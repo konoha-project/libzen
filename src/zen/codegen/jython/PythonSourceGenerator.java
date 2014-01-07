@@ -88,7 +88,7 @@ public class PythonSourceGenerator extends ZenSourceGenerator {
 		// this.CurrentBuilder.Append("(");
 		// this.VisitType(Node.Type);
 		// this.CurrentBuilder.Append(") ");
-		this.CurrentBuilder.AppendBlockComment("castto " + this.GetNativeType(Node.Type));
+		this.CurrentBuilder.AppendBlockComment("as " + this.GetNativeType(Node.Type));
 		this.GenerateCode(Node.ExprNode);
 		return true;
 	}
