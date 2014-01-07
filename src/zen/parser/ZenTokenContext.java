@@ -35,19 +35,19 @@ import zen.lang.ZenFunc;
 import zen.lang.ZenSystem;
 
 public final class ZenTokenContext extends ZenUtils {
-	/*field*/public GtNameSpace TopLevelNameSpace;
-	/*field*/public ArrayList<GtToken> SourceTokenList;
+	/*field*/public ZenNameSpace TopLevelNameSpace;
+	/*field*/public ArrayList<ZenToken> SourceTokenList;
 	/*field*/private int CurrentPosition;
 	/*field*/public long ParsingLine;
 	/*field*/public int  ParseFlag;
 	/*field*/private final ArrayList<Integer> ParserStack;
 	/*field*/public ZenMap<Object> ParsingAnnotation;
-	/*field*/public GtToken LatestToken;
+	/*field*/public ZenToken LatestToken;
 	/*field*/private int IndentLevel = 0;
 
-	public ZenTokenContext(GtNameSpace NameSpace, String Text, long FileLine) {
+	public ZenTokenContext(ZenNameSpace NameSpace, String Text, long FileLine) {
 		this.TopLevelNameSpace = NameSpace;
-		this.SourceTokenList = new ArrayList<GtToken>();
+		this.SourceTokenList = new ArrayList<ZenToken>();
 		this.CurrentPosition = 0;
 		this.ParsingLine = FileLine;
 		this.ParseFlag = 0;
@@ -58,8 +58,8 @@ public final class ZenTokenContext extends ZenUtils {
 		this.ParserStack = new ArrayList<Integer>();
 	}
 
-	public GtToken AppendParsedToken(String Text, int TokenFlag, String PatternName) {
-		/*local*/GtToken Token = new GtToken(TokenFlag, Text, this.ParsingLine);
+	public ZenToken AppendParsedToken(String Text, int TokenFlag, String PatternName) {
+		/*local*/ZenToken Token = new ZenToken(TokenFlag, Text, this.ParsingLine);
 		if(PatternName != null) {
 			Token.PresetPattern = this.TopLevelNameSpace.GetSyntaxPattern(PatternName);
 			LibNative.Assert(Token.PresetPattern != null);
@@ -71,7 +71,7 @@ public final class ZenTokenContext extends ZenUtils {
 	public void FoundWhiteSpace() {
 		/*local*/int index = this.SourceTokenList.size() - 1;
 		if(index > 0) {
-			/*local*/GtToken Token = this.SourceTokenList.get(index);
+			/*local*/ZenToken Token = this.SourceTokenList.get(index);
 			Token.TokenFlag |= ZenParserConst.WhiteSpaceTokenFlag;
 		}
 	}
@@ -82,14 +82,14 @@ public final class ZenTokenContext extends ZenUtils {
 
 	@Deprecated
 	public void ReportTokenError1(int Level, String Message, String TokenText) {
-		/*local*/GtToken Token = this.AppendParsedToken(TokenText, 0, "$Error$");
+		/*local*/ZenToken Token = this.AppendParsedToken(TokenText, 0, "$Error$");
 		this.TopLevelNameSpace.Generator.ReportError(Level, Token, Message);
 	}
 
 	public void SkipErrorStatement() {
-		/*local*/GtToken LeastRecentToken = this.LatestToken;
+		/*local*/ZenToken LeastRecentToken = this.LatestToken;
 		while(this.HasNext()) {
-			/*local*/GtToken T = this.GetToken();
+			/*local*/ZenToken T = this.GetToken();
 			if(T.IsDelim() || T.EqualsText("}")) {
 				break;
 			}
@@ -99,10 +99,10 @@ public final class ZenTokenContext extends ZenUtils {
 		this.LatestToken = LeastRecentToken;
 	}
 
-	private GtToken GetBeforeToken() {
+	private ZenToken GetBeforeToken() {
 		/*local*/int MovingPos = this.CurrentPosition - 1;
 		while(MovingPos >= 0 && MovingPos < this.SourceTokenList.size()) {
-			/*local*/GtToken Token = this.SourceTokenList.get(MovingPos);
+			/*local*/ZenToken Token = this.SourceTokenList.get(MovingPos);
 			if(!Token.IsIndent()) {
 				return Token;
 			}
@@ -111,7 +111,7 @@ public final class ZenTokenContext extends ZenUtils {
 		return this.LatestToken;
 	}
 
-	public GtNode CreateExpectedErrorNode(GtToken SourceToken, String ExpectedTokenText) {
+	public GtNode CreateExpectedErrorNode(ZenToken SourceToken, String ExpectedTokenText) {
 		if(SourceToken == null || SourceToken.IsNull()) {
 			SourceToken = this.GetBeforeToken();
 			return new GtErrorNode(SourceToken, ExpectedTokenText + " is expected after " + SourceToken.ParsedText);
@@ -160,9 +160,9 @@ public final class ZenTokenContext extends ZenUtils {
 		this.Dump();
 	}
 
-	public GtToken GetToken() {
+	public ZenToken GetToken() {
 		while(this.CurrentPosition < this.SourceTokenList.size()) {
-			/*local*/GtToken Token = this.SourceTokenList.get(this.CurrentPosition);
+			/*local*/ZenToken Token = this.SourceTokenList.get(this.CurrentPosition);
 			if(Token.IsSource()) {
 				this.SourceTokenList.remove(this.SourceTokenList.size() - 1);
 				this.Tokenize(Token.ParsedText, Token.FileLine);
@@ -179,31 +179,31 @@ public final class ZenTokenContext extends ZenUtils {
 			this.LatestToken = Token;
 			return Token;
 		}
-		return GtToken.NullToken;
+		return ZenToken.NullToken;
 	}
 
 	public boolean HasNext() {
-		return (this.GetToken() != GtToken.NullToken);
+		return (this.GetToken() != ZenToken.NullToken);
 	}
 
-	public GtToken GetTokenAndMoveForward() {
-		/*local*/GtToken Token = this.GetToken();
+	public ZenToken GetTokenAndMoveForward() {
+		/*local*/ZenToken Token = this.GetToken();
 		this.CurrentPosition += 1;
 		return Token;
 	}
 
 	public void SkipIndent() {
-		/*local*/GtToken Token = this.GetToken();
+		/*local*/ZenToken Token = this.GetToken();
 		while(Token.IsIndent()) {
 			this.CurrentPosition = this.CurrentPosition + 1;
 			Token = this.GetToken();
 		}
 	}
 
-	public GtToken GetCurrentIndentToken() {
+	public ZenToken GetCurrentIndentToken() {
 		/*local*/int i = this.CurrentPosition - 1;
 		while(0 <= i) {
-			/*local*/GtToken Token = this.SourceTokenList.get(i);
+			/*local*/ZenToken Token = this.SourceTokenList.get(i);
 			if(Token.IsIndent()) {
 				return Token;
 			}
@@ -212,9 +212,9 @@ public final class ZenTokenContext extends ZenUtils {
 		return null;
 	}
 
-	public void SkipUntilIndent(GtToken IndentToken) {
+	public void SkipUntilIndent(ZenToken IndentToken) {
 		while(this.HasNext()) {
-			/*local*/GtToken Token = this.GetToken();
+			/*local*/ZenToken Token = this.GetToken();
 			if(Token.IsIndent() && Token.CompareIndent(IndentToken) == 0) {
 				return;
 			}
@@ -233,8 +233,8 @@ public final class ZenTokenContext extends ZenUtils {
 	//		return Token;
 	//	}
 
-	public ZenSyntaxPattern GetFirstPattern(GtNameSpace NameSpace) {
-		/*local*/GtToken Token = this.GetToken();
+	public ZenSyntaxPattern GetFirstPattern(ZenNameSpace NameSpace) {
+		/*local*/ZenToken Token = this.GetToken();
 		if(Token.PresetPattern != null) {
 			return Token.PresetPattern;
 		}
@@ -245,9 +245,9 @@ public final class ZenTokenContext extends ZenUtils {
 		return Pattern;
 	}
 
-	public ZenSyntaxPattern GetSuffixPattern(GtNameSpace NameSpace) {
-		/*local*/GtToken Token = this.GetToken();
-		if(Token != GtToken.NullToken) {
+	public ZenSyntaxPattern GetSuffixPattern(ZenNameSpace NameSpace) {
+		/*local*/ZenToken Token = this.GetToken();
+		if(Token != ZenToken.NullToken) {
 			/*local*/ZenSyntaxPattern Pattern = NameSpace.GetExtendedSyntaxPattern(Token.ParsedText);
 			return Pattern;
 		}
@@ -255,7 +255,7 @@ public final class ZenTokenContext extends ZenUtils {
 	}
 
 	public final boolean IsToken(String TokenText) {
-		/*local*/GtToken Token = this.GetToken();
+		/*local*/ZenToken Token = this.GetToken();
 		if(Token.EqualsText(TokenText)) {
 			return true;
 		}
@@ -265,7 +265,7 @@ public final class ZenTokenContext extends ZenUtils {
 	public final boolean IsNewLineToken(String TokenText) {
 		/*local*/int RollbackPos = this.CurrentPosition;
 		this.SkipIndent();
-		/*local*/GtToken Token = this.GetToken();
+		/*local*/ZenToken Token = this.GetToken();
 		if(Token.EqualsText(TokenText)) {
 			return true;
 		}
@@ -275,7 +275,7 @@ public final class ZenTokenContext extends ZenUtils {
 
 	public final boolean MatchToken(String TokenText) {
 		/*local*/int RollbackPos = this.CurrentPosition;
-		/*local*/GtToken Token = this.GetTokenAndMoveForward();
+		/*local*/ZenToken Token = this.GetTokenAndMoveForward();
 		if(Token.EqualsText(TokenText)) {
 			return true;
 		}
@@ -286,7 +286,7 @@ public final class ZenTokenContext extends ZenUtils {
 	public final boolean MatchNewLineToken(String TokenText) {
 		/*local*/int RollbackPos = this.CurrentPosition;
 		this.SkipIndent();
-		/*local*/GtToken Token = this.GetTokenAndMoveForward();
+		/*local*/ZenToken Token = this.GetTokenAndMoveForward();
 		if(Token.EqualsText(TokenText)) {
 			return true;
 		}
@@ -294,10 +294,10 @@ public final class ZenTokenContext extends ZenUtils {
 		return false;
 	}
 
-	public GtNode MatchNodeToken(GtNode Base, GtNameSpace NameSpace, String TokenText, int MatchFlag) {
+	public GtNode MatchNodeToken(GtNode Base, ZenNameSpace NameSpace, String TokenText, int MatchFlag) {
 		if(!Base.IsErrorNode()) {
 			/*local*/int RollbackPosition = this.CurrentPosition;
-			/*local*/GtToken Token = this.GetTokenAndMoveForward();
+			/*local*/ZenToken Token = this.GetTokenAndMoveForward();
 			if(Token.ParsedText.equals(TokenText)) {
 				if(Base.SourceToken == null) {
 					Base.SourceToken = Token;
@@ -319,11 +319,11 @@ public final class ZenTokenContext extends ZenUtils {
 		return Base;
 	}
 
-	public final GtNode ApplyMatchPattern(GtNameSpace NameSpace, GtNode LeftNode, ZenSyntaxPattern Pattern) {
+	public final GtNode ApplyMatchPattern(ZenNameSpace NameSpace, GtNode LeftNode, ZenSyntaxPattern Pattern) {
 		/*local*/int RollbackPosition = this.CurrentPosition;
 		/*local*/int ParseFlag = this.ParseFlag;
 		/*local*/ZenSyntaxPattern CurrentPattern = Pattern;
-		/*local*/GtToken TopToken = this.GetToken();
+		/*local*/ZenToken TopToken = this.GetToken();
 		while(CurrentPattern != null) {
 			/*local*/ZenFunc MatchFunc = CurrentPattern.MatchFunc;
 			this.CurrentPosition = RollbackPosition;
@@ -352,7 +352,7 @@ public final class ZenTokenContext extends ZenUtils {
 		return this.CreateExpectedErrorNode(TopToken, Pattern.PatternName);
 	}
 
-	public GtNode AppendMatchedPattern(GtNode Base, GtNameSpace NameSpace, String PatternName,  int MatchFlag) {
+	public GtNode AppendMatchedPattern(GtNode Base, ZenNameSpace NameSpace, String PatternName,  int MatchFlag) {
 		if(!Base.IsErrorNode()) {
 			//			/*local*/GtToken Token = this.GetToken();
 			/*local*/GtNode ParsedNode = this.ParsePattern(NameSpace, PatternName, MatchFlag);
@@ -367,13 +367,13 @@ public final class ZenTokenContext extends ZenUtils {
 	}
 
 	public final boolean StartsWithToken(String TokenText) {
-		/*local*/GtToken Token = this.GetToken();
+		/*local*/ZenToken Token = this.GetToken();
 		if(Token.EqualsText(TokenText)) {
 			this.CurrentPosition += 1;
 			return true;
 		}
 		if(Token.ParsedText.startsWith(TokenText)) {
-			Token = new GtToken(0, Token.ParsedText.substring(TokenText.length()), Token.FileLine);
+			Token = new ZenToken(0, Token.ParsedText.substring(TokenText.length()), Token.FileLine);
 			this.CurrentPosition += 1;
 			this.SourceTokenList.add(this.CurrentPosition, Token);
 			return true;
@@ -411,7 +411,7 @@ public final class ZenTokenContext extends ZenUtils {
 		this.ParseFlag = OldFlag;
 	}
 
-	public final GtNode ParsePatternAfter(GtNameSpace NameSpace, GtNode LeftNode, String PatternName, int MatchFlag) {
+	public final GtNode ParsePatternAfter(ZenNameSpace NameSpace, GtNode LeftNode, String PatternName, int MatchFlag) {
 		/*local*/int Pos = this.CurrentPosition;
 		/*local*/int ParseFlag = this.ParseFlag;
 		if(ZenUtils.IsFlag(MatchFlag, ZenParserConst.Optional)) {
@@ -427,7 +427,7 @@ public final class ZenTokenContext extends ZenUtils {
 		return null; // mismatched
 	}
 
-	public final GtNode ParsePattern(GtNameSpace NameSpace, String PatternName, int MatchFlag) {
+	public final GtNode ParsePattern(ZenNameSpace NameSpace, String PatternName, int MatchFlag) {
 		return this.ParsePatternAfter(NameSpace, null, PatternName, MatchFlag);
 	}
 
@@ -438,7 +438,7 @@ public final class ZenTokenContext extends ZenUtils {
 		this.ParsingAnnotation = null;
 		this.SkipEmptyStatement();
 		while(this.MatchToken("@")) {
-			/*local*/GtToken Token = this.GetTokenAndMoveForward();
+			/*local*/ZenToken Token = this.GetTokenAndMoveForward();
 			if(this.ParsingAnnotation == null) {
 				this.ParsingAnnotation = new ZenMap<Object>(null);
 			}
@@ -459,7 +459,7 @@ public final class ZenTokenContext extends ZenUtils {
 
 	public final void SkipEmptyStatement() {
 		while(this.HasNext()) {
-			/*local*/GtToken Token = this.GetToken();
+			/*local*/ZenToken Token = this.GetToken();
 			if(Token.IsIndent() || Token.IsDelim()) {
 				this.CurrentPosition += 1;
 				continue;
@@ -496,7 +496,7 @@ public final class ZenTokenContext extends ZenUtils {
 		/*local*/String Buffer = PreText;
 		/*local*/int Position = BeginIdx;
 		while(Position < EndIdx) {
-			/*local*/GtToken Token = this.SourceTokenList.get(Position);
+			/*local*/ZenToken Token = this.SourceTokenList.get(Position);
 			if(Token.IsIndent()) {
 				Buffer += "\n";
 			}
@@ -531,7 +531,7 @@ public final class ZenTokenContext extends ZenUtils {
 	public final void DumpPosition() {
 		/*local*/int Position = this.CurrentPosition;
 		if(Position < this.SourceTokenList.size()) {
-			/*local*/GtToken Token = this.SourceTokenList.get(Position);
+			/*local*/ZenToken Token = this.SourceTokenList.get(Position);
 			LibZen.DebugP("Position="+Position+" " + Token);
 		}
 		else {
@@ -542,7 +542,7 @@ public final class ZenTokenContext extends ZenUtils {
 	public final void Dump() {
 		/*local*/int Position = this.CurrentPosition;
 		while(Position < this.SourceTokenList.size()) {
-			/*local*/GtToken Token = this.SourceTokenList.get(Position);
+			/*local*/ZenToken Token = this.SourceTokenList.get(Position);
 			/*local*/String DumpedToken = this.CurrentPosition == Position ? "*[" : "[";
 			DumpedToken = DumpedToken + Position+"] " + Token;
 			if(Token.PresetPattern != null) {

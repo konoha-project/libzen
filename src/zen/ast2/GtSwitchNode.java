@@ -28,13 +28,13 @@ import java.util.ArrayList;
 
 import zen.ast.GtNode;
 import zen.lang.ZenType;
-import zen.parser.GtToken;
+import zen.parser.ZenToken;
 
 final public class GtSwitchNode extends GtNode {
 	/*field*/public GtNode	MatchNode;
 	/*field*/public GtNode	DefaultBlock;
 	/*field*/public ArrayList<GtNode> CaseList; // [expr, block, expr, block, ....]
-	public GtSwitchNode/*constructor*/(ZenType Type, GtToken Token, GtNode MatchNode, GtNode DefaultBlock) {
+	public GtSwitchNode/*constructor*/(ZenType Type, ZenToken Token, GtNode MatchNode, GtNode DefaultBlock) {
 		super();
 		this.MatchNode = MatchNode;
 		this.DefaultBlock = DefaultBlock;

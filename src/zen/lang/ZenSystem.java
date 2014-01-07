@@ -32,7 +32,7 @@ import zen.deps.LibZen;
 import zen.deps.ZenMap;
 import zen.deps.ZenObject;
 import zen.obsolete.GtPolyFunc;
-import zen.parser.GtNameSpace;
+import zen.parser.ZenNameSpace;
 import zen.parser.ZenLogger;
 
 public class ZenSystem implements ZenTypeConst {
@@ -107,7 +107,7 @@ public class ZenSystem implements ZenTypeConst {
 
 	/*field*/private static boolean IsInit = false;
 
-	public final static void InitNameSpace(GtNameSpace NameSpace) {
+	public final static void InitNameSpace(ZenNameSpace NameSpace) {
 		//ifdef JAVA
 		if(!ZenSystem.IsInit) {
 			ZenSystem.SetTypeTable("org.GreenTeaScript.GreenTeaTopObject", ZenSystem.TopType);

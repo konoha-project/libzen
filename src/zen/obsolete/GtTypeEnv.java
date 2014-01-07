@@ -24,7 +24,7 @@
 
 package zen.obsolete;
 
-import zen.parser.GtNameSpace;
+import zen.parser.ZenNameSpace;
 import zen.parser.ZenUtils;
 
 @Deprecated
@@ -38,7 +38,7 @@ public final class GtTypeEnv extends ZenUtils {
 //	/*field*/public GtFuncBlock	FuncBlock;
 //	/*field*/public boolean FoundUncommonFunc;
 	
-	public GtTypeEnv/*constructor*/(GtNameSpace NameSpace) {
+	public GtTypeEnv/*constructor*/(ZenNameSpace NameSpace) {
 //		this.NameSpace = NameSpace;
 //		this.Context   = NameSpace.Context;
 //		this.Generator = NameSpace.Context.Generator;

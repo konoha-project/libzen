@@ -43,7 +43,7 @@ public abstract class ZenNodeUtils {
 	//		return new GtErrorNode(GtStaticTable.VoidType, ParsedTree.KeyToken);
 	//	}
 
-	public final static GtNode CreateConstNode(GtToken SourceToken, Object Value) {
+	public final static GtNode CreateConstNode(ZenToken SourceToken, Object Value) {
 		if(Value instanceof Boolean) {
 			return new GtBooleanNode(SourceToken, (Boolean) Value);
 		}
@@ -59,7 +59,7 @@ public abstract class ZenNodeUtils {
 		return new GtConstPoolNode(SourceToken, Value);
 	}
 
-	public final GtNode CreateSymbolNode(GtToken SourceToken, ZenType Type, String NativeName, boolean IsCaptured, GtNode AssignedNode) {
+	public final GtNode CreateSymbolNode(ZenToken SourceToken, ZenType Type, String NativeName, boolean IsCaptured, GtNode AssignedNode) {
 		if(AssignedNode != null) {
 			if(IsCaptured) {
 				return new GtSetCapturedNode(Type, SourceToken, NativeName, AssignedNode);

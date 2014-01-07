@@ -27,12 +27,12 @@ package zen.ast;
 import zen.ast2.GtSymbolNode;
 import zen.lang.ZenType;
 import zen.parser.ZenVisitor;
-import zen.parser.GtToken;
+import zen.parser.ZenToken;
 
 // E.g., $NativeName = $ValueNode
 final public class GtSetLocalNode extends GtSymbolNode {
 	/*field*/public GtNode	 ValueNode;
-	public GtSetLocalNode/*constructor*/(ZenType Type, GtToken Token, String NativeName, GtNode ValueNode) {
+	public GtSetLocalNode/*constructor*/(ZenType Type, ZenToken Token, String NativeName, GtNode ValueNode) {
 		super(Type, Token, NativeName);
 		this.ValueNode = ValueNode;
 		this.SetChild(ValueNode);

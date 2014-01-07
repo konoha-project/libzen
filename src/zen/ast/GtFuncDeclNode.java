@@ -26,14 +26,14 @@ package zen.ast;
 
 import java.util.ArrayList;
 
-import zen.parser.GtNameSpace;
-import zen.parser.GtToken;
+import zen.parser.ZenNameSpace;
+import zen.parser.ZenToken;
 import zen.parser.ZenVisitor;
 
 final public class GtFuncDeclNode extends GtFunctionLiteralNode {
 	/*field*/public String FuncName;
-	/*field*/public GtNameSpace NameSpace;
-	public GtFuncDeclNode/*constructor*/(GtToken SourceToken, GtNameSpace NameSpace, String FuncName) {
+	/*field*/public ZenNameSpace NameSpace;
+	public GtFuncDeclNode/*constructor*/(ZenToken SourceToken, ZenNameSpace NameSpace, String FuncName) {
 		super(SourceToken); // TODO
 		this.ArgumentList = new ArrayList<GtNode>();
 		this.FuncName = FuncName;

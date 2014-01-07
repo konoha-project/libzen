@@ -28,10 +28,10 @@ import java.util.ArrayList;
 
 import zen.lang.ZenType;
 import zen.lang.ZenFunc;
-import zen.parser.GtNameSpace;
+import zen.parser.ZenNameSpace;
 
 public class GtFuncBlock {
-	/*field*/public GtNameSpace       NameSpace;
+	/*field*/public ZenNameSpace       NameSpace;
 	/*field*/public ArrayList<String> NameList;
 	/*field*/public ArrayList<ZenType> TypeList;
 	/*field*/public GtSyntaxTree      FuncBlock;
@@ -39,7 +39,7 @@ public class GtFuncBlock {
 	/*field*/public int VariableIndex;
 	/*field*/public ZenFunc DefinedFunc;
 
-	public GtFuncBlock/*constructor*/(GtNameSpace NameSpace, ArrayList<ZenType> TypeList) {
+	public GtFuncBlock/*constructor*/(ZenNameSpace NameSpace, ArrayList<ZenType> TypeList) {
 		this.NameSpace = NameSpace;
 		this.TypeList = TypeList;
 		this.NameList = new ArrayList<String>();

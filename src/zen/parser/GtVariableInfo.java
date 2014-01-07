@@ -33,12 +33,12 @@ public class GtVariableInfo {
 	/*field*/public ZenType	Type;
 	/*field*/public String	Name;
 	/*field*/public String	NativeName;
-	/*field*/public GtToken SourceToken;
+	/*field*/public ZenToken SourceToken;
 //	/*field*/public Object  InitValue;
 	/*field*/public int     DefCount;
 	/*field*/public int     UsedCount;
 
-	GtVariableInfo/*constructor*/(GtFuncBlock FuncBlock, int VarFlag, ZenType Type, String Name, GtToken SourceToken) {
+	GtVariableInfo/*constructor*/(GtFuncBlock FuncBlock, int VarFlag, ZenType Type, String Name, ZenToken SourceToken) {
 		this.FuncBlock    = FuncBlock;
 		this.VariableFlag = VarFlag;
 		this.Type = Type;
@@ -50,7 +50,7 @@ public class GtVariableInfo {
 		this.DefCount  = 1;
 	}
 
-	public final boolean IsCaptured(GtNameSpace NameSpace) {
+	public final boolean IsCaptured(ZenNameSpace NameSpace) {
 		return (NameSpace.FuncBlock != this.FuncBlock);
 	}
 

@@ -27,18 +27,18 @@ package zen.obsolete;
 import java.util.ArrayList;
 
 import zen.lang.ZenType;
-import zen.parser.GtNameSpace;
+import zen.parser.ZenNameSpace;
 import zen.parser.ZenUtils;
 
 
 
 public final class GtClassField extends ZenUtils {
 	/*field*/ public ZenType DefinedType;
-	/*field*/ private final GtNameSpace NameSpace;
+	/*field*/ private final ZenNameSpace NameSpace;
 	/*field*/ public ArrayList<GtFieldInfo> FieldList;
 	/*field*/ public int ThisClassIndex;
 
-	public GtClassField/*constructor*/(ZenType DefinedType, GtNameSpace NameSpace) {
+	public GtClassField/*constructor*/(ZenType DefinedType, ZenNameSpace NameSpace) {
 		this.DefinedType = DefinedType;
 		this.NameSpace = NameSpace;
 		this.FieldList = new ArrayList<GtFieldInfo>();

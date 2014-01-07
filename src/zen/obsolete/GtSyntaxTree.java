@@ -25,9 +25,9 @@
 //ifdef JAVA
 package zen.obsolete;
 
-import zen.parser.GtNameSpace;
+import zen.parser.ZenNameSpace;
 import zen.parser.ZenSyntaxPattern;
-import zen.parser.GtToken;
+import zen.parser.ZenToken;
 //endif VAJA
 import zen.parser.ZenUtils;
 
@@ -44,7 +44,7 @@ public final class GtSyntaxTree extends ZenUtils {
 //	/*field*/public ArrayList<GtSyntaxTree>  SubTreeList;
 //	/*field*/public Object                   ParsedValue;
 
-	public GtSyntaxTree/*constructor*/(ZenSyntaxPattern Pattern, GtNameSpace NameSpace, GtToken KeyToken, Object ParsedValue) {
+	public GtSyntaxTree/*constructor*/(ZenSyntaxPattern Pattern, ZenNameSpace NameSpace, ZenToken KeyToken, Object ParsedValue) {
 //		this.NameSpace   = NameSpace;
 //		this.Annotation  = null;
 //		this.KeyToken    = KeyToken;

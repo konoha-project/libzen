@@ -191,7 +191,7 @@ public interface ZenParserConst {
 //	public final static int PrecedenceCStyleCOMMA			= (1300 << PrecedenceShift) | BinaryOperator;
 
 
-	public final static Object UndefinedSymbol = new GtUndefinedSymbol();
+	public final static Object UndefinedSymbol = new ZenUndefinedSymbol();
 	public final static String NativeNameSuffix = "__";
 
 	public final static boolean UseLangStat = true;

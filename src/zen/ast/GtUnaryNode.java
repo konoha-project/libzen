@@ -25,13 +25,13 @@
 package zen.ast;
 
 
-import zen.parser.GtToken;
+import zen.parser.ZenToken;
 import zen.parser.ZenVisitor;
 
 //E.g., "~" $RecvNode
 final public class GtUnaryNode extends GtNode {
 	/*field*/public GtNode	RecvNode;
-	public GtUnaryNode/*constructor*/(GtToken Token) {
+	public GtUnaryNode/*constructor*/(ZenToken Token) {
 		super();
 		this.SourceToken = Token;
 	}

@@ -24,12 +24,12 @@
 
 package zen.ast;
 
-import zen.parser.GtToken;
+import zen.parser.ZenToken;
 import zen.parser.ZenVisitor;
 
 final public class GtIntNode extends GtConstNode {
 	/*field*/public long	Value;
-	public GtIntNode/*constructor*/(GtToken Token, long Value) {
+	public GtIntNode/*constructor*/(ZenToken Token, long Value) {
 		super(Token);
 		this.Value = Value;
 	}

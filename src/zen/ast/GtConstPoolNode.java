@@ -24,12 +24,12 @@
 
 package zen.ast;
 
-import zen.parser.GtToken;
+import zen.parser.ZenToken;
 import zen.parser.ZenVisitor;
 
 final public class GtConstPoolNode extends GtConstNode {
 	/*field*/public Object	ConstValue;
-	public GtConstPoolNode/*constructor*/(GtToken Token, Object ConstValue) {
+	public GtConstPoolNode/*constructor*/(ZenToken Token, Object ConstValue) {
 		super(Token);
 		this.ConstValue = ConstValue;
 	}

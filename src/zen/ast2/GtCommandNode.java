@@ -28,13 +28,13 @@ import java.util.ArrayList;
 
 import zen.ast.GtNode;
 import zen.lang.ZenType;
-import zen.parser.GtToken;
+import zen.parser.ZenToken;
 
 // E.g., "ls" "-a"..
 final public class GtCommandNode extends GtNode {
 	/*field*/public ArrayList<GtNode>  ArgumentList; /* ["/bin/ls" , "-la", "/", ...] */
 	/*field*/public GtNode PipedNextNode;
-	public GtCommandNode/*constructor*/(ZenType Type, GtToken Token, GtNode PipedNextNode) {
+	public GtCommandNode/*constructor*/(ZenType Type, ZenToken Token, GtNode PipedNextNode) {
 		super();
 		this.PipedNextNode = PipedNextNode;
 		this.ArgumentList = new ArrayList<GtNode>();

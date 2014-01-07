@@ -26,7 +26,7 @@ package zen.ast2;
 
 import zen.ast.GtNode;
 import zen.lang.ZenType;
-import zen.parser.GtToken;
+import zen.parser.ZenToken;
 
 /**
  * using(File f = new File() {
@@ -40,7 +40,7 @@ final public class GtUsingNode extends GtNode {
 	/*field*/public GtNode	InitNode;
 	/*field*/public GtNode	BlockNode;   // release resource of NativeName after BlockNode
 	/* let VarNode in Block end */
-	public GtUsingNode/*constructor*/(ZenType Type, GtToken Token, ZenType DeclType, String VariableName, GtNode InitNode, GtNode Block) {
+	public GtUsingNode/*constructor*/(ZenType Type, ZenToken Token, ZenType DeclType, String VariableName, GtNode InitNode, GtNode Block) {
 		super();
 		this.NativeName = VariableName;
 		this.DeclType  = DeclType;

@@ -34,13 +34,13 @@ public abstract class ZenGenerator extends ZenNodeUtils implements ZenVisitor {
 	/*field*/public final String       TargetCode;
 	/*field*/public final String       TargetVersion;
 	
-	/*field*/public final GtNameSpace  RootNameSpace;
+	/*field*/public final ZenNameSpace  RootNameSpace;
 	/*field*/public String             OutputFile;
 	/*field*/public ZenLogger          Logger;
 
 	protected ZenGenerator(String TargetCode, String TargetVersion) {
 		super();
-		this.RootNameSpace = new GtNameSpace(this, null);
+		this.RootNameSpace = new ZenNameSpace(this, null);
 		this.TargetCode = TargetCode;
 		this.TargetVersion = TargetVersion;
 		
@@ -48,11 +48,11 @@ public abstract class ZenGenerator extends ZenNodeUtils implements ZenVisitor {
 		this.Logger = new ZenLogger();
 	}
 
-	public final String ReportError(int Level, GtToken Token, String Message) {
+	public final String ReportError(int Level, ZenToken Token, String Message) {
 		return this.Logger.Report(Level, Token, Message);
 	}
 
-	public void DoCodeGeneration(GtNameSpace NameSpace, GtNode Node) {
+	public void DoCodeGeneration(ZenNameSpace NameSpace, GtNode Node) {
 		Node.Accept(this);		
 	}
 

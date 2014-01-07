@@ -29,13 +29,13 @@ import zen.deps.LibZen;
 import zen.lang.ZenFunc;
 
 public final class ZenSyntaxPattern extends ZenUtils {
-	/*field*/public GtNameSpace	          PackageNameSpace;
+	/*field*/public ZenNameSpace	          PackageNameSpace;
 	/*field*/public String		          PatternName;
 	/*field*/public int				      SyntaxFlag;
 	/*field*/public ZenFunc               MatchFunc;
 	/*field*/public ZenSyntaxPattern	  ParentPattern;
 
-	public ZenSyntaxPattern(GtNameSpace NameSpace, String PatternName, ZenFunc MatchFunc) {
+	public ZenSyntaxPattern(ZenNameSpace NameSpace, String PatternName, ZenFunc MatchFunc) {
 		this.PackageNameSpace = NameSpace;
 		this.PatternName = PatternName;
 		this.SyntaxFlag = 0;

@@ -28,14 +28,14 @@ import java.util.ArrayList;
 
 import zen.lang.ZenType;
 import zen.lang.ZenSystem;
-import zen.parser.GtToken;
+import zen.parser.ZenToken;
 import zen.parser.ZenVisitor;
 
 public class GtFunctionLiteralNode extends GtNode {
 	/*field*/public ZenType ReturnType;
 	/*field*/public ArrayList<GtNode>  ArgumentList;  // list of ParamNode
 	/*field*/public GtNode BodyNode;
-	public GtFunctionLiteralNode/*constructor*/(GtToken Token) {
+	public GtFunctionLiteralNode/*constructor*/(ZenToken Token) {
 		super();
 		this.SourceToken = Token;
 		this.ReturnType = ZenSystem.VarType;

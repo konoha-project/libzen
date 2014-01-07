@@ -25,7 +25,7 @@
 package zen.ast;
 
 import zen.lang.ZenSystem;
-import zen.parser.GtToken;
+import zen.parser.ZenToken;
 import zen.parser.ZenVisitor;
 
 /**
@@ -35,7 +35,7 @@ import zen.parser.ZenVisitor;
 
 final public class GtErrorNode extends GtConstNode {
 	public String ErrorMessage;
-	public GtErrorNode/*constructor*/(GtToken SourceToken, String ErrorMessage) {
+	public GtErrorNode/*constructor*/(ZenToken SourceToken, String ErrorMessage) {
 		super(SourceToken);
 		this.Type = ZenSystem.VoidType;
 		this.ErrorMessage = ErrorMessage;

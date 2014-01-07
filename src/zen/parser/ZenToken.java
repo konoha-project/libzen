@@ -24,18 +24,16 @@
 
 //ifdef JAVA
 package zen.parser;
-
 import zen.lang.ZenType;
 
-
-final public class GtToken extends ZenUtils {
+final public class ZenToken extends ZenUtils {
 	/*field*/public int		        TokenFlag;
 	/*field*/public String	        ParsedText;
 	/*field*/public long		    FileLine;
 	/*field*/public ZenSyntaxPattern	PresetPattern;
-	/*field*/public final static GtToken NullToken = new GtToken(0, "/**/", 0);
+	/*field*/public final static ZenToken NullToken = new ZenToken(0, "/**/", 0);
 
-	public GtToken/*constructor*/(int TokenFlag, String Text, long FileLine) {
+	public ZenToken(int TokenFlag, String Text, long FileLine) {
 		this.TokenFlag = TokenFlag;
 		this.ParsedText = Text;
 		this.FileLine = FileLine;
@@ -43,44 +41,48 @@ final public class GtToken extends ZenUtils {
 	}
 
 	public boolean IsSource() {
-		return ZenUtils.IsFlag(this.TokenFlag, SourceTokenFlag);
+		return ZenUtils.IsFlag(this.TokenFlag, ZenParserConst.SourceTokenFlag);
 	}
 
 	public boolean IsError() {
-		return ZenUtils.IsFlag(this.TokenFlag, ErrorTokenFlag);
+		return ZenUtils.IsFlag(this.TokenFlag, ZenParserConst.ErrorTokenFlag);
 	}
 
 	public boolean IsIndent() {
-		return ZenUtils.IsFlag(this.TokenFlag, IndentTokenFlag);
+		return ZenUtils.IsFlag(this.TokenFlag, ZenParserConst.IndentTokenFlag);
 	}
 
 	public boolean IsDelim() {
-		return ZenUtils.IsFlag(this.TokenFlag, DelimTokenFlag);
+		return ZenUtils.IsFlag(this.TokenFlag, ZenParserConst.DelimTokenFlag);
 	}
 
 	public final boolean IsNextWhiteSpace() {
-		return ZenUtils.IsFlag(this.TokenFlag, WhiteSpaceTokenFlag);
+		return ZenUtils.IsFlag(this.TokenFlag, ZenParserConst.WhiteSpaceTokenFlag);
 	}
 
 	public boolean IsQuoted() {
-		return ZenUtils.IsFlag(this.TokenFlag, QuotedTokenFlag);
+		return ZenUtils.IsFlag(this.TokenFlag, ZenParserConst.QuotedTokenFlag);
 	}
 
 	public boolean IsNameSymbol() {
-		return ZenUtils.IsFlag(this.TokenFlag, NameSymbolTokenFlag);
+		return ZenUtils.IsFlag(this.TokenFlag, ZenParserConst.NameSymbolTokenFlag);
 	}
 
 	public boolean EqualsText(String text) {
 		return this.ParsedText.equals(text);
 	}
 
-	public int CompareIndent(GtToken IndentToken) {
+	public int CompareIndent(ZenToken IndentToken) {
 		if(IndentToken == null) {
-			if(this.EqualsText("")) return 0;
+			if(this.EqualsText("")) {
+				return 0;
+			}
 			return this.ParsedText.length();
 		}
 		else {
-			if(this.EqualsText(IndentToken.ParsedText)) return 0;
+			if(this.EqualsText(IndentToken.ParsedText)) {
+				return 0;
+			}
 			return this.ParsedText.length() - IndentToken.ParsedText.length();
 		}
 	}
@@ -95,19 +97,19 @@ final public class GtToken extends ZenUtils {
 
 	public void SetError(ZenSyntaxPattern ErrorPattern) {
 		if(this.ParsedText.length() > 0) {  // skip null token
-			this.TokenFlag = ErrorTokenFlag;
+			this.TokenFlag = ZenParserConst.ErrorTokenFlag;
 			this.PresetPattern = ErrorPattern;
 		}
 	}
 
-	public final GtToken AddTypeInfoToErrorMessage(ZenType ClassType) {
+	public final ZenToken AddTypeInfoToErrorMessage(ZenType ClassType) {
 		this.ParsedText += " of " + ClassType.ShortName;
 		return this;
 	}
 
 	public final boolean IsNull() {
-		return (this == GtToken.NullToken);
+		return (this == ZenToken.NullToken);
 	}
-	
+
 }
 

@@ -41,7 +41,7 @@ import zen.ast.GtNode;
 import zen.lang.ZenFunc;
 import zen.lang.ZenSystem;
 import zen.lang.ZenType;
-import zen.parser.GtNameSpace;
+import zen.parser.ZenNameSpace;
 import zen.parser.ZenGenerator;
 import zen.parser.ZenLogger;
 import zen.parser.ZenSourceGenerator;
@@ -261,12 +261,12 @@ public class LibNative {
 	// Symbol);
 	// }
 
-	public final static boolean ImportGrammar(GtNameSpace NameSpace,
+	public final static boolean ImportGrammar(ZenNameSpace NameSpace,
 			String PackageName) {
 		try {
 			/* local */Class<?> NativeClass = LibNative.LoadClass(PackageName);
 			Method LoaderMethod = NativeClass.getMethod("ImportGrammar",
-					GtNameSpace.class, Class.class);
+					ZenNameSpace.class, Class.class);
 			LoaderMethod.invoke(null, NameSpace, NativeClass);
 			return true;
 		} catch (Exception e) { // naming
@@ -426,7 +426,7 @@ public class LibNative {
 	}
 
 	public final static GtNode ApplyMatchFunc(ZenFunc MatchFunc,
-			GtNameSpace NameSpace, ZenTokenContext TokenContext, GtNode LeftNode) {
+			ZenNameSpace NameSpace, ZenTokenContext TokenContext, GtNode LeftNode) {
 		Object[] Argvs = new Object[3];
 		Argvs[0] = NameSpace;
 		Argvs[1] = TokenContext;
@@ -468,7 +468,7 @@ public class LibNative {
 			String FuncName) {
 		try {
 			Method JavaMethod = GrammarClass.getMethod(FuncName,
-					GtNameSpace.class, ZenTokenContext.class, GtNode.class);
+					ZenNameSpace.class, ZenTokenContext.class, GtNode.class);
 			return LibNative.ConvertNativeMethodToFunc(JavaMethod);
 		} catch (NoSuchMethodException e) {
 			ZenLogger.VerboseException(e);

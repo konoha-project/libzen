@@ -33,14 +33,14 @@ import zen.deps.LibZen;
 
 //endif VAJA
 
-public class GtSourceBuilder {
+public class ZenSourceBuilder {
 	/* field */public ArrayList<String> SourceList;
 	/* field */ZenSourceGenerator Template;
 	/* field */int IndentLevel = 0;
 	/* field */String CurrentIndentString;
 	/* field */String BufferedLineComment;
 
-	public GtSourceBuilder/* constructor */(ZenSourceGenerator Template) {
+	public ZenSourceBuilder(ZenSourceGenerator Template) {
 		this.Template = Template;
 		this.SourceList = new ArrayList<String>();
 		this.IndentLevel = 0;

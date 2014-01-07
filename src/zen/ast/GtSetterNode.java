@@ -27,13 +27,13 @@ package zen.ast;
 import zen.ast2.GtSymbolNode;
 import zen.lang.ZenSystem;
 import zen.parser.ZenVisitor;
-import zen.parser.GtToken;
+import zen.parser.ZenToken;
 
 //E.g., $RecvNode.$NativeName = $Value
 final public class GtSetterNode extends GtSymbolNode {
 	/*field*/public GtNode  RecvNode;
 	/*field*/public GtNode  ValueNode;
-	public GtSetterNode/*constructor*/(GtToken SourceToken, GtNode RecvNode, String NativeName) {
+	public GtSetterNode/*constructor*/(ZenToken SourceToken, GtNode RecvNode, String NativeName) {
 		super(ZenSystem.VarType, SourceToken, NativeName);
 		this.RecvNode  = RecvNode;
 		this.ValueNode = null;

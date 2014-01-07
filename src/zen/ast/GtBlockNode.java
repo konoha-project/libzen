@@ -26,14 +26,14 @@ package zen.ast;
 
 import java.util.ArrayList;
 
-import zen.parser.GtNameSpace;
-import zen.parser.GtToken;
+import zen.parser.ZenNameSpace;
+import zen.parser.ZenToken;
 import zen.parser.ZenVisitor;
 
 public class GtBlockNode extends GtNode {
 	/*field*/public ArrayList<GtNode> NodeList;
-	/*field*/public GtNameSpace NameSpace;
-	public GtBlockNode(GtToken SourceToken, GtNameSpace NameSpace) {
+	/*field*/public ZenNameSpace NameSpace;
+	public GtBlockNode(ZenToken SourceToken, ZenNameSpace NameSpace) {
 		super(); 
 		this.SourceToken = SourceToken;
 		this.NodeList = new ArrayList<GtNode>();

@@ -27,12 +27,12 @@ package zen.ast;
 import zen.ast2.GtSymbolNode;
 import zen.lang.ZenSystem;
 import zen.parser.ZenVisitor;
-import zen.parser.GtToken;
+import zen.parser.ZenToken;
 
 //E.g., $RecvNode.$NativeName
 final public class GtGetterNode extends GtSymbolNode {
 	/*field*/public GtNode  RecvNode;
-	public GtGetterNode/*constructor*/(GtToken SourceToken, GtNode RecvNode, String NativeName) {
+	public GtGetterNode/*constructor*/(ZenToken SourceToken, GtNode RecvNode, String NativeName) {
 		super(ZenSystem.VarType, SourceToken, NativeName);
 		this.RecvNode = RecvNode;
 		this.SetChild(RecvNode);

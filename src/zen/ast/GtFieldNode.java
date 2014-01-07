@@ -25,12 +25,12 @@
 package zen.ast;
 
 import zen.lang.ZenType;
-import zen.parser.GtToken;
+import zen.parser.ZenToken;
 
 final public class GtFieldNode extends GtParamNode {
 	/*field*/public String  Name;
 	/*field*/public GtNode  InitNode;
-	public GtFieldNode/*constructor*/(ZenType Type, GtToken Token, String Name) {
+	public GtFieldNode/*constructor*/(ZenType Type, ZenToken Token, String Name) {
 		super(Type, Token, Name); // TODO
 		this.InitNode = null;
 	}

@@ -67,15 +67,15 @@ import zen.ast.GtVarDeclNode;
 import zen.ast.GtWhileNode;
 import zen.ast2.GtNewArrayNode;
 import zen.ast2.GtNewObjectNode;
-import zen.parser.GtNameSpace;
+import zen.parser.ZenNameSpace;
 import zen.parser.ZenVisitor;
 
 public class ZenEvaluator implements ZenVisitor {
-	/*field*/private GtNameSpace NameSpace_;
+	/*field*/private ZenNameSpace NameSpace_;
 	/*field*/private boolean IsEnforced_;
 	/*field*/private Object EvaledValue_;
 
-	public final Object Eval(GtNode Node, GtNameSpace NameSpace, boolean IsEnforced) {
+	public final Object Eval(GtNode Node, ZenNameSpace NameSpace, boolean IsEnforced) {
 		this.NameSpace_ = NameSpace;
 		this.IsEnforced_ = IsEnforced;
 		Node.Accept(this);

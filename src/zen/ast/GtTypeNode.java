@@ -25,12 +25,12 @@
 package zen.ast;
 
 import zen.lang.ZenType;
-import zen.parser.GtToken;
+import zen.parser.ZenToken;
 import zen.parser.ZenVisitor;
 
 final public class GtTypeNode extends GtConstNode {
 //	/*field*/public GtType	ParsedType;
-	public GtTypeNode/*constructor*/(GtToken SourceToken, ZenType ParsedType) {
+	public GtTypeNode/*constructor*/(ZenToken SourceToken, ZenType ParsedType) {
 		super(SourceToken);
 		this.Type = ParsedType;
 	}

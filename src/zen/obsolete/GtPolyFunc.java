@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import zen.lang.ZenFunc;
 import zen.lang.ZenType;
 import zen.parser.ZenGenerator;
-import zen.parser.GtToken;
+import zen.parser.ZenToken;
 
 public class GtPolyFunc {
 	/*field*/public ZenGenerator Generator;
@@ -53,7 +53,7 @@ public class GtPolyFunc {
 		return s;
 	}
 
-	public final GtPolyFunc Append(ZenFunc Func, GtToken SourceToken) {
+	public final GtPolyFunc Append(ZenFunc Func, ZenToken SourceToken) {
 		if(SourceToken != null) {
 			/*local*/int i = 0;
 			while(i < this.FuncList.size()) {

@@ -29,13 +29,13 @@ import java.util.ArrayList;
 import zen.ast.GtNode;
 import zen.lang.ZenType;
 import zen.lang.ZenFunc;
-import zen.parser.GtToken;
+import zen.parser.ZenToken;
 import zen.parser.ZenVisitor;
 
 // E.g., ConstructorNode is for object creation in Native language defined
 final public class GtNewObjectNode extends GtNode {
 	/*field*/public ArrayList<GtNode>	ParamList;
-	public GtNewObjectNode/*constructor*/(ZenType Type, GtToken Token, ZenFunc Func) {
+	public GtNewObjectNode/*constructor*/(ZenType Type, ZenToken Token, ZenFunc Func) {
 		super();
 		this.ParamList = new ArrayList<GtNode>();
 	}

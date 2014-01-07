@@ -26,11 +26,11 @@ package zen.ast2;
 
 import zen.ast.GtNode;
 import zen.lang.ZenType;
-import zen.parser.GtToken;
+import zen.parser.ZenToken;
 
 // E.g., AllocateNode (without parameters); StaticApply is needed to init
 final public class GtAllocateNode extends GtNode {
-	public GtAllocateNode/*constructor*/(ZenType Type, GtToken Token) {
+	public GtAllocateNode/*constructor*/(ZenType Type, ZenToken Token) {
 		super();
 	}
 //	@Override public boolean Accept(GtVisitor Visitor) {

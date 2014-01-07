@@ -26,7 +26,7 @@
 package zen.lang;
 import zen.deps.LibNative;
 import zen.deps.LibZen;
-import zen.parser.GtNameSpace;
+import zen.parser.ZenNameSpace;
 import zen.parser.ZenUtils;
 
 public class ZenFunc implements ZenFuncConst {
@@ -57,7 +57,7 @@ public class ZenFunc implements ZenFuncConst {
 		}
 	}
 
-	public final ZenType GetStaticType(GtNameSpace NameSpace) {
+	public final ZenType GetStaticType(ZenNameSpace NameSpace) {
 		/*local*/int loc = this.FuncName.lastIndexOf(".");
 		if(loc != -1) {
 			return NameSpace.GetType(this.FuncName.substring(0, loc));

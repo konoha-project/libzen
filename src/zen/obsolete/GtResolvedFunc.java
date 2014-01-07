@@ -28,14 +28,14 @@ import zen.ast.GtNode;
 import zen.lang.ZenFunc;
 import zen.lang.ZenSystem;
 import zen.lang.ZenType;
-import zen.parser.GtNameSpace;
+import zen.parser.ZenNameSpace;
 
 public class GtResolvedFunc {
-	/*field*/public GtNameSpace GenericNameSpace;
+	/*field*/public ZenNameSpace GenericNameSpace;
 	/*field*/public ZenFunc Func;
 	/*field*/public ZenType ReturnType;
 	/*field*/public GtNode ErrorNode;
-	GtResolvedFunc/*constructor*/(GtNameSpace NameSpace) {
+	GtResolvedFunc/*constructor*/(ZenNameSpace NameSpace) {
 		this.GenericNameSpace = NameSpace;
 		this.Func = null;
 		this.ReturnType = ZenSystem.AnyType;

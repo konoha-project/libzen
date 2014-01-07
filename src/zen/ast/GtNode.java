@@ -26,14 +26,14 @@
 package zen.ast;
 import zen.deps.LibNative;
 import zen.lang.ZenType;
-import zen.parser.GtNameSpace;
-import zen.parser.GtToken;
+import zen.parser.ZenNameSpace;
+import zen.parser.ZenToken;
 import zen.parser.ZenVisitor;
 
 public abstract class GtNode {
 	/*field*/public GtNode	ParentNode;
 	/*field*/public ZenType	Type;
-	/*field*/public GtToken	SourceToken;
+	/*field*/public ZenToken	SourceToken;
 
 	public GtNode/*constructor*/() {
 		this.Type = null;
@@ -77,7 +77,7 @@ public abstract class GtNode {
 		}
 		return null;
 	}
-	public Object Eval(GtNameSpace NameSpace, boolean EnforceConst)  {
+	public Object Eval(ZenNameSpace NameSpace, boolean EnforceConst)  {
 		return null;
 		//return this.ToNullValue(NameSpace, EnforceConst);
 	}

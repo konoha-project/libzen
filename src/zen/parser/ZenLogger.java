@@ -63,7 +63,7 @@ public final class ZenLogger {
 		}
 	}
 
-	public final String Report(int Level, GtToken Token, String Message) {
+	public final String Report(int Level, ZenToken Token, String Message) {
 		if(Token != null && !Token.IsNull()) {
 			if(Level == ZenLogger.ErrorLevel) {
 				Message = "(error) " + ZenSystem.FormatFileLineNumber(Token.FileLine) + " " + Message;
@@ -88,19 +88,19 @@ public final class ZenLogger {
 		return Message;
 	}
 
-	public final String ReportError(GtToken Token, String Message) {
+	public final String ReportError(ZenToken Token, String Message) {
 		return this.Report(ErrorLevel, Token, Message);
 	}
 
-	public final String ReportWarning(GtToken Token, String Message) {
+	public final String ReportWarning(ZenToken Token, String Message) {
 		return this.Report(WarningLevel, Token, Message);
 	}
 
-	public final String ReportInfo(GtToken Token, String Message) {
+	public final String ReportInfo(ZenToken Token, String Message) {
 		return this.Report(InfoLevel, Token, Message);
 	}
 
-	public final String ReportDebug(GtToken Token, String Message) {
+	public final String ReportDebug(ZenToken Token, String Message) {
 		return this.Report(DebugLevel, Token, Message);
 	}
 	

@@ -37,22 +37,22 @@ import zen.obsolete.GtFuncBlock;
 import zen.obsolete.GtPolyFunc;
 //endif VAJA
 
-final class GtSymbolSource {
-	/*field*/public GtToken SourceToken;
+final class ZenSymbolSource {
+	/*field*/public ZenToken SourceToken;
 	/*field*/public ZenType  Type; // nullable
 	/*field*/public Object  Value;
 }
 
-public final class GtNameSpace extends ZenUtils {
+public final class ZenNameSpace extends ZenUtils {
 	//	/*field*/public final GtParserContext		Context;
-	/*field*/public final GtNameSpace   ParentNameSpace;
+	/*field*/public final ZenNameSpace   ParentNameSpace;
 	/*field*/public final ZenGenerator		    Generator;
 
 	/*field*/ZenTokenFunc[] TokenMatrix;
 	/*field*/ZenMap<Object>	 SymbolPatternTable;
 	/*field*/GtFuncBlock  FuncBlock;
 
-	public GtNameSpace/*constructor*/(ZenGenerator Generator, GtNameSpace ParentNameSpace) {
+	public ZenNameSpace(ZenGenerator Generator, ZenNameSpace ParentNameSpace) {
 		//		this.Context = Context;
 		this.ParentNameSpace = ParentNameSpace;
 		this.TokenMatrix = null;
@@ -68,19 +68,19 @@ public final class GtNameSpace extends ZenUtils {
 		}
 	}
 
-	public GtNameSpace CreateSubNameSpace() {
-		return new GtNameSpace(null, this);
+	public ZenNameSpace CreateSubNameSpace() {
+		return new ZenNameSpace(null, this);
 	}
 
-	public final GtNameSpace Minimum() {
-		/*local*/GtNameSpace NameSpace = this;
+	public final ZenNameSpace Minimum() {
+		/*local*/ZenNameSpace NameSpace = this;
 		while(NameSpace.SymbolPatternTable == null) {
 			NameSpace = NameSpace.ParentNameSpace;
 		}
 		return NameSpace;
 	}
 
-	public final GtNameSpace GetNameSpace(int NameSpaceFlag) {
+	public final ZenNameSpace GetNameSpace(int NameSpaceFlag) {
 		if(ZenUtils.IsFlag(NameSpaceFlag, ZenParserConst.PublicNameSpace)) {
 			return this.ParentNameSpace;
 		}
@@ -141,7 +141,7 @@ public final class GtNameSpace extends ZenUtils {
 	}
 
 	public final Object GetSymbol(String Key) {
-		/*local*/GtNameSpace NameSpace = this;
+		/*local*/ZenNameSpace NameSpace = this;
 		while(NameSpace != null) {
 			if(NameSpace.SymbolPatternTable != null) {
 				/*local*/Object Value = NameSpace.SymbolPatternTable.GetOrNull(Key);
@@ -158,7 +158,7 @@ public final class GtNameSpace extends ZenUtils {
 		return (this.GetSymbol(Key) != null);
 	}
 
-	public final void SetSymbol(String Key, Object Value, GtToken SourceToken) {
+	public final void SetSymbol(String Key, Object Value, ZenToken SourceToken) {
 		if(this.SymbolPatternTable == null) {
 			this.SymbolPatternTable = new ZenMap<Object>(null);
 		}
@@ -179,13 +179,13 @@ public final class GtNameSpace extends ZenUtils {
 		ZenLogger.VerboseLog(ZenLogger.VerboseSymbol, "symbol: " + Key + ", " + Value);
 	}
 
-	public GtVariableInfo SetLocalVariable(int VarFlag, ZenType Type, String Name, GtToken SourceToken) {
+	public GtVariableInfo SetLocalVariable(int VarFlag, ZenType Type, String Name, ZenToken SourceToken) {
 		/*local*/GtVariableInfo VarInfo = new GtVariableInfo(this.FuncBlock, VarFlag, Type, Name, SourceToken);
 		this.SetSymbol(Name, VarInfo, SourceToken);
 		return VarInfo;
 	}
 
-	public final void SetUndefinedSymbol(String Symbol, GtToken SourceToken) {
+	public final void SetUndefinedSymbol(String Symbol, ZenToken SourceToken) {
 		this.SetSymbol(Symbol, ZenParserConst.UndefinedSymbol, SourceToken);
 	}
 
@@ -211,14 +211,14 @@ public final class GtNameSpace extends ZenUtils {
 	}
 
 	public ZenSyntaxPattern GetExtendedSyntaxPattern(String PatternName) {
-		/*local*/Object Body = this.GetSymbol(GtNameSpace.SuffixPatternSymbol(PatternName));
+		/*local*/Object Body = this.GetSymbol(ZenNameSpace.SuffixPatternSymbol(PatternName));
 		if(Body instanceof ZenSyntaxPattern) {
 			return (/*cast*/ZenSyntaxPattern)Body;
 		}
 		return null;
 	}
 
-	private void AppendSyntaxPattern(String PatternName, ZenSyntaxPattern NewPattern, GtToken SourceToken) {
+	private void AppendSyntaxPattern(String PatternName, ZenSyntaxPattern NewPattern, ZenToken SourceToken) {
 		LibNative.Assert(NewPattern.ParentPattern == null);
 		/*local*/ZenSyntaxPattern ParentPattern = this.GetSyntaxPattern(PatternName);
 		NewPattern.ParentPattern = ParentPattern;
@@ -240,7 +240,7 @@ public final class GtNameSpace extends ZenUtils {
 		/*local*/String Name = (Alias == -1) ? PatternName : PatternName.substring(0, Alias);
 		/*local*/ZenSyntaxPattern Pattern = new ZenSyntaxPattern(this, Name, MatchFunc);
 		Pattern.SyntaxFlag = SyntaxFlag;
-		this.AppendSyntaxPattern(GtNameSpace.SuffixPatternSymbol(Name), Pattern, null);
+		this.AppendSyntaxPattern(ZenNameSpace.SuffixPatternSymbol(Name), Pattern, null);
 		if(Alias != -1) {
 			this.AppendSuffixSyntax(PatternName.substring(Alias+1), SyntaxFlag, MatchFunc);
 		}
@@ -256,7 +256,7 @@ public final class GtNameSpace extends ZenUtils {
 		return null;
 	}
 
-	public final ZenType AppendTypeName(ZenType Type, GtToken SourceToken) {
+	public final ZenType AppendTypeName(ZenType Type, ZenToken SourceToken) {
 		if(Type.GetBaseType() == Type) {
 			this.SetSymbol(Type.ShortName, Type, SourceToken);
 		}
@@ -272,7 +272,7 @@ public final class GtNameSpace extends ZenUtils {
 
 	public final Object GetClassSymbol(ZenType ClassType, String Symbol, boolean RecursiveSearch) {
 		while(ClassType != null) {
-			/*local*/String Key = GtNameSpace.ClassSymbol(ClassType, Symbol);
+			/*local*/String Key = ZenNameSpace.ClassSymbol(ClassType, Symbol);
 			/*local*/Object Value = this.GetSymbol(Key);
 			if(Value != null) {
 				return Value;
@@ -560,7 +560,7 @@ public final class GtNameSpace extends ZenUtils {
 			this.Generator.DoCodeGeneration(this, TopLevelNode);
 			//			TopLevelNode.Accept(this.Generator);
 			if(TopLevelNode.IsErrorNode() && TokenContext.HasNext()) {
-				/*local*/GtToken Token = TokenContext.GetToken();
+				/*local*/ZenToken Token = TokenContext.GetToken();
 				this.Generator.Logger.ReportInfo(Token, "stopped script at this line");
 				return null;
 			}
@@ -575,7 +575,7 @@ public final class GtNameSpace extends ZenUtils {
 
 	public final Object Eval(String ScriptText, long FileLine) {
 		/*local*/Object ResultValue = this.EvalWithErrorInfo(ScriptText, FileLine);
-		if(ResultValue instanceof GtToken && ((/*cast*/GtToken)ResultValue).IsError()) {
+		if(ResultValue instanceof ZenToken && ((/*cast*/ZenToken)ResultValue).IsError()) {
 			return null;
 		}
 		return ResultValue;
@@ -583,7 +583,7 @@ public final class GtNameSpace extends ZenUtils {
 
 	public final boolean Load(String ScriptText, long FileLine) {
 		/*local*/Object Token = this.EvalWithErrorInfo(ScriptText, FileLine);
-		if(Token instanceof GtToken && ((/*cast*/GtToken)Token).IsError()) {
+		if(Token instanceof ZenToken && ((/*cast*/ZenToken)Token).IsError()) {
 			return false;
 		}
 		return true;

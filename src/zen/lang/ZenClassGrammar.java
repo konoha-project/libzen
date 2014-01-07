@@ -24,7 +24,7 @@
 
 //ifdef JAVA
 package zen.lang;
-import zen.parser.GtNameSpace;
+import zen.parser.ZenNameSpace;
 
 //endif VAJA
 
@@ -833,7 +833,7 @@ public class ZenClassGrammar {
 //		return Gamma.Generator.CreateEmptyNode(GtStaticTable.VoidType);
 //	}
 	
-	public static void ImportGrammar(GtNameSpace NameSpace, Class<?> Grammar) {
+	public static void ImportGrammar(ZenNameSpace NameSpace, Class<?> Grammar) {
 ////		NameSpace.AppendTokenFunc(" \t", LibNative.LoadTokenFunc(Grammar, "WhiteSpaceToken"));
 //		NameSpace.AppendTokenFunc("\n",  LibNative.LoadTokenFunc(Grammar, "IndentToken"));
 //		NameSpace.AppendTokenFunc(";", LibNative.LoadTokenFunc(Grammar, "SemiColonToken"));

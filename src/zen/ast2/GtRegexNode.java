@@ -26,10 +26,10 @@ package zen.ast2;
 
 import zen.ast.GtConstNode;
 import zen.lang.ZenType;
-import zen.parser.GtToken;
+import zen.parser.ZenToken;
 
 public abstract class GtRegexNode extends GtConstNode {
-	protected GtRegexNode(ZenType Type, GtToken Token) {
+	protected GtRegexNode(ZenType Type, ZenToken Token) {
 		super(Token);
 		// TODO Auto-generated constructor stub
 	}
