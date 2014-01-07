@@ -782,7 +782,7 @@ public class ZenGrammar {
 		/*local*/GtNode ParsedNode = TokenContext.ParsePattern(NameSpace, "$Expression$", ZenParserConst.Required);
 		if(!ParsedNode.IsErrorNode() && TokenContext.HasNext()) {
 			GtToken Token = TokenContext.GetTokenAndMoveForward();
-			if(!Token.IsDelim() || !Token.IsIndent()) {
+			if(!Token.IsDelim() && !Token.IsIndent()) {
 				return TokenContext.CreateExpectedErrorNode(Token, ";");
 			}
 		}
