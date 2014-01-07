@@ -10,7 +10,7 @@ tmp/
 *.bak
 *.swp
 #.classpath
-.settings/
+#.settings/
 .loadpath
 
 ############
