@@ -24,35 +24,43 @@
 
 //ifdef JAVA
 package zen.parser;
+
 import java.util.ArrayList;
 
 import zen.ast.GtNode;
 import zen.deps.LibNative;
 import zen.deps.LibZen;
+
 //endif VAJA
 
 public class GtSourceBuilder {
-	/*field*/public ArrayList<String> SourceList;
-	/*field*/ZenSourceGenerator Template;
-	/*field*/int IndentLevel = 0;
-	/*field*/String CurrentIndentString;
-	
-	public GtSourceBuilder/*constructor*/(ZenSourceGenerator Template) {
+	/* field */public ArrayList<String> SourceList;
+	/* field */ZenSourceGenerator Template;
+	/* field */int IndentLevel = 0;
+	/* field */String CurrentIndentString;
+	/* field */String BufferedLineComment;
+
+	public GtSourceBuilder/* constructor */(ZenSourceGenerator Template) {
 		this.Template = Template;
 		this.SourceList = new ArrayList<String>();
 		this.IndentLevel = 0;
 		this.CurrentIndentString = "";
+		this.BufferedLineComment = this.Template.LineComment;
 	}
-	
+
 	public void Clear() {
 		this.SourceList.clear();
 	}
-	
+
 	public void Append(String Text) {
 		this.SourceList.add(Text);
 	}
 
 	public final void AppendLineFeed() {
+		if (this.BufferedLineComment.length() > 1) {
+			this.SourceList.add(this.Template.LineFeed);
+			this.BufferedLineComment = this.Template.LineComment;
+		}
 		this.SourceList.add(this.Template.LineFeed);
 	}
 
@@ -61,15 +69,23 @@ public class GtSourceBuilder {
 		this.SourceList.add(Text);
 		this.SourceList.add(" ");
 	}
-	
 
-	public final void AppendCommentLine(String Text) {
-		if(this.Template.LineComment == null) {
+	public final void AppendBlockComment(String Text) {
+		if (this.Template.BeginComment != null) {
 			this.SourceList.add(this.Template.BeginComment);
 			this.SourceList.add(Text);
 			this.SourceList.add(this.Template.EndComment);
+		} else {
+			this.BufferedLineComment = this.BufferedLineComment + Text;
 		}
-		else {
+	}
+
+	public final void AppendCommentLine(String Text) {
+		if (this.Template.LineComment == null) {
+			this.SourceList.add(this.Template.BeginComment);
+			this.SourceList.add(Text);
+			this.SourceList.add(this.Template.EndComment);
+		} else {
 			this.SourceList.add(this.Template.LineComment);
 			this.SourceList.add(Text);
 		}
@@ -88,8 +104,9 @@ public class GtSourceBuilder {
 	}
 
 	private final String GetIndentString() {
-		if(this.CurrentIndentString == null) {
-			this.CurrentIndentString = ZenUtils.JoinStrings(this.Template.Tab, this.IndentLevel);
+		if (this.CurrentIndentString == null) {
+			this.CurrentIndentString = ZenUtils.JoinStrings(this.Template.Tab,
+					this.IndentLevel);
 		}
 		return this.CurrentIndentString;
 	}
@@ -103,18 +120,20 @@ public class GtSourceBuilder {
 		this.SourceList.add(Text);
 	}
 
-	public void AppendParamList(ArrayList<GtNode> ParamList, int BeginIdx, int EndIdx) {
-		/*local*/int i = BeginIdx;
-		while(i < EndIdx) {
-			if(i > BeginIdx) {
+	public void AppendParamList(ArrayList<GtNode> ParamList, int BeginIdx,
+			int EndIdx) {
+		/* local */int i = BeginIdx;
+		while (i < EndIdx) {
+			if (i > BeginIdx) {
 				this.Append(this.Template.Camma);
 			}
 			ParamList.get(i).Accept(this.Template);
 			i = i + 1;
 		}
 	}
-	
-	@Override public String toString() {
+
+	@Override
+	public String toString() {
 		return LibZen.SourceBuilderToString(this);
 	}
 }

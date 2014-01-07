@@ -69,11 +69,13 @@ import zen.ast.GtWhileNode;
 import zen.ast2.GtNewArrayNode;
 import zen.ast2.GtNewObjectNode;
 import zen.deps.LibZen;
+import zen.deps.ZenMap;
 import zen.lang.ZenType;
 
 //endif VAJA
 
 public class ZenSourceGenerator extends ZenGenerator {
+	/* field */public ZenMap<String> NativeTypeMap;
 	/* field */private final ArrayList<GtSourceBuilder> BuilderList;
 	/* field */protected GtSourceBuilder HeaderBuilder;
 	/* field */protected GtSourceBuilder CurrentBuilder;
@@ -89,9 +91,11 @@ public class ZenSourceGenerator extends ZenGenerator {
 	/* field */public String TrueLiteral;
 	/* field */public String FalseLiteral;
 	/* field */public String NullLiteral;
+	/* field */public String TopType;
 
 	public ZenSourceGenerator(String TargetCode, String TargetVersion) {
 		super(TargetCode, TargetVersion);
+		this.NativeTypeMap = new ZenMap<String>(null);
 		this.BuilderList = new ArrayList<GtSourceBuilder>();
 		this.HeaderBuilder = this.NewSourceBuilder();
 		this.CurrentBuilder = this.HeaderBuilder;
@@ -105,12 +109,30 @@ public class ZenSourceGenerator extends ZenGenerator {
 		this.TrueLiteral = "true";
 		this.FalseLiteral = "false";
 		this.NullLiteral = "null";
+		this.TopType = "var";
 	}
 
 	protected GtSourceBuilder NewSourceBuilder() {
 		/* local */GtSourceBuilder Builder = new GtSourceBuilder(this);
 		this.BuilderList.add(Builder);
 		return Builder;
+	}
+
+	protected void SetNativeType(ZenType Type, String TypeName) {
+		String Key = "" + Type.TypeId;
+		this.NativeTypeMap.put(Key, TypeName);
+	}
+
+	protected String GetNativeType(ZenType Type) {
+		if (Type == null) {
+			return this.TopType;
+		}
+		String Key = "" + Type.TypeId;
+		String TypeName = this.NativeTypeMap.GetOrNull(Key);
+		if (TypeName == null) {
+			return Type.ShortName;
+		}
+		return TypeName;
 	}
 
 	@Override
@@ -464,7 +486,7 @@ public class ZenSourceGenerator extends ZenGenerator {
 
 	// Utils
 	protected boolean VisitType(ZenType Type) {
-		this.CurrentBuilder.Append(Type.GetNativeName());
+		this.CurrentBuilder.Append(this.GetNativeType(Type));
 		return true;
 	}
 

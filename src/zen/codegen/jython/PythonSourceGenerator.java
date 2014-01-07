@@ -26,7 +26,10 @@
 package zen.codegen.jython;
 
 import zen.ast.GtBlockNode;
+import zen.ast.GtCastNode;
+import zen.ast.GtInstanceOfNode;
 import zen.ast.GtNode;
+import zen.lang.ZenSystem;
 import zen.parser.ZenSourceGenerator;
 //endif VAJA
 
@@ -39,14 +42,19 @@ public class PythonSourceGenerator extends ZenSourceGenerator {
 		this.LineFeed = "\n";
 		this.Tab = "\t";
 		this.LineComment = "#"; // if not, set null
-		this.BeginComment = "'''";
-		this.EndComment = "'''";
+		this.BeginComment = null; //"'''";
+		this.EndComment = null; //"'''";
 		this.Camma = ", ";
 		this.SemiColon = "";
 
 		this.TrueLiteral = "True";
 		this.FalseLiteral = "False";
 		this.NullLiteral = "None";
+		this.TopType = "object";
+		this.SetNativeType(ZenSystem.BooleanType, "bool");
+		this.SetNativeType(ZenSystem.IntType, "int");
+		this.SetNativeType(ZenSystem.FloatType, "float");
+		this.SetNativeType(ZenSystem.StringType, "str");
 	}
 
 	@Override
@@ -73,6 +81,24 @@ public class PythonSourceGenerator extends ZenSourceGenerator {
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.AppendIndent();
 		this.CurrentBuilder.Append("#");
+		return true;
+	}
+
+	@Override public boolean VisitCastNode(GtCastNode Node) {
+		// this.CurrentBuilder.Append("(");
+		// this.VisitType(Node.Type);
+		// this.CurrentBuilder.Append(") ");
+		this.CurrentBuilder.AppendBlockComment("castto " + this.GetNativeType(Node.Type));
+		this.GenerateCode(Node.ExprNode);
+		return true;
+	}
+
+	@Override public boolean VisitInstanceOfNode(GtInstanceOfNode Node) {
+		this.CurrentBuilder.Append("isinstance(");
+		this.GenerateCode(Node.LeftNode);
+		this.CurrentBuilder.Append(this.Camma);
+		this.VisitType(Node.RightNode.Type);
+		this.CurrentBuilder.Append(")");
 		return true;
 	}
 
