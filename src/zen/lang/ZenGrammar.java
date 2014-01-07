@@ -373,6 +373,8 @@ public class ZenGrammar {
 
 	public static GtNode MatchMapLiteral(GtNameSpace NameSpace, ZenTokenContext TokenContext, GtNode LeftNode) {
 		/*local*/GtNode LiteralNode = new GtMapLiteralNode();
+		/*local*/GtToken Token = TokenContext.GetTokenAndMoveForward(); /* "{" */
+		LiteralNode.SourceToken = Token;
 		if(!TokenContext.MatchToken("}")) {
 			while(TokenContext.HasNext()) {
 				LiteralNode = TokenContext.AppendMatchedPattern(LiteralNode, NameSpace, "$Expression$", ZenParserConst.Required);
@@ -784,7 +786,7 @@ public class ZenGrammar {
 
 		if(!ParsedNode.IsErrorNode() && TokenContext.HasNext()) {
 			GtToken Token = TokenContext.GetTokenAndMoveForward();
-			if(!Token.IsDelim() || !Token.IsIndent()) {
+			if(!Token.IsDelim() && !Token.IsIndent()) {
 				return TokenContext.CreateExpectedErrorNode(Token, ";");
 			}
 		}
