@@ -9,5 +9,6 @@
 	<classpathentry kind="lib" path="ext/httpcore-4.3.jar"/>
 	<classpathentry kind="lib" path="ext/jline-2.12-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="ext/jna-4.0.0.jar"/>
+	<classpathentry kind="lib" path="ext/jython-2.5.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
