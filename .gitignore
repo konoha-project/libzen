@@ -2,14 +2,14 @@
 ## Eclipse
 #################
 
-.project
+#.project
 .metadata
 bin/*.class
 tmp/
 *.tmp
 *.bak
 *.swp
-.classpath
+#.classpath
 .settings/
 .loadpath
 
