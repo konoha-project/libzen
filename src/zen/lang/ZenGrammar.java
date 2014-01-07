@@ -783,7 +783,6 @@ public class ZenGrammar {
 	public static GtNode MatchStatement(GtNameSpace NameSpace, ZenTokenContext TokenContext, GtNode LeftNode) {
 		TokenContext.SkipAndGetAnnotation(true);
 		/*local*/GtNode ParsedNode = TokenContext.ParsePattern(NameSpace, "$Expression$", ZenParserConst.Required);
-		LibZen.DebugP("parsed ... " + ParsedNode);
 		if(!ParsedNode.IsErrorNode() && TokenContext.HasNext()) {
 			GtToken Token = TokenContext.GetTokenAndMoveForward();
 			if(!Token.IsDelim() && !Token.IsIndent()) {

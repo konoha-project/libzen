@@ -556,7 +556,6 @@ public final class GtNameSpace extends ZenUtils {
 			TokenContext.ParseFlag = 0; // init
 			TokenContext.SkipAndGetAnnotation(true);
 			/*local*/GtNode TopLevelNode = TokenContext.ParsePattern(this, "$Statement$", ZenParserConst.Required);
-			LibZen.DebugP("toplevel parsed .." + TopLevelNode);
 			//			TopLevelNode = this.TypeCheck(TopLevelNode, GtStaticTable.VoidType, GreenTeaConsts.AllowVoidPolicy);
 			this.Generator.DoCodeGeneration(this, TopLevelNode);
 			//			TopLevelNode.Accept(this.Generator);
