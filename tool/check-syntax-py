@@ -1,3 +1,0 @@
-#!/bin/sh
-
-./tool/greentea -l python $@ | flake8 --ignore=E501,W391 -

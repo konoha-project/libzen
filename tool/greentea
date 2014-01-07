@@ -1,8 +1,0 @@
-#!/bin/sh
-basedir=`dirname $0`
-jar=${basedir}/GreenTeaScript.jar
-if test ! -f ${jar}
-then
-    jar=GreenTeaScript.jar
-fi
-java -jar ${jar}  $@
