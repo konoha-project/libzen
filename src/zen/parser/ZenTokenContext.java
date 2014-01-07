@@ -332,10 +332,11 @@ public final class ZenTokenContext extends ZenUtils {
 			}
 			//LibZen.DebugP("B :" + JoinStrings("  ", this.IndentLevel) + CurrentPattern + ", next=" + CurrentPattern.ParentPattern);
 			this.IndentLevel += 1;
+			//LibZen.DebugP("LeftNode="+LeftNode + ", pattern" + Pattern);
 			/*local*/ZenNode ParsedNode = LibNative.ApplyMatchFunc(MatchFunc, NameSpace, this, LeftNode);
 			this.IndentLevel -= 1;
 			this.ParseFlag = ParseFlag;
-			//			LibZen.DebugP("E :" + JoinStrings("  ", this.IndentLevel) + CurrentPattern + " => " + ParsedTree);
+			//LibZen.DebugP("E :" + JoinStrings("  ", this.IndentLevel) + CurrentPattern + " => " + ParsedTree);
 			if(ParsedNode != null && (CurrentPattern.ParentPattern == null || !ParsedNode.IsErrorNode())) {
 				return ParsedNode;
 			}
@@ -354,7 +355,6 @@ public final class ZenTokenContext extends ZenUtils {
 
 	public ZenNode AppendMatchedPattern(ZenNode Base, ZenNameSpace NameSpace, String PatternName,  int MatchFlag) {
 		if(!Base.IsErrorNode()) {
-			//			/*local*/GtToken Token = this.GetToken();
 			/*local*/ZenNode ParsedNode = this.ParsePattern(NameSpace, PatternName, MatchFlag);
 			if(ParsedNode != null) {
 				if(ParsedNode.IsErrorNode()) {

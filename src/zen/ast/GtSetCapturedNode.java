@@ -24,18 +24,13 @@
 
 package zen.ast;
 
-import zen.ast2.GtSymbolNode;
-import zen.lang.ZenType;
-import zen.parser.ZenVisitor;
 import zen.parser.ZenToken;
+import zen.parser.ZenVisitor;
 
 //E.g., $NativeName = $RightNode
-final public class GtSetCapturedNode extends GtSymbolNode {
-	/*field*/public ZenNode	 ValueNode;
-	public GtSetCapturedNode/*constructor*/(ZenType Type, ZenToken Token, String NativeName, ZenNode ValueNode) {
-		super(Type, Token, NativeName);
-		this.ValueNode = ValueNode;
-		this.SetChild(ValueNode);
+final public class GtSetCapturedNode extends GtSetLocalNode {
+	public GtSetCapturedNode/*constructor*/(ZenToken Token, String NativeName, ZenNode ValueNode) {
+		super(Token, NativeName, ValueNode);
 	}
 	@Override public boolean Accept(ZenVisitor Visitor) {
 		return Visitor.VisitSetCapturedNode(this);

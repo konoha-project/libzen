@@ -49,7 +49,6 @@ import zen.ast.GtInstanceOfNode;
 import zen.ast.GtIntNode;
 import zen.ast.GtMapLiteralNode;
 import zen.ast.GtMethodCallNode;
-import zen.ast.ZenNode;
 import zen.ast.GtNullNode;
 import zen.ast.GtOrNode;
 import zen.ast.GtParamNode;
@@ -63,15 +62,16 @@ import zen.ast.GtTypeNode;
 import zen.ast.GtUnaryNode;
 import zen.ast.GtVarDeclNode;
 import zen.ast.GtWhileNode;
+import zen.ast.ZenNode;
 import zen.deps.LibNative;
 import zen.deps.LibZen;
-import zen.parser.ZenNameSpace;
-import zen.parser.ZenToken;
 import zen.parser.GtVariableInfo;
 import zen.parser.ZenLogger;
+import zen.parser.ZenNameSpace;
 import zen.parser.ZenNodeUtils;
 import zen.parser.ZenParserConst;
 import zen.parser.ZenSyntaxPattern;
+import zen.parser.ZenToken;
 import zen.parser.ZenTokenContext;
 
 //endif VAJA
@@ -397,13 +397,13 @@ public class ZenGrammar {
 		/*local*/ZenType Type = NameSpace.GetType(Token.ParsedText);
 		if(Type != null) {
 			ZenNode TypeNode = new GtTypeNode(Token, Type);
+			assert(TypeNode.Type != null);
 			return TokenContext.ParsePatternAfter(NameSpace, TypeNode, "$TypeSuffix$", ZenParserConst.Optional);
 		}
 		return null; // Not Matched
 	}
 
-	public static ZenNode MatchTypeSuffix(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenNode LeftNode) {
-		GtTypeNode TypeNode = (GtTypeNode) LeftNode;
+	public static ZenNode MatchTypeSuffix(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenNode TypeNode) {
 		if(TypeNode.Type.GetParamSize() > 0) {
 			if(TokenContext.MatchToken("<")) {  // Generics
 				/*local*/ArrayList<ZenType> TypeList = new ArrayList<ZenType>();
@@ -721,7 +721,7 @@ public class ZenGrammar {
 	public static ZenNode MatchIdentifier(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenNode LeftNode) {
 		/*local*/ZenToken Token = TokenContext.GetTokenAndMoveForward();
 		if(LibZen.IsVariableName(Token.ParsedText, 0)) {
-			return new GtGetLocalNode(ZenSystem.VarType, Token, Token.ParsedText);
+			return new GtGetLocalNode(Token, Token.ParsedText);
 		}
 		return new GtErrorNode(Token, "illegal name:" + Token.ParsedText);
 	}
@@ -737,7 +737,7 @@ public class ZenGrammar {
 	public static ZenNode MatchVarDecl(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenNode LeftNode) {
 		/*local*/ZenNode VarNode = new GtVarDeclNode();
 		VarNode = TokenContext.MatchNodeToken(VarNode, NameSpace, "var", ZenParserConst.Required);
-		VarNode = TokenContext.AppendMatchedPattern(VarNode, NameSpace, "$Idenifier$", ZenParserConst.Required);
+		VarNode = TokenContext.AppendMatchedPattern(VarNode, NameSpace, "$Identifier$", ZenParserConst.Required);
 		VarNode = TokenContext.AppendMatchedPattern(VarNode, NameSpace, "$TypeAnnotation$", ZenParserConst.Optional);
 		VarNode = TokenContext.MatchNodeToken(VarNode, NameSpace, "=", ZenParserConst.Required);
 		VarNode = TokenContext.AppendMatchedPattern(VarNode, NameSpace, "$Expression$", ZenParserConst.Required);
@@ -866,7 +866,7 @@ public class ZenGrammar {
 		NameSpace.AppendSyntax("$Symbol$", LibNative.LoadMatchFunc(Grammar, "MatchSymbol"));
 		NameSpace.AppendSyntax("$Type$",LibNative.LoadMatchFunc(Grammar, "MatchType"));
 		NameSpace.AppendSyntax("$TypeSuffix$", LibNative.LoadMatchFunc(Grammar, "MatchTypeSuffix"));
-		NameSpace.AppendSyntax("$TypeAnnotation$", LibNative.LoadMatchFunc(Grammar, "MatchTypeSuffix"));
+		NameSpace.AppendSyntax("$TypeAnnotation$", LibNative.LoadMatchFunc(Grammar, "MatchTypeAnnotation"));
 
 		NameSpace.AppendSyntax("$StringLiteral$", LibNative.LoadMatchFunc(Grammar, "MatchStringLiteral"));
 		NameSpace.AppendSyntax("$IntegerLiteral$", LibNative.LoadMatchFunc(Grammar, "MatchIntLiteral"));

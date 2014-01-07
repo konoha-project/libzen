@@ -41,9 +41,9 @@ import zen.ast.ZenNode;
 import zen.lang.ZenFunc;
 import zen.lang.ZenSystem;
 import zen.lang.ZenType;
-import zen.parser.ZenNameSpace;
 import zen.parser.ZenGenerator;
 import zen.parser.ZenLogger;
+import zen.parser.ZenNameSpace;
 import zen.parser.ZenSourceGenerator;
 import zen.parser.ZenTokenContext;
 import zen.parser.ZenVisitor;
@@ -77,7 +77,7 @@ public class LibNative {
 			ZenSystem.SetTypeTable(NativeClass.getCanonicalName(), NativeType);
 			ZenLogger.VerboseLog(ZenLogger.VerboseNative,
 					"creating native class: " + NativeClass.getSimpleName()
-							+ ", " + NativeClass.getCanonicalName());
+					+ ", " + NativeClass.getCanonicalName());
 		}
 		return NativeType;
 	}
@@ -416,8 +416,7 @@ public class LibNative {
 	// return null;
 	// }
 
-	public final static long ApplyTokenFunc(ZenFunc TokenFunc,
-			Object TokenContext, String Text, long pos) {
+	public final static long ApplyTokenFunc(ZenFunc TokenFunc, Object TokenContext, String Text, long pos) {
 		Object[] Argvs = new Object[3];
 		Argvs[0] = TokenContext;
 		Argvs[1] = Text;
@@ -425,13 +424,11 @@ public class LibNative {
 		return (Long) TokenFunc.Invoke(Argvs);
 	}
 
-	public final static ZenNode ApplyMatchFunc(ZenFunc MatchFunc,
-			ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenNode LeftNode) {
+	public final static ZenNode ApplyMatchFunc(ZenFunc MatchFunc, ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenNode LeftNode) {
 		Object[] Argvs = new Object[3];
 		Argvs[0] = NameSpace;
 		Argvs[1] = TokenContext;
 		Argvs[2] = LeftNode;
-		// Argvs[3] = Pattern;
 		return (ZenNode) MatchFunc.Invoke(Argvs);
 	}
 
@@ -489,8 +486,7 @@ public class LibNative {
 	public final static boolean DispatchVisitNode(ZenVisitor Visitor,
 			ZenNode Node) {
 		try {
-			Method JavaMethod = Visitor.getClass().getMethod(
-					Node.GetVisitName(), Node.getClass());
+			Method JavaMethod = Visitor.getClass().getMethod(Node.GetVisitName(), Node.getClass());
 			return (Boolean) JavaMethod.invoke(Visitor, Node);
 		} catch (Exception e) {
 		}

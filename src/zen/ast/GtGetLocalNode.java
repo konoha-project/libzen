@@ -24,15 +24,16 @@
 
 package zen.ast;
 
-import zen.ast2.GtSymbolNode;
-import zen.lang.ZenType;
-import zen.parser.ZenVisitor;
 import zen.parser.ZenToken;
+import zen.parser.ZenVisitor;
 
 // E.g., $NativeName
-final public class GtGetLocalNode extends GtSymbolNode {
-	public GtGetLocalNode/*constructor*/(ZenType Type, ZenToken Token, String NativeName) {
-		super(Type, Token, NativeName);
+public class GtGetLocalNode extends ZenNode {
+	/*field*/public String  NativeName;
+	public GtGetLocalNode/*constructor*/(ZenToken Token, String NativeName) {
+		super();
+		this.SourceToken = Token;
+		this.NativeName = NativeName;
 	}
 	@Override public boolean Accept(ZenVisitor Visitor) {
 		return Visitor.VisitGetLocalNode(this);
