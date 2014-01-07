@@ -24,168 +24,175 @@
 
 //ifdef JAVA
 package zen.main;
+
 //endif VAJA
 
-import zen.deps.ZenArray;
 import zen.deps.LibNative;
 import zen.deps.LibZen;
+import zen.deps.ZenArray;
 import zen.lang.ZenGrammar;
 import zen.lang.ZenSystem;
+import zen.parser.ZenGenerator;
 import zen.parser.ZenLogger;
 import zen.parser.ZenParserConst;
-import zen.parser.ZenGenerator;
 import zen.parser.ZenUtils;
 
 public class ZenMain extends ZenUtils {
 	public final static void ExecCommand(String[] Args) {
-		/*local*/String TargetCode = "exe";  // self executable
-		/*local*/int GeneratorFlag = 0;
-		/*local*/String OneLiner = null;
-		/*local*/String RequiredLibName= null;
-		/*local*/String OutputFile = "-";  // stdout
-		/*local*/int    Index = 0;
-		/*local*/boolean ShellMode = false;
-		while(Index < Args.length) {
-			/*local*/String Argu = Args[Index];
-			if(!Argu.startsWith("-")) {
+		/* local */String TargetCode = "exe"; // self executable
+		/* local */int GeneratorFlag = 0;
+		/* local */String OneLiner = null;
+		/* local */String RequiredLibName = null;
+		/* local */String OutputFile = "-"; // stdout
+		/* local */int Index = 0;
+		/* local */boolean ShellMode = false;
+		while (Index < Args.length) {
+			/* local */String Argu = Args[Index];
+			if (!Argu.startsWith("-")) {
 				break;
 			}
 			Index += 1;
-			if((Argu.equals("-e") || Argu.equals("--eval")) && (Index < Args.length)) {
+			if ((Argu.equals("-e") || Argu.equals("--eval"))
+					&& (Index < Args.length)) {
 				OneLiner = Args[Index];
 				Index += 1;
 				continue;
 			}
-			if((Argu.equals("-o") || Argu.equals("--out")) && (Index < Args.length)) {
-				if(!Args[Index].endsWith(".green")) {  // for safety
+			if ((Argu.equals("-o") || Argu.equals("--out"))
+					&& (Index < Args.length)) {
+				if (!Args[Index].endsWith(".green")) { // for safety
 					OutputFile = Args[Index];
 					Index += 1;
 					continue;
 				}
 			}
-			if((Argu.equals("-l") || Argu.equals("--lang")) && (Index < Args.length)) {
-				if(!Args[Index].endsWith(".green")) {  // for safety
+			if ((Argu.equals("-l") || Argu.equals("--lang"))
+					&& (Index < Args.length)) {
+				if (!Args[Index].endsWith(".green")) { // for safety
 					TargetCode = Args[Index];
 					Index += 1;
 					continue;
 				}
 			}
-			if((Argu.equals("-r") || Argu.equals("--require")) && (Index < Args.length)) {
+			if ((Argu.equals("-r") || Argu.equals("--require"))
+					&& (Index < Args.length)) {
 				RequiredLibName = Args[Index];
 				Index += 1;
 				continue;
 			}
-			if(Argu.equals("-i")) {
+			if (Argu.equals("-i")) {
 				ShellMode = true;
 				continue;
 			}
-			if(LibZen.EqualsString(Argu, "--verbose")) {
+			if (LibZen.EqualsString(Argu, "--verbose")) {
 				LibZen.DebugMode = true;
-				ZenLogger.VerboseMask |= (ZenLogger.VerboseFile|ZenLogger.VerboseSymbol|ZenLogger.VerboseNative);
+				ZenLogger.VerboseMask |= (ZenLogger.VerboseFile
+						| ZenLogger.VerboseSymbol | ZenLogger.VerboseNative);
 				continue;
 			}
-			if(LibZen.EqualsString(Argu, "--verbose:token")) {
+			if (LibZen.EqualsString(Argu, "--verbose:token")) {
 				ZenLogger.VerboseMask |= ZenLogger.VerboseToken;
 				continue;
 			}
-			if(LibZen.EqualsString(Argu, "--verbose:type")) {
+			if (LibZen.EqualsString(Argu, "--verbose:type")) {
 				ZenLogger.VerboseMask |= ZenLogger.VerboseType;
 				continue;
 			}
-			if(LibZen.EqualsString(Argu, "--verbose:symbol")) {
+			if (LibZen.EqualsString(Argu, "--verbose:symbol")) {
 				ZenLogger.VerboseMask |= ZenLogger.VerboseSymbol;
 				continue;
 			}
-			if(LibZen.EqualsString(Argu, "--verbose:native")) {
+			if (LibZen.EqualsString(Argu, "--verbose:native")) {
 				ZenLogger.VerboseMask |= ZenLogger.VerboseNative;
 				continue;
 			}
-			if(LibZen.EqualsString(Argu, "--verbose:func")) {
+			if (LibZen.EqualsString(Argu, "--verbose:func")) {
 				ZenLogger.VerboseMask |= ZenLogger.VerboseFunc;
 				continue;
 			}
-			if(LibZen.EqualsString(Argu, "--verbose:all")) {
+			if (LibZen.EqualsString(Argu, "--verbose:all")) {
 				ZenLogger.VerboseMask = -1;
 				continue;
 			}
-			if(LibZen.EqualsString(Argu, "--verbose:no")) {
+			if (LibZen.EqualsString(Argu, "--verbose:no")) {
 				ZenLogger.VerboseMask = 0;
 				continue;
 			}
 			ZenMain.Usage(Argu + " is unknown");
 		}
-		/*local*/ZenGenerator Generator = LibNative.LoadGenerator(TargetCode, OutputFile);
-		LibNative.ImportGrammar(Generator.RootNameSpace, ZenGrammar.class.getName());
-		//		/*local*/GtParserContext Context = new GtParserContext(new KonohaGrammar(), Generator);
-		//		if(RequiredLibName != null) {
-		//			if(!Context.TopLevelNameSpace.LoadRequiredLib(RequiredLibName)) {
-		//				LibZen.Exit(1, "failed to load required library: " + RequiredLibName);
-		//			}
-		//		}
-		//		if(OneLiner != null) {
-		//			Context.TopLevelNameSpace.Eval(OneLiner, 1);
-		//		}
-//		Generator.InitContext(TopLevelNameSpace);
-		if(!(Index < Args.length)) {
+		/* local */ZenGenerator Generator = LibNative.LoadGenerator(TargetCode,
+				OutputFile);
+		LibNative.ImportGrammar(Generator.RootNameSpace,
+				ZenGrammar.class.getName());
+		// /*local*/GtParserContext Context = new GtParserContext(new
+		// KonohaGrammar(), Generator);
+		// if(RequiredLibName != null) {
+		// if(!Context.TopLevelNameSpace.LoadRequiredLib(RequiredLibName)) {
+		// LibZen.Exit(1, "failed to load required library: " +
+		// RequiredLibName);
+		// }
+		// }
+		// if(OneLiner != null) {
+		// Context.TopLevelNameSpace.Eval(OneLiner, 1);
+		// }
+		// Generator.InitContext(TopLevelNameSpace);
+		if (!(Index < Args.length)) {
 			ShellMode = true;
 		}
-		/*local*/ZenArray ARGV = ZenArray.NewArray1(ZenSystem.StringType, 0);
-		while(Index < Args.length) {
+		/* local */ZenArray ARGV = ZenArray.NewArray1(ZenSystem.StringType, 0);
+		while (Index < Args.length) {
 			ARGV.ArrayBody.add(Args[Index]);
 			Index += 1;
 		}
 		Generator.RootNameSpace.SetSymbol("ARGV", ARGV, null);
-		if(ARGV.ArrayBody.size() > 0) {
-			/*local*/String FileName = (/*cast*/String)ARGV.ArrayBody.get(0);
-			/*local*/String ScriptText = LibNative.LoadScript(FileName);
-			if(ScriptText == null) {
+		if (ARGV.ArrayBody.size() > 0) {
+			/* local */String FileName = (/* cast */String) ARGV.ArrayBody.get(0);
+			/* local */String ScriptText = LibNative.LoadScript(FileName);
+			if (ScriptText == null) {
 				LibNative.Exit(1, "file not found: " + FileName);
 			}
-			/*local*/long FileLine = ZenSystem.GetFileLine(FileName, 1);
-			/*local*/boolean Success = Generator.RootNameSpace.Load(ScriptText, FileLine);
+			/* local */long FileLine = ZenSystem.GetFileLine(FileName, 1);
+			/* local */boolean Success = Generator.RootNameSpace.Load(
+					ScriptText, FileLine);
 			Generator.Logger.ShowReportedErrors();
-			if(!Success) {
+			if (!Success) {
 				LibNative.Exit(1, "abort loading: " + FileName);
 			}
 		}
-		if(ShellMode) {
-			LibNative.println(ZenParserConst.ProgName + ZenParserConst.Version + " (" + ZenParserConst.CodeName + ") on " + LibZen.GetPlatform());
+		if (ShellMode) {
+			LibNative.println(ZenParserConst.ProgName + ZenParserConst.Version
+					+ " (" + ZenParserConst.CodeName + ") on "
+					+ LibZen.GetPlatform());
 			LibNative.println(ZenParserConst.Copyright);
 			Generator.Logger.ShowReportedErrors();
-			/*local*/int linenum = 1;
-			/*local*/String Line = null;
-			while((Line = LibZen.ReadLine2(">>> ", "    ")) != null) {
+			/* local */int linenum = 1;
+			/* local */String Line = null;
+			while ((Line = LibZen.ReadLine2(">>> ", "    ")) != null) {
 				try {
-					/*local*/Object EvaledValue = Generator.RootNameSpace.Eval(Line, linenum);
+					/* local */Object EvaledValue = Generator.RootNameSpace
+							.Eval(Line, linenum);
 					Generator.Logger.ShowReportedErrors();
-					if(EvaledValue != null) {
-						LibNative.println(" (" + ZenSystem.GuessType(EvaledValue) + ":" + LibNative.GetClassName(EvaledValue) + ") " + LibZen.Stringify(EvaledValue));
+					if (EvaledValue != null) {
+						LibNative.println(" ("
+								+ ZenSystem.GuessType(EvaledValue) + ":"
+								+ LibNative.GetClassName(EvaledValue) + ") "
+								+ LibZen.Stringify(EvaledValue));
 					}
 					linenum += 1;
-				}
-				catch(Exception e) {
+				} catch (Exception e) {
 					LibZen.PrintStackTrace(e, linenum);
 					linenum += 1;
 				}
 			}
 			LibNative.println("");
 		}
-		/* else if(TargetCode.equals("minikonoha")) {
-			String SourceCode = Generator.GetSourceCode();
-			MiniKonohaExcutor.Eval(SourceCode);
-		} */
+		/*
+		 * else if(TargetCode.equals("minikonoha")) { String SourceCode =
+		 * Generator.GetSourceCode(); MiniKonohaExcutor.Eval(SourceCode); }
+		 */
 		else {
-//			Generator.FlushBuffer();
+			// Generator.FlushBuffer();
 		}
-	}
-
-	public final static void main(String[] Args)  {
-		//		try {
-		ZenMain.ExecCommand(Args);
-		//		}
-		//		catch(SoftwareFaultException e) {
-		//			System.err.println(e.GetStackTrace());
-		//		}
 	}
 
 	public final static void Usage(String Message) {
@@ -206,43 +213,59 @@ public class ZenMain extends ZenUtils {
 		System.out.println("      typescript ts       TypeScript");
 		System.out.println("");
 		System.out.println("  --out|-o  FILE        Output filename");
-		System.out.println("  --eval|-e EXPR        Program passed in as string");
+		System.out
+				.println("  --eval|-e EXPR        Program passed in as string");
 		System.out.println("  --require|-r LIBRARY     Load the library");
 		System.out.println("  --verbose             Printing Debug infomation");
 		System.out.println("     --verbose:token      adding token info");
 		System.out.println("     --verbose:type       adding type info");
 		System.out.println("     --verbose:symbol     adding symbol info");
-		System.out.println("     --verbose:native     adding native class info");
+		System.out
+				.println("     --verbose:native     adding native class info");
 		System.out.println("     --verbose:all        adding all info");
 		System.out.println("     --verbose:no         no log");
 		LibNative.Exit(0, Message);
 	}
 
-	public final static String DetectTargetCode(String Extension, String TargetCode) {
-		if(Extension.endsWith(".js")) {
+	public final static String DetectTargetCode(String Extension,
+			String TargetCode) {
+		if (Extension.endsWith(".js")) {
 			return "js";
-		}
-		else if(Extension.endsWith(".pl")) {
+		} else if (Extension.endsWith(".pl")) {
 			return "perl";
-		}
-		else if(Extension.endsWith(".py")) {
+		} else if (Extension.endsWith(".py")) {
 			return "python";
-		}
-		else if(Extension.endsWith(".sh")) {
+		} else if (Extension.endsWith(".sh")) {
 			return "bash";
-		}
-		else if(Extension.endsWith(".scala")) {
+		} else if (Extension.endsWith(".scala")) {
 			return "scala";
-		}
-		else if(Extension.endsWith(".cs")) {
+		} else if (Extension.endsWith(".cs")) {
 			return "cs";
-		}
-		else if(TargetCode.startsWith("X")) {
+		} else if (TargetCode.startsWith("X")) {
 			return "exe";
-		}
-		else if(Extension.endsWith(".c")) {
+		} else if (Extension.endsWith(".c")) {
 			return "c";
 		}
 		return TargetCode;
 	}
+
+	public final static void main(String[] Args) {
+		ZenMain.ExecCommand(Args);
+	}
+
+	// public static void main(String []args) throws PyException {
+	// PythonInterpreter interp = new PythonInterpreter();
+	//
+	// System.out.println("Hello, brave new world");
+	// interp.exec("import sys");
+	// interp.exec("print sys");
+	// interp.set("a", new PyInteger(42));
+	// interp.exec("print a");
+	// interp.exec("x = 2+2");
+	// PyObject x = interp.get("x");
+	//
+	// System.out.println("x: "+x);
+	// System.out.println("Goodbye, cruel world");
+	// }
+
 }
