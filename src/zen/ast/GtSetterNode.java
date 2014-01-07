@@ -31,15 +31,15 @@ import zen.parser.ZenToken;
 
 //E.g., $RecvNode.$NativeName = $Value
 final public class GtSetterNode extends GtSymbolNode {
-	/*field*/public GtNode  RecvNode;
-	/*field*/public GtNode  ValueNode;
-	public GtSetterNode/*constructor*/(ZenToken SourceToken, GtNode RecvNode, String NativeName) {
+	/*field*/public ZenNode  RecvNode;
+	/*field*/public ZenNode  ValueNode;
+	public GtSetterNode/*constructor*/(ZenToken SourceToken, ZenNode RecvNode, String NativeName) {
 		super(ZenSystem.VarType, SourceToken, NativeName);
 		this.RecvNode  = RecvNode;
 		this.ValueNode = null;
 		this.SetChild(RecvNode);
 	}
-	@Override public void Append(GtNode Node) {
+	@Override public void Append(ZenNode Node) {
 		this.SetChild(Node);
 		this.ValueNode = Node;
 		/*return this;*/

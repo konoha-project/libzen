@@ -24,16 +24,16 @@
 
 package zen.ast2;
 
-import zen.ast.GtNode;
+import zen.ast.ZenNode;
 import zen.lang.ZenType;
 import zen.parser.ZenToken;
 
 //E.g., "for" "(" $Variable "in" $IterNode ")" $BodyNode
-final public class GtForEachNode extends GtNode {
-	/*field*/public GtNode	Variable;
-	/*field*/public GtNode	IterNode;
-	/*field*/public GtNode	BodyNode;
-	public GtForEachNode/*constructor*/(ZenType Type, ZenToken Token, GtNode Variable, GtNode IterNode, GtNode BodyNode) {
+final public class GtForEachNode extends ZenNode {
+	/*field*/public ZenNode	Variable;
+	/*field*/public ZenNode	IterNode;
+	/*field*/public ZenNode	BodyNode;
+	public GtForEachNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode Variable, ZenNode IterNode, ZenNode BodyNode) {
 		super();
 		this.Variable = Variable;
 		this.IterNode = IterNode;

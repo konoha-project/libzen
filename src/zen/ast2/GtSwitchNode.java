@@ -26,19 +26,19 @@ package zen.ast2;
 
 import java.util.ArrayList;
 
-import zen.ast.GtNode;
+import zen.ast.ZenNode;
 import zen.lang.ZenType;
 import zen.parser.ZenToken;
 
-final public class GtSwitchNode extends GtNode {
-	/*field*/public GtNode	MatchNode;
-	/*field*/public GtNode	DefaultBlock;
-	/*field*/public ArrayList<GtNode> CaseList; // [expr, block, expr, block, ....]
-	public GtSwitchNode/*constructor*/(ZenType Type, ZenToken Token, GtNode MatchNode, GtNode DefaultBlock) {
+final public class GtSwitchNode extends ZenNode {
+	/*field*/public ZenNode	MatchNode;
+	/*field*/public ZenNode	DefaultBlock;
+	/*field*/public ArrayList<ZenNode> CaseList; // [expr, block, expr, block, ....]
+	public GtSwitchNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode MatchNode, ZenNode DefaultBlock) {
 		super();
 		this.MatchNode = MatchNode;
 		this.DefaultBlock = DefaultBlock;
-		this.CaseList = new ArrayList<GtNode>();
+		this.CaseList = new ArrayList<ZenNode>();
 		this.SetChild(DefaultBlock);
 	}
 //	@Override public boolean Accept(GtVisitor Visitor) {

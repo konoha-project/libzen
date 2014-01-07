@@ -24,17 +24,17 @@
 
 package zen.ast2;
 
-import zen.ast.GtNode;
+import zen.ast.ZenNode;
 import zen.lang.ZenType;
 import zen.parser.ZenToken;
 
-final public class GtStatementNode extends GtNode {
+final public class GtStatementNode extends ZenNode {
 	/**
 	 * int f(int n);
 	 * f(1)
 	 */
-	/*field*/public GtNode ValueNode;
-	public GtStatementNode/*constructor*/(ZenType Type, ZenToken Token, GtNode ValueNode) {
+	/*field*/public ZenNode ValueNode;
+	public GtStatementNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode ValueNode) {
 		super();
 		this.ValueNode = ValueNode;
 		this.SetChild(ValueNode);

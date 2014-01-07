@@ -27,13 +27,13 @@ package zen.ast;
 import zen.lang.ZenSystem;
 import zen.parser.ZenVisitor;
 
-public class GtReturnNode extends GtNode {
-	/*field*/public GtNode ValueNode;
+public class GtReturnNode extends ZenNode {
+	/*field*/public ZenNode ValueNode;
 	public GtReturnNode/*constructor*/() {
 		super();
 		this.ValueNode = null;
 	}
-	@Override public void Append(GtNode ValueNode) {
+	@Override public void Append(ZenNode ValueNode) {
 		this.ValueNode = ValueNode;
 		this.SetChild(ValueNode);
 	}

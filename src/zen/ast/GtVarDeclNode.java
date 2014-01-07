@@ -33,13 +33,13 @@ import zen.parser.ZenVisitor;
 
 final public class GtVarDeclNode extends GtBlockNode {
 	/*field*/public String  NativeName;
-	/*field*/public GtNode	InitNode;
+	/*field*/public ZenNode	InitNode;
 	public GtVarDeclNode/*constructor*/(/*GtType DeclType, GtToken SourceToken, String VariableName*/) {
 		super(null, null);
 		this.NativeName = null;
 		this.InitNode  = null;
 	}
-	@Override public void Append(GtNode Node) {
+	@Override public void Append(ZenNode Node) {
 		if(this.InitNode != null) {
 			super.Append(Node);
 		}

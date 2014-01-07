@@ -24,14 +24,14 @@
 
 package zen.ast2;
 
-import zen.ast.GtNode;
+import zen.ast.ZenNode;
 import zen.lang.ZenType;
 import zen.parser.ZenToken;
 
-final public class GtDoWhileNode extends GtNode {
-	/*field*/public GtNode	CondNode;
-	/*field*/public GtNode	BodyNode;
-	public GtDoWhileNode/*constructor*/(ZenType Type, ZenToken Token, GtNode CondNode, GtNode BodyNode) {
+final public class GtDoWhileNode extends ZenNode {
+	/*field*/public ZenNode	CondNode;
+	/*field*/public ZenNode	BodyNode;
+	public GtDoWhileNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode CondNode, ZenNode BodyNode) {
 		super();
 		this.CondNode = CondNode;
 		this.BodyNode = BodyNode;
@@ -40,7 +40,7 @@ final public class GtDoWhileNode extends GtNode {
 //	@Override public boolean Accept(GtVisitor Visitor) {
 //		return Visitor.VisitDoWhileNode(this);
 //	}
-	public GtNode ToWhileNode() {
+	public ZenNode ToWhileNode() {
 		/**
 		while(true) {
 			$BodyNode;

@@ -24,12 +24,12 @@
 
 package zen.ast2;
 
-import zen.ast.GtNode;
+import zen.ast.ZenNode;
 import zen.lang.ZenType;
 import zen.lang.ZenFunc;
 import zen.parser.ZenToken;
 
-abstract public class GtSymbolNode extends GtNode {
+abstract public class GtSymbolNode extends ZenNode {
 	/*field*/public String  NativeName;
 	/*field*/public ZenFunc	ResolvedFunc;    // 
 	public GtSymbolNode/*constructor*/(ZenType Type, ZenToken Token, String NativeName) {

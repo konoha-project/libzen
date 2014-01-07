@@ -28,7 +28,7 @@ import zen.lang.ZenType;
 import zen.parser.ZenToken;
 import zen.parser.ZenVisitor;
 
-public class GtParamNode extends GtNode {
+public class GtParamNode extends ZenNode {
 	/*field*/public String  Name;
 	public GtParamNode/*constructor*/(ZenType Type, ZenToken SourceToken, String Name) {
 		super(); // TODO

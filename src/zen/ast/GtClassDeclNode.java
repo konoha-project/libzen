@@ -30,19 +30,19 @@ import zen.lang.ZenType;
 import zen.parser.ZenNameSpace;
 import zen.parser.ZenToken;
 
-final public class GtClassDeclNode extends GtNode {
+final public class GtClassDeclNode extends ZenNode {
 	/*field*/public ZenType ClassType;
 	/*field*/public ZenNameSpace NameSpace;
-	/*field*/public ArrayList<GtNode>  FieldList;
-	/*field*/public ArrayList<GtNode>  MemberList;
+	/*field*/public ArrayList<ZenNode>  FieldList;
+	/*field*/public ArrayList<ZenNode>  MemberList;
 	public GtClassDeclNode/*constructor*/(ZenToken SourceToken, ZenNameSpace NameSpace, ZenType ClassType) {
 		super(); this.SourceToken = SourceToken; // TODO
 		this.NameSpace = NameSpace;
 		this.ClassType = ClassType;
-		this.FieldList = new ArrayList<GtNode>();
-		this.MemberList = new ArrayList<GtNode>();
+		this.FieldList = new ArrayList<ZenNode>();
+		this.MemberList = new ArrayList<ZenNode>();
 	}
-	@Override public void Append(GtNode Node) {
+	@Override public void Append(ZenNode Node) {
 		if(Node instanceof GtFuncDeclNode) {
 			this.MemberList.add(Node);
 		}

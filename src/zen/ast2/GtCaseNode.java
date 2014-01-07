@@ -24,14 +24,14 @@
 
 package zen.ast2;
 
-import zen.ast.GtNode;
+import zen.ast.ZenNode;
 import zen.lang.ZenType;
 import zen.parser.ZenToken;
 
-final public class GtCaseNode extends GtNode {
-	/*field*/public GtNode  CaseNode;;
-	/*field*/public GtNode	BodyNode;
-	public GtCaseNode/*constructor*/(ZenType Type, ZenToken Token, GtNode CaseNode, GtNode BodyNode) {
+final public class GtCaseNode extends ZenNode {
+	/*field*/public ZenNode  CaseNode;;
+	/*field*/public ZenNode	BodyNode;
+	public GtCaseNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode CaseNode, ZenNode BodyNode) {
 		super();
 		this.CaseNode = CaseNode;
 		this.BodyNode = BodyNode;

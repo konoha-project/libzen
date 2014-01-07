@@ -27,7 +27,7 @@ package zen.parser;
 import java.util.ArrayList;
 
 import zen.ast.GtErrorNode;
-import zen.ast.GtNode;
+import zen.ast.ZenNode;
 import zen.deps.LibNative;
 import zen.deps.LibZen;
 import zen.deps.ZenMap;
@@ -111,7 +111,7 @@ public final class ZenTokenContext extends ZenUtils {
 		return this.LatestToken;
 	}
 
-	public GtNode CreateExpectedErrorNode(ZenToken SourceToken, String ExpectedTokenText) {
+	public ZenNode CreateExpectedErrorNode(ZenToken SourceToken, String ExpectedTokenText) {
 		if(SourceToken == null || SourceToken.IsNull()) {
 			SourceToken = this.GetBeforeToken();
 			return new GtErrorNode(SourceToken, ExpectedTokenText + " is expected after " + SourceToken.ParsedText);
@@ -294,7 +294,7 @@ public final class ZenTokenContext extends ZenUtils {
 		return false;
 	}
 
-	public GtNode MatchNodeToken(GtNode Base, ZenNameSpace NameSpace, String TokenText, int MatchFlag) {
+	public ZenNode MatchNodeToken(ZenNode Base, ZenNameSpace NameSpace, String TokenText, int MatchFlag) {
 		if(!Base.IsErrorNode()) {
 			/*local*/int RollbackPosition = this.CurrentPosition;
 			/*local*/ZenToken Token = this.GetTokenAndMoveForward();
@@ -319,7 +319,7 @@ public final class ZenTokenContext extends ZenUtils {
 		return Base;
 	}
 
-	public final GtNode ApplyMatchPattern(ZenNameSpace NameSpace, GtNode LeftNode, ZenSyntaxPattern Pattern) {
+	public final ZenNode ApplyMatchPattern(ZenNameSpace NameSpace, ZenNode LeftNode, ZenSyntaxPattern Pattern) {
 		/*local*/int RollbackPosition = this.CurrentPosition;
 		/*local*/int ParseFlag = this.ParseFlag;
 		/*local*/ZenSyntaxPattern CurrentPattern = Pattern;
@@ -332,7 +332,7 @@ public final class ZenTokenContext extends ZenUtils {
 			}
 			//LibZen.DebugP("B :" + JoinStrings("  ", this.IndentLevel) + CurrentPattern + ", next=" + CurrentPattern.ParentPattern);
 			this.IndentLevel += 1;
-			/*local*/GtNode ParsedNode = LibNative.ApplyMatchFunc(MatchFunc, NameSpace, this, LeftNode);
+			/*local*/ZenNode ParsedNode = LibNative.ApplyMatchFunc(MatchFunc, NameSpace, this, LeftNode);
 			this.IndentLevel -= 1;
 			this.ParseFlag = ParseFlag;
 			//			LibZen.DebugP("E :" + JoinStrings("  ", this.IndentLevel) + CurrentPattern + " => " + ParsedTree);
@@ -352,10 +352,10 @@ public final class ZenTokenContext extends ZenUtils {
 		return this.CreateExpectedErrorNode(TopToken, Pattern.PatternName);
 	}
 
-	public GtNode AppendMatchedPattern(GtNode Base, ZenNameSpace NameSpace, String PatternName,  int MatchFlag) {
+	public ZenNode AppendMatchedPattern(ZenNode Base, ZenNameSpace NameSpace, String PatternName,  int MatchFlag) {
 		if(!Base.IsErrorNode()) {
 			//			/*local*/GtToken Token = this.GetToken();
-			/*local*/GtNode ParsedNode = this.ParsePattern(NameSpace, PatternName, MatchFlag);
+			/*local*/ZenNode ParsedNode = this.ParsePattern(NameSpace, PatternName, MatchFlag);
 			if(ParsedNode != null) {
 				if(ParsedNode.IsErrorNode()) {
 					return ParsedNode;
@@ -411,14 +411,14 @@ public final class ZenTokenContext extends ZenUtils {
 		this.ParseFlag = OldFlag;
 	}
 
-	public final GtNode ParsePatternAfter(ZenNameSpace NameSpace, GtNode LeftNode, String PatternName, int MatchFlag) {
+	public final ZenNode ParsePatternAfter(ZenNameSpace NameSpace, ZenNode LeftNode, String PatternName, int MatchFlag) {
 		/*local*/int Pos = this.CurrentPosition;
 		/*local*/int ParseFlag = this.ParseFlag;
 		if(ZenUtils.IsFlag(MatchFlag, ZenParserConst.Optional)) {
 			this.ParseFlag = this.ParseFlag | ZenParserConst.BackTrackParseFlag;
 		}
 		/*local*/ZenSyntaxPattern Pattern = this.TopLevelNameSpace.GetSyntaxPattern(PatternName);
-		/*local*/GtNode ParsedNode = this.ApplyMatchPattern(NameSpace, LeftNode, Pattern);
+		/*local*/ZenNode ParsedNode = this.ApplyMatchPattern(NameSpace, LeftNode, Pattern);
 		this.ParseFlag = ParseFlag;
 		if(ParsedNode != null) {
 			return ParsedNode;
@@ -427,7 +427,7 @@ public final class ZenTokenContext extends ZenUtils {
 		return null; // mismatched
 	}
 
-	public final GtNode ParsePattern(ZenNameSpace NameSpace, String PatternName, int MatchFlag) {
+	public final ZenNode ParsePattern(ZenNameSpace NameSpace, String PatternName, int MatchFlag) {
 		return this.ParsePatternAfter(NameSpace, null, PatternName, MatchFlag);
 	}
 

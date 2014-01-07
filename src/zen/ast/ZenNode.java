@@ -30,12 +30,12 @@ import zen.parser.ZenNameSpace;
 import zen.parser.ZenToken;
 import zen.parser.ZenVisitor;
 
-public abstract class GtNode {
-	/*field*/public GtNode	ParentNode;
+public abstract class ZenNode {
+	/*field*/public ZenNode	ParentNode;
 	/*field*/public ZenType	Type;
 	/*field*/public ZenToken	SourceToken;
 
-	public GtNode/*constructor*/() {
+	public ZenNode() {
 		this.Type = null;
 		this.SourceToken = null;
 		this.ParentNode = null;
@@ -45,7 +45,7 @@ public abstract class GtNode {
 		return (this instanceof GtErrorNode);
 	}
 
-	public final GtNode SetChild(GtNode Node) {
+	public final ZenNode SetChild(ZenNode Node) {
 		assert(Node != null);
 		if(Node != null) {
 			assert(this != Node);
@@ -54,11 +54,11 @@ public abstract class GtNode {
 		return Node;
 	}
 
-	public void Append(GtNode Node) {
+	public void Append(ZenNode Node) {
 		
 	}
 
-	public final GtNode Done() {
+	public final ZenNode Done() {
 		return new GtBlockNode(this.SourceToken, null);
 	}
 

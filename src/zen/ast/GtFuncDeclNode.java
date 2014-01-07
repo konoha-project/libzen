@@ -35,7 +35,7 @@ final public class GtFuncDeclNode extends GtFunctionLiteralNode {
 	/*field*/public ZenNameSpace NameSpace;
 	public GtFuncDeclNode/*constructor*/(ZenToken SourceToken, ZenNameSpace NameSpace, String FuncName) {
 		super(SourceToken); // TODO
-		this.ArgumentList = new ArrayList<GtNode>();
+		this.ArgumentList = new ArrayList<ZenNode>();
 		this.FuncName = FuncName;
 		this.NameSpace = NameSpace;
 	}

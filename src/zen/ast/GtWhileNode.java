@@ -28,15 +28,15 @@ import zen.lang.ZenSystem;
 import zen.parser.ZenVisitor;
 
 //E.g., "while" "(" $Cond ")" $Body
-final public class GtWhileNode extends GtNode {
-	/*field*/public GtNode	CondNode;
-	/*field*/public GtNode	BodyNode;
+final public class GtWhileNode extends ZenNode {
+	/*field*/public ZenNode	CondNode;
+	/*field*/public ZenNode	BodyNode;
 	public GtWhileNode/*constructor*/() {
 		super();
 		this.CondNode = null;
 		this.BodyNode = null;
 	}
-	@Override public final void Append(GtNode Node) {
+	@Override public final void Append(ZenNode Node) {
 		this.SetChild(Node);
 		if(this.CondNode == null) {
 			this.CondNode = Node;

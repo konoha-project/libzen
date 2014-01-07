@@ -24,7 +24,7 @@
 
 package zen.ast2;
 
-import zen.ast.GtNode;
+import zen.ast.ZenNode;
 import zen.lang.ZenType;
 import zen.parser.ZenToken;
 
@@ -34,13 +34,13 @@ import zen.parser.ZenToken;
  * }
  * try-catch is needed
  */
-final public class GtUsingNode extends GtNode {
+final public class GtUsingNode extends ZenNode {
 	/*field*/public ZenType	DeclType;
 	/*field*/public String  NativeName;
-	/*field*/public GtNode	InitNode;
-	/*field*/public GtNode	BlockNode;   // release resource of NativeName after BlockNode
+	/*field*/public ZenNode	InitNode;
+	/*field*/public ZenNode	BlockNode;   // release resource of NativeName after BlockNode
 	/* let VarNode in Block end */
-	public GtUsingNode/*constructor*/(ZenType Type, ZenToken Token, ZenType DeclType, String VariableName, GtNode InitNode, GtNode Block) {
+	public GtUsingNode/*constructor*/(ZenType Type, ZenToken Token, ZenType DeclType, String VariableName, ZenNode InitNode, ZenNode Block) {
 		super();
 		this.NativeName = VariableName;
 		this.DeclType  = DeclType;

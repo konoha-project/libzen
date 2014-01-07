@@ -29,13 +29,13 @@ import java.util.ArrayList;
 import zen.parser.ZenVisitor;
 
 //E.g., "{" StringNode, $Node, StringNode, $Node "}"
-final public class GtMapLiteralNode extends GtNode {   // => ArrayLiteral
-	/*field*/public ArrayList<GtNode>	NodeList;
+final public class GtMapLiteralNode extends ZenNode {   // => ArrayLiteral
+	/*field*/public ArrayList<ZenNode>	NodeList;
 	public GtMapLiteralNode/*constructor*/() {
 		super();
-		this.NodeList = new ArrayList<GtNode>();
+		this.NodeList = new ArrayList<ZenNode>();
 	}
-	@Override public void Append(GtNode Node) {
+	@Override public void Append(ZenNode Node) {
 		this.NodeList.add(Node);
 	}
 	@Override public boolean Accept(ZenVisitor Visitor) {

@@ -31,7 +31,7 @@ import zen.parser.ZenVisitor;
 
 //E.g., $LeftNode && $RightNode
 final public class GtAndNode extends GtBinaryNode {
-	public GtAndNode/*constructor*/(ZenToken Token, GtNode Left, ZenSyntaxPattern Pattern) {
+	public GtAndNode/*constructor*/(ZenToken Token, ZenNode Left, ZenSyntaxPattern Pattern) {
 		super(Token, Left, Pattern);
 	}
 	@Override public boolean Accept(ZenVisitor Visitor) {

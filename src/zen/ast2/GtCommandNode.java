@@ -26,18 +26,18 @@ package zen.ast2;
 
 import java.util.ArrayList;
 
-import zen.ast.GtNode;
+import zen.ast.ZenNode;
 import zen.lang.ZenType;
 import zen.parser.ZenToken;
 
 // E.g., "ls" "-a"..
-final public class GtCommandNode extends GtNode {
-	/*field*/public ArrayList<GtNode>  ArgumentList; /* ["/bin/ls" , "-la", "/", ...] */
-	/*field*/public GtNode PipedNextNode;
-	public GtCommandNode/*constructor*/(ZenType Type, ZenToken Token, GtNode PipedNextNode) {
+final public class GtCommandNode extends ZenNode {
+	/*field*/public ArrayList<ZenNode>  ArgumentList; /* ["/bin/ls" , "-la", "/", ...] */
+	/*field*/public ZenNode PipedNextNode;
+	public GtCommandNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode PipedNextNode) {
 		super();
 		this.PipedNextNode = PipedNextNode;
-		this.ArgumentList = new ArrayList<GtNode>();
+		this.ArgumentList = new ArrayList<ZenNode>();
 	}
 //	@Override public final ArrayList<GtNode> GetList() {
 //		return this.ArgumentList;

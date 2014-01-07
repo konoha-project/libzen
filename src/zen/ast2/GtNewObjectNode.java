@@ -26,20 +26,20 @@ package zen.ast2;
 
 import java.util.ArrayList;
 
-import zen.ast.GtNode;
+import zen.ast.ZenNode;
 import zen.lang.ZenType;
 import zen.lang.ZenFunc;
 import zen.parser.ZenToken;
 import zen.parser.ZenVisitor;
 
 // E.g., ConstructorNode is for object creation in Native language defined
-final public class GtNewObjectNode extends GtNode {
-	/*field*/public ArrayList<GtNode>	ParamList;
+final public class GtNewObjectNode extends ZenNode {
+	/*field*/public ArrayList<ZenNode>	ParamList;
 	public GtNewObjectNode/*constructor*/(ZenType Type, ZenToken Token, ZenFunc Func) {
 		super();
-		this.ParamList = new ArrayList<GtNode>();
+		this.ParamList = new ArrayList<ZenNode>();
 	}
-	@Override public final void Append(GtNode Node) {
+	@Override public final void Append(ZenNode Node) {
 		this.ParamList.add(this.SetChild(Node));
 	}
 	@Override public boolean Accept(ZenVisitor Visitor) {

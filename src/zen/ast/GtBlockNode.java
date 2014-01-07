@@ -30,16 +30,16 @@ import zen.parser.ZenNameSpace;
 import zen.parser.ZenToken;
 import zen.parser.ZenVisitor;
 
-public class GtBlockNode extends GtNode {
-	/*field*/public ArrayList<GtNode> NodeList;
+public class GtBlockNode extends ZenNode {
+	/*field*/public ArrayList<ZenNode> NodeList;
 	/*field*/public ZenNameSpace NameSpace;
 	public GtBlockNode(ZenToken SourceToken, ZenNameSpace NameSpace) {
 		super(); 
 		this.SourceToken = SourceToken;
-		this.NodeList = new ArrayList<GtNode>();
+		this.NodeList = new ArrayList<ZenNode>();
 		this.NameSpace = NameSpace;
 	}
-	@Override public void Append(GtNode Node) {
+	@Override public void Append(ZenNode Node) {
 		this.NodeList.add(this.SetChild(Node));
 	}
 //	@Override public Object Eval(GtNameSpace NameSpace, boolean EnforceConst)  {

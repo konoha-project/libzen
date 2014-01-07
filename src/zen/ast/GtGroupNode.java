@@ -27,13 +27,13 @@ package zen.ast;
 import zen.parser.ZenVisitor;
 
 //E.g., "~" $RecvNode
-final public class GtGroupNode extends GtNode {
-	/*field*/public GtNode	RecvNode;
+final public class GtGroupNode extends ZenNode {
+	/*field*/public ZenNode	RecvNode;
 	public GtGroupNode/*constructor*/() {
 		super();
 		this.RecvNode = null;
 	}
-	@Override public void Append(GtNode Node) {
+	@Override public void Append(ZenNode Node) {
 		this.RecvNode = Node;
 		this.SetChild(this.RecvNode);
 		this.Type = Node.Type;

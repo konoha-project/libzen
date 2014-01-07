@@ -29,12 +29,12 @@ import zen.parser.ZenToken;
 
 final public class GtFieldNode extends GtParamNode {
 	/*field*/public String  Name;
-	/*field*/public GtNode  InitNode;
+	/*field*/public ZenNode  InitNode;
 	public GtFieldNode/*constructor*/(ZenType Type, ZenToken Token, String Name) {
 		super(Type, Token, Name); // TODO
 		this.InitNode = null;
 	}
-	@Override public void Append(GtNode Node) {
+	@Override public void Append(ZenNode Node) {
 		this.InitNode = Node;
 		this.SetChild(Node);
 		/*return this;*/

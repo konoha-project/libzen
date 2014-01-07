@@ -37,7 +37,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 
-import zen.ast.GtNode;
+import zen.ast.ZenNode;
 import zen.lang.ZenFunc;
 import zen.lang.ZenSystem;
 import zen.lang.ZenType;
@@ -425,14 +425,14 @@ public class LibNative {
 		return (Long) TokenFunc.Invoke(Argvs);
 	}
 
-	public final static GtNode ApplyMatchFunc(ZenFunc MatchFunc,
-			ZenNameSpace NameSpace, ZenTokenContext TokenContext, GtNode LeftNode) {
+	public final static ZenNode ApplyMatchFunc(ZenFunc MatchFunc,
+			ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenNode LeftNode) {
 		Object[] Argvs = new Object[3];
 		Argvs[0] = NameSpace;
 		Argvs[1] = TokenContext;
 		Argvs[2] = LeftNode;
 		// Argvs[3] = Pattern;
-		return (GtNode) MatchFunc.Invoke(Argvs);
+		return (ZenNode) MatchFunc.Invoke(Argvs);
 	}
 
 	public final static ZenFunc ConvertNativeMethodToFunc(Method JMethod) {
@@ -468,7 +468,7 @@ public class LibNative {
 			String FuncName) {
 		try {
 			Method JavaMethod = GrammarClass.getMethod(FuncName,
-					ZenNameSpace.class, ZenTokenContext.class, GtNode.class);
+					ZenNameSpace.class, ZenTokenContext.class, ZenNode.class);
 			return LibNative.ConvertNativeMethodToFunc(JavaMethod);
 		} catch (NoSuchMethodException e) {
 			ZenLogger.VerboseException(e);
@@ -477,7 +477,7 @@ public class LibNative {
 		return null;
 	}
 
-	public final static boolean IsSupportedNode(ZenVisitor Visitor, GtNode Node) {
+	public final static boolean IsSupportedNode(ZenVisitor Visitor, ZenNode Node) {
 		try {
 			Visitor.getClass().getMethod(Node.GetVisitName(), Node.getClass());
 			return true;
@@ -487,7 +487,7 @@ public class LibNative {
 	}
 
 	public final static boolean DispatchVisitNode(ZenVisitor Visitor,
-			GtNode Node) {
+			ZenNode Node) {
 		try {
 			Method JavaMethod = Visitor.getClass().getMethod(
 					Node.GetVisitName(), Node.getClass());

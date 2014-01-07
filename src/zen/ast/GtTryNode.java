@@ -29,17 +29,17 @@ import java.util.ArrayList;
 import zen.lang.ZenSystem;
 import zen.parser.ZenVisitor;
 
-final public class GtTryNode extends GtNode {
-	/*field*/public GtNode	TryNode;
-	/*field*/public ArrayList<GtNode> 	CatchList;
-	/*field*/public GtNode	FinallyNode;
+final public class GtTryNode extends ZenNode {
+	/*field*/public ZenNode	TryNode;
+	/*field*/public ArrayList<ZenNode> 	CatchList;
+	/*field*/public ZenNode	FinallyNode;
 	public GtTryNode/*constructor*/() {
 		super();
 		this.TryNode = null;
 		this.FinallyNode = null;
-		this.CatchList = new ArrayList<GtNode>();
+		this.CatchList = new ArrayList<ZenNode>();
 	}
-	@Override public void Append(GtNode Node) {
+	@Override public void Append(ZenNode Node) {
 		this.SetChild(Node);
 		if(Node instanceof GtCatchNode) {
 			this.CatchList.add(Node);

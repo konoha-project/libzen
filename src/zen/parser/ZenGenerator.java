@@ -25,7 +25,7 @@
 //ifdef JAVA
 package zen.parser;
 
-import zen.ast.GtNode;
+import zen.ast.ZenNode;
 import zen.lang.ZenSystem;
 import zen.lang.ZenType;
 //endif VAJA
@@ -52,11 +52,11 @@ public abstract class ZenGenerator extends ZenNodeUtils implements ZenVisitor {
 		return this.Logger.Report(Level, Token, Message);
 	}
 
-	public void DoCodeGeneration(ZenNameSpace NameSpace, GtNode Node) {
+	public void DoCodeGeneration(ZenNameSpace NameSpace, ZenNode Node) {
 		Node.Accept(this);		
 	}
 
-	public Object EvalTopLevelNode(GtNode TopLevelNode) {
+	public Object EvalTopLevelNode(ZenNode TopLevelNode) {
 		return null;
 	}
 	

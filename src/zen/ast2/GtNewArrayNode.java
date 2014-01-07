@@ -26,16 +26,16 @@ package zen.ast2;
 
 import java.util.ArrayList;
 
-import zen.ast.GtNode;
+import zen.ast.ZenNode;
 import zen.lang.ZenType;
 import zen.parser.ZenToken;
 
 //E.g., new T "[" 10, [10] "]"
-final public class GtNewArrayNode extends GtNode {
-	/*field*/public ArrayList<GtNode>	NodeList;
+final public class GtNewArrayNode extends ZenNode {
+	/*field*/public ArrayList<ZenNode>	NodeList;
 	public GtNewArrayNode/*constructor*/(ZenType Type, ZenToken Token) {
 		super();
-		this.NodeList = new ArrayList<GtNode>();
+		this.NodeList = new ArrayList<ZenNode>();
 	}
 //	@Override public ArrayList<GtNode> GetList() {
 //		return this.NodeList;

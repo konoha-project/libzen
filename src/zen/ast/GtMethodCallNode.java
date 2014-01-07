@@ -30,17 +30,17 @@ import zen.parser.ZenToken;
 import zen.parser.ZenVisitor;
 
 //E.g., $NativeFuncName "(" $Param[0], $Param[1], ... ")"
-final public class GtMethodCallNode extends GtNode {
-	/*field*/public GtNode RecvNode;
+final public class GtMethodCallNode extends ZenNode {
+	/*field*/public ZenNode RecvNode;
 	/*field*/public String MethodName;
-	/*field*/public ArrayList<GtNode>  ParamList; /* [arg1, arg2, ...] */
-	public GtMethodCallNode(ZenToken SourceToken, GtNode RecvNode, String MethodName) {
+	/*field*/public ArrayList<ZenNode>  ParamList; /* [arg1, arg2, ...] */
+	public GtMethodCallNode(ZenToken SourceToken, ZenNode RecvNode, String MethodName) {
 		super(); this.SourceToken = SourceToken;
 		this.RecvNode = this.SetChild(RecvNode);
 		this.MethodName = MethodName;
-		this.ParamList = new ArrayList<GtNode>();
+		this.ParamList = new ArrayList<ZenNode>();
 	}
-	@Override public void Append(GtNode Node) {
+	@Override public void Append(ZenNode Node) {
 		this.ParamList.add(this.SetChild(Node));
 	}
 	@Override public boolean Accept(ZenVisitor Visitor) {

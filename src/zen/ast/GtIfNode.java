@@ -27,10 +27,10 @@ package zen.ast;
 import zen.parser.ZenVisitor;
 
 //E.g., "if" "(" $Cond ")" $ThenNode "else" $ElseNode
-final public class GtIfNode extends GtNode {
-	/*field*/public GtNode	CondNode;
-	/*field*/public GtNode	ThenNode;
-	/*field*/public GtNode	ElseNode;
+final public class GtIfNode extends ZenNode {
+	/*field*/public ZenNode	CondNode;
+	/*field*/public ZenNode	ThenNode;
+	/*field*/public ZenNode	ElseNode;
 	/* If CondNode then ThenBlock else ElseBlock */
 	public GtIfNode/*constructor*/() {
 		super();
@@ -38,7 +38,7 @@ final public class GtIfNode extends GtNode {
 		this.ThenNode = null;
 		this.ElseNode = null;
 	}
-	@Override public final void Append(GtNode Node) {
+	@Override public final void Append(ZenNode Node) {
 		this.SetChild(Node);
 		if(this.CondNode == null) {
 			this.CondNode = Node;

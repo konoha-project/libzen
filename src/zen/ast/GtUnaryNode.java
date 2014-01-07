@@ -29,13 +29,13 @@ import zen.parser.ZenToken;
 import zen.parser.ZenVisitor;
 
 //E.g., "~" $RecvNode
-final public class GtUnaryNode extends GtNode {
-	/*field*/public GtNode	RecvNode;
+final public class GtUnaryNode extends ZenNode {
+	/*field*/public ZenNode	RecvNode;
 	public GtUnaryNode/*constructor*/(ZenToken Token) {
 		super();
 		this.SourceToken = Token;
 	}
-	@Override public void Append(GtNode RecvNode) {
+	@Override public void Append(ZenNode RecvNode) {
 		this.RecvNode = RecvNode;
 		this.SetChild(RecvNode);
 		/*return this;*/

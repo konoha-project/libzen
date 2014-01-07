@@ -29,15 +29,15 @@ import java.util.ArrayList;
 import zen.parser.ZenVisitor;
 
 //E.g., $FuncNode "(" $Param[0], $Param[1], ... ")"
-final public class GtApplyNode extends GtNode {
-	/*field*/public GtNode	FuncNode;
-	/*field*/public ArrayList<GtNode>  ParamList; /* [arg0, arg1, ...] */
-	public GtApplyNode(GtNode FuncNode) {
+final public class GtApplyNode extends ZenNode {
+	/*field*/public ZenNode	FuncNode;
+	/*field*/public ArrayList<ZenNode>  ParamList; /* [arg0, arg1, ...] */
+	public GtApplyNode(ZenNode FuncNode) {
 		super();
-		this.ParamList = new ArrayList<GtNode>();
+		this.ParamList = new ArrayList<ZenNode>();
 		this.FuncNode = this.SetChild(FuncNode);
 	}
-	@Override public void Append(GtNode Node) {
+	@Override public void Append(ZenNode Node) {
 		this.ParamList.add(this.SetChild(Node));
 	}
 	@Override public boolean Accept(ZenVisitor Visitor) {

@@ -24,11 +24,11 @@
 
 package zen.ast2;
 
-import zen.ast.GtNode;
+import zen.ast.ZenNode;
 import zen.lang.ZenType;
 import zen.parser.ZenToken;
 
-final public class GtContinueNode extends GtNode {
+final public class GtContinueNode extends ZenNode {
 	/*field*/public String Label;
 	public GtContinueNode/*constructor*/(ZenType Type, ZenToken Token, String Label) {
 		super();

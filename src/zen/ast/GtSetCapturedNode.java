@@ -31,8 +31,8 @@ import zen.parser.ZenToken;
 
 //E.g., $NativeName = $RightNode
 final public class GtSetCapturedNode extends GtSymbolNode {
-	/*field*/public GtNode	 ValueNode;
-	public GtSetCapturedNode/*constructor*/(ZenType Type, ZenToken Token, String NativeName, GtNode ValueNode) {
+	/*field*/public ZenNode	 ValueNode;
+	public GtSetCapturedNode/*constructor*/(ZenType Type, ZenToken Token, String NativeName, ZenNode ValueNode) {
 		super(Type, Token, NativeName);
 		this.ValueNode = ValueNode;
 		this.SetChild(ValueNode);

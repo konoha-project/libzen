@@ -27,10 +27,10 @@ package zen.ast;
 import zen.parser.ZenVisitor;
 
 //E.g., $Recv[$Index] = $ValueNode
-final public class GtSetIndexNode extends GtNode {
-	/*field*/public GtNode  RecvNode;
-	/*field*/public GtNode  IndexNode;
-	/*field*/public GtNode  ValueNode;
+final public class GtSetIndexNode extends ZenNode {
+	/*field*/public ZenNode  RecvNode;
+	/*field*/public ZenNode  IndexNode;
+	/*field*/public ZenNode  ValueNode;
 	public GtSetIndexNode/*constructor*/(GtGetIndexNode Node) {
 		super();
 		this.Type = Node.Type;
@@ -39,7 +39,7 @@ final public class GtSetIndexNode extends GtNode {
 		this.IndexNode = this.SetChild(Node.IndexNode);
 		this.ValueNode = null;
 	}
-	@Override public void Append(GtNode Node) {
+	@Override public void Append(ZenNode Node) {
 		this.ValueNode = this.SetChild(Node);
 	}
 	@Override public boolean Accept(ZenVisitor Visitor) {

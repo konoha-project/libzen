@@ -26,7 +26,7 @@ package zen.ast;
 
 import zen.parser.ZenToken;
 
-abstract public class GtConstNode extends GtNode {
+abstract public class GtConstNode extends ZenNode {
 	protected GtConstNode/*constructor*/(ZenToken Token) {
 		super();
 		this.SourceToken = Token;

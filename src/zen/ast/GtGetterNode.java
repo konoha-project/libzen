@@ -31,8 +31,8 @@ import zen.parser.ZenToken;
 
 //E.g., $RecvNode.$NativeName
 final public class GtGetterNode extends GtSymbolNode {
-	/*field*/public GtNode  RecvNode;
-	public GtGetterNode/*constructor*/(ZenToken SourceToken, GtNode RecvNode, String NativeName) {
+	/*field*/public ZenNode  RecvNode;
+	public GtGetterNode/*constructor*/(ZenToken SourceToken, ZenNode RecvNode, String NativeName) {
 		super(ZenSystem.VarType, SourceToken, NativeName);
 		this.RecvNode = RecvNode;
 		this.SetChild(RecvNode);

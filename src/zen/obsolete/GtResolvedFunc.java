@@ -24,7 +24,7 @@
 
 package zen.obsolete;
 
-import zen.ast.GtNode;
+import zen.ast.ZenNode;
 import zen.lang.ZenFunc;
 import zen.lang.ZenSystem;
 import zen.lang.ZenType;
@@ -34,7 +34,7 @@ public class GtResolvedFunc {
 	/*field*/public ZenNameSpace GenericNameSpace;
 	/*field*/public ZenFunc Func;
 	/*field*/public ZenType ReturnType;
-	/*field*/public GtNode ErrorNode;
+	/*field*/public ZenNode ErrorNode;
 	GtResolvedFunc/*constructor*/(ZenNameSpace NameSpace) {
 		this.GenericNameSpace = NameSpace;
 		this.Func = null;

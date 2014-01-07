@@ -28,18 +28,18 @@ import zen.parser.ZenToken;
 import zen.parser.ZenSyntaxPattern;
 import zen.parser.ZenVisitor;
 
-public class GtBinaryNode extends GtNode {
-	/*field*/public GtNode   LeftNode;
-	/*field*/public GtNode	 RightNode;
+public class GtBinaryNode extends ZenNode {
+	/*field*/public ZenNode   LeftNode;
+	/*field*/public ZenNode	 RightNode;
 	/*field*/public ZenSyntaxPattern Pattern;
-	public GtBinaryNode/*constructor*/(ZenToken SourceToken, GtNode Left, ZenSyntaxPattern Pattern) {
+	public GtBinaryNode/*constructor*/(ZenToken SourceToken, ZenNode Left, ZenSyntaxPattern Pattern) {
 		super();
 		this.SourceToken = SourceToken;
 		this.LeftNode  = this.SetChild(Left);
 		this.RightNode = null;
 		this.Pattern = Pattern;
 	}
-	@Override public final void Append(GtNode Node) {
+	@Override public final void Append(ZenNode Node) {
 		this.RightNode = this.SetChild(Node);
 	}
 	@Override public boolean Accept(ZenVisitor Visitor) {

@@ -28,7 +28,7 @@ package zen.codegen.jython;
 import zen.ast.GtBlockNode;
 import zen.ast.GtCastNode;
 import zen.ast.GtInstanceOfNode;
-import zen.ast.GtNode;
+import zen.ast.ZenNode;
 import zen.lang.ZenSystem;
 import zen.parser.ZenSourceGenerator;
 //endif VAJA
@@ -63,7 +63,7 @@ public class PythonSourceGenerator extends ZenSourceGenerator {
 		this.CurrentBuilder.Append(":");
 		this.CurrentBuilder.Indent();
 		for (int i = 0; i < Node.NodeList.size(); i++) {
-			GtNode SubNode = Node.NodeList.get(i);
+			ZenNode SubNode = Node.NodeList.get(i);
 			this.CurrentBuilder.AppendLineFeed();
 			this.CurrentBuilder.AppendIndent();
 			if (!this.GenerateCode(SubNode)) {

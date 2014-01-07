@@ -27,17 +27,17 @@ package zen.ast;
 import zen.lang.ZenType;
 import zen.lang.ZenSystem;
 
-final public class GtCatchNode extends GtNode {
+final public class GtCatchNode extends ZenNode {
 	/*field*/public ZenType  ExceptionType;
 	/*field*/public String  ExceptionName;
-	/*field*/public GtNode	BodyNode;
+	/*field*/public ZenNode	BodyNode;
 	public GtCatchNode/*constructor*/() {
 		super();
 		this.ExceptionType = ZenSystem.VarType;
 		this.ExceptionName = null;
 		this.BodyNode = null;
 	}
-	@Override public void Append(GtNode Node) {
+	@Override public void Append(ZenNode Node) {
 		if(Node instanceof GtTypeNode) {
 			this.ExceptionType = Node.Type;
 		}

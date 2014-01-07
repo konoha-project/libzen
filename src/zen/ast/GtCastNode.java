@@ -28,9 +28,9 @@ import zen.lang.ZenType;
 import zen.parser.ZenVisitor;
 
 //E.g., (T) $Expr
-final public class GtCastNode extends GtNode {
-	/*field*/public GtNode	ExprNode;
-	public GtCastNode/*constructor*/(ZenType CastType, GtNode Node) {
+final public class GtCastNode extends ZenNode {
+	/*field*/public ZenNode	ExprNode;
+	public GtCastNode/*constructor*/(ZenType CastType, ZenNode Node) {
 		super();
 		this.Type = CastType;
 		this.ExprNode = null;
@@ -38,7 +38,7 @@ final public class GtCastNode extends GtNode {
 			this.ExprNode = this.SetChild(Node);
 		}
 	}
-	@Override public void Append(GtNode Node) {
+	@Override public void Append(ZenNode Node) {
 		this.SetChild(Node);
 		if(Node instanceof GtTypeNode) {
 			this.Type = Node.Type;

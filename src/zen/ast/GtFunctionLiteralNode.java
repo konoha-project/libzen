@@ -31,18 +31,18 @@ import zen.lang.ZenSystem;
 import zen.parser.ZenToken;
 import zen.parser.ZenVisitor;
 
-public class GtFunctionLiteralNode extends GtNode {
+public class GtFunctionLiteralNode extends ZenNode {
 	/*field*/public ZenType ReturnType;
-	/*field*/public ArrayList<GtNode>  ArgumentList;  // list of ParamNode
-	/*field*/public GtNode BodyNode;
+	/*field*/public ArrayList<ZenNode>  ArgumentList;  // list of ParamNode
+	/*field*/public ZenNode BodyNode;
 	public GtFunctionLiteralNode/*constructor*/(ZenToken Token) {
 		super();
 		this.SourceToken = Token;
 		this.ReturnType = ZenSystem.VarType;
-		this.ArgumentList = new ArrayList<GtNode>();
+		this.ArgumentList = new ArrayList<ZenNode>();
 		this.BodyNode = null;
 	}
-	@Override public void Append(GtNode Node) {
+	@Override public void Append(ZenNode Node) {
 		if(Node instanceof GtParamNode) {
 			this.ArgumentList.add(Node);
 		}

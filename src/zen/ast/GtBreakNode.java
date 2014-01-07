@@ -26,7 +26,7 @@ package zen.ast;
 
 import zen.parser.ZenVisitor;
 
-final public class GtBreakNode extends GtNode {
+final public class GtBreakNode extends ZenNode {
 	/*field*/public String Label;
 	public GtBreakNode/*constructor*/() {
 		super();

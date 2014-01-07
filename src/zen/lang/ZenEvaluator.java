@@ -50,7 +50,7 @@ import zen.ast.GtInstanceOfNode;
 import zen.ast.GtIntNode;
 import zen.ast.GtMapLiteralNode;
 import zen.ast.GtMethodCallNode;
-import zen.ast.GtNode;
+import zen.ast.ZenNode;
 import zen.ast.GtNullNode;
 import zen.ast.GtOrNode;
 import zen.ast.GtParamNode;
@@ -75,7 +75,7 @@ public class ZenEvaluator implements ZenVisitor {
 	/*field*/private boolean IsEnforced_;
 	/*field*/private Object EvaledValue_;
 
-	public final Object Eval(GtNode Node, ZenNameSpace NameSpace, boolean IsEnforced) {
+	public final Object Eval(ZenNode Node, ZenNameSpace NameSpace, boolean IsEnforced) {
 		this.NameSpace_ = NameSpace;
 		this.IsEnforced_ = IsEnforced;
 		Node.Accept(this);

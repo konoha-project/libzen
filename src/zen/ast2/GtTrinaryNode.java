@@ -24,16 +24,16 @@
 
 package zen.ast2;
 
-import zen.ast.GtNode;
+import zen.ast.ZenNode;
 import zen.lang.ZenType;
 import zen.parser.ZenToken;
 
 //E.g., $CondNode "?" $ThenExpr ":" $ElseExpr
-final public class GtTrinaryNode extends GtNode {
-	/*field*/public GtNode	CondNode;
-	/*field*/public GtNode	ThenNode;
-	/*field*/public GtNode	ElseNode;
-	public GtTrinaryNode/*constructor*/(ZenType Type, ZenToken Token, GtNode CondNode, GtNode ThenNode, GtNode ElseNode) {
+final public class GtTrinaryNode extends ZenNode {
+	/*field*/public ZenNode	CondNode;
+	/*field*/public ZenNode	ThenNode;
+	/*field*/public ZenNode	ElseNode;
+	public GtTrinaryNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode CondNode, ZenNode ThenNode, ZenNode ElseNode) {
 		super();
 		this.CondNode = CondNode;
 		this.ThenNode = ThenNode;

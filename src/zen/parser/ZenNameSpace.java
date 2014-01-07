@@ -26,7 +26,7 @@
 package zen.parser;
 import java.util.ArrayList;
 
-import zen.ast.GtNode;
+import zen.ast.ZenNode;
 import zen.deps.LibNative;
 import zen.deps.LibZen;
 import zen.deps.ZenMap;
@@ -555,7 +555,7 @@ public final class ZenNameSpace extends ZenUtils {
 		while(TokenContext.HasNext()) {
 			TokenContext.ParseFlag = 0; // init
 			TokenContext.SkipAndGetAnnotation(true);
-			/*local*/GtNode TopLevelNode = TokenContext.ParsePattern(this, "$Statement$", ZenParserConst.Required);
+			/*local*/ZenNode TopLevelNode = TokenContext.ParsePattern(this, "$Statement$", ZenParserConst.Required);
 			//			TopLevelNode = this.TypeCheck(TopLevelNode, GtStaticTable.VoidType, GreenTeaConsts.AllowVoidPolicy);
 			this.Generator.DoCodeGeneration(this, TopLevelNode);
 			//			TopLevelNode.Accept(this.Generator);

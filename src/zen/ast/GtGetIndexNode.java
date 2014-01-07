@@ -27,16 +27,16 @@ package zen.ast;
 import zen.parser.ZenVisitor;
 
 //E.g., $Recv[$Index]
-final public class GtGetIndexNode extends GtNode {
-	/*field*/public GtNode  RecvNode;
-	/*field*/public GtNode  IndexNode;
-	public GtGetIndexNode/*constructor*/(GtNode RecvNode) {
+final public class GtGetIndexNode extends ZenNode {
+	/*field*/public ZenNode  RecvNode;
+	/*field*/public ZenNode  IndexNode;
+	public GtGetIndexNode/*constructor*/(ZenNode RecvNode) {
 		super();
 		this.RecvNode = RecvNode;
 		this.SetChild(RecvNode);
 		this.IndexNode = null;
 	}
-	@Override public void Append(GtNode Node) {
+	@Override public void Append(ZenNode Node) {
 		this.IndexNode = Node;
 		this.SetChild(Node);
 	}

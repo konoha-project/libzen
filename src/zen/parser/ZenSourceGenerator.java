@@ -51,7 +51,7 @@ import zen.ast.GtInstanceOfNode;
 import zen.ast.GtIntNode;
 import zen.ast.GtMapLiteralNode;
 import zen.ast.GtMethodCallNode;
-import zen.ast.GtNode;
+import zen.ast.ZenNode;
 import zen.ast.GtNullNode;
 import zen.ast.GtOrNode;
 import zen.ast.GtParamNode;
@@ -136,7 +136,7 @@ public class ZenSourceGenerator extends ZenGenerator {
 	}
 
 	@Override
-	public Object EvalTopLevelNode(GtNode Node) {
+	public Object EvalTopLevelNode(ZenNode Node) {
 		String Code = this.CurrentBuilder.toString();
 		System.out.println(Code);
 		this.CurrentBuilder.Clear();
@@ -155,7 +155,7 @@ public class ZenSourceGenerator extends ZenGenerator {
 	// Builder.AppendLine("");
 	// }
 
-	public boolean GenerateCode(GtNode Node) {
+	public boolean GenerateCode(ZenNode Node) {
 		if (Node == null) {
 			this.CurrentBuilder.AppendCommentLine("empty");
 			return false;
@@ -168,7 +168,7 @@ public class ZenSourceGenerator extends ZenGenerator {
 		this.CurrentBuilder.Append("{");
 		this.CurrentBuilder.Indent();
 		for (int i = 0; i < Node.NodeList.size(); i++) {
-			GtNode SubNode = Node.NodeList.get(i);
+			ZenNode SubNode = Node.NodeList.get(i);
 			this.CurrentBuilder.AppendLineFeed();
 			this.CurrentBuilder.AppendIndent();
 			if (!this.GenerateCode(SubNode)) {
@@ -417,7 +417,7 @@ public class ZenSourceGenerator extends ZenGenerator {
 	public boolean VisitTryNode(GtTryNode Node) {
 		this.CurrentBuilder.Append("try");
 		this.GenerateCode(Node.TryNode);
-		for (GtNode CatchNode : Node.CatchList) {
+		for (ZenNode CatchNode : Node.CatchList) {
 			this.GenerateCode(CatchNode);
 		}
 		if (Node.FinallyNode != null) {
@@ -490,10 +490,10 @@ public class ZenSourceGenerator extends ZenGenerator {
 		return true;
 	}
 
-	protected boolean VisitParamList(ArrayList<GtNode> ParamList) {
+	protected boolean VisitParamList(ArrayList<ZenNode> ParamList) {
 		this.CurrentBuilder.Append("(");
 		for (int i = 0; i < ParamList.size(); i++) {
-			GtNode ParamNode = ParamList.get(i);
+			ZenNode ParamNode = ParamList.get(i);
 			if (i > 0) {
 				this.CurrentBuilder.Append(", ");
 			}

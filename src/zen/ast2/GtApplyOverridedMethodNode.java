@@ -26,21 +26,21 @@ package zen.ast2;
 
 import java.util.ArrayList;
 
-import zen.ast.GtNode;
+import zen.ast.ZenNode;
 import zen.lang.ZenType;
 import zen.lang.ZenFunc;
 import zen.parser.ZenNameSpace;
 import zen.parser.ZenToken;
 
-final public class GtApplyOverridedMethodNode extends GtNode {
+final public class GtApplyOverridedMethodNode extends ZenNode {
 	/*field*/public ZenNameSpace NameSpace;
 	/*field*/public ZenFunc Func;
-	/*field*/public ArrayList<GtNode>  ParamList; /* [arg1, arg2, ...] */
+	/*field*/public ArrayList<ZenNode>  ParamList; /* [arg1, arg2, ...] */
 	public GtApplyOverridedMethodNode/*constructor*/(ZenType Type, ZenToken Token, ZenNameSpace NameSpace, ZenFunc Func) {
 		super();
 		this.NameSpace = NameSpace.Minimum();
 		this.Func = Func;
-		this.ParamList = new ArrayList<GtNode>();
+		this.ParamList = new ArrayList<ZenNode>();
 		throw new RuntimeException("FIXME: ApplyOverridedMethodNode is not finished");
 	}
 //	@Override public final ArrayList<GtNode> GetList() {

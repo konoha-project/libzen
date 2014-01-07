@@ -30,7 +30,7 @@ import zen.parser.ZenVisitor;
 
 //E.g., $ExprNode instanceof TypeInfo
 final public class GtInstanceOfNode extends GtBinaryNode {
-	public GtInstanceOfNode/*constructor*/(ZenToken Token, GtNode Left, ZenSyntaxPattern Pattern) {
+	public GtInstanceOfNode/*constructor*/(ZenToken Token, ZenNode Left, ZenSyntaxPattern Pattern) {
 		super(Token, Left, Pattern);
 	}
 
