@@ -372,6 +372,8 @@ public class ZenGrammar {
 
 	public static GtNode MatchMapLiteral(GtNameSpace NameSpace, ZenTokenContext TokenContext, GtNode LeftNode) {
 		/*local*/GtNode LiteralNode = new GtMapLiteralNode();
+		/*local*/GtToken Token = TokenContext.GetTokenAndMoveForward(); /* "{" */
+		LiteralNode.SourceToken = Token;
 		if(!TokenContext.MatchToken("}")) {
 			while(TokenContext.HasNext()) {
 				LiteralNode = TokenContext.AppendMatchedPattern(LiteralNode, NameSpace, "$Expression$", ZenParserConst.Required);
