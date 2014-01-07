@@ -25,6 +25,8 @@
 //ifdef JAVA
 package zen.codegen.jython;
 
+import zen.ast.GtBlockNode;
+import zen.ast.GtNode;
 import zen.parser.ZenSourceGenerator;
 //endif VAJA
 
@@ -45,6 +47,33 @@ public class PythonSourceGenerator extends ZenSourceGenerator {
 		this.TrueLiteral = "True";
 		this.FalseLiteral = "False";
 		this.NullLiteral = "None";
+	}
+
+	@Override
+	public boolean VisitBlockNode(GtBlockNode Node) {
+		int count = 0;
+		this.CurrentBuilder.Append(":");
+		this.CurrentBuilder.Indent();
+		for (int i = 0; i < Node.NodeList.size(); i++) {
+			GtNode SubNode = Node.NodeList.get(i);
+			this.CurrentBuilder.AppendLineFeed();
+			this.CurrentBuilder.AppendIndent();
+			if (!this.GenerateCode(SubNode)) {
+				return false;
+			}
+			this.CurrentBuilder.Append(this.SemiColon);
+			count = count + 1;
+		}
+		if (count == 0) {
+			this.CurrentBuilder.AppendLineFeed();
+			this.CurrentBuilder.AppendIndent();
+			this.CurrentBuilder.Append("pass");
+		}
+		this.CurrentBuilder.UnIndent();
+		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.AppendIndent();
+		this.CurrentBuilder.Append("#");
+		return true;
 	}
 
 }
