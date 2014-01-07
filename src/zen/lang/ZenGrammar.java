@@ -783,7 +783,7 @@ public class ZenGrammar {
 	public static GtNode MatchStatement(GtNameSpace NameSpace, ZenTokenContext TokenContext, GtNode LeftNode) {
 		TokenContext.SkipAndGetAnnotation(true);
 		/*local*/GtNode ParsedNode = TokenContext.ParsePattern(NameSpace, "$Expression$", ZenParserConst.Required);
-
+		LibZen.DebugP("parsed ... " + ParsedNode);
 		if(!ParsedNode.IsErrorNode() && TokenContext.HasNext()) {
 			GtToken Token = TokenContext.GetTokenAndMoveForward();
 			if(!Token.IsDelim() && !Token.IsIndent()) {
@@ -795,7 +795,7 @@ public class ZenGrammar {
 
 	public static GtNode MatchBlock(GtNameSpace NameSpace, ZenTokenContext TokenContext, GtNode LeftNode) {
 		TokenContext.SkipIndent();
-		if(TokenContext.IsToken("{")) {
+		if(TokenContext.MatchToken("{")) {
 			/*local*/GtToken IndentToken = TokenContext.GetCurrentIndentToken();
 			/*local*/GtNameSpace BlockNameSpace = NameSpace.CreateSubNameSpace();
 			/*local*/GtBlockNode BlockNode = new GtBlockNode(TokenContext.GetTokenAndMoveForward(), BlockNameSpace);
@@ -814,7 +814,7 @@ public class ZenGrammar {
 			}
 			return BlockNode;
 		}
-		return TokenContext.CreateExpectedErrorNode(null, "block");
+		return TokenContext.CreateExpectedErrorNode(TokenContext.GetToken(), "block");
 	}
 
 	public static void ImportGrammar(GtNameSpace NameSpace, Class<?> Grammar) {
