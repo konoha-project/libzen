@@ -281,7 +281,9 @@ public class ZenTransformer implements ZenVisitor {
 
 	@Override public void VisitTryNode(GtTryNode Node) {
 		Node.TryNode = this.Transform(Node, Node.TryNode);
-		this.TransformNodeList(Node, Node.CatchList);
+		if(Node.CatchNode != null) {
+			Node.CatchNode = this.Transform(Node, Node.CatchNode);
+		}
 		if(Node.FinallyNode != null) {
 			Node.FinallyNode = this.Transform(Node, Node.FinallyNode);
 		}

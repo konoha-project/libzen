@@ -115,8 +115,8 @@ public class PythonSourceGenerator extends ZenSourceGenerator {
 	public void VisitTryNode(GtTryNode Node) {
 		this.CurrentBuilder.Append("try");
 		this.GenerateCode(Node.TryNode);
-		for (ZenNode CatchNode : Node.CatchList) {
-			this.GenerateCode(CatchNode);
+		if (Node.CatchNode != null) {
+			this.GenerateCode(Node.CatchNode);
 		}
 		if (Node.FinallyNode != null) {
 			this.CurrentBuilder.Append("finally");
@@ -124,12 +124,11 @@ public class PythonSourceGenerator extends ZenSourceGenerator {
 		}
 	}
 
-	@Override
-	public void VisitCatchNode(GtCatchNode Node) {
-		this.CurrentBuilder.Append("except ");
-		this.VisitType(Node.ExceptionType);
-		this.CurrentBuilder.AppendToken("as");
-		this.CurrentBuilder.Append(Node.ExceptionName);
+	@Override public void VisitCatchNode(GtCatchNode Node) {
+		this.CurrentBuilder.Append("except:");
+		//		this.VisitType(Node.ExceptionType);
+		//		this.CurrentBuilder.AppendToken("as");
+		//		this.CurrentBuilder.Append(Node.ExceptionName);
 		this.GenerateCode(Node.BodyNode);
 	}
 

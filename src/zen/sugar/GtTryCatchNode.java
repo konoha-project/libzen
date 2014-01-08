@@ -22,24 +22,27 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package zen.ast;
+package zen.sugar;
 
-import zen.parser.ZenVisitor;
+import java.util.ArrayList;
 
-final public class GtTryNode extends ZenNode {
+import zen.ast.GtCatchNode;
+import zen.ast.ZenNode;
+
+final public class GtTryCatchNode extends ZenNode {
 	/*field*/public ZenNode	TryNode;
-	/*field*/public ZenNode CatchNode;
+	/*field*/public ArrayList<ZenNode> 	CatchList;
 	/*field*/public ZenNode	FinallyNode;
-	public GtTryNode/*constructor*/() {
+	public GtTryCatchNode/*constructor*/() {
 		super();
 		this.TryNode = null;
-		this.CatchNode = null;
 		this.FinallyNode = null;
+		this.CatchList = new ArrayList<ZenNode>();
 	}
 	@Override public void Append(ZenNode Node) {
 		this.SetChild(Node);
 		if(Node instanceof GtCatchNode) {
-			this.CatchNode = Node;
+			this.CatchList.add(Node);
 		}
 		else if(this.TryNode == null) {
 			this.TryNode = Node;
@@ -48,7 +51,7 @@ final public class GtTryNode extends ZenNode {
 			this.FinallyNode = Node;
 		}
 	}
-	@Override public void Accept(ZenVisitor Visitor) {
-		Visitor.VisitTryNode(this);
-	}
+	//	@Override public void Accept(ZenVisitor Visitor) {
+	//		Visitor.VisitTryNode(this);
+	//	}
 }

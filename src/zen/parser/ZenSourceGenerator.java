@@ -401,8 +401,8 @@ public class ZenSourceGenerator extends ZenGenerator {
 	public void VisitTryNode(GtTryNode Node) {
 		this.CurrentBuilder.Append("try ");
 		this.GenerateCode(Node.TryNode);
-		for (ZenNode CatchNode : Node.CatchList) {
-			this.GenerateCode(CatchNode);
+		if(Node.CatchNode != null) {
+			this.GenerateCode(Node.CatchNode);
 		}
 		if (Node.FinallyNode != null) {
 			this.CurrentBuilder.Append("finally ");
