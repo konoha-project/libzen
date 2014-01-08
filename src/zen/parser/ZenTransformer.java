@@ -40,7 +40,9 @@ import zen.ast.GtTryNode;
 import zen.ast.GtUnaryNode;
 import zen.ast.GtVarDeclNode;
 import zen.ast.GtWhileNode;
+import zen.ast.ZenComparatorNode;
 import zen.ast.ZenNode;
+import zen.ast.ZenNotNode;
 import zen.ast2.GtNewArrayNode;
 import zen.ast2.GtNewObjectNode;
 
@@ -210,6 +212,10 @@ public class ZenTransformer implements ZenVisitor {
 		Node.RecvNode = this.Transform(Node, Node.RecvNode);
 	}
 
+	@Override public void VisitNotNode(ZenNotNode Node) {
+		Node.RecvNode = this.Transform(Node, Node.RecvNode);
+	}
+
 	@Override public void VisitCastNode(GtCastNode Node) {
 		Node.ExprNode = this.Transform(Node, Node.ExprNode);
 	}
@@ -229,6 +235,11 @@ public class ZenTransformer implements ZenVisitor {
 	}
 
 	@Override public void VisitBinaryNode(GtBinaryNode Node) {
+		Node.LeftNode = this.Transform(Node, Node.LeftNode);
+		Node.RightNode = this.Transform(Node, Node.RightNode);
+	}
+
+	@Override public void VisitComparatorNode(ZenComparatorNode Node) {
 		Node.LeftNode = this.Transform(Node, Node.LeftNode);
 		Node.RightNode = this.Transform(Node, Node.RightNode);
 	}
@@ -296,6 +307,7 @@ public class ZenTransformer implements ZenVisitor {
 
 	@Override public void VisitErrorNode(GtErrorNode Node) {
 	}
+
 
 
 

@@ -62,6 +62,8 @@ import zen.ast.GtTryNode;
 import zen.ast.GtUnaryNode;
 import zen.ast.GtVarDeclNode;
 import zen.ast.GtWhileNode;
+import zen.ast.ZenComparatorNode;
+import zen.ast.ZenNotNode;
 import zen.ast2.GtNewArrayNode;
 import zen.ast2.GtNewObjectNode;
 
@@ -87,12 +89,14 @@ public interface ZenVisitor {
 	public abstract void VisitSetIndexNode(GtSetIndexNode Node);
 	public abstract void VisitMethodCallNode(GtMethodCallNode Node);
 	public abstract void VisitApplyNode(GtApplyNode Node);
-	public abstract void VisitAndNode(GtAndNode Node);
-	public abstract void VisitOrNode(GtOrNode Node);
 	public abstract void VisitUnaryNode(GtUnaryNode Node);
-	public abstract void VisitBinaryNode(GtBinaryNode Node);
+	public abstract void VisitNotNode(ZenNotNode Node);
 	public abstract void VisitCastNode(GtCastNode Node);
 	public abstract void VisitInstanceOfNode(GtInstanceOfNode Node);
+	public abstract void VisitBinaryNode(GtBinaryNode Node);
+	public abstract void VisitComparatorNode(ZenComparatorNode Node);
+	public abstract void VisitAndNode(GtAndNode Node);
+	public abstract void VisitOrNode(GtOrNode Node);
 	public abstract void VisitBlockNode(GtBlockNode Node);
 	public abstract void VisitVarDeclNode(GtVarDeclNode Node);
 	public abstract void VisitIfNode(GtIfNode Node);

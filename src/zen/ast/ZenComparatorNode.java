@@ -24,23 +24,17 @@
 
 package zen.ast;
 
-
+import zen.parser.ZenSyntaxPattern;
 import zen.parser.ZenToken;
 import zen.parser.ZenVisitor;
 
-//E.g., "~" $RecvNode
-public class GtUnaryNode extends ZenNode {
-	/*field*/public ZenNode	RecvNode;
-	public GtUnaryNode/*constructor*/(ZenToken Token) {
-		super();
-		this.SourceToken = Token;
-	}
-	@Override public void Append(ZenNode RecvNode) {
-		this.RecvNode = RecvNode;
-		this.SetChild(RecvNode);
-		/*return this;*/
+public class ZenComparatorNode extends GtBinaryNode {
+
+	public ZenComparatorNode(ZenToken SourceToken, ZenNode Left, ZenSyntaxPattern Pattern) {
+		super(SourceToken, Left, Pattern);
 	}
 	@Override public void Accept(ZenVisitor Visitor) {
-		Visitor.VisitUnaryNode(this);
+		Visitor.VisitComparatorNode(this);
 	}
+
 }
