@@ -27,7 +27,15 @@ package zen.codegen.jython;
 
 import zen.ast.GtBlockNode;
 import zen.ast.GtCastNode;
+import zen.ast.GtCatchNode;
+import zen.ast.GtFuncDeclNode;
+import zen.ast.GtFunctionLiteralNode;
 import zen.ast.GtInstanceOfNode;
+import zen.ast.GtParamNode;
+import zen.ast.GtReturnNode;
+import zen.ast.GtThrowNode;
+import zen.ast.GtTryNode;
+import zen.ast.GtVarDeclNode;
 import zen.ast.ZenNode;
 import zen.lang.ZenSystem;
 import zen.parser.ZenSourceGenerator;
@@ -58,17 +66,15 @@ public class PythonSourceGenerator extends ZenSourceGenerator {
 	}
 
 	@Override
-	public boolean VisitBlockNode(GtBlockNode Node) {
+	public void VisitBlockNode(GtBlockNode Node) {
 		int count = 0;
 		this.CurrentBuilder.Append(":");
 		this.CurrentBuilder.Indent();
-		for (int i = 0; i < Node.NodeList.size(); i++) {
-			ZenNode SubNode = Node.NodeList.get(i);
+		for (int i = 0; i < Node.StatementList.size(); i++) {
+			ZenNode SubNode = Node.StatementList.get(i);
 			this.CurrentBuilder.AppendLineFeed();
 			this.CurrentBuilder.AppendIndent();
-			if (!this.GenerateCode(SubNode)) {
-				return false;
-			}
+			this.GenerateCode(SubNode);
 			this.CurrentBuilder.Append(this.SemiColon);
 			count = count + 1;
 		}
@@ -81,25 +87,99 @@ public class PythonSourceGenerator extends ZenSourceGenerator {
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.AppendIndent();
 		this.CurrentBuilder.Append("#");
-		return true;
 	}
 
-	@Override public boolean VisitCastNode(GtCastNode Node) {
+	@Override public void VisitCastNode(GtCastNode Node) {
 		// this.CurrentBuilder.Append("(");
 		// this.VisitType(Node.Type);
 		// this.CurrentBuilder.Append(") ");
 		this.CurrentBuilder.AppendBlockComment("as " + this.GetNativeType(Node.Type));
 		this.GenerateCode(Node.ExprNode);
-		return true;
 	}
 
-	@Override public boolean VisitInstanceOfNode(GtInstanceOfNode Node) {
+	@Override public void VisitInstanceOfNode(GtInstanceOfNode Node) {
 		this.CurrentBuilder.Append("isinstance(");
 		this.GenerateCode(Node.LeftNode);
 		this.CurrentBuilder.Append(this.Camma);
 		this.VisitType(Node.RightNode.Type);
 		this.CurrentBuilder.Append(")");
-		return true;
+	}
+
+	@Override
+	public void VisitThrowNode(GtThrowNode Node) {
+		this.CurrentBuilder.Append("raise ");
+		this.GenerateCode(Node.ValueNode);
+	}
+
+	@Override
+	public void VisitTryNode(GtTryNode Node) {
+		this.CurrentBuilder.Append("try");
+		this.GenerateCode(Node.TryNode);
+		for (ZenNode CatchNode : Node.CatchList) {
+			this.GenerateCode(CatchNode);
+		}
+		if (Node.FinallyNode != null) {
+			this.CurrentBuilder.Append("finally");
+			this.GenerateCode(Node.FinallyNode);
+		}
+	}
+
+	@Override
+	public void VisitCatchNode(GtCatchNode Node) {
+		this.CurrentBuilder.Append("except ");
+		this.VisitType(Node.ExceptionType);
+		this.CurrentBuilder.AppendToken("as");
+		this.CurrentBuilder.Append(Node.ExceptionName);
+		this.GenerateCode(Node.BodyNode);
+	}
+
+	@Override
+	public void VisitVarDeclNode(GtVarDeclNode Node) {
+		this.CurrentBuilder.Append(Node.NativeName);
+		this.CurrentBuilder.AppendToken("=");
+		this.GenerateCode(Node.InitNode);
+	}
+
+	@Override
+	public void VisitParamNode(GtParamNode Node) {
+		this.CurrentBuilder.Append(Node.Name);
+	}
+
+	/**
+	>>> def f(x):
+		...   def g(y):
+		...     return x + y
+		...   return g
+		...
+		>>> f(1)(3)
+		4
+	 **/
+	@Override
+	public void VisitFunctionLiteralNode(GtFunctionLiteralNode Node) {
+		GtReturnNode ReturnNode = Node.BodyNode.ToReturnNode();
+		if(ReturnNode != null && ReturnNode.ValueNode != null) {
+			this.CurrentBuilder.Append("lambda");
+			this.VisitParamList(" ", Node.ArgumentList, ": ");
+			this.GenerateCode(ReturnNode.ValueNode);
+		}
+		else {
+			this.CurrentBuilder.Append("def");
+			this.CurrentBuilder.AppendToken("lambda");
+			this.VisitParamList("(", Node.ArgumentList, ")");
+			this.GenerateCode(Node.BodyNode);
+		}
+	}
+
+	@Override
+	public void VisitFuncDeclNode(GtFuncDeclNode Node) {
+		this.CurrentBuilder.Append("def ");
+		this.CurrentBuilder.Append(Node.FuncName);
+		this.VisitParamList("(", Node.ArgumentList, ")");
+		if (Node.BodyNode == null) {
+			this.CurrentBuilder.Append(": pass");
+		} else {
+			this.GenerateCode(Node.BodyNode);
+		}
 	}
 
 }

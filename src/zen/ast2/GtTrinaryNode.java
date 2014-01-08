@@ -41,7 +41,7 @@ final public class GtTrinaryNode extends ZenNode {
 		//this.SetChild3(CondNode, ThenNode, ElseNode);
 	}
 //	@Override public boolean Accept(GtVisitor Visitor) {
-//		return Visitor.VisitTrinaryNode(this);
+//		Visitor.VisitTrinaryNode(this);
 //	}
 //	@Override public Object Eval(GtNameSpace NameSpace, boolean EnforceConst)  {
 //		/*local*/Object CondValue = this.CondNode.Eval(NameSpace, EnforceConst) ;

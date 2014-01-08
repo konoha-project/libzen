@@ -47,7 +47,7 @@ final public class GtApplyOverridedMethodNode extends ZenNode {
 //		return this.ParamList;
 //	}
 //	@Override public boolean Accept(GtVisitor Visitor) {
-//		return Visitor.VisitApplyOverridedMethodNode(this);
+//		Visitor.VisitApplyOverridedMethodNode(this);
 //	}
 //	@Override public Object ToConstValue(GtParserContext Context, boolean EnforceConst)  {
 //		return Context.Generator.EvalApplyOverridedMethodNode(this, EnforceConst);

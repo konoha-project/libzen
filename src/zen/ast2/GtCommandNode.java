@@ -44,7 +44,7 @@ final public class GtCommandNode extends ZenNode {
 //	}
 
 //	@Override public boolean Accept(GtVisitor Visitor) {
-//		return Visitor.VisitCommandNode(this);
+//		Visitor.VisitCommandNode(this);
 //	}
 
 	//	@Override public Object ToConstValue(GtParserContext Context, boolean EnforceConst) {

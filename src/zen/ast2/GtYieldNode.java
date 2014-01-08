@@ -36,6 +36,6 @@ final public class GtYieldNode extends ZenNode {
 		this.SetChild(ValueNode);
 	}
 //	@Override public boolean Accept(GtVisitor Visitor) {
-//		return Visitor.VisitYieldNode(this);
+//		Visitor.VisitYieldNode(this);
 //	}
 }

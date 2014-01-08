@@ -41,7 +41,7 @@ final public class GtNewArrayNode extends ZenNode {
 //		return this.NodeList;
 //	}
 //	@Override public boolean Accept(GtVisitor Visitor) {
-//		return Visitor.VisitNewArrayNode(this);
+//		Visitor.VisitNewArrayNode(this);
 //	}
 //	@Override public Object ToConstValue(GtParserContext Context, boolean EnforceConst)  {
 //		if(EnforceConst) {

@@ -35,6 +35,6 @@ final public class GtContinueNode extends ZenNode {
 		this.Label = Label;
 	}
 //	@Override public boolean Accept(GtVisitor Visitor) {
-//		return Visitor.VisitContinueNode(this);
+//		Visitor.VisitContinueNode(this);
 //	}
 }

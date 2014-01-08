@@ -40,7 +40,7 @@ public abstract class GtRegexNode extends GtConstNode {
 //		throw new RuntimeException("FIXME: Regex object must be defined");
 //	}
 //	@Override public boolean Accept(GtVisitor Visitor) {
-//		return Visitor.VisitRegexNode(this);
+//		Visitor.VisitRegexNode(this);
 //	}
 	@Override public Object GetValue() {
 		return this.Value;

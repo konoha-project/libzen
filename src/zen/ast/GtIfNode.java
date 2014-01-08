@@ -51,7 +51,7 @@ final public class GtIfNode extends ZenNode {
 		}
 		/*return this;*/
 	}
-	@Override public boolean Accept(ZenVisitor Visitor) {
-		return Visitor.VisitIfNode(this);
+	@Override public void Accept(ZenVisitor Visitor) {
+		Visitor.VisitIfNode(this);
 	}
 }

@@ -39,7 +39,7 @@ final public class GtGroupNode extends ZenNode {
 		this.Type = Node.Type;
 		/*return this;*/
 	}
-	@Override public boolean Accept(ZenVisitor Visitor) {
-		return Visitor.VisitGroupNode(this);
+	@Override public void Accept(ZenVisitor Visitor) {
+		Visitor.VisitGroupNode(this);
 	}
 }

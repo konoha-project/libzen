@@ -38,6 +38,6 @@ final public class GtCaseNode extends ZenNode {
 //		this.SetChild2(BodyNode, CaseNode);
 	}
 //	@Override public boolean Accept(GtVisitor Visitor) {
-//		return Visitor.VisitCaseNode(this);
+//		Visitor.VisitCaseNode(this);
 //	}
 }

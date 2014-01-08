@@ -47,7 +47,7 @@ final public class GtCastNode extends ZenNode {
 			this.ExprNode = this.SetChild(Node);
 		}
 	}
-	@Override public boolean Accept(ZenVisitor Visitor) {
-		return Visitor.VisitCastNode(this);
+	@Override public void Accept(ZenVisitor Visitor) {
+		Visitor.VisitCastNode(this);
 	}
 }

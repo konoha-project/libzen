@@ -51,7 +51,7 @@ final public class GtTryNode extends ZenNode {
 			this.FinallyNode = Node;
 		}
 	}
-	@Override public boolean Accept(ZenVisitor Visitor) {
-		return Visitor.VisitTryNode(this);
+	@Override public void Accept(ZenVisitor Visitor) {
+		Visitor.VisitTryNode(this);
 	}
 }

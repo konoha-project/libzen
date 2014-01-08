@@ -24,20 +24,22 @@
 
 package zen.ast;
 
-import zen.lang.ZenSystem;
 import zen.parser.ZenVisitor;
 
-public class GtReturnNode extends ZenNode {
+public final class GtReturnNode extends ZenNode {
 	/*field*/public ZenNode ValueNode;
 	public GtReturnNode/*constructor*/() {
 		super();
 		this.ValueNode = null;
 	}
 	@Override public void Append(ZenNode ValueNode) {
-		this.ValueNode = ValueNode;
-		this.SetChild(ValueNode);
+		this.ValueNode = this.SetChild(ValueNode);
 	}
-	@Override public boolean Accept(ZenVisitor Visitor) {
-		return Visitor.VisitReturnNode(this);
+	@Override public void Accept(ZenVisitor Visitor) {
+		Visitor.VisitReturnNode(this);
 	}
+	@Override public GtReturnNode ToReturnNode() {
+		return this;
+	}
+
 }

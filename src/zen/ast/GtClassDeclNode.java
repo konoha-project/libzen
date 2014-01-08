@@ -51,6 +51,6 @@ final public class GtClassDeclNode extends ZenNode {
 		}
 	}
 //	@Override public boolean Accept(GtVisitor Visitor) {
-//		return Visitor.VisitClassDeclNode(this);
+//		Visitor.VisitClassDeclNode(this);
 //	}
 }

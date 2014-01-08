@@ -42,8 +42,8 @@ final public class GtSetIndexNode extends ZenNode {
 	@Override public void Append(ZenNode Node) {
 		this.ValueNode = this.SetChild(Node);
 	}
-	@Override public boolean Accept(ZenVisitor Visitor) {
-		return Visitor.VisitSetIndexNode(this);
+	@Override public void Accept(ZenVisitor Visitor) {
+		Visitor.VisitSetIndexNode(this);
 	}
 //	@Override public Object Eval(GtNameSpace NameSpace, boolean EnforceConst)  {
 //		//FIXME

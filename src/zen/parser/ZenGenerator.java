@@ -33,19 +33,34 @@ import zen.lang.ZenType;
 public abstract class ZenGenerator extends ZenNodeUtils implements ZenVisitor {
 	/*field*/public final String       TargetCode;
 	/*field*/public final String       TargetVersion;
-	
+
 	/*field*/public final ZenNameSpace  RootNameSpace;
 	/*field*/public String             OutputFile;
 	/*field*/public ZenLogger          Logger;
+
+	/*field*/private boolean StoppedVisitor;
 
 	protected ZenGenerator(String TargetCode, String TargetVersion) {
 		super();
 		this.RootNameSpace = new ZenNameSpace(this, null);
 		this.TargetCode = TargetCode;
 		this.TargetVersion = TargetVersion;
-		
+
 		this.OutputFile = null;
 		this.Logger = new ZenLogger();
+		this.StoppedVisitor = false;
+	}
+
+	@Override public final void EnableVisitor() {
+		this.StoppedVisitor = false;
+	}
+
+	@Override public final void StopVisitor() {
+		this.StoppedVisitor = true;
+	}
+
+	@Override public final boolean IsVisitable() {
+		return !this.StoppedVisitor;
 	}
 
 	public final String ReportError(int Level, ZenToken Token, String Message) {
@@ -53,13 +68,13 @@ public abstract class ZenGenerator extends ZenNodeUtils implements ZenVisitor {
 	}
 
 	public void DoCodeGeneration(ZenNameSpace NameSpace, ZenNode Node) {
-		Node.Accept(this);		
+		Node.Accept(this);
 	}
 
 	public Object EvalTopLevelNode(ZenNode TopLevelNode) {
 		return null;
 	}
-	
+
 	public ZenType GetFieldType(ZenType BaseType, String Name) {
 		return ZenSystem.VarType;     // undefined
 	}

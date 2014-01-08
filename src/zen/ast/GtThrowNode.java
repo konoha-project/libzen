@@ -26,11 +26,17 @@ package zen.ast;
 
 import zen.parser.ZenVisitor;
 
-final public class GtThrowNode extends GtReturnNode {
+final public class GtThrowNode extends ZenNode {
+	/*field*/public ZenNode ValueNode;
 	public GtThrowNode/*constructor*/() {
 		super();
+		this.ValueNode = null;
 	}
-	@Override public boolean Accept(ZenVisitor Visitor) {
-		return Visitor.VisitThrowNode(this);
+	@Override public void Append(ZenNode ValueNode) {
+		this.ValueNode = this.SetChild(ValueNode);
+	}
+
+	@Override public void Accept(ZenVisitor Visitor) {
+		Visitor.VisitThrowNode(this);
 	}
 }

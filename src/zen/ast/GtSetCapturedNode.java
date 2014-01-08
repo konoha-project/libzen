@@ -32,7 +32,7 @@ final public class GtSetCapturedNode extends GtSetLocalNode {
 	public GtSetCapturedNode/*constructor*/(ZenToken Token, String NativeName, ZenNode ValueNode) {
 		super(Token, NativeName, ValueNode);
 	}
-	@Override public boolean Accept(ZenVisitor Visitor) {
-		return Visitor.VisitSetCapturedNode(this);
+	@Override public void Accept(ZenVisitor Visitor) {
+		Visitor.VisitSetCapturedNode(this);
 	}
 }

@@ -37,6 +37,6 @@ final public class GtPrefixDeclNode extends ZenNode {
 		this.SetChild(RecvNode);
 	}
 //	@Override public boolean Accept(GtVisitor Visitor) {
-//		return Visitor.VisitPrefixDeclNode(this);
+//		Visitor.VisitPrefixDeclNode(this);
 //	}
 }

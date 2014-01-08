@@ -42,8 +42,8 @@ final public class GtNewObjectNode extends ZenNode {
 	@Override public final void Append(ZenNode Node) {
 		this.ParamList.add(this.SetChild(Node));
 	}
-	@Override public boolean Accept(ZenVisitor Visitor) {
-		return Visitor.VisitNewObjectNode(this);
+	@Override public void Accept(ZenVisitor Visitor) {
+		Visitor.VisitNewObjectNode(this);
 	}
 	//	@Override public Object ToConstValue(GtParserContext Context, boolean EnforceConst)  {
 	//		if(EnforceConst) {

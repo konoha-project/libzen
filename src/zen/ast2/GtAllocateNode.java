@@ -34,7 +34,7 @@ final public class GtAllocateNode extends ZenNode {
 		super();
 	}
 //	@Override public boolean Accept(GtVisitor Visitor) {
-//		return Visitor.VisitAllocateNode(this);
+//		Visitor.VisitAllocateNode(this);
 //	}
 	//	@Override public Object ToConstValue(GtParserContext Context, boolean EnforceConst)  {
 	//		return Context.Generator.EvalAllocateNode(this, EnforceConst);

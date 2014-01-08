@@ -31,21 +31,29 @@ import zen.parser.ZenToken;
 import zen.parser.ZenVisitor;
 
 public class GtBlockNode extends ZenNode {
-	/*field*/public ArrayList<ZenNode> NodeList;
+	/*field*/public ArrayList<ZenNode> StatementList;
 	/*field*/public ZenNameSpace NameSpace;
 	public GtBlockNode(ZenToken SourceToken, ZenNameSpace NameSpace) {
-		super(); 
+		super();
 		this.SourceToken = SourceToken;
-		this.NodeList = new ArrayList<ZenNode>();
+		this.StatementList = new ArrayList<ZenNode>();
 		this.NameSpace = NameSpace;
 	}
 	@Override public void Append(ZenNode Node) {
-		this.NodeList.add(this.SetChild(Node));
+		this.StatementList.add(this.SetChild(Node));
 	}
-//	@Override public Object Eval(GtNameSpace NameSpace, boolean EnforceConst)  {
-//		return null;
-//	}
-	@Override public boolean Accept(ZenVisitor Visitor) {
-		return Visitor.VisitBlockNode(this);
+	//	@Override public Object Eval(GtNameSpace NameSpace, boolean EnforceConst)  {
+	//		return null;
+	//	}
+	@Override public void Accept(ZenVisitor Visitor) {
+		Visitor.VisitBlockNode(this);
 	}
+
+	@Override public GtReturnNode ToReturnNode() {
+		if(this.StatementList.size() == 1) {
+			return this.StatementList.get(0).ToReturnNode();
+		}
+		return null;
+	}
+
 }

@@ -49,6 +49,6 @@ final public class GtUsingNode extends ZenNode {
 //		this.SetChild2(InitNode, this.BlockNode);
 	}
 //	@Override public boolean Accept(GtVisitor Visitor) {
-//		return Visitor.VisitUsingNode(this);
+//		Visitor.VisitUsingNode(this);
 //	}
 }

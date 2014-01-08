@@ -41,6 +41,6 @@ final public class GtForNode extends ZenNode {
 //		this.SetChild3(CondNode, BodyNode, IterNode);
 	}
 //	@Override public boolean Accept(GtVisitor Visitor) {
-//		return Visitor.VisitForNode(this);
+//		Visitor.VisitForNode(this);
 //	}
 }

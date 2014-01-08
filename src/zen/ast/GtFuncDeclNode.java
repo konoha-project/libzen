@@ -39,7 +39,7 @@ final public class GtFuncDeclNode extends GtFunctionLiteralNode {
 		this.FuncName = FuncName;
 		this.NameSpace = NameSpace;
 	}
-	@Override public boolean Accept(ZenVisitor Visitor) {
-		return Visitor.VisitFuncDeclNode(this);
+	@Override public void Accept(ZenVisitor Visitor) {
+		Visitor.VisitFuncDeclNode(this);
 	}
 }

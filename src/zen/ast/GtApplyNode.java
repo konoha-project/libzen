@@ -40,8 +40,8 @@ final public class GtApplyNode extends ZenNode {
 	@Override public void Append(ZenNode Node) {
 		this.ParamList.add(this.SetChild(Node));
 	}
-	@Override public boolean Accept(ZenVisitor Visitor) {
-		return Visitor.VisitApplyNode(this);
+	@Override public void Accept(ZenVisitor Visitor) {
+		Visitor.VisitApplyNode(this);
 	}
 	//	@Override public Object ToConstValue(GtParserContext Context, boolean EnforceConst)  {
 	//		return Context.Generator.EvalApplyFuncionObjectNode(this, EnforceConst);

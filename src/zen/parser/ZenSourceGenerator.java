@@ -51,7 +51,6 @@ import zen.ast.GtInstanceOfNode;
 import zen.ast.GtIntNode;
 import zen.ast.GtMapLiteralNode;
 import zen.ast.GtMethodCallNode;
-import zen.ast.ZenNode;
 import zen.ast.GtNullNode;
 import zen.ast.GtOrNode;
 import zen.ast.GtParamNode;
@@ -66,6 +65,7 @@ import zen.ast.GtTryNode;
 import zen.ast.GtUnaryNode;
 import zen.ast.GtVarDeclNode;
 import zen.ast.GtWhileNode;
+import zen.ast.ZenNode;
 import zen.ast2.GtNewArrayNode;
 import zen.ast2.GtNewObjectNode;
 import zen.deps.LibZen;
@@ -155,189 +155,165 @@ public class ZenSourceGenerator extends ZenGenerator {
 	// Builder.AppendLine("");
 	// }
 
-	public boolean GenerateCode(ZenNode Node) {
+	public void GenerateCode(ZenNode Node) {
 		if (Node == null) {
 			this.CurrentBuilder.AppendCommentLine("empty");
-			return false;
 		}
-		return Node.Accept(this);
+		Node.Accept(this);
 	}
 
 	@Override
-	public boolean VisitBlockNode(GtBlockNode Node) {
+	public void VisitBlockNode(GtBlockNode Node) {
 		this.CurrentBuilder.Append("{");
 		this.CurrentBuilder.Indent();
-		for (int i = 0; i < Node.NodeList.size(); i++) {
-			ZenNode SubNode = Node.NodeList.get(i);
+		for (int i = 0; i < Node.StatementList.size(); i++) {
+			ZenNode SubNode = Node.StatementList.get(i);
 			this.CurrentBuilder.AppendLineFeed();
 			this.CurrentBuilder.AppendIndent();
-			if (!this.GenerateCode(SubNode)) {
-				return false;
-			}
+			this.GenerateCode(SubNode);
 			this.CurrentBuilder.Append(this.SemiColon);
 		}
 		this.CurrentBuilder.UnIndent();
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.AppendIndent();
 		this.CurrentBuilder.Append("}");
-		return true;
 	}
 
 	@Override
-	public boolean VisitNullNode(GtNullNode Node) {
+	public void VisitNullNode(GtNullNode Node) {
 		this.CurrentBuilder.Append(this.NullLiteral);
-		return true;
 	}
 
 	@Override
-	public boolean VisitBooleanNode(GtBooleanNode Node) {
+	public void VisitBooleanNode(GtBooleanNode Node) {
 		if (Node.Value) {
 			this.CurrentBuilder.Append(this.TrueLiteral);
 		} else {
 			this.CurrentBuilder.Append(this.FalseLiteral);
 		}
-		return true;
 	}
 
 	@Override
-	public boolean VisitIntNode(GtIntNode Node) {
+	public void VisitIntNode(GtIntNode Node) {
 		this.CurrentBuilder.Append("" + Node.Value);
-		return true;
 	}
 
 	@Override
-	public boolean VisitFloatNode(GtFloatNode Node) {
+	public void VisitFloatNode(GtFloatNode Node) {
 		this.CurrentBuilder.Append("" + Node.Value);
-		return true;
 	}
 
 	@Override
-	public boolean VisitStringNode(GtStringNode Node) {
+	public void VisitStringNode(GtStringNode Node) {
 		this.CurrentBuilder.Append(LibZen.QuoteString(Node.Value));
-		return true;
 	}
 
 	@Override
-	public boolean VisitConstPoolNode(GtConstPoolNode Node) {
+	public void VisitConstPoolNode(GtConstPoolNode Node) {
 		// TODO Auto-generated method stub
-		return true;
 	}
 
 	@Override
-	public boolean VisitGroupNode(GtGroupNode Node) {
+	public void VisitGroupNode(GtGroupNode Node) {
 		this.CurrentBuilder.Append("(");
 		this.GenerateCode(Node.RecvNode);
 		this.CurrentBuilder.Append(")");
-		return true;
 	}
 
 	@Override
-	public boolean VisitGetIndexNode(GtGetIndexNode Node) {
+	public void VisitGetIndexNode(GtGetIndexNode Node) {
 		this.GenerateCode(Node.RecvNode);
 		this.CurrentBuilder.Append("[");
 		this.GenerateCode(Node.IndexNode);
 		this.CurrentBuilder.Append("]");
-		return true;
 	}
 
 	@Override
-	public boolean VisitSetIndexNode(GtSetIndexNode Node) {
+	public void VisitSetIndexNode(GtSetIndexNode Node) {
 		this.GenerateCode(Node.RecvNode);
 		this.CurrentBuilder.Append("[");
 		this.GenerateCode(Node.IndexNode);
 		this.CurrentBuilder.Append("]");
 		this.CurrentBuilder.Append(" = ");
 		this.GenerateCode(Node.ValueNode);
-		return true;
 	}
 
 	@Override
-	public boolean VisitGetLocalNode(GtGetLocalNode Node) {
+	public void VisitGetLocalNode(GtGetLocalNode Node) {
 		this.CurrentBuilder.Append(Node.NativeName);
-		return true;
 	}
 
 	@Override
-	public boolean VisitSetLocalNode(GtSetLocalNode Node) {
+	public void VisitSetLocalNode(GtSetLocalNode Node) {
 		this.CurrentBuilder.Append(Node.NativeName);
 		this.CurrentBuilder.Append(" = ");
 		this.GenerateCode(Node.ValueNode);
-		return true;
 	}
 
 	@Override
-	public boolean VisitGetCapturedNode(GtGetCapturedNode Node) {
+	public void VisitGetCapturedNode(GtGetCapturedNode Node) {
 		this.CurrentBuilder.Append(Node.NativeName);
-		return true;
 	}
 
 	@Override
-	public boolean VisitSetCapturedNode(GtSetCapturedNode Node) {
+	public void VisitSetCapturedNode(GtSetCapturedNode Node) {
 		this.CurrentBuilder.Append(Node.NativeName);
 		this.CurrentBuilder.Append(" = ");
 		this.GenerateCode(Node.ValueNode);
-		return true;
 	}
 
 	@Override
-	public boolean VisitGetterNode(GtGetterNode Node) {
+	public void VisitGetterNode(GtGetterNode Node) {
 		this.GenerateCode(Node.RecvNode);
 		this.CurrentBuilder.Append(".");
 		this.CurrentBuilder.Append(Node.NativeName);
-		return true;
 	}
 
 	@Override
-	public boolean VisitSetterNode(GtSetterNode Node) {
+	public void VisitSetterNode(GtSetterNode Node) {
 		this.GenerateCode(Node.RecvNode);
 		this.CurrentBuilder.Append(".");
 		this.CurrentBuilder.Append(Node.NativeName);
 		this.CurrentBuilder.Append(" = ");
 		this.GenerateCode(Node.ValueNode);
-		return true;
 	}
 
 	@Override
-	public boolean VisitMethodCallNode(GtMethodCallNode Node) {
+	public void VisitMethodCallNode(GtMethodCallNode Node) {
 		this.GenerateCode(Node.RecvNode);
 		this.CurrentBuilder.Append(".");
 		this.CurrentBuilder.Append(Node.MethodName);
-		this.VisitParamList(Node.ParamList);
-		return true;
+		this.VisitParamList("(", Node.ParamList, ")");
 	}
 
 	@Override
-	public boolean VisitApplyNode(GtApplyNode Node) {
+	public void VisitApplyNode(GtApplyNode Node) {
 		this.GenerateCode(Node.FuncNode);
-		this.VisitParamList(Node.ParamList);
-		return true;
+		this.VisitParamList("(", Node.ParamList, ")");
 	}
 
 	@Override
-	public boolean VisitAndNode(GtAndNode Node) {
+	public void VisitAndNode(GtAndNode Node) {
 		this.GenerateCode(Node.LeftNode);
 		this.CurrentBuilder.AppendToken("&&");
 		this.GenerateCode(Node.RightNode);
-		return true;
 	}
 
 	@Override
-	public boolean VisitOrNode(GtOrNode Node) {
+	public void VisitOrNode(GtOrNode Node) {
 		this.GenerateCode(Node.LeftNode);
 		this.CurrentBuilder.AppendToken("||");
 		this.GenerateCode(Node.RightNode);
-		return true;
 	}
 
 	@Override
-	public boolean VisitUnaryNode(GtUnaryNode Node) {
+	public void VisitUnaryNode(GtUnaryNode Node) {
 		this.CurrentBuilder.Append(Node.SourceToken.ParsedText);
 		this.GenerateCode(Node.RecvNode);
-		return true;
 	}
 
 	@Override
-	public boolean VisitBinaryNode(GtBinaryNode Node) {
+	public void VisitBinaryNode(GtBinaryNode Node) {
 		if (Node.ParentNode instanceof GtBinaryNode) {
 			this.CurrentBuilder.Append("(");
 		}
@@ -347,151 +323,138 @@ public class ZenSourceGenerator extends ZenGenerator {
 		if (Node.ParentNode instanceof GtBinaryNode) {
 			this.CurrentBuilder.Append(")");
 		}
-		return true;
 	}
 
 	@Override
-	public boolean VisitCastNode(GtCastNode Node) {
+	public void VisitCastNode(GtCastNode Node) {
 		this.CurrentBuilder.Append("(");
 		this.VisitType(Node.Type);
 		this.CurrentBuilder.Append(") ");
 		this.GenerateCode(Node.ExprNode);
-		return true;
 	}
 
 	@Override
-	public boolean VisitInstanceOfNode(GtInstanceOfNode Node) {
+	public void VisitInstanceOfNode(GtInstanceOfNode Node) {
 		this.GenerateCode(Node.LeftNode);
 		this.CurrentBuilder.AppendToken("instanceof");
 		this.VisitType(Node.RightNode.Type);
-		return true;
 	}
 
 	@Override
-	public boolean VisitIfNode(GtIfNode Node) {
+	public void VisitIfNode(GtIfNode Node) {
 		this.CurrentBuilder.Append("if (");
 		this.GenerateCode(Node.CondNode);
 		this.CurrentBuilder.Append(") ");
-		boolean Then = this.GenerateCode(Node.ThenNode);
+		this.GenerateCode(Node.ThenNode);
 		if (Node.ElseNode != null) {
 			this.CurrentBuilder.AppendToken("else");
-			boolean Else = this.GenerateCode(Node.ElseNode);
-			return Then || Else;
+			this.GenerateCode(Node.ElseNode);
 		}
-		return true;
 	}
 
 	@Override
-	public boolean VisitReturnNode(GtReturnNode Node) {
+	public void VisitReturnNode(GtReturnNode Node) {
 		this.CurrentBuilder.Append("return");
 		if (Node.ValueNode != null) {
 			this.CurrentBuilder.Append(" ");
 			this.GenerateCode(Node.ValueNode);
 		}
-		return false;
 	}
 
 	@Override
-	public boolean VisitWhileNode(GtWhileNode Node) {
+	public void VisitWhileNode(GtWhileNode Node) {
 		this.CurrentBuilder.Append("while (");
 		this.GenerateCode(Node.CondNode);
 		this.CurrentBuilder.Append(") ");
 		this.GenerateCode(Node.BodyNode);
-		return true;
 	}
 
 	@Override
-	public boolean VisitBreakNode(GtBreakNode Node) {
+	public void VisitBreakNode(GtBreakNode Node) {
 		this.CurrentBuilder.Append("break");
-		return true;
 	}
 
 	@Override
-	public boolean VisitThrowNode(GtThrowNode Node) {
+	public void VisitThrowNode(GtThrowNode Node) {
 		this.CurrentBuilder.Append("throw ");
 		this.GenerateCode(Node.ValueNode);
-		return false;
 	}
 
 	@Override
-	public boolean VisitTryNode(GtTryNode Node) {
-		this.CurrentBuilder.Append("try");
+	public void VisitTryNode(GtTryNode Node) {
+		this.CurrentBuilder.Append("try ");
 		this.GenerateCode(Node.TryNode);
 		for (ZenNode CatchNode : Node.CatchList) {
 			this.GenerateCode(CatchNode);
 		}
 		if (Node.FinallyNode != null) {
+			this.CurrentBuilder.Append("finally ");
 			this.GenerateCode(Node.FinallyNode);
 		}
-		return true;
 	}
 
 	@Override
-	public boolean VisitCatchNode(GtCatchNode Node) {
+	public void VisitCatchNode(GtCatchNode Node) {
 		this.CurrentBuilder.Append("catch (");
 		this.CurrentBuilder.Append(Node.ExceptionName);
 		this.VisitTypeAnnotation(Node.ExceptionType);
 		this.CurrentBuilder.Append(") ");
 		this.GenerateCode(Node.BodyNode);
-		return true;
 	}
 
 	@Override
-	public boolean VisitVarDeclNode(GtVarDeclNode Node) {
-		// TODO Auto-generated method stub
-		return true;
+	public void VisitVarDeclNode(GtVarDeclNode Node) {
+		this.CurrentBuilder.Append("var ");
+		this.CurrentBuilder.Append(Node.NativeName);
+		this.CurrentBuilder.AppendToken("=");
+		this.GenerateCode(Node.InitNode);
 	}
 
-	protected boolean VisitTypeAnnotation(ZenType Type) {
+	protected void VisitTypeAnnotation(ZenType Type) {
 		this.CurrentBuilder.Append(" :");
 		this.CurrentBuilder.Append(Type.GetNativeName());
-		return true;
 	}
 
 	@Override
-	public boolean VisitParamNode(GtParamNode Node) {
+	public void VisitParamNode(GtParamNode Node) {
 		this.CurrentBuilder.Append(Node.Name);
-		return this.VisitTypeAnnotation(Node.Type);
+		this.VisitTypeAnnotation(Node.Type);
 	}
 
 	@Override
-	public boolean VisitFunctionLiteralNode(GtFunctionLiteralNode Node) {
+	public void VisitFunctionLiteralNode(GtFunctionLiteralNode Node) {
 		this.CurrentBuilder.Append("function ");
-		this.VisitParamList(Node.ArgumentList);
+		this.VisitParamList("(", Node.ArgumentList, ")");
 		this.VisitTypeAnnotation(Node.ReturnType);
 		this.GenerateCode(Node.BodyNode);
-		return true;
 	}
 
 	@Override
-	public boolean VisitFuncDeclNode(GtFuncDeclNode Node) {
+	public void VisitFuncDeclNode(GtFuncDeclNode Node) {
 		this.CurrentBuilder.Append("function ");
 		this.CurrentBuilder.Append(Node.FuncName);
-		this.VisitParamList(Node.ArgumentList);
+		this.VisitParamList("(", Node.ArgumentList, ")");
 		this.VisitTypeAnnotation(Node.ReturnType);
 		if (Node.BodyNode == null) {
 			this.CurrentBuilder.Append(this.SemiColon);
 		} else {
 			this.GenerateCode(Node.BodyNode);
 		}
-		return true;
 	}
 
 	@Override
-	public boolean VisitErrorNode(GtErrorNode Node) {
+	public void VisitErrorNode(GtErrorNode Node) {
 		this.Logger.ReportError(Node.SourceToken, Node.ErrorMessage);
 		// this.BreakGeneration();
-		return false;
 	}
 
 	// Utils
-	protected boolean VisitType(ZenType Type) {
+	protected void VisitType(ZenType Type) {
 		this.CurrentBuilder.Append(this.GetNativeType(Type));
-		return true;
 	}
 
-	protected boolean VisitParamList(ArrayList<ZenNode> ParamList) {
-		this.CurrentBuilder.Append("(");
+	protected void VisitParamList(String OpenToken, ArrayList<ZenNode> ParamList, String CloseToken) {
+		this.CurrentBuilder.Append(OpenToken);
 		for (int i = 0; i < ParamList.size(); i++) {
 			ZenNode ParamNode = ParamList.get(i);
 			if (i > 0) {
@@ -499,32 +462,27 @@ public class ZenSourceGenerator extends ZenGenerator {
 			}
 			this.GenerateCode(ParamNode);
 		}
-		this.CurrentBuilder.Append(")");
-		return true;
+		this.CurrentBuilder.Append(CloseToken);
 	}
 
 	@Override
-	public boolean VisitArrayLiteralNode(GtArrayLiteralNode Node) {
+	public void VisitArrayLiteralNode(GtArrayLiteralNode Node) {
 		// TODO Auto-generated method stub
-		return false;
 	}
 
 	@Override
-	public boolean VisitMapLiteralNode(GtMapLiteralNode Node) {
+	public void VisitMapLiteralNode(GtMapLiteralNode Node) {
 		// TODO Auto-generated method stub
-		return false;
 	}
 
 	@Override
-	public boolean VisitNewArrayNode(GtNewArrayNode Node) {
+	public void VisitNewArrayNode(GtNewArrayNode Node) {
 		// TODO Auto-generated method stub
-		return false;
 	}
 
 	@Override
-	public boolean VisitNewObjectNode(GtNewObjectNode Node) {
+	public void VisitNewObjectNode(GtNewObjectNode Node) {
 		// TODO Auto-generated method stub
-		return false;
 	}
 
 	// @Override public void FlushBuffer() {

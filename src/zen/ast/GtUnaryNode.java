@@ -40,7 +40,7 @@ final public class GtUnaryNode extends ZenNode {
 		this.SetChild(RecvNode);
 		/*return this;*/
 	}
-	@Override public boolean Accept(ZenVisitor Visitor) {
-		return Visitor.VisitUnaryNode(this);
+	@Override public void Accept(ZenVisitor Visitor) {
+		Visitor.VisitUnaryNode(this);
 	}
 }

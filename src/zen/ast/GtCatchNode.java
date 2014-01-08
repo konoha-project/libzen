@@ -51,6 +51,6 @@ final public class GtCatchNode extends ZenNode {
 	}
 
 //	@Override public boolean Accept(GtVisitor Visitor) {
-//		return Visitor.VisitCatchNode(this);
+//		Visitor.VisitCatchNode(this);
 //	}
 }

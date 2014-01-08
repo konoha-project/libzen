@@ -37,6 +37,6 @@ final public class GtSuffixDeclNode extends ZenNode {
 		this.SetChild(RecvNode);
 	}
 //	@Override public boolean Accept(GtVisitor Visitor) {
-//		return Visitor.VisitSuffixDeclNode(this);
+//		Visitor.VisitSuffixDeclNode(this);
 //	}
 }

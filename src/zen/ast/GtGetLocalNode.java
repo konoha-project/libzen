@@ -35,7 +35,7 @@ public class GtGetLocalNode extends ZenNode {
 		this.SourceToken = Token;
 		this.NativeName = NativeName;
 	}
-	@Override public boolean Accept(ZenVisitor Visitor) {
-		return Visitor.VisitGetLocalNode(this);
+	@Override public void Accept(ZenVisitor Visitor) {
+		Visitor.VisitGetLocalNode(this);
 	}
 }

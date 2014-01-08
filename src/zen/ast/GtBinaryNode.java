@@ -42,7 +42,7 @@ public class GtBinaryNode extends ZenNode {
 	@Override public final void Append(ZenNode Node) {
 		this.RightNode = this.SetChild(Node);
 	}
-	@Override public boolean Accept(ZenVisitor Visitor) {
-		return Visitor.VisitBinaryNode(this);
+	@Override public void Accept(ZenVisitor Visitor) {
+		Visitor.VisitBinaryNode(this);
 	}
 }

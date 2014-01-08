@@ -42,7 +42,7 @@ final public class GtSwitchNode extends ZenNode {
 		this.SetChild(DefaultBlock);
 	}
 //	@Override public boolean Accept(GtVisitor Visitor) {
-//		return Visitor.VisitSwitchNode(this);
+//		Visitor.VisitSwitchNode(this);
 //	}
 //	@Override public final ArrayList<GtNode> GetList() {
 //		return this.CaseList;

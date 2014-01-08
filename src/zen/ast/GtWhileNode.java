@@ -46,7 +46,7 @@ final public class GtWhileNode extends ZenNode {
 		}
 		/*return this;*/
 	}
-	@Override public boolean Accept(ZenVisitor Visitor) {
-		return Visitor.VisitWhileNode(this);
+	@Override public void Accept(ZenVisitor Visitor) {
+		Visitor.VisitWhileNode(this);
 	}
 }

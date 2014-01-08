@@ -38,8 +38,8 @@ final public class GtArrayLiteralNode extends ZenNode {
 	@Override public void Append(ZenNode Node) {
 		this.NodeList.add(Node);
 	}
-	@Override public boolean Accept(ZenVisitor Visitor) {
-		return Visitor.VisitArrayLiteralNode(this);
+	@Override public void Accept(ZenVisitor Visitor) {
+		Visitor.VisitArrayLiteralNode(this);
 	}
 //	@Override public Object ToConstValue(GtParserContext Context, boolean EnforceConst)  {
 //		if(EnforceConst) {

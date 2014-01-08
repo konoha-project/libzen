@@ -43,8 +43,8 @@ final public class GtErrorNode extends GtConstNode {
 	@Override public final Object GetValue() {
 		return this.ErrorMessage;
 	}
-	@Override public boolean Accept(ZenVisitor Visitor) {
-		return Visitor.VisitErrorNode(this);
+	@Override public void Accept(ZenVisitor Visitor) {
+		Visitor.VisitErrorNode(this);
 	}
 	@Override public String toString() {
 		return "ErrorNode '" + this.ErrorMessage + "'";

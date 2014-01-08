@@ -794,7 +794,7 @@ public class ZenGrammar {
 
 	public static ZenNode MatchBlock(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenNode LeftNode) {
 		TokenContext.SkipIndent();
-		if(TokenContext.MatchToken("{")) {
+		if(TokenContext.IsToken("{")) {
 			/*local*/ZenToken IndentToken = TokenContext.GetCurrentIndentToken();
 			/*local*/ZenNameSpace BlockNameSpace = NameSpace.CreateSubNameSpace();
 			/*local*/GtBlockNode BlockNode = new GtBlockNode(TokenContext.GetTokenAndMoveForward(), BlockNameSpace);

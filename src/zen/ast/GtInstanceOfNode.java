@@ -34,8 +34,8 @@ final public class GtInstanceOfNode extends GtBinaryNode {
 		super(Token, Left, Pattern);
 	}
 
-	@Override public boolean Accept(ZenVisitor Visitor) {
-		return Visitor.VisitInstanceOfNode(this);
+	@Override public void Accept(ZenVisitor Visitor) {
+		Visitor.VisitInstanceOfNode(this);
 	}
 //	@Override public Object Eval(GtNameSpace NameSpace, boolean EnforceConst)  {
 //		/*local*/Object Value = this.ExprNode.Eval(NameSpace, EnforceConst) ;

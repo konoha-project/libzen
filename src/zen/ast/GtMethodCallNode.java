@@ -43,8 +43,8 @@ final public class GtMethodCallNode extends ZenNode {
 	@Override public void Append(ZenNode Node) {
 		this.ParamList.add(this.SetChild(Node));
 	}
-	@Override public boolean Accept(ZenVisitor Visitor) {
-		return Visitor.VisitMethodCallNode(this);
+	@Override public void Accept(ZenVisitor Visitor) {
+		Visitor.VisitMethodCallNode(this);
 	}
 	//	@Override public Object ToConstValue(GtParserContext Context, boolean EnforceConst)  {
 	//		return Context.Generator.EvalApplySymbolNode(this, EnforceConst);

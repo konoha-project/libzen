@@ -32,7 +32,7 @@ final public class GtBreakNode extends ZenNode {
 		super();
 		this.Label = null;
 	}
-	@Override public boolean Accept(ZenVisitor Visitor) {
-		return Visitor.VisitBreakNode(this);
+	@Override public void Accept(ZenVisitor Visitor) {
+		Visitor.VisitBreakNode(this);
 	}
 }

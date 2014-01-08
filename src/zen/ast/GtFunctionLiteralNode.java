@@ -54,7 +54,7 @@ public class GtFunctionLiteralNode extends ZenNode {
 		}
 		/*return this;*/
 	}
-	@Override public boolean Accept(ZenVisitor Visitor) {
-		return Visitor.VisitFunctionLiteralNode(this);
+	@Override public void Accept(ZenVisitor Visitor) {
+		Visitor.VisitFunctionLiteralNode(this);
 	}
 }

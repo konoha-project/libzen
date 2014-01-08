@@ -38,7 +38,7 @@ final public class GtDoWhileNode extends ZenNode {
 //		this.SetChild2(CondNode, BodyNode);
 	}
 //	@Override public boolean Accept(GtVisitor Visitor) {
-//		return Visitor.VisitDoWhileNode(this);
+//		Visitor.VisitDoWhileNode(this);
 //	}
 	public ZenNode ToWhileNode() {
 		/**

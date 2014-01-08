@@ -36,7 +36,7 @@ public class GtParamNode extends ZenNode {
 		this.SourceToken = SourceToken;
 		this.Name = Name;
 	}
-	@Override public boolean Accept(ZenVisitor Visitor) {
-		return Visitor.VisitParamNode(this);
+	@Override public void Accept(ZenVisitor Visitor) {
+		Visitor.VisitParamNode(this);
 	}
 }

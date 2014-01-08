@@ -45,7 +45,7 @@ public class ZenSourceBuilder {
 		this.SourceList = new ArrayList<String>();
 		this.IndentLevel = 0;
 		this.CurrentIndentString = "";
-		this.BufferedLineComment = this.Template.LineComment;
+		this.BufferedLineComment = "";
 	}
 
 	public void Clear() {
@@ -57,9 +57,9 @@ public class ZenSourceBuilder {
 	}
 
 	public final void AppendLineFeed() {
-		if (this.BufferedLineComment.length() > 1) {
-			this.SourceList.add(this.Template.LineFeed);
-			this.BufferedLineComment = this.Template.LineComment;
+		if (this.BufferedLineComment.length() > 0) {
+			this.SourceList.add(this.BufferedLineComment);
+			this.BufferedLineComment = "";
 		}
 		this.SourceList.add(this.Template.LineFeed);
 	}
@@ -75,8 +75,8 @@ public class ZenSourceBuilder {
 			this.SourceList.add(this.Template.BeginComment);
 			this.SourceList.add(Text);
 			this.SourceList.add(this.Template.EndComment);
-		} else {
-			this.BufferedLineComment = this.BufferedLineComment + Text;
+		} else if (this.Template.LineComment != null) {
+			this.BufferedLineComment = this.BufferedLineComment + this.Template.LineComment + Text;
 		}
 	}
 

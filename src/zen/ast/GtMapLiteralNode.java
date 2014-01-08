@@ -38,7 +38,7 @@ final public class GtMapLiteralNode extends ZenNode {   // => ArrayLiteral
 	@Override public void Append(ZenNode Node) {
 		this.NodeList.add(Node);
 	}
-	@Override public boolean Accept(ZenVisitor Visitor) {
-		return Visitor.VisitMapLiteralNode(this);
+	@Override public void Accept(ZenVisitor Visitor) {
+		Visitor.VisitMapLiteralNode(this);
 	}
 }

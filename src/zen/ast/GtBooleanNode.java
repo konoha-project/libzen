@@ -33,8 +33,8 @@ final public class GtBooleanNode extends GtConstNode {
 		super(Token);
 		this.Value = Value;
 	}
-	@Override public boolean Accept(ZenVisitor Visitor) {
-		return Visitor.VisitBooleanNode(this);
+	@Override public void Accept(ZenVisitor Visitor) {
+		Visitor.VisitBooleanNode(this);
 	}
 	@Override public final Object GetValue() {
 		return this.Value;

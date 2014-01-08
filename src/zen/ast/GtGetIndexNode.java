@@ -40,8 +40,8 @@ final public class GtGetIndexNode extends ZenNode {
 		this.IndexNode = Node;
 		this.SetChild(Node);
 	}
-	@Override public boolean Accept(ZenVisitor Visitor) {
-		return Visitor.VisitGetIndexNode(this);
+	@Override public void Accept(ZenVisitor Visitor) {
+		Visitor.VisitGetIndexNode(this);
 	}
 //	@Override public Object Eval(GtNameSpace NameSpace, boolean EnforceConst)  {
 //		return null;

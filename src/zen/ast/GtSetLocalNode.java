@@ -37,7 +37,7 @@ public class GtSetLocalNode extends ZenNode {
 		this.ValueNode = ValueNode;
 		this.SetChild(ValueNode);
 	}
-	@Override public boolean Accept(ZenVisitor Visitor) {
-		return Visitor.VisitSetLocalNode(this);
+	@Override public void Accept(ZenVisitor Visitor) {
+		Visitor.VisitSetLocalNode(this);
 	}
 }

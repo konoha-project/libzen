@@ -41,6 +41,6 @@ final public class GtSliceNode extends GtSymbolNode {
 //		this.SetChild3(RecvNode, Index1, Index2);
 	}
 //	@Override public boolean Accept(GtVisitor Visitor) {
-//		return Visitor.VisitSliceNode(this);
+//		Visitor.VisitSliceNode(this);
 //	}
 }

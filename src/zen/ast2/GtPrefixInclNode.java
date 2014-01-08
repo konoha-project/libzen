@@ -37,6 +37,6 @@ final public class GtPrefixInclNode extends ZenNode {
 		this.SetChild(RecvNode);
 	}
 //	@Override public boolean Accept(GtVisitor Visitor) {
-//		return Visitor.VisitPrefixInclNode(this);
+//		Visitor.VisitPrefixInclNode(this);
 //	}
 }

@@ -37,7 +37,7 @@ final public class GtTypeNode extends GtConstNode {
 	@Override public final Object GetValue() {
 		return this.Type;
 	}
-	@Override public boolean Accept(ZenVisitor Visitor) {
+	@Override public void Accept(ZenVisitor Visitor) {
 		throw new RuntimeException("TODO");
 	}
 }

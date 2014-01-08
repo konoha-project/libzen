@@ -58,7 +58,7 @@ final public class GtVarDeclNode extends GtBlockNode {
 		/*return this;*/
 	}
 
-	@Override public boolean Accept(ZenVisitor Visitor) {
-		return Visitor.VisitVarDeclNode(this);
+	@Override public void Accept(ZenVisitor Visitor) {
+		Visitor.VisitVarDeclNode(this);
 	}
 }

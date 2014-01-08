@@ -40,6 +40,6 @@ final public class GtStatementNode extends ZenNode {
 		this.SetChild(ValueNode);
 	}
 //	@Override public boolean Accept(GtVisitor Visitor) {
-//		return Visitor.VisitStatementNode(this);
+//		Visitor.VisitStatementNode(this);
 //	}
 }

@@ -33,7 +33,7 @@ final public class GtOrNode extends GtBinaryNode {
 	public GtOrNode/*constructor*/(ZenToken Token, ZenNode Left, ZenSyntaxPattern Pattern) {
 		super(Token, Left, Pattern);
 	}
-	@Override public boolean Accept(ZenVisitor Visitor) {
-		return Visitor.VisitOrNode(this);
+	@Override public void Accept(ZenVisitor Visitor) {
+		Visitor.VisitOrNode(this);
 	}
 }

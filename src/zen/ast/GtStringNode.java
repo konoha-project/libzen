@@ -36,7 +36,7 @@ final public class GtStringNode extends GtConstNode {
 	@Override public final Object GetValue() {
 		return this.Value;
 	}
-	@Override public boolean Accept(ZenVisitor Visitor) {
-		return Visitor.VisitStringNode(this);
+	@Override public void Accept(ZenVisitor Visitor) {
+		Visitor.VisitStringNode(this);
 	}
 }
