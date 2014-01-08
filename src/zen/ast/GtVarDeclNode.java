@@ -40,13 +40,13 @@ final public class GtVarDeclNode extends GtBlockNode {
 		this.InitNode  = null;
 	}
 	@Override public void Append(ZenNode Node) {
-		if(this.InitNode != null) {
+		if(Node instanceof GtTypeNode) {
+			this.Type = Node.Type;
+		}
+		else if(this.InitNode != null) {
 			super.Append(Node);
 		}
 		else {
-			if(Node instanceof GtTypeNode) {
-				this.Type = Node.Type;
-			}
 			if(this.NativeName == null) {
 				this.NativeName = Node.SourceToken.ParsedText;
 			}
