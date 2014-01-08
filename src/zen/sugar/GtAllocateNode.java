@@ -22,25 +22,21 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package zen.ast2;
+package zen.sugar;
 
 import zen.ast.ZenNode;
 import zen.lang.ZenType;
 import zen.parser.ZenToken;
 
-//E.g., "for" "(" $Variable "in" $IterNode ")" $BodyNode
-final public class GtForEachNode extends ZenNode {
-	/*field*/public ZenNode	Variable;
-	/*field*/public ZenNode	IterNode;
-	/*field*/public ZenNode	BodyNode;
-	public GtForEachNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode Variable, ZenNode IterNode, ZenNode BodyNode) {
+// E.g., AllocateNode (without parameters); StaticApply is needed to init
+final public class GtAllocateNode extends ZenNode {
+	public GtAllocateNode/*constructor*/(ZenType Type, ZenToken Token) {
 		super();
-		this.Variable = Variable;
-		this.IterNode = IterNode;
-		this.BodyNode = BodyNode;
-//		this.SetChild3(Variable, BodyNode, IterNode);
 	}
 //	@Override public boolean Accept(GtVisitor Visitor) {
-//		Visitor.VisitForEachNode(this);
+//		Visitor.VisitAllocateNode(this);
 //	}
+	//	@Override public Object ToConstValue(GtParserContext Context, boolean EnforceConst)  {
+	//		return Context.Generator.EvalAllocateNode(this, EnforceConst);
+	//	}
 }

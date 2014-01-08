@@ -22,29 +22,25 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package zen.ast2;
-
-import java.util.ArrayList;
+package zen.sugar;
 
 import zen.ast.ZenNode;
 import zen.lang.ZenType;
 import zen.parser.ZenToken;
 
-final public class GtSwitchNode extends ZenNode {
-	/*field*/public ZenNode	MatchNode;
-	/*field*/public ZenNode	DefaultBlock;
-	/*field*/public ArrayList<ZenNode> CaseList; // [expr, block, expr, block, ....]
-	public GtSwitchNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode MatchNode, ZenNode DefaultBlock) {
+//E.g., "for" "(" ";" $CondNode ";" $IterNode ")" $LoopNode
+final public class GtForNode extends ZenNode {
+	/*field*/public ZenNode	CondNode;
+	/*field*/public ZenNode	IterNode;
+	/*field*/public ZenNode	BodyNode;
+	public GtForNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode CondNode, ZenNode IterNode, ZenNode BodyNode) {
 		super();
-		this.MatchNode = MatchNode;
-		this.DefaultBlock = DefaultBlock;
-		this.CaseList = new ArrayList<ZenNode>();
-		this.SetChild(DefaultBlock);
+		this.CondNode = CondNode;
+		this.BodyNode = BodyNode;
+		this.IterNode = IterNode;
+//		this.SetChild3(CondNode, BodyNode, IterNode);
 	}
 //	@Override public boolean Accept(GtVisitor Visitor) {
-//		Visitor.VisitSwitchNode(this);
-//	}
-//	@Override public final ArrayList<GtNode> GetList() {
-//		return this.CaseList;
+//		Visitor.VisitForNode(this);
 //	}
 }

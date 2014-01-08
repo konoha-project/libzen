@@ -22,37 +22,27 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package zen.ast2;
+package zen.sugar;
 
-import zen.ast.ZenNode;
+import zen.ast.GtConstNode;
 import zen.lang.ZenType;
 import zen.parser.ZenToken;
 
-//E.g., $CondNode "?" $ThenExpr ":" $ElseExpr
-final public class GtTrinaryNode extends ZenNode {
-	/*field*/public ZenNode	CondNode;
-	/*field*/public ZenNode	ThenNode;
-	/*field*/public ZenNode	ElseNode;
-	public GtTrinaryNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode CondNode, ZenNode ThenNode, ZenNode ElseNode) {
-		super();
-		this.CondNode = CondNode;
-		this.ThenNode = ThenNode;
-		this.ElseNode = ElseNode;
-		//this.SetChild3(CondNode, ThenNode, ElseNode);
+public abstract class GtRegexNode extends GtConstNode {
+	protected GtRegexNode(ZenType Type, ZenToken Token) {
+		super(Token);
+		// TODO Auto-generated constructor stub
 	}
+	/*field*/public String	Value;
+//	public GtRegexNode/*constructor*/(GtType Type, GtToken Token, String Value) {
+//		super();
+//		this.Value = Value;
+//		throw new RuntimeException("FIXME: Regex object must be defined");
+//	}
 //	@Override public boolean Accept(GtVisitor Visitor) {
-//		Visitor.VisitTrinaryNode(this);
+//		Visitor.VisitRegexNode(this);
 //	}
-//	@Override public Object Eval(GtNameSpace NameSpace, boolean EnforceConst)  {
-//		/*local*/Object CondValue = this.CondNode.Eval(NameSpace, EnforceConst) ;
-//		if(CondValue instanceof Boolean) {
-//			if(LibZen.booleanValue(CondValue)) {
-//				return this.ThenNode.Eval(NameSpace, EnforceConst);
-//			}
-//			else {
-//				return this.ElseNode.Eval(NameSpace, EnforceConst);
-//			}
-//		}
-//		return null;
-//	}
+	@Override public Object GetValue() {
+		return this.Value;
+	}
 }

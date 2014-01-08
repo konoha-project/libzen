@@ -22,27 +22,20 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package zen.ast2;
+package zen.sugar;
 
-import zen.ast.GtConstNode;
+import zen.ast.ZenNode;
 import zen.lang.ZenType;
 import zen.parser.ZenToken;
 
-public abstract class GtRegexNode extends GtConstNode {
-	protected GtRegexNode(ZenType Type, ZenToken Token) {
-		super(Token);
-		// TODO Auto-generated constructor stub
+final public class GtYieldNode extends ZenNode {
+	/*field*/public ZenNode ValueNode;
+	public GtYieldNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode ValueNode) {
+		super();
+		this.ValueNode = ValueNode;
+		this.SetChild(ValueNode);
 	}
-	/*field*/public String	Value;
-//	public GtRegexNode/*constructor*/(GtType Type, GtToken Token, String Value) {
-//		super();
-//		this.Value = Value;
-//		throw new RuntimeException("FIXME: Regex object must be defined");
-//	}
 //	@Override public boolean Accept(GtVisitor Visitor) {
-//		Visitor.VisitRegexNode(this);
+//		Visitor.VisitYieldNode(this);
 //	}
-	@Override public Object GetValue() {
-		return this.Value;
-	}
 }

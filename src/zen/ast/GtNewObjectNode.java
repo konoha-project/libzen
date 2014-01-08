@@ -22,33 +22,32 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package zen.ast2;
+package zen.ast;
 
 import java.util.ArrayList;
 
-import zen.ast.ZenNode;
 import zen.lang.ZenType;
+import zen.lang.ZenFunc;
 import zen.parser.ZenToken;
+import zen.parser.ZenVisitor;
 
-// E.g., "ls" "-a"..
-final public class GtCommandNode extends ZenNode {
-	/*field*/public ArrayList<ZenNode>  ArgumentList; /* ["/bin/ls" , "-la", "/", ...] */
-	/*field*/public ZenNode PipedNextNode;
-	public GtCommandNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode PipedNextNode) {
+// E.g., ConstructorNode is for object creation in Native language defined
+final public class GtNewObjectNode extends ZenNode {
+	/*field*/public ArrayList<ZenNode>	ParamList;
+	public GtNewObjectNode/*constructor*/(ZenType Type, ZenToken Token, ZenFunc Func) {
 		super();
-		this.PipedNextNode = PipedNextNode;
-		this.ArgumentList = new ArrayList<ZenNode>();
+		this.ParamList = new ArrayList<ZenNode>();
 	}
-//	@Override public final ArrayList<GtNode> GetList() {
-//		return this.ArgumentList;
-//	}
-
-//	@Override public boolean Accept(GtVisitor Visitor) {
-//		Visitor.VisitCommandNode(this);
-//	}
-
-	//	@Override public Object ToConstValue(GtParserContext Context, boolean EnforceConst) {
-	//		//FIXME: Exception
-	//		return Context.Generator.EvalCommandNode(this, EnforceConst);
+	@Override public final void Append(ZenNode Node) {
+		this.ParamList.add(this.SetChild(Node));
+	}
+	@Override public void Accept(ZenVisitor Visitor) {
+		Visitor.VisitNewObjectNode(this);
+	}
+	//	@Override public Object ToConstValue(GtParserContext Context, boolean EnforceConst)  {
+	//		if(EnforceConst) {
+	//			return Context.Generator.EvalConstructorNode(this, EnforceConst);
+	//		}
+	//		return null;
 	//	}
 }

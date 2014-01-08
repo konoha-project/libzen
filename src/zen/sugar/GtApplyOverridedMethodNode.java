@@ -22,31 +22,34 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package zen.ast2;
+package zen.sugar;
 
 import java.util.ArrayList;
 
 import zen.ast.ZenNode;
 import zen.lang.ZenType;
+import zen.lang.ZenFunc;
+import zen.parser.ZenNameSpace;
 import zen.parser.ZenToken;
 
-//E.g., new T "[" 10, [10] "]"
-final public class GtNewArrayNode extends ZenNode {
-	/*field*/public ArrayList<ZenNode>	NodeList;
-	public GtNewArrayNode/*constructor*/(ZenType Type, ZenToken Token) {
+final public class GtApplyOverridedMethodNode extends ZenNode {
+	/*field*/public ZenNameSpace NameSpace;
+	/*field*/public ZenFunc Func;
+	/*field*/public ArrayList<ZenNode>  ParamList; /* [arg1, arg2, ...] */
+	public GtApplyOverridedMethodNode/*constructor*/(ZenType Type, ZenToken Token, ZenNameSpace NameSpace, ZenFunc Func) {
 		super();
-		this.NodeList = new ArrayList<ZenNode>();
+		this.NameSpace = NameSpace.Minimum();
+		this.Func = Func;
+		this.ParamList = new ArrayList<ZenNode>();
+		throw new RuntimeException("FIXME: ApplyOverridedMethodNode is not finished");
 	}
-//	@Override public ArrayList<GtNode> GetList() {
-//		return this.NodeList;
+//	@Override public final ArrayList<GtNode> GetList() {
+//		return this.ParamList;
 //	}
 //	@Override public boolean Accept(GtVisitor Visitor) {
-//		Visitor.VisitNewArrayNode(this);
+//		Visitor.VisitApplyOverridedMethodNode(this);
 //	}
 //	@Override public Object ToConstValue(GtParserContext Context, boolean EnforceConst)  {
-//		if(EnforceConst) {
-//			return Context.Generator.EvalNewArrayNode(this, EnforceConst);
-//		}
-//		return null;
+//		return Context.Generator.EvalApplyOverridedMethodNode(this, EnforceConst);
 //	}
 }

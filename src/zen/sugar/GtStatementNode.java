@@ -22,34 +22,24 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package zen.ast2;
+package zen.sugar;
 
 import zen.ast.ZenNode;
 import zen.lang.ZenType;
 import zen.parser.ZenToken;
 
-final public class GtDoWhileNode extends ZenNode {
-	/*field*/public ZenNode	CondNode;
-	/*field*/public ZenNode	BodyNode;
-	public GtDoWhileNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode CondNode, ZenNode BodyNode) {
+final public class GtStatementNode extends ZenNode {
+	/**
+	 * int f(int n);
+	 * f(1)
+	 */
+	/*field*/public ZenNode ValueNode;
+	public GtStatementNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode ValueNode) {
 		super();
-		this.CondNode = CondNode;
-		this.BodyNode = BodyNode;
-//		this.SetChild2(CondNode, BodyNode);
+		this.ValueNode = ValueNode;
+		this.SetChild(ValueNode);
 	}
 //	@Override public boolean Accept(GtVisitor Visitor) {
-//		Visitor.VisitDoWhileNode(this);
+//		Visitor.VisitStatementNode(this);
 //	}
-	public ZenNode ToWhileNode() {
-		/**
-		while(true) {
-			$BodyNode;
-			break;
-		}
-		while($CondNode) {
-			$BodyNode;
-		}
-		 **/
-		return null;
-	}
 }

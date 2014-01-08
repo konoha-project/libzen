@@ -24,10 +24,10 @@
 
 package zen.ast;
 
-import zen.ast2.GtSymbolNode;
 import zen.lang.ZenSystem;
 import zen.parser.ZenVisitor;
 import zen.parser.ZenToken;
+import zen.sugar.GtSymbolNode;
 
 //E.g., $RecvNode.$NativeName = $Value
 final public class GtSetterNode extends GtSymbolNode {

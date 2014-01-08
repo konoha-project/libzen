@@ -22,19 +22,29 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package zen.ast2;
+package zen.sugar;
+
+import java.util.ArrayList;
 
 import zen.ast.ZenNode;
 import zen.lang.ZenType;
 import zen.parser.ZenToken;
 
-final public class GtContinueNode extends ZenNode {
-	/*field*/public String Label;
-	public GtContinueNode/*constructor*/(ZenType Type, ZenToken Token, String Label) {
+final public class GtSwitchNode extends ZenNode {
+	/*field*/public ZenNode	MatchNode;
+	/*field*/public ZenNode	DefaultBlock;
+	/*field*/public ArrayList<ZenNode> CaseList; // [expr, block, expr, block, ....]
+	public GtSwitchNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode MatchNode, ZenNode DefaultBlock) {
 		super();
-		this.Label = Label;
+		this.MatchNode = MatchNode;
+		this.DefaultBlock = DefaultBlock;
+		this.CaseList = new ArrayList<ZenNode>();
+		this.SetChild(DefaultBlock);
 	}
 //	@Override public boolean Accept(GtVisitor Visitor) {
-//		Visitor.VisitContinueNode(this);
+//		Visitor.VisitSwitchNode(this);
+//	}
+//	@Override public final ArrayList<GtNode> GetList() {
+//		return this.CaseList;
 //	}
 }

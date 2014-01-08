@@ -22,19 +22,37 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package zen.ast2;
+package zen.sugar;
 
 import zen.ast.ZenNode;
 import zen.lang.ZenType;
-import zen.lang.ZenFunc;
 import zen.parser.ZenToken;
 
-abstract public class GtSymbolNode extends ZenNode {
-	/*field*/public String  NativeName;
-	/*field*/public ZenFunc	ResolvedFunc;    // 
-	public GtSymbolNode/*constructor*/(ZenType Type, ZenToken Token, String NativeName) {
+//E.g., $CondNode "?" $ThenExpr ":" $ElseExpr
+final public class GtTrinaryNode extends ZenNode {
+	/*field*/public ZenNode	CondNode;
+	/*field*/public ZenNode	ThenNode;
+	/*field*/public ZenNode	ElseNode;
+	public GtTrinaryNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode CondNode, ZenNode ThenNode, ZenNode ElseNode) {
 		super();
-		this.NativeName = NativeName;
-		this.ResolvedFunc = null;
+		this.CondNode = CondNode;
+		this.ThenNode = ThenNode;
+		this.ElseNode = ElseNode;
+		//this.SetChild3(CondNode, ThenNode, ElseNode);
 	}
+//	@Override public boolean Accept(GtVisitor Visitor) {
+//		Visitor.VisitTrinaryNode(this);
+//	}
+//	@Override public Object Eval(GtNameSpace NameSpace, boolean EnforceConst)  {
+//		/*local*/Object CondValue = this.CondNode.Eval(NameSpace, EnforceConst) ;
+//		if(CondValue instanceof Boolean) {
+//			if(LibZen.booleanValue(CondValue)) {
+//				return this.ThenNode.Eval(NameSpace, EnforceConst);
+//			}
+//			else {
+//				return this.ElseNode.Eval(NameSpace, EnforceConst);
+//			}
+//		}
+//		return null;
+//	}
 }

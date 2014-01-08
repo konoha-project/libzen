@@ -22,21 +22,33 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package zen.ast2;
+package zen.sugar;
+
+import java.util.ArrayList;
 
 import zen.ast.ZenNode;
 import zen.lang.ZenType;
 import zen.parser.ZenToken;
 
-// E.g., AllocateNode (without parameters); StaticApply is needed to init
-final public class GtAllocateNode extends ZenNode {
-	public GtAllocateNode/*constructor*/(ZenType Type, ZenToken Token) {
+// E.g., "ls" "-a"..
+final public class GtCommandNode extends ZenNode {
+	/*field*/public ArrayList<ZenNode>  ArgumentList; /* ["/bin/ls" , "-la", "/", ...] */
+	/*field*/public ZenNode PipedNextNode;
+	public GtCommandNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode PipedNextNode) {
 		super();
+		this.PipedNextNode = PipedNextNode;
+		this.ArgumentList = new ArrayList<ZenNode>();
 	}
-//	@Override public boolean Accept(GtVisitor Visitor) {
-//		Visitor.VisitAllocateNode(this);
+//	@Override public final ArrayList<GtNode> GetList() {
+//		return this.ArgumentList;
 //	}
-	//	@Override public Object ToConstValue(GtParserContext Context, boolean EnforceConst)  {
-	//		return Context.Generator.EvalAllocateNode(this, EnforceConst);
+
+//	@Override public boolean Accept(GtVisitor Visitor) {
+//		Visitor.VisitCommandNode(this);
+//	}
+
+	//	@Override public Object ToConstValue(GtParserContext Context, boolean EnforceConst) {
+	//		//FIXME: Exception
+	//		return Context.Generator.EvalCommandNode(this, EnforceConst);
 	//	}
 }

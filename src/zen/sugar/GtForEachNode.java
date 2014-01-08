@@ -22,33 +22,25 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package zen.ast2;
-
-import java.util.ArrayList;
+package zen.sugar;
 
 import zen.ast.ZenNode;
 import zen.lang.ZenType;
-import zen.lang.ZenFunc;
 import zen.parser.ZenToken;
-import zen.parser.ZenVisitor;
 
-// E.g., ConstructorNode is for object creation in Native language defined
-final public class GtNewObjectNode extends ZenNode {
-	/*field*/public ArrayList<ZenNode>	ParamList;
-	public GtNewObjectNode/*constructor*/(ZenType Type, ZenToken Token, ZenFunc Func) {
+//E.g., "for" "(" $Variable "in" $IterNode ")" $BodyNode
+final public class GtForEachNode extends ZenNode {
+	/*field*/public ZenNode	Variable;
+	/*field*/public ZenNode	IterNode;
+	/*field*/public ZenNode	BodyNode;
+	public GtForEachNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode Variable, ZenNode IterNode, ZenNode BodyNode) {
 		super();
-		this.ParamList = new ArrayList<ZenNode>();
+		this.Variable = Variable;
+		this.IterNode = IterNode;
+		this.BodyNode = BodyNode;
+//		this.SetChild3(Variable, BodyNode, IterNode);
 	}
-	@Override public final void Append(ZenNode Node) {
-		this.ParamList.add(this.SetChild(Node));
-	}
-	@Override public void Accept(ZenVisitor Visitor) {
-		Visitor.VisitNewObjectNode(this);
-	}
-	//	@Override public Object ToConstValue(GtParserContext Context, boolean EnforceConst)  {
-	//		if(EnforceConst) {
-	//			return Context.Generator.EvalConstructorNode(this, EnforceConst);
-	//		}
-	//		return null;
-	//	}
+//	@Override public boolean Accept(GtVisitor Visitor) {
+//		Visitor.VisitForEachNode(this);
+//	}
 }

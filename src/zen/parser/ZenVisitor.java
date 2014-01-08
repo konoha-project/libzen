@@ -48,6 +48,8 @@ import zen.ast.GtInstanceOfNode;
 import zen.ast.GtIntNode;
 import zen.ast.GtMapLiteralNode;
 import zen.ast.GtMethodCallNode;
+import zen.ast.GtNewArrayNode;
+import zen.ast.GtNewObjectNode;
 import zen.ast.GtNullNode;
 import zen.ast.GtOrNode;
 import zen.ast.GtParamNode;
@@ -64,8 +66,6 @@ import zen.ast.GtVarDeclNode;
 import zen.ast.GtWhileNode;
 import zen.ast.ZenComparatorNode;
 import zen.ast.ZenNotNode;
-import zen.ast2.GtNewArrayNode;
-import zen.ast2.GtNewObjectNode;
 
 public interface ZenVisitor {
 	public abstract void VisitNullNode(GtNullNode Node);
