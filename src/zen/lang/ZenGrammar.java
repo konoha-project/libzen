@@ -606,7 +606,11 @@ public class ZenGrammar {
 		IfNode = TokenContext.MatchNodeToken(IfNode, NameSpace, ")", ZenParserConst.Required | ZenParserConst.DisallowSkipIndent);
 		IfNode = TokenContext.AppendMatchedPattern(IfNode, NameSpace, "$Block$", ZenParserConst.Required);
 		if(TokenContext.MatchNewLineToken("else")) {
-			IfNode = TokenContext.AppendMatchedPattern(IfNode, NameSpace, "$Block$", ZenParserConst.Required);
+			String PatternName = "$Block$";
+			if(TokenContext.IsNewLineToken("if")) {
+				PatternName = "if";
+			}
+			IfNode = TokenContext.AppendMatchedPattern(IfNode, NameSpace, PatternName, ZenParserConst.Required);
 		}
 		return IfNode;
 	}
