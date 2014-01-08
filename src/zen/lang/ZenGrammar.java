@@ -544,36 +544,6 @@ public class ZenGrammar {
 		return UnaryNode;
 	}
 
-	//	private static ZenNode RightJoin(ZenNameSpace NameSpace, ZenNode LeftNode, ZenSyntaxPattern Pattern, ZenToken Token, GtBinaryNode RightNode) {
-	//		/*local*/ZenNode RightLeftNode = RightNode.LeftNode;
-	//		if(RightLeftNode instanceof GtBinaryNode && Pattern.IsRightJoin(((GtBinaryNode)RightLeftNode).Pattern)) {
-	//			RightNode.LeftNode = ZenGrammar.RightJoin(NameSpace, LeftNode, Pattern, Token, (GtBinaryNode) RightLeftNode);
-	//		}
-	//		else {
-	//			/*local*/GtBinaryNode BinaryNode = new GtBinaryNode(Token, LeftNode, Pattern);
-	//			BinaryNode.Append(RightLeftNode);
-	//			RightNode.LeftNode = BinaryNode;
-	//			RightNode.SetChild(BinaryNode);
-	//		}
-	//		return RightNode;
-	//	}
-	//
-	//	public static ZenNode MatchBinary0(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenNode LeftNode) {
-	//		/*local*/ZenToken Token = TokenContext.GetTokenAndMoveForward();
-	//		/*local*/ZenNode RightNode = TokenContext.ParsePattern(NameSpace, "$Expression$", ZenParserConst.Required);
-	//		if(RightNode.IsErrorNode()) {
-	//			return RightNode;
-	//		}
-	//		/*local*/ZenSyntaxPattern Pattern = NameSpace.GetExtendedSyntaxPattern(Token.ParsedText);  // FIXME
-	//		if(RightNode instanceof GtBinaryNode && Pattern.IsRightJoin(((GtBinaryNode)RightNode).Pattern)) {
-	//			return ZenGrammar.RightJoin(NameSpace, LeftNode, Pattern, Token, (GtBinaryNode) RightNode);
-	//		}
-	//		// LeftJoin
-	//		/*local*/GtBinaryNode BinaryNode = new GtBinaryNode(Token, LeftNode, Pattern);
-	//		BinaryNode.Append(RightNode);
-	//		return BinaryNode;
-	//	}
-
 	public static ZenNode MatchBinary(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenNode LeftNode) {
 		/*local*/ZenToken Token = TokenContext.GetTokenAndMoveForward();
 		/*local*/GtBinaryNode BinaryNode = new GtBinaryNode(Token, LeftNode, NameSpace.GetExtendedSyntaxPattern(Token.ParsedText));
@@ -602,16 +572,11 @@ public class ZenGrammar {
 	public static ZenNode MatchAnd(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenNode LeftNode) {
 		/*local*/GtBinaryNode BinaryNode = new GtAndNode(TokenContext.GetTokenAndMoveForward(), LeftNode, NameSpace.GetExtendedSyntaxPattern("&&"));
 		return BinaryNode.AppendParsedRightNode(NameSpace, TokenContext);
-		//		BinaryNode = TokenContext.AppendMatchedPattern(BinaryNode, NameSpace, "$Expression$", ZenParserConst.Required);
-		//		return BinaryNode;
 	}
 
 	public static ZenNode MatchOr(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenNode LeftNode) {
 		/*local*/GtBinaryNode BinaryNode = new GtOrNode(TokenContext.GetTokenAndMoveForward(), LeftNode, NameSpace.GetExtendedSyntaxPattern("||"));
 		return BinaryNode.AppendParsedRightNode(NameSpace, TokenContext);
-		//
-		//		BinaryNode = TokenContext.AppendMatchedPattern(BinaryNode, NameSpace, "$Expression$", ZenParserConst.Required);
-		//		return BinaryNode;
 	}
 
 	public static ZenNode MatchInstanceOf(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenNode LeftNode) {
