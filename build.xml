@@ -28,6 +28,7 @@
 			</manifest>
 			<zipfileset src="ext/asm-all-4.0.jar" />
 			<zipfileset src="ext/jline-2.12-SNAPSHOT.jar" />
+			<zipfileset src="ext/jruby-complete-1.7.9.jar" />
 		</jar>
 	</target>
 
