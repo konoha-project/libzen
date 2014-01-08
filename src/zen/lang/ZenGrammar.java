@@ -805,6 +805,12 @@ public class ZenGrammar {
 		return TokenContext.CreateExpectedErrorNode(TokenContext.GetToken(), "block");
 	}
 
+	public static ZenNode MatchError(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenNode LeftNode) {
+		// FIXME this method is not suitable with "zen" mind.
+		ZenToken Token = TokenContext.GetTokenAndMoveForward();
+		return new GtErrorNode(Token, Token.ParsedText);
+	}
+
 	public static void ImportGrammar(ZenNameSpace NameSpace, Class<?> Grammar) {
 		NameSpace.AppendTokenFunc(" \t", LibNative.LoadTokenFunc(Grammar, "WhiteSpaceToken"));
 		NameSpace.AppendTokenFunc("\n",  LibNative.LoadTokenFunc(Grammar, "IndentToken"));
@@ -851,7 +857,7 @@ public class ZenGrammar {
 
 		//		NameSpace.AppendExtendedSyntax("?", 0, LibNative.LoadMatchFunc(Grammar, "MatchTrinary"));
 
-		//		NameSpace.AppendSyntax("$Error$", LibNative.LoadMatchFunc(Grammar, "MatchError"));
+		NameSpace.AppendSyntax("$Error$", LibNative.LoadMatchFunc(Grammar, "MatchError"));
 		//		NameSpace.AppendSyntax("$Empty$", LibNative.LoadMatchFunc(Grammar, "MatchEmpty"));
 		NameSpace.AppendSyntax("$Symbol$", LibNative.LoadMatchFunc(Grammar, "MatchSymbol"));
 		NameSpace.AppendSyntax("$Type$",LibNative.LoadMatchFunc(Grammar, "MatchType"));
