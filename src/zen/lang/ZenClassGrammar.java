@@ -459,11 +459,9 @@ public class ZenClassGrammar {
 //		if(!EnumTree.IsMismatchedOrError()) {
 //			/*local*/GtNameSpace StoreNameSpace = NameSpace.GetNameSpace(KonohaGrammar.ParseNameSpaceFlag(0, TokenContext.ParsingAnnotation));
 //			StoreNameSpace.AppendTypeName(NewEnumType, EnumTree.GetSyntaxTreeAt(GreenTeaConsts.EnumNameTreeIndex).KeyToken);
-//			/*local*/int i = 0;
-//			while(i < LibZen.ListSize(NameList)) {
+//			for(/*local*/int i = 0; i < LibZen.ListSize(NameList); i = i + 1) {
 //				/*local*/String Key = NameList.get(i).ParsedText;
 //				StoreNameSpace.SetSymbol(GreenTeaUtils.ClassStaticSymbol(NewEnumType, Key), EnumMap.GetOrNull(Key), NameList.get(i));
-//				i = i + 1;
 //			}
 //			EnumTree.ParsedValue = NewEnumType;
 //		}
@@ -539,8 +537,7 @@ public class ZenClassGrammar {
 //			DefaultNode = ParsedTree.TypeCheckAt(GreenTeaConsts.SwitchCaseDefaultBlock, Gamma, GtStaticTable.VoidType, GreenTeaConsts.DefaultTypeCheckPolicy);
 //		}
 //		/*local*/GtNode Node = Gamma.Generator.CreateSwitchNode(GtStaticTable.VoidType, ParsedTree, CondNode, DefaultNode);
-//		/*local*/int CaseIndex = GreenTeaConsts.SwitchCaseCaseIndex;
-//		while(CaseIndex < ParsedTree.SubTreeList.size()) {
+//		for(/*local*/int CaseIndex = GreenTeaConsts.SwitchCaseCaseIndex; CaseIndex < ParsedTree.SubTreeList.size(); CaseIndex += 2) {
 //			/*local*/GtNode CaseExpr  = ParsedTree.TypeCheckAt(CaseIndex, Gamma, CondNode.Type, GreenTeaConsts.DefaultTypeCheckPolicy);
 //			/*local*/GtNode CaseBlock = null;
 //			if(ParsedTree.HasNodeAt(CaseIndex+1)) {
@@ -548,7 +545,6 @@ public class ZenClassGrammar {
 //			}
 //			Node.Append(CaseExpr);
 //			Node.Append(CaseBlock);
-//			CaseIndex += 2;
 //		}
 //		return Node;
 //	}
@@ -573,15 +569,13 @@ public class ZenClassGrammar {
 //	public static GtNode TypeNewArray(GtTypeEnv Gamma, GtSyntaxTree ParsedTree, GtType ContextType) {
 //		/*local*/GtType ArrayType = ParsedTree.GetSyntaxTreeAt(0).GetParsedType();
 //		/*local*/GtNode ArrayNode = Gamma.Generator.CreateNewArrayNode(GtStaticTable.ArrayType, ParsedTree);
-//		/*local*/int i = 1;
-//		while(i < LibZen.ListSize(ParsedTree.SubTreeList)) {
+//		for(/*local*/int i = 1; i < LibZen.ListSize(ParsedTree.SubTreeList); i = i + 1) {
 //			/*local*/GtNode Node = ParsedTree.TypeCheckAt(i, Gamma, GtStaticTable.IntType, GreenTeaConsts.DefaultTypeCheckPolicy);
 //			if(Node.IsErrorNode()) {
 //				return Node;
 //			}
 //			ArrayType = GtStaticTable.GetGenericType1(GtStaticTable.ArrayType, ArrayType, true);
 //			ArrayNode.Append(Node);
-//			i = i + 1;
 //		}
 //		ArrayNode.Type = ArrayType;
 //		return ArrayNode;
@@ -610,8 +604,7 @@ public class ZenClassGrammar {
 //			ElemType = ContextType.TypeParams[0];
 //			ArrayNode.Type = ContextType;
 //		}
-//		/*local*/int i = 0;
-//		while(i < LibZen.ListSize(ParsedTree.SubTreeList)) {
+//		for(/*local*/int i = 0; i < LibZen.ListSize(ParsedTree.SubTreeList); i = i + 1) {
 //			/*local*/GtNode Node = ParsedTree.TypeCheckAt(i, Gamma, ElemType, GreenTeaConsts.DefaultTypeCheckPolicy);
 //			if(Node.IsErrorNode()) {
 //				return Node;
@@ -621,7 +614,6 @@ public class ZenClassGrammar {
 //				ArrayNode.Type = GtStaticTable.GetGenericType1(GtStaticTable.ArrayType, ElemType, true);
 //			}
 //			ArrayNode.Append(Node);
-//			i = i + 1;
 //		}
 //		if(ElemType.IsVarType()) {
 //			ArrayNode.Type = GtStaticTable.GetGenericType1(GtStaticTable.ArrayType, GtStaticTable.AnyType, true);

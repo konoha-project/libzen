@@ -71,14 +71,12 @@ public class ZenFunc implements ZenFuncConst {
 
 	@Override public String toString() {
 		/*local*/String s = this.GetReturnType() + " " + this.FuncName + "(";
-		/*local*/int i = 0;
-		while(i < this.GetFuncParamSize()) {
+		for(/*local*/int i = 0; i < this.GetFuncParamSize(); i += 1) {
 			/*local*/ZenType ParamType = this.GetFuncParamType(i);
 			if(i > 0) {
 				s += ", ";
 			}
 			s += ParamType;
-			i += 1;
 		}
 		return s + ")";
 	}
@@ -127,12 +125,10 @@ public class ZenFunc implements ZenFuncConst {
 
 	public final boolean EqualsParamTypes(int BaseIndex, ZenType[] ParamTypes) {
 		if(this.Types.length == ParamTypes.length) {
-			/*local*/int i = BaseIndex;
-			while(i < this.Types.length) {
+			for(/*local*/int i = BaseIndex; i < this.Types.length; i = i + 1) {
 				if(this.Types[i] != ParamTypes[i]) {
 					return false;
 				}
-				i = i + 1;
 			}
 			return true;
 		}
@@ -146,7 +142,7 @@ public class ZenFunc implements ZenFuncConst {
 	public final boolean EqualsOverridedMethod(ZenFunc AFunc) {
 		return this.Types[0] == AFunc.Types[0] && this.EqualsParamTypes(2, AFunc.Types);
 	}
-	
+
 	public Object Invoke(Object[] Params) {
 		LibZen.DebugP("abstract function");
 		return null;
@@ -175,7 +171,7 @@ public class ZenFunc implements ZenFuncConst {
 //		return LibZen.ImportMethodToFunc(this, FullName);
 //	}
 
-//	
+//
 //	private boolean HasStaticBlock() {
 //		if(this.FuncBody instanceof GtFuncBlock) {
 //			/*local*/GtFuncBlock FuncBlock = (/*cast*/GtFuncBlock)this.FuncBody;
@@ -188,12 +184,10 @@ public class ZenFunc implements ZenFuncConst {
 //		if(this.HasStaticBlock()) {
 //			/*local*/GtFuncBlock FuncBlock = (/*cast*/GtFuncBlock)this.FuncBody;
 //			/*local*/GtTypeEnv Gamma = new GtTypeEnv(FuncBlock.NameSpace);
-//			/*local*/int i = 0;
 //			/*local*/ArrayList<String> NameList = new ArrayList<String>();
-//			while(i <  FuncBlock.NameList.size()) {
+//			for(/*local*/int i = 0; i <  FuncBlock.NameList.size(); i = i + 1) {
 //				/*local*/GtVariableInfo VarInfo = Gamma.AppendDeclaredVariable(0, FuncBlock.DefinedFunc.Types[i+1], FuncBlock.NameList.get(i), null, null);
 //				NameList.add(VarInfo.NativeName);
-//				i = i + 1;
 //			}
 //			Gamma.FuncBlock = FuncBlock;
 //			/*local*/GtNode BodyNode = GreenTeaUtils.TypeBlock(Gamma, FuncBlock.FuncBlock, GtStaticTable.VoidType);
@@ -223,15 +217,11 @@ public class ZenFunc implements ZenFuncConst {
 //	public final GtNameSpace GetGenericNameSpace(GtNameSpace NameSpace, ArrayList<GtNode> NodeList, int MaxSize) {
 //		if(this.Is(GenericFunc)) {
 //			/*local*/GtNameSpace GenericNameSpace = NameSpace.CreateSubNameSpace();
-//			/*local*/int i = 0;
-//			while(i < this.Types.length) {
+//			for(/*local*/int i = 0; i < this.Types.length; i = i + 1) {
 //				this.Types[i].AppendTypeVariable(GenericNameSpace, 0);
-//				i = i + 1;
 //			}
-//			i = 0;
-//			while(i < MaxSize) {
+//			for(/*local*/int i = 0; i < MaxSize; i = i + 1) {
 //				this.Types[i+1].Match(GenericNameSpace, NodeList.get(i).Type);
-//				i = i + 1;				
 //			}
 //			return GenericNameSpace;
 //		}
@@ -241,15 +231,11 @@ public class ZenFunc implements ZenFuncConst {
 //	public final GtNameSpace GetGenericNameSpaceT(GtNameSpace NameSpace, ArrayList<GtType> NodeList, int MaxSize) {
 //		if(this.Is(GenericFunc)) {
 //			/*local*/GtNameSpace GenericNameSpace = NameSpace.CreateSubNameSpace();
-//			/*local*/int i = 0;
-//			while(i < this.Types.length) {
+//			for(/*local*/int i = 0; i < this.Types.length; i = i + 1) {
 //				this.Types[i].AppendTypeVariable(GenericNameSpace, 0);
-//				i = i + 1;
 //			}
-//			i = 0;
-//			while(i < MaxSize) {
+//			for(/*local*/int i = 0; i < MaxSize; i = i + 1) {
 //				this.Types[i+1].Match(GenericNameSpace, NodeList.get(i));
-//				i = i + 1;				
 //			}
 //			return GenericNameSpace;
 //		}

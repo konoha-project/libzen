@@ -39,8 +39,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import zen.lang.ZenType;
-import zen.parser.ZenSourceBuilder;
 import zen.parser.ZenLogger;
+import zen.parser.ZenSourceBuilder;
 import zen.parser.ZenUtils;
 
 public abstract class LibZen {
@@ -54,13 +54,13 @@ public abstract class LibZen {
 		else {
 			return ZenArray.NewArray3(Type.GetParamType(0).GetParamType(0).GetParamType(0), ((Number)InitSizes[0]).intValue(), ((Number)InitSizes[1]).intValue(), ((Number)InitSizes[2]).intValue());
 		}
-		
+
 	}
 
 	public final static ZenArray NewNewArray(ZenType ArrayType, Object[] Values) {
-		return ZenArray.NewNewArray(ArrayType, Values);		
+		return ZenArray.NewNewArray(ArrayType, Values);
 	}
-	
+
 
 //	public static Object InvokeOverridedMethod(long FileLine, GtNameSpace NameSpace, GtFunc Func, Object[] Arguments) {
 //		/*local*/GtType ClassType = GtStaticTable.GuessType(Arguments[0]);
@@ -92,7 +92,7 @@ public abstract class LibZen {
 //		LibZen.VerboseLog(VerboseRuntime, PolyFunc.FormatTypeErrorMessage("method", ClassType, FuncName));
 //		return Value;
 //	}
-//	
+//
 //	public static Object DynamicGetter(Object RecvObject, String FieldName) {
 //		try {
 //			Field JavaField = RecvObject.getClass().getField(FieldName);
@@ -113,7 +113,7 @@ public abstract class LibZen {
 //		}
 //		return null;
 //	}
-		
+
 	public final static String GetPlatform() {
 		return "Java JVM-" + System.getProperty("java.version");
 	}
@@ -133,7 +133,7 @@ public abstract class LibZen {
 
 	public final static void DebugP(String msg) {
 //		if(LibZen.DebugMode) {
-			LibNative.println("DEBUG " + LibZen.GetStackInfo(2) + ": " + msg);
+		LibNative.println("DEBUG " + LibZen.GetStackInfo(2) + ": " + msg);
 //		}
 	}
 
@@ -205,7 +205,7 @@ public abstract class LibZen {
 		else {
 			quote = '\0';
 		}
-		while(i < Length) {
+		for(; i < Length; i += 1) {
 			/*local*/char ch = LibZen.CharAt(Text, i);
 			if(ch == '\\') {
 				i = i + 1;
@@ -233,7 +233,6 @@ public abstract class LibZen {
 				i = i + 1;
 			}
 			sb.append(ch);
-			i = i + 1;
 		}
 		return sb.toString();
 	}
@@ -241,8 +240,7 @@ public abstract class LibZen {
 	public static final String QuoteString(String Text) {
 		StringBuilder sb = new StringBuilder();
 		sb.append('"');
-		/*local*/int i = 0;
-		while(i < Text.length()) {
+		for(/*local*/int i = 0; i < Text.length(); i = i + 1) {
 			/*local*/char ch = LibZen.CharAt(Text, i);
 			if(ch == '\n') {
 				sb.append("\\n");
@@ -259,7 +257,6 @@ public abstract class LibZen {
 			else {
 				sb.append(ch);
 			}
-			i = i + 1;
 		}
 		sb.append('"');
 		return sb.toString();
@@ -318,7 +315,7 @@ public abstract class LibZen {
 			ZenLogger.VerboseException(e);
 		}
 		return 0.0;
-	}	
+	}
 
 	public final static void ArrayCopy(Object src, int srcPos, Object dest, int destPos, int length) {
 		System.arraycopy(src, srcPos, dest, destPos, length);
@@ -333,11 +330,11 @@ public abstract class LibZen {
 //		return NativeFunc;
 //	}
 //
-	
+
 //	public final static void LoadNativeConstructors(GtParserContext Context, GtType ClassType, ArrayList<GtFunc> FuncList) {
 //		LibNative.LoadNativeConstructors(Context, ClassType, FuncList);
 //	}
-//	
+//
 //	public final static GtFunc LoadNativeField(GtParserContext Context, GtType ClassType, String FieldName, boolean GetSetter) {
 //		return LibNative.LoadNativeField(Context, ClassType, FieldName, GetSetter);
 //	}
@@ -450,7 +447,7 @@ public abstract class LibZen {
 			PrintStream Stream = null;
 			if(OutputFile.equals("-")) {
 				Stream = System.out;
-				Stream.flush();				
+				Stream.flush();
 			}
 			else {
 				Stream = new PrintStream(OutputFile);
@@ -474,7 +471,7 @@ public abstract class LibZen {
 	private static java.io.Console Console = null;
 	private static java.io.BufferedReader Reader = null;
 	private static boolean ConsoleInitialized = false;
-	
+
 	static private String ReadLine(String format, Object... args) {
 		if(!ConsoleInitialized){
 			Console = System.console();
@@ -505,7 +502,7 @@ public abstract class LibZen {
 			int level = 0;
 			while((level = LibZen.CheckBraceLevel(Line)) > 0) {
 				String Line2 = LibZen.ReadLine(Prompt2 + ZenUtils.JoinStrings("  ", level));
-				Line += "\n" + Line2; 
+				Line += "\n" + Line2;
 			}
 			if(level < 0) {
 				Line = "";
@@ -602,11 +599,11 @@ public abstract class LibZen {
 	public static int LowerId(long FileLine) {
 		return (int)FileLine;
 	}
-	
+
 	public static boolean booleanValue(Object Value) {
 		return ((Boolean)Value).booleanValue();
 	}
-	
+
 //	public static Object DynamicCast(ZenType CastType, Object Value) {
 //		if(Value != null) {
 //			ZenType FromType = ZenSystem.GuessType(Value);

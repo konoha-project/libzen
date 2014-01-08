@@ -56,14 +56,12 @@ public class ZenGeneric1Type extends ZenType {
 
 //	// Note Don't call this directly. Use Context.GetGenericType instead.
 //	public ZenType CreateGenericType(int BaseIndex, ArrayList<ZenType> TypeList, String ShortName) {
-//		/*local*/int i = BaseIndex;
 //		/*local*/int TypeVariableFlag = (this.TypeFlag & (~GenericVariable));
-//		while(i < TypeList.size()) {
+//		for(/*local*/int i = BaseIndex; i < TypeList.size(); i = i + 1) {
 //			if(TypeList.get(i).HasTypeVariable()) {
 //				TypeVariableFlag |= GenericVariable;
 //				break;
 //			}
-//			i = i + 1;
 //		}
 //		/*local*/ZenType GenericType = new ZenType(TypeVariableFlag, ShortName, null, null);
 //		GenericType.BaseType = this.BaseType;
