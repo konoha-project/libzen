@@ -1,0 +1,14 @@
+function f() : int {
+    var a : int = 1;
+    var b : int = 10;
+    var c : int = 100;
+    var d : int = 1000;
+    var e : int = 10000;
+    var f : int = 100000;
+    var g : int = 1000000;
+    var h : int = 10000000;
+    var i : int = 100000000;
+    return a+b+c+d+e+f+g+h+i;
+}
+
+f();
