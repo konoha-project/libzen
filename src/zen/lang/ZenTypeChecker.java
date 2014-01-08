@@ -431,7 +431,8 @@ public class ZenTypeChecker extends ZenTypeCheckerImpl {
 
 	@Override public void VisitBlockNode(GtBlockNode Node) {
 		ZenType ContextType = this.GetContextType();
-		for(int i = 0; i < Node.StatementList.size() - 1; i += 1) {
+		int i = 0;
+		for(; i < Node.StatementList.size() - 1; i += 1) {
 			ZenNode SubNode = Node.StatementList.get(i);
 			SubNode = this.TypeCheck(SubNode, Node.NameSpace, ZenSystem.VoidType, ZenTypeCheckerImpl.DefaultTypeCheckPolicy);
 			Node.StatementList.set(i, SubNode);
