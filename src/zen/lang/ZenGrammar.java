@@ -576,13 +576,13 @@ public class ZenGrammar {
 
 	public static ZenNode MatchBinary(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenNode LeftNode) {
 		/*local*/ZenToken Token = TokenContext.GetTokenAndMoveForward();
-		/*local*/GtBinaryNode BinaryNode = new GtBinaryNode(Token, LeftNode, NameSpace.GetSyntaxPattern(Token.ParsedText));
+		/*local*/GtBinaryNode BinaryNode = new GtBinaryNode(Token, LeftNode, NameSpace.GetExtendedSyntaxPattern(Token.ParsedText));
 		return BinaryNode.AppendParsedRightNode(NameSpace, TokenContext);
 	}
 
 	public static ZenNode MatchComparator(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenNode LeftNode) {
 		/*local*/ZenToken Token = TokenContext.GetTokenAndMoveForward();
-		/*local*/GtBinaryNode BinaryNode = new ZenComparatorNode(Token, LeftNode, NameSpace.GetSyntaxPattern(Token.ParsedText));
+		/*local*/GtBinaryNode BinaryNode = new ZenComparatorNode(Token, LeftNode, NameSpace.GetExtendedSyntaxPattern(Token.ParsedText));
 		return BinaryNode.AppendParsedRightNode(NameSpace, TokenContext);
 	}
 
@@ -600,14 +600,14 @@ public class ZenGrammar {
 	}
 
 	public static ZenNode MatchAnd(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenNode LeftNode) {
-		/*local*/GtBinaryNode BinaryNode = new GtAndNode(TokenContext.GetTokenAndMoveForward(), LeftNode, NameSpace.GetSyntaxPattern("&&"));
+		/*local*/GtBinaryNode BinaryNode = new GtAndNode(TokenContext.GetTokenAndMoveForward(), LeftNode, NameSpace.GetExtendedSyntaxPattern("&&"));
 		return BinaryNode.AppendParsedRightNode(NameSpace, TokenContext);
 		//		BinaryNode = TokenContext.AppendMatchedPattern(BinaryNode, NameSpace, "$Expression$", ZenParserConst.Required);
 		//		return BinaryNode;
 	}
 
 	public static ZenNode MatchOr(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenNode LeftNode) {
-		/*local*/GtBinaryNode BinaryNode = new GtOrNode(TokenContext.GetTokenAndMoveForward(), LeftNode, NameSpace.GetSyntaxPattern("||"));
+		/*local*/GtBinaryNode BinaryNode = new GtOrNode(TokenContext.GetTokenAndMoveForward(), LeftNode, NameSpace.GetExtendedSyntaxPattern("||"));
 		return BinaryNode.AppendParsedRightNode(NameSpace, TokenContext);
 		//
 		//		BinaryNode = TokenContext.AppendMatchedPattern(BinaryNode, NameSpace, "$Expression$", ZenParserConst.Required);

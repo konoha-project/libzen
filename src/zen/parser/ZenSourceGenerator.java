@@ -93,6 +93,11 @@ public class ZenSourceGenerator extends ZenGenerator {
 	/* field */public String TrueLiteral;
 	/* field */public String FalseLiteral;
 	/* field */public String NullLiteral;
+
+	/* field */public String NotOperator;
+	/* field */public String AndOperator;
+	/* field */public String OrOperator;
+
 	/* field */public String TopType;
 
 	public ZenSourceGenerator(String TargetCode, String TargetVersion) {
@@ -111,6 +116,9 @@ public class ZenSourceGenerator extends ZenGenerator {
 		this.TrueLiteral = "true";
 		this.FalseLiteral = "false";
 		this.NullLiteral = "null";
+		this.AndOperator = "&&";
+		this.OrOperator = "||";
+		this.NotOperator = "!";
 		this.TopType = "var";
 	}
 
@@ -302,9 +310,9 @@ public class ZenSourceGenerator extends ZenGenerator {
 
 	@Override
 	public void VisitNotNode(ZenNotNode Node) {
-		this.CurrentBuilder.Append(Node.SourceToken.ParsedText);
+		this.CurrentBuilder.Append(this.NotOperator);
 		//		this.CurrentBuilder.Append("(");
-		this.CurrentBuilder.Append("!");
+		this.GenerateCode(Node.RecvNode);
 		//		this.CurrentBuilder.Append(")");
 	}
 
@@ -346,14 +354,14 @@ public class ZenSourceGenerator extends ZenGenerator {
 	@Override
 	public void VisitAndNode(GtAndNode Node) {
 		this.GenerateCode(Node.LeftNode);
-		this.CurrentBuilder.AppendToken("&&");
+		this.CurrentBuilder.AppendToken(this.AndOperator);
 		this.GenerateCode(Node.RightNode);
 	}
 
 	@Override
 	public void VisitOrNode(GtOrNode Node) {
 		this.GenerateCode(Node.LeftNode);
-		this.CurrentBuilder.AppendToken("||");
+		this.CurrentBuilder.AppendToken(this.OrOperator);
 		this.GenerateCode(Node.RightNode);
 	}
 

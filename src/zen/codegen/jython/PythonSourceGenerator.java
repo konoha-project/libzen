@@ -58,6 +58,11 @@ public class PythonSourceGenerator extends ZenSourceGenerator {
 		this.TrueLiteral = "True";
 		this.FalseLiteral = "False";
 		this.NullLiteral = "None";
+
+		this.AndOperator = "and";
+		this.OrOperator = "or";
+		this.NotOperator = "not ";
+
 		this.TopType = "object";
 		this.SetNativeType(ZenSystem.BooleanType, "bool");
 		this.SetNativeType(ZenSystem.IntType, "int");
