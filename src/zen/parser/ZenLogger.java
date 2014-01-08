@@ -103,7 +103,7 @@ public final class ZenLogger {
 	public final String ReportDebug(ZenToken Token, String Message) {
 		return this.Report(DebugLevel, Token, Message);
 	}
-	
+
 	public final String[] GetReportedErrors() {
 		/*local*/ArrayList<String> List = this.ReportedErrorList;
 		this.ReportedErrorList = new ArrayList<String>();
@@ -111,14 +111,12 @@ public final class ZenLogger {
 	}
 
 	public final void ShowReportedErrors() {
-		/*local*/int i = 0;
 		/*local*/String[] Messages = this.GetReportedErrors();
-		while(i < Messages.length) {
+		for(/*local*/int i = 0; i < Messages.length; i = i + 1) {
 			LibNative.println(Messages[i]);
-			i = i + 1;
 		}
 	}
-	
+
 	public final void Count(String EventName) {
 		if(this.StatMap != null) {
 			ZenCounter Counter = this.StatMap.GetOrNull(EventName);
@@ -146,7 +144,7 @@ public final class ZenLogger {
 		}
 	}
 
-	
+
 	public static int VerboseMask = VerboseUndefined | VerboseException;
 
 	public final static void TODO(String msg) {
@@ -169,7 +167,7 @@ public final class ZenLogger {
 		if(e instanceof IllegalArgumentException) {
 			LibNative.Exit(1, e.toString());
 		}
-		
+
 	}
 
 	public final static void VerboseLog(int VerboseFlag, String Message) {
@@ -179,7 +177,7 @@ public final class ZenLogger {
 	}
 
 	public static void ParseVerboseOption() {
-		
+
 	}
 
 }

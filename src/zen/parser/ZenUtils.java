@@ -38,10 +38,8 @@ public class ZenUtils implements ZenParserConst {
 
 	public final static String JoinStrings(String Unit, int Times) {
 		/*local*/String s = "";
-		/*local*/int i = 0;
-		while(i < Times) {
+		for(/*local*/int i = 0; i < Times; i += 1) {
 			s = s + Unit;
-			i = i + 1;
 		}
 		return s;
 	}

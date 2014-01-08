@@ -153,17 +153,15 @@ public class ZenSourceGenerator extends ZenGenerator {
 		return null;
 	}
 
-	// public final void FlushErrorReport() {
-	// /*local*/GtSourceBuilder Builder = this.NewSourceBuilder();
-	// /*local*/String[] Reports = this.Logger.GetReportedErrors();
-	// /*local*/int i = 0;
-	// Builder.AppendLine("");
-	// while(i < Reports.length) {
-	// Builder.AppendCommentLine(Reports[i]);
-	// i = i + 1;
-	// }
-	// Builder.AppendLine("");
-	// }
+//	public final void FlushErrorReport() {
+//		/*local*/GtSourceBuilder Builder = this.NewSourceBuilder();
+//		/*local*/String[] Reports = this.Logger.GetReportedErrors();
+//		Builder.AppendLine("");
+//		for(/*local*/int i = 0; i < Reports.length; i = i + 1) {
+//			Builder.AppendCommentLine(Reports[i]);
+//		}
+//		Builder.AppendLine("");
+//	}
 
 	public void GenerateCode(ZenNode Node) {
 		if (Node == null) {

@@ -120,15 +120,12 @@ public class ZenSourceBuilder {
 		this.SourceList.add(Text);
 	}
 
-	public void AppendParamList(ArrayList<ZenNode> ParamList, int BeginIdx,
-			int EndIdx) {
-		/* local */int i = BeginIdx;
-		while (i < EndIdx) {
+	public void AppendParamList(ArrayList<ZenNode> ParamList, int BeginIdx, int EndIdx) {
+		for(/*local*/int i = BeginIdx; i < EndIdx; i = i + 1) {
 			if (i > BeginIdx) {
 				this.Append(this.Template.Camma);
 			}
 			ParamList.get(i).Accept(this.Template);
-			i = i + 1;
 		}
 	}
 

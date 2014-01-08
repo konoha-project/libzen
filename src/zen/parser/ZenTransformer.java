@@ -86,14 +86,12 @@ public class ZenTransformer implements ZenVisitor {
 	}
 
 	protected boolean TransformNodeList(ZenNode ParentNode, ArrayList<ZenNode> NodeList) {
-		int i = 0;
-		while (i < NodeList.size()) {
+		for(int i = 0; i < NodeList.size(); i = i + 1) {
 			ZenNode SubNode = NodeList.get(i);
 			NodeList.set(i, this.Transform(ParentNode, SubNode));
 			if(!this.IsVisitable()) {
 				break;
 			}
-			i = i + 1;
 		}
 		return true;
 	}
@@ -106,12 +104,10 @@ public class ZenTransformer implements ZenVisitor {
 		while(SubNode.ParentNode != BlockNode) {
 			SubNode = SubNode.ParentNode;
 		}
-		int i = 0;
-		while(i < BlockNode.StatementList.size()) {
+		for(int i = 0; i < BlockNode.StatementList.size(); i = i + 1) {
 			if(BlockNode.StatementList.get(i) == SubNode) {
 				return i;
 			}
-			i = i + 1;
 		}
 		return -1;
 	}

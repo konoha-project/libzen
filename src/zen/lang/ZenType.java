@@ -279,10 +279,8 @@ public class ZenType implements ZenTypeConst {
 //			return Count + 1;
 //		}
 //		if(ZenUtils.IsFlag(this.TypeFlag, GenericVariable)) {
-//			/*local*/int i = 0;
-//			while(i < this.TypeParams.length) {
+//			for(/*local*/int i = 0; i < this.TypeParams.length; i += 1) {
 //				Count = this.TypeParams[i].AppendTypeVariable(GenericNameSpace, Count);
-//				i += 1;
 //			}
 //		}
 //		return Count;
@@ -308,12 +306,10 @@ public class ZenType implements ZenTypeConst {
 //			}
 //		}
 //		if(ZenUtils.IsFlag(this.TypeFlag, GenericVariable)) {
-//			/*local*/int i = 0;
 //			/*local*/ArrayList<ZenType> TypeList = new ArrayList<ZenType>();
-//			while(i < this.TypeParams.length) {
+//			for(/*local*/int i = 0; i < this.TypeParams.length; i += 1) {
 //				/*local*/ZenType RealParamType = this.TypeParams[i].RealType(GenericNameSpace, this.GivenParamType(GivenType, i));
 //				TypeList.add(RealParamType);
-//				i += 1;
 //			}
 //			return ZenTypeSystem.GetGenericType(this.BaseType, 0, TypeList, true);
 //		}
@@ -333,12 +329,10 @@ public class ZenType implements ZenTypeConst {
 //		}
 //		if(ZenUtils.IsFlag(this.TypeFlag, GenericVariable)) {
 //			if(GivenType.BaseType == this.BaseType && GivenType.TypeParams.length == this.TypeParams.length) {
-//				/*local*/int i = 0;
-//				while(i < this.TypeParams.length) {
+//				for(/*local*/int i = 0; i < this.TypeParams.length; i += 1) {
 //					if(!this.TypeParams[i].Match(GenericNameSpace, GivenType.TypeParams[i])) {
 //						return false;
 //					}
-//					i += 1;
 //				}
 //				return true;
 //			}

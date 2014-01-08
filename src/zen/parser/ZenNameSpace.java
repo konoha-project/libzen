@@ -104,21 +104,17 @@ public final class ZenNameSpace extends ZenUtils {
 	}
 
 	public final void AppendTokenFunc(String keys, ZenFunc TokenFunc) {
-		/*local*/int i = 0;
 		if(this.TokenMatrix == null) {
 			this.TokenMatrix = new ZenTokenFunc[ZenParserConst.MaxSizeOfChars];
 			if(this.ParentNameSpace != null) {
-				while(i < ZenParserConst.MaxSizeOfChars) {
+				for(/*local*/int i = 0; i < ZenParserConst.MaxSizeOfChars; i += 1) {
 					this.TokenMatrix[i] = this.ParentNameSpace.GetTokenFunc(i);
-					i += 1;
 				}
 			}
 		}
-		i = 0;
-		while(i < keys.length()) {
+		for(/*local*/int i = 0; i < keys.length(); i += 1) {
 			/*local*/int kchar = ZenUtils.AsciiToTokenMatrixIndex(LibZen.CharAt(keys, i));
 			this.TokenMatrix[kchar] = this.JoinParentFunc(TokenFunc, this.TokenMatrix[kchar]);
-			i += 1;
 		}
 	}
 
@@ -330,8 +326,7 @@ public final class ZenNameSpace extends ZenUtils {
 	//			}
 	//			ns = ns.ParentNameSpace;
 	//		}
-	//		/*local*/int i = 0;
-	//		while(i < KeyList.size()) {
+	//		for(/*local*/int i = 0; i < KeyList.size(); i = i + 1) {
 	//			/*local*/String Key = KeyList.get(i);
 	//			/*local*/Object Value = NameSpace.GetSymbol(Key);
 	//			Key = Key.replace(ClassPrefix, Prefix);
@@ -339,7 +334,6 @@ public final class ZenNameSpace extends ZenUtils {
 	//				SourceToken.ParsedText = Key;
 	//			}
 	//			this.SetSymbol(Key, Value, SourceToken);
-	//			i = i + 1;
 	//		}
 	//	}
 
@@ -409,10 +403,8 @@ public final class ZenNameSpace extends ZenUtils {
 	//			while(ClassType != null) {
 	//				/*local*/String Key = GtNameSpace.ClassSymbol(ClassType, Symbol);
 	//				this.RetrieveFuncList(Key, FuncList);
-	//				/*local*/int i = 0;
-	//				while(i < FuncList.size()) {
+	//				for(/*local*/int i = 0; i < FuncList.size(); i+= 1) {
 	//					/*local*/GtFunc Func = FuncList.get(i);
-	//					i += 1;
 	//					if(Func.EqualsOverridedMethod(GivenFunc)) {
 	//						return Func;
 	//					}
@@ -432,10 +424,8 @@ public final class ZenNameSpace extends ZenUtils {
 		}
 		else if(FuncValue instanceof GtPolyFunc) {
 			/*local*/GtPolyFunc PolyFunc = (/*cast*/GtPolyFunc)FuncValue;
-			/*local*/int i = PolyFunc.FuncList.size() - 1;
-			while(i >= 0) {
+			for(/*local*/int i = PolyFunc.FuncList.size() - 1; i >= 0; i = i - 1) {
 				FuncList.add(PolyFunc.FuncList.get(i));
-				i = i - 1;
 			}
 		}
 		if(this.ParentNameSpace != null) {
@@ -453,23 +443,19 @@ public final class ZenNameSpace extends ZenUtils {
 	public final ZenFunc GetFunc(String FuncName, int BaseIndex, ArrayList<ZenType> TypeList) {
 		/*local*/ArrayList<ZenFunc> FuncList = new ArrayList<ZenFunc>();
 		this.RetrieveFuncList(FuncName, FuncList);
-		/*local*/int i = 0;
-		while(i < FuncList.size()) {
+		for(/*local*/int i = 0; i < FuncList.size(); i += 1) {
 			/*local*/ZenFunc Func = FuncList.get(i);
 			if(Func.Types.length == TypeList.size() - BaseIndex) {
-				/*local*/int j = 0;
-				while(j < Func.Types.length) {
+				for(/*local*/int j = 0; j < Func.Types.length; j += 1) {
 					if(TypeList.get(BaseIndex + j) != Func.Types[j]) {
 						Func = null;
 						break;
 					}
-					j = j + 1;
 				}
 				if(Func != null) {
 					return Func;
 				}
 			}
-			i = i + 1;
 		}
 		return null;
 	}
@@ -627,12 +613,10 @@ public final class ZenNameSpace extends ZenUtils {
 	}
 
 	public void Revert(ArrayList<Object> RevertList) {
-		/*local*/int i = 0;
-		while(i < RevertList.size()) {
+		for(/*local*/int i = 0; i < RevertList.size(); i += 2) {
 			/*local*/String Key = (/*cast*/String)RevertList.get(i);
 			/*local*/Object Value = RevertList.get(i+1);
 			this.SetSymbol(Key, Value, null);
-			i += 2;
 		}
 	}
 
