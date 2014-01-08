@@ -444,8 +444,7 @@ public class LibNative {
 				TypeList.add(LibNative.GetNativeType(ParamTypes[j]));
 			}
 		}
-		ZenType[] Types = LibZen.CompactTypeList(0, TypeList);
-		return new ZenNativeFunc(0, JMethod.getName(), Types, null, JMethod);
+		return new ZenNativeFunc(0, JMethod.getName(), ZenSystem.LookupFuncType(TypeList), null, JMethod);
 	}
 
 	public final static ZenFunc LoadTokenFunc(Class<?> GrammarClass,

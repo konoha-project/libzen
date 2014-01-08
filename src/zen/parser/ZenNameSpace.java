@@ -34,7 +34,6 @@ import zen.lang.ZenFunc;
 import zen.lang.ZenSystem;
 import zen.lang.ZenType;
 import zen.obsolete.GtFuncBlock;
-import zen.obsolete.GtPolyFunc;
 //endif VAJA
 
 final class ZenSymbolSource {
@@ -423,56 +422,56 @@ public final class ZenNameSpace extends ZenUtils {
 	//		}
 	//		return GivenFunc;
 	//	}
+	//
+	//	public final Object RetrieveFuncList(String FuncName, ArrayList<ZenFunc> FuncList) {
+	//		/*local*/Object FuncValue = this.GetLocalSymbol(FuncName);
+	//		if(FuncValue instanceof ZenFunc) {
+	//			/*local*/ZenFunc Func = (/*cast*/ZenFunc)FuncValue;
+	//			FuncList.add(Func);
+	//		}
+	//		else if(FuncValue instanceof GtPolyFunc) {
+	//			/*local*/GtPolyFunc PolyFunc = (/*cast*/GtPolyFunc)FuncValue;
+	//			/*local*/int i = PolyFunc.FuncList.size() - 1;
+	//			while(i >= 0) {
+	//				FuncList.add(PolyFunc.FuncList.get(i));
+	//				i = i - 1;
+	//			}
+	//		}
+	//		if(this.ParentNameSpace != null) {
+	//			return this.ParentNameSpace.RetrieveFuncList(FuncName, FuncList);
+	//		}
+	//		return FuncValue;
+	//	}
 
-	public final Object RetrieveFuncList(String FuncName, ArrayList<ZenFunc> FuncList) {
-		/*local*/Object FuncValue = this.GetLocalSymbol(FuncName);
-		if(FuncValue instanceof ZenFunc) {
-			/*local*/ZenFunc Func = (/*cast*/ZenFunc)FuncValue;
-			FuncList.add(Func);
-		}
-		else if(FuncValue instanceof GtPolyFunc) {
-			/*local*/GtPolyFunc PolyFunc = (/*cast*/GtPolyFunc)FuncValue;
-			/*local*/int i = PolyFunc.FuncList.size() - 1;
-			while(i >= 0) {
-				FuncList.add(PolyFunc.FuncList.get(i));
-				i = i - 1;
-			}
-		}
-		if(this.ParentNameSpace != null) {
-			return this.ParentNameSpace.RetrieveFuncList(FuncName, FuncList);
-		}
-		return FuncValue;
-	}
-
-	public final GtPolyFunc GetPolyFunc(String FuncName) {
-		/*local*/ArrayList<ZenFunc> FuncList = new ArrayList<ZenFunc>();
-		this.RetrieveFuncList(FuncName, FuncList);
-		return new GtPolyFunc(null, FuncList);
-	}
-
-	public final ZenFunc GetFunc(String FuncName, int BaseIndex, ArrayList<ZenType> TypeList) {
-		/*local*/ArrayList<ZenFunc> FuncList = new ArrayList<ZenFunc>();
-		this.RetrieveFuncList(FuncName, FuncList);
-		/*local*/int i = 0;
-		while(i < FuncList.size()) {
-			/*local*/ZenFunc Func = FuncList.get(i);
-			if(Func.Types.length == TypeList.size() - BaseIndex) {
-				/*local*/int j = 0;
-				while(j < Func.Types.length) {
-					if(TypeList.get(BaseIndex + j) != Func.Types[j]) {
-						Func = null;
-						break;
-					}
-					j = j + 1;
-				}
-				if(Func != null) {
-					return Func;
-				}
-			}
-			i = i + 1;
-		}
-		return null;
-	}
+	//	public final GtPolyFunc GetPolyFunc(String FuncName) {
+	//		/*local*/ArrayList<ZenFunc> FuncList = new ArrayList<ZenFunc>();
+	//		this.RetrieveFuncList(FuncName, FuncList);
+	//		return new GtPolyFunc(null, FuncList);
+	//	}
+	//
+	//	public final ZenFunc GetFunc(String FuncName, int BaseIndex, ArrayList<ZenType> TypeList) {
+	//		/*local*/ArrayList<ZenFunc> FuncList = new ArrayList<ZenFunc>();
+	//		this.RetrieveFuncList(FuncName, FuncList);
+	//		/*local*/int i = 0;
+	//		while(i < FuncList.size()) {
+	//			/*local*/ZenFunc Func = FuncList.get(i);
+	//			if(Func.Types.length == TypeList.size() - BaseIndex) {
+	//				/*local*/int j = 0;
+	//				while(j < Func.Types.length) {
+	//					if(TypeList.get(BaseIndex + j) != Func.Types[j]) {
+	//						Func = null;
+	//						break;
+	//					}
+	//					j = j + 1;
+	//				}
+	//				if(Func != null) {
+	//					return Func;
+	//				}
+	//			}
+	//			i = i + 1;
+	//		}
+	//		return null;
+	//	}
 
 	//	public final Object AppendFuncName(String Key, GtFunc Func, GtToken SourceToken) {
 	//		/*local*/Object OldValue = this.GetLocalSymbol(Key);

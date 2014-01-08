@@ -27,20 +27,21 @@ package zen.deps;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import zen.lang.ZenType;
 import zen.lang.ZenFunc;
+import zen.lang.ZenFuncType;
 import zen.parser.ZenLogger;
 
 public class ZenNativeFunc extends ZenFunc {
 	/*field*/public Object Recv;
 	/*field*/public Method JMethod;  // Abstract function if null
-	
-	public ZenNativeFunc(int FuncFlag, String FuncName, ZenType[] Types, Object Recv, Method JMethod) {
-		super(FuncFlag, FuncName, Types);
+
+	public ZenNativeFunc(int FuncFlag, String FuncName, ZenFuncType FuncType, Object Recv, Method JMethod) {
+		super(FuncFlag, FuncName, FuncType);
 		this.Recv = Recv;
 		this.JMethod = JMethod;
 	}
-	
+
+	@Override
 	public final Object Invoke(Object[] Params) {
 		try {
 			return (this.JMethod).invoke(this.Recv, Params);
