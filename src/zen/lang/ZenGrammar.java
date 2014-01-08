@@ -290,14 +290,18 @@ public class ZenGrammar {
 				if(pos + 1 < SourceText.length()) {
 					/*local*/char NextChar = LibZen.CharAt(SourceText, pos + 1);
 					if(NextChar == 'u') { // \u12345
+						pos += 2; // skip "\\" "u"
 						for(; pos < SourceText.length(); pos += 1) {
 							if(!LibZen.IsDigit(SourceText, pos)) {
 								break;
 							}
 						}
+						ch = LibZen.CharAt(SourceText, pos);
+					}
+					else {
+						pos += 1; // skip "\\"
 					}
 				}
-				pos += 1;
 			}
 			if(ch == '"') {
 				TokenContext.AppendParsedToken(LibZen.SubString(SourceText, start, (pos + 1)), ZenParserConst.QuotedTokenFlag, "$StringLiteral$");
