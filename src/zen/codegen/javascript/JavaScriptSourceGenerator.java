@@ -46,9 +46,9 @@ import zen.lang.ZenSystem;
 import zen.parser.ZenSourceGenerator;
 
 public class JavaScriptSourceGenerator extends ZenSourceGenerator {
-	
-    private ScriptEngineManager EngineManager;
-    private ScriptEngine Engine;
+
+	private final ScriptEngineManager EngineManager;
+	private final ScriptEngine Engine;
 
 	public JavaScriptSourceGenerator() {
 		super("JavaScript", "1.8");
@@ -68,9 +68,9 @@ public class JavaScriptSourceGenerator extends ZenSourceGenerator {
 		this.SetNativeType(ZenSystem.IntType, "Number");
 		this.SetNativeType(ZenSystem.FloatType, "Number");
 		this.SetNativeType(ZenSystem.StringType, "String");
-		
-	    this.EngineManager = new ScriptEngineManager();
-	    this.Engine = EngineManager.getEngineByName("js");
+
+		this.EngineManager = new ScriptEngineManager();
+		this.Engine = this.EngineManager.getEngineByName("js");
 	}
 
 	@Override
@@ -78,14 +78,14 @@ public class JavaScriptSourceGenerator extends ZenSourceGenerator {
 		String Code = this.CurrentBuilder.toString() + ";";
 		System.out.println(Code);
 		this.CurrentBuilder.Clear();
-        try {
-            return ((Compilable)this.Engine).compile(Code).eval();
-        } catch (ScriptException ex) {
-            ex.printStackTrace();
-        }
-        return null;
+		try {
+			return ((Compilable)this.Engine).compile(Code).eval();
+		} catch (ScriptException ex) {
+			ex.printStackTrace();
+		}
+		return null;
 	}
-	
+
 	@Override
 	public void VisitBlockNode(GtBlockNode Node) {
 		this.CurrentBuilder.Append("{");
@@ -124,9 +124,10 @@ public class JavaScriptSourceGenerator extends ZenSourceGenerator {
 	public void VisitTryNode(GtTryNode Node) {
 		this.CurrentBuilder.Append("try");
 		this.GenerateCode(Node.TryNode);
-		for (ZenNode CatchNode : Node.CatchList) {
-			this.GenerateCode(CatchNode);
-		}
+		//for (ZenNode CatchNode : Node.CatchList) {
+		//	this.GenerateCode(CatchNode);
+		//}
+		this.GenerateCode(Node.CatchNode);
 		if (Node.FinallyNode != null) {
 			this.CurrentBuilder.Append("finally");
 			this.GenerateCode(Node.FinallyNode);
