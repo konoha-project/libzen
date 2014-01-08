@@ -39,4 +39,10 @@ public class GtParamNode extends ZenNode {
 	@Override public void Accept(ZenVisitor Visitor) {
 		Visitor.VisitParamNode(this);
 	}
+	@Override
+	public void Append(ZenNode Node) {
+		if(Node instanceof GtTypeNode) {
+			this.Type = ((GtTypeNode)Node).Type;
+		}
+	}
 }
