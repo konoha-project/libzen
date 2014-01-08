@@ -437,7 +437,7 @@ public class ZenSourceGenerator extends ZenGenerator {
 
 	protected void VisitTypeAnnotation(ZenType Type) {
 		this.CurrentBuilder.Append(" :");
-		this.CurrentBuilder.Append(Type.GetNativeName());
+		this.VisitType(Type);
 	}
 
 	@Override
