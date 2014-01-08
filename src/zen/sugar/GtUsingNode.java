@@ -22,22 +22,33 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package zen.ast2;
+package zen.sugar;
 
 import zen.ast.ZenNode;
 import zen.lang.ZenType;
 import zen.parser.ZenToken;
 
-final public class GtCaseNode extends ZenNode {
-	/*field*/public ZenNode  CaseNode;;
-	/*field*/public ZenNode	BodyNode;
-	public GtCaseNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode CaseNode, ZenNode BodyNode) {
+/**
+ * using(File f = new File() {
+ * 	f.read();
+ * }
+ * try-catch is needed
+ */
+final public class GtUsingNode extends ZenNode {
+	/*field*/public ZenType	DeclType;
+	/*field*/public String  NativeName;
+	/*field*/public ZenNode	InitNode;
+	/*field*/public ZenNode	BlockNode;   // release resource of NativeName after BlockNode
+	/* let VarNode in Block end */
+	public GtUsingNode/*constructor*/(ZenType Type, ZenToken Token, ZenType DeclType, String VariableName, ZenNode InitNode, ZenNode Block) {
 		super();
-		this.CaseNode = CaseNode;
-		this.BodyNode = BodyNode;
-//		this.SetChild2(BodyNode, CaseNode);
+		this.NativeName = VariableName;
+		this.DeclType  = DeclType;
+		this.InitNode  = InitNode;
+		this.BlockNode = Block;
+//		this.SetChild2(InitNode, this.BlockNode);
 	}
 //	@Override public boolean Accept(GtVisitor Visitor) {
-//		Visitor.VisitCaseNode(this);
+//		Visitor.VisitUsingNode(this);
 //	}
 }

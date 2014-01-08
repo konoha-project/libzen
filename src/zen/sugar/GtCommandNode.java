@@ -22,7 +22,7 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package zen.ast2;
+package zen.sugar;
 
 import java.util.ArrayList;
 
@@ -30,23 +30,25 @@ import zen.ast.ZenNode;
 import zen.lang.ZenType;
 import zen.parser.ZenToken;
 
-//E.g., new T "[" 10, [10] "]"
-final public class GtNewArrayNode extends ZenNode {
-	/*field*/public ArrayList<ZenNode>	NodeList;
-	public GtNewArrayNode/*constructor*/(ZenType Type, ZenToken Token) {
+// E.g., "ls" "-a"..
+final public class GtCommandNode extends ZenNode {
+	/*field*/public ArrayList<ZenNode>  ArgumentList; /* ["/bin/ls" , "-la", "/", ...] */
+	/*field*/public ZenNode PipedNextNode;
+	public GtCommandNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode PipedNextNode) {
 		super();
-		this.NodeList = new ArrayList<ZenNode>();
+		this.PipedNextNode = PipedNextNode;
+		this.ArgumentList = new ArrayList<ZenNode>();
 	}
-//	@Override public ArrayList<GtNode> GetList() {
-//		return this.NodeList;
+//	@Override public final ArrayList<GtNode> GetList() {
+//		return this.ArgumentList;
 //	}
+
 //	@Override public boolean Accept(GtVisitor Visitor) {
-//		Visitor.VisitNewArrayNode(this);
+//		Visitor.VisitCommandNode(this);
 //	}
-//	@Override public Object ToConstValue(GtParserContext Context, boolean EnforceConst)  {
-//		if(EnforceConst) {
-//			return Context.Generator.EvalNewArrayNode(this, EnforceConst);
-//		}
-//		return null;
-//	}
+
+	//	@Override public Object ToConstValue(GtParserContext Context, boolean EnforceConst) {
+	//		//FIXME: Exception
+	//		return Context.Generator.EvalCommandNode(this, EnforceConst);
+	//	}
 }

@@ -22,29 +22,27 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package zen.ast2;
+package zen.sugar;
 
-import java.util.ArrayList;
-
-import zen.ast.ZenNode;
+import zen.ast.GtConstNode;
 import zen.lang.ZenType;
 import zen.parser.ZenToken;
 
-final public class GtSwitchNode extends ZenNode {
-	/*field*/public ZenNode	MatchNode;
-	/*field*/public ZenNode	DefaultBlock;
-	/*field*/public ArrayList<ZenNode> CaseList; // [expr, block, expr, block, ....]
-	public GtSwitchNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode MatchNode, ZenNode DefaultBlock) {
-		super();
-		this.MatchNode = MatchNode;
-		this.DefaultBlock = DefaultBlock;
-		this.CaseList = new ArrayList<ZenNode>();
-		this.SetChild(DefaultBlock);
+public abstract class GtRegexNode extends GtConstNode {
+	protected GtRegexNode(ZenType Type, ZenToken Token) {
+		super(Token);
+		// TODO Auto-generated constructor stub
 	}
+	/*field*/public String	Value;
+//	public GtRegexNode/*constructor*/(GtType Type, GtToken Token, String Value) {
+//		super();
+//		this.Value = Value;
+//		throw new RuntimeException("FIXME: Regex object must be defined");
+//	}
 //	@Override public boolean Accept(GtVisitor Visitor) {
-//		Visitor.VisitSwitchNode(this);
+//		Visitor.VisitRegexNode(this);
 //	}
-//	@Override public final ArrayList<GtNode> GetList() {
-//		return this.CaseList;
-//	}
+	@Override public Object GetValue() {
+		return this.Value;
+	}
 }

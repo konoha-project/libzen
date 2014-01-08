@@ -22,11 +22,10 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package zen.ast2;
+package zen.ast;
 
 import java.util.ArrayList;
 
-import zen.ast.ZenNode;
 import zen.lang.ZenType;
 import zen.lang.ZenFunc;
 import zen.parser.ZenToken;

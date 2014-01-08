@@ -22,32 +22,25 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package zen.ast;
+package zen.sugar;
 
-import zen.lang.ZenSystem;
-import zen.parser.ZenVisitor;
+import zen.ast.ZenNode;
+import zen.lang.ZenType;
 import zen.parser.ZenToken;
-import zen.sugar.GtSymbolNode;
 
-//E.g., $RecvNode.$NativeName = $Value
-final public class GtSetterNode extends GtSymbolNode {
-	/*field*/public ZenNode  RecvNode;
-	/*field*/public ZenNode  ValueNode;
-	public GtSetterNode/*constructor*/(ZenToken SourceToken, ZenNode RecvNode, String NativeName) {
-		super(ZenSystem.VarType, SourceToken, NativeName);
-		this.RecvNode  = RecvNode;
-		this.ValueNode = null;
-		this.SetChild(RecvNode);
+//E.g., "for" "(" $Variable "in" $IterNode ")" $BodyNode
+final public class GtForEachNode extends ZenNode {
+	/*field*/public ZenNode	Variable;
+	/*field*/public ZenNode	IterNode;
+	/*field*/public ZenNode	BodyNode;
+	public GtForEachNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode Variable, ZenNode IterNode, ZenNode BodyNode) {
+		super();
+		this.Variable = Variable;
+		this.IterNode = IterNode;
+		this.BodyNode = BodyNode;
+//		this.SetChild3(Variable, BodyNode, IterNode);
 	}
-	@Override public void Append(ZenNode Node) {
-		this.SetChild(Node);
-		this.ValueNode = Node;
-		/*return this;*/
-	}
-	@Override public void Accept(ZenVisitor Visitor) {
-		Visitor.VisitSetterNode(this);
-	}
-	//	@Override public Object ToConstValue(GtParserContext Context, boolean EnforceConst)  {
-	//		return Context.Generator.EvalSetterNode(this, EnforceConst);
-	//	}
+//	@Override public boolean Accept(GtVisitor Visitor) {
+//		Visitor.VisitForEachNode(this);
+//	}
 }

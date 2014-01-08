@@ -48,26 +48,26 @@ public final class ZenSyntaxPattern extends ZenUtils {
 	}
 
 	public boolean IsBinaryOperator() {
-		return IsFlag(this.SyntaxFlag, BinaryOperator);
+		return ZenUtils.IsFlag(this.SyntaxFlag, ZenParserConst.BinaryOperator);
 	}
 
 	public final boolean IsRightJoin(ZenSyntaxPattern Right) {
 		/*local*/int left = this.SyntaxFlag;
 		/*local*/int right = Right.SyntaxFlag;
-		return (left < right || (left == right && !IsFlag(this.SyntaxFlag, LeftJoin) && !IsFlag(Right.SyntaxFlag, LeftJoin)));
+		return (left < right || (left == right && !ZenUtils.IsFlag(left, ZenParserConst.LeftJoin) && !ZenUtils.IsFlag(right, ZenParserConst.LeftJoin)));
 	}
 
 	public final boolean EqualsName(String Name) {
 		return LibZen.EqualsString(this.PatternName, Name);
 	}
-	
+
 	public final static ZenSyntaxPattern MergeSyntaxPattern(ZenSyntaxPattern Pattern, ZenSyntaxPattern Parent) {
-		if(Parent == null) return Pattern;
+		if(Parent == null) {
+			return Pattern;
+		}
 		/*local*/ZenSyntaxPattern MergedPattern = new ZenSyntaxPattern(Pattern.PackageNameSpace, Pattern.PatternName, Pattern.MatchFunc);
 		MergedPattern.ParentPattern = Parent;
 		return MergedPattern;
 	}
-
-
 
 }

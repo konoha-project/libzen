@@ -22,21 +22,21 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package zen.ast2;
+package zen.sugar;
 
 import zen.ast.ZenNode;
 import zen.lang.ZenType;
 import zen.parser.ZenToken;
 
-//E.g.,  $RecvNode "++"
-final public class GtSuffixInclNode extends ZenNode {
-	/*field*/public ZenNode	RecvNode;
-	public GtSuffixInclNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode RecvNode) {
+// E.g., AllocateNode (without parameters); StaticApply is needed to init
+final public class GtAllocateNode extends ZenNode {
+	public GtAllocateNode/*constructor*/(ZenType Type, ZenToken Token) {
 		super();
-		this.RecvNode = RecvNode;
-		this.SetChild(RecvNode);
 	}
 //	@Override public boolean Accept(GtVisitor Visitor) {
-//		Visitor.VisitSuffixInclNode(this);
+//		Visitor.VisitAllocateNode(this);
 //	}
+	//	@Override public Object ToConstValue(GtParserContext Context, boolean EnforceConst)  {
+	//		return Context.Generator.EvalAllocateNode(this, EnforceConst);
+	//	}
 }

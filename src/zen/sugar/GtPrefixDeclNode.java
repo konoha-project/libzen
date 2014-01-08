@@ -22,19 +22,21 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package zen.ast2;
+package zen.sugar;
 
 import zen.ast.ZenNode;
 import zen.lang.ZenType;
 import zen.parser.ZenToken;
 
-final public class GtContinueNode extends ZenNode {
-	/*field*/public String Label;
-	public GtContinueNode/*constructor*/(ZenType Type, ZenToken Token, String Label) {
+//E.g.,  "--" $RecvNode
+final public class GtPrefixDeclNode extends ZenNode {
+	/*field*/public ZenNode	RecvNode;
+	public GtPrefixDeclNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode RecvNode) {
 		super();
-		this.Label = Label;
+		this.RecvNode = RecvNode;
+		this.SetChild(RecvNode);
 	}
 //	@Override public boolean Accept(GtVisitor Visitor) {
-//		Visitor.VisitContinueNode(this);
+//		Visitor.VisitPrefixDeclNode(this);
 //	}
 }

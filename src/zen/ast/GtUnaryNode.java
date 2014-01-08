@@ -29,7 +29,7 @@ import zen.parser.ZenToken;
 import zen.parser.ZenVisitor;
 
 //E.g., "~" $RecvNode
-final public class GtUnaryNode extends ZenNode {
+public class GtUnaryNode extends ZenNode {
 	/*field*/public ZenNode	RecvNode;
 	public GtUnaryNode/*constructor*/(ZenToken Token) {
 		super();

@@ -22,34 +22,25 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package zen.ast2;
-
-import java.util.ArrayList;
+package zen.sugar;
 
 import zen.ast.ZenNode;
 import zen.lang.ZenType;
-import zen.lang.ZenFunc;
-import zen.parser.ZenNameSpace;
 import zen.parser.ZenToken;
 
-final public class GtApplyOverridedMethodNode extends ZenNode {
-	/*field*/public ZenNameSpace NameSpace;
-	/*field*/public ZenFunc Func;
-	/*field*/public ArrayList<ZenNode>  ParamList; /* [arg1, arg2, ...] */
-	public GtApplyOverridedMethodNode/*constructor*/(ZenType Type, ZenToken Token, ZenNameSpace NameSpace, ZenFunc Func) {
-		super();
-		this.NameSpace = NameSpace.Minimum();
-		this.Func = Func;
-		this.ParamList = new ArrayList<ZenNode>();
-		throw new RuntimeException("FIXME: ApplyOverridedMethodNode is not finished");
+//E.g., $Expr "[" $Index ":" $Index2 "]"
+final public class GtSliceNode extends GtSymbolNode {
+	/*field*/public ZenNode RecvNode;
+	/*field*/public ZenNode Index1;
+	/*field*/public ZenNode Index2;
+	public GtSliceNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode RecvNode, ZenNode Index1, ZenNode Index2) {
+		super(Type, Token, "");
+		this.RecvNode = RecvNode;
+		this.Index1 = Index1;
+		this.Index2 = Index2;
+//		this.SetChild3(RecvNode, Index1, Index2);
 	}
-//	@Override public final ArrayList<GtNode> GetList() {
-//		return this.ParamList;
-//	}
 //	@Override public boolean Accept(GtVisitor Visitor) {
-//		Visitor.VisitApplyOverridedMethodNode(this);
-//	}
-//	@Override public Object ToConstValue(GtParserContext Context, boolean EnforceConst)  {
-//		return Context.Generator.EvalApplyOverridedMethodNode(this, EnforceConst);
+//		Visitor.VisitSliceNode(this);
 //	}
 }

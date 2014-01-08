@@ -24,8 +24,11 @@
 
 package zen.ast;
 
-import zen.parser.ZenToken;
+import zen.parser.ZenNameSpace;
+import zen.parser.ZenParserConst;
 import zen.parser.ZenSyntaxPattern;
+import zen.parser.ZenToken;
+import zen.parser.ZenTokenContext;
 import zen.parser.ZenVisitor;
 
 public class GtBinaryNode extends ZenNode {
@@ -37,11 +40,48 @@ public class GtBinaryNode extends ZenNode {
 		this.SourceToken = SourceToken;
 		this.LeftNode  = this.SetChild(Left);
 		this.RightNode = null;
+		assert(Pattern != null);
 		this.Pattern = Pattern;
 	}
+
 	@Override public final void Append(ZenNode Node) {
 		this.RightNode = this.SetChild(Node);
 	}
+
+	private boolean IsRightJoin(ZenNode Node) {
+		if(Node instanceof GtBinaryNode) {
+			return this.Pattern.IsRightJoin(((GtBinaryNode)Node).Pattern);
+		}
+		return false;
+	}
+
+	private ZenNode RightJoin(ZenNameSpace NameSpace, GtBinaryNode RightNode) {
+		/*local*/ZenNode RightLeftNode = RightNode.LeftNode;
+		//		if(RightLeftNode instanceof GtBinaryNode && this.Pattern.IsRightJoin(((GtBinaryNode)RightLeftNode).Pattern)) {
+		if(this.IsRightJoin(RightLeftNode)) {
+			RightNode.LeftNode = this.RightJoin(NameSpace, (GtBinaryNode) RightLeftNode);
+		}
+		else {
+			RightNode.LeftNode = RightNode.SetChild(this);
+			this.Append(RightLeftNode);
+		}
+		return RightNode;
+	}
+
+	public final ZenNode AppendParsedRightNode(ZenNameSpace NameSpace, ZenTokenContext TokenContext) {
+
+		/*local*/ZenNode RightNode = TokenContext.ParsePattern(NameSpace, "$Expression$", ZenParserConst.Required);
+		if(RightNode.IsErrorNode()) {
+			return RightNode;
+		}
+		if(this.IsRightJoin(RightNode)) {
+			return this.RightJoin(NameSpace, (GtBinaryNode) RightNode);
+		}
+		// LeftJoin
+		this.Append(RightNode);
+		return this;
+	}
+
 	@Override public void Accept(ZenVisitor Visitor) {
 		Visitor.VisitBinaryNode(this);
 	}

@@ -22,27 +22,36 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package zen.ast2;
+package zen.sugar;
 
-import zen.ast.GtConstNode;
-import zen.lang.ZenType;
-import zen.parser.ZenToken;
+import java.util.ArrayList;
 
-public abstract class GtRegexNode extends GtConstNode {
-	protected GtRegexNode(ZenType Type, ZenToken Token) {
-		super(Token);
-		// TODO Auto-generated constructor stub
+import zen.ast.GtCatchNode;
+import zen.ast.ZenNode;
+
+final public class GtTryCatchNode extends ZenNode {
+	/*field*/public ZenNode	TryNode;
+	/*field*/public ArrayList<ZenNode> 	CatchList;
+	/*field*/public ZenNode	FinallyNode;
+	public GtTryCatchNode/*constructor*/() {
+		super();
+		this.TryNode = null;
+		this.FinallyNode = null;
+		this.CatchList = new ArrayList<ZenNode>();
 	}
-	/*field*/public String	Value;
-//	public GtRegexNode/*constructor*/(GtType Type, GtToken Token, String Value) {
-//		super();
-//		this.Value = Value;
-//		throw new RuntimeException("FIXME: Regex object must be defined");
-//	}
-//	@Override public boolean Accept(GtVisitor Visitor) {
-//		Visitor.VisitRegexNode(this);
-//	}
-	@Override public Object GetValue() {
-		return this.Value;
+	@Override public void Append(ZenNode Node) {
+		this.SetChild(Node);
+		if(Node instanceof GtCatchNode) {
+			this.CatchList.add(Node);
+		}
+		else if(this.TryNode == null) {
+			this.TryNode = Node;
+		}
+		else {
+			this.FinallyNode = Node;
+		}
 	}
+	//	@Override public void Accept(ZenVisitor Visitor) {
+	//		Visitor.VisitTryNode(this);
+	//	}
 }

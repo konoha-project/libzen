@@ -24,25 +24,22 @@
 
 package zen.ast;
 
-import java.util.ArrayList;
-
-import zen.lang.ZenSystem;
 import zen.parser.ZenVisitor;
 
 final public class GtTryNode extends ZenNode {
 	/*field*/public ZenNode	TryNode;
-	/*field*/public ArrayList<ZenNode> 	CatchList;
+	/*field*/public ZenNode CatchNode;
 	/*field*/public ZenNode	FinallyNode;
 	public GtTryNode/*constructor*/() {
 		super();
 		this.TryNode = null;
+		this.CatchNode = null;
 		this.FinallyNode = null;
-		this.CatchList = new ArrayList<ZenNode>();
 	}
 	@Override public void Append(ZenNode Node) {
 		this.SetChild(Node);
 		if(Node instanceof GtCatchNode) {
-			this.CatchList.add(Node);
+			this.CatchNode = Node;
 		}
 		else if(this.TryNode == null) {
 			this.TryNode = Node;

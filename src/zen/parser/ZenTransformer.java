@@ -26,6 +26,8 @@ import zen.ast.GtInstanceOfNode;
 import zen.ast.GtIntNode;
 import zen.ast.GtMapLiteralNode;
 import zen.ast.GtMethodCallNode;
+import zen.ast.GtNewArrayNode;
+import zen.ast.GtNewObjectNode;
 import zen.ast.GtNullNode;
 import zen.ast.GtOrNode;
 import zen.ast.GtParamNode;
@@ -40,9 +42,9 @@ import zen.ast.GtTryNode;
 import zen.ast.GtUnaryNode;
 import zen.ast.GtVarDeclNode;
 import zen.ast.GtWhileNode;
+import zen.ast.ZenComparatorNode;
 import zen.ast.ZenNode;
-import zen.ast2.GtNewArrayNode;
-import zen.ast2.GtNewObjectNode;
+import zen.ast.ZenNotNode;
 
 public class ZenTransformer implements ZenVisitor {
 	/*field*/public GtBlockNode BlockNode;
@@ -210,6 +212,10 @@ public class ZenTransformer implements ZenVisitor {
 		Node.RecvNode = this.Transform(Node, Node.RecvNode);
 	}
 
+	@Override public void VisitNotNode(ZenNotNode Node) {
+		Node.RecvNode = this.Transform(Node, Node.RecvNode);
+	}
+
 	@Override public void VisitCastNode(GtCastNode Node) {
 		Node.ExprNode = this.Transform(Node, Node.ExprNode);
 	}
@@ -229,6 +235,11 @@ public class ZenTransformer implements ZenVisitor {
 	}
 
 	@Override public void VisitBinaryNode(GtBinaryNode Node) {
+		Node.LeftNode = this.Transform(Node, Node.LeftNode);
+		Node.RightNode = this.Transform(Node, Node.RightNode);
+	}
+
+	@Override public void VisitComparatorNode(ZenComparatorNode Node) {
 		Node.LeftNode = this.Transform(Node, Node.LeftNode);
 		Node.RightNode = this.Transform(Node, Node.RightNode);
 	}
@@ -270,7 +281,9 @@ public class ZenTransformer implements ZenVisitor {
 
 	@Override public void VisitTryNode(GtTryNode Node) {
 		Node.TryNode = this.Transform(Node, Node.TryNode);
-		this.TransformNodeList(Node, Node.CatchList);
+		if(Node.CatchNode != null) {
+			Node.CatchNode = this.Transform(Node, Node.CatchNode);
+		}
 		if(Node.FinallyNode != null) {
 			Node.FinallyNode = this.Transform(Node, Node.FinallyNode);
 		}
@@ -296,6 +309,7 @@ public class ZenTransformer implements ZenVisitor {
 
 	@Override public void VisitErrorNode(GtErrorNode Node) {
 	}
+
 
 
 

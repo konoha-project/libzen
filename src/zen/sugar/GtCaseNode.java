@@ -22,25 +22,22 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package zen.ast2;
+package zen.sugar;
 
 import zen.ast.ZenNode;
 import zen.lang.ZenType;
 import zen.parser.ZenToken;
 
-//E.g., "for" "(" $Variable "in" $IterNode ")" $BodyNode
-final public class GtForEachNode extends ZenNode {
-	/*field*/public ZenNode	Variable;
-	/*field*/public ZenNode	IterNode;
+final public class GtCaseNode extends ZenNode {
+	/*field*/public ZenNode  CaseNode;;
 	/*field*/public ZenNode	BodyNode;
-	public GtForEachNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode Variable, ZenNode IterNode, ZenNode BodyNode) {
+	public GtCaseNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode CaseNode, ZenNode BodyNode) {
 		super();
-		this.Variable = Variable;
-		this.IterNode = IterNode;
+		this.CaseNode = CaseNode;
 		this.BodyNode = BodyNode;
-//		this.SetChild3(Variable, BodyNode, IterNode);
+//		this.SetChild2(BodyNode, CaseNode);
 	}
 //	@Override public boolean Accept(GtVisitor Visitor) {
-//		Visitor.VisitForEachNode(this);
+//		Visitor.VisitCaseNode(this);
 //	}
 }

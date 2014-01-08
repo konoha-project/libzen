@@ -22,34 +22,19 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package zen.ast2;
+package zen.ast;
 
-import zen.ast.ZenNode;
-import zen.lang.ZenType;
+import zen.parser.ZenSyntaxPattern;
 import zen.parser.ZenToken;
+import zen.parser.ZenVisitor;
 
-final public class GtDoWhileNode extends ZenNode {
-	/*field*/public ZenNode	CondNode;
-	/*field*/public ZenNode	BodyNode;
-	public GtDoWhileNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode CondNode, ZenNode BodyNode) {
-		super();
-		this.CondNode = CondNode;
-		this.BodyNode = BodyNode;
-//		this.SetChild2(CondNode, BodyNode);
+public class ZenComparatorNode extends GtBinaryNode {
+
+	public ZenComparatorNode(ZenToken SourceToken, ZenNode Left, ZenSyntaxPattern Pattern) {
+		super(SourceToken, Left, Pattern);
 	}
-//	@Override public boolean Accept(GtVisitor Visitor) {
-//		Visitor.VisitDoWhileNode(this);
-//	}
-	public ZenNode ToWhileNode() {
-		/**
-		while(true) {
-			$BodyNode;
-			break;
-		}
-		while($CondNode) {
-			$BodyNode;
-		}
-		 **/
-		return null;
+	@Override public void Accept(ZenVisitor Visitor) {
+		Visitor.VisitComparatorNode(this);
 	}
+
 }

@@ -22,25 +22,34 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package zen.ast2;
+package zen.sugar;
 
 import zen.ast.ZenNode;
 import zen.lang.ZenType;
 import zen.parser.ZenToken;
 
-//E.g., $Expr "[" $Index ":" $Index2 "]"
-final public class GtSliceNode extends GtSymbolNode {
-	/*field*/public ZenNode RecvNode;
-	/*field*/public ZenNode Index1;
-	/*field*/public ZenNode Index2;
-	public GtSliceNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode RecvNode, ZenNode Index1, ZenNode Index2) {
-		super(Type, Token, "");
-		this.RecvNode = RecvNode;
-		this.Index1 = Index1;
-		this.Index2 = Index2;
-//		this.SetChild3(RecvNode, Index1, Index2);
+final public class GtDoWhileNode extends ZenNode {
+	/*field*/public ZenNode	CondNode;
+	/*field*/public ZenNode	BodyNode;
+	public GtDoWhileNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode CondNode, ZenNode BodyNode) {
+		super();
+		this.CondNode = CondNode;
+		this.BodyNode = BodyNode;
+//		this.SetChild2(CondNode, BodyNode);
 	}
 //	@Override public boolean Accept(GtVisitor Visitor) {
-//		Visitor.VisitSliceNode(this);
+//		Visitor.VisitDoWhileNode(this);
 //	}
+	public ZenNode ToWhileNode() {
+		/**
+		while(true) {
+			$BodyNode;
+			break;
+		}
+		while($CondNode) {
+			$BodyNode;
+		}
+		 **/
+		return null;
+	}
 }

@@ -22,21 +22,18 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package zen.ast2;
+package zen.ast;
 
-import zen.ast.ZenNode;
-import zen.lang.ZenType;
 import zen.parser.ZenToken;
+import zen.parser.ZenVisitor;
 
-// E.g., AllocateNode (without parameters); StaticApply is needed to init
-final public class GtAllocateNode extends ZenNode {
-	public GtAllocateNode/*constructor*/(ZenType Type, ZenToken Token) {
-		super();
+public class ZenNotNode extends GtUnaryNode {
+	public ZenNotNode(ZenToken Token) {
+		super(Token);
 	}
-//	@Override public boolean Accept(GtVisitor Visitor) {
-//		Visitor.VisitAllocateNode(this);
-//	}
-	//	@Override public Object ToConstValue(GtParserContext Context, boolean EnforceConst)  {
-	//		return Context.Generator.EvalAllocateNode(this, EnforceConst);
-	//	}
+
+	@Override public void Accept(ZenVisitor Visitor) {
+		Visitor.VisitNotNode(this);
+	}
+
 }

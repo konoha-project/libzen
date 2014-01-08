@@ -22,25 +22,30 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package zen.ast2;
+package zen.ast;
 
-import zen.ast.ZenNode;
+import java.util.ArrayList;
+
 import zen.lang.ZenType;
 import zen.parser.ZenToken;
 
-//E.g., "for" "(" ";" $CondNode ";" $IterNode ")" $LoopNode
-final public class GtForNode extends ZenNode {
-	/*field*/public ZenNode	CondNode;
-	/*field*/public ZenNode	IterNode;
-	/*field*/public ZenNode	BodyNode;
-	public GtForNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode CondNode, ZenNode IterNode, ZenNode BodyNode) {
+//E.g., new T "[" 10, [10] "]"
+final public class GtNewArrayNode extends ZenNode {
+	/*field*/public ArrayList<ZenNode>	NodeList;
+	public GtNewArrayNode/*constructor*/(ZenType Type, ZenToken Token) {
 		super();
-		this.CondNode = CondNode;
-		this.BodyNode = BodyNode;
-		this.IterNode = IterNode;
-//		this.SetChild3(CondNode, BodyNode, IterNode);
+		this.NodeList = new ArrayList<ZenNode>();
 	}
+//	@Override public ArrayList<GtNode> GetList() {
+//		return this.NodeList;
+//	}
 //	@Override public boolean Accept(GtVisitor Visitor) {
-//		Visitor.VisitForNode(this);
+//		Visitor.VisitNewArrayNode(this);
+//	}
+//	@Override public Object ToConstValue(GtParserContext Context, boolean EnforceConst)  {
+//		if(EnforceConst) {
+//			return Context.Generator.EvalNewArrayNode(this, EnforceConst);
+//		}
+//		return null;
 //	}
 }

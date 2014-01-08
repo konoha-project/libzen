@@ -22,33 +22,19 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package zen.ast2;
-
-import java.util.ArrayList;
+package zen.sugar;
 
 import zen.ast.ZenNode;
 import zen.lang.ZenType;
 import zen.parser.ZenToken;
 
-// E.g., "ls" "-a"..
-final public class GtCommandNode extends ZenNode {
-	/*field*/public ArrayList<ZenNode>  ArgumentList; /* ["/bin/ls" , "-la", "/", ...] */
-	/*field*/public ZenNode PipedNextNode;
-	public GtCommandNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode PipedNextNode) {
+final public class GtContinueNode extends ZenNode {
+	/*field*/public String Label;
+	public GtContinueNode/*constructor*/(ZenType Type, ZenToken Token, String Label) {
 		super();
-		this.PipedNextNode = PipedNextNode;
-		this.ArgumentList = new ArrayList<ZenNode>();
+		this.Label = Label;
 	}
-//	@Override public final ArrayList<GtNode> GetList() {
-//		return this.ArgumentList;
-//	}
-
 //	@Override public boolean Accept(GtVisitor Visitor) {
-//		Visitor.VisitCommandNode(this);
+//		Visitor.VisitContinueNode(this);
 //	}
-
-	//	@Override public Object ToConstValue(GtParserContext Context, boolean EnforceConst) {
-	//		//FIXME: Exception
-	//		return Context.Generator.EvalCommandNode(this, EnforceConst);
-	//	}
 }
