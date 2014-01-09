@@ -1,0 +1,214 @@
+Zen 仕様書
+
+Zen パーサー用ライブラリの言語仕様
+
+型システム
+==========
+
+T ::=   void
+        any     //なんでもよい
+        boolean
+        int
+        String
+        float
+        T[]
+        Map<T>
+        Func<T,T,..>  // 関数型、最初が返り値
+
+リテラル
+========
+
+null      : any
+true      : boolean
+false     : boolean
+1         : int
+1.0       : float
+"hi"      : String
+[1,2]     : int[]
+{"name": 1}    : Map<any>
+
+function(x : int ) {
+  return x+1;
+}          // 関数リテラル Func<int,int>
+
+シンボル定義
+============
+
+定数のこと
+
+let C = 1;
+
+
+関数定義
+========
+
+型なし
+function f(a, b) {
+	return a + b;
+}
+
+型あり
+function f(a: int, b: int): int {
+	return a + b;
+}
+
+変数宣言
+========
+
+型なし
+var x = 1;
+
+型あり
+var x: int = 1;
+
+- 初期値（左辺値）は常に必要
+- ローカル変数のみ
+- スコープはCスタイルのブロックスコープ
+
+
+制御構造
+========
+ - if
+ - return
+ - while
+ - break
+ - try
+ - catch
+
+if 文
+----
+
+if($EXPR) {
+}
+
+if($EXPR) {
+} else {
+}
+
+if($EXPR) {
+} else if($EXPR) {
+} else {
+}
+
+ - ブロックのみ 1文のみは使えない
+
+return 文
+---------
+
+return [$EXPR]
+
+
+while 文
+--------
+
+while($EXPR) {
+}
+
+
+break 文
+--------
+
+break のみ
+
+
+try 文
+-----
+
+try {
+}
+catch(e) {
+}
+finally {
+}
+
+D-Shell の場合は、拡張されているから、
+以下のException を使えるようにする
+
+try {
+}
+catch(e : Exception1) {
+}
+catch(e : Exception2) {
+}
+finally {
+}
+
+throw 文
+-----
+
+throw $EXPR
+
+
+演算子
+======
+
+論理演算子
+---------
+
+$EXPR && $EXPR
+$EXPR || $EXPR
+! $EXPR
+
+比較演算子
+----------
+
+$EXPR == $EXPR
+$EXPR != $EXPR
+$EXPR < $EXPR
+$EXPR <= $EXPR
+$EXPR > $EXPR
+$EXPR >= $EXPR
+
+四則演算子
+----------
+
+$EXPR + $EXPR
+$EXPR - $EXPR
+$EXPR * $EXPR
+$EXPR / $EXPR
+$EXPR % $EXPR
++ $EXPR
+- $EXPR
+
+関数コール
+---------
+
+$EXPR (...)
+$EXPR.MethodName(...)
+
+既存のオブジェクトのメソッドは呼べる
+
+型演算子
+--------
+
+(T) $EXPR  // キャスト
+$EXPR instanceof T   // インスタンス判定
+
+オブジェクト生成
+----------------
+
+new T()
+new T[1]
+[1, 2, 3]
+{"name": "naruto", "age": 17}
+
+ローカル変数
+------------
+
+NAME
+NAME = $EXPR
+
+配列(Map)要素
+-------------
+
+$EXPR[$EXPR]
+$EXPR[$EXPR] = $EXPR
+
+フォールド要素
+--------------
+
+$EXPR.Field
+$EXPR.Field = $EXPR
+
+
+
