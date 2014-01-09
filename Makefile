@@ -1,9 +1,7 @@
-# build:  do static checking and build of js
-# test:   test both implementations, typescript and java
-# testts: test python implementation
-# testj:  test javascript implementation
+# build:  do static checking and build
+# test:   test java implementation
 .SILENT:
-JavaBin="./GreenTeaScript.jar"
+JavaBin="./libzen.jar"
 INSTALL_PREFIX?="$(HOME)"
 TEST_BASEDIR="test/common"
 TEST_OUTDIR="$(TEST_BASEDIR)/test-result"
@@ -12,16 +10,14 @@ TEST_FILES:=$(wildcard test/common/*.green)
 
 all: build
 
-#build: buildj buildts
 build: buildj
 
 dist: distj distts
 
-#test: testj testpy
-	#sh tool/ReleaseCheck.sh
+test:
 
 buildj: $(JavaBin)
-	echo Build GreenTeaScript;
+	echo Build LibZen
 
 check_java_env:
 	java -version > /dev/null
@@ -31,62 +27,15 @@ $(JavaBin): check_java_env
 	echo Building Java implementation
 	ant jar
 
-buildpy:
-	echo Building Python implementation
-	python --version  > /dev/null
-	bash ./tool/ToPython
-
-buildts:
-	echo Building TypeScript implementation
-	ruby -v > /dev/null
-	node -v > /dev/null
-	tsc -v  > /dev/null
-	bash ./tool/ToTypeScript
-
-testj:
-	echo Testing Java implementation
-	python ./tool/TestAll.py --target=c
-
-testpy:
-	echo Testing Python implementation
-	python ./tool/TestAll.py --target=python
-
-testts: buildts
-	echo Testing JavaScript implementation...
-	python ./tool/TestAll.py --target=js
-
-distj: buildj
-	echo Distribution for Java implementation
-	mkdir -p generated/jar/
-	cp $(JavaBin) generated/jar/
-
-distts: buildts
-	echo Distribution for JavaScript implementation
-	mkdir -p generated/js/
-	cp src/TypeScript/*.ts generated/js/
-	cp src/TypeScript/*.js generated/js/
-
 clean:
-	-rm -rf bin/*.class *.jar GTAGS GPATH GRTAGS
+	-rm -rf bin/*.class *.jar
 
 install: installj
 
 installj: distj
 	echo Installing Java implementation
 	install -d $(INSTALL_PREFIX)/bin
-	install -d $(INSTALL_PREFIX)/include
-	cp -f generated/jar/GreenTeaScript.jar $(INSTALL_PREFIX)/bin/
-	install -m 755 tool/greentea $(INSTALL_PREFIX)/bin/greentea
-	install -m 755 tool/dshell $(INSTALL_PREFIX)/bin/dshell
-	cp -f include/c/*.h $(INSTALL_PREFIX)/include/
 
-test: buildj $(notdir $(TEST_FILES))
-	cat $(TEST_OUTDIR)/*.green.csv >> $(TEST_OUTDIR)/TestResult.csv
+test: buildj
 
-test_prepare:
-	bash tool/ReleaseCheck2.sh --reset $(TEST_OUTDIR)/TestResult.csv
-
-$(notdir $(TEST_FILES)): test_prepare
-	bash tool/ReleaseCheck2.sh $(TEST_BASEDIR)/$@ $(TEST_OUTDIR)/$@.csv
-
-.PHONY: all build buildj buildts test testp testj clean dist buildj buildts installj
+.PHONY: all build buildj test testj clean dist buildj installj
