@@ -13,7 +13,7 @@ T ::=   void
         float
         T[]
         Map<T>
-        Func<T,T,..>  // 関数型、最初が返り値
+        Func<T,T,..>  // 関数型、最初が返り値の型
 
 リテラル
 ========
@@ -68,12 +68,12 @@ var x: int = 1;
 
 制御構造
 ========
- - if
+ - if/else
  - return
  - while
  - break
- - try
- - catch
+ - try/catch/finally
+ - throw
 
 if 文
 ----
@@ -121,23 +121,12 @@ catch(e) {
 finally {
 }
 
-D-Shell の場合は、拡張されているから、
-以下のException を使えるようにする
-
-try {
-}
-catch(e : Exception1) {
-}
-catch(e : Exception2) {
-}
-finally {
-}
-
 throw 文
 -----
 
 throw $EXPR
 
+ - なんでも投げられる
 
 演算子
 ======
