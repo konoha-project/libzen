@@ -751,7 +751,7 @@ public class ZenGrammar {
 		if(!TokenContext.MatchToken(")")) {
 			while(!FuncNode.IsErrorNode()) {
 				FuncNode = TokenContext.AppendMatchedPattern(FuncNode, NameSpace, "$Param$", ZenParserConst.Required);
-				if(TokenContext.MatchToken(")")) {
+				if(TokenContext.MatchNodeToken(FuncNode,  NameSpace, ")", ZenParserConst.Optional | ZenParserConst.DisallowSkipIndent) == FuncNode) {
 					break;
 				}
 				FuncNode = TokenContext.MatchNodeToken(FuncNode,  NameSpace, ",", ZenParserConst.Required);
