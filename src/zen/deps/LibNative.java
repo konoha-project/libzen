@@ -105,8 +105,7 @@ public class LibNative {
 		return true;
 	}
 
-	private final static boolean MatchNativeMethod(ZenType[] GreenTypeParams,
-			Method JavaMethod) {
+	private final static boolean MatchNativeMethod(ZenType[] GreenTypeParams, Method JavaMethod) {
 		if (!LibNative.AcceptJavaType(GreenTypeParams[0],
 				JavaMethod.getReturnType())) {
 			LibNative.DebugP("return mismatched: " + GreenTypeParams[0] + ", "
@@ -511,11 +510,8 @@ public class LibNative {
 		}
 	}
 
-	public final static ZenGenerator LoadGenerator(String ClassName,
-			String OutputFile) {
-		// if (ClassName == null) {
+	public final static ZenGenerator LoadGenerator(String ClassName, String OutputFile) {
 		ClassName = System.getenv("ZENCODE");
-		// }
 		if (ClassName != null) {
 			try {
 				Class<?> GeneratorClass = Class.forName(ClassName);
@@ -596,8 +592,7 @@ public class LibNative {
 				return null;
 			}
 		}
-		BufferedReader reader = new BufferedReader(
-				new InputStreamReader(Stream));
+		BufferedReader reader = new BufferedReader(new InputStreamReader(Stream));
 		String buffer = "";
 		try {
 			int buflen = 4096;
