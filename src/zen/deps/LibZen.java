@@ -407,7 +407,7 @@ public abstract class LibZen {
 		return Tuple;
 	}
 
-	public static void RetrieveMapKeys(ZenMap Map, String Prefix, ArrayList<String> List) {
+	public static void RetrieveMapKeys(ZenMap<?> Map, String Prefix, ArrayList<String> List) {
 		/*local*/Iterator<String> itr = Map.key_iterator();
 		/*local*/int i = 0;
 		while(itr.hasNext()) {
