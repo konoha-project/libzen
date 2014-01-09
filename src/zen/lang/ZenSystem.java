@@ -55,8 +55,6 @@ public class ZenSystem implements ZenTypeConst {
 	/*field*/public final static ZenType		ArrayType = new ZenGeneric1Type(UniqueType, "Array", null, VarType);
 	/*field*/public final static ZenType		FuncType  = new ZenFuncType("Func", null);
 
-	//	/*field*/public final static ZenType		EnumBaseType = ZenTypeSystem.TopType.CreateSubType(EnumType, "enum", null, ZenEnum.class);
-	///*field*/public final static GtType		StructType;
 
 	//	/*field*/public final static ZenType     IteratorType = new ZenType(GenericVariable, "Iterator", null, Iterator.class);
 
@@ -186,11 +184,9 @@ public class ZenSystem implements ZenTypeConst {
 
 	public final static String MangleTypes(int BaseIdx, ArrayList<ZenType> TypeList) {
 		/*local*/String s = "";
-		/*local*/int i = BaseIdx;
-		while(i < LibZen.ListSize(TypeList)) {
+		for(/*local*/int i = BaseIdx; i < LibZen.ListSize(TypeList); i = i + 1) {
 			/*local*/ZenType Type = TypeList.get(i);
 			s = s + ":" + Type.TypeId;
-			i = i + 1;
 		}
 		return s;
 	}
@@ -227,12 +223,10 @@ public class ZenSystem implements ZenTypeConst {
 		/*local*/String MangleName = ":" + BaseType.TypeId + ZenSystem.MangleTypes(BaseIdx, TypeList);
 		/*local*/ZenType GenericType = (/*cast*/ZenType)ZenSystem.ClassNameMap.GetOrNull(MangleName);
 		if((GenericType == null) && IsCreation) {
-			/*local*/int i = BaseIdx;
 			/*local*/String ShortName = BaseType.ShortName + "<";
-			while(i < LibZen.ListSize(TypeList)) {
+			for(/*local*/int i = BaseIdx; i < LibZen.ListSize(TypeList); i += 1) {
 				ShortName = ShortName + TypeList.get(i).ShortName;
-				i += 1;
-				if(i == LibZen.ListSize(TypeList)) {
+				if(i + 1 == LibZen.ListSize(TypeList)) {
 					ShortName = ShortName + ">";
 				}
 				else {

@@ -121,14 +121,12 @@ public final class ZenTokenContext extends ZenUtils {
 
 	public void Vacume() {
 		//		if(this.CurrentPosition > 0) {
-		//			/*local*/int i = this.CurrentPosition - 1;
-		//			while(i >= 0) {
+		//			for(/*local*/int i = this.CurrentPosition - 1; i >= 0; i = i - 1) {
 		//				GtToken Token = this.SourceList.get(i);
 		//				if(Token == null) {
 		//					break;
 		//				}
-		//				this.SourceList.set(i, null); // invoke gc;
-		//				i = i - 1;
+		//				this.SourceList.set(i, null); // unlink object
 		//			}
 		//			this.CurrentPosition = 0;
 		//		}
@@ -201,13 +199,11 @@ public final class ZenTokenContext extends ZenUtils {
 	}
 
 	public ZenToken GetCurrentIndentToken() {
-		/*local*/int i = this.CurrentPosition - 1;
-		while(0 <= i) {
+		for(/*local*/int i = this.CurrentPosition - 1; i >= 0; i -= 1) {
 			/*local*/ZenToken Token = this.SourceTokenList.get(i);
 			if(Token.IsIndent()) {
 				return Token;
 			}
-			i -= 1;
 		}
 		return null;
 	}
@@ -494,8 +490,7 @@ public final class ZenTokenContext extends ZenUtils {
 
 	public final String Stringfy(String PreText, int BeginIdx, int EndIdx) {
 		/*local*/String Buffer = PreText;
-		/*local*/int Position = BeginIdx;
-		while(Position < EndIdx) {
+		for(/*local*/int Position = BeginIdx; Position < EndIdx; Position += 1) {
 			/*local*/ZenToken Token = this.SourceTokenList.get(Position);
 			if(Token.IsIndent()) {
 				Buffer += "\n";
@@ -504,7 +499,6 @@ public final class ZenTokenContext extends ZenUtils {
 			if(Token.IsNextWhiteSpace()) {
 				Buffer += " ";
 			}
-			Position += 1;
 		}
 		return Buffer;
 	}
@@ -540,8 +534,7 @@ public final class ZenTokenContext extends ZenUtils {
 	}
 
 	public final void Dump() {
-		/*local*/int Position = this.CurrentPosition;
-		while(Position < this.SourceTokenList.size()) {
+		for(/*local*/int Position = this.CurrentPosition; Position < this.SourceTokenList.size(); Position += 1) {
 			/*local*/ZenToken Token = this.SourceTokenList.get(Position);
 			/*local*/String DumpedToken = this.CurrentPosition == Position ? "*[" : "[";
 			DumpedToken = DumpedToken + Position+"] " + Token;
@@ -550,7 +543,6 @@ public final class ZenTokenContext extends ZenUtils {
 			}
 			LibZen.DebugP(DumpedToken);
 			//			ZenLogger.VerboseLog(ZenLogger.VerboseToken,  DumpedToken);
-			Position += 1;
 		}
 	}
 

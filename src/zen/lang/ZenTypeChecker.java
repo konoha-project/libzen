@@ -147,12 +147,10 @@ abstract class ZenTypeCheckerImpl implements ZenVisitor {
 
 	public final void TypeCheckNodeList(ZenNameSpace NameSpace, ArrayList<ZenNode> ParamList) {
 		if(this.IsVisitable()) {
-			int i = 0;
-			while(i < ParamList.size()) {
+			for(int i = 0; i < ParamList.size(); i = i + 1) {
 				ZenNode SubNode = ParamList.get(i);
 				SubNode = this.TypeCheck(SubNode, NameSpace, ZenSystem.VarType, ZenTypeCheckerImpl.DefaultTypeCheckPolicy);
 				ParamList.set(i, SubNode);
-				i = i + 1;
 			}
 		}
 	}

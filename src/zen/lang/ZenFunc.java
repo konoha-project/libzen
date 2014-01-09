@@ -73,14 +73,12 @@ public class ZenFunc implements ZenFuncConst {
 
 	@Override public String toString() {
 		/*local*/String s = this.GetReturnType() + " " + this.FuncName + "(";
-		/*local*/int i = 0;
-		while(i < this.GetFuncParamSize()) {
+		for(/*local*/int i = 0; i < this.GetFuncParamSize(); i += 1) {
 			/*local*/ZenType ParamType = this.GetFuncParamType(i);
 			if(i > 0) {
 				s += ", ";
 			}
 			s += ParamType;
-			i += 1;
 		}
 		return s + ")";
 	}

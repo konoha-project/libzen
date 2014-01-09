@@ -64,6 +64,7 @@ public class RubySourceGenerator extends ZenSourceGenerator {
 
 	@Override
 	public void VisitBlockNode(GtBlockNode Node) {
+		this.CurrentBuilder.Append("do");
 		this.CurrentBuilder.Indent();
 		for(ZenNode SubNode : Node.StatementList) {
 			this.CurrentBuilder.AppendLineFeed();
@@ -127,18 +128,9 @@ public class RubySourceGenerator extends ZenSourceGenerator {
 	@Override
 	public void VisitFunctionLiteralNode(GtFunctionLiteralNode Node) {
 		GtReturnNode ReturnNode = Node.BodyNode.ToReturnNode();
-		if(ReturnNode != null && ReturnNode.ValueNode != null) {
-			//TODO
-			//this.CurrentBuilder.Append("lambda");
-			//this.VisitParamList(" ", Node.ArgumentList, ": ");
-			//this.GenerateCode(ReturnNode.ValueNode);
-		}
-		else {
-			this.CurrentBuilder.Append("def");
-			//this.CurrentBuilder.AppendToken("lambda");
-			this.VisitParamList("(", Node.ArgumentList, ")");
-			this.GenerateCode(Node.BodyNode);
-		}
+		this.CurrentBuilder.Append("->");
+		this.VisitParamList("(", Node.ArgumentList, ")");
+		this.GenerateCode(Node.BodyNode);
 	}
 
 	@Override
