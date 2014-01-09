@@ -776,6 +776,8 @@ public class ZenGrammar {
 
 	public static ZenNode MatchBlock(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenNode LeftNode) {
 		if(TokenContext.IsNewLineToken("{")) {
+			TokenContext.Push();
+			TokenContext.SetParseFlag(0);
 			/*local*/ZenToken IndentToken = TokenContext.GetCurrentIndentToken();
 			/*local*/ZenNameSpace BlockNameSpace = NameSpace.CreateSubNameSpace();
 			/*local*/GtBlockNode BlockNode = new GtBlockNode(TokenContext.GetTokenAndMoveForward(), BlockNameSpace);
@@ -792,6 +794,7 @@ public class ZenGrammar {
 					break;
 				}
 			}
+			TokenContext.Pop();
 			return BlockNode;
 		}
 		return TokenContext.CreateExpectedErrorNode(TokenContext.GetToken(), "block");
