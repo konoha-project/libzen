@@ -1,4 +1,4 @@
-<project name="GreenTeaScript" default="jar">
+<project name="libzen" default="jar">
 	<!-- directory / file definition -->
 	<property name="BinaryName" value="libzen" />
 	<property name="source_dir" value="src" />

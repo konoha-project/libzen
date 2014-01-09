@@ -26,5 +26,6 @@ notifications:
     email:
         - imasahiro9@gmail.com
         - matsumura.t.lab@gmail.com
+        - kkuramitsu@gmail.com
     on_success: change
     on_failure: always
