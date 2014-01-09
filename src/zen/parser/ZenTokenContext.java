@@ -39,7 +39,7 @@ public final class ZenTokenContext extends ZenUtils {
 	/*field*/public ArrayList<ZenToken> SourceTokenList;
 	/*field*/private int CurrentPosition;
 	/*field*/public long ParsingLine;
-	/*field*/public int  ParseFlag;
+	/*field*/private int ParseFlag;
 	/*field*/private final ArrayList<Integer> ParserStack;
 	/*field*/public ZenMap<Object> ParsingAnnotation;
 	/*field*/public ZenToken LatestToken;
@@ -50,7 +50,7 @@ public final class ZenTokenContext extends ZenUtils {
 		this.SourceTokenList = new ArrayList<ZenToken>();
 		this.CurrentPosition = 0;
 		this.ParsingLine = FileLine;
-		this.ParseFlag = 0;
+		this.SetParseFlag(0);
 		this.AppendParsedToken(Text, ZenParserConst.SourceTokenFlag, null);
 		this.ParsingAnnotation = null;
 		this.IndentLevel = 0;
@@ -170,7 +170,7 @@ public final class ZenTokenContext extends ZenUtils {
 					break;
 				}
 			}
-			if(ZenUtils.IsFlag(this.ParseFlag, ZenParserConst.SkipIndentParseFlag) && Token.IsIndent()) {
+			if(ZenUtils.IsFlag(this.GetParseFlag(), ZenParserConst.SkipIndentParseFlag) && Token.IsIndent()) {
 				this.CurrentPosition = this.CurrentPosition + 1;
 				continue;
 			}
@@ -317,21 +317,21 @@ public final class ZenTokenContext extends ZenUtils {
 
 	public final ZenNode ApplyMatchPattern(ZenNameSpace NameSpace, ZenNode LeftNode, ZenSyntaxPattern Pattern) {
 		/*local*/int RollbackPosition = this.CurrentPosition;
-		/*local*/int ParseFlag = this.ParseFlag;
+		/*local*/int ParseFlag = this.GetParseFlag();
 		/*local*/ZenSyntaxPattern CurrentPattern = Pattern;
 		/*local*/ZenToken TopToken = this.GetToken();
 		while(CurrentPattern != null) {
 			/*local*/ZenFunc MatchFunc = CurrentPattern.MatchFunc;
 			this.CurrentPosition = RollbackPosition;
 			if(CurrentPattern.ParentPattern != null) {   // This means it has next patterns
-				this.ParseFlag = ParseFlag | ZenParserConst.BackTrackParseFlag;
+				this.SetParseFlag(ParseFlag | ZenParserConst.BackTrackParseFlag);
 			}
 			//LibZen.DebugP("B :" + JoinStrings("  ", this.IndentLevel) + CurrentPattern + ", next=" + CurrentPattern.ParentPattern);
 			this.IndentLevel += 1;
 			//LibZen.DebugP("LeftNode="+LeftNode + ", pattern" + Pattern);
 			/*local*/ZenNode ParsedNode = LibNative.ApplyMatchFunc(MatchFunc, NameSpace, this, LeftNode);
 			this.IndentLevel -= 1;
-			this.ParseFlag = ParseFlag;
+			this.SetParseFlag(ParseFlag);
 			//LibZen.DebugP("E :" + JoinStrings("  ", this.IndentLevel) + CurrentPattern + " => " + ParsedTree);
 			if(ParsedNode != null && (CurrentPattern.ParentPattern == null || !ParsedNode.IsErrorNode())) {
 				return ParsedNode;
@@ -378,44 +378,44 @@ public final class ZenTokenContext extends ZenUtils {
 	}
 
 	public final boolean IsAllowedBackTrack() {
-		return ZenUtils.IsFlag(this.ParseFlag, ZenParserConst.BackTrackParseFlag);
+		return ZenUtils.IsFlag(this.GetParseFlag(), ZenParserConst.BackTrackParseFlag);
 	}
 
 	public final int SetBackTrack(boolean Allowed) {
-		/*local*/int OldFlag = this.ParseFlag;
+		/*local*/int OldFlag = this.GetParseFlag();
 		if(Allowed) {
-			this.ParseFlag = this.ParseFlag | ZenParserConst.BackTrackParseFlag;
+			this.SetParseFlag(this.GetParseFlag() | ZenParserConst.BackTrackParseFlag);
 		}
 		else {
-			this.ParseFlag = (~(ZenParserConst.BackTrackParseFlag) & this.ParseFlag);
+			this.SetParseFlag((~(ZenParserConst.BackTrackParseFlag) & this.GetParseFlag()));
 		}
 		return OldFlag;
 	}
 
 	public final int SetSkipIndent(boolean Allowed) {
-		/*local*/int OldFlag = this.ParseFlag;
+		/*local*/int OldFlag = this.GetParseFlag();
 		if(Allowed) {
-			this.ParseFlag = this.ParseFlag | ZenParserConst.SkipIndentParseFlag;
+			this.SetParseFlag(this.GetParseFlag() | ZenParserConst.SkipIndentParseFlag);
 		}
 		else {
-			this.ParseFlag = (~(ZenParserConst.SkipIndentParseFlag) & this.ParseFlag);
+			this.SetParseFlag((~(ZenParserConst.SkipIndentParseFlag) & this.GetParseFlag()));
 		}
 		return OldFlag;
 	}
 
 	public final void SetRememberFlag(int OldFlag) {
-		this.ParseFlag = OldFlag;
+		this.SetParseFlag(OldFlag);
 	}
 
 	public final ZenNode ParsePatternAfter(ZenNameSpace NameSpace, ZenNode LeftNode, String PatternName, int MatchFlag) {
 		/*local*/int Pos = this.CurrentPosition;
-		/*local*/int ParseFlag = this.ParseFlag;
+		/*local*/int ParseFlag = this.GetParseFlag();
 		if(ZenUtils.IsFlag(MatchFlag, ZenParserConst.Optional)) {
-			this.ParseFlag = this.ParseFlag | ZenParserConst.BackTrackParseFlag;
+			this.SetParseFlag(this.GetParseFlag() | ZenParserConst.BackTrackParseFlag);
 		}
 		/*local*/ZenSyntaxPattern Pattern = this.TopLevelNameSpace.GetSyntaxPattern(PatternName);
 		/*local*/ZenNode ParsedNode = this.ApplyMatchPattern(NameSpace, LeftNode, Pattern);
-		this.ParseFlag = ParseFlag;
+		this.SetParseFlag(ParseFlag);
 		if(ParsedNode != null) {
 			return ParsedNode;
 		}
@@ -514,11 +514,11 @@ public final class ZenTokenContext extends ZenUtils {
 
 
 	public final void Push() {
-		this.ParserStack.add(this.ParseFlag);
+		this.ParserStack.add(this.GetParseFlag());
 	}
 
 	public final void Pop() {
-		this.ParseFlag = this.ParserStack.get(this.ParserStack.size() - 1);
+		this.SetParseFlag(this.ParserStack.get(this.ParserStack.size() - 1));
 		this.ParserStack.remove(this.ParserStack.size() - 1);
 	}
 
@@ -544,6 +544,14 @@ public final class ZenTokenContext extends ZenUtils {
 			LibZen.DebugP(DumpedToken);
 			//			ZenLogger.VerboseLog(ZenLogger.VerboseToken,  DumpedToken);
 		}
+	}
+
+	public int GetParseFlag() {
+		return this.ParseFlag;
+	}
+
+	public void SetParseFlag(int ParseFlag) {
+		this.ParseFlag = ParseFlag;
 	}
 
 
