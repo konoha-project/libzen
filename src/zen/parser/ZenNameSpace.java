@@ -549,8 +549,8 @@ public final class ZenNameSpace extends ZenUtils {
 			TokenContext.ParseFlag = 0; // init
 			TokenContext.SkipAndGetAnnotation(true);
 			/*local*/ZenNode TopLevelNode = TokenContext.ParsePattern(this, "$Statement$", ZenParserConst.Required);
-			TypeChecker.EnableVisitor();
-			TopLevelNode = TypeChecker.TypeCheck(TopLevelNode, this, ZenSystem.VoidType, 0);
+			//			TypeChecker.EnableVisitor();
+			//			TopLevelNode = TypeChecker.TypeCheck(TopLevelNode, this, ZenSystem.VoidType, 0);
 			this.Generator.DoCodeGeneration(this, TopLevelNode);
 			if(TopLevelNode.IsErrorNode() && TokenContext.HasNext()) {
 				/*local*/ZenToken Token = TokenContext.GetToken();
