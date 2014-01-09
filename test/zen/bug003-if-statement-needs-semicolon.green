@@ -1,5 +1,0 @@
-function f(n) {
-    if(n < 3) {
-        return 1;
-    }
-}
