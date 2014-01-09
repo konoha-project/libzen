@@ -87,5 +87,9 @@ public abstract class ZenNode {
 		return null;
 	}
 
+	public boolean IsBreakingBlock() {
+		return false;
+	}
+
 }
 

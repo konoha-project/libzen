@@ -76,7 +76,6 @@ import zen.parser.ZenNameSpace;
 import zen.parser.ZenUtils;
 import zen.parser.ZenVisitor;
 
-
 abstract class ZenTypeCheckerImpl implements ZenVisitor {
 	public final static int DefaultTypeCheckPolicy			= 0;
 	public final static int NoCheckPolicy                   = 1;
@@ -243,6 +242,22 @@ abstract class ZenTypeCheckerImpl implements ZenVisitor {
 		return null;
 	}
 
+	public ZenVarInfo GetVarInfo(ZenNameSpace nameSpace, String nativeName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void UntypedNameNode(String nativeName, GtGetLocalNode node) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void SetVarInfo(ZenNameSpace nameSpace, ZenType varType,
+			String nativeName) {
+		// TODO Auto-generated method stub
+
+	}
+
 }
 
 public class ZenTypeChecker extends ZenTypeCheckerImpl {
@@ -304,14 +319,26 @@ public class ZenTypeChecker extends ZenTypeCheckerImpl {
 	@Override
 	public void VisitGetLocalNode(GtGetLocalNode Node) {
 		ZenNameSpace NameSpace = this.GetNameSpace();
-		this.Todo(Node);
+		ZenVarInfo VarInfo = this.GetVarInfo(NameSpace, Node.NativeName);
+		if(VarInfo != null) {
+			Node.NativeName = VarInfo.NativeName;
+			this.TypedNode(Node, VarInfo.Type);
+			return;
+		}
+		this.UntypedNameNode(Node.NativeName, Node);
 	}
 
 	@Override
 	public void VisitSetLocalNode(GtSetLocalNode Node) {
 		ZenNameSpace NameSpace = this.GetNameSpace();
-		Node.ValueNode = this.TypeCheck(Node.ValueNode, NameSpace, ZenSystem.VarType, ZenTypeCheckerImpl.DefaultTypeCheckPolicy);
-		this.Todo(Node);
+		ZenVarInfo VarInfo = this.GetVarInfo(NameSpace, Node.NativeName);
+		if(VarInfo != null) {
+			Node.NativeName = VarInfo.NativeName;
+			Node.ValueNode = this.TypeCheck(Node.ValueNode, NameSpace, VarInfo.Type, ZenTypeCheckerImpl.DefaultTypeCheckPolicy);
+			this.TypedNode(Node, ZenSystem.VoidType);
+			return;
+		}
+		//		this.UntypedNameNode(Node.NativeName, Node);
 	}
 
 	@Override
@@ -390,8 +417,9 @@ public class ZenTypeChecker extends ZenTypeCheckerImpl {
 	}
 
 	@Override public void VisitCastNode(GtCastNode Node) {
-		// TODO Auto-generated method stub
-		this.Todo(Node);
+		ZenNameSpace NameSpace = this.GetNameSpace();
+		Node.ExprNode = this.TypeCheck(Node.ExprNode, NameSpace, Node.Type, ZenTypeCheckerImpl.DefaultTypeCheckPolicy);
+		this.TypedNode(Node, Node.Type);
 	}
 
 	@Override public void VisitInstanceOfNode(GtInstanceOfNode Node) {
@@ -432,29 +460,36 @@ public class ZenTypeChecker extends ZenTypeCheckerImpl {
 	}
 
 	@Override public void VisitBlockNode(GtBlockNode Node) {
-		ZenType ContextType = this.GetContextType();
-		int i = 0;
-		while(i < Node.StatementList.size() - 1) {
-			ZenNode SubNode = Node.StatementList.get(i);
-			SubNode = this.TypeCheck(SubNode, Node.NameSpace, ZenSystem.VoidType, ZenTypeCheckerImpl.DefaultTypeCheckPolicy);
-			Node.StatementList.set(i, SubNode);
-			i = i + 1;
-		}
-		if(i < Node.StatementList.size()) {
-			ZenNode LastNode = Node.StatementList.get(i);
-			LastNode = this.TypeCheck(LastNode, Node.NameSpace, ContextType, ZenTypeCheckerImpl.DefaultTypeCheckPolicy);
-			Node.StatementList.set(i, LastNode);
-			if(ContextType.IsVarType()) {
-				ContextType = LastNode.Type;
+		if(this.IsVisitable()) {
+			int i = 0;
+			while(i < Node.StatementList.size()) {
+				ZenNode SubNode = Node.StatementList.get(i);
+				SubNode = this.TypeCheck(SubNode, Node.NameSpace, ZenSystem.VoidType, ZenTypeCheckerImpl.DefaultTypeCheckPolicy);
+				Node.StatementList.set(i, SubNode);
+				if(SubNode.IsBreakingBlock()) {
+					break;
+				}
+				i = i + 1;
 			}
+			this.EnableVisitor();
+			this.TypedNode(Node, ZenSystem.VoidType);
 		}
-		this.TypedNode(Node, ContextType);
 	}
 
-	@Override
-	public void VisitVarDeclNode(GtVarDeclNode Node) {
-		// TODO Auto-generated method stub
-		this.Todo(Node);
+	@Override public void VisitVarDeclNode(GtVarDeclNode Node) {
+		ZenNameSpace NameSpace = this.GetNameSpace();
+		ZenType VarType = Node.Type;
+		if(Node.Type == null) {
+			Node.InitNode = this.TypeCheck(Node.InitNode, NameSpace, ZenSystem.VarType, ZenTypeCheckerImpl.DefaultTypeCheckPolicy);
+			VarType = Node.InitNode.Type;
+		}
+		else {
+			Node.InitNode = this.TypeCheck(Node.InitNode, NameSpace, Node.Type, ZenTypeCheckerImpl.DefaultTypeCheckPolicy);
+		}
+		if(this.IsVisitable()) {
+			this.SetVarInfo(NameSpace, VarType, Node.NativeName);
+			this.VisitBlockNode(Node);
+		}
 	}
 
 	@Override public void VisitIfNode(GtIfNode Node) {
@@ -464,7 +499,7 @@ public class ZenTypeChecker extends ZenTypeCheckerImpl {
 		if(Node.ElseNode != null) {
 			Node.ElseNode = this.TypeCheck(Node.ElseNode, NameSpace, ZenSystem.VoidType, ZenTypeCheckerImpl.DefaultTypeCheckPolicy);
 		}
-		this.TypedNode(Node, Node.ThenNode.Type);
+		this.TypedNode(Node, ZenSystem.VoidType);
 	}
 
 	@Override public void VisitReturnNode(GtReturnNode Node) {
@@ -548,7 +583,6 @@ public class ZenTypeChecker extends ZenTypeCheckerImpl {
 
 	@Override
 	public void VisitFuncDeclNode(GtFuncDeclNode Node) {
-		// TODO Auto-generated method stub
 		this.Todo(Node);
 	}
 

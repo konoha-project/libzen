@@ -67,7 +67,6 @@ import zen.ast.ZenNode;
 import zen.ast.ZenNotNode;
 import zen.deps.LibNative;
 import zen.deps.LibZen;
-import zen.parser.GtVariableInfo;
 import zen.parser.ZenLogger;
 import zen.parser.ZenNameSpace;
 import zen.parser.ZenNodeUtils;
@@ -444,8 +443,8 @@ public class ZenGrammar {
 			}
 		}
 		/*local*/Object ConstValue = NameSpace.GetSymbol(Token.ParsedText);
-		if(ConstValue instanceof GtVariableInfo) {
-			GtVariableInfo Var = (GtVariableInfo) ConstValue;
+		if(ConstValue instanceof ZenVarInfo) {
+			ZenVarInfo Var = (ZenVarInfo) ConstValue;
 			return NameSpace.Generator.CreateSymbolNode(Token, Var.Type, Var.NativeName, Var.IsCaptured(NameSpace), AssignedNode);
 		}
 		if(ConstValue != null) {

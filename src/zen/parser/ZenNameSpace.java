@@ -33,6 +33,7 @@ import zen.deps.ZenMap;
 import zen.lang.ZenFunc;
 import zen.lang.ZenSystem;
 import zen.lang.ZenType;
+import zen.lang.ZenTypeChecker;
 import zen.obsolete.GtFuncBlock;
 //endif VAJA
 
@@ -49,7 +50,7 @@ public final class ZenNameSpace extends ZenUtils {
 
 	/*field*/ZenTokenFunc[] TokenMatrix;
 	/*field*/ZenMap<Object>	 SymbolPatternTable;
-	/*field*/GtFuncBlock  FuncBlock;
+	/*field*/public GtFuncBlock  FuncBlock;
 
 	public ZenNameSpace(ZenGenerator Generator, ZenNameSpace ParentNameSpace) {
 		//		this.Context = Context;
@@ -178,11 +179,11 @@ public final class ZenNameSpace extends ZenUtils {
 		ZenLogger.VerboseLog(ZenLogger.VerboseSymbol, "symbol: " + Key + ", " + Value);
 	}
 
-	public GtVariableInfo SetLocalVariable(int VarFlag, ZenType Type, String Name, ZenToken SourceToken) {
-		/*local*/GtVariableInfo VarInfo = new GtVariableInfo(this.FuncBlock, VarFlag, Type, Name, SourceToken);
-		this.SetSymbol(Name, VarInfo, SourceToken);
-		return VarInfo;
-	}
+	//	public ZenVarInfo SetLocalVariable(int VarFlag, ZenType Type, String Name, ZenToken SourceToken) {
+	//		/*local*/ZenVarInfo VarInfo = new ZenVarInfo(this.FuncBlock, VarFlag, Type, Name, SourceToken);
+	//		this.SetSymbol(Name, VarInfo, SourceToken);
+	//		return VarInfo;
+	//	}
 
 	public final void SetUndefinedSymbol(String Symbol, ZenToken SourceToken) {
 		this.SetSymbol(Symbol, ZenParserConst.UndefinedSymbol, SourceToken);
@@ -550,14 +551,15 @@ public final class ZenNameSpace extends ZenUtils {
 		/*local*/Object ResultValue = null;
 		ZenLogger.VerboseLog(ZenLogger.VerboseEval, "eval: " + ScriptText);
 		/*local*/ZenTokenContext TokenContext = new ZenTokenContext(this, ScriptText, FileLine);
+		/*local*/ZenTypeChecker TypeChecker = new ZenTypeChecker(this.Generator.Logger);
 		TokenContext.SkipEmptyStatement();
 		while(TokenContext.HasNext()) {
 			TokenContext.ParseFlag = 0; // init
 			TokenContext.SkipAndGetAnnotation(true);
 			/*local*/ZenNode TopLevelNode = TokenContext.ParsePattern(this, "$Statement$", ZenParserConst.Required);
-			//			TopLevelNode = this.TypeCheck(TopLevelNode, GtStaticTable.VoidType, GreenTeaConsts.AllowVoidPolicy);
+			TypeChecker.EnableVisitor();
+			TopLevelNode = TypeChecker.TypeCheck(TopLevelNode, this, ZenSystem.VoidType, 0);
 			this.Generator.DoCodeGeneration(this, TopLevelNode);
-			//			TopLevelNode.Accept(this.Generator);
 			if(TopLevelNode.IsErrorNode() && TokenContext.HasNext()) {
 				/*local*/ZenToken Token = TokenContext.GetToken();
 				this.Generator.Logger.ReportInfo(Token, "stopped script at this line");
