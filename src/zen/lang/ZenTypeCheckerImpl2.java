@@ -44,7 +44,6 @@ import zen.ast.ZenErrorNode;
 import zen.ast.ZenFloatNode;
 import zen.ast.ZenFuncDeclNode;
 import zen.ast.ZenFunctionLiteralNode;
-import zen.ast.ZenGetCapturedNode;
 import zen.ast.ZenGetIndexNode;
 import zen.ast.ZenGetLocalNode;
 import zen.ast.ZenGetterNode;
@@ -62,7 +61,6 @@ import zen.ast.ZenNullNode;
 import zen.ast.ZenOrNode;
 import zen.ast.ZenParamNode;
 import zen.ast.ZenReturnNode;
-import zen.ast.ZenSetCapturedNode;
 import zen.ast.ZenSetIndexNode;
 import zen.ast.ZenSetLocalNode;
 import zen.ast.ZenSetterNode;
@@ -161,18 +159,6 @@ public class ZenTypeCheckerImpl2 extends ZenTypeChecker {
 			this.TypeSync(VarInfo.VarType, Node.ValueNode);
 			this.TypedNode(Node, ZenSystem.VoidType);
 		}
-	}
-
-	@Override
-	public void VisitGetCapturedNode(ZenGetCapturedNode Node) {
-		this.Todo(Node);
-	}
-
-	@Override
-	public void VisitSetCapturedNode(ZenSetCapturedNode Node) {
-		ZenNameSpace NameSpace = this.GetNameSpace();
-		Node.ValueNode = this.TypeCheck(Node.ValueNode, NameSpace, ZenSystem.VarType, ZenTypeChecker.DefaultTypeCheckPolicy);
-		this.Todo(Node);
 	}
 
 	@Override

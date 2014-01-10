@@ -43,7 +43,6 @@ import zen.ast.ZenErrorNode;
 import zen.ast.ZenFloatNode;
 import zen.ast.ZenFuncDeclNode;
 import zen.ast.ZenFunctionLiteralNode;
-import zen.ast.ZenGetCapturedNode;
 import zen.ast.ZenGetIndexNode;
 import zen.ast.ZenGetLocalNode;
 import zen.ast.ZenGetterNode;
@@ -61,7 +60,6 @@ import zen.ast.ZenNullNode;
 import zen.ast.ZenOrNode;
 import zen.ast.ZenParamNode;
 import zen.ast.ZenReturnNode;
-import zen.ast.ZenSetCapturedNode;
 import zen.ast.ZenSetIndexNode;
 import zen.ast.ZenSetLocalNode;
 import zen.ast.ZenSetterNode;
@@ -174,18 +172,13 @@ public class ZenSourceGenerator extends ZenGenerator {
 	public void VisitStatementList(ArrayList<ZenNode> StatementList) {
 		int i = 0;
 		while (i < StatementList.size()) {
-			ZenNode SubNode = Node.StatementList.get(i);
+			ZenNode SubNode = StatementList.get(i);
 			this.CurrentBuilder.AppendLineFeed();
 			this.CurrentBuilder.AppendIndent();
 			this.GenerateCode(SubNode);
 			this.CurrentBuilder.Append(this.SemiColon);
 			i = i + 1;
 		}
-		//		if (i == 0) {
-		//			this.CurrentBuilder.AppendLineFeed();
-		//			this.CurrentBuilder.AppendIndent();
-		//			this.CurrentBuilder.Append("pass");
-		//		}
 	}
 
 	@Override public void VisitBlockNode(ZenBlockNode Node) {
@@ -268,18 +261,6 @@ public class ZenSourceGenerator extends ZenGenerator {
 
 	@Override
 	public void VisitSetLocalNode(ZenSetLocalNode Node) {
-		this.CurrentBuilder.Append(Node.VarName);
-		this.CurrentBuilder.Append(" = ");
-		this.GenerateCode(Node.ValueNode);
-	}
-
-	@Override
-	public void VisitGetCapturedNode(ZenGetCapturedNode Node) {
-		this.CurrentBuilder.Append(Node.VarName);
-	}
-
-	@Override
-	public void VisitSetCapturedNode(ZenSetCapturedNode Node) {
 		this.CurrentBuilder.Append(Node.VarName);
 		this.CurrentBuilder.Append(" = ");
 		this.GenerateCode(Node.ValueNode);

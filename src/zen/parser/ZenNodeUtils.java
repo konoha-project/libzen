@@ -27,13 +27,11 @@ package zen.parser;
 import zen.ast.ZenBooleanNode;
 import zen.ast.ZenConstPoolNode;
 import zen.ast.ZenFloatNode;
-import zen.ast.ZenGetCapturedNode;
 import zen.ast.ZenGetLocalNode;
 import zen.ast.ZenIntNode;
-import zen.ast.ZenSetCapturedNode;
+import zen.ast.ZenNode;
 import zen.ast.ZenSetLocalNode;
 import zen.ast.ZenStringNode;
-import zen.ast.ZenNode;
 import zen.lang.ZenType;
 
 public abstract class ZenNodeUtils {
@@ -59,22 +57,12 @@ public abstract class ZenNodeUtils {
 		return new ZenConstPoolNode(SourceToken, Value);
 	}
 
-	public final ZenNode CreateSymbolNode(ZenToken SourceToken, ZenType Type, String NativeName, boolean IsCaptured, ZenNode AssignedNode) {
+	public final ZenNode CreateSymbolNode(ZenToken SourceToken, ZenType Type, String NativeName, ZenNode AssignedNode) {
 		if(AssignedNode != null) {
-			if(IsCaptured) {
-				return new ZenSetCapturedNode(SourceToken, NativeName, AssignedNode);
-			}
-			else {
-				return new ZenSetLocalNode(SourceToken, NativeName, AssignedNode);
-			}
+			return new ZenSetLocalNode(SourceToken, NativeName, AssignedNode);
 		}
 		else {
-			if(IsCaptured) {
-				return new ZenGetCapturedNode(SourceToken, NativeName);
-			}
-			else {
-				return new ZenGetLocalNode(SourceToken, NativeName);
-			}
+			return new ZenGetLocalNode(SourceToken, NativeName);
 		}
 	}
 }

@@ -435,7 +435,7 @@ public class ZenGrammar {
 		/*local*/Object ConstValue = NameSpace.GetSymbol(Token.ParsedText);
 		if(ConstValue instanceof ZenVarInfo) {
 			ZenVarInfo Var = (ZenVarInfo) ConstValue;
-			return NameSpace.Generator.CreateSymbolNode(Token, Var.VarType, Var.NativeName, false, AssignedNode);
+			return NameSpace.Generator.CreateSymbolNode(Token, Var.VarType, Var.NativeName, AssignedNode);
 		}
 		if(ConstValue != null) {
 			if(AssignedNode != null) {
@@ -443,7 +443,7 @@ public class ZenGrammar {
 			}
 			return ZenNodeUtils.CreateConstNode(Token, ConstValue);
 		}
-		return NameSpace.Generator.CreateSymbolNode(Token, ZenSystem.VarType, Token.ParsedText, false/*captured*/, AssignedNode);
+		return NameSpace.Generator.CreateSymbolNode(Token, ZenSystem.VarType, Token.ParsedText, AssignedNode);
 	}
 
 	// PatternName: "("  (1)
