@@ -43,7 +43,7 @@ public final class ZenTokenContext extends ZenUtils {
 	/*field*/private final ArrayList<Integer> ParserStack;
 	/*field*/public ZenMap<Object> ParsingAnnotation;
 	/*field*/public ZenToken LatestToken;
-	/*field*/private int IndentLevel = 0;
+	/*field*/protected int IndentLevel = 0;
 
 	public ZenTokenContext(ZenNameSpace NameSpace, String Text, long FileLine) {
 		this.TopLevelNameSpace = NameSpace;

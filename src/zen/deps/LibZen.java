@@ -62,57 +62,57 @@ public abstract class LibZen {
 	}
 
 
-//	public static Object InvokeOverridedMethod(long FileLine, ZenNameSpace NameSpace, ZenFunc Func, Object[] Arguments) {
-//		/*local*/ZenType ClassType = ZenStaticTable.GuessType(Arguments[0]);
-//		Func = NameSpace.GetOverridedMethod(ClassType, Func);
-//		return LibZen.InvokeFunc(Func, Arguments);
-//	}
-//
-//	public static Object InvokeDynamicFunc(long FileLine, ZenType ContextType, ZenNameSpace NameSpace, String FuncName, Object[] Arguments) {
-//		/*local*/ZenPolyFunc PolyFunc = NameSpace.GetPolyFunc(FuncName);
-//		/*local*/ZenFunc Func = PolyFunc.GetMatchedFunc(NameSpace, Arguments);
-//		/*local*/Object Value = ContextType.DefaultNullValue;
-//		if(Func != null) {
-//			Value = LibZen.InvokeFunc(Func, Arguments);
-//			return LibZen.DynamicCast(ContextType, Value);
-//		}
-//		LibZen.VerboseLog(VerboseRuntime, PolyFunc.FormatTypeErrorMessage("function", null, FuncName));
-//		return Value;
-//	}
-//
-//	public static final Object InvokeDynamicMethod(long FileLine, ZenType ContextType, ZenNameSpace NameSpace, String FuncName, Object[] Arguments) {
-//		/*local*/ZenType ClassType = ZenStaticTable.GuessType(Arguments[0]);
-//		/*local*/ZenPolyFunc PolyFunc = NameSpace.GetMethod(ClassType, FuncName, true);
-//		/*local*/ZenFunc Func = PolyFunc.GetMatchedFunc(NameSpace, Arguments);
-//		/*local*/Object Value = ContextType.DefaultNullValue;
-//		if(Func != null) {
-//			Value = LibZen.InvokeFunc(Func, Arguments);
-//			return LibZen.DynamicCast(ContextType, Value);
-//		}
-//		LibZen.VerboseLog(VerboseRuntime, PolyFunc.FormatTypeErrorMessage("method", ClassType, FuncName));
-//		return Value;
-//	}
-//
-//	public static Object DynamicGetter(Object RecvObject, String FieldName) {
-//		try {
-//			Field JavaField = RecvObject.getClass().getField(FieldName);
-//			return JavaField.get(RecvObject);
-//		} catch (Exception e) {
-//			LibZen.VerboseException(e);
-//		}
-//		return null;
-//	}
-//
-//	public static Object DynamicSetter(Object RecvObject, String FieldName, Object Value) {
-//		try {
-//			Field JavaField = RecvObject.getClass().getField(FieldName);
-//			JavaField.set(RecvObject, Value);
-//			return JavaField.get(RecvObject);
-//		} catch (Exception e) {
-//			LibZen.VerboseException(e);
-//		}
-//		return null;
-//	}
+	//	public static Object InvokeOverridedMethod(long FileLine, ZenNameSpace NameSpace, ZenFunc Func, Object[] Arguments) {
+	//		/*local*/ZenType ClassType = ZenStaticTable.GuessType(Arguments[0]);
+	//		Func = NameSpace.GetOverridedMethod(ClassType, Func);
+	//		return LibZen.InvokeFunc(Func, Arguments);
+	//	}
+	//
+	//	public static Object InvokeDynamicFunc(long FileLine, ZenType ContextType, ZenNameSpace NameSpace, String FuncName, Object[] Arguments) {
+	//		/*local*/ZenPolyFunc PolyFunc = NameSpace.GetPolyFunc(FuncName);
+	//		/*local*/ZenFunc Func = PolyFunc.GetMatchedFunc(NameSpace, Arguments);
+	//		/*local*/Object Value = ContextType.DefaultNullValue;
+	//		if(Func != null) {
+	//			Value = LibZen.InvokeFunc(Func, Arguments);
+	//			return LibZen.DynamicCast(ContextType, Value);
+	//		}
+	//		LibZen.VerboseLog(VerboseRuntime, PolyFunc.FormatTypeErrorMessage("function", null, FuncName));
+	//		return Value;
+	//	}
+	//
+	//	public static final Object InvokeDynamicMethod(long FileLine, ZenType ContextType, ZenNameSpace NameSpace, String FuncName, Object[] Arguments) {
+	//		/*local*/ZenType ClassType = ZenStaticTable.GuessType(Arguments[0]);
+	//		/*local*/ZenPolyFunc PolyFunc = NameSpace.GetMethod(ClassType, FuncName, true);
+	//		/*local*/ZenFunc Func = PolyFunc.GetMatchedFunc(NameSpace, Arguments);
+	//		/*local*/Object Value = ContextType.DefaultNullValue;
+	//		if(Func != null) {
+	//			Value = LibZen.InvokeFunc(Func, Arguments);
+	//			return LibZen.DynamicCast(ContextType, Value);
+	//		}
+	//		LibZen.VerboseLog(VerboseRuntime, PolyFunc.FormatTypeErrorMessage("method", ClassType, FuncName));
+	//		return Value;
+	//	}
+	//
+	//	public static Object DynamicGetter(Object RecvObject, String FieldName) {
+	//		try {
+	//			Field JavaField = RecvObject.getClass().getField(FieldName);
+	//			return JavaField.get(RecvObject);
+	//		} catch (Exception e) {
+	//			LibZen.VerboseException(e);
+	//		}
+	//		return null;
+	//	}
+	//
+	//	public static Object DynamicSetter(Object RecvObject, String FieldName, Object Value) {
+	//		try {
+	//			Field JavaField = RecvObject.getClass().getField(FieldName);
+	//			JavaField.set(RecvObject, Value);
+	//			return JavaField.get(RecvObject);
+	//		} catch (Exception e) {
+	//			LibZen.VerboseException(e);
+	//		}
+	//		return null;
+	//	}
 
 	public final static String GetPlatform() {
 		return "Java JVM-" + System.getProperty("java.version");
@@ -132,9 +132,9 @@ public abstract class LibZen {
 	}
 
 	public final static void DebugP(String msg) {
-//		if(LibZen.DebugMode) {
-		LibNative.println("DEBUG " + LibZen.GetStackInfo(2) + ": " + msg);
-//		}
+		if(LibZen.DebugMode) {
+			LibNative.println("DEBUG " + LibZen.GetStackInfo(2) + ": " + msg);
+		}
 	}
 
 	private static int ParserCount = -1;
@@ -321,31 +321,31 @@ public abstract class LibZen {
 		System.arraycopy(src, srcPos, dest, destPos, length);
 	}
 
-//	public final static ZenFunc SetNativeMethod(ZenFunc NativeFunc, Method JavaMethod) {
-//		/*local*/int FuncFlag = ZenUtils.NativeFunc;
-//		if(!Modifier.isStatic(JavaMethod.getModifiers())) {
-//			FuncFlag |= ZenUtils.NativeMethodFunc;
-//		}
-//		NativeFunc.SetNativeMethod(FuncFlag, JavaMethod);
-//		return NativeFunc;
-//	}
-//
+	//	public final static ZenFunc SetNativeMethod(ZenFunc NativeFunc, Method JavaMethod) {
+	//		/*local*/int FuncFlag = ZenUtils.NativeFunc;
+	//		if(!Modifier.isStatic(JavaMethod.getModifiers())) {
+	//			FuncFlag |= ZenUtils.NativeMethodFunc;
+	//		}
+	//		NativeFunc.SetNativeMethod(FuncFlag, JavaMethod);
+	//		return NativeFunc;
+	//	}
+	//
 
-//	public final static void LoadNativeConstructors(ZenParserContext Context, ZenType ClassType, ArrayList<ZenFunc> FuncList) {
-//		LibNative.LoadNativeConstructors(Context, ClassType, FuncList);
-//	}
-//
-//	public final static ZenFunc LoadNativeField(ZenParserContext Context, ZenType ClassType, String FieldName, boolean GetSetter) {
-//		return LibNative.LoadNativeField(Context, ClassType, FieldName, GetSetter);
-//	}
-//
-//	public final static void LoadNativeMethods(ZenParserContext Context, ZenType ClassType, String FuncName, ArrayList<ZenFunc> FuncList) {
-//		LibNative.LoadNativeMethods(Context, ClassType, FuncName, FuncList);
-//	}
+	//	public final static void LoadNativeConstructors(ZenParserContext Context, ZenType ClassType, ArrayList<ZenFunc> FuncList) {
+	//		LibNative.LoadNativeConstructors(Context, ClassType, FuncList);
+	//	}
+	//
+	//	public final static ZenFunc LoadNativeField(ZenParserContext Context, ZenType ClassType, String FieldName, boolean GetSetter) {
+	//		return LibNative.LoadNativeField(Context, ClassType, FieldName, GetSetter);
+	//	}
+	//
+	//	public final static void LoadNativeMethods(ZenParserContext Context, ZenType ClassType, String FuncName, ArrayList<ZenFunc> FuncList) {
+	//		LibNative.LoadNativeMethods(Context, ClassType, FuncName, FuncList);
+	//	}
 
 	public static Object NativeFieldGetter(Object ObjectValue, Field NativeField) {
 		try {
-//			Class<?> NativeType = NativeField.getType();
+			//			Class<?> NativeType = NativeField.getType();
 			return NativeField.get(ObjectValue);
 		} catch (IllegalAccessException e) {
 			ZenLogger.VerboseException(e);
@@ -604,62 +604,62 @@ public abstract class LibZen {
 		return ((Boolean)Value).booleanValue();
 	}
 
-//	public static Object DynamicCast(ZenType CastType, Object Value) {
-//		if(Value != null) {
-//			ZenType FromType = ZenSystem.GuessType(Value);
-//			if(CastType == FromType || CastType.Accept(FromType)) {
-//				return Value;
-//			}
-//		}
-//		return null;
-//	}
-//
-//	public static boolean DynamicInstanceOf(Object Value, ZenType Type) {
-//		if(Value != null) {
-//			ZenType ValueType = ZenSystem.GuessType(Value);
-//			if(ValueType == Type || Type.Accept(ValueType)) {
-//				return true;
-//			}
-//		}
-//		return false;
-//	}
-//
-//	public final static Object DynamicConvertTo(ZenType CastType, Object Value) {
-//		if(Value != null) {
-//			ZenType ValueType = ZenTypeSystem.GuessType(Value);
-//			if(ValueType == CastType || CastType.Accept(ValueType)) {
-//				return Value;
-//			}
-//			ZenFunc Func = ZenTypeSystem.GetConverterFunc(ValueType, CastType, true);
-//			if(Func != null) {
-//				Object[] Argvs = new Object[2];
-//				Argvs[0] = CastType;
-//				Argvs[1] = Value;
-//				return LibNative.ApplyMethod(Func, null, Argvs);
-//			}
-//		}
-//		return null;
-//	}
+	//	public static Object DynamicCast(ZenType CastType, Object Value) {
+	//		if(Value != null) {
+	//			ZenType FromType = ZenSystem.GuessType(Value);
+	//			if(CastType == FromType || CastType.Accept(FromType)) {
+	//				return Value;
+	//			}
+	//		}
+	//		return null;
+	//	}
+	//
+	//	public static boolean DynamicInstanceOf(Object Value, ZenType Type) {
+	//		if(Value != null) {
+	//			ZenType ValueType = ZenSystem.GuessType(Value);
+	//			if(ValueType == Type || Type.Accept(ValueType)) {
+	//				return true;
+	//			}
+	//		}
+	//		return false;
+	//	}
+	//
+	//	public final static Object DynamicConvertTo(ZenType CastType, Object Value) {
+	//		if(Value != null) {
+	//			ZenType ValueType = ZenTypeSystem.GuessType(Value);
+	//			if(ValueType == CastType || CastType.Accept(ValueType)) {
+	//				return Value;
+	//			}
+	//			ZenFunc Func = ZenTypeSystem.GetConverterFunc(ValueType, CastType, true);
+	//			if(Func != null) {
+	//				Object[] Argvs = new Object[2];
+	//				Argvs[0] = CastType;
+	//				Argvs[1] = Value;
+	//				return LibNative.ApplyMethod(Func, null, Argvs);
+	//			}
+	//		}
+	//		return null;
+	//	}
 
-//	public static boolean ImportMethodToFunc(ZenFunc Func, String FullName) {
-//		Method JavaMethod = LibNative.ImportMethod(Func.GetFuncType(), FullName, false);
-//		if(JavaMethod != null) {
-//			LibZen.SetNativeMethod(Func, JavaMethod);
-//			if(Func.GetReturnType().IsVarType()) {
-//				Func.SetReturnType(LibNative.GetNativeType(JavaMethod.getReturnType()));
-//			}
-//			int StartIdx = Func.Is(ZenUtils.NativeMethodFunc) ? 2 : 1;
-//			Class<?>[] p = JavaMethod.getParameterTypes();
-//			for(int i = 0; i < p.length; i++) {
-//				if(Func.Types[StartIdx + i].IsVarType()) {
-//					Func.Types[StartIdx + i] = LibNative.GetNativeType(p[i]);
-//					Func.FuncType = null; // reset
-//				}
-//			}
-//			return true;
-//		}
-//		return false;
-//	}
+	//	public static boolean ImportMethodToFunc(ZenFunc Func, String FullName) {
+	//		Method JavaMethod = LibNative.ImportMethod(Func.GetFuncType(), FullName, false);
+	//		if(JavaMethod != null) {
+	//			LibZen.SetNativeMethod(Func, JavaMethod);
+	//			if(Func.GetReturnType().IsVarType()) {
+	//				Func.SetReturnType(LibNative.GetNativeType(JavaMethod.getReturnType()));
+	//			}
+	//			int StartIdx = Func.Is(ZenUtils.NativeMethodFunc) ? 2 : 1;
+	//			Class<?>[] p = JavaMethod.getParameterTypes();
+	//			for(int i = 0; i < p.length; i++) {
+	//				if(Func.Types[StartIdx + i].IsVarType()) {
+	//					Func.Types[StartIdx + i] = LibNative.GetNativeType(p[i]);
+	//					Func.FuncType = null; // reset
+	//				}
+	//			}
+	//			return true;
+	//		}
+	//		return false;
+	//	}
 
 	public static void PrintStackTrace(Exception e, int linenum) {
 		/*local*/StackTraceElement[] elements = e.getStackTrace();
@@ -683,9 +683,9 @@ public abstract class LibZen {
 		}
 		return builder.toString();
 	}
-//	public static Object EvalGetter(ZenType Type, Object Value, String FieldName) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
+	//	public static Object EvalGetter(ZenType Type, Object Value, String FieldName) {
+	//		// TODO Auto-generated method stub
+	//		return null;
+	//	}
 
 }
