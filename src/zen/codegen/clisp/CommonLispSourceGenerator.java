@@ -28,6 +28,7 @@ import zen.ast.ZenAndNode;
 import zen.ast.ZenBinaryNode;
 import zen.ast.ZenBooleanNode;
 import zen.ast.ZenConstPoolNode;
+import zen.ast.ZenEmptyNode;
 import zen.ast.ZenErrorNode;
 import zen.ast.ZenGetLocalNode;
 import zen.ast.ZenIfNode;
@@ -91,25 +92,6 @@ public class CommonLispSourceGenerator extends ZenSourceGenerator {
 		this.CurrentBuilder.Append("nil");
 	}
 
-	@Override
-	public void VisitIndentBlock(String BeginBlock, ZenNode Node, String EndBlock) {
-		//this.VisitingBuilder.AppendLine(BeginBlock);
-		this.CurrentBuilder.Indent();
-		/*local*/ZenNode CurrentNode = Node;
-		while(CurrentNode != null) {
-			if(!this.IsEmptyBlock(CurrentNode)) {
-				this.CurrentBuilder.AppendIndent();
-				CurrentNode.Accept(this);
-				this.CurrentBuilder.AppendLine("");
-			}
-			CurrentNode = CurrentNode.NextNode;
-		}
-		this.CurrentBuilder.UnIndent();
-		if(EndBlock != null) {
-			//this.VisitingBuilder.IndentAndAppend(EndBlock);
-		}
-	}
-
 	//	@Override
 	//	public void GenerateFunc(ZenFunc Func, ArrayList<String> ParamNameList, ZenNode Body) {
 	//		String MethodName = Func.GetNativeFuncName();
@@ -151,7 +133,7 @@ public class CommonLispSourceGenerator extends ZenSourceGenerator {
 		Node.CondNode.Accept(this);
 
 		this.CurrentBuilder.AppendLineFeed();
-		this.VisitIndentBlock("", Node.BodyNode, "");
+		Node.BodyNode.Accept(this);
 		this.CurrentBuilder.AppendIndent();
 		this.CurrentBuilder.Append(")");
 	}
@@ -229,23 +211,27 @@ public class CommonLispSourceGenerator extends ZenSourceGenerator {
 	//	}
 
 	@Override public void VisitIfNode(ZenIfNode Node) {
+		// FIXME we use this.CurrentBuilder.Indent(),
+		// UnIndent() instedof AppendIndent()
 		this.CurrentBuilder.Append("(if  ");
 		Node.CondNode.Accept(this);
-		this.CurrentBuilder.AppendLine("");
+		this.CurrentBuilder.AppendLineFeed();;
 
 		this.CurrentBuilder.AppendIndent();
 		this.CurrentBuilder.AppendIndent();
-		this.CurrentBuilder.AppendLine("(progn ");
-		this.VisitIndentBlock("", Node.ThenNode, "");
+		this.CurrentBuilder.AppendToken("(progn ");
+		this.CurrentBuilder.AppendLineFeed();
+		Node.ThenNode.Accept(this);
 		this.CurrentBuilder.AppendIndent();
 		this.CurrentBuilder.AppendIndent();
-		this.CurrentBuilder.AppendLine(")");
+		this.CurrentBuilder.AppendToken(")");
+		this.CurrentBuilder.AppendLineFeed();
 
-		if (!this.IsEmptyBlock(Node.ElseNode)) {
+		if(Node.ElseNode != null) {
 			this.CurrentBuilder.AppendIndent();
 			this.CurrentBuilder.AppendIndent();
 			this.CurrentBuilder.AppendLine("(progn ");
-			this.VisitIndentBlock("", Node.ElseNode, "");
+			Node.ElseNode.Accept(this);
 			this.CurrentBuilder.AppendIndent();
 			this.CurrentBuilder.AppendIndent();
 			this.CurrentBuilder.Append(")");
