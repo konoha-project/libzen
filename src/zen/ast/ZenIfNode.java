@@ -24,13 +24,14 @@
 
 package zen.ast;
 
+import zen.deps.Field;
 import zen.parser.ZenVisitor;
 
 //E.g., "if" "(" $Cond ")" $ThenNode "else" $ElseNode
 final public class ZenIfNode extends ZenNode {
-	/*field*/public ZenNode	CondNode;
-	/*field*/public ZenNode	ThenNode;
-	/*field*/public ZenNode	ElseNode;
+	@Field public ZenNode	CondNode;
+	@Field public ZenNode	ThenNode;
+	@Field public ZenNode	ElseNode;
 	/* If CondNode then ThenBlock else ElseBlock */
 	public ZenIfNode/*constructor*/() {
 		super();

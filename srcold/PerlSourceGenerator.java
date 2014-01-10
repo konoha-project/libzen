@@ -118,7 +118,7 @@ public class PerlSourceGenerator extends ZenSourceGenerator {
 			}
 			return Type.ShortName;
 		}
-		/*local*/String TypeName = "struct " + Type.ShortName;
+		@Var String TypeName = "struct " + Type.ShortName;
 		if(IsPointer) {
 			TypeName += "*";
 		}
@@ -213,13 +213,13 @@ public class PerlSourceGenerator extends ZenSourceGenerator {
 	}
 
 	@Override public void VisitGetterNode(ZenGetterNode Node) {
-		/*local*/String FieldName = Node.NativeName;
+		@Var String FieldName = Node.NativeName;
 		Node.RecvNode.Accept(this);
 		this.CurrentBuilder.Append("->{'" + FieldName + "'}");
 	}
 
 	@Override public void VisitSetterNode(ZenSetterNode Node) {
-		/*local*/String FieldName = Node.NativeName;
+		@Var String FieldName = Node.NativeName;
 		Node.RecvNode.Accept(this);
 		this.CurrentBuilder.Append("->{'" + FieldName + "'} = ");
 		Node.ValueNode.Accept(this);
@@ -228,7 +228,7 @@ public class PerlSourceGenerator extends ZenSourceGenerator {
 	@Override public void VisitApplySymbolNode(ZenApplySymbolNode Node) {
 		this.CurrentBuilder.Append(Node.NativeName);
 		this.CurrentBuilder.Append("(");
-		for(/*local*/int i = 0; i < LibZen.ListSize(Node.ParamList); i++){
+		for(@Var int i = 0; i < LibZen.ListSize(Node.ParamList); i++){
 			if(i > 0){
 				this.CurrentBuilder.Append(", ");
 			}
@@ -241,7 +241,7 @@ public class PerlSourceGenerator extends ZenSourceGenerator {
 		//FIXME
 		Node.FuncNode.Accept(this);
 		this.CurrentBuilder.Append("(");
-		for(/*local*/int i = 0; i < LibZen.ListSize(Node.ParamList); i++){
+		for(@Var int i = 0; i < LibZen.ListSize(Node.ParamList); i++){
 			if(i > 0){
 				this.CurrentBuilder.Append(", ");
 			}
@@ -254,7 +254,7 @@ public class PerlSourceGenerator extends ZenSourceGenerator {
 		//FIXME
 		this.CurrentBuilder.Append(Node.Func.FuncName);
 		this.CurrentBuilder.Append("(");
-		for(/*local*/int i = 0; i < LibZen.ListSize(Node.ParamList); i++){
+		for(@Var int i = 0; i < LibZen.ListSize(Node.ParamList); i++){
 			if(i > 0){
 				this.CurrentBuilder.Append(", ");
 			}
@@ -356,7 +356,7 @@ public class PerlSourceGenerator extends ZenSourceGenerator {
 	@Override public void VisitConstructorNode(ZenConstructorNode Node) {
 		this.CurrentBuilder.Append(Node.Func.FuncName);
 		this.CurrentBuilder.Append("(");
-		for(/*local*/int i = 0; i < LibZen.ListSize(Node.ParamList); i++){
+		for(@Var int i = 0; i < LibZen.ListSize(Node.ParamList); i++){
 			if(i > 0){
 				this.CurrentBuilder.Append(", ");
 			}
@@ -398,7 +398,7 @@ public class PerlSourceGenerator extends ZenSourceGenerator {
 	}
 
 	@Override public void VisitVarDeclNode(ZenVarDeclNode Node) {
-		/*local*/String VarName = Node.NativeName;
+		@Var String VarName = Node.NativeName;
 		this.CurrentBuilder.Append("my $" + VarName);
 		if(Node.InitNode != null) {
 			this.CurrentBuilder.Append(" = ");
@@ -516,7 +516,7 @@ public class PerlSourceGenerator extends ZenSourceGenerator {
 		this.CurrentBuilder.Append("switch (");
 		Node.MatchNode.Accept(this);
 		this.CurrentBuilder.AppendLine(") {");
-		for (/*local*/int i = 0; i < LibZen.ListSize(Node.CaseList); i++) {
+		for (@Var int i = 0; i < LibZen.ListSize(Node.CaseList); i++) {
 			Node.CaseList.get(i).Accept(this);
 		}
 		this.CurrentBuilder.AppendLine("}");
@@ -531,8 +531,8 @@ public class PerlSourceGenerator extends ZenSourceGenerator {
 
 	@Override public void VisitCommandNode(ZenCommandNode Node) {
 		this.CurrentBuilder.Append("String __Command = ");
-		for(/*local*/int i = 0; i < LibZen.ListSize(Node.ArgumentList); i += 1) {
-			/*local*/ZenNode Param = Node.ArgumentList.get(i);
+		for(@Var int i = 0; i < LibZen.ListSize(Node.ArgumentList); i += 1) {
+			@Var ZenNode Param = Node.ArgumentList.get(i);
 			if(i != 0) {
 				this.CurrentBuilder.Append(" . ");
 			}
@@ -546,17 +546,17 @@ public class PerlSourceGenerator extends ZenSourceGenerator {
 	}
 
 	@Override public void VisitErrorNode(ZenErrorNode Node) {
-		/*local*/String Code = "throw Error(\"" + Node.SourceToken.ParsedText + "\")";
+		@Var String Code = "throw Error(\"" + Node.SourceToken.ParsedText + "\")";
 		this.CurrentBuilder.Append(Code);
 		this.StopVisitor(Node);
 	}
 
 	@Override public void GenerateFunc(ZenFunc Func, ArrayList<String> ParamNameList, ZenNode Body) {
 		this.FlushErrorReport();
-		/*local*/String FuncName = Func.GetNativeFuncName();
+		@Var String FuncName = Func.GetNativeFuncName();
 		this.CurrentBuilder.AppendLine("sub " + FuncName + " {");
 		this.CurrentBuilder.Indent();
-		for(/*local*/int i = 0; i < LibZen.ListSize(ParamNameList); i += 1) {
+		for(@Var int i = 0; i < LibZen.ListSize(ParamNameList); i += 1) {
 			this.CurrentBuilder.AppendLine("my $" + ParamNameList.get(i) + " = $_[" + i + "];");
 		}
 		this.CurrentBuilder.UnIndent();
@@ -564,7 +564,7 @@ public class PerlSourceGenerator extends ZenSourceGenerator {
 	}
 
 	@Override public void OpenClassField(ZenSyntaxTree ParsedTree, ZenType Type, ZenClassField ClassField) {
-		/*local*/String TypeName = Type.ShortName;
+		@Var String TypeName = Type.ShortName;
 		this.CurrentBuilder.AppendLine("package " + TypeName + this.SemiColon);
 		if(Type.SuperType != null) {
 			this.CurrentBuilder.AppendLine("# our @ISA = ('" + Type.SuperType.ShortName + "');" + this.SemiColon);
@@ -573,9 +573,9 @@ public class PerlSourceGenerator extends ZenSourceGenerator {
 		this.CurrentBuilder.Indent();
 		this.CurrentBuilder.AppendLine("my $class = shift" + this.SemiColon);
 		this.CurrentBuilder.AppendLine("my $" + this.GetRecvName() + " = {}" + this.SemiColon);
-		for(/*local*/int i = 0; i < LibZen.ListSize(ClassField.FieldList); i += 1) {
-			/*local*/ZenFieldInfo FieldInfo = ClassField.FieldList.get(i);
-			/*local*/String InitValue = this.StringifyConstValue(FieldInfo.InitValue);
+		for(@Var int i = 0; i < LibZen.ListSize(ClassField.FieldList); i += 1) {
+			@Var ZenFieldInfo FieldInfo = ClassField.FieldList.get(i);
+			@Var String InitValue = this.StringifyConstValue(FieldInfo.InitValue);
 			if(!FieldInfo.Type.IsNativeType()) {
 				InitValue = this.NullLiteral;
 			}

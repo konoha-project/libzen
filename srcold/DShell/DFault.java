@@ -38,7 +38,7 @@ public class DFault /*extends Exception*/ {
 	public long   DCaseRevision;
 	public String DCaseNode;
 	
-//	/*field*/public String CurrentNodeName = "";
+//	@Field public String CurrentNodeName = "";
 //	public String CallerNodeName  = "";
 //	public long DCaseRevision = 0;
 

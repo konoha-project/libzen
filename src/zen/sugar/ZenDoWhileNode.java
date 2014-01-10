@@ -25,21 +25,22 @@
 package zen.sugar;
 
 import zen.ast.ZenNode;
+import zen.deps.Field;
 import zen.lang.ZenType;
 import zen.parser.ZenToken;
 
 final public class ZenDoWhileNode extends ZenNode {
-	/*field*/public ZenNode	CondNode;
-	/*field*/public ZenNode	BodyNode;
+	@Field public ZenNode	CondNode;
+	@Field public ZenNode	BodyNode;
 	public ZenDoWhileNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode CondNode, ZenNode BodyNode) {
 		super();
 		this.CondNode = CondNode;
 		this.BodyNode = BodyNode;
-//		this.SetChild2(CondNode, BodyNode);
+		//		this.SetChild2(CondNode, BodyNode);
 	}
-//	@Override public boolean Accept(ZenVisitor Visitor) {
-//		Visitor.VisitDoWhileNode(this);
-//	}
+	//	@Override public boolean Accept(ZenVisitor Visitor) {
+	//		Visitor.VisitDoWhileNode(this);
+	//	}
 	public ZenNode ToWhileNode() {
 		/**
 		while(true) {

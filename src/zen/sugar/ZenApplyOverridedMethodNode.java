@@ -27,15 +27,16 @@ package zen.sugar;
 import java.util.ArrayList;
 
 import zen.ast.ZenNode;
+import zen.deps.Field;
 import zen.lang.ZenFunc;
 import zen.lang.ZenType;
 import zen.parser.ZenNameSpace;
 import zen.parser.ZenToken;
 
 final public class ZenApplyOverridedMethodNode extends ZenNode {
-	/*field*/public ZenNameSpace NameSpace;
-	/*field*/public ZenFunc Func;
-	/*field*/public ArrayList<ZenNode>  ParamList; /* [arg1, arg2, ...] */
+	@Field public ZenNameSpace NameSpace;
+	@Field public ZenFunc Func;
+	@Field public ArrayList<ZenNode>  ParamList; /* [arg1, arg2, ...] */
 	public ZenApplyOverridedMethodNode/*constructor*/(ZenType Type, ZenToken Token, ZenNameSpace NameSpace, ZenFunc Func) {
 		super();
 		//		this.NameSpace = NameSpace.Minimum();

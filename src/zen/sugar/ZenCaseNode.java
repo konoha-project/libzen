@@ -25,19 +25,20 @@
 package zen.sugar;
 
 import zen.ast.ZenNode;
+import zen.deps.Field;
 import zen.lang.ZenType;
 import zen.parser.ZenToken;
 
 final public class ZenCaseNode extends ZenNode {
-	/*field*/public ZenNode  CaseNode;;
-	/*field*/public ZenNode	BodyNode;
+	@Field public ZenNode  CaseNode;;
+	@Field public ZenNode	BodyNode;
 	public ZenCaseNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode CaseNode, ZenNode BodyNode) {
 		super();
 		this.CaseNode = CaseNode;
 		this.BodyNode = BodyNode;
-//		this.SetChild2(BodyNode, CaseNode);
+		//		this.SetChild2(BodyNode, CaseNode);
 	}
-//	@Override public boolean Accept(ZenVisitor Visitor) {
-//		Visitor.VisitCaseNode(this);
-//	}
+	//	@Override public boolean Accept(ZenVisitor Visitor) {
+	//		Visitor.VisitCaseNode(this);
+	//	}
 }

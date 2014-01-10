@@ -32,8 +32,8 @@ import zen.lang.ZenFuncType;
 import zen.parser.ZenLogger;
 
 public class ZenNativeFunc extends ZenFunc {
-	/*field*/public Object Recv;
-	/*field*/public Method JMethod;  // Abstract function if null
+	@Field public Object Recv;
+	@Field public Method JMethod;  // Abstract function if null
 
 	public ZenNativeFunc(int FuncFlag, String FuncName, ZenFuncType FuncType, Object Recv, Method JMethod) {
 		super(FuncFlag, FuncName, FuncType);

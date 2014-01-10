@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import zen.ast.ZenErrorNode;
 import zen.ast.ZenNode;
+import zen.deps.Field;
 import zen.parser.ZenLogger;
 import zen.parser.ZenNameSpace;
 import zen.parser.ZenToken;
@@ -22,12 +23,12 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 	public final static int NullablePolicy                  = (1 << 8);
 	public final static int BlockPolicy                     = (1 << 7);
 
-	/*field*/private ZenNameSpace NameSpace_;
-	/*field*/private ZenType ContextType_;
-	/*field*/private ZenNode TypedNode_;
+	@Field private ZenNameSpace NameSpace_;
+	@Field private ZenType ContextType_;
+	@Field private ZenNode TypedNode_;
 
-	/*field*/public ZenLogger Logger;
-	/*field*/private boolean StoppedVisitor;
+	@Field public ZenLogger Logger;
+	@Field private boolean StoppedVisitor;
 
 	public ZenTypeChecker(ZenLogger Logger) {
 		this.Logger = Logger;
@@ -240,11 +241,11 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 			return Node;
 		}
 		//		if(Node.Type.IsUnrevealedType()) {
-		//			/*local*/ZenFunc Func = ParsedTree.NameSpace.GetConverterFunc(Node.Type, Node.Type.BaseType, true);
+		//			@Var ZenFunc Func = ParsedTree.NameSpace.GetConverterFunc(Node.Type, Node.Type.BaseType, true);
 		//			Node = this.Generator.CreateCoercionNode(Func.GetReturnType(), ParsedTree.NameSpace, Func, Node);
 		//		}
 		//		System.err.println("**** " + Node.getClass());
-		//		/*local*/Object ConstValue = Node.ToConstValue(this.Context, IsFlag(TypeCheckPolicy, OnlyConstPolicy));
+		//		@Var Object ConstValue = Node.ToConstValue(this.Context, IsFlag(TypeCheckPolicy, OnlyConstPolicy));
 		//		if(ConstValue != null && !(Node.IsConstNode())) {  // recreated
 		//			Node = this.Generator.CreateConstNode_OLD(Node.Type, ParsedTree, ConstValue);
 		//		}
@@ -261,7 +262,7 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		if(Node.Type == ContextType || ContextType.IsVarType() || ContextType.Accept(Node.Type)) {
 			return Node;
 		}
-		//		/*local*/ZenFunc Func1 = this.GetConverterFunc(Node.Type, ContextType, true);
+		//		@Var ZenFunc Func1 = this.GetConverterFunc(Node.Type, ContextType, true);
 		//		if(Func1 != null && (Func1.Is(CoercionFunc) || IsFlag(TypeCheckPolicy, CastPolicy))) {
 		//			return this.Generator.CreateCoercionNode(Type, ParsedTree.NameSpace, Func1, Node);
 		//		}

@@ -24,6 +24,7 @@
 
 //ifdef JAVA
 package zen.ast;
+import zen.deps.Field;
 import zen.deps.LibNative;
 import zen.lang.ZenType;
 import zen.parser.ZenNameSpace;
@@ -31,9 +32,9 @@ import zen.parser.ZenToken;
 import zen.parser.ZenVisitor;
 
 public abstract class ZenNode {
-	/*field*/public ZenNode	ParentNode;
-	/*field*/public ZenType	Type;
-	/*field*/public ZenToken	SourceToken;
+	@Field public ZenNode	ParentNode;
+	@Field public ZenType	Type;
+	@Field public ZenToken	SourceToken;
 
 	public ZenNode() {
 		this.Type = null;

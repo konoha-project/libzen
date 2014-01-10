@@ -73,7 +73,7 @@ import parser.ast.ZenWhileNode;
 import parser.deps.LibGreenTea;
 
 public class MiniKonohaSourceGenerator extends ZenSourceGenerator {
-	/*field*/private ArrayList<String> UsedLibrary;
+	@Field private ArrayList<String> UsedLibrary;
 	
 	public MiniKonohaSourceGenerator(String TargetCode, String OutputFile, int GeneratorFlag) {
 		super(TargetCode, OutputFile, GeneratorFlag);
@@ -87,8 +87,8 @@ public class MiniKonohaSourceGenerator extends ZenSourceGenerator {
 		Builder.IndentAndAppend(this.ConvertToNativeTypeName(Func.GetReturnType()));
 		Builder.AppendToken(MethodName);
 		Builder.Append("(");
-		/*local*/int i = 0;
-		/*local*/int size = LibZen.ListSize(ParamNameList);
+		@Var int i = 0;
+		@Var int size = LibZen.ListSize(ParamNameList);
 		while(i < size) {
 			if(i != 0) {
 				Builder.Append(this.Camma);
@@ -139,7 +139,7 @@ public class MiniKonohaSourceGenerator extends ZenSourceGenerator {
 		return Type.ShortName;
 	}
 	private void VisitBlockWithoutIndent(ZenNode Node) {
-		/*local*/ZenNode CurrentNode = Node;
+		@Var ZenNode CurrentNode = Node;
 		while(CurrentNode != null) {
 			if(!this.IsEmptyBlock(CurrentNode)) {
 				this.CurrentBuilder.AppendIndent();
@@ -207,11 +207,11 @@ var CLASS = (function (_super) {
 		this.CurrentBuilder.AppendLine(" {");
 		this.CurrentBuilder.Indent();
 		
-		/*local*/int i = 0;
-		/*local*/int size = LibZen.ListSize(ClassField.FieldList);
+		@Var int i = 0;
+		@Var int size = LibZen.ListSize(ClassField.FieldList);
 		while(i < size) {
-			/*local*/ZenFieldInfo FieldInfo = ClassField.FieldList.get(i);
-			/*local*/String InitValue = this.StringifyConstValue(FieldInfo.InitValue);
+			@Var ZenFieldInfo FieldInfo = ClassField.FieldList.get(i);
+			@Var String InitValue = this.StringifyConstValue(FieldInfo.InitValue);
 			if(!FieldInfo.Type.IsNativeType()) {
 				this.AddUseLibrary("Syntax.Null");
 				InitValue = this.NullLiteral;
@@ -290,8 +290,8 @@ var CLASS = (function (_super) {
 //	}
 	@Override public void VisitArrayLiteralNode(ZenArrayLiteralNode Node) {
 		this.AddUseLibrary("JavaScript.Array");
-		/*local*/int size = LibZen.ListSize(Node.NodeList);
-		/*local*/int i = 0;
+		@Var int size = LibZen.ListSize(Node.NodeList);
+		@Var int i = 0;
 		this.CurrentBuilder.Append("[");
 		while(i < size) {
 			if(i != 0) {
@@ -381,7 +381,7 @@ var CLASS = (function (_super) {
 	@Override public void VisitApplySymbolNode(ZenApplySymbolNode Node) {
 		this.CurrentBuilder.Append(ConvertToNativeFuncName(Node.ResolvedFunc));
 		this.CurrentBuilder.Append("(");
-		for(/*local*/int i = 0; i < LibZen.ListSize(Node.ParamList); i++){
+		for(@Var int i = 0; i < LibZen.ListSize(Node.ParamList); i++){
 			if(i != 0) this.CurrentBuilder.Append(", ");
 			Node.ParamList.get(i).Accept(this);
 		}

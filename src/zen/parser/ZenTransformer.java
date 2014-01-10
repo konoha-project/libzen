@@ -44,11 +44,12 @@ import zen.ast.ZenTryNode;
 import zen.ast.ZenUnaryNode;
 import zen.ast.ZenVarDeclNode;
 import zen.ast.ZenWhileNode;
+import zen.deps.Field;
 
 public class ZenTransformer implements ZenVisitor {
-	/*field*/public ZenBlockNode BlockNode;
-	/*field*/private ZenNode ReplacedNode;
-	/*field*/private boolean StoppedVisitor;
+	@Field public ZenBlockNode BlockNode;
+	@Field private ZenNode ReplacedNode;
+	@Field private boolean StoppedVisitor;
 
 	public ZenTransformer(ZenBlockNode BlockNode) {
 		this.BlockNode = BlockNode;

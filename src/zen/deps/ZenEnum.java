@@ -28,8 +28,8 @@ package zen.deps;
 import zen.lang.ZenType;
 
 public class ZenEnum extends ZenTopObject {
-	/*field*/public final long EnumValue;
-	/*field*/public final String EnumSymbol;
+	@Field public final long EnumValue;
+	@Field public final String EnumSymbol;
 	public ZenEnum(ZenType GreenType, long EnumValue, String EnumSymbol) {
 		super(GreenType);
 		this.EnumValue = EnumValue;

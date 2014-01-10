@@ -24,16 +24,18 @@
 
 package zen.lang;
 
+import zen.deps.Field;
+
 
 public class ZenGeneric1Type extends ZenType {
-	/*field*/public ZenType			BaseType;
-	/*field*/public ZenType         ParamType;
+	@Field public ZenType			BaseType;
+	@Field public ZenType         ParamType;
 	public ZenGeneric1Type(int TypeFlag, String ShortName, ZenType BaseType, ZenType ParamType) {
 		super(TypeFlag, ShortName, ZenSystem.TopType);
 		this.BaseType = BaseType == null ? this : BaseType;
 		this.ParamType = ParamType;
 	}
-		
+
 	@Override
 	public ZenType GetSuperType() {
 		return this.BaseType == this ? this.RefType : this.BaseType;
@@ -46,7 +48,7 @@ public class ZenGeneric1Type extends ZenType {
 	@Override public int GetParamSize() {
 		return 1;
 	}
-	
+
 	@Override public ZenType GetParamType(int Index) {
 		if(Index == 0) {
 			return this.ParamType;
@@ -54,22 +56,22 @@ public class ZenGeneric1Type extends ZenType {
 		return null;
 	}
 
-//	// Note Don't call this directly. Use Context.GetGenericType instead.
-//	public ZenType CreateGenericType(int BaseIndex, ArrayList<ZenType> TypeList, String ShortName) {
-//		/*local*/int TypeVariableFlag = (this.TypeFlag & (~GenericVariable));
-//		for(/*local*/int i = BaseIndex; i < TypeList.size(); i = i + 1) {
-//			if(TypeList.get(i).HasTypeVariable()) {
-//				TypeVariableFlag |= GenericVariable;
-//				break;
-//			}
-//		}
-//		/*local*/ZenType GenericType = new ZenType(TypeVariableFlag, ShortName, null, null);
-//		GenericType.BaseType = this.BaseType;
-//		GenericType.ParentMethodSearch = this.BaseType;
-//		GenericType.RefType = this.RefType;
-//		GenericType.TypeParams = LibZen.CompactTypeList(BaseIndex, TypeList);
-//		LibZen.VerboseLog(VerboseType, "new generic type: " + GenericType.ShortName + ", ClassId=" + GenericType.TypeId);
-//		return GenericType;
-//	}
+	//	// Note Don't call this directly. Use Context.GetGenericType instead.
+	//	public ZenType CreateGenericType(int BaseIndex, ArrayList<ZenType> TypeList, String ShortName) {
+	//		@Var int TypeVariableFlag = (this.TypeFlag & (~GenericVariable));
+	//		for(@Var int i = BaseIndex; i < TypeList.size(); i = i + 1) {
+	//			if(TypeList.get(i).HasTypeVariable()) {
+	//				TypeVariableFlag |= GenericVariable;
+	//				break;
+	//			}
+	//		}
+	//		@Var ZenType GenericType = new ZenType(TypeVariableFlag, ShortName, null, null);
+	//		GenericType.BaseType = this.BaseType;
+	//		GenericType.ParentMethodSearch = this.BaseType;
+	//		GenericType.RefType = this.RefType;
+	//		GenericType.TypeParams = LibZen.CompactTypeList(BaseIndex, TypeList);
+	//		LibZen.VerboseLog(VerboseType, "new generic type: " + GenericType.ShortName + ", ClassId=" + GenericType.TypeId);
+	//		return GenericType;
+	//	}
 
 }

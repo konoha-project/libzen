@@ -25,8 +25,8 @@
 //package org.GreenTeaScript;
 //
 //final class ZenStack {
-//	/*field*/public final Object[] Stack;
-//	/*field*/public int StackTop;
+//	@Field public final Object[] Stack;
+//	@Field public int StackTop;
 //	ZenStack/*constructor*/() {
 //		this.Stack = new Object[4096];
 //		this.StackTop = 0;
@@ -73,11 +73,11 @@
 //}
 //
 //final class ZenCode implements CodeSet {
-//	/*field*/public final int OpCode;
-//	/*field*/public final int Index_A;
-//	/*field*/public final int Index_B;
-//	/*field*/public final int Index_C;  /* C = A op B */
-//	/*field*/public final Object Ref;
+//	@Field public final int OpCode;
+//	@Field public final int Index_A;
+//	@Field public final int Index_B;
+//	@Field public final int Index_C;  /* C = A op B */
+//	@Field public final Object Ref;
 //	ZenCode/*constructor*/(int OpCode, int Index_A, int Index_B, int Index_C, Object Ref) {
 //		this.OpCode = OpCode;
 //		this.Index_A = Index_A;
@@ -94,7 +94,7 @@
 //		long IntReg = 0;
 //		int StackTop = 0;
 //		while(pc > 0) {
-//			/*local*/ZenCode _Code = Code[pc];
+//			@Var ZenCode _Code = Code[pc];
 //			switch(_Code.OpCode) {
 //			case NopCode:
 //				pc = pc + 1;

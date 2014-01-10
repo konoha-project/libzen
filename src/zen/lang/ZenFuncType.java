@@ -1,7 +1,9 @@
 package zen.lang;
 
+import zen.deps.Field;
+
 public final class ZenFuncType extends ZenType {
-	/*field*/public ZenType[]		TypeParams;
+	@Field public ZenType[]		TypeParams;
 	public ZenFuncType(String ShortName, ZenType[] UniqueTypeParams) {
 		super(UniqueType, ShortName, ZenSystem.TopType);
 		if(UniqueTypeParams == null) {

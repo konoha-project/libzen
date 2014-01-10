@@ -24,10 +24,11 @@
 
 package zen.ast;
 
+import zen.deps.Field;
 import zen.parser.ZenVisitor;
 
 public final class ZenReturnNode extends ZenNode {
-	/*field*/public ZenNode ValueNode;
+	@Field public ZenNode ValueNode;
 	public ZenReturnNode/*constructor*/() {
 		super();
 		this.ValueNode = null;

@@ -24,16 +24,18 @@
 
 package zen.lang;
 
+import zen.deps.Field;
+
 
 public class ZenDefiningFunc extends ZenFunc {
 
-	//	/*field*/public ZenNameSpace       NameSpace;
-	//	/*field*/public ArrayList<String>  NameList;
-	//	/*field*/public ArrayList<ZenType> TypeList;
-	//	/*field*/public ZenNode            FuncBlock;
-	//	/*field*/public boolean IsVarArgument;
-	/*field*/public int VarIndex;
-	//	/*field*/public ZenDefiningFunc DefinedFunc;
+	//	@Field public ZenNameSpace       NameSpace;
+	//	@Field public ArrayList<String>  NameList;
+	//	@Field public ArrayList<ZenType> TypeList;
+	//	@Field public ZenNode            FuncBlock;
+	//	@Field public boolean IsVarArgument;
+	@Field public int VarIndex;
+	//	@Field public ZenDefiningFunc DefinedFunc;
 
 	public ZenDefiningFunc(int FuncFlag, String FuncName, ZenFuncType FuncType) {
 		super(FuncFlag, FuncName, FuncType);

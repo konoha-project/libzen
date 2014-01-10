@@ -24,14 +24,16 @@
 
 //ifdef JAVA
 package zen.parser;
+import zen.deps.Field;
+import zen.deps.Var;
 import zen.lang.ZenType;
 
 final public class ZenToken extends ZenUtils {
-	/*field*/public int		        TokenFlag;
-	/*field*/public String	        ParsedText;
-	/*field*/public long		    FileLine;
-	/*field*/public ZenSyntaxPattern	PresetPattern;
-	/*field*/public final static ZenToken NullToken = new ZenToken(0, "/**/", 0);
+	@Field public int		        TokenFlag;
+	@Field public String	        ParsedText;
+	@Field public long		    FileLine;
+	@Field public ZenSyntaxPattern	PresetPattern;
+	@Field public final static ZenToken NullToken = new ZenToken(0, "/**/", 0);
 
 	public ZenToken(int TokenFlag, String Text, long FileLine) {
 		this.TokenFlag = TokenFlag;
@@ -88,7 +90,7 @@ final public class ZenToken extends ZenUtils {
 	}
 
 	@Override public String toString() {
-		/*local*/String TokenText = "";
+		@Var String TokenText = "";
 		if(this.PresetPattern != null) {
 			TokenText = "(" + this.PresetPattern.PatternName + ") ";
 		}

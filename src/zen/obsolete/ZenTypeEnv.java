@@ -29,14 +29,14 @@ import zen.parser.ZenUtils;
 
 @Deprecated
 public final class ZenTypeEnv extends ZenUtils {
-//	/*field*/public final ZenParserContext    Context;
-//	/*field*/public final ZenGenerator        Generator;
-//	/*field*/public ZenNameSpace	    NameSpace;
+//	@Field public final ZenParserContext    Context;
+//	@Field public final ZenGenerator        Generator;
+//	@Field public ZenNameSpace	    NameSpace;
 //
-//	/*field*/public ArrayList<ZenVariableInfo> LocalStackList;
-//	/*field*/public int StackTopIndex;
-//	/*field*/public ZenFuncBlock	FuncBlock;
-//	/*field*/public boolean FoundUncommonFunc;
+//	@Field public ArrayList<ZenVariableInfo> LocalStackList;
+//	@Field public int StackTopIndex;
+//	@Field public ZenFuncBlock	FuncBlock;
+//	@Field public boolean FoundUncommonFunc;
 	
 	public ZenTypeEnv/*constructor*/(ZenNameSpace NameSpace) {
 //		this.NameSpace = NameSpace;
@@ -57,13 +57,13 @@ public final class ZenTypeEnv extends ZenUtils {
 //	}
 //
 //	public void AppendRecv(ZenType RecvType) {
-//		/*local*/String ThisName = this.Generator.GetRecvName();
+//		@Var String ThisName = this.Generator.GetRecvName();
 //		this.AppendDeclaredVariable(0, RecvType, ThisName, null, null);
 //		this.LocalStackList.get(this.StackTopIndex-1).NativeName = ThisName;
 //	}
 //
 //	public ZenVariableInfo AppendDeclaredVariable(int VarFlag, ZenType Type, String Name, ZenToken NameToken, Object InitValue) {
-//		/*local*/ZenVariableInfo VarInfo = new ZenVariableInfo(this.FuncBlock, VarFlag, Type, Name, NameToken /*InitValue*/);
+//		@Var ZenVariableInfo VarInfo = new ZenVariableInfo(this.FuncBlock, VarFlag, Type, Name, NameToken /*InitValue*/);
 //		if(this.StackTopIndex < this.LocalStackList.size()) {
 //			this.LocalStackList.set(this.StackTopIndex, VarInfo);
 //		}
@@ -75,9 +75,9 @@ public final class ZenTypeEnv extends ZenUtils {
 //	}
 //
 //	public ZenVariableInfo LookupDeclaredVariable(String Symbol) {
-//		/*local*/int i = this.StackTopIndex - 1;
+//		@Var int i = this.StackTopIndex - 1;
 //		while(i >= 0) {
-//			/*local*/ZenVariableInfo VarInfo = this.LocalStackList.get(i);
+//			@Var ZenVariableInfo VarInfo = this.LocalStackList.get(i);
 //			if(VarInfo.Name.equals(Symbol)) {
 //				return VarInfo;
 //			}
@@ -87,9 +87,9 @@ public final class ZenTypeEnv extends ZenUtils {
 //	}
 //
 //	public void PushBackStackIndex(int PushBackIndex) {
-//		/*local*/int i = this.StackTopIndex - 1;
+//		@Var int i = this.StackTopIndex - 1;
 //		while(i >= PushBackIndex) {
-//			/*local*/ZenVariableInfo VarInfo = this.LocalStackList.get(i);
+//			@Var ZenVariableInfo VarInfo = this.LocalStackList.get(i);
 //			VarInfo.Check(this.Context);
 //			i = i - 1;
 //		}
@@ -132,7 +132,7 @@ public final class ZenTypeEnv extends ZenUtils {
 //	}
 //
 //	public final ZenNode CreateLocalNode(ZenSyntaxTree ParsedTree, String Name) {
-//		/*local*/ZenVariableInfo VariableInfo = this.LookupDeclaredVariable(Name);
+//		@Var ZenVariableInfo VariableInfo = this.LookupDeclaredVariable(Name);
 //		if(VariableInfo != null) {
 //			return this.Generator.CreateGetLocalNode(VariableInfo.Type, ParsedTree, VariableInfo.NativeName);
 //		}
@@ -149,11 +149,11 @@ public final class ZenTypeEnv extends ZenUtils {
 //			return Node;
 //		}
 //		if(Node.Type.IsUnrevealedType()) {
-//			/*local*/ZenFunc Func = ParsedTree.NameSpace.GetConverterFunc(Node.Type, Node.Type.BaseType, true);
+//			@Var ZenFunc Func = ParsedTree.NameSpace.GetConverterFunc(Node.Type, Node.Type.BaseType, true);
 //			Node = this.Generator.CreateCoercionNode(Func.GetReturnType(), ParsedTree.NameSpace, Func, Node);
 //		}
 //		//System.err.println("**** " + Node.getClass());
-//		/*local*/Object ConstValue = Node.ToConstValue(this.Context, IsFlag(TypeCheckPolicy, OnlyConstPolicy));
+//		@Var Object ConstValue = Node.ToConstValue(this.Context, IsFlag(TypeCheckPolicy, OnlyConstPolicy));
 //		if(ConstValue != null && !(Node.IsConstNode())) {  // recreated
 //			Node = this.Generator.CreateConstNode_OLD(Node.Type, ParsedTree, ConstValue);
 //		}
@@ -173,7 +173,7 @@ public final class ZenTypeEnv extends ZenUtils {
 //		if(Node.Type == Type || Type.IsVarType() || Type.Accept(Node.Type)) {
 //			return Node;
 //		}
-//		/*local*/ZenFunc Func1 = ParsedTree.NameSpace.GetConverterFunc(Node.Type, Type, true);
+//		@Var ZenFunc Func1 = ParsedTree.NameSpace.GetConverterFunc(Node.Type, Type, true);
 //		if(Func1 != null && (Func1.Is(CoercionFunc) || IsFlag(TypeCheckPolicy, CastPolicy))) {
 //			return this.Generator.CreateCoercionNode(Type, ParsedTree.NameSpace, Func1, Node);
 //		}
@@ -183,9 +183,9 @@ public final class ZenTypeEnv extends ZenUtils {
 //	}
 //
 //	public ZenNode ParseTypedNode(String Text, long FileLine, ZenType ContextType) {
-//		/*local*/ZenNameSpace NameSpace = this.NameSpace;
-//		/*local*/ZenTokenContext LocalContext = new ZenTokenContext(NameSpace, Text, FileLine);
-//		/*local*/ZenSyntaxTree ParsedTree = LocalContext.ParsePattern_OLD(NameSpace, "$Expression$", Required);
+//		@Var ZenNameSpace NameSpace = this.NameSpace;
+//		@Var ZenTokenContext LocalContext = new ZenTokenContext(NameSpace, Text, FileLine);
+//		@Var ZenSyntaxTree ParsedTree = LocalContext.ParsePattern_OLD(NameSpace, "$Expression$", Required);
 //		return GreenTeaUtils.TypeBlock(this, ParsedTree, ContextType);
 //	}
 }

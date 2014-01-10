@@ -22,28 +22,15 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package zen.ast;
+package zen.deps;
 
-import zen.deps.Field;
-import zen.parser.ZenToken;
-import zen.parser.ZenVisitor;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-final public class ZenConstPoolNode extends ZenConstNode {
-	@Field public Object	ConstValue;
-	public ZenConstPoolNode/*constructor*/(ZenToken Token, Object ConstValue) {
-		super(Token);
-		this.ConstValue = ConstValue;
-	}
-	@Override public void Accept(ZenVisitor Visitor) {
-		// int ConstPoolId = SetConstPool(ConstValue)
-		// using StaticApplyNode => GetConstPool(ConstPoolId);
-		Visitor.VisitConstPoolNode(this);
-	}
-	@Override public final Object GetValue() {
-		return this.ConstValue;
-	}
-	//	@Override public Object ToConstValue(ZenParserContext Context, boolean EnforceConst)  {
-	//		return this.ConstValue;
-	//	}
+@Target(ElementType.CONSTRUCTOR)
+@Retention(RetentionPolicy.SOURCE)
+public @interface Constructor {
 
 }

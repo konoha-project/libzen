@@ -25,27 +25,28 @@
 package zen.obsolete;
 
 import zen.ast.ZenNode;
+import zen.deps.Field;
 import zen.lang.ZenFunc;
 import zen.lang.ZenSystem;
 import zen.lang.ZenType;
 import zen.parser.ZenNameSpace;
 
 public class ZenResolvedFunc {
-	/*field*/public ZenNameSpace GenericNameSpace;
-	/*field*/public ZenFunc Func;
-	/*field*/public ZenType ReturnType;
-	/*field*/public ZenNode ErrorNode;
+	@Field public ZenNameSpace GenericNameSpace;
+	@Field public ZenFunc Func;
+	@Field public ZenType ReturnType;
+	@Field public ZenNode ErrorNode;
 	ZenResolvedFunc/*constructor*/(ZenNameSpace NameSpace) {
 		this.GenericNameSpace = NameSpace;
 		this.Func = null;
 		this.ReturnType = ZenSystem.AnyType;
 		this.ErrorNode = null;
-	}	
-//	ZenResolvedFunc UpdateFunc(ZenFunc Func, ZenNameSpace GenericNameSpace) {		
-//		this.Func = Func;
-//		if(Func != null) {
-//			this.ReturnType = Func.GetReturnType().RealType(GenericNameSpace, ZenSystem.AnyType);
-//		}
-//		return this;
-//	}
+	}
+	//	ZenResolvedFunc UpdateFunc(ZenFunc Func, ZenNameSpace GenericNameSpace) {
+	//		this.Func = Func;
+	//		if(Func != null) {
+	//			this.ReturnType = Func.GetReturnType().RealType(GenericNameSpace, ZenSystem.AnyType);
+	//		}
+	//		return this;
+	//	}
 }

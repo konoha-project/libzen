@@ -27,25 +27,26 @@ package zen.sugar;
 import java.util.ArrayList;
 
 import zen.ast.ZenNode;
+import zen.deps.Field;
 import zen.lang.ZenType;
 import zen.parser.ZenToken;
 
 // E.g., "ls" "-a"..
 final public class ZenCommandNode extends ZenNode {
-	/*field*/public ArrayList<ZenNode>  ArgumentList; /* ["/bin/ls" , "-la", "/", ...] */
-	/*field*/public ZenNode PipedNextNode;
+	@Field public ArrayList<ZenNode>  ArgumentList; /* ["/bin/ls" , "-la", "/", ...] */
+	@Field public ZenNode PipedNextNode;
 	public ZenCommandNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode PipedNextNode) {
 		super();
 		this.PipedNextNode = PipedNextNode;
 		this.ArgumentList = new ArrayList<ZenNode>();
 	}
-//	@Override public final ArrayList<ZenNode> GetList() {
-//		return this.ArgumentList;
-//	}
+	//	@Override public final ArrayList<ZenNode> GetList() {
+	//		return this.ArgumentList;
+	//	}
 
-//	@Override public boolean Accept(ZenVisitor Visitor) {
-//		Visitor.VisitCommandNode(this);
-//	}
+	//	@Override public boolean Accept(ZenVisitor Visitor) {
+	//		Visitor.VisitCommandNode(this);
+	//	}
 
 	//	@Override public Object ToConstValue(ZenParserContext Context, boolean EnforceConst) {
 	//		//FIXME: Exception

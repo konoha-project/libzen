@@ -25,20 +25,21 @@
 //ifdef JAVA
 package zen.obsolete;
 
-import zen.lang.ZenType;
+import zen.deps.Field;
 import zen.lang.ZenFunc;
+import zen.lang.ZenType;
 import zen.parser.ZenUtils;
 
 
 public class ZenFieldInfo extends ZenUtils {
-	/*field*/public int     FieldFlag;
-	/*field*/public int     FieldIndex;
-	/*field*/public ZenType	Type;
-	/*field*/public String	Name;
-	/*field*/public String	NativeName;
-	/*field*/public Object  InitValue;
-	/*field*/public ZenFunc	GetterFunc;
-	/*field*/public ZenFunc	SetterFunc;
+	@Field public int     FieldFlag;
+	@Field public int     FieldIndex;
+	@Field public ZenType	Type;
+	@Field public String	Name;
+	@Field public String	NativeName;
+	@Field public Object  InitValue;
+	@Field public ZenFunc	GetterFunc;
+	@Field public ZenFunc	SetterFunc;
 
 	ZenFieldInfo/*constructor*/(int FieldFlag, ZenType Type, String Name, int FieldIndex, Object InitValue) {
 		this.FieldFlag = FieldFlag;

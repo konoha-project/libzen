@@ -24,20 +24,22 @@
 
 //ifdef JAVA
 package zen.lang;
+import zen.deps.Field;
 import zen.deps.LibNative;
 import zen.deps.LibZen;
+import zen.deps.Var;
 import zen.parser.ZenNameSpace;
 import zen.parser.ZenUtils;
 
 public class ZenFunc implements ZenFuncConst {
-	/*field*/public                 int FuncId;
-	/*field*/public int				FuncFlag;
-	/*field*/public String			FuncName;
-	/*field*/public ZenFuncType     ZenType;
-	//	/*field*/public ZenType[]		Types;
-	//	/*field*/public ZenType          FuncType;
-	//	/*field*/public Object          FuncBody;  // Abstract function if null
-	//	/*field*/public String[]        GenericParam;
+	@Field public                 int FuncId;
+	@Field public int				FuncFlag;
+	@Field public String			FuncName;
+	@Field public ZenFuncType     ZenType;
+	//	@Field public ZenType[]		Types;
+	//	@Field public ZenType          FuncType;
+	//	@Field public Object          FuncBody;  // Abstract function if null
+	//	@Field public String[]        GenericParam;
 
 	public ZenFunc(int FuncFlag, String FuncName, ZenFuncType FuncType) {
 		this.FuncFlag = FuncFlag;
@@ -60,7 +62,7 @@ public class ZenFunc implements ZenFuncConst {
 	}
 
 	public final ZenType GetStaticType(ZenNameSpace NameSpace) {
-		/*local*/int loc = this.FuncName.lastIndexOf(".");
+		@Var int loc = this.FuncName.lastIndexOf(".");
 		if(loc != -1) {
 			return NameSpace.GetType(this.FuncName.substring(0, loc));
 		}
@@ -72,9 +74,9 @@ public class ZenFunc implements ZenFuncConst {
 	}
 
 	@Override public String toString() {
-		/*local*/String s = this.GetReturnType() + " " + this.FuncName + "(";
-		for(/*local*/int i = 0; i < this.GetFuncParamSize(); i += 1) {
-			/*local*/ZenType ParamType = this.GetFuncParamType(i);
+		@Var String s = this.GetReturnType() + " " + this.FuncName + "(";
+		for(@Var int i = 0; i < this.GetFuncParamSize(); i += 1) {
+			@Var ZenType ParamType = this.GetFuncParamType(i);
 			if(i > 0) {
 				s += ", ";
 			}
@@ -117,7 +119,7 @@ public class ZenFunc implements ZenFuncConst {
 
 	public final ZenType GetVargType() {
 		if(this.ZenType.TypeParams.length > 0) {
-			/*local*/ZenType VargType = this.ZenType.TypeParams[this.ZenType.TypeParams.length - 1];
+			@Var ZenType VargType = this.ZenType.TypeParams[this.ZenType.TypeParams.length - 1];
 			if(VargType.IsArrayType()) {
 				return VargType.GetParamType(0);
 			}
@@ -127,7 +129,7 @@ public class ZenFunc implements ZenFuncConst {
 
 	//	public final boolean EqualsParamTypes(int BaseIndex, ZenType[] ParamTypes) {
 	//		if(this.Types.length == ParamTypes.length) {
-	//			/*local*/int i = BaseIndex;
+	//			@Var int i = BaseIndex;
 	//			while(i < this.Types.length) {
 	//				if(this.Types[i] != ParamTypes[i]) {
 	//					return false;
@@ -183,7 +185,7 @@ public class ZenFunc implements ZenFuncConst {
 	//
 	//	private boolean HasStaticBlock() {
 	//		if(this.FuncBody instanceof ZenFuncBlock) {
-	//			/*local*/ZenFuncBlock FuncBlock = (/*cast*/ZenFuncBlock)this.FuncBody;
+	//			@Var ZenFuncBlock FuncBlock = (/*cast*/ZenFuncBlock)this.FuncBody;
 	//			return !FuncBlock.IsVarArgument;
 	//		}
 	//		return false;
@@ -191,21 +193,21 @@ public class ZenFunc implements ZenFuncConst {
 	//
 	//	public void GenerateNativeFunc() {
 	//		if(this.HasStaticBlock()) {
-	//			/*local*/ZenFuncBlock FuncBlock = (/*cast*/ZenFuncBlock)this.FuncBody;
-	//			/*local*/ZenTypeEnv Gamma = new ZenTypeEnv(FuncBlock.NameSpace);
-	//			/*local*/int i = 0;
-	//			/*local*/ArrayList<String> NameList = new ArrayList<String>();
+	//			@Var ZenFuncBlock FuncBlock = (/*cast*/ZenFuncBlock)this.FuncBody;
+	//			@Var ZenTypeEnv Gamma = new ZenTypeEnv(FuncBlock.NameSpace);
+	//			@Var int i = 0;
+	//			@Var ArrayList<String> NameList = new ArrayList<String>();
 	//			while(i <  FuncBlock.NameList.size()) {
-	//				/*local*/ZenVariableInfo VarInfo = Gamma.AppendDeclaredVariable(0, FuncBlock.DefinedFunc.Types[i+1], FuncBlock.NameList.get(i), null, null);
+	//				@Var ZenVariableInfo VarInfo = Gamma.AppendDeclaredVariable(0, FuncBlock.DefinedFunc.Types[i+1], FuncBlock.NameList.get(i), null, null);
 	//				NameList.add(VarInfo.NativeName);
 	//				i = i + 1;
 	//			}
 	//			Gamma.FuncBlock = FuncBlock;
-	//			/*local*/ZenNode BodyNode = GreenTeaUtils.TypeBlock(Gamma, FuncBlock.FuncBlock, ZenStaticTable.VoidType);
+	//			@Var ZenNode BodyNode = GreenTeaUtils.TypeBlock(Gamma, FuncBlock.FuncBlock, ZenStaticTable.VoidType);
 	//			if(Gamma.FoundUncommonFunc) {
 	//				Gamma.FuncBlock.DefinedFunc.FuncFlag = UnsetFlag(Gamma.FuncBlock.DefinedFunc.FuncFlag, CommonFunc);
 	//			}
-	//			/*local*/String FuncName = FuncBlock.DefinedFunc.GetNativeFuncName();
+	//			@Var String FuncName = FuncBlock.DefinedFunc.GetNativeFuncName();
 	//			Gamma.Generator.GenerateFunc(FuncBlock.DefinedFunc, NameList, BodyNode);
 	//			if(FuncName.equals("main")) {
 	//				Gamma.Generator.InvokeMainFunc(FuncName);
@@ -215,7 +217,7 @@ public class ZenFunc implements ZenFuncConst {
 	//
 	//	public boolean HasLazyBlock() {
 	//		if(this.FuncBody instanceof ZenFuncBlock) {
-	//			/*local*/ZenFuncBlock FuncBlock = (/*cast*/ZenFuncBlock)this.FuncBody;
+	//			@Var ZenFuncBlock FuncBlock = (/*cast*/ZenFuncBlock)this.FuncBody;
 	//			return FuncBlock.IsVarArgument;
 	//		}
 	//		return false;
@@ -227,8 +229,8 @@ public class ZenFunc implements ZenFuncConst {
 	//
 	//	public final ZenNameSpace GetGenericNameSpace(ZenNameSpace NameSpace, ArrayList<ZenNode> NodeList, int MaxSize) {
 	//		if(this.Is(GenericFunc)) {
-	//			/*local*/ZenNameSpace GenericNameSpace = NameSpace.CreateSubNameSpace();
-	//			/*local*/int i = 0;
+	//			@Var ZenNameSpace GenericNameSpace = NameSpace.CreateSubNameSpace();
+	//			@Var int i = 0;
 	//			while(i < this.Types.length) {
 	//				this.Types[i].AppendTypeVariable(GenericNameSpace, 0);
 	//				i = i + 1;
@@ -245,8 +247,8 @@ public class ZenFunc implements ZenFuncConst {
 	//
 	//	public final ZenNameSpace GetGenericNameSpaceT(ZenNameSpace NameSpace, ArrayList<ZenType> NodeList, int MaxSize) {
 	//		if(this.Is(GenericFunc)) {
-	//			/*local*/ZenNameSpace GenericNameSpace = NameSpace.CreateSubNameSpace();
-	//			/*local*/int i = 0;
+	//			@Var ZenNameSpace GenericNameSpace = NameSpace.CreateSubNameSpace();
+	//			@Var int i = 0;
 	//			while(i < this.Types.length) {
 	//				this.Types[i].AppendTypeVariable(GenericNameSpace, 0);
 	//				i = i + 1;

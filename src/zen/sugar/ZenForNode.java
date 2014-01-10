@@ -25,22 +25,23 @@
 package zen.sugar;
 
 import zen.ast.ZenNode;
+import zen.deps.Field;
 import zen.lang.ZenType;
 import zen.parser.ZenToken;
 
 //E.g., "for" "(" ";" $CondNode ";" $IterNode ")" $LoopNode
 final public class ZenForNode extends ZenNode {
-	/*field*/public ZenNode	CondNode;
-	/*field*/public ZenNode	IterNode;
-	/*field*/public ZenNode	BodyNode;
+	@Field public ZenNode	CondNode;
+	@Field public ZenNode	IterNode;
+	@Field public ZenNode	BodyNode;
 	public ZenForNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode CondNode, ZenNode IterNode, ZenNode BodyNode) {
 		super();
 		this.CondNode = CondNode;
 		this.BodyNode = BodyNode;
 		this.IterNode = IterNode;
-//		this.SetChild3(CondNode, BodyNode, IterNode);
+		//		this.SetChild3(CondNode, BodyNode, IterNode);
 	}
-//	@Override public boolean Accept(ZenVisitor Visitor) {
-//		Visitor.VisitForNode(this);
-//	}
+	//	@Override public boolean Accept(ZenVisitor Visitor) {
+	//		Visitor.VisitForNode(this);
+	//	}
 }

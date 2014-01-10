@@ -38,7 +38,7 @@ final public class ZenInstanceOfNode extends ZenBinaryNode {
 		Visitor.VisitInstanceOfNode(this);
 	}
 //	@Override public Object Eval(ZenNameSpace NameSpace, boolean EnforceConst)  {
-//		/*local*/Object Value = this.ExprNode.Eval(NameSpace, EnforceConst) ;
+//		@Var Object Value = this.ExprNode.Eval(NameSpace, EnforceConst) ;
 //		if(Value != null) {
 //			return LibZen.DynamicInstanceOf(Value, this.TypeInfo);
 //		}

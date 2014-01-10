@@ -25,16 +25,17 @@
 package zen.sugar;
 
 import zen.ast.ZenNode;
+import zen.deps.Field;
 import zen.lang.ZenType;
 import zen.parser.ZenToken;
 
 final public class ZenContinueNode extends ZenNode {
-	/*field*/public String Label;
+	@Field public String Label;
 	public ZenContinueNode/*constructor*/(ZenType Type, ZenToken Token, String Label) {
 		super();
 		this.Label = Label;
 	}
-//	@Override public boolean Accept(ZenVisitor Visitor) {
-//		Visitor.VisitContinueNode(this);
-//	}
+	//	@Override public boolean Accept(ZenVisitor Visitor) {
+	//		Visitor.VisitContinueNode(this);
+	//	}
 }

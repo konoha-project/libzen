@@ -26,12 +26,14 @@ package zen.ast;
 
 import java.util.ArrayList;
 
+import zen.deps.Field;
 import zen.parser.ZenVisitor;
 
 //E.g., $FuncNode "(" $Param[0], $Param[1], ... ")"
 final public class ZenApplyNode extends ZenNode {
-	/*field*/public ZenNode	FuncNode;
-	/*field*/public ArrayList<ZenNode>  ParamList; /* [arg0, arg1, ...] */
+	@Field public ZenNode	FuncNode;
+	@Field public ArrayList<ZenNode>  ParamList; /* [arg0, arg1, ...] */
+
 	public ZenApplyNode(ZenNode FuncNode) {
 		super();
 		this.ParamList = new ArrayList<ZenNode>();

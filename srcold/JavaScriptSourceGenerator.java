@@ -80,21 +80,21 @@ import parser.ast.ZenWhileNode;
 import parser.deps.LibGreenTea;
 
 public class JavaScriptSourceGenerator extends ZenSourceGenerator {
-//	/*field*/private boolean UseLetKeyword = false;
-//	/*field*/private boolean IsForNodeJS = false;
+//	@Field private boolean UseLetKeyword = false;
+//	@Field private boolean IsForNodeJS = false;
 
 	public JavaScriptSourceGenerator/*constructor*/(String TargetCode, String OutputFile, int GeneratorFlag) {
 		super(TargetCode, OutputFile, GeneratorFlag);
 	}
 	
 	@Override public void GenerateFunc(ZenFunc Func, ArrayList<String> ParamNameList, ZenNode Body) {
-		/*local*/String MethodName = Func.GetNativeFuncName();
-		/*local*/ZenSourceBuilder Builder = new ZenSourceBuilder(this);
+		@Var String MethodName = Func.GetNativeFuncName();
+		@Var ZenSourceBuilder Builder = new ZenSourceBuilder(this);
 		Builder.IndentAndAppend("function ");
 		Builder.AppendToken(MethodName);
 		Builder.Append("(");
-		/*local*/int i = 0;
-		/*local*/int size = LibZen.ListSize(ParamNameList);
+		@Var int i = 0;
+		@Var int size = LibZen.ListSize(ParamNameList);
 		while(i < size) {
 			if(i != 0) {
 				Builder.Append(this.Camma);
@@ -103,7 +103,7 @@ public class JavaScriptSourceGenerator extends ZenSourceGenerator {
 			i += 1;
 		}
 		Builder.Append(")");
-		/*local*/ZenSourceBuilder PushedBuilder = this.CurrentBuilder;
+		@Var ZenSourceBuilder PushedBuilder = this.CurrentBuilder;
 		this.CurrentBuilder = Builder;
 		this.VisitIndentBlock("{", Body, "}");
 		this.CurrentBuilder = PushedBuilder;
@@ -151,11 +151,11 @@ var CLASS = (function (_super) {
 		this.CurrentBuilder.AppendLine(") {");
 		this.CurrentBuilder.Indent();
 		
-		/*local*/int i = 0;
-		/*local*/int size = LibZen.ListSize(ClassField.FieldList);
+		@Var int i = 0;
+		@Var int size = LibZen.ListSize(ClassField.FieldList);
 		while(i < size) {
-			/*local*/ZenFieldInfo FieldInfo = ClassField.FieldList.get(i);
-			/*local*/String InitValue = this.StringifyConstValue(FieldInfo.InitValue);
+			@Var ZenFieldInfo FieldInfo = ClassField.FieldList.get(i);
+			@Var String InitValue = this.StringifyConstValue(FieldInfo.InitValue);
 			if(!FieldInfo.Type.IsNativeType()) {
 				InitValue = this.NullLiteral;
 			}
@@ -300,7 +300,7 @@ var CLASS = (function (_super) {
 	@Override public void VisitApplySymbolNode(ZenApplySymbolNode Node) {
 		this.CurrentBuilder.Append(Node.NativeName);
 		this.CurrentBuilder.Append("(");
-		for(/*local*/int i = 0; i < LibZen.ListSize(Node.ParamList); i++){
+		for(@Var int i = 0; i < LibZen.ListSize(Node.ParamList); i++){
 			if(i > 0){
 				this.CurrentBuilder.Append(", ");
 			}
@@ -311,7 +311,7 @@ var CLASS = (function (_super) {
 	@Override public void VisitApplyOverridedMethodNode(ZenApplyOverridedMethodNode Node) {
 		this.CurrentBuilder.Append(Node.Func.GetNativeFuncName());
 		this.CurrentBuilder.Append("(");
-		for(/*local*/int i = 0; i < LibZen.ListSize(Node.ParamList); i++){
+		for(@Var int i = 0; i < LibZen.ListSize(Node.ParamList); i++){
 			if(i > 0){
 				this.CurrentBuilder.Append(", ");
 			}
@@ -326,7 +326,7 @@ var CLASS = (function (_super) {
 		Node.FuncNode.Accept(this);
 		this.CurrentBuilder.Append(")");
 		this.CurrentBuilder.Append("(");
-		for(/*local*/int i = 0; i < LibZen.ListSize(Node.ParamList); i++){
+		for(@Var int i = 0; i < LibZen.ListSize(Node.ParamList); i++){
 			if(i > 0){
 				this.CurrentBuilder.Append(", ");
 			}
@@ -439,10 +439,10 @@ var CLASS = (function (_super) {
 //
 //	
 //	public String VisitBlockJS(ZenNode Node) {
-//		/*local*/String Code = "";
-//		/*local*/ZenNode CurrentNode = Node;
+//		@Var String Code = "";
+//		@Var ZenNode CurrentNode = Node;
 //		while(CurrentNode != null) {
-//			/*local*/String Statement = this.VisitNode(CurrentNode);
+//			@Var String Statement = this.VisitNode(CurrentNode);
 //			if(Statement.trim().length() >0) {
 //				Code += this.GetIndentString() + Statement + ";" + this.LineFeed;
 //			}
@@ -452,7 +452,7 @@ var CLASS = (function (_super) {
 //	}
 //
 //	public String VisitBlockJSWithIndent(ZenNode Node) {
-//		/*local*/String Code = "";
+//		@Var String Code = "";
 //		Code += "{" + this.LineFeed;
 //		this.Indent();
 //		Code += this.VisitBlockJS(Node);
@@ -462,11 +462,11 @@ var CLASS = (function (_super) {
 //	}
 //
 //	@Override public void VisitBinaryNode(ZenBinaryNode Node) {
-//		/*local*/String FuncName = Node.SourceToken.ParsedText;
-//		/*local*/String Left = this.VisitNode(Node.LeftNode);
-//		/*local*/String Right = this.VisitNode(Node.RightNode);
-//		/*local*/String Source = "(" + SourceGenerator.GenerateApplyFunc2(Node.Func, FuncName, Left, Right) + ")";
-//		/*local*/String operator = Node.SourceToken.ParsedText;
+//		@Var String FuncName = Node.SourceToken.ParsedText;
+//		@Var String Left = this.VisitNode(Node.LeftNode);
+//		@Var String Right = this.VisitNode(Node.RightNode);
+//		@Var String Source = "(" + SourceGenerator.GenerateApplyFunc2(Node.Func, FuncName, Left, Right) + ")";
+//		@Var String operator = Node.SourceToken.ParsedText;
 //		if(LibGreenTea.EqualsString(operator, "/") /*&& Node.Type == Context.IntType*/ ) {
 //			Source = "(" + Source + " | 0)";
 //		}
@@ -474,8 +474,8 @@ var CLASS = (function (_super) {
 //	}
 //
 //	@Override public void VisitVarNode(ZenVarNode Node) {
-//		/*local*/String VarName = Node.NativeName;
-//		/*local*/String Source = (this.UseLetKeyword ? "let " : "var ") + " " + VarName;
+//		@Var String VarName = Node.NativeName;
+//		@Var String Source = (this.UseLetKeyword ? "let " : "var ") + " " + VarName;
 //		if(Node.InitNode != null) {
 //			Node.InitNode.Accept(this);
 //			Source += " = " + this.PopSourceCode();
@@ -486,9 +486,9 @@ var CLASS = (function (_super) {
 //	}
 //
 //	@Override public void VisitIfNode(ZenIfNode Node) {
-//		/*local*/String ThenBlock = this.VisitBlockJSWithIndent(Node.ThenNode);
-//		/*local*/String CondExpr = this.VisitNode(Node.CondExpr);
-//		/*local*/String Source = "if(" + CondExpr + ") " + ThenBlock;
+//		@Var String ThenBlock = this.VisitBlockJSWithIndent(Node.ThenNode);
+//		@Var String CondExpr = this.VisitNode(Node.CondExpr);
+//		@Var String Source = "if(" + CondExpr + ") " + ThenBlock;
 //		if(Node.ElseNode != null) {
 //			Source = Source + " else " + this.VisitBlockJSWithIndent(Node.ElseNode);
 //		}
@@ -496,29 +496,29 @@ var CLASS = (function (_super) {
 //	}
 //
 //	@Override public void VisitWhileNode(ZenWhileNode Node) {
-//		/*local*/String LoopBody = this.VisitBlockJSWithIndent(Node.LoopBody);
-//		/*local*/String CondExpr = this.VisitNode(Node.CondExpr);
+//		@Var String LoopBody = this.VisitBlockJSWithIndent(Node.LoopBody);
+//		@Var String CondExpr = this.VisitNode(Node.CondExpr);
 //		this.PushSourceCode("while(" + CondExpr + ") {" + LoopBody + "}");
 //	}
 //
 //	@Override public void VisitForNode(ZenForNode Node) {
-//		/*local*/String LoopBody = this.VisitBlockJSWithIndent(Node.LoopBody);
-//		/*local*/String IterExpr = this.VisitNode(Node.IterExpr);
-//		/*local*/String CondExpr = this.VisitNode(Node.CondExpr);
+//		@Var String LoopBody = this.VisitBlockJSWithIndent(Node.LoopBody);
+//		@Var String IterExpr = this.VisitNode(Node.IterExpr);
+//		@Var String CondExpr = this.VisitNode(Node.CondExpr);
 //		this.PushSourceCode("for(;" + CondExpr + "; " + IterExpr + ") {" + LoopBody + "}");
 //	}
 //
 //	@Override public void VisitDoWhileNode(ZenDoWhileNode Node) {
-//		/*local*/String LoopBody = this.VisitBlockJSWithIndent(Node.LoopBody);
-//		/*local*/String CondExpr = this.VisitNode(Node.CondExpr);
+//		@Var String LoopBody = this.VisitBlockJSWithIndent(Node.LoopBody);
+//		@Var String CondExpr = this.VisitNode(Node.CondExpr);
 //		this.PushSourceCode("do {" + LoopBody + "} while(" + CondExpr + ");");
 //	}
 //
 //	@Override public void VisitTryNode(ZenTryNode Node) {
-//		/*local*/String Code = "try ";
+//		@Var String Code = "try ";
 //		Code += this.VisitBlockJSWithIndent(Node.TryBlock);
 //		if(Node.CatchExpr != null) {
-//			/*local*/ZenVarNode Val = (/*cast*/ZenVarNode) Node.CatchExpr;
+//			@Var ZenVarNode Val = (/*cast*/ZenVarNode) Node.CatchExpr;
 //			Code += " catch (" + Val.Type.toString() + " " + Val.NativeName + ") ";
 //			Code += this.VisitBlockJSWithIndent(Node.CatchBlock);
 //		}
@@ -529,20 +529,20 @@ var CLASS = (function (_super) {
 //	}
 //
 //	@Override public void VisitThrowNode(ZenThrowNode Node) {
-//		/*local*/String Expr = this.VisitNode(Node.Expr);
+//		@Var String Expr = this.VisitNode(Node.Expr);
 //		this.PushSourceCode("throw " + Expr);
 //	}
 //
 //	@Override public void VisitErrorNode(ZenErrorNode Node) {
-//		/*local*/String Expr = Node.SourceToken.ParsedText;
+//		@Var String Expr = Node.SourceToken.ParsedText;
 //		this.PushSourceCode("(function() {throw new Error(\"" + Expr + "\") })()");
 //	}
 //
 //	@Override public void GenerateFunc(ZenFunc Func, ArrayList<String> NameList, ZenNode Body) {
 //		this.FlushErrorReport();
-//		/*local*/int ArgCount = Func.Types.length - 1;
-//		/*local*/String Code = "var " + Func.GetNativeFuncName() + " = (function(";
-//		/*local*/int i = 0;
+//		@Var int ArgCount = Func.Types.length - 1;
+//		@Var String Code = "var " + Func.GetNativeFuncName() + " = (function(";
+//		@Var int i = 0;
 //		while(i < ArgCount) {
 //			if(i > 0) {
 //				Code = Code + ", ";
@@ -573,18 +573,18 @@ var CLASS = (function (_super) {
 //})(SUPERCLASS);
 // */
 //	@Override public void OpenClassField(ZenSyntaxTree ParsedTree, ZenType Type, ZenClassField ClassField) {
-//		/*local*/String TypeName = Type.ShortName;
-//		/*local*/String Program = this.GetIndentString() + "var " + TypeName + " = (function() {" + this.LineFeed;
+//		@Var String TypeName = Type.ShortName;
+//		@Var String Program = this.GetIndentString() + "var " + TypeName + " = (function() {" + this.LineFeed;
 ////		if(Type.SuperType != null) {
 ////			Program += "(" + Type.SuperType.ShortClassName + ")";
 ////		}
 //		this.Indent();
 //		Program += this.GetIndentString() + "function " + TypeName + "() {" + this.LineFeed;
 //		this.Indent();
-//		/*local*/int i = 0;
+//		@Var int i = 0;
 //		while(i < ClassField.FieldList.size()) {
-//			/*local*/ZenFieldInfo FieldInfo = ClassField.FieldList.get(i);
-//			/*local*/String InitValue = this.StringifyConstValue(FieldInfo.InitValue);
+//			@Var ZenFieldInfo FieldInfo = ClassField.FieldList.get(i);
+//			@Var String InitValue = this.StringifyConstValue(FieldInfo.InitValue);
 //			if(!FieldInfo.Type.IsNativeType()) {
 //				InitValue = this.NullLiteral;
 //			}
@@ -599,7 +599,7 @@ var CLASS = (function (_super) {
 //		this.WriteLineCode(Program);
 //	}
 //	@Override public Object Eval(ZenNode Node) {
-//		/*local*/String ret = this.VisitBlockJS(Node);
+//		@Var String ret = this.VisitBlockJS(Node);
 //		this.WriteLineCode(ret);
 //		return ret;
 //	}

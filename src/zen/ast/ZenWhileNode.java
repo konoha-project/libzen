@@ -24,12 +24,13 @@
 
 package zen.ast;
 
+import zen.deps.Field;
 import zen.parser.ZenVisitor;
 
 //E.g., "while" "(" $Cond ")" $Body
 final public class ZenWhileNode extends ZenNode {
-	/*field*/public ZenNode	CondNode;
-	/*field*/public ZenNode	BodyNode;
+	@Field public ZenNode	CondNode;
+	@Field public ZenNode	BodyNode;
 	public ZenWhileNode/*constructor*/() {
 		super();
 		this.CondNode = null;

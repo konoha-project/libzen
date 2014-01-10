@@ -27,13 +27,14 @@ package zen.sugar;
 import java.util.ArrayList;
 
 import zen.ast.ZenNode;
+import zen.deps.Field;
 import zen.lang.ZenType;
 import zen.parser.ZenToken;
 
 final public class ZenSwitchNode extends ZenNode {
-	/*field*/public ZenNode	MatchNode;
-	/*field*/public ZenNode	DefaultBlock;
-	/*field*/public ArrayList<ZenNode> CaseList; // [expr, block, expr, block, ....]
+	@Field public ZenNode	MatchNode;
+	@Field public ZenNode	DefaultBlock;
+	@Field public ArrayList<ZenNode> CaseList; // [expr, block, expr, block, ....]
 	public ZenSwitchNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode MatchNode, ZenNode DefaultBlock) {
 		super();
 		this.MatchNode = MatchNode;
@@ -41,10 +42,10 @@ final public class ZenSwitchNode extends ZenNode {
 		this.CaseList = new ArrayList<ZenNode>();
 		this.SetChild(DefaultBlock);
 	}
-//	@Override public boolean Accept(ZenVisitor Visitor) {
-//		Visitor.VisitSwitchNode(this);
-//	}
-//	@Override public final ArrayList<ZenNode> GetList() {
-//		return this.CaseList;
-//	}
+	//	@Override public boolean Accept(ZenVisitor Visitor) {
+	//		Visitor.VisitSwitchNode(this);
+	//	}
+	//	@Override public final ArrayList<ZenNode> GetList() {
+	//		return this.CaseList;
+	//	}
 }

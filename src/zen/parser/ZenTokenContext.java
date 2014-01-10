@@ -28,21 +28,23 @@ import java.util.ArrayList;
 
 import zen.ast.ZenErrorNode;
 import zen.ast.ZenNode;
+import zen.deps.Field;
 import zen.deps.LibNative;
 import zen.deps.LibZen;
+import zen.deps.Var;
 import zen.lang.ZenFunc;
 import zen.lang.ZenSystem;
 
 public final class ZenTokenContext extends ZenUtils {
-	/*field*/public ZenNameSpace TopLevelNameSpace;
-	/*field*/public ArrayList<ZenToken> SourceTokenList;
-	/*field*/private int CurrentPosition;
-	/*field*/public long ParsingLine;
-	/*field*/private int ParseFlag;
-	//	/*field*/private final ArrayList<Integer> ParserStack;
-	//	/*field*/public ZenMap<Object> ParsingAnnotation;
-	/*field*/public ZenToken LatestToken;
-	/*field*/int IndentLevel = 0;
+	@Field public ZenNameSpace TopLevelNameSpace;
+	@Field public ArrayList<ZenToken> SourceTokenList;
+	@Field private int CurrentPosition;
+	@Field public long ParsingLine;
+	@Field private int ParseFlag;
+	//	@Field private final ArrayList<Integer> ParserStack;
+	//	@Field public ZenMap<Object> ParsingAnnotation;
+	@Field public ZenToken LatestToken;
+	@Field int IndentLevel = 0;
 
 	public ZenTokenContext(ZenNameSpace NameSpace, String Text, long FileLine) {
 		this.TopLevelNameSpace = NameSpace;
@@ -56,7 +58,7 @@ public final class ZenTokenContext extends ZenUtils {
 	}
 
 	public ZenToken AppendParsedToken(String Text, int TokenFlag, String PatternName) {
-		/*local*/ZenToken Token = new ZenToken(TokenFlag, Text, this.ParsingLine);
+		@Var ZenToken Token = new ZenToken(TokenFlag, Text, this.ParsingLine);
 		if(PatternName != null) {
 			Token.PresetPattern = this.TopLevelNameSpace.GetSyntaxPattern(PatternName);
 			LibNative.Assert(Token.PresetPattern != null);
@@ -66,9 +68,9 @@ public final class ZenTokenContext extends ZenUtils {
 	}
 
 	public void FoundWhiteSpace() {
-		/*local*/int index = this.SourceTokenList.size() - 1;
+		@Var int index = this.SourceTokenList.size() - 1;
 		if(index > 0) {
-			/*local*/ZenToken Token = this.SourceTokenList.get(index);
+			@Var ZenToken Token = this.SourceTokenList.get(index);
 			Token.TokenFlag |= ZenParserConst.WhiteSpaceTokenFlag;
 		}
 	}
@@ -79,14 +81,14 @@ public final class ZenTokenContext extends ZenUtils {
 
 	@Deprecated
 	public void ReportTokenError1(int Level, String Message, String TokenText) {
-		/*local*/ZenToken Token = this.AppendParsedToken(TokenText, 0, "$Error$");
+		@Var ZenToken Token = this.AppendParsedToken(TokenText, 0, "$Error$");
 		this.TopLevelNameSpace.Generator.ReportError(Level, Token, Message);
 	}
 
 	public void SkipErrorStatement() {
-		/*local*/ZenToken LeastRecentToken = this.LatestToken;
+		@Var ZenToken LeastRecentToken = this.LatestToken;
 		while(this.HasNext()) {
-			/*local*/ZenToken T = this.GetToken();
+			@Var ZenToken T = this.GetToken();
 			if(T.IsDelim() || T.EqualsText("}")) {
 				break;
 			}
@@ -97,9 +99,9 @@ public final class ZenTokenContext extends ZenUtils {
 	}
 
 	private ZenToken GetBeforeToken() {
-		/*local*/int MovingPos = this.CurrentPosition - 1;
+		@Var int MovingPos = this.CurrentPosition - 1;
 		while(MovingPos >= 0 && MovingPos < this.SourceTokenList.size()) {
-			/*local*/ZenToken Token = this.SourceTokenList.get(MovingPos);
+			@Var ZenToken Token = this.SourceTokenList.get(MovingPos);
 			if(!Token.IsIndent()) {
 				return Token;
 			}
@@ -118,7 +120,7 @@ public final class ZenTokenContext extends ZenUtils {
 
 	public void Vacume() {
 		//		if(this.CurrentPosition > 0) {
-		//			for(/*local*/int i = this.CurrentPosition - 1; i >= 0; i = i - 1) {
+		//			for(@Var int i = this.CurrentPosition - 1; i >= 0; i = i - 1) {
 		//				ZenToken Token = this.SourceList.get(i);
 		//				if(Token == null) {
 		//					break;
@@ -130,8 +132,8 @@ public final class ZenTokenContext extends ZenUtils {
 	}
 
 	private int DispatchFunc(String ScriptSource, int ZenChar, int pos) {
-		/*local*/ZenTokenFunc TokenFunc = this.TopLevelNameSpace.GetTokenFunc(ZenChar);
-		/*local*/int NextIdx = ZenTokenFunc.ApplyTokenFunc(TokenFunc, this, ScriptSource, pos);
+		@Var ZenTokenFunc TokenFunc = this.TopLevelNameSpace.GetTokenFunc(ZenChar);
+		@Var int NextIdx = ZenTokenFunc.ApplyTokenFunc(TokenFunc, this, ScriptSource, pos);
 		if(NextIdx == ZenParserConst.MismatchedPosition) {
 			ZenLogger.VerboseLog(ZenLogger.VerboseUndefined, "undefined tokenizer: " + ScriptSource.substring(pos, pos+1));
 			this.AppendParsedToken(ScriptSource.substring(pos, pos + 1), 0, null);
@@ -141,12 +143,12 @@ public final class ZenTokenContext extends ZenUtils {
 	}
 
 	private void Tokenize(String ScriptSource, long CurrentLine) {
-		/*local*/int CurrentPos = 0;
-		/*local*/int Length = ScriptSource.length();
+		@Var int CurrentPos = 0;
+		@Var int Length = ScriptSource.length();
 		this.ParsingLine = CurrentLine;
 		while(CurrentPos < Length) {
-			/*local*/int ZenCode = ZenUtils.AsciiToTokenMatrixIndex(LibZen.CharAt(ScriptSource, CurrentPos));
-			/*local*/int NextPos = this.DispatchFunc(ScriptSource, ZenCode, CurrentPos);
+			@Var int ZenCode = ZenUtils.AsciiToTokenMatrixIndex(LibZen.CharAt(ScriptSource, CurrentPos));
+			@Var int NextPos = this.DispatchFunc(ScriptSource, ZenCode, CurrentPos);
 			if(CurrentPos >= NextPos) {
 				break;
 			}
@@ -157,7 +159,7 @@ public final class ZenTokenContext extends ZenUtils {
 
 	public ZenToken GetToken() {
 		while(this.CurrentPosition < this.SourceTokenList.size()) {
-			/*local*/ZenToken Token = this.SourceTokenList.get(this.CurrentPosition);
+			@Var ZenToken Token = this.SourceTokenList.get(this.CurrentPosition);
 			if(Token.IsSource()) {
 				this.SourceTokenList.remove(this.SourceTokenList.size() - 1);
 				this.Tokenize(Token.ParsedText, Token.FileLine);
@@ -182,13 +184,13 @@ public final class ZenTokenContext extends ZenUtils {
 	}
 
 	public ZenToken GetTokenAndMoveForward() {
-		/*local*/ZenToken Token = this.GetToken();
+		@Var ZenToken Token = this.GetToken();
 		this.CurrentPosition += 1;
 		return Token;
 	}
 
 	public void SkipIndent() {
-		/*local*/ZenToken Token = this.GetToken();
+		@Var ZenToken Token = this.GetToken();
 		while(Token.IsIndent()) {
 			this.CurrentPosition = this.CurrentPosition + 1;
 			Token = this.GetToken();
@@ -196,8 +198,8 @@ public final class ZenTokenContext extends ZenUtils {
 	}
 
 	public ZenToken GetCurrentIndentToken() {
-		for(/*local*/int i = this.CurrentPosition - 1; i >= 0; i -= 1) {
-			/*local*/ZenToken Token = this.SourceTokenList.get(i);
+		for(@Var int i = this.CurrentPosition - 1; i >= 0; i -= 1) {
+			@Var ZenToken Token = this.SourceTokenList.get(i);
 			if(Token.IsIndent()) {
 				return Token;
 			}
@@ -207,7 +209,7 @@ public final class ZenTokenContext extends ZenUtils {
 
 	public void SkipUntilIndent(ZenToken IndentToken) {
 		while(this.HasNext()) {
-			/*local*/ZenToken Token = this.GetToken();
+			@Var ZenToken Token = this.GetToken();
 			if(Token.IsIndent() && Token.CompareIndent(IndentToken) == 0) {
 				return;
 			}
@@ -216,7 +218,7 @@ public final class ZenTokenContext extends ZenUtils {
 	}
 
 	//	public ZenToken NextConcatinatedToken() {
-	//		/*local*/ZenToken Token = this.Next();
+	//		@Var ZenToken Token = this.Next();
 	//		if(Token.IsNextWhiteSpace()) {
 	//			return Token;
 	//		}
@@ -227,11 +229,11 @@ public final class ZenTokenContext extends ZenUtils {
 	//	}
 
 	public ZenSyntaxPattern GetFirstPattern(ZenNameSpace NameSpace) {
-		/*local*/ZenToken Token = this.GetToken();
+		@Var ZenToken Token = this.GetToken();
 		if(Token.PresetPattern != null) {
 			return Token.PresetPattern;
 		}
-		/*local*/ZenSyntaxPattern Pattern = NameSpace.GetSyntaxPattern(Token.ParsedText);
+		@Var ZenSyntaxPattern Pattern = NameSpace.GetSyntaxPattern(Token.ParsedText);
 		if(Pattern == null) {
 			return NameSpace.GetSyntaxPattern("$Symbol$");
 		}
@@ -239,16 +241,16 @@ public final class ZenTokenContext extends ZenUtils {
 	}
 
 	public ZenSyntaxPattern GetSuffixPattern(ZenNameSpace NameSpace) {
-		/*local*/ZenToken Token = this.GetToken();
+		@Var ZenToken Token = this.GetToken();
 		if(Token != ZenToken.NullToken) {
-			/*local*/ZenSyntaxPattern Pattern = NameSpace.GetExtendedSyntaxPattern(Token.ParsedText);
+			@Var ZenSyntaxPattern Pattern = NameSpace.GetExtendedSyntaxPattern(Token.ParsedText);
 			return Pattern;
 		}
 		return null;
 	}
 
 	public final boolean IsToken(String TokenText) {
-		/*local*/ZenToken Token = this.GetToken();
+		@Var ZenToken Token = this.GetToken();
 		if(Token.EqualsText(TokenText)) {
 			return true;
 		}
@@ -256,9 +258,9 @@ public final class ZenTokenContext extends ZenUtils {
 	}
 
 	public final boolean IsNewLineToken(String TokenText) {
-		/*local*/int RollbackPos = this.CurrentPosition;
+		@Var int RollbackPos = this.CurrentPosition;
 		this.SkipIndent();
-		/*local*/ZenToken Token = this.GetToken();
+		@Var ZenToken Token = this.GetToken();
 		if(Token.EqualsText(TokenText)) {
 			return true;
 		}
@@ -267,8 +269,8 @@ public final class ZenTokenContext extends ZenUtils {
 	}
 
 	public final boolean MatchToken(String TokenText) {
-		/*local*/int RollbackPos = this.CurrentPosition;
-		/*local*/ZenToken Token = this.GetTokenAndMoveForward();
+		@Var int RollbackPos = this.CurrentPosition;
+		@Var ZenToken Token = this.GetTokenAndMoveForward();
 		if(Token.EqualsText(TokenText)) {
 			return true;
 		}
@@ -277,9 +279,9 @@ public final class ZenTokenContext extends ZenUtils {
 	}
 
 	public final boolean MatchNewLineToken(String TokenText) {
-		/*local*/int RollbackPos = this.CurrentPosition;
+		@Var int RollbackPos = this.CurrentPosition;
 		this.SkipIndent();
-		/*local*/ZenToken Token = this.GetTokenAndMoveForward();
+		@Var ZenToken Token = this.GetTokenAndMoveForward();
 		if(Token.EqualsText(TokenText)) {
 			return true;
 		}
@@ -289,8 +291,8 @@ public final class ZenTokenContext extends ZenUtils {
 
 	public ZenNode MatchNodeToken(ZenNode Base, ZenNameSpace NameSpace, String TokenText, int MatchFlag) {
 		if(!Base.IsErrorNode()) {
-			/*local*/int RollbackPosition = this.CurrentPosition;
-			/*local*/ZenToken Token = this.GetTokenAndMoveForward();
+			@Var int RollbackPosition = this.CurrentPosition;
+			@Var ZenToken Token = this.GetTokenAndMoveForward();
 			if(Token.ParsedText.equals(TokenText)) {
 				if(Base.SourceToken == null) {
 					Base.SourceToken = Token;
@@ -313,12 +315,12 @@ public final class ZenTokenContext extends ZenUtils {
 	}
 
 	public final ZenNode ApplyMatchPattern(ZenNameSpace NameSpace, ZenNode LeftNode, ZenSyntaxPattern Pattern) {
-		/*local*/int RollbackPosition = this.CurrentPosition;
-		/*local*/int ParseFlag = this.GetParseFlag();
-		/*local*/ZenSyntaxPattern CurrentPattern = Pattern;
-		/*local*/ZenToken TopToken = this.GetToken();
+		@Var int RollbackPosition = this.CurrentPosition;
+		@Var int ParseFlag = this.GetParseFlag();
+		@Var ZenSyntaxPattern CurrentPattern = Pattern;
+		@Var ZenToken TopToken = this.GetToken();
 		while(CurrentPattern != null) {
-			/*local*/ZenFunc MatchFunc = CurrentPattern.MatchFunc;
+			@Var ZenFunc MatchFunc = CurrentPattern.MatchFunc;
 			this.CurrentPosition = RollbackPosition;
 			if(CurrentPattern.ParentPattern != null) {   // This means it has next patterns
 				this.SetParseFlag(ParseFlag | ZenParserConst.BackTrackParseFlag);
@@ -326,7 +328,7 @@ public final class ZenTokenContext extends ZenUtils {
 			//LibZen.DebugP("B :" + JoinStrings("  ", this.IndentLevel) + CurrentPattern + ", next=" + CurrentPattern.ParentPattern);
 			this.IndentLevel += 1;
 			//LibZen.DebugP("LeftNode="+LeftNode + ", pattern" + Pattern);
-			/*local*/ZenNode ParsedNode = LibNative.ApplyMatchFunc(MatchFunc, NameSpace, this, LeftNode);
+			@Var ZenNode ParsedNode = LibNative.ApplyMatchFunc(MatchFunc, NameSpace, this, LeftNode);
 			this.IndentLevel -= 1;
 			this.SetParseFlag(ParseFlag);
 			//LibZen.DebugP("E :" + JoinStrings("  ", this.IndentLevel) + CurrentPattern + " => " + ParsedTree);
@@ -348,7 +350,7 @@ public final class ZenTokenContext extends ZenUtils {
 
 	public ZenNode AppendMatchedPattern(ZenNode Base, ZenNameSpace NameSpace, String PatternName,  int MatchFlag) {
 		if(!Base.IsErrorNode()) {
-			/*local*/ZenNode ParsedNode = this.ParsePattern(NameSpace, PatternName, MatchFlag);
+			@Var ZenNode ParsedNode = this.ParsePattern(NameSpace, PatternName, MatchFlag);
 			if(ParsedNode != null) {
 				if(ParsedNode.IsErrorNode()) {
 					return ParsedNode;
@@ -360,7 +362,7 @@ public final class ZenTokenContext extends ZenUtils {
 	}
 
 	public final boolean StartsWithToken(String TokenText) {
-		/*local*/ZenToken Token = this.GetToken();
+		@Var ZenToken Token = this.GetToken();
 		if(Token.EqualsText(TokenText)) {
 			this.CurrentPosition += 1;
 			return true;
@@ -379,7 +381,7 @@ public final class ZenTokenContext extends ZenUtils {
 	}
 
 	public final int SetBackTrack(boolean Allowed) {
-		/*local*/int OldFlag = this.GetParseFlag();
+		@Var int OldFlag = this.GetParseFlag();
 		if(Allowed) {
 			this.SetParseFlag(this.GetParseFlag() | ZenParserConst.BackTrackParseFlag);
 		}
@@ -390,7 +392,7 @@ public final class ZenTokenContext extends ZenUtils {
 	}
 
 	public final int SetSkipIndent(boolean Allowed) {
-		/*local*/int OldFlag = this.GetParseFlag();
+		@Var int OldFlag = this.GetParseFlag();
 		if(Allowed) {
 			this.SetParseFlag(this.GetParseFlag() | ZenParserConst.SkipIndentParseFlag);
 		}
@@ -405,13 +407,13 @@ public final class ZenTokenContext extends ZenUtils {
 	}
 
 	public final ZenNode ParsePatternAfter(ZenNameSpace NameSpace, ZenNode LeftNode, String PatternName, int MatchFlag) {
-		/*local*/int Pos = this.CurrentPosition;
-		/*local*/int ParseFlag = this.GetParseFlag();
+		@Var int Pos = this.CurrentPosition;
+		@Var int ParseFlag = this.GetParseFlag();
 		if(ZenUtils.IsFlag(MatchFlag, ZenParserConst.Optional)) {
 			this.SetParseFlag(this.GetParseFlag() | ZenParserConst.BackTrackParseFlag);
 		}
-		/*local*/ZenSyntaxPattern Pattern = this.TopLevelNameSpace.GetSyntaxPattern(PatternName);
-		/*local*/ZenNode ParsedNode = this.ApplyMatchPattern(NameSpace, LeftNode, Pattern);
+		@Var ZenSyntaxPattern Pattern = this.TopLevelNameSpace.GetSyntaxPattern(PatternName);
+		@Var ZenNode ParsedNode = this.ApplyMatchPattern(NameSpace, LeftNode, Pattern);
 		this.SetParseFlag(ParseFlag);
 		if(ParsedNode != null) {
 			return ParsedNode;
@@ -427,7 +429,7 @@ public final class ZenTokenContext extends ZenUtils {
 
 	public final void SkipEmptyStatement() {
 		while(this.HasNext()) {
-			/*local*/ZenToken Token = this.GetToken();
+			@Var ZenToken Token = this.GetToken();
 			if(Token.IsIndent() || Token.IsDelim()) {
 				this.CurrentPosition += 1;
 				continue;
@@ -438,7 +440,7 @@ public final class ZenTokenContext extends ZenUtils {
 
 	public final void SkipIncompleteStatement() {
 		//		if(this.HasNext()) {
-		//			/*local*/ZenToken Token = this.GetToken();
+		//			@Var ZenToken Token = this.GetToken();
 		//			if(!Token.IsIndent() && !Token.IsDelim()) {
 		//				this.TopLevelNameSpace.Generator.ReportError(GreenTeaConsts.WarningLevel, Token, "needs ;");
 		//				if(Token.EqualsText("}")) {
@@ -461,9 +463,9 @@ public final class ZenTokenContext extends ZenUtils {
 	}
 
 	public final String Stringfy(String PreText, int BeginIdx, int EndIdx) {
-		/*local*/String Buffer = PreText;
-		for(/*local*/int Position = BeginIdx; Position < EndIdx; Position += 1) {
-			/*local*/ZenToken Token = this.SourceTokenList.get(Position);
+		@Var String Buffer = PreText;
+		for(@Var int Position = BeginIdx; Position < EndIdx; Position += 1) {
+			@Var ZenToken Token = this.SourceTokenList.get(Position);
 			if(Token.IsIndent()) {
 				Buffer += "\n";
 			}
@@ -476,18 +478,18 @@ public final class ZenTokenContext extends ZenUtils {
 	}
 
 	public final void SetSourceMap(String SourceMap) {
-		/*local*/int Index = SourceMap.lastIndexOf(":");
+		@Var int Index = SourceMap.lastIndexOf(":");
 		if(Index != -1) {
-			/*local*/String FileName = SourceMap.substring(0, Index);
-			/*local*/int Line = (/*cast*/int)LibZen.ParseInt(SourceMap.substring(Index+1));
+			@Var String FileName = SourceMap.substring(0, Index);
+			@Var int Line = (/*cast*/int)LibZen.ParseInt(SourceMap.substring(Index+1));
 			this.ParsingLine = ZenSystem.GetFileLine(FileName, Line);
 		}
 	}
 
 	public final void DumpPosition() {
-		/*local*/int Position = this.CurrentPosition;
+		@Var int Position = this.CurrentPosition;
 		if(Position < this.SourceTokenList.size()) {
-			/*local*/ZenToken Token = this.SourceTokenList.get(Position);
+			@Var ZenToken Token = this.SourceTokenList.get(Position);
 			LibZen.DebugP("Position="+Position+" " + Token);
 		}
 		else {
@@ -496,9 +498,9 @@ public final class ZenTokenContext extends ZenUtils {
 	}
 
 	public final void Dump() {
-		for(/*local*/int Position = this.CurrentPosition; Position < this.SourceTokenList.size(); Position += 1) {
-			/*local*/ZenToken Token = this.SourceTokenList.get(Position);
-			/*local*/String DumpedToken = this.CurrentPosition == Position ? "*[" : "[";
+		for(@Var int Position = this.CurrentPosition; Position < this.SourceTokenList.size(); Position += 1) {
+			@Var ZenToken Token = this.SourceTokenList.get(Position);
+			@Var String DumpedToken = this.CurrentPosition == Position ? "*[" : "[";
 			DumpedToken = DumpedToken + Position+"] " + Token;
 			if(Token.PresetPattern != null) {
 				DumpedToken = DumpedToken + " : " + Token.PresetPattern;

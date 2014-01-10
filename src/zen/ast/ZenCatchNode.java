@@ -24,13 +24,14 @@
 
 package zen.ast;
 
-import zen.lang.ZenType;
+import zen.deps.Field;
 import zen.lang.ZenSystem;
+import zen.lang.ZenType;
 
 final public class ZenCatchNode extends ZenNode {
-	/*field*/public ZenType  ExceptionType;
-	/*field*/public String  ExceptionName;
-	/*field*/public ZenNode	BodyNode;
+	@Field public ZenType  ExceptionType;
+	@Field public String  ExceptionName;
+	@Field public ZenNode	BodyNode;
 	public ZenCatchNode/*constructor*/() {
 		super();
 		this.ExceptionType = ZenSystem.VarType;
@@ -50,7 +51,7 @@ final public class ZenCatchNode extends ZenNode {
 		}
 	}
 
-//	@Override public boolean Accept(ZenVisitor Visitor) {
-//		Visitor.VisitCatchNode(this);
-//	}
+	//	@Override public boolean Accept(ZenVisitor Visitor) {
+	//		Visitor.VisitCatchNode(this);
+	//	}
 }

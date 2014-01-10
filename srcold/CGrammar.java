@@ -50,8 +50,8 @@ import parser.deps.LibGreenTea;
 public class CGrammar extends GreenTeaUtils {
 	
 	public static long PreprocesserToken(ZenTokenContext TokenContext, String SourceText, long pos) {
-		/*local*/long start = pos;
-		/*local*/String PresetPattern = null;
+		@Var long start = pos;
+		@Var String PresetPattern = null;
 		pos += 1;
 		while(pos < SourceText.length()) {
 			if(!LibGreenTea.IsVariableName(SourceText, pos) && !LibGreenTea.IsDigit(SourceText, pos)) {
@@ -65,9 +65,9 @@ public class CGrammar extends GreenTeaUtils {
 	
 	public static ZenSyntaxTree ParseGetterP(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenSyntaxTree LeftTree, ZenSyntaxPattern Pattern) {
 		TokenContext.MatchToken("->");
-		/*local*/ZenToken Token = TokenContext.Next();
+		@Var ZenToken Token = TokenContext.Next();
 		if(Token.IsNameSymbol()) {
-			/*local*/ZenSyntaxTree NewTree = new ZenSyntaxTree(Pattern, NameSpace, Token, null);
+			@Var ZenSyntaxTree NewTree = new ZenSyntaxTree(Pattern, NameSpace, Token, null);
 			NewTree.AppendParsedTree2(LeftTree);
 			return NewTree;
 		}
@@ -75,16 +75,16 @@ public class CGrammar extends GreenTeaUtils {
 	}
 
 	public static ZenNode TypeGetterP(ZenTypeEnv Gamma, ZenSyntaxTree ParsedTree, ZenType ContextType) {
-		/*local*/String Name = ParsedTree.KeyToken.ParsedText;
-		/*local*/ZenNode ObjectNode = ParsedTree.TypeCheckAt(UnaryTerm, Gamma, ZenStaticTable.VarType, DefaultTypeCheckPolicy);
+		@Var String Name = ParsedTree.KeyToken.ParsedText;
+		@Var ZenNode ObjectNode = ParsedTree.TypeCheckAt(UnaryTerm, Gamma, ZenStaticTable.VarType, DefaultTypeCheckPolicy);
 		if(ObjectNode.IsErrorNode()) {
 			return ObjectNode;
 		}
 		// 1. To start, check class const such as Math.Pi if base is a type value
-		/*local*/String TypeName = ObjectNode.Type.ShortName;
+		@Var String TypeName = ObjectNode.Type.ShortName;
 //		if(ObjectNode instanceof ConstNode && ObjectNode.Type.IsTypeType()) {
-//			/*local*/ZenType ObjectType = (/*cast*/ZenType)((/*cast*/ConstNode)ObjectNode).ConstValue;
-//			/*local*/Object ConstValue = ParsedTree.NameSpace.GetClassSymbol(ObjectType, ClassStaticName(Name), true);
+//			@Var ZenType ObjectType = (/*cast*/ZenType)((/*cast*/ConstNode)ObjectNode).ConstValue;
+//			@Var Object ConstValue = ParsedTree.NameSpace.GetClassSymbol(ObjectType, ClassStaticName(Name), true);
 //			if(ConstValue instanceof GreenTeaEnum) {
 //				if(ContextType.IsStringType()) {
 //					ConstValue = ((/*cast*/GreenTeaEnum)ConstValue).EnumSymbol;
@@ -99,9 +99,9 @@ public class CGrammar extends GreenTeaUtils {
 //			TypeName = ObjectType.ShortName;
 //		}
 		// 2. find Class method
-		/*local*/ZenFuncSet FuncSet = ParsedTree.NameSpace.GetMethod(ObjectNode.Type, Name, true);
+		@Var ZenFuncSet FuncSet = ParsedTree.NameSpace.GetMethod(ObjectNode.Type, Name, true);
 		if(FuncSet.FuncList.size() > 0 && ContextType.IsFuncType()) {
-			/*local*/ZenFunc FirstFunc = FuncSet.FuncList.get(0);
+			@Var ZenFunc FirstFunc = FuncSet.FuncList.get(0);
 			ZenNode Node = Gamma.Generator.CreateGetterNode(ContextType, ParsedTree, ObjectNode, Name);
 			if(Node instanceof ZenSymbolNode) {
 				((/*cast*/ZenSymbolNode)Node).ResolvedFunc = FirstFunc;
@@ -109,9 +109,9 @@ public class CGrammar extends GreenTeaUtils {
 		}
 
 		// 3. find Class field
-		/*local*/ZenFunc GetterFunc = ParsedTree.NameSpace.GetGetterFunc(ObjectNode.Type, Name, true);
-		/*local*/ZenType ReturnType = (GetterFunc != null) ? GetterFunc.GetReturnType() : ZenStaticTable.AnyType;
-		/*local*/ZenNode Node = Gamma.Generator.CreateGetterNode(ReturnType, ParsedTree, ObjectNode, Name);
+		@Var ZenFunc GetterFunc = ParsedTree.NameSpace.GetGetterFunc(ObjectNode.Type, Name, true);
+		@Var ZenType ReturnType = (GetterFunc != null) ? GetterFunc.GetReturnType() : ZenStaticTable.AnyType;
+		@Var ZenNode Node = Gamma.Generator.CreateGetterNode(ReturnType, ParsedTree, ObjectNode, Name);
 		if(Node instanceof ZenSymbolNode) {
 			((/*cast*/ZenGetterNode)Node).ResolvedFunc = GetterFunc;
 		}
@@ -124,7 +124,7 @@ public class CGrammar extends GreenTeaUtils {
 	}
 	
 	public static ZenSyntaxTree ParseStructDecl2(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenSyntaxTree LeftTree, ZenSyntaxPattern Pattern) {
-		/*local*/ZenSyntaxTree ClassDeclTree = TokenContext.CreateMatchedSyntaxTree(NameSpace, Pattern, "struct");
+		@Var ZenSyntaxTree ClassDeclTree = TokenContext.CreateMatchedSyntaxTree(NameSpace, Pattern, "struct");
 		ClassDeclTree.SetMatchedPatternAt(ClassDeclName, NameSpace, TokenContext, "$FuncName$", Required); //$ClassName$ is better
 		//if(TokenContext.MatchToken("extends")) {
 		//	ClassDeclTree.SetMatchedPatternAt(ClassDeclSuperType, NameSpace, TokenContext, "$Type$", Required);
@@ -133,15 +133,15 @@ public class CGrammar extends GreenTeaUtils {
 			return ClassDeclTree;
 		}
 		// define new class
-		/*local*/ZenNameSpace ClassNameSpace = new ZenNameSpace(NameSpace.Context, NameSpace);
-		/*local*/ZenToken NameToken = ClassDeclTree.GetSyntaxTreeAt(ClassDeclName).KeyToken;
-		/*local*/ZenType SuperType = ZenStaticTable.TopType;
+		@Var ZenNameSpace ClassNameSpace = new ZenNameSpace(NameSpace.Context, NameSpace);
+		@Var ZenToken NameToken = ClassDeclTree.GetSyntaxTreeAt(ClassDeclName).KeyToken;
+		@Var ZenType SuperType = ZenStaticTable.TopType;
 		//if(ClassDeclTree.HasNodeAt(ClassDeclSuperType)) {
 		//	SuperType = ClassDeclTree.GetSyntaxTreeAt(ClassDeclSuperType).GetParsedType();
 		//}
-		/*local*/int ClassFlag = KonohaGrammar.ParseClassFlag(0, TokenContext.ParsingAnnotation);
-		/*local*/String ClassName = NameToken.ParsedText;
-		/*local*/ZenType DefinedType = NameSpace.GetType(ClassName);
+		@Var int ClassFlag = KonohaGrammar.ParseClassFlag(0, TokenContext.ParsingAnnotation);
+		@Var String ClassName = NameToken.ParsedText;
+		@Var ZenType DefinedType = NameSpace.GetType(ClassName);
 		if(DefinedType != null && DefinedType.IsAbstractType()) {
 			DefinedType.TypeFlag = ClassFlag;
 			DefinedType.SuperType = SuperType;
@@ -155,9 +155,9 @@ public class CGrammar extends GreenTeaUtils {
 
 		ClassDeclTree.SetMatchedPatternAt(ClassDeclBlock, ClassNameSpace, TokenContext, "$Block$", Optional);
 		if(ClassDeclTree.HasNodeAt(ClassDeclBlock)) {
-			/*local*/ZenClassField ClassField = new ZenClassField(DefinedType, NameSpace);
-			/*local*/ZenTypeEnv Gamma = new ZenTypeEnv(ClassNameSpace);
-			/*local*/ZenSyntaxTree SubTree = ClassDeclTree.GetSyntaxTreeAt(ClassDeclBlock);
+			@Var ZenClassField ClassField = new ZenClassField(DefinedType, NameSpace);
+			@Var ZenTypeEnv Gamma = new ZenTypeEnv(ClassNameSpace);
+			@Var ZenSyntaxTree SubTree = ClassDeclTree.GetSyntaxTreeAt(ClassDeclBlock);
 			while(SubTree != null) {
 				if(SubTree.Pattern.EqualsName("$VarDecl$")) {
 					CGrammar.TypeMemberDecl(Gamma, SubTree, ClassField);
@@ -173,13 +173,13 @@ public class CGrammar extends GreenTeaUtils {
 	}
 
 	public static ZenNode TypeStructDecl2(ZenTypeEnv Gamma, ZenSyntaxTree ParsedTree, ZenType ContextType) {
-		/*local*/ZenClassField ClassField = (/*cast*/ZenClassField)ParsedTree.ParsedValue;
+		@Var ZenClassField ClassField = (/*cast*/ZenClassField)ParsedTree.ParsedValue;
 		if(ClassField != null) {
-			/*local*/ZenType DefinedType = ClassField.DefinedType;
+			@Var ZenType DefinedType = ClassField.DefinedType;
 			DefinedType.SetClassField(ClassField);
 			Gamma.Generator.OpenClassField(ParsedTree, DefinedType, ClassField);
-			/*local*/ZenSyntaxTree SubTree = ParsedTree.GetSyntaxTreeAt(ClassDeclBlock);
-			/*local*/ArrayList<ZenFunc> MemberList = new ArrayList<ZenFunc>();
+			@Var ZenSyntaxTree SubTree = ParsedTree.GetSyntaxTreeAt(ClassDeclBlock);
+			@Var ArrayList<ZenFunc> MemberList = new ArrayList<ZenFunc>();
 			while(SubTree != null) {
 				//if(SubTree.Pattern.EqualsName("$FuncDecl$") || SubTree.Pattern.EqualsName("$Constructor2$")) {
 				//	MemberList.add((/*cast*/ZenFunc)SubTree.ParsedValue);
@@ -195,11 +195,11 @@ public class CGrammar extends GreenTeaUtils {
 	}
 	
 	private static boolean TypeMemberDecl(ZenTypeEnv Gamma, ZenSyntaxTree ParsedTree, ZenClassField ClassField) {
-		/*local*/int    FieldFlag = KonohaGrammar.ParseVarFlag(0, ParsedTree.Annotation);
-		/*local*/ZenType DeclType = ParsedTree.GetSyntaxTreeAt(VarDeclType).GetParsedType();
-		/*local*/String FieldName = ParsedTree.GetSyntaxTreeAt(VarDeclName).KeyToken.ParsedText;
-		/*local*/ZenNode InitValueNode = null;
-		/*local*/Object InitValue = null;
+		@Var int    FieldFlag = KonohaGrammar.ParseVarFlag(0, ParsedTree.Annotation);
+		@Var ZenType DeclType = ParsedTree.GetSyntaxTreeAt(VarDeclType).GetParsedType();
+		@Var String FieldName = ParsedTree.GetSyntaxTreeAt(VarDeclName).KeyToken.ParsedText;
+		@Var ZenNode InitValueNode = null;
+		@Var Object InitValue = null;
 		if(ParsedTree.HasNodeAt(VarDeclValue)) {
 			InitValueNode = ParsedTree.TypeCheckAt(VarDeclValue, Gamma, DeclType, OnlyConstPolicy | NullablePolicy);
 			if(InitValueNode.IsErrorNode()) {
@@ -240,7 +240,7 @@ public class CGrammar extends GreenTeaUtils {
 	public static ZenSyntaxTree ParseInclude(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenSyntaxTree LeftTree, ZenSyntaxPattern Pattern) {
 		TokenContext.Next(); // skipped first token "require";
 		while(TokenContext.HasNext()) {
-			/*local*/ZenToken Token = TokenContext.Next();
+			@Var ZenToken Token = TokenContext.Next();
 			if(Token.IsIndent() || Token.IsDelim()) {
 				break;
 			}
@@ -259,7 +259,7 @@ public class CGrammar extends GreenTeaUtils {
 	//ifdef JAVA
 	// this is a new interface used in ImportNativeObject
 	public static void ImportGrammar(ZenNameSpace NameSpace, Class<?> GrammarClass) {
-		/*local*/ZenParserContext ParserContext = NameSpace.Context;
+		@Var ZenParserContext ParserContext = NameSpace.Context;
 		NameSpace.AppendTokenFunc("#", LoadTokenFunc2(ParserContext, GrammarClass, "PreprocesserToken"));
 		NameSpace.AppendExtendedSyntax_OLD("->", 0, LoadParseFunc2(ParserContext, GrammarClass, "ParseGetterP"), LoadTypeFunc2(ParserContext, GrammarClass, "TypeGetterP"));
 		NameSpace.AppendSyntax_OLD("struct", LoadParseFunc2(ParserContext, GrammarClass, "ParseStructDecl2"), LoadTypeFunc2(ParserContext, GrammarClass, "TypeStructDecl2"));

@@ -26,13 +26,14 @@ package zen.ast;
 
 import java.util.ArrayList;
 
+import zen.deps.Field;
 import zen.parser.ZenNameSpace;
 import zen.parser.ZenToken;
 import zen.parser.ZenVisitor;
 
 final public class ZenFuncDeclNode extends ZenFunctionLiteralNode {
-	/*field*/public String FuncName;
-	/*field*/public ZenNameSpace NameSpace;
+	@Field public String FuncName;
+	@Field public ZenNameSpace NameSpace;
 	public ZenFuncDeclNode/*constructor*/(ZenToken SourceToken, ZenNameSpace NameSpace, String FuncName) {
 		super(SourceToken); // TODO
 		this.ArgumentList = new ArrayList<ZenNode>();

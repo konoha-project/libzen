@@ -24,20 +24,21 @@
 
 package zen.lang;
 
+import zen.deps.Field;
 import zen.parser.ZenNameSpace;
 import zen.parser.ZenToken;
 import zen.parser.ZenUtils;
 
 public class ZenVarInfo {
-	/*field*/public ZenDefiningFunc  DefiningFunc;
-	/*field*/public int      VarFlag;
-	/*field*/public ZenType	 VarType;
-	/*field*/public String	 VarName;
-	/*field*/public String	 NativeName;
-	/*field*/public ZenToken SourceToken;
-	//	/*field*/public Object   InitValue;
-	/*field*/public int      DefCount;
-	/*field*/public int      UsedCount;
+	@Field public ZenDefiningFunc  DefiningFunc;
+	@Field public int      VarFlag;
+	@Field public ZenType	 VarType;
+	@Field public String	 VarName;
+	@Field public String	 NativeName;
+	@Field public ZenToken SourceToken;
+	//	@Field public Object   InitValue;
+	@Field public int      DefCount;
+	@Field public int      UsedCount;
 
 	ZenVarInfo(ZenDefiningFunc DefiningFunc, int VarFlag, ZenType VarType, String VarName, ZenToken SourceToken) {
 		this.DefiningFunc    = DefiningFunc;

@@ -25,15 +25,17 @@
 //ifdef JAVA
 package zen.parser;
 
+import zen.deps.Field;
 import zen.deps.LibZen;
+import zen.deps.Var;
 import zen.lang.ZenFunc;
 
 public final class ZenSyntaxPattern extends ZenUtils {
-	/*field*/public ZenNameSpace	          PackageNameSpace;
-	/*field*/public String		          PatternName;
-	/*field*/public int				      SyntaxFlag;
-	/*field*/public ZenFunc               MatchFunc;
-	/*field*/public ZenSyntaxPattern	  ParentPattern;
+	@Field public ZenNameSpace	          PackageNameSpace;
+	@Field public String		          PatternName;
+	@Field public int				      SyntaxFlag;
+	@Field public ZenFunc               MatchFunc;
+	@Field public ZenSyntaxPattern	  ParentPattern;
 
 	public ZenSyntaxPattern(ZenNameSpace NameSpace, String PatternName, ZenFunc MatchFunc) {
 		this.PackageNameSpace = NameSpace;
@@ -52,8 +54,8 @@ public final class ZenSyntaxPattern extends ZenUtils {
 	}
 
 	public final boolean IsRightJoin(ZenSyntaxPattern Right) {
-		/*local*/int left = this.SyntaxFlag;
-		/*local*/int right = Right.SyntaxFlag;
+		@Var int left = this.SyntaxFlag;
+		@Var int right = Right.SyntaxFlag;
 		return (left < right || (left == right && !ZenUtils.IsFlag(left, ZenParserConst.LeftJoin) && !ZenUtils.IsFlag(right, ZenParserConst.LeftJoin)));
 	}
 
@@ -65,7 +67,7 @@ public final class ZenSyntaxPattern extends ZenUtils {
 		if(Parent == null) {
 			return Pattern;
 		}
-		/*local*/ZenSyntaxPattern MergedPattern = new ZenSyntaxPattern(Pattern.PackageNameSpace, Pattern.PatternName, Pattern.MatchFunc);
+		@Var ZenSyntaxPattern MergedPattern = new ZenSyntaxPattern(Pattern.PackageNameSpace, Pattern.PatternName, Pattern.MatchFunc);
 		MergedPattern.ParentPattern = Parent;
 		return MergedPattern;
 	}

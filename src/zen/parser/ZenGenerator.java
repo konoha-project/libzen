@@ -26,19 +26,20 @@
 package zen.parser;
 
 import zen.ast.ZenNode;
+import zen.deps.Field;
 import zen.lang.ZenSystem;
 import zen.lang.ZenType;
 //endif VAJA
 
 public abstract class ZenGenerator extends ZenNodeUtils implements ZenVisitor {
-	/*field*/public final String       TargetCode;
-	/*field*/public final String       TargetVersion;
+	@Field public final String       TargetCode;
+	@Field public final String       TargetVersion;
 
-	/*field*/public final ZenNameSpace  RootNameSpace;
-	/*field*/public String             OutputFile;
-	/*field*/public ZenLogger          Logger;
+	@Field public final ZenNameSpace  RootNameSpace;
+	@Field public String             OutputFile;
+	@Field public ZenLogger          Logger;
 
-	/*field*/private boolean StoppedVisitor;
+	@Field private boolean StoppedVisitor;
 
 	protected ZenGenerator(String TargetCode, String TargetVersion) {
 		super();

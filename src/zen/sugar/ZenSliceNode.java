@@ -25,22 +25,23 @@
 package zen.sugar;
 
 import zen.ast.ZenNode;
+import zen.deps.Field;
 import zen.lang.ZenType;
 import zen.parser.ZenToken;
 
 //E.g., $Expr "[" $Index ":" $Index2 "]"
 final public class ZenSliceNode extends ZenSymbolNode {
-	/*field*/public ZenNode RecvNode;
-	/*field*/public ZenNode Index1;
-	/*field*/public ZenNode Index2;
+	@Field public ZenNode RecvNode;
+	@Field public ZenNode Index1;
+	@Field public ZenNode Index2;
 	public ZenSliceNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode RecvNode, ZenNode Index1, ZenNode Index2) {
 		super(Type, Token, "");
 		this.RecvNode = RecvNode;
 		this.Index1 = Index1;
 		this.Index2 = Index2;
-//		this.SetChild3(RecvNode, Index1, Index2);
+		//		this.SetChild3(RecvNode, Index1, Index2);
 	}
-//	@Override public boolean Accept(ZenVisitor Visitor) {
-//		Visitor.VisitSliceNode(this);
-//	}
+	//	@Override public boolean Accept(ZenVisitor Visitor) {
+	//		Visitor.VisitSliceNode(this);
+	//	}
 }

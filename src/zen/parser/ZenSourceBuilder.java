@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import zen.ast.ZenNode;
 import zen.deps.LibNative;
 import zen.deps.LibZen;
+import zen.deps.Var;
 
 //endif VAJA
 
@@ -121,7 +122,7 @@ public class ZenSourceBuilder {
 	}
 
 	public void AppendParamList(ArrayList<ZenNode> ParamList, int BeginIdx, int EndIdx) {
-		for(/*local*/int i = BeginIdx; i < EndIdx; i = i + 1) {
+		for(@Var int i = BeginIdx; i < EndIdx; i = i + 1) {
 			if (i > BeginIdx) {
 				this.Append(this.Template.Camma);
 			}

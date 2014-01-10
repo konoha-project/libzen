@@ -25,12 +25,13 @@
 package zen.ast;
 
 
+import zen.deps.Field;
 import zen.parser.ZenToken;
 import zen.parser.ZenVisitor;
 
 //E.g., "~" $RecvNode
 public class ZenUnaryNode extends ZenNode {
-	/*field*/public ZenNode	RecvNode;
+	@Field public ZenNode	RecvNode;
 	public ZenUnaryNode/*constructor*/(ZenToken Token) {
 		super();
 		this.SourceToken = Token;

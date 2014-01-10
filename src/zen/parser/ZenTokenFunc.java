@@ -1,11 +1,13 @@
 package zen.parser;
 
+import zen.deps.Field;
 import zen.deps.LibNative;
+import zen.deps.Var;
 import zen.lang.ZenFunc;
 
 final class ZenTokenFunc {
-	/*field*/public ZenFunc      Func;
-	/*field*/public ZenTokenFunc	ParentFunc;
+	@Field public ZenFunc      Func;
+	@Field public ZenTokenFunc	ParentFunc;
 
 	ZenTokenFunc(ZenFunc Func, ZenTokenFunc Parent) {
 		this.Func = Func;
@@ -18,8 +20,10 @@ final class ZenTokenFunc {
 
 	final static int ApplyTokenFunc(ZenTokenFunc TokenFunc, ZenTokenContext TokenContext, String ScriptSource, int Pos) {
 		while(TokenFunc != null) {
-			/*local*/int NextIdx = (/*cast*/int)LibNative.ApplyTokenFunc(TokenFunc.Func, TokenContext, ScriptSource, Pos);
-			if(NextIdx > Pos) return NextIdx;
+			@Var int NextIdx = (/*cast*/int)LibNative.ApplyTokenFunc(TokenFunc.Func, TokenContext, ScriptSource, Pos);
+			if(NextIdx > Pos) {
+				return NextIdx;
+			}
 			TokenFunc = TokenFunc.ParentFunc;
 		}
 		return ZenParserConst.MismatchedPosition;

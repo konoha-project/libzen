@@ -54,7 +54,7 @@ import parser.deps.LibNative;
 public class DShellGrammar extends GreenTeaUtils {
 	// LibDShell
 	public final static String GetEnv(String Key) {
-		/*local*/String ret = "";
+		@Var String ret = "";
 //ifdef JAVA
 		ret = System.getenv(Key);
 //endif VAJA
@@ -98,16 +98,16 @@ public class DShellGrammar extends GreenTeaUtils {
 	}
 
 	public final static String[] ExpandPath(String Path) {
-		/*local*/int Index = Path.indexOf("*");
-		/*local*/String NewPath = LibGreenTea.SubString(Path, 0, Index);
-		/*local*/String[] ExpanddedPaths = new File(NewPath).list();
+		@Var int Index = Path.indexOf("*");
+		@Var String NewPath = LibGreenTea.SubString(Path, 0, Index);
+		@Var String[] ExpanddedPaths = new File(NewPath).list();
 		if(ExpanddedPaths != null) {
 			return ExpanddedPaths;
 		}
 		return new String[0];
 	}
 //endif VAJA
-	/*field*/private static String ErrorMessage = "no error reported";
+	@Field private static String ErrorMessage = "no error reported";
 
 	public static void SetErrorMessage(String Message) {
 		DShellGrammar.ErrorMessage = Message;
@@ -163,8 +163,8 @@ public class DShellGrammar extends GreenTeaUtils {
 
 	private static void AppendCommand(ZenNameSpace NameSpace, String CommandPath, ZenToken SourceToken) {
 		if(CommandPath.length() > 0) {
-			/*local*/int loc = CommandPath.lastIndexOf('/');
-			/*local*/String Command = CommandPath;
+			@Var int loc = CommandPath.lastIndexOf('/');
+			@Var String Command = CommandPath;
 			if(loc != -1) {
 //ifdef JAVA
 				if(!IsFileExecutable(CommandPath)) {
@@ -196,11 +196,11 @@ public class DShellGrammar extends GreenTeaUtils {
 	}
 
 	public static ZenSyntaxTree ParseCommand(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenSyntaxTree LeftTree, ZenSyntaxPattern Pattern) {
-		/*local*/ZenSyntaxTree CommandTree = TokenContext.CreateMatchedSyntaxTree(NameSpace, Pattern, "command");
-		/*local*/String Command = "";
-		/*local*/ZenToken SourceToken = null;
+		@Var ZenSyntaxTree CommandTree = TokenContext.CreateMatchedSyntaxTree(NameSpace, Pattern, "command");
+		@Var String Command = "";
+		@Var ZenToken SourceToken = null;
 		while(TokenContext.HasNext()) {
-			/*local*/ZenToken Token = TokenContext.Next();
+			@Var ZenToken Token = TokenContext.Next();
 			if(Token.EqualsText(",")) {
 				Token.ParsedText = "";
 			}
@@ -229,9 +229,9 @@ public class DShellGrammar extends GreenTeaUtils {
 
 	public static long ShellCommentToken(ZenTokenContext TokenContext, String SourceText, long pos) {
 		if(LibGreenTea.CharAt(SourceText, pos) == '#') { // shell style SingleLineComment
-			/*local*/long NextPos = pos + 1;
+			@Var long NextPos = pos + 1;
 			while(NextPos < SourceText.length()) {
-				/*local*/char NextChar = LibGreenTea.CharAt(SourceText, NextPos);
+				@Var char NextChar = LibGreenTea.CharAt(SourceText, NextPos);
 				if(NextChar == '\n') {
 					break;
 				}
@@ -243,21 +243,21 @@ public class DShellGrammar extends GreenTeaUtils {
 	}
 
 	public static ZenSyntaxTree ParseEnv(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenSyntaxTree LeftTree, ZenSyntaxPattern Pattern) {
-		/*local*/ZenSyntaxTree CommandTree = TokenContext.CreateMatchedSyntaxTree(NameSpace, Pattern, "letenv");
-		/*local*/ZenToken Token = TokenContext.Next();
+		@Var ZenSyntaxTree CommandTree = TokenContext.CreateMatchedSyntaxTree(NameSpace, Pattern, "letenv");
+		@Var ZenToken Token = TokenContext.Next();
 		if(!LibGreenTea.IsVariableName(Token.ParsedText, 0)) {
 			return TokenContext.ReportExpectedMessage(Token, "name", true);
 		}
-		/*local*/String Name = Token.ParsedText;
-		/*local*/String Env  = DShellGrammar.GetEnv(Name);
+		@Var String Name = Token.ParsedText;
+		@Var String Env  = DShellGrammar.GetEnv(Name);
 		if(TokenContext.MatchToken("=")) {
-			/*local*/ZenSyntaxTree ConstTree = TokenContext.ParsePattern_OLD(NameSpace, "$Expression$", Required);
+			@Var ZenSyntaxTree ConstTree = TokenContext.ParsePattern_OLD(NameSpace, "$Expression$", Required);
 			if(GreenTeaUtils.IsMismatchedOrError(ConstTree)) {
 				return ConstTree;
 			}
 			if(Env == null) {
-				/*local*/ZenTypeEnv Gamma = new ZenTypeEnv(NameSpace);
-				/*local*/ZenNode ConstNode = ConstTree.TypeCheck(Gamma, ZenStaticTable.StringType, DefaultTypeCheckPolicy);
+				@Var ZenTypeEnv Gamma = new ZenTypeEnv(NameSpace);
+				@Var ZenNode ConstNode = ConstTree.TypeCheck(Gamma, ZenStaticTable.StringType, DefaultTypeCheckPolicy);
 				Env = (/*cast*/String)ConstNode.ToConstValue(Gamma.Context, true);
 			}
 		}
@@ -272,13 +272,13 @@ public class DShellGrammar extends GreenTeaUtils {
 		return CommandTree;
 	}
 
-	/*field*/private final static String FileOperators = "-d -e -f -r -w -x";
-	/*field*/private final static String StopTokens = ";,)]}&&||";
+	@Field private final static String FileOperators = "-d -e -f -r -w -x";
+	@Field private final static String StopTokens = ";,)]}&&||";
 
 	public static ZenSyntaxTree ParseFilePath(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenSyntaxTree LeftTree, ZenSyntaxPattern Pattern) {
-		/*local*/ZenToken Token = TokenContext.GetToken();
-		/*local*/boolean HasStringExpr = false;
-		/*local*/String Path = null;
+		@Var ZenToken Token = TokenContext.GetToken();
+		@Var boolean HasStringExpr = false;
+		@Var String Path = null;
 		if(Token.IsIndent() || DShellGrammar.StopTokens.indexOf(Token.ParsedText) != -1) {
 			return null;
 		}
@@ -290,17 +290,17 @@ public class DShellGrammar extends GreenTeaUtils {
 			TokenContext.Next();
 		}
 		if(Path == null) {
-			/*local*/boolean FoundOpen = false;
+			@Var boolean FoundOpen = false;
 			Path = "";
 			while(TokenContext.HasNext()) {
 				Token = TokenContext.GetToken();
-				/*local*/String ParsedText = Token.ParsedText;
+				@Var String ParsedText = Token.ParsedText;
 				if(Token.IsIndent() || (!FoundOpen && DShellGrammar.StopTokens.indexOf(Token.ParsedText) != -1)) {
 					break;
 				}
 				TokenContext.Next();
 				if(Token.EqualsText("$")) {   // $HOME/hoge
-					/*local*/ZenToken Token2 = TokenContext.GetToken();
+					@Var ZenToken Token2 = TokenContext.GetToken();
 					if(LibGreenTea.IsVariableName(Token2.ParsedText, 0)) {
 						Path += "${" + Token2.ParsedText + "}";
 						HasStringExpr = true;
@@ -328,7 +328,7 @@ public class DShellGrammar extends GreenTeaUtils {
 			}
 		}
 		if(!HasStringExpr) {
-			/*local*/ZenSyntaxTree PathTree = new ZenSyntaxTree(Pattern, NameSpace, Token, null);
+			@Var ZenSyntaxTree PathTree = new ZenSyntaxTree(Pattern, NameSpace, Token, null);
 			PathTree.ToConstTree(Path);
 //			System.err.println("debug: " + Path + " ...");
 			return PathTree;
@@ -339,18 +339,18 @@ public class DShellGrammar extends GreenTeaUtils {
 			Path = Path.replaceAll("\\$\\{", "\" + (");
 			Path = Path.replaceAll("\\}", ") + \"");
 //			System.err.println("debug: " + Path);
-			/*local*/ZenTokenContext LocalContext = new ZenTokenContext(NameSpace, Path, Token.FileLine);
+			@Var ZenTokenContext LocalContext = new ZenTokenContext(NameSpace, Path, Token.FileLine);
 			return LocalContext.ParsePattern_OLD(NameSpace, "$Expression$", Required);
 		}
 	}
 
 	public static ZenSyntaxTree ParseFileOperator(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenSyntaxTree LeftTree, ZenSyntaxPattern Pattern) {
-		/*local*/ZenToken Token = TokenContext.Next();   // "-"
-		/*local*/ZenToken Token2 = TokenContext.Next();  // "f"
+		@Var ZenToken Token = TokenContext.Next();   // "-"
+		@Var ZenToken Token2 = TokenContext.Next();  // "f"
 		if(!Token.IsNextWhiteSpace()) {
 			if(DShellGrammar.FileOperators.indexOf(Token2.ParsedText) != -1) {
 				Token.ParsedText += Token2.ParsedText;  // join to "-f";
-				/*local*/ZenSyntaxTree Tree = new ZenSyntaxTree(Pattern, NameSpace, Token, null);
+				@Var ZenSyntaxTree Tree = new ZenSyntaxTree(Pattern, NameSpace, Token, null);
 				Tree.SetMatchedPatternAt(UnaryTerm, NameSpace, TokenContext, "$FilePath$", Required);
 				return Tree;
 			}
@@ -359,13 +359,13 @@ public class DShellGrammar extends GreenTeaUtils {
 	}
 
 	public static ZenNode TypeFileOperator(ZenTypeEnv Gamma, ZenSyntaxTree ParsedTree, ZenType ContextType) {
-		/*local*/ZenNode PathNode = ParsedTree.TypeCheckAt(UnaryTerm, Gamma, ZenStaticTable.StringType, DefaultTypeCheckPolicy);
+		@Var ZenNode PathNode = ParsedTree.TypeCheckAt(UnaryTerm, Gamma, ZenStaticTable.StringType, DefaultTypeCheckPolicy);
 		if(!PathNode.IsErrorNode()) {
-			/*local*/String OperatorSymbol = ZenNameSpace.FuncSymbol(ParsedTree.KeyToken.ParsedText);
-			/*local*/ZenFuncSet FuncSet = Gamma.NameSpace.GetMethod(ZenStaticTable.StringType, OperatorSymbol, true);
-			/*local*/ZenFunc ResolvedFunc = FuncSet.ResolveUnaryMethod(Gamma, PathNode.Type);
+			@Var String OperatorSymbol = ZenNameSpace.FuncSymbol(ParsedTree.KeyToken.ParsedText);
+			@Var ZenFuncSet FuncSet = Gamma.NameSpace.GetMethod(ZenStaticTable.StringType, OperatorSymbol, true);
+			@Var ZenFunc ResolvedFunc = FuncSet.ResolveUnaryMethod(Gamma, PathNode.Type);
 			LibNative.Assert(ResolvedFunc != null);
-			/*local*/ZenNode ApplyNode =  Gamma.Generator.CreateApplySymbolNode(ResolvedFunc.GetReturnType(), ParsedTree, OperatorSymbol, ResolvedFunc);
+			@Var ZenNode ApplyNode =  Gamma.Generator.CreateApplySymbolNode(ResolvedFunc.GetReturnType(), ParsedTree, OperatorSymbol, ResolvedFunc);
 			ApplyNode.Append(Gamma.Generator.CreateConstNode_OLD(ZenStaticTable.VarType, ParsedTree, ResolvedFunc));
 			ApplyNode.Append(PathNode);
 			return ApplyNode;
@@ -375,7 +375,7 @@ public class DShellGrammar extends GreenTeaUtils {
 
 	private static void IncreasePos(ZenTokenContext TokenContext, int time, boolean allowIncrement) {
 		if(allowIncrement) {
-			for(/*local*/int i = 0; i < time; i++) {
+			for(@Var int i = 0; i < time; i++) {
 				TokenContext.Next();
 			}
 		}
@@ -383,10 +383,10 @@ public class DShellGrammar extends GreenTeaUtils {
 
 	// >, >>, >&, 1>, 2>, 1>>, 2>>, &>, &>>, 1>&1, 1>&2, 2>&1, 2>&2, >&1, >&2
 	private static String FindRedirectSymbol(ZenTokenContext TokenContext, boolean allowIncrement) {
-		/*local*/ZenToken Token = TokenContext.GetToken();
-		/*local*/int CurrentPos = TokenContext.GetPosition(0);
-		/*local*/int NextLen = 0;
-		/*local*/String RedirectSymbol = Token.ParsedText;
+		@Var ZenToken Token = TokenContext.GetToken();
+		@Var int CurrentPos = TokenContext.GetPosition(0);
+		@Var int NextLen = 0;
+		@Var String RedirectSymbol = Token.ParsedText;
 		if(Token.EqualsText(">>")) {
 			DShellGrammar.IncreasePos(TokenContext, 1, allowIncrement);
 			return RedirectSymbol;
@@ -398,8 +398,8 @@ public class DShellGrammar extends GreenTeaUtils {
 			NextLen = 3;
 		}
 		
-		/*local*/ZenToken[] NextTokens = new ZenToken[NextLen];
-		for(/*local*/int i = 0; i < NextLen; i++) {
+		@Var ZenToken[] NextTokens = new ZenToken[NextLen];
+		for(@Var int i = 0; i < NextLen; i++) {
 			TokenContext.Next();
 			NextTokens[i] = TokenContext.GetToken();
 		}
@@ -442,14 +442,14 @@ public class DShellGrammar extends GreenTeaUtils {
 	}
 
 	public static ZenSyntaxTree ParseDShell2(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenSyntaxTree LeftTree, ZenSyntaxPattern Pattern) {
-		/*local*/ZenSyntaxTree CommandTree = TokenContext.CreateSyntaxTree(NameSpace, Pattern, null);
-		/*local*/ZenToken CommandToken = TokenContext.GetToken();
-		/*local*/String RedirectSymbol = DShellGrammar.FindRedirectSymbol(TokenContext, true);
+		@Var ZenSyntaxTree CommandTree = TokenContext.CreateSyntaxTree(NameSpace, Pattern, null);
+		@Var ZenToken CommandToken = TokenContext.GetToken();
+		@Var String RedirectSymbol = DShellGrammar.FindRedirectSymbol(TokenContext, true);
 		if(RedirectSymbol != null) {
 			CommandTree.AppendParsedTree2(CommandTree.CreateConstTree(RedirectSymbol));
 		}
 		else {
-			/*local*/String Command = (/*cast*/String)NameSpace.GetSymbol(DShellGrammar.CommandSymbol(CommandToken.ParsedText));
+			@Var String Command = (/*cast*/String)NameSpace.GetSymbol(DShellGrammar.CommandSymbol(CommandToken.ParsedText));
 			if(Command != null) {
 				CommandTree.AppendParsedTree2(CommandTree.CreateConstTree(Command));
 				TokenContext.Next();
@@ -460,19 +460,19 @@ public class DShellGrammar extends GreenTeaUtils {
 		}
 		TokenContext.SetBackTrack(false);
 		while(TokenContext.HasNext() && CommandTree.IsValidSyntax()) {
-			/*local*/ZenToken Token = TokenContext.GetToken();
+			@Var ZenToken Token = TokenContext.GetToken();
 			if(Token.IsIndent() || DShellGrammar.StopTokens.indexOf(Token.ParsedText) != -1) {
 				if(!Token.EqualsText("|") && !Token.EqualsText("&")) {
 					break;
 				}
 			}
 			if(Token.EqualsText("||") || Token.EqualsText("&&")) {
-				/*local*/ZenSyntaxPattern ExtendedPattern = TokenContext.GetExtendedPattern(NameSpace);
+				@Var ZenSyntaxPattern ExtendedPattern = TokenContext.GetExtendedPattern(NameSpace);
 				return GreenTeaUtils.ApplySyntaxPattern_OLD(NameSpace, TokenContext, CommandTree, ExtendedPattern);
 			}
 			if(Token.EqualsText("|")) {
 				TokenContext.Next();
-				/*local*/ZenSyntaxTree PipedTree = TokenContext.ParsePattern_OLD(NameSpace, "$DShell2$", Required);
+				@Var ZenSyntaxTree PipedTree = TokenContext.ParsePattern_OLD(NameSpace, "$DShell2$", Required);
 				if(PipedTree.IsError()) {
 					return PipedTree;
 				}
@@ -480,14 +480,14 @@ public class DShellGrammar extends GreenTeaUtils {
 				return CommandTree;
 			}
 			if(Token.EqualsText("&")) {	// set background job
-				/*local*/ZenSyntaxTree OptionTree = TokenContext.CreateSyntaxTree(NameSpace, Pattern, null);
+				@Var ZenSyntaxTree OptionTree = TokenContext.CreateSyntaxTree(NameSpace, Pattern, null);
 				OptionTree.AppendParsedTree2(OptionTree.CreateConstTree(Token.ParsedText));
 				CommandTree.AppendParsedTree2(OptionTree);
 				TokenContext.Next();
 				return CommandTree;
 			}
 			if(DShellGrammar.FindRedirectSymbol(TokenContext, false) != null) {
-				/*local*/ZenSyntaxTree RedirectTree = TokenContext.ParsePattern_OLD(NameSpace, "$DShell2$", Required);
+				@Var ZenSyntaxTree RedirectTree = TokenContext.ParsePattern_OLD(NameSpace, "$DShell2$", Required);
 				if(RedirectTree.IsError()) {
 					return RedirectTree;
 				}
@@ -500,7 +500,7 @@ public class DShellGrammar extends GreenTeaUtils {
 	}
 
 	public static ZenNode TypeDShell2(ZenTypeEnv Gamma, ZenSyntaxTree ParsedTree, ZenType ContextType) {
-		/*local*/ZenType Type = null;
+		@Var ZenType Type = null;
 		if(ContextType.IsStringType() || ContextType.IsBooleanType()) {
 			Type = ContextType;
 		}
@@ -511,11 +511,11 @@ public class DShellGrammar extends GreenTeaUtils {
 			Type = ParsedTree.NameSpace.GetType("Task");
 			LibNative.Assert(Type != null);
 		}
-		/*local*/ZenNode PipedNode = null;
-		/*local*/int Index = 0;
-		/*local*/int ArgumentSize = LibZen.ListSize(ParsedTree.SubTreeList);
+		@Var ZenNode PipedNode = null;
+		@Var int Index = 0;
+		@Var int ArgumentSize = LibZen.ListSize(ParsedTree.SubTreeList);
 		while(Index < ArgumentSize) {
-			/*local*/ZenSyntaxTree SubTree = ParsedTree.SubTreeList.get(Index);
+			@Var ZenSyntaxTree SubTree = ParsedTree.SubTreeList.get(Index);
 			if(SubTree.Pattern.EqualsName("$DShell2$")) {
 				PipedNode = DShellGrammar.TypeDShell2(Gamma, SubTree, ContextType);
 				ArgumentSize = Index;
@@ -523,10 +523,10 @@ public class DShellGrammar extends GreenTeaUtils {
 			}
 			Index += 1;
 		}
-		/*local*/ZenNode Node = Gamma.Generator.CreateCommandNode(Type, ParsedTree, PipedNode);
+		@Var ZenNode Node = Gamma.Generator.CreateCommandNode(Type, ParsedTree, PipedNode);
 		Index = 0;
 		while(Index < ArgumentSize) {
-			/*local*/ZenNode ArgumentNode = ParsedTree.TypeCheckAt(Index, Gamma, ZenStaticTable.StringType, DefaultTypeCheckPolicy);
+			@Var ZenNode ArgumentNode = ParsedTree.TypeCheckAt(Index, Gamma, ZenStaticTable.StringType, DefaultTypeCheckPolicy);
 			if(ArgumentNode.IsErrorNode()) {
 				return ArgumentNode;
 			}
@@ -536,51 +536,51 @@ public class DShellGrammar extends GreenTeaUtils {
 		return Node;
 	}
 
-	/*field*/private final static int AtomicTarget   = 0;
-	/*field*/private final static int AtomicBody     = 1;
-	/*field*/private final static int AtomicExcept   = 2;
-	/*field*/private final static int AtomicRollback = 3;
-	/*field*/private final static int AtomicClear    = 4;
-	/*field*/private static int checkpointCount = -1;
+	@Field private final static int AtomicTarget   = 0;
+	@Field private final static int AtomicBody     = 1;
+	@Field private final static int AtomicExcept   = 2;
+	@Field private final static int AtomicRollback = 3;
+	@Field private final static int AtomicClear    = 4;
+	@Field private static int checkpointCount = -1;
 
 	public static ZenSyntaxTree ParseAtomic(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenSyntaxTree LeftTree, ZenSyntaxPattern Pattern) {
-		/*local*/ZenSyntaxTree AtomicTree = TokenContext.CreateMatchedSyntaxTree(NameSpace, Pattern, "atomic");
-		/*local*/ZenSyntaxTree TargetTree = TokenContext.ParsePattern_OLD(NameSpace, "$FilePath$", Required);
+		@Var ZenSyntaxTree AtomicTree = TokenContext.CreateMatchedSyntaxTree(NameSpace, Pattern, "atomic");
+		@Var ZenSyntaxTree TargetTree = TokenContext.ParsePattern_OLD(NameSpace, "$FilePath$", Required);
 
-		/*local*/String TargetPath = LibGreenTea.QuoteString((/*cast*/String)TargetTree.ParsedValue);
+		@Var String TargetPath = LibGreenTea.QuoteString((/*cast*/String)TargetTree.ParsedValue);
 		DShellGrammar.checkpointCount += 1;
-		/*local*/String CheckPointName = "___def_check_point__" + DShellGrammar.checkpointCount;
+		@Var String CheckPointName = "___def_check_point__" + DShellGrammar.checkpointCount;
 
-		/*local*/String NewCheckPoint = "var " + CheckPointName + " = new CheckPoint(" + TargetPath + ");";
-		/*local*/ZenTokenContext CheckPointContext = new ZenTokenContext(NameSpace, NewCheckPoint, TokenContext.ParsingLine);
+		@Var String NewCheckPoint = "var " + CheckPointName + " = new CheckPoint(" + TargetPath + ");";
+		@Var ZenTokenContext CheckPointContext = new ZenTokenContext(NameSpace, NewCheckPoint, TokenContext.ParsingLine);
 		AtomicTree.SetMatchedPatternAt(DShellGrammar.AtomicTarget, NameSpace, CheckPointContext, "$VarDecl$", Required);
 
 		TokenContext.SkipEmptyStatement();
 		AtomicTree.SetMatchedPatternAt(DShellGrammar.AtomicBody, NameSpace, TokenContext, "$Block$", Required);
 
-		/*local*/String NewExcept = "DShellException e";
-		/*local*/ZenTokenContext ExceptContext = new ZenTokenContext(NameSpace, NewExcept, TokenContext.ParsingLine);
+		@Var String NewExcept = "DShellException e";
+		@Var ZenTokenContext ExceptContext = new ZenTokenContext(NameSpace, NewExcept, TokenContext.ParsingLine);
 		AtomicTree.SetMatchedPatternAt(DShellGrammar.AtomicExcept , NameSpace, ExceptContext, "$VarDecl$", Required);
 
-		/*local*/String NewRollback = "{ " + CheckPointName + ".rollback(); }";
-		/*local*/ZenTokenContext RollbackContext = new ZenTokenContext(NameSpace, NewRollback, TokenContext.ParsingLine);
+		@Var String NewRollback = "{ " + CheckPointName + ".rollback(); }";
+		@Var ZenTokenContext RollbackContext = new ZenTokenContext(NameSpace, NewRollback, TokenContext.ParsingLine);
 		AtomicTree.SetMatchedPatternAt(DShellGrammar.AtomicRollback, NameSpace, RollbackContext, "$Block$", Required);
 
-		/*local*/String NewClear = "{ " + CheckPointName + ".clear(); }";
-		/*local*/ZenTokenContext ClearContext = new ZenTokenContext(NameSpace, NewClear, TokenContext.ParsingLine);
+		@Var String NewClear = "{ " + CheckPointName + ".clear(); }";
+		@Var ZenTokenContext ClearContext = new ZenTokenContext(NameSpace, NewClear, TokenContext.ParsingLine);
 		AtomicTree.SetMatchedPatternAt(DShellGrammar.AtomicClear, NameSpace, ClearContext, "$Block$", Required);
 		return AtomicTree;
 	}
 
 	public static ZenNode TypeAtomic(ZenTypeEnv Gamma, ZenSyntaxTree ParsedTree, ZenType ContextType) {
-		/*local*/ZenNameSpace NameSpace = Gamma.NameSpace;
-		/*local*/ZenSyntaxPattern TryPattern = NameSpace.GetSyntaxPattern("try");
-		/*local*/ZenSyntaxTree TryTree = new ZenSyntaxTree(TryPattern, NameSpace, new ZenToken("try", ParsedTree.KeyToken.FileLine), null);
+		@Var ZenNameSpace NameSpace = Gamma.NameSpace;
+		@Var ZenSyntaxPattern TryPattern = NameSpace.GetSyntaxPattern("try");
+		@Var ZenSyntaxTree TryTree = new ZenSyntaxTree(TryPattern, NameSpace, new ZenToken("try", ParsedTree.KeyToken.FileLine), null);
 		TryTree.SetSyntaxTreeAt(TryBody, ParsedTree.GetSyntaxTreeAt(DShellGrammar.AtomicBody));
 		TryTree.SetSyntaxTreeAt(CatchVariable, ParsedTree.GetSyntaxTreeAt(DShellGrammar.AtomicExcept));
 		TryTree.SetSyntaxTreeAt(CatchBody, ParsedTree.GetSyntaxTreeAt(DShellGrammar.AtomicRollback));
 		TryTree.SetSyntaxTreeAt(FinallyBody, ParsedTree.GetSyntaxTreeAt(DShellGrammar.AtomicClear));
-		/*local*/ZenSyntaxTree TargetDeclTree = ParsedTree.GetSyntaxTreeAt(DShellGrammar.AtomicTarget);
+		@Var ZenSyntaxTree TargetDeclTree = ParsedTree.GetSyntaxTreeAt(DShellGrammar.AtomicTarget);
 		TargetDeclTree.ParentTree = ParsedTree.ParentTree;
 		TargetDeclTree.PrevTree = ParsedTree.PrevTree;
 		TargetDeclTree.NextTree = TryTree;
@@ -596,7 +596,7 @@ public class DShellGrammar extends GreenTeaUtils {
 
 	// dlog $Expr
 	private static ZenNode CreateDCaseNode(ZenTypeEnv Gamma, ZenSyntaxTree ParsedTree) {
-		/*local*/String ContextualFuncName = "Admin";
+		@Var String ContextualFuncName = "Admin";
 		if(Gamma.FuncBlock.DefinedFunc != null) {
 			ContextualFuncName = Gamma.FuncBlock.DefinedFunc.FuncName;
 		}
@@ -604,7 +604,7 @@ public class DShellGrammar extends GreenTeaUtils {
 	}
 
 	public static ZenSyntaxTree ParseDLog(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenSyntaxTree LeftTree, ZenSyntaxPattern Pattern) {
-		/*local*/ZenSyntaxTree Tree = TokenContext.CreateMatchedSyntaxTree(NameSpace, Pattern, "dlog");
+		@Var ZenSyntaxTree Tree = TokenContext.CreateMatchedSyntaxTree(NameSpace, Pattern, "dlog");
 		Tree.SetMatchedPatternAt(UnaryTerm, NameSpace, TokenContext, "$Expression$", Required);
 		return Tree;
 	}
@@ -612,7 +612,7 @@ public class DShellGrammar extends GreenTeaUtils {
 	// dlog FunctionName => ExecAction(NameSpace, ContextualFuncName, Action);
 	public static ZenNode TypeDLog(ZenTypeEnv Gamma, ZenSyntaxTree ParsedTree, ZenType ContextType) {
 		ContextType = LibNative.GetNativeType(DFault.class);
-		/*local*/ZenNode ActionNode = ParsedTree.TypeCheckAt(UnaryTerm, Gamma, ContextType, DefaultTypeCheckPolicy);
+		@Var ZenNode ActionNode = ParsedTree.TypeCheckAt(UnaryTerm, Gamma, ContextType, DefaultTypeCheckPolicy);
 		if(ActionNode.IsErrorNode()) {
 			return ActionNode;
 		}
@@ -624,10 +624,10 @@ public class DShellGrammar extends GreenTeaUtils {
 				return Gamma.CreateSyntaxErrorNode(ParsedTree, "constant variable 'Location' is not defined");
 			}
 
-			/*local*/ZenFunc ActionFunc = ((/*cast*/ZenApplySymbolNode)ActionNode).ResolvedFunc;
+			@Var ZenFunc ActionFunc = ((/*cast*/ZenApplySymbolNode)ActionNode).ResolvedFunc;
 			if(ActionFunc.GetFuncParamSize() == 0) {
-				/*local*/ZenFunc ReportFunc = (/*cast*/ZenFunc)Gamma.NameSpace.GetSymbol("$ReportBuiltInFunc");
-				/*local*/ZenNode ApplyNode = Gamma.Generator.CreateApplySymbolNode(ContextType, ParsedTree, "$ReportBuiltInFunc", ReportFunc);
+				@Var ZenFunc ReportFunc = (/*cast*/ZenFunc)Gamma.NameSpace.GetSymbol("$ReportBuiltInFunc");
+				@Var ZenNode ApplyNode = Gamma.Generator.CreateApplySymbolNode(ContextType, ParsedTree, "$ReportBuiltInFunc", ReportFunc);
 				ApplyNode.Append(Gamma.Generator.CreateConstNode_OLD(ZenStaticTable.VarType, ParsedTree, ReportFunc));
 				ApplyNode.Append(Gamma.Generator.CreateConstNode_OLD(ZenStaticTable.VarType, ParsedTree, Gamma.NameSpace));
 				ApplyNode.Append(DShellGrammar.CreateDCaseNode(Gamma, ParsedTree));
@@ -639,11 +639,11 @@ public class DShellGrammar extends GreenTeaUtils {
 	}
 	
 	// Raise Expression
-	/*field*/public final static int ErrorTerm = 0;
-	/*field*/public final static int FaultTerm = 1;
+	@Field public final static int ErrorTerm = 0;
+	@Field public final static int FaultTerm = 1;
 	
 	public static ZenSyntaxTree ParseFault(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenSyntaxTree LeftTree, ZenSyntaxPattern Pattern) {
-		/*local*/ZenSyntaxTree FaultTree = TokenContext.CreateMatchedSyntaxTree(NameSpace, Pattern, "fault");
+		@Var ZenSyntaxTree FaultTree = TokenContext.CreateMatchedSyntaxTree(NameSpace, Pattern, "fault");
 		if(TokenContext.MatchToken("(")) {
 			FaultTree.SetMatchedPatternAt(DShellGrammar.ErrorTerm, NameSpace, TokenContext, "$Expression$", Required);
 			if(TokenContext.MatchToken(",")) {
@@ -655,12 +655,12 @@ public class DShellGrammar extends GreenTeaUtils {
 	}
 
 	public static ZenNode TypeFault(ZenTypeEnv Gamma, ZenSyntaxTree ParsedTree, ZenType ContextType) {
-		/*local*/ZenFunc CreateFunc = (/*cast*/ZenFunc)Gamma.NameSpace.GetSymbol("$CreateFaultBuiltInFunc");
-		/*local*/ZenNode ApplyNode = Gamma.Generator.CreateApplySymbolNode(ContextType, ParsedTree, "$CreateFaultBuiltInFunc", CreateFunc);
+		@Var ZenFunc CreateFunc = (/*cast*/ZenFunc)Gamma.NameSpace.GetSymbol("$CreateFaultBuiltInFunc");
+		@Var ZenNode ApplyNode = Gamma.Generator.CreateApplySymbolNode(ContextType, ParsedTree, "$CreateFaultBuiltInFunc", CreateFunc);
 		ApplyNode.Append(Gamma.Generator.CreateConstNode_OLD(ZenStaticTable.VarType, ParsedTree, CreateFunc));
 		ApplyNode.Append(Gamma.Generator.CreateConstNode_OLD(ZenStaticTable.VarType, ParsedTree, Gamma.NameSpace));
 		ApplyNode.Append(DShellGrammar.CreateDCaseNode(Gamma, ParsedTree));
-		/*local*/String FaultInfo;
+		@Var String FaultInfo;
 		if(ParsedTree.HasNodeAt(DShellGrammar.FaultTerm)) {
 			FaultInfo = ParsedTree.GetSyntaxTreeAt(DShellGrammar.FaultTerm).KeyToken.ParsedText;
 		}
@@ -671,7 +671,7 @@ public class DShellGrammar extends GreenTeaUtils {
 			}
 		}
 		ApplyNode.Append(Gamma.Generator.CreateConstNode_OLD(ZenStaticTable.VarType, ParsedTree, FaultInfo));
-		/*local*/ZenNode ErrorInfoNode = null;
+		@Var ZenNode ErrorInfoNode = null;
 		if(ParsedTree.HasNodeAt(DShellGrammar.ErrorTerm)) {
 			ErrorInfoNode = ParsedTree.TypeCheckAt(DShellGrammar.ErrorTerm, Gamma, ZenStaticTable.StringType, DefaultTypeCheckPolicy);
 		}
@@ -690,7 +690,7 @@ public class DShellGrammar extends GreenTeaUtils {
 	// D-exec Expression
 	// dexec FunctionName
 	public static ZenSyntaxTree ParseDexec(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenSyntaxTree LeftTree, ZenSyntaxPattern Pattern) {
-		/*local*/ZenSyntaxTree Tree = TokenContext.CreateMatchedSyntaxTree(NameSpace, Pattern, "dexec");
+		@Var ZenSyntaxTree Tree = TokenContext.CreateMatchedSyntaxTree(NameSpace, Pattern, "dexec");
 		Tree.SetMatchedPatternAt(UnaryTerm, NameSpace, TokenContext, "$Variable$", Required);
 		return Tree;
 	}
@@ -698,44 +698,44 @@ public class DShellGrammar extends GreenTeaUtils {
 	// dexec FunctionName
 	// => ReportAction(FunctionName(), "FunctionName", CurrentFuncName, DCaseRevision)
 	public static ZenNode TypeDexec(ZenTypeEnv Gamma, ZenSyntaxTree ParsedTree, ZenType ContextType) {
-		/*local*/Object ConstValue = ParsedTree.NameSpace.GetSymbol("DCaseRevision");
+		@Var Object ConstValue = ParsedTree.NameSpace.GetSymbol("DCaseRevision");
 		if(ConstValue == null) {
 			return Gamma.CreateSyntaxErrorNode(ParsedTree, "constant variable DCaseRevision is not defined in this context");
 		}
-		/*local*/ZenType DFaultType = (/*cast*/ZenType) ParsedTree.NameSpace.GetSymbol("DFault");
+		@Var ZenType DFaultType = (/*cast*/ZenType) ParsedTree.NameSpace.GetSymbol("DFault");
 		if(DFaultType == null) {
 			return Gamma.CreateSyntaxErrorNode(ParsedTree, "DFault type is not defined in this context");
 		}
 
-		/*local*/ZenNode ApplyNode = KonohaGrammar.TypeApply(Gamma, ParsedTree, DFaultType);
+		@Var ZenNode ApplyNode = KonohaGrammar.TypeApply(Gamma, ParsedTree, DFaultType);
 		if(ApplyNode.IsErrorNode()) {
 			return ApplyNode;
 		}
 
 		// create UpdateFaultInfomation(FunctionName(), "FunctionName", CurrentFuncName, DCaseRevision);
-		/*local*/ZenNode Revision = DShellGrammar.CreateConstNode(Gamma, ParsedTree, ConstValue);
-		/*local*/String FunctionName = ParsedTree.GetSyntaxTreeAt(UnaryTerm).KeyToken.ParsedText;
-		/*local*/String CurrentFuncName = Gamma.FuncBlock.DefinedFunc.GetNativeFuncName();
+		@Var ZenNode Revision = DShellGrammar.CreateConstNode(Gamma, ParsedTree, ConstValue);
+		@Var String FunctionName = ParsedTree.GetSyntaxTreeAt(UnaryTerm).KeyToken.ParsedText;
+		@Var String CurrentFuncName = Gamma.FuncBlock.DefinedFunc.GetNativeFuncName();
 
-		/*local*/ZenNode FuncNameNode = DShellGrammar.CreateConstNode(Gamma, ParsedTree, FunctionName);
-		/*local*/ZenNode CurFuncNameNode = DShellGrammar.CreateConstNode(Gamma, ParsedTree, CurrentFuncName);
+		@Var ZenNode FuncNameNode = DShellGrammar.CreateConstNode(Gamma, ParsedTree, FunctionName);
+		@Var ZenNode CurFuncNameNode = DShellGrammar.CreateConstNode(Gamma, ParsedTree, CurrentFuncName);
 		
 		ConstValue = ParsedTree.NameSpace.GetSymbol("Location");
 		if(ConstValue == null || !(ConstValue instanceof String)) {
 			return Gamma.CreateSyntaxErrorNode(ParsedTree, "Location is not defined in this context");
 		}
-		/*local*/ZenNode LocationNode = DShellGrammar.CreateConstNode(Gamma, ParsedTree, ConstValue);
+		@Var ZenNode LocationNode = DShellGrammar.CreateConstNode(Gamma, ParsedTree, ConstValue);
 		ConstValue = ParsedTree.NameSpace.GetSymbol("RecServer");
 		if(ConstValue == null || !(ConstValue instanceof String)) {
 			return Gamma.CreateSyntaxErrorNode(ParsedTree, "RecServer is not defined in this context");
 		}
-		/*local*/ZenNode RecServerNode = DShellGrammar.CreateConstNode(Gamma, ParsedTree, ConstValue);
+		@Var ZenNode RecServerNode = DShellGrammar.CreateConstNode(Gamma, ParsedTree, ConstValue);
 		ConstValue = ParsedTree.NameSpace.GetSymbol("ReportAction");
 		if(!(ConstValue instanceof ZenFunc)) {
 			return Gamma.CreateSyntaxErrorNode(ParsedTree, "ReportAction is not defined in this context");
 		}
-		/*local*/ZenFunc Func = (/*cast*/ZenFunc) ConstValue;
-		/*local*/ZenNode ApplyNode2 = Gamma.Generator.CreateApplySymbolNode(Func.GetReturnType(), ParsedTree, "ReportAction", Func);
+		@Var ZenFunc Func = (/*cast*/ZenFunc) ConstValue;
+		@Var ZenNode ApplyNode2 = Gamma.Generator.CreateApplySymbolNode(Func.GetReturnType(), ParsedTree, "ReportAction", Func);
 		ApplyNode2.Append(DShellGrammar.CreateConstNode(Gamma, ParsedTree, Func));
 		ApplyNode2.Append(ApplyNode);
 		ApplyNode2.Append(FuncNameNode);
@@ -748,7 +748,7 @@ public class DShellGrammar extends GreenTeaUtils {
 
 	// Raise Expression
 	public static ZenSyntaxTree ParseRaise(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenSyntaxTree LeftTree, ZenSyntaxPattern Pattern) {
-		/*local*/ZenSyntaxTree ReturnTree = TokenContext.CreateMatchedSyntaxTree(NameSpace, Pattern, "raise");
+		@Var ZenSyntaxTree ReturnTree = TokenContext.CreateMatchedSyntaxTree(NameSpace, Pattern, "raise");
 		ReturnTree.SetMatchedPatternAt(UnaryTerm, NameSpace, TokenContext, "$Type$", Required);
 		return ReturnTree;
 	}
@@ -757,9 +757,9 @@ public class DShellGrammar extends GreenTeaUtils {
 		if(Gamma.IsTopLevel() || Gamma.FuncBlock.DefinedFunc == null) {
 			return Gamma.UnsupportedTopLevelError(ParsedTree);
 		}
-		/*local*/ZenNode Expr = ParsedTree.TypeCheckAt(UnaryTerm, Gamma, ZenStaticTable.TypeType, DefaultTypeCheckPolicy);
+		@Var ZenNode Expr = ParsedTree.TypeCheckAt(UnaryTerm, Gamma, ZenStaticTable.TypeType, DefaultTypeCheckPolicy);
 		if(Expr.IsConstNode() && Expr.Type.IsTypeType()) {
-			/*local*/ZenType ObjectType = (/*cast*/ZenType)((/*cast*/ZenConstPoolNode)Expr).ConstValue;
+			@Var ZenType ObjectType = (/*cast*/ZenType)((/*cast*/ZenConstPoolNode)Expr).ConstValue;
 			Expr = Gamma.Generator.CreateAllocateNode(ObjectType, ParsedTree);
 			//Expr = KonohaGrammar.TypeApply(Gamma, ParsedTree, ObjectType);
 		}
@@ -777,7 +777,7 @@ public class DShellGrammar extends GreenTeaUtils {
 //ifdef JAVA
 	// this is a new interface used in ImportNativeObject
 	public static void ImportGrammar(ZenNameSpace NameSpace, Class<?> GrammarClass) {
-		/*local*/ZenParserContext ParserContext = NameSpace.Context;
+		@Var ZenParserContext ParserContext = NameSpace.Context;
 		NameSpace.AppendTokenFunc("#", LoadTokenFunc(GrammarClass, "ShellCommentToken")); 
 		
 		NameSpace.AppendSyntax_OLD("letenv", LoadParseFunc2(GrammarClass, "ParseEnv"), null);
@@ -790,11 +790,11 @@ public class DShellGrammar extends GreenTeaUtils {
 		
 		// builtin command
 		// timeout
-		/*local*/String timeout = "timeout";
+		@Var String timeout = "timeout";
 		NameSpace.SetSymbol(timeout, NameSpace.GetSyntaxPattern("$DShell2$"), new ZenToken(timeout, 0));
 		NameSpace.SetSymbol(DShellGrammar.CommandSymbol(timeout), timeout, null);
 		// infer
-		/*local*/String trace = "trace";
+		@Var String trace = "trace";
 		NameSpace.SetSymbol(trace, NameSpace.GetSyntaxPattern("$DShell2$"), new ZenToken(trace, 0));
 		NameSpace.SetSymbol(DShellGrammar.CommandSymbol(trace), trace, null);
 

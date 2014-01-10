@@ -26,11 +26,12 @@ package zen.ast;
 
 import java.util.ArrayList;
 
+import zen.deps.Field;
 import zen.parser.ZenVisitor;
 
 //E.g., "{" StringNode, $Node, StringNode, $Node "}"
 final public class ZenMapLiteralNode extends ZenNode {   // => ArrayLiteral
-	/*field*/public ArrayList<ZenNode>	NodeList;
+	@Field public ArrayList<ZenNode>	NodeList;
 	public ZenMapLiteralNode/*constructor*/() {
 		super();
 		this.NodeList = new ArrayList<ZenNode>();

@@ -24,14 +24,15 @@
 
 package zen.ast;
 
+import zen.deps.Field;
 import zen.parser.ZenToken;
 import zen.parser.ZenVisitor;
 
 // E.g., $NativeName = $ValueNode
 public class ZenSetLocalNode extends ZenNode {
-	/*field*/public boolean IsCaptured;
-	/*field*/public String   VarName;
-	/*field*/public ZenNode	 ValueNode;
+	@Field public boolean IsCaptured;
+	@Field public String   VarName;
+	@Field public ZenNode	 ValueNode;
 	public ZenSetLocalNode/*constructor*/(ZenToken Token, String NativeName, ZenNode ValueNode) {
 		super();
 		this.VarName = NativeName;

@@ -24,6 +24,8 @@
 
 package zen.ast;
 
+import zen.deps.Field;
+import zen.deps.Var;
 import zen.parser.ZenNameSpace;
 import zen.parser.ZenParserConst;
 import zen.parser.ZenSyntaxPattern;
@@ -32,9 +34,9 @@ import zen.parser.ZenTokenContext;
 import zen.parser.ZenVisitor;
 
 public class ZenBinaryNode extends ZenNode {
-	/*field*/public ZenNode   LeftNode;
-	/*field*/public ZenNode	 RightNode;
-	/*field*/public ZenSyntaxPattern Pattern;
+	@Field public ZenNode   LeftNode;
+	@Field public ZenNode	 RightNode;
+	@Field public ZenSyntaxPattern Pattern;
 	public ZenBinaryNode/*constructor*/(ZenToken SourceToken, ZenNode Left, ZenSyntaxPattern Pattern) {
 		super();
 		this.SourceToken = SourceToken;
@@ -56,7 +58,7 @@ public class ZenBinaryNode extends ZenNode {
 	}
 
 	private ZenNode RightJoin(ZenNameSpace NameSpace, ZenBinaryNode RightNode) {
-		/*local*/ZenNode RightLeftNode = RightNode.LeftNode;
+		@Var ZenNode RightLeftNode = RightNode.LeftNode;
 		//		if(RightLeftNode instanceof ZenBinaryNode && this.Pattern.IsRightJoin(((ZenBinaryNode)RightLeftNode).Pattern)) {
 		if(this.IsRightJoin(RightLeftNode)) {
 			RightNode.LeftNode = this.RightJoin(NameSpace, (ZenBinaryNode) RightLeftNode);
@@ -70,7 +72,7 @@ public class ZenBinaryNode extends ZenNode {
 
 	public final ZenNode AppendParsedRightNode(ZenNameSpace NameSpace, ZenTokenContext TokenContext) {
 
-		/*local*/ZenNode RightNode = TokenContext.ParsePattern(NameSpace, "$Expression$", ZenParserConst.Required);
+		@Var ZenNode RightNode = TokenContext.ParsePattern(NameSpace, "$Expression$", ZenParserConst.Required);
 		if(RightNode.IsErrorNode()) {
 			return RightNode;
 		}

@@ -27,8 +27,10 @@ package zen.parser;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
+import zen.deps.Field;
 import zen.deps.LibNative;
 import zen.deps.LibZen;
+import zen.deps.Var;
 import zen.deps.ZenMap;
 import zen.lang.ZenSystem;
 
@@ -50,8 +52,8 @@ public final class ZenLogger {
 	public final static int VerboseType      = (1 << 1);
 	public final static int VerboseSymbol    = 1;
 
-	/*field*/public ArrayList<String>  ReportedErrorList;
-	/*field*/public ZenMap<ZenCounter> StatMap;
+	@Field public ArrayList<String>  ReportedErrorList;
+	@Field public ZenMap<ZenCounter> StatMap;
 
 	public ZenLogger() {
 		this.ReportedErrorList = new ArrayList<String>();
@@ -105,14 +107,14 @@ public final class ZenLogger {
 	}
 
 	public final String[] GetReportedErrors() {
-		/*local*/ArrayList<String> List = this.ReportedErrorList;
+		@Var ArrayList<String> List = this.ReportedErrorList;
 		this.ReportedErrorList = new ArrayList<String>();
 		return LibZen.CompactStringList(List);
 	}
 
 	public final void ShowReportedErrors() {
-		/*local*/String[] Messages = this.GetReportedErrors();
-		for(/*local*/int i = 0; i < Messages.length; i = i + 1) {
+		@Var String[] Messages = this.GetReportedErrors();
+		for(@Var int i = 0; i < Messages.length; i = i + 1) {
 			LibNative.println(Messages[i]);
 		}
 	}

@@ -27,8 +27,10 @@ package zen.parser;
 import java.util.ArrayList;
 
 import zen.ast.ZenNode;
+import zen.deps.Field;
 import zen.deps.LibNative;
 import zen.deps.LibZen;
+import zen.deps.Var;
 import zen.deps.ZenMap;
 import zen.lang.ZenDefiningFunc;
 import zen.lang.ZenFunc;
@@ -38,18 +40,18 @@ import zen.lang.ZenType;
 import zen.lang.ZenTypeCheckerImpl2;
 
 final class ZenSymbolSource {
-	/*field*/public ZenToken SourceToken;
-	/*field*/public ZenType  Type; // nullable
-	/*field*/public Object  Value;
+	@Field public ZenToken SourceToken;
+	@Field public ZenType  Type; // nullable
+	@Field public Object  Value;
 }
 
 public final class ZenNameSpace {
-	/*field*/public final ZenNameSpace   ParentNameSpace;
-	/*field*/public final ZenGenerator		    Generator;
+	@Field public final ZenNameSpace   ParentNameSpace;
+	@Field public final ZenGenerator		    Generator;
 
-	/*field*/ZenTokenFunc[] TokenMatrix;
-	/*field*/ZenMap<Object>	 SymbolPatternTable;
-	/*field*/private ZenDefiningFunc  DefiningFunc;
+	@Field ZenTokenFunc[] TokenMatrix;
+	@Field ZenMap<Object>	 SymbolPatternTable;
+	@Field private ZenDefiningFunc  DefiningFunc;
 
 	public ZenNameSpace(ZenGenerator Generator, ZenNameSpace ParentNameSpace) {
 		//		this.Context = Context;
@@ -71,7 +73,7 @@ public final class ZenNameSpace {
 	}
 
 	//	public final ZenNameSpace Minimum() {
-	//		/*local*/ZenNameSpace NameSpace = this;
+	//		@Var ZenNameSpace NameSpace = this;
 	//		while(NameSpace.SymbolPatternTable == null) {
 	//			NameSpace = NameSpace.ParentNameSpace;
 	//		}
@@ -104,13 +106,13 @@ public final class ZenNameSpace {
 		if(this.TokenMatrix == null) {
 			this.TokenMatrix = new ZenTokenFunc[ZenParserConst.MaxSizeOfChars];
 			if(this.ParentNameSpace != null) {
-				for(/*local*/int i = 0; i < ZenParserConst.MaxSizeOfChars; i += 1) {
+				for(@Var int i = 0; i < ZenParserConst.MaxSizeOfChars; i += 1) {
 					this.TokenMatrix[i] = this.ParentNameSpace.GetTokenFunc(i);
 				}
 			}
 		}
-		for(/*local*/int i = 0; i < keys.length(); i += 1) {
-			/*local*/int kchar = ZenUtils.AsciiToTokenMatrixIndex(LibZen.CharAt(keys, i));
+		for(@Var int i = 0; i < keys.length(); i += 1) {
+			@Var int kchar = ZenUtils.AsciiToTokenMatrixIndex(LibZen.CharAt(keys, i));
 			this.TokenMatrix[kchar] = this.JoinParentFunc(TokenFunc, this.TokenMatrix[kchar]);
 		}
 	}
@@ -125,7 +127,7 @@ public final class ZenNameSpace {
 
 	public final Object GetLocalSymbol(String Key) {
 		if(this.SymbolPatternTable != null) {
-			/*local*/Object Value = this.SymbolPatternTable.GetOrNull(Key);
+			@Var Object Value = this.SymbolPatternTable.GetOrNull(Key);
 			if(Value != null) {
 				return Value == ZenParserConst.UndefinedSymbol ? null : Value;
 			}
@@ -134,10 +136,10 @@ public final class ZenNameSpace {
 	}
 
 	public final Object GetSymbol(String Key) {
-		/*local*/ZenNameSpace NameSpace = this;
+		@Var ZenNameSpace NameSpace = this;
 		while(NameSpace != null) {
 			if(NameSpace.SymbolPatternTable != null) {
-				/*local*/Object Value = NameSpace.SymbolPatternTable.GetOrNull(Key);
+				@Var Object Value = NameSpace.SymbolPatternTable.GetOrNull(Key);
 				if(Value != null) {
 					return Value == ZenParserConst.UndefinedSymbol ? null : Value;
 				}
@@ -156,7 +158,7 @@ public final class ZenNameSpace {
 			this.SymbolPatternTable = new ZenMap<Object>(null);
 		}
 		if(SourceToken != null) {
-			/*local*/Object OldValue = this.SymbolPatternTable.GetOrNull(Key);
+			@Var Object OldValue = this.SymbolPatternTable.GetOrNull(Key);
 			if(OldValue != null && OldValue != ZenParserConst.UndefinedSymbol) {
 				if(LibZen.DebugMode) {
 					this.Generator.Logger.ReportWarning(SourceToken, "duplicated symbol: " + SourceToken + " old, new =" + OldValue + ", " + Value);
@@ -177,7 +179,7 @@ public final class ZenNameSpace {
 	}
 
 	public final String GetSymbolText(String Key) {
-		/*local*/Object Body = this.GetSymbol(Key);
+		@Var Object Body = this.GetSymbol(Key);
 		if(Body instanceof String) {
 			return (/*cast*/String)Body;
 		}
@@ -190,7 +192,7 @@ public final class ZenNameSpace {
 
 	// Pattern
 	public ZenSyntaxPattern GetSyntaxPattern(String PatternName) {
-		/*local*/Object Body = this.GetSymbol(PatternName);
+		@Var Object Body = this.GetSymbol(PatternName);
 		if(Body instanceof ZenSyntaxPattern) {
 			return (/*cast*/ZenSyntaxPattern)Body;
 		}
@@ -198,7 +200,7 @@ public final class ZenNameSpace {
 	}
 
 	public ZenSyntaxPattern GetExtendedSyntaxPattern(String PatternName) {
-		/*local*/Object Body = this.GetSymbol(ZenNameSpace.SuffixPatternSymbol(PatternName));
+		@Var Object Body = this.GetSymbol(ZenNameSpace.SuffixPatternSymbol(PatternName));
 		if(Body instanceof ZenSyntaxPattern) {
 			return (/*cast*/ZenSyntaxPattern)Body;
 		}
@@ -207,15 +209,15 @@ public final class ZenNameSpace {
 
 	private void AppendSyntaxPattern(String PatternName, ZenSyntaxPattern NewPattern, ZenToken SourceToken) {
 		LibNative.Assert(NewPattern.ParentPattern == null);
-		/*local*/ZenSyntaxPattern ParentPattern = this.GetSyntaxPattern(PatternName);
+		@Var ZenSyntaxPattern ParentPattern = this.GetSyntaxPattern(PatternName);
 		NewPattern.ParentPattern = ParentPattern;
 		this.SetSymbol(PatternName, NewPattern, SourceToken);
 	}
 
 	public void AppendSyntax(String PatternName, ZenFunc MatchFunc) {
-		/*local*/int Alias = PatternName.indexOf(" ");
-		/*local*/String Name = (Alias == -1) ? PatternName : PatternName.substring(0, Alias);
-		/*local*/ZenSyntaxPattern Pattern = new ZenSyntaxPattern(this, Name, MatchFunc);
+		@Var int Alias = PatternName.indexOf(" ");
+		@Var String Name = (Alias == -1) ? PatternName : PatternName.substring(0, Alias);
+		@Var ZenSyntaxPattern Pattern = new ZenSyntaxPattern(this, Name, MatchFunc);
 		this.AppendSyntaxPattern(Name, Pattern, null);
 		if(Alias != -1) {
 			this.AppendSyntax(PatternName.substring(Alias+1), MatchFunc);
@@ -223,9 +225,9 @@ public final class ZenNameSpace {
 	}
 
 	public void AppendSuffixSyntax(String PatternName, int SyntaxFlag, ZenFunc MatchFunc) {
-		/*local*/int Alias = PatternName.indexOf(" ");
-		/*local*/String Name = (Alias == -1) ? PatternName : PatternName.substring(0, Alias);
-		/*local*/ZenSyntaxPattern Pattern = new ZenSyntaxPattern(this, Name, MatchFunc);
+		@Var int Alias = PatternName.indexOf(" ");
+		@Var String Name = (Alias == -1) ? PatternName : PatternName.substring(0, Alias);
+		@Var ZenSyntaxPattern Pattern = new ZenSyntaxPattern(this, Name, MatchFunc);
 		Pattern.SyntaxFlag = SyntaxFlag;
 		this.AppendSyntaxPattern(ZenNameSpace.SuffixPatternSymbol(Name), Pattern, null);
 		if(Alias != -1) {
@@ -234,7 +236,7 @@ public final class ZenNameSpace {
 	}
 
 	public final ZenType GetType(String TypeName) {
-		/*local*/Object TypeInfo = this.GetSymbol(TypeName);
+		@Var Object TypeInfo = this.GetSymbol(TypeName);
 		if(TypeInfo instanceof ZenType) {
 			return (/*cast*/ZenType)TypeInfo;
 		}
@@ -255,7 +257,7 @@ public final class ZenNameSpace {
 	}
 
 	public ZenDefiningFunc GetDefiningFunc() {
-		/*local*/ZenNameSpace NameSpace = this;
+		@Var ZenNameSpace NameSpace = this;
 		while(NameSpace != null) {
 			if(NameSpace.DefiningFunc != null) {
 				return NameSpace.DefiningFunc;
@@ -265,11 +267,11 @@ public final class ZenNameSpace {
 	}
 
 	public final void AppendFuncName(ZenFunc Func, ZenToken SourceToken) {
-		/*local*/Object OldValue = this.GetLocalSymbol(Func.FuncName);
+		@Var Object OldValue = this.GetLocalSymbol(Func.FuncName);
 		assert(!(OldValue instanceof ZenSyntaxPattern));
-		/*local*/ZenFuncSet FuncSet = null;
+		@Var ZenFuncSet FuncSet = null;
 		if(OldValue instanceof ZenFunc) {
-			/*local*/ZenFunc OldFunc = (/*cast*/ZenFunc)OldValue;
+			@Var ZenFunc OldFunc = (/*cast*/ZenFunc)OldValue;
 			if(OldFunc.ZenType != Func.ZenType) {
 				FuncSet = new ZenFuncSet(OldFunc);
 			}
@@ -286,11 +288,11 @@ public final class ZenNameSpace {
 	}
 
 	public void RetrieveFuncList(ArrayList<ZenFunc> FuncList, ZenType ClassType, String FuncName, int FuncParamSize) {
-		/*local*/ZenNameSpace NameSpace = this;
+		@Var ZenNameSpace NameSpace = this;
 		while(NameSpace != null) {
-			/*local*/Object FuncValue = NameSpace.GetLocalSymbol(FuncName);
+			@Var Object FuncValue = NameSpace.GetLocalSymbol(FuncName);
 			if(FuncValue instanceof ZenFunc) {
-				/*local*/ZenFunc Func = (/*cast*/ZenFunc)FuncValue;
+				@Var ZenFunc Func = (/*cast*/ZenFunc)FuncValue;
 				if(FuncParamSize == Func.GetFuncParamSize()) {
 					if(ClassType == null || Func.GetRecvType() == ClassType) {
 						FuncList.add(Func);
@@ -298,10 +300,10 @@ public final class ZenNameSpace {
 				}
 			}
 			else if(FuncValue instanceof ZenFuncSet) {
-				/*local*/ZenFuncSet FuncSet = (/*cast*/ZenFuncSet)FuncValue;
-				/*local*/int i = FuncSet.FuncList.size() - 1;
+				@Var ZenFuncSet FuncSet = (/*cast*/ZenFuncSet)FuncValue;
+				@Var int i = FuncSet.FuncList.size() - 1;
 				while(i >= 0) {
-					/*local*/ZenFunc Func = FuncSet.FuncList.get(i);
+					@Var ZenFunc Func = FuncSet.FuncList.get(i);
 					if(FuncParamSize == Func.GetFuncParamSize()) {
 						if(ClassType == null || Func.GetRecvType() == ClassType) {
 							FuncList.add(Func);
@@ -316,15 +318,15 @@ public final class ZenNameSpace {
 
 	//	public final ZenType AppendTypeVariable(String Name, ZenType ParamBaseType, ZenToken SourceToken, ArrayList<Object> RevertList) {
 	//		this.UpdateRevertList(Name, RevertList);
-	//		/*local*/ZenType TypeVar = new ZenType(TypeVariable, Name, ParamBaseType, null);
+	//		@Var ZenType TypeVar = new ZenType(TypeVariable, Name, ParamBaseType, null);
 	//		this.SetSymbol(Name, TypeVar, SourceToken);
 	//		return TypeVar;
 	//	}
 
 	public final Object GetClassSymbol(ZenType ClassType, String Symbol, boolean RecursiveSearch) {
 		while(ClassType != null) {
-			/*local*/String Key = ZenNameSpace.ClassSymbol(ClassType, Symbol);
-			/*local*/Object Value = this.GetSymbol(Key);
+			@Var String Key = ZenNameSpace.ClassSymbol(ClassType, Symbol);
+			@Var Object Value = this.GetSymbol(Key);
 			if(Value != null) {
 				return Value;
 			}
@@ -344,11 +346,11 @@ public final class ZenNameSpace {
 	}
 
 	//	public final Object GetClassStaticSymbol(ZenType StaticClassType, String Symbol, boolean RecursiveSearch) {
-	//		/*local*/String Key = null;
-	//		/*local*/ZenType ClassType = StaticClassType;
+	//		@Var String Key = null;
+	//		@Var ZenType ClassType = StaticClassType;
 	//		while(ClassType != null) {
 	//			Key = ZenNameSpace.ClassStaticSymbol(ClassType, Symbol);
-	//			/*local*/Object Value = this.GetSymbol(Key);
+	//			@Var Object Value = this.GetSymbol(Key);
 	//			if(Value != null) {
 	//				return Value;
 	//			}
@@ -359,7 +361,7 @@ public final class ZenNameSpace {
 	//		}
 	//		Key = ZenNameSpace.ClassStaticSymbol(StaticClassType, Symbol);
 	//		if(StaticClassType.IsDynamicNaitiveLoading() && this.Context.RootNameSpace.GetLocalUndefinedSymbol(Key) == null) {
-	//			/*local*/Object Value = LibNative.ImportStaticFieldValue(this.Context, StaticClassType, Symbol);
+	//			@Var Object Value = LibNative.ImportStaticFieldValue(this.Context, StaticClassType, Symbol);
 	//			if(Value == null) {
 	//				this.Context.RootNameSpace.SetUndefinedSymbol(Key, null);
 	//			}
@@ -372,18 +374,18 @@ public final class ZenNameSpace {
 	//	}
 
 	//	public final void ImportClassSymbol(ZenNameSpace NameSpace, String Prefix, ZenType ClassType, ZenToken SourceToken) {
-	//		/*local*/String ClassPrefix = ClassSymbol(ClassType, ClassStaticName(""));
-	//		/*local*/ArrayList<String> KeyList = new ArrayList<String>();
-	//		/*local*/ZenNameSpace ns = NameSpace;
+	//		@Var String ClassPrefix = ClassSymbol(ClassType, ClassStaticName(""));
+	//		@Var ArrayList<String> KeyList = new ArrayList<String>();
+	//		@Var ZenNameSpace ns = NameSpace;
 	//		while(ns != null) {
 	//			if(ns.SymbolPatternTable != null) {
 	//				LibZen.RetrieveMapKeys(ns.SymbolPatternTable, ClassPrefix, KeyList);
 	//			}
 	//			ns = ns.ParentNameSpace;
 	//		}
-	//		for(/*local*/int i = 0; i < KeyList.size(); i = i + 1) {
-	//			/*local*/String Key = KeyList.get(i);
-	//			/*local*/Object Value = NameSpace.GetSymbol(Key);
+	//		for(@Var int i = 0; i < KeyList.size(); i = i + 1) {
+	//			@Var String Key = KeyList.get(i);
+	//			@Var Object Value = NameSpace.GetSymbol(Key);
 	//			Key = Key.replace(ClassPrefix, Prefix);
 	//			if(SourceToken != null) {
 	//				SourceToken.ParsedText = Key;
@@ -393,7 +395,7 @@ public final class ZenNameSpace {
 	//	}
 
 	//	public final ZenFunc GetGetterFunc(ZenType ClassType, String Symbol, boolean RecursiveSearch) {
-	//		/*local*/Object Func = this.Context.RootNameSpace.GetClassSymbol(ClassType, ZenNameSpace.GetterSymbol(Symbol), RecursiveSearch);
+	//		@Var Object Func = this.Context.RootNameSpace.GetClassSymbol(ClassType, ZenNameSpace.GetterSymbol(Symbol), RecursiveSearch);
 	//		if(Func instanceof ZenFunc) {
 	//			return (/*cast*/ZenFunc)Func;
 	//		}
@@ -405,7 +407,7 @@ public final class ZenNameSpace {
 	//	}
 	//
 	//	public final ZenFunc GetSetterFunc(ZenType ClassType, String Symbol, boolean RecursiveSearch) {
-	//		/*local*/Object Func = this.Context.RootNameSpace.GetClassSymbol(ClassType, ZenNameSpace.SetterSymbol(Symbol), RecursiveSearch);
+	//		@Var Object Func = this.Context.RootNameSpace.GetClassSymbol(ClassType, ZenNameSpace.SetterSymbol(Symbol), RecursiveSearch);
 	//		if(Func instanceof ZenFunc) {
 	//			return (/*cast*/ZenFunc)Func;
 	//		}
@@ -417,7 +419,7 @@ public final class ZenNameSpace {
 	//	}
 	//
 	//	public final ZenFunc GetConverterFunc(ZenType FromType, ZenType ToType, boolean RecursiveSearch) {
-	//		/*local*/Object Func = this.GetClassSymbol(FromType, ZenNameSpace.ConverterSymbol(ToType), RecursiveSearch);
+	//		@Var Object Func = this.GetClassSymbol(FromType, ZenNameSpace.ConverterSymbol(ToType), RecursiveSearch);
 	//		if(Func instanceof ZenFunc) {
 	//			return (/*cast*/ZenFunc)Func;
 	//		}
@@ -425,10 +427,10 @@ public final class ZenNameSpace {
 	//	}
 	//
 	//	public final ZenFuncSet GetMethod(ZenType ClassType, String Symbol, boolean RecursiveSearch) {
-	//		/*local*/ArrayList<ZenFunc> FuncList = new ArrayList<ZenFunc>();
+	//		@Var ArrayList<ZenFunc> FuncList = new ArrayList<ZenFunc>();
 	//		while(ClassType != null) {
-	//			/*local*/String Key = ZenNameSpace.ClassSymbol(ClassType, Symbol);
-	//			/*local*/Object RootValue = this.RetrieveFuncList(Key, FuncList);
+	//			@Var String Key = ZenNameSpace.ClassSymbol(ClassType, Symbol);
+	//			@Var Object RootValue = this.RetrieveFuncList(Key, FuncList);
 	//			if(RootValue == null && ClassType.IsDynamicNaitiveLoading()) {
 	//				if(LibZen.EqualsString(Symbol, ZenNameSpace.ConstructorSymbol())) {
 	//					LibZen.LoadNativeConstructors(this.Context, ClassType, FuncList);
@@ -451,15 +453,15 @@ public final class ZenNameSpace {
 	//	}
 	//
 	//	public final ZenFunc GetOverridedMethod(ZenType ClassType, ZenFunc GivenFunc) {
-	//		/*local*/String Symbol = ZenNameSpace.FuncSymbol(GivenFunc.FuncName);
-	//		/*local*/ZenType GivenClassType = GivenFunc.GetRecvType();
+	//		@Var String Symbol = ZenNameSpace.FuncSymbol(GivenFunc.FuncName);
+	//		@Var ZenType GivenClassType = GivenFunc.GetRecvType();
 	//		if(ClassType != GivenClassType) {
-	//			/*local*/ArrayList<ZenFunc> FuncList = new ArrayList<ZenFunc>();
+	//			@Var ArrayList<ZenFunc> FuncList = new ArrayList<ZenFunc>();
 	//			while(ClassType != null) {
-	//				/*local*/String Key = ZenNameSpace.ClassSymbol(ClassType, Symbol);
+	//				@Var String Key = ZenNameSpace.ClassSymbol(ClassType, Symbol);
 	//				this.RetrieveFuncList(Key, FuncList);
-	//				for(/*local*/int i = 0; i < FuncList.size(); i+= 1) {
-	//					/*local*/ZenFunc Func = FuncList.get(i);
+	//				for(@Var int i = 0; i < FuncList.size(); i+= 1) {
+	//					@Var ZenFunc Func = FuncList.get(i);
 	//					if(Func.EqualsOverridedMethod(GivenFunc)) {
 	//						return Func;
 	//					}
@@ -473,19 +475,19 @@ public final class ZenNameSpace {
 	//
 
 	//	public final ZenFuncSet GetFuncSet(String FuncName) {
-	//		/*local*/ArrayList<ZenFunc> FuncList = new ArrayList<ZenFunc>();
+	//		@Var ArrayList<ZenFunc> FuncList = new ArrayList<ZenFunc>();
 	//		this.RetrieveFuncList(FuncName, FuncList);
 	//		return new ZenFuncSet(null, FuncList);
 	//	}
 	//
 	//	public final ZenFunc GetFunc(String FuncName, int BaseIndex, ArrayList<ZenType> TypeList) {
-	//		/*local*/ArrayList<ZenFunc> FuncList = new ArrayList<ZenFunc>();
+	//		@Var ArrayList<ZenFunc> FuncList = new ArrayList<ZenFunc>();
 	//		this.RetrieveFuncList(FuncName, FuncList);
-	//		/*local*/int i = 0;
+	//		@Var int i = 0;
 	//		while(i < FuncList.size()) {
-	//			/*local*/ZenFunc Func = FuncList.get(i);
+	//			@Var ZenFunc Func = FuncList.get(i);
 	//			if(Func.Types.length == TypeList.size() - BaseIndex) {
-	//				/*local*/int j = 0;
+	//				@Var int j = 0;
 	//				while(j < Func.Types.length) {
 	//					if(TypeList.get(BaseIndex + j) != Func.Types[j]) {
 	//						Func = null;
@@ -508,33 +510,33 @@ public final class ZenNameSpace {
 	//	}
 	//
 	//	public final Object AppendStaticFunc(ZenType StaticType, ZenFunc Func, ZenToken SourceToken) {
-	//		/*local*/int loc = Func.FuncName.lastIndexOf(".");
+	//		@Var int loc = Func.FuncName.lastIndexOf(".");
 	//		return this.AppendFuncName(ZenNameSpace.ClassStaticSymbol(StaticType, Func.FuncName.substring(loc+1)), Func, SourceToken);
 	//	}
 	//
 	//	public final Object AppendMethod(ZenFunc Func, ZenToken SourceToken) {
-	//		/*local*/ZenType ClassType = Func.GetRecvType();
+	//		@Var ZenType ClassType = Func.GetRecvType();
 	//		if(ClassType.IsGenericType() && ClassType.HasTypeVariable()) {
 	//			ClassType = ClassType.BaseType;
 	//		}
-	//		/*local*/String Key = ZenNameSpace.ClassSymbol(ClassType, Func.FuncName);
+	//		@Var String Key = ZenNameSpace.ClassSymbol(ClassType, Func.FuncName);
 	//		return this.AppendFuncName(Key, Func, SourceToken);
 	//	}
 	//
 	//	public final void AppendConstructor(ZenType ClassType, ZenFunc Func, ZenToken SourceToken) {
-	//		/*local*/String Key = ZenNameSpace.ClassSymbol(ClassType, ZenNameSpace.ConstructorSymbol());
+	//		@Var String Key = ZenNameSpace.ClassSymbol(ClassType, ZenNameSpace.ConstructorSymbol());
 	//		LibNative.Assert(Func.Is(ConstructorFunc));
 	//		this.Context.RootNameSpace.AppendFuncName(Key, Func, SourceToken);  // @Public
 	//	}
 	//
 	//	public final void SetGetterFunc(ZenType ClassType, String Name, ZenFunc Func, ZenToken SourceToken) {
-	//		/*local*/String Key = ZenNameSpace.ClassSymbol(ClassType, ZenNameSpace.GetterSymbol(Name));
+	//		@Var String Key = ZenNameSpace.ClassSymbol(ClassType, ZenNameSpace.GetterSymbol(Name));
 	//		LibNative.Assert(Func.Is(GetterFunc));
 	//		this.Context.RootNameSpace.SetSymbol(Key, Func, SourceToken);  // @Public
 	//	}
 	//
 	//	public final void SetSetterFunc(ZenType ClassType, String Name, ZenFunc Func, ZenToken SourceToken) {
-	//		/*local*/String Key = ZenNameSpace.ClassSymbol(ClassType, ZenNameSpace.SetterSymbol(Name));
+	//		@Var String Key = ZenNameSpace.ClassSymbol(ClassType, ZenNameSpace.SetterSymbol(Name));
 	//		LibNative.Assert(Func.Is(SetterFunc));
 	//		this.Context.RootNameSpace.SetSymbol(Key, Func, SourceToken);  // @Public
 	//	}
@@ -546,25 +548,25 @@ public final class ZenNameSpace {
 	//		if(ToType == null) {
 	//			ToType = Func.GetReturnType();
 	//		}
-	//		/*local*/String Key = ZenNameSpace.ClassSymbol(ClassType, ZenNameSpace.ConverterSymbol(ToType));
+	//		@Var String Key = ZenNameSpace.ClassSymbol(ClassType, ZenNameSpace.ConverterSymbol(ToType));
 	//		LibNative.Assert(Func.Is(ConverterFunc));
 	//		this.SetSymbol(Key, Func, SourceToken);
 	//	}
 
 	final Object EvalWithErrorInfo(String ScriptText, long FileLine) {
-		/*local*/Object ResultValue = null;
+		@Var Object ResultValue = null;
 		ZenLogger.VerboseLog(ZenLogger.VerboseEval, "eval: " + ScriptText);
-		/*local*/ZenTokenContext TokenContext = new ZenTokenContext(this, ScriptText, FileLine);
-		/*local*/ZenTypeCheckerImpl2 TypeChecker = new ZenTypeCheckerImpl2(this.Generator.Logger);
+		@Var ZenTokenContext TokenContext = new ZenTokenContext(this, ScriptText, FileLine);
+		@Var ZenTypeCheckerImpl2 TypeChecker = new ZenTypeCheckerImpl2(this.Generator.Logger);
 		TokenContext.SkipEmptyStatement();
 		while(TokenContext.HasNext()) {
 			TokenContext.SetParseFlag(0); // init
-			/*local*/ZenNode TopLevelNode = TokenContext.ParsePattern(this, "$Statement$", ZenParserConst.Required);
+			@Var ZenNode TopLevelNode = TokenContext.ParsePattern(this, "$Statement$", ZenParserConst.Required);
 			//			TypeChecker.EnableVisitor();
 			//			TopLevelNode = TypeChecker.TypeCheck(TopLevelNode, this, ZenSystem.VoidType, 0);
 			this.Generator.DoCodeGeneration(this, TopLevelNode);
 			if(TopLevelNode.IsErrorNode() && TokenContext.HasNext()) {
-				/*local*/ZenToken Token = TokenContext.GetToken();
+				@Var ZenToken Token = TokenContext.GetToken();
 				this.Generator.Logger.ReportInfo(Token, "stopped script at this line");
 				return null;
 			}
@@ -578,7 +580,7 @@ public final class ZenNameSpace {
 	}
 
 	public final Object Eval(String ScriptText, long FileLine) {
-		/*local*/Object ResultValue = this.EvalWithErrorInfo(ScriptText, FileLine);
+		@Var Object ResultValue = this.EvalWithErrorInfo(ScriptText, FileLine);
 		if(ResultValue instanceof ZenToken && ((/*cast*/ZenToken)ResultValue).IsError()) {
 			return null;
 		}
@@ -586,7 +588,7 @@ public final class ZenNameSpace {
 	}
 
 	public final boolean Load(String ScriptText, long FileLine) {
-		/*local*/Object Token = this.EvalWithErrorInfo(ScriptText, FileLine);
+		@Var Object Token = this.EvalWithErrorInfo(ScriptText, FileLine);
 		if(Token instanceof ZenToken && ((/*cast*/ZenToken)Token).IsError()) {
 			return false;
 		}
@@ -594,21 +596,21 @@ public final class ZenNameSpace {
 	}
 
 	public final boolean LoadFile(String FileName) {
-		/*local*/String ScriptText = LibNative.LoadScript(FileName);
+		@Var String ScriptText = LibNative.LoadScript(FileName);
 		if(ScriptText != null) {
-			/*local*/long FileLine = ZenSystem.GetFileLine(FileName, 1);
+			@Var long FileLine = ZenSystem.GetFileLine(FileName, 1);
 			return this.Load(ScriptText, FileLine);
 		}
 		return false;
 	}
 
 	public final boolean LoadRequiredLib(String LibName) {
-		/*local*/String Key = ZenParserConst.NativeNameSuffix + "L" + LibName.toLowerCase();
+		@Var String Key = ZenParserConst.NativeNameSuffix + "L" + LibName.toLowerCase();
 		if(!this.HasSymbol(Key)) {
-			/*local*/String Path = LibZen.GetLibPath(this.Generator.TargetCode, LibName);
-			/*local*/String Script = LibNative.LoadScript(Path);
+			@Var String Path = LibZen.GetLibPath(this.Generator.TargetCode, LibName);
+			@Var String Script = LibNative.LoadScript(Path);
 			if(Script != null) {
-				/*local*/long FileLine = ZenSystem.GetFileLine(Path, 1);
+				@Var long FileLine = ZenSystem.GetFileLine(Path, 1);
 				if(this.Load(Script, FileLine)) {
 					this.SetSymbol(Key, Path, null);
 					return true;
@@ -620,7 +622,7 @@ public final class ZenNameSpace {
 	}
 
 	private void UpdateRevertList(String Key, ArrayList<Object> RevertList) {
-		/*local*/Object Value = this.GetLocalSymbol(Key);
+		@Var Object Value = this.GetLocalSymbol(Key);
 		RevertList.add(Key);
 		if(Value != null) {
 			RevertList.add(Value);
@@ -631,9 +633,9 @@ public final class ZenNameSpace {
 	}
 
 	public void Revert(ArrayList<Object> RevertList) {
-		for(/*local*/int i = 0; i < RevertList.size(); i += 2) {
-			/*local*/String Key = (/*cast*/String)RevertList.get(i);
-			/*local*/Object Value = RevertList.get(i+1);
+		for(@Var int i = 0; i < RevertList.size(); i += 2) {
+			@Var String Key = (/*cast*/String)RevertList.get(i);
+			@Var Object Value = RevertList.get(i+1);
 			this.SetSymbol(Key, Value, null);
 		}
 	}

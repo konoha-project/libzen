@@ -25,18 +25,19 @@
 package zen.sugar;
 
 import zen.ast.ZenNode;
+import zen.deps.Field;
 import zen.lang.ZenType;
 import zen.parser.ZenToken;
 
 //E.g.,  $RecvNode "++"
 final public class ZenSuffixInclNode extends ZenNode {
-	/*field*/public ZenNode	RecvNode;
+	@Field public ZenNode	RecvNode;
 	public ZenSuffixInclNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode RecvNode) {
 		super();
 		this.RecvNode = RecvNode;
 		this.SetChild(RecvNode);
 	}
-//	@Override public boolean Accept(ZenVisitor Visitor) {
-//		Visitor.VisitSuffixInclNode(this);
-//	}
+	//	@Override public boolean Accept(ZenVisitor Visitor) {
+	//		Visitor.VisitSuffixInclNode(this);
+	//	}
 }

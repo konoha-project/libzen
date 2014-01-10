@@ -26,26 +26,27 @@ package zen.ast;
 
 import java.util.ArrayList;
 
+import zen.deps.Field;
 import zen.lang.ZenType;
 import zen.parser.ZenToken;
 
 //E.g., new T "[" 10, [10] "]"
 final public class ZenNewArrayNode extends ZenNode {
-	/*field*/public ArrayList<ZenNode>	NodeList;
+	@Field public ArrayList<ZenNode>	NodeList;
 	public ZenNewArrayNode/*constructor*/(ZenType Type, ZenToken Token) {
 		super();
 		this.NodeList = new ArrayList<ZenNode>();
 	}
-//	@Override public ArrayList<ZenNode> GetList() {
-//		return this.NodeList;
-//	}
-//	@Override public boolean Accept(ZenVisitor Visitor) {
-//		Visitor.VisitNewArrayNode(this);
-//	}
-//	@Override public Object ToConstValue(ZenParserContext Context, boolean EnforceConst)  {
-//		if(EnforceConst) {
-//			return Context.Generator.EvalNewArrayNode(this, EnforceConst);
-//		}
-//		return null;
-//	}
+	//	@Override public ArrayList<ZenNode> GetList() {
+	//		return this.NodeList;
+	//	}
+	//	@Override public boolean Accept(ZenVisitor Visitor) {
+	//		Visitor.VisitNewArrayNode(this);
+	//	}
+	//	@Override public Object ToConstValue(ZenParserContext Context, boolean EnforceConst)  {
+	//		if(EnforceConst) {
+	//			return Context.Generator.EvalNewArrayNode(this, EnforceConst);
+	//		}
+	//		return null;
+	//	}
 }

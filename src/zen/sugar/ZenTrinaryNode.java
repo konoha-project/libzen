@@ -25,14 +25,15 @@
 package zen.sugar;
 
 import zen.ast.ZenNode;
+import zen.deps.Field;
 import zen.lang.ZenType;
 import zen.parser.ZenToken;
 
 //E.g., $CondNode "?" $ThenExpr ":" $ElseExpr
 final public class ZenTrinaryNode extends ZenNode {
-	/*field*/public ZenNode	CondNode;
-	/*field*/public ZenNode	ThenNode;
-	/*field*/public ZenNode	ElseNode;
+	@Field public ZenNode	CondNode;
+	@Field public ZenNode	ThenNode;
+	@Field public ZenNode	ElseNode;
 	public ZenTrinaryNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode CondNode, ZenNode ThenNode, ZenNode ElseNode) {
 		super();
 		this.CondNode = CondNode;
@@ -40,19 +41,19 @@ final public class ZenTrinaryNode extends ZenNode {
 		this.ElseNode = ElseNode;
 		//this.SetChild3(CondNode, ThenNode, ElseNode);
 	}
-//	@Override public boolean Accept(ZenVisitor Visitor) {
-//		Visitor.VisitTrinaryNode(this);
-//	}
-//	@Override public Object Eval(ZenNameSpace NameSpace, boolean EnforceConst)  {
-//		/*local*/Object CondValue = this.CondNode.Eval(NameSpace, EnforceConst) ;
-//		if(CondValue instanceof Boolean) {
-//			if(LibZen.booleanValue(CondValue)) {
-//				return this.ThenNode.Eval(NameSpace, EnforceConst);
-//			}
-//			else {
-//				return this.ElseNode.Eval(NameSpace, EnforceConst);
-//			}
-//		}
-//		return null;
-//	}
+	//	@Override public boolean Accept(ZenVisitor Visitor) {
+	//		Visitor.VisitTrinaryNode(this);
+	//	}
+	//	@Override public Object Eval(ZenNameSpace NameSpace, boolean EnforceConst)  {
+	//		@Var Object CondValue = this.CondNode.Eval(NameSpace, EnforceConst) ;
+	//		if(CondValue instanceof Boolean) {
+	//			if(LibZen.booleanValue(CondValue)) {
+	//				return this.ThenNode.Eval(NameSpace, EnforceConst);
+	//			}
+	//			else {
+	//				return this.ElseNode.Eval(NameSpace, EnforceConst);
+	//			}
+	//		}
+	//		return null;
+	//	}
 }

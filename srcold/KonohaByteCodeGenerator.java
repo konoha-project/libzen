@@ -94,16 +94,16 @@ import parser.ast.ZenYieldNode;
 import parser.deps.LibGreenTea;
 
 public class KonohaByteCodeGenerator extends ZenSourceGenerator {
-	/*field*/private ArrayList<Object> ConstPool;
-	/*field*/private ArrayList<String> MethodPool;
-	/*field*/private ArrayList<ZenType> ClassPool;
-	/*field*/private HashMap<ZenType, ArrayList<ZenFieldInfo>> ClassFieldMap;
-	/*field*/private int RegisterNum;
-	/*field*/private ArrayList<Integer> RegStack;
-	/*field*/private int LabelNum;
-	/*field*/private ArrayList<Integer> ContinueStack;
-	/*field*/private ArrayList<Integer> BreakStack;
-	/*field*/private HashMap<String, Integer> LocalVarMap;
+	@Field private ArrayList<Object> ConstPool;
+	@Field private ArrayList<String> MethodPool;
+	@Field private ArrayList<ZenType> ClassPool;
+	@Field private HashMap<ZenType, ArrayList<ZenFieldInfo>> ClassFieldMap;
+	@Field private int RegisterNum;
+	@Field private ArrayList<Integer> RegStack;
+	@Field private int LabelNum;
+	@Field private ArrayList<Integer> ContinueStack;
+	@Field private ArrayList<Integer> BreakStack;
+	@Field private HashMap<String, Integer> LocalVarMap;
 
 	private static final int CallParameters = 5;
 	private static final int ThisIndex = 0;
@@ -125,26 +125,26 @@ public class KonohaByteCodeGenerator extends ZenSourceGenerator {
 	}
 
 	private void SetSignature() {
-		/*local*/int ConstPoolSize = this.ConstPool.size();
+		@Var int ConstPoolSize = this.ConstPool.size();
 		this.HeaderBuilder.Append("CONSTPOOLSIZE = " + ConstPoolSize + "\n");
 		this.HeaderBuilder.Append("METHODPOOLSIZE = " + this.MethodPool.size() + "\n");
-		/*local*/int ClassPoolSize = this.ClassPool.size();
+		@Var int ClassPoolSize = this.ClassPool.size();
 		this.HeaderBuilder.Append("CLASSPOOLSIZE = " + ClassPoolSize + "\n");
-		for(/*local*/int i = 0; i < ConstPoolSize; ++i) {
-			/*local*/Object ConstValue = this.ConstPool.get(i);
+		for(@Var int i = 0; i < ConstPoolSize; ++i) {
+			@Var Object ConstValue = this.ConstPool.get(i);
 			//Builder.Append("CONST" + i + " = " + ConstValue.toString() + "(" + ConstValue.getClass().getName() + ")" + "\n");
 			this.HeaderBuilder.Append("CONST" + i + " = ");
 			this.HeaderBuilder.Append(ConstValue.toString() + "\n");			
 		}
-		for(/*local*/int i = 0; i < ClassPoolSize; ++i) {
-			/*local*/ZenType Class = this.ClassPool.get(i);
+		for(@Var int i = 0; i < ClassPoolSize; ++i) {
+			@Var ZenType Class = this.ClassPool.get(i);
 			this.HeaderBuilder.Append("CLASS" + i + "(" + Class.ShortName + ")");
 			this.HeaderBuilder.Append(" :\n");
 			this.HeaderBuilder.Indent();
-			/*local*/ArrayList<ZenFieldInfo> FieldList = this.ClassFieldMap.get(Class);
-			/*local*/int FieldSize = FieldList.size();
-			for(/*local*/int j = 0; j < FieldSize; ++j) {
-				/*local*/ZenFieldInfo ClassField = FieldList.get(j);
+			@Var ArrayList<ZenFieldInfo> FieldList = this.ClassFieldMap.get(Class);
+			@Var int FieldSize = FieldList.size();
+			for(@Var int j = 0; j < FieldSize; ++j) {
+				@Var ZenFieldInfo ClassField = FieldList.get(j);
 				this.HeaderBuilder.IndentAndAppend("FIELD" + j + ": " + ClassField.NativeName + "(" + ClassField.Type.ShortName + ")" + "\n");
 			}
 			this.HeaderBuilder.UnIndent();
@@ -161,12 +161,12 @@ public class KonohaByteCodeGenerator extends ZenSourceGenerator {
 		Stack.add(new Integer(RegNum));
 	}
 	private int PopStack(ArrayList<Integer> Stack) {
-		/*local*/int Size = Stack.size();
-		/*local*/Integer PopValue = Stack.remove(Size - 1);
+		@Var int Size = Stack.size();
+		@Var Integer PopValue = Stack.remove(Size - 1);
 		return PopValue.intValue();
 	}
 	private int PeekStack(ArrayList<Integer> Stack) {
-		/*local*/int Size = Stack.size();
+		@Var int Size = Stack.size();
 		return Stack.get(Size - 1);
 	}
 	private int AllocRegister() {
@@ -175,7 +175,7 @@ public class KonohaByteCodeGenerator extends ZenSourceGenerator {
 	}
 	private int ReserveRegister(int Size) {
 		/*FIXME*/
-		/*local*/int HeadRegister = this.RegisterNum;
+		@Var int HeadRegister = this.RegisterNum;
 		this.RegisterNum += Size;
 		return HeadRegister;
 	}
@@ -208,7 +208,7 @@ public class KonohaByteCodeGenerator extends ZenSourceGenerator {
 		return this.PeekStack(this.BreakStack);
 	}
 	private int AddConstant(Object ConstValue) {
-		/*local*/int Index = this.ConstPool.indexOf(ConstValue);
+		@Var int Index = this.ConstPool.indexOf(ConstValue);
 		if(Index == -1) {
 			Index = this.ConstPool.size();
 			this.ConstPool.add(ConstValue);
@@ -216,7 +216,7 @@ public class KonohaByteCodeGenerator extends ZenSourceGenerator {
 		return Index;
 	}
 	private int AddMethod(String MethodName) {
-		/*local*/int Index = this.MethodPool.indexOf(MethodName);
+		@Var int Index = this.MethodPool.indexOf(MethodName);
 		if(Index == -1) {
 			Index = this.MethodPool.size();
 			this.MethodPool.add(MethodName);
@@ -224,9 +224,9 @@ public class KonohaByteCodeGenerator extends ZenSourceGenerator {
 		return Index;
 	}
 	private int GetFieldOffset(ArrayList<ZenFieldInfo> FieldList, String FieldName) {
-		/*local*/int FieldSize = FieldList.size();
-		/*local*/int Offset = -1;
-		for(/*local*/int i = 0; i < FieldSize; ++i) {
+		@Var int FieldSize = FieldList.size();
+		@Var int Offset = -1;
+		for(@Var int i = 0; i < FieldSize; ++i) {
 			if(FieldList.get(i).NativeName.equals(FieldName)) {
 				Offset = i;
 				break;
@@ -240,58 +240,58 @@ public class KonohaByteCodeGenerator extends ZenSourceGenerator {
 	}
 
 	@Override public void VisitNullNode(ZenNullNode Node) {
-		/*local*/int Reg = this.AllocRegister();
+		@Var int Reg = this.AllocRegister();
 		this.CurrentBuilder.Append("NUL  " + "REG" + Reg + "\n");
 		this.PushRegister(Reg);
 	}
 
 	@Override public void VisitBooleanNode(ZenBooleanNode Node) {
-		/*local*/int Index = this.AddConstant(new Boolean(Node.Value));
-		/*local*/int Reg = this.AllocRegister();
+		@Var int Index = this.AddConstant(new Boolean(Node.Value));
+		@Var int Reg = this.AllocRegister();
 		this.CurrentBuilder.Append("NSET " + "REG" + Reg + ", " + "CONST" + Index + "\n");
 		this.PushRegister(Reg);
 	}
 
 	@Override public void VisitIntNode(ZenIntNode Node) {
-		/*local*/int Index = this.AddConstant(new Long(Node.Value));
-		/*local*/int Reg = this.AllocRegister();
+		@Var int Index = this.AddConstant(new Long(Node.Value));
+		@Var int Reg = this.AllocRegister();
 		this.CurrentBuilder.Append("NSET " + "REG" + Reg + ", " + "CONST" + Index + "\n");
 		this.PushRegister(Reg);
 	}
 
 	@Override public void VisitFloatNode(ZenFloatNode Node) {
-		/*local*/int Index = this.AddConstant(new Float(Node.Value));
-		/*local*/int Reg = this.AllocRegister();
+		@Var int Index = this.AddConstant(new Float(Node.Value));
+		@Var int Reg = this.AllocRegister();
 		this.CurrentBuilder.Append("NSET " + "REG" + Reg + ", " + "CONST" + Index + "\n");
 		this.PushRegister(Reg);
 	}
 
 	@Override public void VisitStringNode(ZenStringNode Node) {
-		/*local*/int Index = this.AddConstant(LibGreenTea.QuoteString(Node.Value));
-		/*local*/int Reg = this.AllocRegister();
+		@Var int Index = this.AddConstant(LibGreenTea.QuoteString(Node.Value));
+		@Var int Reg = this.AllocRegister();
 		this.CurrentBuilder.Append("NSET " + "REG" + Reg + ", " + "CONST" + Index + "\n");
 		this.PushRegister(Reg);
 	}
 
 	@Override public void VisitRegexNode(ZenRegexNode Node) {
-		/*local*/int Index = this.AddConstant(Node.Value);
-		/*local*/int Reg = this.AllocRegister();
+		@Var int Index = this.AddConstant(Node.Value);
+		@Var int Reg = this.AllocRegister();
 		this.CurrentBuilder.Append("NSET " + "REG" + Reg + ", " + "CONST" + Index + "\n");
 		this.PushRegister(Reg);
 	}
 
 	@Override public void VisitConstPoolNode(ZenConstPoolNode Node) {
-		/*local*/int Index = this.AddConstant(Node.ConstValue);
-		/*local*/int Reg = this.AllocRegister();
+		@Var int Index = this.AddConstant(Node.ConstValue);
+		@Var int Reg = this.AllocRegister();
 		this.CurrentBuilder.Append("NSET " + "REG" + Reg + ", " + "CONST" + Index + "\n");
 		this.PushRegister(Reg);
 	}
 
 	@Override public void VisitArrayLiteralNode(ZenArrayLiteralNode Node) {
-		/*local*/int ArraySize = LibZen.ListSize(Node.NodeList);
-		/*local*/int TargetReg = this.ReserveRegister(ArraySize + CallParameters);
-		/*local*/int CallReg = TargetReg - ReturnIndex + ThisIndex;
-		for(/*local*/int i = 0; i < ArraySize; ++i) {
+		@Var int ArraySize = LibZen.ListSize(Node.NodeList);
+		@Var int TargetReg = this.ReserveRegister(ArraySize + CallParameters);
+		@Var int CallReg = TargetReg - ReturnIndex + ThisIndex;
+		for(@Var int i = 0; i < ArraySize; ++i) {
 			Node.NodeList.get(i).Accept(this);
 			this.CurrentBuilder.Append("NMOV " + "REG" + (CallReg+i+1) + ", REG" + this.PopRegister() + "\n");
 		}
@@ -332,31 +332,31 @@ public class KonohaByteCodeGenerator extends ZenSourceGenerator {
 
 	@Override public void VisitGetterNode(ZenGetterNode Node) {
 		Node.RecvNode.Accept(this);
-		/*local*/int TargetReg = this.AllocRegister();
-		/*local*/ArrayList<ZenFieldInfo> FieldList = this.ClassFieldMap.get(Node.RecvNode.Type);
-		/*local*/int Offset = this.GetFieldOffset(FieldList, Node.NativeName);
+		@Var int TargetReg = this.AllocRegister();
+		@Var ArrayList<ZenFieldInfo> FieldList = this.ClassFieldMap.get(Node.RecvNode.Type);
+		@Var int Offset = this.GetFieldOffset(FieldList, Node.NativeName);
 		this.CurrentBuilder.Append("NMOVx " + "REG" + TargetReg + ", REG" + this.PopRegister() + ", " + Offset + "\n");
 		this.PushRegister(TargetReg);
 	}
 
 	@Override public void VisitSetterNode(ZenSetterNode Node) {
 		Node.RecvNode.Accept(this);
-		/*local*/int TargetReg = this.PopRegister();
-		/*local*/ArrayList<ZenFieldInfo> FieldList = this.ClassFieldMap.get(Node.RecvNode.Type);
-		/*local*/int Offset = this.GetFieldOffset(FieldList, Node.NativeName);
+		@Var int TargetReg = this.PopRegister();
+		@Var ArrayList<ZenFieldInfo> FieldList = this.ClassFieldMap.get(Node.RecvNode.Type);
+		@Var int Offset = this.GetFieldOffset(FieldList, Node.NativeName);
 		Node.ValueNode.Accept(this);
 		this.CurrentBuilder.Append("XNMOV " + "REG" + TargetReg + ", " + Offset + ", REG" + this.PopRegister() + "\n");
 	}
 
 	@Override public void VisitApplySymbolNode(ZenApplySymbolNode Node) {
-		/*local*/int ParamSize = LibZen.ListSize(Node.ParamList);
-		/*local*/int TargetReg = this.ReserveRegister(ParamSize + CallParameters);
-		/*local*/int CallReg = TargetReg - ReturnIndex + ThisIndex;
-		for(/*local*/int i = 0; i < ParamSize; ++i) {
+		@Var int ParamSize = LibZen.ListSize(Node.ParamList);
+		@Var int TargetReg = this.ReserveRegister(ParamSize + CallParameters);
+		@Var int CallReg = TargetReg - ReturnIndex + ThisIndex;
+		for(@Var int i = 0; i < ParamSize; ++i) {
 			Node.ParamList.get(i).Accept(this);
 			this.CurrentBuilder.Append("NMOV " + "REG" + (CallReg+i+1) + ", REG" + this.PopRegister() + "\n");
 		}
-		/*local*/int CallMethod = this.MethodPool.indexOf(Node.ResolvedFunc.GetNativeFuncName());
+		@Var int CallMethod = this.MethodPool.indexOf(Node.ResolvedFunc.GetNativeFuncName());
 		this.CurrentBuilder.Append("NSET " + "REG" + (CallReg+MethodIndex) + ", METHOD" + CallMethod + "\n");
 		this.CurrentBuilder.Append("CALL " + "REG" + CallReg + ", " + ParamSize + "\n");
 		this.PushRegister(TargetReg);
@@ -365,10 +365,10 @@ public class KonohaByteCodeGenerator extends ZenSourceGenerator {
 
 	@Override public void VisitApplyFunctionObjectNode(ZenApplyFunctionObjectNode Node) {
 		/*FIXME*/
-		/*local*/int ParamSize = LibZen.ListSize(Node.ParamList);
-		/*local*/int TargetReg = this.ReserveRegister(ParamSize + CallParameters);
-		/*local*/int CallReg = TargetReg - ReturnIndex + ThisIndex;
-		for(/*local*/int i = 0; i < ParamSize; ++i) {
+		@Var int ParamSize = LibZen.ListSize(Node.ParamList);
+		@Var int TargetReg = this.ReserveRegister(ParamSize + CallParameters);
+		@Var int CallReg = TargetReg - ReturnIndex + ThisIndex;
+		for(@Var int i = 0; i < ParamSize; ++i) {
 			Node.ParamList.get(i).Accept(this);
 			this.CurrentBuilder.Append("NMOV " + "REG" + (CallReg+i+1) + ", REG" + this.PopRegister() + "\n");
 		}
@@ -385,8 +385,8 @@ public class KonohaByteCodeGenerator extends ZenSourceGenerator {
 	}
 
 	@Override public void VisitGetIndexNode(ZenGetIndexNode Node) {
-		/*local*/int TargetReg = this.ReserveRegister(2/*ArgumentSize*/ + CallParameters);
-		/*local*/int CallReg = TargetReg - ReturnIndex + ThisIndex;
+		@Var int TargetReg = this.ReserveRegister(2/*ArgumentSize*/ + CallParameters);
+		@Var int CallReg = TargetReg - ReturnIndex + ThisIndex;
 		Node.RecvNode.Accept(this);
 		this.CurrentBuilder.Append("NMOV " + "REG" + (CallReg+1) + ", REG" + this.PopRegister() + "\n");
 		Node.IndexNode.Accept(this);
@@ -398,10 +398,10 @@ public class KonohaByteCodeGenerator extends ZenSourceGenerator {
 	}
 
 	@Override public void VisitSetIndexNode(ZenSetIndexNode Node) {
-		/*local*/int TargetReg = this.ReserveRegister(3/*ArgumentSize*/ + CallParameters);
-		/*local*/int CallReg = TargetReg - ReturnIndex + ThisIndex;
+		@Var int TargetReg = this.ReserveRegister(3/*ArgumentSize*/ + CallParameters);
+		@Var int CallReg = TargetReg - ReturnIndex + ThisIndex;
 		Node.RecvNode.Accept(this);
-		///*local*/int ArrayVarReg = this.PopRegister();
+		//@Var int ArrayVarReg = this.PopRegister();
 		//this.VisitingBuilder.Append("NMOV " + "REG" + (CallReg+1) + ", REG" + ArrayVarReg + "\n");
 		this.CurrentBuilder.Append("NMOV " + "REG" + (CallReg+1) + ", REG" + this.PopRegister() + "\n");
 		Node.IndexNode.Accept(this);
@@ -419,8 +419,8 @@ public class KonohaByteCodeGenerator extends ZenSourceGenerator {
 	}
 
 	@Override public void VisitAndNode(ZenAndNode Node) {
-		/*local*/int TargetReg = this.AllocRegister();
-		/*local*/int EndLabel = this.NewLabel();
+		@Var int TargetReg = this.AllocRegister();
+		@Var int EndLabel = this.NewLabel();
 		Node.LeftNode.Accept(this);
 		this.CurrentBuilder.Append("NMOV " + "REG" + TargetReg + ", REG" + this.PopRegister() + "\n");
 		this.CurrentBuilder.Append("JMPF " + "L" + EndLabel + ", REG" + TargetReg + "\n");
@@ -431,9 +431,9 @@ public class KonohaByteCodeGenerator extends ZenSourceGenerator {
 	}
 
 	@Override public void VisitOrNode(ZenOrNode Node) {
-		/*local*/int TargetReg = this.AllocRegister();
-		/*local*/int RightLabel = this.NewLabel();
-		/*local*/int EndLabel = this.NewLabel();
+		@Var int TargetReg = this.AllocRegister();
+		@Var int RightLabel = this.NewLabel();
+		@Var int EndLabel = this.NewLabel();
 		Node.LeftNode.Accept(this);
 		this.CurrentBuilder.Append("NMOV " + "REG" + TargetReg + ", REG" + this.PopRegister() + "\n");
 		this.CurrentBuilder.Append("JMPF " + "L" + RightLabel + ", REG" + TargetReg + "\n");
@@ -446,11 +446,11 @@ public class KonohaByteCodeGenerator extends ZenSourceGenerator {
 	}
 
 	@Override public void VisitUnaryNode(ZenUnaryNode Node) {
-		/*local*/int TargetReg = this.ReserveRegister(1/*ArgumentSize*/ + CallParameters);
-		/*local*/int CallReg = TargetReg - ReturnIndex + ThisIndex;
+		@Var int TargetReg = this.ReserveRegister(1/*ArgumentSize*/ + CallParameters);
+		@Var int CallReg = TargetReg - ReturnIndex + ThisIndex;
 		Node.RecvNode.Accept(this);
 		this.CurrentBuilder.Append("NMOV " + "REG" + (CallReg+1) + ", REG" + this.PopRegister() + "\n");
-		/*local*/String Op = Node.SourceToken.ParsedText; //Node.NativeName
+		@Var String Op = Node.SourceToken.ParsedText; //Node.NativeName
 		this.CurrentBuilder.Append("NSET " + "REG" + (CallReg+MethodIndex) + ", METHOD\"" + Op + "\"\n");
 		this.CurrentBuilder.Append("CALL " + "REG" + CallReg + ", " + 1/*ArgumentSize*/ + "\n");
 		this.PushRegister(TargetReg);
@@ -459,11 +459,11 @@ public class KonohaByteCodeGenerator extends ZenSourceGenerator {
 
 	@Override public void VisitPrefixInclNode(ZenPrefixInclNode Node) {
 		/*FIXME*/
-		/*local*/int TargetReg = this.ReserveRegister(2/*ArgumentSize*/ + CallParameters);
-		/*local*/int CallReg = TargetReg - ReturnIndex + ThisIndex;
+		@Var int TargetReg = this.ReserveRegister(2/*ArgumentSize*/ + CallParameters);
+		@Var int CallReg = TargetReg - ReturnIndex + ThisIndex;
 		Node.RecvNode.Accept(this);
 		this.CurrentBuilder.Append("NMOV " + "REG" + (CallReg+1) + ", REG" + this.PopRegister() + "\n");
-		/*local*/int Index = this.AddConstant(new Long(1));
+		@Var int Index = this.AddConstant(new Long(1));
 		this.CurrentBuilder.Append("NSET " + "REG" + (CallReg+2) + ", " + "CONST" + Index + "\n");
 		this.CurrentBuilder.Append("NSET " + "REG" + (CallReg+MethodIndex) + ", METHOD\"\"\n");
 		this.CurrentBuilder.Append("CALL " + "REG" + CallReg + ", " + 2/*ArgumentSize*/ + "\n");
@@ -484,13 +484,13 @@ public class KonohaByteCodeGenerator extends ZenSourceGenerator {
 	}
 
 	@Override public void VisitBinaryNode(ZenBinaryNode Node) {
-		/*local*/int TargetReg = this.ReserveRegister(2/*ArgumentSize*/ + CallParameters);
-		/*local*/int CallReg = TargetReg - ReturnIndex + ThisIndex;
+		@Var int TargetReg = this.ReserveRegister(2/*ArgumentSize*/ + CallParameters);
+		@Var int CallReg = TargetReg - ReturnIndex + ThisIndex;
 		Node.LeftNode.Accept(this);
 		this.CurrentBuilder.Append("NMOV " + "REG" + (CallReg+1) + ", REG" + this.PopRegister() + "\n");
 		Node.RightNode.Accept(this);
 		this.CurrentBuilder.Append("NMOV " + "REG" + (CallReg+2) + ", REG" + this.PopRegister() + "\n");
-		/*local*/String Op = Node.SourceToken.ParsedText; //Node.NativeName
+		@Var String Op = Node.SourceToken.ParsedText; //Node.NativeName
 		this.CurrentBuilder.Append("NSET " + "REG" + (CallReg+MethodIndex) + ", METHOD\"" + Op + "\"\n");
 		this.CurrentBuilder.Append("CALL " + "REG" + CallReg + ", " + 2/*ArgumentSize*/ + "\n");
 		this.PushRegister(TargetReg);
@@ -502,14 +502,14 @@ public class KonohaByteCodeGenerator extends ZenSourceGenerator {
 	}
 
 	@Override public void VisitConstructorNode(ZenConstructorNode Node) {
-		/*local*/int ParamSize = LibZen.ListSize(Node.ParamList);
-		/*local*/int TargetReg = this.ReserveRegister(ParamSize + CallParameters);
-		/*local*/int CallReg = TargetReg - ReturnIndex + ThisIndex;
-		for(/*local*/int i = 0; i < ParamSize; ++i) {
+		@Var int ParamSize = LibZen.ListSize(Node.ParamList);
+		@Var int TargetReg = this.ReserveRegister(ParamSize + CallParameters);
+		@Var int CallReg = TargetReg - ReturnIndex + ThisIndex;
+		for(@Var int i = 0; i < ParamSize; ++i) {
 			Node.ParamList.get(i).Accept(this);
 			this.CurrentBuilder.Append("NMOV " + "REG" + (CallReg+i+1) + ", REG" + this.PopRegister() + "\n");
 		}
-		/*local*/int CallMethod = this.MethodPool.indexOf(Node.Func.GetNativeFuncName());
+		@Var int CallMethod = this.MethodPool.indexOf(Node.Func.GetNativeFuncName());
 		this.CurrentBuilder.Append("NSET " + "REG" + (CallReg+MethodIndex) + ", METHOD" + CallMethod + "\n");
 		//this.VisitingBuilder.Append("NEW  " + "REG" + CallReg + ", CLASS" + this.ClassPool.indexOf(Node.Type) + "\n");
 		this.CurrentBuilder.Append("CALL " + "REG" + CallReg + ", " + ParamSize + "\n");
@@ -518,7 +518,7 @@ public class KonohaByteCodeGenerator extends ZenSourceGenerator {
 	}
 
 	@Override public void VisitAllocateNode(ZenAllocateNode Node) {
-		/*local*/int Reg = this.AllocRegister();
+		@Var int Reg = this.AllocRegister();
 		this.CurrentBuilder.Append("NEW  " + "REG" + Reg + ", CLASS" + this.ClassPool.indexOf(Node.Type) + "\n");
 		this.PushRegister(Reg);
 	}
@@ -548,8 +548,8 @@ public class KonohaByteCodeGenerator extends ZenSourceGenerator {
 	}
 
 	@Override public void VisitIfNode(ZenIfNode Node) {
-		/*local*/int ElseLabel = this.NewLabel();
-		/*local*/int EndLabel = this.NewLabel();
+		@Var int ElseLabel = this.NewLabel();
+		@Var int EndLabel = this.NewLabel();
 		Node.CondNode.Accept(this);
 		this.CurrentBuilder.Append("JMPF " + "L" + ElseLabel + ", REG" + this.PopRegister() + "\n");
 		this.VisitBlock(Node.ThenNode);
@@ -560,8 +560,8 @@ public class KonohaByteCodeGenerator extends ZenSourceGenerator {
 	}
 
 	@Override public void VisitWhileNode(ZenWhileNode Node) {
-		/*local*/int CondLabel = this.NewLabel();
-		/*local*/int EndLabel = this.NewLabel();
+		@Var int CondLabel = this.NewLabel();
+		@Var int EndLabel = this.NewLabel();
 		this.PushLoopLabel(CondLabel, EndLabel);
 		this.CurrentBuilder.Append("L" + CondLabel + ":\n");
 		Node.CondNode.Accept(this);
@@ -573,9 +573,9 @@ public class KonohaByteCodeGenerator extends ZenSourceGenerator {
 	}
 
 	@Override public void VisitDoWhileNode(ZenDoWhileNode Node) {
-		/*local*/int BodyLabel = this.NewLabel();
-		/*local*/int CondLabel = this.NewLabel();
-		/*local*/int EndLabel = this.NewLabel();
+		@Var int BodyLabel = this.NewLabel();
+		@Var int CondLabel = this.NewLabel();
+		@Var int EndLabel = this.NewLabel();
 		this.PushLoopLabel(CondLabel, EndLabel);
 		this.CurrentBuilder.Append("L" + BodyLabel + ":\n");
 		this.VisitBlock(Node.BodyNode);
@@ -588,9 +588,9 @@ public class KonohaByteCodeGenerator extends ZenSourceGenerator {
 	}
 
 	@Override public void VisitForNode(ZenForNode Node) {
-		/*local*/int CondLabel = this.NewLabel();
-		/*local*/int IterLabel = this.NewLabel();
-		/*local*/int EndLabel = this.NewLabel();
+		@Var int CondLabel = this.NewLabel();
+		@Var int IterLabel = this.NewLabel();
+		@Var int EndLabel = this.NewLabel();
 		this.PushLoopLabel(IterLabel, EndLabel);
 		this.CurrentBuilder.Append("L" + CondLabel + ":\n");
 		Node.CondNode.Accept(this);
@@ -660,16 +660,16 @@ public class KonohaByteCodeGenerator extends ZenSourceGenerator {
 	}
 
 	@Override public void GenerateFunc(ZenFunc Func, ArrayList<String> ParamNameList, ZenNode Body) {
-		/*local*/String MethodName = Func.GetNativeFuncName();
-		/*local*/int Index = this.AddMethod(MethodName);
+		@Var String MethodName = Func.GetNativeFuncName();
+		@Var int Index = this.AddMethod(MethodName);
 		this.RegisterNum = ThisIndex + 1;
 		//this.LabelNum = 0;
 		this.CurrentBuilder = this.NewSourceBuilder();
 		this.CurrentBuilder.Append("(METHOD" + Index + " " + MethodName);
-		/*local*/int ParamSize = LibZen.ListSize(ParamNameList);
-		///*local*/HashMap<String,Integer> PushedMap = (/*cast*/HashMap<String,Integer>)this.LocalVarMap.clone();
-		for(/*local*/int i = 0; i < ParamSize; ++i) {
-			/*local*/String ParamName = ParamNameList.get(i);
+		@Var int ParamSize = LibZen.ListSize(ParamNameList);
+		//@Var HashMap<String,Integer> PushedMap = (/*cast*/HashMap<String,Integer>)this.LocalVarMap.clone();
+		for(@Var int i = 0; i < ParamSize; ++i) {
+			@Var String ParamName = ParamNameList.get(i);
 			this.LocalVarMap.put(ParamName, this.AllocRegister());
 			this.CurrentBuilder.Append(" " + ParamName + ":REG" + this.LocalVarMap.get(ParamName));
 		}

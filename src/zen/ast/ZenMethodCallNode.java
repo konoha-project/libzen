@@ -26,14 +26,15 @@ package zen.ast;
 
 import java.util.ArrayList;
 
+import zen.deps.Field;
 import zen.parser.ZenToken;
 import zen.parser.ZenVisitor;
 
 //E.g., $NativeFuncName "(" $Param[0], $Param[1], ... ")"
 final public class ZenMethodCallNode extends ZenNode {
-	/*field*/public ZenNode RecvNode;
-	/*field*/public String MethodName;
-	/*field*/public ArrayList<ZenNode>  ParamList; /* [arg1, arg2, ...] */
+	@Field public ZenNode RecvNode;
+	@Field public String MethodName;
+	@Field public ArrayList<ZenNode>  ParamList; /* [arg1, arg2, ...] */
 	public ZenMethodCallNode(ZenToken SourceToken, ZenNode RecvNode, String MethodName) {
 		super(); this.SourceToken = SourceToken;
 		this.RecvNode = this.SetChild(RecvNode);

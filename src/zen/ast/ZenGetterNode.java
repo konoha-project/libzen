@@ -24,14 +24,15 @@
 
 package zen.ast;
 
+import zen.deps.Field;
 import zen.lang.ZenSystem;
-import zen.parser.ZenVisitor;
 import zen.parser.ZenToken;
+import zen.parser.ZenVisitor;
 import zen.sugar.ZenSymbolNode;
 
 //E.g., $RecvNode.$NativeName
 final public class ZenGetterNode extends ZenSymbolNode {
-	/*field*/public ZenNode  RecvNode;
+	@Field public ZenNode  RecvNode;
 	public ZenGetterNode/*constructor*/(ZenToken SourceToken, ZenNode RecvNode, String NativeName) {
 		super(ZenSystem.VarType, SourceToken, NativeName);
 		this.RecvNode = RecvNode;

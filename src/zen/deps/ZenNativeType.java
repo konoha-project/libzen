@@ -3,7 +3,7 @@ package zen.deps;
 import zen.lang.ZenType;
 
 public class ZenNativeType extends ZenType {
-	/*field*/public Class<?>          JClass;
+	@Field public Class<?>          JClass;
 	
 	ZenNativeType(Class<?> JType) {
 		super(UniqueType, JType.getSimpleName(), null);

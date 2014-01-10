@@ -24,6 +24,7 @@
 
 package zen.ast;
 
+import zen.deps.Field;
 import zen.parser.ZenVisitor;
 
 /**
@@ -32,8 +33,8 @@ import zen.parser.ZenVisitor;
  */
 
 final public class ZenVarDeclNode extends ZenBlockNode {
-	/*field*/public String  NativeName;
-	/*field*/public ZenNode	InitNode;
+	@Field public String  NativeName;
+	@Field public ZenNode	InitNode;
 	public ZenVarDeclNode/*constructor*/(/*ZenType DeclType, ZenToken SourceToken, String VariableName*/) {
 		super(null, null);
 		this.NativeName = null;

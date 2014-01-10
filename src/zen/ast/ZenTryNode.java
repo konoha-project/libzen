@@ -24,12 +24,13 @@
 
 package zen.ast;
 
+import zen.deps.Field;
 import zen.parser.ZenVisitor;
 
 final public class ZenTryNode extends ZenNode {
-	/*field*/public ZenNode	TryNode;
-	/*field*/public ZenNode CatchNode;
-	/*field*/public ZenNode	FinallyNode;
+	@Field public ZenNode	TryNode;
+	@Field public ZenNode CatchNode;
+	@Field public ZenNode	FinallyNode;
 	public ZenTryNode/*constructor*/() {
 		super();
 		this.TryNode = null;

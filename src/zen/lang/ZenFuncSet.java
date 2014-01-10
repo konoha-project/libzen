@@ -26,11 +26,13 @@ package zen.lang;
 
 import java.util.ArrayList;
 
+import zen.deps.Field;
+import zen.deps.Var;
 import zen.parser.ZenLogger;
 import zen.parser.ZenToken;
 
 public class ZenFuncSet {
-	/*field*/public ArrayList<ZenFunc> FuncList;
+	@Field public ArrayList<ZenFunc> FuncList;
 
 	public ZenFuncSet(ZenFunc Func) {
 		this.FuncList = new ArrayList<ZenFunc>();
@@ -44,8 +46,8 @@ public class ZenFuncSet {
 	}
 
 	@Override public String toString() { // this is used in an error message
-		/*local*/String s = "";
-		/*local*/int i = 0;
+		@Var String s = "";
+		@Var int i = 0;
 		while(i < this.FuncList.size()) {
 			if(i > 0) {
 				s = s + ", ";
@@ -58,9 +60,9 @@ public class ZenFuncSet {
 
 	public void Append(ZenFunc Func, ZenLogger Logger, ZenToken SourceToken) {
 		if(SourceToken != null) {
-			/*local*/int i = 0;
+			@Var int i = 0;
 			while(i < this.FuncList.size()) {
-				/*local*/ZenFunc ListedFunc = this.FuncList.get(i);
+				@Var ZenFunc ListedFunc = this.FuncList.get(i);
 				if(ListedFunc == Func) {
 					/*return this;*/ /* same function */
 				}
@@ -81,9 +83,9 @@ public class ZenFuncSet {
 	//
 	//
 	//	public ZenFunc ResolveUnaryMethod(ZenType Type) {
-	//		/*local*/int i = 0;
+	//		@Var int i = 0;
 	//		while(i < this.FuncList.size()) {
-	//			/*local*/ZenFunc Func = this.FuncList.get(i);
+	//			@Var ZenFunc Func = this.FuncList.get(i);
 	//			if(Func.GetFuncParamSize() == 1) {
 	//				return Func;
 	//			}
@@ -93,16 +95,16 @@ public class ZenFuncSet {
 	//	}
 	//
 	//	public final boolean CheckIncrementalTyping(ZenNameSpace NameSpace, int FuncParamSize, ArrayList<ZenNode> ParamList, ZenResolvedFunc ResolvedFunc) {
-	//		/*local*/ZenFunc FoundFunc = null;
-	//		/*local*/ZenNameSpace GenericNameSpace = null;
-	//		/*local*/int i = 0;
+	//		@Var ZenFunc FoundFunc = null;
+	//		@Var ZenNameSpace GenericNameSpace = null;
+	//		@Var int i = 0;
 	//		while(i < this.FuncList.size()) {
-	//			/*local*/ZenFunc Func = this.FuncList.get(i);
+	//			@Var ZenFunc Func = this.FuncList.get(i);
 	//			if(Func.GetFuncParamSize() == FuncParamSize) {
 	//				GenericNameSpace = Func.GetGenericNameSpace(NameSpace, ParamList, 0);
-	//				/*local*/int p = 0;
+	//				@Var int p = 0;
 	//				while(p < ParamList.size()) {
-	//					/*local*/ZenNode Node = ParamList.get(p);
+	//					@Var ZenNode Node = ParamList.get(p);
 	//					if(!Func.Types[p + 1].Match(GenericNameSpace, Node.Type)) {
 	//						Func = null;
 	//						break;
@@ -130,14 +132,14 @@ public class ZenFuncSet {
 	//	}
 
 	//	public ZenFunc CheckParamWithCoercion(ZenNameSpace GenericNameSpace, ZenFunc Func, ArrayList<ZenNode> ParamList) {
-	//		/*local*/int p = 0;
-	//		/*local*/ZenNode[] ConvertedNodes = null;
+	//		@Var int p = 0;
+	//		@Var ZenNode[] ConvertedNodes = null;
 	//		while(p < ParamList.size()) {
-	//			/*local*/ZenType ParamType = Func.Types[p + 1];
-	//			/*local*/ZenNode Node = ParamList.get(p);
+	//			@Var ZenType ParamType = Func.Types[p + 1];
+	//			@Var ZenNode Node = ParamList.get(p);
 	//			ParamType = ParamType.RealType(GenericNameSpace, Node.Type);
 	//			if(!ParamType.Accept(Node.Type)) {
-	//				/*local*/ZenFunc TypeCoercion = GenericNameSpace.GetConverterFunc(Node.Type, ParamType, true);
+	//				@Var ZenFunc TypeCoercion = GenericNameSpace.GetConverterFunc(Node.Type, ParamType, true);
 	//				if(TypeCoercion != null && TypeCoercion.Is(CoercionFunc)) {
 	//					if(ConvertedNodes == null) {
 	//						ConvertedNodes = new ZenNode[ParamList.size()];
@@ -163,17 +165,17 @@ public class ZenFuncSet {
 	//	}
 
 	//	public ZenFunc CheckParamAsVarArg(ZenNameSpace GenericNameSpace, ZenFunc Func, ZenType VargType, ArrayList<ZenNode> ParamList) {
-	//		/*local*/int p = 0;
-	//		/*local*/ZenNode ConvertedNodes[] = null;
+	//		@Var int p = 0;
+	//		@Var ZenNode ConvertedNodes[] = null;
 	//		while(p < ParamList.size()) {
-	//			/*local*/ZenType ParamType = (p + 1 < Func.Types.length - 1) ? Func.Types[p + 1] : VargType;
-	//			/*local*/ZenNode Node = ParamList.get(p);
-	//			/*local*/ZenType RealType = ParamType.RealType(GenericNameSpace, Node.Type);
+	//			@Var ZenType ParamType = (p + 1 < Func.Types.length - 1) ? Func.Types[p + 1] : VargType;
+	//			@Var ZenNode Node = ParamList.get(p);
+	//			@Var ZenType RealType = ParamType.RealType(GenericNameSpace, Node.Type);
 	//			if(RealType == null) {
 	//				return null;
 	//			}
 	//			if(!ParamType.Accept(RealType)) {
-	//				/*local*/ZenFunc TypeCoercion = GenericNameSpace.GetConverterFunc(RealType, ParamType, true);
+	//				@Var ZenFunc TypeCoercion = GenericNameSpace.GetConverterFunc(RealType, ParamType, true);
 	//				if(TypeCoercion != null && TypeCoercion.Is(CoercionFunc)) {
 	//					if(ConvertedNodes == null) {
 	//						ConvertedNodes = new ZenNode[ParamList.size()];
@@ -197,8 +199,8 @@ public class ZenFuncSet {
 	//			ConvertedNodes = null;
 	//		}
 	//		if(!Func.Is(NativeVariadicFunc)) {
-	//			/*local*/ZenType ArrayType = Func.Types[Func.Types.length - 1];
-	//			/*local*/ZenNode ArrayNode = GenericNameSpace.Context.Generator.CreateArrayLiteralNode(ArrayType, null);
+	//			@Var ZenType ArrayType = Func.Types[Func.Types.length - 1];
+	//			@Var ZenNode ArrayNode = GenericNameSpace.Context.Generator.CreateArrayLiteralNode(ArrayType, null);
 	//			p = Func.Types.length - 1;
 	//			while(p < ParamList.size()) {
 	//				ArrayNode.Append(ParamList.get(p));
@@ -212,11 +214,11 @@ public class ZenFuncSet {
 	//	}
 
 	//	public ZenResolvedFunc GetAcceptableFunc(ZenTypeEnv Gamma, int FuncParamSize, ArrayList<ZenNode> ParamList, ZenResolvedFunc ResolvedFunc) {
-	//		/*local*/int i = 0;
+	//		@Var int i = 0;
 	//		while(i < this.FuncList.size()) {
-	//			/*local*/ZenFunc Func = this.FuncList.get(i);
+	//			@Var ZenFunc Func = this.FuncList.get(i);
 	//			if(Func.GetFuncParamSize() == FuncParamSize) {
-	//				/*local*/ZenNameSpace GenericNameSpace = Func.GetGenericNameSpace(Gamma.NameSpace, ParamList, 0);
+	//				@Var ZenNameSpace GenericNameSpace = Func.GetGenericNameSpace(Gamma.NameSpace, ParamList, 0);
 	//				Func = this.CheckParamWithCoercion(GenericNameSpace, Func, ParamList);
 	//				if(Func != null) {
 	//					return ResolvedFunc.UpdateFunc(Func, GenericNameSpace);
@@ -226,10 +228,10 @@ public class ZenFuncSet {
 	//		}
 	//		i = 0;
 	//		while(i < this.FuncList.size()) {
-	//			/*local*/ZenFunc Func = this.FuncList.get(i);
-	//			/*local*/ZenType VargType = Func.GetVargType();
+	//			@Var ZenFunc Func = this.FuncList.get(i);
+	//			@Var ZenType VargType = Func.GetVargType();
 	//			if(VargType != null && Func.GetFuncParamSize() <= FuncParamSize) {
-	//				/*local*/ZenNameSpace GenericNameSpace = Func.GetGenericNameSpace(Gamma.NameSpace, ParamList, 0);
+	//				@Var ZenNameSpace GenericNameSpace = Func.GetGenericNameSpace(Gamma.NameSpace, ParamList, 0);
 	//				Func = this.CheckParamAsVarArg(GenericNameSpace, Func, VargType, ParamList);
 	//				if(Func != null) {
 	//					return ResolvedFunc.UpdateFunc(Func, GenericNameSpace);
@@ -241,12 +243,12 @@ public class ZenFuncSet {
 	//	}
 
 	//	public ZenResolvedFunc ResolveFunc(ZenTypeEnv Gamma, ZenSyntaxTree ParsedTree, int TreeIndex, ArrayList<ZenNode> ParamList) {
-	//		/*local*/int FuncParamSize = LibZen.ListSize(ParsedTree.SubTreeList) - TreeIndex + ParamList.size();
+	//		@Var int FuncParamSize = LibZen.ListSize(ParsedTree.SubTreeList) - TreeIndex + ParamList.size();
 	//		//System.err.println("*** FuncParamSize=" + FuncParamSize + ", resolved_size=" + ParamList.size());
 	//		//System.err.println("*** FuncList=" + this);
-	//		/*local*/ZenResolvedFunc ResolvedFunc = new ZenResolvedFunc(Gamma.NameSpace);
+	//		@Var ZenResolvedFunc ResolvedFunc = new ZenResolvedFunc(Gamma.NameSpace);
 	//		while(!this.CheckIncrementalTyping(Gamma.NameSpace, FuncParamSize, ParamList, ResolvedFunc) && TreeIndex < LibZen.ListSize(ParsedTree.SubTreeList)) {
-	//			/*local*/ZenNode Node = ParsedTree.TypeCheckAt(TreeIndex, Gamma, ZenStaticTable.VarType, DefaultTypeCheckPolicy);
+	//			@Var ZenNode Node = ParsedTree.TypeCheckAt(TreeIndex, Gamma, ZenStaticTable.VarType, DefaultTypeCheckPolicy);
 	//			if(Node.IsErrorNode()) {
 	//				ResolvedFunc.ErrorNode = Node;
 	//				return ResolvedFunc;
@@ -255,12 +257,12 @@ public class ZenFuncSet {
 	//			TreeIndex = TreeIndex + 1;
 	//		}
 	//		if(ResolvedFunc.Func != null) {
-	//			/*local*/ZenNameSpace GenericNameSpace = ResolvedFunc.GenericNameSpace;
+	//			@Var ZenNameSpace GenericNameSpace = ResolvedFunc.GenericNameSpace;
 	//			while(TreeIndex < LibZen.ListSize(ParsedTree.SubTreeList)) {
-	//				/*local*/ZenType ContextType = ResolvedFunc.Func.GetFuncParamType(ParamList.size()/*ResolvedSize*/);
+	//				@Var ZenType ContextType = ResolvedFunc.Func.GetFuncParamType(ParamList.size()/*ResolvedSize*/);
 	//				ContextType = ContextType.RealType(GenericNameSpace, ZenStaticTable.VarType);
 	//				//System.err.println("TreeIndex="+ TreeIndex+" NodeSize="+ParamList.size()+" ContextType="+ContextType);
-	//				/*local*/ZenNode Node = ParsedTree.TypeCheckAt(TreeIndex, Gamma, ContextType, DefaultTypeCheckPolicy);
+	//				@Var ZenNode Node = ParsedTree.TypeCheckAt(TreeIndex, Gamma, ContextType, DefaultTypeCheckPolicy);
 	//				if(Node.IsErrorNode()) {
 	//					ResolvedFunc.ErrorNode = Node;
 	//					return ResolvedFunc;
@@ -277,15 +279,15 @@ public class ZenFuncSet {
 	//	}
 
 	//	private boolean CheckArguments(ZenNameSpace NameSpace, ZenFunc Func, Object[] Arguments, Object[] ConvertedArguments, ArrayList<ZenType> TypeList) {
-	//		/*local*/int p = 0;
+	//		@Var int p = 0;
 	//		while(p < Arguments.length) {
-	//			/*local*/ZenType DefinedType = Func.Types[p + 1];
-	//			/*local*/ZenType GivenType = TypeList.get(p);
+	//			@Var ZenType DefinedType = Func.Types[p + 1];
+	//			@Var ZenType GivenType = TypeList.get(p);
 	//			if(DefinedType.Accept(GivenType)) {
 	//				ConvertedArguments[p] = Arguments[p];
 	//			}
 	//			else {
-	//				/*local*/ZenFunc TypeCoercion = NameSpace.GetConverterFunc(GivenType, DefinedType, true);
+	//				@Var ZenFunc TypeCoercion = NameSpace.GetConverterFunc(GivenType, DefinedType, true);
 	//				if(TypeCoercion != null && TypeCoercion.Is(CoercionFunc)) {
 	//					ConvertedArguments[p] = LibZen.DynamicConvertTo(DefinedType, Arguments[p]);
 	//				}
@@ -299,26 +301,26 @@ public class ZenFuncSet {
 	//	}
 	//
 	//	public ZenFunc GetMatchedFunc(ZenNameSpace NameSpace, Object[] Arguments) {
-	//		/*local*/Object[] OriginalArguments = new Object[Arguments.length];
+	//		@Var Object[] OriginalArguments = new Object[Arguments.length];
 	//		LibZen.ArrayCopy(Arguments, 0, OriginalArguments, 0, Arguments.length);
-	//		/*local*/ArrayList<ZenType> TypeList = new ArrayList<ZenType>();
-	//		/*local*/int i = 0;
+	//		@Var ArrayList<ZenType> TypeList = new ArrayList<ZenType>();
+	//		@Var int i = 0;
 	//		while(i < Arguments.length) {
 	//			TypeList.add(ZenStaticTable.GuessType(Arguments[i]));
 	//			i = i + 1;
 	//		}
 	//		i = 0;
 	//		while(i < this.FuncList.size()) {
-	//			/*local*/ZenFunc Func = this.FuncList.get(i);
+	//			@Var ZenFunc Func = this.FuncList.get(i);
 	//			if(Func.GetFuncParamSize() == Arguments.length) {
-	//				/*local*/ZenNameSpace GenericNameSpace = Func.GetGenericNameSpaceT(NameSpace, TypeList, 0);
+	//				@Var ZenNameSpace GenericNameSpace = Func.GetGenericNameSpaceT(NameSpace, TypeList, 0);
 	//				if(this.CheckArguments(GenericNameSpace, Func, OriginalArguments, Arguments, TypeList)) {
 	//					return Func;
 	//				}
 	//			}
-	////			/*local*/ZenType VargType = Func.GetVargType();
+	////			@Var ZenType VargType = Func.GetVargType();
 	////			if(VargType != null && Func.GetFuncParamSize() <= FuncParamSize) {
-	////				/*local*/ZenNameSpace GenericNameSpace = Func.GetGenericNameSpace(Gamma.NameSpace, ParamList, 0);
+	////				@Var ZenNameSpace GenericNameSpace = Func.GetGenericNameSpace(Gamma.NameSpace, ParamList, 0);
 	////				Func = this.CheckMethodArguments(GenericNameSpace, Func, Arguments);
 	////				if(Func != null) {
 	////					return Func;
@@ -330,10 +332,10 @@ public class ZenFuncSet {
 	//	}
 	//
 	//	public ZenResolvedFunc ResolveConstructor(ZenTypeEnv Gamma, ZenSyntaxTree ParsedTree, int TreeIndex, ArrayList<ZenNode> NodeList) {
-	//		/*local*/int FuncParamSize = LibZen.ListSize(ParsedTree.SubTreeList) - TreeIndex + NodeList.size();
+	//		@Var int FuncParamSize = LibZen.ListSize(ParsedTree.SubTreeList) - TreeIndex + NodeList.size();
 	////		System.err.println("*** FuncParamSize=" + FuncParamSize + " resolved_size=" + NodeList.size());
 	////		System.err.println("*** FuncList=" + this);
-	//		/*local*/ZenResolvedFunc ResolvedFunc = this.ResolveFunc(Gamma, ParsedTree, TreeIndex, NodeList);
+	//		@Var ZenResolvedFunc ResolvedFunc = this.ResolveFunc(Gamma, ParsedTree, TreeIndex, NodeList);
 	//		if(ResolvedFunc.Func == null  && FuncParamSize == 1) {
 	//
 	//		}

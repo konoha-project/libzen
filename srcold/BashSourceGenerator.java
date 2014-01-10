@@ -65,8 +65,8 @@ import parser.deps.LibGreenTea;
 //GreenTea Generator should be written in each language.
 
 public class BashSourceGenerator extends SourceGenerator {
-	/*field*/boolean inFunc = false;
-	/*field*/boolean inMainFunc = false;
+	@Field boolean inFunc = false;
+	@Field boolean inMainFunc = false;
 
 	public BashSourceGenerator/*constructor*/(String TargetCode, String OutputFile, int GeneratorFlag) {
 		super(TargetCode, OutputFile, GeneratorFlag);
@@ -99,17 +99,17 @@ public class BashSourceGenerator extends SourceGenerator {
 	}
 
 	private String VisitBlockWithOption(ZenNode Node, boolean inBlock, boolean allowDummyBlock, boolean replaceBreak) {
-		/*local*/String Code = "";
-		/*local*/boolean isBreakReplaced = false;
+		@Var String Code = "";
+		@Var boolean isBreakReplaced = false;
 		if(inBlock) {
 			this.Indent();
 		}
-		/*local*/ZenNode CurrentNode = Node;
+		@Var ZenNode CurrentNode = Node;
 		if(this.IsEmptyBlock(Node) && allowDummyBlock) {
 			Code += this.GetIndentString() + "echo dummy block!! &> /dev/zero" + this.LineFeed;
 		}
 		while(!this.IsEmptyBlock(CurrentNode)) {
-			/*local*/String poppedCode = this.VisitNode(CurrentNode);
+			@Var String poppedCode = this.VisitNode(CurrentNode);
 			if(replaceBreak && CurrentNode instanceof ZenBreakNode) {
 				isBreakReplaced = true;
 				poppedCode = ";;";
@@ -140,22 +140,22 @@ public class BashSourceGenerator extends SourceGenerator {
 		 * => boolean firstCond = true; while(firstCond || Cond) {firstCond = false; Block; }
 		 *
 		 */
-		/*local*/ZenType BoolType = ZenStaticTable.BooleanType;
-		/*local*/String VarName = "FirstCond";
-		/*local*/ZenNode TrueNode = this.CreateBooleanNode(BoolType, ParsedTree, true);
-		/*local*/ZenNode FalseNode = this.CreateBooleanNode(BoolType, ParsedTree, false);
+		@Var ZenType BoolType = ZenStaticTable.BooleanType;
+		@Var String VarName = "FirstCond";
+		@Var ZenNode TrueNode = this.CreateBooleanNode(BoolType, ParsedTree, true);
+		@Var ZenNode FalseNode = this.CreateBooleanNode(BoolType, ParsedTree, false);
 
-		/*local*/ZenNode FirstCond = this.CreateGetLocalNode(BoolType, ParsedTree, VarName);
-		/*local*/ZenNode NewCond = this.CreateOrNode(BoolType, ParsedTree, FirstCond, Cond);
-		/*local*/ZenNode BodyNode = this.CreateSetLocalNode(BoolType, ParsedTree, VarName, FalseNode);
+		@Var ZenNode FirstCond = this.CreateGetLocalNode(BoolType, ParsedTree, VarName);
+		@Var ZenNode NewCond = this.CreateOrNode(BoolType, ParsedTree, FirstCond, Cond);
+		@Var ZenNode BodyNode = this.CreateSetLocalNode(BoolType, ParsedTree, VarName, FalseNode);
 
 		ZenNode.LinkNode(BodyNode.MoveTailNode(), Block);
-		/*local*/ZenNode NewWhileNode = this.CreateWhileNode(Type, ParsedTree, NewCond, BodyNode);
+		@Var ZenNode NewWhileNode = this.CreateWhileNode(Type, ParsedTree, NewCond, BodyNode);
 		return this.CreateVarDeclNode(BoolType, ParsedTree, BoolType, VarName, TrueNode, NewWhileNode);
 	}
 
 	private String ResolveCondition(ZenNode Node) {
-		/*local*/String Cond = this.VisitNode(Node);
+		@Var String Cond = this.VisitNode(Node);
 		if(LibGreenTea.EqualsString(Cond, this.TrueLiteral)) {
 			Cond = "((1 == 1))";
 		}
@@ -171,33 +171,33 @@ public class BashSourceGenerator extends SourceGenerator {
 	}
 
 	@Override public void VisitWhileNode(ZenWhileNode Node) {
-		/*local*/String Program = "while " + this.ResolveCondition(Node.CondNode) + " ;do" + this.LineFeed;
+		@Var String Program = "while " + this.ResolveCondition(Node.CondNode) + " ;do" + this.LineFeed;
 		Program += this.VisitBlockWithIndent(Node.BodyNode, true) + "done";
 		this.PushSourceCode(Program);
 	}
 
 	@Override public void VisitForNode(ZenForNode Node) {
-		/*local*/String Cond = this.ResolveCondition(Node.CondNode);
-		/*local*/String Iter = this.VisitNode(Node.IterNode);
-		/*local*/String Program = "for((; " + Cond  + "; " + Iter + " )) ;do" + this.LineFeed;
+		@Var String Cond = this.ResolveCondition(Node.CondNode);
+		@Var String Iter = this.VisitNode(Node.IterNode);
+		@Var String Program = "for((; " + Cond  + "; " + Iter + " )) ;do" + this.LineFeed;
 		Program += this.VisitBlockWithIndent(Node.BodyNode, true) + "done";
 		this.PushSourceCode(Program);
 	}
 
 	@Override public void VisitForEachNode(ZenForEachNode Node) {
-		/*local*/String Variable = this.VisitNode(Node.Variable);
-		/*local*/String Iter = this.VisitNode(Node.IterNode);
-		/*local*/String Program = "for " + Variable + " in " + "${" + Iter + "[@]} ;do" + this.LineFeed;
+		@Var String Variable = this.VisitNode(Node.Variable);
+		@Var String Iter = this.VisitNode(Node.IterNode);
+		@Var String Program = "for " + Variable + " in " + "${" + Iter + "[@]} ;do" + this.LineFeed;
 		Program += this.VisitBlockWithIndent(Node.BodyNode, true) + "done";
 		this.PushSourceCode(Program);
 	}
 
 	private String[] MakeParamCode(ArrayList<ZenNode> ParamList, boolean isAssert) {
-		/*local*/int Size = LibZen.ListSize(ParamList);
-		/*local*/String[] ParamCode = new String[Size];
-		/*local*/int i = 0;
+		@Var int Size = LibZen.ListSize(ParamList);
+		@Var String[] ParamCode = new String[Size];
+		@Var int i = 0;
 		while(i < Size) {
-			/*local*/ZenNode ParamNode = ParamList.get(i);
+			@Var ZenNode ParamNode = ParamList.get(i);
 			if(isAssert) {
 				ParamCode[i] = this.ResolveCondition(ParamNode);
 			}
@@ -210,7 +210,7 @@ public class BashSourceGenerator extends SourceGenerator {
 	}
 
 	private boolean FindAssert(ZenFunc Func) {
-		/*local*/boolean isAssert = false;
+		@Var boolean isAssert = false;
 		if(Func != null && Func.Is(GreenTeaConsts.NativeMacroFunc)) {
 			if(LibGreenTea.EqualsString(Func.FuncName, "assert")) {
 				isAssert = true;
@@ -220,21 +220,21 @@ public class BashSourceGenerator extends SourceGenerator {
 	}
 
 	@Override public void VisitApplySymbolNode(ZenApplySymbolNode Node) {
-		/*local*/int ParamSize = LibZen.ListSize(Node.ParamList);
-		/*local*/String Template = this.GenerateFuncTemplate(ParamSize, Node.ResolvedFunc);
-		/*local*/boolean isAssert = this.FindAssert(Node.ResolvedFunc);
+		@Var int ParamSize = LibZen.ListSize(Node.ParamList);
+		@Var String Template = this.GenerateFuncTemplate(ParamSize, Node.ResolvedFunc);
+		@Var boolean isAssert = this.FindAssert(Node.ResolvedFunc);
 		if(isAssert) {
 			Template = "assert " + LibGreenTea.QuoteString("$1");
 		}
-		/*local*/String[] ParamCode = this.MakeParamCode(Node.ParamList, isAssert);
+		@Var String[] ParamCode = this.MakeParamCode(Node.ParamList, isAssert);
 		this.PushSourceCode(this.ApplyMacro2(Template, ParamCode));
 	}
 
 	@Override public void VisitUnaryNode(ZenUnaryNode Node) {
-		/*local*/String FuncName = Node.SourceToken.ParsedText;
-		/*local*/ZenFunc Func = Node.ResolvedFunc;
-		/*local*/String Expr = this.ResolveValueType(Node.RecvNode, false);	//TODO: support ++ --
-		/*local*/String Macro = null;
+		@Var String FuncName = Node.SourceToken.ParsedText;
+		@Var ZenFunc Func = Node.ResolvedFunc;
+		@Var String Expr = this.ResolveValueType(Node.RecvNode, false);	//TODO: support ++ --
+		@Var String Macro = null;
 		if(Func != null) {
 			FuncName = Func.GetNativeFuncName();
 			if(GreenTeaUtils.IsFlag(Func.FuncFlag, GreenTeaConsts.NativeMacroFunc)) {
@@ -248,11 +248,11 @@ public class BashSourceGenerator extends SourceGenerator {
 	}
 
 	@Override public void VisitBinaryNode(ZenBinaryNode Node) {
-		/*local*/String FuncName = Node.SourceToken.ParsedText;
-		/*local*/ZenFunc Func = Node.ResolvedFunc;
-		/*local*/String Left = this.ResolveValueType(Node.LeftNode, false);
-		/*local*/String Right = this.ResolveValueType(Node.RightNode, false);
-		/*local*/String Macro = null;
+		@Var String FuncName = Node.SourceToken.ParsedText;
+		@Var ZenFunc Func = Node.ResolvedFunc;
+		@Var String Left = this.ResolveValueType(Node.LeftNode, false);
+		@Var String Right = this.ResolveValueType(Node.RightNode, false);
+		@Var String Macro = null;
 		if(Func != null) {
 			FuncName = Func.GetNativeFuncName();
 			if(GreenTeaUtils.IsFlag(Func.FuncFlag, GreenTeaConsts.NativeMacroFunc)) {
@@ -297,11 +297,11 @@ public class BashSourceGenerator extends SourceGenerator {
 	}
 
 //	@Override public void VisitSelfAssignNode(ZenSelfAssignNode Node) {
-//		/*local*/String FuncName = Node.SourceToken.ParsedText;
-//		/*local*/ZenFunc Func = Node.Func;
-//		/*local*/String Left = this.VisitNode(Node.LeftNode);
-//		/*local*/String Right = this.ResolveValueType(Node.RightNode, false);
-//		/*local*/String Macro = null;
+//		@Var String FuncName = Node.SourceToken.ParsedText;
+//		@Var ZenFunc Func = Node.Func;
+//		@Var String Left = this.VisitNode(Node.LeftNode);
+//		@Var String Right = this.ResolveValueType(Node.RightNode, false);
+//		@Var String Macro = null;
 //		if(Func != null) {
 //			FuncName = Func.GetNativeFuncName();
 //			if(IsFlag(Func.FuncFlag, NativeMacroFunc)) {
@@ -315,9 +315,9 @@ public class BashSourceGenerator extends SourceGenerator {
 //	}
 
 	@Override public void VisitVarDeclNode(ZenVarDeclNode Node) {
-		/*local*/String VarName = Node.NativeName;
-		/*local*/String Declare = "declare ";
-		/*local*/String Option = "";
+		@Var String VarName = Node.NativeName;
+		@Var String Declare = "declare ";
+		@Var String Option = "";
 		if(this.inFunc) {
 			Declare = "local ";
 		}
@@ -325,7 +325,7 @@ public class BashSourceGenerator extends SourceGenerator {
 			Option = "-a ";
 		}
 
-		/*local*/String Code = Declare + Option + VarName + this.LineFeed;
+		@Var String Code = Declare + Option + VarName + this.LineFeed;
 		Code += this.GetIndentString() + VarName;
 		if(Node.InitNode != null) {
 			Code += "=" + this.ResolveValueType(Node.InitNode, true);
@@ -335,16 +335,16 @@ public class BashSourceGenerator extends SourceGenerator {
 	}
 
 	@Override public void VisitTrinaryNode(ZenTrinaryNode Node) {
-		/*local*/String CondNode = this.ResolveCondition(Node.CondNode);
-		/*local*/String Then = this.ResolveValueType(Node.ThenNode, false);
-		/*local*/String Else = this.ResolveValueType(Node.ElseNode, false);
+		@Var String CondNode = this.ResolveCondition(Node.CondNode);
+		@Var String Then = this.ResolveValueType(Node.ThenNode, false);
+		@Var String Else = this.ResolveValueType(Node.ElseNode, false);
 		this.PushSourceCode("((" + CondNode + " ? " + Then + " : " + Else + "))");
 	}
 
 	@Override public void VisitIfNode(ZenIfNode Node) {
-		/*local*/String CondNode = this.ResolveCondition(Node.CondNode);
-		/*local*/String ThenBlock = this.VisitBlockWithIndent(Node.ThenNode, true);
-		/*local*/String Code = "if " + CondNode + " ;then" + this.LineFeed + ThenBlock;
+		@Var String CondNode = this.ResolveCondition(Node.CondNode);
+		@Var String ThenBlock = this.VisitBlockWithIndent(Node.ThenNode, true);
+		@Var String Code = "if " + CondNode + " ;then" + this.LineFeed + ThenBlock;
 		if(!this.IsEmptyBlock(Node.ElseNode)) {
 			Code += "else" + this.LineFeed + this.VisitBlockWithIndent(Node.ElseNode, false);
 		}
@@ -353,12 +353,12 @@ public class BashSourceGenerator extends SourceGenerator {
 	}
 
 	@Override public void VisitSwitchNode(ZenSwitchNode Node) {
-		/*local*/String Match = this.ResolveValueType(Node.MatchNode, false);
-		/*local*/String Code = "case " + Match + " in" + this.LineFeed + this.GetIndentString();
-		/*local*/int i = 0;
+		@Var String Match = this.ResolveValueType(Node.MatchNode, false);
+		@Var String Code = "case " + Match + " in" + this.LineFeed + this.GetIndentString();
+		@Var int i = 0;
 		while(i < LibZen.ListSize(Node.CaseList)) {
-			/*local*/ZenNode Case  = Node.CaseList.get(i);
-			/*local*/ZenNode Block = Node.CaseList.get(i+1);
+			@Var ZenNode Case  = Node.CaseList.get(i);
+			@Var ZenNode Block = Node.CaseList.get(i+1);
 			Code += this.VisitNode(Case) + ")" + this.LineFeed;
 			Code += this.VisitBlockWithReplaceBreak(Block, true);
 			i = i + 2;
@@ -377,7 +377,7 @@ public class BashSourceGenerator extends SourceGenerator {
 		}
 
 		if(Node.ValueNode != null) {
-			/*local*/String Ret = this.ResolveValueType(Node.ValueNode, false);
+			@Var String Ret = this.ResolveValueType(Node.ValueNode, false);
 			if(Node.Type.IsBooleanType() || (Node.Type.IsIntType() && this.inMainFunc)) {
 				this.PushSourceCode("return " + Ret);
 				return;
@@ -390,14 +390,14 @@ public class BashSourceGenerator extends SourceGenerator {
 
 	@Override public void VisitTryNode(ZenTryNode Node) {
 		throw new RuntimeException("FIXME support Try-catch @ BashSourceGenerator");
-//		/*local*/ZenNode TrueNode = new ZenConstPoolNode(ZenStaticTable.BooleanType, null, true);
-//		/*local*/String Code = "trap ";
-//		/*local*/String Try = this.VisitNode(new ZenIfNode(null, null, TrueNode, Node.TryNode, null));
-//		/*local*/String Catch = this.VisitNode(new ZenIfNode(null, null, TrueNode, Node.CatchBlock, null));
+//		@Var ZenNode TrueNode = new ZenConstPoolNode(ZenStaticTable.BooleanType, null, true);
+//		@Var String Code = "trap ";
+//		@Var String Try = this.VisitNode(new ZenIfNode(null, null, TrueNode, Node.TryNode, null));
+//		@Var String Catch = this.VisitNode(new ZenIfNode(null, null, TrueNode, Node.CatchBlock, null));
 //		Code += LibGreenTea.QuoteString(Catch) + " ERR" + this.LineFeed;
 //		Code += this.GetIndentString() + Try + this.LineFeed + this.GetIndentString() + "trap ERR";
 //		if(Node.FinallyNode != null) {
-//			/*local*/String Finally = this.VisitNode(new ZenIfNode(null, null, TrueNode, Node.FinallyNode, null));
+//			@Var String Finally = this.VisitNode(new ZenIfNode(null, null, TrueNode, Node.FinallyNode, null));
 //			Code += this.LineFeed + this.GetIndentString() + Finally;
 //		}
 //		this.PushSourceCode(Code);
@@ -412,10 +412,10 @@ public class BashSourceGenerator extends SourceGenerator {
 	}
 
 	@Override public void VisitCommandNode(ZenCommandNode Node) {
-		/*local*/String Code = "";
-		/*local*/int count = 0;
-		/*local*/ZenType Type = Node.Type;
-		/*local*/ZenCommandNode CurrentNode = Node;
+		@Var String Code = "";
+		@Var int count = 0;
+		@Var ZenType Type = Node.Type;
+		@Var ZenCommandNode CurrentNode = Node;
 		while(CurrentNode != null) {
 			if(count > 0) {
 				Code += " | ";
@@ -435,9 +435,9 @@ public class BashSourceGenerator extends SourceGenerator {
 	}
 
 	private String AppendCommand(ZenCommandNode CurrentNode) {
-		/*local*/String Code = "";
-		/*local*/int size = LibZen.ListSize(CurrentNode.ArgumentList);
-		/*local*/int i = 0;
+		@Var String Code = "";
+		@Var int size = LibZen.ListSize(CurrentNode.ArgumentList);
+		@Var int i = 0;
 		while(i < size) {
 			Code += this.ResolveValueType(CurrentNode.ArgumentList.get(i), false) + " ";
 			i = i + 1;
@@ -450,11 +450,11 @@ public class BashSourceGenerator extends SourceGenerator {
 			return true;
 		}
 		else if(TargetNode instanceof ZenUnaryNode) {
-			/*local*/ZenUnaryNode Unary = (/*cast*/ZenUnaryNode) TargetNode;
+			@Var ZenUnaryNode Unary = (/*cast*/ZenUnaryNode) TargetNode;
 			return this.CheckConstFolding(Unary.RecvNode);
 		}
 		else if(TargetNode instanceof ZenBinaryNode) {
-			/*local*/ZenBinaryNode Binary = (/*cast*/ZenBinaryNode) TargetNode;
+			@Var ZenBinaryNode Binary = (/*cast*/ZenBinaryNode) TargetNode;
 			if(this.CheckConstFolding(Binary.LeftNode) && this.CheckConstFolding(Binary.RightNode)) {
 				return true;
 			}
@@ -463,9 +463,9 @@ public class BashSourceGenerator extends SourceGenerator {
 	}
 
 	private String ResolveValueType(ZenNode TargetNode, boolean isAssign) {
-		/*local*/String ResolvedValue;
-		/*local*/String Value = this.VisitNode(TargetNode);
-		/*local*/ZenType Type = TargetNode.Type;
+		@Var String ResolvedValue;
+		@Var String Value = this.VisitNode(TargetNode);
+		@Var ZenType Type = TargetNode.Type;
 
 		// resolve constant folding
 		if(this.CheckConstFolding(TargetNode)) {
@@ -490,8 +490,8 @@ public class BashSourceGenerator extends SourceGenerator {
 //			ResolvedValue = "$(" + Value + ")";
 //		}
 		else if(TargetNode instanceof ZenGetLocalNode && !this.IsNativeType(Type)) {
-			/*local*/ZenGetLocalNode Local = (/*cast*/ZenGetLocalNode) TargetNode;
-			/*local*/String Name = Local.NativeName;
+			@Var ZenGetLocalNode Local = (/*cast*/ZenGetLocalNode) TargetNode;
+			@Var String Name = Local.NativeName;
 			ResolvedValue = "${" + Value + "[@]}";
 			if(Name.length() == 1 && LibGreenTea.IsDigit(Name, 0)) {
 				ResolvedValue = "$" + Value;
@@ -520,8 +520,8 @@ public class BashSourceGenerator extends SourceGenerator {
 
 	@Override public void GenerateFunc(ZenFunc Func, ArrayList<String> ParamNameList, ZenNode Body) {
 		this.FlushErrorReport();
-		/*local*/String Function = "";
-		/*local*/String FuncName = Func.GetNativeFuncName();
+		@Var String Function = "";
+		@Var String FuncName = Func.GetNativeFuncName();
 		this.inFunc = true;
 		if(LibGreenTea.EqualsString(FuncName, "main")) {
 			this.inMainFunc = true;
@@ -529,9 +529,9 @@ public class BashSourceGenerator extends SourceGenerator {
 		Function += FuncName + "() {" + this.LineFeed;
 		this.Indent();
 
-		/*local*/int i = 0;
+		@Var int i = 0;
 		while(i < ParamNameList.size()) {
-			/*local*/ZenType ParamType = Func.GetFuncParamType(i);
+			@Var ZenType ParamType = Func.GetFuncParamType(i);
 			// "local -a x"
 			Function += this.GetIndentString() + "local ";
 			if(!this.IsNativeType(ParamType)) {
@@ -556,15 +556,15 @@ public class BashSourceGenerator extends SourceGenerator {
 	}
 
 	@Override public void OpenClassField(ZenSyntaxTree ParsedTree, ZenType Type, ZenClassField ClassField) {	//TODO: support super
-		/*local*/String Program = "__NEW__" + Type.ShortName + "() {" + this.LineFeed;
+		@Var String Program = "__NEW__" + Type.ShortName + "() {" + this.LineFeed;
 		this.WriteLineCode("#### define class " + Type.ShortName + " ####");
 		this.Indent();
 		Program += this.GetIndentString() + "local -a " + this.GetRecvName() + this.LineFeed;
 
-		/*local*/int i = 0;
+		@Var int i = 0;
 		while(i < LibZen.ListSize(ClassField.FieldList)) {
-			/*local*/ZenFieldInfo FieldInfo = ClassField.FieldList.get(i);
-			/*local*/String InitValue = this.StringifyConstValue(FieldInfo.InitValue);
+			@Var ZenFieldInfo FieldInfo = ClassField.FieldList.get(i);
+			@Var String InitValue = this.StringifyConstValue(FieldInfo.InitValue);
 			if(!FieldInfo.Type.IsNativeType()) {
 				InitValue = "NULL";
 			}

@@ -25,6 +25,7 @@
 package zen.sugar;
 
 import zen.ast.ZenNode;
+import zen.deps.Field;
 import zen.lang.ZenType;
 import zen.parser.ZenToken;
 
@@ -35,10 +36,10 @@ import zen.parser.ZenToken;
  * try-catch is needed
  */
 final public class ZenUsingNode extends ZenNode {
-	/*field*/public ZenType	DeclType;
-	/*field*/public String  NativeName;
-	/*field*/public ZenNode	InitNode;
-	/*field*/public ZenNode	BlockNode;   // release resource of NativeName after BlockNode
+	@Field public ZenType	DeclType;
+	@Field public String  NativeName;
+	@Field public ZenNode	InitNode;
+	@Field public ZenNode	BlockNode;   // release resource of NativeName after BlockNode
 	/* let VarNode in Block end */
 	public ZenUsingNode/*constructor*/(ZenType Type, ZenToken Token, ZenType DeclType, String VariableName, ZenNode InitNode, ZenNode Block) {
 		super();
@@ -46,9 +47,9 @@ final public class ZenUsingNode extends ZenNode {
 		this.DeclType  = DeclType;
 		this.InitNode  = InitNode;
 		this.BlockNode = Block;
-//		this.SetChild2(InitNode, this.BlockNode);
+		//		this.SetChild2(InitNode, this.BlockNode);
 	}
-//	@Override public boolean Accept(ZenVisitor Visitor) {
-//		Visitor.VisitUsingNode(this);
-//	}
+	//	@Override public boolean Accept(ZenVisitor Visitor) {
+	//		Visitor.VisitUsingNode(this);
+	//	}
 }

@@ -26,13 +26,14 @@ package zen.ast;
 
 import java.util.ArrayList;
 
+import zen.deps.Field;
 import zen.parser.ZenNameSpace;
 import zen.parser.ZenToken;
 import zen.parser.ZenVisitor;
 
 public class ZenBlockNode extends ZenNode {
-	/*field*/public ArrayList<ZenNode> StatementList;
-	/*field*/public ZenNameSpace NameSpace;
+	@Field public ArrayList<ZenNode> StatementList;
+	@Field public ZenNameSpace NameSpace;
 	public ZenBlockNode(ZenToken SourceToken, ZenNameSpace NameSpace) {
 		super();
 		this.SourceToken = SourceToken;

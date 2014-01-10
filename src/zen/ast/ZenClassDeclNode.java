@@ -26,15 +26,16 @@ package zen.ast;
 
 import java.util.ArrayList;
 
+import zen.deps.Field;
 import zen.lang.ZenType;
 import zen.parser.ZenNameSpace;
 import zen.parser.ZenToken;
 
 final public class ZenClassDeclNode extends ZenNode {
-	/*field*/public ZenType ClassType;
-	/*field*/public ZenNameSpace NameSpace;
-	/*field*/public ArrayList<ZenNode>  FieldList;
-	/*field*/public ArrayList<ZenNode>  MemberList;
+	@Field public ZenType ClassType;
+	@Field public ZenNameSpace NameSpace;
+	@Field public ArrayList<ZenNode>  FieldList;
+	@Field public ArrayList<ZenNode>  MemberList;
 	public ZenClassDeclNode/*constructor*/(ZenToken SourceToken, ZenNameSpace NameSpace, ZenType ClassType) {
 		super(); this.SourceToken = SourceToken; // TODO
 		this.NameSpace = NameSpace;
@@ -50,7 +51,7 @@ final public class ZenClassDeclNode extends ZenNode {
 			this.FieldList.add(Node);
 		}
 	}
-//	@Override public boolean Accept(ZenVisitor Visitor) {
-//		Visitor.VisitClassDeclNode(this);
-//	}
+	//	@Override public boolean Accept(ZenVisitor Visitor) {
+	//		Visitor.VisitClassDeclNode(this);
+	//	}
 }

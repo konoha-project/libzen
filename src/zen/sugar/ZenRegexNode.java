@@ -25,6 +25,7 @@
 package zen.sugar;
 
 import zen.ast.ZenConstNode;
+import zen.deps.Field;
 import zen.lang.ZenType;
 import zen.parser.ZenToken;
 
@@ -33,15 +34,15 @@ public abstract class ZenRegexNode extends ZenConstNode {
 		super(Token);
 		// TODO Auto-generated constructor stub
 	}
-	/*field*/public String	Value;
-//	public ZenRegexNode/*constructor*/(ZenType Type, ZenToken Token, String Value) {
-//		super();
-//		this.Value = Value;
-//		throw new RuntimeException("FIXME: Regex object must be defined");
-//	}
-//	@Override public boolean Accept(ZenVisitor Visitor) {
-//		Visitor.VisitRegexNode(this);
-//	}
+	@Field public String	Value;
+	//	public ZenRegexNode/*constructor*/(ZenType Type, ZenToken Token, String Value) {
+	//		super();
+	//		this.Value = Value;
+	//		throw new RuntimeException("FIXME: Regex object must be defined");
+	//	}
+	//	@Override public boolean Accept(ZenVisitor Visitor) {
+	//		Visitor.VisitRegexNode(this);
+	//	}
 	@Override public Object GetValue() {
 		return this.Value;
 	}

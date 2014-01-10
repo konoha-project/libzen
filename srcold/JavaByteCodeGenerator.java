@@ -621,7 +621,7 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 	@Override
 	public void VisitBlock(ZenNode Node) {
 		int CurrentStackIndex = this.StackFrame.size();
-		/*local*/ZenNode CurrentNode = Node;
+		@Var ZenNode CurrentNode = Node;
 		while(CurrentNode != null) {
 			CurrentNode.Accept(this);
 			CurrentNode = CurrentNode.NextNode;

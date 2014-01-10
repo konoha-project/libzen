@@ -27,24 +27,25 @@
 package zen.deps;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-//endif VAJA
 
 import zen.lang.ZenType;
+//endif VAJA
 
 
 public class ZenTopObject implements ZenObject {
-	/*field*/public ZenType GreenType;
+	public ZenType GreenType;
 	protected ZenTopObject(ZenType GreenType) {
 		this.GreenType = GreenType;
 	}
+	@Override
 	public final ZenType GetZenType() {
 		return this.GreenType;
 	}
 
 
 	@Override public String toString() {
-		/*local*/String s = "{";
-//ifdef JAVA
+		@Var String s = "{";
+		//ifdef JAVA
 		Field[] Fields = this.getClass().getFields();
 		for(int i = 0; i < Fields.length; i++) {
 			if(Modifier.isPublic(Fields[i].getModifiers())) {
@@ -54,7 +55,7 @@ public class ZenTopObject implements ZenObject {
 				try {
 					s += Fields[i].getName() + ": ";
 					if(Fields[i].getType() == long.class) {
-							s += Fields[i].getLong(this);
+						s += Fields[i].getLong(this);
 					}
 					else if(Fields[i].getType() == double.class) {
 						s += Fields[i].getDouble(this);
@@ -71,14 +72,14 @@ public class ZenTopObject implements ZenObject {
 				}
 			}
 		}
-//endif VAJA
+		//endif VAJA
 		return s + "}";
 	}
 }
 
 
 final class GreenTeaAnyObject extends ZenTopObject {
-	/*field*/public final Object NativeValue;
+	public final Object NativeValue;
 	GreenTeaAnyObject/*constructor*/(ZenType GreenType, Object NativeValue) {
 		super(GreenType);
 		this.NativeValue = NativeValue;

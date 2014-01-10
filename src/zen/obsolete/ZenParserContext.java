@@ -30,10 +30,10 @@ import zen.parser.ZenUtils;
 
 @Deprecated
 public final class ZenParserContext extends ZenUtils {
-//	/*field*/public final  int ParserId;
-//	/*field*/public final  ZenGenerator   Generator;
-//	/*field*/public final  ZenNameSpace   RootNameSpace;
-//	/*field*/public ZenNameSpace		     TopLevelNameSpace;
+//	@Field public final  int ParserId;
+//	@Field public final  ZenGenerator   Generator;
+//	@Field public final  ZenNameSpace   RootNameSpace;
+//	@Field public ZenNameSpace		     TopLevelNameSpace;
 		
 //	public ZenParserContext/*constructor*/(ZenGrammar Grammar, ZenGenerator Generator) {
 //		this.ParserId     = LibZen.NewParserId();

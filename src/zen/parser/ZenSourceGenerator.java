@@ -152,10 +152,10 @@ public class ZenSourceGenerator extends ZenGenerator {
 	}
 
 	//	public final void FlushErrorReport() {
-	//		/*local*/ZenSourceBuilder Builder = this.NewSourceBuilder();
-	//		/*local*/String[] Reports = this.Logger.GetReportedErrors();
+	//		@Var ZenSourceBuilder Builder = this.NewSourceBuilder();
+	//		@Var String[] Reports = this.Logger.GetReportedErrors();
 	//		Builder.AppendLine("");
-	//		for(/*local*/int i = 0; i < Reports.length; i = i + 1) {
+	//		for(@Var int i = 0; i < Reports.length; i = i + 1) {
 	//			Builder.AppendCommentLine(Reports[i]);
 	//		}
 	//		Builder.AppendLine("");

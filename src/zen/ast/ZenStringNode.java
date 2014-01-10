@@ -24,11 +24,12 @@
 
 package zen.ast;
 
+import zen.deps.Field;
 import zen.parser.ZenToken;
 import zen.parser.ZenVisitor;
 
 final public class ZenStringNode extends ZenConstNode {
-	/*field*/public String	Value;
+	@Field public String	Value;
 	public ZenStringNode/*constructor*/(ZenToken Token, String Value) {
 		super(Token);
 		this.Value = Value;

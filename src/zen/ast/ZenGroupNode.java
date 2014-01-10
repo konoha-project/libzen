@@ -24,11 +24,12 @@
 
 package zen.ast;
 
+import zen.deps.Field;
 import zen.parser.ZenVisitor;
 
 //E.g., "~" $RecvNode
 final public class ZenGroupNode extends ZenNode {
-	/*field*/public ZenNode	RecvNode;
+	@Field public ZenNode	RecvNode;
 	public ZenGroupNode/*constructor*/() {
 		super();
 		this.RecvNode = null;

@@ -60,30 +60,30 @@ import parser.deps.LibNative;
 
 @Deprecated
 public class SourceGenerator extends ZenGenerator {
-	/*field*/protected String    HeaderSource;
-	/*field*/protected String    BodySource;
+	@Field protected String    HeaderSource;
+	@Field protected String    BodySource;
 
-	/*field*/protected String    Tab;
-	/*field*/protected String    LineFeed;
-	/*field*/protected int       IndentLevel;
-	/*field*/protected String    CurrentLevelIndentString;
+	@Field protected String    Tab;
+	@Field protected String    LineFeed;
+	@Field protected int       IndentLevel;
+	@Field protected String    CurrentLevelIndentString;
 
-	/*field*/protected boolean   HasLabelSupport;
-	/*field*/protected String    LogicalOrOperator;
-	/*field*/protected String    LogicalAndOperator;
-	/*field*/protected String    MemberAccessOperator;
-	/*field*/protected String    TrueLiteral;
-	/*field*/protected String    FalseLiteral;
-	/*field*/protected String    NullLiteral;
-	/*field*/protected String    LineComment;
-	/*field*/protected String    BreakKeyword;
-	/*field*/protected String    ContinueKeyword;
-	/*field*/protected String    ParameterBegin;
-	/*field*/protected String    ParameterEnd;
-	/*field*/protected String    ParameterDelimiter;
-	/*field*/protected String    SemiColon;
-	/*field*/protected String    BlockBegin;
-	/*field*/protected String    BlockEnd;
+	@Field protected boolean   HasLabelSupport;
+	@Field protected String    LogicalOrOperator;
+	@Field protected String    LogicalAndOperator;
+	@Field protected String    MemberAccessOperator;
+	@Field protected String    TrueLiteral;
+	@Field protected String    FalseLiteral;
+	@Field protected String    NullLiteral;
+	@Field protected String    LineComment;
+	@Field protected String    BreakKeyword;
+	@Field protected String    ContinueKeyword;
+	@Field protected String    ParameterBegin;
+	@Field protected String    ParameterEnd;
+	@Field protected String    ParameterDelimiter;
+	@Field protected String    SemiColon;
+	@Field protected String    BlockBegin;
+	@Field protected String    BlockEnd;
 
 	public SourceGenerator/*constructor*/(String TargetCode, String OutputFile, int GeneratorFlag) {
 		super(TargetCode, OutputFile, GeneratorFlag);
@@ -139,8 +139,8 @@ public class SourceGenerator extends ZenGenerator {
 
 	public final void FlushErrorReport() {
 		this.WriteLineCode("");
-		/*local*/String[] Reports = this.Context.GetReportedErrors();
-		/*local*/int i = 0;
+		@Var String[] Reports = this.Context.GetReportedErrors();
+		@Var int i = 0;
 		while(i < Reports.length) {
 			this.WriteLineComment(Reports[i]);
 			i = i + 1;
@@ -175,15 +175,15 @@ public class SourceGenerator extends ZenGenerator {
 	}
 
 	public String VisitBlockWithIndent(ZenNode Node, boolean NeedBlock) {
-		/*local*/String Code = "";
+		@Var String Code = "";
 		if(NeedBlock) {
 			Code += this.BlockBegin + this.LineFeed;
 			this.Indent();
 		}
-		/*local*/ZenNode CurrentNode = Node;
+		@Var ZenNode CurrentNode = Node;
 		while(CurrentNode != null) {
 			if(!this.IsEmptyBlock(CurrentNode)) {
-				/*local*/String Stmt = this.VisitNode(CurrentNode);
+				@Var String Stmt = this.VisitNode(CurrentNode);
 				if(!LibGreenTea.EqualsString(Stmt, "")) {
 					Code += this.GetIndentString() + Stmt + this.SemiColon + this.LineFeed;
 				}
@@ -239,10 +239,10 @@ public class SourceGenerator extends ZenGenerator {
 	}
 
 	public final String JoinCode(String BeginCode, int BeginIdx, String[] ParamCode, String EndCode, String Delim) {
-		/*local*/String JoinedCode = BeginCode;
-		/*local*/int i = BeginIdx;
+		@Var String JoinedCode = BeginCode;
+		@Var int i = BeginIdx;
 		while(i < ParamCode.length) {
-			/*local*/String P = ParamCode[i];
+			@Var String P = ParamCode[i];
 			if(i != BeginIdx) {
 				JoinedCode += Delim;
 			}
@@ -253,7 +253,7 @@ public class SourceGenerator extends ZenGenerator {
 	}
 
 	public final static String GenerateApplyFunc1(ZenFunc Func, String FuncName, boolean IsSuffixOp, String Arg1) {
-		/*local*/String Macro = null;
+		@Var String Macro = null;
 		if(Func != null) {
 			FuncName = Func.GetNativeFuncName();
 			if(IsFlag(Func.FuncFlag, NativeMacroFunc)) {
@@ -272,7 +272,7 @@ public class SourceGenerator extends ZenGenerator {
 	}
 
 	public final static String GenerateApplyFunc2(ZenFunc Func, String FuncName, String Arg1, String Arg2) {
-		/*local*/String Macro = null;
+		@Var String Macro = null;
 		if(Func != null) {
 			FuncName = Func.GetNativeFuncName();
 			if(IsFlag(Func.FuncFlag, NativeMacroFunc)) {
@@ -286,9 +286,9 @@ public class SourceGenerator extends ZenGenerator {
 	}
 
 	public String GenerateFuncTemplate(int ParamSize, ZenFunc Func) {
-		/*local*/int BeginIdx = 0;
-		/*local*/String Template = "";
-		/*local*/boolean IsNative = false;
+		@Var int BeginIdx = 0;
+		@Var String Template = "";
+		@Var boolean IsNative = false;
 		if(Func == null) {
 			Template = "$1";
 			BeginIdx += 1;
@@ -309,7 +309,7 @@ public class SourceGenerator extends ZenGenerator {
 			// T1 converter(FromType, ToType, Value);
 			BeginIdx += 1;
 		}
-		/*local*/int i = BeginIdx;
+		@Var int i = BeginIdx;
 		if(IsNative == false) {
 			Template += this.ParameterBegin;
 			while(i < ParamSize) {
@@ -325,20 +325,20 @@ public class SourceGenerator extends ZenGenerator {
 	}
 
 	public final String ApplyMacro(String Template, ArrayList<ZenNode> NodeList) {
-		/*local*/int ParamSize = LibZen.ListSize(NodeList);
-		/*local*/int ParamIndex = 0;
+		@Var int ParamSize = LibZen.ListSize(NodeList);
+		@Var int ParamIndex = 0;
 		while(ParamIndex < ParamSize) {
-			/*local*/String Param = this.VisitNode(NodeList.get(ParamIndex));
+			@Var String Param = this.VisitNode(NodeList.get(ParamIndex));
 			Template = Template.replace("$" + (ParamIndex + 1), Param);
 			ParamIndex = ParamIndex  + 1;
 		}
 		return Template;
 	}
 	public final String ApplyMacro2(String Template, String[] ParamList) {
-		/*local*/int ParamSize = ParamList.length;
-		/*local*/int ParamIndex = 0;
+		@Var int ParamSize = ParamList.length;
+		@Var int ParamIndex = 0;
 		while(ParamIndex < ParamSize) {
-			/*local*/String Param = ParamList[ParamIndex];
+			@Var String Param = ParamList[ParamIndex];
 			Template = Template.replace("$" + (ParamIndex + 1), Param);
 			ParamIndex = ParamIndex + 1;
 		}
@@ -346,8 +346,8 @@ public class SourceGenerator extends ZenGenerator {
 	}
 
 	public final String GenerateApplyFunc(ZenApplySymbolNode Node) {
-		/*local*/int ParamSize = LibZen.ListSize(Node.ParamList);
-		/*local*/String Template = this.GenerateFuncTemplate(ParamSize, Node.ResolvedFunc);
+		@Var int ParamSize = LibZen.ListSize(Node.ParamList);
+		@Var String Template = this.GenerateFuncTemplate(ParamSize, Node.ResolvedFunc);
 		return this.ApplyMacro(Template, Node.ParamList);
 	}
 
@@ -373,7 +373,7 @@ public class SourceGenerator extends ZenGenerator {
 	}
 
 	@Override public void VisitReturnNode(ZenReturnNode Node) {
-		/*local*/String Code = "return";
+		@Var String Code = "return";
 		if(Node.ValueNode != null) {
 			Code += " " + this.VisitNode(Node.ValueNode);
 		}
@@ -386,8 +386,8 @@ public class SourceGenerator extends ZenGenerator {
 //	}
 
 	@Override public final void VisitConstructorNode(ZenConstructorNode Node) {
-		/*local*/int ParamSize = LibZen.ListSize(Node.ParamList);
-		/*local*/String Template = this.GenerateFuncTemplate(ParamSize, Node.Func);
+		@Var int ParamSize = LibZen.ListSize(Node.ParamList);
+		@Var String Template = this.GenerateFuncTemplate(ParamSize, Node.Func);
 		this.PushSourceCode(this.ApplyMacro(Template, Node.ParamList));
 	}
 
@@ -396,13 +396,13 @@ public class SourceGenerator extends ZenGenerator {
 	}
 
 	@Override public void VisitApplySymbolNode(ZenApplySymbolNode Node) {
-		/*local*/String Program = this.GenerateApplyFunc(Node);
+		@Var String Program = this.GenerateApplyFunc(Node);
 		this.PushSourceCode(Program);
 	}
 
 //	@Override public void VisitSuffixNode(ZenSuffixNode Node) {
-//		/*local*/String FuncName = Node.SourceToken.ParsedText;
-//		/*local*/String Expr = this.VisitNode(Node.Expr);
+//		@Var String FuncName = Node.SourceToken.ParsedText;
+//		@Var String Expr = this.VisitNode(Node.Expr);
 //		if(LibGreenTea.EqualsString(FuncName, "++")) {
 //		}
 //		else if(LibGreenTea.EqualsString(FuncName, "--")) {
@@ -414,22 +414,22 @@ public class SourceGenerator extends ZenGenerator {
 //	}
 
 //	@Override public void VisitSelfAssignNode(ZenSelfAssignNode Node) {
-//		/*local*/String FuncName = Node.SourceToken.ParsedText;
-//		/*local*/String Left = this.VisitNode(Node.LeftNode);
-//		/*local*/String Right = this.VisitNode(Node.RightNode);
+//		@Var String FuncName = Node.SourceToken.ParsedText;
+//		@Var String Left = this.VisitNode(Node.LeftNode);
+//		@Var String Right = this.VisitNode(Node.RightNode);
 //		this.PushSourceCode(Left + " = " + SourceGenerator.GenerateApplyFunc2(Node.Func, FuncName, Left, Right));
 //	}
 
 	@Override public void VisitUnaryNode(ZenUnaryNode Node) {
-		/*local*/String FuncName = Node.SourceToken.ParsedText;
-		/*local*/String Expr = this.VisitNode(Node.RecvNode);
+		@Var String FuncName = Node.SourceToken.ParsedText;
+		@Var String Expr = this.VisitNode(Node.RecvNode);
 		this.PushSourceCode("(" + SourceGenerator.GenerateApplyFunc1(Node.ResolvedFunc, FuncName, false, Expr) + ")");
 	}
 
 	@Override public void VisitBinaryNode(ZenBinaryNode Node) {
-		/*local*/String FuncName = Node.SourceToken.ParsedText;
-		/*local*/String Left = this.VisitNode(Node.LeftNode);
-		/*local*/String Right = this.VisitNode(Node.RightNode);
+		@Var String FuncName = Node.SourceToken.ParsedText;
+		@Var String Left = this.VisitNode(Node.LeftNode);
+		@Var String Right = this.VisitNode(Node.RightNode);
 		this.PushSourceCode("(" + SourceGenerator.GenerateApplyFunc2(Node.ResolvedFunc, FuncName, Left, Right) + ")");
 	}
 
@@ -441,28 +441,28 @@ public class SourceGenerator extends ZenGenerator {
 	}
 
 	@Override public void VisitAndNode(ZenAndNode Node) {
-		/*local*/String Left = this.VisitNode(Node.LeftNode);
-		/*local*/String Right = this.VisitNode(Node.RightNode);
+		@Var String Left = this.VisitNode(Node.LeftNode);
+		@Var String Right = this.VisitNode(Node.RightNode);
 		this.PushSourceCode("(" + Left + " " + this.LogicalAndOperator +" " + Right + ")");
 	}
 
 	@Override public void VisitOrNode(ZenOrNode Node) {
-		/*local*/String Left = this.VisitNode(Node.LeftNode);
-		/*local*/String Right = this.VisitNode(Node.RightNode);
+		@Var String Left = this.VisitNode(Node.LeftNode);
+		@Var String Right = this.VisitNode(Node.RightNode);
 		this.PushSourceCode("(" + Left + " " + this.LogicalOrOperator +" " + Right + ")");
 	}
 
 	@Override public void VisitTrinaryNode(ZenTrinaryNode Node) {
-		/*local*/String CondExpr = this.VisitNode(Node.CondNode);
-		/*local*/String ThenExpr = this.VisitNode(Node.ThenNode);
-		/*local*/String ElseExpr = this.VisitNode(Node.ElseNode);
+		@Var String CondExpr = this.VisitNode(Node.CondNode);
+		@Var String ThenExpr = this.VisitNode(Node.ThenNode);
+		@Var String ElseExpr = this.VisitNode(Node.ElseNode);
 		this.PushSourceCode("((" + CondExpr + ")? " + ThenExpr + " : " + ElseExpr + ")");
 	}
 
 	@Override public void VisitBreakNode(ZenBreakNode Node) {
-		/*local*/String Code = this.BreakKeyword;
+		@Var String Code = this.BreakKeyword;
 		if(this.HasLabelSupport) {
-			/*local*/String Label = Node.Label;
+			@Var String Label = Node.Label;
 			if(Label != null) {
 				Code += " " + Label;
 			}
@@ -472,9 +472,9 @@ public class SourceGenerator extends ZenGenerator {
 	}
 
 	@Override public void VisitContinueNode(ZenContinueNode Node) {
-		/*local*/String Code = this.ContinueKeyword;
+		@Var String Code = this.ContinueKeyword;
 		if(this.HasLabelSupport) {
-			/*local*/String Label = Node.Label;
+			@Var String Label = Node.Label;
 			if(Label != null) {
 				Code += " " + Label;
 			}
@@ -484,11 +484,11 @@ public class SourceGenerator extends ZenGenerator {
 	}
 
 	@Override public void VisitSwitchNode(ZenSwitchNode Node) {
-		/*local*/String Code = "switch (" + this.VisitNode(Node.MatchNode) + ") {" + this.LineFeed;
-		/*local*/int i = 0;
+		@Var String Code = "switch (" + this.VisitNode(Node.MatchNode) + ") {" + this.LineFeed;
+		@Var int i = 0;
 		while(i < Node.CaseList.size()) {
-			/*local*/ZenNode Case  = Node.CaseList.get(i);
-			/*local*/ZenNode Block = Node.CaseList.get(i+1);
+			@Var ZenNode Case  = Node.CaseList.get(i);
+			@Var ZenNode Block = Node.CaseList.get(i+1);
 			Code += this.GetIndentString() + "case " + this.VisitNode(Case) + ":";
 			if(this.IsEmptyBlock(Block)) {
 				this.Indent();

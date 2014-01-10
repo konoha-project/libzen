@@ -26,15 +26,16 @@ package zen.ast;
 
 import java.util.ArrayList;
 
-import zen.lang.ZenType;
+import zen.deps.Field;
 import zen.lang.ZenSystem;
+import zen.lang.ZenType;
 import zen.parser.ZenToken;
 import zen.parser.ZenVisitor;
 
 public class ZenFunctionLiteralNode extends ZenNode {
-	/*field*/public ZenType ReturnType;
-	/*field*/public ArrayList<ZenNode>  ArgumentList;  // list of ParamNode
-	/*field*/public ZenNode BodyNode;
+	@Field public ZenType ReturnType;
+	@Field public ArrayList<ZenNode>  ArgumentList;  // list of ParamNode
+	@Field public ZenNode BodyNode;
 	public ZenFunctionLiteralNode/*constructor*/(ZenToken Token) {
 		super();
 		this.SourceToken = Token;
@@ -48,7 +49,7 @@ public class ZenFunctionLiteralNode extends ZenNode {
 		}
 		else if(Node instanceof ZenTypeNode) {
 			this.ReturnType = Node.Type;
-		}		
+		}
 		else if(Node instanceof ZenBlockNode) {
 			this.BodyNode = Node;
 		}

@@ -29,16 +29,17 @@ package zen.lang;
 import zen.ast.ZenAndNode;
 import zen.ast.ZenBinaryNode;
 import zen.ast.ZenCastNode;
+import zen.ast.ZenNode;
 import zen.ast.ZenOrNode;
 import zen.ast.ZenUnaryNode;
-import zen.ast.ZenNode;
+import zen.deps.Field;
 import zen.parser.ZenNameSpace;
 import zen.parser.ZenVisitor;
 
 public abstract class ZenEvaluator implements ZenVisitor {
-	/*field*/private ZenNameSpace NameSpace_;
-	/*field*/private boolean IsEnforced_;
-	/*field*/private Object EvaledValue_;
+	@Field private ZenNameSpace NameSpace_;
+	@Field private boolean IsEnforced_;
+	@Field private Object EvaledValue_;
 
 	public final Object Eval(ZenNode Node, ZenNameSpace NameSpace, boolean IsEnforced) {
 		this.NameSpace_ = NameSpace;
@@ -51,7 +52,7 @@ public abstract class ZenEvaluator implements ZenVisitor {
 	@Override
 	public void VisitAndNode(ZenAndNode Node) {
 		//		@Override public Object Eval(ZenNameSpace NameSpace, boolean EnforceConst)  {
-		//			/*local*/Object LeftValue = this.LeftNode.Eval(NameSpace, EnforceConst) ;
+		//			@Var Object LeftValue = this.LeftNode.Eval(NameSpace, EnforceConst) ;
 		//			if((LeftValue instanceof Boolean) && LibZen.booleanValue(LeftValue)) {
 		//				return this.RightNode.Eval(NameSpace, EnforceConst) ;
 		//			}
@@ -64,7 +65,7 @@ public abstract class ZenEvaluator implements ZenVisitor {
 	@Override
 	public void VisitOrNode(ZenOrNode Node) {
 		//		@Override public Object Eval(ZenNameSpace NameSpace, boolean EnforceConst)  {
-		//			/*local*/Object LeftValue = this.LeftNode.Eval(NameSpace, EnforceConst) ;
+		//			@Var Object LeftValue = this.LeftNode.Eval(NameSpace, EnforceConst) ;
 		//			if(LeftValue instanceof Boolean) {
 		//				if(LibZen.booleanValue(LeftValue)) {
 		//					return LeftValue;
@@ -104,9 +105,9 @@ public abstract class ZenEvaluator implements ZenVisitor {
 	//	}
 
 	//	@Override public Object ToConstValue(ZenParserContext Context, boolean EnforceConst)  {
-	//	/*local*/Object LeftValue = this.LeftNode.ToConstValue(Context, EnforceConst) ;
+	//	@Var Object LeftValue = this.LeftNode.ToConstValue(Context, EnforceConst) ;
 	//	if(LeftValue != null) {
-	//		/*local*/Object RightValue = this.RightNode.ToConstValue(Context, EnforceConst) ;
+	//		@Var Object RightValue = this.RightNode.ToConstValue(Context, EnforceConst) ;
 	//		if(RightValue != null) {
 	//			return LibZen.EvalBinary(this.Type, LeftValue, this.Token.ParsedText, RightValue);
 	//		}
@@ -262,7 +263,7 @@ public abstract class ZenEvaluator implements ZenVisitor {
 	@Override
 	public void VisitUnaryNode(ZenUnaryNode Node) {
 		//		@Override public Object Eval(ZenNameSpace NameSpace, boolean EnforceConst)  {
-		//			/*local*/Object Value = this.RecvNode.Eval(NameSpace, EnforceConst) ;
+		//			@Var Object Value = this.RecvNode.Eval(NameSpace, EnforceConst) ;
 		//			if(Value != null) {
 		//				return LibZen.EvalUnary(this.Type, this.SourceToken.ParsedText, Value);
 		//			}
@@ -278,7 +279,7 @@ public abstract class ZenEvaluator implements ZenVisitor {
 	@Override
 	public void VisitCastNode(ZenCastNode Node) {
 		//		@Override public Object Eval(ZenNameSpace NameSpace, boolean EnforceConst)  {
-		//			/*local*/Object Value = this.ExprNode.Eval(NameSpace, EnforceConst) ;
+		//			@Var Object Value = this.ExprNode.Eval(NameSpace, EnforceConst) ;
 		//			if(Value != null) {
 		//				return LibZen.DynamicCast(this.Type, Value);
 		//			}

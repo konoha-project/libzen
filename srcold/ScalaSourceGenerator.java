@@ -48,7 +48,7 @@
 ////GreenTea Generator should be written in each language.
 //
 //public class ScalaSourceGenerator extends SourceGenerator {
-//	/*field*/String OutFileName;
+//	@Field String OutFileName;
 //	ScalaSourceGenerator/*constructor*/(String TargetCode, String OutputFile, int GeneratorFlag) {
 //		super(TargetCode, OutputFile, GeneratorFlag);
 //		this.OutFileName = OutputFile;
@@ -86,7 +86,7 @@
 //		 * 		BLOCK2;
 //		 * 		ITER
 //		 */
-//		/*local*/String Program = "while(" + this.VisitNode(Node.CondNode) + ")" + this.LineFeed;
+//		@Var String Program = "while(" + this.VisitNode(Node.CondNode) + ")" + this.LineFeed;
 //		Program += this.GetIndentString() + "{";
 //		this.Indent();
 //		Program += this.VisitBlockWithIndent(Node.BodyNode, false);
@@ -97,17 +97,17 @@
 //	}
 //
 //	@Override public void VisitContinueNode(ZenContinueNode Node) {
-//		/*local*/String Code = "";
-//		/*local*/ZenForNode Parent = this.FindParentForNode(Node);
+//		@Var String Code = "";
+//		@Var ZenForNode Parent = this.FindParentForNode(Node);
 //		if(Parent != null) {
-//			/*local*/ZenNode IterNode = Parent.IterNode;
+//			@Var ZenNode IterNode = Parent.IterNode;
 //			if(IterNode != null) {
 //				Code += this.VisitNode(IterNode) + this.LineFeed + this.GetIndentString();
 //			}
 //		}
 //		Code += this.ContinueKeyword;
 //		if(this.HasLabelSupport) {
-//			/*local*/String Label = Node.Label;
+//			@Var String Label = Node.Label;
 //			if(Label != null) {
 //				Code += " " + Label;
 //			}
@@ -117,29 +117,29 @@
 //	}
 //	
 //	@Override public void VisitWhileNode(ZenWhileNode Node) {
-//		/*local*/String Program = "while(" + this.VisitNode(Node.CondNode) + ")";
+//		@Var String Program = "while(" + this.VisitNode(Node.CondNode) + ")";
 //		Program += this.VisitBlockWithIndent(Node.BodyNode, true);
 //		this.PushSourceCode(Program);
 //	}
 //
 //	@Override public void VisitDoWhileNode(ZenDoWhileNode Node) {
-//		/*local*/String Program = "do" + this.VisitBlockWithIndent(Node.BodyNode, true);
+//		@Var String Program = "do" + this.VisitBlockWithIndent(Node.BodyNode, true);
 //		Program += " while(" + this.VisitNode(Node.CondNode) + ")";
 //		this.PushSourceCode(Program);
 //	}
 //
 //	@Override public void VisitGetterNode(ZenGetterNode Node) {
-//		/*local*/String Program = this.VisitNode(Node.RecvNode);
-//		/*local*/String FieldName = Node.ResolvedFunc.FuncName;
+//		@Var String Program = this.VisitNode(Node.RecvNode);
+//		@Var String FieldName = Node.ResolvedFunc.FuncName;
 //		Program = Program + "." + FieldName;
 //		this.PushSourceCode(Program);
 //	}
 //
 //	@Override public void VisitVarDeclNode(ZenVarDeclNode Node) {
-//		/*local*/String Type = this.LocalTypeName(Node.DeclType);
-//		/*local*/String VarName = Node.NativeName;
-//		/*local*/String Code = "var " + VarName + " : " + Type + " ";
-//		/*local*/boolean CreateNewScope = true;
+//		@Var String Type = this.LocalTypeName(Node.DeclType);
+//		@Var String VarName = Node.NativeName;
+//		@Var String Code = "var " + VarName + " : " + Type + " ";
+//		@Var boolean CreateNewScope = true;
 //		if(Node.InitNode != null) {
 //			Code += " = " + this.VisitNode(Node.InitNode);
 //		}
@@ -152,9 +152,9 @@
 //	}
 //
 //	@Override public void VisitIfNode(ZenIfNode Node) {
-//		/*local*/String CondNode = this.VisitNode(Node.CondNode);
-//		/*local*/String ThenBlock = this.VisitBlockWithIndent(Node.ThenNode, true);
-//		/*local*/String Code = "if(" + CondNode + ") " + ThenBlock;
+//		@Var String CondNode = this.VisitNode(Node.CondNode);
+//		@Var String ThenBlock = this.VisitBlockWithIndent(Node.ThenNode, true);
+//		@Var String Code = "if(" + CondNode + ") " + ThenBlock;
 //		if(Node.ElseNode != null) {
 //			Code += " else " + this.VisitBlockWithIndent(Node.ElseNode, true);
 //		}
@@ -162,7 +162,7 @@
 //	}
 //
 //	@Override public void VisitTryNode(ZenTryNode Node) {
-//		/*local*/String Code = "try ";
+//		@Var String Code = "try ";
 //		Code += this.VisitBlockWithIndent(Node.TryNode, true);
 //		for (int i = 0; i < LibZen.ListSize(Node.CatchList); i++) {
 //			ZenCatchNode Catch = (/*cast*/ZenCatchNode) Node.CatchList.get(i);
@@ -177,17 +177,17 @@
 //
 //
 //	@Override public void VisitThrowNode(ZenThrowNode Node) {
-//		/*local*/String Code = "throw " + this.VisitNode(Node.ValueNode);
+//		@Var String Code = "throw " + this.VisitNode(Node.ValueNode);
 //		this.PushSourceCode(Code);
 //	}
 //
 //	@Override public void VisitErrorNode(ZenErrorNode Node) {
-//		/*local*/String Code = "throw RuntimeError(\"" + Node.SourceToken.ParsedText + "\")";
+//		@Var String Code = "throw RuntimeError(\"" + Node.SourceToken.ParsedText + "\")";
 //		this.PushSourceCode(Code);
 //	}
 //
 ////	@Override public Object Eval(ZenNode Node) {
-////		/*local*/String Code = this.VisitBlockWithIndent(Node, false);
+////		@Var String Code = this.VisitBlockWithIndent(Node, false);
 ////		if(LibGreenTea.EqualsString(Code, ";" + this.LineFeed)) {
 ////			return "";
 ////		}
@@ -197,36 +197,36 @@
 //
 //	@Override public void GenerateFunc(ZenFunc Func, ArrayList<String> ParamNameList, ZenNode Body) {
 //		this.FlushErrorReport();
-//		/*local*/String Function = "def ";
+//		@Var String Function = "def ";
 //		Function += Func.GetNativeFuncName() + "(";
-//		/*local*/int i = 0;
-//		/*local*/int size = ParamNameList.size();
+//		@Var int i = 0;
+//		@Var int size = ParamNameList.size();
 //		while(i < size) {
 //			if(i > 0) {
 //				Function += ", ";
 //			}
-//			/*local*/String ParamTy = this.LocalTypeName(Func.GetFuncParamType(i));
+//			@Var String ParamTy = this.LocalTypeName(Func.GetFuncParamType(i));
 //			Function += ParamNameList.get(i) + " : " + ParamTy;
 //			i = i + 1;
 //		}
-//		/*local*/String Block = this.VisitBlockWithIndent(Body, true);
+//		@Var String Block = this.VisitBlockWithIndent(Body, true);
 //		Function += ") : " + this.LocalTypeName(Func.GetReturnType()) + " = " + this.LineFeed + Block + this.LineFeed;
 //		this.WriteLineCode(Function);
 //	}
 //
 //	@Override public void OpenClassField(ZenSyntaxTree ParsedTree, ZenType Type, ZenClassField ClassField) {
-//		/*local*/String TypeName = this.LocalTypeName(Type);
-//		/*local*/String Program = this.GetIndentString() + "class " + TypeName;
+//		@Var String TypeName = this.LocalTypeName(Type);
+//		@Var String Program = this.GetIndentString() + "class " + TypeName;
 ////		if(Type.SuperType != null) {
 ////			Program += " extends " + Type.SuperType;
 ////		}
 //		Program += " {" + this.LineFeed;
 //		this.Indent();
-//		/*local*/int i = ClassField.ThisClassIndex;
+//		@Var int i = ClassField.ThisClassIndex;
 //		while(i < ClassField.FieldList.size()) {
-//			/*local*/ZenFieldInfo FieldInfo = ClassField.FieldList.get(i);
-//			/*local*/ZenType VarType = FieldInfo.Type;
-//			/*local*/String VarName = FieldInfo.NativeName;
+//			@Var ZenFieldInfo FieldInfo = ClassField.FieldList.get(i);
+//			@Var ZenType VarType = FieldInfo.Type;
+//			@Var String VarName = FieldInfo.NativeName;
 //			Program += this.GetIndentString() + "var " + VarName + " : ";
 //			Program += this.LocalTypeName(VarType) + " = _/*default value*/;" + this.LineFeed;
 //			i = i + 1;
@@ -240,9 +240,9 @@
 ////		Program += this.GetIndentString() + "var " + this.GetRecvName() + " : " + this.LocalTypeName(Type);
 ////		Program += " = new " + this.LocalTypeName(Type) + "();" + this.LineFeed;
 //		while(i < ClassField.FieldList.size()) {
-//			/*local*/ZenFieldInfo FieldInfo = ClassField.FieldList.get(i);
-//			/*local*/String VarName = FieldInfo.NativeName;
-//			/*local*/String InitValue = this.StringifyConstValue(FieldInfo.InitValue);
+//			@Var ZenFieldInfo FieldInfo = ClassField.FieldList.get(i);
+//			@Var String VarName = FieldInfo.NativeName;
+//			@Var String InitValue = this.StringifyConstValue(FieldInfo.InitValue);
 //			if(!FieldInfo.Type.IsNativeType()) {
 //				InitValue = this.NullLiteral;
 //			}

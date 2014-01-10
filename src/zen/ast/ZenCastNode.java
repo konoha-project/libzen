@@ -24,12 +24,13 @@
 
 package zen.ast;
 
+import zen.deps.Field;
 import zen.lang.ZenType;
 import zen.parser.ZenVisitor;
 
 //E.g., (T) $Expr
 final public class ZenCastNode extends ZenNode {
-	/*field*/public ZenNode	ExprNode;
+	@Field public ZenNode	ExprNode;
 	public ZenCastNode/*constructor*/(ZenType CastType, ZenNode Node) {
 		super();
 		this.Type = CastType;

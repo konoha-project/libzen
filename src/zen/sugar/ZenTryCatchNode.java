@@ -28,11 +28,12 @@ import java.util.ArrayList;
 
 import zen.ast.ZenCatchNode;
 import zen.ast.ZenNode;
+import zen.deps.Field;
 
 final public class ZenTryCatchNode extends ZenNode {
-	/*field*/public ZenNode	TryNode;
-	/*field*/public ArrayList<ZenNode> 	CatchList;
-	/*field*/public ZenNode	FinallyNode;
+	@Field public ZenNode	TryNode;
+	@Field public ArrayList<ZenNode> 	CatchList;
+	@Field public ZenNode	FinallyNode;
 	public ZenTryCatchNode/*constructor*/() {
 		super();
 		this.TryNode = null;

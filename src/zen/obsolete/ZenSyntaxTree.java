@@ -33,16 +33,16 @@ import zen.parser.ZenUtils;
 
 @Deprecated
 public final class ZenSyntaxTree extends ZenUtils {
-//	/*field*/public ZenMap               Annotation;
-//	/*field*/public ZenSyntaxTree		ParentTree;
-//	/*field*/public ZenSyntaxTree		PrevTree;
-//	/*field*/public ZenSyntaxTree		NextTree;
+//	@Field public ZenMap               Annotation;
+//	@Field public ZenSyntaxTree		ParentTree;
+//	@Field public ZenSyntaxTree		PrevTree;
+//	@Field public ZenSyntaxTree		NextTree;
 //
-//	/*field*/public ZenNameSpace	             NameSpace;
-//	/*field*/public ZenSyntaxPattern	         Pattern;
-//	/*field*/public ZenToken		             KeyToken;
-//	/*field*/public ArrayList<ZenSyntaxTree>  SubTreeList;
-//	/*field*/public Object                   ParsedValue;
+//	@Field public ZenNameSpace	             NameSpace;
+//	@Field public ZenSyntaxPattern	         Pattern;
+//	@Field public ZenToken		             KeyToken;
+//	@Field public ArrayList<ZenSyntaxTree>  SubTreeList;
+//	@Field public Object                   ParsedValue;
 
 	public ZenSyntaxTree/*constructor*/(ZenSyntaxPattern Pattern, ZenNameSpace NameSpace, ZenToken KeyToken, Object ParsedValue) {
 //		this.NameSpace   = NameSpace;
@@ -57,12 +57,12 @@ public final class ZenSyntaxTree extends ZenUtils {
 	}
 
 //	@Override public String toString() {
-//		/*local*/String s = "(" + this.KeyToken.ParsedText;
-//		/*local*/int i = 0;
+//		@Var String s = "(" + this.KeyToken.ParsedText;
+//		@Var int i = 0;
 //		while(i < LibZen.ListSize(this.SubTreeList)) {
-//			/*local*/ZenSyntaxTree SubTree = this.SubTreeList.get(i);
+//			@Var ZenSyntaxTree SubTree = this.SubTreeList.get(i);
 //			while(SubTree != null) {
-//				/*local*/String Entry = SubTree.toString();
+//				@Var String Entry = SubTree.toString();
 //				if(LibZen.ListSize(SubTree.SubTreeList) == 0) {
 //					Entry = SubTree.KeyToken.ParsedText;
 //				}
@@ -75,7 +75,7 @@ public final class ZenSyntaxTree extends ZenUtils {
 //	}
 //
 //	public final void AppendNext(ZenSyntaxTree Tree) {
-//		/*local*/ZenSyntaxTree TailTree = this;
+//		@Var ZenSyntaxTree TailTree = this;
 //		while(TailTree.NextTree != null) {
 //			TailTree = TailTree.NextTree;
 //		}
@@ -156,7 +156,7 @@ public final class ZenSyntaxTree extends ZenUtils {
 //
 //	public void SetMatchedPatternAt(int Index, ZenNameSpace NameSpace, ZenTokenContext TokenContext, String PatternName,  int MatchFlag) {
 //		if(!this.IsMismatchedOrError()) {
-//			/*local*/ZenSyntaxTree ParsedTree = TokenContext.ParsePattern_OLD(NameSpace, PatternName, MatchFlag);
+//			@Var ZenSyntaxTree ParsedTree = TokenContext.ParsePattern_OLD(NameSpace, PatternName, MatchFlag);
 //			if(ParsedTree != null) {
 //				this.SetSyntaxTreeAt(Index, ParsedTree);
 //			}
@@ -170,8 +170,8 @@ public final class ZenSyntaxTree extends ZenUtils {
 //
 //	public void SetMatchedTokenAt(int Index, ZenNameSpace NameSpace, ZenTokenContext TokenContext, String TokenText, int MatchFlag) {
 //		if(!this.IsMismatchedOrError()) {
-//			/*local*/int Pos = TokenContext.GetPosition(MatchFlag);
-//			/*local*/ZenToken Token = TokenContext.Next();
+//			@Var int Pos = TokenContext.GetPosition(MatchFlag);
+//			@Var ZenToken Token = TokenContext.Next();
 //			if(Token.ParsedText.equals(TokenText)) {
 //				if(Index == KeyTokenIndex) {
 //					this.KeyToken = Token;
@@ -212,7 +212,7 @@ public final class ZenSyntaxTree extends ZenUtils {
 //
 //	public void AppendMatchedPattern(ZenNameSpace NameSpace, ZenTokenContext TokenContext, String PatternName,  int MatchFlag) {
 //		if(!this.IsMismatchedOrError()) {
-//			/*local*/ZenSyntaxTree ParsedTree = TokenContext.ParsePattern_OLD(NameSpace, PatternName, MatchFlag);
+//			@Var ZenSyntaxTree ParsedTree = TokenContext.ParsePattern_OLD(NameSpace, PatternName, MatchFlag);
 //			if(ParsedTree != null) {
 //				this.AppendParsedTree2(ParsedTree);
 //			}
@@ -236,12 +236,12 @@ public final class ZenSyntaxTree extends ZenUtils {
 //	}
 
 //	public ZenNode TypeCheck(ZenTypeEnv Gamma, ZenType ContextType, int TypeCheckPolicy) {
-//		/*local*/ZenNode Node = GreenTeaUtils.ApplyTypeFunc(this.Pattern.TypeFunc, Gamma, this, ContextType);
+//		@Var ZenNode Node = GreenTeaUtils.ApplyTypeFunc(this.Pattern.TypeFunc, Gamma, this, ContextType);
 //		return Gamma.TypeCheckSingleNode(this, Node, ContextType, TypeCheckPolicy);
 //	}
 //
 //	public final ZenNode TypeCheckAt(int Index, ZenTypeEnv Gamma, ZenType ContextType, int TypeCheckPolicy) {
-//		/*local*/ZenSyntaxTree ParsedTree = this.GetSyntaxTreeAt(Index);
+//		@Var ZenSyntaxTree ParsedTree = this.GetSyntaxTreeAt(Index);
 //		if(ContextType.IsVoidType() || IsFlag(TypeCheckPolicy, BlockPolicy)) {
 //			return GreenTeaUtils.TypeBlock(Gamma, ParsedTree, ContextType);
 //		}
@@ -253,7 +253,7 @@ public final class ZenSyntaxTree extends ZenUtils {
 //
 //	public final void TypeCheckParam(ZenTypeEnv Gamma, int TreeIndex, ArrayList<ZenNode> NodeList) {
 //		while(TreeIndex < LibZen.ListSize(this.SubTreeList)) {
-//			/*local*/ZenNode Node = this.TypeCheckAt(TreeIndex, Gamma, ZenStaticTable.VarType, DefaultTypeCheckPolicy);
+//			@Var ZenNode Node = this.TypeCheckAt(TreeIndex, Gamma, ZenStaticTable.VarType, DefaultTypeCheckPolicy);
 //			NodeList.add(Node);
 //			TreeIndex = TreeIndex + 1;
 //		}

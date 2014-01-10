@@ -106,8 +106,8 @@ public class CommonLispSourceGenerator extends ZenSourceGenerator {
 	//
 	//		Builder.Append("(");
 	//
-	//		/*local*/int i = 0;
-	//		/*local*/int size = LibZen.ListSize(ParamNameList);
+	//		@Var int i = 0;
+	//		@Var int size = LibZen.ListSize(ParamNameList);
 	//		while (i < size) {
 	//			if(i != 0) {
 	//				Builder.Append(" ");

@@ -63,15 +63,15 @@ public abstract class LibZen {
 
 
 	//	public static Object InvokeOverridedMethod(long FileLine, ZenNameSpace NameSpace, ZenFunc Func, Object[] Arguments) {
-	//		/*local*/ZenType ClassType = ZenStaticTable.GuessType(Arguments[0]);
+	//		@Var ZenType ClassType = ZenStaticTable.GuessType(Arguments[0]);
 	//		Func = NameSpace.GetOverridedMethod(ClassType, Func);
 	//		return LibZen.InvokeFunc(Func, Arguments);
 	//	}
 	//
 	//	public static Object InvokeDynamicFunc(long FileLine, ZenType ContextType, ZenNameSpace NameSpace, String FuncName, Object[] Arguments) {
-	//		/*local*/ZenFuncSet FuncSet = NameSpace.GetFuncSet(FuncName);
-	//		/*local*/ZenFunc Func = FuncSet.GetMatchedFunc(NameSpace, Arguments);
-	//		/*local*/Object Value = ContextType.DefaultNullValue;
+	//		@Var ZenFuncSet FuncSet = NameSpace.GetFuncSet(FuncName);
+	//		@Var ZenFunc Func = FuncSet.GetMatchedFunc(NameSpace, Arguments);
+	//		@Var Object Value = ContextType.DefaultNullValue;
 	//		if(Func != null) {
 	//			Value = LibZen.InvokeFunc(Func, Arguments);
 	//			return LibZen.DynamicCast(ContextType, Value);
@@ -81,10 +81,10 @@ public abstract class LibZen {
 	//	}
 	//
 	//	public static final Object InvokeDynamicMethod(long FileLine, ZenType ContextType, ZenNameSpace NameSpace, String FuncName, Object[] Arguments) {
-	//		/*local*/ZenType ClassType = ZenStaticTable.GuessType(Arguments[0]);
-	//		/*local*/ZenFuncSet FuncSet = NameSpace.GetMethod(ClassType, FuncName, true);
-	//		/*local*/ZenFunc Func = FuncSet.GetMatchedFunc(NameSpace, Arguments);
-	//		/*local*/Object Value = ContextType.DefaultNullValue;
+	//		@Var ZenType ClassType = ZenStaticTable.GuessType(Arguments[0]);
+	//		@Var ZenFuncSet FuncSet = NameSpace.GetMethod(ClassType, FuncName, true);
+	//		@Var ZenFunc Func = FuncSet.GetMatchedFunc(NameSpace, Arguments);
+	//		@Var Object Value = ContextType.DefaultNullValue;
 	//		if(Func != null) {
 	//			Value = LibZen.InvokeFunc(Func, Arguments);
 	//			return LibZen.DynamicCast(ContextType, Value);
@@ -195,9 +195,9 @@ public abstract class LibZen {
 
 	public static final String UnquoteString(String Text) {
 		StringBuilder sb = new StringBuilder();
-		/*local*/char quote = LibZen.CharAt(Text, 0);
-		/*local*/int i = 0;
-		/*local*/int Length = Text.length();
+		@Var char quote = LibZen.CharAt(Text, 0);
+		@Var int i = 0;
+		@Var int Length = Text.length();
 		if(quote == '"' || quote == '\'') {
 			i = 1;
 			Length -= 1;
@@ -206,7 +206,7 @@ public abstract class LibZen {
 			quote = '\0';
 		}
 		for(; i < Length; i += 1) {
-			/*local*/char ch = LibZen.CharAt(Text, i);
+			@Var char ch = LibZen.CharAt(Text, i);
 			if(ch == '\\') {
 				i = i + 1;
 				char next = LibZen.CharAt(Text, i);
@@ -240,8 +240,8 @@ public abstract class LibZen {
 	public static final String QuoteString(String Text) {
 		StringBuilder sb = new StringBuilder();
 		sb.append('"');
-		for(/*local*/int i = 0; i < Text.length(); i = i + 1) {
-			/*local*/char ch = LibZen.CharAt(Text, i);
+		for(@Var int i = 0; i < Text.length(); i = i + 1) {
+			@Var char ch = LibZen.CharAt(Text, i);
 			if(ch == '\n') {
 				sb.append("\\n");
 			}
@@ -275,7 +275,7 @@ public abstract class LibZen {
 	}
 
 	public final static String StringifyField(Object Value) {
-		/*local*/String s = "{";
+		@Var String s = "{";
 		Field[] Fields = Value.getClass().getFields();
 		for(int i = 0; i < Fields.length; i++) {
 			if(Modifier.isPublic(Fields[i].getModifiers())) {
@@ -322,7 +322,7 @@ public abstract class LibZen {
 	}
 
 	//	public final static ZenFunc SetNativeMethod(ZenFunc NativeFunc, Method JavaMethod) {
-	//		/*local*/int FuncFlag = ZenUtils.NativeFunc;
+	//		@Var int FuncFlag = ZenUtils.NativeFunc;
 	//		if(!Modifier.isStatic(JavaMethod.getModifiers())) {
 	//			FuncFlag |= ZenUtils.NativeMethodFunc;
 	//		}
@@ -408,8 +408,8 @@ public abstract class LibZen {
 	}
 
 	public static void RetrieveMapKeys(ZenMap<?> Map, String Prefix, ArrayList<String> List) {
-		/*local*/Iterator<String> itr = Map.key_iterator();
-		/*local*/int i = 0;
+		@Var Iterator<String> itr = Map.key_iterator();
+		@Var int i = 0;
 		while(itr.hasNext()) {
 			String Key = itr.next();
 			if(Prefix != null && !Key.startsWith(Prefix)) {
@@ -662,10 +662,10 @@ public abstract class LibZen {
 	//	}
 
 	public static void PrintStackTrace(Exception e, int linenum) {
-		/*local*/StackTraceElement[] elements = e.getStackTrace();
-		/*local*/int size = elements.length + 1;
-		/*local*/StackTraceElement[] newElements = new StackTraceElement[size];
-		for(/*local*/int i = 0; i < size; i++) {
+		@Var StackTraceElement[] elements = e.getStackTrace();
+		@Var int size = elements.length + 1;
+		@Var StackTraceElement[] newElements = new StackTraceElement[size];
+		for(@Var int i = 0; i < size; i++) {
 			if(i == size - 1) {
 				newElements[i] = new StackTraceElement("<TopLevel>", "TopLevelEval", "stdin", linenum);
 				break;

@@ -26,11 +26,12 @@ package zen.ast;
 
 import java.util.ArrayList;
 
+import zen.deps.Field;
 import zen.parser.ZenVisitor;
 
 //E.g., "[" $Node, $Node "]"
 final public class ZenArrayLiteralNode extends ZenNode {
-	/*field*/public ArrayList<ZenNode>	NodeList;
+	@Field public ArrayList<ZenNode>	NodeList;
 	public ZenArrayLiteralNode/*constructor*/() {
 		super();
 		this.NodeList = new ArrayList<ZenNode>();
@@ -41,10 +42,10 @@ final public class ZenArrayLiteralNode extends ZenNode {
 	@Override public void Accept(ZenVisitor Visitor) {
 		Visitor.VisitArrayLiteralNode(this);
 	}
-//	@Override public Object ToConstValue(ZenParserContext Context, boolean EnforceConst)  {
-//		if(EnforceConst) {
-//			return Context.Generator.EvalArrayNode(this, EnforceConst);
-//		}
-//		return null;
-//	}
+	//	@Override public Object ToConstValue(ZenParserContext Context, boolean EnforceConst)  {
+	//		if(EnforceConst) {
+	//			return Context.Generator.EvalArrayNode(this, EnforceConst);
+	//		}
+	//		return null;
+	//	}
 }
