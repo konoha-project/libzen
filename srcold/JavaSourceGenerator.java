@@ -85,11 +85,11 @@ public class JavaSourceGenerator extends ZenSourceGenerator {
 		String MethodName = Func.GetNativeFuncName();
 		ZenSourceBuilder Builder = new ZenSourceBuilder(this);
 		Builder.Append("class");
-		Builder.SpaceAppendSpace(HolderClassName(MethodName));
+		Builder.AppendToken(HolderClassName(MethodName));
 		Builder.AppendLine("{");
 		Builder.Indent();
 		Builder.IndentAndAppend("final static ");
-		Builder.SpaceAppendSpace(MethodName);
+		Builder.AppendToken(MethodName);
 		Builder.Append("(");
 
 		Builder.Append(")");
@@ -246,7 +246,7 @@ public class JavaSourceGenerator extends ZenSourceGenerator {
 		//if(Node.Func.FuncBody instanceof Method) {
 		this.CurrentBuilder.Append("(");
 		Node.LeftNode.Accept(this);
-		this.CurrentBuilder.SpaceAppendSpace(Node.Token.ParsedText);
+		this.CurrentBuilder.AppendToken(Node.SourceToken.ParsedText);
 		Node.RightNode.Accept(this);
 		this.CurrentBuilder.Append(")");
 		//}
@@ -255,7 +255,7 @@ public class JavaSourceGenerator extends ZenSourceGenerator {
 	@Override public void VisitUnaryNode(ZenUnaryNode Node) {
 //		if(Node.Func.FuncBody instanceof Method) {
 		this.CurrentBuilder.Append("(");
-		this.CurrentBuilder.Append(Node.Token.ParsedText);
+		this.CurrentBuilder.Append(Node.SourceToken.ParsedText);
 		Node.RecvNode.Accept(this);
 		this.CurrentBuilder.Append(")");
 //		}

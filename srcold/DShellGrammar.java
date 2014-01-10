@@ -513,7 +513,7 @@ public class DShellGrammar extends GreenTeaUtils {
 		}
 		/*local*/ZenNode PipedNode = null;
 		/*local*/int Index = 0;
-		/*local*/int ArgumentSize = LibGreenTea.ListSize(ParsedTree.SubTreeList);
+		/*local*/int ArgumentSize = LibZen.ListSize(ParsedTree.SubTreeList);
 		while(Index < ArgumentSize) {
 			/*local*/ZenSyntaxTree SubTree = ParsedTree.SubTreeList.get(Index);
 			if(SubTree.Pattern.EqualsName("$DShell2$")) {

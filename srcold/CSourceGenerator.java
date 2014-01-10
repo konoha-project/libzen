@@ -172,7 +172,7 @@ public class CSourceGenerator extends ZenSourceGenerator {
 //
 	@Override public void VisitArrayLiteralNode(ZenArrayLiteralNode Node) {
 		this.CurrentBuilder.Append("{");
-		for (int i = 0; i < LibGreenTea.ListSize(Node.NodeList); i++) {
+		for (int i = 0; i < LibZen.ListSize(Node.NodeList); i++) {
 			if(i != 0) {
 				this.CurrentBuilder.Append(", ");
 			}
@@ -232,7 +232,7 @@ public class CSourceGenerator extends ZenSourceGenerator {
 	@Override public void VisitApplySymbolNode(ZenApplySymbolNode Node) {
 		this.CurrentBuilder.Append(Node.NativeName);
 		this.CurrentBuilder.Append("(");
-		for(/*local*/int i = 0; i < LibGreenTea.ListSize(Node.ParamList); i++){
+		for(/*local*/int i = 0; i < LibZen.ListSize(Node.ParamList); i++){
 			if(i > 0){
 				this.CurrentBuilder.Append(", ");
 			}
@@ -245,7 +245,7 @@ public class CSourceGenerator extends ZenSourceGenerator {
 		//FIXME
 		Node.FuncNode.Accept(this);
 		this.CurrentBuilder.Append("(");
-		for(/*local*/int i = 0; i < LibGreenTea.ListSize(Node.ParamList); i++){
+		for(/*local*/int i = 0; i < LibZen.ListSize(Node.ParamList); i++){
 			if(i > 0){
 				this.CurrentBuilder.Append(", ");
 			}
@@ -258,7 +258,7 @@ public class CSourceGenerator extends ZenSourceGenerator {
 		//FIXME
 		this.CurrentBuilder.Append(Node.Func.FuncName);
 		this.CurrentBuilder.Append("(");
-		for(/*local*/int i = 0; i < LibGreenTea.ListSize(Node.ParamList); i++){
+		for(/*local*/int i = 0; i < LibZen.ListSize(Node.ParamList); i++){
 			if(i > 0){
 				this.CurrentBuilder.Append(", ");
 			}
@@ -360,7 +360,7 @@ public class CSourceGenerator extends ZenSourceGenerator {
 	@Override public void VisitConstructorNode(ZenConstructorNode Node) {
 		this.CurrentBuilder.Append(Node.Func.FuncName);
 		this.CurrentBuilder.Append("(");
-		for(/*local*/int i = 0; i < LibGreenTea.ListSize(Node.ParamList); i++){
+		for(/*local*/int i = 0; i < LibZen.ListSize(Node.ParamList); i++){
 			if(i > 0){
 				this.CurrentBuilder.Append(", ");
 			}
@@ -375,7 +375,7 @@ public class CSourceGenerator extends ZenSourceGenerator {
 
 	@Override public void VisitNewArrayNode(ZenNewArrayNode Node) {
 		this.CurrentBuilder.Append("NEWARRAY_" + GetLocalType(Node.Type, false) + "(");
-		for (int i = 0; i < LibGreenTea.ListSize(Node.NodeList); i++) {
+		for (int i = 0; i < LibZen.ListSize(Node.NodeList); i++) {
 			if(i > 0) {
 				this.CurrentBuilder.Append(", ");
 			}
@@ -501,7 +501,7 @@ public class CSourceGenerator extends ZenSourceGenerator {
 	@Override public void VisitTryNode(ZenTryNode Node) {
 		this.CurrentBuilder.Append("try ");
 		this.VisitIndentBlock("{", Node.TryNode, "}");
-		for (int i = 0; i < LibGreenTea.ListSize(Node.CatchList); i++) {
+		for (int i = 0; i < LibZen.ListSize(Node.CatchList); i++) {
 			Node.CatchList.get(i).Accept(this);
 		}
 		if(Node.FinallyNode != null) {
@@ -520,7 +520,7 @@ public class CSourceGenerator extends ZenSourceGenerator {
 		this.CurrentBuilder.Append("switch (");
 		Node.MatchNode.Accept(this);
 		this.CurrentBuilder.AppendLine(") {");
-		for (/*local*/int i = 0; i < LibGreenTea.ListSize(Node.CaseList); i++) {
+		for (/*local*/int i = 0; i < LibZen.ListSize(Node.CaseList); i++) {
 			Node.CaseList.get(i).Accept(this);
 		}
 		this.CurrentBuilder.AppendLine("}");
@@ -535,7 +535,7 @@ public class CSourceGenerator extends ZenSourceGenerator {
 
 	@Override public void VisitCommandNode(ZenCommandNode Node) {
 		this.CurrentBuilder.Append("String __Command = ");
-		for(/*local*/int i = 0; i < LibGreenTea.ListSize(Node.ArgumentList); i += 1) {
+		for(/*local*/int i = 0; i < LibZen.ListSize(Node.ArgumentList); i += 1) {
 			/*local*/ZenNode Param = Node.ArgumentList.get(i);
 			if(i != 0) {
 				this.CurrentBuilder.Append(" + ");
@@ -550,7 +550,7 @@ public class CSourceGenerator extends ZenSourceGenerator {
 	}
 
 	@Override public void VisitErrorNode(ZenErrorNode Node) {
-		/*local*/String Code = "throw Error(\"" + Node.Token.ParsedText + "\")";
+		/*local*/String Code = "throw Error(\"" + Node.SourceToken.ParsedText + "\")";
 		this.CurrentBuilder.Append(Code);
 		this.StopVisitor(Node);
 	}
@@ -592,7 +592,7 @@ public class CSourceGenerator extends ZenSourceGenerator {
 			this.CurrentBuilder.AppendIndent();
 			this.CurrentBuilder.AppendLine("// " + this.LocalTypeName(Type.SuperType) + " __base;");
 		}
-		for(/*local*/int i = 0; i < LibGreenTea.ListSize(ClassField.FieldList); i = i + 1) {
+		for(/*local*/int i = 0; i < LibZen.ListSize(ClassField.FieldList); i = i + 1) {
 			/*local*/ZenFieldInfo FieldInfo = ClassField.FieldList.get(i);
 			/*local*/ZenType VarType = FieldInfo.Type;
 			/*local*/String VarName = FieldInfo.NativeName;
@@ -610,7 +610,7 @@ public class CSourceGenerator extends ZenSourceGenerator {
 		this.CurrentBuilder.Indent();
 		this.CurrentBuilder.AppendIndent();
 		this.CurrentBuilder.AppendLine(LocalType + " " + this.GetRecvName() + " = " + "GT_New("+LocalType+")" + this.SemiColon);
-		for(/*local*/int i = 0; i < LibGreenTea.ListSize(ClassField.FieldList); i = i + 1) {
+		for(/*local*/int i = 0; i < LibZen.ListSize(ClassField.FieldList); i = i + 1) {
 			/*local*/ZenFieldInfo FieldInfo = ClassField.FieldList.get(i);
 			/*local*/String VarName = FieldInfo.NativeName;
 			/*local*/String InitValue = this.StringifyConstValue(FieldInfo.InitValue);

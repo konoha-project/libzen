@@ -288,7 +288,7 @@ public class KonohaByteCodeGenerator extends ZenSourceGenerator {
 	}
 
 	@Override public void VisitArrayLiteralNode(ZenArrayLiteralNode Node) {
-		/*local*/int ArraySize = LibGreenTea.ListSize(Node.NodeList);
+		/*local*/int ArraySize = LibZen.ListSize(Node.NodeList);
 		/*local*/int TargetReg = this.ReserveRegister(ArraySize + CallParameters);
 		/*local*/int CallReg = TargetReg - ReturnIndex + ThisIndex;
 		for(/*local*/int i = 0; i < ArraySize; ++i) {
@@ -349,7 +349,7 @@ public class KonohaByteCodeGenerator extends ZenSourceGenerator {
 	}
 
 	@Override public void VisitApplySymbolNode(ZenApplySymbolNode Node) {
-		/*local*/int ParamSize = LibGreenTea.ListSize(Node.ParamList);
+		/*local*/int ParamSize = LibZen.ListSize(Node.ParamList);
 		/*local*/int TargetReg = this.ReserveRegister(ParamSize + CallParameters);
 		/*local*/int CallReg = TargetReg - ReturnIndex + ThisIndex;
 		for(/*local*/int i = 0; i < ParamSize; ++i) {
@@ -365,7 +365,7 @@ public class KonohaByteCodeGenerator extends ZenSourceGenerator {
 
 	@Override public void VisitApplyFunctionObjectNode(ZenApplyFunctionObjectNode Node) {
 		/*FIXME*/
-		/*local*/int ParamSize = LibGreenTea.ListSize(Node.ParamList);
+		/*local*/int ParamSize = LibZen.ListSize(Node.ParamList);
 		/*local*/int TargetReg = this.ReserveRegister(ParamSize + CallParameters);
 		/*local*/int CallReg = TargetReg - ReturnIndex + ThisIndex;
 		for(/*local*/int i = 0; i < ParamSize; ++i) {
@@ -450,7 +450,7 @@ public class KonohaByteCodeGenerator extends ZenSourceGenerator {
 		/*local*/int CallReg = TargetReg - ReturnIndex + ThisIndex;
 		Node.RecvNode.Accept(this);
 		this.CurrentBuilder.Append("NMOV " + "REG" + (CallReg+1) + ", REG" + this.PopRegister() + "\n");
-		/*local*/String Op = Node.Token.ParsedText; //Node.NativeName
+		/*local*/String Op = Node.SourceToken.ParsedText; //Node.NativeName
 		this.CurrentBuilder.Append("NSET " + "REG" + (CallReg+MethodIndex) + ", METHOD\"" + Op + "\"\n");
 		this.CurrentBuilder.Append("CALL " + "REG" + CallReg + ", " + 1/*ArgumentSize*/ + "\n");
 		this.PushRegister(TargetReg);
@@ -490,7 +490,7 @@ public class KonohaByteCodeGenerator extends ZenSourceGenerator {
 		this.CurrentBuilder.Append("NMOV " + "REG" + (CallReg+1) + ", REG" + this.PopRegister() + "\n");
 		Node.RightNode.Accept(this);
 		this.CurrentBuilder.Append("NMOV " + "REG" + (CallReg+2) + ", REG" + this.PopRegister() + "\n");
-		/*local*/String Op = Node.Token.ParsedText; //Node.NativeName
+		/*local*/String Op = Node.SourceToken.ParsedText; //Node.NativeName
 		this.CurrentBuilder.Append("NSET " + "REG" + (CallReg+MethodIndex) + ", METHOD\"" + Op + "\"\n");
 		this.CurrentBuilder.Append("CALL " + "REG" + CallReg + ", " + 2/*ArgumentSize*/ + "\n");
 		this.PushRegister(TargetReg);
@@ -502,7 +502,7 @@ public class KonohaByteCodeGenerator extends ZenSourceGenerator {
 	}
 
 	@Override public void VisitConstructorNode(ZenConstructorNode Node) {
-		/*local*/int ParamSize = LibGreenTea.ListSize(Node.ParamList);
+		/*local*/int ParamSize = LibZen.ListSize(Node.ParamList);
 		/*local*/int TargetReg = this.ReserveRegister(ParamSize + CallParameters);
 		/*local*/int CallReg = TargetReg - ReturnIndex + ThisIndex;
 		for(/*local*/int i = 0; i < ParamSize; ++i) {
@@ -666,7 +666,7 @@ public class KonohaByteCodeGenerator extends ZenSourceGenerator {
 		//this.LabelNum = 0;
 		this.CurrentBuilder = this.NewSourceBuilder();
 		this.CurrentBuilder.Append("(METHOD" + Index + " " + MethodName);
-		/*local*/int ParamSize = LibGreenTea.ListSize(ParamNameList);
+		/*local*/int ParamSize = LibZen.ListSize(ParamNameList);
 		///*local*/HashMap<String,Integer> PushedMap = (/*cast*/HashMap<String,Integer>)this.LocalVarMap.clone();
 		for(/*local*/int i = 0; i < ParamSize; ++i) {
 			/*local*/String ParamName = ParamNameList.get(i);

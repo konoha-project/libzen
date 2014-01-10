@@ -325,7 +325,7 @@ public class SourceGenerator extends ZenGenerator {
 	}
 
 	public final String ApplyMacro(String Template, ArrayList<ZenNode> NodeList) {
-		/*local*/int ParamSize = LibGreenTea.ListSize(NodeList);
+		/*local*/int ParamSize = LibZen.ListSize(NodeList);
 		/*local*/int ParamIndex = 0;
 		while(ParamIndex < ParamSize) {
 			/*local*/String Param = this.VisitNode(NodeList.get(ParamIndex));
@@ -346,7 +346,7 @@ public class SourceGenerator extends ZenGenerator {
 	}
 
 	public final String GenerateApplyFunc(ZenApplySymbolNode Node) {
-		/*local*/int ParamSize = LibGreenTea.ListSize(Node.ParamList);
+		/*local*/int ParamSize = LibZen.ListSize(Node.ParamList);
 		/*local*/String Template = this.GenerateFuncTemplate(ParamSize, Node.ResolvedFunc);
 		return this.ApplyMacro(Template, Node.ParamList);
 	}
@@ -386,7 +386,7 @@ public class SourceGenerator extends ZenGenerator {
 //	}
 
 	@Override public final void VisitConstructorNode(ZenConstructorNode Node) {
-		/*local*/int ParamSize = LibGreenTea.ListSize(Node.ParamList);
+		/*local*/int ParamSize = LibZen.ListSize(Node.ParamList);
 		/*local*/String Template = this.GenerateFuncTemplate(ParamSize, Node.Func);
 		this.PushSourceCode(this.ApplyMacro(Template, Node.ParamList));
 	}
@@ -401,7 +401,7 @@ public class SourceGenerator extends ZenGenerator {
 	}
 
 //	@Override public void VisitSuffixNode(ZenSuffixNode Node) {
-//		/*local*/String FuncName = Node.Token.ParsedText;
+//		/*local*/String FuncName = Node.SourceToken.ParsedText;
 //		/*local*/String Expr = this.VisitNode(Node.Expr);
 //		if(LibGreenTea.EqualsString(FuncName, "++")) {
 //		}
@@ -414,20 +414,20 @@ public class SourceGenerator extends ZenGenerator {
 //	}
 
 //	@Override public void VisitSelfAssignNode(ZenSelfAssignNode Node) {
-//		/*local*/String FuncName = Node.Token.ParsedText;
+//		/*local*/String FuncName = Node.SourceToken.ParsedText;
 //		/*local*/String Left = this.VisitNode(Node.LeftNode);
 //		/*local*/String Right = this.VisitNode(Node.RightNode);
 //		this.PushSourceCode(Left + " = " + SourceGenerator.GenerateApplyFunc2(Node.Func, FuncName, Left, Right));
 //	}
 
 	@Override public void VisitUnaryNode(ZenUnaryNode Node) {
-		/*local*/String FuncName = Node.Token.ParsedText;
+		/*local*/String FuncName = Node.SourceToken.ParsedText;
 		/*local*/String Expr = this.VisitNode(Node.RecvNode);
 		this.PushSourceCode("(" + SourceGenerator.GenerateApplyFunc1(Node.ResolvedFunc, FuncName, false, Expr) + ")");
 	}
 
 	@Override public void VisitBinaryNode(ZenBinaryNode Node) {
-		/*local*/String FuncName = Node.Token.ParsedText;
+		/*local*/String FuncName = Node.SourceToken.ParsedText;
 		/*local*/String Left = this.VisitNode(Node.LeftNode);
 		/*local*/String Right = this.VisitNode(Node.RightNode);
 		this.PushSourceCode("(" + SourceGenerator.GenerateApplyFunc2(Node.ResolvedFunc, FuncName, Left, Right) + ")");

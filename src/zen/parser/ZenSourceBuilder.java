@@ -133,4 +133,10 @@ public class ZenSourceBuilder {
 	public String toString() {
 		return LibZen.SourceBuilderToString(this);
 	}
+
+	@Deprecated
+	public void AppendLine(String Text) {
+		this.Append(Text);
+		this.AppendLineFeed();
+	}
 }

@@ -22,50 +22,37 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package org.GreenTeaScript;
+package zen.codegen.clisp;
 
-import java.util.ArrayList;
-
-import parser.ZenClassField;
-import parser.ZenFieldInfo;
-import parser.ZenFunc;
-import parser.ZenSourceBuilder;
-import parser.ZenSourceGenerator;
-import parser.ZenSyntaxTree;
-import parser.ZenType;
-import parser.ast.ZenAndNode;
-import parser.ast.ZenBinaryNode;
-import parser.ast.ZenBooleanNode;
-import parser.ast.ZenConstPoolNode;
-import parser.ast.ZenDoWhileNode;
-import parser.ast.ZenEmptyNode;
-import parser.ast.ZenErrorNode;
-import parser.ast.ZenForNode;
-import parser.ast.ZenGetLocalNode;
-import parser.ast.ZenIfNode;
-import parser.ast.ZenIntNode;
-import parser.ast.ZenNode;
-import parser.ast.ZenNullNode;
-import parser.ast.ZenOrNode;
-import parser.ast.ZenReturnNode;
-import parser.ast.ZenSetLocalNode;
-import parser.ast.ZenStringNode;
-import parser.ast.ZenTrinaryNode;
-import parser.ast.ZenUnaryNode;
-import parser.ast.ZenVarDeclNode;
-import parser.ast.ZenWhileNode;
-import parser.deps.LibGreenTea;
+import zen.ast.ZenAndNode;
+import zen.ast.ZenBinaryNode;
+import zen.ast.ZenBooleanNode;
+import zen.ast.ZenConstPoolNode;
+import zen.ast.ZenErrorNode;
+import zen.ast.ZenGetLocalNode;
+import zen.ast.ZenIfNode;
+import zen.ast.ZenIntNode;
+import zen.ast.ZenNode;
+import zen.ast.ZenNullNode;
+import zen.ast.ZenOrNode;
+import zen.ast.ZenReturnNode;
+import zen.ast.ZenSetLocalNode;
+import zen.ast.ZenStringNode;
+import zen.ast.ZenUnaryNode;
+import zen.ast.ZenVarDeclNode;
+import zen.ast.ZenWhileNode;
+import zen.parser.ZenSourceGenerator;
 
 public class CommonLispSourceGenerator extends ZenSourceGenerator {
 
-	public CommonLispSourceGenerator(String TargetCode, String OutputFile, int GeneratorFlag) {
-		super(TargetCode, OutputFile, GeneratorFlag);
+	public CommonLispSourceGenerator(String TargetCode) {
+		super("CommonLisp", "0.0");
 	}
 
 	@Override public void VisitGetLocalNode(ZenGetLocalNode Node) {
-		this.CurrentBuilder.Append(Node.Token.ParsedText);
+		this.CurrentBuilder.Append(Node.SourceToken.ParsedText);
 	}
-	
+
 	@Override public void VisitBooleanNode(ZenBooleanNode Node) {
 		if(Node.Value) {
 			this.CurrentBuilder.Append("t");
@@ -75,18 +62,18 @@ public class CommonLispSourceGenerator extends ZenSourceGenerator {
 		}
 	}
 	@Override public void VisitIntNode(ZenIntNode Node) {
-		this.CurrentBuilder.Append(Node.Token.ParsedText);
+		this.CurrentBuilder.Append(Node.SourceToken.ParsedText);
 	}
 
 	@Override public void VisitStringNode(ZenStringNode Node) {
-		this.CurrentBuilder.Append(Node.Token.ParsedText);
+		this.CurrentBuilder.Append(Node.SourceToken.ParsedText);
 	}
 	@Override public void VisitConstPoolNode(ZenConstPoolNode Node) {
 		if(Node.ConstValue == null) {
 			this.CurrentBuilder.Append("nil");
 		}
 		else {
-			this.CurrentBuilder.Append(Node.Token.ParsedText);
+			this.CurrentBuilder.Append(Node.SourceToken.ParsedText);
 		}
 	}
 
@@ -123,37 +110,37 @@ public class CommonLispSourceGenerator extends ZenSourceGenerator {
 		}
 	}
 
-	@Override
-	public void GenerateFunc(ZenFunc Func, ArrayList<String> ParamNameList, ZenNode Body) {
-		String MethodName = Func.GetNativeFuncName();
-		ZenSourceBuilder Builder = new ZenSourceBuilder(this);
-		ZenSourceBuilder PushedBuilder = this.CurrentBuilder;
-		this.CurrentBuilder = Builder;
-		Builder.Append("(defun ");
-		Builder.SpaceAppendSpace(MethodName);
-
-		Builder.Append("(");
-
-		/*local*/int i = 0;
-		/*local*/int size = LibGreenTea.ListSize(ParamNameList);
-		while (i < size) {
-			if(i != 0) {
-				Builder.Append(" ");
-			}
-			Builder.Append(ParamNameList.get(i));
-			i += 1;
-		}
-		Builder.AppendLine(")");
-
-		this.CurrentBuilder = Builder;
-		this.VisitIndentBlock("", Body, "");
-
-		this.CurrentBuilder = PushedBuilder;
-		Builder.AppendLine(")");
-
-		// for debug
-		System.out.println(Builder.toString());
-	}
+	//	@Override
+	//	public void GenerateFunc(ZenFunc Func, ArrayList<String> ParamNameList, ZenNode Body) {
+	//		String MethodName = Func.GetNativeFuncName();
+	//		ZenSourceBuilder Builder = new ZenSourceBuilder(this);
+	//		ZenSourceBuilder PushedBuilder = this.CurrentBuilder;
+	//		this.CurrentBuilder = Builder;
+	//		Builder.Append("(defun ");
+	//		Builder.AppendToken(MethodName);
+	//
+	//		Builder.Append("(");
+	//
+	//		/*local*/int i = 0;
+	//		/*local*/int size = LibZen.ListSize(ParamNameList);
+	//		while (i < size) {
+	//			if(i != 0) {
+	//				Builder.Append(" ");
+	//			}
+	//			Builder.Append(ParamNameList.get(i));
+	//			i += 1;
+	//		}
+	//		Builder.AppendLine(")");
+	//
+	//		this.CurrentBuilder = Builder;
+	//		this.VisitIndentBlock("", Body, "");
+	//
+	//		this.CurrentBuilder = PushedBuilder;
+	//		Builder.AppendLine(")");
+	//
+	//		// for debug
+	//		System.out.println(Builder.toString());
+	//	}
 
 	//
 	// Visitor API
@@ -163,59 +150,59 @@ public class CommonLispSourceGenerator extends ZenSourceGenerator {
 
 		Node.CondNode.Accept(this);
 
-		this.CurrentBuilder.AppendLine("");
+		this.CurrentBuilder.AppendLineFeed();
 		this.VisitIndentBlock("", Node.BodyNode, "");
 		this.CurrentBuilder.AppendIndent();
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override public void VisitDoWhileNode(ZenDoWhileNode Node) {
-		this.CurrentBuilder.AppendLine("(loop initially");
+	//	@Override public void VisitDoWhileNode(ZenDoWhileNode Node) {
+	//		this.CurrentBuilder.AppendLine("(loop initially");
+	//
+	//		this.CurrentBuilder.AppendIndent();
+	//		this.CurrentBuilder.AppendIndent();
+	//
+	//		this.CurrentBuilder.AppendLine("(progn");
+	//		this.VisitIndentBlock("", Node.BodyNode, "");
+	//
+	//		this.CurrentBuilder.AppendIndent();
+	//		this.CurrentBuilder.AppendIndent();
+	//		this.CurrentBuilder.AppendLine(")");
+	//
+	//		this.CurrentBuilder.AppendIndent();
+	//		this.CurrentBuilder.AppendIndent();
+	//
+	//		this.CurrentBuilder.Append("while ");
+	//		Node.CondNode.Accept(this);
+	//		this.CurrentBuilder.AppendLine("");
+	//		this.CurrentBuilder.AppendIndent();
+	//		this.CurrentBuilder.AppendIndent();
+	//
+	//		this.CurrentBuilder.AppendLine("do (progn");
+	//		this.VisitIndentBlock("", Node.BodyNode, "");
+	//		this.CurrentBuilder.AppendIndent();
+	//		this.CurrentBuilder.AppendIndent();
+	//		this.CurrentBuilder.Append(")");
+	//		this.CurrentBuilder.Append(")");
+	//	}
 
-		this.CurrentBuilder.AppendIndent();
-		this.CurrentBuilder.AppendIndent();
-
-		this.CurrentBuilder.AppendLine("(progn");
-		this.VisitIndentBlock("", Node.BodyNode, "");
-
-		this.CurrentBuilder.AppendIndent();
-		this.CurrentBuilder.AppendIndent();
-		this.CurrentBuilder.AppendLine(")");
-
-		this.CurrentBuilder.AppendIndent();
-		this.CurrentBuilder.AppendIndent();
-
-		this.CurrentBuilder.Append("while ");
-		Node.CondNode.Accept(this);
-		this.CurrentBuilder.AppendLine("");
-		this.CurrentBuilder.AppendIndent();
-		this.CurrentBuilder.AppendIndent();
-
-		this.CurrentBuilder.AppendLine("do (progn");
-		this.VisitIndentBlock("", Node.BodyNode, "");
-		this.CurrentBuilder.AppendIndent();
-		this.CurrentBuilder.AppendIndent();
-		this.CurrentBuilder.Append(")");
-		this.CurrentBuilder.Append(")");
-	}
-
-	@Override public void VisitForNode(ZenForNode Node) {
-		this.CurrentBuilder.Append("(loop while ");
-		Node.CondNode.Accept(this);
-		this.CurrentBuilder.AppendLine("");
-
-		this.CurrentBuilder.AppendIndent();
-		this.CurrentBuilder.AppendIndent();
-		this.CurrentBuilder.AppendLine("do (progn");
-		this.VisitIndentBlock("", Node.BodyNode, "");
-
-		this.CurrentBuilder.AppendIndent();
-		this.CurrentBuilder.AppendIndent();
-		Node.IterNode.Accept(this);
-		this.CurrentBuilder.Append(")");
-
-		this.CurrentBuilder.Append(")");
-	}
+	//	@Override public void VisitForNode(ZenForNode Node) {
+	//		this.CurrentBuilder.Append("(loop while ");
+	//		Node.CondNode.Accept(this);
+	//		this.CurrentBuilder.AppendLine("");
+	//
+	//		this.CurrentBuilder.AppendIndent();
+	//		this.CurrentBuilder.AppendIndent();
+	//		this.CurrentBuilder.AppendLine("do (progn");
+	//		this.VisitIndentBlock("", Node.BodyNode, "");
+	//
+	//		this.CurrentBuilder.AppendIndent();
+	//		this.CurrentBuilder.AppendIndent();
+	//		Node.IterNode.Accept(this);
+	//		this.CurrentBuilder.Append(")");
+	//
+	//		this.CurrentBuilder.Append(")");
+	//	}
 
 	@Override public void VisitVarDeclNode(ZenVarDeclNode Node) {
 		this.CurrentBuilder.Append("(setq  ");
@@ -231,15 +218,15 @@ public class CommonLispSourceGenerator extends ZenSourceGenerator {
 		this.CurrentBuilder.AppendLine(")");
 	}
 
-	@Override public void VisitTrinaryNode(ZenTrinaryNode Node) {
-		this.CurrentBuilder.Append("(if  ");
-		Node.CondNode.Accept(this);
-		this.CurrentBuilder.Append(" ");
-		Node.ThenNode.Accept(this);
-		this.CurrentBuilder.Append(" ");
-		Node.ElseNode.Accept(this);
-		this.CurrentBuilder.Append(")");
-	}
+	//	@Override public void VisitTrinaryNode(ZenTrinaryNode Node) {
+	//		this.CurrentBuilder.Append("(if  ");
+	//		Node.CondNode.Accept(this);
+	//		this.CurrentBuilder.Append(" ");
+	//		Node.ThenNode.Accept(this);
+	//		this.CurrentBuilder.Append(" ");
+	//		Node.ElseNode.Accept(this);
+	//		this.CurrentBuilder.Append(")");
+	//	}
 
 	@Override public void VisitIfNode(ZenIfNode Node) {
 		this.CurrentBuilder.Append("(if  ");
@@ -273,49 +260,49 @@ public class CommonLispSourceGenerator extends ZenSourceGenerator {
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override public void OpenClassField(ZenSyntaxTree ParsedTree, ZenType Type, ZenClassField ClassField) {
-		ZenSourceBuilder Builder = new ZenSourceBuilder(this);
+	//	@Override public void OpenClassField(ZenSyntaxTree ParsedTree, ZenType Type, ZenClassField ClassField) {
+	//		ZenSourceBuilder Builder = new ZenSourceBuilder(this);
+	//
+	//		Builder.Append("(defclass ");
+	//		Builder.Append(Type.ShortName);
+	//		Builder.Append(" " + "()");
+	//
+	//		Builder.Append(" " + "(");
+	//		for (ZenFieldInfo FieldInfo : ClassField.FieldList) {
+	//			String InitValue = this.StringifyConstValue(FieldInfo.InitValue);
+	//
+	//			Builder.Append("(");
+	//			Builder.Append(FieldInfo.NativeName);
+	//			Builder.Append(" :initarg :" + FieldInfo.NativeName);
+	//
+	//			if (!FieldInfo.Type.IsNativeType()) {
+	//				InitValue = "nil";
+	//			}
+	//
+	//			Builder.Append(" :initform " + InitValue);
+	//			Builder.Append(")");
+	//		}
+	//		Builder.Append("))");
+	//
+	//		// for debug
+	//		System.out.println(Builder.toString());
+	//	}
 
-		Builder.Append("(defclass ");
-		Builder.Append(Type.ShortName);
-		Builder.Append(" " + "()");
-
-		Builder.Append(" " + "(");
-		for (ZenFieldInfo FieldInfo : ClassField.FieldList) {
-			String InitValue = this.StringifyConstValue(FieldInfo.InitValue);
-
-			Builder.Append("(");
-			Builder.Append(FieldInfo.NativeName);
-			Builder.Append(" :initarg :" + FieldInfo.NativeName);
-
-			if (!FieldInfo.Type.IsNativeType()) {
-				InitValue = "nil";
-			}
-
-			Builder.Append(" :initform " + InitValue);
-			Builder.Append(")");
-		}
-		Builder.Append("))");
-
-		// for debug
-		System.out.println(Builder.toString());
-	}
-
-	@Override public void InvokeMainFunc(String MainFuncName) {
-		this.CurrentBuilder = this.NewSourceBuilder();
-		this.CurrentBuilder.Append("(");
-		this.CurrentBuilder.Append(MainFuncName);
-		this.CurrentBuilder.AppendLine(")");
-	}
+	//	@Override public void InvokeMainFunc(String MainFuncName) {
+	//		this.CurrentBuilder = this.NewSourceBuilder();
+	//		this.CurrentBuilder.Append("(");
+	//		this.CurrentBuilder.Append(MainFuncName);
+	//		this.CurrentBuilder.AppendLine(")");
+	//	}
 
 	@Override public void VisitUnaryNode(ZenUnaryNode Node) {
-		this.CurrentBuilder.Append(Node.Token.ParsedText);
+		this.CurrentBuilder.Append(Node.SourceToken.ParsedText);
 		Node.RecvNode.Accept(this);
 	}
 
 	@Override public void VisitBinaryNode(ZenBinaryNode Node) {
 		this.CurrentBuilder.Append("(");
-		this.CurrentBuilder.Append(Node.Token.ParsedText);
+		this.CurrentBuilder.Append(Node.SourceToken.ParsedText);
 		this.CurrentBuilder.Append(" ");
 		Node.LeftNode.Accept(this);
 		this.CurrentBuilder.Append(" ");
@@ -339,7 +326,7 @@ public class CommonLispSourceGenerator extends ZenSourceGenerator {
 	}
 
 	@Override public void VisitSetLocalNode(ZenSetLocalNode Node) {
-		this.CurrentBuilder.Append("(setq  " + Node.NativeName);
+		this.CurrentBuilder.Append("(setq  " + Node.VarName);
 		this.CurrentBuilder.Append(" ");
 		Node.ValueNode.Accept(this);
 		this.CurrentBuilder.Append(")");

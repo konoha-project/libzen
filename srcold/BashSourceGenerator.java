@@ -193,7 +193,7 @@ public class BashSourceGenerator extends SourceGenerator {
 	}
 
 	private String[] MakeParamCode(ArrayList<ZenNode> ParamList, boolean isAssert) {
-		/*local*/int Size = LibGreenTea.ListSize(ParamList);
+		/*local*/int Size = LibZen.ListSize(ParamList);
 		/*local*/String[] ParamCode = new String[Size];
 		/*local*/int i = 0;
 		while(i < Size) {
@@ -220,7 +220,7 @@ public class BashSourceGenerator extends SourceGenerator {
 	}
 
 	@Override public void VisitApplySymbolNode(ZenApplySymbolNode Node) {
-		/*local*/int ParamSize = LibGreenTea.ListSize(Node.ParamList);
+		/*local*/int ParamSize = LibZen.ListSize(Node.ParamList);
 		/*local*/String Template = this.GenerateFuncTemplate(ParamSize, Node.ResolvedFunc);
 		/*local*/boolean isAssert = this.FindAssert(Node.ResolvedFunc);
 		if(isAssert) {
@@ -231,7 +231,7 @@ public class BashSourceGenerator extends SourceGenerator {
 	}
 
 	@Override public void VisitUnaryNode(ZenUnaryNode Node) {
-		/*local*/String FuncName = Node.Token.ParsedText;
+		/*local*/String FuncName = Node.SourceToken.ParsedText;
 		/*local*/ZenFunc Func = Node.ResolvedFunc;
 		/*local*/String Expr = this.ResolveValueType(Node.RecvNode, false);	//TODO: support ++ --
 		/*local*/String Macro = null;
@@ -248,7 +248,7 @@ public class BashSourceGenerator extends SourceGenerator {
 	}
 
 	@Override public void VisitBinaryNode(ZenBinaryNode Node) {
-		/*local*/String FuncName = Node.Token.ParsedText;
+		/*local*/String FuncName = Node.SourceToken.ParsedText;
 		/*local*/ZenFunc Func = Node.ResolvedFunc;
 		/*local*/String Left = this.ResolveValueType(Node.LeftNode, false);
 		/*local*/String Right = this.ResolveValueType(Node.RightNode, false);
@@ -297,7 +297,7 @@ public class BashSourceGenerator extends SourceGenerator {
 	}
 
 //	@Override public void VisitSelfAssignNode(ZenSelfAssignNode Node) {
-//		/*local*/String FuncName = Node.Token.ParsedText;
+//		/*local*/String FuncName = Node.SourceToken.ParsedText;
 //		/*local*/ZenFunc Func = Node.Func;
 //		/*local*/String Left = this.VisitNode(Node.LeftNode);
 //		/*local*/String Right = this.ResolveValueType(Node.RightNode, false);
@@ -356,7 +356,7 @@ public class BashSourceGenerator extends SourceGenerator {
 		/*local*/String Match = this.ResolveValueType(Node.MatchNode, false);
 		/*local*/String Code = "case " + Match + " in" + this.LineFeed + this.GetIndentString();
 		/*local*/int i = 0;
-		while(i < LibGreenTea.ListSize(Node.CaseList)) {
+		while(i < LibZen.ListSize(Node.CaseList)) {
 			/*local*/ZenNode Case  = Node.CaseList.get(i);
 			/*local*/ZenNode Block = Node.CaseList.get(i+1);
 			Code += this.VisitNode(Case) + ")" + this.LineFeed;
@@ -408,7 +408,7 @@ public class BashSourceGenerator extends SourceGenerator {
 	}
 
 	@Override public void VisitErrorNode(ZenErrorNode Node) {
-		this.PushSourceCode("echo " + LibGreenTea.QuoteString(Node.Token.ParsedText) + " >&2");
+		this.PushSourceCode("echo " + LibGreenTea.QuoteString(Node.SourceToken.ParsedText) + " >&2");
 	}
 
 	@Override public void VisitCommandNode(ZenCommandNode Node) {
@@ -436,7 +436,7 @@ public class BashSourceGenerator extends SourceGenerator {
 
 	private String AppendCommand(ZenCommandNode CurrentNode) {
 		/*local*/String Code = "";
-		/*local*/int size = LibGreenTea.ListSize(CurrentNode.ArgumentList);
+		/*local*/int size = LibZen.ListSize(CurrentNode.ArgumentList);
 		/*local*/int i = 0;
 		while(i < size) {
 			Code += this.ResolveValueType(CurrentNode.ArgumentList.get(i), false) + " ";
@@ -562,7 +562,7 @@ public class BashSourceGenerator extends SourceGenerator {
 		Program += this.GetIndentString() + "local -a " + this.GetRecvName() + this.LineFeed;
 
 		/*local*/int i = 0;
-		while(i < LibGreenTea.ListSize(ClassField.FieldList)) {
+		while(i < LibZen.ListSize(ClassField.FieldList)) {
 			/*local*/ZenFieldInfo FieldInfo = ClassField.FieldList.get(i);
 			/*local*/String InitValue = this.StringifyConstValue(FieldInfo.InitValue);
 			if(!FieldInfo.Type.IsNativeType()) {

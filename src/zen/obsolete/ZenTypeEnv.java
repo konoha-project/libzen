@@ -108,12 +108,12 @@ public final class ZenTypeEnv extends ZenUtils {
 //
 //	public final ZenNode ReportTypeResult(ZenSyntaxTree ParsedTree, ZenNode Node, int Level, String Message) {
 //		if(Level == ErrorLevel || (this.IsStrictMode() && Level == TypeErrorLevel)) {
-//			LibZen.Assert(Node.Token == ParsedTree.KeyToken);
-//			this.NameSpace.Context.ReportError_OLD(GreenTeaConsts.ErrorLevel, Node.Token, Message);
+//			LibZen.Assert(Node.SourceToken == ParsedTree.KeyToken);
+//			this.NameSpace.Context.ReportError_OLD(GreenTeaConsts.ErrorLevel, Node.SourceToken, Message);
 //			return this.Generator.CreateErrorNode(ZenStaticTable.VoidType, ParsedTree);
 //		}
 //		else {
-//			this.NameSpace.Context.ReportError_OLD(Level, Node.Token, Message);
+//			this.NameSpace.Context.ReportError_OLD(Level, Node.SourceToken, Message);
 //		}
 //		return Node;
 //	}
@@ -168,7 +168,7 @@ public final class ZenTypeEnv extends ZenUtils {
 //			return Node;
 //		}
 //		if(Node.Type.IsVarType()) {
-//			return this.ReportTypeResult(ParsedTree, Node, TypeErrorLevel, "unspecified type: " + Node.Token.ParsedText);
+//			return this.ReportTypeResult(ParsedTree, Node, TypeErrorLevel, "unspecified type: " + Node.SourceToken.ParsedText);
 //		}
 //		if(Node.Type == Type || Type.IsVarType() || Type.Accept(Node.Type)) {
 //			return Node;

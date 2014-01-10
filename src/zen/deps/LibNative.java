@@ -489,8 +489,8 @@ public class LibNative {
 		}
 		LibNative.println("unsupported syntax: " + Node.SourceToken.ParsedText
 				+ " " + Node.getClass());
-		// Visitor.ReportError(GreenTeaConsts.ErrorLevel, Node.Token,
-		// "unsupported syntax: " + Node.Token.ParsedText + " " +
+		// Visitor.ReportError(GreenTeaConsts.ErrorLevel, Node.SourceToken,
+		// "unsupported syntax: " + Node.SourceToken.ParsedText + " " +
 		// Node.getClass());
 	}
 

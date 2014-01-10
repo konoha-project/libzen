@@ -396,7 +396,7 @@ class JMethodBuilder {
 	}
 
 	void SetLineNumber(ZenNode Node) {
-		this.SetLineNumber(Node.Token.FileLine);
+		this.SetLineNumber(Node.SourceToken.FileLine);
 	}
 	
 	void LoadLocal(JLocalVarStack local) {
@@ -849,7 +849,7 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 	}
 
 	@Override public void VisitApplyOverridedMethodNode(ZenApplyOverridedMethodNode Node) {
-		this.CurrentVisitor.AsmVisitor.visitLdcInsn(Node.Token.FileLine);
+		this.CurrentVisitor.AsmVisitor.visitLdcInsn(Node.SourceToken.FileLine);
 		this.CurrentVisitor.LoadConst(Node.NameSpace);
 		this.CurrentVisitor.LoadConst(Node.Func);
 		this.CurrentVisitor.LoadNewArray(this, 0, Node.ParamList);
@@ -859,7 +859,7 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 	}
 	
 //	@Override public void VisitApplyDynamicFuncNode(ZenApplyDynamicFuncNode Node) {
-//		this.VisitingBuilder.AsmVisitor.visitLdcInsn((long)Node.Token.FileLine);
+//		this.VisitingBuilder.AsmVisitor.visitLdcInsn((long)Node.SourceToken.FileLine);
 //		this.VisitingBuilder.LoadConst(Node.Type);
 //		this.VisitingBuilder.LoadConst(Node.NameSpace);
 //		this.VisitingBuilder.LoadConst(Node.FuncName);		
@@ -869,7 +869,7 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 //	}
 //
 //	@Override public void VisitApplyDynamicMethodNode(ZenApplyDynamicMethodNode Node) {
-//		this.VisitingBuilder.AsmVisitor.visitLdcInsn((long)Node.Token.FileLine);
+//		this.VisitingBuilder.AsmVisitor.visitLdcInsn((long)Node.SourceToken.FileLine);
 //		this.VisitingBuilder.LoadConst(Node.Type);
 //		this.VisitingBuilder.LoadConst(Node.NameSpace);
 //		this.VisitingBuilder.LoadConst(Node.FuncName);		
@@ -1213,7 +1213,7 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 		this.CurrentVisitor.SetLineNumber(Node);
 		this.CurrentVisitor.AsmVisitor.visitTypeInsn(NEW, name);
 		this.CurrentVisitor.AsmVisitor.visitInsn(DUP);
-		this.CurrentVisitor.LoadConst(Node.Token.GetErrorMessage());
+		this.CurrentVisitor.LoadConst(Node.SourceToken.GetErrorMessage());
 		this.CurrentVisitor.AsmVisitor.visitMethodInsn(INVOKESPECIAL, name, "<init>", "(Ljava/lang/Object;)V");
 		this.CurrentVisitor.AsmVisitor.visitInsn(ATHROW);
 	}

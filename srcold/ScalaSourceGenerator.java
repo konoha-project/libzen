@@ -164,7 +164,7 @@
 //	@Override public void VisitTryNode(ZenTryNode Node) {
 //		/*local*/String Code = "try ";
 //		Code += this.VisitBlockWithIndent(Node.TryNode, true);
-//		for (int i = 0; i < LibGreenTea.ListSize(Node.CatchList); i++) {
+//		for (int i = 0; i < LibZen.ListSize(Node.CatchList); i++) {
 //			ZenCatchNode Catch = (/*cast*/ZenCatchNode) Node.CatchList.get(i);
 //			Code += " catch (" + Catch.ExceptionType + " " + Catch.ExceptionName + ") ";
 //			Code += this.VisitBlockWithIndent(Catch.BodyNode, true);
@@ -182,7 +182,7 @@
 //	}
 //
 //	@Override public void VisitErrorNode(ZenErrorNode Node) {
-//		/*local*/String Code = "throw RuntimeError(\"" + Node.Token.ParsedText + "\")";
+//		/*local*/String Code = "throw RuntimeError(\"" + Node.SourceToken.ParsedText + "\")";
 //		this.PushSourceCode(Code);
 //	}
 //
