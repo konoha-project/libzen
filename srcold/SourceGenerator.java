@@ -28,38 +28,38 @@ import java.util.ArrayList;
 //endif VAJA
 
 
-import parser.GtFunc;
-import parser.GtGenerator;
-import parser.GtNameSpace;
-import parser.GtType;
-import parser.ast.GtAllocateNode;
-import parser.ast.GtAndNode;
-import parser.ast.GtApplySymbolNode;
-import parser.ast.GtBinaryNode;
-import parser.ast.GtBreakNode;
-import parser.ast.GtConstPoolNode;
-import parser.ast.GtConstructorNode;
-import parser.ast.GtContinueNode;
-import parser.ast.GtEmptyNode;
-import parser.ast.GtGetLocalNode;
-import parser.ast.GtGetterNode;
-import parser.ast.GtInstanceOfNode;
-import parser.ast.GtNewArrayNode;
-import parser.ast.GtNode;
-import parser.ast.GtNullNode;
-import parser.ast.GtOrNode;
-import parser.ast.GtReturnNode;
-import parser.ast.GtSetLocalNode;
-import parser.ast.GtSetterNode;
-import parser.ast.GtSwitchNode;
-import parser.ast.GtTrinaryNode;
-import parser.ast.GtUnaryNode;
+import parser.ZenFunc;
+import parser.ZenGenerator;
+import parser.ZenNameSpace;
+import parser.ZenType;
+import parser.ast.ZenAllocateNode;
+import parser.ast.ZenAndNode;
+import parser.ast.ZenApplySymbolNode;
+import parser.ast.ZenBinaryNode;
+import parser.ast.ZenBreakNode;
+import parser.ast.ZenConstPoolNode;
+import parser.ast.ZenConstructorNode;
+import parser.ast.ZenContinueNode;
+import parser.ast.ZenEmptyNode;
+import parser.ast.ZenGetLocalNode;
+import parser.ast.ZenGetterNode;
+import parser.ast.ZenInstanceOfNode;
+import parser.ast.ZenNewArrayNode;
+import parser.ast.ZenNode;
+import parser.ast.ZenNullNode;
+import parser.ast.ZenOrNode;
+import parser.ast.ZenReturnNode;
+import parser.ast.ZenSetLocalNode;
+import parser.ast.ZenSetterNode;
+import parser.ast.ZenSwitchNode;
+import parser.ast.ZenTrinaryNode;
+import parser.ast.ZenUnaryNode;
 import parser.deps.GreenTeaEnum;
 import parser.deps.LibGreenTea;
 import parser.deps.LibNative;
 
 @Deprecated
-public class SourceGenerator extends GtGenerator {
+public class SourceGenerator extends ZenGenerator {
 	/*field*/protected String    HeaderSource;
 	/*field*/protected String    BodySource;
 
@@ -111,7 +111,7 @@ public class SourceGenerator extends GtGenerator {
 		this.BlockEnd = "}";
 	}
 
-	@Override public void InitContext(GtNameSpace Context) {
+	@Override public void InitContext(ZenNameSpace Context) {
 		super.InitContext(Context);
 		this.HeaderSource = "";
 		this.BodySource = "";
@@ -174,13 +174,13 @@ public class SourceGenerator extends GtGenerator {
 		return this.CurrentLevelIndentString;
 	}
 
-	public String VisitBlockWithIndent(GtNode Node, boolean NeedBlock) {
+	public String VisitBlockWithIndent(ZenNode Node, boolean NeedBlock) {
 		/*local*/String Code = "";
 		if(NeedBlock) {
 			Code += this.BlockBegin + this.LineFeed;
 			this.Indent();
 		}
-		/*local*/GtNode CurrentNode = Node;
+		/*local*/ZenNode CurrentNode = Node;
 		while(CurrentNode != null) {
 			if(!this.IsEmptyBlock(CurrentNode)) {
 				/*local*/String Stmt = this.VisitNode(CurrentNode);
@@ -221,7 +221,7 @@ public class SourceGenerator extends GtGenerator {
 		return ConstValue.toString();
 	}
 
-	protected String GetNewOperator(GtType Type) {
+	protected String GetNewOperator(ZenType Type) {
 		return "new " + Type.ShortName + "()";
 	}
 
@@ -233,7 +233,7 @@ public class SourceGenerator extends GtGenerator {
 		return (/*cast*/String) this.PopCode();
 	}
 
-	public final String VisitNode(GtNode Node) {
+	public final String VisitNode(ZenNode Node) {
 		Node.Accept(this);
 		return this.PopSourceCode();
 	}
@@ -252,7 +252,7 @@ public class SourceGenerator extends GtGenerator {
 		return JoinedCode + EndCode;
 	}
 
-	public final static String GenerateApplyFunc1(GtFunc Func, String FuncName, boolean IsSuffixOp, String Arg1) {
+	public final static String GenerateApplyFunc1(ZenFunc Func, String FuncName, boolean IsSuffixOp, String Arg1) {
 		/*local*/String Macro = null;
 		if(Func != null) {
 			FuncName = Func.GetNativeFuncName();
@@ -271,7 +271,7 @@ public class SourceGenerator extends GtGenerator {
 		return Macro.replace("$1", Arg1);
 	}
 
-	public final static String GenerateApplyFunc2(GtFunc Func, String FuncName, String Arg1, String Arg2) {
+	public final static String GenerateApplyFunc2(ZenFunc Func, String FuncName, String Arg1, String Arg2) {
 		/*local*/String Macro = null;
 		if(Func != null) {
 			FuncName = Func.GetNativeFuncName();
@@ -285,7 +285,7 @@ public class SourceGenerator extends GtGenerator {
 		return Macro.replace("$1", Arg1).replace("$2", Arg2);
 	}
 
-	public String GenerateFuncTemplate(int ParamSize, GtFunc Func) {
+	public String GenerateFuncTemplate(int ParamSize, ZenFunc Func) {
 		/*local*/int BeginIdx = 0;
 		/*local*/String Template = "";
 		/*local*/boolean IsNative = false;
@@ -324,7 +324,7 @@ public class SourceGenerator extends GtGenerator {
 		return Template;
 	}
 
-	public final String ApplyMacro(String Template, ArrayList<GtNode> NodeList) {
+	public final String ApplyMacro(String Template, ArrayList<ZenNode> NodeList) {
 		/*local*/int ParamSize = LibGreenTea.ListSize(NodeList);
 		/*local*/int ParamIndex = 0;
 		while(ParamIndex < ParamSize) {
@@ -345,34 +345,34 @@ public class SourceGenerator extends GtGenerator {
 		return Template;
 	}
 
-	public final String GenerateApplyFunc(GtApplySymbolNode Node) {
+	public final String GenerateApplyFunc(ZenApplySymbolNode Node) {
 		/*local*/int ParamSize = LibGreenTea.ListSize(Node.ParamList);
 		/*local*/String Template = this.GenerateFuncTemplate(ParamSize, Node.ResolvedFunc);
 		return this.ApplyMacro(Template, Node.ParamList);
 	}
 
 	// Visitor API
-	@Override public void VisitEmptyNode(GtEmptyNode Node) {
+	@Override public void VisitEmptyNode(ZenEmptyNode Node) {
 		this.PushSourceCode("");
 	}
 
-	@Override public void VisitInstanceOfNode(GtInstanceOfNode Node) {
+	@Override public void VisitInstanceOfNode(ZenInstanceOfNode Node) {
 		this.PushSourceCode(this.VisitNode(Node.ExprNode) + " instanceof " + Node.TypeInfo);
 	}
 
-	@Override public final void VisitConstPoolNode(GtConstPoolNode Node) {
+	@Override public final void VisitConstPoolNode(ZenConstPoolNode Node) {
 		this.PushSourceCode(this.StringifyConstValue(Node.ConstValue));
 	}
 
-	@Override public final void VisitNullNode(GtNullNode Node) {
+	@Override public final void VisitNullNode(ZenNullNode Node) {
 		this.PushSourceCode(this.NullLiteral);
 	}
 
-	@Override public void VisitGetLocalNode(GtGetLocalNode Node) {
+	@Override public void VisitGetLocalNode(ZenGetLocalNode Node) {
 		this.PushSourceCode(Node.NativeName);
 	}
 
-	@Override public void VisitReturnNode(GtReturnNode Node) {
+	@Override public void VisitReturnNode(ZenReturnNode Node) {
 		/*local*/String Code = "return";
 		if(Node.ValueNode != null) {
 			Code += " " + this.VisitNode(Node.ValueNode);
@@ -381,26 +381,26 @@ public class SourceGenerator extends GtGenerator {
 		this.StopVisitor(Node);
 	}
 
-//	@Override public void VisitIndexerNode(GtIndexerNode Node) {
+//	@Override public void VisitIndexerNode(ZenIndexerNode Node) {
 //		this.PushSourceCode(this.VisitNode(Node.Expr) + "[" + this.VisitNode(Node.GetAt(0)) + "]"); // FIXME: Multi
 //	}
 
-	@Override public final void VisitConstructorNode(GtConstructorNode Node) {
+	@Override public final void VisitConstructorNode(ZenConstructorNode Node) {
 		/*local*/int ParamSize = LibGreenTea.ListSize(Node.ParamList);
 		/*local*/String Template = this.GenerateFuncTemplate(ParamSize, Node.Func);
 		this.PushSourceCode(this.ApplyMacro(Template, Node.ParamList));
 	}
 
-	@Override public void VisitAllocateNode(GtAllocateNode Node) {
+	@Override public void VisitAllocateNode(ZenAllocateNode Node) {
 		this.PushSourceCode(this.GetNewOperator(Node.Type));
 	}
 
-	@Override public void VisitApplySymbolNode(GtApplySymbolNode Node) {
+	@Override public void VisitApplySymbolNode(ZenApplySymbolNode Node) {
 		/*local*/String Program = this.GenerateApplyFunc(Node);
 		this.PushSourceCode(Program);
 	}
 
-//	@Override public void VisitSuffixNode(GtSuffixNode Node) {
+//	@Override public void VisitSuffixNode(ZenSuffixNode Node) {
 //		/*local*/String FuncName = Node.Token.ParsedText;
 //		/*local*/String Expr = this.VisitNode(Node.Expr);
 //		if(LibGreenTea.EqualsString(FuncName, "++")) {
@@ -413,53 +413,53 @@ public class SourceGenerator extends GtGenerator {
 //		this.PushSourceCode("(" + SourceGenerator.GenerateApplyFunc1(Node.Func, FuncName, true, Expr) + ")");
 //	}
 
-//	@Override public void VisitSelfAssignNode(GtSelfAssignNode Node) {
+//	@Override public void VisitSelfAssignNode(ZenSelfAssignNode Node) {
 //		/*local*/String FuncName = Node.Token.ParsedText;
 //		/*local*/String Left = this.VisitNode(Node.LeftNode);
 //		/*local*/String Right = this.VisitNode(Node.RightNode);
 //		this.PushSourceCode(Left + " = " + SourceGenerator.GenerateApplyFunc2(Node.Func, FuncName, Left, Right));
 //	}
 
-	@Override public void VisitUnaryNode(GtUnaryNode Node) {
+	@Override public void VisitUnaryNode(ZenUnaryNode Node) {
 		/*local*/String FuncName = Node.Token.ParsedText;
 		/*local*/String Expr = this.VisitNode(Node.RecvNode);
 		this.PushSourceCode("(" + SourceGenerator.GenerateApplyFunc1(Node.ResolvedFunc, FuncName, false, Expr) + ")");
 	}
 
-	@Override public void VisitBinaryNode(GtBinaryNode Node) {
+	@Override public void VisitBinaryNode(ZenBinaryNode Node) {
 		/*local*/String FuncName = Node.Token.ParsedText;
 		/*local*/String Left = this.VisitNode(Node.LeftNode);
 		/*local*/String Right = this.VisitNode(Node.RightNode);
 		this.PushSourceCode("(" + SourceGenerator.GenerateApplyFunc2(Node.ResolvedFunc, FuncName, Left, Right) + ")");
 	}
 
-	@Override public void VisitGetterNode(GtGetterNode Node) {
+	@Override public void VisitGetterNode(ZenGetterNode Node) {
 		this.PushSourceCode(this.VisitNode(Node.RecvNode) + this.MemberAccessOperator + Node.ResolvedFunc.FuncName);
 	}
-	@Override public void VisitSetLocalNode(GtSetLocalNode Node) {
+	@Override public void VisitSetLocalNode(ZenSetLocalNode Node) {
 		this.PushSourceCode(Node.NativeName + " = " + this.VisitNode(Node.ValueNode));
 	}
 
-	@Override public void VisitAndNode(GtAndNode Node) {
+	@Override public void VisitAndNode(ZenAndNode Node) {
 		/*local*/String Left = this.VisitNode(Node.LeftNode);
 		/*local*/String Right = this.VisitNode(Node.RightNode);
 		this.PushSourceCode("(" + Left + " " + this.LogicalAndOperator +" " + Right + ")");
 	}
 
-	@Override public void VisitOrNode(GtOrNode Node) {
+	@Override public void VisitOrNode(ZenOrNode Node) {
 		/*local*/String Left = this.VisitNode(Node.LeftNode);
 		/*local*/String Right = this.VisitNode(Node.RightNode);
 		this.PushSourceCode("(" + Left + " " + this.LogicalOrOperator +" " + Right + ")");
 	}
 
-	@Override public void VisitTrinaryNode(GtTrinaryNode Node) {
+	@Override public void VisitTrinaryNode(ZenTrinaryNode Node) {
 		/*local*/String CondExpr = this.VisitNode(Node.CondNode);
 		/*local*/String ThenExpr = this.VisitNode(Node.ThenNode);
 		/*local*/String ElseExpr = this.VisitNode(Node.ElseNode);
 		this.PushSourceCode("((" + CondExpr + ")? " + ThenExpr + " : " + ElseExpr + ")");
 	}
 
-	@Override public void VisitBreakNode(GtBreakNode Node) {
+	@Override public void VisitBreakNode(ZenBreakNode Node) {
 		/*local*/String Code = this.BreakKeyword;
 		if(this.HasLabelSupport) {
 			/*local*/String Label = Node.Label;
@@ -471,7 +471,7 @@ public class SourceGenerator extends GtGenerator {
 		this.StopVisitor(Node);
 	}
 
-	@Override public void VisitContinueNode(GtContinueNode Node) {
+	@Override public void VisitContinueNode(ZenContinueNode Node) {
 		/*local*/String Code = this.ContinueKeyword;
 		if(this.HasLabelSupport) {
 			/*local*/String Label = Node.Label;
@@ -483,12 +483,12 @@ public class SourceGenerator extends GtGenerator {
 		this.StopVisitor(Node);
 	}
 
-	@Override public void VisitSwitchNode(GtSwitchNode Node) {
+	@Override public void VisitSwitchNode(ZenSwitchNode Node) {
 		/*local*/String Code = "switch (" + this.VisitNode(Node.MatchNode) + ") {" + this.LineFeed;
 		/*local*/int i = 0;
 		while(i < Node.CaseList.size()) {
-			/*local*/GtNode Case  = Node.CaseList.get(i);
-			/*local*/GtNode Block = Node.CaseList.get(i+1);
+			/*local*/ZenNode Case  = Node.CaseList.get(i);
+			/*local*/ZenNode Block = Node.CaseList.get(i+1);
 			Code += this.GetIndentString() + "case " + this.VisitNode(Case) + ":";
 			if(this.IsEmptyBlock(Block)) {
 				this.Indent();
@@ -509,7 +509,7 @@ public class SourceGenerator extends GtGenerator {
 	}
 
 	// EnforceConst API
-	@Override public Object EvalAllocateNode(GtAllocateNode Node, boolean EnforceConst) {
+	@Override public Object EvalAllocateNode(ZenAllocateNode Node, boolean EnforceConst) {
 		if(EnforceConst) {
 			this.VisitAllocateNode(Node);
 			return this.PopSourceCode();
@@ -517,7 +517,7 @@ public class SourceGenerator extends GtGenerator {
 		return null;
 	}
 
-	@Override public Object EvalNewArrayNode(GtNewArrayNode Node, boolean EnforceConst) {
+	@Override public Object EvalNewArrayNode(ZenNewArrayNode Node, boolean EnforceConst) {
 		if(EnforceConst) {
 			this.VisitNewArrayNode(Node);
 			return this.PopSourceCode();
@@ -525,7 +525,7 @@ public class SourceGenerator extends GtGenerator {
 		return null;
 	}
 
-	public Object EvalGetterNode(GtGetterNode Node, boolean EnforceConst) {
+	public Object EvalGetterNode(ZenGetterNode Node, boolean EnforceConst) {
 		if(EnforceConst) {
 			this.VisitGetterNode(Node);
 			return this.PopSourceCode();
@@ -533,7 +533,7 @@ public class SourceGenerator extends GtGenerator {
 		return null;
 	}
 
-	public Object EvalSetterNode(GtSetterNode Node, boolean EnforceConst) {
+	public Object EvalSetterNode(ZenSetterNode Node, boolean EnforceConst) {
 		if(EnforceConst) {
 			this.VisitSetterNode(Node);
 			return this.PopSourceCode();
@@ -541,7 +541,7 @@ public class SourceGenerator extends GtGenerator {
 		return null;
 	}
 
-	@Override public Object EvalApplySymbolNode(GtApplySymbolNode ApplyNode, boolean EnforceConst) {
+	@Override public Object EvalApplySymbolNode(ZenApplySymbolNode ApplyNode, boolean EnforceConst) {
 		if((EnforceConst || ApplyNode.ResolvedFunc.Is(ConstFunc)) /*&& ApplyNode.Func.FuncBody instanceof Method */) {
 			this.VisitApplySymbolNode(ApplyNode);
 			return this.PopSourceCode();

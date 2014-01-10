@@ -243,7 +243,7 @@ public class ZenType implements ZenTypeConst {
 		return ZenSystem.CheckSubType(Type, this);
 	}
 
-//	public final boolean Accept(GtType Type) {
+//	public final boolean Accept(ZenType Type) {
 //		boolean b = this.Accept_(Type);
 //		System.err.println("" + this + " accepts " + Type + " ? " + b);
 //		return b;
@@ -253,7 +253,7 @@ public class ZenType implements ZenTypeConst {
 		return (Value != null) ? this.Accept(ZenSystem.GuessType(Value)) : true;
 	}
 
-//	public void SetClassField(GtClassField ClassField) {
+//	public void SetClassField(ZenClassField ClassField) {
 //		this.TypeBody = ClassField;
 //	}
 //
@@ -269,7 +269,7 @@ public class ZenType implements ZenTypeConst {
 //		return ZenUtils.IsFlag(this.TypeFlag, TypeVariable) || ZenUtils.IsFlag(this.TypeFlag, GenericVariable);
 //	}
 //
-//	public int AppendTypeVariable(GtNameSpace GenericNameSpace, int Count) {
+//	public int AppendTypeVariable(ZenNameSpace GenericNameSpace, int Count) {
 //		if(ZenUtils.IsFlag(this.TypeFlag, TypeVariable)) {
 //			/*local*/ZenType TypeVar = GenericNameSpace.GetType(this.ShortName);
 //			if(TypeVar != null && TypeVar.IsTypeVariable()) {
@@ -293,7 +293,7 @@ public class ZenType implements ZenTypeConst {
 //		return GivenType;
 //	}
 //	
-//	public ZenType RealType(GtNameSpace GenericNameSpace, ZenType GivenType) {
+//	public ZenType RealType(ZenNameSpace GenericNameSpace, ZenType GivenType) {
 //		if(ZenUtils.IsFlag(this.TypeFlag, TypeVariable)) {
 //			/*local*/ZenType TypeVar = GenericNameSpace.GetType(this.ShortName);
 //			//System.err.println("TypeVar="+this.ShortName + ", " + TypeVar);
@@ -316,7 +316,7 @@ public class ZenType implements ZenTypeConst {
 //		return this;
 //	}
 //
-//	public boolean Match(GtNameSpace GenericNameSpace, ZenType GivenType) {
+//	public boolean Match(ZenNameSpace GenericNameSpace, ZenType GivenType) {
 //		
 //		if(ZenUtils.IsFlag(this.TypeFlag, TypeVariable)) {
 //			/*local*/ZenType TypeVar = GenericNameSpace.GetType(this.ShortName);
@@ -341,7 +341,7 @@ public class ZenType implements ZenTypeConst {
 //		return this.Accept(GivenType);
 //	}
 //
-////	public boolean Match(GtNameSpace GenericNameSpace, GtType GivenType) {
+////	public boolean Match(ZenNameSpace GenericNameSpace, ZenType GivenType) {
 ////		boolean b = this.Match_(GenericNameSpace, GivenType);
 ////		System.err.println("matching.. " + this + ", given = " + GivenType + ", results=" + b);
 ////		return b;

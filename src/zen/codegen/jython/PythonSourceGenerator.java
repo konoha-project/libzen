@@ -25,17 +25,17 @@
 //ifdef JAVA
 package zen.codegen.jython;
 
-import zen.ast.GtBlockNode;
-import zen.ast.GtCastNode;
-import zen.ast.GtCatchNode;
-import zen.ast.GtFuncDeclNode;
-import zen.ast.GtFunctionLiteralNode;
-import zen.ast.GtInstanceOfNode;
-import zen.ast.GtParamNode;
-import zen.ast.GtReturnNode;
-import zen.ast.GtThrowNode;
-import zen.ast.GtTryNode;
-import zen.ast.GtVarDeclNode;
+import zen.ast.ZenBlockNode;
+import zen.ast.ZenCastNode;
+import zen.ast.ZenCatchNode;
+import zen.ast.ZenFuncDeclNode;
+import zen.ast.ZenFunctionLiteralNode;
+import zen.ast.ZenInstanceOfNode;
+import zen.ast.ZenParamNode;
+import zen.ast.ZenReturnNode;
+import zen.ast.ZenThrowNode;
+import zen.ast.ZenTryNode;
+import zen.ast.ZenVarDeclNode;
 import zen.ast.ZenNode;
 import zen.lang.ZenSystem;
 import zen.parser.ZenSourceGenerator;
@@ -71,7 +71,7 @@ public class PythonSourceGenerator extends ZenSourceGenerator {
 	}
 
 	@Override
-	public void VisitBlockNode(GtBlockNode Node) {
+	public void VisitBlockNode(ZenBlockNode Node) {
 		int count = 0;
 		this.CurrentBuilder.Append(":");
 		this.CurrentBuilder.Indent();
@@ -94,7 +94,7 @@ public class PythonSourceGenerator extends ZenSourceGenerator {
 		this.CurrentBuilder.Append("#");
 	}
 
-	@Override public void VisitCastNode(GtCastNode Node) {
+	@Override public void VisitCastNode(ZenCastNode Node) {
 		// this.CurrentBuilder.Append("(");
 		// this.VisitType(Node.Type);
 		// this.CurrentBuilder.Append(") ");
@@ -102,7 +102,7 @@ public class PythonSourceGenerator extends ZenSourceGenerator {
 		this.GenerateCode(Node.ExprNode);
 	}
 
-	@Override public void VisitInstanceOfNode(GtInstanceOfNode Node) {
+	@Override public void VisitInstanceOfNode(ZenInstanceOfNode Node) {
 		this.CurrentBuilder.Append("isinstance(");
 		this.GenerateCode(Node.LeftNode);
 		this.CurrentBuilder.Append(this.Camma);
@@ -111,13 +111,13 @@ public class PythonSourceGenerator extends ZenSourceGenerator {
 	}
 
 	@Override
-	public void VisitThrowNode(GtThrowNode Node) {
+	public void VisitThrowNode(ZenThrowNode Node) {
 		this.CurrentBuilder.Append("raise ");
 		this.GenerateCode(Node.ValueNode);
 	}
 
 	@Override
-	public void VisitTryNode(GtTryNode Node) {
+	public void VisitTryNode(ZenTryNode Node) {
 		this.CurrentBuilder.Append("try");
 		this.GenerateCode(Node.TryNode);
 		if (Node.CatchNode != null) {
@@ -129,7 +129,7 @@ public class PythonSourceGenerator extends ZenSourceGenerator {
 		}
 	}
 
-	@Override public void VisitCatchNode(GtCatchNode Node) {
+	@Override public void VisitCatchNode(ZenCatchNode Node) {
 		this.CurrentBuilder.Append("except:");
 		//		this.VisitType(Node.ExceptionType);
 		//		this.CurrentBuilder.AppendToken("as");
@@ -138,14 +138,14 @@ public class PythonSourceGenerator extends ZenSourceGenerator {
 	}
 
 	@Override
-	public void VisitVarDeclNode(GtVarDeclNode Node) {
+	public void VisitVarDeclNode(ZenVarDeclNode Node) {
 		this.CurrentBuilder.Append(Node.NativeName);
 		this.CurrentBuilder.AppendToken("=");
 		this.GenerateCode(Node.InitNode);
 	}
 
 	@Override
-	public void VisitParamNode(GtParamNode Node) {
+	public void VisitParamNode(ZenParamNode Node) {
 		this.CurrentBuilder.Append(Node.Name);
 	}
 
@@ -159,8 +159,8 @@ public class PythonSourceGenerator extends ZenSourceGenerator {
 		4
 	 **/
 	@Override
-	public void VisitFunctionLiteralNode(GtFunctionLiteralNode Node) {
-		GtReturnNode ReturnNode = Node.BodyNode.ToReturnNode();
+	public void VisitFunctionLiteralNode(ZenFunctionLiteralNode Node) {
+		ZenReturnNode ReturnNode = Node.BodyNode.ToReturnNode();
 		if(ReturnNode != null && ReturnNode.ValueNode != null) {
 			this.CurrentBuilder.Append("lambda");
 			this.VisitParamList(" ", Node.ArgumentList, ": ");
@@ -175,7 +175,7 @@ public class PythonSourceGenerator extends ZenSourceGenerator {
 	}
 
 	@Override
-	public void VisitFuncDeclNode(GtFuncDeclNode Node) {
+	public void VisitFuncDeclNode(ZenFuncDeclNode Node) {
 		this.CurrentBuilder.Append("def ");
 		this.CurrentBuilder.Append(Node.FuncName);
 		this.VisitParamList("(", Node.ArgumentList, ")");

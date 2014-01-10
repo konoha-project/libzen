@@ -26,72 +26,72 @@
 package org.GreenTeaScript;
 import java.util.ArrayList;
 
-import parser.GtClassField;
-import parser.GtFieldInfo;
-import parser.GtFunc;
-import parser.GtNameSpace;
-import parser.GtSourceGenerator;
-import parser.GtSyntaxTree;
-import parser.GtType;
-import parser.ast.GtAllocateNode;
-import parser.ast.GtAndNode;
-import parser.ast.GtApplyFunctionObjectNode;
-import parser.ast.GtApplyOverridedMethodNode;
-import parser.ast.GtApplySymbolNode;
-import parser.ast.GtArrayLiteralNode;
-import parser.ast.GtBinaryNode;
-import parser.ast.GtBooleanNode;
-import parser.ast.GtBreakNode;
-import parser.ast.GtCaseNode;
-import parser.ast.GtCastNode;
-import parser.ast.GtCatchNode;
-import parser.ast.GtCommandNode;
-import parser.ast.GtConstructorNode;
-import parser.ast.GtContinueNode;
-import parser.ast.GtDoWhileNode;
-import parser.ast.GtErrorNode;
-import parser.ast.GtFloatNode;
-import parser.ast.GtForEachNode;
-import parser.ast.GtForNode;
-import parser.ast.GtGetCapturedNode;
-import parser.ast.GtGetIndexNode;
-import parser.ast.GtGetLocalNode;
-import parser.ast.GtGetterNode;
-import parser.ast.GtIfNode;
-import parser.ast.GtInstanceOfNode;
-import parser.ast.GtIntNode;
-import parser.ast.GtNewArrayNode;
-import parser.ast.GtNode;
-import parser.ast.GtNullNode;
-import parser.ast.GtOrNode;
-import parser.ast.GtParamNode;
-import parser.ast.GtPrefixDeclNode;
-import parser.ast.GtPrefixInclNode;
-import parser.ast.GtReturnNode;
-import parser.ast.GtSetCapturedNode;
-import parser.ast.GtSetIndexNode;
-import parser.ast.GtSetLocalNode;
-import parser.ast.GtSetterNode;
-import parser.ast.GtSliceNode;
-import parser.ast.GtStatementNode;
-import parser.ast.GtStringNode;
-import parser.ast.GtSuffixDeclNode;
-import parser.ast.GtSuffixInclNode;
-import parser.ast.GtSwitchNode;
-import parser.ast.GtThrowNode;
-import parser.ast.GtTrinaryNode;
-import parser.ast.GtTryNode;
-import parser.ast.GtUnaryNode;
-import parser.ast.GtUsingNode;
-import parser.ast.GtVarDeclNode;
-import parser.ast.GtWhileNode;
-import parser.ast.GtYieldNode;
+import parser.ZenClassField;
+import parser.ZenFieldInfo;
+import parser.ZenFunc;
+import parser.ZenNameSpace;
+import parser.ZenSourceGenerator;
+import parser.ZenSyntaxTree;
+import parser.ZenType;
+import parser.ast.ZenAllocateNode;
+import parser.ast.ZenAndNode;
+import parser.ast.ZenApplyFunctionObjectNode;
+import parser.ast.ZenApplyOverridedMethodNode;
+import parser.ast.ZenApplySymbolNode;
+import parser.ast.ZenArrayLiteralNode;
+import parser.ast.ZenBinaryNode;
+import parser.ast.ZenBooleanNode;
+import parser.ast.ZenBreakNode;
+import parser.ast.ZenCaseNode;
+import parser.ast.ZenCastNode;
+import parser.ast.ZenCatchNode;
+import parser.ast.ZenCommandNode;
+import parser.ast.ZenConstructorNode;
+import parser.ast.ZenContinueNode;
+import parser.ast.ZenDoWhileNode;
+import parser.ast.ZenErrorNode;
+import parser.ast.ZenFloatNode;
+import parser.ast.ZenForEachNode;
+import parser.ast.ZenForNode;
+import parser.ast.ZenGetCapturedNode;
+import parser.ast.ZenGetIndexNode;
+import parser.ast.ZenGetLocalNode;
+import parser.ast.ZenGetterNode;
+import parser.ast.ZenIfNode;
+import parser.ast.ZenInstanceOfNode;
+import parser.ast.ZenIntNode;
+import parser.ast.ZenNewArrayNode;
+import parser.ast.ZenNode;
+import parser.ast.ZenNullNode;
+import parser.ast.ZenOrNode;
+import parser.ast.ZenParamNode;
+import parser.ast.ZenPrefixDeclNode;
+import parser.ast.ZenPrefixInclNode;
+import parser.ast.ZenReturnNode;
+import parser.ast.ZenSetCapturedNode;
+import parser.ast.ZenSetIndexNode;
+import parser.ast.ZenSetLocalNode;
+import parser.ast.ZenSetterNode;
+import parser.ast.ZenSliceNode;
+import parser.ast.ZenStatementNode;
+import parser.ast.ZenStringNode;
+import parser.ast.ZenSuffixDeclNode;
+import parser.ast.ZenSuffixInclNode;
+import parser.ast.ZenSwitchNode;
+import parser.ast.ZenThrowNode;
+import parser.ast.ZenTrinaryNode;
+import parser.ast.ZenTryNode;
+import parser.ast.ZenUnaryNode;
+import parser.ast.ZenUsingNode;
+import parser.ast.ZenVarDeclNode;
+import parser.ast.ZenWhileNode;
+import parser.ast.ZenYieldNode;
 import parser.deps.LibGreenTea;
 //endif VAJA
 
 //GreenTea Generator should be written in each language.
 
-public class PerlSourceGenerator extends GtSourceGenerator {
+public class PerlSourceGenerator extends ZenSourceGenerator {
 	public PerlSourceGenerator/*constructor*/(String TargetCode, String OutputFile, int GeneratorFlag) {
 		super("perl", OutputFile, GeneratorFlag);
 		this.TrueLiteral  = "1";
@@ -100,7 +100,7 @@ public class PerlSourceGenerator extends GtSourceGenerator {
 		this.LineComment = "##";
 	}
 
-	@Override public void InitContext(GtNameSpace Context) {
+	@Override public void InitContext(ZenNameSpace Context) {
 		super.InitContext(Context);
 		this.HeaderBuilder.AppendLine("use strict;");
 		this.HeaderBuilder.AppendLine("use warnings;");
@@ -111,7 +111,7 @@ public class PerlSourceGenerator extends GtSourceGenerator {
 		return "self";
 	}
 
-	private String GetLocalType(GtType Type, boolean IsPointer) {
+	private String GetLocalType(ZenType Type, boolean IsPointer) {
 		if(Type.IsDynamicType() || Type.IsNativeType()) {
 			if(Type.IsBooleanType()) {
 				return "int";
@@ -125,23 +125,23 @@ public class PerlSourceGenerator extends GtSourceGenerator {
 		return TypeName;
 
 	}
-	public String NativeTypeName(GtType Type) {
+	public String NativeTypeName(ZenType Type) {
 		return this.GetLocalType(Type, false);
 	}
 
-	public String LocalTypeName(GtType Type) {
+	public String LocalTypeName(ZenType Type) {
 		return this.GetLocalType(Type, true);
 	}
 
-	public String GtTypeName(GtType Type) {
+	public String ZenTypeName(ZenType Type) {
 		return Type.ShortName;
 	}
 
-	@Override public void VisitNullNode(GtNullNode Node) {
+	@Override public void VisitNullNode(ZenNullNode Node) {
 		this.CurrentBuilder.Append(this.NullLiteral);
 	}
 
-	@Override public void VisitBooleanNode(GtBooleanNode Node) {
+	@Override public void VisitBooleanNode(ZenBooleanNode Node) {
 		if(Node.Value) {
 			this.CurrentBuilder.Append(this.TrueLiteral);
 		}
@@ -150,28 +150,28 @@ public class PerlSourceGenerator extends GtSourceGenerator {
 		}
 	}
 
-	@Override public void VisitIntNode(GtIntNode Node) {
+	@Override public void VisitIntNode(ZenIntNode Node) {
 		this.CurrentBuilder.Append(Long.toString(Node.Value));
 	}
 
-	@Override public void VisitFloatNode(GtFloatNode Node) {
+	@Override public void VisitFloatNode(ZenFloatNode Node) {
 		this.CurrentBuilder.Append(Double.toString(Node.Value));
 	}
 
-	@Override public void VisitStringNode(GtStringNode Node) {
+	@Override public void VisitStringNode(ZenStringNode Node) {
 		this.CurrentBuilder.Append(LibGreenTea.QuoteString(Node.Value));
 	}
 
 	//FIXME Need to Implement
-//	@Override public void VisitRegexNode(GtRegexNode Node) {
+//	@Override public void VisitRegexNode(ZenRegexNode Node) {
 //		this.VisitingBuilder.Append("");
 //	}
 //
-//	@Override public void VisitConstPoolNode(GtConstPoolNode Node) {
+//	@Override public void VisitConstPoolNode(ZenConstPoolNode Node) {
 //		this.VisitingBuilder.Append("");
 //	}
 //
-	@Override public void VisitArrayLiteralNode(GtArrayLiteralNode Node) {
+	@Override public void VisitArrayLiteralNode(ZenArrayLiteralNode Node) {
 		this.CurrentBuilder.Append("{");
 		for (int i = 0; i < LibGreenTea.ListSize(Node.NodeList); i++) {
 			if(i != 0) {
@@ -182,50 +182,50 @@ public class PerlSourceGenerator extends GtSourceGenerator {
 		this.CurrentBuilder.Append("}");
 	}
 
-//	@Override public void VisitMapLiteralNode(GtMapLiteralNode Node) {
+//	@Override public void VisitMapLiteralNode(ZenMapLiteralNode Node) {
 //		this.VisitingBuilder.Append("");
 //	}
 
-	@Override public void VisitParamNode(GtParamNode Node) {
+	@Override public void VisitParamNode(ZenParamNode Node) {
 		this.CurrentBuilder.Append("");
 	}
 
-//	@Override public void VisitFunctionLiteralNode(GtFunctionLiteralNode Node) {
+//	@Override public void VisitFunctionLiteralNode(ZenFunctionLiteralNode Node) {
 //		this.VisitingBuilder.Append("");
 //	}
 
-	@Override public void VisitGetLocalNode(GtGetLocalNode Node) {
+	@Override public void VisitGetLocalNode(ZenGetLocalNode Node) {
 		this.CurrentBuilder.Append("$" + Node.NativeName);
 	}
 
-	@Override public void VisitSetLocalNode(GtSetLocalNode Node) {
+	@Override public void VisitSetLocalNode(ZenSetLocalNode Node) {
 		this.CurrentBuilder.Append(Node.NativeName + " = ");
 		Node.ValueNode.Accept(this);
 	}
 
-	@Override public void VisitGetCapturedNode(GtGetCapturedNode Node) {
+	@Override public void VisitGetCapturedNode(ZenGetCapturedNode Node) {
 		this.CurrentBuilder.Append("__env->" + Node.NativeName);
 	}
 
-	@Override public void VisitSetCapturedNode(GtSetCapturedNode Node) {
+	@Override public void VisitSetCapturedNode(ZenSetCapturedNode Node) {
 		this.CurrentBuilder.Append("__env->" + Node.NativeName + " = ");
 		Node.ValueNode.Accept(this);
 	}
 
-	@Override public void VisitGetterNode(GtGetterNode Node) {
+	@Override public void VisitGetterNode(ZenGetterNode Node) {
 		/*local*/String FieldName = Node.NativeName;
 		Node.RecvNode.Accept(this);
 		this.CurrentBuilder.Append("->{'" + FieldName + "'}");
 	}
 
-	@Override public void VisitSetterNode(GtSetterNode Node) {
+	@Override public void VisitSetterNode(ZenSetterNode Node) {
 		/*local*/String FieldName = Node.NativeName;
 		Node.RecvNode.Accept(this);
 		this.CurrentBuilder.Append("->{'" + FieldName + "'} = ");
 		Node.ValueNode.Accept(this);
 	}
 
-	@Override public void VisitApplySymbolNode(GtApplySymbolNode Node) {
+	@Override public void VisitApplySymbolNode(ZenApplySymbolNode Node) {
 		this.CurrentBuilder.Append(Node.NativeName);
 		this.CurrentBuilder.Append("(");
 		for(/*local*/int i = 0; i < LibGreenTea.ListSize(Node.ParamList); i++){
@@ -237,7 +237,7 @@ public class PerlSourceGenerator extends GtSourceGenerator {
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override public void VisitApplyFunctionObjectNode(GtApplyFunctionObjectNode Node) {
+	@Override public void VisitApplyFunctionObjectNode(ZenApplyFunctionObjectNode Node) {
 		//FIXME
 		Node.FuncNode.Accept(this);
 		this.CurrentBuilder.Append("(");
@@ -250,7 +250,7 @@ public class PerlSourceGenerator extends GtSourceGenerator {
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override public void VisitApplyOverridedMethodNode(GtApplyOverridedMethodNode Node) {
+	@Override public void VisitApplyOverridedMethodNode(ZenApplyOverridedMethodNode Node) {
 		//FIXME
 		this.CurrentBuilder.Append(Node.Func.FuncName);
 		this.CurrentBuilder.Append("(");
@@ -263,14 +263,14 @@ public class PerlSourceGenerator extends GtSourceGenerator {
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override public void VisitGetIndexNode(GtGetIndexNode Node) {
+	@Override public void VisitGetIndexNode(ZenGetIndexNode Node) {
 		Node.RecvNode.Accept(this);
 		this.CurrentBuilder.Append("[");
 		Node.IndexNode.Accept(this);
 		this.CurrentBuilder.Append("]");
 	}
 
-	@Override public void VisitSetIndexNode(GtSetIndexNode Node) {
+	@Override public void VisitSetIndexNode(ZenSetIndexNode Node) {
 		Node.RecvNode.Accept(this);
 		this.CurrentBuilder.Append("[");
 		Node.IndexNode.Accept(this);
@@ -278,7 +278,7 @@ public class PerlSourceGenerator extends GtSourceGenerator {
 		Node.ValueNode.Accept(this);
 	}
 
-	@Override public void VisitSliceNode(GtSliceNode Node) {
+	@Override public void VisitSliceNode(ZenSliceNode Node) {
 		this.CurrentBuilder.Append("GT_Slice(");
 		Node.RecvNode.Accept(this);
 		this.CurrentBuilder.Append(", ");
@@ -288,7 +288,7 @@ public class PerlSourceGenerator extends GtSourceGenerator {
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override public void VisitAndNode(GtAndNode Node) {
+	@Override public void VisitAndNode(ZenAndNode Node) {
 		this.CurrentBuilder.Append("(");
 		Node.LeftNode.Accept(this);
 		this.CurrentBuilder.Append(" && ");
@@ -296,7 +296,7 @@ public class PerlSourceGenerator extends GtSourceGenerator {
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override public void VisitOrNode(GtOrNode Node) {
+	@Override public void VisitOrNode(ZenOrNode Node) {
 		this.CurrentBuilder.Append("(");
 		Node.LeftNode.Accept(this);
 		this.CurrentBuilder.Append(" || ");
@@ -304,38 +304,38 @@ public class PerlSourceGenerator extends GtSourceGenerator {
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override public void VisitUnaryNode(GtUnaryNode Node) {
+	@Override public void VisitUnaryNode(ZenUnaryNode Node) {
 		this.CurrentBuilder.Append("(");
 		this.CurrentBuilder.Append(Node.NativeName);
 		Node.RecvNode.Accept(this);
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override public void VisitPrefixInclNode(GtPrefixInclNode Node) {
+	@Override public void VisitPrefixInclNode(ZenPrefixInclNode Node) {
 		this.CurrentBuilder.Append("(++");
 		Node.RecvNode.Accept(this);
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override public void VisitPrefixDeclNode(GtPrefixDeclNode Node) {
+	@Override public void VisitPrefixDeclNode(ZenPrefixDeclNode Node) {
 		this.CurrentBuilder.Append("(--");
 		Node.RecvNode.Accept(this);
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override public void VisitSuffixInclNode(GtSuffixInclNode Node) {
+	@Override public void VisitSuffixInclNode(ZenSuffixInclNode Node) {
 		this.CurrentBuilder.Append("(");
 		Node.RecvNode.Accept(this);
 		this.CurrentBuilder.Append("++)");
 	}
 
-	@Override public void VisitSuffixDeclNode(GtSuffixDeclNode Node) {
+	@Override public void VisitSuffixDeclNode(ZenSuffixDeclNode Node) {
 		this.CurrentBuilder.Append("(");
 		Node.RecvNode.Accept(this);
 		this.CurrentBuilder.Append("--)");
 	}
 
-	@Override public void VisitBinaryNode(GtBinaryNode Node) {
+	@Override public void VisitBinaryNode(ZenBinaryNode Node) {
 		this.CurrentBuilder.Append("(");
 		Node.LeftNode.Accept(this);
 		this.CurrentBuilder.Append(" " + Node.NativeName + " ");
@@ -343,7 +343,7 @@ public class PerlSourceGenerator extends GtSourceGenerator {
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override public void VisitTrinaryNode(GtTrinaryNode Node) {
+	@Override public void VisitTrinaryNode(ZenTrinaryNode Node) {
 		this.CurrentBuilder.Append("(");
 		Node.CondNode.Accept(this);
 		this.CurrentBuilder.Append(") ? (");
@@ -353,7 +353,7 @@ public class PerlSourceGenerator extends GtSourceGenerator {
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override public void VisitConstructorNode(GtConstructorNode Node) {
+	@Override public void VisitConstructorNode(ZenConstructorNode Node) {
 		this.CurrentBuilder.Append(Node.Func.FuncName);
 		this.CurrentBuilder.Append("(");
 		for(/*local*/int i = 0; i < LibGreenTea.ListSize(Node.ParamList); i++){
@@ -365,11 +365,11 @@ public class PerlSourceGenerator extends GtSourceGenerator {
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override public void VisitAllocateNode(GtAllocateNode Node) {
+	@Override public void VisitAllocateNode(ZenAllocateNode Node) {
 		this.CurrentBuilder.Append(GetLocalType(Node.Type, false) + "->new()");
 	}
 
-	@Override public void VisitNewArrayNode(GtNewArrayNode Node) {
+	@Override public void VisitNewArrayNode(ZenNewArrayNode Node) {
 		throw new RuntimeException("NOT Implemented");
 //		this.VisitingBuilder.Append("NEWARRAY_" + GetLocalType(Node.Type, false) + "(");
 //		for (int i = 0; i < LibGreenTea.ListSize(Node.NodeList); i++) {
@@ -381,7 +381,7 @@ public class PerlSourceGenerator extends GtSourceGenerator {
 //		this.VisitingBuilder.Append(")");
 	}
 
-	@Override public void VisitInstanceOfNode(GtInstanceOfNode Node) {
+	@Override public void VisitInstanceOfNode(ZenInstanceOfNode Node) {
 		this.CurrentBuilder.Append("InstanceOf(");
 		Node.ExprNode.Accept(this);
 		this.CurrentBuilder.Append(", ");
@@ -389,7 +389,7 @@ public class PerlSourceGenerator extends GtSourceGenerator {
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override public void VisitCastNode(GtCastNode Node) {
+	@Override public void VisitCastNode(ZenCastNode Node) {
 		this.CurrentBuilder.Append("Cast(");
 		Node.Expr.Accept(this);
 		this.CurrentBuilder.Append(", ");
@@ -397,7 +397,7 @@ public class PerlSourceGenerator extends GtSourceGenerator {
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override public void VisitVarDeclNode(GtVarDeclNode Node) {
+	@Override public void VisitVarDeclNode(ZenVarDeclNode Node) {
 		/*local*/String VarName = Node.NativeName;
 		this.CurrentBuilder.Append("my $" + VarName);
 		if(Node.InitNode != null) {
@@ -409,11 +409,11 @@ public class PerlSourceGenerator extends GtSourceGenerator {
 		this.VisitIndentBlock("{", Node.BlockNode, "}");
 	}
 
-	@Override public void VisitUsingNode(GtUsingNode Node) {
+	@Override public void VisitUsingNode(ZenUsingNode Node) {
 		throw new RuntimeException("FIXME");
 	}
 
-	@Override public void VisitIfNode(GtIfNode Node) {
+	@Override public void VisitIfNode(ZenIfNode Node) {
 		this.CurrentBuilder.Append("if(");
 		Node.CondNode.Accept(this);
 		this.CurrentBuilder.Append(")");
@@ -424,14 +424,14 @@ public class PerlSourceGenerator extends GtSourceGenerator {
 		}
 	}
 
-	@Override public void VisitWhileNode(GtWhileNode Node) {
+	@Override public void VisitWhileNode(ZenWhileNode Node) {
 		this.CurrentBuilder.Append("while(");
 		Node.CondNode.Accept(this);
 		this.CurrentBuilder.Append(")");
 		this.VisitIndentBlock("{", Node.BodyNode, "}");
 	}
 
-	@Override public void VisitDoWhileNode(GtDoWhileNode Node) {
+	@Override public void VisitDoWhileNode(ZenDoWhileNode Node) {
 		this.CurrentBuilder.Append("do ");
 		this.VisitIndentBlock("{", Node.BodyNode, "}");
 		this.CurrentBuilder.Append("while(");
@@ -439,7 +439,7 @@ public class PerlSourceGenerator extends GtSourceGenerator {
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override public void VisitForNode(GtForNode Node) {
+	@Override public void VisitForNode(ZenForNode Node) {
 		this.CurrentBuilder.Append("for(;");
 		Node.CondNode.Accept(this);
 		this.CurrentBuilder.Append(";");
@@ -448,32 +448,32 @@ public class PerlSourceGenerator extends GtSourceGenerator {
 		this.VisitIndentBlock("{", Node.BodyNode, "}");
 	}
 
-	@Override public void VisitForEachNode(GtForEachNode Node) {
+	@Override public void VisitForEachNode(ZenForEachNode Node) {
 		Node.Variable.Accept(this);
 		this.CurrentBuilder.Append("while(");
 		Node.IterNode.Accept(this);
 		this.CurrentBuilder.Append(")");
 		this.VisitIndentBlock("{", Node.BodyNode, "}");	}
 
-	@Override public void VisitContinueNode(GtContinueNode Node) {
+	@Override public void VisitContinueNode(ZenContinueNode Node) {
 		this.CurrentBuilder.Append("next");
 		if(Node.Label != null) {
 			this.CurrentBuilder.Append(" " + Node.Label);
 		}
 	}
 
-	@Override public void VisitBreakNode(GtBreakNode Node) {
+	@Override public void VisitBreakNode(ZenBreakNode Node) {
 		this.CurrentBuilder.Append("last");
 		if(Node.Label != null) {
 			this.CurrentBuilder.Append(" " + Node.Label);
 		}
 	}
 
-	@Override public void VisitStatementNode(GtStatementNode Node) {
+	@Override public void VisitStatementNode(ZenStatementNode Node) {
 		Node.ValueNode.Accept(this);
 	}
 
-	@Override public void VisitReturnNode(GtReturnNode Node) {
+	@Override public void VisitReturnNode(ZenReturnNode Node) {
 		this.CurrentBuilder.Append("return ");
 		if(Node.ValueNode != null) {
 			Node.ValueNode.Accept(this);
@@ -481,19 +481,19 @@ public class PerlSourceGenerator extends GtSourceGenerator {
 		this.StopVisitor(Node);
 	}
 
-	@Override public void VisitYieldNode(GtYieldNode Node) {
+	@Override public void VisitYieldNode(ZenYieldNode Node) {
 		this.CurrentBuilder.Append("yield ");
 		Node.ValueNode.Accept(this);
 		this.StopVisitor(Node);
 	}
 
-	@Override public void VisitThrowNode(GtThrowNode Node) {
+	@Override public void VisitThrowNode(ZenThrowNode Node) {
 		this.CurrentBuilder.Append("throw ");
 		Node.ValueNode.Accept(this);
 		this.StopVisitor(Node);
 	}
 
-	@Override public void VisitTryNode(GtTryNode Node) {
+	@Override public void VisitTryNode(ZenTryNode Node) {
 		this.CurrentBuilder.Append("try ");
 		this.VisitIndentBlock("{", Node.TryNode, "}");
 		for (int i = 0; i < LibGreenTea.ListSize(Node.CatchList); i++) {
@@ -505,14 +505,14 @@ public class PerlSourceGenerator extends GtSourceGenerator {
 		}
 	}
 
-	@Override public void VisitCatchNode(GtCatchNode Node) {
+	@Override public void VisitCatchNode(ZenCatchNode Node) {
 		this.CurrentBuilder.AppendLine(" catch " + Node.ExceptionType + " with {");
 		this.CurrentBuilder.AppendLine(" my $" + Node.ExceptionName + " = shift;");
 		this.VisitIndentBlock("{", Node.BodyNode, "}");
 		this.CurrentBuilder.AppendLine("}");
 	}
 
-	@Override public void VisitSwitchNode(GtSwitchNode Node) {
+	@Override public void VisitSwitchNode(ZenSwitchNode Node) {
 		this.CurrentBuilder.Append("switch (");
 		Node.MatchNode.Accept(this);
 		this.CurrentBuilder.AppendLine(") {");
@@ -522,17 +522,17 @@ public class PerlSourceGenerator extends GtSourceGenerator {
 		this.CurrentBuilder.AppendLine("}");
 	}
 
-	@Override public void VisitCaseNode(GtCaseNode Node) {
+	@Override public void VisitCaseNode(ZenCaseNode Node) {
 		this.CurrentBuilder.Append("case ");
 		Node.CaseNode.Accept(this);
 		this.CurrentBuilder.Append(" : ");
 		this.VisitIndentBlock("{", Node.BodyNode, "}");
 	}
 
-	@Override public void VisitCommandNode(GtCommandNode Node) {
+	@Override public void VisitCommandNode(ZenCommandNode Node) {
 		this.CurrentBuilder.Append("String __Command = ");
 		for(/*local*/int i = 0; i < LibGreenTea.ListSize(Node.ArgumentList); i += 1) {
-			/*local*/GtNode Param = Node.ArgumentList.get(i);
+			/*local*/ZenNode Param = Node.ArgumentList.get(i);
 			if(i != 0) {
 				this.CurrentBuilder.Append(" . ");
 			}
@@ -545,13 +545,13 @@ public class PerlSourceGenerator extends GtSourceGenerator {
 		this.CurrentBuilder.Append("system(__Command)");
 	}
 
-	@Override public void VisitErrorNode(GtErrorNode Node) {
+	@Override public void VisitErrorNode(ZenErrorNode Node) {
 		/*local*/String Code = "throw Error(\"" + Node.Token.ParsedText + "\")";
 		this.CurrentBuilder.Append(Code);
 		this.StopVisitor(Node);
 	}
 
-	@Override public void GenerateFunc(GtFunc Func, ArrayList<String> ParamNameList, GtNode Body) {
+	@Override public void GenerateFunc(ZenFunc Func, ArrayList<String> ParamNameList, ZenNode Body) {
 		this.FlushErrorReport();
 		/*local*/String FuncName = Func.GetNativeFuncName();
 		this.CurrentBuilder.AppendLine("sub " + FuncName + " {");
@@ -563,7 +563,7 @@ public class PerlSourceGenerator extends GtSourceGenerator {
 		this.VisitIndentBlock("", Body, "");
 	}
 
-	@Override public void OpenClassField(GtSyntaxTree ParsedTree, GtType Type, GtClassField ClassField) {
+	@Override public void OpenClassField(ZenSyntaxTree ParsedTree, ZenType Type, ZenClassField ClassField) {
 		/*local*/String TypeName = Type.ShortName;
 		this.CurrentBuilder.AppendLine("package " + TypeName + this.SemiColon);
 		if(Type.SuperType != null) {
@@ -574,7 +574,7 @@ public class PerlSourceGenerator extends GtSourceGenerator {
 		this.CurrentBuilder.AppendLine("my $class = shift" + this.SemiColon);
 		this.CurrentBuilder.AppendLine("my $" + this.GetRecvName() + " = {}" + this.SemiColon);
 		for(/*local*/int i = 0; i < LibGreenTea.ListSize(ClassField.FieldList); i += 1) {
-			/*local*/GtFieldInfo FieldInfo = ClassField.FieldList.get(i);
+			/*local*/ZenFieldInfo FieldInfo = ClassField.FieldList.get(i);
 			/*local*/String InitValue = this.StringifyConstValue(FieldInfo.InitValue);
 			if(!FieldInfo.Type.IsNativeType()) {
 				InitValue = this.NullLiteral;

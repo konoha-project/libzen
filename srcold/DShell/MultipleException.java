@@ -26,7 +26,7 @@ package org.GreenTeaScript.DShell;
 
 import org.GreenTeaScript.Konoha.ArrayApi;
 
-import parser.GtStaticTable;
+import parser.ZenStaticTable;
 import parser.deps.GreenTeaArray;
 
 public class MultipleException extends DShellException {
@@ -35,7 +35,7 @@ public class MultipleException extends DShellException {
 
 	public MultipleException(String message, Exception[] exceptions) {
 		super(message);
-		this.exceptionArray = GreenTeaArray.NewArray1(GtStaticTable.AnyType, 0);
+		this.exceptionArray = GreenTeaArray.NewArray1(ZenStaticTable.AnyType, 0);
 		for(int i = 0; i < exceptions.length; i++) {
 			ArrayApi.Add(this.exceptionArray, exceptions[i]);
 		}

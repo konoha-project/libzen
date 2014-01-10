@@ -26,47 +26,47 @@ package org.GreenTeaScript;
 
 import java.util.ArrayList;
 
-import parser.GtClassField;
-import parser.GtFieldInfo;
-import parser.GtFunc;
-import parser.GtSourceBuilder;
-import parser.GtSourceGenerator;
-import parser.GtSyntaxTree;
-import parser.GtType;
-import parser.ast.GtAndNode;
-import parser.ast.GtBinaryNode;
-import parser.ast.GtBooleanNode;
-import parser.ast.GtConstPoolNode;
-import parser.ast.GtDoWhileNode;
-import parser.ast.GtEmptyNode;
-import parser.ast.GtErrorNode;
-import parser.ast.GtForNode;
-import parser.ast.GtGetLocalNode;
-import parser.ast.GtIfNode;
-import parser.ast.GtIntNode;
-import parser.ast.GtNode;
-import parser.ast.GtNullNode;
-import parser.ast.GtOrNode;
-import parser.ast.GtReturnNode;
-import parser.ast.GtSetLocalNode;
-import parser.ast.GtStringNode;
-import parser.ast.GtTrinaryNode;
-import parser.ast.GtUnaryNode;
-import parser.ast.GtVarDeclNode;
-import parser.ast.GtWhileNode;
+import parser.ZenClassField;
+import parser.ZenFieldInfo;
+import parser.ZenFunc;
+import parser.ZenSourceBuilder;
+import parser.ZenSourceGenerator;
+import parser.ZenSyntaxTree;
+import parser.ZenType;
+import parser.ast.ZenAndNode;
+import parser.ast.ZenBinaryNode;
+import parser.ast.ZenBooleanNode;
+import parser.ast.ZenConstPoolNode;
+import parser.ast.ZenDoWhileNode;
+import parser.ast.ZenEmptyNode;
+import parser.ast.ZenErrorNode;
+import parser.ast.ZenForNode;
+import parser.ast.ZenGetLocalNode;
+import parser.ast.ZenIfNode;
+import parser.ast.ZenIntNode;
+import parser.ast.ZenNode;
+import parser.ast.ZenNullNode;
+import parser.ast.ZenOrNode;
+import parser.ast.ZenReturnNode;
+import parser.ast.ZenSetLocalNode;
+import parser.ast.ZenStringNode;
+import parser.ast.ZenTrinaryNode;
+import parser.ast.ZenUnaryNode;
+import parser.ast.ZenVarDeclNode;
+import parser.ast.ZenWhileNode;
 import parser.deps.LibGreenTea;
 
-public class CommonLispSourceGenerator extends GtSourceGenerator {
+public class CommonLispSourceGenerator extends ZenSourceGenerator {
 
 	public CommonLispSourceGenerator(String TargetCode, String OutputFile, int GeneratorFlag) {
 		super(TargetCode, OutputFile, GeneratorFlag);
 	}
 
-	@Override public void VisitGetLocalNode(GtGetLocalNode Node) {
+	@Override public void VisitGetLocalNode(ZenGetLocalNode Node) {
 		this.CurrentBuilder.Append(Node.Token.ParsedText);
 	}
 	
-	@Override public void VisitBooleanNode(GtBooleanNode Node) {
+	@Override public void VisitBooleanNode(ZenBooleanNode Node) {
 		if(Node.Value) {
 			this.CurrentBuilder.Append("t");
 		}
@@ -74,14 +74,14 @@ public class CommonLispSourceGenerator extends GtSourceGenerator {
 			this.CurrentBuilder.Append("nil");
 		}
 	}
-	@Override public void VisitIntNode(GtIntNode Node) {
+	@Override public void VisitIntNode(ZenIntNode Node) {
 		this.CurrentBuilder.Append(Node.Token.ParsedText);
 	}
 
-	@Override public void VisitStringNode(GtStringNode Node) {
+	@Override public void VisitStringNode(ZenStringNode Node) {
 		this.CurrentBuilder.Append(Node.Token.ParsedText);
 	}
-	@Override public void VisitConstPoolNode(GtConstPoolNode Node) {
+	@Override public void VisitConstPoolNode(ZenConstPoolNode Node) {
 		if(Node.ConstValue == null) {
 			this.CurrentBuilder.Append("nil");
 		}
@@ -90,25 +90,25 @@ public class CommonLispSourceGenerator extends GtSourceGenerator {
 		}
 	}
 
-	private final boolean DoesNodeExist(GtNode Node){
-		return Node != null && !(Node instanceof GtEmptyNode);
+	private final boolean DoesNodeExist(ZenNode Node){
+		return Node != null && !(Node instanceof ZenEmptyNode);
 	}
 
-	@Override public void VisitReturnNode(GtReturnNode Node) {
+	@Override public void VisitReturnNode(ZenReturnNode Node) {
 		if (this.DoesNodeExist(Node.ValueNode)) {
 			Node.ValueNode.Accept(this);
 		}
 	}
 
-	@Override public void VisitNullNode(GtNullNode Node) {
+	@Override public void VisitNullNode(ZenNullNode Node) {
 		this.CurrentBuilder.Append("nil");
 	}
 
 	@Override
-	public void VisitIndentBlock(String BeginBlock, GtNode Node, String EndBlock) {
+	public void VisitIndentBlock(String BeginBlock, ZenNode Node, String EndBlock) {
 		//this.VisitingBuilder.AppendLine(BeginBlock);
 		this.CurrentBuilder.Indent();
-		/*local*/GtNode CurrentNode = Node;
+		/*local*/ZenNode CurrentNode = Node;
 		while(CurrentNode != null) {
 			if(!this.IsEmptyBlock(CurrentNode)) {
 				this.CurrentBuilder.AppendIndent();
@@ -124,10 +124,10 @@ public class CommonLispSourceGenerator extends GtSourceGenerator {
 	}
 
 	@Override
-	public void GenerateFunc(GtFunc Func, ArrayList<String> ParamNameList, GtNode Body) {
+	public void GenerateFunc(ZenFunc Func, ArrayList<String> ParamNameList, ZenNode Body) {
 		String MethodName = Func.GetNativeFuncName();
-		GtSourceBuilder Builder = new GtSourceBuilder(this);
-		GtSourceBuilder PushedBuilder = this.CurrentBuilder;
+		ZenSourceBuilder Builder = new ZenSourceBuilder(this);
+		ZenSourceBuilder PushedBuilder = this.CurrentBuilder;
 		this.CurrentBuilder = Builder;
 		Builder.Append("(defun ");
 		Builder.SpaceAppendSpace(MethodName);
@@ -158,7 +158,7 @@ public class CommonLispSourceGenerator extends GtSourceGenerator {
 	//
 	// Visitor API
 	//
-	@Override public void VisitWhileNode(GtWhileNode Node) {
+	@Override public void VisitWhileNode(ZenWhileNode Node) {
 		this.CurrentBuilder.Append("(while ");
 
 		Node.CondNode.Accept(this);
@@ -169,7 +169,7 @@ public class CommonLispSourceGenerator extends GtSourceGenerator {
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override public void VisitDoWhileNode(GtDoWhileNode Node) {
+	@Override public void VisitDoWhileNode(ZenDoWhileNode Node) {
 		this.CurrentBuilder.AppendLine("(loop initially");
 
 		this.CurrentBuilder.AppendIndent();
@@ -199,7 +199,7 @@ public class CommonLispSourceGenerator extends GtSourceGenerator {
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override public void VisitForNode(GtForNode Node) {
+	@Override public void VisitForNode(ZenForNode Node) {
 		this.CurrentBuilder.Append("(loop while ");
 		Node.CondNode.Accept(this);
 		this.CurrentBuilder.AppendLine("");
@@ -217,7 +217,7 @@ public class CommonLispSourceGenerator extends GtSourceGenerator {
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override public void VisitVarDeclNode(GtVarDeclNode Node) {
+	@Override public void VisitVarDeclNode(ZenVarDeclNode Node) {
 		this.CurrentBuilder.Append("(setq  ");
 		this.CurrentBuilder.Append(Node.NativeName);
 		this.CurrentBuilder.Append(" ");
@@ -231,7 +231,7 @@ public class CommonLispSourceGenerator extends GtSourceGenerator {
 		this.CurrentBuilder.AppendLine(")");
 	}
 
-	@Override public void VisitTrinaryNode(GtTrinaryNode Node) {
+	@Override public void VisitTrinaryNode(ZenTrinaryNode Node) {
 		this.CurrentBuilder.Append("(if  ");
 		Node.CondNode.Accept(this);
 		this.CurrentBuilder.Append(" ");
@@ -241,7 +241,7 @@ public class CommonLispSourceGenerator extends GtSourceGenerator {
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override public void VisitIfNode(GtIfNode Node) {
+	@Override public void VisitIfNode(ZenIfNode Node) {
 		this.CurrentBuilder.Append("(if  ");
 		Node.CondNode.Accept(this);
 		this.CurrentBuilder.AppendLine("");
@@ -267,21 +267,21 @@ public class CommonLispSourceGenerator extends GtSourceGenerator {
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override public void VisitErrorNode(GtErrorNode Node) {
+	@Override public void VisitErrorNode(ZenErrorNode Node) {
 		this.CurrentBuilder.Append("(error ");
 		Node.Accept(this);
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override public void OpenClassField(GtSyntaxTree ParsedTree, GtType Type, GtClassField ClassField) {
-		GtSourceBuilder Builder = new GtSourceBuilder(this);
+	@Override public void OpenClassField(ZenSyntaxTree ParsedTree, ZenType Type, ZenClassField ClassField) {
+		ZenSourceBuilder Builder = new ZenSourceBuilder(this);
 
 		Builder.Append("(defclass ");
 		Builder.Append(Type.ShortName);
 		Builder.Append(" " + "()");
 
 		Builder.Append(" " + "(");
-		for (GtFieldInfo FieldInfo : ClassField.FieldList) {
+		for (ZenFieldInfo FieldInfo : ClassField.FieldList) {
 			String InitValue = this.StringifyConstValue(FieldInfo.InitValue);
 
 			Builder.Append("(");
@@ -308,12 +308,12 @@ public class CommonLispSourceGenerator extends GtSourceGenerator {
 		this.CurrentBuilder.AppendLine(")");
 	}
 
-	@Override public void VisitUnaryNode(GtUnaryNode Node) {
+	@Override public void VisitUnaryNode(ZenUnaryNode Node) {
 		this.CurrentBuilder.Append(Node.Token.ParsedText);
 		Node.RecvNode.Accept(this);
 	}
 
-	@Override public void VisitBinaryNode(GtBinaryNode Node) {
+	@Override public void VisitBinaryNode(ZenBinaryNode Node) {
 		this.CurrentBuilder.Append("(");
 		this.CurrentBuilder.Append(Node.Token.ParsedText);
 		this.CurrentBuilder.Append(" ");
@@ -323,14 +323,14 @@ public class CommonLispSourceGenerator extends GtSourceGenerator {
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override public void VisitAndNode(GtAndNode Node) {
+	@Override public void VisitAndNode(ZenAndNode Node) {
 		this.CurrentBuilder.Append("(and ");
 		Node.LeftNode.Accept(this);
 		this.CurrentBuilder.Append(" ");
 		Node.RightNode.Accept(this);
 		this.CurrentBuilder.Append(")");
 	}
-	@Override public void VisitOrNode(GtOrNode Node) {
+	@Override public void VisitOrNode(ZenOrNode Node) {
 		this.CurrentBuilder.Append("(or ");
 		Node.LeftNode.Accept(this);
 		this.CurrentBuilder.Append(" ");
@@ -338,7 +338,7 @@ public class CommonLispSourceGenerator extends GtSourceGenerator {
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override public void VisitSetLocalNode(GtSetLocalNode Node) {
+	@Override public void VisitSetLocalNode(ZenSetLocalNode Node) {
 		this.CurrentBuilder.Append("(setq  " + Node.NativeName);
 		this.CurrentBuilder.Append(" ");
 		Node.ValueNode.Accept(this);
@@ -348,11 +348,11 @@ public class CommonLispSourceGenerator extends GtSourceGenerator {
 	// TODO function call
 
 	// XXX
-	//@Override public void VisitSwitchNode(GtSwitchNode Node) {
+	//@Override public void VisitSwitchNode(ZenSwitchNode Node) {
 	//}
 
 	// XXX
-	//@Override public void VisitSelfAssignNode(GtSelfAssignNode Node) {
+	//@Override public void VisitSelfAssignNode(ZenSelfAssignNode Node) {
 	//}
 
 }

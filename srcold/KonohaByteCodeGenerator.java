@@ -27,77 +27,77 @@ package org.GreenTeaScript;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import parser.GtClassField;
-import parser.GtFieldInfo;
-import parser.GtFunc;
-import parser.GtSourceGenerator;
-import parser.GtSyntaxTree;
-import parser.GtType;
-import parser.ast.GtAllocateNode;
-import parser.ast.GtAndNode;
-import parser.ast.GtApplyFunctionObjectNode;
-import parser.ast.GtApplyOverridedMethodNode;
-import parser.ast.GtApplySymbolNode;
-import parser.ast.GtArrayLiteralNode;
-import parser.ast.GtBinaryNode;
-import parser.ast.GtBooleanNode;
-import parser.ast.GtBreakNode;
-import parser.ast.GtCaseNode;
-import parser.ast.GtCastNode;
-import parser.ast.GtCatchNode;
-import parser.ast.GtCommandNode;
-import parser.ast.GtConstPoolNode;
-import parser.ast.GtConstructorNode;
-import parser.ast.GtContinueNode;
-import parser.ast.GtDoWhileNode;
-import parser.ast.GtEmptyNode;
-import parser.ast.GtErrorNode;
-import parser.ast.GtFloatNode;
-import parser.ast.GtForEachNode;
-import parser.ast.GtForNode;
-import parser.ast.GtFunctionLiteralNode;
-import parser.ast.GtGetCapturedNode;
-import parser.ast.GtGetIndexNode;
-import parser.ast.GtGetLocalNode;
-import parser.ast.GtGetterNode;
-import parser.ast.GtIfNode;
-import parser.ast.GtInstanceOfNode;
-import parser.ast.GtIntNode;
-import parser.ast.GtMapLiteralNode;
-import parser.ast.GtNewArrayNode;
-import parser.ast.GtNode;
-import parser.ast.GtNullNode;
-import parser.ast.GtOrNode;
-import parser.ast.GtParamNode;
-import parser.ast.GtPrefixDeclNode;
-import parser.ast.GtPrefixInclNode;
-import parser.ast.GtRegexNode;
-import parser.ast.GtReturnNode;
-import parser.ast.GtSetCapturedNode;
-import parser.ast.GtSetIndexNode;
-import parser.ast.GtSetLocalNode;
-import parser.ast.GtSetterNode;
-import parser.ast.GtSliceNode;
-import parser.ast.GtStatementNode;
-import parser.ast.GtStringNode;
-import parser.ast.GtSuffixDeclNode;
-import parser.ast.GtSuffixInclNode;
-import parser.ast.GtSwitchNode;
-import parser.ast.GtThrowNode;
-import parser.ast.GtTrinaryNode;
-import parser.ast.GtTryNode;
-import parser.ast.GtUnaryNode;
-import parser.ast.GtUsingNode;
-import parser.ast.GtVarDeclNode;
-import parser.ast.GtWhileNode;
-import parser.ast.GtYieldNode;
+import parser.ZenClassField;
+import parser.ZenFieldInfo;
+import parser.ZenFunc;
+import parser.ZenSourceGenerator;
+import parser.ZenSyntaxTree;
+import parser.ZenType;
+import parser.ast.ZenAllocateNode;
+import parser.ast.ZenAndNode;
+import parser.ast.ZenApplyFunctionObjectNode;
+import parser.ast.ZenApplyOverridedMethodNode;
+import parser.ast.ZenApplySymbolNode;
+import parser.ast.ZenArrayLiteralNode;
+import parser.ast.ZenBinaryNode;
+import parser.ast.ZenBooleanNode;
+import parser.ast.ZenBreakNode;
+import parser.ast.ZenCaseNode;
+import parser.ast.ZenCastNode;
+import parser.ast.ZenCatchNode;
+import parser.ast.ZenCommandNode;
+import parser.ast.ZenConstPoolNode;
+import parser.ast.ZenConstructorNode;
+import parser.ast.ZenContinueNode;
+import parser.ast.ZenDoWhileNode;
+import parser.ast.ZenEmptyNode;
+import parser.ast.ZenErrorNode;
+import parser.ast.ZenFloatNode;
+import parser.ast.ZenForEachNode;
+import parser.ast.ZenForNode;
+import parser.ast.ZenFunctionLiteralNode;
+import parser.ast.ZenGetCapturedNode;
+import parser.ast.ZenGetIndexNode;
+import parser.ast.ZenGetLocalNode;
+import parser.ast.ZenGetterNode;
+import parser.ast.ZenIfNode;
+import parser.ast.ZenInstanceOfNode;
+import parser.ast.ZenIntNode;
+import parser.ast.ZenMapLiteralNode;
+import parser.ast.ZenNewArrayNode;
+import parser.ast.ZenNode;
+import parser.ast.ZenNullNode;
+import parser.ast.ZenOrNode;
+import parser.ast.ZenParamNode;
+import parser.ast.ZenPrefixDeclNode;
+import parser.ast.ZenPrefixInclNode;
+import parser.ast.ZenRegexNode;
+import parser.ast.ZenReturnNode;
+import parser.ast.ZenSetCapturedNode;
+import parser.ast.ZenSetIndexNode;
+import parser.ast.ZenSetLocalNode;
+import parser.ast.ZenSetterNode;
+import parser.ast.ZenSliceNode;
+import parser.ast.ZenStatementNode;
+import parser.ast.ZenStringNode;
+import parser.ast.ZenSuffixDeclNode;
+import parser.ast.ZenSuffixInclNode;
+import parser.ast.ZenSwitchNode;
+import parser.ast.ZenThrowNode;
+import parser.ast.ZenTrinaryNode;
+import parser.ast.ZenTryNode;
+import parser.ast.ZenUnaryNode;
+import parser.ast.ZenUsingNode;
+import parser.ast.ZenVarDeclNode;
+import parser.ast.ZenWhileNode;
+import parser.ast.ZenYieldNode;
 import parser.deps.LibGreenTea;
 
-public class KonohaByteCodeGenerator extends GtSourceGenerator {
+public class KonohaByteCodeGenerator extends ZenSourceGenerator {
 	/*field*/private ArrayList<Object> ConstPool;
 	/*field*/private ArrayList<String> MethodPool;
-	/*field*/private ArrayList<GtType> ClassPool;
-	/*field*/private HashMap<GtType, ArrayList<GtFieldInfo>> ClassFieldMap;
+	/*field*/private ArrayList<ZenType> ClassPool;
+	/*field*/private HashMap<ZenType, ArrayList<ZenFieldInfo>> ClassFieldMap;
 	/*field*/private int RegisterNum;
 	/*field*/private ArrayList<Integer> RegStack;
 	/*field*/private int LabelNum;
@@ -114,8 +114,8 @@ public class KonohaByteCodeGenerator extends GtSourceGenerator {
 		super(TargetCode, OutputFile, GeneratorFlag);
 		this.ConstPool = new ArrayList<Object>();
 		this.MethodPool = new ArrayList<String>();
-		this.ClassPool = new ArrayList<GtType>();
-		this.ClassFieldMap = new HashMap<GtType, ArrayList<GtFieldInfo>>();
+		this.ClassPool = new ArrayList<ZenType>();
+		this.ClassFieldMap = new HashMap<ZenType, ArrayList<ZenFieldInfo>>();
 		this.RegisterNum = 0;
 		this.RegStack = new ArrayList<Integer>();
 		this.LabelNum = 0;
@@ -137,14 +137,14 @@ public class KonohaByteCodeGenerator extends GtSourceGenerator {
 			this.HeaderBuilder.Append(ConstValue.toString() + "\n");			
 		}
 		for(/*local*/int i = 0; i < ClassPoolSize; ++i) {
-			/*local*/GtType Class = this.ClassPool.get(i);
+			/*local*/ZenType Class = this.ClassPool.get(i);
 			this.HeaderBuilder.Append("CLASS" + i + "(" + Class.ShortName + ")");
 			this.HeaderBuilder.Append(" :\n");
 			this.HeaderBuilder.Indent();
-			/*local*/ArrayList<GtFieldInfo> FieldList = this.ClassFieldMap.get(Class);
+			/*local*/ArrayList<ZenFieldInfo> FieldList = this.ClassFieldMap.get(Class);
 			/*local*/int FieldSize = FieldList.size();
 			for(/*local*/int j = 0; j < FieldSize; ++j) {
-				/*local*/GtFieldInfo ClassField = FieldList.get(j);
+				/*local*/ZenFieldInfo ClassField = FieldList.get(j);
 				this.HeaderBuilder.IndentAndAppend("FIELD" + j + ": " + ClassField.NativeName + "(" + ClassField.Type.ShortName + ")" + "\n");
 			}
 			this.HeaderBuilder.UnIndent();
@@ -223,7 +223,7 @@ public class KonohaByteCodeGenerator extends GtSourceGenerator {
 		}
 		return Index;
 	}
-	private int GetFieldOffset(ArrayList<GtFieldInfo> FieldList, String FieldName) {
+	private int GetFieldOffset(ArrayList<ZenFieldInfo> FieldList, String FieldName) {
 		/*local*/int FieldSize = FieldList.size();
 		/*local*/int Offset = -1;
 		for(/*local*/int i = 0; i < FieldSize; ++i) {
@@ -235,59 +235,59 @@ public class KonohaByteCodeGenerator extends GtSourceGenerator {
 		return Offset;
 	}
 
-	@Override public void VisitEmptyNode(GtEmptyNode Node) {
+	@Override public void VisitEmptyNode(ZenEmptyNode Node) {
 		/*FIXME*/
 	}
 
-	@Override public void VisitNullNode(GtNullNode Node) {
+	@Override public void VisitNullNode(ZenNullNode Node) {
 		/*local*/int Reg = this.AllocRegister();
 		this.CurrentBuilder.Append("NUL  " + "REG" + Reg + "\n");
 		this.PushRegister(Reg);
 	}
 
-	@Override public void VisitBooleanNode(GtBooleanNode Node) {
+	@Override public void VisitBooleanNode(ZenBooleanNode Node) {
 		/*local*/int Index = this.AddConstant(new Boolean(Node.Value));
 		/*local*/int Reg = this.AllocRegister();
 		this.CurrentBuilder.Append("NSET " + "REG" + Reg + ", " + "CONST" + Index + "\n");
 		this.PushRegister(Reg);
 	}
 
-	@Override public void VisitIntNode(GtIntNode Node) {
+	@Override public void VisitIntNode(ZenIntNode Node) {
 		/*local*/int Index = this.AddConstant(new Long(Node.Value));
 		/*local*/int Reg = this.AllocRegister();
 		this.CurrentBuilder.Append("NSET " + "REG" + Reg + ", " + "CONST" + Index + "\n");
 		this.PushRegister(Reg);
 	}
 
-	@Override public void VisitFloatNode(GtFloatNode Node) {
+	@Override public void VisitFloatNode(ZenFloatNode Node) {
 		/*local*/int Index = this.AddConstant(new Float(Node.Value));
 		/*local*/int Reg = this.AllocRegister();
 		this.CurrentBuilder.Append("NSET " + "REG" + Reg + ", " + "CONST" + Index + "\n");
 		this.PushRegister(Reg);
 	}
 
-	@Override public void VisitStringNode(GtStringNode Node) {
+	@Override public void VisitStringNode(ZenStringNode Node) {
 		/*local*/int Index = this.AddConstant(LibGreenTea.QuoteString(Node.Value));
 		/*local*/int Reg = this.AllocRegister();
 		this.CurrentBuilder.Append("NSET " + "REG" + Reg + ", " + "CONST" + Index + "\n");
 		this.PushRegister(Reg);
 	}
 
-	@Override public void VisitRegexNode(GtRegexNode Node) {
+	@Override public void VisitRegexNode(ZenRegexNode Node) {
 		/*local*/int Index = this.AddConstant(Node.Value);
 		/*local*/int Reg = this.AllocRegister();
 		this.CurrentBuilder.Append("NSET " + "REG" + Reg + ", " + "CONST" + Index + "\n");
 		this.PushRegister(Reg);
 	}
 
-	@Override public void VisitConstPoolNode(GtConstPoolNode Node) {
+	@Override public void VisitConstPoolNode(ZenConstPoolNode Node) {
 		/*local*/int Index = this.AddConstant(Node.ConstValue);
 		/*local*/int Reg = this.AllocRegister();
 		this.CurrentBuilder.Append("NSET " + "REG" + Reg + ", " + "CONST" + Index + "\n");
 		this.PushRegister(Reg);
 	}
 
-	@Override public void VisitArrayLiteralNode(GtArrayLiteralNode Node) {
+	@Override public void VisitArrayLiteralNode(ZenArrayLiteralNode Node) {
 		/*local*/int ArraySize = LibGreenTea.ListSize(Node.NodeList);
 		/*local*/int TargetReg = this.ReserveRegister(ArraySize + CallParameters);
 		/*local*/int CallReg = TargetReg - ReturnIndex + ThisIndex;
@@ -301,54 +301,54 @@ public class KonohaByteCodeGenerator extends GtSourceGenerator {
 		this.FreeRegister(TargetReg + 1);
 	}
 
-	@Override public void VisitMapLiteralNode(GtMapLiteralNode Node) {
+	@Override public void VisitMapLiteralNode(ZenMapLiteralNode Node) {
 		/*FIXME*/
 	}
 
-	@Override public void VisitParamNode(GtParamNode Node) {
+	@Override public void VisitParamNode(ZenParamNode Node) {
 		/*FIXME*/
 	}
 
-	@Override public void VisitFunctionLiteralNode(GtFunctionLiteralNode Node) {
+	@Override public void VisitFunctionLiteralNode(ZenFunctionLiteralNode Node) {
 		/*FIXME*/
 	}
 
-	@Override public void VisitGetLocalNode(GtGetLocalNode Node) {
+	@Override public void VisitGetLocalNode(ZenGetLocalNode Node) {
 		this.PushRegister(this.LocalVarMap.get(Node.NativeName));
 	}
 
-	@Override public void VisitSetLocalNode(GtSetLocalNode Node) {
+	@Override public void VisitSetLocalNode(ZenSetLocalNode Node) {
 		Node.ValueNode.Accept(this);
 		this.CurrentBuilder.Append("NMOV " + "REG" + this.LocalVarMap.get(Node.NativeName) + ", REG" + this.PopRegister() + "\n");
 	}
 
-	@Override public void VisitGetCapturedNode(GtGetCapturedNode Node) {
+	@Override public void VisitGetCapturedNode(ZenGetCapturedNode Node) {
 		/*FIXME*/
 	}
 
-	@Override public void VisitSetCapturedNode(GtSetCapturedNode Node) {
+	@Override public void VisitSetCapturedNode(ZenSetCapturedNode Node) {
 		/*FIXME*/
 	}
 
-	@Override public void VisitGetterNode(GtGetterNode Node) {
+	@Override public void VisitGetterNode(ZenGetterNode Node) {
 		Node.RecvNode.Accept(this);
 		/*local*/int TargetReg = this.AllocRegister();
-		/*local*/ArrayList<GtFieldInfo> FieldList = this.ClassFieldMap.get(Node.RecvNode.Type);
+		/*local*/ArrayList<ZenFieldInfo> FieldList = this.ClassFieldMap.get(Node.RecvNode.Type);
 		/*local*/int Offset = this.GetFieldOffset(FieldList, Node.NativeName);
 		this.CurrentBuilder.Append("NMOVx " + "REG" + TargetReg + ", REG" + this.PopRegister() + ", " + Offset + "\n");
 		this.PushRegister(TargetReg);
 	}
 
-	@Override public void VisitSetterNode(GtSetterNode Node) {
+	@Override public void VisitSetterNode(ZenSetterNode Node) {
 		Node.RecvNode.Accept(this);
 		/*local*/int TargetReg = this.PopRegister();
-		/*local*/ArrayList<GtFieldInfo> FieldList = this.ClassFieldMap.get(Node.RecvNode.Type);
+		/*local*/ArrayList<ZenFieldInfo> FieldList = this.ClassFieldMap.get(Node.RecvNode.Type);
 		/*local*/int Offset = this.GetFieldOffset(FieldList, Node.NativeName);
 		Node.ValueNode.Accept(this);
 		this.CurrentBuilder.Append("XNMOV " + "REG" + TargetReg + ", " + Offset + ", REG" + this.PopRegister() + "\n");
 	}
 
-	@Override public void VisitApplySymbolNode(GtApplySymbolNode Node) {
+	@Override public void VisitApplySymbolNode(ZenApplySymbolNode Node) {
 		/*local*/int ParamSize = LibGreenTea.ListSize(Node.ParamList);
 		/*local*/int TargetReg = this.ReserveRegister(ParamSize + CallParameters);
 		/*local*/int CallReg = TargetReg - ReturnIndex + ThisIndex;
@@ -363,7 +363,7 @@ public class KonohaByteCodeGenerator extends GtSourceGenerator {
 		this.FreeRegister(TargetReg + 1);
 	}
 
-	@Override public void VisitApplyFunctionObjectNode(GtApplyFunctionObjectNode Node) {
+	@Override public void VisitApplyFunctionObjectNode(ZenApplyFunctionObjectNode Node) {
 		/*FIXME*/
 		/*local*/int ParamSize = LibGreenTea.ListSize(Node.ParamList);
 		/*local*/int TargetReg = this.ReserveRegister(ParamSize + CallParameters);
@@ -380,11 +380,11 @@ public class KonohaByteCodeGenerator extends GtSourceGenerator {
 		this.FreeRegister(TargetReg + 1);
 	}
 
-	@Override public void VisitApplyOverridedMethodNode(GtApplyOverridedMethodNode Node) {
+	@Override public void VisitApplyOverridedMethodNode(ZenApplyOverridedMethodNode Node) {
 		/*FIXME*/
 	}
 
-	@Override public void VisitGetIndexNode(GtGetIndexNode Node) {
+	@Override public void VisitGetIndexNode(ZenGetIndexNode Node) {
 		/*local*/int TargetReg = this.ReserveRegister(2/*ArgumentSize*/ + CallParameters);
 		/*local*/int CallReg = TargetReg - ReturnIndex + ThisIndex;
 		Node.RecvNode.Accept(this);
@@ -397,7 +397,7 @@ public class KonohaByteCodeGenerator extends GtSourceGenerator {
 		this.FreeRegister(TargetReg + 1);
 	}
 
-	@Override public void VisitSetIndexNode(GtSetIndexNode Node) {
+	@Override public void VisitSetIndexNode(ZenSetIndexNode Node) {
 		/*local*/int TargetReg = this.ReserveRegister(3/*ArgumentSize*/ + CallParameters);
 		/*local*/int CallReg = TargetReg - ReturnIndex + ThisIndex;
 		Node.RecvNode.Accept(this);
@@ -414,11 +414,11 @@ public class KonohaByteCodeGenerator extends GtSourceGenerator {
 		this.FreeRegister(TargetReg);
 	}
 
-	@Override public void VisitSliceNode(GtSliceNode Node) {
+	@Override public void VisitSliceNode(ZenSliceNode Node) {
 		/*FIXME*/
 	}
 
-	@Override public void VisitAndNode(GtAndNode Node) {
+	@Override public void VisitAndNode(ZenAndNode Node) {
 		/*local*/int TargetReg = this.AllocRegister();
 		/*local*/int EndLabel = this.NewLabel();
 		Node.LeftNode.Accept(this);
@@ -430,7 +430,7 @@ public class KonohaByteCodeGenerator extends GtSourceGenerator {
 		this.PushRegister(TargetReg);
 	}
 
-	@Override public void VisitOrNode(GtOrNode Node) {
+	@Override public void VisitOrNode(ZenOrNode Node) {
 		/*local*/int TargetReg = this.AllocRegister();
 		/*local*/int RightLabel = this.NewLabel();
 		/*local*/int EndLabel = this.NewLabel();
@@ -445,7 +445,7 @@ public class KonohaByteCodeGenerator extends GtSourceGenerator {
 		this.PushRegister(TargetReg);
 	}
 
-	@Override public void VisitUnaryNode(GtUnaryNode Node) {
+	@Override public void VisitUnaryNode(ZenUnaryNode Node) {
 		/*local*/int TargetReg = this.ReserveRegister(1/*ArgumentSize*/ + CallParameters);
 		/*local*/int CallReg = TargetReg - ReturnIndex + ThisIndex;
 		Node.RecvNode.Accept(this);
@@ -457,7 +457,7 @@ public class KonohaByteCodeGenerator extends GtSourceGenerator {
 		this.FreeRegister(TargetReg + 1);
 	}
 
-	@Override public void VisitPrefixInclNode(GtPrefixInclNode Node) {
+	@Override public void VisitPrefixInclNode(ZenPrefixInclNode Node) {
 		/*FIXME*/
 		/*local*/int TargetReg = this.ReserveRegister(2/*ArgumentSize*/ + CallParameters);
 		/*local*/int CallReg = TargetReg - ReturnIndex + ThisIndex;
@@ -471,19 +471,19 @@ public class KonohaByteCodeGenerator extends GtSourceGenerator {
 		this.FreeRegister(TargetReg + 1);
 	}
 
-	@Override public void VisitPrefixDeclNode(GtPrefixDeclNode Node) {
+	@Override public void VisitPrefixDeclNode(ZenPrefixDeclNode Node) {
 		/*FIXME*/
 	}
 
-	@Override public void VisitSuffixInclNode(GtSuffixInclNode Node) {
+	@Override public void VisitSuffixInclNode(ZenSuffixInclNode Node) {
 		/*FIXME*/
 	}
 
-	@Override public void VisitSuffixDeclNode(GtSuffixDeclNode Node) {
+	@Override public void VisitSuffixDeclNode(ZenSuffixDeclNode Node) {
 		/*FIXME*/
 	}
 
-	@Override public void VisitBinaryNode(GtBinaryNode Node) {
+	@Override public void VisitBinaryNode(ZenBinaryNode Node) {
 		/*local*/int TargetReg = this.ReserveRegister(2/*ArgumentSize*/ + CallParameters);
 		/*local*/int CallReg = TargetReg - ReturnIndex + ThisIndex;
 		Node.LeftNode.Accept(this);
@@ -497,11 +497,11 @@ public class KonohaByteCodeGenerator extends GtSourceGenerator {
 		this.FreeRegister(TargetReg + 1);
 	}
 
-	@Override public void VisitTrinaryNode(GtTrinaryNode Node) {
+	@Override public void VisitTrinaryNode(ZenTrinaryNode Node) {
 		/*FIXME*/
 	}
 
-	@Override public void VisitConstructorNode(GtConstructorNode Node) {
+	@Override public void VisitConstructorNode(ZenConstructorNode Node) {
 		/*local*/int ParamSize = LibGreenTea.ListSize(Node.ParamList);
 		/*local*/int TargetReg = this.ReserveRegister(ParamSize + CallParameters);
 		/*local*/int CallReg = TargetReg - ReturnIndex + ThisIndex;
@@ -517,25 +517,25 @@ public class KonohaByteCodeGenerator extends GtSourceGenerator {
 		this.FreeRegister(TargetReg + 1);
 	}
 
-	@Override public void VisitAllocateNode(GtAllocateNode Node) {
+	@Override public void VisitAllocateNode(ZenAllocateNode Node) {
 		/*local*/int Reg = this.AllocRegister();
 		this.CurrentBuilder.Append("NEW  " + "REG" + Reg + ", CLASS" + this.ClassPool.indexOf(Node.Type) + "\n");
 		this.PushRegister(Reg);
 	}
 
-	@Override public void VisitNewArrayNode(GtNewArrayNode Node) {
+	@Override public void VisitNewArrayNode(ZenNewArrayNode Node) {
 		/*FIXME*/
 	}
 
-	@Override public void VisitInstanceOfNode(GtInstanceOfNode Node) {
+	@Override public void VisitInstanceOfNode(ZenInstanceOfNode Node) {
 		/*FIXME*/
 	}
 
-	@Override public void VisitCastNode(GtCastNode Node) {
+	@Override public void VisitCastNode(ZenCastNode Node) {
 		/*FIXME*/
 	}
 
-	@Override public void VisitVarDeclNode(GtVarDeclNode Node) {
+	@Override public void VisitVarDeclNode(ZenVarDeclNode Node) {
 		this.LocalVarMap.put(Node.NativeName, this.AllocRegister());
 		Node.InitNode.Accept(this);
 		this.CurrentBuilder.Append("NMOV " + "REG" + this.LocalVarMap.get(Node.NativeName) + ", REG" + this.PopRegister() + "\n");
@@ -543,11 +543,11 @@ public class KonohaByteCodeGenerator extends GtSourceGenerator {
 		this.LocalVarMap.remove(Node.NativeName);
 	}
 
-	@Override public void VisitUsingNode(GtUsingNode Node) {
+	@Override public void VisitUsingNode(ZenUsingNode Node) {
 		/*FIXME*/
 	}
 
-	@Override public void VisitIfNode(GtIfNode Node) {
+	@Override public void VisitIfNode(ZenIfNode Node) {
 		/*local*/int ElseLabel = this.NewLabel();
 		/*local*/int EndLabel = this.NewLabel();
 		Node.CondNode.Accept(this);
@@ -559,7 +559,7 @@ public class KonohaByteCodeGenerator extends GtSourceGenerator {
 		this.CurrentBuilder.Append("L" + EndLabel + ":\n");
 	}
 
-	@Override public void VisitWhileNode(GtWhileNode Node) {
+	@Override public void VisitWhileNode(ZenWhileNode Node) {
 		/*local*/int CondLabel = this.NewLabel();
 		/*local*/int EndLabel = this.NewLabel();
 		this.PushLoopLabel(CondLabel, EndLabel);
@@ -572,7 +572,7 @@ public class KonohaByteCodeGenerator extends GtSourceGenerator {
 		this.PopLoopLabel();
 	}
 
-	@Override public void VisitDoWhileNode(GtDoWhileNode Node) {
+	@Override public void VisitDoWhileNode(ZenDoWhileNode Node) {
 		/*local*/int BodyLabel = this.NewLabel();
 		/*local*/int CondLabel = this.NewLabel();
 		/*local*/int EndLabel = this.NewLabel();
@@ -587,7 +587,7 @@ public class KonohaByteCodeGenerator extends GtSourceGenerator {
 		this.PopLoopLabel();
 	}
 
-	@Override public void VisitForNode(GtForNode Node) {
+	@Override public void VisitForNode(ZenForNode Node) {
 		/*local*/int CondLabel = this.NewLabel();
 		/*local*/int IterLabel = this.NewLabel();
 		/*local*/int EndLabel = this.NewLabel();
@@ -603,23 +603,23 @@ public class KonohaByteCodeGenerator extends GtSourceGenerator {
 		this.PopLoopLabel();
 	}
 
-	@Override public void VisitForEachNode(GtForEachNode Node) {
+	@Override public void VisitForEachNode(ZenForEachNode Node) {
 		/*FIXME*/
 	}
 
-	@Override public void VisitContinueNode(GtContinueNode Node) {
+	@Override public void VisitContinueNode(ZenContinueNode Node) {
 		this.CurrentBuilder.Append("JMP  " + "L" + this.PeekContinueLabel() + "\n");
 	}
 
-	@Override public void VisitBreakNode(GtBreakNode Node) {
+	@Override public void VisitBreakNode(ZenBreakNode Node) {
 		this.CurrentBuilder.Append("JMP  " + "L" + this.PeekBreakLabel() + "\n");
 	}
 
-	@Override public void VisitStatementNode(GtStatementNode Node) {
+	@Override public void VisitStatementNode(ZenStatementNode Node) {
 		/*FIXME*/
 	}
 
-	@Override public void VisitReturnNode(GtReturnNode Node) {
+	@Override public void VisitReturnNode(ZenReturnNode Node) {
 		if(Node.ValueNode != null) {
 			Node.ValueNode.Accept(this);
 			this.CurrentBuilder.Append("NMOV " + "REG" + ReturnIndex + ", REG" + this.PopRegister() + "\n");
@@ -627,39 +627,39 @@ public class KonohaByteCodeGenerator extends GtSourceGenerator {
 		this.CurrentBuilder.Append("RET\n");
 	}
 
-	@Override public void VisitYieldNode(GtYieldNode Node) {
+	@Override public void VisitYieldNode(ZenYieldNode Node) {
 		/*FIXME*/
 	}
 
-	@Override public void VisitThrowNode(GtThrowNode Node) {
+	@Override public void VisitThrowNode(ZenThrowNode Node) {
 		/*FIXME*/
 	}
 
-	@Override public void VisitTryNode(GtTryNode Node) {
+	@Override public void VisitTryNode(ZenTryNode Node) {
 		/*FIXME*/
 	}
 
-	@Override public void VisitCatchNode(GtCatchNode Node) {
+	@Override public void VisitCatchNode(ZenCatchNode Node) {
 		/*FIXME*/
 	}
 
-	@Override public void VisitSwitchNode(GtSwitchNode Node) {
+	@Override public void VisitSwitchNode(ZenSwitchNode Node) {
 		/*FIXME*/
 	}
 
-	@Override public void VisitCaseNode(GtCaseNode Node) {
+	@Override public void VisitCaseNode(ZenCaseNode Node) {
 		/*FIXME*/
 	}
 
-	@Override public void VisitCommandNode(GtCommandNode Node) {
+	@Override public void VisitCommandNode(ZenCommandNode Node) {
 		/*FIXME*/
 	}
 
-	@Override public void VisitErrorNode(GtErrorNode Node) {
+	@Override public void VisitErrorNode(ZenErrorNode Node) {
 		/*FIXME*/
 	}
 
-	@Override public void GenerateFunc(GtFunc Func, ArrayList<String> ParamNameList, GtNode Body) {
+	@Override public void GenerateFunc(ZenFunc Func, ArrayList<String> ParamNameList, ZenNode Body) {
 		/*local*/String MethodName = Func.GetNativeFuncName();
 		/*local*/int Index = this.AddMethod(MethodName);
 		this.RegisterNum = ThisIndex + 1;
@@ -678,7 +678,7 @@ public class KonohaByteCodeGenerator extends GtSourceGenerator {
 		//this.LocalVarMap = PushedMap;
 	}
 
-	@Override public void OpenClassField(GtSyntaxTree ParsedTree, GtType Type, GtClassField ClassField) {
+	@Override public void OpenClassField(ZenSyntaxTree ParsedTree, ZenType Type, ZenClassField ClassField) {
 		this.ClassPool.add(Type);
 		this.ClassFieldMap.put(Type, ClassField.FieldList);
 	}

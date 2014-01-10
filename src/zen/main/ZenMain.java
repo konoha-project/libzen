@@ -124,7 +124,7 @@ public class ZenMain extends ZenUtils {
 				OutputFile);
 		LibNative.ImportGrammar(Generator.RootNameSpace,
 				ZenGrammar.class.getName());
-		// /*local*/GtParserContext Context = new GtParserContext(new
+		// /*local*/ZenParserContext Context = new ZenParserContext(new
 		// KonohaGrammar(), Generator);
 		// if(RequiredLibName != null) {
 		// if(!Context.TopLevelNameSpace.LoadRequiredLib(RequiredLibName)) {

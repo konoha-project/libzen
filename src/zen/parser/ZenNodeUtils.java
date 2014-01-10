@@ -24,56 +24,56 @@
 
 package zen.parser;
 
-import zen.ast.GtBooleanNode;
-import zen.ast.GtConstPoolNode;
-import zen.ast.GtFloatNode;
-import zen.ast.GtGetCapturedNode;
-import zen.ast.GtGetLocalNode;
-import zen.ast.GtIntNode;
-import zen.ast.GtSetCapturedNode;
-import zen.ast.GtSetLocalNode;
-import zen.ast.GtStringNode;
+import zen.ast.ZenBooleanNode;
+import zen.ast.ZenConstPoolNode;
+import zen.ast.ZenFloatNode;
+import zen.ast.ZenGetCapturedNode;
+import zen.ast.ZenGetLocalNode;
+import zen.ast.ZenIntNode;
+import zen.ast.ZenSetCapturedNode;
+import zen.ast.ZenSetLocalNode;
+import zen.ast.ZenStringNode;
 import zen.ast.ZenNode;
 import zen.lang.ZenType;
 
 public abstract class ZenNodeUtils {
-	//	public final GtNode CreateUnsupportedNode(GtType Type, GtSyntaxTree ParsedTree) {
-	//		/*local*/GtToken Token = ParsedTree.KeyToken;
+	//	public final ZenNode CreateUnsupportedNode(ZenType Type, ZenSyntaxTree ParsedTree) {
+	//		/*local*/ZenToken Token = ParsedTree.KeyToken;
 	//		this.Context.ReportError(GreenTeaConsts.ErrorLevel, Token, this.TargetCode + " has no language support for " + Token.ParsedText);
-	//		return new GtErrorNode(GtStaticTable.VoidType, ParsedTree.KeyToken);
+	//		return new ZenErrorNode(ZenStaticTable.VoidType, ParsedTree.KeyToken);
 	//	}
 
 	public final static ZenNode CreateConstNode(ZenToken SourceToken, Object Value) {
 		if(Value instanceof Boolean) {
-			return new GtBooleanNode(SourceToken, (Boolean) Value);
+			return new ZenBooleanNode(SourceToken, (Boolean) Value);
 		}
 		if((Value instanceof Long) || (Value instanceof Integer)) {
-			return new GtIntNode(SourceToken, ((Number)Value).longValue());
+			return new ZenIntNode(SourceToken, ((Number)Value).longValue());
 		}
 		if((Value instanceof Double) || (Value instanceof Float)) {
-			return new GtFloatNode(SourceToken, ((Number)Value).doubleValue());
+			return new ZenFloatNode(SourceToken, ((Number)Value).doubleValue());
 		}
 		if(Value instanceof String) {
-			return new GtStringNode(SourceToken, Value.toString());
+			return new ZenStringNode(SourceToken, Value.toString());
 		}
-		return new GtConstPoolNode(SourceToken, Value);
+		return new ZenConstPoolNode(SourceToken, Value);
 	}
 
 	public final ZenNode CreateSymbolNode(ZenToken SourceToken, ZenType Type, String NativeName, boolean IsCaptured, ZenNode AssignedNode) {
 		if(AssignedNode != null) {
 			if(IsCaptured) {
-				return new GtSetCapturedNode(SourceToken, NativeName, AssignedNode);
+				return new ZenSetCapturedNode(SourceToken, NativeName, AssignedNode);
 			}
 			else {
-				return new GtSetLocalNode(SourceToken, NativeName, AssignedNode);
+				return new ZenSetLocalNode(SourceToken, NativeName, AssignedNode);
 			}
 		}
 		else {
 			if(IsCaptured) {
-				return new GtGetCapturedNode(SourceToken, NativeName);
+				return new ZenGetCapturedNode(SourceToken, NativeName);
 			}
 			else {
-				return new GtGetLocalNode(SourceToken, NativeName);
+				return new ZenGetLocalNode(SourceToken, NativeName);
 			}
 		}
 	}

@@ -35,7 +35,7 @@ public class ZenFunc implements ZenFuncConst {
 	/*field*/public String			FuncName;
 	/*field*/public ZenFuncType     ZenType;
 	//	/*field*/public ZenType[]		Types;
-	//	/*field*/public GtType          FuncType;
+	//	/*field*/public ZenType          FuncType;
 	//	/*field*/public Object          FuncBody;  // Abstract function if null
 	//	/*field*/public String[]        GenericParam;
 
@@ -182,8 +182,8 @@ public class ZenFunc implements ZenFuncConst {
 
 	//
 	//	private boolean HasStaticBlock() {
-	//		if(this.FuncBody instanceof GtFuncBlock) {
-	//			/*local*/GtFuncBlock FuncBlock = (/*cast*/GtFuncBlock)this.FuncBody;
+	//		if(this.FuncBody instanceof ZenFuncBlock) {
+	//			/*local*/ZenFuncBlock FuncBlock = (/*cast*/ZenFuncBlock)this.FuncBody;
 	//			return !FuncBlock.IsVarArgument;
 	//		}
 	//		return false;
@@ -191,17 +191,17 @@ public class ZenFunc implements ZenFuncConst {
 	//
 	//	public void GenerateNativeFunc() {
 	//		if(this.HasStaticBlock()) {
-	//			/*local*/GtFuncBlock FuncBlock = (/*cast*/GtFuncBlock)this.FuncBody;
-	//			/*local*/GtTypeEnv Gamma = new GtTypeEnv(FuncBlock.NameSpace);
+	//			/*local*/ZenFuncBlock FuncBlock = (/*cast*/ZenFuncBlock)this.FuncBody;
+	//			/*local*/ZenTypeEnv Gamma = new ZenTypeEnv(FuncBlock.NameSpace);
 	//			/*local*/int i = 0;
 	//			/*local*/ArrayList<String> NameList = new ArrayList<String>();
 	//			while(i <  FuncBlock.NameList.size()) {
-	//				/*local*/GtVariableInfo VarInfo = Gamma.AppendDeclaredVariable(0, FuncBlock.DefinedFunc.Types[i+1], FuncBlock.NameList.get(i), null, null);
+	//				/*local*/ZenVariableInfo VarInfo = Gamma.AppendDeclaredVariable(0, FuncBlock.DefinedFunc.Types[i+1], FuncBlock.NameList.get(i), null, null);
 	//				NameList.add(VarInfo.NativeName);
 	//				i = i + 1;
 	//			}
 	//			Gamma.FuncBlock = FuncBlock;
-	//			/*local*/GtNode BodyNode = GreenTeaUtils.TypeBlock(Gamma, FuncBlock.FuncBlock, GtStaticTable.VoidType);
+	//			/*local*/ZenNode BodyNode = GreenTeaUtils.TypeBlock(Gamma, FuncBlock.FuncBlock, ZenStaticTable.VoidType);
 	//			if(Gamma.FoundUncommonFunc) {
 	//				Gamma.FuncBlock.DefinedFunc.FuncFlag = UnsetFlag(Gamma.FuncBlock.DefinedFunc.FuncFlag, CommonFunc);
 	//			}
@@ -214,20 +214,20 @@ public class ZenFunc implements ZenFuncConst {
 	//	}
 	//
 	//	public boolean HasLazyBlock() {
-	//		if(this.FuncBody instanceof GtFuncBlock) {
-	//			/*local*/GtFuncBlock FuncBlock = (/*cast*/GtFuncBlock)this.FuncBody;
+	//		if(this.FuncBody instanceof ZenFuncBlock) {
+	//			/*local*/ZenFuncBlock FuncBlock = (/*cast*/ZenFuncBlock)this.FuncBody;
 	//			return FuncBlock.IsVarArgument;
 	//		}
 	//		return false;
 	//	}
 	//
-	//	public GtFunc GenerateLazyFunc(ArrayList<GtNode> NodeList) {
+	//	public ZenFunc GenerateLazyFunc(ArrayList<ZenNode> NodeList) {
 	//		return null; // TODO
 	//	}
 	//
-	//	public final GtNameSpace GetGenericNameSpace(GtNameSpace NameSpace, ArrayList<GtNode> NodeList, int MaxSize) {
+	//	public final ZenNameSpace GetGenericNameSpace(ZenNameSpace NameSpace, ArrayList<ZenNode> NodeList, int MaxSize) {
 	//		if(this.Is(GenericFunc)) {
-	//			/*local*/GtNameSpace GenericNameSpace = NameSpace.CreateSubNameSpace();
+	//			/*local*/ZenNameSpace GenericNameSpace = NameSpace.CreateSubNameSpace();
 	//			/*local*/int i = 0;
 	//			while(i < this.Types.length) {
 	//				this.Types[i].AppendTypeVariable(GenericNameSpace, 0);
@@ -243,9 +243,9 @@ public class ZenFunc implements ZenFuncConst {
 	//		return NameSpace;
 	//	}
 	//
-	//	public final GtNameSpace GetGenericNameSpaceT(GtNameSpace NameSpace, ArrayList<GtType> NodeList, int MaxSize) {
+	//	public final ZenNameSpace GetGenericNameSpaceT(ZenNameSpace NameSpace, ArrayList<ZenType> NodeList, int MaxSize) {
 	//		if(this.Is(GenericFunc)) {
-	//			/*local*/GtNameSpace GenericNameSpace = NameSpace.CreateSubNameSpace();
+	//			/*local*/ZenNameSpace GenericNameSpace = NameSpace.CreateSubNameSpace();
 	//			/*local*/int i = 0;
 	//			while(i < this.Types.length) {
 	//				this.Types[i].AppendTypeVariable(GenericNameSpace, 0);

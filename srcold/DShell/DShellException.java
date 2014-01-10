@@ -34,6 +34,6 @@ public class DShellException extends RuntimeException {
 	@Override public Throwable fillInStackTrace() {
 		return this;
 	}
-	// this exception is raised by GtSubProc.runCommand 
+	// this exception is raised by ZenSubProc.runCommand 
 	// when syscall trace is disabled
 }

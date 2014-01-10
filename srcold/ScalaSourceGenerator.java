@@ -27,23 +27,23 @@
 //import java.util.ArrayList;
 ////endif VAJA
 //
-//import parser.GtClassField;
-//import parser.GtFieldInfo;
-//import parser.GtFunc;
-//import parser.GtSyntaxTree;
-//import parser.GtType;
-//import parser.ast.GtCatchNode;
-//import parser.ast.GtContinueNode;
-//import parser.ast.GtDoWhileNode;
-//import parser.ast.GtErrorNode;
-//import parser.ast.GtForNode;
-//import parser.ast.GtGetterNode;
-//import parser.ast.GtIfNode;
-//import parser.ast.GtNode;
-//import parser.ast.GtThrowNode;
-//import parser.ast.GtTryNode;
-//import parser.ast.GtVarDeclNode;
-//import parser.ast.GtWhileNode;
+//import parser.ZenClassField;
+//import parser.ZenFieldInfo;
+//import parser.ZenFunc;
+//import parser.ZenSyntaxTree;
+//import parser.ZenType;
+//import parser.ast.ZenCatchNode;
+//import parser.ast.ZenContinueNode;
+//import parser.ast.ZenDoWhileNode;
+//import parser.ast.ZenErrorNode;
+//import parser.ast.ZenForNode;
+//import parser.ast.ZenGetterNode;
+//import parser.ast.ZenIfNode;
+//import parser.ast.ZenNode;
+//import parser.ast.ZenThrowNode;
+//import parser.ast.ZenTryNode;
+//import parser.ast.ZenVarDeclNode;
+//import parser.ast.ZenWhileNode;
 //
 ////GreenTea Generator should be written in each language.
 //
@@ -59,7 +59,7 @@
 //		}
 //	}
 //
-//	private String LocalTypeName(GtType Type) {
+//	private String LocalTypeName(ZenType Type) {
 //		if(Type.IsDynamicType() || Type.IsNativeType()) {
 //			if(Type.IsVoidType()) {
 //				return "Unit";
@@ -78,7 +78,7 @@
 //	}
 //
 //	// copied from PythonSourceGenerator
-//	@Override public void VisitForNode(GtForNode Node) {
+//	@Override public void VisitForNode(ZenForNode Node) {
 //		/* for(; COND; ITER) BLOCK1; continue; BLOCK2;
 //		 * => while COND:
 //		 * 		BLOCK1;
@@ -96,11 +96,11 @@
 //		this.PushSourceCode(Program);
 //	}
 //
-//	@Override public void VisitContinueNode(GtContinueNode Node) {
+//	@Override public void VisitContinueNode(ZenContinueNode Node) {
 //		/*local*/String Code = "";
-//		/*local*/GtForNode Parent = this.FindParentForNode(Node);
+//		/*local*/ZenForNode Parent = this.FindParentForNode(Node);
 //		if(Parent != null) {
-//			/*local*/GtNode IterNode = Parent.IterNode;
+//			/*local*/ZenNode IterNode = Parent.IterNode;
 //			if(IterNode != null) {
 //				Code += this.VisitNode(IterNode) + this.LineFeed + this.GetIndentString();
 //			}
@@ -116,26 +116,26 @@
 //		this.StopVisitor(Node);
 //	}
 //	
-//	@Override public void VisitWhileNode(GtWhileNode Node) {
+//	@Override public void VisitWhileNode(ZenWhileNode Node) {
 //		/*local*/String Program = "while(" + this.VisitNode(Node.CondNode) + ")";
 //		Program += this.VisitBlockWithIndent(Node.BodyNode, true);
 //		this.PushSourceCode(Program);
 //	}
 //
-//	@Override public void VisitDoWhileNode(GtDoWhileNode Node) {
+//	@Override public void VisitDoWhileNode(ZenDoWhileNode Node) {
 //		/*local*/String Program = "do" + this.VisitBlockWithIndent(Node.BodyNode, true);
 //		Program += " while(" + this.VisitNode(Node.CondNode) + ")";
 //		this.PushSourceCode(Program);
 //	}
 //
-//	@Override public void VisitGetterNode(GtGetterNode Node) {
+//	@Override public void VisitGetterNode(ZenGetterNode Node) {
 //		/*local*/String Program = this.VisitNode(Node.RecvNode);
 //		/*local*/String FieldName = Node.ResolvedFunc.FuncName;
 //		Program = Program + "." + FieldName;
 //		this.PushSourceCode(Program);
 //	}
 //
-//	@Override public void VisitVarDeclNode(GtVarDeclNode Node) {
+//	@Override public void VisitVarDeclNode(ZenVarDeclNode Node) {
 //		/*local*/String Type = this.LocalTypeName(Node.DeclType);
 //		/*local*/String VarName = Node.NativeName;
 //		/*local*/String Code = "var " + VarName + " : " + Type + " ";
@@ -151,7 +151,7 @@
 //		this.PushSourceCode(Code + this.PopSourceCode());
 //	}
 //
-//	@Override public void VisitIfNode(GtIfNode Node) {
+//	@Override public void VisitIfNode(ZenIfNode Node) {
 //		/*local*/String CondNode = this.VisitNode(Node.CondNode);
 //		/*local*/String ThenBlock = this.VisitBlockWithIndent(Node.ThenNode, true);
 //		/*local*/String Code = "if(" + CondNode + ") " + ThenBlock;
@@ -161,11 +161,11 @@
 //		this.PushSourceCode(Code);
 //	}
 //
-//	@Override public void VisitTryNode(GtTryNode Node) {
+//	@Override public void VisitTryNode(ZenTryNode Node) {
 //		/*local*/String Code = "try ";
 //		Code += this.VisitBlockWithIndent(Node.TryNode, true);
 //		for (int i = 0; i < LibGreenTea.ListSize(Node.CatchList); i++) {
-//			GtCatchNode Catch = (/*cast*/GtCatchNode) Node.CatchList.get(i);
+//			ZenCatchNode Catch = (/*cast*/ZenCatchNode) Node.CatchList.get(i);
 //			Code += " catch (" + Catch.ExceptionType + " " + Catch.ExceptionName + ") ";
 //			Code += this.VisitBlockWithIndent(Catch.BodyNode, true);
 //		}
@@ -176,17 +176,17 @@
 //	}
 //
 //
-//	@Override public void VisitThrowNode(GtThrowNode Node) {
+//	@Override public void VisitThrowNode(ZenThrowNode Node) {
 //		/*local*/String Code = "throw " + this.VisitNode(Node.ValueNode);
 //		this.PushSourceCode(Code);
 //	}
 //
-//	@Override public void VisitErrorNode(GtErrorNode Node) {
+//	@Override public void VisitErrorNode(ZenErrorNode Node) {
 //		/*local*/String Code = "throw RuntimeError(\"" + Node.Token.ParsedText + "\")";
 //		this.PushSourceCode(Code);
 //	}
 //
-////	@Override public Object Eval(GtNode Node) {
+////	@Override public Object Eval(ZenNode Node) {
 ////		/*local*/String Code = this.VisitBlockWithIndent(Node, false);
 ////		if(LibGreenTea.EqualsString(Code, ";" + this.LineFeed)) {
 ////			return "";
@@ -195,7 +195,7 @@
 ////		return Code;
 ////	}
 //
-//	@Override public void GenerateFunc(GtFunc Func, ArrayList<String> ParamNameList, GtNode Body) {
+//	@Override public void GenerateFunc(ZenFunc Func, ArrayList<String> ParamNameList, ZenNode Body) {
 //		this.FlushErrorReport();
 //		/*local*/String Function = "def ";
 //		Function += Func.GetNativeFuncName() + "(";
@@ -214,7 +214,7 @@
 //		this.WriteLineCode(Function);
 //	}
 //
-//	@Override public void OpenClassField(GtSyntaxTree ParsedTree, GtType Type, GtClassField ClassField) {
+//	@Override public void OpenClassField(ZenSyntaxTree ParsedTree, ZenType Type, ZenClassField ClassField) {
 //		/*local*/String TypeName = this.LocalTypeName(Type);
 //		/*local*/String Program = this.GetIndentString() + "class " + TypeName;
 ////		if(Type.SuperType != null) {
@@ -224,8 +224,8 @@
 //		this.Indent();
 //		/*local*/int i = ClassField.ThisClassIndex;
 //		while(i < ClassField.FieldList.size()) {
-//			/*local*/GtFieldInfo FieldInfo = ClassField.FieldList.get(i);
-//			/*local*/GtType VarType = FieldInfo.Type;
+//			/*local*/ZenFieldInfo FieldInfo = ClassField.FieldList.get(i);
+//			/*local*/ZenType VarType = FieldInfo.Type;
 //			/*local*/String VarName = FieldInfo.NativeName;
 //			Program += this.GetIndentString() + "var " + VarName + " : ";
 //			Program += this.LocalTypeName(VarType) + " = _/*default value*/;" + this.LineFeed;
@@ -240,7 +240,7 @@
 ////		Program += this.GetIndentString() + "var " + this.GetRecvName() + " : " + this.LocalTypeName(Type);
 ////		Program += " = new " + this.LocalTypeName(Type) + "();" + this.LineFeed;
 //		while(i < ClassField.FieldList.size()) {
-//			/*local*/GtFieldInfo FieldInfo = ClassField.FieldList.get(i);
+//			/*local*/ZenFieldInfo FieldInfo = ClassField.FieldList.get(i);
 //			/*local*/String VarName = FieldInfo.NativeName;
 //			/*local*/String InitValue = this.StringifyConstValue(FieldInfo.InitValue);
 //			if(!FieldInfo.Type.IsNativeType()) {

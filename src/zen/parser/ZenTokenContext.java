@@ -26,7 +26,7 @@
 package zen.parser;
 import java.util.ArrayList;
 
-import zen.ast.GtErrorNode;
+import zen.ast.ZenErrorNode;
 import zen.ast.ZenNode;
 import zen.deps.LibNative;
 import zen.deps.LibZen;
@@ -114,15 +114,15 @@ public final class ZenTokenContext extends ZenUtils {
 	public ZenNode CreateExpectedErrorNode(ZenToken SourceToken, String ExpectedTokenText) {
 		if(SourceToken == null || SourceToken.IsNull()) {
 			SourceToken = this.GetBeforeToken();
-			return new GtErrorNode(SourceToken, ExpectedTokenText + " is expected after " + SourceToken.ParsedText);
+			return new ZenErrorNode(SourceToken, ExpectedTokenText + " is expected after " + SourceToken.ParsedText);
 		}
-		return new GtErrorNode(SourceToken, ExpectedTokenText + " is expected; " + SourceToken.ParsedText + " is given");
+		return new ZenErrorNode(SourceToken, ExpectedTokenText + " is expected; " + SourceToken.ParsedText + " is given");
 	}
 
 	public void Vacume() {
 		//		if(this.CurrentPosition > 0) {
 		//			for(/*local*/int i = this.CurrentPosition - 1; i >= 0; i = i - 1) {
-		//				GtToken Token = this.SourceList.get(i);
+		//				ZenToken Token = this.SourceList.get(i);
 		//				if(Token == null) {
 		//					break;
 		//				}
@@ -132,8 +132,8 @@ public final class ZenTokenContext extends ZenUtils {
 		//		}
 	}
 
-	private int DispatchFunc(String ScriptSource, int GtChar, int pos) {
-		/*local*/ZenTokenFunc TokenFunc = this.TopLevelNameSpace.GetTokenFunc(GtChar);
+	private int DispatchFunc(String ScriptSource, int ZenChar, int pos) {
+		/*local*/ZenTokenFunc TokenFunc = this.TopLevelNameSpace.GetTokenFunc(ZenChar);
 		/*local*/int NextIdx = ZenTokenFunc.ApplyTokenFunc(TokenFunc, this, ScriptSource, pos);
 		if(NextIdx == ZenParserConst.MismatchedPosition) {
 			ZenLogger.VerboseLog(ZenLogger.VerboseUndefined, "undefined tokenizer: " + ScriptSource.substring(pos, pos+1));
@@ -148,8 +148,8 @@ public final class ZenTokenContext extends ZenUtils {
 		/*local*/int Length = ScriptSource.length();
 		this.ParsingLine = CurrentLine;
 		while(CurrentPos < Length) {
-			/*local*/int GtCode = ZenUtils.AsciiToTokenMatrixIndex(LibZen.CharAt(ScriptSource, CurrentPos));
-			/*local*/int NextPos = this.DispatchFunc(ScriptSource, GtCode, CurrentPos);
+			/*local*/int ZenCode = ZenUtils.AsciiToTokenMatrixIndex(LibZen.CharAt(ScriptSource, CurrentPos));
+			/*local*/int NextPos = this.DispatchFunc(ScriptSource, ZenCode, CurrentPos);
 			if(CurrentPos >= NextPos) {
 				break;
 			}
@@ -218,8 +218,8 @@ public final class ZenTokenContext extends ZenUtils {
 		}
 	}
 
-	//	public GtToken NextConcatinatedToken() {
-	//		/*local*/GtToken Token = this.Next();
+	//	public ZenToken NextConcatinatedToken() {
+	//		/*local*/ZenToken Token = this.Next();
 	//		if(Token.IsNextWhiteSpace()) {
 	//			return Token;
 	//		}
@@ -466,7 +466,7 @@ public final class ZenTokenContext extends ZenUtils {
 
 	public final void SkipIncompleteStatement() {
 		//		if(this.HasNext()) {
-		//			/*local*/GtToken Token = this.GetToken();
+		//			/*local*/ZenToken Token = this.GetToken();
 		//			if(!Token.IsIndent() && !Token.IsDelim()) {
 		//				this.TopLevelNameSpace.Generator.ReportError(GreenTeaConsts.WarningLevel, Token, "needs ;");
 		//				if(Token.EqualsText("}")) {

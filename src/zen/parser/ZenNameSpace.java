@@ -264,7 +264,7 @@ public final class ZenNameSpace {
 	//		}
 	//	}
 
-	//	public final ZenType AppendTypeVariable(String Name, ZenType ParamBaseType, GtToken SourceToken, ArrayList<Object> RevertList) {
+	//	public final ZenType AppendTypeVariable(String Name, ZenType ParamBaseType, ZenToken SourceToken, ArrayList<Object> RevertList) {
 	//		this.UpdateRevertList(Name, RevertList);
 	//		/*local*/ZenType TypeVar = new ZenType(TypeVariable, Name, ParamBaseType, null);
 	//		this.SetSymbol(Name, TypeVar, SourceToken);
@@ -293,11 +293,11 @@ public final class ZenNameSpace {
 		return null;
 	}
 
-	//	public final Object GetClassStaticSymbol(GtType StaticClassType, String Symbol, boolean RecursiveSearch) {
+	//	public final Object GetClassStaticSymbol(ZenType StaticClassType, String Symbol, boolean RecursiveSearch) {
 	//		/*local*/String Key = null;
-	//		/*local*/GtType ClassType = StaticClassType;
+	//		/*local*/ZenType ClassType = StaticClassType;
 	//		while(ClassType != null) {
-	//			Key = GtNameSpace.ClassStaticSymbol(ClassType, Symbol);
+	//			Key = ZenNameSpace.ClassStaticSymbol(ClassType, Symbol);
 	//			/*local*/Object Value = this.GetSymbol(Key);
 	//			if(Value != null) {
 	//				return Value;
@@ -307,7 +307,7 @@ public final class ZenNameSpace {
 	//			}
 	//			ClassType = ClassType.SuperType;
 	//		}
-	//		Key = GtNameSpace.ClassStaticSymbol(StaticClassType, Symbol);
+	//		Key = ZenNameSpace.ClassStaticSymbol(StaticClassType, Symbol);
 	//		if(StaticClassType.IsDynamicNaitiveLoading() && this.Context.RootNameSpace.GetLocalUndefinedSymbol(Key) == null) {
 	//			/*local*/Object Value = LibNative.ImportStaticFieldValue(this.Context, StaticClassType, Symbol);
 	//			if(Value == null) {
@@ -321,10 +321,10 @@ public final class ZenNameSpace {
 	//		return null;
 	//	}
 
-	//	public final void ImportClassSymbol(GtNameSpace NameSpace, String Prefix, GtType ClassType, GtToken SourceToken) {
+	//	public final void ImportClassSymbol(ZenNameSpace NameSpace, String Prefix, ZenType ClassType, ZenToken SourceToken) {
 	//		/*local*/String ClassPrefix = ClassSymbol(ClassType, ClassStaticName(""));
 	//		/*local*/ArrayList<String> KeyList = new ArrayList<String>();
-	//		/*local*/GtNameSpace ns = NameSpace;
+	//		/*local*/ZenNameSpace ns = NameSpace;
 	//		while(ns != null) {
 	//			if(ns.SymbolPatternTable != null) {
 	//				LibZen.RetrieveMapKeys(ns.SymbolPatternTable, ClassPrefix, KeyList);
@@ -342,45 +342,45 @@ public final class ZenNameSpace {
 	//		}
 	//	}
 
-	//	public final GtFunc GetGetterFunc(GtType ClassType, String Symbol, boolean RecursiveSearch) {
-	//		/*local*/Object Func = this.Context.RootNameSpace.GetClassSymbol(ClassType, GtNameSpace.GetterSymbol(Symbol), RecursiveSearch);
-	//		if(Func instanceof GtFunc) {
-	//			return (/*cast*/GtFunc)Func;
+	//	public final ZenFunc GetGetterFunc(ZenType ClassType, String Symbol, boolean RecursiveSearch) {
+	//		/*local*/Object Func = this.Context.RootNameSpace.GetClassSymbol(ClassType, ZenNameSpace.GetterSymbol(Symbol), RecursiveSearch);
+	//		if(Func instanceof ZenFunc) {
+	//			return (/*cast*/ZenFunc)Func;
 	//		}
-	//		Func = this.Context.RootNameSpace.GetLocalUndefinedSymbol(GtNameSpace.ClassSymbol(ClassType, GtNameSpace.GetterSymbol(Symbol)));
+	//		Func = this.Context.RootNameSpace.GetLocalUndefinedSymbol(ZenNameSpace.ClassSymbol(ClassType, ZenNameSpace.GetterSymbol(Symbol)));
 	//		if(ClassType.IsDynamicNaitiveLoading() && Func == null) {
 	//			return LibZen.LoadNativeField(this.Context, ClassType, Symbol, false);
 	//		}
 	//		return null;
 	//	}
 	//
-	//	public final GtFunc GetSetterFunc(GtType ClassType, String Symbol, boolean RecursiveSearch) {
-	//		/*local*/Object Func = this.Context.RootNameSpace.GetClassSymbol(ClassType, GtNameSpace.SetterSymbol(Symbol), RecursiveSearch);
-	//		if(Func instanceof GtFunc) {
-	//			return (/*cast*/GtFunc)Func;
+	//	public final ZenFunc GetSetterFunc(ZenType ClassType, String Symbol, boolean RecursiveSearch) {
+	//		/*local*/Object Func = this.Context.RootNameSpace.GetClassSymbol(ClassType, ZenNameSpace.SetterSymbol(Symbol), RecursiveSearch);
+	//		if(Func instanceof ZenFunc) {
+	//			return (/*cast*/ZenFunc)Func;
 	//		}
-	//		Func = this.Context.RootNameSpace.GetLocalUndefinedSymbol(GtNameSpace.ClassSymbol(ClassType, GtNameSpace.SetterSymbol(Symbol)));
+	//		Func = this.Context.RootNameSpace.GetLocalUndefinedSymbol(ZenNameSpace.ClassSymbol(ClassType, ZenNameSpace.SetterSymbol(Symbol)));
 	//		if(ClassType.IsDynamicNaitiveLoading() && Func == null) {
 	//			return LibZen.LoadNativeField(this.Context, ClassType, Symbol, true);
 	//		}
 	//		return null;
 	//	}
 	//
-	//	public final GtFunc GetConverterFunc(GtType FromType, GtType ToType, boolean RecursiveSearch) {
-	//		/*local*/Object Func = this.GetClassSymbol(FromType, GtNameSpace.ConverterSymbol(ToType), RecursiveSearch);
-	//		if(Func instanceof GtFunc) {
-	//			return (/*cast*/GtFunc)Func;
+	//	public final ZenFunc GetConverterFunc(ZenType FromType, ZenType ToType, boolean RecursiveSearch) {
+	//		/*local*/Object Func = this.GetClassSymbol(FromType, ZenNameSpace.ConverterSymbol(ToType), RecursiveSearch);
+	//		if(Func instanceof ZenFunc) {
+	//			return (/*cast*/ZenFunc)Func;
 	//		}
 	//		return null;
 	//	}
 	//
-	//	public final GtPolyFunc GetMethod(GtType ClassType, String Symbol, boolean RecursiveSearch) {
-	//		/*local*/ArrayList<GtFunc> FuncList = new ArrayList<GtFunc>();
+	//	public final ZenPolyFunc GetMethod(ZenType ClassType, String Symbol, boolean RecursiveSearch) {
+	//		/*local*/ArrayList<ZenFunc> FuncList = new ArrayList<ZenFunc>();
 	//		while(ClassType != null) {
-	//			/*local*/String Key = GtNameSpace.ClassSymbol(ClassType, Symbol);
+	//			/*local*/String Key = ZenNameSpace.ClassSymbol(ClassType, Symbol);
 	//			/*local*/Object RootValue = this.RetrieveFuncList(Key, FuncList);
 	//			if(RootValue == null && ClassType.IsDynamicNaitiveLoading()) {
-	//				if(LibZen.EqualsString(Symbol, GtNameSpace.ConstructorSymbol())) {
+	//				if(LibZen.EqualsString(Symbol, ZenNameSpace.ConstructorSymbol())) {
 	//					LibZen.LoadNativeConstructors(this.Context, ClassType, FuncList);
 	//				}
 	//				else {
@@ -393,23 +393,23 @@ public final class ZenNameSpace {
 	//			//System.err.println("** " + ClassType + ", " + ClassType.ParentMethodSearch);
 	//			ClassType = ClassType.ParentMethodSearch;
 	//		}
-	//		return new GtPolyFunc(FuncList);
+	//		return new ZenPolyFunc(FuncList);
 	//	}
 	//
-	//	public final GtPolyFunc GetConstructorFunc(GtType ClassType) {
-	//		return this.Context.RootNameSpace.GetMethod(ClassType, GtNameSpace.ConstructorSymbol(), false);
+	//	public final ZenPolyFunc GetConstructorFunc(ZenType ClassType) {
+	//		return this.Context.RootNameSpace.GetMethod(ClassType, ZenNameSpace.ConstructorSymbol(), false);
 	//	}
 	//
-	//	public final GtFunc GetOverridedMethod(GtType ClassType, GtFunc GivenFunc) {
-	//		/*local*/String Symbol = GtNameSpace.FuncSymbol(GivenFunc.FuncName);
-	//		/*local*/GtType GivenClassType = GivenFunc.GetRecvType();
+	//	public final ZenFunc GetOverridedMethod(ZenType ClassType, ZenFunc GivenFunc) {
+	//		/*local*/String Symbol = ZenNameSpace.FuncSymbol(GivenFunc.FuncName);
+	//		/*local*/ZenType GivenClassType = GivenFunc.GetRecvType();
 	//		if(ClassType != GivenClassType) {
-	//			/*local*/ArrayList<GtFunc> FuncList = new ArrayList<GtFunc>();
+	//			/*local*/ArrayList<ZenFunc> FuncList = new ArrayList<ZenFunc>();
 	//			while(ClassType != null) {
-	//				/*local*/String Key = GtNameSpace.ClassSymbol(ClassType, Symbol);
+	//				/*local*/String Key = ZenNameSpace.ClassSymbol(ClassType, Symbol);
 	//				this.RetrieveFuncList(Key, FuncList);
 	//				for(/*local*/int i = 0; i < FuncList.size(); i+= 1) {
-	//					/*local*/GtFunc Func = FuncList.get(i);
+	//					/*local*/ZenFunc Func = FuncList.get(i);
 	//					if(Func.EqualsOverridedMethod(GivenFunc)) {
 	//						return Func;
 	//					}
@@ -427,8 +427,8 @@ public final class ZenNameSpace {
 	//			/*local*/ZenFunc Func = (/*cast*/ZenFunc)FuncValue;
 	//			FuncList.add(Func);
 	//		}
-	//		else if(FuncValue instanceof GtPolyFunc) {
-	//			/*local*/GtPolyFunc PolyFunc = (/*cast*/GtPolyFunc)FuncValue;
+	//		else if(FuncValue instanceof ZenPolyFunc) {
+	//			/*local*/ZenPolyFunc PolyFunc = (/*cast*/ZenPolyFunc)FuncValue;
 	//			/*local*/int i = PolyFunc.FuncList.size() - 1;
 	//			while(i >= 0) {
 	//				FuncList.add(PolyFunc.FuncList.get(i));
@@ -441,10 +441,10 @@ public final class ZenNameSpace {
 	//		return FuncValue;
 	//	}
 
-	//	public final GtPolyFunc GetPolyFunc(String FuncName) {
+	//	public final ZenPolyFunc GetPolyFunc(String FuncName) {
 	//		/*local*/ArrayList<ZenFunc> FuncList = new ArrayList<ZenFunc>();
 	//		this.RetrieveFuncList(FuncName, FuncList);
-	//		return new GtPolyFunc(null, FuncList);
+	//		return new ZenPolyFunc(null, FuncList);
 	//	}
 	//
 	//	public final ZenFunc GetFunc(String FuncName, int BaseIndex, ArrayList<ZenType> TypeList) {
@@ -471,15 +471,15 @@ public final class ZenNameSpace {
 	//		return null;
 	//	}
 
-	//	public final Object AppendFuncName(String Key, GtFunc Func, GtToken SourceToken) {
+	//	public final Object AppendFuncName(String Key, ZenFunc Func, ZenToken SourceToken) {
 	//		/*local*/Object OldValue = this.GetLocalSymbol(Key);
-	//		if(OldValue instanceof GtSyntaxPattern) {
+	//		if(OldValue instanceof ZenSyntaxPattern) {
 	//			return OldValue;
 	//		}
-	//		if(OldValue instanceof GtFunc) {
-	//			/*local*/GtFunc OldFunc = (/*cast*/GtFunc)OldValue;
+	//		if(OldValue instanceof ZenFunc) {
+	//			/*local*/ZenFunc OldFunc = (/*cast*/ZenFunc)OldValue;
 	//			if(!OldFunc.EqualsType(Func)) {
-	//				/*local*/GtPolyFunc PolyFunc = new GtPolyFunc(null);
+	//				/*local*/ZenPolyFunc PolyFunc = new ZenPolyFunc(null);
 	//				PolyFunc.Append(this.Context, OldFunc, SourceToken);
 	//				PolyFunc.Append(this.Context, Func, SourceToken);
 	//				this.SetSymbol(Key, PolyFunc, null);
@@ -487,8 +487,8 @@ public final class ZenNameSpace {
 	//			}
 	//			// error
 	//		}
-	//		else if(OldValue instanceof GtPolyFunc) {
-	//			/*local*/GtPolyFunc PolyFunc = (/*cast*/GtPolyFunc)OldValue;
+	//		else if(OldValue instanceof ZenPolyFunc) {
+	//			/*local*/ZenPolyFunc PolyFunc = (/*cast*/ZenPolyFunc)OldValue;
 	//			PolyFunc.Append(this.Context, Func, SourceToken);
 	//			return PolyFunc;
 	//		}
@@ -496,50 +496,50 @@ public final class ZenNameSpace {
 	//		return OldValue;
 	//	}
 	//
-	//	public final Object AppendFunc(GtFunc Func, GtToken SourceToken) {
+	//	public final Object AppendFunc(ZenFunc Func, ZenToken SourceToken) {
 	//		return this.AppendFuncName(Func.FuncName, Func, SourceToken);
 	//	}
 	//
-	//	public final Object AppendStaticFunc(GtType StaticType, GtFunc Func, GtToken SourceToken) {
+	//	public final Object AppendStaticFunc(ZenType StaticType, ZenFunc Func, ZenToken SourceToken) {
 	//		/*local*/int loc = Func.FuncName.lastIndexOf(".");
-	//		return this.AppendFuncName(GtNameSpace.ClassStaticSymbol(StaticType, Func.FuncName.substring(loc+1)), Func, SourceToken);
+	//		return this.AppendFuncName(ZenNameSpace.ClassStaticSymbol(StaticType, Func.FuncName.substring(loc+1)), Func, SourceToken);
 	//	}
 	//
-	//	public final Object AppendMethod(GtFunc Func, GtToken SourceToken) {
-	//		/*local*/GtType ClassType = Func.GetRecvType();
+	//	public final Object AppendMethod(ZenFunc Func, ZenToken SourceToken) {
+	//		/*local*/ZenType ClassType = Func.GetRecvType();
 	//		if(ClassType.IsGenericType() && ClassType.HasTypeVariable()) {
 	//			ClassType = ClassType.BaseType;
 	//		}
-	//		/*local*/String Key = GtNameSpace.ClassSymbol(ClassType, Func.FuncName);
+	//		/*local*/String Key = ZenNameSpace.ClassSymbol(ClassType, Func.FuncName);
 	//		return this.AppendFuncName(Key, Func, SourceToken);
 	//	}
 	//
-	//	public final void AppendConstructor(GtType ClassType, GtFunc Func, GtToken SourceToken) {
-	//		/*local*/String Key = GtNameSpace.ClassSymbol(ClassType, GtNameSpace.ConstructorSymbol());
+	//	public final void AppendConstructor(ZenType ClassType, ZenFunc Func, ZenToken SourceToken) {
+	//		/*local*/String Key = ZenNameSpace.ClassSymbol(ClassType, ZenNameSpace.ConstructorSymbol());
 	//		LibNative.Assert(Func.Is(ConstructorFunc));
 	//		this.Context.RootNameSpace.AppendFuncName(Key, Func, SourceToken);  // @Public
 	//	}
 	//
-	//	public final void SetGetterFunc(GtType ClassType, String Name, GtFunc Func, GtToken SourceToken) {
-	//		/*local*/String Key = GtNameSpace.ClassSymbol(ClassType, GtNameSpace.GetterSymbol(Name));
+	//	public final void SetGetterFunc(ZenType ClassType, String Name, ZenFunc Func, ZenToken SourceToken) {
+	//		/*local*/String Key = ZenNameSpace.ClassSymbol(ClassType, ZenNameSpace.GetterSymbol(Name));
 	//		LibNative.Assert(Func.Is(GetterFunc));
 	//		this.Context.RootNameSpace.SetSymbol(Key, Func, SourceToken);  // @Public
 	//	}
 	//
-	//	public final void SetSetterFunc(GtType ClassType, String Name, GtFunc Func, GtToken SourceToken) {
-	//		/*local*/String Key = GtNameSpace.ClassSymbol(ClassType, GtNameSpace.SetterSymbol(Name));
+	//	public final void SetSetterFunc(ZenType ClassType, String Name, ZenFunc Func, ZenToken SourceToken) {
+	//		/*local*/String Key = ZenNameSpace.ClassSymbol(ClassType, ZenNameSpace.SetterSymbol(Name));
 	//		LibNative.Assert(Func.Is(SetterFunc));
 	//		this.Context.RootNameSpace.SetSymbol(Key, Func, SourceToken);  // @Public
 	//	}
 	//
-	//	public final void SetConverterFunc(GtType ClassType, GtType ToType, GtFunc Func, GtToken SourceToken) {
+	//	public final void SetConverterFunc(ZenType ClassType, ZenType ToType, ZenFunc Func, ZenToken SourceToken) {
 	//		if(ClassType == null) {
 	//			ClassType = Func.GetFuncParamType(0);
 	//		}
 	//		if(ToType == null) {
 	//			ToType = Func.GetReturnType();
 	//		}
-	//		/*local*/String Key = GtNameSpace.ClassSymbol(ClassType, GtNameSpace.ConverterSymbol(ToType));
+	//		/*local*/String Key = ZenNameSpace.ClassSymbol(ClassType, ZenNameSpace.ConverterSymbol(ToType));
 	//		LibNative.Assert(Func.Is(ConverterFunc));
 	//		this.SetSymbol(Key, Func, SourceToken);
 	//	}

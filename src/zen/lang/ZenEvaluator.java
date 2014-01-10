@@ -26,11 +26,11 @@
 
 package zen.lang;
 
-import zen.ast.GtAndNode;
-import zen.ast.GtBinaryNode;
-import zen.ast.GtCastNode;
-import zen.ast.GtOrNode;
-import zen.ast.GtUnaryNode;
+import zen.ast.ZenAndNode;
+import zen.ast.ZenBinaryNode;
+import zen.ast.ZenCastNode;
+import zen.ast.ZenOrNode;
+import zen.ast.ZenUnaryNode;
 import zen.ast.ZenNode;
 import zen.parser.ZenNameSpace;
 import zen.parser.ZenVisitor;
@@ -49,8 +49,8 @@ public abstract class ZenEvaluator implements ZenVisitor {
 
 
 	@Override
-	public void VisitAndNode(GtAndNode Node) {
-		//		@Override public Object Eval(GtNameSpace NameSpace, boolean EnforceConst)  {
+	public void VisitAndNode(ZenAndNode Node) {
+		//		@Override public Object Eval(ZenNameSpace NameSpace, boolean EnforceConst)  {
 		//			/*local*/Object LeftValue = this.LeftNode.Eval(NameSpace, EnforceConst) ;
 		//			if((LeftValue instanceof Boolean) && LibZen.booleanValue(LeftValue)) {
 		//				return this.RightNode.Eval(NameSpace, EnforceConst) ;
@@ -62,8 +62,8 @@ public abstract class ZenEvaluator implements ZenVisitor {
 	}
 
 	@Override
-	public void VisitOrNode(GtOrNode Node) {
-		//		@Override public Object Eval(GtNameSpace NameSpace, boolean EnforceConst)  {
+	public void VisitOrNode(ZenOrNode Node) {
+		//		@Override public Object Eval(ZenNameSpace NameSpace, boolean EnforceConst)  {
 		//			/*local*/Object LeftValue = this.LeftNode.Eval(NameSpace, EnforceConst) ;
 		//			if(LeftValue instanceof Boolean) {
 		//				if(LibZen.booleanValue(LeftValue)) {
@@ -103,7 +103,7 @@ public abstract class ZenEvaluator implements ZenVisitor {
 	//		return null;
 	//	}
 
-	//	@Override public Object ToConstValue(GtParserContext Context, boolean EnforceConst)  {
+	//	@Override public Object ToConstValue(ZenParserContext Context, boolean EnforceConst)  {
 	//	/*local*/Object LeftValue = this.LeftNode.ToConstValue(Context, EnforceConst) ;
 	//	if(LeftValue != null) {
 	//		/*local*/Object RightValue = this.RightNode.ToConstValue(Context, EnforceConst) ;
@@ -260,8 +260,8 @@ public abstract class ZenEvaluator implements ZenVisitor {
 	//	}
 
 	@Override
-	public void VisitUnaryNode(GtUnaryNode Node) {
-		//		@Override public Object Eval(GtNameSpace NameSpace, boolean EnforceConst)  {
+	public void VisitUnaryNode(ZenUnaryNode Node) {
+		//		@Override public Object Eval(ZenNameSpace NameSpace, boolean EnforceConst)  {
 		//			/*local*/Object Value = this.RecvNode.Eval(NameSpace, EnforceConst) ;
 		//			if(Value != null) {
 		//				return LibZen.EvalUnary(this.Type, this.SourceToken.ParsedText, Value);
@@ -271,13 +271,13 @@ public abstract class ZenEvaluator implements ZenVisitor {
 	}
 
 	@Override
-	public void VisitBinaryNode(GtBinaryNode Node) {
+	public void VisitBinaryNode(ZenBinaryNode Node) {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void VisitCastNode(GtCastNode Node) {
-		//		@Override public Object Eval(GtNameSpace NameSpace, boolean EnforceConst)  {
+	public void VisitCastNode(ZenCastNode Node) {
+		//		@Override public Object Eval(ZenNameSpace NameSpace, boolean EnforceConst)  {
 		//			/*local*/Object Value = this.ExprNode.Eval(NameSpace, EnforceConst) ;
 		//			if(Value != null) {
 		//				return LibZen.DynamicCast(this.Type, Value);

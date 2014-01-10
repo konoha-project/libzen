@@ -25,14 +25,14 @@
 //ifdef JAVA
 
 package org.GreenTeaScript;
-import parser.GtType;
+import parser.ZenType;
 
 public class GreenTeaRuntime {
 	// converter 
 	
 	// Boolean
 
-	public final static boolean AnyToBoolean(GtType Type, Object value) {
+	public final static boolean AnyToBoolean(ZenType Type, Object value) {
 		if(value instanceof Boolean) {
 			return ((Boolean) value).booleanValue();
 		}
@@ -40,11 +40,11 @@ public class GreenTeaRuntime {
 	}
 
 	// String
-	public final static Object StringToAny(GtType Type, String value) {
+	public final static Object StringToAny(ZenType Type, String value) {
 		return (Object)value;
 	}
 
-	public final static Object AnyToString(GtType Type, Object value) {
+	public final static Object AnyToString(ZenType Type, Object value) {
 		if(value != null) {
 			return value.toString();
 		}
@@ -54,7 +54,7 @@ public class GreenTeaRuntime {
 	// int
 
 
-	public final static long AnyToInt(GtType Type, Object value) {
+	public final static long AnyToInt(ZenType Type, Object value) {
 		if(value instanceof Number) {
 			return ((Number) value).longValue();
 		}
@@ -62,16 +62,16 @@ public class GreenTeaRuntime {
 	}
 
 	// double
-	public final static String DoubleToString(GtType Type, double value) {
+	public final static String DoubleToString(ZenType Type, double value) {
 		return ""+value;
 	}
 
 
-	public final static Object DoubleToAny(GtType Type, double value) {
+	public final static Object DoubleToAny(ZenType Type, double value) {
 		return new Double(value);
 	}
 
-	public final static double AnyToDouble(GtType Type, Object value) {
+	public final static double AnyToDouble(ZenType Type, Object value) {
 		if(value instanceof Number) {
 			return ((Number) value).doubleValue();
 		}
@@ -81,15 +81,15 @@ public class GreenTeaRuntime {
 	//-----------------------------------------------------------------------
 
 
-	public final static long d2l(GtType Type, double n) {
+	public final static long d2l(ZenType Type, double n) {
 		return (long)n;
 	}
 
-	public final static String d2s(GtType Type, double n) {
+	public final static String d2s(ZenType Type, double n) {
 		return "" + n;
 	}
 
-	public final static double l2d(GtType Type, long n) {
+	public final static double l2d(ZenType Type, long n) {
 		return (double)n;
 	}
 

@@ -28,50 +28,50 @@ package org.GreenTeaScript;
 import java.util.ArrayList;
 //endif VAJA
 
-import parser.GtClassField;
-import parser.GtFunc;
-import parser.GtSourceBuilder;
-import parser.GtSourceGenerator;
-import parser.GtSyntaxTree;
-import parser.GtType;
-import parser.ast.GtAllocateNode;
-import parser.ast.GtAndNode;
-import parser.ast.GtApplySymbolNode;
-import parser.ast.GtArrayLiteralNode;
-import parser.ast.GtBinaryNode;
-import parser.ast.GtBreakNode;
-import parser.ast.GtCastNode;
-import parser.ast.GtCommandNode;
-import parser.ast.GtConstPoolNode;
-import parser.ast.GtConstructorNode;
-import parser.ast.GtContinueNode;
-import parser.ast.GtDoWhileNode;
-import parser.ast.GtErrorNode;
-import parser.ast.GtForEachNode;
-import parser.ast.GtForNode;
-import parser.ast.GtFunctionLiteralNode;
-import parser.ast.GtGetLocalNode;
-import parser.ast.GtGetterNode;
-import parser.ast.GtIfNode;
-import parser.ast.GtInstanceOfNode;
-import parser.ast.GtNewArrayNode;
-import parser.ast.GtNode;
-import parser.ast.GtNullNode;
-import parser.ast.GtOrNode;
-import parser.ast.GtReturnNode;
-import parser.ast.GtSetLocalNode;
-import parser.ast.GtSetterNode;
-import parser.ast.GtSwitchNode;
-import parser.ast.GtThrowNode;
-import parser.ast.GtTrinaryNode;
-import parser.ast.GtTryNode;
-import parser.ast.GtUnaryNode;
-import parser.ast.GtVarDeclNode;
-import parser.ast.GtWhileNode;
+import parser.ZenClassField;
+import parser.ZenFunc;
+import parser.ZenSourceBuilder;
+import parser.ZenSourceGenerator;
+import parser.ZenSyntaxTree;
+import parser.ZenType;
+import parser.ast.ZenAllocateNode;
+import parser.ast.ZenAndNode;
+import parser.ast.ZenApplySymbolNode;
+import parser.ast.ZenArrayLiteralNode;
+import parser.ast.ZenBinaryNode;
+import parser.ast.ZenBreakNode;
+import parser.ast.ZenCastNode;
+import parser.ast.ZenCommandNode;
+import parser.ast.ZenConstPoolNode;
+import parser.ast.ZenConstructorNode;
+import parser.ast.ZenContinueNode;
+import parser.ast.ZenDoWhileNode;
+import parser.ast.ZenErrorNode;
+import parser.ast.ZenForEachNode;
+import parser.ast.ZenForNode;
+import parser.ast.ZenFunctionLiteralNode;
+import parser.ast.ZenGetLocalNode;
+import parser.ast.ZenGetterNode;
+import parser.ast.ZenIfNode;
+import parser.ast.ZenInstanceOfNode;
+import parser.ast.ZenNewArrayNode;
+import parser.ast.ZenNode;
+import parser.ast.ZenNullNode;
+import parser.ast.ZenOrNode;
+import parser.ast.ZenReturnNode;
+import parser.ast.ZenSetLocalNode;
+import parser.ast.ZenSetterNode;
+import parser.ast.ZenSwitchNode;
+import parser.ast.ZenThrowNode;
+import parser.ast.ZenTrinaryNode;
+import parser.ast.ZenTryNode;
+import parser.ast.ZenUnaryNode;
+import parser.ast.ZenVarDeclNode;
+import parser.ast.ZenWhileNode;
 import parser.deps.LibGreenTea;
 import parser.deps.LibNative;
 
-public class JavaSourceGenerator extends GtSourceGenerator {
+public class JavaSourceGenerator extends ZenSourceGenerator {
 
 	public JavaSourceGenerator(String TargetCode, String OutputFile, int GeneratorFlag) {
 		super("java", OutputFile, GeneratorFlag);
@@ -81,9 +81,9 @@ public class JavaSourceGenerator extends GtSourceGenerator {
 		return "Func" + NativeName;
 	}
 	
-	@Override public void GenerateFunc(GtFunc Func, ArrayList<String> NameList, GtNode Body) {
+	@Override public void GenerateFunc(ZenFunc Func, ArrayList<String> NameList, ZenNode Body) {
 		String MethodName = Func.GetNativeFuncName();
-		GtSourceBuilder Builder = new GtSourceBuilder(this);
+		ZenSourceBuilder Builder = new ZenSourceBuilder(this);
 		Builder.Append("class");
 		Builder.SpaceAppendSpace(HolderClassName(MethodName));
 		Builder.AppendLine("{");
@@ -93,7 +93,7 @@ public class JavaSourceGenerator extends GtSourceGenerator {
 		Builder.Append("(");
 
 		Builder.Append(")");
-		GtSourceBuilder PushedBuilder = this.CurrentBuilder;
+		ZenSourceBuilder PushedBuilder = this.CurrentBuilder;
 		this.CurrentBuilder = Builder;
 		this.VisitIndentBlock("{", Body, "}");
 		this.CurrentBuilder = PushedBuilder;
@@ -102,12 +102,12 @@ public class JavaSourceGenerator extends GtSourceGenerator {
 		Builder.AppendLine("}");
 	}
 
-	@Override public void OpenClassField(GtSyntaxTree ParsedTree, GtType ClassType, GtClassField ClassField) {
+	@Override public void OpenClassField(ZenSyntaxTree ParsedTree, ZenType ClassType, ZenClassField ClassField) {
 //		String ClassName = ClassType.GetNativeName();
 //		String superClassName = ClassType.SuperType.GetNativeName();
 //		JClassBuilder ClassBuilder = this.ClassGenerator.NewBuilder(ClassName, superClassName);
 //		// generate field
-//		for(GtFieldInfo field : ClassField.FieldList) {
+//		for(ZenFieldInfo field : ClassField.FieldList) {
 //			if(field.FieldIndex >= ClassField.ThisClassIndex) {
 //				String fieldName = field.NativeName;
 //				Type fieldType = JLib.GetAsmType(field.Type);
@@ -116,11 +116,11 @@ public class JavaSourceGenerator extends GtSourceGenerator {
 //			}
 //		}
 //		// generate default constructor (for jvm)
-//		MethodNode constructor = new MethodNode(ACC_PUBLIC, "<init>", "(Lorg/GreenTeaScript/GtType;)V", null, null);
+//		MethodNode constructor = new MethodNode(ACC_PUBLIC, "<init>", "(Lorg/GreenTeaScript/ZenType;)V", null, null);
 //		constructor.visitVarInsn(ALOAD, 0);
 //		constructor.visitVarInsn(ALOAD, 1);
-//		constructor.visitMethodInsn(INVOKESPECIAL, superClassName, "<init>", "(Lorg/GreenTeaScript/GtType;)V");
-//		for(GtFieldInfo field : ClassField.FieldList) {
+//		constructor.visitMethodInsn(INVOKESPECIAL, superClassName, "<init>", "(Lorg/GreenTeaScript/ZenType;)V");
+//		for(ZenFieldInfo field : ClassField.FieldList) {
 //			if(field.FieldIndex >= ClassField.ThisClassIndex && field.InitValue != null) {
 //				String name = field.NativeName;
 //				String desc = JLib.GetAsmType(field.Type).getDescriptor();
@@ -141,34 +141,34 @@ public class JavaSourceGenerator extends GtSourceGenerator {
 
 	//-----------------------------------------------------
 
-	@Override public void VisitConstPoolNode(GtConstPoolNode Node) {
+	@Override public void VisitConstPoolNode(ZenConstPoolNode Node) {
 //		Object constValue = Node.ConstValue;
 //		LibGreenTea.Assert(Node.ConstValue != null);  // Added by kimio
 //		this.VisitingBuilder.LoadConst(constValue);
 	}
 
-	@Override public void VisitAllocateNode(GtAllocateNode Node) {
+	@Override public void VisitAllocateNode(ZenAllocateNode Node) {
 //		Type type = JLib.GetAsmType(Node.Type);
 //		String owner = type.getInternalName();
 //		this.VisitingBuilder.MethodVisitor.visitTypeInsn(NEW, owner);
 //		this.VisitingBuilder.MethodVisitor.visitInsn(DUP);
 //		if(!Node.Type.IsNative()) {
 //			this.VisitingBuilder.LoadConst(Node.Type);
-//			this.VisitingBuilder.MethodVisitor.visitMethodInsn(INVOKESPECIAL, owner, "<init>", "(Lorg/GreenTeaScript/GtType;)V");
+//			this.VisitingBuilder.MethodVisitor.visitMethodInsn(INVOKESPECIAL, owner, "<init>", "(Lorg/GreenTeaScript/ZenType;)V");
 //		} else {
 //			this.VisitingBuilder.MethodVisitor.visitMethodInsn(INVOKESPECIAL, owner, "<init>", "()V");
 //		}
 	}
 
-	@Override public void VisitNullNode(GtNullNode Node) {
+	@Override public void VisitNullNode(ZenNullNode Node) {
 		this.CurrentBuilder.Append(this.NullLiteral);
 	}
 
-	@Override public void VisitGetLocalNode(GtGetLocalNode Node) {
+	@Override public void VisitGetLocalNode(ZenGetLocalNode Node) {
 		this.CurrentBuilder.Append(Node.NativeName);
 	}
 
-	@Override public void VisitConstructorNode(GtConstructorNode Node) {
+	@Override public void VisitConstructorNode(ZenConstructorNode Node) {
 //		if(Node.Type.TypeBody instanceof Class<?>) {
 //			// native class
 //			Class<?> klass = (Class<?>) Node.Type.TypeBody;
@@ -176,7 +176,7 @@ public class JavaSourceGenerator extends GtSourceGenerator {
 //			this.VisitingBuilder.MethodVisitor.visitTypeInsn(NEW, Type.getInternalName(klass));
 //			this.VisitingBuilder.MethodVisitor.visitInsn(DUP);
 //			for(int i = 0; i<Node.ParamList.size(); i++) {
-//				GtNode ParamNode = Node.ParamList.get(i);
+//				ZenNode ParamNode = Node.ParamList.get(i);
 //				ParamNode.Accept(this);
 //				this.VisitingBuilder.BoxIfUnboxed(ParamNode.Type, Node.Func.GetFuncParamType(i));
 //			}
@@ -186,13 +186,13 @@ public class JavaSourceGenerator extends GtSourceGenerator {
 //		}
 	}
 
-	@Override public void VisitGetterNode(GtGetterNode Node) {
+	@Override public void VisitGetterNode(ZenGetterNode Node) {
 		Node.RecvNode.Accept(this);
 		this.CurrentBuilder.Append(".");
 		this.CurrentBuilder.Append(Node.ResolvedFunc.FuncName);
 	}
 	
-	@Override public void VisitSetterNode(GtSetterNode Node) {
+	@Override public void VisitSetterNode(ZenSetterNode Node) {
 		Node.RecvNode.Accept(this);
 		this.CurrentBuilder.Append(".");
 		this.CurrentBuilder.Append(Node.ResolvedFunc.FuncName);
@@ -200,10 +200,10 @@ public class JavaSourceGenerator extends GtSourceGenerator {
 		Node.ValueNode.Accept(this);
 	}
 
-//	@Override public void VisitApplyNode(GtApplyNode Node) {
-//		GtFunc Func = Node.Func;
+//	@Override public void VisitApplyNode(ZenApplyNode Node) {
+//		ZenFunc Func = Node.Func;
 //		for(int i = 1; i < Node.NodeList.size(); i++) {
-//			GtNode ParamNode = Node.NodeList.get(i);
+//			ZenNode ParamNode = Node.NodeList.get(i);
 //			ParamNode.Accept(this);
 //			this.VisitingBuilder.BoxIfUnboxed(ParamNode.Type, Func.GetFuncParamType(i - 1));
 //		}
@@ -223,10 +223,10 @@ public class JavaSourceGenerator extends GtSourceGenerator {
 //		}
 //	}
 
-	@Override public void VisitApplySymbolNode(GtApplySymbolNode ApplyNode) {
-//		GtFunc Func = ApplyNode.Func;
+	@Override public void VisitApplySymbolNode(ZenApplySymbolNode ApplyNode) {
+//		ZenFunc Func = ApplyNode.Func;
 //		for(int i = 0; i < ApplyNode.ParamList.size(); i++) {
-//			GtNode ParamNode = ApplyNode.ParamList.get(i);
+//			ZenNode ParamNode = ApplyNode.ParamList.get(i);
 //			ParamNode.Accept(this);
 //			this.VisitingBuilder.BoxIfUnboxed(ParamNode.Type, Func.GetFuncParamType(i));
 //		}
@@ -242,7 +242,7 @@ public class JavaSourceGenerator extends GtSourceGenerator {
 //		}
 	}
 
-	@Override public void VisitBinaryNode(GtBinaryNode Node) {
+	@Override public void VisitBinaryNode(ZenBinaryNode Node) {
 		//if(Node.Func.FuncBody instanceof Method) {
 		this.CurrentBuilder.Append("(");
 		Node.LeftNode.Accept(this);
@@ -252,7 +252,7 @@ public class JavaSourceGenerator extends GtSourceGenerator {
 		//}
 	}
 
-	@Override public void VisitUnaryNode(GtUnaryNode Node) {
+	@Override public void VisitUnaryNode(ZenUnaryNode Node) {
 //		if(Node.Func.FuncBody instanceof Method) {
 		this.CurrentBuilder.Append("(");
 		this.CurrentBuilder.Append(Node.Token.ParsedText);
@@ -261,8 +261,8 @@ public class JavaSourceGenerator extends GtSourceGenerator {
 //		}
 	}
 
-//	@Override public void VisitIndexerNode(GtIndexerNode Node) {
-//		ArrayList<GtNode> NodeList = Node.NodeList;
+//	@Override public void VisitIndexerNode(ZenIndexerNode Node) {
+//		ArrayList<ZenNode> NodeList = Node.NodeList;
 //		Node.Expr.Accept(this);
 //		for(int i=0; i<NodeList.size(); i++) {
 //			NodeList.get(i).Accept(this);
@@ -270,8 +270,8 @@ public class JavaSourceGenerator extends GtSourceGenerator {
 //		this.VisitingBuilder.InvokeMethodCall(Node.Type, (Method) Node.Func.FuncBody);
 //	}
 
-	@Override public void VisitArrayLiteralNode(GtArrayLiteralNode Node) {
-//		ArrayList<GtNode> NodeList = Node.NodeList;
+	@Override public void VisitArrayLiteralNode(ZenArrayLiteralNode Node) {
+//		ArrayList<ZenNode> NodeList = Node.NodeList;
 //		this.VisitingBuilder.LoadConst(Node.Type);
 //		this.VisitingBuilder.MethodVisitor.visitLdcInsn(NodeList.size());
 //		this.VisitingBuilder.MethodVisitor.visitTypeInsn(ANEWARRAY, Type.getInternalName(Object.class));
@@ -285,7 +285,7 @@ public class JavaSourceGenerator extends GtSourceGenerator {
 //		this.VisitingBuilder.InvokeMethodCall(Node.Type, JLib.NewNewArray);
 	}
 
-	public void VisitNewArrayNode(GtNewArrayNode Node) {
+	public void VisitNewArrayNode(ZenNewArrayNode Node) {
 //		this.VisitingBuilder.LoadConst(Node.Type);
 //		this.VisitingBuilder.MethodVisitor.visitLdcInsn(Node.NodeList.size());
 //		this.VisitingBuilder.MethodVisitor.visitTypeInsn(ANEWARRAY, Type.getInternalName(Object.class));
@@ -299,7 +299,7 @@ public class JavaSourceGenerator extends GtSourceGenerator {
 //		this.VisitingBuilder.InvokeMethodCall(Node.Type, JLib.NewArray);
 	}
 
-	@Override public void VisitAndNode(GtAndNode Node) {
+	@Override public void VisitAndNode(ZenAndNode Node) {
 		this.CurrentBuilder.Append("(");
 		Node.LeftNode.Accept(this);
 		this.CurrentBuilder.Append(" && ");
@@ -307,7 +307,7 @@ public class JavaSourceGenerator extends GtSourceGenerator {
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override public void VisitOrNode(GtOrNode Node) {
+	@Override public void VisitOrNode(ZenOrNode Node) {
 		this.CurrentBuilder.Append("(");
 		Node.LeftNode.Accept(this);
 		this.CurrentBuilder.Append(" || ");
@@ -315,17 +315,17 @@ public class JavaSourceGenerator extends GtSourceGenerator {
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override public void VisitSetLocalNode(GtSetLocalNode Node) {
-//		assert (Node.LeftNode instanceof GtLocalNode);
-//		GtLocalNode Left = (GtLocalNode) Node.LeftNode;
+	@Override public void VisitSetLocalNode(ZenSetLocalNode Node) {
+//		assert (Node.LeftNode instanceof ZenLocalNode);
+//		ZenLocalNode Left = (ZenLocalNode) Node.LeftNode;
 //		JLocalVarStack local = this.VisitingBuilder.FindLocalVariable(Left.NativeName);
 //		Node.RightNode.Accept(this);
 //		this.VisitingBuilder.StoreLocal(local);
 	}
 
-//	@Override public void VisitSelfAssignNode(GtSelfAssignNode Node) {
-//		if(Node.LeftNode instanceof GtLocalNode) {
-//			GtLocalNode Left = (GtLocalNode)Node.LeftNode;
+//	@Override public void VisitSelfAssignNode(ZenSelfAssignNode Node) {
+//		if(Node.LeftNode instanceof ZenLocalNode) {
+//			ZenLocalNode Left = (ZenLocalNode)Node.LeftNode;
 //			JLocalVarStack local = this.VisitingBuilder.FindLocalVariable(Left.NativeName);
 //			Node.LeftNode.Accept(this);
 //			Node.RightNode.Accept(this);
@@ -337,14 +337,14 @@ public class JavaSourceGenerator extends GtSourceGenerator {
 //		}
 //	}
 
-	@Override public void VisitVarDeclNode(GtVarDeclNode Node) {
+	@Override public void VisitVarDeclNode(ZenVarDeclNode Node) {
 //		JLocalVarStack local = this.VisitingBuilder.AddLocal(Node.Type, Node.NativeName);
 //		Node.InitNode.Accept(this);
 //		this.VisitingBuilder.StoreLocal(local);
 //		this.VisitBlock(Node.BlockNode);
 	}
 
-	@Override public void VisitIfNode(GtIfNode Node) {
+	@Override public void VisitIfNode(ZenIfNode Node) {
 		this.CurrentBuilder.Append("if");
 		this.CurrentBuilder.Append("(");
 		Node.CondNode.Accept(this);
@@ -356,7 +356,7 @@ public class JavaSourceGenerator extends GtSourceGenerator {
 		}
 	}
 
-	@Override public void VisitTrinaryNode(GtTrinaryNode Node) {
+	@Override public void VisitTrinaryNode(ZenTrinaryNode Node) {
 		this.CurrentBuilder.Append("(");
 		Node.CondNode.Accept(this);
 		this.CurrentBuilder.Append(" ? ");
@@ -366,14 +366,14 @@ public class JavaSourceGenerator extends GtSourceGenerator {
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override public void VisitSwitchNode(GtSwitchNode Node) {
+	@Override public void VisitSwitchNode(ZenSwitchNode Node) {
 //		int cases = Node.CaseList.size() / 2;
 //		int[] keys = new int[cases];
 //		Label[] caseLabels = new Label[cases];
 //		Label defaultLabel = new Label();
 //		Label breakLabel = new Label();
 //		for(int i=0; i<cases; i++) {
-//			keys[i] = ((Number)((GtConstNode)Node.CaseList.get(i*2)).ConstValue).intValue();
+//			keys[i] = ((Number)((ZenConstNode)Node.CaseList.get(i*2)).ConstValue).intValue();
 //			caseLabels[i] = new Label();
 //		}
 //		Node.MatchNode.Accept(this);
@@ -390,7 +390,7 @@ public class JavaSourceGenerator extends GtSourceGenerator {
 //		this.VisitingBuilder.MethodVisitor.visitLabel(breakLabel);
 	}
 
-	@Override public void VisitWhileNode(GtWhileNode Node) {
+	@Override public void VisitWhileNode(ZenWhileNode Node) {
 //		Label continueLabel = new Label();
 //		Label breakLabel = new Label();
 //		this.VisitingBuilder.BreakLabelStack.push(breakLabel);
@@ -407,7 +407,7 @@ public class JavaSourceGenerator extends GtSourceGenerator {
 //		this.VisitingBuilder.ContinueLabelStack.pop();
 	}
 
-	@Override public void VisitDoWhileNode(GtDoWhileNode Node) {
+	@Override public void VisitDoWhileNode(ZenDoWhileNode Node) {
 //		Label headLabel = new Label();
 //		Label continueLabel = new Label();
 //		Label breakLabel = new Label();
@@ -426,7 +426,7 @@ public class JavaSourceGenerator extends GtSourceGenerator {
 //		this.VisitingBuilder.ContinueLabelStack.pop();
 	}
 
-	@Override public void VisitForNode(GtForNode Node) {
+	@Override public void VisitForNode(ZenForNode Node) {
 //		Label headLabel = new Label();
 //		Label continueLabel = new Label();
 //		Label breakLabel = new Label();
@@ -446,11 +446,11 @@ public class JavaSourceGenerator extends GtSourceGenerator {
 //		this.VisitingBuilder.ContinueLabelStack.pop();
 	}
 
-	@Override public void VisitForEachNode(GtForEachNode Node) {
+	@Override public void VisitForEachNode(ZenForEachNode Node) {
 		LibGreenTea.TODO("ForEach");
 	}
 
-	@Override public void VisitReturnNode(GtReturnNode Node) {
+	@Override public void VisitReturnNode(ZenReturnNode Node) {
 		this.CurrentBuilder.Append("return");
 		if(Node.ValueNode != null) {
 			this.CurrentBuilder.Append(" ");
@@ -458,15 +458,15 @@ public class JavaSourceGenerator extends GtSourceGenerator {
 		}
 	}
 
-	@Override public void VisitBreakNode(GtBreakNode Node) {
+	@Override public void VisitBreakNode(ZenBreakNode Node) {
 		this.CurrentBuilder.Append("break");
 	}
 
-	@Override public void VisitContinueNode(GtContinueNode Node) {
+	@Override public void VisitContinueNode(ZenContinueNode Node) {
 		this.CurrentBuilder.Append("continue");
 	}
 
-	@Override public void VisitTryNode(GtTryNode Node) { //FIXME
+	@Override public void VisitTryNode(ZenTryNode Node) { //FIXME
 //		int catchSize = Node.CatchBlock != null ? 1 : 0;
 //		MethodVisitor mv = this.VisitingBuilder.MethodVisitor;
 //		Label beginTryLabel = new Label();
@@ -489,7 +489,7 @@ public class JavaSourceGenerator extends GtSourceGenerator {
 //
 //		// catch block
 //		for(int i = 0; i < catchSize; i++) { //TODO: add exception class name
-//			GtNode block = Node.CatchBlock;
+//			ZenNode block = Node.CatchBlock;
 //			mv.visitLabel(catchLabel[i]);
 //			this.VisitBlock(block);
 //			mv.visitJumpInsn(GOTO, finallyLabel);
@@ -500,9 +500,9 @@ public class JavaSourceGenerator extends GtSourceGenerator {
 //		this.VisitBlock(Node.FinallyBlock);
 	}
 
-	@Override public void VisitThrowNode(GtThrowNode Node) {
+	@Override public void VisitThrowNode(ZenThrowNode Node) {
 //		// use wrapper
-//		String name = Type.getInternalName(GtThrowableWrapper.class);
+//		String name = Type.getInternalName(ZenThrowableWrapper.class);
 //		this.VisitingBuilder.MethodVisitor.visitTypeInsn(NEW, name);
 //		this.VisitingBuilder.MethodVisitor.visitInsn(DUP);
 //		Node.Expr.Accept(this);
@@ -512,43 +512,43 @@ public class JavaSourceGenerator extends GtSourceGenerator {
 //		this.VisitingBuilder.MethodVisitor.visitInsn(ATHROW);
 	}
 
-	@Override public void VisitInstanceOfNode(GtInstanceOfNode Node) {
+	@Override public void VisitInstanceOfNode(ZenInstanceOfNode Node) {
 //		Node.ExprNode.Accept(this);
 //		this.VisitingBuilder.BoxIfUnboxed(Node.ExprNode.Type, this.Context.AnyType);
 //		this.VisitingBuilder.LoadConst(Node.TypeInfo);
 //		this.VisitingBuilder.InvokeMethodCall(JLib.GreenInstanceOfOperator);
 	}
 
-	@Override public void VisitCastNode(GtCastNode Node) {
+	@Override public void VisitCastNode(ZenCastNode Node) {
 //		this.VisitingBuilder.LoadConst(Node.CastType);
 //		Node.Expr.Accept(this);
 //		this.VisitingBuilder.BoxIfUnboxed(Node.Expr.Type, this.Context.AnyType);
 //		this.VisitingBuilder.InvokeMethodCall(Node.CastType, JLib.GreenCastOperator);
 	}
 
-	@Override public void VisitFunctionLiteralNode(GtFunctionLiteralNode Node) {
+	@Override public void VisitFunctionLiteralNode(ZenFunctionLiteralNode Node) {
 		LibGreenTea.TODO("FunctionNode");
 	}
 
-	@Override public void VisitErrorNode(GtErrorNode Node) {
+	@Override public void VisitErrorNode(ZenErrorNode Node) {
 //		this.Builder.AsmMethodVisitor.visitLdcInsn("(ErrorNode)");
 //		this.Builder.Call(this.methodMap.get("error_node"));
 		LibNative.Exit(1, "ErrorNode found in JavaByteCodeGenerator");
 	}
 
-	@Override public void VisitCommandNode(GtCommandNode Node) {
-//		ArrayList<ArrayList<GtNode>> Args = new ArrayList<ArrayList<GtNode>>();
-//		GtCommandNode node = Node;
+	@Override public void VisitCommandNode(ZenCommandNode Node) {
+//		ArrayList<ArrayList<ZenNode>> Args = new ArrayList<ArrayList<ZenNode>>();
+//		ZenCommandNode node = Node;
 //		while(node != null) {
 //			Args.add(node.ArgumentList);
-//			node = (GtCommandNode) node.PipedNextNode;
+//			node = (ZenCommandNode) node.PipedNextNode;
 //		}
 //		// new String[][n]
 //		this.VisitingBuilder.MethodVisitor.visitLdcInsn(Args.size());
 //		this.VisitingBuilder.MethodVisitor.visitTypeInsn(ANEWARRAY, Type.getInternalName(String[].class));
 //		for(int i=0; i<Args.size(); i++) {
 //			// new String[m];
-//			ArrayList<GtNode> Arg = Args.get(i);
+//			ArrayList<ZenNode> Arg = Args.get(i);
 //			this.VisitingBuilder.MethodVisitor.visitInsn(DUP);
 //			this.VisitingBuilder.MethodVisitor.visitLdcInsn(i);
 //			this.VisitingBuilder.MethodVisitor.visitLdcInsn(Arg.size());

@@ -2,56 +2,56 @@ package zen.parser;
 
 import java.util.ArrayList;
 
-import zen.ast.GtAndNode;
-import zen.ast.GtApplyNode;
-import zen.ast.GtArrayLiteralNode;
-import zen.ast.GtBinaryNode;
-import zen.ast.GtBlockNode;
-import zen.ast.GtBooleanNode;
-import zen.ast.GtBreakNode;
-import zen.ast.GtCastNode;
-import zen.ast.GtCatchNode;
-import zen.ast.GtConstPoolNode;
-import zen.ast.GtErrorNode;
-import zen.ast.GtFloatNode;
-import zen.ast.GtFuncDeclNode;
-import zen.ast.GtFunctionLiteralNode;
-import zen.ast.GtGetCapturedNode;
-import zen.ast.GtGetIndexNode;
-import zen.ast.GtGetLocalNode;
-import zen.ast.GtGetterNode;
-import zen.ast.GtGroupNode;
-import zen.ast.GtIfNode;
-import zen.ast.GtInstanceOfNode;
-import zen.ast.GtIntNode;
-import zen.ast.GtMapLiteralNode;
-import zen.ast.GtMethodCallNode;
-import zen.ast.GtNewArrayNode;
-import zen.ast.GtNewObjectNode;
-import zen.ast.GtNullNode;
-import zen.ast.GtOrNode;
-import zen.ast.GtParamNode;
-import zen.ast.GtReturnNode;
-import zen.ast.GtSetCapturedNode;
-import zen.ast.GtSetIndexNode;
-import zen.ast.GtSetLocalNode;
-import zen.ast.GtSetterNode;
-import zen.ast.GtStringNode;
-import zen.ast.GtThrowNode;
-import zen.ast.GtTryNode;
-import zen.ast.GtUnaryNode;
-import zen.ast.GtVarDeclNode;
-import zen.ast.GtWhileNode;
+import zen.ast.ZenAndNode;
+import zen.ast.ZenApplyNode;
+import zen.ast.ZenArrayLiteralNode;
+import zen.ast.ZenBinaryNode;
+import zen.ast.ZenBlockNode;
+import zen.ast.ZenBooleanNode;
+import zen.ast.ZenBreakNode;
+import zen.ast.ZenCastNode;
+import zen.ast.ZenCatchNode;
+import zen.ast.ZenConstPoolNode;
+import zen.ast.ZenErrorNode;
+import zen.ast.ZenFloatNode;
+import zen.ast.ZenFuncDeclNode;
+import zen.ast.ZenFunctionLiteralNode;
+import zen.ast.ZenGetCapturedNode;
+import zen.ast.ZenGetIndexNode;
+import zen.ast.ZenGetLocalNode;
+import zen.ast.ZenGetterNode;
+import zen.ast.ZenGroupNode;
+import zen.ast.ZenIfNode;
+import zen.ast.ZenInstanceOfNode;
+import zen.ast.ZenIntNode;
+import zen.ast.ZenMapLiteralNode;
+import zen.ast.ZenMethodCallNode;
+import zen.ast.ZenNewArrayNode;
+import zen.ast.ZenNewObjectNode;
+import zen.ast.ZenNullNode;
+import zen.ast.ZenOrNode;
+import zen.ast.ZenParamNode;
+import zen.ast.ZenReturnNode;
+import zen.ast.ZenSetCapturedNode;
+import zen.ast.ZenSetIndexNode;
+import zen.ast.ZenSetLocalNode;
+import zen.ast.ZenSetterNode;
+import zen.ast.ZenStringNode;
+import zen.ast.ZenThrowNode;
+import zen.ast.ZenTryNode;
+import zen.ast.ZenUnaryNode;
+import zen.ast.ZenVarDeclNode;
+import zen.ast.ZenWhileNode;
 import zen.ast.ZenComparatorNode;
 import zen.ast.ZenNode;
 import zen.ast.ZenNotNode;
 
 public class ZenTransformer implements ZenVisitor {
-	/*field*/public GtBlockNode BlockNode;
+	/*field*/public ZenBlockNode BlockNode;
 	/*field*/private ZenNode ReplacedNode;
 	/*field*/private boolean StoppedVisitor;
 
-	public ZenTransformer(GtBlockNode BlockNode) {
+	public ZenTransformer(ZenBlockNode BlockNode) {
 		this.BlockNode = BlockNode;
 		this.ReplacedNode = null;
 		this.StoppedVisitor = false;
@@ -96,11 +96,11 @@ public class ZenTransformer implements ZenVisitor {
 		return true;
 	}
 
-	protected GtBlockNode GetBlockNode() {
+	protected ZenBlockNode GetBlockNode() {
 		return this.BlockNode;
 	}
 
-	private int FindInBlockStatementIndex(GtBlockNode BlockNode, ZenNode SubNode) {
+	private int FindInBlockStatementIndex(ZenBlockNode BlockNode, ZenNode SubNode) {
 		while(SubNode.ParentNode != BlockNode) {
 			SubNode = SubNode.ParentNode;
 		}
@@ -112,99 +112,99 @@ public class ZenTransformer implements ZenVisitor {
 		return -1;
 	}
 
-	protected void InsertInBlockStatementBefore(GtBlockNode BlockNode, ZenNode SubNode, ZenNode InsertedNode) {
+	protected void InsertInBlockStatementBefore(ZenBlockNode BlockNode, ZenNode SubNode, ZenNode InsertedNode) {
 		int index = this.FindInBlockStatementIndex(BlockNode, SubNode);
 		BlockNode.StatementList.add(index, BlockNode.SetChild(InsertedNode));
 	}
 
-	protected void ReplaceInBlockStatement(GtBlockNode BlockNode, ZenNode Node, ZenNode ReplacedNode) {
+	protected void ReplaceInBlockStatement(ZenBlockNode BlockNode, ZenNode Node, ZenNode ReplacedNode) {
 		int index = this.FindInBlockStatementIndex(BlockNode, Node);
 		BlockNode.StatementList.set(index, BlockNode.SetChild(ReplacedNode));
 	}
 
-	@Override public void VisitNullNode(GtNullNode Node) {
+	@Override public void VisitNullNode(ZenNullNode Node) {
 	}
 
-	@Override public void VisitBooleanNode(GtBooleanNode Node) {
+	@Override public void VisitBooleanNode(ZenBooleanNode Node) {
 	}
 
-	@Override public void VisitIntNode(GtIntNode Node) {
+	@Override public void VisitIntNode(ZenIntNode Node) {
 	}
 
-	@Override public void VisitFloatNode(GtFloatNode Node) {
+	@Override public void VisitFloatNode(ZenFloatNode Node) {
 	}
 
-	@Override public void VisitStringNode(GtStringNode Node) {
+	@Override public void VisitStringNode(ZenStringNode Node) {
 	}
 
-	@Override public void VisitConstPoolNode(GtConstPoolNode Node) {
+	@Override public void VisitConstPoolNode(ZenConstPoolNode Node) {
 	}
 
-	@Override public void VisitArrayLiteralNode(GtArrayLiteralNode Node) {
+	@Override public void VisitArrayLiteralNode(ZenArrayLiteralNode Node) {
 		this.TransformNodeList(Node, Node.NodeList);
 	}
 
-	@Override public void VisitMapLiteralNode(GtMapLiteralNode Node) {
+	@Override public void VisitMapLiteralNode(ZenMapLiteralNode Node) {
 		this.TransformNodeList(Node, Node.NodeList);
 	}
 
-	@Override public void VisitNewArrayNode(GtNewArrayNode Node) {
+	@Override public void VisitNewArrayNode(ZenNewArrayNode Node) {
 		//TODO
 	}
 
-	@Override public void VisitNewObjectNode(GtNewObjectNode Node) {
+	@Override public void VisitNewObjectNode(ZenNewObjectNode Node) {
 		//TODO
 	}
 
-	@Override public void VisitGetLocalNode(GtGetLocalNode Node) {
+	@Override public void VisitGetLocalNode(ZenGetLocalNode Node) {
 	}
 
-	@Override public void VisitSetLocalNode(GtSetLocalNode Node) {
+	@Override public void VisitSetLocalNode(ZenSetLocalNode Node) {
 		Node.ValueNode = this.Transform(Node, Node.ValueNode);
 	}
 
-	@Override public void VisitGetCapturedNode(GtGetCapturedNode Node) {
+	@Override public void VisitGetCapturedNode(ZenGetCapturedNode Node) {
 	}
 
-	@Override public void VisitSetCapturedNode(GtSetCapturedNode Node) {
+	@Override public void VisitSetCapturedNode(ZenSetCapturedNode Node) {
 		Node.ValueNode = this.Transform(Node, Node.ValueNode);
 	}
 
-	@Override public void VisitGroupNode(GtGroupNode Node) {
+	@Override public void VisitGroupNode(ZenGroupNode Node) {
 		Node.RecvNode = this.Transform(Node, Node.RecvNode);
 	}
 
-	@Override public void VisitGetterNode(GtGetterNode Node) {
+	@Override public void VisitGetterNode(ZenGetterNode Node) {
 		Node.RecvNode = this.Transform(Node, Node.RecvNode);
 	}
 
-	@Override public void VisitSetterNode(GtSetterNode Node) {
+	@Override public void VisitSetterNode(ZenSetterNode Node) {
 		Node.RecvNode = this.Transform(Node, Node.RecvNode);
 		Node.ValueNode = this.Transform(Node, Node.ValueNode);
 	}
 
-	@Override public void VisitGetIndexNode(GtGetIndexNode Node) {
+	@Override public void VisitGetIndexNode(ZenGetIndexNode Node) {
 		Node.RecvNode = this.Transform(Node, Node.RecvNode);
 		Node.IndexNode = this.Transform(Node, Node.IndexNode);
 	}
 
-	@Override public void VisitSetIndexNode(GtSetIndexNode Node) {
+	@Override public void VisitSetIndexNode(ZenSetIndexNode Node) {
 		Node.RecvNode = this.Transform(Node, Node.RecvNode);
 		Node.IndexNode = this.Transform(Node, Node.IndexNode);
 		Node.ValueNode = this.Transform(Node, Node.ValueNode);
 	}
 
-	@Override public void VisitMethodCallNode(GtMethodCallNode Node) {
+	@Override public void VisitMethodCallNode(ZenMethodCallNode Node) {
 		Node.RecvNode = this.Transform(Node, Node.RecvNode);
 		this.TransformNodeList(Node, Node.ParamList);
 	}
 
-	@Override public void VisitApplyNode(GtApplyNode Node) {
+	@Override public void VisitApplyNode(ZenApplyNode Node) {
 		Node.FuncNode = this.Transform(Node, Node.FuncNode);
 		this.TransformNodeList(Node, Node.ParamList);
 	}
 
-	@Override public void VisitUnaryNode(GtUnaryNode Node) {
+	@Override public void VisitUnaryNode(ZenUnaryNode Node) {
 		Node.RecvNode = this.Transform(Node, Node.RecvNode);
 	}
 
@@ -212,25 +212,25 @@ public class ZenTransformer implements ZenVisitor {
 		Node.RecvNode = this.Transform(Node, Node.RecvNode);
 	}
 
-	@Override public void VisitCastNode(GtCastNode Node) {
+	@Override public void VisitCastNode(ZenCastNode Node) {
 		Node.ExprNode = this.Transform(Node, Node.ExprNode);
 	}
 
-	@Override public void VisitInstanceOfNode(GtInstanceOfNode Node) {
+	@Override public void VisitInstanceOfNode(ZenInstanceOfNode Node) {
 		Node.LeftNode = this.Transform(Node, Node.LeftNode);
 	}
 
-	@Override public void VisitAndNode(GtAndNode Node) {
-		Node.LeftNode = this.Transform(Node, Node.LeftNode);
-		Node.RightNode = this.Transform(Node, Node.RightNode);
-	}
-
-	@Override public void VisitOrNode(GtOrNode Node) {
+	@Override public void VisitAndNode(ZenAndNode Node) {
 		Node.LeftNode = this.Transform(Node, Node.LeftNode);
 		Node.RightNode = this.Transform(Node, Node.RightNode);
 	}
 
-	@Override public void VisitBinaryNode(GtBinaryNode Node) {
+	@Override public void VisitOrNode(ZenOrNode Node) {
+		Node.LeftNode = this.Transform(Node, Node.LeftNode);
+		Node.RightNode = this.Transform(Node, Node.RightNode);
+	}
+
+	@Override public void VisitBinaryNode(ZenBinaryNode Node) {
 		Node.LeftNode = this.Transform(Node, Node.LeftNode);
 		Node.RightNode = this.Transform(Node, Node.RightNode);
 	}
@@ -240,16 +240,16 @@ public class ZenTransformer implements ZenVisitor {
 		Node.RightNode = this.Transform(Node, Node.RightNode);
 	}
 
-	@Override public void VisitBlockNode(GtBlockNode Node) {
+	@Override public void VisitBlockNode(ZenBlockNode Node) {
 		this.TransformNodeList(Node, Node.StatementList);
 	}
 
-	@Override public void VisitVarDeclNode(GtVarDeclNode Node) {
+	@Override public void VisitVarDeclNode(ZenVarDeclNode Node) {
 		Node.InitNode = this.Transform(Node, Node.InitNode);
 		this.TransformNodeList(Node, Node.StatementList);
 	}
 
-	@Override public void VisitIfNode(GtIfNode Node) {
+	@Override public void VisitIfNode(ZenIfNode Node) {
 		Node.CondNode = this.Transform(Node, Node.CondNode);
 		Node.ThenNode = this.Transform(Node, Node.ThenNode);
 		if(Node.ElseNode != null) {
@@ -257,25 +257,25 @@ public class ZenTransformer implements ZenVisitor {
 		}
 	}
 
-	@Override public void VisitReturnNode(GtReturnNode Node) {
+	@Override public void VisitReturnNode(ZenReturnNode Node) {
 		if(Node.ValueNode != null) {
 			Node.ValueNode = this.Transform(Node, Node.ValueNode);
 		}
 	}
 
-	@Override public void VisitWhileNode(GtWhileNode Node) {
+	@Override public void VisitWhileNode(ZenWhileNode Node) {
 		Node.CondNode = this.Transform(Node, Node.CondNode);
 		Node.BodyNode = this.Transform(Node, Node.BodyNode);
 	}
 
-	@Override public void VisitBreakNode(GtBreakNode Node) {
+	@Override public void VisitBreakNode(ZenBreakNode Node) {
 	}
 
-	@Override public void VisitThrowNode(GtThrowNode Node) {
+	@Override public void VisitThrowNode(ZenThrowNode Node) {
 		Node.ValueNode = this.Transform(Node, Node.ValueNode);
 	}
 
-	@Override public void VisitTryNode(GtTryNode Node) {
+	@Override public void VisitTryNode(ZenTryNode Node) {
 		Node.TryNode = this.Transform(Node, Node.TryNode);
 		if(Node.CatchNode != null) {
 			Node.CatchNode = this.Transform(Node, Node.CatchNode);
@@ -285,25 +285,25 @@ public class ZenTransformer implements ZenVisitor {
 		}
 	}
 
-	@Override public void VisitCatchNode(GtCatchNode Node) {
+	@Override public void VisitCatchNode(ZenCatchNode Node) {
 		Node.BodyNode = this.Transform(Node, Node.BodyNode);
 	}
 
-	@Override public void VisitParamNode(GtParamNode Node) {
+	@Override public void VisitParamNode(ZenParamNode Node) {
 	}
 
-	@Override public void VisitFunctionLiteralNode(GtFunctionLiteralNode Node) {
+	@Override public void VisitFunctionLiteralNode(ZenFunctionLiteralNode Node) {
 		Node.BodyNode = this.Transform(Node, Node.BodyNode);
 	}
 
-	@Override public void VisitFuncDeclNode(GtFuncDeclNode Node) {
+	@Override public void VisitFuncDeclNode(ZenFuncDeclNode Node) {
 		this.TransformNodeList(Node, Node.ArgumentList);
 		if(Node.BodyNode != null) {
 			Node.BodyNode = this.Transform(Node, Node.BodyNode);
 		}
 	}
 
-	@Override public void VisitErrorNode(GtErrorNode Node) {
+	@Override public void VisitErrorNode(ZenErrorNode Node) {
 	}
 
 

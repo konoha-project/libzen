@@ -28,7 +28,7 @@ import zen.parser.ZenSyntaxPattern;
 import zen.parser.ZenToken;
 import zen.parser.ZenVisitor;
 
-public class ZenComparatorNode extends GtBinaryNode {
+public class ZenComparatorNode extends ZenBinaryNode {
 
 	public ZenComparatorNode(ZenToken SourceToken, ZenNode Left, ZenSyntaxPattern Pattern) {
 		super(SourceToken, Left, Pattern);

@@ -24,13 +24,12 @@
 
 package zen.lang;
 
-import zen.obsolete.ZenFunc;
-import zen.parser.ZenNameSpace;
+import zen.obsolete.ZenFuncBlock;
 import zen.parser.ZenToken;
 import zen.parser.ZenUtils;
 
 public class ZenVarInfo {
-	/*field*/public ZenFunc  DefiningFunc;
+	/*field*/public ZenFuncBlock  DefiningFunc;
 	/*field*/public int      VariableFlag;
 	/*field*/public ZenType	 Type;
 	/*field*/public String	 Name;
@@ -40,7 +39,7 @@ public class ZenVarInfo {
 	/*field*/public int      DefCount;
 	/*field*/public int      UsedCount;
 
-	ZenVarInfo(ZenFunc DefiningFunc, int VarFlag, ZenType Type, String Name, ZenToken SourceToken) {
+	ZenVarInfo(ZenFuncBlock DefiningFunc, int VarFlag, ZenType Type, String Name, ZenToken SourceToken) {
 		this.DefiningFunc    = DefiningFunc;
 		this.VariableFlag = VarFlag;
 		this.Type = Type;
@@ -52,9 +51,9 @@ public class ZenVarInfo {
 		this.DefCount  = 1;
 	}
 
-	public final boolean IsCaptured(ZenNameSpace NameSpace) {
-		return (NameSpace.DefiningFunc != this.DefiningFunc);
-	}
+	//	public final boolean IsCaptured(ZenNameSpace NameSpace) {
+	//		return (NameSpace.DefiningFunc != this.DefiningFunc);
+	//	}
 
 	//	public final void Defined() {
 	//		this.DefCount += 1;
@@ -65,7 +64,7 @@ public class ZenVarInfo {
 	//		this.UsedCount += 1;
 	//	}
 	//
-	//	public void Check(GtParserContext Context) {
+	//	public void Check(ZenParserContext Context) {
 	//		if(this.UsedCount == 0 && this.SourceToken != null) {
 	//			Context.ReportError_OLD(GreenTeaConsts.WarningLevel, this.SourceToken, "unused variable: " + this.Name);
 	//		}

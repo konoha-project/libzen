@@ -62,15 +62,15 @@ public abstract class LibZen {
 	}
 
 
-//	public static Object InvokeOverridedMethod(long FileLine, GtNameSpace NameSpace, GtFunc Func, Object[] Arguments) {
-//		/*local*/GtType ClassType = GtStaticTable.GuessType(Arguments[0]);
+//	public static Object InvokeOverridedMethod(long FileLine, ZenNameSpace NameSpace, ZenFunc Func, Object[] Arguments) {
+//		/*local*/ZenType ClassType = ZenStaticTable.GuessType(Arguments[0]);
 //		Func = NameSpace.GetOverridedMethod(ClassType, Func);
 //		return LibZen.InvokeFunc(Func, Arguments);
 //	}
 //
-//	public static Object InvokeDynamicFunc(long FileLine, GtType ContextType, GtNameSpace NameSpace, String FuncName, Object[] Arguments) {
-//		/*local*/GtPolyFunc PolyFunc = NameSpace.GetPolyFunc(FuncName);
-//		/*local*/GtFunc Func = PolyFunc.GetMatchedFunc(NameSpace, Arguments);
+//	public static Object InvokeDynamicFunc(long FileLine, ZenType ContextType, ZenNameSpace NameSpace, String FuncName, Object[] Arguments) {
+//		/*local*/ZenPolyFunc PolyFunc = NameSpace.GetPolyFunc(FuncName);
+//		/*local*/ZenFunc Func = PolyFunc.GetMatchedFunc(NameSpace, Arguments);
 //		/*local*/Object Value = ContextType.DefaultNullValue;
 //		if(Func != null) {
 //			Value = LibZen.InvokeFunc(Func, Arguments);
@@ -80,10 +80,10 @@ public abstract class LibZen {
 //		return Value;
 //	}
 //
-//	public static final Object InvokeDynamicMethod(long FileLine, GtType ContextType, GtNameSpace NameSpace, String FuncName, Object[] Arguments) {
-//		/*local*/GtType ClassType = GtStaticTable.GuessType(Arguments[0]);
-//		/*local*/GtPolyFunc PolyFunc = NameSpace.GetMethod(ClassType, FuncName, true);
-//		/*local*/GtFunc Func = PolyFunc.GetMatchedFunc(NameSpace, Arguments);
+//	public static final Object InvokeDynamicMethod(long FileLine, ZenType ContextType, ZenNameSpace NameSpace, String FuncName, Object[] Arguments) {
+//		/*local*/ZenType ClassType = ZenStaticTable.GuessType(Arguments[0]);
+//		/*local*/ZenPolyFunc PolyFunc = NameSpace.GetMethod(ClassType, FuncName, true);
+//		/*local*/ZenFunc Func = PolyFunc.GetMatchedFunc(NameSpace, Arguments);
 //		/*local*/Object Value = ContextType.DefaultNullValue;
 //		if(Func != null) {
 //			Value = LibZen.InvokeFunc(Func, Arguments);
@@ -331,15 +331,15 @@ public abstract class LibZen {
 //	}
 //
 
-//	public final static void LoadNativeConstructors(GtParserContext Context, GtType ClassType, ArrayList<GtFunc> FuncList) {
+//	public final static void LoadNativeConstructors(ZenParserContext Context, ZenType ClassType, ArrayList<ZenFunc> FuncList) {
 //		LibNative.LoadNativeConstructors(Context, ClassType, FuncList);
 //	}
 //
-//	public final static GtFunc LoadNativeField(GtParserContext Context, GtType ClassType, String FieldName, boolean GetSetter) {
+//	public final static ZenFunc LoadNativeField(ZenParserContext Context, ZenType ClassType, String FieldName, boolean GetSetter) {
 //		return LibNative.LoadNativeField(Context, ClassType, FieldName, GetSetter);
 //	}
 //
-//	public final static void LoadNativeMethods(GtParserContext Context, GtType ClassType, String FuncName, ArrayList<GtFunc> FuncList) {
+//	public final static void LoadNativeMethods(ZenParserContext Context, ZenType ClassType, String FuncName, ArrayList<ZenFunc> FuncList) {
 //		LibNative.LoadNativeMethods(Context, ClassType, FuncName, FuncList);
 //	}
 
@@ -624,9 +624,9 @@ public abstract class LibZen {
 //		return false;
 //	}
 //
-//	public final static Object DynamicConvertTo(GtType CastType, Object Value) {
+//	public final static Object DynamicConvertTo(ZenType CastType, Object Value) {
 //		if(Value != null) {
-//			GtType ValueType = ZenTypeSystem.GuessType(Value);
+//			ZenType ValueType = ZenTypeSystem.GuessType(Value);
 //			if(ValueType == CastType || CastType.Accept(ValueType)) {
 //				return Value;
 //			}
@@ -683,7 +683,7 @@ public abstract class LibZen {
 		}
 		return builder.toString();
 	}
-//	public static Object EvalGetter(GtType Type, Object Value, String FieldName) {
+//	public static Object EvalGetter(ZenType Type, Object Value, String FieldName) {
 //		// TODO Auto-generated method stub
 //		return null;
 //	}

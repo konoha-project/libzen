@@ -237,7 +237,7 @@ public class LibNative {
 	// } catch (NoSuchFieldException e) {
 	// // LibZen.VerboseException(e);
 	// }
-	// GtPolyFunc PolyFunc = new GtPolyFunc(null, null);
+	// ZenPolyFunc PolyFunc = new ZenPolyFunc(null, null);
 	// Method[] Methods = NativeClass.getMethods();
 	// for(int i = 0; i < Methods.length; i++) {
 	// if(Methods[i].getName().equals(Symbol) &&
@@ -273,14 +273,14 @@ public class LibNative {
 		return false;
 	}
 
-	// public final static Object ImportNativeObject(GtNameSpace NameSpace,
+	// public final static Object ImportNativeObject(ZenNameSpace NameSpace,
 	// String PackageName) {
 	// LibZen.VerboseLog(ZenUtils.VerboseNative, "importing " + PackageName);
 	// try {
 	// /*local*/Class<?> NativeClass = LibNative.LoadClass(PackageName);
 	// try {
 	// Method LoaderMethod = NativeClass.getMethod("ImportGrammar",
-	// GtNameSpace.class, Class.class);
+	// ZenNameSpace.class, Class.class);
 	// LoaderMethod.invoke(null, NameSpace, NativeClass);
 	// } catch (Exception e) { // naming
 	// }
@@ -301,18 +301,18 @@ public class LibNative {
 	// return null;
 	// }
 
-	// public final static void LoadNativeConstructors(GtParserContext Context,
-	// GtType ClassType, ArrayList<GtFunc> FuncList) {
+	// public final static void LoadNativeConstructors(ZenParserContext Context,
+	// ZenType ClassType, ArrayList<ZenFunc> FuncList) {
 	// /*local*/boolean TransformedResult = false;
 	// Class<?> NativeClass = (Class<?>)ClassType.TypeBody;
-	// // GtParserContext Context = ClassType.Context;
+	// // ZenParserContext Context = ClassType.Context;
 	// Constructor<?>[] Constructors = NativeClass.getDeclaredConstructors();
 	// if(Constructors != null) {
 	// for(int i = 0; i < Constructors.length; i++) {
 	// if(!Modifier.isPublic(Constructors[i].getModifiers())) {
 	// continue;
 	// }
-	// /*local*/ArrayList<GtType> TypeList = new ArrayList<GtType>();
+	// /*local*/ArrayList<ZenType> TypeList = new ArrayList<ZenType>();
 	// TypeList.add(ClassType);
 	// /*local*/Class<?>[] ParamTypes = Constructors[i].getParameterTypes();
 	// if(ParamTypes != null) {
@@ -320,7 +320,7 @@ public class LibNative {
 	// TypeList.add(LibNative.GetNativeType(ParamTypes[j]));
 	// }
 	// }
-	// GtFunc Func = new GtFunc(GreenTeaConsts.ConstructorFunc,
+	// ZenFunc Func = new ZenFunc(GreenTeaConsts.ConstructorFunc,
 	// ClassType.ShortName, 0, TypeList);
 	// Func.SetNativeMethod(0, Constructors[i]);
 	// Context.RootNameSpace.AppendConstructor(ClassType, Func, null);
@@ -329,30 +329,30 @@ public class LibNative {
 	// }
 	// }
 	// if(!TransformedResult) {
-	// Context.RootNameSpace.SetUndefinedSymbol(GtNameSpace.ClassSymbol(ClassType,
-	// GtNameSpace.ConstructorSymbol()), null);
+	// Context.RootNameSpace.SetUndefinedSymbol(ZenNameSpace.ClassSymbol(ClassType,
+	// ZenNameSpace.ConstructorSymbol()), null);
 	// }
 	// }
 
-	// public final static GtFunc LoadNativeField(GtParserContext Context,
-	// GtType ClassType, String FieldName, boolean GetSetter) {
+	// public final static ZenFunc LoadNativeField(ZenParserContext Context,
+	// ZenType ClassType, String FieldName, boolean GetSetter) {
 	// try {
 	// Class<?> NativeClass = (Class<?>)ClassType.TypeBody;
 	// Field NativeField = NativeClass.getField(FieldName);
 	// if(Modifier.isPublic(NativeField.getModifiers())) {
-	// ArrayList<GtType> TypeList = new ArrayList<GtType>();
+	// ArrayList<ZenType> TypeList = new ArrayList<ZenType>();
 	// TypeList.add(LibNative.GetNativeType(NativeField.getType()));
 	// TypeList.add(ClassType);
-	// GtFunc GetterNativeFunc = new GtFunc(GreenTeaConsts.GetterFunc,
+	// ZenFunc GetterNativeFunc = new ZenFunc(GreenTeaConsts.GetterFunc,
 	// FieldName, 0, TypeList);
 	// GetterNativeFunc.SetNativeMethod(0, NativeField);
 	// Context.RootNameSpace.SetGetterFunc(ClassType, FieldName,
 	// GetterNativeFunc, null);
 	// TypeList.clear();
-	// TypeList.add(GtStaticTable.VoidType);
+	// TypeList.add(ZenStaticTable.VoidType);
 	// TypeList.add(ClassType);
 	// TypeList.add(LibNative.GetNativeType(NativeField.getType()));
-	// GtFunc SetterNativeFunc = new GtFunc(GreenTeaConsts.SetterFunc,
+	// ZenFunc SetterNativeFunc = new ZenFunc(GreenTeaConsts.SetterFunc,
 	// FieldName, 0, TypeList);
 	// SetterNativeFunc.SetNativeMethod(0, NativeField);
 	// Context.RootNameSpace.SetSetterFunc(ClassType, FieldName,
@@ -363,15 +363,15 @@ public class LibNative {
 	// LibZen.VerboseException(e);
 	// } catch (NoSuchFieldException e) {
 	// }
-	// Context.RootNameSpace.SetUndefinedSymbol(GtNameSpace.ClassSymbol(ClassType,
-	// GtNameSpace.GetterSymbol(FieldName)), null);
-	// Context.RootNameSpace.SetUndefinedSymbol(GtNameSpace.ClassSymbol(ClassType,
-	// GtNameSpace.SetterSymbol(FieldName)), null); // for setter
+	// Context.RootNameSpace.SetUndefinedSymbol(ZenNameSpace.ClassSymbol(ClassType,
+	// ZenNameSpace.GetterSymbol(FieldName)), null);
+	// Context.RootNameSpace.SetUndefinedSymbol(ZenNameSpace.ClassSymbol(ClassType,
+	// ZenNameSpace.SetterSymbol(FieldName)), null); // for setter
 	// return null;
 	// }
 
-	// public final static void LoadNativeMethods(GtParserContext Context,
-	// GtType ClassType, String FuncName, ArrayList<GtFunc> FuncList) {
+	// public final static void LoadNativeMethods(ZenParserContext Context,
+	// ZenType ClassType, String FuncName, ArrayList<ZenFunc> FuncList) {
 	// Class<?> NativeClass = (Class<?>)ClassType.TypeBody;
 	// Method[] Methods = NativeClass.getDeclaredMethods();
 	// /*local*/boolean FoundMethod = false;
@@ -381,7 +381,7 @@ public class LibNative {
 	// if(!Modifier.isPublic(Methods[i].getModifiers())) {
 	// continue;
 	// }
-	// GtFunc NativeFunc = LibZen.ConvertNativeMethodToFunc(Methods[i]);
+	// ZenFunc NativeFunc = LibZen.ConvertNativeMethodToFunc(Methods[i]);
 	// Context.RootNameSpace.AppendMethod(NativeFunc, null);
 	// FuncList.add(NativeFunc);
 	// FoundMethod = true;
@@ -389,7 +389,7 @@ public class LibNative {
 	// }
 	// }
 	// if(!FoundMethod) {
-	// Context.RootNameSpace.SetUndefinedSymbol(GtNameSpace.ClassSymbol(ClassType,
+	// Context.RootNameSpace.SetUndefinedSymbol(ZenNameSpace.ClassSymbol(ClassType,
 	// FuncName), null);
 	// }
 	// }

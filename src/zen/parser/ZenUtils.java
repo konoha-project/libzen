@@ -74,15 +74,15 @@ public class ZenUtils implements ZenParserConst {
 		return Name + NativeNameSuffix + Index;
 	}
 
-//	public final static boolean IsMismatchedOrError(GtSyntaxTree Tree) {
+//	public final static boolean IsMismatchedOrError(ZenSyntaxTree Tree) {
 //		return (Tree == null || Tree.IsMismatchedOrError());
 //	}
 //
-//	public final static boolean IsValidSyntax(GtSyntaxTree Tree) {
+//	public final static boolean IsValidSyntax(ZenSyntaxTree Tree) {
 //		return !(GreenTeaUtils.IsMismatchedOrError(Tree));
 //	}
 //
-//	public final static GtSyntaxTree TreeHead(GtSyntaxTree Tree) {
+//	public final static ZenSyntaxTree TreeHead(ZenSyntaxTree Tree) {
 //		if(Tree != null) {
 //			while(Tree.PrevTree != null) {
 //				Tree = Tree.PrevTree;
@@ -91,7 +91,7 @@ public class ZenUtils implements ZenParserConst {
 //		return Tree;
 //	}
 //
-//	public final static GtSyntaxTree TreeTail(GtSyntaxTree Tree) {
+//	public final static ZenSyntaxTree TreeTail(ZenSyntaxTree Tree) {
 //		if(Tree != null) {
 //			while(Tree.NextTree != null) {
 //				Tree = Tree.NextTree;
@@ -100,7 +100,7 @@ public class ZenUtils implements ZenParserConst {
 //		return Tree;
 //	}
 //
-//	public final static GtSyntaxTree LinkTree(GtSyntaxTree LastNode, GtSyntaxTree Node) {
+//	public final static ZenSyntaxTree LinkTree(ZenSyntaxTree LastNode, ZenSyntaxTree Node) {
 //		Node.PrevTree = LastNode;
 //		if(LastNode != null) {
 //			LastNode.NextTree = Node;
@@ -108,19 +108,19 @@ public class ZenUtils implements ZenParserConst {
 //		return GreenTeaUtils.TreeTail(Node);
 //	}
 
-//	public final static GtSyntaxTree ApplySyntaxPattern_OLD(GtNameSpace NameSpace, GtTokenContext TokenContext, GtSyntaxTree LeftNode, GtSyntaxPattern Pattern) {
+//	public final static ZenSyntaxTree ApplySyntaxPattern_OLD(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenSyntaxTree LeftNode, ZenSyntaxPattern Pattern) {
 //		/*local*/int Pos = TokenContext.GetPosition(0);
 //		/*local*/int ParseFlag = TokenContext.ParseFlag;
-//		/*local*/GtSyntaxPattern CurrentPattern = Pattern;
+//		/*local*/ZenSyntaxPattern CurrentPattern = Pattern;
 //		while(CurrentPattern != null) {
-//			/*local*/GtFunc delegate = CurrentPattern.MatchFunc;
+//			/*local*/ZenFunc delegate = CurrentPattern.MatchFunc;
 //			TokenContext.RollbackPosition(Pos, 0);
 //			if(CurrentPattern.ParentPattern != null) {   // This means it has next patterns
 //				TokenContext.ParseFlag = ParseFlag | BackTrackParseFlag;
 //			}
 //			//LibZen.DebugP("B :" + JoinStrings("  ", TokenContext.IndentLevel) + CurrentPattern + ", next=" + CurrentPattern.ParentPattern);
 //			TokenContext.IndentLevel += 1;
-//			/*local*/GtSyntaxTree ParsedTree = LibNative.ApplyParseFunc(delegate, NameSpace, TokenContext, LeftNode, CurrentPattern);
+//			/*local*/ZenSyntaxTree ParsedTree = LibNative.ApplyParseFunc(delegate, NameSpace, TokenContext, LeftNode, CurrentPattern);
 //			TokenContext.IndentLevel -= 1;
 //			TokenContext.ParseFlag = ParseFlag;
 //			if(ParsedTree != null && ParsedTree.IsMismatched()) {
@@ -146,12 +146,12 @@ public class ZenUtils implements ZenParserConst {
 
 //
 //	// typing
-//	public final static GtNode ApplyTypeFunc(GtFunc TypeFunc, GtTypeEnv Gamma, GtSyntaxTree ParsedTree, GtType Type) {
+//	public final static ZenNode ApplyTypeFunc(ZenFunc TypeFunc, ZenTypeEnv Gamma, ZenSyntaxTree ParsedTree, ZenType Type) {
 //		if(TypeFunc != null) {
 //			Gamma.NameSpace = ParsedTree.NameSpace;
 //			return LibNative.ApplyTypeFunc(TypeFunc, Gamma, ParsedTree, Type);
 //		}
-//		return Gamma.Generator.CreateEmptyNode(GtStaticTable.VoidType);
+//		return Gamma.Generator.CreateEmptyNode(ZenStaticTable.VoidType);
 //	}
 
 /*GreenTeaUtils End*/

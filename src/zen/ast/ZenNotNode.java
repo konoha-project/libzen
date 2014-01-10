@@ -27,7 +27,7 @@ package zen.ast;
 import zen.parser.ZenToken;
 import zen.parser.ZenVisitor;
 
-public class ZenNotNode extends GtUnaryNode {
+public class ZenNotNode extends ZenUnaryNode {
 	public ZenNotNode(ZenToken Token) {
 		super(Token);
 	}

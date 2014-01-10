@@ -24,10 +24,10 @@
 //
 //package org.GreenTeaScript;
 //
-//final class GtStack {
+//final class ZenStack {
 //	/*field*/public final Object[] Stack;
 //	/*field*/public int StackTop;
-//	GtStack/*constructor*/() {
+//	ZenStack/*constructor*/() {
 //		this.Stack = new Object[4096];
 //		this.StackTop = 0;
 //	}
@@ -51,8 +51,8 @@
 //	}
 //}
 //
-//class GtException extends RuntimeException {
-//	GtException/*constructor*/(String Message) {
+//class ZenException extends RuntimeException {
+//	ZenException/*constructor*/(String Message) {
 //		super(Message);
 //	}
 //}
@@ -72,13 +72,13 @@
 //
 //}
 //
-//final class GtCode implements CodeSet {
+//final class ZenCode implements CodeSet {
 //	/*field*/public final int OpCode;
 //	/*field*/public final int Index_A;
 //	/*field*/public final int Index_B;
 //	/*field*/public final int Index_C;  /* C = A op B */
 //	/*field*/public final Object Ref;
-//	GtCode/*constructor*/(int OpCode, int Index_A, int Index_B, int Index_C, Object Ref) {
+//	ZenCode/*constructor*/(int OpCode, int Index_A, int Index_B, int Index_C, Object Ref) {
 //		this.OpCode = OpCode;
 //		this.Index_A = Index_A;
 //		this.Index_B = Index_B;
@@ -89,12 +89,12 @@
 //
 //public class GreenTeaVirtualMachine implements CodeSet {
 //
-//	public static Object Run(GtStack Stack, int pc, GtCode Code[]) {	
+//	public static Object Run(ZenStack Stack, int pc, ZenCode Code[]) {	
 //		Object ObjectReg = null;
 //		long IntReg = 0;
 //		int StackTop = 0;
 //		while(pc > 0) {
-//			/*local*/GtCode _Code = Code[pc];
+//			/*local*/ZenCode _Code = Code[pc];
 //			switch(_Code.OpCode) {
 //			case NopCode:
 //				pc = pc + 1;
@@ -126,10 +126,10 @@
 //			case TryCatchCode:
 //				try {
 //					StackTop = Stack.StackTop;
-//					ObjectReg = Run(Stack, pc + 1, (GtCode[])_Code.Ref);
+//					ObjectReg = Run(Stack, pc + 1, (ZenCode[])_Code.Ref);
 //					pc = ((Integer)ObjectReg).intValue();
 //				}
-//				catch(GtException e) {
+//				catch(ZenException e) {
 //					Stack.StackTop = StackTop;
 //					Stack.SetValueAt(_Code.Index_A, e);
 //					pc = _Code.Index_B;
@@ -142,7 +142,7 @@
 //				break;
 //			case ApplyCode:
 //				Stack.Shift(_Code.Index_A);
-//				ObjectReg = Run(Stack, 0, (GtCode[])_Code.Ref);
+//				ObjectReg = Run(Stack, 0, (ZenCode[])_Code.Ref);
 //				Stack.Unshift(_Code.Index_A);
 //				Stack.SetValueAt(_Code.Index_C, ObjectReg);
 //				pc = pc + 1;
@@ -164,7 +164,7 @@
 //		return null;
 //	}
 //
-//	private static Object CallNative(Object Ref, GtStack Stack, int ParamSize) {
+//	private static Object CallNative(Object Ref, ZenStack Stack, int ParamSize) {
 //		return null;
 //	}
 //}

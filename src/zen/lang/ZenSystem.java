@@ -30,7 +30,7 @@ import zen.deps.LibNative;
 import zen.deps.LibZen;
 import zen.deps.ZenMap;
 import zen.deps.ZenObject;
-import zen.obsolete.GtPolyFunc;
+import zen.obsolete.ZenPolyFunc;
 import zen.parser.ZenLogger;
 import zen.parser.ZenNameSpace;
 
@@ -69,7 +69,7 @@ public class ZenSystem implements ZenTypeConst {
 	//	/*field*/public final static ZenType		FuncType  = ZenTypeSystem.TopType.CreateSubType(GenericVariable, "Func", null, ZenFunc.class);
 	//
 	//	/*field*/public final static ZenType		EnumBaseType = ZenTypeSystem.TopType.CreateSubType(EnumType, "enum", null, ZenEnum.class);
-	//	///*field*/public final static GtType		StructType;
+	//	///*field*/public final static ZenType		StructType;
 	//
 	//	/*field*/public final static ZenType		VarType = new ZenType(0, "var", null, null);
 	//	/*field*/public final static ZenType		TypeType = ZenTypeSystem.TopType.CreateSubType(0, "Type", null, ZenType.class);
@@ -115,7 +115,7 @@ public class ZenSystem implements ZenTypeConst {
 			ZenSystem.SetTypeTable("long",    ZenSystem.IntType);
 			ZenSystem.SetTypeTable("java.lang.Long",    ZenSystem.IntType);
 			ZenSystem.SetTypeTable("java.lang.String",  ZenSystem.StringType);
-			ZenSystem.SetTypeTable("org.GreenTeaScript.GtType", ZenSystem.TypeType);
+			ZenSystem.SetTypeTable("org.GreenTeaScript.ZenType", ZenSystem.TypeType);
 			//			ZenTypeSystem.SetNativeTypeName("org.GreenTeaScript.GreenTeaEnum", ZenTypeSystem.EnumBaseType);
 			ZenSystem.SetTypeTable("org.GreenTeaScript.GreenTeaArray", ZenSystem.ArrayType);
 			ZenSystem.SetTypeTable("org.GreenTeaScript.Konoha.GreenTeaIntArray", ZenSystem.GetGenericType1(ZenSystem.ArrayType, ZenSystem.IntType, true));
@@ -166,7 +166,7 @@ public class ZenSystem implements ZenTypeConst {
 		if(Value instanceof ZenFunc) {
 			return ((/*cast*/ZenFunc)Value).GetFuncType();
 		}
-		else if(Value instanceof GtPolyFunc) {
+		else if(Value instanceof ZenPolyFunc) {
 			return ZenSystem.FuncType;
 		}
 		else if(Value instanceof ZenObject) {
@@ -244,7 +244,7 @@ public class ZenSystem implements ZenTypeConst {
 		return GenericType;
 	}
 
-	//	private final String SubtypeKey(GtType FromType, GtType ToType) {
+	//	private final String SubtypeKey(ZenType FromType, ZenType ToType) {
 	//		return FromType.GetUniqueName() + "<" + ToType.GetUniqueName();
 	//	}
 

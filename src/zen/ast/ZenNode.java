@@ -42,7 +42,7 @@ public abstract class ZenNode {
 	}
 
 	public final boolean IsErrorNode() {
-		return (this instanceof GtErrorNode);
+		return (this instanceof ZenErrorNode);
 	}
 
 	public final ZenNode SetChild(ZenNode Node) {
@@ -59,21 +59,21 @@ public abstract class ZenNode {
 	}
 
 	public final ZenNode Done() {
-		return new GtBlockNode(this.SourceToken, null);
+		return new ZenBlockNode(this.SourceToken, null);
 	}
 
 	public String GetVisitName() {
 		return "VisitNode"; // override this if you want to use additional node
 	}
 
-	//	public abstract boolean Accept(GtVisitor Visitor);
+	//	public abstract boolean Accept(ZenVisitor Visitor);
 	public void Accept(ZenVisitor Visitor) {
 		LibNative.DispatchVisitNode(Visitor, this);
 	}
 
-	public GtConstNode ToConstNode(boolean EnforceConst) {
+	public ZenConstNode ToConstNode(boolean EnforceConst) {
 		if(EnforceConst) {
-			return new GtErrorNode(this.SourceToken, "value must be constant");
+			return new ZenErrorNode(this.SourceToken, "value must be constant");
 		}
 		return null;
 	}
@@ -83,7 +83,7 @@ public abstract class ZenNode {
 	}
 
 
-	public GtReturnNode ToReturnNode() {
+	public ZenReturnNode ToReturnNode() {
 		return null;
 	}
 
