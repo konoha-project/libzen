@@ -13,6 +13,8 @@
 			<classpath path="ext/asm-all-4.0.jar" />
 			<classpath path="ext/jline-2.12-SNAPSHOT.jar" />
 			<include name="**/*.java" />
+			<compilerarg value="-Xlint:deprecation" />
+			<compilerarg value="-Xlint:unchecked" />
 		</javac>
 	</target>
 

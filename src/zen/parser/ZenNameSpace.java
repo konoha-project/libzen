@@ -551,7 +551,7 @@ public final class ZenNameSpace {
 		/*local*/ZenTypeCheckerImpl2 TypeChecker = new ZenTypeCheckerImpl2(this.Generator.Logger);
 		TokenContext.SkipEmptyStatement();
 		while(TokenContext.HasNext()) {
-			TokenContext.ParseFlag = 0; // init
+			TokenContext.SetParseFlag(0); // init
 			TokenContext.SkipAndGetAnnotation(true);
 			/*local*/ZenNode TopLevelNode = TokenContext.ParsePattern(this, "$Statement$", ZenParserConst.Required);
 			//			TypeChecker.EnableVisitor();

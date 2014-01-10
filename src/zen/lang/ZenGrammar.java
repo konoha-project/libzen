@@ -452,7 +452,7 @@ public class ZenGrammar {
 		TokenContext.Push();
 		GroupNode = TokenContext.MatchNodeToken(GroupNode, NameSpace, "(", ZenParserConst.Required | ZenParserConst.AllowSkipIndent);
 		GroupNode = TokenContext.AppendMatchedPattern(GroupNode, NameSpace, "$Expression$", ZenParserConst.Required);
-		GroupNode = TokenContext.MatchNodeToken(GroupNode, NameSpace, ")", ZenParserConst.Required);
+		GroupNode = TokenContext.MatchNodeToken(GroupNode, NameSpace, ")", ZenParserConst.Required | ZenParserConst.DisallowSkipIndent);
 		TokenContext.Pop();
 		return GroupNode;
 	}
@@ -461,7 +461,7 @@ public class ZenGrammar {
 		/*local*/ZenNode CastNode = new GtCastNode(ZenSystem.VarType, null);
 		CastNode = TokenContext.MatchNodeToken(CastNode, NameSpace, "(", ZenParserConst.Required | ZenParserConst.AllowSkipIndent);
 		CastNode = TokenContext.AppendMatchedPattern(CastNode, NameSpace, "$Type$", ZenParserConst.Required);
-		CastNode = TokenContext.MatchNodeToken(CastNode, NameSpace, ")", ZenParserConst.Required);
+		CastNode = TokenContext.MatchNodeToken(CastNode, NameSpace, ")", ZenParserConst.Required  | ZenParserConst.DisallowSkipIndent);
 		CastNode = TokenContext.AppendMatchedPattern(CastNode, NameSpace, "$SuffixExpression$", ZenParserConst.Required);
 		return CastNode;
 	}
@@ -681,23 +681,23 @@ public class ZenGrammar {
 			return TokenContext.CreateExpectedErrorNode(SymbolToken, "=");
 		}
 		ZenNode ValueNode = TokenContext.ParsePattern(NameSpace, "$Expression$", ZenParserConst.Required);
-		if(!ValueNode.IsErrorNode()) {
-			/*local*/String ConstName = SymbolToken.ParsedText;
-			if(ConstClass != null) {
-				ConstName = ZenNameSpace.ClassStaticSymbol(ConstClass, ConstName);
-				SourceToken.AddTypeInfoToErrorMessage(ConstClass);
-			}
-			//			ValueNode = NameSpace.TypeCheck(ValueNode, NameSpace.GetSymbolType(ConstName), ZenParserConst.DefaultTypeCheckPolicy);
-			GtConstNode ConstNode = ValueNode.ToConstNode(true);
-			if(!ConstNode.IsErrorNode()) {
-				//				/*local*/int NameSpaceFlag = KonohaGrammar.ParseNameSpaceFlag(0, TokenContext.ParsingAnnotation);
-				//				/*local*/GtNameSpace StoreNameSpace = NameSpace.GetNameSpace(NameSpaceFlag);
-				NameSpace.SetSymbol(ConstName, ConstNode.GetValue(), SourceToken);
-				return ConstNode.Done();
-			}
-			return ConstNode;
+		if(ValueNode.IsErrorNode()) {
+			return ValueNode;
 		}
-		return ValueNode;
+		/*local*/String ConstName = SymbolToken.ParsedText;
+		if(ConstClass != null) {
+			ConstName = ZenNameSpace.ClassStaticSymbol(ConstClass, ConstName);
+			SourceToken.AddTypeInfoToErrorMessage(ConstClass);
+		}
+		//ValueNode = NameSpace.TypeCheck(ValueNode, NameSpace.GetSymbolType(ConstName), ZenParserConst.DefaultTypeCheckPolicy);
+		GtConstNode ConstNode = ValueNode.ToConstNode(true);
+		if(!ConstNode.IsErrorNode()) {
+			///*local*/int NameSpaceFlag = KonohaGrammar.ParseNameSpaceFlag(0, TokenContext.ParsingAnnotation);
+			///*local*/GtNameSpace StoreNameSpace = NameSpace.GetNameSpace(NameSpaceFlag);
+			NameSpace.SetSymbol(ConstName, ConstNode.GetValue(), SourceToken);
+			return ConstNode.Done();
+		}
+		return ConstNode;
 	}
 
 	public static ZenNode MatchIdentifier(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenNode LeftNode) {
@@ -775,8 +775,9 @@ public class ZenGrammar {
 	}
 
 	public static ZenNode MatchBlock(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenNode LeftNode) {
-		TokenContext.SkipIndent();
-		if(TokenContext.IsToken("{")) {
+		if(TokenContext.IsNewLineToken("{")) {
+			TokenContext.Push();
+			TokenContext.SetParseFlag(0);
 			/*local*/ZenToken IndentToken = TokenContext.GetCurrentIndentToken();
 			/*local*/ZenNameSpace BlockNameSpace = NameSpace.CreateSubNameSpace();
 			/*local*/GtBlockNode BlockNode = new GtBlockNode(TokenContext.GetTokenAndMoveForward(), BlockNameSpace);
@@ -793,6 +794,7 @@ public class ZenGrammar {
 					break;
 				}
 			}
+			TokenContext.Pop();
 			return BlockNode;
 		}
 		return TokenContext.CreateExpectedErrorNode(TokenContext.GetToken(), "block");
