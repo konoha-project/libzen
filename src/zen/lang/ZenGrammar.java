@@ -449,11 +449,9 @@ public class ZenGrammar {
 	// PatternName: "("  (1)
 	public static ZenNode MatchGroup(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenNode LeftNode) {
 		/*local*/ZenNode GroupNode = new ZenGroupNode();
-		TokenContext.Push();
 		GroupNode = TokenContext.MatchNodeToken(GroupNode, NameSpace, "(", ZenParserConst.Required | ZenParserConst.AllowSkipIndent);
 		GroupNode = TokenContext.AppendMatchedPattern(GroupNode, NameSpace, "$Expression$", ZenParserConst.Required);
 		GroupNode = TokenContext.MatchNodeToken(GroupNode, NameSpace, ")", ZenParserConst.Required | ZenParserConst.DisallowSkipIndent);
-		TokenContext.Pop();
 		return GroupNode;
 	}
 
