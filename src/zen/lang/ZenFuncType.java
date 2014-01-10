@@ -17,7 +17,7 @@ public final class ZenFuncType extends ZenType {
 	public boolean IsFuncType() {
 		return true;
 	}
-	
+
 	@Override public ZenType GetBaseType() {
 		return ZenSystem.FuncType;
 	}
@@ -28,6 +28,10 @@ public final class ZenFuncType extends ZenType {
 
 	@Override public ZenType GetParamType(int Index) {
 		return this.TypeParams[Index];
+	}
+
+	public ZenType GetReturnType() {
+		return this.TypeParams[0];
 	}
 
 }

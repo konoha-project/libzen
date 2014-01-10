@@ -79,8 +79,8 @@ public class ZenTypeCheckerImpl2 extends ZenTypeChecker {
 		super(Logger);
 	}
 
-	@Override
-	public void VisitEmptyNode(ZenEmptyNode Node) {
+	@Override public void VisitEmptyNode(ZenEmptyNode Node) {
+
 	}
 
 	@Override public void VisitNullNode(ZenNullNode Node) {
@@ -202,19 +202,37 @@ public class ZenTypeCheckerImpl2 extends ZenTypeChecker {
 	@Override public void VisitMethodCallNode(ZenMethodCallNode Node) {
 		ZenNameSpace NameSpace = this.GetNameSpace();
 		Node.RecvNode = this.TypeCheck(Node.RecvNode, NameSpace, ZenSystem.VarType, ZenTypeChecker.DefaultTypeCheckPolicy);
-		this.TypeCheckNodeList(NameSpace, Node.ParamList);
-		this.Todo(Node);
+		if(this.IsVisitable()) {
+			ZenType FuncType = this.GuessMethodFuncType(NameSpace, Node.RecvNode, Node.MethodName, Node.ParamList);
+			ZenType ReturnType = this.TypeCheckFuncParam(NameSpace, Node.ParamList, FuncType, 2);
+			this.TypedNode(Node, ReturnType);
+		}
 	}
 
 	@Override public void VisitApplyNode(ZenApplyNode Node) {
 		ZenNameSpace NameSpace = this.GetNameSpace();
-		this.TypeCheckNodeList(NameSpace, Node.ParamList);
-		this.Todo(Node);
+		if(Node.FuncNode instanceof ZenGetLocalNode) {
+			ZenGetLocalNode VarNode = (ZenGetLocalNode)Node.FuncNode;
+			ZenVarInfo VarInfo = this.GetVarInfo(NameSpace, VarNode.VarName);
+			if(VarInfo != null) {
+				VarNode.Type = VarInfo.VarType;
+			}
+			else {
+				VarNode.Type = this.GuessFuncType(NameSpace, VarNode.VarName, Node.ParamList);
+			}
+		}
+		else {
+			Node.FuncNode = this.TypeCheck(Node.FuncNode, NameSpace, ZenSystem.VarType, ZenTypeChecker.DefaultTypeCheckPolicy);
+		}
+		ZenType FuncType = Node.FuncNode.Type;
+		ZenType ReturnType = this.TypeCheckFuncParam(NameSpace, Node.ParamList, FuncType, 1);
+		this.TypedNode(Node, ReturnType);
 	}
 
 	@Override public void VisitUnaryNode(ZenUnaryNode Node) {
 		ZenNameSpace NameSpace = this.GetNameSpace();
 		Node.RecvNode = this.TypeCheck(Node.RecvNode, NameSpace, ZenSystem.VarType, ZenTypeChecker.DefaultTypeCheckPolicy);
+
 		this.Todo(Node);
 	}
 
@@ -249,7 +267,7 @@ public class ZenTypeCheckerImpl2 extends ZenTypeChecker {
 	@Override public void VisitComparatorNode(ZenComparatorNode Node) {
 		ZenNameSpace NameSpace = this.GetNameSpace();
 		Node.LeftNode = this.TypeCheck(Node.LeftNode, NameSpace, ZenSystem.VarType, ZenTypeChecker.DefaultTypeCheckPolicy);
-		Node.RightNode = this.TypeCheck(Node.RightNode, NameSpace, ZenSystem.VarType, ZenTypeChecker.DefaultTypeCheckPolicy);
+		Node.RightNode = this.TypeCheck(Node.RightNode, NameSpace, Node.LeftNode.Type, ZenTypeChecker.DefaultTypeCheckPolicy);
 		this.TypedNode(Node, ZenSystem.BooleanType);
 	}
 

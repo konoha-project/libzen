@@ -237,19 +237,19 @@ public class LibNative {
 	// } catch (NoSuchFieldException e) {
 	// // LibZen.VerboseException(e);
 	// }
-	// ZenPolyFunc PolyFunc = new ZenPolyFunc(null, null);
+	// ZenFuncSet FuncSet = new ZenFuncSet(null, null);
 	// Method[] Methods = NativeClass.getMethods();
 	// for(int i = 0; i < Methods.length; i++) {
 	// if(Methods[i].getName().equals(Symbol) &&
 	// Modifier.isStatic(Methods[i].getModifiers())) {
-	// PolyFunc.Append(LibNative.ConvertNativeMethodToFunc(Methods[i]), null);
+	// FuncSet.Append(LibNative.ConvertNativeMethodToFunc(Methods[i]), null);
 	// }
 	// }
-	// if(PolyFunc.FuncList.size() == 1) {
-	// return PolyFunc.FuncList.get(0);
+	// if(FuncSet.FuncList.size() == 1) {
+	// return FuncSet.FuncList.get(0);
 	// }
-	// else if(PolyFunc.FuncList.size() != 0) {
-	// return PolyFunc;
+	// else if(FuncSet.FuncList.size() != 0) {
+	// return FuncSet;
 	// }
 	// return null;
 	// }

@@ -30,7 +30,6 @@ import zen.deps.LibNative;
 import zen.deps.LibZen;
 import zen.deps.ZenMap;
 import zen.deps.ZenObject;
-import zen.obsolete.ZenPolyFunc;
 import zen.parser.ZenLogger;
 import zen.parser.ZenNameSpace;
 
@@ -166,7 +165,7 @@ public class ZenSystem implements ZenTypeConst {
 		if(Value instanceof ZenFunc) {
 			return ((/*cast*/ZenFunc)Value).GetFuncType();
 		}
-		else if(Value instanceof ZenPolyFunc) {
+		else if(Value instanceof ZenFuncSet) {
 			return ZenSystem.FuncType;
 		}
 		else if(Value instanceof ZenObject) {

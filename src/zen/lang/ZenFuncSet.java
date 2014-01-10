@@ -22,21 +22,25 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package zen.obsolete;
+package zen.lang;
 
 import java.util.ArrayList;
 
-import zen.lang.ZenFunc;
-import zen.lang.ZenType;
-import zen.parser.ZenGenerator;
+import zen.parser.ZenLogger;
+import zen.parser.ZenToken;
 
-public class ZenPolyFunc {
-	/*field*/public ZenGenerator Generator;
+public class ZenFuncSet {
 	/*field*/public ArrayList<ZenFunc> FuncList;
 
-	public ZenPolyFunc/*constructor*/(ZenGenerator Generator, ArrayList<ZenFunc> FuncList) {
-		this.Generator = Generator;
-		this.FuncList = FuncList == null ? new ArrayList<ZenFunc>() : FuncList;
+	public ZenFuncSet(ZenFunc Func) {
+		this.FuncList = new ArrayList<ZenFunc>();
+		if(Func != null) {
+			this.FuncList.add(Func);
+		}
+	}
+
+	public boolean IsEmpty() {
+		return this.FuncList.size() == 0;
 	}
 
 	@Override public String toString() { // this is used in an error message
@@ -52,37 +56,42 @@ public class ZenPolyFunc {
 		return s;
 	}
 
-	//	public final ZenPolyFunc Append(ZenFunc Func, ZenToken SourceToken) {
-	//		if(SourceToken != null) {
-	//			/*local*/int i = 0;
-	//			while(i < this.FuncList.size()) {
-	//				/*local*/ZenFunc ListedFunc = this.FuncList.get(i);
-	//				if(ListedFunc == Func) {
-	//					/*return this;*/ /* same function */
-	//				}
-	//				if(Func.EqualsType(ListedFunc)) {
-	//					this.Generator.Logger.ReportWarning(SourceToken, "duplicated symbol: " + SourceToken.ParsedText);
-	//					break;
-	//				}
-	//				i = i + 1;
-	//			}
-	//		}
-	//		this.FuncList.add(Func);
-	//		return this;
-	//	}
-
-	public ZenFunc ResolveUnaryMethod(ZenType Type) {
-		/*local*/int i = 0;
-		while(i < this.FuncList.size()) {
-			/*local*/ZenFunc Func = this.FuncList.get(i);
-			if(Func.GetFuncParamSize() == 1) {
-				return Func;
+	public void Append(ZenFunc Func, ZenLogger Logger, ZenToken SourceToken) {
+		if(SourceToken != null) {
+			/*local*/int i = 0;
+			while(i < this.FuncList.size()) {
+				/*local*/ZenFunc ListedFunc = this.FuncList.get(i);
+				if(ListedFunc == Func) {
+					/*return this;*/ /* same function */
+				}
+				if(Func.ZenType == ListedFunc.ZenType) {
+					Logger.ReportWarning(SourceToken, "duplicated function symbol: " + SourceToken.ParsedText);
+					this.FuncList.set(i, Func);
+				}
+				i = i + 1;
 			}
-			i = i + 1;
 		}
-		return null;
+		this.FuncList.add(Func);
 	}
 
+	//	public final ZenFunc ResolveFunc(ArrayList<ZenType> TypeList, int ResolvedSize, int FuncParamSize) {
+	//
+	//	}
+	//
+	//
+	//
+	//	public ZenFunc ResolveUnaryMethod(ZenType Type) {
+	//		/*local*/int i = 0;
+	//		while(i < this.FuncList.size()) {
+	//			/*local*/ZenFunc Func = this.FuncList.get(i);
+	//			if(Func.GetFuncParamSize() == 1) {
+	//				return Func;
+	//			}
+	//			i = i + 1;
+	//		}
+	//		return null;
+	//	}
+	//
 	//	public final boolean CheckIncrementalTyping(ZenNameSpace NameSpace, int FuncParamSize, ArrayList<ZenNode> ParamList, ZenResolvedFunc ResolvedFunc) {
 	//		/*local*/ZenFunc FoundFunc = null;
 	//		/*local*/ZenNameSpace GenericNameSpace = null;
@@ -330,10 +339,6 @@ public class ZenPolyFunc {
 	//		}
 	//		return ResolvedFunc;
 	//	}
-
-	public boolean IsEmpty() {
-		return this.FuncList.size() == 0;
-	}
 
 	//	public String FormatTypeErrorMessage(String FuncType, ZenType ClassType, String MethodName) {
 	//		if(ClassType != null) {

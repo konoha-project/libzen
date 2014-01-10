@@ -36,7 +36,7 @@ import parser.GreenTeaUtils;
 import parser.ZenFunc;
 import parser.ZenNameSpace;
 import parser.ZenParserContext;
-import parser.ZenPolyFunc;
+import parser.ZenFuncSet;
 import parser.ZenStaticTable;
 import parser.ZenSyntaxPattern;
 import parser.ZenSyntaxTree;
@@ -362,8 +362,8 @@ public class DShellGrammar extends GreenTeaUtils {
 		/*local*/ZenNode PathNode = ParsedTree.TypeCheckAt(UnaryTerm, Gamma, ZenStaticTable.StringType, DefaultTypeCheckPolicy);
 		if(!PathNode.IsErrorNode()) {
 			/*local*/String OperatorSymbol = ZenNameSpace.FuncSymbol(ParsedTree.KeyToken.ParsedText);
-			/*local*/ZenPolyFunc PolyFunc = Gamma.NameSpace.GetMethod(ZenStaticTable.StringType, OperatorSymbol, true);
-			/*local*/ZenFunc ResolvedFunc = PolyFunc.ResolveUnaryMethod(Gamma, PathNode.Type);
+			/*local*/ZenFuncSet FuncSet = Gamma.NameSpace.GetMethod(ZenStaticTable.StringType, OperatorSymbol, true);
+			/*local*/ZenFunc ResolvedFunc = FuncSet.ResolveUnaryMethod(Gamma, PathNode.Type);
 			LibNative.Assert(ResolvedFunc != null);
 			/*local*/ZenNode ApplyNode =  Gamma.Generator.CreateApplySymbolNode(ResolvedFunc.GetReturnType(), ParsedTree, OperatorSymbol, ResolvedFunc);
 			ApplyNode.Append(Gamma.Generator.CreateConstNode_OLD(ZenStaticTable.VarType, ParsedTree, ResolvedFunc));

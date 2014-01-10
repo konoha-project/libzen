@@ -3,7 +3,6 @@ package zen.lang;
 import java.util.ArrayList;
 
 import zen.ast.ZenErrorNode;
-import zen.ast.ZenGetLocalNode;
 import zen.ast.ZenNode;
 import zen.parser.ZenLogger;
 import zen.parser.ZenNameSpace;
@@ -82,12 +81,134 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 
 	public final void TypeCheckNodeList(ZenNameSpace NameSpace, ArrayList<ZenNode> ParamList) {
 		if(this.IsVisitable()) {
-			for(int i = 0; i < ParamList.size(); i = i + 1) {
+			int i = 0;
+			while(i < ParamList.size()) {
 				ZenNode SubNode = ParamList.get(i);
 				SubNode = this.TypeCheck(SubNode, NameSpace, ZenSystem.VarType, ZenTypeChecker.DefaultTypeCheckPolicy);
 				ParamList.set(i, SubNode);
+				i = i + 1;
 			}
 		}
+	}
+
+	private int FilterFuncParamType(ArrayList<ZenFunc> FuncList, int StartIdx, int EndIdx, int ParamIdx, ZenType ParamType) {
+		int StartFuncSize = FuncList.size();
+		int i = StartIdx;
+		while(i < EndIdx) {
+			ZenFunc Func = FuncList.get(i);
+			if(Func.GetFuncParamType(ParamIdx) == ParamType) {
+				FuncList.add(Func);
+			}
+			i = i + 1;
+		}
+		return FuncList.size() - StartFuncSize;
+	}
+
+	private ZenType GuessFuncTypeMatchedParam(ZenNameSpace NameSpace, ArrayList<ZenFunc> FuncList, ArrayList<ZenNode> ParamList, int ResolvedSize) {
+		int StartIdx = 0;
+		int NextIdx = FuncList.size();
+		int FuncParamSize = ParamList.size();
+		while(ResolvedSize < FuncParamSize) {
+			ZenNode SubNode = this.TypeCheck(ParamList.get(ResolvedSize), NameSpace, ZenSystem.VarType, 0);
+			if(SubNode.Type.IsVarType()) {
+				return ZenSystem.VarType; // unspecified
+			}
+			int Count = this.FilterFuncParamType(FuncList, StartIdx, NextIdx, ResolvedSize, SubNode.Type);
+			if(Count == 1) {
+				return FuncList.get(FuncList.size()-1).ZenType;
+			}
+			if(Count == 0) {
+				return ZenSystem.VarType;
+			}
+			StartIdx = NextIdx;
+			NextIdx = FuncList.size();
+		}
+		return null;
+	}
+
+	private boolean IsAcceptFunc(ZenFunc Func, ArrayList<ZenNode> ParamList) {
+		int i = 0;
+		while(i < ParamList.size()) {
+			ZenType FuncType = Func.GetFuncParamType(i);
+			ZenType ParamType = ParamList.get(i).Type;
+			if(Func.GetFuncParamType(i) != ParamList.get(i).Type) {
+				if(FuncType != ParamType && !FuncType.Accept(ParamType)) {
+					return false;
+				}
+			}
+			i = i + 1;
+		}
+		return true;
+	}
+
+	protected ZenType GuessFuncType(ZenNameSpace NameSpace, String FuncName, ArrayList<ZenNode> ParamList) {
+		ArrayList<ZenFunc> FuncList = new ArrayList<ZenFunc>();
+		int FuncParamSize = ParamList.size();
+		NameSpace.RetrieveFuncList(FuncList, null, FuncName, FuncParamSize);
+		int BaseSize = FuncList.size();
+		if(BaseSize > 1 && FuncParamSize > 0) {
+			ZenType GuessedType = this.GuessFuncTypeMatchedParam(NameSpace, FuncList, ParamList, 0);
+			if(GuessedType != null) {
+				return GuessedType;
+			}
+			int i = 0;
+			while(i < BaseSize) {
+				ZenFunc Func = FuncList.get(i);
+				if(this.IsAcceptFunc(Func, ParamList)) {
+					return Func.ZenType;
+				}
+				i = i + 1;
+			}
+		}
+		return ZenSystem.VarType; // unspecified
+	}
+
+	protected ZenType GuessMethodFuncType(ZenNameSpace NameSpace, ZenNode RecvNode, String FuncName, ArrayList<ZenNode> ParamList) {
+		ArrayList<ZenFunc> FuncList = new ArrayList<ZenFunc>();
+		int FuncParamSize = ParamList.size() + 1;
+		ZenType ClassType = RecvNode.Type;
+		while(ClassType != null) {
+			NameSpace.RetrieveFuncList(FuncList, ClassType, FuncName, FuncParamSize);
+			ClassType = ClassType.GetSuperType();
+		}
+		int BaseSize = FuncList.size();
+		if(BaseSize > 1 && FuncParamSize > 1) {
+			ParamList.add(0, RecvNode);
+			ZenType GuessedType = this.GuessFuncTypeMatchedParam(NameSpace, FuncList, ParamList, 1);
+			if(GuessedType == null) {
+				GuessedType = ZenSystem.VarType;
+				int i = 0;
+				while(i < BaseSize) {
+					ZenFunc Func = FuncList.get(i);
+					if(this.IsAcceptFunc(Func, ParamList)) {
+						GuessedType = Func.ZenType;
+						break;
+					}
+					i = i + 1;
+				}
+			}
+			ParamList.remove(0);
+			return GuessedType;
+		}
+		return ZenSystem.VarType; // unspecified
+	}
+
+	public final ZenType TypeCheckFuncParam(ZenNameSpace NameSpace, ArrayList<ZenNode> ParamList, ZenType ContextType, int ParamIdx /* 1: Func 2: Method*/) {
+		if(this.IsVisitable() && ContextType.IsFuncType()) {
+			ZenFuncType FuncType = (ZenFuncType)ContextType;
+			if(FuncType.GetParamSize() == ParamList.size() + ParamIdx) {
+				int i = 0;
+				while(i < ParamList.size()) {
+					ZenNode SubNode = ParamList.get(i);
+					SubNode = this.TypeCheck(SubNode, NameSpace, FuncType.GetParamType(i+ParamIdx), ZenTypeChecker.DefaultTypeCheckPolicy);
+					ParamList.set(i, SubNode);
+					i = i + 1;
+				}
+				return FuncType.GetReturnType();
+			}
+		}
+		this.TypeCheckNodeList(NameSpace, ParamList);
+		return ZenSystem.VarType;
 	}
 
 	public final ZenNode TypeCheck(ZenNode Node, ZenNameSpace NameSpace, ZenType ContextType, int TypeCheckPolicy) {
@@ -192,13 +313,29 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		//		return VarInfo;
 	}
 
-	public void UntypedNameNode(String nativeName, ZenGetLocalNode node) {
-		// TODO Auto-generated method stub
+	//	public int RetrieveFuncList(ZenNameSpace NameSpace, String FuncName, ArrayList<ZenFunc> FuncList, int StartIdx, ArrayList<ZenType> TypeList, int ResolvedSize, int FuncParamSize) {
+	//		if(ResolvedSize == 0) {
+	//			NameSpace.RetrieveFuncList(FuncList, null, FuncName, FuncParamSize);
+	//		}
+	//		if(ResolvedSize > 0) {
+	//			int i = StartIdx;
+	//			int FuncListSize = FuncList.size();
+	//			while(i < FuncListSize) {
+	//				ZenFunc Func = FuncList.get(i);
+	//				if(Func.GetFuncParamType(ResolvedSize-1) == TypeList.get(ResolvedSize-1)) {
+	//					FuncList.add(Func);
+	//				}
+	//				i = i + 1;
+	//			}
+	//			return FuncList.size() - FuncListSize;
+	//		}
+	//		return FuncList.size();
+	//	}
 
-	}
 
 
-	public ZenNode CanDefineFunc(ZenNameSpace nameSpace, String FuncName, ZenFuncType funcType) {
+
+	public ZenNode CanDefineFunc(ZenNameSpace NameSpace, String FuncName, ZenFuncType funcType) {
 		// TODO Auto-generated method stub
 		return null;
 	}

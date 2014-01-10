@@ -205,8 +205,8 @@ public class ZenClassGrammar {
 //			return IterNode;
 //		}
 //		if(!IterNode.Type.IsIteratorType()) {
-//			/*local*/ZenPolyFunc PolyFunc = Gamma.NameSpace.GetMethod(IterNode.Type, GreenTeaUtils.FuncSymbol(".."), true);
-//			/*local*/ZenFunc Func = PolyFunc.ResolveUnaryMethod(Gamma, IterNode.Type);
+//			/*local*/ZenFuncSet FuncSet = Gamma.NameSpace.GetMethod(IterNode.Type, GreenTeaUtils.FuncSymbol(".."), true);
+//			/*local*/ZenFunc Func = FuncSet.ResolveUnaryMethod(Gamma, IterNode.Type);
 //			if(Func == null) {
 //				return Gamma.CreateSyntaxErrorNode(ParsedTree, "for/in takes an iterator, but given = " + IterNode.Type);
 //			}
@@ -633,9 +633,9 @@ public class ZenClassGrammar {
 //		if(ExprNode.IsErrorNode()) {
 //			return ExprNode;
 //		}
-//		/*local*/ZenPolyFunc PolyFunc = Gamma.NameSpace.GetMethod(ExprNode.Type, GreenTeaUtils.FuncSymbol("||"), true);
-//		//System.err.println("polyfunc: " + PolyFunc);
-//		/*local*/ZenFunc Func = PolyFunc.ResolveUnaryMethod(Gamma, ExprNode.Type);
+//		/*local*/ZenFuncSet FuncSet = Gamma.NameSpace.GetMethod(ExprNode.Type, GreenTeaUtils.FuncSymbol("||"), true);
+//		//System.err.println("polyfunc: " + FuncSet);
+//		/*local*/ZenFunc Func = FuncSet.ResolveUnaryMethod(Gamma, ExprNode.Type);
 //		LibZen.Assert(Func != null);  // any has ||
 //		Gamma.CheckFunc("operator", Func, ParsedTree.KeyToken);
 //		ZenNode Node = Gamma.Generator.CreateApplySymbolNode(Func.GetReturnType(), ParsedTree, GreenTeaUtils.FuncSymbol("||"), Func);
@@ -672,11 +672,11 @@ public class ZenClassGrammar {
 //		if(!RecvNode.IsErrorNode()) {
 //			/*local*/String MethodName = ParsedTree.KeyToken.ParsedText;
 //			/*local*/ZenResolvedFunc ResolvedFunc = null;
-//			/*local*/ZenPolyFunc PolyFunc = ParsedTree.NameSpace.GetMethod(RecvNode.Type, GreenTeaUtils.FuncSymbol(MethodName), true);
-//			//System.err.println("polyfunc: " + PolyFunc);
+//			/*local*/ZenFuncSet FuncSet = ParsedTree.NameSpace.GetMethod(RecvNode.Type, GreenTeaUtils.FuncSymbol(MethodName), true);
+//			//System.err.println("polyfunc: " + FuncSet);
 //			/*local*/ArrayList<ZenNode> ParamList = new ArrayList<ZenNode>();
 //			ParamList.add(RecvNode);
-//			ResolvedFunc = PolyFunc.ResolveFunc(Gamma, ParsedTree, 1, ParamList);
+//			ResolvedFunc = FuncSet.ResolveFunc(Gamma, ParsedTree, 1, ParamList);
 //			if(ResolvedFunc.Func == null) {
 //				return Gamma.CreateSyntaxErrorNode(ParsedTree, "undefined: " + MethodName + " of " + RecvNode.Type);
 //			}

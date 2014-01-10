@@ -34,7 +34,7 @@ import parser.ZenClassField;
 import parser.ZenFunc;
 import parser.ZenNameSpace;
 import parser.ZenParserContext;
-import parser.ZenPolyFunc;
+import parser.ZenFuncSet;
 import parser.ZenStaticTable;
 import parser.ZenSyntaxPattern;
 import parser.ZenSyntaxTree;
@@ -99,9 +99,9 @@ public class CGrammar extends GreenTeaUtils {
 //			TypeName = ObjectType.ShortName;
 //		}
 		// 2. find Class method
-		/*local*/ZenPolyFunc PolyFunc = ParsedTree.NameSpace.GetMethod(ObjectNode.Type, Name, true);
-		if(PolyFunc.FuncList.size() > 0 && ContextType.IsFuncType()) {
-			/*local*/ZenFunc FirstFunc = PolyFunc.FuncList.get(0);
+		/*local*/ZenFuncSet FuncSet = ParsedTree.NameSpace.GetMethod(ObjectNode.Type, Name, true);
+		if(FuncSet.FuncList.size() > 0 && ContextType.IsFuncType()) {
+			/*local*/ZenFunc FirstFunc = FuncSet.FuncList.get(0);
 			ZenNode Node = Gamma.Generator.CreateGetterNode(ContextType, ParsedTree, ObjectNode, Name);
 			if(Node instanceof ZenSymbolNode) {
 				((/*cast*/ZenSymbolNode)Node).ResolvedFunc = FirstFunc;

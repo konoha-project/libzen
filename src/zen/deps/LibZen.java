@@ -69,27 +69,27 @@ public abstract class LibZen {
 	//	}
 	//
 	//	public static Object InvokeDynamicFunc(long FileLine, ZenType ContextType, ZenNameSpace NameSpace, String FuncName, Object[] Arguments) {
-	//		/*local*/ZenPolyFunc PolyFunc = NameSpace.GetPolyFunc(FuncName);
-	//		/*local*/ZenFunc Func = PolyFunc.GetMatchedFunc(NameSpace, Arguments);
+	//		/*local*/ZenFuncSet FuncSet = NameSpace.GetFuncSet(FuncName);
+	//		/*local*/ZenFunc Func = FuncSet.GetMatchedFunc(NameSpace, Arguments);
 	//		/*local*/Object Value = ContextType.DefaultNullValue;
 	//		if(Func != null) {
 	//			Value = LibZen.InvokeFunc(Func, Arguments);
 	//			return LibZen.DynamicCast(ContextType, Value);
 	//		}
-	//		LibZen.VerboseLog(VerboseRuntime, PolyFunc.FormatTypeErrorMessage("function", null, FuncName));
+	//		LibZen.VerboseLog(VerboseRuntime, FuncSet.FormatTypeErrorMessage("function", null, FuncName));
 	//		return Value;
 	//	}
 	//
 	//	public static final Object InvokeDynamicMethod(long FileLine, ZenType ContextType, ZenNameSpace NameSpace, String FuncName, Object[] Arguments) {
 	//		/*local*/ZenType ClassType = ZenStaticTable.GuessType(Arguments[0]);
-	//		/*local*/ZenPolyFunc PolyFunc = NameSpace.GetMethod(ClassType, FuncName, true);
-	//		/*local*/ZenFunc Func = PolyFunc.GetMatchedFunc(NameSpace, Arguments);
+	//		/*local*/ZenFuncSet FuncSet = NameSpace.GetMethod(ClassType, FuncName, true);
+	//		/*local*/ZenFunc Func = FuncSet.GetMatchedFunc(NameSpace, Arguments);
 	//		/*local*/Object Value = ContextType.DefaultNullValue;
 	//		if(Func != null) {
 	//			Value = LibZen.InvokeFunc(Func, Arguments);
 	//			return LibZen.DynamicCast(ContextType, Value);
 	//		}
-	//		LibZen.VerboseLog(VerboseRuntime, PolyFunc.FormatTypeErrorMessage("method", ClassType, FuncName));
+	//		LibZen.VerboseLog(VerboseRuntime, FuncSet.FormatTypeErrorMessage("method", ClassType, FuncName));
 	//		return Value;
 	//	}
 	//

@@ -32,6 +32,7 @@ import zen.deps.LibZen;
 import zen.deps.ZenMap;
 import zen.lang.ZenDefiningFunc;
 import zen.lang.ZenFunc;
+import zen.lang.ZenFuncSet;
 import zen.lang.ZenSystem;
 import zen.lang.ZenType;
 import zen.lang.ZenTypeCheckerImpl2;
@@ -263,6 +264,55 @@ public final class ZenNameSpace {
 		return null;
 	}
 
+	public final void AppendFuncName(ZenFunc Func, ZenToken SourceToken) {
+		/*local*/Object OldValue = this.GetLocalSymbol(Func.FuncName);
+		assert(!(OldValue instanceof ZenSyntaxPattern));
+		/*local*/ZenFuncSet FuncSet = null;
+		if(OldValue instanceof ZenFunc) {
+			/*local*/ZenFunc OldFunc = (/*cast*/ZenFunc)OldValue;
+			if(OldFunc.ZenType != Func.ZenType) {
+				FuncSet = new ZenFuncSet(OldFunc);
+			}
+		}
+		else if(OldValue instanceof ZenFuncSet) {
+			FuncSet = (/*cast*/ZenFuncSet)OldValue;
+		}
+		if(FuncSet != null) {
+			FuncSet.Append(Func, this.Generator.Logger, SourceToken);
+		}
+		else {
+			this.SetSymbol(Func.FuncName, Func, SourceToken);
+		}
+	}
+
+	public void RetrieveFuncList(ArrayList<ZenFunc> FuncList, ZenType ClassType, String FuncName, int FuncParamSize) {
+		/*local*/ZenNameSpace NameSpace = this;
+		while(NameSpace != null) {
+			/*local*/Object FuncValue = NameSpace.GetLocalSymbol(FuncName);
+			if(FuncValue instanceof ZenFunc) {
+				/*local*/ZenFunc Func = (/*cast*/ZenFunc)FuncValue;
+				if(FuncParamSize == Func.GetFuncParamSize()) {
+					if(ClassType == null || Func.GetRecvType() == ClassType) {
+						FuncList.add(Func);
+					}
+				}
+			}
+			else if(FuncValue instanceof ZenFuncSet) {
+				/*local*/ZenFuncSet FuncSet = (/*cast*/ZenFuncSet)FuncValue;
+				/*local*/int i = FuncSet.FuncList.size() - 1;
+				while(i >= 0) {
+					/*local*/ZenFunc Func = FuncSet.FuncList.get(i);
+					if(FuncParamSize == Func.GetFuncParamSize()) {
+						if(ClassType == null || Func.GetRecvType() == ClassType) {
+							FuncList.add(Func);
+						}
+					}
+					i = i - 1;
+				}
+			}
+			NameSpace = NameSpace.ParentNameSpace;
+		}
+	}
 
 	//	public final ZenType AppendTypeVariable(String Name, ZenType ParamBaseType, ZenToken SourceToken, ArrayList<Object> RevertList) {
 	//		this.UpdateRevertList(Name, RevertList);
@@ -374,7 +424,7 @@ public final class ZenNameSpace {
 	//		return null;
 	//	}
 	//
-	//	public final ZenPolyFunc GetMethod(ZenType ClassType, String Symbol, boolean RecursiveSearch) {
+	//	public final ZenFuncSet GetMethod(ZenType ClassType, String Symbol, boolean RecursiveSearch) {
 	//		/*local*/ArrayList<ZenFunc> FuncList = new ArrayList<ZenFunc>();
 	//		while(ClassType != null) {
 	//			/*local*/String Key = ZenNameSpace.ClassSymbol(ClassType, Symbol);
@@ -393,10 +443,10 @@ public final class ZenNameSpace {
 	//			//System.err.println("** " + ClassType + ", " + ClassType.ParentMethodSearch);
 	//			ClassType = ClassType.ParentMethodSearch;
 	//		}
-	//		return new ZenPolyFunc(FuncList);
+	//		return new ZenFuncSet(FuncList);
 	//	}
 	//
-	//	public final ZenPolyFunc GetConstructorFunc(ZenType ClassType) {
+	//	public final ZenFuncSet GetConstructorFunc(ZenType ClassType) {
 	//		return this.Context.RootNameSpace.GetMethod(ClassType, ZenNameSpace.ConstructorSymbol(), false);
 	//	}
 	//
@@ -421,30 +471,11 @@ public final class ZenNameSpace {
 	//		return GivenFunc;
 	//	}
 	//
-	//	public final Object RetrieveFuncList(String FuncName, ArrayList<ZenFunc> FuncList) {
-	//		/*local*/Object FuncValue = this.GetLocalSymbol(FuncName);
-	//		if(FuncValue instanceof ZenFunc) {
-	//			/*local*/ZenFunc Func = (/*cast*/ZenFunc)FuncValue;
-	//			FuncList.add(Func);
-	//		}
-	//		else if(FuncValue instanceof ZenPolyFunc) {
-	//			/*local*/ZenPolyFunc PolyFunc = (/*cast*/ZenPolyFunc)FuncValue;
-	//			/*local*/int i = PolyFunc.FuncList.size() - 1;
-	//			while(i >= 0) {
-	//				FuncList.add(PolyFunc.FuncList.get(i));
-	//				i = i - 1;
-	//			}
-	//		}
-	//		if(this.ParentNameSpace != null) {
-	//			return this.ParentNameSpace.RetrieveFuncList(FuncName, FuncList);
-	//		}
-	//		return FuncValue;
-	//	}
 
-	//	public final ZenPolyFunc GetPolyFunc(String FuncName) {
+	//	public final ZenFuncSet GetFuncSet(String FuncName) {
 	//		/*local*/ArrayList<ZenFunc> FuncList = new ArrayList<ZenFunc>();
 	//		this.RetrieveFuncList(FuncName, FuncList);
-	//		return new ZenPolyFunc(null, FuncList);
+	//		return new ZenFuncSet(null, FuncList);
 	//	}
 	//
 	//	public final ZenFunc GetFunc(String FuncName, int BaseIndex, ArrayList<ZenType> TypeList) {
@@ -471,30 +502,6 @@ public final class ZenNameSpace {
 	//		return null;
 	//	}
 
-	//	public final Object AppendFuncName(String Key, ZenFunc Func, ZenToken SourceToken) {
-	//		/*local*/Object OldValue = this.GetLocalSymbol(Key);
-	//		if(OldValue instanceof ZenSyntaxPattern) {
-	//			return OldValue;
-	//		}
-	//		if(OldValue instanceof ZenFunc) {
-	//			/*local*/ZenFunc OldFunc = (/*cast*/ZenFunc)OldValue;
-	//			if(!OldFunc.EqualsType(Func)) {
-	//				/*local*/ZenPolyFunc PolyFunc = new ZenPolyFunc(null);
-	//				PolyFunc.Append(this.Context, OldFunc, SourceToken);
-	//				PolyFunc.Append(this.Context, Func, SourceToken);
-	//				this.SetSymbol(Key, PolyFunc, null);
-	//				return PolyFunc;
-	//			}
-	//			// error
-	//		}
-	//		else if(OldValue instanceof ZenPolyFunc) {
-	//			/*local*/ZenPolyFunc PolyFunc = (/*cast*/ZenPolyFunc)OldValue;
-	//			PolyFunc.Append(this.Context, Func, SourceToken);
-	//			return PolyFunc;
-	//		}
-	//		this.SetSymbol(Key, Func, SourceToken);
-	//		return OldValue;
-	//	}
 	//
 	//	public final Object AppendFunc(ZenFunc Func, ZenToken SourceToken) {
 	//		return this.AppendFuncName(Func.FuncName, Func, SourceToken);
