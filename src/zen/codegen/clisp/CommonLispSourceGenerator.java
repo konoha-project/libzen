@@ -26,14 +26,13 @@ package zen.codegen.clisp;
 
 import zen.ast.ZenAndNode;
 import zen.ast.ZenBinaryNode;
+import zen.ast.ZenBlockNode;
 import zen.ast.ZenBooleanNode;
 import zen.ast.ZenConstPoolNode;
-import zen.ast.ZenEmptyNode;
 import zen.ast.ZenErrorNode;
 import zen.ast.ZenGetLocalNode;
 import zen.ast.ZenIfNode;
 import zen.ast.ZenIntNode;
-import zen.ast.ZenNode;
 import zen.ast.ZenNullNode;
 import zen.ast.ZenOrNode;
 import zen.ast.ZenReturnNode;
@@ -46,7 +45,7 @@ import zen.parser.ZenSourceGenerator;
 
 public class CommonLispSourceGenerator extends ZenSourceGenerator {
 
-	public CommonLispSourceGenerator(String TargetCode) {
+	public CommonLispSourceGenerator() {
 		super("CommonLisp", "0.0");
 	}
 
@@ -78,18 +77,22 @@ public class CommonLispSourceGenerator extends ZenSourceGenerator {
 		}
 	}
 
-	private final boolean DoesNodeExist(ZenNode Node){
-		return Node != null && !(Node instanceof ZenEmptyNode);
-	}
-
 	@Override public void VisitReturnNode(ZenReturnNode Node) {
-		if (this.DoesNodeExist(Node.ValueNode)) {
+		if (Node.ValueNode != null) {
 			Node.ValueNode.Accept(this);
 		}
 	}
 
 	@Override public void VisitNullNode(ZenNullNode Node) {
 		this.CurrentBuilder.Append("nil");
+	}
+
+	@Override public void VisitBlockNode(ZenBlockNode Node) {
+		this.CurrentBuilder.Indent();
+		this.VisitStatementList(Node.StatementList);
+		this.CurrentBuilder.UnIndent();
+		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.AppendIndent();
 	}
 
 	//	@Override
@@ -197,7 +200,7 @@ public class CommonLispSourceGenerator extends ZenSourceGenerator {
 			this.CurrentBuilder.Append("nil");
 		}
 
-		this.CurrentBuilder.AppendLine(")");
+		this.CurrentBuilder.AppendToken(")");
 	}
 
 	//	@Override public void VisitTrinaryNode(ZenTrinaryNode Node) {
@@ -211,32 +214,29 @@ public class CommonLispSourceGenerator extends ZenSourceGenerator {
 	//	}
 
 	@Override public void VisitIfNode(ZenIfNode Node) {
-		// FIXME we use this.CurrentBuilder.Indent(),
-		// UnIndent() instedof AppendIndent()
 		this.CurrentBuilder.Append("(if  ");
 		Node.CondNode.Accept(this);
-		this.CurrentBuilder.AppendLineFeed();;
+		this.CurrentBuilder.Indent();
+		this.CurrentBuilder.AppendLineFeed();
 
-		this.CurrentBuilder.AppendIndent();
-		this.CurrentBuilder.AppendIndent();
-		this.CurrentBuilder.AppendToken("(progn ");
+		this.CurrentBuilder.Append("(progn ");
+		this.CurrentBuilder.Indent();
 		this.CurrentBuilder.AppendLineFeed();
 		Node.ThenNode.Accept(this);
-		this.CurrentBuilder.AppendIndent();
-		this.CurrentBuilder.AppendIndent();
-		this.CurrentBuilder.AppendToken(")");
+		this.CurrentBuilder.UnIndent();
 		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.Append(")");
 
 		if(Node.ElseNode != null) {
-			this.CurrentBuilder.AppendIndent();
-			this.CurrentBuilder.AppendIndent();
-			this.CurrentBuilder.AppendLine("(progn ");
+			this.CurrentBuilder.Indent();
+			this.CurrentBuilder.AppendLineFeed();
+			this.CurrentBuilder.Append("(progn ");
 			Node.ElseNode.Accept(this);
-			this.CurrentBuilder.AppendIndent();
-			this.CurrentBuilder.AppendIndent();
+			this.CurrentBuilder.UnIndent();
+			this.CurrentBuilder.AppendLineFeed();
 			this.CurrentBuilder.Append(")");
 		}
-
+		this.CurrentBuilder.UnIndent();
 		this.CurrentBuilder.Append(")");
 	}
 
