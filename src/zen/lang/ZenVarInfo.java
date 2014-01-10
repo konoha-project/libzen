@@ -24,7 +24,6 @@
 
 package zen.lang;
 
-import zen.obsolete.ZenDefiningFunc;
 import zen.parser.ZenNameSpace;
 import zen.parser.ZenToken;
 import zen.parser.ZenUtils;

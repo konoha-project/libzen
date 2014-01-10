@@ -30,12 +30,11 @@ import zen.ast.ZenNode;
 import zen.deps.LibNative;
 import zen.deps.LibZen;
 import zen.deps.ZenMap;
+import zen.lang.ZenDefiningFunc;
 import zen.lang.ZenFunc;
 import zen.lang.ZenSystem;
 import zen.lang.ZenType;
 import zen.lang.ZenTypeCheckerImpl2;
-import zen.obsolete.ZenDefiningFunc;
-//endif VAJA
 
 final class ZenSymbolSource {
 	/*field*/public ZenToken SourceToken;
