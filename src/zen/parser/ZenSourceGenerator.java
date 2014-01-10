@@ -144,8 +144,7 @@ public class ZenSourceGenerator extends ZenGenerator {
 		return TypeName;
 	}
 
-	@Override
-	public Object EvalTopLevelNode(ZenNode Node) {
+	@Override public Object EvalTopLevelNode(ZenNode Node) {
 		String Code = this.CurrentBuilder.toString();
 		System.out.println(Code);
 		this.CurrentBuilder.Clear();

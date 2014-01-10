@@ -25,15 +25,23 @@
 package zen.ast;
 
 
+import zen.deps.ZenMap;
 import zen.parser.ZenToken;
 import zen.parser.ZenVisitor;
 
-final public class ZenEmptyNode extends ZenNode {
-	public ZenEmptyNode/*constructor*/(ZenToken Token) {
+final public class ZenAnnotationNode extends ZenNode {
+	public ZenMap<Object> Annotation;
+	public ZenNode AnnotatedNode;
+
+	public ZenAnnotationNode/*constructor*/(ZenToken Token) {
 		this.SourceToken = Token;
+		this.Annotation = new ZenMap<Object>(null);
+		this.AnnotatedNode = null;
 	}
 
 	@Override public void Accept(ZenVisitor Visitor) {
-		Visitor.VisitEmptyNode(this);
+		if(this.AnnotatedNode != null) {
+			this.AnnotatedNode.Accept(Visitor);
+		}
 	}
 }
