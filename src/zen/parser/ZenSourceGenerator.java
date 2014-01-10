@@ -38,6 +38,7 @@ import zen.ast.ZenCastNode;
 import zen.ast.ZenCatchNode;
 import zen.ast.ZenComparatorNode;
 import zen.ast.ZenConstPoolNode;
+import zen.ast.ZenEmptyNode;
 import zen.ast.ZenErrorNode;
 import zen.ast.ZenFloatNode;
 import zen.ast.ZenFuncDeclNode;
@@ -195,6 +196,10 @@ public class ZenSourceGenerator extends ZenGenerator {
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.AppendIndent();
 		this.CurrentBuilder.Append("}");
+	}
+
+	@Override
+	public void VisitEmptyNode(ZenEmptyNode Node) {
 	}
 
 	@Override
