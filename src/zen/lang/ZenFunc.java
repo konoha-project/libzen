@@ -152,6 +152,11 @@ public class ZenFunc implements ZenFuncConst {
 		return null;
 	}
 
+	public boolean IsLazyDef() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 	//	public final boolean IsAbstract() {
 	//		return this.FuncBody == null;
 	//	}

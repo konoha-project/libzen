@@ -24,13 +24,13 @@
 
 package zen.lang;
 
-import zen.obsolete.GtFuncBlock;
+import zen.obsolete.ZenFunc;
 import zen.parser.ZenNameSpace;
 import zen.parser.ZenToken;
 import zen.parser.ZenUtils;
 
 public class ZenVarInfo {
-	/*field*/public GtFuncBlock  FuncBlock;
+	/*field*/public ZenFunc  DefiningFunc;
 	/*field*/public int      VariableFlag;
 	/*field*/public ZenType	 Type;
 	/*field*/public String	 Name;
@@ -40,20 +40,20 @@ public class ZenVarInfo {
 	/*field*/public int      DefCount;
 	/*field*/public int      UsedCount;
 
-	ZenVarInfo(GtFuncBlock FuncBlock, int VarFlag, ZenType Type, String Name, ZenToken SourceToken) {
-		this.FuncBlock    = FuncBlock;
+	ZenVarInfo(ZenFunc DefiningFunc, int VarFlag, ZenType Type, String Name, ZenToken SourceToken) {
+		this.DefiningFunc    = DefiningFunc;
 		this.VariableFlag = VarFlag;
 		this.Type = Type;
 		this.SourceToken = SourceToken;
 		this.Name = Name;
-		this.NativeName = ZenUtils.NativeVariableName(Name, this.FuncBlock.GetVariableIndex());
+		this.NativeName = ZenUtils.NativeVariableName(Name, this.DefiningFunc.GetVariableIndex());
 		//		this.InitValue = null;
 		this.UsedCount = 0;
 		this.DefCount  = 1;
 	}
 
 	public final boolean IsCaptured(ZenNameSpace NameSpace) {
-		return (NameSpace.FuncBlock != this.FuncBlock);
+		return (NameSpace.DefiningFunc != this.DefiningFunc);
 	}
 
 	//	public final void Defined() {

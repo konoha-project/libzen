@@ -33,8 +33,7 @@ import zen.deps.ZenMap;
 import zen.lang.ZenFunc;
 import zen.lang.ZenSystem;
 import zen.lang.ZenType;
-import zen.lang.ZenTypeChecker;
-import zen.obsolete.GtFuncBlock;
+import zen.lang.ZenTypeCheckerImpl2;
 //endif VAJA
 
 final class ZenSymbolSource {
@@ -43,14 +42,13 @@ final class ZenSymbolSource {
 	/*field*/public Object  Value;
 }
 
-public final class ZenNameSpace extends ZenUtils {
-	//	/*field*/public final GtParserContext		Context;
+public final class ZenNameSpace {
 	/*field*/public final ZenNameSpace   ParentNameSpace;
 	/*field*/public final ZenGenerator		    Generator;
 
 	/*field*/ZenTokenFunc[] TokenMatrix;
 	/*field*/ZenMap<Object>	 SymbolPatternTable;
-	/*field*/public GtFuncBlock  FuncBlock;
+	/*field*/public ZenFunc  DefiningFunc;
 
 	public ZenNameSpace(ZenGenerator Generator, ZenNameSpace ParentNameSpace) {
 		//		this.Context = Context;
@@ -59,12 +57,11 @@ public final class ZenNameSpace extends ZenUtils {
 		this.SymbolPatternTable = null;
 		if(ParentNameSpace == null) {
 			this.Generator = Generator;
-			this.FuncBlock = null;
+			this.DefiningFunc = null;
 			ZenSystem.InitNameSpace(this);
 		}
 		else {
 			this.Generator = ParentNameSpace.Generator;
-			this.FuncBlock = ParentNameSpace.FuncBlock;
 		}
 	}
 
@@ -72,28 +69,27 @@ public final class ZenNameSpace extends ZenUtils {
 		return new ZenNameSpace(null, this);
 	}
 
-	public final ZenNameSpace Minimum() {
-		/*local*/ZenNameSpace NameSpace = this;
-		while(NameSpace.SymbolPatternTable == null) {
-			NameSpace = NameSpace.ParentNameSpace;
-		}
-		return NameSpace;
-	}
-
-	public final ZenNameSpace GetNameSpace(int NameSpaceFlag) {
-		if(ZenUtils.IsFlag(NameSpaceFlag, ZenParserConst.PublicNameSpace)) {
-			return this.ParentNameSpace;
-		}
-		return this;
-	}
+	//	public final ZenNameSpace Minimum() {
+	//		/*local*/ZenNameSpace NameSpace = this;
+	//		while(NameSpace.SymbolPatternTable == null) {
+	//			NameSpace = NameSpace.ParentNameSpace;
+	//		}
+	//		return NameSpace;
+	//	}
+	//
+	//	public final ZenNameSpace GetNameSpace(int NameSpaceFlag) {
+	//		if(ZenUtils.IsFlag(NameSpaceFlag, ZenParserConst.PublicNameSpace)) {
+	//			return this.ParentNameSpace;
+	//		}
+	//		return this;
+	//	}
 
 	// TokenMatrix
-
-	public final ZenTokenFunc GetTokenFunc(int GtChar2) {
+	public final ZenTokenFunc GetTokenFunc(int ZenChar) {
 		if(this.TokenMatrix == null) {
-			return this.ParentNameSpace.GetTokenFunc(GtChar2);
+			return this.ParentNameSpace.GetTokenFunc(ZenChar);
 		}
-		return this.TokenMatrix[GtChar2];
+		return this.TokenMatrix[ZenChar];
 	}
 
 	private final ZenTokenFunc JoinParentFunc(ZenFunc Func, ZenTokenFunc Parent) {
@@ -242,8 +238,6 @@ public final class ZenNameSpace extends ZenUtils {
 		}
 	}
 
-
-
 	public final ZenType GetType(String TypeName) {
 		/*local*/Object TypeInfo = this.GetSymbol(TypeName);
 		if(TypeInfo instanceof ZenType) {
@@ -257,6 +251,17 @@ public final class ZenNameSpace extends ZenUtils {
 			this.SetSymbol(Type.ShortName, Type, SourceToken);
 		}
 		return Type;
+	}
+
+	// DefiningFunc
+
+	public ZenFunc GetDefiningFunc() {
+		if(this.DefiningFunc != null) {
+			return this.DefiningFunc;
+		}
+		if(this.ParentNameSpace != null) {
+			this.ParentNameSpace.GetDefiningFunc();
+		}
 	}
 
 	//	public final ZenType AppendTypeVariable(String Name, ZenType ParamBaseType, GtToken SourceToken, ArrayList<Object> RevertList) {
@@ -543,7 +548,7 @@ public final class ZenNameSpace extends ZenUtils {
 		/*local*/Object ResultValue = null;
 		ZenLogger.VerboseLog(ZenLogger.VerboseEval, "eval: " + ScriptText);
 		/*local*/ZenTokenContext TokenContext = new ZenTokenContext(this, ScriptText, FileLine);
-		/*local*/ZenTypeChecker TypeChecker = new ZenTypeChecker(this.Generator.Logger);
+		/*local*/ZenTypeCheckerImpl2 TypeChecker = new ZenTypeCheckerImpl2(this.Generator.Logger);
 		TokenContext.SkipEmptyStatement();
 		while(TokenContext.HasNext()) {
 			TokenContext.ParseFlag = 0; // init
