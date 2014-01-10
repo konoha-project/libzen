@@ -255,14 +255,14 @@ public final class ZenNameSpace {
 
 	// DefiningFunc
 
-	public ZenFunc GetDefiningFunc() {
-		if(this.DefiningFunc != null) {
-			return this.DefiningFunc;
-		}
-		if(this.ParentNameSpace != null) {
-			this.ParentNameSpace.GetDefiningFunc();
-		}
-	}
+	//	public ZenFunc GetDefiningFunc() {
+	//		if(this.DefiningFunc != null) {
+	//			return this.DefiningFunc;
+	//		}
+	//		if(this.ParentNameSpace != null) {
+	//			this.ParentNameSpace.GetDefiningFunc();
+	//		}
+	//	}
 
 	//	public final ZenType AppendTypeVariable(String Name, ZenType ParamBaseType, GtToken SourceToken, ArrayList<Object> RevertList) {
 	//		this.UpdateRevertList(Name, RevertList);
