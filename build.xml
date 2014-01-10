@@ -2,7 +2,7 @@
 	<!-- directory / file definition -->
 	<property name="BinaryName" value="libzen" />
 	<property name="source_dir" value="src" />
-	<property name="build_dir"  value="bin" />
+	<property name="build_dir"  value="build" />
 
 	<!-- ================================== -->
 	<!--                BUILD               -->
