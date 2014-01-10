@@ -1,3 +1,29 @@
+// ***************************************************************************
+// Copyright (c) 2013-2014, Konoha project authors. All rights reserved.
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are met:
+//
+// *  Redistributions of source code must retain the above copyright notice,
+//    this list of conditions and the following disclaimer.
+// *  Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+// TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+// PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+// CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+// OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+// WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+// OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+// ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// **************************************************************************
+
+//ifdef JAVA
+
 package zen.lang;
 
 import java.util.ArrayList;
@@ -5,6 +31,7 @@ import java.util.ArrayList;
 import zen.ast.ZenErrorNode;
 import zen.ast.ZenNode;
 import zen.deps.Field;
+import zen.deps.Var;
 import zen.parser.ZenLogger;
 import zen.parser.ZenNameSpace;
 import zen.parser.ZenToken;
@@ -82,7 +109,7 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 
 	public final void TypeCheckNodeList(ZenNameSpace NameSpace, ArrayList<ZenNode> ParamList) {
 		if(this.IsVisitable()) {
-			int i = 0;
+			@Var int i = 0;
 			while(i < ParamList.size()) {
 				ZenNode SubNode = ParamList.get(i);
 				SubNode = this.TypeCheck(SubNode, NameSpace, ZenSystem.VarType, ZenTypeChecker.DefaultTypeCheckPolicy);
@@ -93,10 +120,10 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 	}
 
 	private int FilterFuncParamType(ArrayList<ZenFunc> FuncList, int StartIdx, int EndIdx, int ParamIdx, ZenType ParamType) {
-		int StartFuncSize = FuncList.size();
-		int i = StartIdx;
+		@Var int StartFuncSize = FuncList.size();
+		@Var int i = StartIdx;
 		while(i < EndIdx) {
-			ZenFunc Func = FuncList.get(i);
+			@Var ZenFunc Func = FuncList.get(i);
 			if(Func.GetFuncParamType(ParamIdx) == ParamType) {
 				FuncList.add(Func);
 			}
@@ -106,15 +133,15 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 	}
 
 	private ZenType GuessFuncTypeMatchedParam(ZenNameSpace NameSpace, ArrayList<ZenFunc> FuncList, ArrayList<ZenNode> ParamList, int ResolvedSize) {
-		int StartIdx = 0;
-		int NextIdx = FuncList.size();
-		int FuncParamSize = ParamList.size();
+		@Var int StartIdx = 0;
+		@Var int NextIdx = FuncList.size();
+		@Var int FuncParamSize = ParamList.size();
 		while(ResolvedSize < FuncParamSize) {
-			ZenNode SubNode = this.TypeCheck(ParamList.get(ResolvedSize), NameSpace, ZenSystem.VarType, 0);
+			@Var ZenNode SubNode = this.TypeCheck(ParamList.get(ResolvedSize), NameSpace, ZenSystem.VarType, 0);
 			if(SubNode.Type.IsVarType()) {
 				return ZenSystem.VarType; // unspecified
 			}
-			int Count = this.FilterFuncParamType(FuncList, StartIdx, NextIdx, ResolvedSize, SubNode.Type);
+			@Var int Count = this.FilterFuncParamType(FuncList, StartIdx, NextIdx, ResolvedSize, SubNode.Type);
 			if(Count == 1) {
 				return FuncList.get(FuncList.size()-1).ZenType;
 			}
@@ -128,10 +155,10 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 	}
 
 	private boolean IsAcceptFunc(ZenFunc Func, ArrayList<ZenNode> ParamList) {
-		int i = 0;
+		@Var int i = 0;
 		while(i < ParamList.size()) {
-			ZenType FuncType = Func.GetFuncParamType(i);
-			ZenType ParamType = ParamList.get(i).Type;
+			@Var ZenType FuncType = Func.GetFuncParamType(i);
+			@Var ZenType ParamType = ParamList.get(i).Type;
 			if(Func.GetFuncParamType(i) != ParamList.get(i).Type) {
 				if(FuncType != ParamType && !FuncType.Accept(ParamType)) {
 					return false;
@@ -143,44 +170,46 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 	}
 
 	protected ZenType GuessFuncType(ZenNameSpace NameSpace, String FuncName, ArrayList<ZenNode> ParamList) {
-		ArrayList<ZenFunc> FuncList = new ArrayList<ZenFunc>();
-		int FuncParamSize = ParamList.size();
+		@Var ArrayList<ZenFunc> FuncList = new ArrayList<ZenFunc>();
+		@Var int FuncParamSize = ParamList.size();
 		NameSpace.RetrieveFuncList(FuncList, null, FuncName, FuncParamSize);
-		int BaseSize = FuncList.size();
+		@Var int BaseSize = FuncList.size();
 		if(BaseSize > 1 && FuncParamSize > 0) {
-			ZenType GuessedType = this.GuessFuncTypeMatchedParam(NameSpace, FuncList, ParamList, 0);
-			if(GuessedType != null) {
-				return GuessedType;
-			}
-			int i = 0;
-			while(i < BaseSize) {
-				ZenFunc Func = FuncList.get(i);
-				if(this.IsAcceptFunc(Func, ParamList)) {
-					return Func.ZenType;
+			@Var ZenType GuessedType = this.GuessFuncTypeMatchedParam(NameSpace, FuncList, ParamList, 0);
+			if(GuessedType == null) {
+				GuessedType = ZenSystem.VarType;
+				@Var int i = 0;
+				while(i < BaseSize) {
+					@Var ZenFunc Func = FuncList.get(i);
+					if(this.IsAcceptFunc(Func, ParamList)) {
+						GuessedType = Func.ZenType;
+						break;
+					}
+					i = i + 1;
 				}
-				i = i + 1;
 			}
+			return GuessedType;
 		}
 		return ZenSystem.VarType; // unspecified
 	}
 
 	protected ZenType GuessMethodFuncType(ZenNameSpace NameSpace, ZenNode RecvNode, String FuncName, ArrayList<ZenNode> ParamList) {
-		ArrayList<ZenFunc> FuncList = new ArrayList<ZenFunc>();
-		int FuncParamSize = ParamList.size() + 1;
-		ZenType ClassType = RecvNode.Type;
+		@Var ArrayList<ZenFunc> FuncList = new ArrayList<ZenFunc>();
+		@Var int FuncParamSize = ParamList.size() + 1;
+		@Var ZenType ClassType = RecvNode.Type;
 		while(ClassType != null) {
 			NameSpace.RetrieveFuncList(FuncList, ClassType, FuncName, FuncParamSize);
 			ClassType = ClassType.GetSuperType();
 		}
-		int BaseSize = FuncList.size();
+		@Var int BaseSize = FuncList.size();
 		if(BaseSize > 1 && FuncParamSize > 1) {
 			ParamList.add(0, RecvNode);
-			ZenType GuessedType = this.GuessFuncTypeMatchedParam(NameSpace, FuncList, ParamList, 1);
+			@Var ZenType GuessedType = this.GuessFuncTypeMatchedParam(NameSpace, FuncList, ParamList, 1);
 			if(GuessedType == null) {
 				GuessedType = ZenSystem.VarType;
-				int i = 0;
+				@Var int i = 0;
 				while(i < BaseSize) {
-					ZenFunc Func = FuncList.get(i);
+					@Var ZenFunc Func = FuncList.get(i);
 					if(this.IsAcceptFunc(Func, ParamList)) {
 						GuessedType = Func.ZenType;
 						break;
@@ -301,7 +330,7 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 	}
 
 	protected ZenVarInfo GetVarInfo(ZenNameSpace NameSpace, String VarName) {
-		Object VarInfo = NameSpace.GetSymbol(VarName);
+		@Var Object VarInfo = NameSpace.GetSymbol(VarName);
 		if(VarInfo instanceof ZenVarInfo) {
 			return (ZenVarInfo)VarInfo;
 		}
@@ -309,40 +338,16 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 	}
 
 	protected void SetVarInfo(ZenNameSpace NameSpace, ZenType VarType, String VarName, ZenToken SourceToken) {
-		ZenVarInfo VarInfo = new ZenVarInfo(NameSpace.GetDefiningFunc(), 0, VarType, VarName, SourceToken);
+		@Var ZenVarInfo VarInfo = new ZenVarInfo(NameSpace.GetDefiningFunc(), 0, VarType, VarName, SourceToken);
 		NameSpace.SetSymbol(VarName, VarInfo, SourceToken);
-		//		return VarInfo;
 	}
 
-	//	public int RetrieveFuncList(ZenNameSpace NameSpace, String FuncName, ArrayList<ZenFunc> FuncList, int StartIdx, ArrayList<ZenType> TypeList, int ResolvedSize, int FuncParamSize) {
-	//		if(ResolvedSize == 0) {
-	//			NameSpace.RetrieveFuncList(FuncList, null, FuncName, FuncParamSize);
-	//		}
-	//		if(ResolvedSize > 0) {
-	//			int i = StartIdx;
-	//			int FuncListSize = FuncList.size();
-	//			while(i < FuncListSize) {
-	//				ZenFunc Func = FuncList.get(i);
-	//				if(Func.GetFuncParamType(ResolvedSize-1) == TypeList.get(ResolvedSize-1)) {
-	//					FuncList.add(Func);
-	//				}
-	//				i = i + 1;
-	//			}
-	//			return FuncList.size() - FuncListSize;
-	//		}
-	//		return FuncList.size();
-	//	}
-
-
-
-
-	public ZenNode CanDefineFunc(ZenNameSpace NameSpace, String FuncName, ZenFuncType funcType) {
+	public ZenNode CanDefineFunc(ZenNameSpace NameSpace, String FuncName, ZenFuncType FuncType) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public ZenFunc Define(ZenNameSpace nameSpace, String funcName,
-			ZenFuncType funcType) {
+	public ZenFunc Define(ZenNameSpace NameSpace, String FuncName, ZenFuncType FuncType) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -352,25 +357,22 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		return null;
 	}
 
-	public void PopFunc(ZenFunc upperFunc) {
+	public void PopFunc(ZenFunc UpperFunc) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public ZenFuncType CheckFunctionType(ZenFuncType funcType,
-			ZenType contextType) {
+	public ZenFuncType CheckFunctionType(ZenFuncType FuncType, ZenType ContextType) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public void UpdateParamType() {
 		// TODO Auto-generated method stub
-
 	}
 
-	public void TypeSync(ZenType varType, ZenNode valueNode) {
+	public void TypeSync(ZenType VarType, ZenNode ValueNode) {
 		// TODO Auto-generated method stub
-
 	}
 
 }
