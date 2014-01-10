@@ -47,12 +47,16 @@ public final class ZenMap <T> implements ZenObject {
 	}
 
 	public Iterator<String> key_iterator() { // FIXME
-		return Map.keySet().iterator();
+		return this.Map.keySet().iterator();
 	}
 
 	@Override public ZenType GetZenType() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public void AddMap(ZenMap<Object> aMap) {
+		throw new RuntimeException("unimplemented !!");
 	}
 }
 //endif VAJA

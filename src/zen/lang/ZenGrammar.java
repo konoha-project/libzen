@@ -27,6 +27,7 @@ package zen.lang;
 import java.util.ArrayList;
 
 import zen.ast.ZenAndNode;
+import zen.ast.ZenAnnotationNode;
 import zen.ast.ZenApplyNode;
 import zen.ast.ZenArrayLiteralNode;
 import zen.ast.ZenBinaryNode;
@@ -67,6 +68,7 @@ import zen.ast.ZenVarDeclNode;
 import zen.ast.ZenWhileNode;
 import zen.deps.LibNative;
 import zen.deps.LibZen;
+import zen.deps.ZenMap;
 import zen.parser.ZenLogger;
 import zen.parser.ZenNameSpace;
 import zen.parser.ZenNodeUtils;
@@ -760,8 +762,25 @@ public class ZenGrammar {
 		return FuncNode;
 	}
 
+	public static ZenNode MatchAnnotation(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenNode LeftNode) {
+		ZenMap<Object> Anno = null;
+		/*local*/ZenToken Token = null;
+		while(TokenContext.MatchToken("@")) {
+			Token = TokenContext.GetTokenAndMoveForward();
+			if(Anno == null) {
+				Anno = new ZenMap<Object>(null);
+			}
+			Anno.put(Token.ParsedText, Token);
+			TokenContext.SkipIndent();
+		}
+		if(Anno != null) {
+			return new ZenAnnotationNode(Token, Anno);
+		}
+		return null;
+	}
+
 	public static ZenNode MatchStatement(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenNode LeftNode) {
-		TokenContext.SkipAndGetAnnotation(true);
+		/*local*/ZenAnnotationNode AnnotationNode = (ZenAnnotationNode)TokenContext.ParsePattern(NameSpace, "$Annotation$", ZenParserConst.Required);
 		/*local*/ZenNode ParsedNode = TokenContext.ParsePattern(NameSpace, "$Expression$", ZenParserConst.Required);
 		if(!ParsedNode.IsErrorNode() && TokenContext.HasNext()) {
 			ZenToken Token = TokenContext.GetTokenAndMoveForward();
@@ -769,12 +788,15 @@ public class ZenGrammar {
 				return TokenContext.CreateExpectedErrorNode(Token, ";");
 			}
 		}
+		if(AnnotationNode != null) {
+			AnnotationNode.Append(ParsedNode);
+			ParsedNode = AnnotationNode;
+		}
 		return ParsedNode;
 	}
 
 	public static ZenNode MatchBlock(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenNode LeftNode) {
 		if(TokenContext.IsNewLineToken("{")) {
-			TokenContext.Push();
 			TokenContext.SetParseFlag(0);
 			/*local*/ZenToken IndentToken = TokenContext.GetCurrentIndentToken();
 			/*local*/ZenNameSpace BlockNameSpace = NameSpace.CreateSubNameSpace();
@@ -792,7 +814,6 @@ public class ZenGrammar {
 					break;
 				}
 			}
-			TokenContext.Pop();
 			return BlockNode;
 		}
 		return TokenContext.CreateExpectedErrorNode(TokenContext.GetToken(), "block");

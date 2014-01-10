@@ -30,7 +30,6 @@ import zen.ast.ZenErrorNode;
 import zen.ast.ZenNode;
 import zen.deps.LibNative;
 import zen.deps.LibZen;
-import zen.deps.ZenMap;
 import zen.lang.ZenFunc;
 import zen.lang.ZenSystem;
 
@@ -40,10 +39,10 @@ public final class ZenTokenContext extends ZenUtils {
 	/*field*/private int CurrentPosition;
 	/*field*/public long ParsingLine;
 	/*field*/private int ParseFlag;
-	/*field*/private final ArrayList<Integer> ParserStack;
-	/*field*/public ZenMap<Object> ParsingAnnotation;
+	//	/*field*/private final ArrayList<Integer> ParserStack;
+	//	/*field*/public ZenMap<Object> ParsingAnnotation;
 	/*field*/public ZenToken LatestToken;
-	/*field*/protected int IndentLevel = 0;
+	/*field*/int IndentLevel = 0;
 
 	public ZenTokenContext(ZenNameSpace NameSpace, String Text, long FileLine) {
 		this.TopLevelNameSpace = NameSpace;
@@ -52,10 +51,8 @@ public final class ZenTokenContext extends ZenUtils {
 		this.ParsingLine = FileLine;
 		this.SetParseFlag(0);
 		this.AppendParsedToken(Text, ZenParserConst.SourceTokenFlag, null);
-		this.ParsingAnnotation = null;
 		this.IndentLevel = 0;
 		this.LatestToken = null;
-		this.ParserStack = new ArrayList<Integer>();
 	}
 
 	public ZenToken AppendParsedToken(String Text, int TokenFlag, String PatternName) {
@@ -428,31 +425,6 @@ public final class ZenTokenContext extends ZenUtils {
 	}
 
 
-	public final ZenMap<Object> SkipAndGetAnnotation(boolean IsAllowedDelim) {
-		// this is tentative implementation. In the future, you have to
-		// use this pattern.
-		this.ParsingAnnotation = null;
-		this.SkipEmptyStatement();
-		while(this.MatchToken("@")) {
-			/*local*/ZenToken Token = this.GetTokenAndMoveForward();
-			if(this.ParsingAnnotation == null) {
-				this.ParsingAnnotation = new ZenMap<Object>(null);
-			}
-			this.ParsingAnnotation.put(Token.ParsedText, true);
-			this.SkipIndent();
-			//			if(this.MatchToken(";")) {
-			//				if(IsAllowedDelim) {
-			//					Annotation = null; // empty statement
-			//					this.();
-			//				}
-			//				else {
-			//					return null;
-			//				}
-			//			}
-		}
-		return this.ParsingAnnotation;
-	}
-
 	public final void SkipEmptyStatement() {
 		while(this.HasNext()) {
 			/*local*/ZenToken Token = this.GetToken();
@@ -510,16 +482,6 @@ public final class ZenTokenContext extends ZenUtils {
 			/*local*/int Line = (/*cast*/int)LibZen.ParseInt(SourceMap.substring(Index+1));
 			this.ParsingLine = ZenSystem.GetFileLine(FileName, Line);
 		}
-	}
-
-
-	public final void Push() {
-		this.ParserStack.add(this.GetParseFlag());
-	}
-
-	public final void Pop() {
-		this.SetParseFlag(this.ParserStack.get(this.ParserStack.size() - 1));
-		this.ParserStack.remove(this.ParserStack.size() - 1);
 	}
 
 	public final void DumpPosition() {

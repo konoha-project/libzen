@@ -41,10 +41,6 @@ public abstract class ZenNode {
 		this.ParentNode = null;
 	}
 
-	public final boolean IsErrorNode() {
-		return (this instanceof ZenErrorNode);
-	}
-
 	public final ZenNode SetChild(ZenNode Node) {
 		assert(Node != null);
 		if(Node != null) {
@@ -54,12 +50,20 @@ public abstract class ZenNode {
 		return Node;
 	}
 
+	public boolean IsErrorNode() {
+		return (this instanceof ZenErrorNode);
+	}
+
+	public boolean IsBreakingBlock() {
+		return false;
+	}
+
 	public void Append(ZenNode Node) {
 
 	}
 
 	public final ZenNode Done() {
-		return new ZenBlockNode(this.SourceToken, null);
+		return new ZenEmptyNode(null);
 	}
 
 	public String GetVisitName() {
@@ -85,10 +89,6 @@ public abstract class ZenNode {
 
 	public ZenReturnNode ToReturnNode() {
 		return null;
-	}
-
-	public boolean IsBreakingBlock() {
-		return false;
 	}
 
 }

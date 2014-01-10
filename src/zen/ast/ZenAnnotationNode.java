@@ -23,25 +23,38 @@
 // **************************************************************************
 
 package zen.ast;
-
-
 import zen.deps.ZenMap;
 import zen.parser.ZenToken;
 import zen.parser.ZenVisitor;
 
-final public class ZenAnnotationNode extends ZenNode {
+public final class ZenAnnotationNode extends ZenNode {
 	public ZenMap<Object> Annotation;
 	public ZenNode AnnotatedNode;
 
-	public ZenAnnotationNode/*constructor*/(ZenToken Token) {
+	public ZenAnnotationNode/*constructor*/(ZenToken Token, ZenMap<Object> Anno) {
 		this.SourceToken = Token;
-		this.Annotation = new ZenMap<Object>(null);
+		this.Annotation = Anno;
 		this.AnnotatedNode = null;
 	}
 
-	@Override public void Accept(ZenVisitor Visitor) {
-		if(this.AnnotatedNode != null) {
-			this.AnnotatedNode.Accept(Visitor);
+	@Override public void Append(ZenNode Node) {
+		if(Node instanceof ZenAnnotationNode) {
+			ZenAnnotationNode AnnoNode = (ZenAnnotationNode)Node;
+			this.Annotation.AddMap(AnnoNode.Annotation);
+			Node = AnnoNode.AnnotatedNode;
 		}
+		this.AnnotatedNode = this.SetChild(Node);
+	}
+
+	@Override public boolean IsBreakingBlock() {
+		return this.AnnotatedNode.IsBreakingBlock();
+	}
+
+	@Override public boolean IsErrorNode() {
+		return this.AnnotatedNode.IsErrorNode();
+	}
+
+	@Override public void Accept(ZenVisitor Visitor) {
+		this.AnnotatedNode.Accept(Visitor);
 	}
 }
