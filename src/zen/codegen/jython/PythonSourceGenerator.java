@@ -25,18 +25,20 @@
 //ifdef JAVA
 package zen.codegen.jython;
 
+import java.util.ArrayList;
+
 import zen.ast.ZenBlockNode;
 import zen.ast.ZenCastNode;
 import zen.ast.ZenCatchNode;
 import zen.ast.ZenFuncDeclNode;
 import zen.ast.ZenFunctionLiteralNode;
 import zen.ast.ZenInstanceOfNode;
+import zen.ast.ZenNode;
 import zen.ast.ZenParamNode;
 import zen.ast.ZenReturnNode;
 import zen.ast.ZenThrowNode;
 import zen.ast.ZenTryNode;
 import zen.ast.ZenVarDeclNode;
-import zen.ast.ZenNode;
 import zen.lang.ZenSystem;
 import zen.parser.ZenSourceGenerator;
 //endif VAJA
@@ -46,7 +48,7 @@ import zen.parser.ZenSourceGenerator;
 public class PythonSourceGenerator extends ZenSourceGenerator {
 
 	public PythonSourceGenerator/* constructor */() {
-		super("python", "2.0");
+		super("Python", "2.0");
 		this.LineFeed = "\n";
 		this.Tab = "\t";
 		this.LineComment = "#"; // if not, set null
@@ -70,24 +72,28 @@ public class PythonSourceGenerator extends ZenSourceGenerator {
 		this.SetNativeType(ZenSystem.StringType, "str");
 	}
 
-	@Override
-	public void VisitBlockNode(ZenBlockNode Node) {
-		int count = 0;
-		this.CurrentBuilder.Append(":");
-		this.CurrentBuilder.Indent();
-		for (int i = 0; i < Node.StatementList.size(); i++) {
-			ZenNode SubNode = Node.StatementList.get(i);
+	@Override public void VisitStatementList(ArrayList<ZenNode> StatementList) {
+		int i = 0;
+		while (i < StatementList.size()) {
+			ZenNode SubNode = StatementList.get(i);
 			this.CurrentBuilder.AppendLineFeed();
 			this.CurrentBuilder.AppendIndent();
 			this.GenerateCode(SubNode);
 			this.CurrentBuilder.Append(this.SemiColon);
-			count = count + 1;
+			i = i + 1;
 		}
-		if (count == 0) {
+		if (i == 0) {
 			this.CurrentBuilder.AppendLineFeed();
 			this.CurrentBuilder.AppendIndent();
 			this.CurrentBuilder.Append("pass");
 		}
+	}
+
+	@Override
+	public void VisitBlockNode(ZenBlockNode Node) {
+		this.CurrentBuilder.Append(":");
+		this.CurrentBuilder.Indent();
+		this.VisitStatementList(Node.StatementList);
 		this.CurrentBuilder.UnIndent();
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.AppendIndent();

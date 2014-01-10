@@ -36,6 +36,7 @@ import zen.ast.ZenBooleanNode;
 import zen.ast.ZenBreakNode;
 import zen.ast.ZenCastNode;
 import zen.ast.ZenCatchNode;
+import zen.ast.ZenComparatorNode;
 import zen.ast.ZenConstPoolNode;
 import zen.ast.ZenErrorNode;
 import zen.ast.ZenFloatNode;
@@ -53,6 +54,8 @@ import zen.ast.ZenMapLiteralNode;
 import zen.ast.ZenMethodCallNode;
 import zen.ast.ZenNewArrayNode;
 import zen.ast.ZenNewObjectNode;
+import zen.ast.ZenNode;
+import zen.ast.ZenNotNode;
 import zen.ast.ZenNullNode;
 import zen.ast.ZenOrNode;
 import zen.ast.ZenParamNode;
@@ -67,9 +70,6 @@ import zen.ast.ZenTryNode;
 import zen.ast.ZenUnaryNode;
 import zen.ast.ZenVarDeclNode;
 import zen.ast.ZenWhileNode;
-import zen.ast.ZenComparatorNode;
-import zen.ast.ZenNode;
-import zen.ast.ZenNotNode;
 import zen.deps.LibZen;
 import zen.deps.ZenMap;
 import zen.lang.ZenType;
@@ -153,15 +153,15 @@ public class ZenSourceGenerator extends ZenGenerator {
 		return null;
 	}
 
-//	public final void FlushErrorReport() {
-//		/*local*/ZenSourceBuilder Builder = this.NewSourceBuilder();
-//		/*local*/String[] Reports = this.Logger.GetReportedErrors();
-//		Builder.AppendLine("");
-//		for(/*local*/int i = 0; i < Reports.length; i = i + 1) {
-//			Builder.AppendCommentLine(Reports[i]);
-//		}
-//		Builder.AppendLine("");
-//	}
+	//	public final void FlushErrorReport() {
+	//		/*local*/ZenSourceBuilder Builder = this.NewSourceBuilder();
+	//		/*local*/String[] Reports = this.Logger.GetReportedErrors();
+	//		Builder.AppendLine("");
+	//		for(/*local*/int i = 0; i < Reports.length; i = i + 1) {
+	//			Builder.AppendCommentLine(Reports[i]);
+	//		}
+	//		Builder.AppendLine("");
+	//	}
 
 	public void GenerateCode(ZenNode Node) {
 		if (Node == null) {
@@ -170,17 +170,27 @@ public class ZenSourceGenerator extends ZenGenerator {
 		Node.Accept(this);
 	}
 
-	@Override
-	public void VisitBlockNode(ZenBlockNode Node) {
-		this.CurrentBuilder.Append("{");
-		this.CurrentBuilder.Indent();
-		for (int i = 0; i < Node.StatementList.size(); i++) {
+	public void VisitStatementList(ArrayList<ZenNode> StatementList) {
+		int i = 0;
+		while (i < StatementList.size()) {
 			ZenNode SubNode = Node.StatementList.get(i);
 			this.CurrentBuilder.AppendLineFeed();
 			this.CurrentBuilder.AppendIndent();
 			this.GenerateCode(SubNode);
 			this.CurrentBuilder.Append(this.SemiColon);
+			i = i + 1;
 		}
+		//		if (i == 0) {
+		//			this.CurrentBuilder.AppendLineFeed();
+		//			this.CurrentBuilder.AppendIndent();
+		//			this.CurrentBuilder.Append("pass");
+		//		}
+	}
+
+	@Override public void VisitBlockNode(ZenBlockNode Node) {
+		this.CurrentBuilder.Append("{");
+		this.CurrentBuilder.Indent();
+		this.VisitStatementList(Node.StatementList);
 		this.CurrentBuilder.UnIndent();
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.AppendIndent();
