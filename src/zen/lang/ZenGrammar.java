@@ -813,6 +813,10 @@ public class ZenGrammar {
 					TokenContext.MatchToken("}");
 					break;
 				}
+				/* VarDecl is defined as BlockNode to speficy its scope */
+				if(ParsedNode.GetStatementNode() instanceof ZenBlockNode) {
+					BlockNode = (ZenBlockNode)ParsedNode.GetStatementNode();
+				}
 			}
 			return BlockNode;
 		}

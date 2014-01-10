@@ -58,6 +58,10 @@ public abstract class ZenNode {
 		return false;
 	}
 
+	public ZenNode GetStatementNode() {
+		return this;  // ZenAnnotationNode should return AnnotatedNode;
+	}
+
 	public void Append(ZenNode Node) {
 
 	}
@@ -90,6 +94,7 @@ public abstract class ZenNode {
 	public ZenReturnNode ToReturnNode() {
 		return null;
 	}
+
 
 }
 

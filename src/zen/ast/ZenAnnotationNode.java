@@ -54,6 +54,10 @@ public final class ZenAnnotationNode extends ZenNode {
 		return this.AnnotatedNode.IsErrorNode();
 	}
 
+	@Override public ZenNode GetStatementNode() {
+		return this.AnnotatedNode;
+	}
+
 	@Override public void Accept(ZenVisitor Visitor) {
 		this.AnnotatedNode.Accept(Visitor);
 	}
