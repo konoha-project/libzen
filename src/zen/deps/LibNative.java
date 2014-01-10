@@ -510,62 +510,26 @@ public class LibNative {
 		}
 	}
 
+	private final static ZenMap<Class<?>> GenMap = new ZenMap<Class<?>>(null);
+	static {
+		GenMap.put("python", zen.codegen.jython.PythonSourceGenerator.class);
+		GenMap.put("javascript", zen.codegen.javascript.JavaScriptSourceGenerator.class);
+		GenMap.put("ruby", zen.codegen.jruby.RubySourceGenerator.class);
+	}
+
 	public final static ZenGenerator LoadGenerator(String ClassName, String OutputFile) {
 		ClassName = System.getenv("ZENCODE");
 		if (ClassName != null) {
 			try {
-				Class<?> GeneratorClass = Class.forName(ClassName);
+				Class<?> GeneratorClass = GenMap.GetOrNull("ClassName");
+				if(GeneratorClass == null) {
+					GeneratorClass = Class.forName(ClassName);
+				}
 				return (ZenGenerator) GeneratorClass.newInstance();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		// int GeneratorFlag = 0;
-		// String Extension = (OutputFile == null) ? "-" : OutputFile;
-		// ClassName = LibZen.DetectTargetCode(Extension, ClassName);
-		// ClassName = ClassName.toLowerCase();
-		// if(ClassName.startsWith("exe")) {
-		// return new JavaByteCodeGenerator(ClassName, OutputFile,
-		// GeneratorFlag);
-		// }
-
-		// if(ClassName.startsWith("js") || ClassName.startsWith("javascript"))
-		// {
-		// return new JavaScriptSourceGenerator(ClassName, OutputFile,
-		// GeneratorFlag);
-		// }
-		// else if(ClassName.startsWith("pl") || ClassName.startsWith("perl")) {
-		// return new PerlSourceGenerator(ClassName, OutputFile, GeneratorFlag);
-		// }
-		// else if(ClassName.startsWith("python")) {
-		// return new PythonSourceGenerator(ClassName, OutputFile,
-		// GeneratorFlag);
-		// }
-		// else if(ClassName.startsWith("bash")) {
-		// return new BashSourceGenerator(ClassName, OutputFile, GeneratorFlag);
-		// }
-		// else if(TargetCode.startsWith("scala")) {
-		// return new ScalaSourceGenerator(TargetCode, OutputFile,
-		// GeneratorFlag);
-		// }
-		// // FIXME CSharpSourceCodeGenerator.java is missing.
-		// //else if(TargetCode.startsWith("csharp")) {
-		// // return new CSharpSourceCodeGenerator(TargetCode, OutputFile,
-		// GeneratorFlag);
-		// //}
-		// else if(ClassName.startsWith("c")) {
-		// return new CSourceGenerator(ClassName, OutputFile, GeneratorFlag);
-		// }
-		// else if(ClassName.startsWith("lisp")) {
-		// return new CommonLispSourceGenerator(ClassName, OutputFile,
-		// GeneratorFlag);
-		// }
-		// else if(ClassName.startsWith("minikonoha")) {
-		// return new KonohaByteCodeGenerator(ClassName, OutputFile,
-		// GeneratorFlag);
-		// //return new MiniKonohaSourceGenerator(TargetCode, OutputFile,
-		// GeneratorFlag);
-		// }
 		try {
 			Class<?> GeneratorClass = Class.forName(ClassName);
 			ZenGenerator Generator = (ZenGenerator) GeneratorClass
