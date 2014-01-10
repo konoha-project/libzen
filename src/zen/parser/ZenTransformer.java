@@ -11,7 +11,9 @@ import zen.ast.ZenBooleanNode;
 import zen.ast.ZenBreakNode;
 import zen.ast.ZenCastNode;
 import zen.ast.ZenCatchNode;
+import zen.ast.ZenComparatorNode;
 import zen.ast.ZenConstPoolNode;
+import zen.ast.ZenEmptyNode;
 import zen.ast.ZenErrorNode;
 import zen.ast.ZenFloatNode;
 import zen.ast.ZenFuncDeclNode;
@@ -28,6 +30,8 @@ import zen.ast.ZenMapLiteralNode;
 import zen.ast.ZenMethodCallNode;
 import zen.ast.ZenNewArrayNode;
 import zen.ast.ZenNewObjectNode;
+import zen.ast.ZenNode;
+import zen.ast.ZenNotNode;
 import zen.ast.ZenNullNode;
 import zen.ast.ZenOrNode;
 import zen.ast.ZenParamNode;
@@ -42,9 +46,6 @@ import zen.ast.ZenTryNode;
 import zen.ast.ZenUnaryNode;
 import zen.ast.ZenVarDeclNode;
 import zen.ast.ZenWhileNode;
-import zen.ast.ZenComparatorNode;
-import zen.ast.ZenNode;
-import zen.ast.ZenNotNode;
 
 public class ZenTransformer implements ZenVisitor {
 	/*field*/public ZenBlockNode BlockNode;
@@ -120,6 +121,9 @@ public class ZenTransformer implements ZenVisitor {
 	protected void ReplaceInBlockStatement(ZenBlockNode BlockNode, ZenNode Node, ZenNode ReplacedNode) {
 		int index = this.FindInBlockStatementIndex(BlockNode, Node);
 		BlockNode.StatementList.set(index, BlockNode.SetChild(ReplacedNode));
+	}
+
+	@Override public void VisitEmptyNode(ZenEmptyNode Node) {
 	}
 
 	@Override public void VisitNullNode(ZenNullNode Node) {

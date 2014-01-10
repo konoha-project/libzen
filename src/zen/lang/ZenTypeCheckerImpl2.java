@@ -39,6 +39,7 @@ import zen.ast.ZenCastNode;
 import zen.ast.ZenCatchNode;
 import zen.ast.ZenComparatorNode;
 import zen.ast.ZenConstPoolNode;
+import zen.ast.ZenEmptyNode;
 import zen.ast.ZenErrorNode;
 import zen.ast.ZenFloatNode;
 import zen.ast.ZenFuncDeclNode;
@@ -78,6 +79,10 @@ public class ZenTypeCheckerImpl2 extends ZenTypeChecker {
 
 	public ZenTypeCheckerImpl2(ZenLogger Logger) {
 		super(Logger);
+	}
+
+	@Override
+	public void VisitEmptyNode(ZenEmptyNode Node) {
 	}
 
 	@Override public void VisitNullNode(ZenNullNode Node) {
@@ -444,6 +449,5 @@ public class ZenTypeCheckerImpl2 extends ZenTypeChecker {
 	@Override public void VisitErrorNode(ZenErrorNode Node) {
 		this.CheckErrorNode(Node);
 	}
-
 }
 
