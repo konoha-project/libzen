@@ -24,54 +24,49 @@
 
 package zen.lang;
 
-import zen.obsolete.ZenFuncBlock;
+import zen.obsolete.ZenDefiningFunc;
+import zen.parser.ZenNameSpace;
 import zen.parser.ZenToken;
 import zen.parser.ZenUtils;
 
 public class ZenVarInfo {
-	/*field*/public ZenFuncBlock  DefiningFunc;
-	/*field*/public int      VariableFlag;
-	/*field*/public ZenType	 Type;
-	/*field*/public String	 Name;
+	/*field*/public ZenDefiningFunc  DefiningFunc;
+	/*field*/public int      VarFlag;
+	/*field*/public ZenType	 VarType;
+	/*field*/public String	 VarName;
 	/*field*/public String	 NativeName;
 	/*field*/public ZenToken SourceToken;
 	//	/*field*/public Object   InitValue;
 	/*field*/public int      DefCount;
 	/*field*/public int      UsedCount;
 
-	ZenVarInfo(ZenFuncBlock DefiningFunc, int VarFlag, ZenType Type, String Name, ZenToken SourceToken) {
+	ZenVarInfo(ZenDefiningFunc DefiningFunc, int VarFlag, ZenType VarType, String VarName, ZenToken SourceToken) {
 		this.DefiningFunc    = DefiningFunc;
-		this.VariableFlag = VarFlag;
-		this.Type = Type;
+		this.VarFlag = VarFlag;
+		this.VarType = VarType;
+		this.VarName = VarName;
 		this.SourceToken = SourceToken;
-		this.Name = Name;
-		this.NativeName = ZenUtils.NativeVariableName(Name, this.DefiningFunc.GetVariableIndex());
+		this.NativeName = ZenUtils.NativeVariableName(VarName, this.DefiningFunc.GetVarIndex());
 		//		this.InitValue = null;
 		this.UsedCount = 0;
 		this.DefCount  = 1;
 	}
 
-	//	public final boolean IsCaptured(ZenNameSpace NameSpace) {
-	//		return (NameSpace.DefiningFunc != this.DefiningFunc);
-	//	}
+	public final boolean IsCaptured(ZenNameSpace NameSpace) {
+		return (NameSpace.GetDefiningFunc() != this.DefiningFunc);
+	}
 
-	//	public final void Defined() {
-	//		this.DefCount += 1;
-	////		this.InitValue = null;
-	//	}
-	//
-	//	public final void Used() {
-	//		this.UsedCount += 1;
-	//	}
-	//
-	//	public void Check(ZenParserContext Context) {
-	//		if(this.UsedCount == 0 && this.SourceToken != null) {
-	//			Context.ReportError_OLD(GreenTeaConsts.WarningLevel, this.SourceToken, "unused variable: " + this.Name);
-	//		}
-	//	}
+	public final void Defined() {
+		this.DefCount += 1;
+	}
+
+	public final void Used() {
+		this.UsedCount += 1;
+	}
+
 	// for debug
 	@Override public String toString() {
-		return "(" + this.Type + " " + this.Name + ", " + this.NativeName + ")";
+		return "(" + this.VarType + " " + this.VarName + ", " + this.NativeName + ")";
 	}
 
 }

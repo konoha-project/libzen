@@ -248,24 +248,24 @@ public class ZenSourceGenerator extends ZenGenerator {
 
 	@Override
 	public void VisitGetLocalNode(ZenGetLocalNode Node) {
-		this.CurrentBuilder.Append(Node.NativeName);
+		this.CurrentBuilder.Append(Node.VarName);
 	}
 
 	@Override
 	public void VisitSetLocalNode(ZenSetLocalNode Node) {
-		this.CurrentBuilder.Append(Node.NativeName);
+		this.CurrentBuilder.Append(Node.VarName);
 		this.CurrentBuilder.Append(" = ");
 		this.GenerateCode(Node.ValueNode);
 	}
 
 	@Override
 	public void VisitGetCapturedNode(ZenGetCapturedNode Node) {
-		this.CurrentBuilder.Append(Node.NativeName);
+		this.CurrentBuilder.Append(Node.VarName);
 	}
 
 	@Override
 	public void VisitSetCapturedNode(ZenSetCapturedNode Node) {
-		this.CurrentBuilder.Append(Node.NativeName);
+		this.CurrentBuilder.Append(Node.VarName);
 		this.CurrentBuilder.Append(" = ");
 		this.GenerateCode(Node.ValueNode);
 	}

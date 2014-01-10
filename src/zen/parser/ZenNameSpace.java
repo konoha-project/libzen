@@ -34,6 +34,7 @@ import zen.lang.ZenFunc;
 import zen.lang.ZenSystem;
 import zen.lang.ZenType;
 import zen.lang.ZenTypeCheckerImpl2;
+import zen.obsolete.ZenDefiningFunc;
 //endif VAJA
 
 final class ZenSymbolSource {
@@ -48,16 +49,16 @@ public final class ZenNameSpace {
 
 	/*field*/ZenTokenFunc[] TokenMatrix;
 	/*field*/ZenMap<Object>	 SymbolPatternTable;
-	/*field*/public ZenFunc  DefiningFunc;
+	/*field*/private ZenDefiningFunc  DefiningFunc;
 
 	public ZenNameSpace(ZenGenerator Generator, ZenNameSpace ParentNameSpace) {
 		//		this.Context = Context;
 		this.ParentNameSpace = ParentNameSpace;
 		this.TokenMatrix = null;
 		this.SymbolPatternTable = null;
+		this.DefiningFunc = null;
 		if(ParentNameSpace == null) {
 			this.Generator = Generator;
-			this.DefiningFunc = null;
 			ZenSystem.InitNameSpace(this);
 		}
 		else {
@@ -171,12 +172,6 @@ public final class ZenNameSpace {
 		ZenLogger.VerboseLog(ZenLogger.VerboseSymbol, "symbol: " + Key + ", " + Value);
 	}
 
-	//	public ZenVarInfo SetLocalVariable(int VarFlag, ZenType Type, String Name, ZenToken SourceToken) {
-	//		/*local*/ZenVarInfo VarInfo = new ZenVarInfo(this.FuncBlock, VarFlag, Type, Name, SourceToken);
-	//		this.SetSymbol(Name, VarInfo, SourceToken);
-	//		return VarInfo;
-	//	}
-
 	public final void SetUndefinedSymbol(String Symbol, ZenToken SourceToken) {
 		this.SetSymbol(Symbol, ZenParserConst.UndefinedSymbol, SourceToken);
 	}
@@ -255,14 +250,20 @@ public final class ZenNameSpace {
 
 	// DefiningFunc
 
-	//	public ZenFunc GetDefiningFunc() {
-	//		if(this.DefiningFunc != null) {
-	//			return this.DefiningFunc;
-	//		}
-	//		if(this.ParentNameSpace != null) {
-	//			this.ParentNameSpace.GetDefiningFunc();
-	//		}
-	//	}
+	public void SetDefiningFunc(ZenFunc Func) {
+		this.DefiningFunc = new ZenDefiningFunc(Func.FuncFlag, Func.FuncName, Func.ZenType);
+	}
+
+	public ZenDefiningFunc GetDefiningFunc() {
+		/*local*/ZenNameSpace NameSpace = this;
+		while(NameSpace != null) {
+			if(NameSpace.DefiningFunc != null) {
+				return NameSpace.DefiningFunc;
+			}
+		}
+		return null;
+	}
+
 
 	//	public final ZenType AppendTypeVariable(String Name, ZenType ParamBaseType, ZenToken SourceToken, ArrayList<Object> RevertList) {
 	//		this.UpdateRevertList(Name, RevertList);

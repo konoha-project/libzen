@@ -35,6 +35,7 @@ import zen.ast.ZenBooleanNode;
 import zen.ast.ZenBreakNode;
 import zen.ast.ZenCastNode;
 import zen.ast.ZenCatchNode;
+import zen.ast.ZenComparatorNode;
 import zen.ast.ZenConstNode;
 import zen.ast.ZenErrorNode;
 import zen.ast.ZenFloatNode;
@@ -49,6 +50,8 @@ import zen.ast.ZenInstanceOfNode;
 import zen.ast.ZenIntNode;
 import zen.ast.ZenMapLiteralNode;
 import zen.ast.ZenMethodCallNode;
+import zen.ast.ZenNode;
+import zen.ast.ZenNotNode;
 import zen.ast.ZenNullNode;
 import zen.ast.ZenOrNode;
 import zen.ast.ZenParamNode;
@@ -62,9 +65,6 @@ import zen.ast.ZenTypeNode;
 import zen.ast.ZenUnaryNode;
 import zen.ast.ZenVarDeclNode;
 import zen.ast.ZenWhileNode;
-import zen.ast.ZenComparatorNode;
-import zen.ast.ZenNode;
-import zen.ast.ZenNotNode;
 import zen.deps.LibNative;
 import zen.deps.LibZen;
 import zen.parser.ZenLogger;
@@ -435,7 +435,7 @@ public class ZenGrammar {
 		/*local*/Object ConstValue = NameSpace.GetSymbol(Token.ParsedText);
 		if(ConstValue instanceof ZenVarInfo) {
 			ZenVarInfo Var = (ZenVarInfo) ConstValue;
-			return NameSpace.Generator.CreateSymbolNode(Token, Var.Type, Var.NativeName, Var.IsCaptured(NameSpace), AssignedNode);
+			return NameSpace.Generator.CreateSymbolNode(Token, Var.VarType, Var.NativeName, false, AssignedNode);
 		}
 		if(ConstValue != null) {
 			if(AssignedNode != null) {

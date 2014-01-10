@@ -29,11 +29,13 @@ import zen.parser.ZenVisitor;
 
 // E.g., $NativeName
 public class ZenGetLocalNode extends ZenNode {
-	/*field*/public String  NativeName;
+	/*field*/public boolean IsCaptured;
+	/*field*/public String  VarName;
 	public ZenGetLocalNode/*constructor*/(ZenToken Token, String NativeName) {
 		super();
 		this.SourceToken = Token;
-		this.NativeName = NativeName;
+		this.VarName = NativeName;
+		this.IsCaptured = false;
 	}
 	@Override public void Accept(ZenVisitor Visitor) {
 		Visitor.VisitGetLocalNode(this);
