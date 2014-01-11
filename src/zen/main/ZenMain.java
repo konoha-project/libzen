@@ -41,7 +41,7 @@ import zen.parser.ZenUtils;
 public class ZenMain extends ZenUtils {
 	public final static void ExecCommand(String[] Args) {
 		@Var String TargetCode = "exe"; // self executable
-		@Var int GeneratorFlag = 0;
+		//@Var int GeneratorFlag = 0;
 		@Var String OneLiner = null;
 		@Var String RequiredLibName = null;
 		@Var String OutputFile = "-"; // stdout
@@ -75,8 +75,7 @@ public class ZenMain extends ZenUtils {
 					continue;
 				}
 			}
-			if ((Argu.equals("-r") || Argu.equals("--require"))
-					&& (Index < Args.length)) {
+			if ((Argu.equals("-r") || Argu.equals("--require")) && (Index < Args.length)) {
 				RequiredLibName = Args[Index];
 				Index += 1;
 				continue;
@@ -150,8 +149,7 @@ public class ZenMain extends ZenUtils {
 				LibNative.Exit(1, "file not found: " + FileName);
 			}
 			@Var long FileLine = ZenSystem.GetFileLine(FileName, 1);
-			@Var boolean Success = Generator.RootNameSpace.Load(
-					ScriptText, FileLine);
+			@Var boolean Success = Generator.RootNameSpace.Load(ScriptText, FileLine);
 			Generator.Logger.ShowReportedErrors();
 			if (!Success) {
 				LibNative.Exit(1, "abort loading: " + FileName);
@@ -167,8 +165,7 @@ public class ZenMain extends ZenUtils {
 			@Var String Line = null;
 			while ((Line = LibZen.ReadLine2(">>> ", "    ")) != null) {
 				try {
-					@Var Object EvaledValue = Generator.RootNameSpace
-							.Eval(Line, linenum);
+					@Var Object EvaledValue = Generator.RootNameSpace.Eval(Line, linenum);
 					Generator.Logger.ShowReportedErrors();
 					if (EvaledValue != null) {
 						LibNative.println(" ("
@@ -211,59 +208,19 @@ public class ZenMain extends ZenUtils {
 		System.out.println("      typescript ts       TypeScript");
 		System.out.println("");
 		System.out.println("  --out|-o  FILE        Output filename");
-		System.out
-		.println("  --eval|-e EXPR        Program passed in as string");
+		System.out.println("  --eval|-e EXPR        Program passed in as string");
 		System.out.println("  --require|-r LIBRARY     Load the library");
 		System.out.println("  --verbose             Printing Debug infomation");
 		System.out.println("     --verbose:token      adding token info");
 		System.out.println("     --verbose:type       adding type info");
 		System.out.println("     --verbose:symbol     adding symbol info");
-		System.out
-		.println("     --verbose:native     adding native class info");
+		System.out.println("     --verbose:native     adding native class info");
 		System.out.println("     --verbose:all        adding all info");
 		System.out.println("     --verbose:no         no log");
 		LibNative.Exit(0, Message);
 	}
 
-	public final static String DetectTargetCode(String Extension,
-			String TargetCode) {
-		if (Extension.endsWith(".js")) {
-			return "js";
-		} else if (Extension.endsWith(".pl")) {
-			return "perl";
-		} else if (Extension.endsWith(".py")) {
-			return "python";
-		} else if (Extension.endsWith(".sh")) {
-			return "bash";
-		} else if (Extension.endsWith(".scala")) {
-			return "scala";
-		} else if (Extension.endsWith(".cs")) {
-			return "cs";
-		} else if (TargetCode.startsWith("X")) {
-			return "exe";
-		} else if (Extension.endsWith(".c")) {
-			return "c";
-		}
-		return TargetCode;
-	}
-
 	public final static void main(String[] Args) {
 		ZenMain.ExecCommand(Args);
 	}
-
-	// public static void main(String []args) throws PyException {
-	// PythonInterpreter interp = new PythonInterpreter();
-	//
-	// System.out.println("Hello, brave new world");
-	// interp.exec("import sys");
-	// interp.exec("print sys");
-	// interp.set("a", new PyInteger(42));
-	// interp.exec("print a");
-	// interp.exec("x = 2+2");
-	// PyObject x = interp.get("x");
-	//
-	// System.out.println("x: "+x);
-	// System.out.println("Goodbye, cruel world");
-	// }
-
 }
