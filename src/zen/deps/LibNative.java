@@ -109,7 +109,7 @@ public class LibNative {
 	//			LibNative.DebugP("return mismatched: " + GreenTypeParams[0] + ", " + JavaMethod.getReturnType() + " of " + JavaMethod);
 	//			return false;
 	//		}
-	//		/* local */int StartIndex = 2;
+	//		@Var int StartIndex = 2;
 	//		if (Modifier.isStatic(JavaMethod.getModifiers())) {
 	//			StartIndex = 1;
 	//		} else {
@@ -123,8 +123,8 @@ public class LibNative {
 	//			}
 	//			StartIndex = 2;
 	//		}
-	//		/* local */int ParamSize = GreenTypeParams.length - StartIndex;
-	//		/* local */Class<?>[] ParamTypes = JavaMethod.getParameterTypes();
+	//		@Var int ParamSize = GreenTypeParams.length - StartIndex;
+	//		@Var Class<?>[] ParamTypes = JavaMethod.getParameterTypes();
 	//		if (ParamTypes != null) {
 	//			if (ParamTypes.length != ParamSize) {
 	//				LibNative.DebugP("param.length mismatched: " + ParamSize
@@ -259,7 +259,7 @@ public class LibNative {
 	public final static boolean ImportGrammar(ZenNameSpace NameSpace,
 			String PackageName) {
 		try {
-			/* local */Class<?> NativeClass = LibNative.LoadClass(PackageName);
+			@Var Class<?> NativeClass = LibNative.LoadClass(PackageName);
 			Method LoaderMethod = NativeClass.getMethod("ImportGrammar",
 					ZenNameSpace.class, Class.class);
 			LoaderMethod.invoke(null, NameSpace, NativeClass);
@@ -428,12 +428,12 @@ public class LibNative {
 	}
 
 	public final static ZenFunc ConvertNativeMethodToFunc(Method JMethod) {
-		/* local */ArrayList<ZenType> TypeList = new ArrayList<ZenType>();
+		@Var ArrayList<ZenType> TypeList = new ArrayList<ZenType>();
 		TypeList.add(LibNative.GetNativeType(JMethod.getReturnType()));
 		if (!Modifier.isStatic(JMethod.getModifiers())) {
 			TypeList.add(LibNative.GetNativeType(JMethod.getDeclaringClass()));
 		}
-		/* local */Class<?>[] ParamTypes = JMethod.getParameterTypes();
+		@Var Class<?>[] ParamTypes = JMethod.getParameterTypes();
 		if (ParamTypes != null) {
 			for (int j = 0; j < ParamTypes.length; j++) {
 				TypeList.add(LibNative.GetNativeType(ParamTypes[j]));

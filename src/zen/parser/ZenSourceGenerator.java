@@ -69,35 +69,37 @@ import zen.ast.ZenTryNode;
 import zen.ast.ZenUnaryNode;
 import zen.ast.ZenVarDeclNode;
 import zen.ast.ZenWhileNode;
+import zen.deps.Field;
 import zen.deps.LibZen;
+import zen.deps.Var;
 import zen.deps.ZenMap;
 import zen.lang.ZenType;
 
 //endif VAJA
 
 public class ZenSourceGenerator extends ZenGenerator {
-	/* field */public ZenMap<String> NativeTypeMap;
-	/* field */private final ArrayList<ZenSourceBuilder> BuilderList;
-	/* field */protected ZenSourceBuilder HeaderBuilder;
-	/* field */protected ZenSourceBuilder CurrentBuilder;
+	@Field public ZenMap<String> NativeTypeMap;
+	@Field private final ArrayList<ZenSourceBuilder> BuilderList;
+	@Field protected ZenSourceBuilder HeaderBuilder;
+	@Field protected ZenSourceBuilder CurrentBuilder;
 
-	/* field */public String Tab;
-	/* field */public String LineFeed;
-	/* field */public String LineComment;
-	/* field */public String BeginComment;
-	/* field */public String EndComment;
-	/* field */public String SemiColon;
-	/* field */public String Camma;
+	@Field public String Tab;
+	@Field public String LineFeed;
+	@Field public String LineComment;
+	@Field public String BeginComment;
+	@Field public String EndComment;
+	@Field public String SemiColon;
+	@Field public String Camma;
 
-	/* field */public String TrueLiteral;
-	/* field */public String FalseLiteral;
-	/* field */public String NullLiteral;
+	@Field public String TrueLiteral;
+	@Field public String FalseLiteral;
+	@Field public String NullLiteral;
 
-	/* field */public String NotOperator;
-	/* field */public String AndOperator;
-	/* field */public String OrOperator;
+	@Field public String NotOperator;
+	@Field public String AndOperator;
+	@Field public String OrOperator;
 
-	/* field */public String TopType;
+	@Field public String TopType;
 
 	public ZenSourceGenerator(String TargetCode, String TargetVersion) {
 		super(TargetCode, TargetVersion);
@@ -122,7 +124,7 @@ public class ZenSourceGenerator extends ZenGenerator {
 	}
 
 	protected ZenSourceBuilder NewSourceBuilder() {
-		/* local */ZenSourceBuilder Builder = new ZenSourceBuilder(this);
+		@Var ZenSourceBuilder Builder = new ZenSourceBuilder(this);
 		this.BuilderList.add(Builder);
 		return Builder;
 	}
