@@ -195,8 +195,6 @@ public interface ZenParserConst {
 	public final static String NativeNameSuffix = "__";
 
 	public final static boolean UseLangStat = true;
-
-	public final static boolean DebugVisitor = true;
 /*GreenTeaConst End*/
 //ifdef JAVA
 }

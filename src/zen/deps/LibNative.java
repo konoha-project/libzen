@@ -514,10 +514,12 @@ public class LibNative {
 	}
 
 	public final static ZenGenerator LoadGenerator(@Nullable String ClassName, String OutputFile) {
-		ClassName = System.getenv("ZENCODE");
+		if(ClassName == null) {
+			ClassName = System.getenv("ZENCODE");
+		}
 		if (ClassName != null) {
 			try {
-				Class<?> GeneratorClass = GenMap.GetOrNull("ClassName");
+				Class<?> GeneratorClass = GenMap.GetOrNull(ClassName);
 				if(GeneratorClass == null) {
 					GeneratorClass = Class.forName(ClassName);
 				}

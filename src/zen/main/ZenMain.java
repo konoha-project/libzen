@@ -41,7 +41,6 @@ import zen.parser.ZenUtils;
 public class ZenMain extends ZenUtils {
 	public final static void ExecCommand(String[] Args) {
 		@Var String TargetCode = "exe"; // self executable
-		//@Var int GeneratorFlag = 0;
 		@Var String OneLiner = null;
 		@Var String RequiredLibName = null;
 		@Var String OutputFile = "-"; // stdout
