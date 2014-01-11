@@ -307,6 +307,27 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		return NameSpace.Generator.GetSetterType(BaseType, Name);
 	}
 
+	protected ZenType GetIndexType(ZenNameSpace NameSpace, ZenType RecvType) {
+		if(RecvType.IsArrayType() || RecvType.IsStringType()) {
+			return ZenSystem.IntType;
+		}
+		if(RecvType.IsMapType()) {
+			return ZenSystem.StringType;
+		}
+		return ZenSystem.VarType;
+	}
+
+	protected ZenType GetElementType(ZenNameSpace NameSpace, ZenType RecvType) {
+		if(RecvType.IsArrayType() || RecvType.IsMapType()) {
+			return RecvType.GetParamType(0);
+		}
+		if(RecvType.IsStringType()) {
+			return ZenSystem.StringType;
+		}
+		return ZenSystem.VarType;
+	}
+
+
 	protected ZenType GetReturnType(ZenNameSpace NameSpace) {
 		// TODO Auto-generated method stub
 		return null;
@@ -374,5 +395,6 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 	public void TypeSync(ZenType VarType, ZenNode ValueNode) {
 		// TODO Auto-generated method stub
 	}
+
 
 }

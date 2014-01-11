@@ -70,17 +70,19 @@ import zen.ast.ZenTryNode;
 import zen.ast.ZenUnaryNode;
 import zen.ast.ZenVarDeclNode;
 import zen.ast.ZenWhileNode;
+import zen.deps.Var;
 import zen.parser.ZenLogger;
 import zen.parser.ZenNameSpace;
+import zen.parser.ZenNodeUtils;
 
-public class ZenTypeCheckerImpl2 extends ZenTypeChecker {
+public class ZenDynamicTypeChecker extends ZenTypeChecker {
 
-	public ZenTypeCheckerImpl2(ZenLogger Logger) {
+	public ZenDynamicTypeChecker(ZenLogger Logger) {
 		super(Logger);
 	}
 
 	@Override public void VisitEmptyNode(ZenEmptyNode Node) {
-
+		this.TypedNode(Node, ZenSystem.VoidType);
 	}
 
 	@Override public void VisitNullNode(ZenNullNode Node) {
@@ -95,8 +97,7 @@ public class ZenTypeCheckerImpl2 extends ZenTypeChecker {
 		this.TypedNode(Node, ZenSystem.BooleanType);
 	}
 
-	@Override
-	public void VisitIntNode(ZenIntNode Node) {
+	@Override public void VisitIntNode(ZenIntNode Node) {
 		this.TypedNode(Node, ZenSystem.IntType);
 	}
 
@@ -108,42 +109,44 @@ public class ZenTypeCheckerImpl2 extends ZenTypeChecker {
 		this.TypedNode(Node, ZenSystem.StringType);
 	}
 
-	@Override
-	public void VisitConstPoolNode(ZenConstPoolNode Node) {
+	@Override public void VisitConstPoolNode(ZenConstPoolNode Node) {
 		this.TypedNode(Node, ZenSystem.GuessType(Node.ConstValue));
 	}
 
-	@Override
-	public void VisitArrayLiteralNode(ZenArrayLiteralNode Node) {
+	@Override public void VisitArrayLiteralNode(ZenArrayLiteralNode Node) {
 		this.Todo(Node);
 	}
 
-	@Override
-	public void VisitMapLiteralNode(ZenMapLiteralNode Node) {
+	@Override public void VisitMapLiteralNode(ZenMapLiteralNode Node) {
 		this.Todo(Node);
 	}
 
-	@Override
-	public void VisitNewArrayNode(ZenNewArrayNode Node) {
+	@Override public void VisitNewArrayNode(ZenNewArrayNode Node) {
 		this.Todo(Node);
 	}
 
-	@Override
-	public void VisitNewObjectNode(ZenNewObjectNode Node) {
+	@Override public void VisitNewObjectNode(ZenNewObjectNode Node) {
 		this.Todo(Node);
 	}
 
-	@Override
-	public void VisitGetLocalNode(ZenGetLocalNode Node) {
-		ZenNameSpace NameSpace = this.GetNameSpace();
-		ZenType VarType = ZenSystem.VarType;
-		ZenVarInfo VarInfo = this.GetVarInfo(NameSpace, Node.VarName);
+	@Override public void VisitGetLocalNode(ZenGetLocalNode Node) {
+		@Var ZenNameSpace NameSpace = this.GetNameSpace();
+		@Var ZenType VarType = ZenSystem.VarType;
+		@Var ZenVarInfo VarInfo = this.GetVarInfo(NameSpace, Node.VarName);
 		if(VarInfo != null) {
 			Node.VarName = VarInfo.NativeName;
 			VarType = VarInfo.VarType;
 			Node.IsCaptured = VarInfo.IsCaptured(NameSpace);
 		}
-		this.TypedNode(Node, VarType);
+		@Var Object Value = NameSpace.GetSymbol(Node.VarName);
+		if(Value != null) {
+			@Var ZenNode NewNode = ZenNodeUtils.CreateConstNode(Node.SourceToken, Value);
+			NewNode = this.TypeCheck(NewNode, NameSpace, ZenSystem.VarType, 0);
+			this.TypedNode(NewNode, NewNode.Type);
+		}
+		else {
+			this.TypedNode(Node, VarType);
+		}
 	}
 
 	@Override public void VisitSetLocalNode(ZenSetLocalNode Node) {
@@ -161,20 +164,19 @@ public class ZenTypeCheckerImpl2 extends ZenTypeChecker {
 		}
 	}
 
-	@Override
-	public void VisitGetIndexNode(ZenGetIndexNode Node) {
+	@Override public void VisitGetIndexNode(ZenGetIndexNode Node) {
 		ZenNameSpace NameSpace = this.GetNameSpace();
 		Node.RecvNode = this.TypeCheck(Node.RecvNode, NameSpace, ZenSystem.VarType, ZenTypeChecker.DefaultTypeCheckPolicy);
-		Node.IndexNode = this.TypeCheck(Node.IndexNode, NameSpace, ZenSystem.VarType, ZenTypeChecker.DefaultTypeCheckPolicy);
-		this.Todo(Node);
+		Node.IndexNode = this.TypeCheck(Node.IndexNode, NameSpace, this.GetIndexType(NameSpace, Node.RecvNode.Type), ZenTypeChecker.DefaultTypeCheckPolicy);
+		this.TypedNode(Node, this.GetElementType(NameSpace, Node.RecvNode.Type));
 	}
 
 	@Override public void VisitSetIndexNode(ZenSetIndexNode Node) {
 		ZenNameSpace NameSpace = this.GetNameSpace();
 		Node.RecvNode = this.TypeCheck(Node.RecvNode, NameSpace, ZenSystem.VarType, ZenTypeChecker.DefaultTypeCheckPolicy);
-		Node.IndexNode = this.TypeCheck(Node.IndexNode, NameSpace, ZenSystem.VarType, ZenTypeChecker.DefaultTypeCheckPolicy);
-		Node.ValueNode = this.TypeCheck(Node.ValueNode, NameSpace, ZenSystem.VarType, ZenTypeChecker.DefaultTypeCheckPolicy);
-		this.Todo(Node);
+		Node.IndexNode = this.TypeCheck(Node.IndexNode, NameSpace, this.GetIndexType(NameSpace, Node.RecvNode.Type), ZenTypeChecker.DefaultTypeCheckPolicy);
+		Node.ValueNode = this.TypeCheck(Node.ValueNode, NameSpace, this.GetElementType(NameSpace, Node.RecvNode.Type), ZenTypeChecker.DefaultTypeCheckPolicy);
+		this.TypedNode(Node, ZenSystem.VoidType);
 	}
 
 	@Override public void VisitGroupNode(ZenGroupNode Node) {

@@ -37,7 +37,7 @@ import zen.lang.ZenFunc;
 import zen.lang.ZenFuncSet;
 import zen.lang.ZenSystem;
 import zen.lang.ZenType;
-import zen.lang.ZenTypeCheckerImpl2;
+import zen.lang.ZenDynamicTypeChecker;
 
 final class ZenSymbolSource {
 	@Field public ZenToken SourceToken;
@@ -557,7 +557,7 @@ public final class ZenNameSpace {
 		@Var Object ResultValue = null;
 		ZenLogger.VerboseLog(ZenLogger.VerboseEval, "eval: " + ScriptText);
 		@Var ZenTokenContext TokenContext = new ZenTokenContext(this, ScriptText, FileLine);
-		@Var ZenTypeCheckerImpl2 TypeChecker = new ZenTypeCheckerImpl2(this.Generator.Logger);
+		@Var ZenDynamicTypeChecker TypeChecker = new ZenDynamicTypeChecker(this.Generator.Logger);
 		TokenContext.SkipEmptyStatement();
 		while(TokenContext.HasNext()) {
 			TokenContext.SetParseFlag(0); // init

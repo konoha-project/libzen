@@ -128,6 +128,10 @@ public class ZenType implements ZenTypeConst {
 		return (this.GetBaseType() == ZenSystem.ArrayType);
 	}
 
+	public final boolean IsMapType() {
+		return (this.GetBaseType() == ZenSystem.ArrayType);
+	}
+
 	public final boolean IsEnumType() {
 		return ZenUtils.IsFlag(this.TypeFlag, EnumType);
 	}
