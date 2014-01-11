@@ -29,6 +29,7 @@ package zen.main;
 
 import zen.deps.LibNative;
 import zen.deps.LibZen;
+import zen.deps.Var;
 import zen.deps.ZenArray;
 import zen.lang.ZenGrammar;
 import zen.lang.ZenSystem;
@@ -39,15 +40,14 @@ import zen.parser.ZenUtils;
 
 public class ZenMain extends ZenUtils {
 	public final static void ExecCommand(String[] Args) {
-		/* local */String TargetCode = "exe"; // self executable
-		/* local */int GeneratorFlag = 0;
-		/* local */String OneLiner = null;
-		/* local */String RequiredLibName = null;
-		/* local */String OutputFile = "-"; // stdout
-		/* local */int Index = 0;
-		/* local */boolean ShellMode = false;
+		@Var String TargetCode = null;
+		@Var String OneLiner = null;
+		@Var String RequiredLibName = null;
+		@Var String OutputFile = "-"; // stdout
+		@Var int Index = 0;
+		@Var boolean ShellMode = false;
 		while (Index < Args.length) {
-			/* local */String Argu = Args[Index];
+			@Var String Argu = Args[Index];
 			if (!Argu.startsWith("-")) {
 				break;
 			}
@@ -120,10 +120,8 @@ public class ZenMain extends ZenUtils {
 			}
 			ZenMain.Usage(Argu + " is unknown");
 		}
-		/* local */ZenGenerator Generator = LibNative.LoadGenerator(TargetCode,
-				OutputFile);
-		LibNative.ImportGrammar(Generator.RootNameSpace,
-				ZenGrammar.class.getName());
+		@Var ZenGenerator Generator = LibNative.LoadGenerator(TargetCode, OutputFile);
+		LibNative.ImportGrammar(Generator.RootNameSpace, ZenGrammar.class.getName());
 		// @Var ZenParserContext Context = new ZenParserContext(new
 		// KonohaGrammar(), Generator);
 		// if(RequiredLibName != null) {
@@ -139,20 +137,20 @@ public class ZenMain extends ZenUtils {
 		if (!(Index < Args.length)) {
 			ShellMode = true;
 		}
-		/* local */ZenArray ARGV = ZenArray.NewArray1(ZenSystem.StringType, 0);
+		@Var ZenArray ARGV = ZenArray.NewArray1(ZenSystem.StringType, 0);
 		while (Index < Args.length) {
 			ARGV.ArrayBody.add(Args[Index]);
 			Index += 1;
 		}
 		Generator.RootNameSpace.SetSymbol("ARGV", ARGV, null);
 		if (ARGV.ArrayBody.size() > 0) {
-			/* local */String FileName = (/* cast */String) ARGV.ArrayBody.get(0);
-			/* local */String ScriptText = LibNative.LoadScript(FileName);
+			@Var String FileName = (/* cast */String) ARGV.ArrayBody.get(0);
+			@Var String ScriptText = LibNative.LoadScript(FileName);
 			if (ScriptText == null) {
 				LibNative.Exit(1, "file not found: " + FileName);
 			}
-			/* local */long FileLine = ZenSystem.GetFileLine(FileName, 1);
-			/* local */boolean Success = Generator.RootNameSpace.Load(
+			@Var long FileLine = ZenSystem.GetFileLine(FileName, 1);
+			@Var boolean Success = Generator.RootNameSpace.Load(
 					ScriptText, FileLine);
 			Generator.Logger.ShowReportedErrors();
 			if (!Success) {
@@ -165,11 +163,11 @@ public class ZenMain extends ZenUtils {
 					+ LibZen.GetPlatform());
 			LibNative.println(ZenParserConst.Copyright);
 			Generator.Logger.ShowReportedErrors();
-			/* local */int linenum = 1;
-			/* local */String Line = null;
+			@Var int linenum = 1;
+			@Var String Line = null;
 			while ((Line = LibZen.ReadLine2(">>> ", "    ")) != null) {
 				try {
-					/* local */Object EvaledValue = Generator.RootNameSpace
+					@Var Object EvaledValue = Generator.RootNameSpace
 							.Eval(Line, linenum);
 					Generator.Logger.ShowReportedErrors();
 					if (EvaledValue != null) {
@@ -214,14 +212,14 @@ public class ZenMain extends ZenUtils {
 		System.out.println("");
 		System.out.println("  --out|-o  FILE        Output filename");
 		System.out
-				.println("  --eval|-e EXPR        Program passed in as string");
+		.println("  --eval|-e EXPR        Program passed in as string");
 		System.out.println("  --require|-r LIBRARY     Load the library");
 		System.out.println("  --verbose             Printing Debug infomation");
 		System.out.println("     --verbose:token      adding token info");
 		System.out.println("     --verbose:type       adding type info");
 		System.out.println("     --verbose:symbol     adding symbol info");
 		System.out
-				.println("     --verbose:native     adding native class info");
+		.println("     --verbose:native     adding native class info");
 		System.out.println("     --verbose:all        adding all info");
 		System.out.println("     --verbose:no         no log");
 		LibNative.Exit(0, Message);

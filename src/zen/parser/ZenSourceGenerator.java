@@ -70,6 +70,7 @@ import zen.ast.ZenUnaryNode;
 import zen.ast.ZenVarDeclNode;
 import zen.ast.ZenWhileNode;
 import zen.deps.LibZen;
+import zen.deps.Var;
 import zen.deps.ZenMap;
 import zen.lang.ZenType;
 
@@ -122,7 +123,7 @@ public class ZenSourceGenerator extends ZenGenerator {
 	}
 
 	protected ZenSourceBuilder NewSourceBuilder() {
-		/* local */ZenSourceBuilder Builder = new ZenSourceBuilder(this);
+		@Var ZenSourceBuilder Builder = new ZenSourceBuilder(this);
 		this.BuilderList.add(Builder);
 		return Builder;
 	}
