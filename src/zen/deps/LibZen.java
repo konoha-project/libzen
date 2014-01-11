@@ -512,13 +512,13 @@ public abstract class LibZen {
 		return Line;
 	}
 
-	private static jline.console.ConsoleReader ConsoleReader = null;
+	private static jline.ConsoleReader ConsoleReader = null;
 
 	public final static String ReadLine2(String Prompt, String Prompt2) {
 		if(ConsoleReader == null) {
 			try {
-				ConsoleReader = new jline.console.ConsoleReader();
-				ConsoleReader.setExpandEvents(false);
+				ConsoleReader = new jline.ConsoleReader();
+				//ConsoleReader.setExpandEvents(false);
 			}
 			catch (IOException e) {
 				throw new RuntimeException(e);
@@ -552,7 +552,7 @@ public abstract class LibZen {
 				LibNative.println(" .. canceled");
 			}
 		}
-		ConsoleReader.getHistory().add(Line);
+		ConsoleReader.getHistory().addToHistory(Line);
 		return Line;
 	}
 
