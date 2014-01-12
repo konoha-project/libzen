@@ -54,7 +54,7 @@ public class CommonLispSourceGenerator extends ZenSourceGenerator {
 	}
 
 	@Override public void VisitBooleanNode(ZenBooleanNode Node) {
-		if(Node.Value) {
+		if(Node.BooleanValue) {
 			this.CurrentBuilder.Append("t");
 		}
 		else {

@@ -203,7 +203,7 @@ public class ZenSourceGenerator extends ZenGenerator {
 
 	@Override
 	public void VisitBooleanNode(ZenBooleanNode Node) {
-		if (Node.Value) {
+		if (Node.BooleanValue) {
 			this.CurrentBuilder.Append(this.TrueLiteral);
 		} else {
 			this.CurrentBuilder.Append(this.FalseLiteral);

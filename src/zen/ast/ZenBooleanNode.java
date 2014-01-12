@@ -29,15 +29,15 @@ import zen.parser.ZenToken;
 import zen.parser.ZenVisitor;
 
 final public class ZenBooleanNode extends ZenConstNode {
-	@Field public boolean	Value;
+	@Field public boolean	BooleanValue;
 	public ZenBooleanNode/*constructor*/(ZenToken Token, boolean Value) {
 		super(Token);
-		this.Value = Value;
+		this.BooleanValue = Value;
 	}
 	@Override public void Accept(ZenVisitor Visitor) {
 		Visitor.VisitBooleanNode(this);
 	}
 	@Override public final Object GetValue() {
-		return this.Value;
+		return this.BooleanValue;
 	}
 }
