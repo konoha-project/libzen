@@ -28,6 +28,7 @@ package zen.parser;
 import java.util.ArrayList;
 
 import zen.ast.ZenNode;
+import zen.deps.Field;
 import zen.deps.LibNative;
 import zen.deps.LibZen;
 import zen.deps.Var;
@@ -35,11 +36,11 @@ import zen.deps.Var;
 //endif VAJA
 
 public class ZenSourceBuilder {
-	/* field */public ArrayList<String> SourceList;
-	/* field */ZenSourceGenerator Template;
-	/* field */int IndentLevel = 0;
-	/* field */String CurrentIndentString;
-	/* field */String BufferedLineComment;
+	@Field public ArrayList<String> SourceList;
+	@Field ZenSourceGenerator Template;
+	@Field int IndentLevel = 0;
+	@Field String CurrentIndentString;
+	@Field String BufferedLineComment;
 
 	public ZenSourceBuilder(ZenSourceGenerator Template) {
 		this.Template = Template;

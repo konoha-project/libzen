@@ -50,10 +50,6 @@ import zen.parser.ZenVisitor;
 
 public class LibNative {
 
-	final static void DebugP(String s) {
-		// System.err.println("LibNative.DebugP: " + s);
-	}
-
 	public final static String GetEnv(String Name) {
 		return System.getenv(Name);
 	}
@@ -90,9 +86,9 @@ public class LibNative {
 		}
 		@Var ZenType JavaType = LibNative.GetNativeType(NativeType);
 		if (GreenType != JavaType) {
-			LibNative.DebugP("*** " + JavaType + ", " + GreenType
-					+ ", equals? "
-					+ (GreenType.GetBaseType() == JavaType.GetBaseType()));
+			//			LibNative.DebugP("*** " + JavaType + ", " + GreenType
+			//					+ ", equals? "
+			//					+ (GreenType.GetBaseType() == JavaType.GetBaseType()));
 			// if(GreenType.IsGenericType() && GreenType.HasTypeVariable()) {
 			// return GreenType.BaseType == JavaType.BaseType;
 			// }
@@ -148,8 +144,9 @@ public class LibNative {
 
 	private final static Class<?> LoadClass(String ClassName) throws ClassNotFoundException {
 		try {
-			return Class.forName("org.GreenTeaScript." + ClassName);
-		} catch (ClassNotFoundException e) {
+			return Class.forName(ClassName);
+		}
+		catch (ClassNotFoundException e) {
 		}
 		return Class.forName(ClassName);
 	}
@@ -506,38 +503,6 @@ public class LibNative {
 		}
 	}
 
-	private final static ZenMap<Class<?>> GenMap = new ZenMap<Class<?>>(null);
-	static {
-		GenMap.put("python", zen.codegen.jython.PythonSourceGenerator.class);
-		GenMap.put("javascript", zen.codegen.javascript.JavaScriptSourceGenerator.class);
-		GenMap.put("ruby", zen.codegen.jruby.RubySourceGenerator.class);
-	}
-
-	public final static ZenGenerator LoadGenerator(@Nullable String ClassName, String OutputFile) {
-		if(ClassName == null) {
-			ClassName = System.getenv("ZENCODE");
-		}
-		if (ClassName != null) {
-			try {
-				Class<?> GeneratorClass = GenMap.GetOrNull(ClassName);
-				if(GeneratorClass == null) {
-					GeneratorClass = Class.forName(ClassName);
-				}
-				return (ZenGenerator) GeneratorClass.newInstance();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		try {
-			Class<?> GeneratorClass = Class.forName(ClassName);
-			ZenGenerator Generator = (ZenGenerator) GeneratorClass
-					.newInstance();
-			return Generator;
-		} catch (Exception e) {
-		}
-		return new ZenSourceGenerator("zen", "0.1");
-	}
-
 	public final static void Exit(int status, String Message) {
 		System.err.println(Message);
 		System.exit(1);
@@ -570,5 +535,34 @@ public class LibNative {
 		}
 		return buffer;
 	}
+
+
+
+	private final static ZenMap<Class<?>> GenMap = new ZenMap<Class<?>>(null);
+	static {
+		GenMap.put("python", zen.codegen.jython.PythonSourceGenerator.class);
+		GenMap.put("javascript", zen.codegen.javascript.JavaScriptSourceGenerator.class);
+		GenMap.put("ruby", zen.codegen.jruby.RubySourceGenerator.class);
+		GenMap.put("clisp", zen.codegen.clisp.CommonLispSourceGenerator.class);
+	}
+
+	public final static ZenGenerator LoadGenerator(@Nullable String ClassName, String OutputFile) {
+		if(ClassName == null) {
+			ClassName = System.getenv("ZENCODE");
+		}
+		if (ClassName != null) {
+			try {
+				Class<?> GeneratorClass = GenMap.GetOrNull(ClassName);
+				if(GeneratorClass == null) {
+					GeneratorClass = Class.forName(ClassName);
+				}
+				return (ZenGenerator) GeneratorClass.newInstance();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return new ZenSourceGenerator("zen", "0.1");
+	}
+
 
 }
