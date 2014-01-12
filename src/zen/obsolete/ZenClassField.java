@@ -27,7 +27,6 @@ package zen.obsolete;
 import java.util.ArrayList;
 
 import zen.deps.Field;
-import zen.deps.Var;
 import zen.lang.ZenType;
 import zen.parser.ZenNameSpace;
 import zen.parser.ZenUtils;
@@ -44,15 +43,15 @@ public final class ZenClassField extends ZenUtils {
 		this.DefinedType = DefinedType;
 		this.NameSpace = NameSpace;
 		this.FieldList = new ArrayList<ZenFieldInfo>();
-		@Var ZenType SuperClass = DefinedType.RefType;
-		//		if(SuperClass.TypeBody instanceof ZenClassField) {
-		//			@Var ZenClassField SuperField = (/*cast*/ZenClassField)SuperClass.TypeBody;
-		//			@Var int i = 0;
-		//			while(i < SuperField.FieldList.size()) {
-		//				this.FieldList.add(SuperField.FieldList.get(i));
-		//				i+=1;
-		//			}
-		//		}
+		//@Var ZenType SuperClass = DefinedType.RefType;
+		//if(SuperClass.TypeBody instanceof ZenClassField) {
+		//	@Var ZenClassField SuperField = (/*cast*/ZenClassField)SuperClass.TypeBody;
+		//	@Var int i = 0;
+		//	while(i < SuperField.FieldList.size()) {
+		//		this.FieldList.add(SuperField.FieldList.get(i));
+		//		i+=1;
+		//	}
+		//}
 		this.ThisClassIndex = this.FieldList.size();
 	}
 
