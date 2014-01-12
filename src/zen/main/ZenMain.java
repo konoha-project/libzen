@@ -201,10 +201,10 @@ public class ZenMain extends ZenUtils {
 			}
 		}
 		if (ShellMode) {
-			LibNative.println(ZenParserConst.ProgName + ZenParserConst.Version
-					+ " (" + ZenParserConst.CodeName + ") on "
-					+ LibZen.GetPlatform());
+			LibNative.println(ZenParserConst.ProgName + ZenParserConst.Version + " (" + ZenParserConst.CodeName + ") on " + LibZen.GetPlatform());
 			LibNative.println(ZenParserConst.Copyright);
+			LibNative.println("Accept: " + Generator.GetGrammarInfo());
+			LibNative.println("Produce: " + Generator.GetTargetLangInfo());
 			Generator.Logger.ShowReportedErrors();
 			@Var int linenum = 1;
 			@Var String Line = null;

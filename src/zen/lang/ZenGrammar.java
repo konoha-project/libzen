@@ -917,6 +917,7 @@ public class ZenGrammar {
 		NameSpace.AppendSyntax("$Param$", LibNative.LoadMatchFunc(Grammar, "MatchParam"));
 		NameSpace.AppendSyntax("function", LibNative.LoadMatchFunc(Grammar, "MatchFunction"));
 		NameSpace.AppendSyntax("let", LibNative.LoadMatchFunc(Grammar, "MatchLetDecl"));
+		NameSpace.Generator.SetGrammarInfo("zen0.1");
 	}
 
 }

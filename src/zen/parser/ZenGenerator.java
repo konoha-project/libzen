@@ -32,6 +32,7 @@ import zen.lang.ZenType;
 //endif VAJA
 
 public abstract class ZenGenerator extends ZenNodeUtils implements ZenVisitor {
+	@Field private String            GrammarInfo;
 	@Field public final String       TargetCode;
 	@Field public final String       TargetVersion;
 
@@ -44,6 +45,7 @@ public abstract class ZenGenerator extends ZenNodeUtils implements ZenVisitor {
 	protected ZenGenerator(String TargetCode, String TargetVersion) {
 		super();
 		this.RootNameSpace = new ZenNameSpace(this, null);
+		this.GrammarInfo = "";
 		this.TargetCode = TargetCode;
 		this.TargetVersion = TargetVersion;
 
@@ -64,6 +66,19 @@ public abstract class ZenGenerator extends ZenNodeUtils implements ZenVisitor {
 		return !this.StoppedVisitor;
 	}
 
+	public String GetGrammarInfo() {
+		return this.GrammarInfo.trim();
+	}
+
+	public void SetGrammarInfo(String GrammarInfo) {
+		this.GrammarInfo = this.GrammarInfo + GrammarInfo + " ";
+	}
+
+	public String GetTargetLangInfo() {
+		return this.TargetCode + this.TargetVersion;
+	}
+
+
 	public final String ReportError(int Level, ZenToken Token, String Message) {
 		return this.Logger.Report(Level, Token, Message);
 	}
@@ -83,5 +98,7 @@ public abstract class ZenGenerator extends ZenNodeUtils implements ZenVisitor {
 	public ZenType GetSetterType(ZenType BaseType, String Name) {
 		return ZenSystem.VoidType;   // readonly
 	}
+
+
 
 }
