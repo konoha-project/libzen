@@ -28,7 +28,7 @@ package zen.parser;
 /*GreenTeaConst Begin*/
 //ifdef JAVA
 public interface ZenParserConst {
-//endif VAJA
+	//endif VAJA
 	// Version
 	public final static String  ProgName  = "LibZen";
 	public final static String  CodeName  = "Reference Implementation of D-Script";
@@ -58,7 +58,7 @@ public interface ZenParserConst {
 	public final static int		NativeMacroFunc	    = 1 << 9;
 	public final static int		NativeVariadicFunc	= 1 << 10;
 	public final static int     ConstructorFunc     = 1 << 11;
-	public final static int     MethodFunc          = 1 << 12;  
+	public final static int     MethodFunc          = 1 << 12;
 	public final static int     GetterFunc          = 1 << 13;
 	public final static int     SetterFunc          = 1 << 14;
 	public final static int     OperatorFunc        = 1 << 15;  //@Operator
@@ -67,18 +67,10 @@ public interface ZenParserConst {
 	public final static int     StrongCoercionFunc  = 1 << 18;  //@StrongCoercion
 	public final static int     GenericFunc         = 1 << 15;
 	public final static int		LazyFunc		    = 1 << 16;
-	
+
 	// VarFlag
 	public final static int  ReadOnlyVar = 1;              // @ReadOnly x = 1; disallow x = 2
 	//public final static int  MutableFieldVar  = (1 << 1);  // @Mutable x; x.y = 1 is allowed
-
-	public final static int		MismatchedPosition		= -1;
-	public final static int     Required          = (1 << 0);
-	public final static int     Optional          = (1 << 1);
-	public final static int     AllowLineFeed     = (1 << 2);
-	public final static int     AllowAnnotation   = (1 << 3);
-	public final static int     AllowSkipIndent    = (1 << 4);
-	public final static int     DisallowSkipIndent   = (1 << 5);
 
 	public final static int	NullChar				= 0;
 	public final static int	UndefinedChar			= 1;
@@ -156,7 +148,7 @@ public interface ZenParserConst {
 		LowerAlphaChar, LowerAlphaChar, LowerAlphaChar, LowerAlphaChar, LowerAlphaChar, LowerAlphaChar, LowerAlphaChar, LowerAlphaChar,
 		/*170  x   171  y   172  z   173  {   174  |   175  }   176  ~   177 del*/
 		LowerAlphaChar, LowerAlphaChar, LowerAlphaChar, OpenBraceChar, VarChar, CloseBraceChar, ChilderChar, 1,
-		/*EndArray*/};
+	/*EndArray*/};
 
 	// TokenFlag
 	public final static int	SourceTokenFlag	    = 1;
@@ -167,34 +159,31 @@ public interface ZenParserConst {
 	public final static int QuotedTokenFlag	    = (1 << 5);
 	public final static int NameSymbolTokenFlag	  = (1 << 6);
 
-	// ParseFlag
-	public final static int	BackTrackParseFlag	= 1;
-	public final static int	SkipIndentParseFlag	= (1 << 1);
 
 
 	public final static int BinaryOperator					= 1;
 	public final static int LeftJoin						= 1 << 1;
-//	public final static int PrecedenceShift					= 3;
-//	public final static int PrecedenceCStyleMUL			    = (100 << PrecedenceShift) | BinaryOperator;
-//	public final static int PrecedenceCStyleADD			    = (200 << PrecedenceShift) | BinaryOperator;
-//	public final static int PrecedenceCStyleSHIFT			= (300 << PrecedenceShift) | BinaryOperator;
-//	public final static int PrecedenceCStyleCOMPARE		    = (400 << PrecedenceShift) | BinaryOperator;
-//	public final static int PrecedenceInstanceof            = PrecedenceCStyleCOMPARE;
-//	public final static int PrecedenceCStyleEquals			= (500 << PrecedenceShift) | BinaryOperator;
-//	public final static int PrecedenceCStyleBITAND			= (600 << PrecedenceShift) | BinaryOperator;
-//	public final static int PrecedenceCStyleBITXOR			= (700 << PrecedenceShift) | BinaryOperator;
-//	public final static int PrecedenceCStyleBITOR			= (800 << PrecedenceShift) | BinaryOperator;
-//	public final static int PrecedenceCStyleAND			    = (900 << PrecedenceShift) | BinaryOperator;
-//	public final static int PrecedenceCStyleOR				= (1000 << PrecedenceShift) | BinaryOperator;
-//	public final static int PrecedenceCStyleTRINARY		    = (1100 << PrecedenceShift) | BinaryOperator;				/* ? : */
-//	public final static int PrecedenceCStyleAssign			= (1200 << PrecedenceShift) | BinaryOperator;
-//	public final static int PrecedenceCStyleCOMMA			= (1300 << PrecedenceShift) | BinaryOperator;
+	//	public final static int PrecedenceShift					= 3;
+	//	public final static int PrecedenceCStyleMUL			    = (100 << PrecedenceShift) | BinaryOperator;
+	//	public final static int PrecedenceCStyleADD			    = (200 << PrecedenceShift) | BinaryOperator;
+	//	public final static int PrecedenceCStyleSHIFT			= (300 << PrecedenceShift) | BinaryOperator;
+	//	public final static int PrecedenceCStyleCOMPARE		    = (400 << PrecedenceShift) | BinaryOperator;
+	//	public final static int PrecedenceInstanceof            = PrecedenceCStyleCOMPARE;
+	//	public final static int PrecedenceCStyleEquals			= (500 << PrecedenceShift) | BinaryOperator;
+	//	public final static int PrecedenceCStyleBITAND			= (600 << PrecedenceShift) | BinaryOperator;
+	//	public final static int PrecedenceCStyleBITXOR			= (700 << PrecedenceShift) | BinaryOperator;
+	//	public final static int PrecedenceCStyleBITOR			= (800 << PrecedenceShift) | BinaryOperator;
+	//	public final static int PrecedenceCStyleAND			    = (900 << PrecedenceShift) | BinaryOperator;
+	//	public final static int PrecedenceCStyleOR				= (1000 << PrecedenceShift) | BinaryOperator;
+	//	public final static int PrecedenceCStyleTRINARY		    = (1100 << PrecedenceShift) | BinaryOperator;				/* ? : */
+	//	public final static int PrecedenceCStyleAssign			= (1200 << PrecedenceShift) | BinaryOperator;
+	//	public final static int PrecedenceCStyleCOMMA			= (1300 << PrecedenceShift) | BinaryOperator;
 
 
 	public final static Object UndefinedSymbol = new ZenUndefinedSymbol();
 	public final static String NativeNameSuffix = "__";
 
 	public final static boolean UseLangStat = true;
-/*GreenTeaConst End*/
-//ifdef JAVA
+	/*GreenTeaConst End*/
+	//ifdef JAVA
 }

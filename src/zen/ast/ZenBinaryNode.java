@@ -27,7 +27,6 @@ package zen.ast;
 import zen.deps.Field;
 import zen.deps.Var;
 import zen.parser.ZenNameSpace;
-import zen.parser.ZenParserConst;
 import zen.parser.ZenSyntaxPattern;
 import zen.parser.ZenToken;
 import zen.parser.ZenTokenContext;
@@ -72,7 +71,7 @@ public class ZenBinaryNode extends ZenNode {
 
 	public final ZenNode AppendParsedRightNode(ZenNameSpace NameSpace, ZenTokenContext TokenContext) {
 
-		@Var ZenNode RightNode = TokenContext.ParsePattern(NameSpace, "$Expression$", ZenParserConst.Required);
+		@Var ZenNode RightNode = TokenContext.ParsePattern(NameSpace, "$Expression$", ZenTokenContext.Required);
 		if(RightNode.IsErrorNode()) {
 			return RightNode;
 		}

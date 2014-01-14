@@ -26,6 +26,6 @@ final class ZenTokenFunc {
 			}
 			TokenFunc = TokenFunc.ParentFunc;
 		}
-		return ZenParserConst.MismatchedPosition;
+		return ZenTokenContext.MismatchedPosition;
 	}
 }
