@@ -28,7 +28,7 @@ import java.util.ArrayList;
 
 import zen.ast.ZenAndNode;
 import zen.ast.ZenAnnotationNode;
-import zen.ast.ZenApplyNode;
+import zen.ast.ZenFuncCallNode;
 import zen.ast.ZenArrayLiteralNode;
 import zen.ast.ZenBinaryNode;
 import zen.ast.ZenBlockNode;
@@ -72,7 +72,6 @@ import zen.deps.Var;
 import zen.deps.ZenMap;
 import zen.parser.ZenLogger;
 import zen.parser.ZenNameSpace;
-import zen.parser.ZenNodeUtils;
 import zen.parser.ZenParserConst;
 import zen.parser.ZenSyntaxPattern;
 import zen.parser.ZenToken;
@@ -424,9 +423,9 @@ public class ZenGrammar {
 	}
 
 	public static ZenNode MatchSymbol(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenNode LeftNode) {
-		@Var ZenToken Token = TokenContext.GetTokenAndMoveForward();
-		if(!Token.IsNameSymbol()) {
-			return TokenContext.CreateExpectedErrorNode(Token, "identifier");
+		@Var ZenToken NameToken = TokenContext.GetTokenAndMoveForward();
+		if(!NameToken.IsNameSymbol()) {
+			return TokenContext.CreateExpectedErrorNode(NameToken, "identifier");
 		}
 		@Var ZenNode AssignedNode = null;
 		if(TokenContext.MatchToken("=")) {
@@ -435,18 +434,7 @@ public class ZenGrammar {
 				return AssignedNode;
 			}
 		}
-		@Var Object ConstValue = NameSpace.GetSymbol(Token.ParsedText);
-		if(ConstValue instanceof ZenVarInfo) {
-			ZenVarInfo Var = (ZenVarInfo) ConstValue;
-			return NameSpace.Generator.CreateSymbolNode(Token, Var.VarType, Var.NativeName, AssignedNode);
-		}
-		if(ConstValue != null) {
-			if(AssignedNode != null) {
-				return new ZenErrorNode(Token, "cannot be assigned");
-			}
-			return ZenNodeUtils.CreateConstNode(Token, ConstValue);
-		}
-		return NameSpace.Generator.CreateSymbolNode(Token, ZenSystem.VarType, Token.ParsedText, AssignedNode);
+		return NameSpace.Generator.CreateSymbolNode(NameToken, ZenSystem.VarType, NameToken.ParsedText, AssignedNode);
 	}
 
 	// PatternName: "("  (1)
@@ -497,7 +485,7 @@ public class ZenGrammar {
 	}
 
 	public static ZenNode MatchApply(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenNode LeftNode) {
-		@Var ZenNode ApplyNode = new ZenApplyNode(LeftNode);
+		@Var ZenNode ApplyNode = new ZenFuncCallNode(LeftNode);
 		ApplyNode = TokenContext.MatchNodeToken(ApplyNode, NameSpace, "(", ZenTokenContext.Required | ZenTokenContext.AllowSkipIndent);
 		if(!TokenContext.MatchToken(")")) {
 			while(!ApplyNode.IsErrorNode()) {

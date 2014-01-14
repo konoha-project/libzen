@@ -840,7 +840,7 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 //		this.PushStack(Node.Type);
 //	}
 
-	@Override public void VisitApplyNode(ZenApplyNode Node) {
+	@Override public void VisitFuncCallNode(ZenApplyNode Node) {
 		Node.FuncNode.Accept(this);
 		this.CurrentVisitor.LoadNewArray(this, 0, Node.ParamList);
 		this.CurrentVisitor.InvokeMethodCall(Node.Type, JLib.InvokeFunc);

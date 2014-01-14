@@ -33,12 +33,14 @@ public class ZenSetLocalNode extends ZenNode {
 	@Field public boolean IsCaptured;
 	@Field public String   VarName;
 	@Field public ZenNode	 ValueNode;
-	public ZenSetLocalNode/*constructor*/(ZenToken Token, String NativeName, ZenNode ValueNode) {
+	@Field public int VarIndex;
+	public ZenSetLocalNode/*constructor*/(ZenToken Token, String VarName, ZenNode ValueNode) {
 		super();
-		this.VarName = NativeName;
+		this.VarName = VarName;
+		this.VarIndex = 0;
+		this.IsCaptured = false;
 		this.ValueNode = ValueNode;
 		this.SetChild(ValueNode);
-		this.IsCaptured = false;
 	}
 	@Override public void Accept(ZenVisitor Visitor) {
 		Visitor.VisitSetLocalNode(this);

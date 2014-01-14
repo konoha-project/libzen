@@ -27,8 +27,10 @@ package zen.parser;
 
 import zen.ast.ZenNode;
 import zen.deps.Field;
+import zen.lang.ZenDynamicTypeChecker;
 import zen.lang.ZenSystem;
 import zen.lang.ZenType;
+import zen.lang.ZenTypeChecker;
 //endif VAJA
 
 public abstract class ZenGenerator extends ZenNodeUtils implements ZenVisitor {
@@ -40,6 +42,7 @@ public abstract class ZenGenerator extends ZenNodeUtils implements ZenVisitor {
 	@Field public String             OutputFile;
 	@Field public ZenLogger          Logger;
 
+	@Field public ZenTypeChecker TypeChecker;
 	@Field private boolean StoppedVisitor;
 
 	protected ZenGenerator(String TargetCode, String TargetVersion) {
@@ -51,7 +54,9 @@ public abstract class ZenGenerator extends ZenNodeUtils implements ZenVisitor {
 
 		this.OutputFile = null;
 		this.Logger = new ZenLogger();
+		this.TypeChecker = new ZenDynamicTypeChecker(this.Logger);
 		this.StoppedVisitor = false;
+
 	}
 
 	@Override public final void EnableVisitor() {

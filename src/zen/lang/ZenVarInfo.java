@@ -27,16 +27,14 @@ package zen.lang;
 import zen.deps.Field;
 import zen.parser.ZenNameSpace;
 import zen.parser.ZenToken;
-import zen.parser.ZenUtils;
 
 public class ZenVarInfo {
 	@Field public ZenDefiningFunc  DefiningFunc;
-	@Field public int      VarFlag;
+	@Field public int        VarFlag;
 	@Field public ZenType	 VarType;
 	@Field public String	 VarName;
-	@Field public String	 NativeName;
+	@Field public int        VarUniqueIndex;
 	@Field public ZenToken SourceToken;
-	//	@Field public Object   InitValue;
 	@Field public int      DefCount;
 	@Field public int      UsedCount;
 
@@ -46,8 +44,7 @@ public class ZenVarInfo {
 		this.VarType = VarType;
 		this.VarName = VarName;
 		this.SourceToken = SourceToken;
-		this.NativeName = ZenUtils.NativeVariableName(VarName, this.DefiningFunc.GetVarIndex());
-		//		this.InitValue = null;
+		this.VarUniqueIndex = this.DefiningFunc.GetVarIndex();
 		this.UsedCount = 0;
 		this.DefCount  = 1;
 	}
@@ -62,11 +59,6 @@ public class ZenVarInfo {
 
 	public final void Used() {
 		this.UsedCount += 1;
-	}
-
-	// for debug
-	@Override public String toString() {
-		return "(" + this.VarType + " " + this.VarName + ", " + this.NativeName + ")";
 	}
 
 }

@@ -200,7 +200,7 @@ public class JavaSourceGenerator extends ZenSourceGenerator {
 		Node.ValueNode.Accept(this);
 	}
 
-//	@Override public void VisitApplyNode(ZenApplyNode Node) {
+//	@Override public void VisitFuncCallNode(ZenApplyNode Node) {
 //		ZenFunc Func = Node.Func;
 //		for(int i = 1; i < Node.NodeList.size(); i++) {
 //			ZenNode ParamNode = Node.NodeList.get(i);

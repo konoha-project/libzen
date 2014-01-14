@@ -28,7 +28,7 @@ package zen.parser;
 import java.util.ArrayList;
 
 import zen.ast.ZenAndNode;
-import zen.ast.ZenApplyNode;
+import zen.ast.ZenFuncCallNode;
 import zen.ast.ZenArrayLiteralNode;
 import zen.ast.ZenBinaryNode;
 import zen.ast.ZenBlockNode;
@@ -296,7 +296,7 @@ public class ZenSourceGenerator extends ZenGenerator {
 	}
 
 	@Override
-	public void VisitApplyNode(ZenApplyNode Node) {
+	public void VisitFuncCallNode(ZenFuncCallNode Node) {
 		this.GenerateCode(Node.FuncNode);
 		this.VisitParamList("(", Node.ParamList, ")");
 	}

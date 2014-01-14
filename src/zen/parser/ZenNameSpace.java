@@ -33,7 +33,6 @@ import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.deps.ZenMap;
 import zen.lang.ZenDefiningFunc;
-import zen.lang.ZenDynamicTypeChecker;
 import zen.lang.ZenFunc;
 import zen.lang.ZenFuncSet;
 import zen.lang.ZenSystem;
@@ -48,7 +47,7 @@ final class ZenSymbolSource {
 
 public final class ZenNameSpace {
 	@Field public final ZenNameSpace   ParentNameSpace;
-	@Field public final ZenGenerator		    Generator;
+	@Field public final ZenGenerator   Generator;
 
 	@Field ZenTokenFunc[] TokenMatrix;
 	@Field ZenMap<Object>	 SymbolPatternTable;
@@ -67,6 +66,7 @@ public final class ZenNameSpace {
 		else {
 			this.Generator = ParentNameSpace.Generator;
 		}
+
 	}
 
 	public ZenNameSpace CreateSubNameSpace() {
@@ -563,19 +563,17 @@ public final class ZenNameSpace {
 
 	final Object EvalWithErrorInfo(String ScriptText, long FileLine) {
 		@Var Object ResultValue = null;
-		ZenLogger.VerboseLog(ZenLogger.VerboseEval, "eval: " + ScriptText);
+		//ZenLogger.VerboseLog(ZenLogger.VerboseEval, "eval: " + ScriptText);
 		@Var ZenTokenContext TokenContext = new ZenTokenContext(this, ScriptText, FileLine);
-		@Var ZenDynamicTypeChecker TypeChecker = new ZenDynamicTypeChecker(this.Generator.Logger);
 		TokenContext.SkipEmptyStatement();
 		while(TokenContext.HasNext()) {
 			TokenContext.SetParseFlag(0); // init
 			@Var ZenNode TopLevelNode = TokenContext.ParsePattern(this, "$Statement$", TokenContext.Required);
-			TypeChecker.EnableVisitor();
-			TopLevelNode = TypeChecker.TypeCheck(TopLevelNode, this, ZenSystem.VoidType, 0);
+			TopLevelNode = this.TypeCheck(TopLevelNode, ZenSystem.VoidType);
 			this.Generator.DoCodeGeneration(this, TopLevelNode);
 			if(TopLevelNode.IsErrorNode() && TokenContext.HasNext()) {
 				@Var ZenToken Token = TokenContext.GetToken();
-				this.Generator.Logger.ReportInfo(Token, "stopped script at this line");
+				//this.Generator.Logger.ReportInfo(Token, "stopped script at this line");
 				return null;
 			}
 			//			if(!TopLevelNode.Type.IsVoidType()) {
@@ -585,6 +583,11 @@ public final class ZenNameSpace {
 			TokenContext.Vacume();
 		}
 		return ResultValue;
+	}
+
+	private ZenNode TypeCheck(ZenNode Node, ZenType ContextType) {
+		this.Generator.TypeChecker.EnableVisitor();
+		return this.Generator.TypeChecker.TypeCheck(Node, this, ContextType, 0);
 	}
 
 	public final Object Eval(String ScriptText, long FileLine) {

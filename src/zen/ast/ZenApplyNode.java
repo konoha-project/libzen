@@ -26,26 +26,19 @@ package zen.ast;
 
 import java.util.ArrayList;
 
+import zen.deps.Constructor;
 import zen.deps.Field;
-import zen.parser.ZenVisitor;
+import zen.lang.ZenFunc;
 
-//E.g., $FuncNode "(" $Param[0], $Param[1], ... ")"
-final public class ZenApplyNode extends ZenNode {
-	@Field public ZenNode	FuncNode;
+public abstract class ZenApplyNode extends ZenNode {
 	@Field public ArrayList<ZenNode>  ParamList; /* [arg0, arg1, ...] */
-
-	public ZenApplyNode(ZenNode FuncNode) {
+	@Field public ZenFunc ResolvedFunc;
+	@Constructor public ZenApplyNode() {
 		super();
 		this.ParamList = new ArrayList<ZenNode>();
-		this.FuncNode = this.SetChild(FuncNode);
+		this.ResolvedFunc = null;  // optional
 	}
 	@Override public void Append(ZenNode Node) {
 		this.ParamList.add(this.SetChild(Node));
 	}
-	@Override public void Accept(ZenVisitor Visitor) {
-		Visitor.VisitApplyNode(this);
-	}
-	//	@Override public Object ToConstValue(ZenParserContext Context, boolean EnforceConst)  {
-	//		return Context.Generator.EvalApplyFuncionObjectNode(this, EnforceConst);
-	//	}
 }

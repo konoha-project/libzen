@@ -29,7 +29,6 @@ package zen.lang;
 import java.util.ArrayList;
 
 import zen.ast.ZenAndNode;
-import zen.ast.ZenApplyNode;
 import zen.ast.ZenArrayLiteralNode;
 import zen.ast.ZenBinaryNode;
 import zen.ast.ZenBlockNode;
@@ -42,6 +41,7 @@ import zen.ast.ZenConstPoolNode;
 import zen.ast.ZenEmptyNode;
 import zen.ast.ZenErrorNode;
 import zen.ast.ZenFloatNode;
+import zen.ast.ZenFuncCallNode;
 import zen.ast.ZenFuncDeclNode;
 import zen.ast.ZenFunctionLiteralNode;
 import zen.ast.ZenGetIndexNode;
@@ -134,7 +134,8 @@ public class ZenDynamicTypeChecker extends ZenTypeChecker {
 		@Var ZenType VarType = ZenSystem.VarType;
 		@Var ZenVarInfo VarInfo = this.GetVarInfo(NameSpace, Node.VarName);
 		if(VarInfo != null) {
-			Node.VarName = VarInfo.NativeName;
+			Node.VarName = VarInfo.VarName;
+			Node.VarIndex = VarInfo.VarUniqueIndex;
 			VarType = VarInfo.VarType;
 			Node.IsCaptured = VarInfo.IsCaptured(NameSpace);
 		}
@@ -154,7 +155,8 @@ public class ZenDynamicTypeChecker extends ZenTypeChecker {
 			this.CheckErrorNode(this.CreateUndefinedVarErrorNode(Node, Node.VarName));
 		}
 		else {
-			Node.VarName = VarInfo.NativeName;
+			Node.VarName = VarInfo.VarName;
+			Node.VarIndex = VarInfo.VarUniqueIndex;
 			Node.IsCaptured = VarInfo.IsCaptured(NameSpace);
 			Node.ValueNode = this.TypeCheck(Node.ValueNode, NameSpace, VarInfo.VarType, ZenTypeChecker.DefaultTypeCheckPolicy);
 			this.TypeSync(VarInfo.VarType, Node.ValueNode);
@@ -201,25 +203,25 @@ public class ZenDynamicTypeChecker extends ZenTypeChecker {
 	}
 
 	@Override public void VisitMethodCallNode(ZenMethodCallNode Node) {
-		ZenNameSpace NameSpace = this.GetNameSpace();
+		@Var ZenNameSpace NameSpace = this.GetNameSpace();
 		Node.RecvNode = this.TypeCheck(Node.RecvNode, NameSpace, ZenSystem.VarType, ZenTypeChecker.DefaultTypeCheckPolicy);
 		if(this.IsVisitable()) {
-			ZenType FuncType = this.GuessMethodFuncType(NameSpace, Node.RecvNode, Node.MethodName, Node.ParamList);
+			ZenType FuncType = this.GuessMethodFuncType(NameSpace, Node.RecvNode, Node.MethodName, Node);
 			ZenType ReturnType = this.TypeCheckFuncParam(NameSpace, Node.ParamList, FuncType, 2);
 			this.TypedNode(Node, ReturnType);
 		}
 	}
 
-	@Override public void VisitApplyNode(ZenApplyNode Node) {
-		ZenNameSpace NameSpace = this.GetNameSpace();
+	@Override public void VisitFuncCallNode(ZenFuncCallNode Node) {
+		@Var ZenNameSpace NameSpace = this.GetNameSpace();
 		if(Node.FuncNode instanceof ZenGetLocalNode) {
-			ZenGetLocalNode VarNode = (ZenGetLocalNode)Node.FuncNode;
-			ZenVarInfo VarInfo = this.GetVarInfo(NameSpace, VarNode.VarName);
+			@Var ZenGetLocalNode VarNode = (ZenGetLocalNode)Node.FuncNode;
+			@Var ZenVarInfo VarInfo = this.GetVarInfo(NameSpace, VarNode.VarName);
 			if(VarInfo != null) {
 				VarNode.Type = VarInfo.VarType;
 			}
 			else {
-				VarNode.Type = this.GuessFuncType(NameSpace, VarNode.VarName, Node.ParamList);
+				VarNode.Type = this.GuessFuncType(NameSpace, VarNode.VarName, Node);
 			}
 		}
 		else {

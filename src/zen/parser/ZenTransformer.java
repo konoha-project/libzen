@@ -3,7 +3,7 @@ package zen.parser;
 import java.util.ArrayList;
 
 import zen.ast.ZenAndNode;
-import zen.ast.ZenApplyNode;
+import zen.ast.ZenFuncCallNode;
 import zen.ast.ZenArrayLiteralNode;
 import zen.ast.ZenBinaryNode;
 import zen.ast.ZenBlockNode;
@@ -195,7 +195,7 @@ public class ZenTransformer implements ZenVisitor {
 		this.TransformNodeList(Node, Node.ParamList);
 	}
 
-	@Override public void VisitApplyNode(ZenApplyNode Node) {
+	@Override public void VisitFuncCallNode(ZenFuncCallNode Node) {
 		Node.FuncNode = this.Transform(Node, Node.FuncNode);
 		this.TransformNodeList(Node, Node.ParamList);
 	}

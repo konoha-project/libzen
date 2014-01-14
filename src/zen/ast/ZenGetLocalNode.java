@@ -32,11 +32,13 @@ import zen.parser.ZenVisitor;
 public class ZenGetLocalNode extends ZenNode {
 	@Field public boolean IsCaptured;
 	@Field public String  VarName;
+	@Field public int VarIndex;
 	public ZenGetLocalNode/*constructor*/(ZenToken Token, String NativeName) {
 		super();
 		this.SourceToken = Token;
 		this.VarName = NativeName;
 		this.IsCaptured = false;
+		this.VarIndex = 0;
 	}
 	@Override public void Accept(ZenVisitor Visitor) {
 		Visitor.VisitGetLocalNode(this);
