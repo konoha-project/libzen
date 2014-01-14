@@ -681,7 +681,7 @@ public class ZenGrammar {
 			SourceToken.AddTypeInfoToErrorMessage(SymbolClass);
 		}
 		@Var ZenType SymbolType = TokenContext.ParseType(NameSpace, "$TypeAnnotation$", ZenSystem.VarType);
-		if(TokenContext.MatchToken("=")) {
+		if(!TokenContext.MatchToken("=")) {
 			return TokenContext.CreateExpectedErrorNode(SymbolToken, "=");
 		}
 		@Var ZenNode ValueNode = TokenContext.ParsePattern(NameSpace, "$Expression$", ZenTokenContext.Required);
