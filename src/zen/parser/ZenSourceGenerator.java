@@ -170,6 +170,10 @@ public class ZenSourceGenerator extends ZenGenerator {
 		Node.Accept(this);
 	}
 
+	public void AppendCode(String RawSource) {
+		this.CurrentBuilder.Append(RawSource);
+	}
+
 	public void VisitStatementList(ArrayList<ZenNode> StatementList) {
 		int i = 0;
 		while (i < StatementList.size()) {

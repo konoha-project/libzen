@@ -27,19 +27,15 @@ package zen.lang;
 import zen.deps.Field;
 import zen.deps.LibZen;
 import zen.deps.Var;
+import zen.parser.ZenToken;
 import zen.parser.ZenUtils;
 //endif VAJA
 
 public class ZenType implements ZenTypeConst {
-	@Field public int				TypeFlag;
+	@Field public int			  TypeFlag;
 	@Field public int             TypeId;
-	@Field public String			ShortName;
-	@Field public ZenType			RefType;
-	//	@Field public ZenType			ParentMethodSearch;
-	//	@Field public ZenType			BaseType;
-	//	@Field public ZenType[]		TypeParams;
-	//	@Field public Object          TypeBody;
-	//	@Field public Object			DefaultNullValue;
+	@Field public String		  ShortName;
+	@Field public ZenType		  RefType;
 
 	public ZenType(int TypeFlag, String ShortName, ZenType RefType) {
 		this.TypeFlag = TypeFlag;
@@ -65,11 +61,14 @@ public class ZenType implements ZenTypeConst {
 		return this;
 	}
 
-	public void FoundTypeError() {
-
+	public void Infer(ZenType Type, ZenToken SourceToken) {
+		// ZenVarInfo should be implemented
 	}
-
+	//	public void FoundTypeError() {
+	//
+	//	}
 	public boolean IsFoundTypeError() {
+		// ZenVarInfo should be implemented
 		return false;
 	}
 

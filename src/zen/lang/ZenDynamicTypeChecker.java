@@ -88,7 +88,7 @@ public class ZenDynamicTypeChecker extends ZenTypeChecker {
 	@Override public void VisitNullNode(ZenNullNode Node) {
 		ZenType Type = this.GetContextType();
 		if(Type.IsVarType()) {
-			Type = ZenSystem.AnyType;
+			Type = ZenSystem.AnyType;  // TODO:
 		}
 		this.TypedNode(Node, Type);
 	}
@@ -144,9 +144,7 @@ public class ZenDynamicTypeChecker extends ZenTypeChecker {
 			NewNode = this.TypeCheck(NewNode, NameSpace, ZenSystem.VarType, 0);
 			this.TypedNode(NewNode, NewNode.Type);
 		}
-		else {
-			this.TypedNode(Node, VarType);
-		}
+		this.TypedNode(Node, VarType);
 	}
 
 	@Override public void VisitSetLocalNode(ZenSetLocalNode Node) {
@@ -198,6 +196,7 @@ public class ZenDynamicTypeChecker extends ZenTypeChecker {
 			this.CheckErrorNode(this.CreateReadOnlyErrorNode(Node, Node.RecvNode.Type, Node.NativeName));
 		}
 		Node.ValueNode = this.TypeCheck(Node.ValueNode, NameSpace, FieldType, ZenTypeChecker.DefaultTypeCheckPolicy);
+		this.InferFieldType(NameSpace, Node.RecvNode.Type, Node.NativeName, Node.ValueNode.Type);
 		this.TypedNode(Node, ZenSystem.VoidType);
 	}
 
@@ -234,8 +233,7 @@ public class ZenDynamicTypeChecker extends ZenTypeChecker {
 	@Override public void VisitUnaryNode(ZenUnaryNode Node) {
 		ZenNameSpace NameSpace = this.GetNameSpace();
 		Node.RecvNode = this.TypeCheck(Node.RecvNode, NameSpace, ZenSystem.VarType, ZenTypeChecker.DefaultTypeCheckPolicy);
-
-		this.Todo(Node);
+		this.TypedNode(Node, Node.Type);
 	}
 
 	@Override public void VisitNotNode(ZenNotNode Node) {
@@ -259,17 +257,33 @@ public class ZenDynamicTypeChecker extends ZenTypeChecker {
 		this.TypedNode(Node, ZenSystem.BooleanType);
 	}
 
+	private ZenType UnifyType(ZenNameSpace NameSpace, ZenBinaryNode Node, ZenType Type) {
+		if(Node.LeftNode.Type.Is(Type)) {
+			Node.RightNode = this.TypeCheck(Node.RightNode, NameSpace, Type, 0);
+			return Type;
+		}
+		else if(Node.RightNode.Type.Is(Type)) {
+			Node.LeftNode = this.TypeCheck(Node.LeftNode, NameSpace, Type, 0);
+			return Type;
+		}
+		return null;
+	}
+
 	@Override public void VisitBinaryNode(ZenBinaryNode Node) {
 		ZenNameSpace NameSpace = this.GetNameSpace();
 		Node.LeftNode = this.TypeCheck(Node.LeftNode, NameSpace, ZenSystem.VarType, ZenTypeChecker.DefaultTypeCheckPolicy);
-		Node.RightNode = this.TypeCheck(Node.RightNode, NameSpace, ZenSystem.VarType, ZenTypeChecker.DefaultTypeCheckPolicy);
-		this.Todo(Node);
+		Node.RightNode = this.TypeCheck(Node.RightNode, NameSpace, Node.LeftNode.Type, ZenTypeChecker.NoCheckPolicy);
+		this.UnifyType(NameSpace, Node, ZenSystem.StringType);
+		this.UnifyType(NameSpace, Node, ZenSystem.FloatType);
+		Node.LeftNode = this.TypeCheck(Node.LeftNode, NameSpace, Node.RightNode.Type, ZenTypeChecker.DefaultTypeCheckPolicy);
+		this.TypedNode(Node, Node.LeftNode.Type);
 	}
 
 	@Override public void VisitComparatorNode(ZenComparatorNode Node) {
 		ZenNameSpace NameSpace = this.GetNameSpace();
 		Node.LeftNode = this.TypeCheck(Node.LeftNode, NameSpace, ZenSystem.VarType, ZenTypeChecker.DefaultTypeCheckPolicy);
-		Node.RightNode = this.TypeCheck(Node.RightNode, NameSpace, Node.LeftNode.Type, ZenTypeChecker.DefaultTypeCheckPolicy);
+		Node.RightNode = this.TypeCheck(Node.RightNode, NameSpace, Node.LeftNode.Type, ZenTypeChecker.NoCheckPolicy);
+		this.UnifyType(NameSpace, Node, ZenSystem.FloatType);
 		this.TypedNode(Node, ZenSystem.BooleanType);
 	}
 
@@ -444,6 +458,7 @@ public class ZenDynamicTypeChecker extends ZenTypeChecker {
 			ZenFunc DefinedFunc = this.Define(NameSpace, Node.FuncName, FuncType);
 			if(DefinedFunc.IsLazyDef()) {
 				this.TypedNode(Node, ZenSystem.VoidType);
+				return;
 			}
 			ZenFunc UpperFunc = this.SetFuncParamType(Node.NameSpace, DefinedFunc, Node.ArgumentList);
 			Node.BodyNode = this.TypeCheck(Node.BodyNode, Node.NameSpace, ZenSystem.VarType, 0);

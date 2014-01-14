@@ -33,11 +33,11 @@ import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.deps.ZenMap;
 import zen.lang.ZenDefiningFunc;
+import zen.lang.ZenDynamicTypeChecker;
 import zen.lang.ZenFunc;
 import zen.lang.ZenFuncSet;
 import zen.lang.ZenSystem;
 import zen.lang.ZenType;
-import zen.lang.ZenDynamicTypeChecker;
 
 final class ZenSymbolSource {
 	@Field public ZenToken SourceToken;
@@ -562,8 +562,8 @@ public final class ZenNameSpace {
 		while(TokenContext.HasNext()) {
 			TokenContext.SetParseFlag(0); // init
 			@Var ZenNode TopLevelNode = TokenContext.ParsePattern(this, "$Statement$", ZenParserConst.Required);
-			//			TypeChecker.EnableVisitor();
-			//			TopLevelNode = TypeChecker.TypeCheck(TopLevelNode, this, ZenSystem.VoidType, 0);
+			TypeChecker.EnableVisitor();
+			TopLevelNode = TypeChecker.TypeCheck(TopLevelNode, this, ZenSystem.VoidType, 0);
 			this.Generator.DoCodeGeneration(this, TopLevelNode);
 			if(TopLevelNode.IsErrorNode() && TokenContext.HasNext()) {
 				@Var ZenToken Token = TokenContext.GetToken();

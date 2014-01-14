@@ -28,6 +28,7 @@ package zen.lang;
 
 import java.util.ArrayList;
 
+import zen.ast.ZenCastNode;
 import zen.ast.ZenErrorNode;
 import zen.ast.ZenNode;
 import zen.deps.Field;
@@ -41,28 +42,31 @@ import zen.parser.ZenVisitor;
 public abstract class ZenTypeChecker implements ZenVisitor {
 	public final static int DefaultTypeCheckPolicy			= 0;
 	public final static int NoCheckPolicy                   = 1;
-	public final static int CastPolicy                      = (1 << 1);
-	public final static int IgnoreEmptyPolicy               = (1 << 2);
-	public final static int AllowEmptyPolicy                = (1 << 3);
-	public final static int AllowVoidPolicy                 = (1 << 4);
-	public final static int AllowCoercionPolicy             = (1 << 5);
-	public final static int OnlyConstPolicy                 = (1 << 6);
-	public final static int NullablePolicy                  = (1 << 8);
-	public final static int BlockPolicy                     = (1 << 7);
+	//	public final static int CastPolicy                      = (1 << 1);
+	//	public final static int IgnoreEmptyPolicy               = (1 << 2);
+	//	public final static int AllowEmptyPolicy                = (1 << 3);
+	//	public final static int AllowVoidPolicy                 = (1 << 4);
+	//	public final static int AllowCoercionPolicy             = (1 << 5);
+	//	public final static int OnlyConstPolicy                 = (1 << 6);
+	//	public final static int NullablePolicy                  = (1 << 8);
+	//	public final static int BlockPolicy                     = (1 << 7);
 
-	@Field private ZenNameSpace NameSpace_;
-	@Field private ZenType ContextType_;
-	@Field private ZenNode TypedNode_;
+	@Field private ZenNameSpace StackedNameSpace;
+	@Field private ZenType StackedContextType;
+	@Field private ZenNode StackedTypedNode;
 
 	@Field public ZenLogger Logger;
 	@Field private boolean StoppedVisitor;
 
+	@Field ArrayList<ZenVarType> VarTypeList;
+
 	public ZenTypeChecker(ZenLogger Logger) {
 		this.Logger = Logger;
-		this.NameSpace_ = null;
-		this.ContextType_ = null;
-		this.TypedNode_ = null;
+		this.StackedNameSpace = null;
+		this.StackedContextType = null;
+		this.StackedTypedNode = null;
 		this.StoppedVisitor = false;
+		this.VarTypeList = new ArrayList<ZenVarType>();
 	}
 
 	@Override public final void EnableVisitor() {
@@ -78,31 +82,41 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 	}
 
 	public final ZenNameSpace GetNameSpace() {
-		return this.NameSpace_;
+		return this.StackedNameSpace;
 	}
 
 	public final ZenType GetContextType() {
-		return this.ContextType_;
+		return this.StackedContextType;
+	}
+
+	protected final ZenType VarType(ZenType Type, String Name) {
+		if(Type == null) {
+			ZenVarType VarType = new ZenVarType(Name);
+			this.VarTypeList.add(VarType);
+			return VarType;
+		}
+		assert(Type.IsVarType());
+		return Type;
 	}
 
 	public final void TypedNode(ZenNode Node, ZenType Type) {
 		Node.Type = Type;
 		if(this.IsVisitable()) {
-			this.TypedNode_ = Node;
+			this.StackedTypedNode = Node;
 		}
 	}
 
 	public final void Todo(ZenNode Node) {
 		this.Logger.ReportWarning(Node.SourceToken, "TODO: unimplemented type checker node: " + Node.getClass().getSimpleName());
-		Node.Type = ZenSystem.AnyType;
+		Node.Type = ZenSystem.VarType;
 		if(this.IsVisitable()) {
-			this.TypedNode_ = Node;
+			this.StackedTypedNode = Node;
 		}
 	}
 
 	public final void CheckErrorNode(ZenNode Node) {
 		if(Node.IsErrorNode()) {
-			this.TypedNode_ = Node;
+			this.StackedTypedNode = Node;
 			this.StopVisitor();
 		}
 	}
@@ -244,19 +258,19 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 	public final ZenNode TypeCheck(ZenNode Node, ZenNameSpace NameSpace, ZenType ContextType, int TypeCheckPolicy) {
 		if(this.IsVisitable()) {
 			ZenNode ParentNode = Node.ParentNode;
-			ZenNameSpace NameSpace_ = this.NameSpace_;
-			ZenType ContextType_ = this.ContextType_;
-			ZenNode TypedNode_ = this.TypedNode_;
-			this.NameSpace_ = NameSpace;
-			this.ContextType_ = ContextType;
+			ZenNameSpace NameSpace_ = this.StackedNameSpace;
+			ZenType ContextType_ = this.StackedContextType;
+			ZenNode TypedNode_ = this.StackedTypedNode;
+			this.StackedNameSpace = NameSpace;
+			this.StackedContextType = ContextType;
 			if(Node.Type == null || Node.Type.IsVarType()) {
 				Node.Accept(this);
-				Node = this.TypedNode_;
+				Node = this.StackedTypedNode;
 			}
 			Node = this.TypeCheckImpl(Node, ContextType, TypeCheckPolicy);
-			this.NameSpace_ = NameSpace_;
-			this.ContextType_ = ContextType_;
-			this.TypedNode_ = TypedNode_;
+			this.StackedNameSpace = NameSpace_;
+			this.StackedContextType = ContextType_;
+			this.StackedTypedNode = TypedNode_;
 			if(ParentNode != Node.ParentNode && ParentNode != null) {
 				ParentNode.SetChild(Node);
 			}
@@ -269,10 +283,13 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		if(Node.IsErrorNode()) {
 			return Node;
 		}
-		//		if(Node.Type.IsUnrevealedType()) {
-		//			@Var ZenFunc Func = ParsedTree.NameSpace.GetConverterFunc(Node.Type, Node.Type.BaseType, true);
-		//			Node = this.Generator.CreateCoercionNode(Func.GetReturnType(), ParsedTree.NameSpace, Func, Node);
-		//		}
+		if(Node.Type == ContextType || ContextType.IsVarType() || ContextType.Accept(Node.Type) || ZenUtils.IsFlag(TypeCheckPolicy, NoCheckPolicy)) {
+			return Node;
+		}
+		if(ContextType.IsVoidType() && !Node.Type.IsVoidType()) {
+			return new ZenCastNode(ZenSystem.VoidType, Node);
+		}
+
 		//		System.err.println("**** " + Node.getClass());
 		//		@Var Object ConstValue = Node.ToConstValue(this.Context, IsFlag(TypeCheckPolicy, OnlyConstPolicy));
 		//		if(ConstValue != null && !(Node.IsConstNode())) {  // recreated
@@ -285,26 +302,16 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		//				return this.CreateSyntaxErrorNode(ParsedTree, "value must be const");
 		//			}
 		//		}
-		if(ZenUtils.IsFlag(TypeCheckPolicy, ZenTypeChecker.AllowVoidPolicy) || Node.Type.IsVoidType()) {
-			return Node;
+		@Var ZenFunc Func1 = this.GetCoercionFunc(Node.Type, ContextType);
+		if(Func1 != null) {
+
 		}
-		if(Node.Type == ContextType || ContextType.IsVarType() || ContextType.Accept(Node.Type)) {
-			return Node;
-		}
-		//		@Var ZenFunc Func1 = this.GetConverterFunc(Node.Type, ContextType, true);
-		//		if(Func1 != null && (Func1.Is(CoercionFunc) || IsFlag(TypeCheckPolicy, CastPolicy))) {
-		//			return this.Generator.CreateCoercionNode(Type, ParsedTree.NameSpace, Func1, Node);
-		//		}
 		//System.err.println("node="+ LibZen.GetClassName(Node) + "type error: requested = " + Type + ", given = " + Node.Type);
 		return new ZenErrorNode(Node.SourceToken, "type error: requested = " + ContextType + ", given = " + Node.Type);
 	}
 
-	protected final ZenType GetFieldType(ZenNameSpace NameSpace, ZenType BaseType, String Name) {
-		return NameSpace.Generator.GetFieldType(BaseType, Name);
-	}
-
-	protected final ZenType GetSetterType(ZenNameSpace NameSpace, ZenType BaseType, String Name) {
-		return NameSpace.Generator.GetSetterType(BaseType, Name);
+	private ZenFunc GetCoercionFunc(ZenType Type, ZenType ContextType) {
+		return null;
 	}
 
 	protected ZenType GetIndexType(ZenNameSpace NameSpace, ZenType RecvType) {
@@ -326,6 +333,19 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		}
 		return ZenSystem.VarType;
 	}
+
+	protected final ZenType GetFieldType(ZenNameSpace NameSpace, ZenType BaseType, String Name) {
+		return NameSpace.Generator.GetFieldType(BaseType, Name);
+	}
+
+	protected final ZenType GetSetterType(ZenNameSpace NameSpace, ZenType BaseType, String Name) {
+		return NameSpace.Generator.GetSetterType(BaseType, Name);
+	}
+
+	protected void InferFieldType(ZenNameSpace NameSpace, ZenType ClassType, String FieldName, ZenType ValueType) {
+		//TODO
+	}
+
 
 
 	protected ZenType GetReturnType(ZenNameSpace NameSpace) {

@@ -24,16 +24,51 @@
 
 package zen.lang;
 
+import zen.ast.ZenNode;
+import zen.deps.Field;
 
 public class ZenVarType extends ZenType {
+	@Field public ZenNode SourceNode; // to remember
+	@Field private boolean FoundTypeError;
+	public ZenVarType(String ShortName) {
+		super(0, ShortName, ZenSystem.VarType);
+		this.FoundTypeError = false;
+	}
 
-	public ZenVarType(int TypeFlag, String ShortName, ZenType RefType) {
-		super(TypeFlag, ShortName, RefType.GetRealType());
+	@Override public final ZenType GetRealType() {
+		return this.RefType;
+	}
+
+	public void TypeCheckNode(ZenNode SourceNode) {
+		if(!SourceNode.Type.IsVarType()) {
+			if(this.SourceNode == null) {
+				this.RefType = SourceNode.Type;
+				this.SourceNode = SourceNode;
+			}
+			else {
+				if(!this.Accept(SourceNode.Type)) {
+					this.FoundTypeError = true;
+				}
+			}
+		}
+	}
+
+	@Override public boolean IsFoundTypeError() {
+		return this.FoundTypeError;
+	}
+
+	@Override public int GetParamSize() {
+		return this.RefType.GetParamSize();
 	}
 
 	@Override
-	public final ZenType GetRealType() {
-		return this.RefType;
+	public ZenType GetParamType(int Index) {
+		return this.RefType.GetParamType(Index);
+	}
+
+	@Override
+	public boolean IsFuncType() {
+		return this.RefType.IsFuncType();
 	}
 
 }
