@@ -667,14 +667,14 @@ public class ZenGrammar {
 	}
 
 	public static ZenNode MatchLetDecl(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenNode LeftNode) {
-		ZenToken SourceToken = TokenContext.GetTokenAndMoveForward(); /* let */
-		ZenToken SymbolToken = TokenContext.GetTokenAndMoveForward(); /* name */
+		@Var ZenToken SourceToken = TokenContext.GetTokenAndMoveForward(); /* let */
+		@Var ZenToken SymbolToken = TokenContext.GetTokenAndMoveForward(); /* name */
 		@Var String SymbolName = SymbolToken.ParsedText;
 		if(TokenContext.MatchToken(".")) {
 			@Var String ClassName = SymbolToken.ParsedText;
 			@Var ZenType SymbolClass = NameSpace.GetType(ClassName);
 			if(SymbolClass == null) {
-				return new ZenErrorNode(SymbolToken, "unknown type: " + ClassName);
+				SymbolClass = NameSpace.NewVirtualClass(ClassName, SymbolToken);
 			}
 			SymbolToken = TokenContext.GetTokenAndMoveForward(); /* class name */
 			SymbolName = ZenNameSpace.ClassStaticSymbol(SymbolClass, SymbolName);
@@ -684,7 +684,7 @@ public class ZenGrammar {
 		if(TokenContext.MatchToken("=")) {
 			return TokenContext.CreateExpectedErrorNode(SymbolToken, "=");
 		}
-		ZenNode ValueNode = TokenContext.ParsePattern(NameSpace, "$Expression$", ZenTokenContext.Required);
+		@Var ZenNode ValueNode = TokenContext.ParsePattern(NameSpace, "$Expression$", ZenTokenContext.Required);
 		if(ValueNode instanceof ZenStringNode && SymbolType.IsFuncType()) {
 			@Var ZenMacro MacroFunc = new ZenMacro(0, SymbolName, (ZenFuncType)SymbolType, ((ZenStringNode)ValueNode).Value);
 			NameSpace.AppendFuncName(MacroFunc, SourceToken);
@@ -693,7 +693,6 @@ public class ZenGrammar {
 		if(ValueNode.IsErrorNode()) {
 			return ValueNode;
 		}
-
 		//ValueNode = NameSpace.TypeCheck(ValueNode, NameSpace.GetSymbolType(ConstName), ZenParserConst.DefaultTypeCheckPolicy);
 		ZenConstNode ConstNode = ValueNode.ToConstNode(true);
 		if(!ConstNode.IsErrorNode()) {

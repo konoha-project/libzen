@@ -30,6 +30,7 @@ import zen.deps.Field;
 public class ZenVarType extends ZenType {
 	@Field public ZenNode SourceNode; // to remember
 	@Field private boolean FoundTypeError;
+
 	public ZenVarType(String ShortName) {
 		super(0, ShortName, ZenSystem.VarType);
 		this.FoundTypeError = false;

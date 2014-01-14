@@ -38,6 +38,7 @@ import zen.lang.ZenFunc;
 import zen.lang.ZenFuncSet;
 import zen.lang.ZenSystem;
 import zen.lang.ZenType;
+import zen.lang.ZenVarType;
 
 final class ZenSymbolSource {
 	@Field public ZenToken SourceToken;
@@ -247,6 +248,13 @@ public final class ZenNameSpace {
 		if(Type.GetBaseType() == Type) {
 			this.SetSymbol(Type.ShortName, Type, SourceToken);
 		}
+		return Type;
+	}
+
+	public ZenType NewVirtualClass(String ClassName, ZenToken SourceToken) {
+		ZenType Type = new ZenVarType(ClassName);
+		this.Generator.Logger.ReportInfo(SourceToken, "implicit defintion of type " + ClassName);
+		this.SetSymbol(ClassName, Type, SourceToken);
 		return Type;
 	}
 
@@ -561,7 +569,7 @@ public final class ZenNameSpace {
 		TokenContext.SkipEmptyStatement();
 		while(TokenContext.HasNext()) {
 			TokenContext.SetParseFlag(0); // init
-			@Var ZenNode TopLevelNode = TokenContext.ParsePattern(this, "$Statement$", ZenParserConst.Required);
+			@Var ZenNode TopLevelNode = TokenContext.ParsePattern(this, "$Statement$", TokenContext.Required);
 			TypeChecker.EnableVisitor();
 			TopLevelNode = TypeChecker.TypeCheck(TopLevelNode, this, ZenSystem.VoidType, 0);
 			this.Generator.DoCodeGeneration(this, TopLevelNode);
@@ -671,6 +679,7 @@ public final class ZenNameSpace {
 	public final static String SuffixPatternSymbol(String PatternName) {
 		return "\t" + PatternName;
 	}
+
 
 
 }
