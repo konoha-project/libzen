@@ -28,12 +28,14 @@ import java.util.ArrayList;
 
 import zen.ast.ZenErrorNode;
 import zen.ast.ZenNode;
+import zen.ast.ZenTypeNode;
 import zen.deps.Field;
 import zen.deps.LibNative;
 import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.lang.ZenFunc;
 import zen.lang.ZenSystem;
+import zen.lang.ZenType;
 
 public final class ZenTokenContext {
 	// ParseFlag
@@ -469,6 +471,13 @@ public final class ZenTokenContext {
 		return this.ParsePatternAfter(NameSpace, null, PatternName, MatchFlag);
 	}
 
+	public final ZenType ParseType(ZenNameSpace NameSpace, String PatternName, ZenType DefaultType) {
+		ZenTypeNode TypeNode = (ZenTypeNode)this.ParsePatternAfter(NameSpace, null, PatternName, Optional);
+		if(TypeNode != null) {
+			return TypeNode.Type;
+		}
+		return DefaultType;
+	}
 
 	public final void SkipEmptyStatement() {
 		while(this.HasNext()) {

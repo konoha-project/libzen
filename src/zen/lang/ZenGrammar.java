@@ -669,32 +669,35 @@ public class ZenGrammar {
 	public static ZenNode MatchLetDecl(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenNode LeftNode) {
 		ZenToken SourceToken = TokenContext.GetTokenAndMoveForward(); /* let */
 		ZenToken SymbolToken = TokenContext.GetTokenAndMoveForward(); /* name */
-		@Var ZenType ConstClass = null;
+		@Var String SymbolName = SymbolToken.ParsedText;
 		if(TokenContext.MatchToken(".")) {
 			@Var String ClassName = SymbolToken.ParsedText;
-			ConstClass = NameSpace.GetType(ClassName);
-			if(ConstClass == null) {
+			@Var ZenType SymbolClass = NameSpace.GetType(ClassName);
+			if(SymbolClass == null) {
 				return new ZenErrorNode(SymbolToken, "unknown type: " + ClassName);
 			}
 			SymbolToken = TokenContext.GetTokenAndMoveForward(); /* class name */
+			SymbolName = ZenNameSpace.ClassStaticSymbol(SymbolClass, SymbolName);
+			SourceToken.AddTypeInfoToErrorMessage(SymbolClass);
 		}
-		ZenNode AnnotatedToken = TokenContext.ParsePattern(NameSpace, "$TypeAnnotation$", ZenTokenContext.Optional);
-		if(!TokenContext.MatchToken("=")) {
+		@Var ZenType SymbolType = TokenContext.ParseType(NameSpace, "$TypeAnnotation$", ZenSystem.VarType);
+		if(TokenContext.MatchToken("=")) {
 			return TokenContext.CreateExpectedErrorNode(SymbolToken, "=");
 		}
 		ZenNode ValueNode = TokenContext.ParsePattern(NameSpace, "$Expression$", ZenTokenContext.Required);
+		if(ValueNode instanceof ZenStringNode && SymbolType.IsFuncType()) {
+			@Var ZenMacro MacroFunc = new ZenMacro(0, SymbolName, (ZenFuncType)SymbolType, ((ZenStringNode)ValueNode).Value);
+			NameSpace.AppendFuncName(MacroFunc, SourceToken);
+			return ValueNode.Done();
+		}
 		if(ValueNode.IsErrorNode()) {
 			return ValueNode;
 		}
-		@Var String ConstName = SymbolToken.ParsedText;
-		if(ConstClass != null) {
-			ConstName = ZenNameSpace.ClassStaticSymbol(ConstClass, ConstName);
-			SourceToken.AddTypeInfoToErrorMessage(ConstClass);
-		}
+
 		//ValueNode = NameSpace.TypeCheck(ValueNode, NameSpace.GetSymbolType(ConstName), ZenParserConst.DefaultTypeCheckPolicy);
 		ZenConstNode ConstNode = ValueNode.ToConstNode(true);
 		if(!ConstNode.IsErrorNode()) {
-			NameSpace.SetSymbol(ConstName, ConstNode.GetValue(), SourceToken);
+			NameSpace.SetSymbol(SymbolName, ConstNode.GetValue(), SourceToken);
 			return ConstNode.Done();
 		}
 		return ConstNode;

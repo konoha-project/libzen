@@ -561,7 +561,7 @@ public final class ZenNameSpace {
 		TokenContext.SkipEmptyStatement();
 		while(TokenContext.HasNext()) {
 			TokenContext.SetParseFlag(0); // init
-			@Var ZenNode TopLevelNode = TokenContext.ParsePattern(this, "$Statement$", ZenTokenContext.Required);
+			@Var ZenNode TopLevelNode = TokenContext.ParsePattern(this, "$Statement$", ZenParserConst.Required);
 			TypeChecker.EnableVisitor();
 			TopLevelNode = TypeChecker.TypeCheck(TopLevelNode, this, ZenSystem.VoidType, 0);
 			this.Generator.DoCodeGeneration(this, TopLevelNode);
