@@ -561,20 +561,25 @@ public final class ZenNameSpace {
 	//		this.SetSymbol(Key, Func, SourceToken);
 	//	}
 
-	final Object EvalWithErrorInfo(String ScriptText, long FileLine) {
-		@Var Object ResultValue = null;
+	private ZenNode TypeCheck(ZenNode Node, ZenType ContextType) {
+		this.Generator.TypeChecker.EnableVisitor();
+		return this.Generator.TypeChecker.TypeCheck(Node, this, ContextType, 0);
+	}
+
+	public final Object Eval(String ScriptText, long FileLine, boolean IsInteractive) {
+		@Var Object ResultValue = ZenParserConst.UndefinedSymbol;
 		//ZenLogger.VerboseLog(ZenLogger.VerboseEval, "eval: " + ScriptText);
 		@Var ZenTokenContext TokenContext = new ZenTokenContext(this, ScriptText, FileLine);
 		TokenContext.SkipEmptyStatement();
 		while(TokenContext.HasNext()) {
 			TokenContext.SetParseFlag(0); // init
-			@Var ZenNode TopLevelNode = TokenContext.ParsePattern(this, "$Statement$", TokenContext.Required);
+			@Var ZenNode TopLevelNode = TokenContext.ParsePattern(this, "$Statement$", ZenTokenContext.Required);
 			TopLevelNode = this.TypeCheck(TopLevelNode, ZenSystem.VoidType);
 			this.Generator.DoCodeGeneration(this, TopLevelNode);
 			if(TopLevelNode.IsErrorNode() && TokenContext.HasNext()) {
 				@Var ZenToken Token = TokenContext.GetToken();
 				//this.Generator.Logger.ReportInfo(Token, "stopped script at this line");
-				return null;
+				return TopLevelNode;
 			}
 			//			if(!TopLevelNode.Type.IsVoidType()) {
 			ResultValue = this.Generator.EvalTopLevelNode(TopLevelNode);
@@ -585,21 +590,8 @@ public final class ZenNameSpace {
 		return ResultValue;
 	}
 
-	private ZenNode TypeCheck(ZenNode Node, ZenType ContextType) {
-		this.Generator.TypeChecker.EnableVisitor();
-		return this.Generator.TypeChecker.TypeCheck(Node, this, ContextType, 0);
-	}
-
-	public final Object Eval(String ScriptText, long FileLine) {
-		@Var Object ResultValue = this.EvalWithErrorInfo(ScriptText, FileLine);
-		if(ResultValue instanceof ZenToken && ((/*cast*/ZenToken)ResultValue).IsError()) {
-			return null;
-		}
-		return ResultValue;
-	}
-
 	public final boolean Load(String ScriptText, long FileLine) {
-		@Var Object Token = this.EvalWithErrorInfo(ScriptText, FileLine);
+		@Var Object Token = this.Eval(ScriptText, FileLine, false);
 		if(Token instanceof ZenToken && ((/*cast*/ZenToken)Token).IsError()) {
 			return false;
 		}
@@ -632,24 +624,24 @@ public final class ZenNameSpace {
 		return true;
 	}
 
-	private void UpdateRevertList(String Key, ArrayList<Object> RevertList) {
-		@Var Object Value = this.GetLocalSymbol(Key);
-		RevertList.add(Key);
-		if(Value != null) {
-			RevertList.add(Value);
-		}
-		else {
-			RevertList.add(ZenParserConst.UndefinedSymbol);
-		}
-	}
-
-	public void Revert(ArrayList<Object> RevertList) {
-		for(@Var int i = 0; i < RevertList.size(); i += 2) {
-			@Var String Key = (/*cast*/String)RevertList.get(i);
-			@Var Object Value = RevertList.get(i+1);
-			this.SetSymbol(Key, Value, null);
-		}
-	}
+	//	private void UpdateRevertList(String Key, ArrayList<Object> RevertList) {
+	//		@Var Object Value = this.GetLocalSymbol(Key);
+	//		RevertList.add(Key);
+	//		if(Value != null) {
+	//			RevertList.add(Value);
+	//		}
+	//		else {
+	//			RevertList.add(ZenParserConst.UndefinedSymbol);
+	//		}
+	//	}
+	//
+	//	public void Revert(ArrayList<Object> RevertList) {
+	//		for(@Var int i = 0; i < RevertList.size(); i += 2) {
+	//			@Var String Key = (/*cast*/String)RevertList.get(i);
+	//			@Var Object Value = RevertList.get(i+1);
+	//			this.SetSymbol(Key, Value, null);
+	//		}
+	//	}
 
 	public final static String FuncSymbol(String Symbol) {
 		return LibZen.IsVariableName(Symbol, 0) ? Symbol : "__" + Symbol;

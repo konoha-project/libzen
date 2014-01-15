@@ -26,8 +26,6 @@
 
 package zen.lang;
 
-import java.util.ArrayList;
-
 import zen.ast.ZenAndNode;
 import zen.ast.ZenArrayLiteralNode;
 import zen.ast.ZenBinaryNode;
@@ -419,21 +417,6 @@ public class ZenDynamicTypeChecker extends ZenTypeChecker {
 		this.Todo(Node);
 	}
 
-	protected ZenFuncType LookupTypeFunc(ZenType ReturnType, ArrayList<ZenNode> NodeList) {
-		ArrayList<ZenType> TypeList = new ArrayList<ZenType>();
-		TypeList.add(ReturnType);
-		int i = 0;
-		while(i < NodeList.size()) {
-			ZenParamNode Node = (ZenParamNode)NodeList.get(i);
-			if(Node.Type == null) {
-				Node.Type = ZenSystem.VarType;
-			}
-			TypeList.add(Node.Type);
-			i = i + 1;
-		}
-		return ZenSystem.LookupFuncType(TypeList);
-	}
-
 	@Override public void VisitFunctionLiteralNode(ZenFunctionLiteralNode Node) {
 		ZenType ContextType = this.GetContextType();
 		ZenNameSpace NameSpace = this.GetNameSpace();
@@ -453,18 +436,16 @@ public class ZenDynamicTypeChecker extends ZenTypeChecker {
 	}
 
 	@Override public void VisitFuncDeclNode(ZenFuncDeclNode Node) {
-		ZenNameSpace NameSpace = this.GetNameSpace();
-		ZenFuncType FuncType = this.LookupTypeFunc(Node.ReturnType, Node.ArgumentList);
-		this.CheckErrorNode(this.CanDefineFunc(NameSpace, Node.FuncName, FuncType));
+		@Var ZenNameSpace NameSpace = this.GetNameSpace();
+		@Var ZenFuncType FuncType = this.LookupTypeFunc(Node.ReturnType, Node.ArgumentList);
+		this.CheckErrorNode(this.CanDefineFunc(NameSpace, Node.FuncName, FuncType, Node));
 		if(this.IsVisitable()) {
-			ZenFunc DefinedFunc = this.Define(NameSpace, Node.FuncName, FuncType);
-			if(DefinedFunc.IsLazyDef()) {
-				this.TypedNode(Node, ZenSystem.VoidType);
-				return;
+			ZenFunc DefiningFunc = this.Define(NameSpace, Node.FuncName, FuncType);
+			if(!DefiningFunc.IsLazyDef() && Node.BodyNode != null) {
+				@Var ZenFunc UpperFunc = this.SetFuncParamType(Node.NameSpace, DefiningFunc, Node.ArgumentList);
+				Node.BodyNode = this.TypeCheck(Node.BodyNode, Node.NameSpace, ZenSystem.VarType, 0);
+				this.PopFunc(UpperFunc);
 			}
-			ZenFunc UpperFunc = this.SetFuncParamType(Node.NameSpace, DefinedFunc, Node.ArgumentList);
-			Node.BodyNode = this.TypeCheck(Node.BodyNode, Node.NameSpace, ZenSystem.VarType, 0);
-			this.PopFunc(UpperFunc);
 		}
 		this.TypedNode(Node, ZenSystem.VoidType);
 	}

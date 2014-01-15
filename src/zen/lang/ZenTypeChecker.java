@@ -31,7 +31,9 @@ import java.util.ArrayList;
 import zen.ast.ZenApplyNode;
 import zen.ast.ZenCastNode;
 import zen.ast.ZenErrorNode;
+import zen.ast.ZenFuncDeclNode;
 import zen.ast.ZenNode;
+import zen.ast.ZenParamNode;
 import zen.deps.Field;
 import zen.deps.Var;
 import zen.parser.ZenLogger;
@@ -407,9 +409,23 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		NameSpace.SetSymbol(VarName, VarInfo, SourceToken);
 	}
 
-	public ZenNode CanDefineFunc(ZenNameSpace NameSpace, String FuncName, ZenFuncType FuncType) {
-		// TODO Auto-generated method stub
-		return null;
+	protected ZenFuncType LookupTypeFunc(ZenType ReturnType, ArrayList<ZenNode> NodeList) {
+		ArrayList<ZenType> TypeList = new ArrayList<ZenType>();
+		TypeList.add(ReturnType);
+		int i = 0;
+		while(i < NodeList.size()) {
+			ZenParamNode Node = (ZenParamNode)NodeList.get(i);
+			if(Node.Type == null) {
+				Node.Type = ZenSystem.VarType;
+			}
+			TypeList.add(Node.Type);
+			i = i + 1;
+		}
+		return ZenSystem.LookupFuncType(TypeList);
+	}
+
+	protected ZenNode CanDefineFunc(ZenNameSpace NameSpace, String FuncName, ZenFuncType FuncType, ZenFuncDeclNode Node) {
+		return Node;
 	}
 
 	public ZenFunc Define(ZenNameSpace NameSpace, String FuncName, ZenFuncType FuncType) {

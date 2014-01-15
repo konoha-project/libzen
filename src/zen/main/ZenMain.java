@@ -210,13 +210,10 @@ public class ZenMain extends ZenUtils {
 			@Var String Line = null;
 			while ((Line = ZenMain.ReadLine2(">>> ", "    ")) != null) {
 				try {
-					@Var Object EvaledValue = Generator.RootNameSpace.Eval(Line, linenum);
+					@Var Object EvaledValue = Generator.RootNameSpace.Eval(Line, linenum, true);
 					Generator.Logger.ShowReportedErrors();
 					if (EvaledValue != null) {
-						LibNative.println(" ("
-								+ ZenSystem.GuessType(EvaledValue) + ":"
-								+ LibNative.GetClassName(EvaledValue) + ") "
-								+ LibZen.Stringify(EvaledValue));
+						LibNative.println(" (" + ZenSystem.GuessType(EvaledValue) + ":" + LibNative.GetClassName(EvaledValue) + ") " + LibZen.Stringify(EvaledValue));
 					}
 					linenum += 1;
 				} catch (Exception e) {
