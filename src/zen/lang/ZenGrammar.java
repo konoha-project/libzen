@@ -736,6 +736,7 @@ public class ZenGrammar {
 		}
 		else {
 			@Var ZenToken NameToken = TokenContext.GetTokenAndMoveForward();
+			NameSpace = NameSpace.CreateSubNameSpace();
 			FuncNode = new ZenFuncDeclNode(FuncToken, NameSpace, NameToken.ParsedText);
 		}
 		FuncNode = TokenContext.MatchNodeToken(FuncNode,  NameSpace, "(", ZenTokenContext.Required | ZenTokenContext.AllowSkipIndent);

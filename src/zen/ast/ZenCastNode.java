@@ -30,19 +30,19 @@ import zen.parser.ZenVisitor;
 
 //E.g., (T) $Expr
 final public class ZenCastNode extends ZenNode {
+	@Field public ZenType   CastType;
 	@Field public ZenNode	ExprNode;
 	public ZenCastNode/*constructor*/(ZenType CastType, ZenNode Node) {
 		super();
-		this.Type = CastType;
+		this.CastType = CastType;
 		this.ExprNode = null;
 		if(Node != null) {
 			this.ExprNode = this.SetChild(Node);
 		}
 	}
 	@Override public void Append(ZenNode Node) {
-		this.SetChild(Node);
 		if(Node instanceof ZenTypeNode) {
-			this.Type = Node.Type;
+			this.CastType = Node.Type;
 		}
 		else {
 			this.ExprNode = this.SetChild(Node);

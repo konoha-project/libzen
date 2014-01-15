@@ -48,6 +48,7 @@ class FuncContext {
 	@Field FuncContext Parent;
 	@Field public ZenFunc DefinedFunc;
 	@Field public ZenType ReturnType;
+	@Field boolean IsInferredReturn;
 	@Field ArrayList<ZenVarType> VarTypeList;
 	@Field public int VarIndex;
 	@Field public int CountOfUnknownTypeNode;
@@ -61,12 +62,20 @@ class FuncContext {
 		else {
 			this.ReturnType = DefinedFunc.GetReturnType();
 		}
+		this.IsInferredReturn = false;
 		this.VarTypeList = new ArrayList<ZenVarType>();
 		this.VarIndex = 0;
 		this.CountOfUnknownTypeNode = 0;
 	}
 
-	public ZenType CheckFuncType(ArrayList<ZenNode> ParamList) {
+	public void InferReturnType(ZenType InferredType) {
+		if(this.ReturnType.IsVarType()) {
+			this.ReturnType = InferredType.GetRealType();
+			this.IsInferredReturn = true;
+		}
+	}
+
+	public ZenType CheckFuncType(ZenFunctionLiteralNode FuncNode) {
 		@Var boolean HasVar = false;
 		@Var boolean ResetType = false;
 		@Var ZenType FuncType = this.DefinedFunc.GetFuncType();
@@ -81,12 +90,13 @@ class FuncContext {
 		}
 		if(ResetType) {
 			@Var ArrayList<ZenType> TypeList = new ArrayList<ZenType>();
-			if(this.ReturnType.IsVarType()) {
+			if(this.ReturnType.IsVarType() && !this.IsInferredReturn) {
 				this.ReturnType = ZenSystem.VoidType;
 			}
-			TypeList.add(this.ReturnType.GetRealType());
-			while(i < ParamList.size()) {
-				@Var ZenParamNode ParamNode = (ZenParamNode)ParamList.get(i);
+			FuncNode.ReturnType = this.ReturnType.GetRealType();
+			TypeList.add(FuncNode.ReturnType);
+			while(i < FuncNode.ArgumentList.size()) {
+				@Var ZenParamNode ParamNode = (ZenParamNode)FuncNode.ArgumentList.get(i);
 				ParamNode.Type = ParamNode.Type.GetRealType();
 				TypeList.add(ParamNode.Type);
 				if(ParamNode.Type.IsVarType()) {
@@ -197,6 +207,42 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		}
 	}
 
+	public final void TypedNodeIf(ZenNode Node, ZenType Type, ZenNode P1) {
+		if(P1.Type.IsVarType()) {
+			Node.Type = ZenSystem.VarType;
+		}
+		else {
+			Node.Type = Type;
+		}
+		if(this.IsVisitable()) {
+			this.StackedTypedNode = Node;
+		}
+	}
+
+	public final void TypedNodeIf2(ZenNode Node, ZenType Type, ZenNode P1, ZenNode P2) {
+		if(P1.Type.IsVarType() || P2.Type.IsVarType()) {
+			Node.Type = ZenSystem.VarType;
+		}
+		else {
+			Node.Type = Type;
+		}
+		if(this.IsVisitable()) {
+			this.StackedTypedNode = Node;
+		}
+	}
+
+	public final void TypedNodeIf3(ZenNode Node, ZenType Type, ZenNode P1, ZenNode P2, ZenNode P3) {
+		if(P1.Type.IsVarType() || P2.Type.IsVarType() || P3.Type.IsVarType()) {
+			Node.Type = ZenSystem.VarType;
+		}
+		else {
+			Node.Type = Type;
+		}
+		if(this.IsVisitable()) {
+			this.StackedTypedNode = Node;
+		}
+	}
+
 	public final void Todo(ZenNode Node) {
 		this.Logger.ReportWarning(Node.SourceToken, "TODO: unimplemented type checker node: " + Node.getClass().getSimpleName());
 		Node.Type = ZenSystem.VarType;
@@ -207,6 +253,7 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 
 	public final void CheckErrorNode(ZenNode Node) {
 		if(Node.IsErrorNode()) {
+			Node.Type = ZenSystem.VoidType;
 			this.StackedTypedNode = Node;
 			this.StopVisitor();
 		}
@@ -493,7 +540,7 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 	}
 
 	protected void InferReturnType(ZenType InferredType) {
-		this.FuncScope.ReturnType = InferredType.GetRealType();
+		this.FuncScope.InferReturnType(InferredType);
 	}
 
 	protected ZenNode CreateDefaultValueNode(ZenType Type) {
@@ -579,10 +626,7 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 
 	public ZenType PopFuncScope(ZenNameSpace NameSpace, ZenFunctionLiteralNode FuncNode) {
 		NameSpace.SetDefiningFunc(null);
-		ZenType Type = this.FuncScope.CheckFuncType(FuncNode.ArgumentList);
-		if(Type.IsFuncType()) {
-			FuncNode.ReturnType = Type.GetParamType(0);
-		}
+		ZenType Type = this.FuncScope.CheckFuncType(FuncNode);
 		this.FuncScope.Dump();
 		this.FuncScope = this.FuncScope.Parent;
 		return Type;

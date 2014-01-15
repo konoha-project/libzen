@@ -66,10 +66,20 @@ public class ZenSourceBuilder {
 		this.SourceList.add(this.Template.LineFeed);
 	}
 
+	public final void AppendWhiteSpace() {
+		if(this.SourceList.size() > 0) {
+			@Var String Last = this.SourceList.get(this.SourceList.size()-1);
+			if(Last.endsWith(" ") || Last.endsWith("\n") || Last.endsWith("\t")) {
+				return;
+			}
+		}
+		this.SourceList.add(" ");
+	}
+
 	public void AppendToken(String Text) {
-		this.SourceList.add(" ");
+		this.AppendWhiteSpace();
 		this.SourceList.add(Text);
-		this.SourceList.add(" ");
+		this.AppendWhiteSpace();
 	}
 
 	public final void AppendBlockComment(String Text) {

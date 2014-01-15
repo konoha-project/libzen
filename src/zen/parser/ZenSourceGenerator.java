@@ -164,9 +164,6 @@ public class ZenSourceGenerator extends ZenGenerator {
 	//	}
 
 	public void GenerateCode(ZenNode Node) {
-		if (Node == null) {
-			this.CurrentBuilder.AppendCommentLine("empty");
-		}
 		Node.Accept(this);
 	}
 
@@ -181,18 +178,21 @@ public class ZenSourceGenerator extends ZenGenerator {
 			this.CurrentBuilder.AppendLineFeed();
 			this.CurrentBuilder.AppendIndent();
 			this.GenerateCode(SubNode);
-			if(i + 1 < StmtList.size()) {
+			i = i + 1;
+			if(i  < StmtList.size()) {
 				this.CurrentBuilder.Append(this.SemiColon);
 			}
-			i = i + 1;
 		}
 	}
 
 	@Override public void VisitBlockNode(ZenBlockNode Node) {
+		this.CurrentBuilder.AppendWhiteSpace();
 		this.CurrentBuilder.Append("{");
 		this.CurrentBuilder.Indent();
 		this.VisitStmtList(Node.StmtList);
-		this.CurrentBuilder.Append(this.SemiColon);
+		if(Node.StmtList.size()>0) {
+			this.CurrentBuilder.Append(this.SemiColon);
+		}
 		this.CurrentBuilder.UnIndent();
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.AppendIndent();
@@ -258,7 +258,7 @@ public class ZenSourceGenerator extends ZenGenerator {
 		this.CurrentBuilder.Append("[");
 		this.GenerateCode(Node.IndexNode);
 		this.CurrentBuilder.Append("]");
-		this.CurrentBuilder.Append(" = ");
+		this.CurrentBuilder.AppendToken("=");
 		this.GenerateCode(Node.ValueNode);
 	}
 
@@ -270,7 +270,7 @@ public class ZenSourceGenerator extends ZenGenerator {
 	@Override
 	public void VisitSetLocalNode(ZenSetLocalNode Node) {
 		this.CurrentBuilder.Append(Node.VarName);
-		this.CurrentBuilder.Append(" = ");
+		this.CurrentBuilder.AppendToken("=");
 		this.GenerateCode(Node.ValueNode);
 	}
 
@@ -286,7 +286,7 @@ public class ZenSourceGenerator extends ZenGenerator {
 		this.GenerateCode(Node.RecvNode);
 		this.CurrentBuilder.Append(".");
 		this.CurrentBuilder.Append(Node.NativeName);
-		this.CurrentBuilder.Append(" = ");
+		this.CurrentBuilder.AppendToken("=");
 		this.GenerateCode(Node.ValueNode);
 	}
 
@@ -322,7 +322,7 @@ public class ZenSourceGenerator extends ZenGenerator {
 	public void VisitCastNode(ZenCastNode Node) {
 		this.CurrentBuilder.Append("(");
 		this.VisitType(Node.Type);
-		this.CurrentBuilder.Append(") ");
+		this.CurrentBuilder.Append(")");
 		this.GenerateCode(Node.ExprNode);
 	}
 
@@ -371,7 +371,7 @@ public class ZenSourceGenerator extends ZenGenerator {
 	public void VisitIfNode(ZenIfNode Node) {
 		this.CurrentBuilder.Append("if (");
 		this.GenerateCode(Node.CondNode);
-		this.CurrentBuilder.Append(") ");
+		this.CurrentBuilder.Append(")");
 		this.GenerateCode(Node.ThenNode);
 		if (Node.ElseNode != null) {
 			this.CurrentBuilder.AppendToken("else");
@@ -383,7 +383,7 @@ public class ZenSourceGenerator extends ZenGenerator {
 	public void VisitReturnNode(ZenReturnNode Node) {
 		this.CurrentBuilder.Append("return");
 		if (Node.ValueNode != null) {
-			this.CurrentBuilder.Append(" ");
+			this.CurrentBuilder.AppendWhiteSpace();
 			this.GenerateCode(Node.ValueNode);
 		}
 	}
@@ -392,7 +392,7 @@ public class ZenSourceGenerator extends ZenGenerator {
 	public void VisitWhileNode(ZenWhileNode Node) {
 		this.CurrentBuilder.Append("while (");
 		this.GenerateCode(Node.CondNode);
-		this.CurrentBuilder.Append(") ");
+		this.CurrentBuilder.Append(")");
 		this.GenerateCode(Node.BodyNode);
 	}
 
@@ -403,19 +403,20 @@ public class ZenSourceGenerator extends ZenGenerator {
 
 	@Override
 	public void VisitThrowNode(ZenThrowNode Node) {
-		this.CurrentBuilder.Append("throw ");
+		this.CurrentBuilder.Append("throw");
+		this.CurrentBuilder.AppendWhiteSpace();
 		this.GenerateCode(Node.ValueNode);
 	}
 
 	@Override
 	public void VisitTryNode(ZenTryNode Node) {
-		this.CurrentBuilder.Append("try ");
+		this.CurrentBuilder.Append("try");
 		this.GenerateCode(Node.TryNode);
 		if(Node.CatchNode != null) {
 			this.GenerateCode(Node.CatchNode);
 		}
 		if (Node.FinallyNode != null) {
-			this.CurrentBuilder.Append("finally ");
+			this.CurrentBuilder.Append("finally");
 			this.GenerateCode(Node.FinallyNode);
 		}
 	}
@@ -425,20 +426,21 @@ public class ZenSourceGenerator extends ZenGenerator {
 		this.CurrentBuilder.Append("catch (");
 		this.CurrentBuilder.Append(Node.ExceptionName);
 		this.VisitTypeAnnotation(Node.ExceptionType);
-		this.CurrentBuilder.Append(") ");
+		this.CurrentBuilder.Append(")");
 		this.GenerateCode(Node.BodyNode);
 	}
 
 	@Override
 	public void VisitVarDeclNode(ZenVarDeclNode Node) {
-		this.CurrentBuilder.Append("var ");
+		this.CurrentBuilder.Append("var");
+		this.CurrentBuilder.AppendWhiteSpace();
 		this.CurrentBuilder.Append(Node.NativeName);
 		this.CurrentBuilder.AppendToken("=");
 		this.GenerateCode(Node.InitNode);
 	}
 
 	protected void VisitTypeAnnotation(ZenType Type) {
-		this.CurrentBuilder.Append(" :");
+		this.CurrentBuilder.Append(": ");
 		this.VisitType(Type);
 	}
 
@@ -448,14 +450,16 @@ public class ZenSourceGenerator extends ZenGenerator {
 	}
 
 	@Override public void VisitFunctionLiteralNode(ZenFunctionLiteralNode Node) {
-		this.CurrentBuilder.Append("function ");
+		this.CurrentBuilder.Append("function");
+		this.CurrentBuilder.AppendWhiteSpace();
 		this.VisitParamList("(", Node.ArgumentList, ")");
 		this.VisitTypeAnnotation(Node.ReturnType);
 		this.GenerateCode(Node.BodyNode);
 	}
 
 	@Override public void VisitFuncDeclNode(ZenFuncDeclNode Node) {
-		this.CurrentBuilder.Append("function ");
+		this.CurrentBuilder.Append("function");
+		this.CurrentBuilder.AppendWhiteSpace();
 		this.CurrentBuilder.Append(Node.FuncName);
 		this.VisitParamList("(", Node.ArgumentList, ")");
 		this.VisitTypeAnnotation(Node.ReturnType);
@@ -506,12 +510,5 @@ public class ZenSourceGenerator extends ZenGenerator {
 	public void VisitNewObjectNode(ZenNewObjectNode Node) {
 		// TODO Auto-generated method stub
 	}
-
-
-	// @Override public void FlushBuffer() {
-	// LibZen.WriteSource(this.OutputFile, this.BuilderList);
-	// this.BuilderList.clear();
-	// this.HeaderBuilder.SourceList.clear();
-	// }
 
 }
