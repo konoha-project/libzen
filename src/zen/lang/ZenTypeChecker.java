@@ -311,6 +311,9 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		if(Node.IsErrorNode()) {
 			return Node;
 		}
+		if(Node.Type == null) {
+			Node.Type = ZenSystem.VarType;
+		}
 		if(Node.Type == ContextType || ContextType.IsVarType() || ContextType.Accept(Node.Type) || ZenUtils.IsFlag(TypeCheckPolicy, NoCheckPolicy)) {
 			return Node;
 		}
