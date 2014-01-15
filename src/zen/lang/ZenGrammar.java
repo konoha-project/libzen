@@ -733,8 +733,10 @@ public class ZenGrammar {
 	public static ZenNode MatchFunction(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenNode LeftNode) {
 		@Var ZenToken FuncToken = TokenContext.GetTokenAndMoveForward(); /* function*/
 		@Var ZenNode FuncNode;
+		@Var int BlockOption = ZenTokenContext.Required;
 		if(TokenContext.IsToken("(")) {
 			FuncNode = new ZenFunctionLiteralNode(FuncToken);
+			BlockOption = ZenTokenContext.Optional;
 		}
 		else {
 			@Var ZenToken NameToken = TokenContext.GetTokenAndMoveForward();
@@ -752,7 +754,7 @@ public class ZenGrammar {
 			}
 		}
 		FuncNode = TokenContext.AppendMatchedPattern(FuncNode, NameSpace, "$TypeAnnotation$", ZenTokenContext.Optional);
-		FuncNode = TokenContext.AppendMatchedPattern(FuncNode, NameSpace, "$Block$", ZenTokenContext.Optional);
+		FuncNode = TokenContext.AppendMatchedPattern(FuncNode, NameSpace, "$Block$", BlockOption);
 		return FuncNode;
 	}
 
