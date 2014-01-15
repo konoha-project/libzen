@@ -1,4 +1,4 @@
-Zen 仕様書
+Zen 1.0 仕様書
 
 Zen パーサー用ライブラリの言語仕様
 
@@ -6,14 +6,15 @@ Zen パーサー用ライブラリの言語仕様
 ==========
 
 T ::=   void
-        any     //なんでもよい
         boolean
         int
+	float
         String
-        float
         T[]
         Map<T>
         Func<T,T,..>  // 関数型、最初が返り値の型
+
+any 型は、zen 1.1 から 
 
 リテラル
 ========
@@ -25,7 +26,8 @@ false     : boolean
 1.0       : float
 "hi"      : String
 [1,2]     : int[]
-{"name": 1}    : Map<any>
+["a", "b"] : String[]
+{"name": 1}    : Map<int>
 
 function(x : int ) {
   return x+1;
@@ -37,7 +39,10 @@ function(x : int ) {
 定数のこと
 
 let C = 1;
+let Math.sin: Func<float,float> = `sin(${1})`
 
+import java.lang.System
+# let System = import java.lang.System と同じ
 
 関数定義
 ========
@@ -64,7 +69,6 @@ var x: int = 1;
 - 初期値（左辺値）は常に必要
 - ローカル変数のみ
 - スコープはCスタイルのブロックスコープ
-
 
 制御構造
 ========
