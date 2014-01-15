@@ -258,11 +258,11 @@ public class ZenDynamicTypeChecker extends ZenTypeChecker {
 	}
 
 	private ZenType UnifyType(ZenNameSpace NameSpace, ZenBinaryNode Node, ZenType Type) {
-		if(Node.LeftNode.Type.Is(Type)) {
+		if(Node.LeftNode.Type.Equals(Type)) {
 			Node.RightNode = this.TypeCheck(Node.RightNode, NameSpace, Type, 0);
 			return Type;
 		}
-		else if(Node.RightNode.Type.Is(Type)) {
+		else if(Node.RightNode.Type.Equals(Type)) {
 			Node.LeftNode = this.TypeCheck(Node.LeftNode, NameSpace, Type, 0);
 			return Type;
 		}

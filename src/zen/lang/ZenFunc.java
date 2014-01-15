@@ -27,170 +27,81 @@ package zen.lang;
 import zen.deps.Field;
 import zen.deps.LibNative;
 import zen.deps.LibZen;
-import zen.deps.Var;
-import zen.parser.ZenNameSpace;
 import zen.parser.ZenUtils;
 
-public class ZenFunc implements ZenFuncConst {
-	@Field public                 int FuncId;
-	@Field public int				FuncFlag;
-	@Field public String			FuncName;
-	@Field public ZenFuncType     ZenType;
-	//	@Field public ZenType[]		Types;
-	//	@Field public ZenType          FuncType;
-	//	@Field public Object          FuncBody;  // Abstract function if null
-	//	@Field public String[]        GenericParam;
+public class ZenFunc implements ZenFuncFlag {
+	@Field public int             FuncId;
+	@Field public int			  FuncFlag;
+	@Field public String		  FuncName;  // NativeReferenceNamr
+	@Field public ZenFuncType     FuncType;
 
 	public ZenFunc(int FuncFlag, String FuncName, ZenFuncType FuncType) {
 		this.FuncFlag = FuncFlag;
 		this.FuncName = FuncName;
-		this.ZenType  = FuncType;
-		//		this.Types = Types;
-		//		this.Types = LibZen.CompactTypeList(BaseIndex, ParamList);
-		//		LibNative.Assert(this.Types.length > 0);
-		//		this.FuncId = ZenTypeSystem.FuncPools.size();
-		//		ZenTypeSystem.FuncPools.add(this);
-	}
-
-	public final String GetNativeFuncName() {
-		if(this.Is(ExportFunc)) {
-			return this.FuncName;
-		}
-		else {
-			return this.FuncName + NativeNameSuffix + this.FuncId;
-		}
-	}
-
-	public final ZenType GetStaticType(ZenNameSpace NameSpace) {
-		@Var int loc = this.FuncName.lastIndexOf(".");
-		if(loc != -1) {
-			return NameSpace.GetType(this.FuncName.substring(0, loc));
-		}
-		return null;
+		this.FuncType = FuncType;
+		//				this.FuncId = ZenTypeSystem.FuncPools.size();
+		//				ZenTypeSystem.FuncPools.add(this);
 	}
 
 	public final ZenType GetFuncType() {
-		return this.ZenType;
+		return this.FuncType;
 	}
 
 	@Override public String toString() {
-		@Var String s = this.GetReturnType() + " " + this.FuncName + "(";
-		for(@Var int i = 0; i < this.GetFuncParamSize(); i += 1) {
-			@Var ZenType ParamType = this.GetFuncParamType(i);
-			if(i > 0) {
-				s += ", ";
-			}
-			s += ParamType;
-		}
-		return s + ")";
+		return this.FuncName + ": " + this.FuncType;
 	}
 
-	public boolean Is(int Flag) {
+	protected boolean Is(int Flag) {
 		return ZenUtils.IsFlag(this.FuncFlag, Flag);
 	}
 
 	public final ZenType GetReturnType() {
-		return this.ZenType.TypeParams[0];
+		return this.FuncType.TypeParams[0];
 	}
 
 	public final void SetReturnType(ZenType ReturnType) {
 		LibNative.Assert(this.GetReturnType().IsVarType());
-		this.ZenType.TypeParams[0] = ReturnType;
+		this.FuncType.TypeParams[0] = ReturnType;
 	}
 
 	public final ZenType GetRecvType() {
-		if(this.ZenType.TypeParams.length == 1) {
+		if(this.FuncType.TypeParams.length == 1) {
 			return ZenSystem.VoidType;
 		}
-		return this.ZenType.TypeParams[1];
+		return this.FuncType.TypeParams[1];
 	}
 
 	public final int GetFuncParamSize() {
-		return this.ZenType.TypeParams.length - 1;
+		return this.FuncType.TypeParams.length - 1;
 	}
 
 	public final ZenType GetFuncParamType(int ParamIdx) {
-		return this.ZenType.TypeParams[ParamIdx+1];
+		return this.FuncType.TypeParams[ParamIdx+1];
 	}
 
 	public final int GetMethodParamSize() {
-		return this.ZenType.TypeParams.length - 2;
+		return this.FuncType.TypeParams.length - 2;
 	}
 
-	public final ZenType GetVargType() {
-		if(this.ZenType.TypeParams.length > 0) {
-			@Var ZenType VargType = this.ZenType.TypeParams[this.ZenType.TypeParams.length - 1];
-			if(VargType.IsArrayType()) {
-				return VargType.GetParamType(0);
-			}
-		}
-		return null;
-	}
-
-	//	public final boolean EqualsParamTypes(int BaseIndex, ZenType[] ParamTypes) {
-	//		if(this.Types.length == ParamTypes.length) {
-	//			@Var int i = BaseIndex;
-	//			while(i < this.Types.length) {
-	//				if(this.Types[i] != ParamTypes[i]) {
-	//					return false;
-	//				}
-	//				i = i + 1;
+	//	public final ZenType GetVargType() {
+	//		if(this.FuncType.TypeParams.length > 0) {
+	//			@Var ZenType VargType = this.FuncType.TypeParams[this.FuncType.TypeParams.length - 1];
+	//			if(VargType.IsArrayType()) {
+	//				return VargType.GetParamType(0);
 	//			}
-	//			return true;
 	//		}
-	//		return false;
-	//	}
-	//
-	//	public final boolean EqualsType(ZenFunc AFunc) {
-	//		return this.EqualsParamTypes(0, AFunc.Types);
-	//	}
-	//
-	//	public final boolean EqualsOverridedMethod(ZenFunc AFunc) {
-	//		return this.ZenType.TypeParams[0] == AFunc.ZenType.TypeParams[0] && this.EqualsParamTypes(2, AFunc.Types);
+	//		return null;
 	//	}
 
 	public Object Invoke(Object[] Params) {
-		LibZen.DebugP("abstract function");
+		LibZen.DebugP("not native method");
 		return null;
 	}
 
 	public boolean IsLazyDef() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
-	//	public final boolean IsAbstract() {
-	//		return this.FuncBody == null;
-	//	}
-	//
-	//	public final void SetNativeMacro(String NativeMacro) {
-	//		LibNative.Assert(this.FuncBody == null);
-	//		this.FuncFlag |= NativeMacroFunc;
-	//		this.FuncBody = NativeMacro;
-	//	}
-	//
-	//	public final String GetNativeMacro() {
-	//		return (/*cast*/String)this.FuncBody;
-	//	}
-	//
-	//	public final void SetNativeMethod(int OptionalFuncFlag, Object Method) {
-	//		this.FuncFlag |= NativeFunc | OptionalFuncFlag;
-	//		this.FuncBody = Method;
-	//	}
-
-	//	public final boolean ImportMethod(String FullName) {
-	//		return LibZen.ImportMethodToFunc(this, FullName);
-	//	}
-
-	//
-	//	private boolean HasStaticBlock() {
-	//		if(this.FuncBody instanceof ZenFuncBlock) {
-	//			@Var ZenFuncBlock FuncBlock = (/*cast*/ZenFuncBlock)this.FuncBody;
-	//			return !FuncBlock.IsVarArgument;
-	//		}
-	//		return false;
-	//	}
-	//
 	//	public void GenerateNativeFunc() {
 	//		if(this.HasStaticBlock()) {
 	//			@Var ZenFuncBlock FuncBlock = (/*cast*/ZenFuncBlock)this.FuncBody;

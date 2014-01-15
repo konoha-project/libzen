@@ -64,9 +64,7 @@ public class ZenType implements ZenTypeConst {
 	public void Infer(ZenType Type, ZenToken SourceToken) {
 		// ZenVarInfo should be implemented
 	}
-	//	public void FoundTypeError() {
-	//
-	//	}
+
 	public boolean IsFoundTypeError() {
 		// ZenVarInfo should be implemented
 		return false;
@@ -84,9 +82,25 @@ public class ZenType implements ZenTypeConst {
 		return false;
 	}
 
-	public final boolean Is(ZenType Type) {
+	public final boolean Equals(ZenType Type) {
 		return (this.GetRealType() == Type.GetRealType());
 	}
+
+	public final boolean Accept(ZenType Type) {
+		@Var ZenType ThisType = this.GetRealType();
+		if(ThisType == Type.GetRealType() || ThisType == ZenSystem.AnyType) {
+			return true;
+		}
+		@Var ZenType SuperClass = Type.GetSuperType();
+		while(SuperClass != null) {
+			if(SuperClass == ThisType) {
+				return true;
+			}
+			SuperClass = SuperClass.GetSuperType();
+		}
+		return ZenSystem.CheckSubType(Type, this);
+	}
+
 
 	public final boolean IsTopType() {
 		return (this.GetRealType() == ZenSystem.TopType);
@@ -134,50 +148,6 @@ public class ZenType implements ZenTypeConst {
 	public final boolean IsEnumType() {
 		return ZenUtils.IsFlag(this.TypeFlag, EnumType);
 	}
-
-	//	public ZenType(int TypeFlag, String ShortName, Object DefaultNullValue, Object TypeBody) {
-	//		this.ShortName = ShortName;
-	//		this.TypeFlag = TypeFlag;
-	//		this.ReferenceType = null;
-	//		this.DefaultNullValue = DefaultNullValue;
-	//		this.TypeBody = TypeBody;
-	//		this.BaseType = this;
-	//		this.ParentMethodSearch = ZenTypeSystem.TopType;
-	//		if(!ZenUtils.IsFlag(TypeFlag, TypeVariable)) {
-	//			this.TypeId = ZenTypeSystem.IssueTypeId(this);
-	//		}
-	//		this.TypeParams = null;
-	////ifdef JAVA
-	//		if(ZenUtils.IsFlag(NativeType, TypeFlag) && TypeBody instanceof Class<?>) {
-	//			Class<?> SuperClass = ((/*cast*/Class<?>)TypeBody).getSuperclass();
-	//			if(SuperClass != null && SuperClass != Object.class) {
-	//				this.ReferenceType = LibNative.GetNativeType(SuperClass);
-	//				this.ParentMethodSearch = this.ReferenceType;
-	//			}
-	//		}
-	////endif VAJA
-	//	}
-
-	////ifdef JAVA
-	//	public Class<?> GetNativeType(boolean enforceBoxing) {
-	//		if(this.BaseType.TypeBody instanceof Class<?>) {
-	//			Class<?> JavaType = (Class<?>) this.BaseType.TypeBody;
-	//			if(enforceBoxing && this.IsUnboxType()) {
-	//				if(this.BaseType.IsIntType()) {
-	//					JavaType = Long.class;
-	//				}
-	//				else if(this.BaseType.IsBooleanType()) {
-	//					JavaType = Boolean.class;
-	//				}
-	//				else {
-	//					JavaType = Double.class;
-	//				}
-	//			}
-	//			return JavaType;
-	//		}
-	//		return Object.class;
-	//	}
-	////endif VAJA
 
 	public ZenType CreateSubType(int ClassFlag, String ClassName) {
 		@Var ZenType SubType = new ZenType(ClassFlag, ClassName, this);
@@ -234,19 +204,6 @@ public class ZenType implements ZenTypeConst {
 		}
 	}
 
-	public final boolean Accept(ZenType Type) {
-		if(this == Type || this == ZenSystem.AnyType) {
-			return true;
-		}
-		@Var ZenType SuperClass = Type.GetSuperType();
-		while(SuperClass != null) {
-			if(SuperClass == this) {
-				return true;
-			}
-			SuperClass = SuperClass.RefType;
-		}
-		return ZenSystem.CheckSubType(Type, this);
-	}
 
 	//	public final boolean Accept(ZenType Type) {
 	//		boolean b = this.Accept_(Type);

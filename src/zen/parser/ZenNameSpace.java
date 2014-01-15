@@ -271,7 +271,7 @@ public final class ZenNameSpace {
 	}
 
 	public void SetDefiningFunc(ZenFunc Func) {
-		this.DefiningFunc = new ZenDefiningFunc(Func.FuncFlag, Func.FuncName, Func.ZenType);
+		this.DefiningFunc = new ZenDefiningFunc(Func.FuncFlag, Func.FuncName, Func.FuncType);
 	}
 
 	public final void AppendFuncName(ZenFunc Func, ZenToken SourceToken) {
@@ -280,7 +280,7 @@ public final class ZenNameSpace {
 		@Var ZenFuncSet FuncSet = null;
 		if(OldValue instanceof ZenFunc) {
 			@Var ZenFunc OldFunc = (/*cast*/ZenFunc)OldValue;
-			if(OldFunc.ZenType != Func.ZenType) {
+			if(OldFunc.FuncType != Func.FuncType) {
 				FuncSet = new ZenFuncSet(OldFunc);
 			}
 		}

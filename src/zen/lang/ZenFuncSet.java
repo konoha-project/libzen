@@ -66,7 +66,7 @@ public class ZenFuncSet {
 				if(ListedFunc == Func) {
 					/*return this;*/ /* same function */
 				}
-				if(Func.ZenType == ListedFunc.ZenType) {
+				if(Func.FuncType.Equals(ListedFunc.FuncType)) {
 					Logger.ReportWarning(SourceToken, "duplicated function symbol: " + SourceToken.ParsedText);
 					this.FuncList.set(i, Func);
 				}
