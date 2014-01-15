@@ -27,7 +27,7 @@ package zen.parser;
 
 import zen.ast.ZenNode;
 import zen.deps.Field;
-import zen.lang.ZenDynamicTypeChecker;
+import zen.lang.ZenTypeInfer;
 import zen.lang.ZenSystem;
 import zen.lang.ZenType;
 import zen.lang.ZenTypeChecker;
@@ -54,7 +54,7 @@ public abstract class ZenGenerator extends ZenNodeUtils implements ZenVisitor {
 
 		this.OutputFile = null;
 		this.Logger = new ZenLogger();
-		this.TypeChecker = new ZenDynamicTypeChecker(this.Logger);
+		this.TypeChecker = new ZenTypeInfer(this.Logger);
 		this.StoppedVisitor = false;
 
 	}

@@ -37,6 +37,7 @@ public class ZenVarType extends ZenType {
 		super(0, Name, ZenSystem.VarType);
 		this.SourceToken = SourceToken;
 		this.FoundTypeError = false;
+		this.TypeId = this.RefType.TypeId;
 	}
 
 	@Override public final ZenType GetRealType() {
@@ -60,8 +61,11 @@ public class ZenVarType extends ZenType {
 	}
 
 	public void Infer(ZenType ContextType, ZenToken SourceToken) {
+		assert(this.RefType.IsVarType());
 		this.RefType = ContextType.GetRealType();
 		this.SourceToken = SourceToken;
+		this.TypeId = this.RefType.TypeId;
+		this.TypeFlag = this.RefType.TypeFlag;
 	}
 
 }

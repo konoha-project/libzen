@@ -73,9 +73,9 @@ import zen.parser.ZenLogger;
 import zen.parser.ZenNameSpace;
 import zen.parser.ZenNodeUtils;
 
-public class ZenDynamicTypeChecker extends ZenTypeChecker {
+public class ZenTypeInfer extends ZenTypeChecker {
 
-	public ZenDynamicTypeChecker(ZenLogger Logger) {
+	public ZenTypeInfer(ZenLogger Logger) {
 		super(Logger);
 	}
 

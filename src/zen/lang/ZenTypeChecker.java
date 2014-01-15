@@ -87,7 +87,8 @@ class FuncContext {
 			TypeList.add(this.ReturnType.GetRealType());
 			while(i < ParamList.size()) {
 				@Var ZenParamNode ParamNode = (ZenParamNode)ParamList.get(i);
-				TypeList.add(ParamNode.Type.GetRealType());
+				ParamNode.Type = ParamNode.Type.GetRealType();
+				TypeList.add(ParamNode.Type);
 				if(ParamNode.Type.IsVarType()) {
 					HasVar = true;
 				}
