@@ -28,7 +28,7 @@ import zen.lang.ZenType;
 
 //endif VAJA
 /*ZenObject Begin*/
-public interface ZenObject {
-	public ZenType GetZenType();
+public interface ZenTypedObject {
+	public ZenType GetObjectType();
 }
 /*ZenObject End*/

@@ -44,24 +44,24 @@ import zen.parser.ZenSourceBuilder;
 import zen.parser.ZenUtils;
 
 public abstract class LibZen {
-	public final static ZenArray NewArray(ZenType Type, Object[] InitSizes) {
-		if(InitSizes.length == 1) {
-			return ZenArray.NewArray1(Type.GetParamType(0), ((Number)InitSizes[0]).intValue());
-		}
-		else if(InitSizes.length == 2) {
-			return ZenArray.NewArray2(Type.GetParamType(0).GetParamType(0), ((Number)InitSizes[0]).intValue(), ((Number)InitSizes[1]).intValue());
-		}
-		else {
-			return ZenArray.NewArray3(Type.GetParamType(0).GetParamType(0).GetParamType(0), ((Number)InitSizes[0]).intValue(), ((Number)InitSizes[1]).intValue(), ((Number)InitSizes[2]).intValue());
-		}
-
-	}
-
-	public final static ZenArray NewNewArray(ZenType ArrayType, Object[] Values) {
-		return ZenArray.NewNewArray(ArrayType, Values);
-	}
-
-
+	//	public final static ZenArray NewArray(ZenType Type, Object[] InitSizes) {
+	//		if(InitSizes.length == 1) {
+	//			return ZenArray.NewArray1(Type.GetParamType(0), ((Number)InitSizes[0]).intValue());
+	//		}
+	//		else if(InitSizes.length == 2) {
+	//			return ZenArray.NewArray2(Type.GetParamType(0).GetParamType(0), ((Number)InitSizes[0]).intValue(), ((Number)InitSizes[1]).intValue());
+	//		}
+	//		else {
+	//			return ZenArray.NewArray3(Type.GetParamType(0).GetParamType(0).GetParamType(0), ((Number)InitSizes[0]).intValue(), ((Number)InitSizes[1]).intValue(), ((Number)InitSizes[2]).intValue());
+	//		}
+	//
+	//	}
+	//
+	//	public final static ZenArray NewNewArray(ZenType ArrayType, Object[] Values) {
+	//		return ZenArray.NewNewArray(ArrayType, Values);
+	//	}
+	//
+	//
 	//	public static Object InvokeOverridedMethod(long FileLine, ZenNameSpace NameSpace, ZenFunc Func, Object[] Arguments) {
 	//		@Var ZenType ClassType = ZenSystem.GuessType(Arguments[0]);
 	//		Func = NameSpace.GetOverridedMethod(ClassType, Func);

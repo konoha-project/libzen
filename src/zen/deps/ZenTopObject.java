@@ -32,13 +32,13 @@ import zen.lang.ZenType;
 //endif VAJA
 
 
-public class ZenTopObject implements ZenObject {
+public class ZenTopObject implements ZenTypedObject {
 	public ZenType GreenType;
 	protected ZenTopObject(ZenType GreenType) {
 		this.GreenType = GreenType;
 	}
 	@Override
-	public final ZenType GetZenType() {
+	public final ZenType GetObjectType() {
 		return this.GreenType;
 	}
 

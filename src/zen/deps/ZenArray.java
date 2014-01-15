@@ -29,24 +29,37 @@ import java.util.ArrayList;
 import zen.lang.ZenSystem;
 import zen.lang.ZenType;
 
-public class ZenArray extends ZenTopObject {
-	public ArrayList<Object> ArrayBody ;
-	public ZenArray(ZenType ZType) {
-		super(ZType);
-		this.ArrayBody = new ArrayList<Object>();
+public class ZenArray<T> extends ArrayList<T> implements ZenTypedObject {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4931064639290182147L;
+	private final ZenType ObjectType;
+	private ZenArray(ZenType ZType) {
+		super();
+		this.ObjectType = ZType == null ? ZenSystem.ArrayType : ZType;
 	}
-	public ZenArray SubArray(int bindex, int eindex) {
-		@Var ZenArray ArrayObject = new ZenArray(this.GreenType);
+
+	public static <T> ZenArray<T> NewZenArray(ZenType ElementType) {
+		return new ZenArray<T>(ZenSystem.GetGenericType1(ZenSystem.ArrayType, ElementType, true));
+	}
+
+	@Override public ZenType GetObjectType() {
+		return this.ObjectType;
+	}
+
+	public ZenArray<T> SubArray(int bindex, int eindex) {
+		@Var ZenArray<T> ArrayObject = new ZenArray<T>(this.ObjectType);
 		for(@Var int i = bindex; i < eindex; i++) {
-			@Var Object Value = this.ArrayBody.get(i);
-			ArrayObject.ArrayBody.add(Value);
+			@Var T Value = this.get(i);
+			ArrayObject.add(Value);
 		}
 		return ArrayObject;
 	}
 	@Override public String toString() {
 		@Var String s = "[";
-		for(@Var int i = 0; i < this.ArrayBody.size(); i++) {
-			@Var Object Value = this.ArrayBody.get(i);
+		for(@Var int i = 0; i < this.size(); i++) {
+			@Var T Value = this.get(i);
 			if(i > 0) {
 				s += ", ";
 			}
@@ -54,38 +67,38 @@ public class ZenArray extends ZenTopObject {
 		}
 		return s + "]";
 	}
-	public final static ZenArray NewArray1(ZenType Type, int InitSize) {
-		@Var ZenType ArrayType = ZenSystem.GetGenericType1(ZenSystem.ArrayType, Type, true);
-		@Var ZenArray ArrayObject =  new ZenArray(ArrayType);
-		for(@Var int i = 0; i < InitSize; i++) {
-			ArrayObject.ArrayBody.add(null /*Type.DefaultNullValue*/);
-		}
-		return ArrayObject;
-	}
-	// new int[2][3]
-	public final static ZenArray NewArray2(ZenType Type, int InitSize, int InitSize2) {
-		@Var ZenType ArrayType = ZenSystem.GetGenericType1(ZenSystem.ArrayType, Type, true);
-		ArrayType = ZenSystem.GetGenericType1(ZenSystem.ArrayType, ArrayType, true);
-		@Var ZenArray ArrayObject =  new ZenArray(ArrayType);
-		for(@Var int i = 0; i < InitSize2; i++) {
-			ArrayObject.ArrayBody.add(ZenArray.NewArray1(Type, InitSize));
-		}
-		return ArrayObject;
-	}
-	public final static ZenArray NewArray3(ZenType Type, int InitSize, int InitSize2, int InitSize3) {
-		@Var ZenType ArrayType = ZenSystem.GetGenericType1(ZenSystem.ArrayType, Type, true);
-		ArrayType = ZenSystem.GetGenericType1(ZenSystem.ArrayType, ArrayType, true);
-		ArrayType = ZenSystem.GetGenericType1(ZenSystem.ArrayType, ArrayType, true);
-		@Var ZenArray ArrayObject =  new ZenArray(ArrayType);
-		for(@Var int i = 0; i < InitSize2; i++) {
-			ArrayObject.ArrayBody.add(ZenArray.NewArray2(Type, InitSize, InitSize2));
-		}
-		return ArrayObject;
-	}
-	public final static ZenArray NewNewArray(ZenType ArrayType, Object[] Values) {
-		@Var ZenArray ArrayObject =  new ZenArray(ArrayType);
+	//	public final static ZenArray<T> NewArray1(ZenType Type, int InitSize) {
+	//		@Var ZenType ArrayType = ZenSystem.GetGenericType1(ZenSystem.ArrayType, Type, true);
+	//		@Var ZenArray ArrayObject =  new ZenArray(ArrayType);
+	//		for(@Var int i = 0; i < InitSize; i++) {
+	//			ArrayObject.add(null /*Type.DefaultNullValue*/);
+	//		}
+	//		return ArrayObject;
+	//	}
+	//	// new int[2][3]
+	//	public final static ZenArray<T> NewArray2(ZenType Type, int InitSize, int InitSize2) {
+	//		@Var ZenType ArrayType = ZenSystem.GetGenericType1(ZenSystem.ArrayType, Type, true);
+	//		ArrayType = ZenSystem.GetGenericType1(ZenSystem.ArrayType, ArrayType, true);
+	//		@Var ZenArray<T> ArrayObject =  new ZenArray<T>(ArrayType);
+	//		for(@Var int i = 0; i < InitSize2; i++) {
+	//			ArrayObject.add(ZenArray.NewArray1(Type, InitSize));
+	//		}
+	//		return ArrayObject;
+	//	}
+	//	public final static ZenArray NewArray3(ZenType Type, int InitSize, int InitSize2, int InitSize3) {
+	//		@Var ZenType ArrayType = ZenSystem.GetGenericType1(ZenSystem.ArrayType, Type, true);
+	//		ArrayType = ZenSystem.GetGenericType1(ZenSystem.ArrayType, ArrayType, true);
+	//		ArrayType = ZenSystem.GetGenericType1(ZenSystem.ArrayType, ArrayType, true);
+	//		@Var ZenArray ArrayObject =  new ZenArray(ArrayType);
+	//		for(@Var int i = 0; i < InitSize2; i++) {
+	//			ArrayObject.add(ZenArray.NewArray2(Type, InitSize, InitSize2));
+	//		}
+	//		return ArrayObject;
+	//	}
+	public final static <T> ZenArray<T> NewNewArray(ZenType ArrayType, T[] Values) {
+		@Var ZenArray<T> ArrayObject =  new ZenArray<T>(ArrayType);
 		for(@Var int i = 0; i < Values.length; i++) {
-			ArrayObject.ArrayBody.add(Values[i]);
+			ArrayObject.add(Values[i]);
 		}
 		return ArrayObject;
 	}

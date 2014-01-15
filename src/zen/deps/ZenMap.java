@@ -29,7 +29,7 @@ import java.util.Iterator;
 
 import zen.lang.ZenType;
 
-public final class ZenMap <T> implements ZenObject {
+public final class ZenMap <T> implements ZenTypedObject {
 	final ZenType ElementType;
 	final HashMap<String, T>	Map;
 
@@ -50,7 +50,7 @@ public final class ZenMap <T> implements ZenObject {
 		return this.Map.keySet().iterator();
 	}
 
-	@Override public ZenType GetZenType() {
+	@Override public ZenType GetObjectType() {
 		// TODO Auto-generated method stub
 		return null;
 	}

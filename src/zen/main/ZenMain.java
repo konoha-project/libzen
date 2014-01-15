@@ -181,14 +181,14 @@ public class ZenMain extends ZenUtils {
 		if (!(Index < Args.length)) {
 			ShellMode = true;
 		}
-		@Var ZenArray ARGV = ZenArray.NewArray1(ZenSystem.StringType, 0);
+		@Var ZenArray<String> ARGV = ZenArray.NewZenArray(ZenSystem.StringType);
 		while (Index < Args.length) {
-			ARGV.ArrayBody.add(Args[Index]);
+			ARGV.add(Args[Index]);
 			Index += 1;
 		}
 		Generator.RootNameSpace.SetSymbol("ARGV", ARGV, null);
-		if (ARGV.ArrayBody.size() > 0) {
-			@Var String FileName = (/* cast */String) ARGV.ArrayBody.get(0);
+		if (ARGV.size() > 0) {
+			@Var String FileName = ARGV.get(0);
 			@Var String ScriptText = LibNative.LoadScript(FileName);
 			if (ScriptText == null) {
 				LibNative.Exit(1, "file not found: " + FileName);

@@ -70,11 +70,14 @@ public class LibNative {
 			// + ", " + NativeClass.getCanonicalName());
 			NativeType = new ZenNativeType(NativeClass);
 			ZenSystem.SetTypeTable(NativeClass.getCanonicalName(), NativeType);
-			ZenLogger.VerboseLog(ZenLogger.VerboseNative,
-					"creating native class: " + NativeClass.getSimpleName()
-					+ ", " + NativeClass.getCanonicalName());
+			ZenLogger.VerboseLog(ZenLogger.VerboseNative, "creating native class: " + NativeClass.getSimpleName() + ", " + NativeClass.getCanonicalName());
 		}
 		return NativeType;
+	}
+
+	public static <T> ZenArray<T> NewZenArray(Class<?> NativeClass) {
+		ZenType ElementType = LibNative.GetNativeType(NativeClass);
+		return ZenArray.NewZenArray(ElementType);
 	}
 
 	private static boolean AcceptJavaType(ZenType GreenType, Class<?> NativeType) {

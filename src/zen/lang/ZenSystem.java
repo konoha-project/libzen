@@ -30,7 +30,7 @@ import zen.deps.LibNative;
 import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.deps.ZenMap;
-import zen.deps.ZenObject;
+import zen.deps.ZenTypedObject;
 import zen.parser.ZenLogger;
 import zen.parser.ZenNameSpace;
 
@@ -171,9 +171,9 @@ public class ZenSystem implements ZenTypeConst {
 		else if(Value instanceof ZenFuncSet) {
 			return ZenSystem.FuncType;
 		}
-		else if(Value instanceof ZenObject) {
+		else if(Value instanceof ZenTypedObject) {
 			// FIXME In typescript, we cannot use ZenObject
-			return ((/*cast*/ZenObject)Value).GetZenType();
+			return ((/*cast*/ZenTypedObject)Value).GetObjectType();
 		}
 		else {
 			return ZenSystem.GetNativeTypeOfValue(Value);
