@@ -708,7 +708,7 @@ public class ZenGrammar {
 
 	// "var" $Identifier [: $Type$] "=" $Expression$
 	public static ZenNode MatchVarDecl(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenNode LeftNode) {
-		@Var ZenNode VarNode = new ZenVarDeclNode();
+		@Var ZenNode VarNode = new ZenVarDeclNode(NameSpace);
 		VarNode = TokenContext.MatchNodeToken(VarNode, NameSpace, "var", ZenTokenContext.Required);
 		VarNode = TokenContext.AppendMatchedPattern(VarNode, NameSpace, "$Identifier$", ZenTokenContext.Required);
 		VarNode = TokenContext.AppendMatchedPattern(VarNode, NameSpace, "$TypeAnnotation$", ZenTokenContext.Optional);
