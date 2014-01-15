@@ -27,7 +27,7 @@ package zen.ast;
 import zen.deps.Field;
 import zen.parser.ZenVisitor;
 
-final public class ZenBreakNode extends ZenNode {
+final public class ZenBreakNode extends ZenStatementNode {
 	@Field public String Label;
 	public ZenBreakNode/*constructor*/() {
 		super();

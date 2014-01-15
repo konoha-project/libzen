@@ -28,7 +28,6 @@ import java.util.ArrayList;
 
 import zen.ast.ZenAndNode;
 import zen.ast.ZenAnnotationNode;
-import zen.ast.ZenFuncCallNode;
 import zen.ast.ZenArrayLiteralNode;
 import zen.ast.ZenBinaryNode;
 import zen.ast.ZenBlockNode;
@@ -40,6 +39,7 @@ import zen.ast.ZenComparatorNode;
 import zen.ast.ZenConstNode;
 import zen.ast.ZenErrorNode;
 import zen.ast.ZenFloatNode;
+import zen.ast.ZenFuncCallNode;
 import zen.ast.ZenFuncDeclNode;
 import zen.ast.ZenFunctionLiteralNode;
 import zen.ast.ZenGetIndexNode;
@@ -59,6 +59,7 @@ import zen.ast.ZenParamNode;
 import zen.ast.ZenReturnNode;
 import zen.ast.ZenSetIndexNode;
 import zen.ast.ZenSetterNode;
+import zen.ast.ZenStatementNode;
 import zen.ast.ZenStringNode;
 import zen.ast.ZenThrowNode;
 import zen.ast.ZenTryNode;
@@ -707,7 +708,7 @@ public class ZenGrammar {
 
 	// "var" $Identifier [: $Type$] "=" $Expression$
 	public static ZenNode MatchVarDecl(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenNode LeftNode) {
-		@Var ZenNode VarNode = new ZenVarDeclNode();
+		@Var ZenNode VarNode = new ZenVarDeclNode(NameSpace);
 		VarNode = TokenContext.MatchNodeToken(VarNode, NameSpace, "var", ZenTokenContext.Required);
 		VarNode = TokenContext.AppendMatchedPattern(VarNode, NameSpace, "$Identifier$", ZenTokenContext.Required);
 		VarNode = TokenContext.AppendMatchedPattern(VarNode, NameSpace, "$TypeAnnotation$", ZenTokenContext.Optional);
@@ -773,9 +774,14 @@ public class ZenGrammar {
 		@Var ZenAnnotationNode AnnotationNode = (ZenAnnotationNode)TokenContext.ParsePattern(NameSpace, "$Annotation$", ZenTokenContext.Optional);
 		@Var ZenNode ParsedNode = TokenContext.ParsePattern(NameSpace, "$Expression$", ZenTokenContext.Required);
 		if(!ParsedNode.IsErrorNode() && TokenContext.HasNext()) {
-			ZenToken Token = TokenContext.GetTokenAndMoveForward();
-			if(!Token.IsDelim() && !Token.IsIndent()) {
-				return TokenContext.CreateExpectedErrorNode(Token, ";");
+			if(ParsedNode instanceof ZenStatementNode) {
+				System.out.println();
+			}
+			else {
+				ZenToken Token = TokenContext.GetTokenAndMoveForward();
+				if(!Token.IsDelim() && !Token.IsIndent()) {
+					return TokenContext.CreateExpectedErrorNode(Token, ";");
+				}
 			}
 		}
 		if(AnnotationNode != null) {

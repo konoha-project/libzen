@@ -31,11 +31,11 @@ import zen.parser.ZenNameSpace;
 import zen.parser.ZenToken;
 import zen.parser.ZenVisitor;
 
-public class ZenBlockNode extends ZenNode {
+public class ZenBlockNode extends ZenStatementNode {
 	@Field public ArrayList<ZenNode> StmtList;
 	@Field public ZenNameSpace NameSpace;
 	public ZenBlockNode(ZenToken SourceToken, ZenNameSpace NameSpace) {
-		super();
+		super(NameSpace.GetType("void"), SourceToken);
 		this.SourceToken = SourceToken;
 		this.StmtList = new ArrayList<ZenNode>();
 		this.NameSpace = NameSpace;

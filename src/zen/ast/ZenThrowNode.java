@@ -27,7 +27,7 @@ package zen.ast;
 import zen.deps.Field;
 import zen.parser.ZenVisitor;
 
-final public class ZenThrowNode extends ZenNode {
+final public class ZenThrowNode extends ZenStatementNode {
 	@Field public ZenNode ValueNode;
 	public ZenThrowNode/*constructor*/() {
 		super();

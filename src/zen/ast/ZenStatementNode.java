@@ -22,23 +22,21 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package zen.sugar;
+package zen.ast;
 
-import zen.ast.ZenNode;
-import zen.deps.Field;
 import zen.lang.ZenType;
 import zen.parser.ZenToken;
 
-final public class ZenStatementNode extends ZenNode {
+public abstract class ZenStatementNode extends ZenNode {
 	/**
 	 * int f(int n);
 	 * f(1)
 	 */
-	@Field public ZenNode ValueNode;
-	public ZenStatementNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode ValueNode) {
+	public ZenStatementNode/*constructor*/(ZenType Type, ZenToken Token) {
 		super();
-		this.ValueNode = ValueNode;
-		this.SetChild(ValueNode);
+	}
+	public ZenStatementNode/*constructor*/() {
+		super();
 	}
 	//	@Override public boolean Accept(ZenVisitor Visitor) {
 	//		Visitor.VisitStatementNode(this);

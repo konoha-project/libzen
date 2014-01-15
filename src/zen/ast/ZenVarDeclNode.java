@@ -24,8 +24,10 @@
 
 package zen.ast;
 
+import zen.deps.Constructor;
 import zen.deps.Field;
 import zen.lang.ZenType;
+import zen.parser.ZenNameSpace;
 import zen.parser.ZenVisitor;
 
 /**
@@ -37,8 +39,9 @@ final public class ZenVarDeclNode extends ZenBlockNode {
 	@Field public ZenType   DeclType;
 	@Field public String    NativeName;
 	@Field public ZenNode	InitNode;
-	public ZenVarDeclNode/*constructor*/(/*ZenType DeclType, ZenToken SourceToken, String VariableName*/) {
-		super(null, null);
+
+	@Constructor public ZenVarDeclNode(ZenNameSpace NameSpace) {
+		super(null, NameSpace);
 		this.DeclType = null;
 		this.NativeName = null;
 		this.InitNode  = null;
