@@ -260,10 +260,6 @@ public final class ZenNameSpace {
 
 	// DefiningFunc
 
-	public void SetDefiningFunc(ZenFunc Func) {
-		this.DefiningFunc = new ZenDefiningFunc(Func.FuncFlag, Func.FuncName, Func.ZenType);
-	}
-
 	public ZenDefiningFunc GetDefiningFunc() {
 		@Var ZenNameSpace NameSpace = this;
 		while(NameSpace != null) {
@@ -272,6 +268,10 @@ public final class ZenNameSpace {
 			}
 		}
 		return null;
+	}
+
+	public void SetDefiningFunc(ZenFunc Func) {
+		this.DefiningFunc = new ZenDefiningFunc(Func.FuncFlag, Func.FuncName, Func.ZenType);
 	}
 
 	public final void AppendFuncName(ZenFunc Func, ZenToken SourceToken) {

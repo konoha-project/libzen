@@ -92,14 +92,10 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		return this.StackedContextType;
 	}
 
-	protected final ZenType VarType(ZenType Type, String Name) {
-		if(Type == null) {
-			ZenVarType VarType = new ZenVarType(Name);
-			this.VarTypeList.add(VarType);
-			return VarType;
-		}
-		assert(Type.IsVarType());
-		return Type;
+	protected final ZenType VarType(String Name) {
+		ZenVarType VarType = new ZenVarType(Name);
+		this.VarTypeList.add(VarType);
+		return VarType;
 	}
 
 	public final void TypedNode(ZenNode Node, ZenType Type) {
@@ -410,13 +406,13 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 	}
 
 	protected ZenFuncType LookupTypeFunc(ZenType ReturnType, ArrayList<ZenNode> NodeList) {
-		ArrayList<ZenType> TypeList = new ArrayList<ZenType>();
+		@Var ArrayList<ZenType> TypeList = new ArrayList<ZenType>();
 		TypeList.add(ReturnType);
-		int i = 0;
+		@Var int i = 0;
 		while(i < NodeList.size()) {
 			ZenParamNode Node = (ZenParamNode)NodeList.get(i);
 			if(Node.Type == null) {
-				Node.Type = ZenSystem.VarType;
+				Node.Type = ZenSystem.VarType; //this.VarType(Node.Name);
 			}
 			TypeList.add(Node.Type);
 			i = i + 1;
@@ -424,28 +420,37 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		return ZenSystem.LookupFuncType(TypeList);
 	}
 
+	public ZenFuncType CheckFuncType(ZenFuncType FuncType, ZenType ContextType) {
+		if(ContextType.IsFuncType()) {
+			// TODO
+		}
+		return FuncType;
+	}
+
 	protected ZenNode CanDefineFunc(ZenNameSpace NameSpace, String FuncName, ZenFuncType FuncType, ZenFuncDeclNode Node) {
 		return Node;
 	}
 
-	public ZenFunc Define(ZenNameSpace NameSpace, String FuncName, ZenFuncType FuncType) {
-		// TODO Auto-generated method stub
-		return null;
+	public ZenFunc DefineFunc(ZenNameSpace NameSpace, String FuncName, ZenFuncType FuncType, ZenToken SourceToken) {
+		ZenFunc Func = new ZenFunc(0, FuncName, FuncType);
+		NameSpace.AppendFuncName(Func, SourceToken);
+		return Func;
 	}
 
-	public ZenFunc SetFuncParamType(ZenNameSpace NameSpace, ZenFunc DefinedFunc, ArrayList<ZenNode> ArgumentList) {
-		// TODO Auto-generated method stub
-		return null;
+	public ZenFunc PopFuncParamType(ZenNameSpace NameSpace, ZenFunc DefinedFunc, ArrayList<ZenNode> ArgumentList) {
+		@Var ZenFunc UpperDefiningFunc = NameSpace.GetDefiningFunc();
+		NameSpace.SetDefiningFunc(DefinedFunc);
+		@Var int i = 0;
+		while(i < ArgumentList.size()) {
+			ZenParamNode Node = (ZenParamNode)ArgumentList.get(i);
+			this.SetVarInfo(NameSpace, Node.Type, Node.Name, Node.SourceToken);
+			i = i + 1;
+		}
+		return UpperDefiningFunc;
 	}
 
-	public void PopFunc(ZenFunc UpperFunc) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public ZenFuncType CheckFunctionType(ZenFuncType FuncType, ZenType ContextType) {
-		// TODO Auto-generated method stub
-		return null;
+	public void PopFunc(ZenNameSpace NameSpace, ZenFunc UpperDefiningFunc) {
+		NameSpace.SetDefiningFunc(UpperDefiningFunc);
 	}
 
 	public void UpdateParamType() {

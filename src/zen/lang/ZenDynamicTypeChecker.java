@@ -422,16 +422,16 @@ public class ZenDynamicTypeChecker extends ZenTypeChecker {
 		ZenNameSpace NameSpace = this.GetNameSpace();
 		ZenFuncType FuncType = this.LookupTypeFunc(Node.ReturnType, Node.ArgumentList);
 		if(ContextType instanceof ZenFuncType) {
-			FuncType = this.CheckFunctionType(FuncType, ContextType);
+			FuncType = this.CheckFuncType(FuncType, ContextType);
 			if(FuncType == null) {
 				//TODO Error;
 			}
 		}
-		ZenFunc DefinedFunc = this.Define(NameSpace, "", FuncType);
-		ZenFunc UpperFunc = this.SetFuncParamType(NameSpace, DefinedFunc, Node.ArgumentList);
+		ZenFunc DefinedFunc = this.DefineFunc(NameSpace, "", FuncType, Node.SourceToken);
+		ZenFunc UpperDefiningFunc = this.PopFuncParamType(NameSpace, DefinedFunc, Node.ArgumentList);
 		Node.BodyNode = this.TypeCheck(Node.BodyNode, NameSpace, ZenSystem.VarType, 0);
 		//this.UpdateParamType(FuncType);
-		this.PopFunc(UpperFunc);
+		this.PopFunc(NameSpace, UpperDefiningFunc);
 		this.TypedNode(Node, FuncType);
 	}
 
@@ -440,11 +440,11 @@ public class ZenDynamicTypeChecker extends ZenTypeChecker {
 		@Var ZenFuncType FuncType = this.LookupTypeFunc(Node.ReturnType, Node.ArgumentList);
 		this.CheckErrorNode(this.CanDefineFunc(NameSpace, Node.FuncName, FuncType, Node));
 		if(this.IsVisitable()) {
-			ZenFunc DefiningFunc = this.Define(NameSpace, Node.FuncName, FuncType);
+			ZenFunc DefiningFunc = this.DefineFunc(NameSpace, Node.FuncName, FuncType, Node.SourceToken);
 			if(!DefiningFunc.IsLazyDef() && Node.BodyNode != null) {
-				@Var ZenFunc UpperFunc = this.SetFuncParamType(Node.NameSpace, DefiningFunc, Node.ArgumentList);
+				@Var ZenFunc UpperDefiningFunc = this.PopFuncParamType(Node.NameSpace, DefiningFunc, Node.ArgumentList);
 				Node.BodyNode = this.TypeCheck(Node.BodyNode, Node.NameSpace, ZenSystem.VarType, 0);
-				this.PopFunc(UpperFunc);
+				this.PopFunc(Node.NameSpace, UpperDefiningFunc);
 			}
 		}
 		this.TypedNode(Node, ZenSystem.VoidType);
