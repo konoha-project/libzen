@@ -28,7 +28,7 @@ import zen.deps.Field;
 import zen.parser.ZenVisitor;
 
 //E.g., "if" "(" $Cond ")" $ThenNode "else" $ElseNode
-final public class ZenIfNode extends ZenNode {
+final public class ZenIfNode extends ZenStatementNode {
 	@Field public ZenNode	CondNode;
 	@Field public ZenNode	ThenNode;
 	@Field public ZenNode	ElseNode;

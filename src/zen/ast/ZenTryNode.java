@@ -27,7 +27,7 @@ package zen.ast;
 import zen.deps.Field;
 import zen.parser.ZenVisitor;
 
-final public class ZenTryNode extends ZenNode {
+final public class ZenTryNode extends ZenStatementNode {
 	@Field public ZenNode	TryNode;
 	@Field public ZenNode CatchNode;
 	@Field public ZenNode	FinallyNode;

@@ -28,7 +28,7 @@ import zen.deps.Field;
 import zen.parser.ZenVisitor;
 
 //E.g., "while" "(" $Cond ")" $Body
-final public class ZenWhileNode extends ZenNode {
+final public class ZenWhileNode extends ZenStatementNode {
 	@Field public ZenNode	CondNode;
 	@Field public ZenNode	BodyNode;
 	public ZenWhileNode/*constructor*/() {
