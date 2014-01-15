@@ -22,7 +22,7 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-// LangBase is a language-dependent code used in GreenTea.java
+// LangBase is a language-dependent code used in Zen.java
 
 package zen.deps;
 import java.io.BufferedReader;
@@ -63,7 +63,7 @@ public abstract class LibZen {
 
 
 	//	public static Object InvokeOverridedMethod(long FileLine, ZenNameSpace NameSpace, ZenFunc Func, Object[] Arguments) {
-	//		@Var ZenType ClassType = ZenStaticTable.GuessType(Arguments[0]);
+	//		@Var ZenType ClassType = ZenSystem.GuessType(Arguments[0]);
 	//		Func = NameSpace.GetOverridedMethod(ClassType, Func);
 	//		return LibZen.InvokeFunc(Func, Arguments);
 	//	}
@@ -81,7 +81,7 @@ public abstract class LibZen {
 	//	}
 	//
 	//	public static final Object InvokeDynamicMethod(long FileLine, ZenType ContextType, ZenNameSpace NameSpace, String FuncName, Object[] Arguments) {
-	//		@Var ZenType ClassType = ZenStaticTable.GuessType(Arguments[0]);
+	//		@Var ZenType ClassType = ZenSystem.GuessType(Arguments[0]);
 	//		@Var ZenFuncSet FuncSet = NameSpace.GetMethod(ClassType, FuncName, true);
 	//		@Var ZenFunc Func = FuncSet.GetMatchedFunc(NameSpace, Arguments);
 	//		@Var Object Value = ContextType.DefaultNullValue;

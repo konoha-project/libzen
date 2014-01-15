@@ -37,8 +37,8 @@ import zen.lang.ZenType;
 public abstract class ZenNodeUtils {
 	//	public final ZenNode CreateUnsupportedNode(ZenType Type, ZenSyntaxTree ParsedTree) {
 	//		@Var ZenToken Token = ParsedTree.KeyToken;
-	//		this.Context.ReportError(GreenTeaConsts.ErrorLevel, Token, this.TargetCode + " has no language support for " + Token.ParsedText);
-	//		return new ZenErrorNode(ZenStaticTable.VoidType, ParsedTree.KeyToken);
+	//		this.Context.ReportError(ZenConsts.ErrorLevel, Token, this.TargetCode + " has no language support for " + Token.ParsedText);
+	//		return new ZenErrorNode(ZenSystem.VoidType, ParsedTree.KeyToken);
 	//	}
 
 	public final static ZenNode CreateConstNode(ZenToken SourceToken, Object Value) {

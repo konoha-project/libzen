@@ -27,8 +27,8 @@ package zen.deps;
 import zen.lang.ZenType;
 
 //endif VAJA
-/*GreenTeaObject Begin*/
+/*ZenObject Begin*/
 public interface ZenObject {
 	public ZenType GetZenType();
 }
-/*GreenTeaObject End*/
+/*ZenObject End*/

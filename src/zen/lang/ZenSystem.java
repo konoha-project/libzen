@@ -60,7 +60,7 @@ public class ZenSystem implements ZenTypeConst {
 
 	//	public final static ZenType     IteratorType = new ZenType(GenericVariable, "Iterator", null, Iterator.class);
 
-	//	public final static ZenType		TopType = new ZenType(0, "Top", null, Object.class /*GreenTeaTopObject.class*/);
+	//	public final static ZenType		TopType = new ZenType(0, "Top", null, Object.class /*ZenTopObject.class*/);
 	//	public final static ZenType		VoidType = new ZenType(NativeType, "void", null, void.class);
 	//	public final static ZenType		BooleanType = new ZenType(NativeType|UnboxType, "boolean", false, boolean.class);
 	//	public final static ZenType		IntType = new ZenType(NativeType|UnboxType, "int", 0L, long.class);
@@ -109,7 +109,7 @@ public class ZenSystem implements ZenTypeConst {
 	public final static void InitNameSpace(ZenNameSpace NameSpace) {
 		//ifdef JAVA
 		if(!ZenSystem.IsInit) {
-			ZenSystem.SetTypeTable("org.GreenTeaScript.GreenTeaTopObject", ZenSystem.TopType);
+			ZenSystem.SetTypeTable("org.ZenScript.ZenTopObject", ZenSystem.TopType);
 			ZenSystem.SetTypeTable("void",    ZenSystem.VoidType);
 			ZenSystem.SetTypeTable("java.lang.Object",  ZenSystem.AnyType);
 			ZenSystem.SetTypeTable("boolean", ZenSystem.BooleanType);
@@ -117,10 +117,10 @@ public class ZenSystem implements ZenTypeConst {
 			ZenSystem.SetTypeTable("long",    ZenSystem.IntType);
 			ZenSystem.SetTypeTable("java.lang.Long",    ZenSystem.IntType);
 			ZenSystem.SetTypeTable("java.lang.String",  ZenSystem.StringType);
-			ZenSystem.SetTypeTable("org.GreenTeaScript.ZenType", ZenSystem.TypeType);
-			//			ZenTypeSystem.SetNativeTypeName("org.GreenTeaScript.GreenTeaEnum", ZenTypeSystem.EnumBaseType);
-			ZenSystem.SetTypeTable("org.GreenTeaScript.GreenTeaArray", ZenSystem.ArrayType);
-			ZenSystem.SetTypeTable("org.GreenTeaScript.Konoha.GreenTeaIntArray", ZenSystem.GetGenericType1(ZenSystem.ArrayType, ZenSystem.IntType, true));
+			ZenSystem.SetTypeTable("org.ZenScript.ZenType", ZenSystem.TypeType);
+			//			ZenTypeSystem.SetNativeTypeName("org.ZenScript.ZenEnum", ZenTypeSystem.EnumBaseType);
+			ZenSystem.SetTypeTable("org.ZenScript.ZenArray", ZenSystem.ArrayType);
+			ZenSystem.SetTypeTable("org.ZenScript.Konoha.ZenIntArray", ZenSystem.GetGenericType1(ZenSystem.ArrayType, ZenSystem.IntType, true));
 			ZenSystem.SetTypeTable("double",    ZenSystem.FloatType);
 			ZenSystem.SetTypeTable("java.lang.Double",  ZenSystem.FloatType);
 			//			ZenTypeSystem.SetNativeTypeName("java.util.Iterator",  ZenTypeSystem.IteratorType);
@@ -172,7 +172,7 @@ public class ZenSystem implements ZenTypeConst {
 			return ZenSystem.FuncType;
 		}
 		else if(Value instanceof ZenObject) {
-			// FIXME In typescript, we cannot use GreenTeaObject
+			// FIXME In typescript, we cannot use ZenObject
 			return ((/*cast*/ZenObject)Value).GetZenType();
 		}
 		else {

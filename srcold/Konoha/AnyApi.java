@@ -22,7 +22,7 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package org.GreenTeaScript.Konoha;
+package org.ZenScript.Konoha;
 
 public final class AnyApi {
 

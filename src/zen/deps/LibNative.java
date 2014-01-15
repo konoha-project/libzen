@@ -22,7 +22,7 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-// LangBase is a language-dependent code used in GreenTea.java
+// LangBase is a language-dependent code used in Zen.java
 
 package zen.deps;
 
@@ -313,7 +313,7 @@ public class LibNative {
 	// TypeList.add(LibNative.GetNativeType(ParamTypes[j]));
 	// }
 	// }
-	// ZenFunc Func = new ZenFunc(GreenTeaConsts.ConstructorFunc,
+	// ZenFunc Func = new ZenFunc(ZenConsts.ConstructorFunc,
 	// ClassType.ShortName, 0, TypeList);
 	// Func.SetNativeMethod(0, Constructors[i]);
 	// Context.RootNameSpace.AppendConstructor(ClassType, Func, null);
@@ -336,16 +336,16 @@ public class LibNative {
 	// ArrayList<ZenType> TypeList = new ArrayList<ZenType>();
 	// TypeList.add(LibNative.GetNativeType(NativeField.getType()));
 	// TypeList.add(ClassType);
-	// ZenFunc GetterNativeFunc = new ZenFunc(GreenTeaConsts.GetterFunc,
+	// ZenFunc GetterNativeFunc = new ZenFunc(ZenConsts.GetterFunc,
 	// FieldName, 0, TypeList);
 	// GetterNativeFunc.SetNativeMethod(0, NativeField);
 	// Context.RootNameSpace.SetGetterFunc(ClassType, FieldName,
 	// GetterNativeFunc, null);
 	// TypeList.clear();
-	// TypeList.add(ZenStaticTable.VoidType);
+	// TypeList.add(ZenSystem.VoidType);
 	// TypeList.add(ClassType);
 	// TypeList.add(LibNative.GetNativeType(NativeField.getType()));
-	// ZenFunc SetterNativeFunc = new ZenFunc(GreenTeaConsts.SetterFunc,
+	// ZenFunc SetterNativeFunc = new ZenFunc(ZenConsts.SetterFunc,
 	// FieldName, 0, TypeList);
 	// SetterNativeFunc.SetNativeMethod(0, NativeField);
 	// Context.RootNameSpace.SetSetterFunc(ClassType, FieldName,
@@ -482,7 +482,7 @@ public class LibNative {
 		}
 		LibNative.println("unsupported syntax: " + Node.SourceToken.ParsedText
 				+ " " + Node.getClass());
-		// Visitor.ReportError(GreenTeaConsts.ErrorLevel, Node.SourceToken,
+		// Visitor.ReportError(ZenConsts.ErrorLevel, Node.SourceToken,
 		// "unsupported syntax: " + Node.SourceToken.ParsedText + " " +
 		// Node.getClass());
 	}

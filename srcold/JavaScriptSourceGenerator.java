@@ -23,7 +23,7 @@
 // **************************************************************************
 
 //ifdef JAVA
-package org.GreenTeaScript;
+package org.ZenScript;
 import java.util.ArrayList;
 //endif VAJA
 
@@ -77,7 +77,7 @@ import parser.ast.ZenTryNode;
 import parser.ast.ZenUnaryNode;
 import parser.ast.ZenVarDeclNode;
 import parser.ast.ZenWhileNode;
-import parser.deps.LibGreenTea;
+import parser.deps.LibZen;
 
 public class JavaScriptSourceGenerator extends ZenSourceGenerator {
 //	@Field private boolean UseLetKeyword = false;
@@ -203,7 +203,7 @@ var CLASS = (function (_super) {
 	}
 
 	@Override public void VisitEmptyNode(ZenEmptyNode EmptyNode) {
-		LibGreenTea.DebugP("empty node: " + EmptyNode.SourceToken.ParsedText);
+		LibZen.DebugP("empty node: " + EmptyNode.SourceToken.ParsedText);
 	}
 	@Override public void VisitInstanceOfNode(ZenInstanceOfNode Node) {
 		/*extention*/
@@ -418,7 +418,7 @@ var CLASS = (function (_super) {
 //
 //	JavaScriptSourceGenerator/*constructor*/(String TargetCode, String OutputFile, int GeneratorFlag) {
 //		super(TargetCode, OutputFile, GeneratorFlag);
-//		this.IsNodeJS = LibGreenTea.EqualsString(TargetCode, "nodejs");
+//		this.IsNodeJS = LibZen.EqualsString(TargetCode, "nodejs");
 //		this.HasLabelSupport= false;
 //		this.LogicalAndOperator = "&&";
 //		this.LogicalOrOperator = "||";
@@ -467,7 +467,7 @@ var CLASS = (function (_super) {
 //		@Var String Right = this.VisitNode(Node.RightNode);
 //		@Var String Source = "(" + SourceGenerator.GenerateApplyFunc2(Node.Func, FuncName, Left, Right) + ")";
 //		@Var String operator = Node.SourceToken.ParsedText;
-//		if(LibGreenTea.EqualsString(operator, "/") /*&& Node.Type == Context.IntType*/ ) {
+//		if(LibZen.EqualsString(operator, "/") /*&& Node.Type == Context.IntType*/ ) {
 //			Source = "(" + Source + " | 0)";
 //		}
 //		this.PushSourceCode(Source);

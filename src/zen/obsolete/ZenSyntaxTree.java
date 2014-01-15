@@ -236,14 +236,14 @@ public final class ZenSyntaxTree extends ZenUtils {
 //	}
 
 //	public ZenNode TypeCheck(ZenTypeEnv Gamma, ZenType ContextType, int TypeCheckPolicy) {
-//		@Var ZenNode Node = GreenTeaUtils.ApplyTypeFunc(this.Pattern.TypeFunc, Gamma, this, ContextType);
+//		@Var ZenNode Node = ZenUtils.ApplyTypeFunc(this.Pattern.TypeFunc, Gamma, this, ContextType);
 //		return Gamma.TypeCheckSingleNode(this, Node, ContextType, TypeCheckPolicy);
 //	}
 //
 //	public final ZenNode TypeCheckAt(int Index, ZenTypeEnv Gamma, ZenType ContextType, int TypeCheckPolicy) {
 //		@Var ZenSyntaxTree ParsedTree = this.GetSyntaxTreeAt(Index);
 //		if(ContextType.IsVoidType() || IsFlag(TypeCheckPolicy, BlockPolicy)) {
-//			return GreenTeaUtils.TypeBlock(Gamma, ParsedTree, ContextType);
+//			return ZenUtils.TypeBlock(Gamma, ParsedTree, ContextType);
 //		}
 //		else if(ParsedTree != null) {
 //			return ParsedTree.TypeCheck(Gamma, ContextType, TypeCheckPolicy);
@@ -253,7 +253,7 @@ public final class ZenSyntaxTree extends ZenUtils {
 //
 //	public final void TypeCheckParam(ZenTypeEnv Gamma, int TreeIndex, ArrayList<ZenNode> NodeList) {
 //		while(TreeIndex < LibZen.ListSize(this.SubTreeList)) {
-//			@Var ZenNode Node = this.TypeCheckAt(TreeIndex, Gamma, ZenStaticTable.VarType, DefaultTypeCheckPolicy);
+//			@Var ZenNode Node = this.TypeCheckAt(TreeIndex, Gamma, ZenSystem.VarType, DefaultTypeCheckPolicy);
 //			NodeList.add(Node);
 //			TreeIndex = TreeIndex + 1;
 //		}

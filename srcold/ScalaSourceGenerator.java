@@ -23,7 +23,7 @@
 //// **************************************************************************
 //
 ////ifdef  JAVA
-//package org.GreenTeaScript;
+//package org.ZenScript;
 //import java.util.ArrayList;
 ////endif VAJA
 //
@@ -45,15 +45,15 @@
 //import parser.ast.ZenVarDeclNode;
 //import parser.ast.ZenWhileNode;
 //
-////GreenTea Generator should be written in each language.
+////Zen Generator should be written in each language.
 //
 //public class ScalaSourceGenerator extends SourceGenerator {
 //	@Field String OutFileName;
 //	ScalaSourceGenerator/*constructor*/(String TargetCode, String OutputFile, int GeneratorFlag) {
 //		super(TargetCode, OutputFile, GeneratorFlag);
 //		this.OutFileName = OutputFile;
-//		if(LibGreenTea.EqualsString(this.OutFileName, "-")) {
-//			this.OutFileName = "GreenTea";
+//		if(LibZen.EqualsString(this.OutFileName, "-")) {
+//			this.OutFileName = "Zen";
 //		} else {
 //			this.OutFileName = this.OutFileName.replace("/", "_").replace(".", "_").replace("-", "_");
 //		}
@@ -188,7 +188,7 @@
 //
 ////	@Override public Object Eval(ZenNode Node) {
 ////		@Var String Code = this.VisitBlockWithIndent(Node, false);
-////		if(LibGreenTea.EqualsString(Code, ";" + this.LineFeed)) {
+////		if(LibZen.EqualsString(Code, ";" + this.LineFeed)) {
 ////			return "";
 ////		}
 ////		this.WriteLineCode(Code);

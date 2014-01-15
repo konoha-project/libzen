@@ -22,7 +22,7 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package org.GreenTeaScript.DShell;
+package org.ZenScript.DShell;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -649,7 +649,7 @@ enum ErrorToException {
 	}, 
 	EIO {
 		public Class<?> toException() {
-			return org.GreenTeaScript.DShell.IOException.class;
+			return org.ZenScript.DShell.IOException.class;
 		}
 	}, 
 	EISCONN, 
@@ -719,7 +719,7 @@ enum ErrorToException {
 	}, 
 	ENOENT {
 		public Class<?> toException() {
-			return org.GreenTeaScript.DShell.FileNotFoundException.class;
+			return org.ZenScript.DShell.FileNotFoundException.class;
 		}
 	}, 
 	ENOEXEC, 

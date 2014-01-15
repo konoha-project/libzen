@@ -48,17 +48,17 @@ public final class ZenParserContext extends ZenUtils {
 //	public final void ReportError_OLD(int Level, ZenToken Token, String Message) {
 //		if(!Token.IsError() || !this.NoErrorReport) {
 //			if(Level == ErrorLevel) {
-//				Message = "(error) " + ZenStaticTable.FormatFileLineNumber(Token.FileLine) + " " + Message;
+//				Message = "(error) " + ZenSystem.FormatFileLineNumber(Token.FileLine) + " " + Message;
 //				Token.SetErrorMessage(Message, this.RootNameSpace.GetSyntaxPattern("$Error$"));
 //			}
 //			else if(Level == TypeErrorLevel) {
-//				Message = "(error) " + ZenStaticTable.FormatFileLineNumber(Token.FileLine) + " " + Message;
+//				Message = "(error) " + ZenSystem.FormatFileLineNumber(Token.FileLine) + " " + Message;
 //			}
 //			else if(Level == WarningLevel) {
-//				Message = "(warning) " + ZenStaticTable.FormatFileLineNumber(Token.FileLine) + " " + Message;
+//				Message = "(warning) " + ZenSystem.FormatFileLineNumber(Token.FileLine) + " " + Message;
 //			}
 //			else if(Level == InfoLevel) {
-//				Message = "(info) " + ZenStaticTable.FormatFileLineNumber(Token.FileLine) + " " + Message;
+//				Message = "(info) " + ZenSystem.FormatFileLineNumber(Token.FileLine) + " " + Message;
 //			}
 //			this.ReportedErrorList.add(Message);
 //		}

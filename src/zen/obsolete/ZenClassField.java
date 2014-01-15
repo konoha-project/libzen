@@ -60,7 +60,7 @@ public final class ZenClassField extends ZenUtils {
 	//		while(i < this.FieldList.size()) {
 	//			@Var ZenFieldInfo FieldInfo = this.FieldList.get(i);
 	//			if(FieldInfo.Name.equals(Name)) {
-	//				this.NameSpace.Context.ReportError_OLD(GreenTeaConsts.WarningLevel, SourceToken, "duplicated field: " + Name);
+	//				this.NameSpace.Context.ReportError_OLD(ZenConsts.WarningLevel, SourceToken, "duplicated field: " + Name);
 	//				return null;
 	//			}
 	//			i = i + 1;
@@ -72,7 +72,7 @@ public final class ZenClassField extends ZenUtils {
 	//		FieldInfo2.GetterFunc = new ZenFunc(GetterFunc, FieldInfo2.Name, 0, ParamList);
 	//		this.NameSpace.SetGetterFunc(this.DefinedType, FieldInfo2.Name, FieldInfo2.GetterFunc, SourceToken);
 	//		ParamList.clear();
-	//		ParamList.add(ZenStaticTable.VoidType);
+	//		ParamList.add(ZenSystem.VoidType);
 	//		ParamList.add(this.DefinedType);
 	//		ParamList.add(FieldInfo2.Type);
 	//		FieldInfo2.SetterFunc = new ZenFunc(SetterFunc, FieldInfo2.Name, 0, ParamList);

@@ -43,7 +43,7 @@ import zen.lang.ZenSystem;
 import zen.parser.ZenSourceGenerator;
 //endif VAJA
 
-//GreenTea Generator should be written in each language.
+//Zen Generator should be written in each language.
 
 public class PythonSourceGenerator extends ZenSourceGenerator {
 

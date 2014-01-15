@@ -22,7 +22,7 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package org.GreenTeaScript.Konoha;
+package org.ZenScript.Konoha;
 
 public class BooleanApi {
 	public static boolean Not(boolean b) {

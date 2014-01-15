@@ -24,10 +24,10 @@
 
 //ifdef JAVA
 
-package org.GreenTeaScript;
+package org.ZenScript;
 import parser.ZenType;
 
-public class GreenTeaRuntime {
+public class ZenRuntime {
 	// converter 
 	
 	// Boolean

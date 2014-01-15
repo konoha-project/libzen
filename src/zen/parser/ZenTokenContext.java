@@ -494,7 +494,7 @@ public final class ZenTokenContext {
 		//		if(this.HasNext()) {
 		//			@Var ZenToken Token = this.GetToken();
 		//			if(!Token.IsIndent() && !Token.IsDelim()) {
-		//				this.TopLevelNameSpace.Generator.ReportError(GreenTeaConsts.WarningLevel, Token, "needs ;");
+		//				this.TopLevelNameSpace.Generator.ReportError(ZenConsts.WarningLevel, Token, "needs ;");
 		//				if(Token.EqualsText("}")) {
 		//					return;
 		//				}

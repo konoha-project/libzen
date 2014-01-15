@@ -22,11 +22,11 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 //ifdef JAVA
-package org.GreenTeaScript;
+package org.ZenScript;
 
 import parser.ZenNameSpace;
 
 //endif VAJA
-public interface GreenTeaGrammar {
+public interface ZenGrammar {
 	public void LoadTo(ZenNameSpace NameSpace);
 }

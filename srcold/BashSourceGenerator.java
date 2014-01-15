@@ -23,16 +23,16 @@
 // **************************************************************************
 
 //ifdef JAVA
-package org.GreenTeaScript;
+package org.ZenScript;
 import java.util.ArrayList;
 
-import parser.GreenTeaConsts;
-import parser.GreenTeaUtils;
+import parser.ZenConsts;
+import parser.ZenUtils;
 import parser.ZenClassField;
 import parser.ZenFieldInfo;
 import parser.ZenFunc;
 import parser.ZenNameSpace;
-import parser.ZenStaticTable;
+import parser.ZenSystem;
 import parser.ZenSyntaxTree;
 import parser.ZenType;
 import parser.ast.ZenAndNode;
@@ -59,10 +59,10 @@ import parser.ast.ZenTryNode;
 import parser.ast.ZenUnaryNode;
 import parser.ast.ZenVarDeclNode;
 import parser.ast.ZenWhileNode;
-import parser.deps.LibGreenTea;
+import parser.deps.LibZen;
 //endif VAJA
 
-//GreenTea Generator should be written in each language.
+//Zen Generator should be written in each language.
 
 public class BashSourceGenerator extends SourceGenerator {
 	@Field boolean inFunc = false;
@@ -72,7 +72,7 @@ public class BashSourceGenerator extends SourceGenerator {
 		super(TargetCode, OutputFile, GeneratorFlag);
 		this.TrueLiteral  = "0";
 		this.FalseLiteral = "1";
-		this.NullLiteral = LibGreenTea.QuoteString("__NULL__");
+		this.NullLiteral = LibZen.QuoteString("__NULL__");
 		this.MemberAccessOperator = "__MEMBER__";
 		this.LineComment = "##";
 		this.ParameterBegin = " ";
@@ -83,7 +83,7 @@ public class BashSourceGenerator extends SourceGenerator {
 	@Override public void InitContext(ZenNameSpace Context) {
 		super.InitContext(Context);
 		this.WriteLineHeader("#!/bin/bash");
-		this.WriteLineCode(this.LineFeed + "source $GREENTEA_HOME/include/bash/GreenTeaPlus.sh" + this.LineFeed);
+		this.WriteLineCode(this.LineFeed + "source $GREENTEA_HOME/include/bash/ZenPlus.sh" + this.LineFeed);
 	}
 
 	@Override public String VisitBlockWithIndent(ZenNode Node, boolean NeedBlock) {
@@ -114,7 +114,7 @@ public class BashSourceGenerator extends SourceGenerator {
 				isBreakReplaced = true;
 				poppedCode = ";;";
 			}
-			if(!LibGreenTea.EqualsString(poppedCode, "")) {
+			if(!LibZen.EqualsString(poppedCode, "")) {
 				Code += this.GetIndentString() + poppedCode + this.LineFeed;
 			}
 			CurrentNode = CurrentNode.NextNode;
@@ -128,7 +128,7 @@ public class BashSourceGenerator extends SourceGenerator {
 		}
 		else {
 			if(Code.length() > 0) {
-				Code = LibGreenTea.SubString(Code, 0, Code.length() - 1);
+				Code = LibZen.SubString(Code, 0, Code.length() - 1);
 			}
 		}
 		return Code;
@@ -140,7 +140,7 @@ public class BashSourceGenerator extends SourceGenerator {
 		 * => boolean firstCond = true; while(firstCond || Cond) {firstCond = false; Block; }
 		 *
 		 */
-		@Var ZenType BoolType = ZenStaticTable.BooleanType;
+		@Var ZenType BoolType = ZenSystem.BooleanType;
 		@Var String VarName = "FirstCond";
 		@Var ZenNode TrueNode = this.CreateBooleanNode(BoolType, ParsedTree, true);
 		@Var ZenNode FalseNode = this.CreateBooleanNode(BoolType, ParsedTree, false);
@@ -156,10 +156,10 @@ public class BashSourceGenerator extends SourceGenerator {
 
 	private String ResolveCondition(ZenNode Node) {
 		@Var String Cond = this.VisitNode(Node);
-		if(LibGreenTea.EqualsString(Cond, this.TrueLiteral)) {
+		if(LibZen.EqualsString(Cond, this.TrueLiteral)) {
 			Cond = "((1 == 1))";
 		}
-		else if(LibGreenTea.EqualsString(Cond, this.FalseLiteral)) {
+		else if(LibZen.EqualsString(Cond, this.FalseLiteral)) {
 			Cond = "((1 != 1))";
 		}
 		else {
@@ -211,8 +211,8 @@ public class BashSourceGenerator extends SourceGenerator {
 
 	private boolean FindAssert(ZenFunc Func) {
 		@Var boolean isAssert = false;
-		if(Func != null && Func.Is(GreenTeaConsts.NativeMacroFunc)) {
-			if(LibGreenTea.EqualsString(Func.FuncName, "assert")) {
+		if(Func != null && Func.Is(ZenConsts.NativeMacroFunc)) {
+			if(LibZen.EqualsString(Func.FuncName, "assert")) {
 				isAssert = true;
 			}
 		}
@@ -224,7 +224,7 @@ public class BashSourceGenerator extends SourceGenerator {
 		@Var String Template = this.GenerateFuncTemplate(ParamSize, Node.ResolvedFunc);
 		@Var boolean isAssert = this.FindAssert(Node.ResolvedFunc);
 		if(isAssert) {
-			Template = "assert " + LibGreenTea.QuoteString("$1");
+			Template = "assert " + LibZen.QuoteString("$1");
 		}
 		@Var String[] ParamCode = this.MakeParamCode(Node.ParamList, isAssert);
 		this.PushSourceCode(this.ApplyMacro2(Template, ParamCode));
@@ -237,7 +237,7 @@ public class BashSourceGenerator extends SourceGenerator {
 		@Var String Macro = null;
 		if(Func != null) {
 			FuncName = Func.GetNativeFuncName();
-			if(GreenTeaUtils.IsFlag(Func.FuncFlag, GreenTeaConsts.NativeMacroFunc)) {
+			if(ZenUtils.IsFlag(Func.FuncFlag, ZenConsts.NativeMacroFunc)) {
 				Macro = Func.GetNativeMacro();
 			}
 		}
@@ -255,7 +255,7 @@ public class BashSourceGenerator extends SourceGenerator {
 		@Var String Macro = null;
 		if(Func != null) {
 			FuncName = Func.GetNativeFuncName();
-			if(GreenTeaUtils.IsFlag(Func.FuncFlag, GreenTeaConsts.NativeMacroFunc)) {
+			if(ZenUtils.IsFlag(Func.FuncFlag, ZenConsts.NativeMacroFunc)) {
 				Macro = Func.GetNativeMacro();
 			}
 		}
@@ -390,11 +390,11 @@ public class BashSourceGenerator extends SourceGenerator {
 
 	@Override public void VisitTryNode(ZenTryNode Node) {
 		throw new RuntimeException("FIXME support Try-catch @ BashSourceGenerator");
-//		@Var ZenNode TrueNode = new ZenConstPoolNode(ZenStaticTable.BooleanType, null, true);
+//		@Var ZenNode TrueNode = new ZenConstPoolNode(ZenSystem.BooleanType, null, true);
 //		@Var String Code = "trap ";
 //		@Var String Try = this.VisitNode(new ZenIfNode(null, null, TrueNode, Node.TryNode, null));
 //		@Var String Catch = this.VisitNode(new ZenIfNode(null, null, TrueNode, Node.CatchBlock, null));
-//		Code += LibGreenTea.QuoteString(Catch) + " ERR" + this.LineFeed;
+//		Code += LibZen.QuoteString(Catch) + " ERR" + this.LineFeed;
 //		Code += this.GetIndentString() + Try + this.LineFeed + this.GetIndentString() + "trap ERR";
 //		if(Node.FinallyNode != null) {
 //			@Var String Finally = this.VisitNode(new ZenIfNode(null, null, TrueNode, Node.FinallyNode, null));
@@ -408,7 +408,7 @@ public class BashSourceGenerator extends SourceGenerator {
 	}
 
 	@Override public void VisitErrorNode(ZenErrorNode Node) {
-		this.PushSourceCode("echo " + LibGreenTea.QuoteString(Node.SourceToken.ParsedText) + " >&2");
+		this.PushSourceCode("echo " + LibZen.QuoteString(Node.SourceToken.ParsedText) + " >&2");
 	}
 
 	@Override public void VisitCommandNode(ZenCommandNode Node) {
@@ -426,10 +426,10 @@ public class BashSourceGenerator extends SourceGenerator {
 		}
 
 		if(Type.IsStringType()) {
-			Code = "execCommadString " + LibGreenTea.QuoteString(Code);
+			Code = "execCommadString " + LibZen.QuoteString(Code);
 		}
 		else if(Type.IsBooleanType()) {
-			Code = "execCommadBool " + LibGreenTea.QuoteString(Code);
+			Code = "execCommadBool " + LibZen.QuoteString(Code);
 		}
 		this.PushSourceCode(Code);
 	}
@@ -476,7 +476,7 @@ public class BashSourceGenerator extends SourceGenerator {
 		if(Type != null && Type.IsBooleanType()) {
 //			if(TargetNode instanceof ZenApplyNode || TargetNode instanceof ZenUnaryNode ||
 //					TargetNode instanceof ZenCommandNode || TargetNode instanceof ZenBinaryNode) {
-//				return "$(valueOfBool " + LibGreenTea.QuoteString(Value) + ")";
+//				return "$(valueOfBool " + LibZen.QuoteString(Value) + ")";
 //			}
 		}
 
@@ -493,7 +493,7 @@ public class BashSourceGenerator extends SourceGenerator {
 			@Var ZenGetLocalNode Local = (/*cast*/ZenGetLocalNode) TargetNode;
 			@Var String Name = Local.NativeName;
 			ResolvedValue = "${" + Value + "[@]}";
-			if(Name.length() == 1 && LibGreenTea.IsDigit(Name, 0)) {
+			if(Name.length() == 1 && LibZen.IsDigit(Name, 0)) {
 				ResolvedValue = "$" + Value;
 			}
 		}
@@ -512,7 +512,7 @@ public class BashSourceGenerator extends SourceGenerator {
 		// resolve string and object value
 		if(Type != null) {
 			if(Type.IsStringType() || !this.IsNativeType(Type)) {
-				ResolvedValue = LibGreenTea.QuoteString(ResolvedValue);
+				ResolvedValue = LibZen.QuoteString(ResolvedValue);
 			}
 		}
 		return ResolvedValue;
@@ -523,7 +523,7 @@ public class BashSourceGenerator extends SourceGenerator {
 		@Var String Function = "";
 		@Var String FuncName = Func.GetNativeFuncName();
 		this.inFunc = true;
-		if(LibGreenTea.EqualsString(FuncName, "main")) {
+		if(LibZen.EqualsString(FuncName, "main")) {
 			this.inMainFunc = true;
 		}
 		Function += FuncName + "() {" + this.LineFeed;
@@ -552,7 +552,7 @@ public class BashSourceGenerator extends SourceGenerator {
 	}
 
 	@Override protected String GetNewOperator(ZenType Type) {
-		return LibGreenTea.QuoteString("$(__NEW__" + Type.ShortName + ")");
+		return LibZen.QuoteString("$(__NEW__" + Type.ShortName + ")");
 	}
 
 	@Override public void OpenClassField(ZenSyntaxTree ParsedTree, ZenType Type, ZenClassField ClassField) {	//TODO: support super
@@ -575,7 +575,7 @@ public class BashSourceGenerator extends SourceGenerator {
 			i = i + 1;
 		}
 		Program += this.GetIndentString() + "echo ";
-		Program += LibGreenTea.QuoteString("${" + this.GetRecvName() + "[@]}") + this.LineFeed;
+		Program += LibZen.QuoteString("${" + this.GetRecvName() + "[@]}") + this.LineFeed;
 		this.UnIndent();
 		Program += "}";
 

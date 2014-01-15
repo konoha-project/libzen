@@ -22,7 +22,7 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package org.GreenTeaScript.DShell;
+package org.ZenScript.DShell;
 
 
 public class ConnectionRefusedException extends RelatedSyscallException {

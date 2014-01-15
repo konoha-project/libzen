@@ -43,7 +43,7 @@ public class ZenClassGrammar {
 //	}
 //
 //	public static ZenNode TypeError(ZenTypeEnv Gamma, ZenSyntaxTree ParsedTree, ZenType Type) {
-//		return Gamma.Generator.CreateErrorNode(ZenStaticTable.VoidType, ParsedTree);
+//		return Gamma.Generator.CreateErrorNode(ZenSystem.VoidType, ParsedTree);
 //	}
 //
 //	public static ZenSyntaxTree ParseEmpty(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenSyntaxTree LeftNode, ZenSyntaxPattern Pattern) {
@@ -51,7 +51,7 @@ public class ZenClassGrammar {
 //	}
 //
 //	public static ZenNode TypeEmpty(ZenTypeEnv Gamma, ZenSyntaxTree ParsedTree, ZenType Type) {
-//		return Gamma.Generator.CreateEmptyNode(ZenStaticTable.VoidType);
+//		return Gamma.Generator.CreateEmptyNode(ZenSystem.VoidType);
 //	}
 //
 //	public static ZenSyntaxTree ParseSemiColon(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenSyntaxTree LeftNode, ZenSyntaxPattern Pattern) {
@@ -108,54 +108,54 @@ public class ZenClassGrammar {
 //		if(Value == null) {
 //			return Gamma.CreateSyntaxErrorNode(ParsedTree, "cannot import: " + ParsedTree.ParsedValue);
 //		}
-//		return Gamma.Generator.CreateConstNode_OLD(ZenStaticTable.GuessType(Value), ParsedTree, Value);
+//		return Gamma.Generator.CreateConstNode_OLD(ZenSystem.GuessType(Value), ParsedTree, Value);
 //	}
 
 
 //	// While Statement
 //	public static ZenSyntaxTree ParseWhile(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenSyntaxTree LeftNode, ZenSyntaxPattern Pattern) {
 //		@Var ZenSyntaxTree WhileTree = TokenContext.CreateMatchedSyntaxTree(NameSpace, Pattern, "while");
-//		WhileTree.SetMatchedTokenAt(GreenTeaConsts.NoWhere, NameSpace, TokenContext, "(", GreenTeaConsts.Required | GreenTeaConsts.OpenSkipIndent);
-//		WhileTree.SetMatchedPatternAt(GreenTeaConsts.WhileCond, NameSpace, TokenContext, "$Expression$", GreenTeaConsts.Required);
-//		WhileTree.SetMatchedTokenAt(GreenTeaConsts.NoWhere, NameSpace, TokenContext, ")", GreenTeaConsts.Required | GreenTeaConsts.CloseSkipIndent);
-//		WhileTree.SetMatchedPatternAt(GreenTeaConsts.WhileBody, NameSpace, TokenContext, "$StmtBlock$", GreenTeaConsts.Required);
+//		WhileTree.SetMatchedTokenAt(ZenConsts.NoWhere, NameSpace, TokenContext, "(", ZenConsts.Required | ZenConsts.OpenSkipIndent);
+//		WhileTree.SetMatchedPatternAt(ZenConsts.WhileCond, NameSpace, TokenContext, "$Expression$", ZenConsts.Required);
+//		WhileTree.SetMatchedTokenAt(ZenConsts.NoWhere, NameSpace, TokenContext, ")", ZenConsts.Required | ZenConsts.CloseSkipIndent);
+//		WhileTree.SetMatchedPatternAt(ZenConsts.WhileBody, NameSpace, TokenContext, "$StmtBlock$", ZenConsts.Required);
 //		return WhileTree;
 //	}
 //
 //	public static ZenNode TypeWhile(ZenTypeEnv Gamma, ZenSyntaxTree ParsedTree, ZenType ContextType) {
-//		@Var ZenNode CondNode = ParsedTree.TypeCheckAt(GreenTeaConsts.WhileCond, Gamma, ZenStaticTable.BooleanType, GreenTeaConsts.DefaultTypeCheckPolicy);
-//		@Var ZenNode BodyNode =  ParsedTree.TypeCheckAt(GreenTeaConsts.WhileBody, Gamma, ZenStaticTable.VoidType, GreenTeaConsts.DefaultTypeCheckPolicy);
+//		@Var ZenNode CondNode = ParsedTree.TypeCheckAt(ZenConsts.WhileCond, Gamma, ZenSystem.BooleanType, ZenConsts.DefaultTypeCheckPolicy);
+//		@Var ZenNode BodyNode =  ParsedTree.TypeCheckAt(ZenConsts.WhileBody, Gamma, ZenSystem.VoidType, ZenConsts.DefaultTypeCheckPolicy);
 //		return Gamma.Generator.CreateWhileNode(BodyNode.Type, ParsedTree, CondNode, BodyNode);
 //	}
 //
 //	// DoWhile Statement
 //	public static ZenSyntaxTree ParseDoWhile(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenSyntaxTree LeftNode, ZenSyntaxPattern Pattern) {
 //		@Var ZenSyntaxTree Tree = TokenContext.CreateMatchedSyntaxTree(NameSpace, Pattern, "do");
-//		Tree.SetMatchedPatternAt(GreenTeaConsts.WhileBody, NameSpace, TokenContext, "$StmtBlock$", GreenTeaConsts.Required);
-//		Tree.SetMatchedTokenAt(GreenTeaConsts.NoWhere, NameSpace, TokenContext, "while", GreenTeaConsts.Required);
-//		Tree.SetMatchedTokenAt(GreenTeaConsts.NoWhere, NameSpace, TokenContext, "(", GreenTeaConsts.Required | GreenTeaConsts.OpenSkipIndent);
-//		Tree.SetMatchedPatternAt(GreenTeaConsts.WhileCond, NameSpace, TokenContext, "$Expression$", GreenTeaConsts.Required);
-//		Tree.SetMatchedTokenAt(GreenTeaConsts.NoWhere, NameSpace, TokenContext, ")", GreenTeaConsts.Required | GreenTeaConsts.CloseSkipIndent);
+//		Tree.SetMatchedPatternAt(ZenConsts.WhileBody, NameSpace, TokenContext, "$StmtBlock$", ZenConsts.Required);
+//		Tree.SetMatchedTokenAt(ZenConsts.NoWhere, NameSpace, TokenContext, "while", ZenConsts.Required);
+//		Tree.SetMatchedTokenAt(ZenConsts.NoWhere, NameSpace, TokenContext, "(", ZenConsts.Required | ZenConsts.OpenSkipIndent);
+//		Tree.SetMatchedPatternAt(ZenConsts.WhileCond, NameSpace, TokenContext, "$Expression$", ZenConsts.Required);
+//		Tree.SetMatchedTokenAt(ZenConsts.NoWhere, NameSpace, TokenContext, ")", ZenConsts.Required | ZenConsts.CloseSkipIndent);
 //		return Tree;
 //	}
 //
 //	public static ZenNode TypeDoWhile(ZenTypeEnv Gamma, ZenSyntaxTree ParsedTree, ZenType ContextType) {
-//		@Var ZenNode CondNode = ParsedTree.TypeCheckAt(GreenTeaConsts.WhileCond, Gamma, ZenStaticTable.BooleanType, GreenTeaConsts.DefaultTypeCheckPolicy);
-//		@Var ZenNode BodyNode =  ParsedTree.TypeCheckAt(GreenTeaConsts.WhileBody, Gamma, ZenStaticTable.VoidType, GreenTeaConsts.DefaultTypeCheckPolicy);
+//		@Var ZenNode CondNode = ParsedTree.TypeCheckAt(ZenConsts.WhileCond, Gamma, ZenSystem.BooleanType, ZenConsts.DefaultTypeCheckPolicy);
+//		@Var ZenNode BodyNode =  ParsedTree.TypeCheckAt(ZenConsts.WhileBody, Gamma, ZenSystem.VoidType, ZenConsts.DefaultTypeCheckPolicy);
 //		return Gamma.Generator.CreateDoWhileNode(BodyNode.Type, ParsedTree, CondNode, BodyNode);
 //	}
 //
 //	// For Statement
 //	public static ZenSyntaxTree ParseFor(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenSyntaxTree LeftNode, ZenSyntaxPattern Pattern) {
 //		@Var ZenSyntaxTree Tree = TokenContext.CreateMatchedSyntaxTree(NameSpace, Pattern, "for");
-//		Tree.SetMatchedTokenAt(GreenTeaConsts.NoWhere, NameSpace, TokenContext, "(", GreenTeaConsts.Required | GreenTeaConsts.OpenSkipIndent);
-//		Tree.SetMatchedPatternAt(GreenTeaConsts.ForInit, NameSpace, TokenContext, "$Expression$", GreenTeaConsts.Optional);
-//		Tree.SetMatchedTokenAt(GreenTeaConsts.NoWhere, NameSpace, TokenContext, ";", GreenTeaConsts.Required);
-//		Tree.SetMatchedPatternAt(GreenTeaConsts.ForCond, NameSpace, TokenContext, "$Expression$", GreenTeaConsts.Optional);
-//		Tree.SetMatchedTokenAt(GreenTeaConsts.NoWhere, NameSpace, TokenContext, ";", GreenTeaConsts.Required);
-//		Tree.SetMatchedPatternAt(GreenTeaConsts.ForIteration, NameSpace, TokenContext, "$Expression$", GreenTeaConsts.Optional);
-//		Tree.SetMatchedTokenAt(GreenTeaConsts.NoWhere, NameSpace, TokenContext, ")", GreenTeaConsts.Required | GreenTeaConsts.CloseSkipIndent);
-//		Tree.SetMatchedPatternAt(GreenTeaConsts.ForBody, NameSpace, TokenContext, "$StmtBlock$", GreenTeaConsts.Required);
+//		Tree.SetMatchedTokenAt(ZenConsts.NoWhere, NameSpace, TokenContext, "(", ZenConsts.Required | ZenConsts.OpenSkipIndent);
+//		Tree.SetMatchedPatternAt(ZenConsts.ForInit, NameSpace, TokenContext, "$Expression$", ZenConsts.Optional);
+//		Tree.SetMatchedTokenAt(ZenConsts.NoWhere, NameSpace, TokenContext, ";", ZenConsts.Required);
+//		Tree.SetMatchedPatternAt(ZenConsts.ForCond, NameSpace, TokenContext, "$Expression$", ZenConsts.Optional);
+//		Tree.SetMatchedTokenAt(ZenConsts.NoWhere, NameSpace, TokenContext, ";", ZenConsts.Required);
+//		Tree.SetMatchedPatternAt(ZenConsts.ForIteration, NameSpace, TokenContext, "$Expression$", ZenConsts.Optional);
+//		Tree.SetMatchedTokenAt(ZenConsts.NoWhere, NameSpace, TokenContext, ")", ZenConsts.Required | ZenConsts.CloseSkipIndent);
+//		Tree.SetMatchedPatternAt(ZenConsts.ForBody, NameSpace, TokenContext, "$StmtBlock$", ZenConsts.Required);
 //		return Tree;
 //	}
 //
@@ -163,23 +163,23 @@ public class ZenClassGrammar {
 //		@Var ZenNode InitNode = null;
 //		@Var ZenNode CondNode = null;
 //		@Var ZenNode IterNode = null;
-//		if(ParsedTree.HasNodeAt(GreenTeaConsts.ForInit)) {
-//			InitNode =  ParsedTree.TypeCheckAt(GreenTeaConsts.ForInit, Gamma, ZenStaticTable.VarType, GreenTeaConsts.DefaultTypeCheckPolicy);
+//		if(ParsedTree.HasNodeAt(ZenConsts.ForInit)) {
+//			InitNode =  ParsedTree.TypeCheckAt(ZenConsts.ForInit, Gamma, ZenSystem.VarType, ZenConsts.DefaultTypeCheckPolicy);
 //		}
-//		if(ParsedTree.HasNodeAt(GreenTeaConsts.ForCond)) {
-//			CondNode =  ParsedTree.TypeCheckAt(GreenTeaConsts.ForCond, Gamma, ZenStaticTable.BooleanType, GreenTeaConsts.DefaultTypeCheckPolicy);
+//		if(ParsedTree.HasNodeAt(ZenConsts.ForCond)) {
+//			CondNode =  ParsedTree.TypeCheckAt(ZenConsts.ForCond, Gamma, ZenSystem.BooleanType, ZenConsts.DefaultTypeCheckPolicy);
 //		}
-//		if(ParsedTree.HasNodeAt(GreenTeaConsts.ForIteration)) {
-//			IterNode =  ParsedTree.TypeCheckAt(GreenTeaConsts.ForIteration, Gamma, ZenStaticTable.VarType, GreenTeaConsts.DefaultTypeCheckPolicy);
+//		if(ParsedTree.HasNodeAt(ZenConsts.ForIteration)) {
+//			IterNode =  ParsedTree.TypeCheckAt(ZenConsts.ForIteration, Gamma, ZenSystem.VarType, ZenConsts.DefaultTypeCheckPolicy);
 //		}
-//		@Var ZenNode BodyNode =  ParsedTree.TypeCheckAt(GreenTeaConsts.ForBody, Gamma, ZenStaticTable.VoidType, GreenTeaConsts.DefaultTypeCheckPolicy);
+//		@Var ZenNode BodyNode =  ParsedTree.TypeCheckAt(ZenConsts.ForBody, Gamma, ZenSystem.VoidType, ZenConsts.DefaultTypeCheckPolicy);
 //		@Var ZenNode ForNode = Gamma.Generator.CreateForNode(BodyNode.Type, ParsedTree, CondNode, IterNode, BodyNode);
 //		if(InitNode != null) {
 //			if(InitNode instanceof ZenVarDeclNode) {
 //				((/*cast*/ZenVarDeclNode)InitNode).BlockNode = ForNode;
 //			}
 //			else {
-//				InitNode = GreenTeaUtils.LinkNode(InitNode, ForNode);
+//				InitNode = ZenUtils.LinkNode(InitNode, ForNode);
 //			}
 //			return InitNode;
 //		}
@@ -189,40 +189,40 @@ public class ZenClassGrammar {
 //	// ForEach Statement
 //	public static ZenSyntaxTree ParseForEach(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenSyntaxTree LeftNode, ZenSyntaxPattern Pattern) {
 //		@Var ZenSyntaxTree Tree = TokenContext.CreateMatchedSyntaxTree(NameSpace, Pattern, "for");
-//		Tree.SetMatchedTokenAt(GreenTeaConsts.NoWhere, NameSpace, TokenContext, "(", GreenTeaConsts.Required | GreenTeaConsts.OpenSkipIndent);
-//		Tree.SetMatchedPatternAt(GreenTeaConsts.ForEachType, NameSpace, TokenContext, "$Type$", GreenTeaConsts.Optional);
-//		Tree.SetMatchedPatternAt(GreenTeaConsts.ForEachName, NameSpace, TokenContext, "$Variable$", GreenTeaConsts.Required);
-//		Tree.SetMatchedTokenAt(GreenTeaConsts.NoWhere, NameSpace, TokenContext, "in", GreenTeaConsts.Required);
-//		Tree.SetMatchedPatternAt(GreenTeaConsts.ForEachIter, NameSpace, TokenContext, "$Expression$", GreenTeaConsts.Required);
-//		Tree.SetMatchedTokenAt(GreenTeaConsts.NoWhere, NameSpace, TokenContext, ")", GreenTeaConsts.Required | GreenTeaConsts.CloseSkipIndent);
-//		Tree.SetMatchedPatternAt(GreenTeaConsts.ForEachBody, NameSpace, TokenContext, "$StmtBlock$", GreenTeaConsts.Required);
+//		Tree.SetMatchedTokenAt(ZenConsts.NoWhere, NameSpace, TokenContext, "(", ZenConsts.Required | ZenConsts.OpenSkipIndent);
+//		Tree.SetMatchedPatternAt(ZenConsts.ForEachType, NameSpace, TokenContext, "$Type$", ZenConsts.Optional);
+//		Tree.SetMatchedPatternAt(ZenConsts.ForEachName, NameSpace, TokenContext, "$Variable$", ZenConsts.Required);
+//		Tree.SetMatchedTokenAt(ZenConsts.NoWhere, NameSpace, TokenContext, "in", ZenConsts.Required);
+//		Tree.SetMatchedPatternAt(ZenConsts.ForEachIter, NameSpace, TokenContext, "$Expression$", ZenConsts.Required);
+//		Tree.SetMatchedTokenAt(ZenConsts.NoWhere, NameSpace, TokenContext, ")", ZenConsts.Required | ZenConsts.CloseSkipIndent);
+//		Tree.SetMatchedPatternAt(ZenConsts.ForEachBody, NameSpace, TokenContext, "$StmtBlock$", ZenConsts.Required);
 //		return Tree;
 //	}
 //
 //	public static ZenNode TypeForEach(ZenTypeEnv Gamma, ZenSyntaxTree ParsedTree, ZenType ContextType) {
-//		@Var ZenNode IterNode =  ParsedTree.TypeCheckAt(GreenTeaConsts.ForEachIter, Gamma, ZenStaticTable.VarType, GreenTeaConsts.DefaultTypeCheckPolicy);
+//		@Var ZenNode IterNode =  ParsedTree.TypeCheckAt(ZenConsts.ForEachIter, Gamma, ZenSystem.VarType, ZenConsts.DefaultTypeCheckPolicy);
 //		if(IterNode.IsErrorNode()) {
 //			return IterNode;
 //		}
 //		if(!IterNode.Type.IsIteratorType()) {
-//			@Var ZenFuncSet FuncSet = Gamma.NameSpace.GetMethod(IterNode.Type, GreenTeaUtils.FuncSymbol(".."), true);
+//			@Var ZenFuncSet FuncSet = Gamma.NameSpace.GetMethod(IterNode.Type, ZenUtils.FuncSymbol(".."), true);
 //			@Var ZenFunc Func = FuncSet.ResolveUnaryMethod(Gamma, IterNode.Type);
 //			if(Func == null) {
 //				return Gamma.CreateSyntaxErrorNode(ParsedTree, "for/in takes an iterator, but given = " + IterNode.Type);
 //			}
 //			Gamma.CheckFunc("operator", Func, ParsedTree.KeyToken);
-//			ZenNode ApplyNode = Gamma.Generator.CreateApplySymbolNode(Func.GetReturnType(), ParsedTree, GreenTeaUtils.FuncSymbol(".."), Func);
+//			ZenNode ApplyNode = Gamma.Generator.CreateApplySymbolNode(Func.GetReturnType(), ParsedTree, ZenUtils.FuncSymbol(".."), Func);
 //			ApplyNode.Append(IterNode);
 //			IterNode = ApplyNode;
 //		}
 //		@Var ZenVariableInfo VarInfo = null;
-//		@Var String VarName = ParsedTree.GetSyntaxTreeAt(GreenTeaConsts.ForEachName).KeyToken.ParsedText;
+//		@Var String VarName = ParsedTree.GetSyntaxTreeAt(ZenConsts.ForEachName).KeyToken.ParsedText;
 //		@Var ZenType VarType = null;
-//		if(ParsedTree.HasNodeAt(GreenTeaConsts.ForEachType)) {
-//			VarType = ParsedTree.GetSyntaxTreeAt(GreenTeaConsts.ForEachType).GetParsedType();
+//		if(ParsedTree.HasNodeAt(ZenConsts.ForEachType)) {
+//			VarType = ParsedTree.GetSyntaxTreeAt(ZenConsts.ForEachType).GetParsedType();
 //			if(VarType.IsVarType()) {
 //				VarType = IterNode.Type.TypeParams[0];
-//				Gamma.ReportTypeInference(ParsedTree.GetSyntaxTreeAt(GreenTeaConsts.ForEachName).KeyToken, VarName, VarType);
+//				Gamma.ReportTypeInference(ParsedTree.GetSyntaxTreeAt(ZenConsts.ForEachName).KeyToken, VarName, VarType);
 //			}
 //			VarInfo = Gamma.AppendDeclaredVariable(0, VarType, VarName, null, null);
 //		}
@@ -237,11 +237,11 @@ public class ZenClassGrammar {
 //			return Gamma.CreateSyntaxErrorNode(ParsedTree, "mismatched iterator: " + VarType + " " + VarName + " in " + IterNode.Type);
 //		}
 //		@Var ZenVariableInfo VarIterInfo = Gamma.AppendDeclaredVariable(0, IterNode.Type, "iter", null, null);
-//		@Var ZenNode WhileNode = Gamma.ParseTypedNode("while(iter.hasHext()) { " + VarName + " = iter.next(); }", ParsedTree.KeyToken.FileLine, ZenStaticTable.VoidType);
+//		@Var ZenNode WhileNode = Gamma.ParseTypedNode("while(iter.hasHext()) { " + VarName + " = iter.next(); }", ParsedTree.KeyToken.FileLine, ZenSystem.VoidType);
 //		if(!WhileNode.IsErrorNode()) {
-//			@Var ZenNode BodyNode =  ParsedTree.TypeCheckAt(GreenTeaConsts.ForEachBody, Gamma, ZenStaticTable.VoidType, GreenTeaConsts.DefaultTypeCheckPolicy);
+//			@Var ZenNode BodyNode =  ParsedTree.TypeCheckAt(ZenConsts.ForEachBody, Gamma, ZenSystem.VoidType, ZenConsts.DefaultTypeCheckPolicy);
 //			@Var ZenWhileNode WhileNode2 = (/*cast*/ZenWhileNode)WhileNode;
-//			GreenTeaUtils.LinkNode(WhileNode2.BodyNode, BodyNode);
+//			ZenUtils.LinkNode(WhileNode2.BodyNode, BodyNode);
 //		}
 //		@Var ZenNode Node = Gamma.Generator.CreateVarDeclNode(IterNode.Type, ParsedTree, IterNode.Type, VarIterInfo.NativeName, IterNode, WhileNode);
 //		if(VarInfo != null) {
@@ -256,7 +256,7 @@ public class ZenClassGrammar {
 //	}
 //
 //	public static ZenNode TypeBreak(ZenTypeEnv Gamma, ZenSyntaxTree ParsedTree, ZenType ContextType) {
-//		return Gamma.Generator.CreateBreakNode(ZenStaticTable.VoidType, ParsedTree, "");
+//		return Gamma.Generator.CreateBreakNode(ZenSystem.VoidType, ParsedTree, "");
 //	}
 //
 //	public static ZenSyntaxTree ParseContinue(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenSyntaxTree LeftNode, ZenSyntaxPattern Pattern) {
@@ -264,13 +264,13 @@ public class ZenClassGrammar {
 //	}
 //
 //	public static ZenNode TypeContinue(ZenTypeEnv Gamma, ZenSyntaxTree ParsedTree, ZenType ContextType) {
-//		return Gamma.Generator.CreateContinueNode(ZenStaticTable.VoidType, ParsedTree, "");
+//		return Gamma.Generator.CreateContinueNode(ZenSystem.VoidType, ParsedTree, "");
 //	}
 
 //	// Return Statement
 //	public static ZenSyntaxTree ParseReturn(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenSyntaxTree LeftNode, ZenSyntaxPattern Pattern) {
 //		@Var ZenSyntaxTree ReturnTree = TokenContext.CreateMatchedSyntaxTree(NameSpace, Pattern, "return");
-//		ReturnTree.SetMatchedPatternAt(GreenTeaConsts.ReturnExpr, NameSpace, TokenContext, "$Expression$", GreenTeaConsts.Optional);
+//		ReturnTree.SetMatchedPatternAt(ZenConsts.ReturnExpr, NameSpace, TokenContext, "$Expression$", ZenConsts.Optional);
 //		return ReturnTree;
 //	}
 //
@@ -280,29 +280,29 @@ public class ZenClassGrammar {
 //			return Gamma.UnsupportedTopLevelError(ParsedTree);
 //		}
 //		@Var ZenType ReturnType = Gamma.FuncBlock.DefinedFunc.GetReturnType();
-//		if(ParsedTree.HasNodeAt(GreenTeaConsts.ReturnExpr)) {
-//			@Var ZenNode Expr = ParsedTree.TypeCheckAt(GreenTeaConsts.ReturnExpr, Gamma, ReturnType, GreenTeaConsts.DefaultTypeCheckPolicy);
+//		if(ParsedTree.HasNodeAt(ZenConsts.ReturnExpr)) {
+//			@Var ZenNode Expr = ParsedTree.TypeCheckAt(ZenConsts.ReturnExpr, Gamma, ReturnType, ZenConsts.DefaultTypeCheckPolicy);
 //			if(ReturnType.IsVarType() && !Expr.IsErrorNode()) {
 //				Gamma.FuncBlock.DefinedFunc.Types[0] = Expr.Type;
 //				Gamma.ReportTypeInference(ParsedTree.KeyToken, "return value of " + Gamma.FuncBlock.DefinedFunc.FuncName, Expr.Type);
 //			}
 //			if(ReturnType.IsVoidType()) {
-//				Gamma.Context.ReportError(GreenTeaConsts.WarningLevel, ParsedTree.KeyToken, "ignored return value");
+//				Gamma.Context.ReportError(ZenConsts.WarningLevel, ParsedTree.KeyToken, "ignored return value");
 //				return Gamma.Generator.CreateReturnNode(ReturnType, ParsedTree, null);
 //			}
 //			return Gamma.Generator.CreateReturnNode(Expr.Type, ParsedTree, Expr);
 //		}
 //		else {
 //			if(ReturnType.IsVarType()) {
-//				Gamma.FuncBlock.DefinedFunc.Types[0] = ZenStaticTable.VoidType;
-//				Gamma.ReportTypeInference(ParsedTree.KeyToken, "return value of " + Gamma.FuncBlock.DefinedFunc.FuncName, ZenStaticTable.VoidType);
+//				Gamma.FuncBlock.DefinedFunc.Types[0] = ZenSystem.VoidType;
+//				Gamma.ReportTypeInference(ParsedTree.KeyToken, "return value of " + Gamma.FuncBlock.DefinedFunc.FuncName, ZenSystem.VoidType);
 //			}
-//			if(Gamma.FuncBlock.DefinedFunc.Is(GreenTeaConsts.ConstructorFunc)) {
+//			if(Gamma.FuncBlock.DefinedFunc.Is(ZenConsts.ConstructorFunc)) {
 //				@Var ZenNode ThisNode = Gamma.CreateLocalNode(ParsedTree, Gamma.Generator.GetRecvName());
 //				return Gamma.Generator.CreateReturnNode(ThisNode.Type, ParsedTree, ThisNode);
 //			}
 //			if(!ReturnType.IsVoidType()) {
-//				Gamma.Context.ReportError(GreenTeaConsts.WarningLevel, ParsedTree.KeyToken, "returning default value of " + ReturnType);
+//				Gamma.Context.ReportError(ZenConsts.WarningLevel, ParsedTree.KeyToken, "returning default value of " + ReturnType);
 //				return Gamma.Generator.CreateReturnNode(ReturnType, ParsedTree, Gamma.CreateDefaultValue(ParsedTree, ReturnType));
 //			}
 //			return Gamma.Generator.CreateReturnNode(ReturnType, ParsedTree, null);
@@ -312,32 +312,32 @@ public class ZenClassGrammar {
 //	// try
 //	public static ZenSyntaxTree ParseTry(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenSyntaxTree LeftNode, ZenSyntaxPattern Pattern) {
 //		@Var ZenSyntaxTree TryTree = TokenContext.CreateMatchedSyntaxTree(NameSpace, Pattern, "try");
-//		TryTree.SetMatchedPatternAt(GreenTeaConsts.TryBody, NameSpace, TokenContext, "$Block$", GreenTeaConsts.Required);
+//		TryTree.SetMatchedPatternAt(ZenConsts.TryBody, NameSpace, TokenContext, "$Block$", ZenConsts.Required);
 //		TokenContext.SkipEmptyStatement();
 //		if(TokenContext.MatchToken("catch")) {
-//			TryTree.SetMatchedTokenAt(GreenTeaConsts.NoWhere, NameSpace, TokenContext, "(", GreenTeaConsts.Required | GreenTeaConsts.OpenSkipIndent);
-//			TryTree.SetMatchedPatternAt(GreenTeaConsts.CatchVariable, NameSpace, TokenContext, "$VarDecl$", GreenTeaConsts.Required);
-//			TryTree.SetMatchedTokenAt(GreenTeaConsts.NoWhere, NameSpace, TokenContext, ")", GreenTeaConsts.Required | GreenTeaConsts.CloseSkipIndent);
-//			TryTree.SetMatchedPatternAt(GreenTeaConsts.CatchBody, NameSpace, TokenContext, "$Block$", GreenTeaConsts.Required);
+//			TryTree.SetMatchedTokenAt(ZenConsts.NoWhere, NameSpace, TokenContext, "(", ZenConsts.Required | ZenConsts.OpenSkipIndent);
+//			TryTree.SetMatchedPatternAt(ZenConsts.CatchVariable, NameSpace, TokenContext, "$VarDecl$", ZenConsts.Required);
+//			TryTree.SetMatchedTokenAt(ZenConsts.NoWhere, NameSpace, TokenContext, ")", ZenConsts.Required | ZenConsts.CloseSkipIndent);
+//			TryTree.SetMatchedPatternAt(ZenConsts.CatchBody, NameSpace, TokenContext, "$Block$", ZenConsts.Required);
 //		}
 //		TokenContext.SkipEmptyStatement();
 //		if(TokenContext.MatchToken("finally")) {
-//			TryTree.SetMatchedPatternAt(GreenTeaConsts.FinallyBody, NameSpace, TokenContext, "$Block$", GreenTeaConsts.Required);
+//			TryTree.SetMatchedPatternAt(ZenConsts.FinallyBody, NameSpace, TokenContext, "$Block$", ZenConsts.Required);
 //		}
 //		return TryTree;
 //	}
 //
 //	public static ZenNode TypeTry(ZenTypeEnv Gamma, ZenSyntaxTree ParsedTree, ZenType ContextType) {
-//		@Var ZenNode TryNode = ParsedTree.TypeCheckAt(GreenTeaConsts.TryBody, Gamma, ZenStaticTable.VoidType, GreenTeaConsts.DefaultTypeCheckPolicy);
-//		@Var ZenNode FinallyNode = ParsedTree.TypeCheckAt(GreenTeaConsts.FinallyBody, Gamma, ZenStaticTable.VoidType, GreenTeaConsts.DefaultTypeCheckPolicy);
+//		@Var ZenNode TryNode = ParsedTree.TypeCheckAt(ZenConsts.TryBody, Gamma, ZenSystem.VoidType, ZenConsts.DefaultTypeCheckPolicy);
+//		@Var ZenNode FinallyNode = ParsedTree.TypeCheckAt(ZenConsts.FinallyBody, Gamma, ZenSystem.VoidType, ZenConsts.DefaultTypeCheckPolicy);
 //		ZenNode Node = Gamma.Generator.CreateTryNode(TryNode.Type, ParsedTree, TryNode, FinallyNode);
-//		if(ParsedTree.HasNodeAt(GreenTeaConsts.CatchVariable)) {
-//			ZenSyntaxTree CatchTree = ParsedTree.GetSyntaxTreeAt(GreenTeaConsts.CatchVariable);
-//			@Var String CatchName = CatchTree.GetSyntaxTreeAt(GreenTeaConsts.VarDeclName).KeyToken.ParsedText;
-//			@Var ZenType CatchType = CatchTree.GetSyntaxTreeAt(GreenTeaConsts.VarDeclType).GetParsedType();
+//		if(ParsedTree.HasNodeAt(ZenConsts.CatchVariable)) {
+//			ZenSyntaxTree CatchTree = ParsedTree.GetSyntaxTreeAt(ZenConsts.CatchVariable);
+//			@Var String CatchName = CatchTree.GetSyntaxTreeAt(ZenConsts.VarDeclName).KeyToken.ParsedText;
+//			@Var ZenType CatchType = CatchTree.GetSyntaxTreeAt(ZenConsts.VarDeclType).GetParsedType();
 //			//FIXME we need to add CatchName into LocalVariable
-//			@Var ZenNode BodyNode = ParsedTree.TypeCheckAt(GreenTeaConsts.CatchBody, Gamma, ZenStaticTable.VoidType, GreenTeaConsts.DefaultTypeCheckPolicy);
-//			Node.Append(Gamma.Generator.CreateCatchNode(ZenStaticTable.VoidType, ParsedTree, CatchType, CatchName, BodyNode));
+//			@Var ZenNode BodyNode = ParsedTree.TypeCheckAt(ZenConsts.CatchBody, Gamma, ZenSystem.VoidType, ZenConsts.DefaultTypeCheckPolicy);
+//			Node.Append(Gamma.Generator.CreateCatchNode(ZenSystem.VoidType, ParsedTree, CatchType, CatchName, BodyNode));
 //		}
 //		return Node;
 //	}
@@ -345,14 +345,14 @@ public class ZenClassGrammar {
 //	// throw $Expr$
 //	public static ZenSyntaxTree ParseThrow(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenSyntaxTree LeftNode, ZenSyntaxPattern Pattern) {
 //		@Var ZenSyntaxTree ThrowTree = TokenContext.CreateMatchedSyntaxTree(NameSpace, Pattern, "throw");
-//		ThrowTree.SetMatchedPatternAt(GreenTeaConsts.ReturnExpr, NameSpace, TokenContext, "$Expression$", GreenTeaConsts.Required);
+//		ThrowTree.SetMatchedPatternAt(ZenConsts.ReturnExpr, NameSpace, TokenContext, "$Expression$", ZenConsts.Required);
 //		return ThrowTree;
 //	}
 //
 //	public static ZenNode TypeThrow(ZenTypeEnv Gamma, ZenSyntaxTree ParsedTree, ZenType ContextType) {
 //		ParsedTree.NextTree = null;
 //		@Var ZenType FaultType = ContextType; // FIXME Gamma.FaultType;
-//		@Var ZenNode ExprNode = ParsedTree.TypeCheckAt(GreenTeaConsts.ReturnExpr, Gamma, FaultType, GreenTeaConsts.DefaultTypeCheckPolicy);
+//		@Var ZenNode ExprNode = ParsedTree.TypeCheckAt(ZenConsts.ReturnExpr, Gamma, FaultType, ZenConsts.DefaultTypeCheckPolicy);
 //		return Gamma.Generator.CreateThrowNode(ExprNode.Type, ParsedTree, ExprNode);
 //	}
 
@@ -369,7 +369,7 @@ public class ZenClassGrammar {
 //	}
 //
 //	public static ZenNode TypeLine(ZenTypeEnv Gamma, ZenSyntaxTree ParsedTree, ZenType ContextType) {
-//		return Gamma.Generator.CreateConstNode_OLD(ZenStaticTable.StringType, ParsedTree, ZenStaticTable.FormatFileLineNumber(ParsedTree.KeyToken.FileLine));
+//		return Gamma.Generator.CreateConstNode_OLD(ZenSystem.StringType, ParsedTree, ZenSystem.FormatFileLineNumber(ParsedTree.KeyToken.FileLine));
 //	}
 //
 //	public static ZenSyntaxTree ParseSymbols(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenSyntaxTree LeftNode, ZenSyntaxPattern Pattern) {
@@ -403,19 +403,19 @@ public class ZenClassGrammar {
 //	// new $Type ( $Expr$ [, $Expr$] )
 //	public static ZenSyntaxTree ParseNew(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenSyntaxTree LeftNode, ZenSyntaxPattern Pattern) {
 //		@Var ZenSyntaxTree NewTree = TokenContext.CreateMatchedSyntaxTree(NameSpace, Pattern, "new");
-//		NewTree.SetMatchedPatternAt(0, NameSpace, TokenContext, "$Type$", GreenTeaConsts.Optional);
+//		NewTree.SetMatchedPatternAt(0, NameSpace, TokenContext, "$Type$", ZenConsts.Optional);
 //		if(!NewTree.HasNodeAt(0)) {
-//			NewTree.SetSyntaxTreeAt(0, NewTree.CreateConstTree(ZenStaticTable.VarType)); // TODO
+//			NewTree.SetSyntaxTreeAt(0, NewTree.CreateConstTree(ZenSystem.VarType)); // TODO
 //		}
 //		@Var int ParseFlag = TokenContext.SetSkipIndent(true);
-//		NewTree.SetMatchedTokenAt(GreenTeaConsts.NoWhere, NameSpace, TokenContext, "(", GreenTeaConsts.Required);
+//		NewTree.SetMatchedTokenAt(ZenConsts.NoWhere, NameSpace, TokenContext, "(", ZenConsts.Required);
 //		if(!TokenContext.MatchToken(")")) {
 //			while(!NewTree.IsMismatchedOrError()) {
-//				NewTree.AppendMatchedPattern(NameSpace, TokenContext, "$Expression$", GreenTeaConsts.Required);
+//				NewTree.AppendMatchedPattern(NameSpace, TokenContext, "$Expression$", ZenConsts.Required);
 //				if(TokenContext.MatchToken(")")) {
 //					break;
 //				}
-//				NewTree.SetMatchedTokenAt(GreenTeaConsts.NoWhere, NameSpace, TokenContext, ",", GreenTeaConsts.Required);
+//				NewTree.SetMatchedTokenAt(ZenConsts.NoWhere, NameSpace, TokenContext, ",", ZenConsts.Required);
 //			}
 //		}
 //		TokenContext.SetRememberFlag(ParseFlag);
@@ -428,12 +428,12 @@ public class ZenClassGrammar {
 //		@Var ZenType NewEnumType = null;
 //		@Var ZenMap EnumMap = new ZenMap();
 //		@Var ZenSyntaxTree EnumTree = TokenContext.CreateMatchedSyntaxTree(NameSpace, Pattern, "enum");
-//		EnumTree.SetMatchedPatternAt(GreenTeaConsts.EnumNameTreeIndex, NameSpace, TokenContext, "$FuncName$", GreenTeaConsts.Required);  // $ClassName$ is better
+//		EnumTree.SetMatchedPatternAt(ZenConsts.EnumNameTreeIndex, NameSpace, TokenContext, "$FuncName$", ZenConsts.Required);  // $ClassName$ is better
 //		if(!EnumTree.IsMismatchedOrError()) {
-//			EnumTypeName = EnumTree.GetSyntaxTreeAt(GreenTeaConsts.EnumNameTreeIndex).KeyToken.ParsedText;
-//			NewEnumType = ZenStaticTable.EnumBaseType.CreateSubType(GreenTeaConsts.EnumType, EnumTypeName, null, EnumMap);
+//			EnumTypeName = EnumTree.GetSyntaxTreeAt(ZenConsts.EnumNameTreeIndex).KeyToken.ParsedText;
+//			NewEnumType = ZenSystem.EnumBaseType.CreateSubType(ZenConsts.EnumType, EnumTypeName, null, EnumMap);
 //		}
-//		EnumTree.SetMatchedTokenAt(GreenTeaConsts.NoWhere, NameSpace, TokenContext, "{", GreenTeaConsts.Required);
+//		EnumTree.SetMatchedTokenAt(ZenConsts.NoWhere, NameSpace, TokenContext, "{", ZenConsts.Required);
 //		@Var int EnumValue = 0;
 //		@Var ArrayList<ZenToken> NameList = new ArrayList<ZenToken>();
 //		while(!EnumTree.IsMismatchedOrError()) {
@@ -447,21 +447,21 @@ public class ZenClassGrammar {
 //			@Var ZenToken Token = TokenContext.Next();
 //			if(LibZen.IsVariableName(Token.ParsedText, 0)) {
 //				if(EnumMap.GetOrNull(Token.ParsedText) != null) {
-//					NameSpace.Context.ReportError(GreenTeaConsts.ErrorLevel, Token, "duplicated name: " + Token.ParsedText);
+//					NameSpace.Context.ReportError(ZenConsts.ErrorLevel, Token, "duplicated name: " + Token.ParsedText);
 //					continue;
 //				}
 //				NameList.add(Token);
-//				EnumMap.put(Token.ParsedText, new GreenTeaEnum(NewEnumType, EnumValue, Token.ParsedText));
+//				EnumMap.put(Token.ParsedText, new ZenEnum(NewEnumType, EnumValue, Token.ParsedText));
 //				EnumValue += 1;
 //				continue;
 //			}
 //		}
 //		if(!EnumTree.IsMismatchedOrError()) {
 //			@Var ZenNameSpace StoreNameSpace = NameSpace.GetNameSpace(KonohaGrammar.ParseNameSpaceFlag(0, TokenContext.ParsingAnnotation));
-//			StoreNameSpace.AppendTypeName(NewEnumType, EnumTree.GetSyntaxTreeAt(GreenTeaConsts.EnumNameTreeIndex).KeyToken);
+//			StoreNameSpace.AppendTypeName(NewEnumType, EnumTree.GetSyntaxTreeAt(ZenConsts.EnumNameTreeIndex).KeyToken);
 //			for(@Var int i = 0; i < LibZen.ListSize(NameList); i = i + 1) {
 //				@Var String Key = NameList.get(i).ParsedText;
-//				StoreNameSpace.SetSymbol(GreenTeaUtils.ClassStaticSymbol(NewEnumType, Key), EnumMap.GetOrNull(Key), NameList.get(i));
+//				StoreNameSpace.SetSymbol(ZenUtils.ClassStaticSymbol(NewEnumType, Key), EnumMap.GetOrNull(Key), NameList.get(i));
 //			}
 //			EnumTree.ParsedValue = NewEnumType;
 //		}
@@ -470,7 +470,7 @@ public class ZenClassGrammar {
 //
 //	public static ZenNode TypeEnum(ZenTypeEnv Gamma, ZenSyntaxTree ParsedTree, ZenType ContextType) {
 //		@Var Object EnumType = ParsedTree.ParsedValue;
-//		return Gamma.Generator.CreateConstNode_OLD(ZenStaticTable.GuessType(EnumType), ParsedTree, EnumType);
+//		return Gamma.Generator.CreateConstNode_OLD(ZenSystem.GuessType(EnumType), ParsedTree, EnumType);
 //	}
 //
 //	public static ZenSyntaxTree ParseCaseBlock(ZenNameSpace ParentNameSpace, ZenTokenContext TokenContext, ZenSyntaxTree LeftNode, ZenSyntaxPattern Pattern) {
@@ -491,39 +491,39 @@ public class ZenClassGrammar {
 //				break;
 //			}
 //			@Var ZenMap Annotation = TokenContext.SkipAndGetAnnotation(true);
-//			@Var ZenSyntaxTree CurrentTree = TokenContext.ParsePattern_OLD(NameSpace, "$Expression$", GreenTeaConsts.Required);
-//			if(GreenTeaUtils.IsMismatchedOrError(CurrentTree)) {
+//			@Var ZenSyntaxTree CurrentTree = TokenContext.ParsePattern_OLD(NameSpace, "$Expression$", ZenConsts.Required);
+//			if(ZenUtils.IsMismatchedOrError(CurrentTree)) {
 //				return CurrentTree;
 //			}
 //			CurrentTree.SetAnnotation(Annotation);
-//			PrevTree = GreenTeaUtils.LinkTree(PrevTree, CurrentTree);
+//			PrevTree = ZenUtils.LinkTree(PrevTree, CurrentTree);
 //		}
 //		if(PrevTree == null) {
-//			return TokenContext.ParsePattern_OLD(NameSpace, "$Empty$", GreenTeaConsts.Required);
+//			return TokenContext.ParsePattern_OLD(NameSpace, "$Empty$", ZenConsts.Required);
 //		}
-//		return GreenTeaUtils.TreeHead(PrevTree);
+//		return ZenUtils.TreeHead(PrevTree);
 //	}
 //
 //	public static ZenSyntaxTree ParseSwitch(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenSyntaxTree LeftNode, ZenSyntaxPattern Pattern) {
 //		@Var ZenSyntaxTree SwitchTree = TokenContext.CreateMatchedSyntaxTree(NameSpace, Pattern, "switch");
-//		SwitchTree.SetMatchedTokenAt(GreenTeaConsts.NoWhere, NameSpace, TokenContext, "(", GreenTeaConsts.Required | GreenTeaConsts.OpenSkipIndent);
-//		SwitchTree.SetMatchedPatternAt(GreenTeaConsts.SwitchCaseCondExpr, NameSpace, TokenContext, "$Expression$", GreenTeaConsts.Required);
-//		SwitchTree.SetMatchedTokenAt(GreenTeaConsts.NoWhere, NameSpace, TokenContext, ")", GreenTeaConsts.Required | GreenTeaConsts.CloseSkipIndent);
-//		SwitchTree.SetMatchedTokenAt(GreenTeaConsts.NoWhere, NameSpace, TokenContext, "{", GreenTeaConsts.Required);
+//		SwitchTree.SetMatchedTokenAt(ZenConsts.NoWhere, NameSpace, TokenContext, "(", ZenConsts.Required | ZenConsts.OpenSkipIndent);
+//		SwitchTree.SetMatchedPatternAt(ZenConsts.SwitchCaseCondExpr, NameSpace, TokenContext, "$Expression$", ZenConsts.Required);
+//		SwitchTree.SetMatchedTokenAt(ZenConsts.NoWhere, NameSpace, TokenContext, ")", ZenConsts.Required | ZenConsts.CloseSkipIndent);
+//		SwitchTree.SetMatchedTokenAt(ZenConsts.NoWhere, NameSpace, TokenContext, "{", ZenConsts.Required);
 //
-//		@Var int CaseIndex = GreenTeaConsts.SwitchCaseCaseIndex;
+//		@Var int CaseIndex = ZenConsts.SwitchCaseCaseIndex;
 //		@Var int ParseFlag = TokenContext.SetSkipIndent(true);
 //		while(!SwitchTree.IsMismatchedOrError() && !TokenContext.MatchToken("}")) {
 //			if(TokenContext.MatchToken("case")) {
-//				SwitchTree.SetMatchedPatternAt(CaseIndex, NameSpace, TokenContext, "$Expression$", GreenTeaConsts.Required);
-//				SwitchTree.SetMatchedTokenAt(GreenTeaConsts.NoWhere, NameSpace, TokenContext, ":", GreenTeaConsts.Required);
-//				SwitchTree.SetMatchedPatternAt(CaseIndex + 1, NameSpace, TokenContext, "$CaseBlock$", GreenTeaConsts.Required);
+//				SwitchTree.SetMatchedPatternAt(CaseIndex, NameSpace, TokenContext, "$Expression$", ZenConsts.Required);
+//				SwitchTree.SetMatchedTokenAt(ZenConsts.NoWhere, NameSpace, TokenContext, ":", ZenConsts.Required);
+//				SwitchTree.SetMatchedPatternAt(CaseIndex + 1, NameSpace, TokenContext, "$CaseBlock$", ZenConsts.Required);
 //				CaseIndex += 2;
 //				continue;
 //			}
 //			if(TokenContext.MatchToken("default")) {
-//				SwitchTree.SetMatchedTokenAt(GreenTeaConsts.NoWhere, NameSpace, TokenContext, ":", GreenTeaConsts.Required);
-//				SwitchTree.SetMatchedPatternAt(GreenTeaConsts.SwitchCaseDefaultBlock, NameSpace, TokenContext, "$CaseBlock$", GreenTeaConsts.Required);
+//				SwitchTree.SetMatchedTokenAt(ZenConsts.NoWhere, NameSpace, TokenContext, ":", ZenConsts.Required);
+//				SwitchTree.SetMatchedPatternAt(ZenConsts.SwitchCaseDefaultBlock, NameSpace, TokenContext, "$CaseBlock$", ZenConsts.Required);
 //			}
 //		}
 //		TokenContext.SetRememberFlag(ParseFlag);
@@ -531,17 +531,17 @@ public class ZenClassGrammar {
 //	}
 //
 //	public static ZenNode TypeSwitch(ZenTypeEnv Gamma, ZenSyntaxTree ParsedTree, ZenType ContextType) {
-//		@Var ZenNode CondNode = ParsedTree.TypeCheckAt(GreenTeaConsts.IfCond, Gamma, ZenStaticTable.VarType, GreenTeaConsts.DefaultTypeCheckPolicy);
+//		@Var ZenNode CondNode = ParsedTree.TypeCheckAt(ZenConsts.IfCond, Gamma, ZenSystem.VarType, ZenConsts.DefaultTypeCheckPolicy);
 //		@Var ZenNode DefaultNode = null;
-//		if(ParsedTree.HasNodeAt(GreenTeaConsts.SwitchCaseDefaultBlock)) {
-//			DefaultNode = ParsedTree.TypeCheckAt(GreenTeaConsts.SwitchCaseDefaultBlock, Gamma, ZenStaticTable.VoidType, GreenTeaConsts.DefaultTypeCheckPolicy);
+//		if(ParsedTree.HasNodeAt(ZenConsts.SwitchCaseDefaultBlock)) {
+//			DefaultNode = ParsedTree.TypeCheckAt(ZenConsts.SwitchCaseDefaultBlock, Gamma, ZenSystem.VoidType, ZenConsts.DefaultTypeCheckPolicy);
 //		}
-//		@Var ZenNode Node = Gamma.Generator.CreateSwitchNode(ZenStaticTable.VoidType, ParsedTree, CondNode, DefaultNode);
-//		for(@Var int CaseIndex = GreenTeaConsts.SwitchCaseCaseIndex; CaseIndex < ParsedTree.SubTreeList.size(); CaseIndex += 2) {
-//			@Var ZenNode CaseExpr  = ParsedTree.TypeCheckAt(CaseIndex, Gamma, CondNode.Type, GreenTeaConsts.DefaultTypeCheckPolicy);
+//		@Var ZenNode Node = Gamma.Generator.CreateSwitchNode(ZenSystem.VoidType, ParsedTree, CondNode, DefaultNode);
+//		for(@Var int CaseIndex = ZenConsts.SwitchCaseCaseIndex; CaseIndex < ParsedTree.SubTreeList.size(); CaseIndex += 2) {
+//			@Var ZenNode CaseExpr  = ParsedTree.TypeCheckAt(CaseIndex, Gamma, CondNode.Type, ZenConsts.DefaultTypeCheckPolicy);
 //			@Var ZenNode CaseBlock = null;
 //			if(ParsedTree.HasNodeAt(CaseIndex+1)) {
-//				CaseBlock = ParsedTree.TypeCheckAt(CaseIndex+1, Gamma, ZenStaticTable.VoidType, GreenTeaConsts.DefaultTypeCheckPolicy);
+//				CaseBlock = ParsedTree.TypeCheckAt(CaseIndex+1, Gamma, ZenSystem.VoidType, ZenConsts.DefaultTypeCheckPolicy);
 //			}
 //			Node.Append(CaseExpr);
 //			Node.Append(CaseBlock);
@@ -554,11 +554,11 @@ public class ZenClassGrammar {
 //	// Array
 //	public static ZenSyntaxTree ParseNewArray(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenSyntaxTree LeftNode, ZenSyntaxPattern Pattern) {
 //		@Var ZenSyntaxTree ArrayTree = TokenContext.CreateMatchedSyntaxTree(NameSpace, Pattern, "new");
-//		ArrayTree.AppendMatchedPattern(NameSpace, TokenContext, "$Type$", GreenTeaConsts.Required);
+//		ArrayTree.AppendMatchedPattern(NameSpace, TokenContext, "$Type$", ZenConsts.Required);
 //		while(TokenContext.HasNext() && ArrayTree.IsValidSyntax()) {
-//			ArrayTree.SetMatchedTokenAt(GreenTeaConsts.NoWhere, NameSpace, TokenContext, "[", GreenTeaConsts.Required);
-//			ArrayTree.AppendMatchedPattern(NameSpace, TokenContext, "$Expression$", GreenTeaConsts.Required);
-//			ArrayTree.SetMatchedTokenAt(GreenTeaConsts.NoWhere, NameSpace, TokenContext, "]", GreenTeaConsts.Required);
+//			ArrayTree.SetMatchedTokenAt(ZenConsts.NoWhere, NameSpace, TokenContext, "[", ZenConsts.Required);
+//			ArrayTree.AppendMatchedPattern(NameSpace, TokenContext, "$Expression$", ZenConsts.Required);
+//			ArrayTree.SetMatchedTokenAt(ZenConsts.NoWhere, NameSpace, TokenContext, "]", ZenConsts.Required);
 //			if(!TokenContext.IsToken("[")) {
 //				break;
 //			}
@@ -568,13 +568,13 @@ public class ZenClassGrammar {
 //
 //	public static ZenNode TypeNewArray(ZenTypeEnv Gamma, ZenSyntaxTree ParsedTree, ZenType ContextType) {
 //		@Var ZenType ArrayType = ParsedTree.GetSyntaxTreeAt(0).GetParsedType();
-//		@Var ZenNode ArrayNode = Gamma.Generator.CreateNewArrayNode(ZenStaticTable.ArrayType, ParsedTree);
+//		@Var ZenNode ArrayNode = Gamma.Generator.CreateNewArrayNode(ZenSystem.ArrayType, ParsedTree);
 //		for(@Var int i = 1; i < LibZen.ListSize(ParsedTree.SubTreeList); i = i + 1) {
-//			@Var ZenNode Node = ParsedTree.TypeCheckAt(i, Gamma, ZenStaticTable.IntType, GreenTeaConsts.DefaultTypeCheckPolicy);
+//			@Var ZenNode Node = ParsedTree.TypeCheckAt(i, Gamma, ZenSystem.IntType, ZenConsts.DefaultTypeCheckPolicy);
 //			if(Node.IsErrorNode()) {
 //				return Node;
 //			}
-//			ArrayType = ZenStaticTable.GetGenericType1(ZenStaticTable.ArrayType, ArrayType, true);
+//			ArrayType = ZenSystem.GetGenericType1(ZenSystem.ArrayType, ArrayType, true);
 //			ArrayNode.Append(Node);
 //		}
 //		ArrayNode.Type = ArrayType;
@@ -591,54 +591,54 @@ public class ZenClassGrammar {
 //			if(TokenContext.MatchToken(",")) {
 //				continue;
 //			}
-//			ArrayTree.AppendMatchedPattern(NameSpace, TokenContext, "$Expression$", GreenTeaConsts.Required);
+//			ArrayTree.AppendMatchedPattern(NameSpace, TokenContext, "$Expression$", ZenConsts.Required);
 //		}
 //		TokenContext.SetRememberFlag(OldFlag);
 //		return ArrayTree;
 //	}
 //
 //	public static ZenNode TypeArray(ZenTypeEnv Gamma, ZenSyntaxTree ParsedTree, ZenType ContextType) {
-//		@Var ZenNode ArrayNode = Gamma.Generator.CreateArrayLiteralNode(ZenStaticTable.ArrayType, ParsedTree);
-//		@Var ZenType ElemType = ZenStaticTable.VarType;
+//		@Var ZenNode ArrayNode = Gamma.Generator.CreateArrayLiteralNode(ZenSystem.ArrayType, ParsedTree);
+//		@Var ZenType ElemType = ZenSystem.VarType;
 //		if(ContextType.IsArrayType()) {
 //			ElemType = ContextType.TypeParams[0];
 //			ArrayNode.Type = ContextType;
 //		}
 //		for(@Var int i = 0; i < LibZen.ListSize(ParsedTree.SubTreeList); i = i + 1) {
-//			@Var ZenNode Node = ParsedTree.TypeCheckAt(i, Gamma, ElemType, GreenTeaConsts.DefaultTypeCheckPolicy);
+//			@Var ZenNode Node = ParsedTree.TypeCheckAt(i, Gamma, ElemType, ZenConsts.DefaultTypeCheckPolicy);
 //			if(Node.IsErrorNode()) {
 //				return Node;
 //			}
 //			if(ElemType.IsVarType()) {
 //				ElemType = Node.Type;
-//				ArrayNode.Type = ZenStaticTable.GetGenericType1(ZenStaticTable.ArrayType, ElemType, true);
+//				ArrayNode.Type = ZenSystem.GetGenericType1(ZenSystem.ArrayType, ElemType, true);
 //			}
 //			ArrayNode.Append(Node);
 //		}
 //		if(ElemType.IsVarType()) {
-//			ArrayNode.Type = ZenStaticTable.GetGenericType1(ZenStaticTable.ArrayType, ZenStaticTable.AnyType, true);
+//			ArrayNode.Type = ZenSystem.GetGenericType1(ZenSystem.ArrayType, ZenSystem.AnyType, true);
 //		}
 //		return ArrayNode;
 //	}
 //
 //	public static ZenSyntaxTree ParseSize(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenSyntaxTree LeftNode, ZenSyntaxPattern Pattern) {
 //		@Var ZenSyntaxTree ArrayTree = TokenContext.CreateMatchedSyntaxTree(NameSpace, Pattern, "|");
-//		ArrayTree.SetMatchedPatternAt(GreenTeaConsts.UnaryTerm, NameSpace, TokenContext, "$SuffixExpression$", GreenTeaConsts.Required);
-//		ArrayTree.SetMatchedTokenAt(GreenTeaConsts.NoWhere, NameSpace, TokenContext, "|", GreenTeaConsts.Required);
+//		ArrayTree.SetMatchedPatternAt(ZenConsts.UnaryTerm, NameSpace, TokenContext, "$SuffixExpression$", ZenConsts.Required);
+//		ArrayTree.SetMatchedTokenAt(ZenConsts.NoWhere, NameSpace, TokenContext, "|", ZenConsts.Required);
 //		return ArrayTree;
 //	}
 //
 //	public static ZenNode TypeSize(ZenTypeEnv Gamma, ZenSyntaxTree ParsedTree, ZenType ContextType) {
-//		@Var ZenNode ExprNode = ParsedTree.TypeCheckAt(GreenTeaConsts.UnaryTerm, Gamma, ZenStaticTable.VarType, GreenTeaConsts.DefaultTypeCheckPolicy);
+//		@Var ZenNode ExprNode = ParsedTree.TypeCheckAt(ZenConsts.UnaryTerm, Gamma, ZenSystem.VarType, ZenConsts.DefaultTypeCheckPolicy);
 //		if(ExprNode.IsErrorNode()) {
 //			return ExprNode;
 //		}
-//		@Var ZenFuncSet FuncSet = Gamma.NameSpace.GetMethod(ExprNode.Type, GreenTeaUtils.FuncSymbol("||"), true);
+//		@Var ZenFuncSet FuncSet = Gamma.NameSpace.GetMethod(ExprNode.Type, ZenUtils.FuncSymbol("||"), true);
 //		//System.err.println("polyfunc: " + FuncSet);
 //		@Var ZenFunc Func = FuncSet.ResolveUnaryMethod(Gamma, ExprNode.Type);
 //		LibZen.Assert(Func != null);  // any has ||
 //		Gamma.CheckFunc("operator", Func, ParsedTree.KeyToken);
-//		ZenNode Node = Gamma.Generator.CreateApplySymbolNode(Func.GetReturnType(), ParsedTree, GreenTeaUtils.FuncSymbol("||"), Func);
+//		ZenNode Node = Gamma.Generator.CreateApplySymbolNode(Func.GetReturnType(), ParsedTree, ZenUtils.FuncSymbol("||"), Func);
 //		Node.Append(ExprNode);
 //		if(Node instanceof ZenSymbolNode) {
 //			((/*cast*/ZenSymbolNode)Node).ResolvedFunc = Func;
@@ -651,14 +651,14 @@ public class ZenClassGrammar {
 //		ArrayTree.AppendParsedTree2(LeftNode);
 //		@Var int OldFlag = TokenContext.SetSkipIndent(true);
 //		do {
-//			ArrayTree.AppendMatchedPattern(NameSpace, TokenContext, "$Expression$", GreenTeaConsts.Required);
+//			ArrayTree.AppendMatchedPattern(NameSpace, TokenContext, "$Expression$", ZenConsts.Required);
 //		}
 //		while(!ArrayTree.IsMismatchedOrError() && TokenContext.MatchToken(","));
-//		ArrayTree.SetMatchedTokenAt(GreenTeaConsts.NoWhere, NameSpace, TokenContext, "]", GreenTeaConsts.Required);
+//		ArrayTree.SetMatchedTokenAt(ZenConsts.NoWhere, NameSpace, TokenContext, "]", ZenConsts.Required);
 //		TokenContext.SetRememberFlag(OldFlag);
 //		@Var String OperatorSymbol = "[]";
 //		if(TokenContext.MatchToken("=")) {
-//			ArrayTree.AppendMatchedPattern(NameSpace, TokenContext, "$Expression$", GreenTeaConsts.Required);
+//			ArrayTree.AppendMatchedPattern(NameSpace, TokenContext, "$Expression$", ZenConsts.Required);
 //			OperatorSymbol = "[]=";
 //		}
 //		if(ArrayTree.IsValidSyntax()) {
@@ -668,11 +668,11 @@ public class ZenClassGrammar {
 //	}
 //
 //	public static ZenNode TypeIndexer(ZenTypeEnv Gamma, ZenSyntaxTree ParsedTree, ZenType Type) {
-//		@Var ZenNode RecvNode = ParsedTree.TypeCheckAt(GreenTeaConsts.LeftHandTerm, Gamma, ZenStaticTable.VarType, GreenTeaConsts.DefaultTypeCheckPolicy);
+//		@Var ZenNode RecvNode = ParsedTree.TypeCheckAt(ZenConsts.LeftHandTerm, Gamma, ZenSystem.VarType, ZenConsts.DefaultTypeCheckPolicy);
 //		if(!RecvNode.IsErrorNode()) {
 //			@Var String MethodName = ParsedTree.KeyToken.ParsedText;
 //			@Var ZenResolvedFunc ResolvedFunc = null;
-//			@Var ZenFuncSet FuncSet = ParsedTree.NameSpace.GetMethod(RecvNode.Type, GreenTeaUtils.FuncSymbol(MethodName), true);
+//			@Var ZenFuncSet FuncSet = ParsedTree.NameSpace.GetMethod(RecvNode.Type, ZenUtils.FuncSymbol(MethodName), true);
 //			//System.err.println("polyfunc: " + FuncSet);
 //			@Var ArrayList<ZenNode> ParamList = new ArrayList<ZenNode>();
 //			ParamList.add(RecvNode);
@@ -693,18 +693,18 @@ public class ZenClassGrammar {
 //	public static ZenSyntaxTree ParseSlice(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenSyntaxTree LeftNode, ZenSyntaxPattern Pattern) {
 //		@Var ZenSyntaxTree SliceTree = TokenContext.CreateMatchedSyntaxTree(NameSpace, Pattern, "[");
 //		SliceTree.AppendParsedTree2(LeftNode);
-//		SliceTree.SetMatchedPatternAt(1, NameSpace, TokenContext, "$Expression$", GreenTeaConsts.Optional);
+//		SliceTree.SetMatchedPatternAt(1, NameSpace, TokenContext, "$Expression$", ZenConsts.Optional);
 //		if(!SliceTree.HasNodeAt(1)) {
 //			SliceTree.SetSyntaxTreeAt(1, SliceTree.CreateConstTree(0L)); // s[:x]
 //		}
-//		SliceTree.SetMatchedTokenAt(GreenTeaConsts.NoWhere, NameSpace, TokenContext, ":", GreenTeaConsts.Required);
-//		SliceTree.AppendMatchedPattern(NameSpace, TokenContext, "$Expression$", GreenTeaConsts.Optional);
-//		SliceTree.SetMatchedTokenAt(GreenTeaConsts.NoWhere, NameSpace, TokenContext, "]", GreenTeaConsts.Required);
+//		SliceTree.SetMatchedTokenAt(ZenConsts.NoWhere, NameSpace, TokenContext, ":", ZenConsts.Required);
+//		SliceTree.AppendMatchedPattern(NameSpace, TokenContext, "$Expression$", ZenConsts.Optional);
+//		SliceTree.SetMatchedTokenAt(ZenConsts.NoWhere, NameSpace, TokenContext, "]", ZenConsts.Required);
 //		return SliceTree;
 //	}
 //
 //	public static ZenNode TypeSlice(ZenTypeEnv Gamma, ZenSyntaxTree ParsedTree, ZenType ContextType) {
-//		@Var ZenNode RecvNode = ParsedTree.TypeCheckAt(GreenTeaConsts.LeftHandTerm, Gamma, ZenStaticTable.VarType, GreenTeaConsts.DefaultTypeCheckPolicy);
+//		@Var ZenNode RecvNode = ParsedTree.TypeCheckAt(ZenConsts.LeftHandTerm, Gamma, ZenSystem.VarType, ZenConsts.DefaultTypeCheckPolicy);
 //		if(!RecvNode.IsErrorNode()) {
 //			return KonohaGrammar.TypeMethodNameCall(Gamma, ParsedTree, RecvNode, "[:]", ContextType);
 //		}
@@ -714,36 +714,36 @@ public class ZenClassGrammar {
 	// ClassDecl
 //	private static boolean TypeFieldDecl(ZenTypeEnv Gamma, ZenSyntaxTree ParsedTree, ZenClassField ClassField) {
 //		@Var int    FieldFlag = KonohaGrammar.ParseVarFlag(0, ParsedTree.Annotation);
-//		@Var ZenType DeclType = ParsedTree.GetSyntaxTreeAt(GreenTeaConsts.VarDeclType).GetParsedType();
-//		@Var String FieldName = ParsedTree.GetSyntaxTreeAt(GreenTeaConsts.VarDeclName).KeyToken.ParsedText;
+//		@Var ZenType DeclType = ParsedTree.GetSyntaxTreeAt(ZenConsts.VarDeclType).GetParsedType();
+//		@Var String FieldName = ParsedTree.GetSyntaxTreeAt(ZenConsts.VarDeclName).KeyToken.ParsedText;
 //		@Var ZenNode InitValueNode = null;
 //		@Var Object InitValue = null;
-//		if(ParsedTree.HasNodeAt(GreenTeaConsts.VarDeclValue)) {
-//			InitValueNode = ParsedTree.TypeCheckAt(GreenTeaConsts.VarDeclValue, Gamma, DeclType, GreenTeaConsts.OnlyConstPolicy | GreenTeaConsts.NullablePolicy);
+//		if(ParsedTree.HasNodeAt(ZenConsts.VarDeclValue)) {
+//			InitValueNode = ParsedTree.TypeCheckAt(ZenConsts.VarDeclValue, Gamma, DeclType, ZenConsts.OnlyConstPolicy | ZenConsts.NullablePolicy);
 //			if(InitValueNode.IsErrorNode()) {
 //				return false;
 //			}
 //			InitValue = InitValueNode.ToConstValue(Gamma.Context, true);
 //		}
-//		if(GreenTeaConsts.UseLangStat) {
+//		if(ZenConsts.UseLangStat) {
 //			Gamma.Context.Stat.VarDecl += 1;
 //		}/*EndOfStat*/
 //		if(DeclType.IsVarType()) {
 //			if(InitValueNode == null) {
-//				DeclType = ZenStaticTable.AnyType;
+//				DeclType = ZenSystem.AnyType;
 //			}
 //			else {
 //				DeclType = InitValueNode.Type;
 //			}
 //			Gamma.ReportTypeInference(ParsedTree.KeyToken, FieldName, DeclType);
-//			if(GreenTeaConsts.UseLangStat) {
+//			if(ZenConsts.UseLangStat) {
 //				Gamma.Context.Stat.VarDeclInfer += 1;
 //				if(DeclType.IsAnyType()) {
 //					Gamma.Context.Stat.VarDeclInferAny += 1;
 //				}
 //			}/*EndOfStat*/
 //		}
-//		if(GreenTeaConsts.UseLangStat) {
+//		if(ZenConsts.UseLangStat) {
 //			if(DeclType.IsAnyType()) {
 //				Gamma.Context.Stat.VarDeclAny += 1;
 //			}
@@ -751,25 +751,25 @@ public class ZenClassGrammar {
 //		if(InitValueNode == null) {
 //			InitValue = DeclType.DefaultNullValue;
 //		}
-//		ClassField.CreateField(FieldFlag, DeclType, FieldName, ParsedTree.GetSyntaxTreeAt(GreenTeaConsts.VarDeclName).KeyToken, InitValue);
+//		ClassField.CreateField(FieldFlag, DeclType, FieldName, ParsedTree.GetSyntaxTreeAt(ZenConsts.VarDeclName).KeyToken, InitValue);
 //		return true;
 //	}
 //
 //	public static ZenSyntaxTree ParseClassDecl2(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenSyntaxTree LeftNode, ZenSyntaxPattern Pattern) {
 //		@Var ZenSyntaxTree ClassDeclTree = TokenContext.CreateMatchedSyntaxTree(NameSpace, Pattern, "class");
-//		ClassDeclTree.SetMatchedPatternAt(GreenTeaConsts.ClassDeclName, NameSpace, TokenContext, "$FuncName$", GreenTeaConsts.Required); //$ClassName$ is better
+//		ClassDeclTree.SetMatchedPatternAt(ZenConsts.ClassDeclName, NameSpace, TokenContext, "$FuncName$", ZenConsts.Required); //$ClassName$ is better
 //		if(TokenContext.MatchToken("extends")) {
-//			ClassDeclTree.SetMatchedPatternAt(GreenTeaConsts.ClassDeclSuperType, NameSpace, TokenContext, "$Type$", GreenTeaConsts.Required);
+//			ClassDeclTree.SetMatchedPatternAt(ZenConsts.ClassDeclSuperType, NameSpace, TokenContext, "$Type$", ZenConsts.Required);
 //		}
 //		if(ClassDeclTree.IsMismatchedOrError()) {
 //			return ClassDeclTree;
 //		}
 //		// define new class
 //		@Var ZenNameSpace ClassNameSpace = new ZenNameSpace(NameSpace.Context, NameSpace);
-//		@Var ZenToken NameToken = ClassDeclTree.GetSyntaxTreeAt(GreenTeaConsts.ClassDeclName).KeyToken;
-//		@Var ZenType SuperType = ZenStaticTable.TopType;
-//		if(ClassDeclTree.HasNodeAt(GreenTeaConsts.ClassDeclSuperType)) {
-//			SuperType = ClassDeclTree.GetSyntaxTreeAt(GreenTeaConsts.ClassDeclSuperType).GetParsedType();
+//		@Var ZenToken NameToken = ClassDeclTree.GetSyntaxTreeAt(ZenConsts.ClassDeclName).KeyToken;
+//		@Var ZenType SuperType = ZenSystem.TopType;
+//		if(ClassDeclTree.HasNodeAt(ZenConsts.ClassDeclSuperType)) {
+//			SuperType = ClassDeclTree.GetSyntaxTreeAt(ZenConsts.ClassDeclSuperType).GetParsedType();
 //		}
 //		@Var int ClassFlag = KonohaGrammar.ParseClassFlag(0, TokenContext.ParsingAnnotation);
 //		@Var String ClassName = NameToken.ParsedText;
@@ -784,11 +784,11 @@ public class ZenClassGrammar {
 //			ClassNameSpace.AppendTypeName(DefinedType, NameToken);  // temporary
 //		}
 //		ClassNameSpace.SetSymbol("This", DefinedType, NameToken);
-//		ClassDeclTree.SetMatchedPatternAt(GreenTeaConsts.ClassDeclBlock, ClassNameSpace, TokenContext, "$Block$", GreenTeaConsts.Optional);
-//		if(ClassDeclTree.HasNodeAt(GreenTeaConsts.ClassDeclBlock)) {
+//		ClassDeclTree.SetMatchedPatternAt(ZenConsts.ClassDeclBlock, ClassNameSpace, TokenContext, "$Block$", ZenConsts.Optional);
+//		if(ClassDeclTree.HasNodeAt(ZenConsts.ClassDeclBlock)) {
 //			@Var ZenClassField ClassField = new ZenClassField(DefinedType, NameSpace);
 //			@Var ZenTypeEnv Gamma = new ZenTypeEnv(ClassNameSpace);
-//			@Var ZenSyntaxTree SubTree = ClassDeclTree.GetSyntaxTreeAt(GreenTeaConsts.ClassDeclBlock);
+//			@Var ZenSyntaxTree SubTree = ClassDeclTree.GetSyntaxTreeAt(ZenConsts.ClassDeclBlock);
 //			while(SubTree != null) {
 //				if(SubTree.Pattern.EqualsName("$VarDecl$")) {
 //					KonohaGrammar.TypeFieldDecl(Gamma, SubTree, ClassField);
@@ -809,20 +809,20 @@ public class ZenClassGrammar {
 //			@Var ZenType DefinedType = ClassField.DefinedType;
 //			DefinedType.SetClassField(ClassField);
 //			Gamma.Generator.OpenClassField(ParsedTree, DefinedType, ClassField);
-//			@Var ZenSyntaxTree SubTree = ParsedTree.GetSyntaxTreeAt(GreenTeaConsts.ClassDeclBlock);
+//			@Var ZenSyntaxTree SubTree = ParsedTree.GetSyntaxTreeAt(ZenConsts.ClassDeclBlock);
 //			@Var ArrayList<ZenFunc> MemberList = new ArrayList<ZenFunc>();
 //			while(SubTree != null) {
 //				if(SubTree.Pattern.EqualsName("$FuncDecl$") || SubTree.Pattern.EqualsName("$Constructor2$")) {
 //					MemberList.add((/*cast*/ZenFunc)SubTree.ParsedValue);
 //				}
 //				if(!SubTree.Pattern.EqualsName("$VarDecl$")) {
-//					SubTree.TypeCheck(Gamma, ZenStaticTable.VoidType, GreenTeaConsts.DefaultTypeCheckPolicy);
+//					SubTree.TypeCheck(Gamma, ZenSystem.VoidType, ZenConsts.DefaultTypeCheckPolicy);
 //				}
 //				SubTree = SubTree.NextTree;
 //			}
 //			Gamma.Generator.CloseClassField(DefinedType, MemberList);
 //		}
-//		return Gamma.Generator.CreateEmptyNode(ZenStaticTable.VoidType);
+//		return Gamma.Generator.CreateEmptyNode(ZenSystem.VoidType);
 //	}
 	
 	public static void ImportGrammar(ZenNameSpace NameSpace, Class<?> Grammar) {
@@ -863,7 +863,7 @@ public class ZenClassGrammar {
 //		NameSpace.AppendExtendedSyntax("|", ZenPrecedence.CStyleBITOR, MatchBinary);
 //		NameSpace.AppendExtendedSyntax("^", ZenPrecedence.CStyleBITXOR, MatchBinary);
 //
-//		NameSpace.AppendExtendedSyntax("=", ZenPrecedence.CStyleAssign | GreenTeaConsts.LeftJoin, MatchBinary);
+//		NameSpace.AppendExtendedSyntax("=", ZenPrecedence.CStyleAssign | ZenConsts.LeftJoin, MatchBinary);
 //		NameSpace.AppendExtendedSyntax("+= -= *= /= %= <<= >>= &= |= ^=", ZenPrecedence.CStyleAssign, MatchBinary);
 ////		NameSpace.AppendExtendedSyntax("++ --", 0, LibNative.LoadMatchFunc(Grammar, "MatchIncl"));
 //

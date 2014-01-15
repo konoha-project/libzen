@@ -22,7 +22,7 @@
 //// ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //// **************************************************************************
 //
-//package org.GreenTeaScript;
+//package org.ZenScript;
 //
 //final class ZenStack {
 //	@Field public final Object[] Stack;
@@ -87,7 +87,7 @@
 //	}
 //}
 //
-//public class GreenTeaVirtualMachine implements CodeSet {
+//public class ZenVirtualMachine implements CodeSet {
 //
 //	public static Object Run(ZenStack Stack, int pc, ZenCode Code[]) {	
 //		Object ObjectReg = null;

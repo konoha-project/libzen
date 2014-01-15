@@ -22,7 +22,7 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package org.GreenTeaScript;
+package org.ZenScript;
 import java.util.Iterator;
 
 public class NativeLanguageApi {

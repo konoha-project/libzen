@@ -257,17 +257,17 @@ public class ZenGrammar {
 	//		for(; pos < SourceText.length(); pos += 1) {
 	//			@Var char ch = LibZen.CharAt(SourceText, pos);
 	//			if(ch == '\'' && prev != '\\') {
-	//				TokenContext.AddNewToken(LibZen.SubString(SourceText, start, (pos + 1)), GreenTeaConsts.QuotedTokenFlag, "$CharLiteral$");
+	//				TokenContext.AddNewToken(LibZen.SubString(SourceText, start, (pos + 1)), ZenConsts.QuotedTokenFlag, "$CharLiteral$");
 	//				return pos + 1;
 	//			}
 	//			if(ch == '\n') {
-	//				TokenContext.ReportTokenError1(GreenTeaConsts.ErrorLevel, "expected ' to close the charctor literal", LibZen.SubString(SourceText, start, pos));
+	//				TokenContext.ReportTokenError1(ZenConsts.ErrorLevel, "expected ' to close the charctor literal", LibZen.SubString(SourceText, start, pos));
 	//				TokenContext.FoundLineFeed(1);
 	//				return pos;
 	//			}
 	//			prev = ch;
 	//		}
-	//		TokenContext.ReportTokenError1(GreenTeaConsts.ErrorLevel, "expected ' to close the charctor literal", LibZen.SubString(SourceText, start, pos));
+	//		TokenContext.ReportTokenError1(ZenConsts.ErrorLevel, "expected ' to close the charctor literal", LibZen.SubString(SourceText, start, pos));
 	//		return pos;
 	//	}
 

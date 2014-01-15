@@ -23,7 +23,7 @@
 // **************************************************************************
 
 //ifdef  JAVA
-package org.GreenTeaScript;
+package org.ZenScript;
 import java.util.ArrayList;
 
 import parser.ZenClassField;
@@ -86,10 +86,10 @@ import parser.ast.ZenUsingNode;
 import parser.ast.ZenVarDeclNode;
 import parser.ast.ZenWhileNode;
 import parser.ast.ZenYieldNode;
-import parser.deps.LibGreenTea;
+import parser.deps.LibZen;
 //endif VAJA
 
-//GreenTea Generator should be written in each language.
+//Zen Generator should be written in each language.
 
 public class PerlSourceGenerator extends ZenSourceGenerator {
 	public PerlSourceGenerator/*constructor*/(String TargetCode, String OutputFile, int GeneratorFlag) {
@@ -159,7 +159,7 @@ public class PerlSourceGenerator extends ZenSourceGenerator {
 	}
 
 	@Override public void VisitStringNode(ZenStringNode Node) {
-		this.CurrentBuilder.Append(LibGreenTea.QuoteString(Node.Value));
+		this.CurrentBuilder.Append(LibZen.QuoteString(Node.Value));
 	}
 
 	//FIXME Need to Implement

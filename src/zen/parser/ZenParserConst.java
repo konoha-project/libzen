@@ -25,7 +25,7 @@
 package zen.parser;
 
 
-/*GreenTeaConst Begin*/
+/*ZenConst Begin*/
 //ifdef JAVA
 public interface ZenParserConst {
 	//endif VAJA
@@ -184,6 +184,6 @@ public interface ZenParserConst {
 	public final static String NativeNameSuffix = "__";
 
 	public final static boolean UseLangStat = true;
-	/*GreenTeaConst End*/
+	/*ZenConst End*/
 	//ifdef JAVA
 }

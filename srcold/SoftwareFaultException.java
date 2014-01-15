@@ -22,7 +22,7 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package org.GreenTeaScript;
+package org.ZenScript;
 
 public class SoftwareFaultException extends RuntimeException {
 	private static final long serialVersionUID = 1L;

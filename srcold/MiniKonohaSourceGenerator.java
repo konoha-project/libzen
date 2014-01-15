@@ -23,7 +23,7 @@
 // **************************************************************************
 
 //ifdef JAVA
-package org.GreenTeaScript;
+package org.ZenScript;
 import java.util.ArrayList;
 //endif VAJA
 
@@ -70,7 +70,7 @@ import parser.ast.ZenTryNode;
 import parser.ast.ZenUnaryNode;
 import parser.ast.ZenVarDeclNode;
 import parser.ast.ZenWhileNode;
-import parser.deps.LibGreenTea;
+import parser.deps.LibZen;
 
 public class MiniKonohaSourceGenerator extends ZenSourceGenerator {
 	@Field private ArrayList<String> UsedLibrary;
@@ -183,13 +183,13 @@ var CLASS = (function (_super) {
 
 //	@Override public void FlushBuffer() {
 //		if(this.OutputFile.equals("-")) {
-//			LibGreenTea.WriteCode(this.OutputFile, this.GetHeaderCode());
+//			LibZen.WriteCode(this.OutputFile, this.GetHeaderCode());
 //			super.FlushBuffer();			
 //		}
 //		else {
 //			String PushedSourceCode = this.GetSourceCode();
 //			super.FlushBuffer();
-//			LibGreenTea.WriteCode(this.OutputFile, PushedSourceCode);
+//			LibZen.WriteCode(this.OutputFile, PushedSourceCode);
 //		}
 //	}
 
@@ -246,7 +246,7 @@ var CLASS = (function (_super) {
 	}
 
 	@Override public void VisitEmptyNode(ZenEmptyNode EmptyNode) {
-		LibGreenTea.DebugP("empty node: " + EmptyNode.SourceToken.ParsedText);
+		LibZen.DebugP("empty node: " + EmptyNode.SourceToken.ParsedText);
 	}
 	@Override public void VisitInstanceOfNode(ZenInstanceOfNode Node) {
 		this.AddUseLibrary("JavaStyle.Object");

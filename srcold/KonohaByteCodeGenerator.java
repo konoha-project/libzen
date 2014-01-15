@@ -22,7 +22,7 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package org.GreenTeaScript;
+package org.ZenScript;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -91,7 +91,7 @@ import parser.ast.ZenUsingNode;
 import parser.ast.ZenVarDeclNode;
 import parser.ast.ZenWhileNode;
 import parser.ast.ZenYieldNode;
-import parser.deps.LibGreenTea;
+import parser.deps.LibZen;
 
 public class KonohaByteCodeGenerator extends ZenSourceGenerator {
 	@Field private ArrayList<Object> ConstPool;
@@ -267,7 +267,7 @@ public class KonohaByteCodeGenerator extends ZenSourceGenerator {
 	}
 
 	@Override public void VisitStringNode(ZenStringNode Node) {
-		@Var int Index = this.AddConstant(LibGreenTea.QuoteString(Node.Value));
+		@Var int Index = this.AddConstant(LibZen.QuoteString(Node.Value));
 		@Var int Reg = this.AllocRegister();
 		this.CurrentBuilder.Append("NSET " + "REG" + Reg + ", " + "CONST" + Index + "\n");
 		this.PushRegister(Reg);

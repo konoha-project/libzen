@@ -23,9 +23,9 @@
 // **************************************************************************
 
 //ifdef JAVA
-package org.GreenTeaScript;
+package org.ZenScript;
 
-import parser.deps.LibGreenTea;
+import parser.deps.LibZen;
 //endif VAJA
 
 public class NativeClassTest {
@@ -42,7 +42,7 @@ public class NativeClassTest {
 		this.initial = name.charAt(0);
 	}
 	@Override public String toString() {
-		return LibGreenTea.StringifyField(this);
+		return LibZen.StringifyField(this);
 	}
 }
 

@@ -22,26 +22,26 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package org.GreenTeaScript.DShell;
+package org.ZenScript.DShell;
 
-import org.GreenTeaScript.Konoha.ArrayApi;
+import org.ZenScript.Konoha.ArrayApi;
 
-import parser.ZenStaticTable;
-import parser.deps.GreenTeaArray;
+import parser.ZenSystem;
+import parser.deps.ZenArray;
 
 public class MultipleException extends DShellException {
 	private static final long serialVersionUID = 1L;
-	private GreenTeaArray exceptionArray;
+	private ZenArray exceptionArray;
 
 	public MultipleException(String message, Exception[] exceptions) {
 		super(message);
-		this.exceptionArray = GreenTeaArray.NewArray1(ZenStaticTable.AnyType, 0);
+		this.exceptionArray = ZenArray.NewArray1(ZenSystem.AnyType, 0);
 		for(int i = 0; i < exceptions.length; i++) {
 			ArrayApi.Add(this.exceptionArray, exceptions[i]);
 		}
 	}
 
-	public GreenTeaArray getExceptions() {
+	public ZenArray getExceptions() {
 		return this.exceptionArray;
 	}
 }

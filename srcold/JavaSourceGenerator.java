@@ -24,7 +24,7 @@
 // **************************************************************************
 
 //ifdef JAVA
-package org.GreenTeaScript;
+package org.ZenScript;
 import java.util.ArrayList;
 //endif VAJA
 
@@ -68,7 +68,7 @@ import parser.ast.ZenTryNode;
 import parser.ast.ZenUnaryNode;
 import parser.ast.ZenVarDeclNode;
 import parser.ast.ZenWhileNode;
-import parser.deps.LibGreenTea;
+import parser.deps.LibZen;
 import parser.deps.LibNative;
 
 public class JavaSourceGenerator extends ZenSourceGenerator {
@@ -116,10 +116,10 @@ public class JavaSourceGenerator extends ZenSourceGenerator {
 //			}
 //		}
 //		// generate default constructor (for jvm)
-//		MethodNode constructor = new MethodNode(ACC_PUBLIC, "<init>", "(Lorg/GreenTeaScript/ZenType;)V", null, null);
+//		MethodNode constructor = new MethodNode(ACC_PUBLIC, "<init>", "(Lorg/ZenScript/ZenType;)V", null, null);
 //		constructor.visitVarInsn(ALOAD, 0);
 //		constructor.visitVarInsn(ALOAD, 1);
-//		constructor.visitMethodInsn(INVOKESPECIAL, superClassName, "<init>", "(Lorg/GreenTeaScript/ZenType;)V");
+//		constructor.visitMethodInsn(INVOKESPECIAL, superClassName, "<init>", "(Lorg/ZenScript/ZenType;)V");
 //		for(ZenFieldInfo field : ClassField.FieldList) {
 //			if(field.FieldIndex >= ClassField.ThisClassIndex && field.InitValue != null) {
 //				String name = field.NativeName;
@@ -135,7 +135,7 @@ public class JavaSourceGenerator extends ZenSourceGenerator {
 //			ClassType.TypeBody = this.ClassGenerator.loadClass(ClassName);
 //		}
 //		catch (Exception e) {
-//			LibGreenTea.VerboseException(e);
+//			LibZen.VerboseException(e);
 //		}
 	}
 
@@ -143,7 +143,7 @@ public class JavaSourceGenerator extends ZenSourceGenerator {
 
 	@Override public void VisitConstPoolNode(ZenConstPoolNode Node) {
 //		Object constValue = Node.ConstValue;
-//		LibGreenTea.Assert(Node.ConstValue != null);  // Added by kimio
+//		LibZen.Assert(Node.ConstValue != null);  // Added by kimio
 //		this.VisitingBuilder.LoadConst(constValue);
 	}
 
@@ -154,7 +154,7 @@ public class JavaSourceGenerator extends ZenSourceGenerator {
 //		this.VisitingBuilder.MethodVisitor.visitInsn(DUP);
 //		if(!Node.Type.IsNative()) {
 //			this.VisitingBuilder.LoadConst(Node.Type);
-//			this.VisitingBuilder.MethodVisitor.visitMethodInsn(INVOKESPECIAL, owner, "<init>", "(Lorg/GreenTeaScript/ZenType;)V");
+//			this.VisitingBuilder.MethodVisitor.visitMethodInsn(INVOKESPECIAL, owner, "<init>", "(Lorg/ZenScript/ZenType;)V");
 //		} else {
 //			this.VisitingBuilder.MethodVisitor.visitMethodInsn(INVOKESPECIAL, owner, "<init>", "()V");
 //		}
@@ -182,7 +182,7 @@ public class JavaSourceGenerator extends ZenSourceGenerator {
 //			}
 //			this.VisitingBuilder.Call((Constructor<?>) Node.Func.FuncBody);
 //		} else {
-//			LibGreenTea.TODO("TypeBody is not Class<?>");
+//			LibZen.TODO("TypeBody is not Class<?>");
 //		}
 	}
 
@@ -333,7 +333,7 @@ public class JavaSourceGenerator extends ZenSourceGenerator {
 //			this.VisitingBuilder.StoreLocal(local);
 //		}
 //		else {
-//			LibGreenTea.TODO("selfAssign");
+//			LibZen.TODO("selfAssign");
 //		}
 //	}
 
@@ -447,7 +447,7 @@ public class JavaSourceGenerator extends ZenSourceGenerator {
 	}
 
 	@Override public void VisitForEachNode(ZenForEachNode Node) {
-		LibGreenTea.TODO("ForEach");
+		LibZen.TODO("ForEach");
 	}
 
 	@Override public void VisitReturnNode(ZenReturnNode Node) {
@@ -527,7 +527,7 @@ public class JavaSourceGenerator extends ZenSourceGenerator {
 	}
 
 	@Override public void VisitFunctionLiteralNode(ZenFunctionLiteralNode Node) {
-		LibGreenTea.TODO("FunctionNode");
+		LibZen.TODO("FunctionNode");
 	}
 
 	@Override public void VisitErrorNode(ZenErrorNode Node) {
@@ -580,13 +580,13 @@ public class JavaSourceGenerator extends ZenSourceGenerator {
 //				m.invoke(null);
 //			}
 //		} catch(ClassNotFoundException e) {
-//			LibGreenTea.VerboseException(e);
+//			LibZen.VerboseException(e);
 //		} catch(InvocationTargetException e) {
-//			LibGreenTea.VerboseException(e);
+//			LibZen.VerboseException(e);
 //		} catch(IllegalAccessException e) {
-//			LibGreenTea.VerboseException(e);
+//			LibZen.VerboseException(e);
 //		} catch(NoSuchMethodException e) {
-//			LibGreenTea.VerboseException(e);
+//			LibZen.VerboseException(e);
 //		}
 	}
 }

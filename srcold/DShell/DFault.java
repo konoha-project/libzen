@@ -22,11 +22,11 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package org.GreenTeaScript.DShell;
+package org.ZenScript.DShell;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import parser.deps.LibGreenTea;
+import parser.deps.LibZen;
 
 public class DFault /*extends Exception*/ {
 //	private static final long serialVersionUID = -6178247864604881183L;
@@ -48,7 +48,7 @@ public class DFault /*extends Exception*/ {
 			InetAddress addr = InetAddress.getLocalHost();
 			this.PhysicalLocation = addr.getHostAddress();
 		} catch (UnknownHostException e) {
-			LibGreenTea.VerboseException(e);
+			LibZen.VerboseException(e);
 		}
 		this.FaultInfo = FaultInfo == null ? "UnexpectedFault" : FaultInfo;
 		this.ErrorInfo = ErrorInfo; // nonnull

@@ -1,6 +1,6 @@
 // written by kimio
 
-let Person = import org.GreenTeaScript.NativeClassTest;
+let Person = import org.ZenScript.NativeClassTest;
 
 boolean TestFunc() {
 	Person p = new Person("naruto", 17, true);

@@ -248,7 +248,7 @@ public class ZenFuncSet {
 	//		//System.err.println("*** FuncList=" + this);
 	//		@Var ZenResolvedFunc ResolvedFunc = new ZenResolvedFunc(Gamma.NameSpace);
 	//		while(!this.CheckIncrementalTyping(Gamma.NameSpace, FuncParamSize, ParamList, ResolvedFunc) && TreeIndex < LibZen.ListSize(ParsedTree.SubTreeList)) {
-	//			@Var ZenNode Node = ParsedTree.TypeCheckAt(TreeIndex, Gamma, ZenStaticTable.VarType, DefaultTypeCheckPolicy);
+	//			@Var ZenNode Node = ParsedTree.TypeCheckAt(TreeIndex, Gamma, ZenSystem.VarType, DefaultTypeCheckPolicy);
 	//			if(Node.IsErrorNode()) {
 	//				ResolvedFunc.ErrorNode = Node;
 	//				return ResolvedFunc;
@@ -260,7 +260,7 @@ public class ZenFuncSet {
 	//			@Var ZenNameSpace GenericNameSpace = ResolvedFunc.GenericNameSpace;
 	//			while(TreeIndex < LibZen.ListSize(ParsedTree.SubTreeList)) {
 	//				@Var ZenType ContextType = ResolvedFunc.Func.GetFuncParamType(ParamList.size()/*ResolvedSize*/);
-	//				ContextType = ContextType.RealType(GenericNameSpace, ZenStaticTable.VarType);
+	//				ContextType = ContextType.RealType(GenericNameSpace, ZenSystem.VarType);
 	//				//System.err.println("TreeIndex="+ TreeIndex+" NodeSize="+ParamList.size()+" ContextType="+ContextType);
 	//				@Var ZenNode Node = ParsedTree.TypeCheckAt(TreeIndex, Gamma, ContextType, DefaultTypeCheckPolicy);
 	//				if(Node.IsErrorNode()) {
@@ -306,7 +306,7 @@ public class ZenFuncSet {
 	//		@Var ArrayList<ZenType> TypeList = new ArrayList<ZenType>();
 	//		@Var int i = 0;
 	//		while(i < Arguments.length) {
-	//			TypeList.add(ZenStaticTable.GuessType(Arguments[i]));
+	//			TypeList.add(ZenSystem.GuessType(Arguments[i]));
 	//			i = i + 1;
 	//		}
 	//		i = 0;

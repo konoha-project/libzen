@@ -29,7 +29,7 @@ import zen.deps.Var;
 
 public class ZenUtils implements ZenParserConst {
 	//endif VAJA
-	/*GreenTeaUtils Begin*/
+	/*ZenUtils Begin*/
 	public final static boolean IsFlag(int flag, int flag2) {
 		return ((flag & flag2) == flag2);
 	}
@@ -81,7 +81,7 @@ public class ZenUtils implements ZenParserConst {
 	//	}
 	//
 	//	public final static boolean IsValidSyntax(ZenSyntaxTree Tree) {
-	//		return !(GreenTeaUtils.IsMismatchedOrError(Tree));
+	//		return !(ZenUtils.IsMismatchedOrError(Tree));
 	//	}
 	//
 	//	public final static ZenSyntaxTree TreeHead(ZenSyntaxTree Tree) {
@@ -107,7 +107,7 @@ public class ZenUtils implements ZenParserConst {
 	//		if(LastNode != null) {
 	//			LastNode.NextTree = Node;
 	//		}
-	//		return GreenTeaUtils.TreeTail(Node);
+	//		return ZenUtils.TreeTail(Node);
 	//	}
 
 	//	public final static ZenSyntaxTree ApplySyntaxPattern_OLD(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenSyntaxTree LeftNode, ZenSyntaxPattern Pattern) {
@@ -153,10 +153,10 @@ public class ZenUtils implements ZenParserConst {
 	//			Gamma.NameSpace = ParsedTree.NameSpace;
 	//			return LibNative.ApplyTypeFunc(TypeFunc, Gamma, ParsedTree, Type);
 	//		}
-	//		return Gamma.Generator.CreateEmptyNode(ZenStaticTable.VoidType);
+	//		return Gamma.Generator.CreateEmptyNode(ZenSystem.VoidType);
 	//	}
 
-	/*GreenTeaUtils End*/
+	/*ZenUtils End*/
 	//ifdef JAVA
 
 }

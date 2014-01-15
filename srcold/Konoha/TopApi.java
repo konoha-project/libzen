@@ -22,8 +22,8 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package org.GreenTeaScript.Konoha;
-import parser.deps.GreenTeaEnum;
+package org.ZenScript.Konoha;
+import parser.deps.ZenEnum;
 
 public class TopApi {
 	public final static long Size(Object x) {
@@ -36,13 +36,13 @@ public class TopApi {
 		return x != y;
 	}
 	// Enum
-	public final static String EnumToString(GreenTeaEnum Value) {
+	public final static String EnumToString(ZenEnum Value) {
 		if(Value != null) {
 			return Value.EnumSymbol;
 		}
 		return null;
 	}
-	public final static long EnumToInt(GreenTeaEnum Value) {
+	public final static long EnumToInt(ZenEnum Value) {
 		if(Value != null) {
 			return Value.EnumValue;
 		}

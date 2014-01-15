@@ -111,483 +111,20 @@ import zen.ast2.ZenSwitchNode;
 import zen.ast2.ZenThrowNode;
 import zen.ast2.ZenTryNode;
 import zen.ast2.ZenWhileNode;
-import zen.deps.GreenTeaArray;
+import zen.deps.ZenArray;
 import zen.deps.LibZen;
 import zen.deps.LibNative;
 import zen.parser.ZenFunc;
 import zen.parser.ZenGenerator;
 import zen.parser.ZenNameSpace;
-import zen.parser.ZenStaticTable;
+import zen.parser.ZenSystem;
 import zen.parser.ZenType;
 
-// GreenTea Generator should be written in each language.
+// Zen Generator should be written in each language.
 
-final class SoftwareFaultException extends RuntimeException {
-	private static final long serialVersionUID = 1L;
-
-	public SoftwareFaultException() {
-	}
-}
-
-class JClassBuilder /*implements Opcodes */{
-	final String SourceFile;
-	final String ClassName;
-	final String SuperClassName;
-	final ArrayList<MethodNode> MethodList = new ArrayList<MethodNode>();
-	final ArrayList<FieldNode> FieldList = new ArrayList<FieldNode>();
-	final int ClassQualifer;
-
-	JClassBuilder(int ClassQualifer, String SourceFile, String ClassName, String SuperClass) {
-		this.ClassQualifer = ClassQualifer;
-		this.SourceFile = SourceFile;
-		this.ClassName = ClassName;
-		this.SuperClassName = SuperClass;
-	}
-	
-	void AddMethod(MethodNode m) {
-		for(int i=0; i<MethodList.size(); i++) {
-			MethodNode node = this.MethodList.get(i);
-			if(node.name.equals(m.name) && node.desc.equals(m.desc)) {
-				this.MethodList.set(i, m);
-				return;
-			}
-		}
-		this.MethodList.add(m);
-	}
-
-	void AddField(FieldNode m) {
-		this.FieldList.add(m);
-	}
-	
-	byte[] GenerateBytecode() {
-		ClassWriter Visitor = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
-		Visitor.visit(V1_6, this.ClassQualifer, this.ClassName, null, this.SuperClassName, null);
-		Visitor.visitSource(this.SourceFile, null);
-		for(FieldNode f : this.FieldList) {
-			f.accept(Visitor);
-		}
-
-		for(MethodNode m : this.MethodList) {
-			m.accept(Visitor);
-		}
-		Visitor.visitEnd();
-		return Visitor.toByteArray();
-	}
-
-	void OutputClassFile(String className, String dir) {
-		byte[] ba = this.GenerateBytecode();
-		File file = new File(dir, this.ClassName + ".class");
-		try {
-			FileOutputStream fos = new FileOutputStream(file);
-			fos.write(ba);
-			fos.close();
-		}
-		catch(IOException e) {
-			LibZen.VerboseException(e);
-		} 
-	}
-
-}
-
-class GreenTeaClassLoader extends ClassLoader {
-	final ZenNameSpace NameSpace;
-	final HashMap<String,JClassBuilder> ByteCodeMap;
-	final String GlobalStaticClassName;
-	final String ContextFieldName;
-	final String GontextDescripter;
-	
-	public GreenTeaClassLoader(ZenNameSpace NameSpace) {
-		this.NameSpace = NameSpace;
-		this.ByteCodeMap = new HashMap<String,JClassBuilder>();
-		
-		this.GlobalStaticClassName = "Global$" + 0/*Context.ParserId*/;
-		JClassBuilder GlobalClass = new JClassBuilder(ACC_PUBLIC|ACC_FINAL, null, this.GlobalStaticClassName, "java/lang/Object");
-		FieldNode fn = new FieldNode(ACC_STATIC, "ParserContext", Type.getDescriptor(ZenNameSpace.class), null, null);
-		this.ContextFieldName = fn.name;
-		this.GontextDescripter = fn.desc;
-		GlobalClass.AddField(fn);
-		
-		// static init
-		MethodNode mn = new MethodNode(ACC_PUBLIC | ACC_STATIC, "<clinit>", "()V", null, null);
-		JMethodBuilder MethodBuilder = new JMethodBuilder(NameSpace.Generator, this, mn);
-		MethodBuilder.LoadConst(NameSpace);
-		MethodBuilder.AsmVisitor.visitFieldInsn(PUTSTATIC, this.GlobalStaticClassName, this.ContextFieldName, this.GontextDescripter);
-		MethodBuilder.AsmVisitor.visitInsn(RETURN);
-		GlobalClass.AddMethod(mn);
-		byte[] b = GlobalClass.GenerateBytecode();
-		this.defineClass(this.GlobalStaticClassName, b, 0, b.length);
-	}
-
-	private void AddClassBuilder(JClassBuilder ClassBuilder) {
-		this.ByteCodeMap.put(ClassBuilder.ClassName, ClassBuilder);
-	}
-
-	JClassBuilder NewBuilder(String SourceFile, String ClassName, String SuperClassName) {
-		JClassBuilder cb = new JClassBuilder(ACC_PUBLIC, SourceFile, ClassName, SuperClassName);
-		this.AddClassBuilder(cb);
-		return cb;
-	}
-	
-	JClassBuilder GenerateMethodHolderClass(String SourceFile, String FuncName, MethodNode AsmMethodNode) {
-		JClassBuilder HolderClass = new JClassBuilder(ACC_PUBLIC|ACC_FINAL, SourceFile, JLib.GetHolderClassName(NameSpace, FuncName), "java/lang/Object");
-		this.AddClassBuilder(HolderClass);
-		HolderClass.AddMethod(AsmMethodNode);
-		return HolderClass;
-	}
-	
-	@Override protected Class<?> findClass(String name) {
-		JClassBuilder cb = this.ByteCodeMap.get(name);
-		if(cb != null) {
-			byte[] b = cb.GenerateBytecode();
-			this.ByteCodeMap.remove(name);
-			return this.defineClass(name, b, 0, b.length);
-		}
-		return null;
-	}
-
-}
-
-
-class JLib {
-	static HashMap<String, Type> TypeMap = new HashMap<String, Type>();
-	static Method GetConstPool;
-	static Method GetTypeById;
-	static Method GetFuncById;
-	static Method GetNameSpaceById;
-	static Method DynamicGetter;
-	static Method DynamicSetter;
-	static Method BoxBooleanValue;
-	static Method BoxIntValue;
-	static Method BoxFloatValue;
-	static Method UnboxBooleanValue;
-	static Method UnboxIntValue;
-	static Method UnboxFloatValue;
-	static Method GreenCastOperator;
-	static Method GreenInstanceOfOperator;
-	static Method NewNewArray;
-	static Method NewArray;
-	static Method InvokeFunc;
-	static Method InvokeOverridedFunc;
-	static Method InvokeDynamicFunc;
-	static Method InvokeDynamicMethod;
-	
-	static Method ExecCommandVoid;
-	static Method ExecCommandBool;
-	static Method ExecCommandString;
-	static Method ExecCommandTask;
-	
-	static {
-		TypeMap.put("void", Type.VOID_TYPE);
-		TypeMap.put("boolean", Type.BOOLEAN_TYPE);
-		TypeMap.put("int", Type.LONG_TYPE);
-		TypeMap.put("float", Type.DOUBLE_TYPE);
-		TypeMap.put("any", Type.getType(Object.class));
-		TypeMap.put("String", Type.getType(String.class));
-		TypeMap.put("Array", Type.getType(GreenTeaArray.class));
-		TypeMap.put("Func", Type.getType(ZenFunc.class));
-
-		try {
-			GetConstPool = ZenStaticTable.class.getMethod("GetConstPool", int.class);
-			GetTypeById = ZenStaticTable.class.getMethod("GetTypeById", int.class);
-			GetFuncById = ZenStaticTable.class.getMethod("GetFuncById", int.class);
-			DynamicGetter = LibZen.class.getMethod("DynamicGetter", Object.class, String.class);
-			DynamicSetter = LibZen.class.getMethod("DynamicSetter", Object.class, String.class, Object.class);
-			InvokeFunc = LibZen.class.getMethod("InvokeFunc", ZenFunc.class, Object[].class);
-			InvokeOverridedFunc = LibZen.class.getMethod("InvokeOverridedMethod", long.class, ZenNameSpace.class, ZenFunc.class, Object[].class);
-			InvokeDynamicFunc = LibZen.class.getMethod("InvokeDynamicFunc", long.class, ZenType.class, ZenNameSpace.class, String.class, Object[].class);
-			InvokeDynamicMethod = LibZen.class.getMethod("InvokeDynamicMethod", long.class, ZenType.class, ZenNameSpace.class, String.class, Object[].class);
-			
-			BoxBooleanValue = Boolean.class.getMethod("valueOf", boolean.class);
-			BoxIntValue = Long.class.getMethod("valueOf", long.class);
-			BoxFloatValue = Double.class.getMethod("valueOf", double.class);
-			UnboxBooleanValue = Boolean.class.getMethod("booleanValue");
-			UnboxIntValue = Long.class.getMethod("longValue");
-			UnboxFloatValue = Double.class.getMethod("doubleValue");
-
-			GreenCastOperator = LibZen.class.getMethod("DynamicCast", ZenType.class, Object.class);
-			GreenInstanceOfOperator = LibZen.class.getMethod("DynamicInstanceOf", Object.class, ZenType.class);
-			NewNewArray = LibZen.class.getMethod("NewNewArray", ZenType.class, Object[].class);
-			NewArray = LibZen.class.getMethod("NewArray", ZenType.class, Object[].class);
-//			ExecCommandVoid = DShellProcess.class.getMethod("ExecCommandVoid", String[][].class);
-//			ExecCommandBool = DShellProcess.class.getMethod("ExecCommandBool", String[][].class);
-//			ExecCommandString = DShellProcess.class.getMethod("ExecCommandString", String[][].class);
-//			ExecCommandTask = DShellProcess.class.getMethod("ExecCommandTask", String[][].class);
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-			LibNative.Exit(1, "load error");
-		}
-	}
-	
-	public static String GetHolderClassName(ZenNameSpace NameSpace, String FuncName) {
-		return "FuncHolder" + FuncName + "$" + 0; //Context.ParserId;
-	}
-	
-	static Type GetAsmType(ZenType GreenType) {
-		Type type = TypeMap.get(GreenType.ShortName);
-		if(type != null) {
-			return type;
-		}
-		if(GreenType.TypeBody != null && GreenType.TypeBody instanceof Class<?>) {
-			return Type.getType((Class<?>) GreenType.TypeBody);
-		}
-		if(GreenType.IsTypeVariable()) {
-			return Type.getType(Object.class);
-		}
-		if(GreenType.IsGenericType()) {
-			return GetAsmType(GreenType.BaseType);
-		}
-		return Type.getType("L" + GreenType.GetNativeName() + ";");
-	}
-
-	static String GetMethodDescriptor(ZenFunc Func) {
-		Type ReturnType = GetAsmType(Func.GetReturnType());
-		Type[] argTypes = new Type[Func.GetFuncParamSize()];
-		for(int i = 0; i < argTypes.length; i++) {
-			ZenType ParamType = Func.GetFuncParamType(i);
-			argTypes[i] = GetAsmType(ParamType);
-		}
-		return Type.getMethodDescriptor(ReturnType, argTypes);
-	}
-}
-
-final class JLocalVarStack {
-	public final String Name;
-	public final Type   TypeInfo;
-	public final int    Index;
-
-	public JLocalVarStack(int Index, Type TypeInfo, String Name) {
-		this.Index = Index;
-		this.TypeInfo = TypeInfo;
-		this.Name = Name;
-	}
-}
-
-class JMethodBuilder {
-	final GreenTeaClassLoader           LocalClassLoader;
-	final MethodVisitor                 AsmVisitor;
-	final ZenGenerator                   Generator;
-	ArrayList<JLocalVarStack>     LocalVals;
-	int                           LocalSize;
-	Stack<Label>                  BreakLabelStack;
-	Stack<Label>                  ContinueLabelStack;
-	int PreviousLine;
-
-	public JMethodBuilder(ZenGenerator Generator, GreenTeaClassLoader ClassLoader, MethodVisitor AsmVisitor) {
-		this.Generator = Generator;
-		this.LocalClassLoader = ClassLoader;
-		this.AsmVisitor = AsmVisitor;
-		this.LocalVals = new ArrayList<JLocalVarStack>();
-		this.LocalSize = 0;
-		this.BreakLabelStack = new Stack<Label>();
-		this.ContinueLabelStack = new Stack<Label>();
-		this.PreviousLine = 0;
-	}
-
-	void SetLineNumber(long FileLine) {
-		if(FileLine != 0) {
-			int Line = ZenStaticTable.GetFileLineNumber(FileLine);
-			if(Line != this.PreviousLine) {
-				Label LineLabel = new Label();
-				this.AsmVisitor.visitLineNumber(Line, LineLabel);
-				this.PreviousLine = Line;
-			}
-		}
-	}
-
-	void SetLineNumber(ZenNode Node) {
-		this.SetLineNumber(Node.SourceToken.FileLine);
-	}
-	
-	void LoadLocal(JLocalVarStack local) {
-		Type type = local.TypeInfo;
-		this.AsmVisitor.visitVarInsn(type.getOpcode(ILOAD), local.Index);
-	}
-
-	void StoreLocal(JLocalVarStack local) {
-		Type type = local.TypeInfo;
-		this.AsmVisitor.visitVarInsn(type.getOpcode(ISTORE), local.Index);
-	}
-
-	public JLocalVarStack FindLocalVariable(String Name) {
-		for(int i = 0; i < this.LocalVals.size(); i++) {
-			JLocalVarStack l = this.LocalVals.get(i);
-			if(l.Name.equals(Name)) {
-				return l;
-			}
-		}
-		return null;
-	}
-
-	public JLocalVarStack AddLocal(ZenType GreenType, String Name) {
-		Type LocalType =  JLib.GetAsmType(GreenType);
-		JLocalVarStack local = new JLocalVarStack(this.LocalSize, LocalType, Name);
-		this.LocalVals.add(local);
-		this.LocalSize += LocalType.getSize();
-		return local;
-	}
-	
-	void LoadConst(Object Value) {
-		if(Value instanceof Boolean || Value instanceof Long || Value instanceof Double || Value instanceof String) {
-			this.AsmVisitor.visitLdcInsn(Value);
-			return;
-		}
-		if(Value instanceof ZenNameSpace) {
-			this.AsmVisitor.visitFieldInsn(GETSTATIC, this.LocalClassLoader.GlobalStaticClassName, this.LocalClassLoader.ContextFieldName, this.LocalClassLoader.GontextDescripter);
-			return;
-		}
-		if(Value instanceof ZenType) {
-			int id = ((ZenType)Value).TypeId;
-			this.AsmVisitor.visitLdcInsn(id);
-			this.InvokeMethodCall(ZenType.class, JLib.GetTypeById);
-			return;
-		}
-		else if(Value instanceof ZenFunc) {
-			int id = ((ZenFunc)Value).FuncId;
-			this.AsmVisitor.visitLdcInsn(id);
-			this.InvokeMethodCall(ZenFunc.class, JLib.GetFuncById);
-			return;
-		}
-		int id = ZenStaticTable.AddConstPool(Value);
-		this.AsmVisitor.visitLdcInsn(id);
-		this.InvokeMethodCall(Value.getClass(), JLib.GetConstPool);
-	}
-
-	void LoadNewArray(ZenGenerator Visitor, int StartIdx, ArrayList<ZenNode> NodeList) {
-		this.AsmVisitor.visitLdcInsn(NodeList.size() - StartIdx);
-		this.AsmVisitor.visitTypeInsn(ANEWARRAY, Type.getInternalName(Object.class));
-		//System.err.println("** arraysize = " + (NodeList.size() - StartIdx));
-		for(int i = StartIdx; i < NodeList.size(); i++) {
-			this.AsmVisitor.visitInsn(DUP);
-			this.AsmVisitor.visitLdcInsn(i);
-			NodeList.get(i).Accept(Visitor);
-//			System.out.println("i="+i+" type="+NodeList.get(i).Type);
-			this.CheckCast(Object.class, NodeList.get(i).Type);
-			this.AsmVisitor.visitInsn(AASTORE);
-		}
-	}
-	
-	void CheckCast(Class<?> RequiredType, Class<?> GivenType) {
-		//System.err.println("casting .. giventype = " + GivenType + ", requested = " + RequiredType);
-		if(RequiredType == void.class || RequiredType == GivenType ) {
-			return;
-		}
-		if(RequiredType == long.class) {
-			if(GivenType == Object.class) {
-				this.AsmVisitor.visitTypeInsn(CHECKCAST, Type.getInternalName(Long.class));
-				this.InvokeMethodCall(long.class, JLib.UnboxIntValue);
-				return;
-			}
-		}
-		if(RequiredType == double.class) {
-			if(GivenType == Object.class) {
-				this.AsmVisitor.visitTypeInsn(CHECKCAST, Type.getInternalName(Double.class));
-				this.InvokeMethodCall(double.class, JLib.UnboxFloatValue);
-				return;
-			}
-		}
-		if(RequiredType == boolean.class) {
-			if(GivenType == Object.class) {
-				this.AsmVisitor.visitTypeInsn(CHECKCAST, Type.getInternalName(Long.class));
-				this.InvokeMethodCall(boolean.class, JLib.UnboxBooleanValue);
-				return;
-			}
-		}
-		if(GivenType == long.class) {
-			if(RequiredType == Object.class) {
-				this.InvokeMethodCall(Long.class, JLib.BoxIntValue);
-				return;
-			}
-		}
-		if(GivenType == double.class) {
-			if(RequiredType == Object.class) {
-				this.InvokeMethodCall(Double.class, JLib.BoxFloatValue);
-				return;
-			}
-		}
-		if(GivenType == boolean.class) {
-			if(RequiredType == Object.class) {
-				this.InvokeMethodCall(Boolean.class, JLib.BoxBooleanValue);
-				return;
-			}
-		}
-		if(GivenType.isArray()) {
-			return;//FIXME
-		}
-		if(GivenType.isPrimitive() && RequiredType.isPrimitive()) {
-			return;//FIXME
-		}
-		//System.err.println("CHECKCAST (" + RequiredType + ") " + GivenType);
-		this.AsmVisitor.visitTypeInsn(CHECKCAST, Type.getInternalName(RequiredType));
-	}
-
-	void CheckCast(Class<?> RequiredType, ZenType GivenType) {
-		if(GivenType != null) {
-			this.CheckCast(RequiredType, GivenType.GetNativeType(false));
-		}
-//		else {
-//			System.err.println("cannot check cast given = " + GivenType + " RequiredType="+RequiredType);
-//		}
-	}
-
-	void CheckCast(ZenType RequiredType, ZenType GivenType) {
-		this.CheckCast(RequiredType.GetNativeType(false), GivenType);
-	}
-
-	void Call(Constructor<?> method) {
-		String owner = Type.getInternalName(method.getDeclaringClass());
-		this.AsmVisitor.visitMethodInsn(INVOKESPECIAL, owner, "<init>", Type.getConstructorDescriptor(method));
-	}
-
-	void InvokeMethodCall(Method method) {
-//		System.err.println("giventype = " + method);
-		InvokeMethodCall(void.class, method);
-	}
-
-	void InvokeMethodCall(ZenType RequiredType, Method method) {
-		Class<?> RequiredNativeType = Object.class;
-		if(RequiredType != null) {
-			RequiredNativeType = RequiredType.GetNativeType(false);
-		}
-		InvokeMethodCall(RequiredNativeType, method);
-	}
-
-	void InvokeMethodCall(Class<?> RequiredType, Method method) {
-		int inst;
-		if(Modifier.isStatic(method.getModifiers())) {
-			inst = INVOKESTATIC;
-		}
-		else if(Modifier.isInterface(method.getModifiers())) {
-			inst = INVOKEINTERFACE;
-		}
-		else {
-			inst = INVOKEVIRTUAL;
-		}
-		String owner = Type.getInternalName(method.getDeclaringClass());
-		this.AsmVisitor.visitMethodInsn(inst, owner, method.getName(), Type.getMethodDescriptor(method));
-		//System.err.println("\tRequiredType="+RequiredType+", " + method);
-		this.CheckCast(RequiredType, method.getReturnType());
-	}
-
-	public void PopValue(boolean IsLong) {
-		if(IsLong) {
-			this.AsmVisitor.visitInsn(POP2);
-		}
-		else {
-			this.AsmVisitor.visitInsn(POP);
-		}
-	}
-
-	public void PushEvaluatedNode(ZenType RequestedType, ZenNode ParamNode) {
-		//System.err.println("requested=" + RequestedType + ", given="+ParamNode.Type);
-		ParamNode.Accept(this.Generator);
-		this.CheckCast(RequestedType, ParamNode.Type);
-	}
-	
-}
 
 public class JavaByteCodeGenerator extends ZenGenerator {
-	GreenTeaClassLoader ClassGenerator;
+	ZenClassLoader ClassGenerator;
 	JMethodBuilder CurrentVisitor;
 	ArrayList<ZenType> StackFrame;
 
@@ -633,7 +170,7 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 
 	@Override public void InitContext(ZenNameSpace Context) {
 		super.InitContext(Context);
-		this.ClassGenerator = new GreenTeaClassLoader(Context);
+		this.ClassGenerator = new ZenClassLoader(Context);
 	}
 
 	@Override public void GenerateFunc(ZenFunc Func, ArrayList<String> NameList, ZenNode Body) {
@@ -641,7 +178,7 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 		String MethodName = Func.GetNativeFuncName();
 		String MethodDesc = JLib.GetMethodDescriptor(Func);
 		MethodNode AsmMethodNode = new MethodNode(ACC_PUBLIC | ACC_STATIC, MethodName, MethodDesc, null, null);
-		JClassBuilder ClassHolder = this.ClassGenerator.GenerateMethodHolderClass(ZenStaticTable.GetSourceFileName(Body.Token.FileLine), MethodName, AsmMethodNode);
+		JClassBuilder ClassHolder = this.ClassGenerator.GenerateMethodHolderClass(ZenSystem.GetSourceFileName(Body.Token.FileLine), MethodName, AsmMethodNode);
 
 		JMethodBuilder LocalBuilder = new JMethodBuilder(this, this.ClassGenerator, AsmMethodNode);
 		JMethodBuilder PushedBuilder = this.CurrentVisitor;
@@ -678,7 +215,7 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 //		String ClassName = ClassType.GetNativeName();
 //		String superClassName = ClassType.SuperType.GetNativeName();
 //		//System.err.println("class name = " + ClassName + " extends " + superClassName);
-//		JClassBuilder ClassBuilder = this.ClassGenerator.NewBuilder(ZenStaticTable.GetSourceFileName(ParsedTree.KeyToken.FileLine), ClassName, superClassName);
+//		JClassBuilder ClassBuilder = this.ClassGenerator.NewBuilder(ZenSystem.GetSourceFileName(ParsedTree.KeyToken.FileLine), ClassName, superClassName);
 //		// generate field
 //		for(ZenFieldInfo field : ClassField.FieldList) {
 //			if(field.FieldIndex >= ClassField.ThisClassIndex) {
@@ -689,10 +226,10 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 //			}
 //		}
 //		// generate default constructor (for jvm)
-//		MethodNode constructor = new MethodNode(ACC_PUBLIC, "<init>", "(Lorg/GreenTeaScript/ZenType;)V", null, null);
+//		MethodNode constructor = new MethodNode(ACC_PUBLIC, "<init>", "(Lorg/ZenScript/ZenType;)V", null, null);
 //		constructor.visitVarInsn(ALOAD, 0);
 //		constructor.visitVarInsn(ALOAD, 1);
-//		constructor.visitMethodInsn(INVOKESPECIAL, superClassName, "<init>", "(Lorg/GreenTeaScript/ZenType;)V");
+//		constructor.visitMethodInsn(INVOKESPECIAL, superClassName, "<init>", "(Lorg/ZenScript/ZenType;)V");
 //		for(ZenFieldInfo field : ClassField.FieldList) {
 //			if(field.FieldIndex >= ClassField.ThisClassIndex && field.InitValue != null) {
 //				String name = field.NativeName;
@@ -758,7 +295,7 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 		this.CurrentVisitor.AsmVisitor.visitInsn(DUP);
 		if(!Node.Type.IsNativeType()) {
 			this.CurrentVisitor.LoadConst(Node.Type);
-			this.CurrentVisitor.AsmVisitor.visitMethodInsn(INVOKESPECIAL, owner, "<init>", "(Lorg/GreenTeaScript/ZenType;)V");
+			this.CurrentVisitor.AsmVisitor.visitMethodInsn(INVOKESPECIAL, owner, "<init>", "(Lorg/ZenScript/ZenType;)V");
 		} else {
 			this.CurrentVisitor.AsmVisitor.visitMethodInsn(INVOKESPECIAL, owner, "<init>", "()V");
 		}
@@ -865,7 +402,7 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 //		this.VisitingBuilder.LoadConst(Node.FuncName);		
 //		this.VisitingBuilder.LoadNewArray(this, 0, Node.ParamList);
 //		this.VisitingBuilder.InvokeMethodCall(Node.Type, JLib.InvokeDynamicFunc);				
-//		this.VisitingBuilder.CheckReturn(Node.Type, ZenStaticTable.AnyType);
+//		this.VisitingBuilder.CheckReturn(Node.Type, ZenSystem.AnyType);
 //	}
 //
 //	@Override public void VisitApplyDynamicMethodNode(ZenApplyDynamicMethodNode Node) {
@@ -875,7 +412,7 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 //		this.VisitingBuilder.LoadConst(Node.FuncName);		
 //		this.VisitingBuilder.LoadNewArray(this, 0, Node.ParamList);
 //		this.VisitingBuilder.InvokeMethodCall(Node.Type, JLib.InvokeDynamicMethod);				
-//		this.VisitingBuilder.CheckReturn(Node.Type, ZenStaticTable.AnyType);
+//		this.VisitingBuilder.CheckReturn(Node.Type, ZenSystem.AnyType);
 //	}
 	
 //	@Override public void VisitUnaryNode(ZenUnaryNode Node) {
@@ -933,10 +470,10 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 	@Override public void VisitAndNode(ZenAndNode Node) {
 		Label elseLabel = new Label();
 		Label mergeLabel = new Label();
-		this.CurrentVisitor.PushEvaluatedNode(ZenStaticTable.BooleanType, Node.LeftNode);
+		this.CurrentVisitor.PushEvaluatedNode(ZenSystem.BooleanType, Node.LeftNode);
 		this.CurrentVisitor.AsmVisitor.visitJumpInsn(IFEQ, elseLabel);
 
-		this.CurrentVisitor.PushEvaluatedNode(ZenStaticTable.BooleanType, Node.RightNode);
+		this.CurrentVisitor.PushEvaluatedNode(ZenSystem.BooleanType, Node.RightNode);
 		this.CurrentVisitor.AsmVisitor.visitJumpInsn(IFEQ, elseLabel);
 
 		this.CurrentVisitor.AsmVisitor.visitLdcInsn(true);
@@ -952,10 +489,10 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 	@Override public void VisitOrNode(ZenOrNode Node) {
 		Label thenLabel = new Label();
 		Label mergeLabel = new Label();
-		this.CurrentVisitor.PushEvaluatedNode(ZenStaticTable.BooleanType, Node.LeftNode);
+		this.CurrentVisitor.PushEvaluatedNode(ZenSystem.BooleanType, Node.LeftNode);
 		this.CurrentVisitor.AsmVisitor.visitJumpInsn(IFNE, thenLabel);
 
-		this.CurrentVisitor.PushEvaluatedNode(ZenStaticTable.BooleanType, Node.RightNode);
+		this.CurrentVisitor.PushEvaluatedNode(ZenSystem.BooleanType, Node.RightNode);
 		this.CurrentVisitor.AsmVisitor.visitJumpInsn(IFNE, thenLabel);
 
 		this.CurrentVisitor.AsmVisitor.visitLdcInsn(false);
@@ -993,7 +530,7 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 	@Override public void VisitIfNode(ZenIfNode Node) {
 		Label ElseLabel = new Label();
 		Label EndLabel = new Label();
-		this.CurrentVisitor.PushEvaluatedNode(ZenStaticTable.BooleanType, Node.CondNode);
+		this.CurrentVisitor.PushEvaluatedNode(ZenSystem.BooleanType, Node.CondNode);
 		this.CurrentVisitor.AsmVisitor.visitJumpInsn(IFEQ, ElseLabel);
 		this.RemoveStack(1);
 		// Then
@@ -1012,7 +549,7 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 	@Override public void VisitTrinaryNode(ZenTrinaryNode Node) {
 		Label ElseLabel = new Label();
 		Label EndLabel = new Label();
-		this.CurrentVisitor.PushEvaluatedNode(ZenStaticTable.BooleanType, Node.CondNode);
+		this.CurrentVisitor.PushEvaluatedNode(ZenSystem.BooleanType, Node.CondNode);
 		this.CurrentVisitor.AsmVisitor.visitJumpInsn(IFEQ, ElseLabel);
 		// Then
 		this.VisitBlock(Node.ThenNode);
@@ -1057,7 +594,7 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 		this.CurrentVisitor.ContinueLabelStack.push(continueLabel);
 
 		this.CurrentVisitor.AsmVisitor.visitLabel(continueLabel);
-		this.CurrentVisitor.PushEvaluatedNode(ZenStaticTable.BooleanType, Node.CondNode);
+		this.CurrentVisitor.PushEvaluatedNode(ZenSystem.BooleanType, Node.CondNode);
 		this.CurrentVisitor.AsmVisitor.visitJumpInsn(IFEQ, breakLabel); // condition
 		this.VisitBlock(Node.BodyNode);
 		this.CurrentVisitor.AsmVisitor.visitJumpInsn(GOTO, continueLabel);

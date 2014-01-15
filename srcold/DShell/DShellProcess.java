@@ -22,7 +22,7 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package org.GreenTeaScript.DShell;
+package org.ZenScript.DShell;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -39,9 +39,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Map;
 
-import org.GreenTeaScript.DShellGrammar;
+import org.ZenScript.DShellGrammar;
 
-import parser.deps.LibGreenTea;
+import parser.deps.LibZen;
 
 public class DShellProcess {
 	// option flag
@@ -147,7 +147,7 @@ public class DShellProcess {
 		ArrayList<String[]> newCmdsBuffer = new ArrayList<String[]>();
 		for(int i = 0; i < cmds.length; i++) {
 			String[] currentCmd = cmds[i];
-			if(LibGreenTea.EqualsString(currentCmd[0], "timeout")) {
+			if(LibZen.EqualsString(currentCmd[0], "timeout")) {
 				StringBuilder numBuilder = new StringBuilder();
 				StringBuilder unitBuilder = new StringBuilder();
 				int len = currentCmd[1].length();
@@ -162,7 +162,7 @@ public class DShellProcess {
 				}
 				long num = Integer.parseInt(numBuilder.toString());
 				String unit = unitBuilder.toString();
-				if(LibGreenTea.EqualsString(unit, "s")) {
+				if(LibZen.EqualsString(unit, "s")) {
 					num = num * 1000;
 				}
 				if(num >= 0) {
@@ -175,7 +175,7 @@ public class DShellProcess {
 				}
 				currentCmd = newCmd;
 			}
-			else if(LibGreenTea.EqualsString(currentCmd[0], "trace")) {
+			else if(LibZen.EqualsString(currentCmd[0], "trace")) {
 				enableTrace = checkTraceRequirements();
 				int baseIndex = 1;
 				String[] newCmd = new String[currentCmd.length - baseIndex];
@@ -184,7 +184,7 @@ public class DShellProcess {
 				}
 				currentCmd = newCmd;
 			}
-			else if(LibGreenTea.EqualsString(currentCmd[0], "&")) {
+			else if(LibZen.EqualsString(currentCmd[0], "&")) {
 				this.OptionFlag = setFlag(this.OptionFlag, background, true);
 				continue;
 			}
@@ -207,37 +207,37 @@ public class DShellProcess {
 			if(size > 0) {
 				prevProc = (SubProc)procBuffer.get(size - 1);
 			}
-			if(LibGreenTea.EqualsString(cmdSymbol, "<")) {
+			if(LibZen.EqualsString(cmdSymbol, "<")) {
 				prevProc.setInputRedirect(currentCmd[1]);
 			}
-			else if(LibGreenTea.EqualsString(cmdSymbol, "1>") || LibGreenTea.EqualsString(cmdSymbol, ">")) {
+			else if(LibZen.EqualsString(cmdSymbol, "1>") || LibZen.EqualsString(cmdSymbol, ">")) {
 				prevProc.setOutputRedirect(SubProc.STDOUT_FILENO, currentCmd[1], false);
 			}	
-			else if(LibGreenTea.EqualsString(cmdSymbol, "1>>") || LibGreenTea.EqualsString(cmdSymbol, ">>")) {
+			else if(LibZen.EqualsString(cmdSymbol, "1>>") || LibZen.EqualsString(cmdSymbol, ">>")) {
 				prevProc.setOutputRedirect(SubProc.STDOUT_FILENO, currentCmd[1], true);
 			}
-			else if(LibGreenTea.EqualsString(cmdSymbol, "2>")) {
+			else if(LibZen.EqualsString(cmdSymbol, "2>")) {
 				prevProc.setOutputRedirect(SubProc.STDERR_FILENO, currentCmd[1], false);
 			}
-			else if(LibGreenTea.EqualsString(cmdSymbol, "2>>")) {
+			else if(LibZen.EqualsString(cmdSymbol, "2>>")) {
 				prevProc.setOutputRedirect(SubProc.STDERR_FILENO, currentCmd[1], true);
 			}
-			else if(LibGreenTea.EqualsString(cmdSymbol, "&>") || LibGreenTea.EqualsString(cmdSymbol, ">&")) {
+			else if(LibZen.EqualsString(cmdSymbol, "&>") || LibZen.EqualsString(cmdSymbol, ">&")) {
 				prevProc.setOutputRedirect(SubProc.STDOUT_FILENO, currentCmd[1], false);
 				prevProc.setMergeType(SubProc.mergeErrorToOut);
 			}
-			else if(LibGreenTea.EqualsString(cmdSymbol, "&>>")) {
+			else if(LibZen.EqualsString(cmdSymbol, "&>>")) {
 				prevProc.setOutputRedirect(SubProc.STDOUT_FILENO, currentCmd[1], true);
 				prevProc.setMergeType(SubProc.mergeErrorToOut);
 			}
-			else if(LibGreenTea.EqualsString(cmdSymbol, ">&1") || 
-					LibGreenTea.EqualsString(cmdSymbol, "1>&1") || LibGreenTea.EqualsString(cmdSymbol, "2>&2")) {
+			else if(LibZen.EqualsString(cmdSymbol, ">&1") || 
+					LibZen.EqualsString(cmdSymbol, "1>&1") || LibZen.EqualsString(cmdSymbol, "2>&2")) {
 				// do nothing
 			}
-			else if(LibGreenTea.EqualsString(cmdSymbol, "1>&2")) {
+			else if(LibZen.EqualsString(cmdSymbol, "1>&2")) {
 				prevProc.setMergeType(SubProc.mergeOutToError);
 			}
-			else if(LibGreenTea.EqualsString(cmdSymbol, "2>&1")) {
+			else if(LibZen.EqualsString(cmdSymbol, "2>&1")) {
 				prevProc.setMergeType(SubProc.mergeErrorToOut);
 			}
 			else {
@@ -322,7 +322,7 @@ public class DShellProcess {
 	
 	// change directory
 	public static boolean ChangeDirectory(String path) {
-		if(LibGreenTea.EqualsString(path, "")) {
+		if(LibZen.EqualsString(path, "")) {
 			return CLibraryWrapper.INSTANCE.chdir(System.getenv("HOME")) == 0;
 		}
 		return CLibraryWrapper.INSTANCE.chdir(path) == 0;
@@ -550,7 +550,7 @@ class SubProc extends PseudoProcess {
 	@Override public void setArgument(String[] Args) {
 		String arg = Args[0];
 		this.cmdNameBuilder.append(arg + " ");
-		if(LibGreenTea.EqualsString(arg, "sudo")) {
+		if(LibZen.EqualsString(arg, "sudo")) {
 			int size = this.commandList.size();
 			ArrayList<String> newCommandList = new ArrayList<String>();
 			newCommandList.add(arg);
@@ -695,7 +695,7 @@ class SubProc extends PseudoProcess {
 			Process procKiller = new ProcessBuilder(cmds).start();
 			procKiller.waitFor();
 			this.isKilled = true;
-			//LibGreenTea.print("[killed]: " + this.getCmdName());
+			//LibZen.print("[killed]: " + this.getCmdName());
 		} 
 		catch (NoSuchFieldException e) {
 			throw new RuntimeException(e);

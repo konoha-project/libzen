@@ -23,7 +23,7 @@
 // **************************************************************************
 
 //ifdef JAVA
-package org.GreenTeaScript;
+package org.ZenScript;
 import java.util.ArrayList;
 //endif VAJA
 
@@ -54,8 +54,8 @@ import parser.ast.ZenSetterNode;
 import parser.ast.ZenSwitchNode;
 import parser.ast.ZenTrinaryNode;
 import parser.ast.ZenUnaryNode;
-import parser.deps.GreenTeaEnum;
-import parser.deps.LibGreenTea;
+import parser.deps.ZenEnum;
+import parser.deps.LibZen;
 import parser.deps.LibNative;
 
 @Deprecated
@@ -149,7 +149,7 @@ public class SourceGenerator extends ZenGenerator {
 	}
 
 	@Override public void FlushBuffer() {
-		LibGreenTea.WriteCode(this.OutputFile, this.HeaderSource + this.BodySource);			
+		LibZen.WriteCode(this.OutputFile, this.HeaderSource + this.BodySource);			
 		this.HeaderSource = "";
 		this.BodySource = "";
 	}
@@ -184,7 +184,7 @@ public class SourceGenerator extends ZenGenerator {
 		while(CurrentNode != null) {
 			if(!this.IsEmptyBlock(CurrentNode)) {
 				@Var String Stmt = this.VisitNode(CurrentNode);
-				if(!LibGreenTea.EqualsString(Stmt, "")) {
+				if(!LibZen.EqualsString(Stmt, "")) {
 					Code += this.GetIndentString() + Stmt + this.SemiColon + this.LineFeed;
 				}
 			}
@@ -213,10 +213,10 @@ public class SourceGenerator extends ZenGenerator {
 			}
 		}
 		if(ConstValue instanceof String) {
-			return LibGreenTea.QuoteString((/*cast*/String)ConstValue);
+			return LibZen.QuoteString((/*cast*/String)ConstValue);
 		}
-		if(ConstValue instanceof GreenTeaEnum) {
-			return "" + ((/*cast*/GreenTeaEnum) ConstValue).EnumValue;
+		if(ConstValue instanceof ZenEnum) {
+			return "" + ((/*cast*/ZenEnum) ConstValue).EnumValue;
 		}
 		return ConstValue.toString();
 	}
@@ -403,12 +403,12 @@ public class SourceGenerator extends ZenGenerator {
 //	@Override public void VisitSuffixNode(ZenSuffixNode Node) {
 //		@Var String FuncName = Node.SourceToken.ParsedText;
 //		@Var String Expr = this.VisitNode(Node.Expr);
-//		if(LibGreenTea.EqualsString(FuncName, "++")) {
+//		if(LibZen.EqualsString(FuncName, "++")) {
 //		}
-//		else if(LibGreenTea.EqualsString(FuncName, "--")) {
+//		else if(LibZen.EqualsString(FuncName, "--")) {
 //		}
 //		else {
-//			LibGreenTea.DebugP(FuncName + " is not supported suffix operator!!");
+//			LibZen.DebugP(FuncName + " is not supported suffix operator!!");
 //		}
 //		this.PushSourceCode("(" + SourceGenerator.GenerateApplyFunc1(Node.Func, FuncName, true, Expr) + ")");
 //	}

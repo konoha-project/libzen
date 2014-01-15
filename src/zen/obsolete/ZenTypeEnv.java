@@ -101,7 +101,7 @@ public final class ZenTypeEnv extends ZenUtils {
 ////		if(!this.FoundUncommonFunc && (!Func.Is(CommonFunc))) {
 ////			this.FoundUncommonFunc = true;
 ////			if(this.Func != null && this.Func.Is(CommonFunc)) {
-////				this.NameSpace.Context.ReportError(GreenTeaConsts.WarningLevel, SourceToken, "using uncommon " + FuncType + ": " + Func.FuncName);
+////				this.NameSpace.Context.ReportError(ZenConsts.WarningLevel, SourceToken, "using uncommon " + FuncType + ": " + Func.FuncName);
 ////			}
 ////		}
 //	}
@@ -109,8 +109,8 @@ public final class ZenTypeEnv extends ZenUtils {
 //	public final ZenNode ReportTypeResult(ZenSyntaxTree ParsedTree, ZenNode Node, int Level, String Message) {
 //		if(Level == ErrorLevel || (this.IsStrictMode() && Level == TypeErrorLevel)) {
 //			LibZen.Assert(Node.SourceToken == ParsedTree.KeyToken);
-//			this.NameSpace.Context.ReportError_OLD(GreenTeaConsts.ErrorLevel, Node.SourceToken, Message);
-//			return this.Generator.CreateErrorNode(ZenStaticTable.VoidType, ParsedTree);
+//			this.NameSpace.Context.ReportError_OLD(ZenConsts.ErrorLevel, Node.SourceToken, Message);
+//			return this.Generator.CreateErrorNode(ZenSystem.VoidType, ParsedTree);
 //		}
 //		else {
 //			this.NameSpace.Context.ReportError_OLD(Level, Node.SourceToken, Message);
@@ -119,12 +119,12 @@ public final class ZenTypeEnv extends ZenUtils {
 //	}
 //
 //	public final void ReportTypeInference(ZenToken SourceToken, String Name, ZenType InfferedType) {
-//		this.Context.ReportError_OLD(GreenTeaConsts.InfoLevel, SourceToken, Name + " has type " + InfferedType);
+//		this.Context.ReportError_OLD(ZenConsts.InfoLevel, SourceToken, Name + " has type " + InfferedType);
 //	}
 //
 //	public final ZenNode CreateSyntaxErrorNode(ZenSyntaxTree ParsedTree, String Message) {
-//		this.NameSpace.Context.ReportError_OLD(GreenTeaConsts.ErrorLevel, ParsedTree.KeyToken, Message);
-//		return this.Generator.CreateErrorNode(ZenStaticTable.VoidType, ParsedTree);
+//		this.NameSpace.Context.ReportError_OLD(ZenConsts.ErrorLevel, ParsedTree.KeyToken, Message);
+//		return this.Generator.CreateErrorNode(ZenSystem.VoidType, ParsedTree);
 //	}
 //
 //	public final ZenNode UnsupportedTopLevelError(ZenSyntaxTree ParsedTree) {
@@ -186,6 +186,6 @@ public final class ZenTypeEnv extends ZenUtils {
 //		@Var ZenNameSpace NameSpace = this.NameSpace;
 //		@Var ZenTokenContext LocalContext = new ZenTokenContext(NameSpace, Text, FileLine);
 //		@Var ZenSyntaxTree ParsedTree = LocalContext.ParsePattern_OLD(NameSpace, "$Expression$", Required);
-//		return GreenTeaUtils.TypeBlock(this, ParsedTree, ContextType);
+//		return ZenUtils.TypeBlock(this, ParsedTree, ContextType);
 //	}
 }

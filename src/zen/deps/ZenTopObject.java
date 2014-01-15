@@ -78,9 +78,9 @@ public class ZenTopObject implements ZenObject {
 }
 
 
-final class GreenTeaAnyObject extends ZenTopObject {
+final class ZenAnyObject extends ZenTopObject {
 	public final Object NativeValue;
-	GreenTeaAnyObject/*constructor*/(ZenType GreenType, Object NativeValue) {
+	ZenAnyObject/*constructor*/(ZenType GreenType, Object NativeValue) {
 		super(GreenType);
 		this.NativeValue = NativeValue;
 	}

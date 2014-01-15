@@ -114,7 +114,7 @@ public class ZenFunc implements ZenFuncFlag {
 	//				i = i + 1;
 	//			}
 	//			Gamma.FuncBlock = FuncBlock;
-	//			@Var ZenNode BodyNode = GreenTeaUtils.TypeBlock(Gamma, FuncBlock.FuncBlock, ZenStaticTable.VoidType);
+	//			@Var ZenNode BodyNode = ZenUtils.TypeBlock(Gamma, FuncBlock.FuncBlock, ZenSystem.VoidType);
 	//			if(Gamma.FoundUncommonFunc) {
 	//				Gamma.FuncBlock.DefinedFunc.FuncFlag = UnsetFlag(Gamma.FuncBlock.DefinedFunc.FuncFlag, CommonFunc);
 	//			}
