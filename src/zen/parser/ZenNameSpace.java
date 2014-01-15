@@ -270,12 +270,18 @@ public final class ZenNameSpace {
 			if(NameSpace.DefiningFunc != null) {
 				return NameSpace.DefiningFunc;
 			}
+			NameSpace = NameSpace.ParentNameSpace;
 		}
 		return null;
 	}
 
 	public void SetDefiningFunc(ZenFunc Func) {
-		this.DefiningFunc = new ZenDefiningFunc(Func.FuncFlag, Func.FuncName, Func.FuncType);
+		if(Func == null || (Func instanceof ZenDefiningFunc)) {
+			this.DefiningFunc = (ZenDefiningFunc)Func;
+		}
+		else {
+			this.DefiningFunc = new ZenDefiningFunc(Func.FuncFlag, Func.FuncName, Func.FuncType);
+		}
 	}
 
 	// Function
