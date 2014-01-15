@@ -104,8 +104,8 @@ public class ZenTransformer implements ZenVisitor {
 		while(SubNode.ParentNode != BlockNode) {
 			SubNode = SubNode.ParentNode;
 		}
-		for(int i = 0; i < BlockNode.StatementList.size(); i = i + 1) {
-			if(BlockNode.StatementList.get(i) == SubNode) {
+		for(int i = 0; i < BlockNode.StmtList.size(); i = i + 1) {
+			if(BlockNode.StmtList.get(i) == SubNode) {
 				return i;
 			}
 		}
@@ -114,12 +114,12 @@ public class ZenTransformer implements ZenVisitor {
 
 	protected void InsertInBlockStatementBefore(ZenBlockNode BlockNode, ZenNode SubNode, ZenNode InsertedNode) {
 		int index = this.FindInBlockStatementIndex(BlockNode, SubNode);
-		BlockNode.StatementList.add(index, BlockNode.SetChild(InsertedNode));
+		BlockNode.StmtList.add(index, BlockNode.SetChild(InsertedNode));
 	}
 
 	protected void ReplaceInBlockStatement(ZenBlockNode BlockNode, ZenNode Node, ZenNode ReplacedNode) {
 		int index = this.FindInBlockStatementIndex(BlockNode, Node);
-		BlockNode.StatementList.set(index, BlockNode.SetChild(ReplacedNode));
+		BlockNode.StmtList.set(index, BlockNode.SetChild(ReplacedNode));
 	}
 
 	@Override public void VisitEmptyNode(ZenEmptyNode Node) {
@@ -237,12 +237,12 @@ public class ZenTransformer implements ZenVisitor {
 	}
 
 	@Override public void VisitBlockNode(ZenBlockNode Node) {
-		this.TransformNodeList(Node, Node.StatementList);
+		this.TransformNodeList(Node, Node.StmtList);
 	}
 
 	@Override public void VisitVarDeclNode(ZenVarDeclNode Node) {
 		Node.InitNode = this.Transform(Node, Node.InitNode);
-		this.TransformNodeList(Node, Node.StatementList);
+		this.TransformNodeList(Node, Node.StmtList);
 	}
 
 	@Override public void VisitIfNode(ZenIfNode Node) {

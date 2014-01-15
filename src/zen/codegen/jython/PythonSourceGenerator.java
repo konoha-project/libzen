@@ -72,10 +72,10 @@ public class PythonSourceGenerator extends ZenSourceGenerator {
 		this.SetNativeType(ZenSystem.StringType, "str");
 	}
 
-	@Override public void VisitStatementList(ArrayList<ZenNode> StatementList) {
+	@Override public void VisitStmtList(ArrayList<ZenNode> StmtList) {
 		int i = 0;
-		while (i < StatementList.size()) {
-			ZenNode SubNode = StatementList.get(i);
+		while (i < StmtList.size()) {
+			ZenNode SubNode = StmtList.get(i);
 			this.CurrentBuilder.AppendLineFeed();
 			this.CurrentBuilder.AppendIndent();
 			this.GenerateCode(SubNode);
@@ -93,7 +93,7 @@ public class PythonSourceGenerator extends ZenSourceGenerator {
 	public void VisitBlockNode(ZenBlockNode Node) {
 		this.CurrentBuilder.Append(":");
 		this.CurrentBuilder.Indent();
-		this.VisitStatementList(Node.StatementList);
+		this.VisitStmtList(Node.StmtList);
 		this.CurrentBuilder.UnIndent();
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.AppendIndent();

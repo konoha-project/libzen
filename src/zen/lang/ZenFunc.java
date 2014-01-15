@@ -102,6 +102,13 @@ public class ZenFunc implements ZenFuncFlag {
 		return false;
 	}
 
+	public final boolean IsConverterFunc() {
+		return ZenUtils.IsFlag(this.FuncFlag, ZenFuncFlag.ConverterFunc);
+	}
+	public final boolean IsCoercionFunc() {
+		return ZenUtils.IsFlag(this.FuncFlag, ZenFuncFlag.CoercionFunc);
+	}
+
 	//	public void GenerateNativeFunc() {
 	//		if(this.HasStaticBlock()) {
 	//			@Var ZenFuncBlock FuncBlock = (/*cast*/ZenFuncBlock)this.FuncBody;

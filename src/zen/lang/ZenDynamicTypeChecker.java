@@ -304,10 +304,10 @@ public class ZenDynamicTypeChecker extends ZenTypeChecker {
 	@Override public void VisitBlockNode(ZenBlockNode Node) {
 		if(this.IsVisitable()) {
 			int i = 0;
-			while(i < Node.StatementList.size()) {
-				ZenNode SubNode = Node.StatementList.get(i);
+			while(i < Node.StmtList.size()) {
+				ZenNode SubNode = Node.StmtList.get(i);
 				SubNode = this.TypeCheck(SubNode, Node.NameSpace, ZenSystem.VoidType, ZenTypeChecker.DefaultTypeCheckPolicy);
-				Node.StatementList.set(i, SubNode);
+				Node.StmtList.set(i, SubNode);
 				if(SubNode.IsBreakingBlock()) {
 					break;
 				}

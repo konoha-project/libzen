@@ -66,7 +66,7 @@ public class RubySourceGenerator extends ZenSourceGenerator {
 	public void VisitBlockNode(ZenBlockNode Node) {
 		this.CurrentBuilder.Append("do");
 		this.CurrentBuilder.Indent();
-		for(ZenNode SubNode : Node.StatementList) {
+		for(ZenNode SubNode : Node.StmtList) {
 			this.CurrentBuilder.AppendLineFeed();
 			this.CurrentBuilder.AppendIndent();
 			this.GenerateCode(SubNode);

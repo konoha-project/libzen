@@ -32,16 +32,16 @@ import zen.parser.ZenToken;
 import zen.parser.ZenVisitor;
 
 public class ZenBlockNode extends ZenNode {
-	@Field public ArrayList<ZenNode> StatementList;
+	@Field public ArrayList<ZenNode> StmtList;
 	@Field public ZenNameSpace NameSpace;
 	public ZenBlockNode(ZenToken SourceToken, ZenNameSpace NameSpace) {
 		super();
 		this.SourceToken = SourceToken;
-		this.StatementList = new ArrayList<ZenNode>();
+		this.StmtList = new ArrayList<ZenNode>();
 		this.NameSpace = NameSpace;
 	}
 	@Override public void Append(ZenNode Node) {
-		this.StatementList.add(this.SetChild(Node));
+		this.StmtList.add(this.SetChild(Node));
 	}
 	//	@Override public Object Eval(ZenNameSpace NameSpace, boolean EnforceConst)  {
 	//		return null;
@@ -51,8 +51,8 @@ public class ZenBlockNode extends ZenNode {
 	}
 
 	@Override public ZenReturnNode ToReturnNode() {
-		if(this.StatementList.size() == 1) {
-			return this.StatementList.get(0).ToReturnNode();
+		if(this.StmtList.size() == 1) {
+			return this.StmtList.get(0).ToReturnNode();
 		}
 		return null;
 	}

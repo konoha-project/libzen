@@ -89,7 +89,7 @@ public class CommonLispSourceGenerator extends ZenSourceGenerator {
 
 	@Override public void VisitBlockNode(ZenBlockNode Node) {
 		this.CurrentBuilder.Indent();
-		this.VisitStatementList(Node.StatementList);
+		this.VisitStmtList(Node.StmtList);
 		this.CurrentBuilder.UnIndent();
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.AppendIndent();

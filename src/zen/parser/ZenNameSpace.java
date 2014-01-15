@@ -200,6 +200,10 @@ public final class ZenNameSpace {
 		return null;
 	}
 
+	public final static String SuffixPatternSymbol(String PatternName) {
+		return "\t" + PatternName;
+	}
+
 	public ZenSyntaxPattern GetExtendedSyntaxPattern(String PatternName) {
 		@Var Object Body = this.GetSymbol(ZenNameSpace.SuffixPatternSymbol(PatternName));
 		if(Body instanceof ZenSyntaxPattern) {
@@ -236,6 +240,7 @@ public final class ZenNameSpace {
 		}
 	}
 
+	// Type
 	public final ZenType GetType(String TypeName) {
 		@Var Object TypeInfo = this.GetSymbol(TypeName);
 		if(TypeInfo instanceof ZenType) {
@@ -259,7 +264,6 @@ public final class ZenNameSpace {
 	}
 
 	// DefiningFunc
-
 	public ZenDefiningFunc GetDefiningFunc() {
 		@Var ZenNameSpace NameSpace = this;
 		while(NameSpace != null) {
@@ -274,6 +278,7 @@ public final class ZenNameSpace {
 		this.DefiningFunc = new ZenDefiningFunc(Func.FuncFlag, Func.FuncName, Func.FuncType);
 	}
 
+	// Function
 	public final void AppendFuncName(ZenFunc Func, ZenToken SourceToken) {
 		@Var Object OldValue = this.GetLocalSymbol(Func.FuncName);
 		assert(!(OldValue instanceof ZenSyntaxPattern));
@@ -331,24 +336,29 @@ public final class ZenNameSpace {
 	//		return TypeVar;
 	//	}
 
-	public final Object GetClassSymbol(ZenType ClassType, String Symbol, boolean RecursiveSearch) {
+	private final static String ClassSymbol(ZenType ClassType, String Symbol) {
+		return ClassType.GetUniqueName() + "." + Symbol;
+	}
+
+	protected final Object GetClassSymbol(ZenType ClassType, String Symbol, boolean RecursiveSearch) {
 		while(ClassType != null) {
 			@Var String Key = ZenNameSpace.ClassSymbol(ClassType, Symbol);
 			@Var Object Value = this.GetSymbol(Key);
 			if(Value != null) {
 				return Value;
 			}
-			//			if(ClassType.IsDynamicNaitiveLoading() & this.Context.RootNameSpace.GetLocalUndefinedSymbol(Key) == null) {
-			//				Value = LibZen.LoadNativeStaticFieldValue(ClassType, Symbol.substring(1));
-			//				if(Value != null) {
-			//					return Value;
-			//				}
-			//				//LibZen.LoadNativeMethods(ClassType, Symbol, FuncList);
-			//			}
 			if(!RecursiveSearch) {
 				break;
 			}
 			ClassType = ClassType.GetSuperType();
+		}
+		return null;
+	}
+
+	public ZenFunc GetCoercionFunc(ZenType FromType, ZenType ToType) {
+		Object Func = this.GetClassSymbol(FromType, ToType.GetUniqueName(), true);
+		if(Func instanceof ZenFunc && ((ZenFunc)Func).IsCoercionFunc()) {
+			return (ZenFunc)Func;
 		}
 		return null;
 	}
@@ -643,38 +653,28 @@ public final class ZenNameSpace {
 	//		}
 	//	}
 
-	public final static String FuncSymbol(String Symbol) {
-		return LibZen.IsVariableName(Symbol, 0) ? Symbol : "__" + Symbol;
-	}
+	//	public final static String FuncSymbol(String Symbol) {
+	//		return LibZen.IsVariableName(Symbol, 0) ? Symbol : "__" + Symbol;
+	//	}
+	//
+	//	public final static String ConverterSymbol(ZenType ClassType) {
+	//		return ClassType.GetUniqueName();
+	//	}
+	//
+	//	public final static String ConstructorSymbol() {
+	//		return "";
+	//	}
+	//
+	//	public final static String SetterSymbol(String Symbol) {
+	//		return Symbol + "=";
+	//	}
+	//
+	//	public final static String GetterSymbol(String Symbol) {
+	//		return Symbol + "+";
+	//	}
+	//
 
-	public final static String ConverterSymbol(ZenType ClassType) {
-		return ClassType.GetUniqueName();
-	}
-
-	public final static String ConstructorSymbol() {
-		return "";
-	}
-
-	public final static String SetterSymbol(String Symbol) {
-		return Symbol + "=";
-	}
-
-	public final static String GetterSymbol(String Symbol) {
-		return Symbol + "+";
-	}
-
-	public final static String ClassSymbol(ZenType ClassType, String Symbol) {
-		return ClassType.GetUniqueName() + "." + Symbol;
-	}
-
-	public final static String ClassStaticSymbol(ZenType ClassType, String Symbol) {
+	public final static String StringfyClassStaticSymbol(ZenType ClassType, String Symbol) {
 		return ClassType.GetUniqueName() + ".@" + Symbol;
 	}
-
-	public final static String SuffixPatternSymbol(String PatternName) {
-		return "\t" + PatternName;
-	}
-
-
-
 }

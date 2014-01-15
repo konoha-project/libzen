@@ -295,7 +295,7 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 				Node.Accept(this);
 				Node = this.StackedTypedNode;
 			}
-			Node = this.TypeCheckImpl(Node, ContextType, TypeCheckPolicy);
+			Node = this.TypeCheckImpl(Node, NameSpace, ContextType, TypeCheckPolicy);
 			this.StackedNameSpace = NameSpace_;
 			this.StackedContextType = ContextType_;
 			this.StackedTypedNode = TypedNode_;
@@ -307,7 +307,7 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		return Node;
 	}
 
-	private final ZenNode TypeCheckImpl(ZenNode Node, ZenType ContextType, int TypeCheckPolicy) {
+	private final ZenNode TypeCheckImpl(ZenNode Node, ZenNameSpace NameSpace, ZenType ContextType, int TypeCheckPolicy) {
 		if(Node.IsErrorNode()) {
 			return Node;
 		}
@@ -333,16 +333,12 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		//				return this.CreateSyntaxErrorNode(ParsedTree, "value must be const");
 		//			}
 		//		}
-		@Var ZenFunc Func1 = this.GetCoercionFunc(Node.Type, ContextType);
-		if(Func1 != null) {
+		@Var ZenFunc CoercionFunc = NameSpace.GetCoercionFunc(Node.Type, ContextType);
+		if(CoercionFunc != null) {
 
 		}
 		//System.err.println("node="+ LibZen.GetClassName(Node) + "type error: requested = " + Type + ", given = " + Node.Type);
 		return new ZenErrorNode(Node.SourceToken, "type error: requested = " + ContextType + ", given = " + Node.Type);
-	}
-
-	private ZenFunc GetCoercionFunc(ZenType Type, ZenType ContextType) {
-		return null;
 	}
 
 	protected ZenType GetIndexType(ZenNameSpace NameSpace, ZenType RecvType) {

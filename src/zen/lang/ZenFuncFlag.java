@@ -27,6 +27,8 @@ package zen.lang;
 public interface ZenFuncFlag {
 
 	public final static int PhantomFunc = 1 << 10;
+	public final static int ConverterFunc       = 1 << 16;
+	public final static int CoercionFunc        = (1 << 17) | ConverterFunc;  //@Coercion
 
 	// FuncFlag
 	//	public final static int		ExportFunc		    = 1 << 0;  // @Export
@@ -46,8 +48,6 @@ public interface ZenFuncFlag {
 	//	public final static int     GetterFunc          = 1 << 13;
 	//	public final static int     SetterFunc          = 1 << 14;
 	//	public final static int     OperatorFunc        = 1 << 15;  //@Operator
-	//	public final static int     ConverterFunc       = 1 << 16;
-	//	public final static int     CoercionFunc        = 1 << 17;  //@Coercion
 	//	public final static int     StrongCoercionFunc  = 1 << 18;  //@StrongCoercion
 	//	public final static int     GenericFunc         = 1 << 15;
 	//	public final static int		LazyFunc		    = 1 << 16;

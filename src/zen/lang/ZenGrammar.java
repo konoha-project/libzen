@@ -665,7 +665,7 @@ public class ZenGrammar {
 				SymbolClass = NameSpace.NewVirtualClass(ClassName, SymbolToken);
 			}
 			SymbolToken = TokenContext.GetTokenAndMoveForward(); /* class name */
-			SymbolName = ZenNameSpace.ClassStaticSymbol(SymbolClass, SymbolName);
+			SymbolName = ZenNameSpace.StringfyClassStaticSymbol(SymbolClass, SymbolName);
 			SourceToken.AddTypeInfoToErrorMessage(SymbolClass);
 		}
 		@Var ZenType SymbolType = TokenContext.ParseType(NameSpace, "$TypeAnnotation$", ZenSystem.VarType);
