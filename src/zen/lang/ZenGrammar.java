@@ -350,6 +350,8 @@ public class ZenGrammar {
 
 	public static ZenNode MatchArrayLiteral(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenNode LeftNode) {
 		@Var ZenNode LiteralNode = new ZenArrayLiteralNode();
+		@Var ZenToken Token = TokenContext.GetTokenAndMoveForward(); /* "[" */
+		LiteralNode.SourceToken = Token;
 		if(!TokenContext.MatchToken("]")) {
 			while(TokenContext.HasNext()) {
 				LiteralNode = TokenContext.AppendMatchedPattern(LiteralNode, NameSpace, "$Expression$", ZenTokenContext.Required);
