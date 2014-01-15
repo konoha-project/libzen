@@ -32,8 +32,10 @@ import zen.ast.ZenApplyNode;
 import zen.ast.ZenCastNode;
 import zen.ast.ZenErrorNode;
 import zen.ast.ZenFuncDeclNode;
+import zen.ast.ZenFunctionLiteralNode;
 import zen.ast.ZenNode;
 import zen.ast.ZenParamNode;
+import zen.deps.Constructor;
 import zen.deps.Field;
 import zen.deps.Var;
 import zen.parser.ZenLogger;
@@ -41,6 +43,101 @@ import zen.parser.ZenNameSpace;
 import zen.parser.ZenToken;
 import zen.parser.ZenUtils;
 import zen.parser.ZenVisitor;
+
+class FuncContext {
+	@Field FuncContext Parent;
+	@Field public ZenFunc DefinedFunc;
+	@Field public ZenType ReturnType;
+	@Field ArrayList<ZenVarType> VarTypeList;
+	@Field public int VarIndex;
+	@Field public int CountOfUnknownTypeNode;
+
+	@Constructor FuncContext(FuncContext Parent, ZenFunc DefinedFunc) {
+		this.Parent = Parent;
+		this.DefinedFunc = DefinedFunc;
+		if(this.DefinedFunc == null) {
+			this.ReturnType = null;
+		}
+		else {
+			this.ReturnType = DefinedFunc.GetReturnType();
+		}
+		this.VarTypeList = new ArrayList<ZenVarType>();
+		this.VarIndex = 0;
+		this.CountOfUnknownTypeNode = 0;
+	}
+
+	public ZenType CheckFuncType(ArrayList<ZenNode> ParamList) {
+		@Var boolean HasVar = false;
+		@Var boolean ResetType = false;
+		@Var ZenType FuncType = this.DefinedFunc.GetFuncType();
+		@Var int i = 0;
+		while(i < FuncType.GetParamSize()) {
+			ZenType ParamType = FuncType.GetParamType(0);
+			if(ParamType.IsVarType()) {
+				ResetType = true;
+				break;
+			}
+			i = i + 1;
+		}
+		if(ResetType) {
+			@Var ArrayList<ZenType> TypeList = new ArrayList<ZenType>();
+			if(this.ReturnType.IsVarType()) {
+				this.ReturnType = ZenSystem.VoidType;
+			}
+			TypeList.add(this.ReturnType.GetRealType());
+			while(i < ParamList.size()) {
+				@Var ZenParamNode ParamNode = (ZenParamNode)ParamList.get(i);
+				TypeList.add(ParamNode.Type.GetRealType());
+				if(ParamNode.Type.IsVarType()) {
+					HasVar = true;
+				}
+				i = i + 1;
+			}
+			this.DefinedFunc.FuncType = ZenSystem.LookupFuncType(TypeList);
+			if(HasVar) {
+				return ZenSystem.VarType;
+			}
+			return this.DefinedFunc.FuncType;
+		}
+		return FuncType;
+	}
+
+	public int GetVarSize() {
+		@Var int count = 0;
+		@Var int i = 0;
+		while(i < this.VarTypeList.size()) {
+			@Var ZenVarType VarType = this.VarTypeList.get(i);
+			if(VarType.IsVarType()) {
+				count = count + 1;
+			}
+			i = i + 1;
+		}
+		return count;
+	}
+
+	public void Dump() {
+		@Var int i = 0;
+		System.err.println("debug returning type: " + this.ReturnType);
+		while(i < this.VarTypeList.size()) {
+			@Var ZenVarType VarType = this.VarTypeList.get(i);
+			System.err.println("debug type inference: " + VarType.ShortName + ": " + VarType.GetRealType());
+			i = i + 1;
+		}
+		System.err.println("debug unknown type count = " + this.CountOfUnknownTypeNode);
+		this.VarTypeList.clear();
+	}
+
+	public int GetVarIndex() {
+		int Index = this.VarIndex;
+		this.VarIndex = this.VarIndex + 1;
+		return Index;
+	}
+
+	public void CountUnknownTypeNode(ZenNode Node) {
+		this.CountOfUnknownTypeNode = this.CountOfUnknownTypeNode + 1;
+	}
+
+}
 
 public abstract class ZenTypeChecker implements ZenVisitor {
 	public final static int DefaultTypeCheckPolicy			= 0;
@@ -61,7 +158,7 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 	@Field public ZenLogger Logger;
 	@Field private boolean StoppedVisitor;
 
-	@Field ArrayList<ZenVarType> VarTypeList;
+	@Field private FuncContext FuncScope;
 
 	public ZenTypeChecker(ZenLogger Logger) {
 		this.Logger = Logger;
@@ -69,7 +166,7 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		this.StackedContextType = null;
 		this.StackedTypedNode = null;
 		this.StoppedVisitor = false;
-		this.VarTypeList = new ArrayList<ZenVarType>();
+		this.FuncScope = new FuncContext(null, null);
 	}
 
 	@Override public final void EnableVisitor() {
@@ -90,12 +187,6 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 
 	public final ZenType GetContextType() {
 		return this.StackedContextType;
-	}
-
-	protected final ZenType VarType(String Name) {
-		ZenVarType VarType = new ZenVarType(Name);
-		this.VarTypeList.add(VarType);
-		return VarType;
 	}
 
 	public final void TypedNode(ZenNode Node, ZenType Type) {
@@ -207,7 +298,6 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		return this.GuessFuncTypeAcceptedParam(FuncList, Node, BaseSize);
 	}
 
-
 	protected ZenType GuessFuncType(ZenNameSpace NameSpace, String FuncName, ZenApplyNode Node) {
 		@Var ArrayList<ZenFunc> FuncList = new ArrayList<ZenFunc>();
 		@Var int FuncParamSize = Node.ParamList.size();
@@ -283,22 +373,33 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		return ZenSystem.VarType;
 	}
 
+	public final ZenNode TypeCheckFuncBody(ZenNameSpace NameSpace, ZenNode BodyNode) {
+		int Stopper = Integer.MAX_VALUE;
+		while(this.IsVisitable()) {
+			this.FuncScope.CountOfUnknownTypeNode = 0;
+			BodyNode = this.TypeCheck(BodyNode, NameSpace, ZenSystem.VoidType, 0);
+			int UntypedSize = this.FuncScope.GetVarSize();
+			System.err.println("debug untyped node=" + this.FuncScope.CountOfUnknownTypeNode + ", var=" + UntypedSize);
+			if(this.FuncScope.CountOfUnknownTypeNode == 0 || Stopper == this.FuncScope.CountOfUnknownTypeNode) {
+				break;
+			}
+			Stopper = this.FuncScope.CountOfUnknownTypeNode;
+		}
+		return BodyNode;
+	}
+
 	public final ZenNode TypeCheck(ZenNode Node, ZenNameSpace NameSpace, ZenType ContextType, int TypeCheckPolicy) {
-		if(this.IsVisitable()) {
+		if(this.IsVisitable() && (Node.Type == null || Node.Type.IsVarType())) {
 			ZenNode ParentNode = Node.ParentNode;
 			ZenNameSpace NameSpace_ = this.StackedNameSpace;
 			ZenType ContextType_ = this.StackedContextType;
-			ZenNode TypedNode_ = this.StackedTypedNode;
 			this.StackedNameSpace = NameSpace;
 			this.StackedContextType = ContextType;
-			if(Node.Type == null || Node.Type.IsVarType()) {
-				Node.Accept(this);
-				Node = this.StackedTypedNode;
-			}
-			Node = this.TypeCheckImpl(Node, NameSpace, ContextType, TypeCheckPolicy);
+			Node.Accept(this);
+			Node = this.TypeCheckImpl(this.StackedTypedNode, NameSpace, ContextType, TypeCheckPolicy);
+			this.StackedTypedNode = Node;
 			this.StackedNameSpace = NameSpace_;
 			this.StackedContextType = ContextType_;
-			this.StackedTypedNode = TypedNode_;
 			if(ParentNode != Node.ParentNode && ParentNode != null) {
 				ParentNode.SetChild(Node);
 			}
@@ -313,6 +414,19 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		}
 		if(Node.Type == null) {  // TODO: assert(Node.Type != null);
 			Node.Type = ZenSystem.VarType;
+		}
+		if(!ContextType.IsVarType() && !ContextType.IsVoidType() && Node.Type instanceof ZenVarType) {
+			((ZenVarType)Node.Type).Infer(ContextType, Node.SourceToken);
+			Node.Type = ContextType;
+			return Node;
+		}
+		if(ContextType instanceof ZenVarType && !Node.Type.IsVarType()) {
+			((ZenVarType)ContextType).Infer(Node.Type, Node.SourceToken);
+			return Node;
+		}
+		if(Node.Type.IsVarType()) {
+			this.FuncScope.CountUnknownTypeNode(Node);
+			return Node;
 		}
 		if(Node.Type == ContextType || ContextType.IsVarType() || ContextType.Accept(Node.Type) || ZenUtils.IsFlag(TypeCheckPolicy, NoCheckPolicy)) {
 			return Node;
@@ -373,15 +487,12 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		//TODO
 	}
 
-
-
-	protected ZenType GetReturnType(ZenNameSpace NameSpace) {
-		// TODO Auto-generated method stub
-		return null;
+	protected ZenType GetReturnType() {
+		return this.FuncScope.ReturnType;
 	}
 
-	protected void InferReturnType(ZenNameSpace NameSpace, ZenType InferredType) {
-		// TODO Auto-generated method stub
+	protected void InferReturnType(ZenType InferredType) {
+		this.FuncScope.ReturnType = InferredType.GetRealType();
 	}
 
 	protected ZenNode CreateDefaultValueNode(ZenType Type) {
@@ -397,16 +508,27 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		return new ZenErrorNode(Node.SourceToken, "undefined name: " + VarName);
 	}
 
-	protected ZenVarInfo GetVarInfo(ZenNameSpace NameSpace, String VarName) {
+	protected final ZenType NewVarType(ZenType VarType, String Name, ZenToken SourceToken) {
+		if(VarType == null || !(VarType instanceof ZenVarType)) {
+			if(VarType.IsVarType()) {
+				ZenVarType VarType1 = new ZenVarType(Name, SourceToken);
+				this.FuncScope.VarTypeList.add(VarType1);
+				VarType = VarType1;
+			}
+		}
+		return VarType;
+	}
+
+	protected ZenVariable GetLocalVariable(ZenNameSpace NameSpace, String VarName) {
 		@Var Object VarInfo = NameSpace.GetSymbol(VarName);
-		if(VarInfo instanceof ZenVarInfo) {
-			return (ZenVarInfo)VarInfo;
+		if(VarInfo instanceof ZenVariable) {
+			return (ZenVariable)VarInfo;
 		}
 		return null;
 	}
 
-	protected void SetVarInfo(ZenNameSpace NameSpace, ZenType VarType, String VarName, ZenToken SourceToken) {
-		@Var ZenVarInfo VarInfo = new ZenVarInfo(NameSpace.GetDefiningFunc(), 0, VarType, VarName, SourceToken);
+	protected void SetLocalVariable(ZenNameSpace NameSpace, ZenType VarType, String VarName, ZenToken SourceToken) {
+		@Var ZenVariable VarInfo = new ZenVariable(NameSpace.GetDefiningFunc(), 0, VarType, VarName, this.FuncScope.GetVarIndex(), SourceToken);
 		NameSpace.SetSymbol(VarName, VarInfo, SourceToken);
 	}
 
@@ -442,20 +564,27 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		return Func;
 	}
 
-	public ZenFunc PopFuncParamType(ZenNameSpace NameSpace, ZenFunc DefinedFunc, ArrayList<ZenNode> ArgumentList) {
-		@Var ZenFunc UpperDefiningFunc = NameSpace.GetDefiningFunc();
+	public void PushFuncScope(ZenNameSpace NameSpace, ZenFunc DefinedFunc, ArrayList<ZenNode> ArgumentList) {
 		NameSpace.SetDefiningFunc(DefinedFunc);
+		this.FuncScope = new FuncContext(this.FuncScope, DefinedFunc);
 		@Var int i = 0;
 		while(i < ArgumentList.size()) {
-			ZenParamNode Node = (ZenParamNode)ArgumentList.get(i);
-			this.SetVarInfo(NameSpace, Node.Type, Node.Name, Node.SourceToken);
+			@Var ZenParamNode Node = (ZenParamNode)ArgumentList.get(i);
+			Node.Type = this.NewVarType(Node.Type, Node.Name, Node.SourceToken);
+			this.SetLocalVariable(NameSpace, Node.Type, Node.Name, Node.SourceToken);
 			i = i + 1;
 		}
-		return UpperDefiningFunc;
 	}
 
-	public void PopFunc(ZenNameSpace NameSpace, ZenFunc UpperDefiningFunc) {
-		NameSpace.SetDefiningFunc(UpperDefiningFunc);
+	public ZenType PopFuncScope(ZenNameSpace NameSpace, ZenFunctionLiteralNode FuncNode) {
+		NameSpace.SetDefiningFunc(null);
+		ZenType Type = this.FuncScope.CheckFuncType(FuncNode.ArgumentList);
+		if(Type.IsFuncType()) {
+			FuncNode.ReturnType = Type.GetParamType(0);
+		}
+		this.FuncScope.Dump();
+		this.FuncScope = this.FuncScope.Parent;
+		return Type;
 	}
 
 	public void UpdateParamType() {

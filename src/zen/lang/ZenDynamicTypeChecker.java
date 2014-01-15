@@ -130,7 +130,7 @@ public class ZenDynamicTypeChecker extends ZenTypeChecker {
 	@Override public void VisitGetLocalNode(ZenGetLocalNode Node) {
 		@Var ZenNameSpace NameSpace = this.GetNameSpace();
 		@Var ZenType VarType = ZenSystem.VarType;
-		@Var ZenVarInfo VarInfo = this.GetVarInfo(NameSpace, Node.VarName);
+		@Var ZenVariable VarInfo = this.GetLocalVariable(NameSpace, Node.VarName);
 		if(VarInfo != null) {
 			Node.VarName = VarInfo.VarName;
 			Node.VarIndex = VarInfo.VarUniqueIndex;
@@ -148,7 +148,7 @@ public class ZenDynamicTypeChecker extends ZenTypeChecker {
 
 	@Override public void VisitSetLocalNode(ZenSetLocalNode Node) {
 		ZenNameSpace NameSpace = this.GetNameSpace();
-		ZenVarInfo VarInfo = this.GetVarInfo(NameSpace, Node.VarName);
+		ZenVariable VarInfo = this.GetLocalVariable(NameSpace, Node.VarName);
 		if(VarInfo == null) {
 			this.CheckErrorNode(this.CreateUndefinedVarErrorNode(Node, Node.VarName));
 		}
@@ -214,7 +214,7 @@ public class ZenDynamicTypeChecker extends ZenTypeChecker {
 		@Var ZenNameSpace NameSpace = this.GetNameSpace();
 		if(Node.FuncNode instanceof ZenGetLocalNode) {
 			@Var ZenGetLocalNode VarNode = (ZenGetLocalNode)Node.FuncNode;
-			@Var ZenVarInfo VarInfo = this.GetVarInfo(NameSpace, VarNode.VarName);
+			@Var ZenVariable VarInfo = this.GetLocalVariable(NameSpace, VarNode.VarName);
 			if(VarInfo != null) {
 				VarNode.Type = VarInfo.VarType;
 			}
@@ -320,16 +320,10 @@ public class ZenDynamicTypeChecker extends ZenTypeChecker {
 
 	@Override public void VisitVarDeclNode(ZenVarDeclNode Node) {
 		ZenNameSpace NameSpace = this.GetNameSpace();
-		ZenType VarType = Node.Type;
-		if(Node.Type == null) {
-			Node.InitNode = this.TypeCheck(Node.InitNode, NameSpace, ZenSystem.VarType, ZenTypeChecker.DefaultTypeCheckPolicy);
-			VarType = Node.InitNode.Type;
-		}
-		else {
-			Node.InitNode = this.TypeCheck(Node.InitNode, NameSpace, Node.Type, ZenTypeChecker.DefaultTypeCheckPolicy);
-		}
+		Node.DeclType = this.NewVarType(Node.DeclType, Node.NativeName, Node.SourceToken);
+		Node.InitNode = this.TypeCheck(Node.InitNode, NameSpace, Node.DeclType, ZenTypeChecker.DefaultTypeCheckPolicy);
 		if(this.IsVisitable()) {
-			this.SetVarInfo(NameSpace, VarType, Node.NativeName, Node.SourceToken);
+			this.SetLocalVariable(NameSpace, Node.DeclType, Node.NativeName, Node.SourceToken);
 			this.VisitBlockNode(Node);
 		}
 	}
@@ -346,7 +340,7 @@ public class ZenDynamicTypeChecker extends ZenTypeChecker {
 
 	@Override public void VisitReturnNode(ZenReturnNode Node) {
 		ZenNameSpace NameSpace = this.GetNameSpace();
-		ZenType ReturnType = this.GetReturnType(NameSpace);
+		ZenType ReturnType = this.GetReturnType();
 		if(Node.ValueNode != null) {
 			Node.ValueNode = this.TypeCheck(Node.ValueNode, NameSpace, ReturnType, ZenTypeChecker.DefaultTypeCheckPolicy);
 			if(Node.ValueNode.IsErrorNode()) {
@@ -355,10 +349,10 @@ public class ZenDynamicTypeChecker extends ZenTypeChecker {
 		}
 		if(ReturnType.IsVarType()) {
 			if(Node.ValueNode == null) {
-				this.InferReturnType(NameSpace, ZenSystem.VoidType);
+				this.InferReturnType(ZenSystem.VoidType);
 			}
 			else {
-				this.InferReturnType(NameSpace, Node.ValueNode.Type);
+				this.InferReturnType(Node.ValueNode.Type);
 			}
 		}
 		else if(ReturnType.IsVoidType()) {
@@ -411,8 +405,7 @@ public class ZenDynamicTypeChecker extends ZenTypeChecker {
 		this.Todo(Node);
 	}
 
-	@Override
-	public void VisitParamNode(ZenParamNode Node) {
+	@Override public void VisitParamNode(ZenParamNode Node) {
 		// TODO Auto-generated method stub
 		this.Todo(Node);
 	}
@@ -428,11 +421,9 @@ public class ZenDynamicTypeChecker extends ZenTypeChecker {
 			}
 		}
 		ZenFunc DefinedFunc = this.DefineFunc(NameSpace, "", FuncType, Node.SourceToken);
-		ZenFunc UpperDefiningFunc = this.PopFuncParamType(NameSpace, DefinedFunc, Node.ArgumentList);
-		Node.BodyNode = this.TypeCheck(Node.BodyNode, NameSpace, ZenSystem.VarType, 0);
-		//this.UpdateParamType(FuncType);
-		this.PopFunc(NameSpace, UpperDefiningFunc);
-		this.TypedNode(Node, FuncType);
+		this.PushFuncScope(NameSpace, DefinedFunc, Node.ArgumentList);
+		Node.BodyNode = this.TypeCheck(Node.BodyNode, NameSpace, ZenSystem.VoidType, 0);
+		this.TypedNode(Node, this.PopFuncScope(NameSpace, Node));
 	}
 
 	@Override public void VisitFuncDeclNode(ZenFuncDeclNode Node) {
@@ -442,9 +433,9 @@ public class ZenDynamicTypeChecker extends ZenTypeChecker {
 		if(this.IsVisitable()) {
 			ZenFunc DefiningFunc = this.DefineFunc(NameSpace, Node.FuncName, FuncType, Node.SourceToken);
 			if(!DefiningFunc.IsLazyDef() && Node.BodyNode != null) {
-				@Var ZenFunc UpperDefiningFunc = this.PopFuncParamType(Node.NameSpace, DefiningFunc, Node.ArgumentList);
-				Node.BodyNode = this.TypeCheck(Node.BodyNode, Node.NameSpace, ZenSystem.VarType, 0);
-				this.PopFunc(Node.NameSpace, UpperDefiningFunc);
+				this.PushFuncScope(Node.NameSpace, DefiningFunc, Node.ArgumentList);
+				Node.BodyNode = this.TypeCheckFuncBody(Node.NameSpace, Node.BodyNode);
+				this.PopFuncScope(Node.NameSpace, Node);
 			}
 		}
 		this.TypedNode(Node, ZenSystem.VoidType);

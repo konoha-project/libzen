@@ -257,7 +257,7 @@ public final class ZenNameSpace {
 	}
 
 	public ZenType NewVirtualClass(String ClassName, ZenToken SourceToken) {
-		ZenType Type = new ZenVarType(ClassName);
+		ZenType Type = new ZenVarType(ClassName, SourceToken);
 		this.Generator.Logger.ReportInfo(SourceToken, "implicit defintion of type " + ClassName);
 		this.SetSymbol(ClassName, Type, SourceToken);
 		return Type;

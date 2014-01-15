@@ -27,7 +27,6 @@ package zen.lang;
 import zen.deps.Field;
 import zen.deps.LibZen;
 import zen.deps.Var;
-import zen.parser.ZenToken;
 import zen.parser.ZenUtils;
 //endif VAJA
 
@@ -59,10 +58,6 @@ public class ZenType implements ZenTypeConst {
 
 	public ZenType GetBaseType() {
 		return this;
-	}
-
-	public void Infer(ZenType Type, ZenToken SourceToken) {
-		// ZenVarInfo should be implemented
 	}
 
 	public boolean IsFoundTypeError() {

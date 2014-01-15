@@ -28,23 +28,23 @@ import zen.deps.Field;
 import zen.parser.ZenNameSpace;
 import zen.parser.ZenToken;
 
-public class ZenVarInfo {
-	@Field public ZenDefiningFunc  DefiningFunc;
+public class ZenVariable {
+	@Field public ZenFunc    DefiningFunc;
 	@Field public int        VarFlag;
 	@Field public ZenType	 VarType;
 	@Field public String	 VarName;
 	@Field public int        VarUniqueIndex;
-	@Field public ZenToken SourceToken;
-	@Field public int      DefCount;
-	@Field public int      UsedCount;
+	@Field public ZenToken   SourceToken;
+	@Field public int        DefCount;
+	@Field public int        UsedCount;
 
-	ZenVarInfo(ZenDefiningFunc DefiningFunc, int VarFlag, ZenType VarType, String VarName, ZenToken SourceToken) {
+	ZenVariable(ZenFunc DefiningFunc, int VarFlag, ZenType VarType, String VarName, int VarIndex, ZenToken SourceToken) {
 		this.DefiningFunc    = DefiningFunc;
 		this.VarFlag = VarFlag;
 		this.VarType = VarType;
 		this.VarName = VarName;
 		this.SourceToken = SourceToken;
-		this.VarUniqueIndex = this.DefiningFunc.GetVarIndex();
+		this.VarUniqueIndex = VarIndex;
 		this.UsedCount = 0;
 		this.DefCount  = 1;
 	}
