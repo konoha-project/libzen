@@ -59,7 +59,6 @@ import zen.ast.ZenParamNode;
 import zen.ast.ZenReturnNode;
 import zen.ast.ZenSetIndexNode;
 import zen.ast.ZenSetterNode;
-import zen.ast.ZenStatementNode;
 import zen.ast.ZenStringNode;
 import zen.ast.ZenThrowNode;
 import zen.ast.ZenTryNode;
@@ -759,7 +758,7 @@ public class ZenGrammar {
 	}
 
 	public static ZenNode MatchAnnotation(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenNode LeftNode) {
-		ZenMap<Object> Anno = null;
+		@Var ZenMap<Object> Anno = null;
 		@Var ZenToken Token = null;
 		while(TokenContext.MatchToken("@")) {
 			Token = TokenContext.GetTokenAndMoveForward();
@@ -779,15 +778,15 @@ public class ZenGrammar {
 		@Var ZenAnnotationNode AnnotationNode = (ZenAnnotationNode)TokenContext.ParsePattern(NameSpace, "$Annotation$", ZenTokenContext.Optional);
 		@Var ZenNode ParsedNode = TokenContext.ParsePattern(NameSpace, "$Expression$", ZenTokenContext.Required);
 		if(!ParsedNode.IsErrorNode() && TokenContext.HasNext()) {
-			if(ParsedNode instanceof ZenStatementNode) {
-				System.out.println();
+			//			if(ParsedNode instanceof ZenStatementNode) {  IMIFU
+			//				System.out.println();
+			//			}
+			//			else {
+			ZenToken Token = TokenContext.GetTokenAndMoveForward();
+			if(!Token.IsDelim() && !Token.IsIndent()) {
+				return TokenContext.CreateExpectedErrorNode(Token, ";");
 			}
-			else {
-				ZenToken Token = TokenContext.GetTokenAndMoveForward();
-				if(!Token.IsDelim() && !Token.IsIndent()) {
-					return TokenContext.CreateExpectedErrorNode(Token, ";");
-				}
-			}
+			//			}
 		}
 		if(AnnotationNode != null) {
 			AnnotationNode.Append(ParsedNode);
@@ -818,6 +817,7 @@ public class ZenGrammar {
 				/* VarDecl is defined as BlockNode to speficy its scope */
 				if(ParsedNode.GetStatementNode() instanceof ZenBlockNode) {
 					BlockNode = (ZenBlockNode)ParsedNode.GetStatementNode();
+					BlockNameSpace = BlockNode.NameSpace;
 				}
 			}
 			return ResultNode;
