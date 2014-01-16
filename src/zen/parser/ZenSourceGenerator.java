@@ -452,6 +452,19 @@ public class ZenSourceGenerator extends ZenGenerator {
 		this.CurrentBuilder.Append(Node.NativeName);
 		this.CurrentBuilder.AppendToken("=");
 		this.GenerateCode(Node.InitNode);
+		this.CurrentBuilder.Append(this.SemiColon);
+
+		// copied from VisitBlock(ZenBlockNode)
+		this.CurrentBuilder.Append("{");
+		this.CurrentBuilder.Indent();
+		this.VisitStmtList(Node.StmtList);
+		if(Node.StmtList.size() > 0) {
+			this.CurrentBuilder.Append(this.SemiColon);
+		}
+		this.CurrentBuilder.UnIndent();
+		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.AppendIndent();
+		this.CurrentBuilder.Append("}");
 	}
 
 	protected void VisitTypeAnnotation(ZenType Type) {
