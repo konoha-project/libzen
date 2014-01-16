@@ -27,10 +27,10 @@ package zen.parser;
 
 import zen.ast.ZenNode;
 import zen.deps.Field;
-import zen.lang.ZenTypeInfer;
 import zen.lang.ZenSystem;
 import zen.lang.ZenType;
 import zen.lang.ZenTypeChecker;
+import zen.lang.ZenTypeInfer;
 //endif VAJA
 
 public abstract class ZenGenerator extends ZenNodeUtils implements ZenVisitor {
@@ -101,7 +101,8 @@ public abstract class ZenGenerator extends ZenNodeUtils implements ZenVisitor {
 	}
 
 	public ZenType GetSetterType(ZenType BaseType, String Name) {
-		return ZenSystem.VoidType;   // readonly
+		return ZenSystem.VarType;     // undefined
+		//return ZenSystem.VoidType;   // readonly
 	}
 
 

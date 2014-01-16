@@ -491,7 +491,6 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		if(ContextType.IsVoidType() && !Node.Type.IsVoidType()) {
 			return new ZenCastNode(ZenSystem.VoidType, Node);
 		}
-
 		//		System.err.println("**** " + Node.getClass());
 		//		@Var Object ConstValue = Node.ToConstValue(this.Context, IsFlag(TypeCheckPolicy, OnlyConstPolicy));
 		//		if(ConstValue != null && !(Node.IsConstNode())) {  // recreated
@@ -554,7 +553,8 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 	}
 
 	protected ZenType InferFieldType(ZenNameSpace NameSpace, ZenType ClassType, String FieldName, ZenType InferredType, ZenToken SourceToken) {
-		if(ClassType.IsVarType() || InferredType.IsVarType() || InferredType.IsVarType()) {
+		System.err.println("debug inferrence " + ClassType + "." + FieldName + ": " + InferredType);
+		if(ClassType.IsVarType() || InferredType.IsVarType() || InferredType.IsVoidType()) {
 			return ZenSystem.VarType;
 		}
 		System.err.println("debug inferrence " + ClassType + "." + FieldName + ": " + InferredType);

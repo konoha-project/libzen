@@ -63,7 +63,6 @@ final public class ZenVarDeclNode extends ZenBlockNode {
 				this.SetChild(Node);
 			}
 		}
-		/*return this;*/
 	}
 
 	@Override public void Accept(ZenVisitor Visitor) {

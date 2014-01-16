@@ -26,6 +26,7 @@
 package zen.ast;
 import zen.deps.Field;
 import zen.deps.LibNative;
+import zen.lang.ZenSystem;
 import zen.lang.ZenType;
 import zen.parser.ZenNameSpace;
 import zen.parser.ZenToken;
@@ -37,7 +38,7 @@ public abstract class ZenNode {
 	@Field public ZenToken	SourceToken;
 
 	public ZenNode() {
-		this.Type = null;
+		this.Type = ZenSystem.VarType;
 		this.SourceToken = null;
 		this.ParentNode = null;
 	}

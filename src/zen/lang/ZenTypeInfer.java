@@ -197,9 +197,12 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		@Var ZenType FieldType = this.GetSetterType(NameSpace, Node.RecvNode.Type, Node.NativeName);
 		if(FieldType.IsVoidType()) {
 			this.CheckErrorNode(this.CreateReadOnlyErrorNode(Node, Node.RecvNode.Type, Node.NativeName));
+			return;
 		}
 		Node.ValueNode = this.TypeCheck(Node.ValueNode, NameSpace, FieldType, ZenTypeChecker.DefaultTypeCheckPolicy);
-		this.InferFieldType(NameSpace, Node.RecvNode.Type, Node.NativeName, Node.ValueNode.Type, Node.SourceToken);
+		if(FieldType.IsVarType()) {
+			this.InferFieldType(NameSpace, Node.RecvNode.Type, Node.NativeName, Node.ValueNode.Type, Node.SourceToken);
+		}
 		this.TypedNodeIf2(Node, ZenSystem.VoidType, Node.RecvNode, Node.ValueNode);
 	}
 
@@ -249,8 +252,8 @@ public class ZenTypeInfer extends ZenTypeChecker {
 
 	@Override public void VisitCastNode(ZenCastNode Node) {
 		ZenNameSpace NameSpace = this.GetNameSpace();
-		Node.ExprNode = this.TypeCheck(Node.ExprNode, NameSpace, Node.CastType, ZenTypeChecker.DefaultTypeCheckPolicy);
-		this.TypedNode(Node, Node.CastType);
+		Node.ExprNode = this.TypeCheck(Node.ExprNode, NameSpace, Node.Type, ZenTypeChecker.DefaultTypeCheckPolicy);
+		this.TypedNode(Node, Node.Type);
 	}
 
 	@Override public void VisitInstanceOfNode(ZenInstanceOfNode Node) {

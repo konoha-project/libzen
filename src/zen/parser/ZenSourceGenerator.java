@@ -167,6 +167,24 @@ public class ZenSourceGenerator extends ZenGenerator {
 		Node.Accept(this);
 	}
 
+	protected boolean IsNeededSurroud(ZenNode Node) {
+		if(Node instanceof ZenGetLocalNode || Node instanceof ZenGetterNode || Node instanceof ZenGroupNode) {
+			return false;
+		}
+		return true;
+	}
+
+	protected void GenerateSurroundCode(ZenNode Node) {
+		if(this.IsNeededSurroud(Node)) {
+			this.CurrentBuilder.Append("(");
+			this.GenerateCode(Node);
+			this.CurrentBuilder.Append(")");
+		}
+		else {
+			this.GenerateCode(Node);
+		}
+	}
+
 	public void AppendCode(String RawSource) {
 		this.CurrentBuilder.Append(RawSource);
 	}
@@ -274,16 +292,16 @@ public class ZenSourceGenerator extends ZenGenerator {
 		this.GenerateCode(Node.ValueNode);
 	}
 
-	@Override
-	public void VisitGetterNode(ZenGetterNode Node) {
-		this.GenerateCode(Node.RecvNode);
+
+	@Override public void VisitGetterNode(ZenGetterNode Node) {
+		this.GenerateSurroundCode(Node.RecvNode);
 		this.CurrentBuilder.Append(".");
 		this.CurrentBuilder.Append(Node.NativeName);
 	}
 
 	@Override
 	public void VisitSetterNode(ZenSetterNode Node) {
-		this.GenerateCode(Node.RecvNode);
+		this.GenerateSurroundCode(Node.RecvNode);
 		this.CurrentBuilder.Append(".");
 		this.CurrentBuilder.Append(Node.NativeName);
 		this.CurrentBuilder.AppendToken("=");
@@ -292,7 +310,7 @@ public class ZenSourceGenerator extends ZenGenerator {
 
 	@Override
 	public void VisitMethodCallNode(ZenMethodCallNode Node) {
-		this.GenerateCode(Node.RecvNode);
+		this.GenerateSurroundCode(Node.RecvNode);
 		this.CurrentBuilder.Append(".");
 		this.CurrentBuilder.Append(Node.MethodName);
 		this.VisitParamList("(", Node.ParamList, ")");
@@ -313,9 +331,7 @@ public class ZenSourceGenerator extends ZenGenerator {
 	@Override
 	public void VisitNotNode(ZenNotNode Node) {
 		this.CurrentBuilder.Append(this.NotOperator);
-		//		this.CurrentBuilder.Append("(");
-		this.GenerateCode(Node.RecvNode);
-		//		this.CurrentBuilder.Append(")");
+		this.GenerateSurroundCode(Node.RecvNode);
 	}
 
 	@Override
@@ -323,7 +339,7 @@ public class ZenSourceGenerator extends ZenGenerator {
 		this.CurrentBuilder.Append("(");
 		this.VisitType(Node.Type);
 		this.CurrentBuilder.Append(")");
-		this.GenerateCode(Node.ExprNode);
+		this.GenerateSurroundCode(Node.ExprNode);
 	}
 
 	@Override
