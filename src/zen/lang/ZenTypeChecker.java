@@ -35,6 +35,7 @@ import zen.ast.ZenFuncDeclNode;
 import zen.ast.ZenFunctionLiteralNode;
 import zen.ast.ZenNode;
 import zen.ast.ZenParamNode;
+import zen.ast.ZenStupidCastNode;
 import zen.deps.Constructor;
 import zen.deps.Field;
 import zen.deps.Var;
@@ -508,7 +509,7 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 
 		}
 		//System.err.println("node="+ LibZen.GetClassName(Node) + "type error: requested = " + Type + ", given = " + Node.Type);
-		return new ZenErrorNode(Node.SourceToken, "type error: requested = " + ContextType + ", given = " + Node.Type);
+		return new ZenStupidCastNode(ContextType, Node);
 	}
 
 	protected ZenType GetIndexType(ZenNameSpace NameSpace, ZenType RecvType) {

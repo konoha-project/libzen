@@ -29,7 +29,6 @@ import zen.parser.ZenToken;
 import zen.parser.ZenVisitor;
 
 final public class ZenTypeNode extends ZenConstNode {
-//	@Field public ZenType	ParsedType;
 	public ZenTypeNode/*constructor*/(ZenToken SourceToken, ZenType ParsedType) {
 		super(SourceToken);
 		this.Type = ParsedType;

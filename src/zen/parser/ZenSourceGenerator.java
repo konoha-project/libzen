@@ -64,6 +64,7 @@ import zen.ast.ZenSetIndexNode;
 import zen.ast.ZenSetLocalNode;
 import zen.ast.ZenSetterNode;
 import zen.ast.ZenStringNode;
+import zen.ast.ZenStupidCastNode;
 import zen.ast.ZenThrowNode;
 import zen.ast.ZenTryNode;
 import zen.ast.ZenUnaryNode;
@@ -337,6 +338,9 @@ public class ZenSourceGenerator extends ZenGenerator {
 	@Override
 	public void VisitCastNode(ZenCastNode Node) {
 		this.CurrentBuilder.Append("(");
+		if(Node instanceof ZenStupidCastNode) {
+			this.CurrentBuilder.AppendBlockComment("stupid");
+		}
 		this.VisitType(Node.Type);
 		this.CurrentBuilder.Append(")");
 		this.GenerateSurroundCode(Node.ExprNode);
@@ -446,8 +450,7 @@ public class ZenSourceGenerator extends ZenGenerator {
 		this.GenerateCode(Node.BodyNode);
 	}
 
-	@Override
-	public void VisitVarDeclNode(ZenVarDeclNode Node) {
+	@Override public void VisitVarDeclNode(ZenVarDeclNode Node) {
 		this.CurrentBuilder.Append("var");
 		this.CurrentBuilder.AppendWhiteSpace();
 		this.CurrentBuilder.Append(Node.NativeName);

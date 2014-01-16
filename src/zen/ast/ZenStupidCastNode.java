@@ -25,28 +25,13 @@
 package zen.ast;
 
 import zen.deps.Constructor;
-import zen.deps.Field;
 import zen.lang.ZenType;
 import zen.parser.ZenVisitor;
 
-//E.g., (T) $Expr
-public class ZenCastNode extends ZenNode {
-	@Field public ZenNode	ExprNode;
-	@Constructor public ZenCastNode(ZenType CastType, ZenNode Node) {
-		super();
-		this.Type = CastType;
-		this.ExprNode = null;
-		if(Node != null) {
-			this.ExprNode = this.SetChild(Node);
-		}
-	}
-	@Override public void Append(ZenNode Node) {
-		if(Node instanceof ZenTypeNode) {
-			this.Type = Node.Type;
-		}
-		else {
-			this.ExprNode = this.SetChild(Node);
-		}
+
+public class ZenStupidCastNode extends ZenCastNode {
+	@Constructor public ZenStupidCastNode(ZenType CastType, ZenNode Node) {
+		super(CastType, Node);
 	}
 
 	@Override public void Accept(ZenVisitor Visitor) {
@@ -54,7 +39,7 @@ public class ZenCastNode extends ZenNode {
 	}
 
 	@Override public boolean IsUntyped() {
-		return this.Type.IsVarType() || this.ExprNode.IsUntyped();
+		return false;
 	}
 
 }

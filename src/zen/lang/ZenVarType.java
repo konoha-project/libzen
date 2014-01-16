@@ -61,11 +61,12 @@ public class ZenVarType extends ZenType {
 	}
 
 	public void Infer(ZenType ContextType, ZenToken SourceToken) {
-		assert(this.RefType.IsVarType());
-		this.RefType = ContextType.GetRealType();
-		this.SourceToken = SourceToken;
-		this.TypeId = this.RefType.TypeId;
-		this.TypeFlag = this.RefType.TypeFlag;
+		if(this.RefType.IsVarType()) {
+			this.RefType = ContextType.GetRealType();
+			this.SourceToken = SourceToken;
+			this.TypeId = this.RefType.TypeId;
+			this.TypeFlag = this.RefType.TypeFlag;
+		}
 	}
 
 }
