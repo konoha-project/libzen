@@ -90,7 +90,7 @@ public final class ZenTokenContext {
 
 	public void FoundWhiteSpace() {
 		@Var int index = this.SourceTokenList.size() - 1;
-		if(index > 0) {
+		if(index > -1) {
 			@Var ZenToken Token = this.SourceTokenList.get(index);
 			Token.TokenFlag |= ZenParserConst.WhiteSpaceTokenFlag;
 		}
