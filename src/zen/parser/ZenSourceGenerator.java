@@ -346,15 +346,13 @@ public class ZenSourceGenerator extends ZenGenerator {
 		this.GenerateSurroundCode(Node.ExprNode);
 	}
 
-	@Override
-	public void VisitInstanceOfNode(ZenInstanceOfNode Node) {
+	@Override public void VisitInstanceOfNode(ZenInstanceOfNode Node) {
 		this.GenerateCode(Node.LeftNode);
 		this.CurrentBuilder.AppendToken("instanceof");
 		this.VisitType(Node.RightNode.Type);
 	}
 
-	@Override
-	public void VisitBinaryNode(ZenBinaryNode Node) {
+	@Override public void VisitBinaryNode(ZenBinaryNode Node) {
 		if (Node.ParentNode instanceof ZenBinaryNode) {
 			this.CurrentBuilder.Append("(");
 		}
@@ -366,15 +364,13 @@ public class ZenSourceGenerator extends ZenGenerator {
 		}
 	}
 
-	@Override
-	public void VisitComparatorNode(ZenComparatorNode Node) {
+	@Override public void VisitComparatorNode(ZenComparatorNode Node) {
 		this.GenerateCode(Node.LeftNode);
 		this.CurrentBuilder.AppendToken(Node.SourceToken.ParsedText);
 		this.GenerateCode(Node.RightNode);
 	}
 
-	@Override
-	public void VisitAndNode(ZenAndNode Node) {
+	@Override public void VisitAndNode(ZenAndNode Node) {
 		this.GenerateCode(Node.LeftNode);
 		this.CurrentBuilder.AppendToken(this.AndOperator);
 		this.GenerateCode(Node.RightNode);

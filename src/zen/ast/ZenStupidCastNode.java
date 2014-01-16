@@ -28,7 +28,6 @@ import zen.deps.Constructor;
 import zen.lang.ZenType;
 import zen.parser.ZenVisitor;
 
-
 public class ZenStupidCastNode extends ZenCastNode {
 	@Constructor public ZenStupidCastNode(ZenType CastType, ZenNode Node) {
 		super(CastType, Node);
@@ -39,7 +38,6 @@ public class ZenStupidCastNode extends ZenCastNode {
 	}
 
 	@Override public boolean IsUntyped() {
-		return false;
+		return true;
 	}
-
 }

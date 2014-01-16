@@ -388,10 +388,10 @@ public abstract class LibZen {
 		return List.size();
 	}
 
-	public final static ZenType[] CompactTypeList(int BaseIndex, ArrayList<ZenType> List) {
-		ZenType[] Tuple = new ZenType[List.size() - BaseIndex];
-		for(int i = BaseIndex; i < List.size(); i++) {
-			Tuple[i] = List.get(i);
+	public final static ZenType[] CompactTypeList(int BaseIndex, ArrayList<ZenType> TypeList) {
+		ZenType[] Tuple = new ZenType[TypeList.size() - BaseIndex];
+		for(int i = BaseIndex; i < TypeList.size(); i++) {
+			Tuple[i] = TypeList.get(i).GetRealType();
 		}
 		return Tuple;
 	}

@@ -35,11 +35,10 @@ import zen.parser.ZenLogger;
 import zen.parser.ZenNameSpace;
 
 public class ZenSystem implements ZenTypeConst {
-
-	public final static ZenMap<Integer>               SourceMap = new ZenMap<Integer>(null);
+	public final static ZenMap<Integer>     SourceMap = new ZenMap<Integer>(null);
 	public final static ArrayList<String>   SourceList = new ArrayList<String>();
 
-	public final static ZenMap<Object>			    ClassNameMap = new ZenMap<Object>(null);
+	public final static ZenMap<Object>		ClassNameMap = new ZenMap<Object>(null);
 	public final static ArrayList<ZenType>  TypePools = new ArrayList<ZenType>();
 	public final static ArrayList<ZenFunc>  FuncPools = new ArrayList<ZenFunc>();
 
@@ -48,34 +47,14 @@ public class ZenSystem implements ZenTypeConst {
 	public final static ZenType		VoidType = new ZenType(UniqueType, "void", null);
 	public final static ZenType		BooleanType = new ZenType(UniqueType|UnboxType, "boolean", TopType);
 	public final static ZenType		IntType = new ZenType(UniqueType|UnboxType, "int", TopType);
-	public final static ZenType        FloatType = new ZenType(UniqueType|UnboxType, "float", TopType);
+	public final static ZenType     FloatType = new ZenType(UniqueType|UnboxType, "float", TopType);
 	public final static ZenType		StringType = new ZenType(UniqueType, "String", TopType);
 	public final static ZenType		AnyType = new ZenType(UniqueType|DynamicType, "any", TopType);
-	public final static ZenType        TypeType = new ZenType(UniqueType, "Type", TopType);
+	public final static ZenType     TypeType = new ZenType(UniqueType, "Type", TopType);
 	public final static ZenType		ArrayType = new ZenGeneric1Type(UniqueType, "Array", null, VarType);
 	public final static ZenType		MapType = new ZenGeneric1Type(UniqueType, "Map", null, VarType);
 
 	public final static ZenType		FuncType  = new ZenFuncType("Func", null);
-
-
-	//	public final static ZenType     IteratorType = new ZenType(GenericVariable, "Iterator", null, Iterator.class);
-
-	//	public final static ZenType		TopType = new ZenType(0, "Top", null, Object.class /*ZenTopObject.class*/);
-	//	public final static ZenType		VoidType = new ZenType(NativeType, "void", null, void.class);
-	//	public final static ZenType		BooleanType = new ZenType(NativeType|UnboxType, "boolean", false, boolean.class);
-	//	public final static ZenType		IntType = new ZenType(NativeType|UnboxType, "int", 0L, long.class);
-	//	public final static ZenType        FloatType = new ZenType(NativeType|UnboxType, "float", 0.0, double.class);
-	//	public final static ZenType		StringType = new ZenType(NativeType, "String", null, String.class);
-	//	public final static ZenType		AnyType = new ZenType(DynamicType, "any", null, Object.class);
-	//	public final static ZenType		ArrayType = ZenTypeSystem.TopType.CreateSubType(GenericVariable, "Array", null, ZenArray.class);
-	//	public final static ZenType		FuncType  = ZenTypeSystem.TopType.CreateSubType(GenericVariable, "Func", null, ZenFunc.class);
-	//
-	//	public final static ZenType		EnumBaseType = ZenTypeSystem.TopType.CreateSubType(EnumType, "enum", null, ZenEnum.class);
-	//	//public final static ZenType		StructType;
-	//
-	//	public final static ZenType		VarType = new ZenType(0, "var", null, null);
-	//	public final static ZenType		TypeType = ZenTypeSystem.TopType.CreateSubType(0, "Type", null, ZenType.class);
-	//	public final static ZenType     IteratorType = new ZenType(GenericVariable, "Iterator", null, Iterator.class);
 
 	public final static long GetFileLine(String FileName, int Line) {
 		@Var Object IdOrNull = ZenSystem.SourceMap.GetOrNull(FileName);
@@ -227,7 +206,7 @@ public class ZenSystem implements ZenTypeConst {
 		if((GenericType == null) && IsCreation) {
 			@Var String ShortName = BaseType.ShortName + "<";
 			for(@Var int i = BaseIdx; i < LibZen.ListSize(TypeList); i += 1) {
-				ShortName = ShortName + TypeList.get(i).ShortName;
+				ShortName = ShortName + TypeList.get(i).GetRealType().ShortName;
 				if(i + 1 == LibZen.ListSize(TypeList)) {
 					ShortName = ShortName + ">";
 				}
