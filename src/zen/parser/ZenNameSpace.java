@@ -30,6 +30,7 @@ import zen.ast.ZenNode;
 import zen.deps.Field;
 import zen.deps.LibNative;
 import zen.deps.LibZen;
+import zen.deps.Nullable;
 import zen.deps.Var;
 import zen.deps.ZenMap;
 import zen.lang.ZenDefiningFunc;
@@ -37,7 +38,7 @@ import zen.lang.ZenFunc;
 import zen.lang.ZenFuncSet;
 import zen.lang.ZenSystem;
 import zen.lang.ZenType;
-import zen.lang.ZenVarType;
+import zen.lang.ZenTypeFlag;
 
 final class ZenSymbolSource {
 	@Field public ZenToken SourceToken;
@@ -241,10 +242,16 @@ public final class ZenNameSpace {
 	}
 
 	// Type
-	public final ZenType GetType(String TypeName) {
+	public final ZenType GetType(String TypeName, @Nullable ZenToken SourceToken) {
 		@Var Object TypeInfo = this.GetSymbol(TypeName);
 		if(TypeInfo instanceof ZenType) {
 			return (/*cast*/ZenType)TypeInfo;
+		}
+		if(SourceToken != null && TypeInfo == null) {
+			ZenType Type = new ZenType(ZenTypeFlag.UniqueType|ZenTypeFlag.OpenType, TypeName, ZenSystem.VarType);
+			this.Generator.Logger.ReportInfo(SourceToken, "implicit defintion of type " + TypeName);
+			this.SetSymbol(TypeName, Type, SourceToken);
+			return Type;
 		}
 		return null;
 	}
@@ -253,13 +260,6 @@ public final class ZenNameSpace {
 		if(Type.GetBaseType() == Type) {
 			this.SetSymbol(Type.ShortName, Type, SourceToken);
 		}
-		return Type;
-	}
-
-	public ZenType NewVirtualClass(String ClassName, ZenToken SourceToken) {
-		ZenType Type = new ZenVarType(ClassName, SourceToken);
-		this.Generator.Logger.ReportInfo(SourceToken, "implicit defintion of type " + ClassName);
-		this.SetSymbol(ClassName, Type, SourceToken);
 		return Type;
 	}
 

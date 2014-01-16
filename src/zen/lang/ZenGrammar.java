@@ -389,7 +389,7 @@ public class ZenGrammar {
 
 	public static ZenNode MatchType(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenNode LeftNode) {
 		@Var ZenToken Token = TokenContext.GetTokenAndMoveForward();
-		@Var ZenType Type = NameSpace.GetType(Token.ParsedText);
+		@Var ZenType Type = NameSpace.GetType(Token.ParsedText, Token);
 		if(Type != null) {
 			ZenNode TypeNode = new ZenTypeNode(Token, Type);
 			assert(TypeNode.Type != null);
@@ -662,9 +662,9 @@ public class ZenGrammar {
 		@Var String SymbolName = SymbolToken.ParsedText;
 		if(TokenContext.MatchToken(".")) {
 			@Var String ClassName = SymbolToken.ParsedText;
-			@Var ZenType SymbolClass = NameSpace.GetType(ClassName);
+			@Var ZenType SymbolClass = NameSpace.GetType(ClassName, SymbolToken);
 			if(SymbolClass == null) {
-				SymbolClass = NameSpace.NewVirtualClass(ClassName, SymbolToken);
+				return new ZenErrorNode(SymbolToken, ClassName + " is not type");
 			}
 			SymbolToken = TokenContext.GetTokenAndMoveForward(); /* class name */
 			SymbolName = ZenNameSpace.StringfyClassStaticSymbol(SymbolClass, SymbolName);
