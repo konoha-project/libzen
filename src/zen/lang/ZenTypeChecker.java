@@ -437,7 +437,7 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 	}
 
 	public final ZenNode TypeCheck(ZenNode Node, ZenNameSpace NameSpace, ZenType ContextType, int TypeCheckPolicy) {
-		if(this.IsVisitable() && (Node.Type == null || Node.Type.IsVarType())) {
+		if(this.IsVisitable() && Node.IsUntyped()) {
 			ZenNode ParentNode = Node.ParentNode;
 			ZenNameSpace NameSpace_ = this.StackedNameSpace;
 			ZenType ContextType_ = this.StackedContextType;

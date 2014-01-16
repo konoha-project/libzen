@@ -24,6 +24,7 @@
 
 package zen.ast;
 
+import zen.deps.Constructor;
 import zen.deps.Field;
 import zen.lang.ZenType;
 import zen.parser.ZenVisitor;
@@ -32,7 +33,7 @@ import zen.parser.ZenVisitor;
 final public class ZenCastNode extends ZenNode {
 	@Field public ZenType   CastType;
 	@Field public ZenNode	ExprNode;
-	public ZenCastNode/*constructor*/(ZenType CastType, ZenNode Node) {
+	@Constructor public ZenCastNode(ZenType CastType, ZenNode Node) {
 		super();
 		this.CastType = CastType;
 		this.ExprNode = null;
@@ -51,4 +52,10 @@ final public class ZenCastNode extends ZenNode {
 	@Override public void Accept(ZenVisitor Visitor) {
 		Visitor.VisitCastNode(this);
 	}
+
+	@Override
+	public boolean IsUntyped() {
+		return this.Type == null || this.ExprNode.IsUntyped();
+	}
+
 }

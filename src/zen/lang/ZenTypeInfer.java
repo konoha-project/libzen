@@ -189,9 +189,10 @@ public class ZenTypeInfer extends ZenTypeChecker {
 	}
 
 	@Override public void VisitSetterNode(ZenSetterNode Node) {
-		ZenNameSpace NameSpace = this.GetNameSpace();
+		@Var ZenNameSpace NameSpace = this.GetNameSpace();
+		@Var ZenType ContextType = this.GetContextType();
 		Node.RecvNode = this.TypeCheck(Node.RecvNode, NameSpace, ZenSystem.VarType, ZenTypeChecker.DefaultTypeCheckPolicy);
-		ZenType FieldType = this.GetSetterType(NameSpace, Node.RecvNode.Type, Node.NativeName);
+		@Var ZenType FieldType = this.GetSetterType(NameSpace, Node.RecvNode.Type, Node.NativeName);
 		if(FieldType.IsVoidType()) {
 			this.CheckErrorNode(this.CreateReadOnlyErrorNode(Node, Node.RecvNode.Type, Node.NativeName));
 		}
@@ -202,16 +203,21 @@ public class ZenTypeInfer extends ZenTypeChecker {
 
 	@Override public void VisitMethodCallNode(ZenMethodCallNode Node) {
 		@Var ZenNameSpace NameSpace = this.GetNameSpace();
+		@Var ZenType ContextType = this.GetContextType();
 		Node.RecvNode = this.TypeCheck(Node.RecvNode, NameSpace, ZenSystem.VarType, ZenTypeChecker.DefaultTypeCheckPolicy);
 		if(this.IsVisitable()) {
-			ZenType FuncType = this.GuessMethodFuncType(NameSpace, Node.RecvNode, Node.MethodName, Node);
-			ZenType ReturnType = this.TypeCheckFuncParam(NameSpace, Node.ParamList, FuncType, 2);
+			@Var ZenType FuncType = this.GuessMethodFuncType(NameSpace, Node.RecvNode, Node.MethodName, Node);
+			@Var ZenType ReturnType = this.TypeCheckFuncParam(NameSpace, Node.ParamList, FuncType, 2);
 			this.TypedNode(Node, ReturnType);
+			if(ReturnType.IsVarType() && !ContextType.IsVarType() && !(Node.ParentNode instanceof ZenCastNode)) {
+				this.TypedNode(new ZenCastNode(ContextType, Node), ContextType);
+			}
 		}
 	}
 
 	@Override public void VisitFuncCallNode(ZenFuncCallNode Node) {
 		@Var ZenNameSpace NameSpace = this.GetNameSpace();
+		@Var ZenType ContextType = this.GetContextType();
 		if(Node.FuncNode instanceof ZenGetLocalNode) {
 			@Var ZenGetLocalNode VarNode = (ZenGetLocalNode)Node.FuncNode;
 			@Var ZenVariable VarInfo = this.GetLocalVariable(NameSpace, VarNode.VarName);
@@ -228,6 +234,9 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		ZenType FuncType = Node.FuncNode.Type;
 		ZenType ReturnType = this.TypeCheckFuncParam(NameSpace, Node.ParamList, FuncType, 1);
 		this.TypedNode(Node, ReturnType);
+		if(ReturnType.IsVarType() && !ContextType.IsVarType() && !(Node.ParentNode instanceof ZenCastNode)) {
+			this.TypedNode(new ZenCastNode(ContextType, Node), ContextType);
+		}
 	}
 
 	@Override public void VisitUnaryNode(ZenUnaryNode Node) {
@@ -245,7 +254,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 	@Override public void VisitCastNode(ZenCastNode Node) {
 		ZenNameSpace NameSpace = this.GetNameSpace();
 		Node.ExprNode = this.TypeCheck(Node.ExprNode, NameSpace, Node.CastType, ZenTypeChecker.DefaultTypeCheckPolicy);
-		this.TypedNodeIf(Node, Node.CastType, Node.ExprNode);
+		this.TypedNode(Node, Node.CastType);
 	}
 
 	@Override public void VisitInstanceOfNode(ZenInstanceOfNode Node) {

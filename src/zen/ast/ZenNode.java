@@ -80,6 +80,10 @@ public abstract class ZenNode {
 		LibNative.DispatchVisitNode(Visitor, this);
 	}
 
+	public boolean IsUntyped() {
+		return this.Type == null || this.Type.IsVarType();
+	}
+
 	public ZenConstNode ToConstNode(boolean EnforceConst) {
 		if(EnforceConst) {
 			return new ZenErrorNode(this.SourceToken, "value must be constant");
