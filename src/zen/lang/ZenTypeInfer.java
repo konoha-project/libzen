@@ -26,6 +26,8 @@
 
 package zen.lang;
 
+import java.util.ArrayList;
+
 import zen.ast.ZenAndNode;
 import zen.ast.ZenArrayLiteralNode;
 import zen.ast.ZenBinaryNode;
@@ -68,6 +70,7 @@ import zen.ast.ZenTryNode;
 import zen.ast.ZenUnaryNode;
 import zen.ast.ZenVarDeclNode;
 import zen.ast.ZenWhileNode;
+import zen.deps.Nullable;
 import zen.deps.Var;
 import zen.parser.ZenLogger;
 import zen.parser.ZenNameSpace;
@@ -178,7 +181,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 
 	@Override public void VisitGroupNode(ZenGroupNode Node) {
 		Node.RecvNode.Accept(this); // this is shortcut
-		this.TypedNodeIf(Node, ZenSystem.VoidType, Node.RecvNode);
+		this.TypedNode(Node, Node.RecvNode.Type);
 	}
 
 	@Override public void VisitGetterNode(ZenGetterNode Node) {
@@ -206,12 +209,39 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		this.TypedNodeIf2(Node, ZenSystem.VoidType, Node.RecvNode, Node.ValueNode);
 	}
 
+	private ZenType GuessFuncTypeFromContext(ZenType ContextType, @Nullable ZenType RecvType, ArrayList<ZenNode> ParamList) {
+		if(ContextType.IsVarType() || ContextType.IsVoidType()) {
+			return ZenSystem.VarType;
+		}
+		if(RecvType != null && RecvType.IsVarType()) {
+			return ZenSystem.VarType;
+		}
+		ArrayList<ZenType> TypeList = new ArrayList<ZenType>();
+		TypeList.add(ContextType.GetRealType());
+		if(RecvType != null) {
+			TypeList.add(RecvType.GetRealType());
+		}
+		@Var int i = 0;
+		while(i < ParamList.size()) {
+			ZenNode SubNode = ParamList.get(i);
+			ZenType ParamType = SubNode.Type.GetRealType();
+			if(ParamType.IsVarType() || ParamType.IsVoidType()) {
+				return ZenSystem.VarType;
+			}
+			TypeList.add(ParamType);
+			i = i + 1;
+		}
+		return ZenSystem.LookupFuncType(TypeList);
+	}
+
 	@Override public void VisitMethodCallNode(ZenMethodCallNode Node) {
 		@Var ZenNameSpace NameSpace = this.GetNameSpace();
 		@Var ZenType ContextType = this.GetContextType();
 		Node.RecvNode = this.TypeCheck(Node.RecvNode, NameSpace, ZenSystem.VarType, ZenTypeChecker.DefaultTypeCheckPolicy);
+		this.TypeCheckNodeList(NameSpace, Node.ParamList);
 		if(this.IsVisitable()) {
-			@Var ZenType FuncType = this.GuessMethodFuncType(NameSpace, Node.RecvNode, Node.MethodName, Node);
+			@Var ZenType FuncType = this.GuessFuncTypeFromContext(ContextType, Node.RecvNode.Type, Node.ParamList);
+			FuncType = this.GuessMethodFuncType(NameSpace, Node.MethodName, Node, FuncType);
 			@Var ZenType ReturnType = this.TypeCheckFuncParam(NameSpace, Node.ParamList, FuncType, 2);
 			this.TypedCastNode(Node, ContextType, ReturnType);
 		}
@@ -220,22 +250,29 @@ public class ZenTypeInfer extends ZenTypeChecker {
 	@Override public void VisitFuncCallNode(ZenFuncCallNode Node) {
 		@Var ZenNameSpace NameSpace = this.GetNameSpace();
 		@Var ZenType ContextType = this.GetContextType();
-		if(Node.FuncNode instanceof ZenGetLocalNode) {
+		this.TypeCheckNodeList(NameSpace, Node.ParamList);
+		@Var ZenType FuncType = this.GuessFuncTypeFromContext(ContextType, null, Node.ParamList);
+		@Var boolean IsFuncObject = true;
+		if(Node.FuncNode.IsUntyped() && Node.FuncNode instanceof ZenGetLocalNode) {
 			@Var ZenGetLocalNode VarNode = (ZenGetLocalNode)Node.FuncNode;
 			@Var ZenVariable VarInfo = this.GetLocalVariable(NameSpace, VarNode.VarName);
-			if(VarInfo != null) {
-				VarNode.Type = VarInfo.VarType;
+			if(VarInfo == null) {
+				FuncType = this.GuessFuncType2(NameSpace, VarNode.VarName, Node, FuncType);
+				Node.FuncNode.Type = FuncType;
+				IsFuncObject = false;
 			}
-			else {
-				VarNode.Type = this.GuessFuncType(NameSpace, VarNode.VarName, Node);
-			}
+		}
+		if(IsFuncObject) {
+			Node.FuncNode = this.TypeCheck(Node.FuncNode, NameSpace, FuncType, ZenTypeChecker.NoCheckPolicy);
+			FuncType = Node.FuncNode.Type;
+		}
+		if(!FuncType.IsFuncType() && !FuncType.IsVarType()) {
+			this.CheckErrorNode(new ZenErrorNode(Node.SourceToken, "not function: given = " + FuncType));
 		}
 		else {
-			Node.FuncNode = this.TypeCheck(Node.FuncNode, NameSpace, ZenSystem.VarType, ZenTypeChecker.DefaultTypeCheckPolicy);
+			ZenType ReturnType = this.TypeCheckFuncParam(NameSpace, Node.ParamList, FuncType, 1);
+			this.TypedCastNode(Node, ContextType, ReturnType);
 		}
-		ZenType FuncType = Node.FuncNode.Type;
-		ZenType ReturnType = this.TypeCheckFuncParam(NameSpace, Node.ParamList, FuncType, 1);
-		this.TypedCastNode(Node, ContextType, ReturnType);
 	}
 
 	@Override public void VisitUnaryNode(ZenUnaryNode Node) {

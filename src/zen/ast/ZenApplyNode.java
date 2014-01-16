@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import zen.deps.Constructor;
 import zen.deps.Field;
 import zen.lang.ZenFunc;
+import zen.lang.ZenSystem;
+import zen.lang.ZenType;
 
 public abstract class ZenApplyNode extends ZenNode {
 	@Field public ArrayList<ZenNode>  ParamList; /* [arg0, arg1, ...] */
@@ -40,5 +42,12 @@ public abstract class ZenApplyNode extends ZenNode {
 	}
 	@Override public void Append(ZenNode Node) {
 		this.ParamList.add(this.SetChild(Node));
+	}
+
+	public final ZenType GetRecvType() {
+		if(this.ParamList.size()>0) {
+			return this.ParamList.get(0).Type.GetRealType();
+		}
+		return ZenSystem.VoidType;
 	}
 }

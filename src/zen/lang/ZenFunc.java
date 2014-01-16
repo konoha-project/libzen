@@ -109,6 +109,10 @@ public class ZenFunc implements ZenFuncFlag {
 		return ZenUtils.IsFlag(this.FuncFlag, ZenFuncFlag.CoercionFunc);
 	}
 
+	public static String StringfySignature(String FuncName, int FuncParamSize, ZenType RecvType) {
+		return FuncName + "__" + FuncParamSize + RecvType.TypeId;
+	}
+
 	//	public void GenerateNativeFunc() {
 	//		if(this.HasStaticBlock()) {
 	//			@Var ZenFuncBlock FuncBlock = (/*cast*/ZenFuncBlock)this.FuncBody;
