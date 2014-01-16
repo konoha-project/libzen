@@ -1,7 +1,6 @@
 Zen 1.0 仕様書
 
 Zen パーサー用ライブラリの言語仕様
-
 型システム
 ==========
 
@@ -13,18 +12,20 @@ T ::=   void
         T[]
         Map<T>
         Func<T,T,..>  // 関数型、最初が返り値の型
+	class
 
 any 型は、zen 1.1 から 
 
 リテラル
 ========
 
-null      : any
+null      : 
 true      : boolean
 false     : boolean
 1         : int
 1.0       : float
 "hi"      : String
+	"${name}" StringInterpolation は標準化
 [1,2]     : int[]
 ["a", "b"] : String[]
 {"name": 1}    : Map<int>
@@ -44,6 +45,23 @@ let Math.sin: Func<float,float> = `sin(${1})`
 import java.lang.System
 # let System = import java.lang.System と同じ
 
+クラス定義
+==========
+
+// フィールドのみ
+
+class Person {
+	field name : String;
+	field age : int;
+	field isChild : Func<boolean, This>;
+}
+
+- フィールドの型定義は必須
+- メソッドは関数型のフィールドとして与える
+- function isChild(x:Person) :boolean がバインドされる
+- demangle ルール 引数数 第一引数(this) の
+　　isChild_Person_1
+
 関数定義
 ========
 
@@ -56,6 +74,9 @@ function f(a, b) {
 function f(a: int, b: int): int {
 	return a + b;
 }
+
+ - demangle ルール 引数数 第一引数(this) の型
+　
 
 変数宣言
 ========

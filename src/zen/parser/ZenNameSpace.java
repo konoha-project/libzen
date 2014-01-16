@@ -342,13 +342,13 @@ public final class ZenNameSpace {
 	//		return TypeVar;
 	//	}
 
-	private final static String ClassSymbol(ZenType ClassType, String Symbol) {
+	public final static String StringfyClassSymbol(ZenType ClassType, String Symbol) {
 		return ClassType.GetUniqueName() + "." + Symbol;
 	}
 
-	protected final Object GetClassSymbol(ZenType ClassType, String Symbol, boolean RecursiveSearch) {
+	public final Object GetClassSymbol(ZenType ClassType, String Symbol, boolean RecursiveSearch) {
 		while(ClassType != null) {
-			@Var String Key = ZenNameSpace.ClassSymbol(ClassType, Symbol);
+			@Var String Key = ZenNameSpace.StringfyClassSymbol(ClassType, Symbol);
 			@Var Object Value = this.GetSymbol(Key);
 			if(Value != null) {
 				return Value;
@@ -683,4 +683,5 @@ public final class ZenNameSpace {
 	public final static String StringfyClassStaticSymbol(ZenType ClassType, String Symbol) {
 		return ClassType.GetUniqueName() + ".@" + Symbol;
 	}
+
 }

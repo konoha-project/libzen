@@ -207,6 +207,15 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		}
 	}
 
+	public final void TypedCastNode(ZenNode Node, ZenType ContextType, ZenType NodeType) {
+		if(NodeType.IsVarType() && !ContextType.IsVarType() && !(Node.ParentNode instanceof ZenCastNode)) {
+			this.TypedNode(new ZenCastNode(ContextType, Node), ContextType);
+		}
+		else {
+			this.TypedNode(Node, NodeType);
+		}
+	}
+
 	public final void TypedNodeIf(ZenNode Node, ZenType Type, ZenNode P1) {
 		if(P1.Type.IsVarType()) {
 			Node.Type = ZenSystem.VarType;
@@ -523,16 +532,34 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		return ZenSystem.VarType;
 	}
 
-	protected final ZenType GetFieldType(ZenNameSpace NameSpace, ZenType BaseType, String Name) {
-		return NameSpace.Generator.GetFieldType(BaseType, Name);
+	private void SetClassField(ZenNameSpace NameSpace, ZenType ClassType, String FieldName, ZenType FieldType, ZenToken SourceToken) {
+		ZenField Field = new ZenField(ClassType, FieldName, FieldType, SourceToken);
+		NameSpace.SetSymbol(ZenNameSpace.StringfyClassSymbol(ClassType, FieldName), Field, SourceToken);
 	}
 
-	protected final ZenType GetSetterType(ZenNameSpace NameSpace, ZenType BaseType, String Name) {
-		return NameSpace.Generator.GetSetterType(BaseType, Name);
+	protected final ZenType GetFieldType(ZenNameSpace NameSpace, ZenType ClassType, String FieldName) {
+		Object Field = NameSpace.GetClassSymbol(ClassType, FieldName, true);
+		if(Field instanceof ZenField) {
+			return ((ZenField)Field).FieldType;
+		}
+		return NameSpace.Generator.GetFieldType(ClassType, FieldName);
 	}
 
-	protected void InferFieldType(ZenNameSpace NameSpace, ZenType ClassType, String FieldName, ZenType ValueType) {
-		//TODO
+	protected final ZenType GetSetterType(ZenNameSpace NameSpace, ZenType ClassType, String FieldName) {
+		Object Field = NameSpace.GetClassSymbol(ClassType, FieldName, true);
+		if(Field instanceof ZenField) {
+			return ((ZenField)Field).FieldType;
+		}
+		return NameSpace.Generator.GetSetterType(ClassType, FieldName);
+	}
+
+	protected ZenType InferFieldType(ZenNameSpace NameSpace, ZenType ClassType, String FieldName, ZenType InferredType, ZenToken SourceToken) {
+		if(ClassType.IsVarType() || InferredType.IsVarType() || InferredType.IsVarType()) {
+			return ZenSystem.VarType;
+		}
+		System.err.println("debug inferrence " + ClassType + "." + FieldName + ": " + InferredType);
+		this.SetClassField(NameSpace, ClassType, FieldName, InferredType, SourceToken);
+		return InferredType;
 	}
 
 	protected ZenType GetReturnType() {
