@@ -155,6 +155,7 @@ class FuncContext {
 public abstract class ZenTypeChecker implements ZenVisitor {
 	public final static int DefaultTypeCheckPolicy			= 0;
 	public final static int NoCheckPolicy                   = 1;
+	public final static int EnforceCoercion                 = (1 << 1);
 	//	public final static int CastPolicy                      = (1 << 1);
 	//	public final static int IgnoreEmptyPolicy               = (1 << 2);
 	//	public final static int AllowEmptyPolicy                = (1 << 3);
@@ -502,14 +503,9 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		return Node;
 	}
 
-	private final ZenNode TypeCheckImpl(ZenNode Node, ZenNameSpace NameSpace, ZenType ContextType, int TypeCheckPolicy) {
-		if(Node.IsErrorNode()) {
-			return Node;
-		}
-		if(Node.Type == null) {  // TODO: assert(Node.Type != null);
-			Node.Type = ZenSystem.VarType;
-		}
-		if(!ContextType.IsVarType() && !ContextType.IsVoidType() && Node.Type instanceof ZenVarType) {
+	private final ZenNode InferType(ZenType ContextType, ZenNode Node) {
+		//System.err.println("debug ContextType="+ContextType + ", Node.Type="+ Node.Type);
+		if(ContextType.IsInferrableType() && Node.Type instanceof ZenVarType) {
 			((ZenVarType)Node.Type).Infer(ContextType, Node.SourceToken);
 			Node.Type = ContextType;
 			return Node;
@@ -518,12 +514,19 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 			((ZenVarType)ContextType).Infer(Node.Type, Node.SourceToken);
 			return Node;
 		}
-		if(Node.Type.IsVarType()) {
-			this.FuncScope.CountUnknownTypeNode(Node);
+		return Node;
+	}
+
+	private final ZenNode TypeCheckImpl(ZenNode Node, ZenNameSpace NameSpace, ZenType ContextType, int TypeCheckPolicy) {
+		if(Node.IsErrorNode()) {
 			return Node;
 		}
+		if(Node.Type.IsVarType()) {
+			this.FuncScope.CountUnknownTypeNode(Node);
+			return this.InferType(ContextType, Node);
+		}
 		if(Node.Type == ContextType || ContextType.IsVarType() || ContextType.Accept(Node.Type) || ZenUtils.IsFlag(TypeCheckPolicy, NoCheckPolicy)) {
-			return Node;
+			return this.InferType(ContextType, Node);
 		}
 		if(ContextType.IsVoidType() && !Node.Type.IsVoidType()) {
 			return new ZenCastNode(ZenSystem.VoidType, Node);
@@ -545,10 +548,10 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 
 		}
 		if(ContextType.IsFloatType() && Node.Type.IsIntType()) {
-			return new ZenCastNode(ContextType, Node);
+			return this.InferType(ContextType, new ZenCastNode(ContextType, Node));
 		}
-		if(ContextType.IsStringType()) {
-			return new ZenCastNode(ContextType, Node);
+		if(ZenUtils.IsFlag(TypeCheckPolicy, EnforceCoercion) && ContextType.IsStringType()) {
+			return this.InferType(ContextType, new ZenCastNode(ContextType, Node));
 		}
 		//System.err.println("node="+ LibZen.GetClassName(Node) + "type error: requested = " + Type + ", given = " + Node.Type);
 		return new ZenStupidCastNode(ContextType, Node);
@@ -627,12 +630,10 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 	}
 
 	protected final ZenType NewVarType(ZenType VarType, String Name, ZenToken SourceToken) {
-		if(VarType == null || !(VarType instanceof ZenVarType)) {
-			if(VarType.IsVarType()) {
-				ZenVarType VarType1 = new ZenVarType(Name, SourceToken);
-				this.FuncScope.VarTypeList.add(VarType1);
-				VarType = VarType1;
-			}
+		if(!(VarType instanceof ZenVarType) && VarType.IsVarType()) {
+			ZenVarType VarType1 = new ZenVarType(Name, SourceToken);
+			this.FuncScope.VarTypeList.add(VarType1);
+			VarType = VarType1;
 		}
 		return VarType;
 	}

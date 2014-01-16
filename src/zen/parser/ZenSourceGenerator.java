@@ -169,10 +169,10 @@ public class ZenSourceGenerator extends ZenGenerator {
 	}
 
 	protected boolean IsNeededSurroud(ZenNode Node) {
-		if(Node instanceof ZenGetLocalNode || Node instanceof ZenGetterNode || Node instanceof ZenGroupNode) {
-			return false;
+		if(Node instanceof ZenBinaryNode) {
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	protected void GenerateSurroundCode(ZenNode Node) {
@@ -395,8 +395,7 @@ public class ZenSourceGenerator extends ZenGenerator {
 		}
 	}
 
-	@Override
-	public void VisitReturnNode(ZenReturnNode Node) {
+	@Override public void VisitReturnNode(ZenReturnNode Node) {
 		this.CurrentBuilder.Append("return");
 		if (Node.ValueNode != null) {
 			this.CurrentBuilder.AppendWhiteSpace();
@@ -404,28 +403,24 @@ public class ZenSourceGenerator extends ZenGenerator {
 		}
 	}
 
-	@Override
-	public void VisitWhileNode(ZenWhileNode Node) {
+	@Override public void VisitWhileNode(ZenWhileNode Node) {
 		this.CurrentBuilder.Append("while (");
 		this.GenerateCode(Node.CondNode);
 		this.CurrentBuilder.Append(")");
 		this.GenerateCode(Node.BodyNode);
 	}
 
-	@Override
-	public void VisitBreakNode(ZenBreakNode Node) {
+	@Override public void VisitBreakNode(ZenBreakNode Node) {
 		this.CurrentBuilder.Append("break");
 	}
 
-	@Override
-	public void VisitThrowNode(ZenThrowNode Node) {
+	@Override public void VisitThrowNode(ZenThrowNode Node) {
 		this.CurrentBuilder.Append("throw");
 		this.CurrentBuilder.AppendWhiteSpace();
 		this.GenerateCode(Node.ValueNode);
 	}
 
-	@Override
-	public void VisitTryNode(ZenTryNode Node) {
+	@Override public void VisitTryNode(ZenTryNode Node) {
 		this.CurrentBuilder.Append("try");
 		this.GenerateCode(Node.TryNode);
 		if(Node.CatchNode != null) {
@@ -437,8 +432,7 @@ public class ZenSourceGenerator extends ZenGenerator {
 		}
 	}
 
-	@Override
-	public void VisitCatchNode(ZenCatchNode Node) {
+	@Override public void VisitCatchNode(ZenCatchNode Node) {
 		this.CurrentBuilder.Append("catch (");
 		this.CurrentBuilder.Append(Node.ExceptionName);
 		this.VisitTypeAnnotation(Node.ExceptionType);
@@ -450,6 +444,7 @@ public class ZenSourceGenerator extends ZenGenerator {
 		this.CurrentBuilder.Append("var");
 		this.CurrentBuilder.AppendWhiteSpace();
 		this.CurrentBuilder.Append(Node.NativeName);
+		this.VisitTypeAnnotation(Node.DeclType);
 		this.CurrentBuilder.AppendToken("=");
 		this.GenerateCode(Node.InitNode);
 	}
@@ -491,7 +486,7 @@ public class ZenSourceGenerator extends ZenGenerator {
 
 	// Utils
 	protected void VisitType(ZenType Type) {
-		this.CurrentBuilder.Append(this.GetNativeType(Type));
+		this.CurrentBuilder.Append(this.GetNativeType(Type.GetRealType()));
 	}
 
 	protected void VisitParamList(String OpenToken, ArrayList<ZenNode> ParamList, String CloseToken) {

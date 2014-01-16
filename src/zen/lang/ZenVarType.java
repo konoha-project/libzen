@@ -60,6 +60,10 @@ public class ZenVarType extends ZenType {
 		return this.RefType.IsFuncType();
 	}
 
+	@Override public String toString() {
+		return "typeof("+this.ShortName+"): " + this.RefType;
+	}
+
 	public void Infer(ZenType ContextType, ZenToken SourceToken) {
 		if(this.RefType.IsVarType()) {
 			this.RefType = ContextType.GetRealType();

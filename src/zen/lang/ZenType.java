@@ -109,6 +109,10 @@ public class ZenType implements ZenTypeConst {
 		return (this.GetRealType() == ZenSystem.VarType);
 	}
 
+	public final boolean IsInferrableType() {
+		return (!this.IsVarType() && !this.IsVoidType());
+	}
+
 	public final boolean IsAnyType() {
 		return (this.GetRealType() == ZenSystem.AnyType);
 	}
@@ -127,6 +131,9 @@ public class ZenType implements ZenTypeConst {
 
 	public final boolean IsFloatType() {
 		return (this.GetRealType() == ZenSystem.FloatType);
+	}
+	public final boolean IsNumberType() {
+		return (this.IsIntType() || this.IsFloatType());
 	}
 	public final boolean IsStringType() {
 		return (this.GetRealType() == ZenSystem.StringType);

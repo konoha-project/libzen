@@ -57,10 +57,10 @@ final public class ZenVarDeclNode extends ZenBlockNode {
 		else {
 			if(this.NativeName == null) {
 				this.NativeName = Node.SourceToken.ParsedText;
+				this.SourceToken = Node.SourceToken;
 			}
 			else {
-				this.InitNode = Node;
-				this.SetChild(Node);
+				this.InitNode = this.SetChild(Node);
 			}
 		}
 	}
