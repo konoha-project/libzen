@@ -54,7 +54,7 @@ public class ZenCastNode extends ZenNode {
 	}
 
 	@Override public boolean IsUntyped() {
-		return this.Type.IsVarType() || this.ExprNode.IsUntyped();
+		return this.ExprNode.IsUntyped();
 	}
 
 }

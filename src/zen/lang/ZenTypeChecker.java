@@ -477,19 +477,25 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 	}
 
 	public final ZenNode TypeCheck(ZenNode Node, ZenNameSpace NameSpace, ZenType ContextType, int TypeCheckPolicy) {
-		if(this.IsVisitable() && Node.IsUntyped()) {
-			ZenNode ParentNode = Node.ParentNode;
-			ZenNameSpace NameSpace_ = this.StackedNameSpace;
-			ZenType ContextType_ = this.StackedContextType;
-			this.StackedNameSpace = NameSpace;
-			this.StackedContextType = ContextType;
-			Node.Accept(this);
-			Node = this.TypeCheckImpl(this.StackedTypedNode, NameSpace, ContextType, TypeCheckPolicy);
-			this.StackedTypedNode = Node;
-			this.StackedNameSpace = NameSpace_;
-			this.StackedContextType = ContextType_;
-			if(ParentNode != Node.ParentNode && ParentNode != null) {
-				ParentNode.SetChild(Node);
+		if(this.IsVisitable()) {
+			if(Node.IsUntyped()) {
+				ZenNode ParentNode = Node.ParentNode;
+				ZenNameSpace NameSpace_ = this.StackedNameSpace;
+				ZenType ContextType_ = this.StackedContextType;
+				this.StackedNameSpace = NameSpace;
+				this.StackedContextType = ContextType;
+				Node.Accept(this);
+				Node = this.TypeCheckImpl(this.StackedTypedNode, NameSpace, ContextType, TypeCheckPolicy);
+				this.StackedTypedNode = Node;
+				this.StackedNameSpace = NameSpace_;
+				this.StackedContextType = ContextType_;
+				if(ParentNode != Node.ParentNode && ParentNode != null) {
+					ParentNode.SetChild(Node);
+				}
+			}
+			else {
+				Node = this.TypeCheckImpl(Node, NameSpace, ContextType, TypeCheckPolicy);
+				this.StackedTypedNode = Node;
 			}
 		}
 		this.CheckErrorNode(Node);
@@ -537,6 +543,12 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		@Var ZenFunc CoercionFunc = NameSpace.GetCoercionFunc(Node.Type, ContextType);
 		if(CoercionFunc != null) {
 
+		}
+		if(ContextType.IsFloatType() && Node.Type.IsIntType()) {
+			return new ZenCastNode(ContextType, Node);
+		}
+		if(ContextType.IsStringType()) {
+			return new ZenCastNode(ContextType, Node);
 		}
 		//System.err.println("node="+ LibZen.GetClassName(Node) + "type error: requested = " + Type + ", given = " + Node.Type);
 		return new ZenStupidCastNode(ContextType, Node);
