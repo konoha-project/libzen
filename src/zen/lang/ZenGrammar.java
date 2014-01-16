@@ -709,7 +709,7 @@ public class ZenGrammar {
 
 	// "var" $Identifier [: $Type$] "=" $Expression$
 	public static ZenNode MatchVarDecl(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenNode LeftNode) {
-		@Var ZenNode VarNode = new ZenVarDeclNode(NameSpace);
+		@Var ZenNode VarNode = new ZenVarDeclNode(NameSpace.CreateSubNameSpace());
 		VarNode = TokenContext.MatchNodeToken(VarNode, NameSpace, "var", ZenTokenContext.Required);
 		VarNode = TokenContext.AppendMatchedPattern(VarNode, NameSpace, "$Identifier$", ZenTokenContext.Required);
 		VarNode = TokenContext.AppendMatchedPattern(VarNode, NameSpace, "$TypeAnnotation$", ZenTokenContext.Optional);
@@ -724,7 +724,7 @@ public class ZenGrammar {
 		if(!NameToken.IsNameSymbol()) {
 			return TokenContext.CreateExpectedErrorNode(NameToken, "parameter name");
 		}
-		ZenNode VarNode = new ZenParamNode(ZenSystem.VarType, NameToken, NameToken.ParsedText);
+		@Var ZenNode VarNode = new ZenParamNode(ZenSystem.VarType, NameToken, NameToken.ParsedText);
 		VarNode = TokenContext.AppendMatchedPattern(VarNode, NameSpace, "$TypeAnnotation$", ZenTokenContext.Optional);
 		return VarNode;
 	}

@@ -304,7 +304,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 			int i = 0;
 			ZenType BlockType = ZenSystem.VoidType;
 			while(i < Node.StmtList.size()) {
-				ZenNode SubNode = Node.StmtList.get(i);
+				ZenNode SubNode = Node.StmtList.get(i).GetStatementNode();  // without annotation
 				SubNode = this.TypeCheck(SubNode, Node.NameSpace, ZenSystem.VoidType, ZenTypeChecker.DefaultTypeCheckPolicy);
 				Node.StmtList.set(i, SubNode);
 				if(SubNode.Type.IsVarType()) {
