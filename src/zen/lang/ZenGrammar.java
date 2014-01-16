@@ -740,7 +740,7 @@ public class ZenGrammar {
 		else {
 			@Var ZenToken NameToken = TokenContext.GetTokenAndMoveForward();
 			NameSpace = NameSpace.CreateSubNameSpace();
-			FuncNode = new ZenFuncDeclNode(FuncToken, NameSpace, NameToken.ParsedText);
+			FuncNode = new ZenFuncDeclNode(NameToken, NameSpace, NameToken.ParsedText);
 		}
 		FuncNode = TokenContext.MatchNodeToken(FuncNode,  NameSpace, "(", ZenTokenContext.Required | ZenTokenContext.AllowSkipIndent);
 		if(!TokenContext.MatchToken(")")) {
@@ -782,8 +782,10 @@ public class ZenGrammar {
 			//				System.out.println();
 			//			}
 			//			else {
-			ZenToken Token = TokenContext.GetTokenAndMoveForward();
-			if(!Token.IsDelim() && !Token.IsIndent()) {
+
+			ZenToken Token = TokenContext.GetToken(); //AndMoveForward();
+			if(!Token.IsDelim() && !Token.IsIndent() && !Token.EqualsText("}")) {
+				/* }  is added because function f(x) { x } is parsed */
 				return TokenContext.CreateExpectedErrorNode(Token, ";");
 			}
 			//			}
