@@ -34,7 +34,7 @@ import zen.deps.ZenTypedObject;
 import zen.parser.ZenLogger;
 import zen.parser.ZenNameSpace;
 
-public class ZenSystem implements ZenTypeConst {
+public class ZenSystem implements ZenTypeFlag {
 	public final static ZenMap<Integer>     SourceMap = new ZenMap<Integer>(null);
 	public final static ArrayList<String>   SourceList = new ArrayList<String>();
 
@@ -49,7 +49,7 @@ public class ZenSystem implements ZenTypeConst {
 	public final static ZenType		IntType = new ZenType(UniqueType|UnboxType, "int", TopType);
 	public final static ZenType     FloatType = new ZenType(UniqueType|UnboxType, "float", TopType);
 	public final static ZenType		StringType = new ZenType(UniqueType, "String", TopType);
-	public final static ZenType		AnyType = new ZenType(UniqueType|DynamicType, "any", TopType);
+	//	public final static ZenType		AnyType = new ZenType(UniqueType|DynamicType, "any", TopType);
 	public final static ZenType     TypeType = new ZenType(UniqueType, "Type", TopType);
 	public final static ZenType		ArrayType = new ZenGeneric1Type(UniqueType, "Array", null, VarType);
 	public final static ZenType		MapType = new ZenGeneric1Type(UniqueType, "Map", null, VarType);
@@ -90,7 +90,7 @@ public class ZenSystem implements ZenTypeConst {
 		if(!ZenSystem.IsInit) {
 			ZenSystem.SetTypeTable("org.ZenScript.ZenTopObject", ZenSystem.TopType);
 			ZenSystem.SetTypeTable("void",    ZenSystem.VoidType);
-			ZenSystem.SetTypeTable("java.lang.Object",  ZenSystem.AnyType);
+			//			ZenSystem.SetTypeTable("java.lang.Object",  ZenSystem.AnyType);
 			ZenSystem.SetTypeTable("boolean", ZenSystem.BooleanType);
 			ZenSystem.SetTypeTable("java.lang.Boolean", ZenSystem.BooleanType);
 			ZenSystem.SetTypeTable("long",    ZenSystem.IntType);
@@ -105,13 +105,13 @@ public class ZenSystem implements ZenTypeConst {
 			//			ZenTypeSystem.SetNativeTypeName("java.util.Iterator",  ZenTypeSystem.IteratorType);
 			ZenSystem.IsInit = true;
 		}
-		NameSpace.AppendTypeName(ZenSystem.VarType, null);
+		//		NameSpace.AppendTypeName(ZenSystem.VarType, null);
 		NameSpace.AppendTypeName(ZenSystem.VoidType,  null);
 		NameSpace.AppendTypeName(ZenSystem.BooleanType, null);
 		NameSpace.AppendTypeName(ZenSystem.IntType, null);
 		NameSpace.AppendTypeName(ZenSystem.FloatType, null);
 		NameSpace.AppendTypeName(ZenSystem.StringType, null);
-		NameSpace.AppendTypeName(ZenSystem.AnyType, null);
+		//		NameSpace.AppendTypeName(ZenSystem.AnyType, null);
 		NameSpace.AppendTypeName(ZenSystem.TypeType, null);
 		NameSpace.AppendTypeName(ZenSystem.ArrayType, null);
 		NameSpace.AppendTypeName(ZenSystem.FuncType, null);

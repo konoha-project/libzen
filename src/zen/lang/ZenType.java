@@ -25,12 +25,11 @@
 //ifdef JAVA
 package zen.lang;
 import zen.deps.Field;
-import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.parser.ZenUtils;
 //endif VAJA
 
-public class ZenType implements ZenTypeConst {
+public class ZenType implements ZenTypeFlag {
 	@Field public int			  TypeFlag;
 	@Field public int             TypeId;
 	@Field public String		  ShortName;
@@ -83,7 +82,7 @@ public class ZenType implements ZenTypeConst {
 
 	public final boolean Accept(ZenType Type) {
 		@Var ZenType ThisType = this.GetRealType();
-		if(ThisType == Type.GetRealType() || ThisType == ZenSystem.AnyType) {
+		if(ThisType == Type.GetRealType() /*|| ThisType == ZenSystem.AnyType*/) {
 			return true;
 		}
 		@Var ZenType SuperClass = Type.GetSuperType();
@@ -114,7 +113,7 @@ public class ZenType implements ZenTypeConst {
 	}
 
 	public final boolean IsAnyType() {
-		return (this.GetRealType() == ZenSystem.AnyType);
+		return false; //(this.GetRealType() == ZenSystem.AnyType);
 	}
 
 	public final boolean IsTypeType() {
@@ -147,13 +146,18 @@ public class ZenType implements ZenTypeConst {
 		return (this.GetBaseType() == ZenSystem.ArrayType);
 	}
 
-	public final boolean IsEnumType() {
-		return ZenUtils.IsFlag(this.TypeFlag, EnumType);
-	}
+	//	public final boolean IsEnumType() {
+	//		return ZenUtils.IsFlag(this.TypeFlag, EnumType);
+	//	}
 
 	public ZenType CreateSubType(int ClassFlag, String ClassName) {
 		@Var ZenType SubType = new ZenType(ClassFlag, ClassName, this);
 		return SubType;
+	}
+
+
+	public boolean IsOpenType() {
+		return ZenUtils.IsFlag(this.TypeFlag, ZenTypeFlag.OpenType);
 	}
 
 	//	public final boolean IsAbstractType() {
@@ -184,26 +188,27 @@ public class ZenType implements ZenTypeConst {
 	}
 
 	public final String GetNativeName() {
-		if(ZenUtils.IsFlag(this.TypeFlag, ExportType)) {
-			return this.ShortName;
-		}
-		else {
-			return this.GetBaseType().ShortName + NativeNameSuffix + this.TypeId;
-		}
+		//		if(ZenUtils.IsFlag(this.TypeFlag, ExportType)) {
+		//			return this.ShortName;
+		//		}
+		//		else {
+		//			return this.GetBaseType().ShortName + NativeNameSuffix + this.TypeId;
+		//		}
+		return this.GetBaseType().ShortName + NativeNameSuffix + this.TypeId;
 	}
 
 	public final String GetUniqueName() {
-		if(ZenUtils.IsFlag(this.TypeFlag, TypeVariable)) {
-			return this.ShortName;
-		}
-		else {
-			if(LibZen.DebugMode) {
-				return this.GetBaseType().ShortName + NativeNameSuffix + this.TypeId;
-			}
-			else {
-				return NativeNameSuffix + this.TypeId;
-			}
-		}
+		//		if(ZenUtils.IsFlag(this.TypeFlag, TypeVariable)) {
+		//			return this.ShortName;
+		//		}
+		//		else {
+		//			if(LibZen.DebugMode) {
+		return this.GetBaseType().ShortName + NativeNameSuffix + this.TypeId;
+		//			}
+		//			else {
+		//				return NativeNameSuffix + this.TypeId;
+		//			}
+		//		}
 	}
 
 
@@ -216,6 +221,7 @@ public class ZenType implements ZenTypeConst {
 	public final boolean AcceptValue(Object Value) {
 		return (Value != null) ? this.Accept(ZenSystem.GuessType(Value)) : true;
 	}
+
 
 	//	public void SetClassField(ZenClassField ClassField) {
 	//		this.TypeBody = ClassField;

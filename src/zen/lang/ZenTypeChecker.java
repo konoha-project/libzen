@@ -531,18 +531,6 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		if(ContextType.IsVoidType() && !Node.Type.IsVoidType()) {
 			return new ZenCastNode(ZenSystem.VoidType, Node);
 		}
-		//		System.err.println("**** " + Node.getClass());
-		//		@Var Object ConstValue = Node.ToConstValue(this.Context, IsFlag(TypeCheckPolicy, OnlyConstPolicy));
-		//		if(ConstValue != null && !(Node.IsConstNode())) {  // recreated
-		//			Node = this.Generator.CreateConstNode_OLD(Node.Type, ParsedTree, ConstValue);
-		//		}
-		//		if(IsFlag(TypeCheckPolicy, OnlyConstPolicy) && ConstValue == null) {
-		//			if(IsFlag(TypeCheckPolicy, NullablePolicy) && Node.IsNullNode()) { // OK
-		//			}
-		//			else {
-		//				return this.CreateSyntaxErrorNode(ParsedTree, "value must be const");
-		//			}
-		//		}
 		@Var ZenFunc CoercionFunc = NameSpace.GetCoercionFunc(Node.Type, ContextType);
 		if(CoercionFunc != null) {
 
@@ -600,11 +588,12 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 
 	protected ZenType InferFieldType(ZenNameSpace NameSpace, ZenType ClassType, String FieldName, ZenType InferredType, ZenToken SourceToken) {
 		System.err.println("debug inferrence " + ClassType + "." + FieldName + ": " + InferredType);
-		if(ClassType.IsVarType() || InferredType.IsVarType() || InferredType.IsVoidType()) {
+		if(ClassType.IsVarType() || !InferredType.IsInferrableType()) {
 			return ZenSystem.VarType;
 		}
-		System.err.println("debug inferrence " + ClassType + "." + FieldName + ": " + InferredType);
-		this.SetClassField(NameSpace, ClassType, FieldName, InferredType, SourceToken);
+		if(ClassType.IsOpenType()) {
+			this.SetClassField(NameSpace, ClassType, FieldName, InferredType, SourceToken);
+		}
 		return InferredType;
 	}
 
