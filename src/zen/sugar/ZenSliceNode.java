@@ -30,12 +30,12 @@ import zen.lang.ZenType;
 import zen.parser.ZenToken;
 
 //E.g., $Expr "[" $Index ":" $Index2 "]"
-final public class ZenSliceNode extends ZenSymbolNode {
+final public class ZenSliceNode extends ZenNode {
 	@Field public ZenNode RecvNode;
 	@Field public ZenNode Index1;
 	@Field public ZenNode Index2;
 	public ZenSliceNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode RecvNode, ZenNode Index1, ZenNode Index2) {
-		super(Type, Token, "");
+		super();
 		this.RecvNode = RecvNode;
 		this.Index1 = Index1;
 		this.Index2 = Index2;

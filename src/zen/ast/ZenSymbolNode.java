@@ -22,15 +22,14 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package zen.sugar;
+package zen.ast;
 
-import zen.ast.ZenNode;
 import zen.deps.Constructor;
 import zen.deps.Field;
 import zen.lang.ZenType;
 import zen.parser.ZenToken;
 
-abstract public class ZenSymbolNode extends ZenNode {
+public class ZenSymbolNode extends ZenNode {
 	@Field public String  GivenName;
 	@Field public String  ResourceName;
 
