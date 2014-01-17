@@ -32,14 +32,14 @@ import zen.parser.ZenVisitor;
 
 public class ZenSymbolNode extends ZenNode {
 	@Field public String  GivenName;
-	@Field public String  ResourceName;
+	@Field public String  ReferenceName;
 
 	@Constructor public ZenSymbolNode(ZenType Type, ZenToken SourceToken, String GivenName, String ResourceName) {
 		super();
 		this.Type = Type;
 		this.SourceToken = SourceToken;
 		this.GivenName = GivenName;
-		this.ResourceName = ResourceName;
+		this.ReferenceName = ResourceName;
 	}
 
 	@Override public void Accept(ZenVisitor Visitor) {

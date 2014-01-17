@@ -283,7 +283,7 @@ public class ZenSourceGenerator extends ZenGenerator {
 	}
 
 	@Override public void VisitSymbolNode(ZenSymbolNode Node) {
-		this.CurrentBuilder.Append(Node.ResourceName);
+		this.CurrentBuilder.Append(Node.ReferenceName);
 	}
 
 	@Override

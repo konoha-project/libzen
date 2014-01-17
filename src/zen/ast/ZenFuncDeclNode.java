@@ -33,12 +33,14 @@ import zen.parser.ZenVisitor;
 
 final public class ZenFuncDeclNode extends ZenFunctionLiteralNode {
 	@Field public String FuncName;
+	@Field public String ReferenceName;
 	@Field public ZenNameSpace NameSpace;
 	@Field public boolean IsTypeChecked = false;
 	public ZenFuncDeclNode/*constructor*/(ZenToken SourceToken, ZenNameSpace NameSpace, String FuncName) {
 		super(SourceToken); // TODO
 		this.ArgumentList = new ArrayList<ZenNode>();
 		this.FuncName = FuncName;
+		this.ReferenceName = FuncName;
 		this.NameSpace = NameSpace;
 	}
 	@Override public void Accept(ZenVisitor Visitor) {

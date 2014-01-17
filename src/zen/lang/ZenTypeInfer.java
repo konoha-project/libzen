@@ -135,7 +135,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		if(Node.ParentNode instanceof ZenFuncCallNode) {
 			FuncType = this.GuessFuncType2(NameSpace, Node.GivenName, (ZenFuncCallNode)Node.ParentNode, FuncType);
 			if(FuncType.HasCallableSignature()) {
-				Node.ResourceName = FuncType.StringfySignature(Node.GivenName);
+				Node.ReferenceName = FuncType.StringfySignature(Node.GivenName);
 			}
 			else {
 				FuncType = ZenSystem.VarType;
@@ -144,8 +144,8 @@ public class ZenTypeInfer extends ZenTypeChecker {
 			return;
 		}
 		if(FuncType.HasCallableSignature()) {
-			Node.ResourceName = FuncType.StringfySignature(Node.GivenName);
-			@Var Object Func = NameSpace.GetSymbol(Node.ResourceName);
+			Node.ReferenceName = FuncType.StringfySignature(Node.GivenName);
+			@Var Object Func = NameSpace.GetSymbol(Node.ReferenceName);
 			if(Func instanceof ZenFunc) {
 				FuncType = ((ZenFunc)Func).GetFuncType();
 			}
@@ -526,9 +526,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		this.PushFuncScope(Node.NameSpace, DefinedFunc, Node.ArgumentList);
 		Node.BodyNode = this.TypeCheckFuncBody(Node.NameSpace, Node.BodyNode);
 		FuncType = this.PopFuncScope(NameSpace, Node, Node.SourceToken);
-		if(FuncType.HasCallableSignature()) {
-			Node.FuncName = FuncType.StringfySignature(Node.FuncName);
-		}
+		Node.ReferenceName = FuncType.StringfySignature(Node.FuncName);
 		this.TypedNode(Node, ZenSystem.VoidType);
 	}
 
