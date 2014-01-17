@@ -283,6 +283,9 @@ public class ZenSourceGenerator extends ZenGenerator {
 	}
 
 	@Override public void VisitSymbolNode(ZenSymbolNode Node) {
+		if(Node.GivenName.equals(Node.ReferenceName) && Node.Type.IsFuncType()) {
+			Node.ReferenceName = Node.Type.StringfySignature(Node.GivenName); // FIXME
+		}
 		this.CurrentBuilder.Append(Node.ReferenceName);
 	}
 
@@ -488,7 +491,7 @@ public class ZenSourceGenerator extends ZenGenerator {
 	@Override public void VisitFuncDeclNode(ZenFuncDeclNode Node) {
 		this.CurrentBuilder.Append("function");
 		this.CurrentBuilder.AppendWhiteSpace();
-		this.CurrentBuilder.Append(Node.FuncName);
+		this.CurrentBuilder.Append(Node.ReferenceName);
 		this.VisitParamList("(", Node.ArgumentList, ")");
 		this.VisitTypeAnnotation(Node.ReturnType);
 		if (Node.BodyNode == null) {
