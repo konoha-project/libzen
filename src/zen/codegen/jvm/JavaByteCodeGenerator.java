@@ -7,13 +7,11 @@ import static org.objectweb.asm.Opcodes.ACC_STATIC;
 import static org.objectweb.asm.Opcodes.ACONST_NULL;
 import static org.objectweb.asm.Opcodes.ATHROW;
 import static org.objectweb.asm.Opcodes.DUP;
-import static org.objectweb.asm.Opcodes.GETFIELD;
 import static org.objectweb.asm.Opcodes.GOTO;
 import static org.objectweb.asm.Opcodes.IFEQ;
 import static org.objectweb.asm.Opcodes.IFNE;
 import static org.objectweb.asm.Opcodes.INVOKESPECIAL;
 import static org.objectweb.asm.Opcodes.NEW;
-import static org.objectweb.asm.Opcodes.PUTFIELD;
 
 import org.objectweb.asm.Label;
 import org.objectweb.asm.Type;
@@ -146,20 +144,20 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 	}
 
 	@Override public void VisitGetterNode(ZenGetterNode Node) {
-		String name = Node.NativeName;
-		Type fieldType = JLib.GetAsmType(Node.ResolvedFunc.GetReturnType());
-		Type ownerType = JLib.GetAsmType(Node.ResolvedFunc.GetFuncParamType(0));
-		Node.RecvNode.Accept(this);
-		this.CurrentVisitor.AsmVisitor.visitFieldInsn(GETFIELD, ownerType.getInternalName(), name, fieldType.getDescriptor());
+		//		String name = Node.NativeName;
+		//		Type fieldType = JLib.GetAsmType(Node.ResolvedFunc.GetReturnType());
+		//		Type ownerType = JLib.GetAsmType(Node.ResolvedFunc.GetFuncParamType(0));
+		//		Node.RecvNode.Accept(this);
+		//		this.CurrentVisitor.AsmVisitor.visitFieldInsn(GETFIELD, ownerType.getInternalName(), name, fieldType.getDescriptor());
 	}
 
 	@Override public void VisitSetterNode(ZenSetterNode Node) {
-		String name = Node.NativeName;
-		Type fieldType = JLib.GetAsmType(Node.ResolvedFunc.GetFuncParamType(1));
-		Type ownerType = JLib.GetAsmType(Node.ResolvedFunc.GetFuncParamType(0));
-		Node.RecvNode.Accept(this);
-		this.CurrentVisitor.PushEvaluatedNode(Node.ResolvedFunc.GetFuncParamType(1), Node.ValueNode);
-		this.CurrentVisitor.AsmVisitor.visitFieldInsn(PUTFIELD, ownerType.getInternalName(), name, fieldType.getDescriptor());
+		//		String name = Node.NativeName;
+		//		Type fieldType = JLib.GetAsmType(Node.ResolvedFunc.GetFuncParamType(1));
+		//		Type ownerType = JLib.GetAsmType(Node.ResolvedFunc.GetFuncParamType(0));
+		//		Node.RecvNode.Accept(this);
+		//		this.CurrentVisitor.PushEvaluatedNode(Node.ResolvedFunc.GetFuncParamType(1), Node.ValueNode);
+		//		this.CurrentVisitor.AsmVisitor.visitFieldInsn(PUTFIELD, ownerType.getInternalName(), name, fieldType.getDescriptor());
 	}
 
 	@Override public void VisitGetIndexNode(ZenGetIndexNode Node) {
@@ -214,10 +212,9 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 	}
 
 	@Override public void VisitBinaryNode(ZenBinaryNode Node) {
-		//LibNative.Assert(Node.ResolvedFunc.FuncBody instanceof Method);
-		//this.CurrentVisitor.PushEvaluatedNode(Node.LeftNode.Type, Node.LeftNode);
-		//this.CurrentVisitor.PushEvaluatedNode(Node.RightNode.Type, Node.RightNode);
-		//this.CurrentVisitor.InvokeMethodCall(Node.Type, Node.ResolvedFunc.FuncBody);
+		//		this.CurrentVisitor.PushEvaluatedNode(Node.LeftNode.Type, Node.LeftNode);
+		//		this.CurrentVisitor.PushEvaluatedNode(Node.RightNode.Type, Node.RightNode);
+		//		this.CurrentVisitor.InvokeMethodCall(Node.Type, Node.ResolvedFunc.FuncBody);
 	}
 
 	@Override
