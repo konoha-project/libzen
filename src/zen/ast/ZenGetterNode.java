@@ -25,18 +25,19 @@
 package zen.ast;
 
 import zen.deps.Field;
-import zen.lang.ZenSystem;
 import zen.parser.ZenToken;
 import zen.parser.ZenVisitor;
-import zen.sugar.ZenSymbolNode;
 
 //E.g., $RecvNode.$NativeName
-final public class ZenGetterNode extends ZenSymbolNode {
-	@Field public ZenNode  RecvNode;
-	public ZenGetterNode/*constructor*/(ZenToken SourceToken, ZenNode RecvNode, String NativeName) {
-		super(ZenSystem.VarType, SourceToken, NativeName);
-		this.RecvNode = RecvNode;
-		this.SetChild(RecvNode);
+final public class ZenGetterNode extends ZenNode {
+	@Field public ZenNode RecvNode;
+	@Field public String  NativeName;
+	public ZenGetterNode/*constructor*/(ZenToken SourceToken, ZenNode RecvNode, String FieldName) {
+		super();
+		this.SourceToken = SourceToken;
+		this.NativeName = FieldName;
+		this.RecvNode = this.SetChild(RecvNode);
+
 	}
 	@Override public void Accept(ZenVisitor Visitor) {
 		Visitor.VisitGetterNode(this);

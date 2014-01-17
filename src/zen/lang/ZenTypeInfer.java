@@ -259,7 +259,10 @@ public class ZenTypeInfer extends ZenTypeChecker {
 			@Var ZenVariable VarInfo = this.GetLocalVariable(NameSpace, VarNode.VarName);
 			if(VarInfo == null) {
 				FuncType = this.GuessFuncType2(NameSpace, VarNode.VarName, Node, FuncType);
-				Node.FuncNode.Type = FuncType;
+				if(FuncType instanceof ZenFuncType && FuncType.HasCallableSignature()) {
+					Node.FuncNode.Type = FuncType;
+					VarNode.VarName = FuncType.StringfySignature(VarNode.VarName);
+				}
 				IsFuncObject = false;
 			}
 		}
@@ -339,10 +342,10 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		ZenType ContextType = this.GetContextType();
 		ZenType LeftType = this.GetBinaryLeftType(Node.SourceToken.ParsedText, ContextType);
 		ZenType RightType = this.GetBinaryRightType(Node.SourceToken.ParsedText, ContextType);
-		System.err.println("debug left=" + LeftType + ", right=" + RightType);
+		//System.err.println("debug left=" + LeftType + ", right=" + RightType);
 		Node.LeftNode = this.TypeCheck(Node.LeftNode, NameSpace, LeftType, ZenTypeChecker.DefaultTypeCheckPolicy);
 		Node.RightNode = this.TypeCheck(Node.RightNode, NameSpace, RightType, ZenTypeChecker.DefaultTypeCheckPolicy);
-		System.err.println("debug left=" + Node.LeftNode.Type + ", right=" + Node.RightNode.Type);
+		//System.err.println("debug left=" + Node.LeftNode.Type + ", right=" + Node.RightNode.Type);
 		if(!Node.LeftNode.Type.Equals(Node.RightNode.Type)) {
 			if(Node.SourceToken.EqualsText("+")) {
 				this.UnifyBinaryNodeType(NameSpace, Node, ZenSystem.StringType, ZenTypeChecker.EnforceCoercion);
@@ -492,23 +495,26 @@ public class ZenTypeInfer extends ZenTypeChecker {
 				//TODO Error;
 			}
 		}
-		ZenFunc DefinedFunc = this.DefineFunc(NameSpace, "", FuncType, Node.SourceToken);
+		ZenFunc DefinedFunc = this.DefineFunc(NameSpace, null, FuncType, Node.SourceToken);
 		this.PushFuncScope(NameSpace, DefinedFunc, Node.ArgumentList);
 		Node.BodyNode = this.TypeCheck(Node.BodyNode, NameSpace, ZenSystem.VoidType, 0);
-		this.TypedNode(Node, this.PopFuncScope(NameSpace, Node));
+		this.TypedNode(Node, this.PopFuncScope(NameSpace, Node, Node.SourceToken).GetReturnType());
 	}
 
 	@Override public void VisitFuncDeclNode(ZenFuncDeclNode Node) {
 		@Var ZenNameSpace NameSpace = this.GetNameSpace();
 		@Var ZenFuncType FuncType = this.LookupTypeFunc(Node.ReturnType, Node.ArgumentList);
-		this.CheckErrorNode(this.CanDefineFunc(NameSpace, Node.FuncName, FuncType, Node));
-		if(this.IsVisitable()) {
-			ZenFunc DefiningFunc = this.DefineFunc(NameSpace, Node.FuncName, FuncType, Node.SourceToken);
-			if(!DefiningFunc.IsLazyDef() && Node.BodyNode != null) {
-				this.PushFuncScope(Node.NameSpace, DefiningFunc, Node.ArgumentList);
-				Node.BodyNode = this.TypeCheckFuncBody(Node.NameSpace, Node.BodyNode);
-				this.PopFuncScope(Node.NameSpace, Node);
+		if(Node.BodyNode != null) {
+			@Var ZenFunc DefinedFunc = this.DefineFunc(NameSpace, Node.FuncName, FuncType, Node.SourceToken);
+			this.PushFuncScope(Node.NameSpace, DefinedFunc, Node.ArgumentList);
+			Node.BodyNode = this.TypeCheckFuncBody(Node.NameSpace, Node.BodyNode);
+			FuncType = this.PopFuncScope(NameSpace, Node, Node.SourceToken);
+			if(FuncType.HasCallableSignature()) {
+				Node.FuncName = FuncType.StringfySignature(Node.FuncName);
 			}
+		}
+		else {
+			//TODO;
 		}
 		this.TypedNode(Node, ZenSystem.VoidType);
 	}

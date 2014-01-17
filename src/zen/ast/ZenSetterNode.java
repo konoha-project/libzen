@@ -25,30 +25,25 @@
 package zen.ast;
 
 import zen.deps.Field;
-import zen.lang.ZenSystem;
 import zen.parser.ZenToken;
 import zen.parser.ZenVisitor;
-import zen.sugar.ZenSymbolNode;
 
 //E.g., $RecvNode.$NativeName = $Value
-final public class ZenSetterNode extends ZenSymbolNode {
+final public class ZenSetterNode extends ZenNode {
 	@Field public ZenNode  RecvNode;
+	@Field public String  NativeName;
 	@Field public ZenNode  ValueNode;
-	public ZenSetterNode/*constructor*/(ZenToken SourceToken, ZenNode RecvNode, String NativeName) {
-		super(ZenSystem.VarType, SourceToken, NativeName);
-		this.RecvNode  = RecvNode;
+	public ZenSetterNode/*constructor*/(ZenToken SourceToken, ZenNode RecvNode, String FieldName) {
+		super();
+		this.SourceToken = SourceToken;
+		this.NativeName = FieldName;
+		this.RecvNode  = this.SetChild(RecvNode);
 		this.ValueNode = null;
-		this.SetChild(RecvNode);
 	}
 	@Override public void Append(ZenNode Node) {
-		this.SetChild(Node);
-		this.ValueNode = Node;
-		/*return this;*/
+		this.ValueNode = this.SetChild(Node);
 	}
 	@Override public void Accept(ZenVisitor Visitor) {
 		Visitor.VisitSetterNode(this);
 	}
-	//	@Override public Object ToConstValue(ZenParserContext Context, boolean EnforceConst)  {
-	//		return Context.Generator.EvalSetterNode(this, EnforceConst);
-	//	}
 }

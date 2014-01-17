@@ -39,6 +39,7 @@ import zen.ast.ZenParamNode;
 import zen.ast.ZenStupidCastNode;
 import zen.deps.Constructor;
 import zen.deps.Field;
+import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.parser.ZenLogger;
 import zen.parser.ZenNameSpace;
@@ -50,6 +51,7 @@ class FuncContext {
 	@Field FuncContext Parent;
 	@Field public ZenFunc DefinedFunc;
 	@Field public ZenType ReturnType;
+	@Field public String PredefinedSignature;
 	@Field boolean IsInferredReturn;
 	@Field ArrayList<ZenVarType> VarTypeList;
 	@Field public int VarIndex;
@@ -60,9 +62,11 @@ class FuncContext {
 		this.DefinedFunc = DefinedFunc;
 		if(this.DefinedFunc == null) {
 			this.ReturnType = null;
+			this.PredefinedSignature = "";
 		}
 		else {
-			this.ReturnType = DefinedFunc.GetReturnType();
+			this.ReturnType = DefinedFunc.GetReturnType().GetRealType();
+			this.PredefinedSignature = DefinedFunc.GetSignature();
 		}
 		this.IsInferredReturn = false;
 		this.VarTypeList = new ArrayList<ZenVarType>();
@@ -77,43 +81,42 @@ class FuncContext {
 		}
 	}
 
-	public ZenType CheckFuncType(ZenFunctionLiteralNode FuncNode) {
-		@Var boolean HasVar = false;
-		@Var boolean ResetType = false;
-		@Var ZenType FuncType = this.DefinedFunc.GetFuncType();
-		@Var int i = 0;
-		while(i < FuncType.GetParamSize()) {
-			ZenType ParamType = FuncType.GetParamType(0);
-			if(ParamType.IsVarType()) {
-				ResetType = true;
-				break;
-			}
-			i = i + 1;
-		}
-		if(ResetType) {
+	public ZenFuncType CheckFuncType(ZenFunctionLiteralNode FuncNode) {
+		@Var ZenFuncType FuncType = this.DefinedFunc.FuncType;
+		if(!FuncType.IsCompleteType()) {
 			@Var ArrayList<ZenType> TypeList = new ArrayList<ZenType>();
 			if(this.ReturnType.IsVarType() && !this.IsInferredReturn) {
 				this.ReturnType = ZenSystem.VoidType;
 			}
 			FuncNode.ReturnType = this.ReturnType.GetRealType();
 			TypeList.add(FuncNode.ReturnType);
+			@Var int i = 0;
 			while(i < FuncNode.ArgumentList.size()) {
 				@Var ZenParamNode ParamNode = (ZenParamNode)FuncNode.ArgumentList.get(i);
 				ParamNode.Type = ParamNode.Type.GetRealType();
 				TypeList.add(ParamNode.Type);
-				if(ParamNode.Type.IsVarType()) {
-					HasVar = true;
-				}
 				i = i + 1;
 			}
-			this.DefinedFunc.FuncType = ZenSystem.LookupFuncType(TypeList);
-			if(HasVar) {
-				return ZenSystem.VarType;
+			FuncType = ZenSystem.LookupFuncType(TypeList);
+			this.DefinedFunc.FuncType = FuncType;
+			if(!LibZen.EqualsString(this.PredefinedSignature, FuncType.StringfySignature(this.DefinedFunc.FuncName))) {
+
 			}
-			return this.DefinedFunc.FuncType;
 		}
 		return FuncType;
 	}
+
+	public void UpdateFuncType(ZenNameSpace NameSpace, ZenFunctionLiteralNode FuncNode) {
+		@Var ZenFuncType FuncType = this.DefinedFunc.FuncType;
+		@Var String Signature = FuncType.StringfySignature(this.DefinedFunc.FuncName);
+		System.err.println("debug defined: " + Signature + ": " + FuncType);
+		if(!LibZen.EqualsString(this.PredefinedSignature, Signature)) {
+			System.err.println("debug new signature: " + Signature);
+			NameSpace.SetSymbol(Signature, this.DefinedFunc, null);
+			NameSpace.SetSymbol(this.PredefinedSignature, null, null);
+		}
+	}
+
 
 	public int GetVarSize() {
 		@Var int count = 0;
@@ -662,13 +665,26 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		return FuncType;
 	}
 
-	protected ZenNode CanDefineFunc(ZenNameSpace NameSpace, String FuncName, ZenFuncType FuncType, ZenFuncDeclNode Node) {
-		return Node;
-	}
+	//	protected ZenNode CanDefineFunc(ZenNameSpace NameSpace, String FuncName, ZenFuncType FuncType, ZenFuncDeclNode Node) {
+	//		System.out.println("debug signature: " + FuncType.StringfySignature(FuncName));
+	//		ZenFunc Func = NameSpace.GetSymbol(FuncType.StringfySignature(FuncName));
+	//		return Node;
+	//	}
 
 	public ZenFunc DefineFunc(ZenNameSpace NameSpace, String FuncName, ZenFuncType FuncType, ZenToken SourceToken) {
-		ZenFunc Func = new ZenFunc(0, FuncName, FuncType);
-		NameSpace.AppendFuncName(Func, SourceToken);
+		@Var ZenFunc Func = new ZenFunc(0, FuncName, FuncType);
+		if(FuncName != null) {
+			@Var String Signature = FuncType.StringfySignature(FuncName);
+			System.err.println("debug signature: " + Signature);
+			@Var Object FuncObject = NameSpace.GetSymbol(Signature);
+			if(FuncObject instanceof ZenFunc) {
+				@Var ZenFunc PreDefined = (ZenFunc)FuncObject;
+				System.err.println("predefined func: " + PreDefined);
+
+			}
+			NameSpace.SetSymbol(Signature, Func, SourceToken);
+			NameSpace.AppendFuncName(Func, SourceToken);
+		}
 		return Func;
 	}
 
@@ -684,12 +700,15 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		}
 	}
 
-	public ZenType PopFuncScope(ZenNameSpace NameSpace, ZenFunctionLiteralNode FuncNode) {
+	public ZenFuncType PopFuncScope(ZenNameSpace NameSpace, ZenFunctionLiteralNode FuncNode, ZenToken SourceToken) {
 		NameSpace.SetDefiningFunc(null);
-		ZenType Type = this.FuncScope.CheckFuncType(FuncNode);
+		ZenFuncType FuncType = this.FuncScope.CheckFuncType(FuncNode);
+		if(FuncNode instanceof ZenFuncDeclNode) {
+			this.FuncScope.UpdateFuncType(NameSpace, FuncNode);
+		}
 		this.FuncScope.Dump();
 		this.FuncScope = this.FuncScope.Parent;
-		return Type;
+		return FuncType;
 	}
 
 	public void UpdateParamType() {

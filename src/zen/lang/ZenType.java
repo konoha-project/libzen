@@ -72,9 +72,6 @@ public class ZenType implements ZenTypeFlag {
 		return null;
 	}
 
-	public boolean IsFuncType() {
-		return false;
-	}
 
 	public final boolean Equals(ZenType Type) {
 		return (this.GetRealType() == Type.GetRealType());
@@ -220,6 +217,18 @@ public class ZenType implements ZenTypeFlag {
 
 	public final boolean AcceptValue(Object Value) {
 		return (Value != null) ? this.Accept(ZenSystem.GuessType(Value)) : true;
+	}
+
+	public boolean IsFuncType() {
+		return false;
+	}
+
+	public boolean HasCallableSignature() {
+		return false;
+	}
+
+	public String StringfySignature(String FuncName) {
+		return FuncName;
 	}
 
 

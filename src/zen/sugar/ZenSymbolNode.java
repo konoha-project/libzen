@@ -25,17 +25,20 @@
 package zen.sugar;
 
 import zen.ast.ZenNode;
+import zen.deps.Constructor;
 import zen.deps.Field;
-import zen.lang.ZenFunc;
 import zen.lang.ZenType;
 import zen.parser.ZenToken;
 
 abstract public class ZenSymbolNode extends ZenNode {
-	@Field public String  NativeName;
-	@Field public ZenFunc	ResolvedFunc;    //
-	public ZenSymbolNode/*constructor*/(ZenType Type, ZenToken Token, String NativeName) {
+	@Field public String  GivenName;
+	@Field public String  ResourceName;
+
+	@Constructor public ZenSymbolNode(ZenType Type, ZenToken SourceToken, String GivenName, String ResourceName) {
 		super();
-		this.NativeName = NativeName;
-		this.ResolvedFunc = null;
+		this.Type = Type;
+		this.SourceToken = SourceToken;
+		this.GivenName = GivenName;
+		this.ResourceName = ResourceName;
 	}
 }

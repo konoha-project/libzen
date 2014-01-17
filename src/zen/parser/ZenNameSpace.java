@@ -74,6 +74,10 @@ public final class ZenNameSpace {
 		return new ZenNameSpace(null, this);
 	}
 
+	private ZenNameSpace GetRootNameSpace() {
+		return this.Generator.RootNameSpace;
+	}
+
 	//	public final ZenNameSpace Minimum() {
 	//		@Var ZenNameSpace NameSpace = this;
 	//		while(NameSpace.SymbolPatternTable == null) {
@@ -250,7 +254,7 @@ public final class ZenNameSpace {
 		if(SourceToken != null && TypeInfo == null) {
 			ZenType Type = new ZenType(ZenTypeFlag.UniqueType|ZenTypeFlag.OpenType, TypeName, ZenSystem.VarType);
 			this.Generator.Logger.ReportInfo(SourceToken, "implicit defintion of type " + TypeName);
-			this.SetSymbol(TypeName, Type, SourceToken);
+			this.GetRootNameSpace().SetSymbol(TypeName, Type, SourceToken);
 			return Type;
 		}
 		return null;

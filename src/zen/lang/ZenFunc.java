@@ -25,7 +25,6 @@
 //ifdef JAVA
 package zen.lang;
 import zen.deps.Field;
-import zen.deps.LibNative;
 import zen.deps.LibZen;
 import zen.parser.ZenUtils;
 
@@ -59,20 +58,12 @@ public class ZenFunc implements ZenFuncFlag {
 		return this.FuncType.TypeParams[0];
 	}
 
-	public final void SetReturnType(ZenType ReturnType) {
-		LibNative.Assert(this.GetReturnType().IsVarType());
-		this.FuncType.TypeParams[0] = ReturnType;
-	}
-
 	public final ZenType GetRecvType() {
-		if(this.FuncType.TypeParams.length == 1) {
-			return ZenSystem.VoidType;
-		}
-		return this.FuncType.TypeParams[1];
+		return this.FuncType.GetRecvType();
 	}
 
 	public final int GetFuncParamSize() {
-		return this.FuncType.TypeParams.length - 1;
+		return this.FuncType.GetFuncParamSize();
 	}
 
 	public final ZenType GetFuncParamType(int ParamIdx) {
@@ -83,22 +74,12 @@ public class ZenFunc implements ZenFuncFlag {
 		return this.FuncType.TypeParams.length - 2;
 	}
 
-	//	public final ZenType GetVargType() {
-	//		if(this.FuncType.TypeParams.length > 0) {
-	//			@Var ZenType VargType = this.FuncType.TypeParams[this.FuncType.TypeParams.length - 1];
-	//			if(VargType.IsArrayType()) {
-	//				return VargType.GetParamType(0);
-	//			}
-	//		}
-	//		return null;
-	//	}
-
 	public Object Invoke(Object[] Params) {
 		LibZen.DebugP("not native method");
 		return null;
 	}
 
-	public boolean IsLazyDef() {
+	public boolean IsAbstractType() {
 		return false;
 	}
 
@@ -111,6 +92,10 @@ public class ZenFunc implements ZenFuncFlag {
 
 	public static String StringfySignature(String FuncName, int FuncParamSize, ZenType RecvType) {
 		return FuncName + "__" + FuncParamSize + RecvType.TypeId;
+	}
+
+	public final String GetSignature() {
+		return this.FuncType.StringfySignature(this.FuncName);
 	}
 
 	//	public void GenerateNativeFunc() {
