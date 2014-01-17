@@ -40,6 +40,7 @@ import zen.ast.ZenStupidCastNode;
 import zen.deps.Constructor;
 import zen.deps.Field;
 import zen.deps.LibZen;
+import zen.deps.Nullable;
 import zen.deps.Var;
 import zen.parser.ZenLogger;
 import zen.parser.ZenNameSpace;
@@ -156,6 +157,11 @@ class FuncContext {
 }
 
 public abstract class ZenTypeChecker implements ZenVisitor {
+
+	protected void println(String string) {
+		System.err.println("debug " + string);
+	}
+
 	public final static int DefaultTypeCheckPolicy			= 0;
 	public final static int NoCheckPolicy                   = 1;
 	public final static int EnforceCoercion                 = (1 << 1);
@@ -447,37 +453,22 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 	//	}
 
 	public final ZenType TypeCheckFuncParam(ZenNameSpace NameSpace, ArrayList<ZenNode> ParamList, ZenType ContextType, int ParamIdx /* 1: Func 2: Method*/) {
-		System.err.println("debug TypeCheckFuncParam: " + ContextType);
+		this.println("TypeCheck FuncType: " + ContextType);
 		if(this.IsVisitable() && ContextType.IsFuncType()) {
-			ZenFuncType FuncType = (ZenFuncType)ContextType;
-			if(FuncType.GetParamSize() == ParamList.size() + ParamIdx) {
-				int i = 0;
-				while(i < ParamList.size()) {
-					ZenNode SubNode = ParamList.get(i);
-					SubNode = this.TypeCheck(SubNode, NameSpace, FuncType.GetParamType(i+ParamIdx), ZenTypeChecker.DefaultTypeCheckPolicy);
-					ParamList.set(i, SubNode);
-					i = i + 1;
-				}
-				return FuncType.GetReturnType();
+			@Var ZenFuncType FuncType = (ZenFuncType)ContextType;
+			@Var int i = 0;
+			while(i < ParamList.size()) {
+				@Var ZenNode SubNode = ParamList.get(i);
+				SubNode = this.TypeCheck(SubNode, NameSpace, FuncType.GetParamType(i+ParamIdx), ZenTypeChecker.DefaultTypeCheckPolicy);
+				ParamList.set(i, SubNode);
+				i = i + 1;
+			}
+			if(FuncType.IsCompleteType()) {
+				return FuncType.GetReturnType();   // Return
 			}
 		}
-		this.TypeCheckNodeList(NameSpace, ParamList);
+		//		this.TypeCheckNodeList(NameSpace, ParamList);
 		return ZenSystem.VarType;
-	}
-
-	public final ZenNode TypeCheckFuncBody(ZenNameSpace NameSpace, ZenNode BodyNode) {
-		int Stopper = Integer.MAX_VALUE;
-		while(this.IsVisitable()) {
-			this.FuncScope.CountOfUnknownTypeNode = 0;
-			BodyNode = this.TypeCheck(BodyNode, NameSpace, ZenSystem.VoidType, 0);
-			int UntypedSize = this.FuncScope.GetVarSize();
-			System.err.println("debug untyped node=" + this.FuncScope.CountOfUnknownTypeNode + ", var=" + UntypedSize);
-			if(this.FuncScope.CountOfUnknownTypeNode == 0 || Stopper == this.FuncScope.CountOfUnknownTypeNode) {
-				break;
-			}
-			Stopper = this.FuncScope.CountOfUnknownTypeNode;
-		}
-		return BodyNode;
 	}
 
 	public final ZenNode TypeCheck(ZenNode Node, ZenNameSpace NameSpace, ZenType ContextType, int TypeCheckPolicy) {
@@ -643,16 +634,24 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		NameSpace.SetSymbol(VarName, VarInfo, SourceToken);
 	}
 
-	protected ZenFuncType LookupTypeFunc(ZenType ReturnType, ArrayList<ZenNode> NodeList) {
+	protected ZenFuncType LookupTypeFunc(ZenType ReturnType, ArrayList<ZenNode> NodeList, @Nullable ZenType ContextType) {
+		@Var ZenFuncType FuncType = null;
+		if(ContextType instanceof ZenFuncType) {
+			FuncType = (ZenFuncType)ContextType;
+		}
 		@Var ArrayList<ZenType> TypeList = new ArrayList<ZenType>();
-		TypeList.add(ReturnType);
+		if(ReturnType.IsVarType() && FuncType != null) {
+			ReturnType = FuncType.GetParamType(0);
+		}
+		TypeList.add(ReturnType.GetRealType());
 		@Var int i = 0;
 		while(i < NodeList.size()) {
-			ZenParamNode Node = (ZenParamNode)NodeList.get(i);
-			if(Node.Type == null) {
-				Node.Type = ZenSystem.VarType; //this.VarType(Node.Name);
+			@Var ZenParamNode Node = (ZenParamNode)NodeList.get(i);
+			@Var ZenType ParamType = Node.Type.GetRealType();
+			if(ParamType.IsVarType() && FuncType != null) {
+				ParamType = FuncType.GetParamType(i+1);
 			}
-			TypeList.add(Node.Type);
+			TypeList.add(ParamType);
 			i = i + 1;
 		}
 		return ZenSystem.LookupFuncType(TypeList);
@@ -680,7 +679,6 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 			if(FuncObject instanceof ZenFunc) {
 				@Var ZenFunc PreDefined = (ZenFunc)FuncObject;
 				System.err.println("predefined func: " + PreDefined);
-
 			}
 			NameSpace.SetSymbol(Signature, Func, SourceToken);
 			NameSpace.AppendFuncName(Func, SourceToken);
@@ -700,6 +698,21 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		}
 	}
 
+	public final ZenNode TypeCheckFuncBody(ZenNameSpace NameSpace, ZenNode BodyNode) {
+		@Var int Stopper = Integer.MAX_VALUE;
+		while(this.IsVisitable()) {
+			this.FuncScope.CountOfUnknownTypeNode = 0;
+			BodyNode = this.TypeCheck(BodyNode, NameSpace, ZenSystem.VoidType, 0);
+			int UntypedSize = this.FuncScope.GetVarSize();
+			this.println("untyped node=" + this.FuncScope.CountOfUnknownTypeNode + ", var=" + UntypedSize);
+			if(this.FuncScope.CountOfUnknownTypeNode == 0 || Stopper == this.FuncScope.CountOfUnknownTypeNode) {
+				break;
+			}
+			Stopper = this.FuncScope.CountOfUnknownTypeNode;
+		}
+		return BodyNode;
+	}
+
 	public ZenFuncType PopFuncScope(ZenNameSpace NameSpace, ZenFunctionLiteralNode FuncNode, ZenToken SourceToken) {
 		NameSpace.SetDefiningFunc(null);
 		ZenFuncType FuncType = this.FuncScope.CheckFuncType(FuncNode);
@@ -710,14 +723,14 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		this.FuncScope = this.FuncScope.Parent;
 		return FuncType;
 	}
-
-	public void UpdateParamType() {
-		// TODO Auto-generated method stub
-	}
-
-	public void TypeSync(ZenType VarType, ZenNode ValueNode) {
-		// TODO Auto-generated method stub
-	}
-
+	//
+	//	public void UpdateParamType() {
+	//		// TODO Auto-generated method stub
+	//	}
+	//
+	//	public void TypeSync(ZenType VarType, ZenNode ValueNode) {
+	//		// TODO Auto-generated method stub
+	//	}
+	//
 
 }
