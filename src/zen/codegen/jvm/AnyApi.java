@@ -22,30 +22,18 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package org.ZenScript.Konoha;
-import parser.deps.ZenEnum;
+package zen.codegen.jvm;
 
-public class TopApi {
-	public final static long Size(Object x) {
-		return x == null ? 0 : 1;
+public final class AnyApi {
+
+	public final static boolean ToBoolean(Object value) {
+		return value == null ? false : ((Boolean)value).booleanValue();
 	}
-	public final static boolean Equals(Object x, Object y) {
-		return x == y;
+	public final static long ToInt(Object value) {
+		return value == null ? 0L : ((Long)value).longValue();
 	}
-	public final static boolean NotEquals(Object x, Object y) {
-		return x != y;
+	public final static double ToFloat(Object value) {
+		return value == null ? 0.0 : ((Double)value).longValue();
 	}
-	// Enum
-	public final static String EnumToString(ZenEnum Value) {
-		if(Value != null) {
-			return Value.EnumSymbol;
-		}
-		return null;
-	}
-	public final static long EnumToInt(ZenEnum Value) {
-		if(Value != null) {
-			return Value.EnumValue;
-		}
-		return -1;
-	}
+
 }
