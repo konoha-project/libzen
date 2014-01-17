@@ -134,13 +134,13 @@ class FuncContext {
 
 	public void Dump() {
 		@Var int i = 0;
-		System.err.println("debug returning type: " + this.ReturnType);
+		this.println("returning type: " + this.ReturnType);
 		while(i < this.VarTypeList.size()) {
 			@Var ZenVarType VarType = this.VarTypeList.get(i);
-			System.err.println("debug type inference: " + VarType.ShortName + ": " + VarType.GetRealType());
+			this.println("type inference: " + VarType.ShortName + ": " + VarType.GetRealType());
 			i = i + 1;
 		}
-		System.err.println("debug unknown type count = " + this.CountOfUnknownTypeNode);
+		this.println("unknown type count = " + this.CountOfUnknownTypeNode);
 		this.VarTypeList.clear();
 	}
 
@@ -154,6 +154,9 @@ class FuncContext {
 		this.CountOfUnknownTypeNode = this.CountOfUnknownTypeNode + 1;
 	}
 
+	protected void println(String string) {
+		System.err.println("debug " + string);
+	}
 }
 
 public abstract class ZenTypeChecker implements ZenVisitor {
@@ -339,42 +342,46 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		return null;
 	}
 
-	protected ZenType GuessFuncType2(ZenNameSpace NameSpace, String FuncName, ZenApplyNode Node, ZenType ContextType) {
+	protected ZenType GuessFuncType(ZenNameSpace NameSpace, String FuncName, ZenApplyNode Node, ZenType ContextType) {
+		ZenFuncType FuncType = null;
+		if(ContextType instanceof ZenFuncType) {
+			FuncType = (ZenFuncType)ContextType;
+		}
 		if(Node.ResolvedFunc == null) {
 			@Var int FuncParamSize = Node.ParamList.size();
 			@Var ZenType RecvType = Node.GetRecvType();
-			@Var String Key = ZenFunc.StringfySignature(FuncName, FuncParamSize, RecvType);
-			@Var Object Func = NameSpace.GetSymbol(Key);
+			@Var String Signature = ZenFunc.StringfySignature(FuncName, FuncParamSize, RecvType);
+			@Var Object Func = NameSpace.GetSymbol(Signature);
 			if(Func instanceof ZenFunc) {
 				Node.ResolvedFunc = ((ZenFunc)Func);
+				return Node.ResolvedFunc.GetFuncType();
+			}
+			@Var ArrayList<ZenFunc> FuncList = new ArrayList<ZenFunc>();
+			if(Node instanceof ZenMethodCallNode) {
+				@Var ZenType ClassType = RecvType;
+				while(ClassType != null) {
+					NameSpace.RetrieveFuncList(FuncList, ClassType, FuncName, FuncParamSize);
+					ClassType = ClassType.GetSuperType();
+				}
 			}
 			else {
-				@Var ArrayList<ZenFunc> FuncList = new ArrayList<ZenFunc>();
-				if(Node instanceof ZenMethodCallNode) {
-					@Var ZenType ClassType = RecvType;
-					while(ClassType != null) {
-						NameSpace.RetrieveFuncList(FuncList, ClassType, FuncName, FuncParamSize);
-						ClassType = ClassType.GetSuperType();
-					}
-				}
-				else {
-					NameSpace.RetrieveFuncList(FuncList, null, FuncName, FuncParamSize);
-				}
-				@Var int BaseSize = FuncList.size();
-				if(BaseSize == 1) {
-					Node.ResolvedFunc = FuncList.get(0);
-					return Node.ResolvedFunc.FuncType;
-				}
-				this.DumpFuncList(FuncList, 0, BaseSize);
-				if(BaseSize > 1 && FuncParamSize > 0) {
-					this.GuessFuncTypeAcceptedParam(FuncList, Node, BaseSize);
-					if(Node.ResolvedFunc == null && ContextType.IsFuncType()) {
-						Node.ResolvedFunc = this.NewPhantomFunc(NameSpace, FuncName, ContextType);
-					}
+				NameSpace.RetrieveFuncList(FuncList, null, FuncName, FuncParamSize);
+			}
+			@Var int BaseSize = FuncList.size();
+			if(BaseSize == 1) {
+				Node.ResolvedFunc = FuncList.get(0);
+				return Node.ResolvedFunc.FuncType;
+			}
+			this.DumpFuncList(FuncList, 0, BaseSize);
+			if(BaseSize > 1 && FuncParamSize > 0) {
+				this.GuessFuncTypeAcceptedParam(FuncList, Node, BaseSize);
+				if(Node.ResolvedFunc == null && ContextType.IsFuncType()) {
+					Node.ResolvedFunc = this.NewPhantomFunc(NameSpace, FuncName, ContextType);
 				}
 			}
 		}
 		if(Node.ResolvedFunc == null) {
+			this.println("unfound function call: " + FuncName + ", " + ContextType);
 			return ZenSystem.VarType; // unspecified
 		}
 		return Node.ResolvedFunc.FuncType;
@@ -383,7 +390,7 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 	protected ZenType GuessMethodFuncType(ZenNameSpace NameSpace, String FuncName, ZenMethodCallNode Node, ZenType ContextType) {
 		if(Node.ResolvedFunc == null) {
 			Node.ParamList.add(0, Node.RecvNode);
-			this.GuessFuncType2(NameSpace, FuncName, Node, ContextType);
+			this.GuessFuncType(NameSpace, FuncName, Node, ContextType);
 			Node.ParamList.remove(0);
 		}
 		if(Node.ResolvedFunc == null) {
@@ -391,66 +398,6 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		}
 		return Node.ResolvedFunc.FuncType;
 	}
-
-	//
-	//	private int FilterFuncParamType(ArrayList<ZenFunc> FuncList, int StartIdx, int EndIdx, int ParamIdx, ZenType ParamType) {
-	//		@Var int StartFuncSize = FuncList.size();
-	//		@Var int i = StartIdx;
-	//		while(i < EndIdx) {
-	//			@Var ZenFunc Func = FuncList.get(i);
-	//			if(Func.GetFuncParamType(ParamIdx) == ParamType) {
-	//				FuncList.add(Func);
-	//			}
-	//			i = i + 1;
-	//		}
-	//		return FuncList.size() - StartFuncSize;
-	//	}
-	//
-	//	private ZenType GuessFuncTypeMatchedParam(ZenNameSpace NameSpace, ArrayList<ZenFunc> FuncList, ZenApplyNode Node, int ResolvedSize) {
-	//		@Var int StartIdx = 0;
-	//		@Var int BaseSize = FuncList.size();
-	//		@Var int NextIdx = FuncList.size();
-	//		@Var int FuncParamSize = Node.ParamList.size();
-	//		while(ResolvedSize < FuncParamSize) {
-	//			@Var ZenNode SubNode = this.TypeCheck(Node.ParamList.get(ResolvedSize), NameSpace, ZenSystem.VarType, 0);
-	//			if(SubNode.Type.IsVarType()) {
-	//				return ZenSystem.VarType; // unspecified
-	//			}
-	//			@Var int Count = this.FilterFuncParamType(FuncList, StartIdx, NextIdx, ResolvedSize, SubNode.Type);
-	//			if(Count == 1) {
-	//				Node.ResolvedFunc = FuncList.get(FuncList.size()-1);
-	//				return Node.ResolvedFunc.FuncType;
-	//			}
-	//			if(Count == 0) {
-	//				return null;
-	//			}
-	//			StartIdx = NextIdx;
-	//			NextIdx = FuncList.size();
-	//		}
-	//		return this.GuessFuncTypeAcceptedParam(FuncList, Node, BaseSize);
-	//	}
-	//
-	//	protected ZenType GuessFuncType(ZenNameSpace NameSpace, String FuncName, ZenApplyNode Node) {
-	//		@Var ArrayList<ZenFunc> FuncList = new ArrayList<ZenFunc>();
-	//		@Var int FuncParamSize = Node.ParamList.size();
-	//		NameSpace.RetrieveFuncList(FuncList, null, FuncName, FuncParamSize);
-	//		@Var int BaseSize = FuncList.size();
-	//		if(BaseSize == 1) {
-	//			Node.ResolvedFunc = FuncList.get(0);
-	//			return Node.ResolvedFunc.FuncType;
-	//		}
-	//		this.DumpFuncList(FuncList, 0, BaseSize);
-	//		if(BaseSize > 1 && FuncParamSize > 0) {
-	//			@Var ZenType GuessedType = this.GuessFuncTypeMatchedParam(NameSpace, FuncList, Node, 0);
-	//			if(GuessedType == null) {
-	//				Node.ResolvedFunc = this.NewPhantomFunc(NameSpace, FuncName, Node.ParamList);
-	//				if(Node.ResolvedFunc != null) {
-	//					return Node.ResolvedFunc.GetFuncType();
-	//				}
-	//			}
-	//		}
-	//		return ZenSystem.VarType; // unspecified
-	//	}
 
 	public final ZenType TypeCheckFuncParam(ZenNameSpace NameSpace, ArrayList<ZenNode> ParamList, ZenType ContextType, int ParamIdx /* 1: Func 2: Method*/) {
 		this.println("TypeCheck FuncType: " + ContextType);
@@ -498,7 +445,6 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 	}
 
 	private final ZenNode InferType(ZenType ContextType, ZenNode Node) {
-		//System.err.println("debug ContextType="+ContextType + ", Node.Type="+ Node.Type);
 		if(ContextType.IsInferrableType() && Node.Type instanceof ZenVarType) {
 			((ZenVarType)Node.Type).Infer(ContextType, Node.SourceToken);
 			Node.Type = ContextType;
@@ -581,11 +527,12 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 	}
 
 	protected ZenType InferFieldType(ZenNameSpace NameSpace, ZenType ClassType, String FieldName, ZenType InferredType, ZenToken SourceToken) {
-		System.err.println("debug inferrence " + ClassType + "." + FieldName + ": " + InferredType);
+		this.println("field inferrence " + ClassType + "." + FieldName + ": " + InferredType);
 		if(ClassType.IsVarType() || !InferredType.IsInferrableType()) {
 			return ZenSystem.VarType;
 		}
 		if(ClassType.IsOpenType()) {
+			this.Logger.ReportInfo(SourceToken, "field " + ClassType + "." + FieldName + ": " + InferredType);
 			this.SetClassField(NameSpace, ClassType, FieldName, InferredType, SourceToken);
 		}
 		return InferredType;
@@ -674,11 +621,11 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		@Var ZenFunc Func = new ZenFunc(0, FuncName, FuncType);
 		if(FuncName != null) {
 			@Var String Signature = FuncType.StringfySignature(FuncName);
-			System.err.println("debug signature: " + Signature);
+			this.println("signature: " + Signature);
 			@Var Object FuncObject = NameSpace.GetSymbol(Signature);
 			if(FuncObject instanceof ZenFunc) {
 				@Var ZenFunc PreDefined = (ZenFunc)FuncObject;
-				System.err.println("predefined func: " + PreDefined);
+				this.println("predefined func: " + PreDefined);
 			}
 			NameSpace.SetSymbol(Signature, Func, SourceToken);
 			NameSpace.AppendFuncName(Func, SourceToken);

@@ -133,7 +133,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		@Var ZenNameSpace NameSpace = this.GetNameSpace();
 		@Var ZenType FuncType = this.GetContextType();
 		if(Node.ParentNode instanceof ZenFuncCallNode) {
-			FuncType = this.GuessFuncType2(NameSpace, Node.GivenName, (ZenFuncCallNode)Node.ParentNode, FuncType);
+			FuncType = this.GuessFuncType(NameSpace, Node.GivenName, (ZenFuncCallNode)Node.ParentNode, FuncType);
 			if(FuncType.HasCallableSignature()) {
 				Node.ReferenceName = FuncType.StringfySignature(Node.GivenName);
 			}
