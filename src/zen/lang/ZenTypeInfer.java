@@ -65,6 +65,7 @@ import zen.ast.ZenSetIndexNode;
 import zen.ast.ZenSetLocalNode;
 import zen.ast.ZenSetterNode;
 import zen.ast.ZenStringNode;
+import zen.ast.ZenSymbolNode;
 import zen.ast.ZenThrowNode;
 import zen.ast.ZenTryNode;
 import zen.ast.ZenUnaryNode;
@@ -128,26 +129,32 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		this.Todo(Node);
 	}
 
+	@Override public void VisitSymbolNode(ZenSymbolNode Node) {
+		@Var ZenNameSpace NameSpace = this.GetNameSpace();
+		@Var Object Value = NameSpace.GetSymbol(Node.GivenName);
+		if(Value != null) {
+			@Var ZenNode NewNode = ZenNodeUtils.CreateConstNode(Node.SourceToken, Value);
+			NewNode = this.TypeCheck(NewNode, NameSpace, ZenSystem.VarType, 0);
+			this.TypedNode(NewNode, NewNode.Type);
+		}
+	}
+
 	@Override public void VisitGetLocalNode(ZenGetLocalNode Node) {
 		@Var ZenNameSpace NameSpace = this.GetNameSpace();
-		@Var ZenType VarType = ZenSystem.VarType;
 		@Var ZenVariable VarInfo = this.GetLocalVariable(NameSpace, Node.VarName);
 		if(VarInfo != null) {
+			@Var ZenType VarType = ZenSystem.VarType;
 			Node.VarName = VarInfo.VarName;
 			Node.VarIndex = VarInfo.VarUniqueIndex;
 			VarType = VarInfo.VarType;
 			Node.IsCaptured = VarInfo.IsCaptured(NameSpace);
+			this.TypedNode(Node, VarType);
 		}
 		else {
-			@Var Object Value = NameSpace.GetSymbol(Node.VarName);
-			if(Value != null) {
-				@Var ZenNode NewNode = ZenNodeUtils.CreateConstNode(Node.SourceToken, Value);
-				NewNode = this.TypeCheck(NewNode, NameSpace, ZenSystem.VarType, 0);
-				this.TypedNode(NewNode, NewNode.Type);
-				return;
-			}
+			@Var ZenNode NewNode = new ZenSymbolNode(ZenSystem.VarType, Node.SourceToken, Node.VarName, Node.VarName);
+			NewNode = this.TypeCheck(NewNode, NameSpace, ZenSystem.VarType, 0);
+			this.TypedNode(NewNode, NewNode.Type);
 		}
-		this.TypedNode(Node, VarType);
 	}
 
 	@Override public void VisitSetLocalNode(ZenSetLocalNode Node) {

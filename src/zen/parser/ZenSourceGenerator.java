@@ -65,6 +65,7 @@ import zen.ast.ZenSetLocalNode;
 import zen.ast.ZenSetterNode;
 import zen.ast.ZenStringNode;
 import zen.ast.ZenStupidCastNode;
+import zen.ast.ZenSymbolNode;
 import zen.ast.ZenThrowNode;
 import zen.ast.ZenTryNode;
 import zen.ast.ZenUnaryNode;
@@ -279,6 +280,10 @@ public class ZenSourceGenerator extends ZenGenerator {
 		this.CurrentBuilder.Append("]");
 		this.CurrentBuilder.AppendToken("=");
 		this.GenerateCode(Node.ValueNode);
+	}
+
+	@Override public void VisitSymbolNode(ZenSymbolNode Node) {
+		this.CurrentBuilder.Append(Node.ResourceName);
 	}
 
 	@Override
@@ -520,5 +525,6 @@ public class ZenSourceGenerator extends ZenGenerator {
 	public void VisitNewObjectNode(ZenNewObjectNode Node) {
 		// TODO Auto-generated method stub
 	}
+
 
 }

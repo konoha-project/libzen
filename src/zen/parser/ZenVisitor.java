@@ -25,7 +25,6 @@
 package zen.parser;
 
 import zen.ast.ZenAndNode;
-import zen.ast.ZenFuncCallNode;
 import zen.ast.ZenArrayLiteralNode;
 import zen.ast.ZenBinaryNode;
 import zen.ast.ZenBlockNode;
@@ -38,6 +37,7 @@ import zen.ast.ZenConstPoolNode;
 import zen.ast.ZenEmptyNode;
 import zen.ast.ZenErrorNode;
 import zen.ast.ZenFloatNode;
+import zen.ast.ZenFuncCallNode;
 import zen.ast.ZenFuncDeclNode;
 import zen.ast.ZenFunctionLiteralNode;
 import zen.ast.ZenGetIndexNode;
@@ -60,6 +60,7 @@ import zen.ast.ZenSetIndexNode;
 import zen.ast.ZenSetLocalNode;
 import zen.ast.ZenSetterNode;
 import zen.ast.ZenStringNode;
+import zen.ast.ZenSymbolNode;
 import zen.ast.ZenThrowNode;
 import zen.ast.ZenTryNode;
 import zen.ast.ZenUnaryNode;
@@ -78,6 +79,7 @@ public interface ZenVisitor {
 	public void VisitMapLiteralNode(ZenMapLiteralNode Node);
 	public void VisitNewArrayNode(ZenNewArrayNode Node);
 	public void VisitNewObjectNode(ZenNewObjectNode Node);
+	public void VisitSymbolNode(ZenSymbolNode Node);
 	public void VisitGetLocalNode(ZenGetLocalNode Node);
 	public void VisitSetLocalNode(ZenSetLocalNode Node);
 	public void VisitGroupNode(ZenGroupNode Node);

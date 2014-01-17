@@ -38,6 +38,7 @@ import zen.ast.ZenSetIndexNode;
 import zen.ast.ZenSetLocalNode;
 import zen.ast.ZenSetterNode;
 import zen.ast.ZenStringNode;
+import zen.ast.ZenSymbolNode;
 import zen.ast.ZenThrowNode;
 import zen.ast.ZenTryNode;
 import zen.ast.ZenUnaryNode;
@@ -293,6 +294,12 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 
 	@Override
 	public void VisitErrorNode(ZenErrorNode Node) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void VisitSymbolNode(ZenSymbolNode Node) {
 		// TODO Auto-generated method stub
 
 	}
