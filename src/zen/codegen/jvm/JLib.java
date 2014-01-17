@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import org.objectweb.asm.Type;
 
+import zen.ast.ZenFuncDeclNode;
 import zen.deps.LibNative;
 import zen.deps.LibZen;
 import zen.deps.ZenArray;
@@ -105,11 +106,11 @@ class JLib {
 		return Type.getType("L" + GreenType.GetNativeName() + ";");
 	}
 
-	static String GetMethodDescriptor(ZenFunc Func) {
-		Type ReturnType = GetAsmType(Func.GetReturnType());
-		Type[] argTypes = new Type[Func.GetFuncParamSize()];
+	static String GetMethodDescriptor(ZenFuncDeclNode Func) {
+		Type ReturnType = GetAsmType(Func.ReturnType);
+		Type[] argTypes = new Type[Func.ArgumentList.size()];
 		for(int i = 0; i < argTypes.length; i++) {
-			ZenType ParamType = Func.GetFuncParamType(i);
+			ZenType ParamType = Func.ArgumentList.get(i).Type;
 			argTypes[i] = GetAsmType(ParamType);
 		}
 		return Type.getMethodDescriptor(ReturnType, argTypes);

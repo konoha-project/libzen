@@ -22,7 +22,7 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package org.ZenScript.Konoha;
+package zen.codegen.jvm;
 import java.util.Iterator;
 
 public final class StringApi {
@@ -40,14 +40,14 @@ public final class StringApi {
 	public static String Add(String x, Object y) {
 		return x + y;
 	}
-	
-//	public static String Add(long x, String y) {
-//		return x + y;
-//	}
-//
-//	public static String Add(boolean x, String y) {
-//		return x + y;
-//	}
+
+	//	public static String Add(long x, String y) {
+	//		return x + y;
+	//	}
+	//
+	//	public static String Add(boolean x, String y) {
+	//		return x + y;
+	//	}
 	public final static boolean StartsWith(String x, String y) {
 		return x.startsWith(y);
 	}
@@ -115,7 +115,7 @@ public final class StringApi {
 }
 
 class StringIterator implements Iterator<String> {
-	private String Text;
+	private final String Text;
 	private int Loc;
 	StringIterator(String Text) {
 		this.Text = Text == null ? "" : Text;

@@ -22,7 +22,7 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package org.ZenScript.Konoha;
+package zen.codegen.jvm;
 
 public final class IntApi {
 	public static long Plus(long n) {
@@ -90,7 +90,7 @@ public final class IntApi {
 		return new Long(value);
 	}
 	public final static double ToDouble(long x) {
-		return (double)x;
+		return x;
 	}
 	// double
 	public static double Add(long x, double y) {
@@ -113,19 +113,19 @@ public final class IntApi {
 		return (int)n;
 	}
 	public final static long i2l(int n) {
-		return (long)n;
+		return n;
 	}
 	public final static short l2s(long n) {
 		return (short)n;
 	}
 	public final static long s2l(short n) {
-		return (long)n;
+		return n;
 	}
 	public final static byte l2b(long n) {
 		return (byte)n;
 	}
 	public final static long b2l(byte n) {
-		return (long)n;
+		return n;
 	}
-	
+
 }

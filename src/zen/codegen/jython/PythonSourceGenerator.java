@@ -148,6 +148,13 @@ public class PythonSourceGenerator extends ZenSourceGenerator {
 		this.CurrentBuilder.Append(Node.NativeName);
 		this.CurrentBuilder.AppendToken("=");
 		this.GenerateCode(Node.InitNode);
+		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.AppendIndent();
+
+		// copied from VisitBlock(ZenBlockNode)
+		this.VisitStmtList(Node.StmtList);
+		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.AppendIndent();
 	}
 
 	@Override

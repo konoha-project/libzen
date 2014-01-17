@@ -22,23 +22,69 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package org.ZenScript.Konoha;
+package zen.codegen.jvm;
 
-public class BooleanApi {
-	public static boolean Not(boolean b) {
-		return !b;
+public final class DoubleApi {
+	public static double Plus(double n) {
+		return +n;
 	}
-	public static boolean Equals(boolean x, boolean y) {
+	public static double Minus(double n) {
+		return -n;
+	}
+	public static double Add(double x, double y) {
+		return x + y;
+	}
+	public static double Sub(double x, double y) {
+		return x - y;
+	}
+	public static double Mul(double x, double y) {
+		return x * y;
+	}
+	public static double Div(double x, double y) {
+		return x / y;
+	}
+	public static double Mod(double x, double y) {
+		return x % y;
+	}
+	public static boolean LessThan(double x, double y) {
+		return x < y;
+	}
+	public static boolean LessThanEquals(double x, double y) {
+		return x <= y;
+	}
+	public static boolean GreaterThan(double x, double y) {
+		return x > y;
+	}
+	public static boolean GreaterThanEquals(double x, double y) {
+		return x >= y;
+	}
+	public static boolean Equals(double x, double y) {
 		return x == y;
 	}
-	public static boolean NotEquals(boolean x, boolean y) {
+	public static boolean NotEquals(double x, double y) {
 		return x != y;
 	}
 	// converter
-	public final static String ToString(boolean value) {
-		return value ? "true" : "false";
+	public final static String ToString(double value) {
+		return String.valueOf(value);
 	}
-	public final static Object ToAny(boolean value) {
-		return new Boolean(value);
+	public final static Object ToAny(double value) {
+		return new Double(value);
+	}
+	public final static long ToInt(double value) {
+		return (long)value;
+	}
+	// JavaType
+	public final static float d2f(double n) {
+		return (float)n;
+	}
+	public final static double f2d(float n) {
+		return n;
+	}
+	public final static int d2i(double n) {
+		return (int)n;
+	}
+	public final static double i2d(int n) {
+		return n;
 	}
 }
