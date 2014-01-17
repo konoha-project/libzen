@@ -283,9 +283,9 @@ public class ZenSourceGenerator extends ZenGenerator {
 	}
 
 	@Override public void VisitSymbolNode(ZenSymbolNode Node) {
-		if(Node.GivenName.equals(Node.ReferenceName) && Node.Type.IsFuncType()) {
-			Node.ReferenceName = Node.Type.StringfySignature(Node.GivenName); // FIXME
-		}
+		//		if(Node.GivenName.equals(Node.ReferenceName) && Node.Type.IsFuncType()) {
+		//			Node.ReferenceName = Node.Type.StringfySignature(Node.GivenName); // FIXME
+		//		}
 		this.CurrentBuilder.Append(Node.ReferenceName);
 	}
 

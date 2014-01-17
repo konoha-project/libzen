@@ -161,6 +161,9 @@ public class ZenTypeInfer extends ZenTypeChecker {
 			NewNode = this.TypeCheck(NewNode, NameSpace, ZenSystem.VarType, 0);
 			this.TypedNode(NewNode, NewNode.Type);
 		}
+		else {
+			this.TypedNode(Node, ZenSystem.VarType);
+		}
 	}
 
 	private void InferFuncType(String FuncName, ZenType FuncType) {
