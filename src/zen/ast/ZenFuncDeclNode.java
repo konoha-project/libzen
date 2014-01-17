@@ -27,21 +27,24 @@ package zen.ast;
 import java.util.ArrayList;
 
 import zen.deps.Field;
+import zen.lang.ZenFunc;
 import zen.parser.ZenNameSpace;
 import zen.parser.ZenToken;
 import zen.parser.ZenVisitor;
 
 final public class ZenFuncDeclNode extends ZenFunctionLiteralNode {
 	@Field public String FuncName;
-	@Field public String ReferenceName;
 	@Field public ZenNameSpace NameSpace;
-	@Field public boolean IsTypeChecked = false;
+	@Field public ZenFunc ResolvedFunc;
+	@Field public String ReferenceName;
 	public ZenFuncDeclNode/*constructor*/(ZenToken SourceToken, ZenNameSpace NameSpace, String FuncName) {
-		super(SourceToken); // TODO
+		super(SourceToken);
 		this.ArgumentList = new ArrayList<ZenNode>();
+		this.NameSpace = NameSpace;
 		this.FuncName = FuncName;
 		this.ReferenceName = FuncName;
-		this.NameSpace = NameSpace;
+		this.ResolvedFunc = null;
+
 	}
 	@Override public void Accept(ZenVisitor Visitor) {
 		Visitor.VisitFuncDeclNode(this);
