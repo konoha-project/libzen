@@ -38,7 +38,7 @@ class FuncContext {
 			if(FuncNode.ReturnType.IsVarType() && !this.IsInferredReturn) {
 				FuncNode.ReturnType = ZenSystem.VoidType;
 			}
-			this.FuncType = this.FuncNode.GetFuncType();
+			this.FuncType = this.FuncNode.GetFuncType(null);
 			if(this.FuncType.IsCompleteFunc()) {
 				return this.FuncType;
 			}
