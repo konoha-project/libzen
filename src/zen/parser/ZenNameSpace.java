@@ -33,7 +33,6 @@ import zen.deps.LibZen;
 import zen.deps.Nullable;
 import zen.deps.Var;
 import zen.deps.ZenMap;
-import zen.lang.ZenDefiningFunc;
 import zen.lang.ZenFunc;
 import zen.lang.ZenFuncSet;
 import zen.lang.ZenSystem;
@@ -52,14 +51,14 @@ public final class ZenNameSpace {
 
 	@Field ZenTokenFunc[] TokenMatrix;
 	@Field ZenMap<Object>	 SymbolPatternTable;
-	@Field private ZenDefiningFunc  DefiningFunc;
+	@Field private ZenNode  FuncNode;
 
 	public ZenNameSpace(ZenGenerator Generator, ZenNameSpace ParentNameSpace) {
 		//		this.Context = Context;
 		this.ParentNameSpace = ParentNameSpace;
 		this.TokenMatrix = null;
 		this.SymbolPatternTable = null;
-		this.DefiningFunc = null;
+		this.FuncNode = null;
 		if(ParentNameSpace == null) {
 			this.Generator = Generator;
 			ZenSystem.InitNameSpace(this);
@@ -74,7 +73,7 @@ public final class ZenNameSpace {
 		return new ZenNameSpace(null, this);
 	}
 
-	private ZenNameSpace GetRootNameSpace() {
+	public ZenNameSpace GetRootNameSpace() {
 		return this.Generator.RootNameSpace;
 	}
 
@@ -268,24 +267,19 @@ public final class ZenNameSpace {
 	}
 
 	// DefiningFunc
-	public ZenDefiningFunc GetDefiningFunc() {
+	public final ZenNode GetDefiningFunc() {
 		@Var ZenNameSpace NameSpace = this;
 		while(NameSpace != null) {
-			if(NameSpace.DefiningFunc != null) {
-				return NameSpace.DefiningFunc;
+			if(NameSpace.FuncNode != null) {
+				return NameSpace.FuncNode;
 			}
 			NameSpace = NameSpace.ParentNameSpace;
 		}
 		return null;
 	}
 
-	public void SetDefiningFunc(ZenFunc Func) {
-		if(Func == null || (Func instanceof ZenDefiningFunc)) {
-			this.DefiningFunc = (ZenDefiningFunc)Func;
-		}
-		else {
-			this.DefiningFunc = new ZenDefiningFunc(Func.FuncFlag, Func.FuncName, Func.FuncType);
-		}
+	public final void SetDefiningFunc(ZenNode FuncNode) {
+		this.FuncNode = FuncNode;
 	}
 
 	// Function
@@ -316,8 +310,8 @@ public final class ZenNameSpace {
 			@Var Object FuncValue = NameSpace.GetLocalSymbol(FuncName);
 			if(FuncValue instanceof ZenFunc) {
 				@Var ZenFunc Func = (/*cast*/ZenFunc)FuncValue;
-				if(FuncParamSize == Func.GetFuncParamSize()) {
-					if(ClassType == null || Func.GetRecvType() == ClassType) {
+				if(FuncParamSize == Func.FuncType.GetFuncParamSize()) {
+					if(ClassType == null || Func.FuncType.GetRecvType() == ClassType) {
 						FuncList.add(Func);
 					}
 				}
@@ -327,8 +321,8 @@ public final class ZenNameSpace {
 				@Var int i = FuncSet.FuncList.size() - 1;
 				while(i >= 0) {
 					@Var ZenFunc Func = FuncSet.FuncList.get(i);
-					if(FuncParamSize == Func.GetFuncParamSize()) {
-						if(ClassType == null || Func.GetRecvType() == ClassType) {
+					if(FuncParamSize == Func.FuncType.GetFuncParamSize()) {
+						if(ClassType == null || Func.FuncType.GetRecvType() == ClassType) {
 							FuncList.add(Func);
 						}
 					}
@@ -598,7 +592,7 @@ public final class ZenNameSpace {
 			this.Generator.DoCodeGeneration(this, TopLevelNode);
 			if(TopLevelNode.IsErrorNode() && TokenContext.HasNext()) {
 				@Var ZenToken Token = TokenContext.GetToken();
-				//this.Generator.Logger.ReportInfo(Token, "stopped script at this line");
+				this.Generator.Logger.ReportInfo(Token, "stopped script at this line");
 				return TopLevelNode;
 			}
 			//			if(!TopLevelNode.Type.IsVoidType()) {

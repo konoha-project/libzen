@@ -82,7 +82,7 @@ public abstract class ZenNode {
 	}
 
 	public boolean IsUntyped() {
-		return this.Type.IsVarType() || this.Type.IsVarType();
+		return this.Type.IsVarType();
 	}
 
 	public ZenConstNode ToConstNode(boolean EnforceConst) {

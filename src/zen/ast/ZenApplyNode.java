@@ -50,4 +50,5 @@ public abstract class ZenApplyNode extends ZenNode {
 		}
 		return ZenSystem.VoidType;
 	}
+
 }

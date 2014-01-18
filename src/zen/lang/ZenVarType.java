@@ -24,28 +24,22 @@
 
 package zen.lang;
 
-import zen.ast.ZenNode;
 import zen.deps.Field;
 import zen.parser.ZenToken;
 
 public class ZenVarType extends ZenType {
 	@Field public ZenToken SourceToken;
-	@Field public ZenNode SourceNode; // to remember
-	@Field private final boolean FoundTypeError;
+	@Field public int AlphaId;
 
-	public ZenVarType(String Name, ZenToken SourceToken) {
+	public ZenVarType(String Name, int AlphaId, ZenToken SourceToken) {
 		super(0, Name, ZenSystem.VarType);
 		this.SourceToken = SourceToken;
-		this.FoundTypeError = false;
 		this.TypeId = this.RefType.TypeId;
+		this.AlphaId = AlphaId;
 	}
 
 	@Override public final ZenType GetRealType() {
 		return this.RefType;
-	}
-
-	@Override public boolean IsFoundTypeError() {
-		return this.FoundTypeError;
 	}
 
 	@Override public int GetParamSize() {
@@ -66,11 +60,21 @@ public class ZenVarType extends ZenType {
 
 	public void Infer(ZenType ContextType, ZenToken SourceToken) {
 		if(this.RefType.IsVarType()) {
-			this.RefType = ContextType.GetRealType();
-			this.SourceToken = SourceToken;
-			this.TypeId = this.RefType.TypeId;
-			this.TypeFlag = this.RefType.TypeFlag;
+			if(ContextType instanceof ZenVarType && ContextType.IsVarType()) {
+				ZenVarType VarType = (ZenVarType)ContextType;
+				if(this.AlphaId < VarType.AlphaId) {
+					VarType.AlphaId = this.AlphaId;
+				}
+				else {
+					this.AlphaId = VarType.AlphaId;
+				}
+			}
+			else {
+				this.RefType = ContextType.GetRealType();
+				this.SourceToken = SourceToken;
+				this.TypeId = this.RefType.TypeId;
+				this.TypeFlag = this.RefType.TypeFlag;
+			}
 		}
 	}
-
 }

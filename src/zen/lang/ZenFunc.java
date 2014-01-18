@@ -28,8 +28,7 @@ import zen.deps.Field;
 import zen.deps.LibZen;
 import zen.parser.ZenUtils;
 
-public class ZenFunc implements ZenFuncFlag {
-	@Field public int             FuncId;
+public abstract class ZenFunc {
 	@Field public int			  FuncFlag;
 	@Field public String		  FuncName;  // NativeReferenceNamr
 	@Field public ZenFuncType     FuncType;
@@ -38,11 +37,9 @@ public class ZenFunc implements ZenFuncFlag {
 		this.FuncFlag = FuncFlag;
 		this.FuncName = FuncName;
 		this.FuncType = FuncType;
-		//				this.FuncId = ZenTypeSystem.FuncPools.size();
-		//				ZenTypeSystem.FuncPools.add(this);
 	}
 
-	public final ZenType GetFuncType() {
+	public final ZenFuncType GetFuncType() {
 		return this.FuncType;
 	}
 
@@ -50,37 +47,10 @@ public class ZenFunc implements ZenFuncFlag {
 		return this.FuncName + ": " + this.FuncType;
 	}
 
-	protected boolean Is(int Flag) {
-		return ZenUtils.IsFlag(this.FuncFlag, Flag);
+	public void Used() {
 	}
 
-	public final ZenType GetReturnType() {
-		return this.FuncType.TypeParams[0];
-	}
-
-	public final ZenType GetRecvType() {
-		return this.FuncType.GetRecvType();
-	}
-
-	public final int GetFuncParamSize() {
-		return this.FuncType.GetFuncParamSize();
-	}
-
-	public final ZenType GetFuncParamType(int ParamIdx) {
-		return this.FuncType.TypeParams[ParamIdx+1];
-	}
-
-	public final int GetMethodParamSize() {
-		return this.FuncType.TypeParams.length - 2;
-	}
-
-	public Object Invoke(Object[] Params) {
-		LibZen.DebugP("not native method");
-		return null;
-	}
-
-	public boolean IsAbstractType() {
-		return false;
+	public void Defined() {
 	}
 
 	public final boolean IsConverterFunc() {
@@ -89,6 +59,36 @@ public class ZenFunc implements ZenFuncFlag {
 	public final boolean IsCoercionFunc() {
 		return ZenUtils.IsFlag(this.FuncFlag, ZenFuncFlag.CoercionFunc);
 	}
+
+	protected boolean Is(int Flag) {
+		return ZenUtils.IsFlag(this.FuncFlag, Flag);
+	}
+
+	//	public final ZenType GetReturnType() {
+	//		return this.FuncType.TypeParams[0];
+	//	}
+	//
+	//	public final ZenType GetRecvType() {
+	//		return this.FuncType.GetRecvType();
+	//	}
+	//
+	//	public final int GetFuncParamSize() {
+	//		return this.FuncType.GetFuncParamSize();
+	//	}
+	//
+	//	public final ZenType GetFuncParamType(int ParamIdx) {
+	//		return this.FuncType.TypeParams[ParamIdx+1];
+	//	}
+	//
+	//	public final int GetMethodParamSize() {
+	//		return this.FuncType.TypeParams.length - 2;
+	//	}
+
+	public Object Invoke(Object[] Params) {
+		LibZen.DebugP("not native method");
+		return null;
+	}
+
 
 	public static String StringfySignature(String FuncName, int FuncParamSize, ZenType RecvType) {
 		return FuncName + "__" + FuncParamSize + RecvType.TypeId;

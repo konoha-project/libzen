@@ -45,9 +45,9 @@ public class ZenSystem implements ZenTypeFlag {
 	public final static ZenType		TopType = new ZenType(UniqueType, "var", null);
 	public final static ZenType		VarType = TopType;
 	public final static ZenType		VoidType = new ZenType(UniqueType, "void", null);
-	public final static ZenType		BooleanType = new ZenType(UniqueType|UnboxType, "boolean", TopType);
-	public final static ZenType		IntType = new ZenType(UniqueType|UnboxType, "int", TopType);
-	public final static ZenType     FloatType = new ZenType(UniqueType|UnboxType, "float", TopType);
+	public final static ZenType		BooleanType = new ZenType(UniqueType, "boolean", TopType);
+	public final static ZenType		IntType = new ZenType(UniqueType, "int", TopType);
+	public final static ZenType     FloatType = new ZenType(UniqueType, "float", TopType);
 	public final static ZenType		StringType = new ZenType(UniqueType, "String", TopType);
 	//	public final static ZenType		AnyType = new ZenType(UniqueType|DynamicType, "any", TopType);
 	public final static ZenType     TypeType = new ZenType(UniqueType, "Type", TopType);

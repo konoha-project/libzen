@@ -25,7 +25,6 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
 
 import zen.ast.ZenNode;
-import zen.lang.ZenFunc;
 import zen.lang.ZenSystem;
 import zen.lang.ZenType;
 import zen.parser.ZenGenerator;
@@ -123,12 +122,12 @@ class JMethodBuilder {
 			this.InvokeMethodCall(ZenType.class, JLib.GetTypeById);
 			return;
 		}
-		else if(Value instanceof ZenFunc) {
-			int id = ((ZenFunc)Value).FuncId;
-			this.AsmVisitor.visitLdcInsn(id);
-			this.InvokeMethodCall(ZenFunc.class, JLib.GetFuncById);
-			return;
-		}
+		//		else if(Value instanceof ZenFunc) {
+		//			int id = ((ZenFunc)Value).FuncId;
+		//			this.AsmVisitor.visitLdcInsn(id);
+		//			this.InvokeMethodCall(ZenFunc.class, JLib.GetFuncById);
+		//			return;
+		//		}
 		int id = ZenSystem.AddConstPool(Value);
 		this.AsmVisitor.visitLdcInsn(id);
 		this.InvokeMethodCall(Value.getClass(), JLib.GetConstPool);

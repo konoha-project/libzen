@@ -27,6 +27,9 @@ package zen.ast;
 import java.util.ArrayList;
 
 import zen.deps.Field;
+import zen.deps.Nullable;
+import zen.deps.Var;
+import zen.lang.ZenFuncType;
 import zen.lang.ZenSystem;
 import zen.lang.ZenType;
 import zen.parser.ZenToken;
@@ -58,4 +61,28 @@ public class ZenFunctionLiteralNode extends ZenNode {
 	@Override public void Accept(ZenVisitor Visitor) {
 		Visitor.VisitFunctionLiteralNode(this);
 	}
+
+	public ZenFuncType GetFuncType(@Nullable ZenType ContextType) {
+		@Var ZenFuncType FuncType = null;
+		if(ContextType instanceof ZenFuncType) {
+			FuncType = (ZenFuncType)ContextType;
+		}
+		@Var ArrayList<ZenType> TypeList = new ArrayList<ZenType>();
+		if(this.ReturnType.IsVarType() && FuncType != null) {
+			this.ReturnType = FuncType.GetParamType(0);
+		}
+		TypeList.add(this.ReturnType.GetRealType());
+		@Var int i = 0;
+		while(i < this.ArgumentList.size()) {
+			@Var ZenParamNode Node = (ZenParamNode) this.ArgumentList.get(i);
+			@Var ZenType ParamType = Node.Type.GetRealType();
+			if(ParamType.IsVarType() && FuncType != null) {
+				ParamType = FuncType.GetParamType(i+1);
+			}
+			TypeList.add(ParamType);
+			i = i + 1;
+		}
+		return ZenSystem.LookupFuncType(TypeList);
+	}
+
 }

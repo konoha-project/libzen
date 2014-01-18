@@ -223,6 +223,10 @@ public class ZenType implements ZenTypeFlag {
 		return false;
 	}
 
+	public boolean IsCompleteFunc() {
+		return false;
+	}
+
 	public boolean HasCallableSignature() {
 		return false;
 	}

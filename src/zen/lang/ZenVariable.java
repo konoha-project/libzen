@@ -24,12 +24,13 @@
 
 package zen.lang;
 
+import zen.ast.ZenNode;
 import zen.deps.Field;
 import zen.parser.ZenNameSpace;
 import zen.parser.ZenToken;
 
 public class ZenVariable {
-	@Field public ZenFunc    DefiningFunc;
+	@Field public ZenNode   DefiningFunc;
 	@Field public int        VarFlag;
 	@Field public ZenType	 VarType;
 	@Field public String	 VarName;
@@ -38,8 +39,8 @@ public class ZenVariable {
 	@Field public int        DefCount;
 	@Field public int        UsedCount;
 
-	ZenVariable(ZenFunc DefiningFunc, int VarFlag, ZenType VarType, String VarName, int VarIndex, ZenToken SourceToken) {
-		this.DefiningFunc    = DefiningFunc;
+	ZenVariable(ZenNode DefiningFunc, int VarFlag, ZenType VarType, String VarName, int VarIndex, ZenToken SourceToken) {
+		this.DefiningFunc  = DefiningFunc;
 		this.VarFlag = VarFlag;
 		this.VarType = VarType;
 		this.VarName = VarName;
@@ -54,11 +55,11 @@ public class ZenVariable {
 	}
 
 	public final void Defined() {
-		this.DefCount += 1;
+		this.DefCount = this.DefCount + 1;
 	}
 
 	public final void Used() {
-		this.UsedCount += 1;
+		this.UsedCount = this.UsedCount + 1;
 	}
 
 }

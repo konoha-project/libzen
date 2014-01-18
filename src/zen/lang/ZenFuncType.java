@@ -18,7 +18,18 @@ public final class ZenFuncType extends ZenType {
 		}
 	}
 
-	@Override public boolean IsFuncType() {
+	@Override public final boolean IsFuncType() {
+		return true;
+	}
+
+	@Override public final boolean IsCompleteFunc() {
+		@Var int i = 0;
+		while(i < this.TypeParams.length) {
+			if(this.TypeParams[i].IsVarType()) {
+				return false;
+			}
+			i = i + 1;
+		}
 		return true;
 	}
 
@@ -42,7 +53,7 @@ public final class ZenFuncType extends ZenType {
 		return this.TypeParams[Index];
 	}
 
-	public ZenType GetReturnType() {
+	public final ZenType GetReturnType() {
 		return this.TypeParams[0];
 	}
 
@@ -57,15 +68,24 @@ public final class ZenFuncType extends ZenType {
 		return this.TypeParams[1];
 	}
 
-	public final boolean IsCompleteType() {
+	public final ZenType GetFuncParamType(int Index) {
+		return this.TypeParams[Index+1];
+	}
+
+	public boolean MatchFunc(ZenFuncType ContextFuncType) {
 		@Var int i = 0;
+		if(this.TypeParams[0].IsVarType() && !ContextFuncType.TypeParams[0].IsVarType()) {
+			i = 1;
+		}
 		while(i < this.TypeParams.length) {
-			if(this.TypeParams[i].IsVarType()) {
+			@Var ZenType ParamType =  ContextFuncType.TypeParams[i];
+			if(this.TypeParams[i] != ParamType && !ParamType.IsVarType()) {
 				return false;
 			}
 			i = i + 1;
 		}
 		return true;
 	}
+
 
 }
