@@ -78,7 +78,7 @@ import zen.ast.ZenBooleanNode;
 import zen.ast.ZenConstPoolNode;
 import zen.ast.ZenErrorNode;
 import zen.ast.ZenFloatNode;
-import zen.ast.ZenFunctionLiteralNode;
+import zen.ast.ZenFunctionNode;
 import zen.ast.ZenGetLocalNode;
 import zen.ast.ZenGetterNode;
 import zen.ast.ZenIfNode;
@@ -555,7 +555,7 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 //		this.PushStack(Node.CastType);
 //	}
 
-	@Override public void VisitFunctionLiteralNode(ZenFunctionLiteralNode Node) {
+	@Override public void VisitFunctionNode(ZenFunctionNode Node) {
 		LibZen.TODO("FunctionNode");
 	}
 

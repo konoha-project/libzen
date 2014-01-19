@@ -18,7 +18,7 @@ import zen.ast.ZenErrorNode;
 import zen.ast.ZenFloatNode;
 import zen.ast.ZenFuncCallNode;
 import zen.ast.ZenFuncDeclNode;
-import zen.ast.ZenFunctionLiteralNode;
+import zen.ast.ZenFunctionNode;
 import zen.ast.ZenGetIndexNode;
 import zen.ast.ZenGetLocalNode;
 import zen.ast.ZenGetterNode;
@@ -294,7 +294,7 @@ public class ZenTransformer implements ZenVisitor {
 	@Override public void VisitParamNode(ZenParamNode Node) {
 	}
 
-	@Override public void VisitFunctionLiteralNode(ZenFunctionLiteralNode Node) {
+	@Override public void VisitFunctionNode(ZenFunctionNode Node) {
 		Node.BodyNode = this.Transform(Node, Node.BodyNode);
 	}
 

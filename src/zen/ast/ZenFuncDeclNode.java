@@ -32,7 +32,7 @@ import zen.parser.ZenNameSpace;
 import zen.parser.ZenToken;
 import zen.parser.ZenVisitor;
 
-final public class ZenFuncDeclNode extends ZenFunctionLiteralNode {
+final public class ZenFuncDeclNode extends ZenFunctionNode {
 	@Field public String FuncName;
 	@Field public ZenNameSpace NameSpace;
 	@Field public ZenFunc ResolvedFunc;

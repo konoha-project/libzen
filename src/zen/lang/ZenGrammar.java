@@ -43,7 +43,7 @@ import zen.ast.ZenFieldNode;
 import zen.ast.ZenFloatNode;
 import zen.ast.ZenFuncCallNode;
 import zen.ast.ZenFuncDeclNode;
-import zen.ast.ZenFunctionLiteralNode;
+import zen.ast.ZenFunctionNode;
 import zen.ast.ZenGetIndexNode;
 import zen.ast.ZenGetLocalNode;
 import zen.ast.ZenGetterNode;
@@ -736,7 +736,7 @@ public class ZenGrammar {
 		@Var ZenNode FuncNode;
 		@Var int BlockOption = ZenTokenContext.Required;
 		if(TokenContext.IsToken("(")) {
-			FuncNode = new ZenFunctionLiteralNode(FuncToken);
+			FuncNode = new ZenFunctionNode(FuncToken);
 			BlockOption = ZenTokenContext.Optional;
 		}
 		else {

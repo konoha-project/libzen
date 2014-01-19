@@ -34,7 +34,7 @@ import zen.ast.ZenBlockNode;
 import zen.ast.ZenCastNode;
 import zen.ast.ZenCatchNode;
 import zen.ast.ZenFuncDeclNode;
-import zen.ast.ZenFunctionLiteralNode;
+import zen.ast.ZenFunctionNode;
 import zen.ast.ZenInstanceOfNode;
 import zen.ast.ZenParamNode;
 import zen.ast.ZenReturnNode;
@@ -155,7 +155,7 @@ public class JavaScriptSourceGenerator extends ZenSourceGenerator {
 	}
 
 	@Override
-	public void VisitFunctionLiteralNode(ZenFunctionLiteralNode Node) {
+	public void VisitFunctionNode(ZenFunctionNode Node) {
 		ZenReturnNode ReturnNode = Node.BodyNode.ToReturnNode();
 		this.CurrentBuilder.Append("(function");
 		this.VisitParamList("(", Node.ArgumentList, ")");

@@ -43,7 +43,7 @@ import zen.ast.ZenErrorNode;
 import zen.ast.ZenFloatNode;
 import zen.ast.ZenFuncCallNode;
 import zen.ast.ZenFuncDeclNode;
-import zen.ast.ZenFunctionLiteralNode;
+import zen.ast.ZenFunctionNode;
 import zen.ast.ZenGetIndexNode;
 import zen.ast.ZenGetLocalNode;
 import zen.ast.ZenGetterNode;
@@ -481,7 +481,7 @@ public class ZenSourceGenerator extends ZenGenerator {
 		this.VisitTypeAnnotation(Node.Type);
 	}
 
-	@Override public void VisitFunctionLiteralNode(ZenFunctionLiteralNode Node) {
+	@Override public void VisitFunctionNode(ZenFunctionNode Node) {
 		this.CurrentBuilder.Append("function");
 		this.CurrentBuilder.AppendWhiteSpace();
 		this.VisitParamList("(", Node.ArgumentList, ")");

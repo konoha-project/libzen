@@ -2,7 +2,7 @@ package zen.lang;
 
 import java.util.ArrayList;
 
-import zen.ast.ZenFunctionLiteralNode;
+import zen.ast.ZenFunctionNode;
 import zen.ast.ZenNode;
 import zen.deps.Constructor;
 import zen.deps.Field;
@@ -12,14 +12,14 @@ import zen.parser.ZenLogger;
 class FuncContext {
 	@Field FuncContext Parent;
 	@Field ZenLogger Logger;
-	@Field ZenFunctionLiteralNode FuncNode;
+	@Field ZenFunctionNode FuncNode;
 	@Field ZenFuncType FuncType;
 	@Field int ReturnCount;
 	@Field ArrayList<ZenVarType> VarTypeList;
 	@Field int VarIndex;
 	@Field int CountOfUnknownTypeNode;
 
-	@Constructor FuncContext(FuncContext Parent, ZenLogger Logger, ZenFunctionLiteralNode FuncNode, ZenFuncType FuncType) {
+	@Constructor FuncContext(FuncContext Parent, ZenLogger Logger, ZenFunctionNode FuncNode, ZenFuncType FuncType) {
 		this.Parent = Parent;
 		this.Logger = Logger;
 		this.FuncNode = FuncNode;
@@ -35,7 +35,7 @@ class FuncContext {
 		return this.FuncNode.ReturnType;
 	}
 
-	public ZenFuncType RecheckCompleteFuncType(ZenFunctionLiteralNode FuncNode) {
+	public ZenFuncType RecheckCompleteFuncType(ZenFunctionNode FuncNode) {
 		@Var ZenFuncType FuncType = this.FuncType;
 		if(!FuncType.IsCompleteFunc(false)) {
 			if(FuncNode.ReturnType.IsVarType() && this.ReturnCount == 0) {

@@ -189,7 +189,7 @@ public class CSourceGenerator extends ZenSourceGenerator {
 		this.CurrentBuilder.Append("");
 	}
 
-//	@Override public void VisitFunctionLiteralNode(ZenFunctionLiteralNode Node) {
+//	@Override public void VisitFunctionNode(ZenFunctionNode Node) {
 //		this.VisitingBuilder.Append("");
 //	}
 

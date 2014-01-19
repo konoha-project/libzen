@@ -33,7 +33,7 @@ import zen.ast.ZenErrorNode;
 import zen.ast.ZenFloatNode;
 import zen.ast.ZenFuncCallNode;
 import zen.ast.ZenFuncDeclNode;
-import zen.ast.ZenFunctionLiteralNode;
+import zen.ast.ZenFunctionNode;
 import zen.ast.ZenGetIndexNode;
 import zen.ast.ZenGetLocalNode;
 import zen.ast.ZenGetterNode;
@@ -349,7 +349,7 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 	}
 
 	@Override
-	public void VisitFunctionLiteralNode(ZenFunctionLiteralNode Node) {
+	public void VisitFunctionNode(ZenFunctionNode Node) {
 		// TODO Auto-generated method stub
 
 	}

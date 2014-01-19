@@ -31,7 +31,7 @@ import zen.ast.ZenBlockNode;
 import zen.ast.ZenCastNode;
 import zen.ast.ZenCatchNode;
 import zen.ast.ZenFuncDeclNode;
-import zen.ast.ZenFunctionLiteralNode;
+import zen.ast.ZenFunctionNode;
 import zen.ast.ZenInstanceOfNode;
 import zen.ast.ZenNode;
 import zen.ast.ZenParamNode;
@@ -172,7 +172,7 @@ public class PythonSourceGenerator extends ZenSourceGenerator {
 		4
 	 **/
 	@Override
-	public void VisitFunctionLiteralNode(ZenFunctionLiteralNode Node) {
+	public void VisitFunctionNode(ZenFunctionNode Node) {
 		ZenReturnNode ReturnNode = Node.BodyNode.ToReturnNode();
 		if(ReturnNode != null && ReturnNode.ValueNode != null) {
 			this.CurrentBuilder.Append("lambda");

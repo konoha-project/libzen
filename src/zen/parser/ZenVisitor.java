@@ -40,7 +40,7 @@ import zen.ast.ZenErrorNode;
 import zen.ast.ZenFloatNode;
 import zen.ast.ZenFuncCallNode;
 import zen.ast.ZenFuncDeclNode;
-import zen.ast.ZenFunctionLiteralNode;
+import zen.ast.ZenFunctionNode;
 import zen.ast.ZenGetIndexNode;
 import zen.ast.ZenGetLocalNode;
 import zen.ast.ZenGetterNode;
@@ -108,7 +108,7 @@ public interface ZenVisitor {
 	public void VisitTryNode(ZenTryNode Node);
 	public void VisitCatchNode(ZenCatchNode Node);
 	public void VisitParamNode(ZenParamNode Node);
-	public void VisitFunctionLiteralNode(ZenFunctionLiteralNode Node);
+	public void VisitFunctionNode(ZenFunctionNode Node);
 	public void VisitFuncDeclNode(ZenFuncDeclNode Node);
 	public void VisitClassDeclNode(ZenClassDeclNode Node);
 	public void VisitErrorNode(ZenErrorNode Node);

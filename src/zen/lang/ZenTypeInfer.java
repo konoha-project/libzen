@@ -44,7 +44,7 @@ import zen.ast.ZenErrorNode;
 import zen.ast.ZenFloatNode;
 import zen.ast.ZenFuncCallNode;
 import zen.ast.ZenFuncDeclNode;
-import zen.ast.ZenFunctionLiteralNode;
+import zen.ast.ZenFunctionNode;
 import zen.ast.ZenGetIndexNode;
 import zen.ast.ZenGetLocalNode;
 import zen.ast.ZenGetterNode;
@@ -548,7 +548,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		return null;
 	}
 
-	public void PushFuncNode(ZenNameSpace NameSpace, ZenFunctionLiteralNode FuncNode, ZenFuncType FuncType) {
+	public void PushFuncNode(ZenNameSpace NameSpace, ZenFunctionNode FuncNode, ZenFuncType FuncType) {
 		NameSpace.SetDefiningFunc(FuncNode);
 		this.FuncScope = new FuncContext(this.FuncScope, this.Logger, FuncNode, FuncType);
 		@Var int i = 0;
@@ -579,7 +579,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		}
 	}
 
-	public ZenFuncType PopFuncNode(ZenNameSpace NameSpace, ZenFunctionLiteralNode FuncNode) {
+	public ZenFuncType PopFuncNode(ZenNameSpace NameSpace, ZenFunctionNode FuncNode) {
 		NameSpace.SetDefiningFunc(null);
 		this.FuncScope.Dump();
 		ZenFuncType FuncType = this.FuncScope.FuncType;
@@ -587,7 +587,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		return FuncType;
 	}
 
-	@Override public void VisitFunctionLiteralNode(ZenFunctionLiteralNode Node) {
+	@Override public void VisitFunctionNode(ZenFunctionNode Node) {
 		@Var ZenType ContextType = this.GetContextType();
 		@Var ZenNameSpace NameSpace = this.GetNameSpace();
 		@Var ZenFuncType FuncType = Node.GetFuncType(ContextType);
@@ -609,7 +609,6 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		Node.ReferenceName = FuncType.StringfySignature(Node.FuncName);
 		this.TypedNode(Node, ZenSystem.VoidType);
 	}
-
 
 	@Override public void VisitClassDeclNode(ZenClassDeclNode Node) {
 

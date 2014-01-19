@@ -55,7 +55,7 @@ import parser.ast.ZenErrorNode;
 import parser.ast.ZenFloatNode;
 import parser.ast.ZenForEachNode;
 import parser.ast.ZenForNode;
-import parser.ast.ZenFunctionLiteralNode;
+import parser.ast.ZenFunctionNode;
 import parser.ast.ZenGetCapturedNode;
 import parser.ast.ZenGetIndexNode;
 import parser.ast.ZenGetLocalNode;
@@ -309,7 +309,7 @@ public class KonohaByteCodeGenerator extends ZenSourceGenerator {
 		/*FIXME*/
 	}
 
-	@Override public void VisitFunctionLiteralNode(ZenFunctionLiteralNode Node) {
+	@Override public void VisitFunctionNode(ZenFunctionNode Node) {
 		/*FIXME*/
 	}
 

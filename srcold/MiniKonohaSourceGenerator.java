@@ -50,7 +50,7 @@ import parser.ast.ZenEmptyNode;
 import parser.ast.ZenErrorNode;
 import parser.ast.ZenForEachNode;
 import parser.ast.ZenForNode;
-import parser.ast.ZenFunctionLiteralNode;
+import parser.ast.ZenFunctionNode;
 import parser.ast.ZenGetLocalNode;
 import parser.ast.ZenGetterNode;
 import parser.ast.ZenIfNode;
@@ -459,7 +459,7 @@ var CLASS = (function (_super) {
 	@Override public void VisitThrowNode(ZenThrowNode Node) {
 		this.DebugAppendNode(Node);
 	}
-	@Override public void VisitFunctionLiteralNode(ZenFunctionLiteralNode Node) {
+	@Override public void VisitFunctionNode(ZenFunctionNode Node) {
 		this.DebugAppendNode(Node);
 	}
 	@Override public void VisitErrorNode(ZenErrorNode Node) {

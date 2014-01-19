@@ -33,7 +33,7 @@ import zen.ast.ZenCastNode;
 import zen.ast.ZenCatchNode;
 import zen.ast.ZenFuncCallNode;
 import zen.ast.ZenFuncDeclNode;
-import zen.ast.ZenFunctionLiteralNode;
+import zen.ast.ZenFunctionNode;
 import zen.ast.ZenGetLocalNode;
 import zen.ast.ZenNode;
 import zen.ast.ZenParamNode;
@@ -165,7 +165,7 @@ public class HaskellSourceGenerator extends ZenSourceGenerator {
 	}
 
 	@Override
-	public void VisitFunctionLiteralNode(ZenFunctionLiteralNode Node) {
+	public void VisitFunctionNode(ZenFunctionNode Node) {
 		ZenReturnNode ReturnNode = Node.BodyNode.ToReturnNode();
 		if(ReturnNode != null && ReturnNode.ValueNode != null) {
 			this.CurrentBuilder.Append("\\");

@@ -27,7 +27,7 @@ package zen.codegen.c;
 
 import zen.ast.ZenCastNode;
 import zen.ast.ZenFuncDeclNode;
-import zen.ast.ZenFunctionLiteralNode;
+import zen.ast.ZenFunctionNode;
 import zen.ast.ZenInstanceOfNode;
 import zen.ast.ZenParamNode;
 import zen.ast.ZenVarDeclNode;
@@ -88,7 +88,7 @@ public class CSourceGenerator extends ZenSourceGenerator {
 		this.CurrentBuilder.Append(Node.Name);
 	}
 
-	@Override public void VisitFunctionLiteralNode(ZenFunctionLiteralNode Node) {
+	@Override public void VisitFunctionNode(ZenFunctionNode Node) {
 		this.VisitType(Node.ReturnType);
 		this.CurrentBuilder.Append(" ");
 

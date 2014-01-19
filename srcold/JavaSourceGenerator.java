@@ -49,7 +49,7 @@ import parser.ast.ZenDoWhileNode;
 import parser.ast.ZenErrorNode;
 import parser.ast.ZenForEachNode;
 import parser.ast.ZenForNode;
-import parser.ast.ZenFunctionLiteralNode;
+import parser.ast.ZenFunctionNode;
 import parser.ast.ZenGetLocalNode;
 import parser.ast.ZenGetterNode;
 import parser.ast.ZenIfNode;
@@ -526,7 +526,7 @@ public class JavaSourceGenerator extends ZenSourceGenerator {
 //		this.VisitingBuilder.InvokeMethodCall(Node.CastType, JLib.GreenCastOperator);
 	}
 
-	@Override public void VisitFunctionLiteralNode(ZenFunctionLiteralNode Node) {
+	@Override public void VisitFunctionNode(ZenFunctionNode Node) {
 		LibZen.TODO("FunctionNode");
 	}
 

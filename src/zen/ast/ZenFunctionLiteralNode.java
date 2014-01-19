@@ -35,11 +35,11 @@ import zen.lang.ZenType;
 import zen.parser.ZenToken;
 import zen.parser.ZenVisitor;
 
-public class ZenFunctionLiteralNode extends ZenNode {
+public class ZenFunctionNode extends ZenNode {
 	@Field public ZenType ReturnType;
 	@Field public ArrayList<ZenNode>  ArgumentList;  // list of ParamNode
 	@Field public ZenNode BodyNode;
-	public ZenFunctionLiteralNode/*constructor*/(ZenToken Token) {
+	public ZenFunctionNode/*constructor*/(ZenToken Token) {
 		super();
 		this.SourceToken = Token;
 		this.ReturnType = ZenSystem.VarType;
@@ -59,7 +59,7 @@ public class ZenFunctionLiteralNode extends ZenNode {
 		/*return this;*/
 	}
 	@Override public void Accept(ZenVisitor Visitor) {
-		Visitor.VisitFunctionLiteralNode(this);
+		Visitor.VisitFunctionNode(this);
 	}
 
 	public ZenFuncType GetFuncType(@Nullable ZenType ContextType) {
