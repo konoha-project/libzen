@@ -32,6 +32,7 @@ import zen.ast.ZenBooleanNode;
 import zen.ast.ZenBreakNode;
 import zen.ast.ZenCastNode;
 import zen.ast.ZenCatchNode;
+import zen.ast.ZenClassDeclNode;
 import zen.ast.ZenComparatorNode;
 import zen.ast.ZenConstPoolNode;
 import zen.ast.ZenEmptyNode;
@@ -109,6 +110,7 @@ public interface ZenVisitor {
 	public void VisitParamNode(ZenParamNode Node);
 	public void VisitFunctionLiteralNode(ZenFunctionLiteralNode Node);
 	public void VisitFuncDeclNode(ZenFuncDeclNode Node);
+	public void VisitClassDeclNode(ZenClassDeclNode Node);
 	public void VisitErrorNode(ZenErrorNode Node);
 
 	public void EnableVisitor();

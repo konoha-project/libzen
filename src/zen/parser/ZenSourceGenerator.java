@@ -35,6 +35,7 @@ import zen.ast.ZenBooleanNode;
 import zen.ast.ZenBreakNode;
 import zen.ast.ZenCastNode;
 import zen.ast.ZenCatchNode;
+import zen.ast.ZenClassDeclNode;
 import zen.ast.ZenComparatorNode;
 import zen.ast.ZenConstPoolNode;
 import zen.ast.ZenEmptyNode;
@@ -500,6 +501,13 @@ public class ZenSourceGenerator extends ZenGenerator {
 			this.GenerateCode(Node.BodyNode);
 		}
 	}
+
+	@Override public void VisitClassDeclNode(ZenClassDeclNode Node) {
+		this.CurrentBuilder.Append("class");
+		this.CurrentBuilder.AppendWhiteSpace();
+		this.CurrentBuilder.Append(Node.ClassName);
+	}
+
 
 	@Override public void VisitErrorNode(ZenErrorNode Node) {
 		this.Logger.ReportError(Node.SourceToken, Node.ErrorMessage);

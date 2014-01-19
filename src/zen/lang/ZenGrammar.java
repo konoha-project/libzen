@@ -854,9 +854,9 @@ public class ZenGrammar {
 		if(TokenContext.MatchNewLineToken("extends")) {
 			ClassNode = TokenContext.AppendMatchedPattern(ClassNode, NameSpace, "$Type$", ZenTokenContext.Required);
 		}
-		if(!ClassNode.IsErrorNode() && TokenContext.IsNewLineToken("{")) {
+		if(!ClassNode.IsErrorNode() && TokenContext.MatchNewLineToken("{")) {
 			TokenContext.SetParseFlag(0);
-			while(TokenContext.HasNext()) {
+			while(!ClassNode.IsErrorNode() && TokenContext.HasNext()) {
 				TokenContext.SkipEmptyStatement();
 				if(TokenContext.MatchToken("}")) {
 					break;

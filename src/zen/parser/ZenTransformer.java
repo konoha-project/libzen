@@ -10,6 +10,7 @@ import zen.ast.ZenBooleanNode;
 import zen.ast.ZenBreakNode;
 import zen.ast.ZenCastNode;
 import zen.ast.ZenCatchNode;
+import zen.ast.ZenClassDeclNode;
 import zen.ast.ZenComparatorNode;
 import zen.ast.ZenConstPoolNode;
 import zen.ast.ZenEmptyNode;
@@ -303,6 +304,11 @@ public class ZenTransformer implements ZenVisitor {
 			Node.BodyNode = this.Transform(Node, Node.BodyNode);
 		}
 	}
+
+	@Override public void VisitClassDeclNode(ZenClassDeclNode Node) {
+
+	}
+
 
 	@Override public void VisitErrorNode(ZenErrorNode Node) {
 	}

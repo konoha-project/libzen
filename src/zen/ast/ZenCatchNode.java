@@ -50,8 +50,4 @@ final public class ZenCatchNode extends ZenNode {
 			this.ExceptionName = Node.SourceToken.ParsedText;
 		}
 	}
-
-	//	@Override public boolean Accept(ZenVisitor Visitor) {
-	//		Visitor.VisitCatchNode(this);
-	//	}
 }

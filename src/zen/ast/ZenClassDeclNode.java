@@ -30,6 +30,7 @@ import zen.deps.Constructor;
 import zen.deps.Field;
 import zen.lang.ZenType;
 import zen.parser.ZenNameSpace;
+import zen.parser.ZenVisitor;
 
 final public class ZenClassDeclNode extends ZenNode {
 	@Field public String ClassName;
@@ -59,4 +60,8 @@ final public class ZenClassDeclNode extends ZenNode {
 			this.ClassType = this.NameSpace.GetType(this.ClassName, this.SourceToken);
 		}
 	}
+	@Override public void Accept(ZenVisitor Visitor) {
+		Visitor.VisitClassDeclNode(this);
+	}
+
 }

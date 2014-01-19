@@ -25,6 +25,7 @@ import zen.ast.ZenBooleanNode;
 import zen.ast.ZenBreakNode;
 import zen.ast.ZenCastNode;
 import zen.ast.ZenCatchNode;
+import zen.ast.ZenClassDeclNode;
 import zen.ast.ZenComparatorNode;
 import zen.ast.ZenConstPoolNode;
 import zen.ast.ZenEmptyNode;
@@ -370,6 +371,10 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 		this.CurrentVisitor = LocalBuilder;
 		Node.BodyNode.Accept(this);
 		this.CurrentVisitor = PushedBuilder;
+	}
+
+	@Override public void VisitClassDeclNode(ZenClassDeclNode Node) {
+		//TODO
 	}
 
 	@Override public void VisitErrorNode(ZenErrorNode Node) {

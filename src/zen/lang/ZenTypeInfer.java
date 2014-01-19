@@ -36,6 +36,7 @@ import zen.ast.ZenBooleanNode;
 import zen.ast.ZenBreakNode;
 import zen.ast.ZenCastNode;
 import zen.ast.ZenCatchNode;
+import zen.ast.ZenClassDeclNode;
 import zen.ast.ZenComparatorNode;
 import zen.ast.ZenConstPoolNode;
 import zen.ast.ZenEmptyNode;
@@ -607,6 +608,11 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		FuncType = this.PopFuncNode(Node.NameSpace, Node);
 		Node.ReferenceName = FuncType.StringfySignature(Node.FuncName);
 		this.TypedNode(Node, ZenSystem.VoidType);
+	}
+
+
+	@Override public void VisitClassDeclNode(ZenClassDeclNode Node) {
+
 	}
 
 	@Override public void VisitErrorNode(ZenErrorNode Node) {
