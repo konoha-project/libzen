@@ -35,7 +35,7 @@ public class ZenField {
 	@Field public int        FieldNativeIndex = 0;
 	@Field public ZenToken   SourceToken = null;
 
-	@Constructor public ZenField(ZenType ClassType, String FieldName, ZenType FieldType, ZenToken SourceToken) {
+	@Constructor public ZenField(String FieldName, ZenType FieldType, ZenToken SourceToken) {
 		this.FieldType = FieldType;
 		this.FieldName = FieldName;
 		this.SourceToken = SourceToken;

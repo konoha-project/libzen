@@ -252,7 +252,7 @@ public final class ZenNameSpace {
 		}
 		if(SourceToken != null && TypeInfo == null) {
 			ZenType Type = new ZenType(ZenTypeFlag.UniqueType|ZenTypeFlag.OpenType, TypeName, ZenSystem.VarType);
-			this.Generator.Logger.ReportInfo(SourceToken, "implicit defintion of type " + TypeName);
+			//			this.Generator.Logger.ReportInfo(SourceToken, "implicit definition of type " + TypeName);
 			this.GetRootNameSpace().SetSymbol(TypeName, Type, SourceToken);
 			return Type;
 		}

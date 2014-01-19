@@ -354,7 +354,7 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 	}
 
 	private void SetClassField(ZenNameSpace NameSpace, ZenType ClassType, String FieldName, ZenType FieldType, ZenToken SourceToken) {
-		ZenField Field = new ZenField(ClassType, FieldName, FieldType, SourceToken);
+		ZenField Field = new ZenField(FieldName, FieldType, SourceToken);
 		NameSpace.SetSymbol(ZenNameSpace.StringfyClassSymbol(ClassType, FieldName), Field, SourceToken);
 	}
 
