@@ -24,21 +24,31 @@
 
 package zen.ast;
 
+import zen.deps.Constructor;
 import zen.deps.Field;
 import zen.lang.ZenType;
-import zen.parser.ZenToken;
 
-final public class ZenFieldNode extends ZenParamNode {
-	@Field public String  Name;
+final public class ZenFieldNode extends ZenNode {
+	@Field public ZenType  ClassType;
+	@Field public ZenType  DeclType;
+	@Field public String   FieldName;
 	@Field public ZenNode  InitNode;
-	public ZenFieldNode/*constructor*/(ZenType Type, ZenToken Token, String Name) {
-		super(Type, Token, Name); // TODO
-		this.InitNode = null;
+	@Constructor public ZenFieldNode(ZenType ClassType) {
+		super(); // TODO
+		this.ClassType = ClassType;
+		this.FieldName = null;
+		this.InitNode  = null;
 	}
 	@Override public void Append(ZenNode Node) {
-		this.InitNode = Node;
-		this.SetChild(Node);
-		/*return this;*/
+		if(Node instanceof ZenTypeNode) {
+			this.DeclType = Node.Type;
+		}
+		else if(this.FieldName == null) {
+			this.FieldName = Node.SourceToken.ParsedText;
+			this.SourceToken = Node.SourceToken;
+		}
+		else {
+			this.InitNode = this.SetChild(Node);
+		}
 	}
-
 }

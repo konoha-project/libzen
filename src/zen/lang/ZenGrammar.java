@@ -35,9 +35,11 @@ import zen.ast.ZenBooleanNode;
 import zen.ast.ZenBreakNode;
 import zen.ast.ZenCastNode;
 import zen.ast.ZenCatchNode;
+import zen.ast.ZenClassDeclNode;
 import zen.ast.ZenComparatorNode;
 import zen.ast.ZenConstNode;
 import zen.ast.ZenErrorNode;
+import zen.ast.ZenFieldNode;
 import zen.ast.ZenFloatNode;
 import zen.ast.ZenFuncCallNode;
 import zen.ast.ZenFuncDeclNode;
@@ -833,6 +835,38 @@ public class ZenGrammar {
 		return new ZenErrorNode(Token, Token.ParsedText);
 	}
 
+	// "var" $Identifier [: $Type$] "=" $Expression$
+	public static ZenNode MatchFieldDecl(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenNode ClassNode) {
+		@Var ZenNode FieldNode = new ZenFieldNode(null);
+		FieldNode = TokenContext.MatchNodeToken(FieldNode, NameSpace, "field", ZenTokenContext.Required);
+		FieldNode = TokenContext.AppendMatchedPattern(FieldNode, NameSpace, "$Identifier$", ZenTokenContext.Required);
+		FieldNode = TokenContext.AppendMatchedPattern(FieldNode, NameSpace, "$TypeAnnotation$", ZenTokenContext.Optional);
+		if(TokenContext.MatchToken("=")) {
+			FieldNode = TokenContext.AppendMatchedPattern(FieldNode, NameSpace, "$Expression$", ZenTokenContext.Required);
+		}
+		return FieldNode;
+	}
+
+	public static ZenNode MatchClassDecl(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenNode LeftNode) {
+		@Var ZenNode ClassNode = new ZenClassDeclNode(NameSpace);
+		ClassNode = TokenContext.MatchNodeToken(ClassNode, NameSpace, "class", ZenTokenContext.Required);
+		ClassNode = TokenContext.AppendMatchedPattern(ClassNode, NameSpace, "$Identifier$", ZenTokenContext.Required);
+		if(TokenContext.MatchNewLineToken("extends")) {
+			ClassNode = TokenContext.AppendMatchedPattern(ClassNode, NameSpace, "$Type$", ZenTokenContext.Required);
+		}
+		if(!ClassNode.IsErrorNode() && TokenContext.IsNewLineToken("{")) {
+			TokenContext.SetParseFlag(0);
+			while(TokenContext.HasNext()) {
+				TokenContext.SkipEmptyStatement();
+				if(TokenContext.MatchToken("}")) {
+					break;
+				}
+				ClassNode = TokenContext.AppendMatchedPattern(ClassNode, NameSpace, "$FieldDecl$", ZenTokenContext.Required);
+			}
+		}
+		return ClassNode;
+	}
+
 	public static void ImportGrammar(ZenNameSpace NameSpace, Class<?> Grammar) {
 		NameSpace.AppendTokenFunc(" \t", LibNative.LoadTokenFunc(Grammar, "WhiteSpaceToken"));
 		NameSpace.AppendTokenFunc("\n",  LibNative.LoadTokenFunc(Grammar, "IndentToken"));
@@ -920,6 +954,10 @@ public class ZenGrammar {
 		NameSpace.AppendSyntax("function", LibNative.LoadMatchFunc(Grammar, "MatchFunction"));
 		NameSpace.AppendSyntax("let", LibNative.LoadMatchFunc(Grammar, "MatchLetDecl"));
 		NameSpace.Generator.SetGrammarInfo("zen0.1");
+
+		NameSpace.AppendSyntax("class", LibNative.LoadMatchFunc(Grammar, "MatchClassDecl"));
+		NameSpace.AppendSyntax("$FieldDecl$", LibNative.LoadMatchFunc(Grammar, "MatchFieldDecl"));
+
 	}
 
 }

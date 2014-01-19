@@ -26,32 +26,37 @@ package zen.ast;
 
 import java.util.ArrayList;
 
+import zen.deps.Constructor;
 import zen.deps.Field;
 import zen.lang.ZenType;
 import zen.parser.ZenNameSpace;
-import zen.parser.ZenToken;
 
 final public class ZenClassDeclNode extends ZenNode {
+	@Field public String ClassName;
 	@Field public ZenType ClassType;
+	@Field public ZenType SuperType;
 	@Field public ZenNameSpace NameSpace;
-	@Field public ArrayList<ZenNode>  FieldList;
-	@Field public ArrayList<ZenNode>  MemberList;
-	public ZenClassDeclNode/*constructor*/(ZenToken SourceToken, ZenNameSpace NameSpace, ZenType ClassType) {
-		super(); this.SourceToken = SourceToken; // TODO
-		this.NameSpace = NameSpace;
-		this.ClassType = ClassType;
-		this.FieldList = new ArrayList<ZenNode>();
-		this.MemberList = new ArrayList<ZenNode>();
+	@Field public ArrayList<ZenFieldNode>  FieldList;
+	@Constructor public ZenClassDeclNode(ZenNameSpace NameSpace) {
+		super();
+		this.NameSpace = NameSpace.GetRootNameSpace();
+		this.ClassName = null;
+		this.ClassType = null;
+		this.SuperType = null;
+		this.FieldList = new ArrayList<ZenFieldNode>();
 	}
+
 	@Override public void Append(ZenNode Node) {
-		if(Node instanceof ZenFuncDeclNode) {
-			this.MemberList.add(Node);
-		}
 		if(Node instanceof ZenFieldNode) {
-			this.FieldList.add(Node);
+			this.FieldList.add((ZenFieldNode)this.SetChild(Node));
+		}
+		else if(Node instanceof ZenTypeNode) {
+			this.SuperType = Node.Type;
+		}
+		else if(this.ClassName == null) {
+			this.ClassName = Node.SourceToken.ParsedText;
+			this.SourceToken = Node.SourceToken;
+			this.ClassType = this.NameSpace.GetType(this.ClassName, this.SourceToken);
 		}
 	}
-	//	@Override public boolean Accept(ZenVisitor Visitor) {
-	//		Visitor.VisitClassDeclNode(this);
-	//	}
 }
