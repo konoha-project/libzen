@@ -91,7 +91,7 @@ public abstract class ZenFunc {
 
 
 	public static String StringfySignature(String FuncName, int FuncParamSize, ZenType RecvType) {
-		return FuncName + "__" + FuncParamSize + RecvType.TypeId;
+		return FuncName + "__" + FuncParamSize + RecvType.GetUniqueName();
 	}
 
 	public final String GetSignature() {

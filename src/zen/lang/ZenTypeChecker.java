@@ -76,7 +76,7 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		this.StackedContextType = null;
 		this.StackedTypedNode = null;
 		this.StoppedVisitor = false;
-		this.FuncScope = new FuncContext(null, null, null);
+		this.FuncScope = new FuncContext(null, Logger, null, null);
 	}
 
 	@Override public final void EnableVisitor() {
@@ -185,44 +185,44 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		return false;
 	}
 
-	private void DumpFuncList(ArrayList<ZenFunc> FuncList, int StartIdx, int EndIdx) {
-		@Var int i = StartIdx;
-		while(i < EndIdx) {
-			@Var ZenFunc Func = FuncList.get(i);
-			System.err.println("["+i+"] " + Func);
-			i = i + 1;
-		}
-		System.err.println("" + StartIdx + " ===> " + EndIdx);
-	}
-
-	private boolean IsAcceptFunc(ZenFunc Func, ArrayList<ZenNode> ParamList) {
-		@Var int i = 0;
-		while(i < ParamList.size()) {
-			@Var ZenType FuncType = Func.FuncType.GetFuncParamType(i);
-			@Var ZenType ParamType = ParamList.get(i).Type;
-			if(Func.FuncType.GetFuncParamType(i) != ParamList.get(i).Type) {
-				if(FuncType != ParamType && !FuncType.Accept(ParamType)) {
-					return false;
-				}
-			}
-			i = i + 1;
-		}
-		return true;
-	}
-
-	private void GuessFuncTypeAcceptedParam(ArrayList<ZenFunc> FuncList, ZenApplyNode Node, int BaseSize) {
-		@Var int i = 0;
-		while(i < BaseSize) {
-			@Var ZenFunc Func = FuncList.get(i);
-			if(this.IsAcceptFunc(Func, Node.ParamList)) {
-				Node.ResolvedFunc = FuncList.get(0);
-			}
-			i = i + 1;
-		}
-	}
+	//	private void DumpFuncList(ArrayList<ZenFunc> FuncList, int StartIdx, int EndIdx) {
+	//		@Var int i = StartIdx;
+	//		while(i < EndIdx) {
+	//			@Var ZenFunc Func = FuncList.get(i);
+	//			System.err.println("["+i+"] " + Func);
+	//			i = i + 1;
+	//		}
+	//		System.err.println("" + StartIdx + " ===> " + EndIdx);
+	//	}
+	//
+	//	private boolean IsAcceptFunc(ZenFunc Func, ArrayList<ZenNode> ParamList) {
+	//		@Var int i = 0;
+	//		while(i < ParamList.size()) {
+	//			@Var ZenType FuncType = Func.FuncType.GetFuncParamType(i);
+	//			@Var ZenType ParamType = ParamList.get(i).Type;
+	//			if(Func.FuncType.GetFuncParamType(i) != ParamList.get(i).Type) {
+	//				if(FuncType != ParamType && !FuncType.Accept(ParamType)) {
+	//					return false;
+	//				}
+	//			}
+	//			i = i + 1;
+	//		}
+	//		return true;
+	//	}
+	//
+	//	private void GuessFuncTypeAcceptedParam(ArrayList<ZenFunc> FuncList, ZenApplyNode Node, int BaseSize) {
+	//		@Var int i = 0;
+	//		while(i < BaseSize) {
+	//			@Var ZenFunc Func = FuncList.get(i);
+	//			if(this.IsAcceptFunc(Func, Node.ParamList)) {
+	//				Node.ResolvedFunc = FuncList.get(0);
+	//			}
+	//			i = i + 1;
+	//		}
+	//	}
 
 	protected ZenFunc InferFuncType(ZenNameSpace NameSpace, String FuncName, ZenType FuncType, ZenToken SourceToken) {
-		if(FuncType.IsCompleteFunc()) {
+		if(FuncType.IsCompleteFunc(false)) {
 			@Var ZenNameSpace RootNameSpace = NameSpace.GetRootNameSpace();
 			@Var String Signature = FuncType.StringfySignature(FuncName);
 			LibNative.Assert(!RootNameSpace.HasSymbol(Signature));
@@ -386,14 +386,6 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		return InferredType;
 	}
 
-	protected ZenType GetReturnType() {
-		return this.FuncScope.FuncNode.ReturnType;
-	}
-
-	protected void InferReturnType(ZenType InferredType) {
-		this.FuncScope.HasReturnType(InferredType);
-	}
-
 	protected ZenNode CreateDefaultValueNode(ZenType Type) {
 		// TODO Auto-generated method stub
 		return null;
@@ -429,51 +421,5 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		@Var ZenVariable VarInfo = new ZenVariable(NameSpace.GetDefiningFunc(), 0, VarType, VarName, this.FuncScope.GetVarIndex(), SourceToken);
 		NameSpace.SetSymbol(VarName, VarInfo, SourceToken);
 	}
-
-	//	protected ZenFuncType LookupTypeFunc(ZenType ReturnType, ArrayList<ZenNode> NodeList, @Nullable ZenType ContextType) {
-	//		@Var ZenFuncType FuncType = null;
-	//		if(ContextType instanceof ZenFuncType) {
-	//			FuncType = (ZenFuncType)ContextType;
-	//		}
-	//		@Var ArrayList<ZenType> TypeList = new ArrayList<ZenType>();
-	//		if(ReturnType.IsVarType() && FuncType != null) {
-	//			ReturnType = FuncType.GetParamType(0);
-	//		}
-	//		TypeList.add(ReturnType.GetRealType());
-	//		@Var int i = 0;
-	//		while(i < NodeList.size()) {
-	//			@Var ZenParamNode Node = (ZenParamNode)NodeList.get(i);
-	//			@Var ZenType ParamType = Node.Type.GetRealType();
-	//			if(ParamType.IsVarType() && FuncType != null) {
-	//				ParamType = FuncType.GetParamType(i+1);
-	//			}
-	//			TypeList.add(ParamType);
-	//			i = i + 1;
-	//		}
-	//		return ZenSystem.LookupFuncType(TypeList);
-	//	}
-
-	public ZenFuncType CheckFuncType(ZenFuncType FuncType, ZenType ContextType) {
-		if(ContextType.IsFuncType()) {
-			// TODO
-		}
-		return FuncType;
-	}
-
-	//	protected ZenNode CanDefineFunc(ZenNameSpace NameSpace, String FuncName, ZenFuncType FuncType, ZenFuncDeclNode Node) {
-	//		System.out.println("debug signature: " + FuncType.StringfySignature(FuncName));
-	//		ZenFunc Func = NameSpace.GetSymbol(FuncType.StringfySignature(FuncName));
-	//		return Node;
-	//	}
-
-	//
-	//	public void UpdateParamType() {
-	//		// TODO Auto-generated method stub
-	//	}
-	//
-	//	public void TypeSync(ZenType VarType, ZenNode ValueNode) {
-	//		// TODO Auto-generated method stub
-	//	}
-	//
 
 }

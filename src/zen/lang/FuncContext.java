@@ -7,67 +7,73 @@ import zen.ast.ZenNode;
 import zen.deps.Constructor;
 import zen.deps.Field;
 import zen.deps.Var;
+import zen.parser.ZenLogger;
 
 class FuncContext {
 	@Field FuncContext Parent;
-	@Field public ZenFunctionLiteralNode FuncNode;
-	@Field public ZenFuncType FuncType;
-	//	@Field public String PredefinedSignature;
-	@Field boolean IsInferredReturn;
+	@Field ZenLogger Logger;
+	@Field ZenFunctionLiteralNode FuncNode;
+	@Field ZenFuncType FuncType;
+	@Field int ReturnCount;
 	@Field ArrayList<ZenVarType> VarTypeList;
-	@Field public int VarIndex;
-	@Field public int CountOfUnknownTypeNode;
+	@Field int VarIndex;
+	@Field int CountOfUnknownTypeNode;
 
-	@Constructor FuncContext(FuncContext Parent, ZenFunctionLiteralNode FuncNode, ZenFuncType FuncType) {
+	@Constructor FuncContext(FuncContext Parent, ZenLogger Logger, ZenFunctionLiteralNode FuncNode, ZenFuncType FuncType) {
 		this.Parent = Parent;
+		this.Logger = Logger;
 		this.FuncNode = FuncNode;
 		this.FuncType = FuncType;
-		this.IsInferredReturn = false;
+		this.ReturnCount = 0;
 		this.VarTypeList = new ArrayList<ZenVarType>();
 		this.VarIndex = 0;
 		this.CountOfUnknownTypeNode = 0;
 	}
 
-	public void HasReturnType(ZenType InferredType) {
-		this.IsInferredReturn = true;
+	public ZenType GetReturnType() {
+		this.ReturnCount = this.ReturnCount + 1;
+		return this.FuncNode.ReturnType;
 	}
 
 	public ZenFuncType RecheckCompleteFuncType(ZenFunctionLiteralNode FuncNode) {
 		@Var ZenFuncType FuncType = this.FuncType;
-		if(!FuncType.IsCompleteFunc()) {
-			if(FuncNode.ReturnType.IsVarType() && !this.IsInferredReturn) {
-				FuncNode.ReturnType = ZenSystem.VoidType;
+		if(!FuncType.IsCompleteFunc(false)) {
+			if(FuncNode.ReturnType.IsVarType() && this.ReturnCount == 0) {
+				((ZenVarType)FuncNode.ReturnType).Infer(ZenSystem.VoidType, FuncNode.SourceToken);
 			}
 			this.FuncType = this.FuncNode.GetFuncType(null);
-			if(this.FuncType.IsCompleteFunc()) {
+			if(this.FuncType.IsCompleteFunc(false)) {
 				return this.FuncType;
 			}
 		}
 		return null;  // no renewal
 	}
 
-	public int GetVarSize() {
-		@Var int count = 0;
-		@Var int i = 0;
-		while(i < this.VarTypeList.size()) {
-			@Var ZenVarType VarType = this.VarTypeList.get(i);
-			if(VarType.IsVarType()) {
-				count = count + 1;
-			}
-			i = i + 1;
-		}
-		return count;
-	}
+	//	public int GetVarSize() {
+	//		@Var int count = 0;
+	//		@Var int i = 0;
+	//		while(i < this.VarTypeList.size()) {
+	//			@Var ZenVarType VarType = this.VarTypeList.get(i);
+	//			if(VarType.IsVarType()) {
+	//				count = count + 1;
+	//			}
+	//			i = i + 1;
+	//		}
+	//		return count;
+	//	}
 
 	public void Dump() {
 		@Var int i = 0;
-		this.println("returning type: " + this.FuncNode.ReturnType);
+		//		this.println("returning type: " + this.FuncNode.ReturnType);
 		while(i < this.VarTypeList.size()) {
 			@Var ZenVarType VarType = this.VarTypeList.get(i);
-			this.println("type inference: " + VarType.ShortName + ": " + VarType.GetRealType());
+			if(VarType.IsVarType()) {
+				this.Logger.ReportInfo(VarType.SourceToken, "ambigious type: " + VarType.ShortName);
+			}
+			//			this.println("type inference: " + VarType.ShortName + ": " + VarType.GetRealType());
 			i = i + 1;
 		}
-		this.println("unknown type count = " + this.CountOfUnknownTypeNode);
+		//		this.println("unknown type count = " + this.CountOfUnknownTypeNode);
 		this.VarTypeList.clear();
 	}
 
@@ -84,4 +90,5 @@ class FuncContext {
 	protected void println(String string) {
 		System.err.println("debug " + string);
 	}
+
 }

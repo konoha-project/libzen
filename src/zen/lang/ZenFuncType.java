@@ -22,8 +22,11 @@ public final class ZenFuncType extends ZenType {
 		return true;
 	}
 
-	@Override public final boolean IsCompleteFunc() {
+	@Override public final boolean IsCompleteFunc(boolean IgnoreReturn) {
 		@Var int i = 0;
+		if(IgnoreReturn) {
+			i = 1;
+		}
 		while(i < this.TypeParams.length) {
 			if(this.TypeParams[i].IsVarType()) {
 				return false;

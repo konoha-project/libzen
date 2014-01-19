@@ -140,7 +140,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 			if(FuncType.HasCallableSignature()) {
 				Node.ReferenceName = FuncType.StringfySignature(Node.GivenName);
 			}
-			if(!(FuncType instanceof ZenFuncType) || !((ZenFuncType)FuncType).IsCompleteFunc()) {
+			if(!FuncType.IsCompleteFunc(false)) {
 				FuncType = ZenSystem.VarType;
 			}
 			this.TypedNode(Node, FuncType);
@@ -280,7 +280,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 				ParamList.set(i, SubNode);
 				i = i + 1;
 			}
-			if(FuncType.IsCompleteFunc()) {
+			if(FuncType.IsCompleteFunc(false)) {
 				return FuncType.GetReturnType();   // Return
 			}
 		}
@@ -466,7 +466,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 
 	@Override public void VisitReturnNode(ZenReturnNode Node) {
 		@Var ZenNameSpace NameSpace = this.GetNameSpace();
-		@Var ZenType ReturnType = this.GetReturnType();
+		@Var ZenType ReturnType = this.FuncScope.GetReturnType();
 		if(Node.ValueNode != null && ReturnType.IsVoidType()) {
 			Node.ValueNode = null;
 		}
@@ -549,8 +549,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 
 	public void PushFuncNode(ZenNameSpace NameSpace, ZenFunctionLiteralNode FuncNode, ZenFuncType FuncType) {
 		NameSpace.SetDefiningFunc(FuncNode);
-		this.FuncScope = new FuncContext(this.FuncScope, FuncNode, FuncType);
-		FuncNode.ReturnType = this.NewVarType(FuncNode.ReturnType, "return", FuncNode.SourceToken);
+		this.FuncScope = new FuncContext(this.FuncScope, this.Logger, FuncNode, FuncType);
 		@Var int i = 0;
 		while(i < FuncNode.ArgumentList.size()) {
 			@Var ZenParamNode ParamNode = (ZenParamNode)FuncNode.ArgumentList.get(i);
@@ -558,6 +557,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 			this.SetLocalVariable(NameSpace, ParamNode.Type, ParamNode.Name, null);
 			i = i + 1;
 		}
+		FuncNode.ReturnType = this.NewVarType(FuncNode.ReturnType, "return", FuncNode.SourceToken);
 	}
 
 	public final void TypeCheckFuncBody(ZenNameSpace NameSpace, ZenFuncDeclNode FuncNode) {
@@ -569,8 +569,8 @@ public class ZenTypeInfer extends ZenTypeChecker {
 			if(RenewalFuncType != null) {
 				this.DefineFunc(NameSpace, FuncNode.FuncName, RenewalFuncType, FuncNode.SourceToken);
 			}
-			int UntypedSize = this.FuncScope.GetVarSize();
-			this.println("untyped node=" + this.FuncScope.CountOfUnknownTypeNode + ", var=" + UntypedSize);
+			//			int UntypedSize = this.FuncScope.GetVarSize();
+			this.println("untyped node=" + this.FuncScope.CountOfUnknownTypeNode);
 			if(this.FuncScope.CountOfUnknownTypeNode == 0 || Stopper == this.FuncScope.CountOfUnknownTypeNode) {
 				break;
 			}

@@ -53,25 +53,6 @@ public class ZenUtils implements ZenParserConst {
 		return UnicodeChar;
 	}
 
-	//	private final static String n2s(int n) {
-	//		if(n < (27)) {
-	//			return LibZen.CharToString((/*cast*/char)(65 + (n - 0)));
-	//		}
-	//		else if(n < (27 + 10)) {
-	//			return LibZen.CharToString((/*cast*/char)(48 + (n - 27)));
-	//		}
-	//		else {
-	//			return LibZen.CharToString((/*cast*/char)(97 + (n - 37)));
-	//		}
-	//	}
-	//
-	//	public final static String NumberToAscii(int number) {
-	//		if(number >= 3600) {
-	//			return n2s(number / 3600) + NumberToAscii(number % 3600);
-	//		}
-	//		return n2s((number / 60)) + n2s((number % 60));
-	//	}
-
 	public final static String NativeVariableName(String Name, int Index) {
 		return Name + NativeNameSuffix + Index;
 	}

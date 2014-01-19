@@ -184,6 +184,21 @@ public class ZenType implements ZenTypeFlag {
 		return this.ShortName;
 	}
 
+	private final static String[] Matrix = {
+		"q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "0", "4",
+		"a", "s", "d", "f", "g", "h", "j", "k", "l", "9", "1", "6",
+		"z", "x", "c", "v", "b", "n", "m", "7", "5", "3", "2", "8",
+	};
+
+	public final String GetUniqueName() {
+		int number = this.TypeId;
+		int d = number % Matrix.length;
+		number = number / Matrix.length;
+		int c = number % Matrix.length;
+		number = number / Matrix.length;
+		return Matrix[number] + Matrix[c] + Matrix[d];
+	}
+
 	public final String GetNativeName() {
 		//		if(ZenUtils.IsFlag(this.TypeFlag, ExportType)) {
 		//			return this.ShortName;
@@ -194,20 +209,19 @@ public class ZenType implements ZenTypeFlag {
 		return this.GetBaseType().ShortName + NativeNameSuffix + this.TypeId;
 	}
 
-	public final String GetUniqueName() {
-		//		if(ZenUtils.IsFlag(this.TypeFlag, TypeVariable)) {
-		//			return this.ShortName;
-		//		}
-		//		else {
-		//			if(LibZen.DebugMode) {
-		return this.GetBaseType().ShortName + NativeNameSuffix + this.TypeId;
-		//			}
-		//			else {
-		//				return NativeNameSuffix + this.TypeId;
-		//			}
-		//		}
-	}
-
+	//	public final String GetUniqueName() {
+	//		//		if(ZenUtils.IsFlag(this.TypeFlag, TypeVariable)) {
+	//		//			return this.ShortName;
+	//		//		}
+	//		//		else {
+	//		//			if(LibZen.DebugMode) {
+	//		return this.GetBaseType().ShortName + NativeNameSuffix + this.TypeId;
+	//		//			}
+	//		//			else {
+	//		//				return NativeNameSuffix + this.TypeId;
+	//		//			}
+	//		//		}
+	//	}
 
 	//	public final boolean Accept(ZenType Type) {
 	//		boolean b = this.Accept_(Type);
@@ -223,7 +237,7 @@ public class ZenType implements ZenTypeFlag {
 		return false;
 	}
 
-	public boolean IsCompleteFunc() {
+	public boolean IsCompleteFunc(boolean IgnoreReturn) {
 		return false;
 	}
 
