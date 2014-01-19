@@ -48,22 +48,26 @@ public class ZenArray<T> extends ArrayList<T> implements ZenTypedObject {
 		return this.ObjectType;
 	}
 
-	public ZenArray<T> SubArray(int bindex, int eindex) {
+	public ZenArray<T> SubArray(int BeginIndex, int EndIndex) {
 		@Var ZenArray<T> ArrayObject = new ZenArray<T>(this.ObjectType);
-		for(@Var int i = bindex; i < eindex; i++) {
+		@Var int i = BeginIndex;
+		while(i < EndIndex) {
 			@Var T Value = this.get(i);
 			ArrayObject.add(Value);
+			i = i + 1;
 		}
 		return ArrayObject;
 	}
 	@Override public String toString() {
 		@Var String s = "[";
-		for(@Var int i = 0; i < this.size(); i++) {
+		@Var int i = 0;
+		while(i < this.size()) {
 			@Var T Value = this.get(i);
 			if(i > 0) {
 				s += ", ";
 			}
 			s += LibZen.Stringify(Value);
+			i = i + 1;
 		}
 		return s + "]";
 	}

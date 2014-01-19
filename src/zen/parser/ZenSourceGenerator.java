@@ -512,12 +512,14 @@ public class ZenSourceGenerator extends ZenGenerator {
 
 	protected void VisitParamList(String OpenToken, ArrayList<ZenNode> ParamList, String CloseToken) {
 		this.CurrentBuilder.Append(OpenToken);
-		for (int i = 0; i < ParamList.size(); i++) {
-			ZenNode ParamNode = ParamList.get(i);
+		@Var int i = 0;
+		while(i < ParamList.size()) {
+			@Var ZenNode ParamNode = ParamList.get(i);
 			if (i > 0) {
 				this.CurrentBuilder.Append(", ");
 			}
 			this.GenerateCode(ParamNode);
+			i = i + 1;
 		}
 		this.CurrentBuilder.Append(CloseToken);
 	}

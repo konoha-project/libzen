@@ -137,13 +137,6 @@ public abstract class LibZen {
 		}
 	}
 
-	private static int ParserCount = -1;
-
-	public static int NewParserId() {
-		ParserCount++;
-		return ParserCount;
-	}
-
 	public final static char CharAt(String Text, long Pos) {
 		if(Pos < Text.length()) {
 			return Text.charAt((int)Pos);
@@ -176,15 +169,17 @@ public abstract class LibZen {
 	}
 
 	public final static int CheckBraceLevel(String Text) {
-		int level = 0;
-		for(int i = 0; i < Text.length(); i++) {
-			char ch = Text.charAt(i);
+		@Var int level = 0;
+		@Var int i = 0;
+		while(i < Text.length()) {
+			@Var char ch = Text.charAt(i);
 			if(ch == '{' || ch == '[') {
-				level++;
+				level = level + 1;
 			}
 			if(ch == '}' || ch == ']') {
-				level--;
+				level = level - 1;
 			}
+			i = i + 1;
 		}
 		return level;
 	}
@@ -617,6 +612,39 @@ public abstract class LibZen {
 	//		}
 	//		return false;
 	//	}
+
+	public static String StringfyObject(Object This) {
+		@Var String s = "{";
+		//ifdef JAVA
+		Field[] Fields = This.getClass().getFields();
+		for(int i = 0; i < Fields.length; i++) {
+			if(Modifier.isPublic(Fields[i].getModifiers())) {
+				if(i > 0) {
+					s += ", ";
+				}
+				try {
+					s += Fields[i].getName() + ": ";
+					if(Fields[i].getType() == long.class) {
+						s += Fields[i].getLong(This);
+					}
+					else if(Fields[i].getType() == double.class) {
+						s += Fields[i].getDouble(This);
+					}
+					else {
+						s += LibZen.Stringify(Fields[i].get(This));
+					}
+				} catch (IllegalArgumentException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		//endif VAJA
+		return s + "}";
+	}
 
 	public static void PrintStackTrace(Exception e, int linenum) {
 		@Var StackTraceElement[] elements = e.getStackTrace();
