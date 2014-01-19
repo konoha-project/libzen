@@ -79,7 +79,7 @@ public class HaskellSourceGenerator extends ZenSourceGenerator {
 	}
 
 	private void Indent(ZenSourceBuilder builder) {
-		IndentLevel++;
+		IndentLevel = IndentLevel + 1;
 		builder.Indent();
 	}
 

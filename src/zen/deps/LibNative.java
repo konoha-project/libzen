@@ -435,8 +435,10 @@ public class LibNative {
 		}
 		@Var Class<?>[] ParamTypes = JMethod.getParameterTypes();
 		if (ParamTypes != null) {
-			for (int j = 0; j < ParamTypes.length; j++) {
+			@Var int j = 0;
+			while(j < ParamTypes.length) {
 				TypeList.add(LibNative.GetNativeType(ParamTypes[j]));
+				j = j + 1;
 			}
 		}
 		return new ZenNativeFunc(0, JMethod.getName(), ZenSystem.LookupFuncType(TypeList), null, JMethod);
