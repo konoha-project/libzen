@@ -1,0 +1,11 @@
+class Person {
+	field name: String;
+	field age: int;
+	field isChild: Func<boolean, Person>;
+}
+
+class Student extends Person {
+	field SchoolName: String;
+	field gender = true;
+}
+
