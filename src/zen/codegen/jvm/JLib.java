@@ -57,10 +57,10 @@ class JLib {
 			GetFuncById = ZenSystem.class.getMethod("GetFuncById", int.class);
 			DynamicGetter = JMethod.class.getMethod("DynamicGetter", Object.class, String.class);
 			DynamicSetter = JMethod.class.getMethod("DynamicSetter", Object.class, String.class, Object.class);
-			//			InvokeFunc = JMethod.class.getMethod("InvokeFunc", ZenFunc.class, Object[].class);
-			//			InvokeOverridedFunc = JMethod.class.getMethod("InvokeOverridedMethod", long.class, ZenNameSpace.class, ZenFunc.class, Object[].class);
-			//			InvokeDynamicFunc = JMethod.class.getMethod("InvokeDynamicFunc", long.class, ZenType.class, ZenNameSpace.class, String.class, Object[].class);
-			//			InvokeDynamicMethod = JMethod.class.getMethod("InvokeDynamicMethod", long.class, ZenType.class, ZenNameSpace.class, String.class, Object[].class);
+			InvokeFunc = JMethod.class.getMethod("InvokeFunc", JMethod.class, Object[].class);
+			//InvokeOverridedFunc = JMethod.class.getMethod("InvokeOverridedMethod", long.class, ZenNameSpace.class, ZenFunc.class, Object[].class);
+			//InvokeDynamicFunc = JMethod.class.getMethod("InvokeDynamicFunc", long.class, ZenType.class, ZenNameSpace.class, String.class, Object[].class);
+			//InvokeDynamicMethod = JMethod.class.getMethod("InvokeDynamicMethod", long.class, ZenType.class, ZenNameSpace.class, String.class, Object[].class);
 
 			BoxBooleanValue = Boolean.class.getMethod("valueOf", boolean.class);
 			BoxIntValue = Long.class.getMethod("valueOf", long.class);

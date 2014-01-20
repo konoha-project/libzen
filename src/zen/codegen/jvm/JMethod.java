@@ -3,11 +3,15 @@ package zen.codegen.jvm;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 
 import zen.ast.ZenBinaryNode;
 import zen.ast.ZenUnaryNode;
 import zen.deps.LibNative;
+import zen.deps.LibZen;
+import zen.deps.Var;
+import zen.lang.ZenFuncSet;
 import zen.lang.ZenSystem;
 import zen.lang.ZenType;
 import zen.parser.ZenLogger;
@@ -103,6 +107,23 @@ public class JMethod {
 		return GetMethodFromMethodTable(Node.SourceToken.ParsedText, TypeParams);
 	}
 
+	public static String FormatTypeErrorMessage(ZenFuncSet Set, String FuncType, ZenType ClassType, String MethodName) {
+		if(ClassType != null) {
+			if(LibZen.EqualsString(MethodName, "")) {
+				MethodName = ClassType.toString();
+			}
+			else {
+				MethodName = MethodName + " of " + ClassType;
+			}
+		}
+		if(Set.FuncList.size() == 0) {
+			return "undefined " + FuncType + ": " + MethodName;
+		}
+		else {
+			return "mismatched " + FuncType + "s: " + Set;
+		}
+	}
+
 	//	public final static ZenArray NewArray(ZenType Type, Object[] InitSizes) {
 	//		if(InitSizes.length == 1) {
 	//			return ZenArray.NewArray1(Type.GetParamType(0), ((Number)InitSizes[0]).intValue());
@@ -119,13 +140,43 @@ public class JMethod {
 	//		return ZenArray.NewNewArray(ArrayType, Values);
 	//	}
 
+	public final static Object ApplyMethod(JMethod Func, Object Self, Object[] Params) {
+		try {
+			// System.err.println("** debug: " + Func.FuncBody);
+			// System.err.println("** debug: " + Self + ", Params.length=" + Params.length);
+			return Func.Body.invoke(Self, Params);
+		}
+		catch (InvocationTargetException e) {
+			ZenLogger.VerboseException(e);
+		}
+		catch (IllegalArgumentException e) {
+			ZenLogger.VerboseException(e);
+		}
+		catch (IllegalAccessException e) {
+			ZenLogger.VerboseException(e);
+		}
+		return null;
+	}
+
+	public static Object InvokeFunc(JMethod Func, Object[] Params) {
+		if(Func == null || Modifier.isAbstract(Func.Body.getModifiers())) {
+			ZenLogger.VerboseLog(ZenLogger.VerboseRuntime, "applying abstract function: " + Func);
+			return null; //Func.FuncType.GetReturnType().DefaultNullValue;
+		}
+		else if(Modifier.isStatic(Func.Body.getModifiers())) {
+			@Var Object[] MethodArguments = new Object[Params.length-1];
+			LibZen.ArrayCopy(Params, 1, MethodArguments, 0, MethodArguments.length);
+			return JMethod.ApplyMethod(Func, Params[0], MethodArguments);
+		}
+		return JMethod.ApplyMethod(Func, null, Params);
+	}
 
 	//	public static Object InvokeOverridedMethod(long FileLine, ZenNameSpace NameSpace, ZenFunc Func, Object[] Arguments) {
 	//		@Var ZenType ClassType = ZenSystem.GuessType(Arguments[0]);
 	//		Func = NameSpace.GetOverridedMethod(ClassType, Func);
 	//		return JMethod.InvokeFunc(Func, Arguments);
 	//	}
-	//
+
 	//	public static Object InvokeDynamicFunc(long FileLine, ZenType ContextType, ZenNameSpace NameSpace, String FuncName, Object[] Arguments) {
 	//		@Var ZenFuncSet FuncSet = NameSpace.GetFuncSet(FuncName);
 	//		@Var ZenFunc Func = FuncSet.GetMatchedFunc(NameSpace, Arguments);
@@ -134,7 +185,7 @@ public class JMethod {
 	//			Value = JMethod.InvokeFunc(Func, Arguments);
 	//			return JMethod.DynamicCast(ContextType, Value);
 	//		}
-	//		ZenLogger.VerboseLog(ZenLogger.VerboseRuntime, FuncSet.FormatTypeErrorMessage("function", null, FuncName));
+	//		ZenLogger.VerboseLog(ZenLogger.VerboseRuntime, FormatTypeErrorMessage(FuncSet, "function", null, FuncName));
 	//		return Value;
 	//	}
 	//
@@ -147,7 +198,7 @@ public class JMethod {
 	//			Value = JMethod.InvokeFunc(Func, Arguments);
 	//			return JMethod.DynamicCast(ContextType, Value);
 	//		}
-	//		ZenLogger.VerboseLog(ZenLogger.VerboseRuntime, FuncSet.FormatTypeErrorMessage("method", ClassType, FuncName));
+	//		ZenLogger.VerboseLog(ZenLogger.VerboseRuntime, FormatTypeErrorMessage(FuncSet, "method", ClassType, FuncName));
 	//		return Value;
 	//	}
 
@@ -208,21 +259,4 @@ public class JMethod {
 	//		return null;
 	//	}
 
-	public final static Object ApplyMethod(JMethod Func, Object Self, Object[] Params) {
-		try {
-			// System.err.println("** debug: " + Func.FuncBody);
-			// System.err.println("** debug: " + Self + ", Params.length=" + Params.length);
-			return Func.Body.invoke(Self, Params);
-		}
-		catch (InvocationTargetException e) {
-			ZenLogger.VerboseException(e);
-		}
-		catch (IllegalArgumentException e) {
-			ZenLogger.VerboseException(e);
-		}
-		catch (IllegalAccessException e) {
-			ZenLogger.VerboseException(e);
-		}
-		return null;
-	}
 }
