@@ -16,7 +16,7 @@ import zen.deps.Var;
 import zen.lang.ZenFuncSet;
 import zen.lang.ZenSystem;
 import zen.lang.ZenType;
-import zen.parser.ZenLogger;
+import zen.parser.ZLogger;
 
 public class JMethod {
 	public Method Body;
@@ -164,20 +164,20 @@ public class JMethod {
 			return Func.Body.invoke(Self, Params);
 		}
 		catch (InvocationTargetException e) {
-			ZenLogger.VerboseException(e);
+			ZLogger.VerboseException(e);
 		}
 		catch (IllegalArgumentException e) {
-			ZenLogger.VerboseException(e);
+			ZLogger.VerboseException(e);
 		}
 		catch (IllegalAccessException e) {
-			ZenLogger.VerboseException(e);
+			ZLogger.VerboseException(e);
 		}
 		return null;
 	}
 
 	public static Object InvokeFunc(JMethod Func, Object[] Params) {
 		if(Func == null || Modifier.isAbstract(Func.Body.getModifiers())) {
-			ZenLogger.VerboseLog(ZenLogger.VerboseRuntime, "applying abstract function: " + Func);
+			ZLogger.VerboseLog(ZLogger.VerboseRuntime, "applying abstract function: " + Func);
 			return null; //Func.FuncType.GetReturnType().DefaultNullValue;
 		}
 		else if(Modifier.isStatic(Func.Body.getModifiers())) {
@@ -202,7 +202,7 @@ public class JMethod {
 	//			Value = JMethod.InvokeFunc(Func, Arguments);
 	//			return JMethod.DynamicCast(ContextType, Value);
 	//		}
-	//		ZenLogger.VerboseLog(ZenLogger.VerboseRuntime, FormatTypeErrorMessage(FuncSet, "function", null, FuncName));
+	//		ZLogger.VerboseLog(ZLogger.VerboseRuntime, FormatTypeErrorMessage(FuncSet, "function", null, FuncName));
 	//		return Value;
 	//	}
 	//
@@ -215,7 +215,7 @@ public class JMethod {
 	//			Value = JMethod.InvokeFunc(Func, Arguments);
 	//			return JMethod.DynamicCast(ContextType, Value);
 	//		}
-	//		ZenLogger.VerboseLog(ZenLogger.VerboseRuntime, FormatTypeErrorMessage(FuncSet, "method", ClassType, FuncName));
+	//		ZLogger.VerboseLog(ZLogger.VerboseRuntime, FormatTypeErrorMessage(FuncSet, "method", ClassType, FuncName));
 	//		return Value;
 	//	}
 
@@ -224,7 +224,7 @@ public class JMethod {
 			Field JavaField = RecvObject.getClass().getField(FieldName);
 			return JavaField.get(RecvObject);
 		} catch (Exception e) {
-			ZenLogger.VerboseException(e);
+			ZLogger.VerboseException(e);
 		}
 		return null;
 	}
@@ -235,7 +235,7 @@ public class JMethod {
 			JavaField.set(RecvObject, Value);
 			return JavaField.get(RecvObject);
 		} catch (Exception e) {
-			ZenLogger.VerboseException(e);
+			ZLogger.VerboseException(e);
 		}
 		return null;
 	}

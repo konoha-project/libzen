@@ -26,7 +26,7 @@
 package zen.lang;
 import zen.deps.Field;
 import zen.deps.LibZen;
-import zen.parser.ZenUtils;
+import zen.parser.ZUtils;
 
 public abstract class ZenFunc {
 	@Field public int			  FuncFlag;
@@ -54,14 +54,14 @@ public abstract class ZenFunc {
 	}
 
 	public final boolean IsConverterFunc() {
-		return ZenUtils.IsFlag(this.FuncFlag, ZenFuncFlag.ConverterFunc);
+		return ZUtils.IsFlag(this.FuncFlag, ZenFuncFlag.ConverterFunc);
 	}
 	public final boolean IsCoercionFunc() {
-		return ZenUtils.IsFlag(this.FuncFlag, ZenFuncFlag.CoercionFunc);
+		return ZUtils.IsFlag(this.FuncFlag, ZenFuncFlag.CoercionFunc);
 	}
 
 	protected boolean Is(int Flag) {
-		return ZenUtils.IsFlag(this.FuncFlag, Flag);
+		return ZUtils.IsFlag(this.FuncFlag, Flag);
 	}
 
 	//	public final ZenType GetReturnType() {

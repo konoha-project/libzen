@@ -29,11 +29,11 @@ import java.util.ArrayList;
 import zen.deps.Field;
 import zen.lang.ZenType;
 import zen.parser.ZenNameSpace;
-import zen.parser.ZenUtils;
+import zen.parser.ZUtils;
 
 
 
-public final class ZenClassField extends ZenUtils {
+public final class ZenClassField extends ZUtils {
 	@Field  public ZenType DefinedType;
 	@Field  private final ZenNameSpace NameSpace;
 	@Field  public ArrayList<ZenFieldInfo> FieldList;

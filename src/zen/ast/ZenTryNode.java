@@ -25,7 +25,7 @@
 package zen.ast;
 
 import zen.deps.Field;
-import zen.parser.ZenVisitor;
+import zen.parser.ZVisitor;
 
 final public class ZenTryNode extends ZenStatementNode {
 	@Field public ZenNode	TryNode;
@@ -49,7 +49,7 @@ final public class ZenTryNode extends ZenStatementNode {
 			this.FinallyNode = Node;
 		}
 	}
-	@Override public void Accept(ZenVisitor Visitor) {
+	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitTryNode(this);
 	}
 }

@@ -36,11 +36,11 @@ import zen.deps.ZenArray;
 import zen.lang.ZenGrammar;
 import zen.lang.ZenSystem;
 import zen.parser.ZenGenerator;
-import zen.parser.ZenLogger;
-import zen.parser.ZenParserConst;
-import zen.parser.ZenUtils;
+import zen.parser.ZLogger;
+import zen.parser.ZParserConst;
+import zen.parser.ZUtils;
 
-public class ZenMain extends ZenUtils {
+public class ZenMain extends ZUtils {
 	private static jline.ConsoleReader ConsoleReader = null;
 
 	public final static String ReadLine2(String Prompt, String Prompt2) {
@@ -131,36 +131,36 @@ public class ZenMain extends ZenUtils {
 			}
 			if (LibZen.EqualsString(Argu, "--verbose")) {
 				LibZen.DebugMode = true;
-				ZenLogger.VerboseMask |= (ZenLogger.VerboseFile
-						| ZenLogger.VerboseSymbol | ZenLogger.VerboseNative);
+				ZLogger.VerboseMask |= (ZLogger.VerboseFile
+						| ZLogger.VerboseSymbol | ZLogger.VerboseNative);
 				continue;
 			}
 			if (LibZen.EqualsString(Argu, "--verbose:token")) {
-				ZenLogger.VerboseMask |= ZenLogger.VerboseToken;
+				ZLogger.VerboseMask |= ZLogger.VerboseToken;
 				continue;
 			}
 			if (LibZen.EqualsString(Argu, "--verbose:type")) {
-				ZenLogger.VerboseMask |= ZenLogger.VerboseType;
+				ZLogger.VerboseMask |= ZLogger.VerboseType;
 				continue;
 			}
 			if (LibZen.EqualsString(Argu, "--verbose:symbol")) {
-				ZenLogger.VerboseMask |= ZenLogger.VerboseSymbol;
+				ZLogger.VerboseMask |= ZLogger.VerboseSymbol;
 				continue;
 			}
 			if (LibZen.EqualsString(Argu, "--verbose:native")) {
-				ZenLogger.VerboseMask |= ZenLogger.VerboseNative;
+				ZLogger.VerboseMask |= ZLogger.VerboseNative;
 				continue;
 			}
 			if (LibZen.EqualsString(Argu, "--verbose:func")) {
-				ZenLogger.VerboseMask |= ZenLogger.VerboseFunc;
+				ZLogger.VerboseMask |= ZLogger.VerboseFunc;
 				continue;
 			}
 			if (LibZen.EqualsString(Argu, "--verbose:all")) {
-				ZenLogger.VerboseMask = -1;
+				ZLogger.VerboseMask = -1;
 				continue;
 			}
 			if (LibZen.EqualsString(Argu, "--verbose:no")) {
-				ZenLogger.VerboseMask = 0;
+				ZLogger.VerboseMask = 0;
 				continue;
 			}
 			ZenMain.Usage(Argu + " is unknown");
@@ -201,8 +201,8 @@ public class ZenMain extends ZenUtils {
 			}
 		}
 		if (ShellMode) {
-			LibNative.println(ZenParserConst.ProgName + ZenParserConst.Version + " (" + ZenParserConst.CodeName + ") on " + LibZen.GetPlatform());
-			LibNative.println(ZenParserConst.Copyright);
+			LibNative.println(ZParserConst.ProgName + ZParserConst.Version + " (" + ZParserConst.CodeName + ") on " + LibZen.GetPlatform());
+			LibNative.println(ZParserConst.Copyright);
 			LibNative.println("Accept: " + Generator.GetGrammarInfo());
 			LibNative.println("Produce: " + Generator.GetTargetLangInfo());
 			Generator.Logger.ShowReportedErrors();

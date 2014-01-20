@@ -30,7 +30,7 @@ import zen.deps.Field;
 import zen.lang.ZenSystem;
 import zen.parser.ZenNameSpace;
 import zen.parser.ZToken;
-import zen.parser.ZenVisitor;
+import zen.parser.ZVisitor;
 
 public class ZenBlockNode extends ZenStatementNode {
 	@Field public ArrayList<ZenNode> StmtList;
@@ -47,7 +47,7 @@ public class ZenBlockNode extends ZenStatementNode {
 	//	@Override public Object Eval(ZenNameSpace NameSpace, boolean EnforceConst)  {
 	//		return null;
 	//	}
-	@Override public void Accept(ZenVisitor Visitor) {
+	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitBlockNode(this);
 	}
 

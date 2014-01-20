@@ -31,7 +31,7 @@ import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.lang.ZenFunc;
 
-public final class ZSyntaxPattern extends ZenUtils {
+public final class ZSyntaxPattern extends ZUtils {
 	@Field @Init public ZenNameSpace	          PackageNameSpace;
 	@Field @Init public String		          PatternName;
 	@Field @Init public ZenFunc                 MatchFunc;
@@ -49,13 +49,13 @@ public final class ZSyntaxPattern extends ZenUtils {
 	}
 
 	public boolean IsBinaryOperator() {
-		return ZenUtils.IsFlag(this.SyntaxFlag, ZenParserConst.BinaryOperator);
+		return ZUtils.IsFlag(this.SyntaxFlag, ZParserConst.BinaryOperator);
 	}
 
 	public final boolean IsRightJoin(ZSyntaxPattern Right) {
 		@Var int left = this.SyntaxFlag;
 		@Var int right = Right.SyntaxFlag;
-		return (left < right || (left == right && !ZenUtils.IsFlag(left, ZenParserConst.LeftJoin) && !ZenUtils.IsFlag(right, ZenParserConst.LeftJoin)));
+		return (left < right || (left == right && !ZUtils.IsFlag(left, ZParserConst.LeftJoin) && !ZUtils.IsFlag(right, ZParserConst.LeftJoin)));
 	}
 
 	public final boolean EqualsName(String Name) {

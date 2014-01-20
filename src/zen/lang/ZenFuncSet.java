@@ -28,7 +28,7 @@ import java.util.ArrayList;
 
 import zen.deps.Field;
 import zen.deps.Var;
-import zen.parser.ZenLogger;
+import zen.parser.ZLogger;
 import zen.parser.ZToken;
 
 public class ZenFuncSet {
@@ -58,7 +58,7 @@ public class ZenFuncSet {
 		return s;
 	}
 
-	public void Append(ZenFunc Func, ZenLogger Logger, ZToken SourceToken) {
+	public void Append(ZenFunc Func, ZLogger Logger, ZToken SourceToken) {
 		if(SourceToken != null) {
 			@Var int i = 0;
 			while(i < this.FuncList.size()) {

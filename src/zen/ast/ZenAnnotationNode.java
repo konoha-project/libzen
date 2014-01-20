@@ -25,7 +25,7 @@
 package zen.ast;
 import zen.deps.ZenMap;
 import zen.parser.ZToken;
-import zen.parser.ZenVisitor;
+import zen.parser.ZVisitor;
 
 public final class ZenAnnotationNode extends ZenNode {
 	public ZenMap<Object> Annotation;
@@ -58,7 +58,7 @@ public final class ZenAnnotationNode extends ZenNode {
 		return this.AnnotatedNode;
 	}
 
-	@Override public void Accept(ZenVisitor Visitor) {
+	@Override public void Accept(ZVisitor Visitor) {
 		this.AnnotatedNode.Accept(Visitor);
 	}
 }

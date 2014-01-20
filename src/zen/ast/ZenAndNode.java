@@ -27,14 +27,14 @@ package zen.ast;
 
 import zen.parser.ZSyntaxPattern;
 import zen.parser.ZToken;
-import zen.parser.ZenVisitor;
+import zen.parser.ZVisitor;
 
 //E.g., $LeftNode && $RightNode
 final public class ZenAndNode extends ZenBinaryNode {
 	public ZenAndNode/*constructor*/(ZToken Token, ZenNode Left, ZSyntaxPattern Pattern) {
 		super(Token, Left, Pattern);
 	}
-	@Override public void Accept(ZenVisitor Visitor) {
+	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitAndNode(this);
 	}
 }

@@ -30,7 +30,7 @@ import zen.lang.ZenSystem;
 import zen.lang.ZenType;
 import zen.parser.ZenNameSpace;
 import zen.parser.ZToken;
-import zen.parser.ZenVisitor;
+import zen.parser.ZVisitor;
 
 public abstract class ZenNode {
 	@Field public ZenNode	ParentNode;
@@ -77,7 +77,7 @@ public abstract class ZenNode {
 	}
 
 	//	public abstract boolean Accept(ZenVisitor Visitor);
-	public void Accept(ZenVisitor Visitor) {
+	public void Accept(ZVisitor Visitor) {
 		LibNative.DispatchVisitNode(Visitor, this);
 	}
 

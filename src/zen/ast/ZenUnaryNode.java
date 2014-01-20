@@ -27,7 +27,7 @@ package zen.ast;
 
 import zen.deps.Field;
 import zen.parser.ZToken;
-import zen.parser.ZenVisitor;
+import zen.parser.ZVisitor;
 
 //E.g., "~" $RecvNode
 public class ZenUnaryNode extends ZenNode {
@@ -41,7 +41,7 @@ public class ZenUnaryNode extends ZenNode {
 		this.SetChild(RecvNode);
 		/*return this;*/
 	}
-	@Override public void Accept(ZenVisitor Visitor) {
+	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitUnaryNode(this);
 	}
 }

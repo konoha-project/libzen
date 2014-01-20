@@ -24,7 +24,7 @@
 
 package zen.parser;
 
-class ZenUndefinedSymbol {
+class ZUndefinedSymbol {
 	@Override public String toString() {
 		return "UndefinedSymbol";
 	}

@@ -26,7 +26,7 @@ package zen.ast;
 
 import zen.lang.ZenSystem;
 import zen.parser.ZToken;
-import zen.parser.ZenVisitor;
+import zen.parser.ZVisitor;
 
 /**
  * ErrorNode carries error information at the parser level
@@ -43,7 +43,7 @@ final public class ZenErrorNode extends ZenConstNode {
 	@Override public final Object GetValue() {
 		return this.ErrorMessage;
 	}
-	@Override public void Accept(ZenVisitor Visitor) {
+	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitErrorNode(this);
 	}
 	@Override public String toString() {

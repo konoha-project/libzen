@@ -114,7 +114,7 @@ public final class ZSourceBuilder {
 
 	private final String GetIndentString() {
 		if (this.CurrentIndentString == null) {
-			this.CurrentIndentString = ZenUtils.JoinStrings(this.Template.Tab,this.IndentLevel);
+			this.CurrentIndentString = ZUtils.JoinStrings(this.Template.Tab,this.IndentLevel);
 		}
 		return this.CurrentIndentString;
 	}

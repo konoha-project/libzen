@@ -39,9 +39,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import zen.lang.ZenType;
-import zen.parser.ZenLogger;
+import zen.parser.ZLogger;
 import zen.parser.ZSourceBuilder;
-import zen.parser.ZenUtils;
+import zen.parser.ZUtils;
 
 public abstract class LibZen {
 	public final static String GetPlatform() {
@@ -227,7 +227,7 @@ public abstract class LibZen {
 			return Long.parseLong(Text);
 		}
 		catch(NumberFormatException e) {
-			ZenLogger.VerboseException(e);
+			ZLogger.VerboseException(e);
 		}
 		return 0L;
 	}
@@ -237,7 +237,7 @@ public abstract class LibZen {
 			return Double.parseDouble(Text);
 		}
 		catch(NumberFormatException e) {
-			ZenLogger.VerboseException(e);
+			ZLogger.VerboseException(e);
 		}
 		return 0.0;
 	}
@@ -273,9 +273,9 @@ public abstract class LibZen {
 			//			Class<?> NativeType = NativeField.getType();
 			return NativeField.get(ObjectValue);
 		} catch (IllegalAccessException e) {
-			ZenLogger.VerboseException(e);
+			ZLogger.VerboseException(e);
 		} catch (SecurityException e) {
-			ZenLogger.VerboseException(e);
+			ZLogger.VerboseException(e);
 		}
 		return null;
 	}
@@ -284,9 +284,9 @@ public abstract class LibZen {
 		try {
 			NativeField.set(ObjectValue, Value);
 		} catch (IllegalAccessException e) {
-			ZenLogger.VerboseException(e);
+			ZLogger.VerboseException(e);
 		} catch (SecurityException e) {
-			ZenLogger.VerboseException(e);
+			ZLogger.VerboseException(e);
 		}
 		return Value;
 	}
@@ -301,7 +301,7 @@ public abstract class LibZen {
 					return methods[i];
 				}
 			}
-			ZenLogger.VerboseLog(ZenLogger.VerboseUndefined, "undefined method: " + Callee.getClass().getSimpleName() + "." + FuncName);
+			ZLogger.VerboseLog(ZLogger.VerboseUndefined, "undefined method: " + Callee.getClass().getSimpleName() + "." + FuncName);
 		}
 		return null;
 	}
@@ -426,7 +426,7 @@ public abstract class LibZen {
 		if(Prompt2 != null) {
 			int level = 0;
 			while((level = LibZen.CheckBraceLevel(Line)) > 0) {
-				String Line2 = LibZen.ReadLine(Prompt2 + ZenUtils.JoinStrings("  ", level));
+				String Line2 = LibZen.ReadLine(Prompt2 + ZUtils.JoinStrings("  ", level));
 				Line += "\n" + Line2;
 			}
 			if(level < 0) {

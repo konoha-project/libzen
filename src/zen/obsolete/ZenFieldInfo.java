@@ -28,10 +28,10 @@ package zen.obsolete;
 import zen.deps.Field;
 import zen.lang.ZenFunc;
 import zen.lang.ZenType;
-import zen.parser.ZenUtils;
+import zen.parser.ZUtils;
 
 
-public class ZenFieldInfo extends ZenUtils {
+public class ZenFieldInfo extends ZUtils {
 	@Field public int     FieldFlag;
 	@Field public int     FieldIndex;
 	@Field public ZenType	Type;

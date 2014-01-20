@@ -42,11 +42,11 @@ import zen.lang.ZenFunc;
 import zen.lang.ZenSystem;
 import zen.lang.ZenType;
 import zen.parser.ZenGenerator;
-import zen.parser.ZenLogger;
+import zen.parser.ZLogger;
 import zen.parser.ZenNameSpace;
 import zen.parser.ZenSourceGenerator;
-import zen.parser.ZenTokenContext;
-import zen.parser.ZenVisitor;
+import zen.parser.ZTokenContext;
+import zen.parser.ZVisitor;
 
 public class LibNative {
 
@@ -70,7 +70,7 @@ public class LibNative {
 			// + ", " + NativeClass.getCanonicalName());
 			NativeType = new ZenNativeType(NativeClass);
 			ZenSystem.SetTypeTable(NativeClass.getCanonicalName(), NativeType);
-			ZenLogger.VerboseLog(ZenLogger.VerboseNative, "creating native class: " + NativeClass.getSimpleName() + ", " + NativeClass.getCanonicalName());
+			ZLogger.VerboseLog(ZLogger.VerboseNative, "creating native class: " + NativeClass.getSimpleName() + ", " + NativeClass.getCanonicalName());
 		}
 		return NativeType;
 	}
@@ -105,7 +105,7 @@ public class LibNative {
 
 	private final static boolean MatchNativeMethod(ZenType[] TypeParams, Method JavaMethod) {
 		if (!LibNative.AcceptJavaType(TypeParams[0], JavaMethod.getReturnType())) {
-			ZenLogger.VerboseLog(ZenLogger.DebugLevel, "return mismatched: " + TypeParams[0] + ", " + JavaMethod.getReturnType() + " of " + JavaMethod);
+			ZLogger.VerboseLog(ZLogger.DebugLevel, "return mismatched: " + TypeParams[0] + ", " + JavaMethod.getReturnType() + " of " + JavaMethod);
 			return false;
 		}
 		@Var int StartIndex = 2;
@@ -115,7 +115,7 @@ public class LibNative {
 			if ((TypeParams.length == 1)
 					|| !LibNative.AcceptJavaType(TypeParams[1],
 							JavaMethod.getDeclaringClass())) {
-				ZenLogger.VerboseLog(ZenLogger.DebugLevel, "recv mismatched: " + TypeParams[1]
+				ZLogger.VerboseLog(ZLogger.DebugLevel, "recv mismatched: " + TypeParams[1]
 						+ ", " + JavaMethod.getDeclaringClass() + " of "
 						+ JavaMethod);
 				return false;
@@ -126,14 +126,14 @@ public class LibNative {
 		@Var Class<?>[] ParamTypes = JavaMethod.getParameterTypes();
 		if (ParamTypes != null) {
 			if (ParamTypes.length != ParamSize) {
-				ZenLogger.VerboseLog(ZenLogger.DebugLevel, "param.length mismatched: " + ParamSize
+				ZLogger.VerboseLog(ZLogger.DebugLevel, "param.length mismatched: " + ParamSize
 						+ " != " + ParamTypes.length + " of " + JavaMethod);
 				return false;
 			}
 			for (int j = 0; j < ParamTypes.length; j++) {
 				if (!LibNative.AcceptJavaType(TypeParams[StartIndex + j],
 						ParamTypes[j])) {
-					ZenLogger.VerboseLog(ZenLogger.DebugLevel, "param mismatched: "
+					ZLogger.VerboseLog(ZLogger.DebugLevel, "param mismatched: "
 							+ TypeParams[StartIndex + j] + " != "
 							+ ParamTypes[j] + " at index " + j + " of "
 							+ JavaMethod);
@@ -177,17 +177,17 @@ public class LibNative {
 						continue;
 					}
 					if(FoundMethod != null) {
-						ZenLogger.VerboseLog(ZenLogger.VerboseUndefined, "overloaded method: " + FullName);
+						ZLogger.VerboseLog(ZLogger.VerboseUndefined, "overloaded method: " + FullName);
 						return FoundMethod; // return the first one
 					}
 					FoundMethod = Methods[i];
 				}
 			}
 			if(FoundMethod == null) {
-				ZenLogger.VerboseLog(ZenLogger.VerboseUndefined, "undefined method: " + FullName + " for " + TypeParams);
+				ZLogger.VerboseLog(ZLogger.VerboseUndefined, "undefined method: " + FullName + " for " + TypeParams);
 			}
 		} catch (ClassNotFoundException e) {
-			ZenLogger.VerboseLog(ZenLogger.VerboseException, e.toString());
+			ZLogger.VerboseLog(ZLogger.VerboseException, e.toString());
 		}
 		return FoundMethod;
 	}
@@ -393,7 +393,7 @@ public class LibNative {
 		return (Long) TokenFunc.Invoke(Argvs);
 	}
 
-	public final static ZenNode ApplyMatchFunc(ZenFunc MatchFunc, ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenNode LeftNode) {
+	public final static ZenNode ApplyMatchFunc(ZenFunc MatchFunc, ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		Object[] Argvs = new Object[3];
 		Argvs[0] = NameSpace;
 		Argvs[1] = TokenContext;
@@ -422,10 +422,10 @@ public class LibNative {
 			String FuncName) {
 		try {
 			Method JavaMethod = GrammarClass.getMethod(FuncName,
-					ZenTokenContext.class, String.class, long.class);
+					ZTokenContext.class, String.class, long.class);
 			return LibNative.ConvertNativeMethodToFunc(JavaMethod);
 		} catch (NoSuchMethodException e) {
-			ZenLogger.VerboseException(e);
+			ZLogger.VerboseException(e);
 			LibNative.Exit(1, e.toString());
 		}
 		return null;
@@ -435,16 +435,16 @@ public class LibNative {
 			String FuncName) {
 		try {
 			Method JavaMethod = GrammarClass.getMethod(FuncName,
-					ZenNameSpace.class, ZenTokenContext.class, ZenNode.class);
+					ZenNameSpace.class, ZTokenContext.class, ZenNode.class);
 			return LibNative.ConvertNativeMethodToFunc(JavaMethod);
 		} catch (NoSuchMethodException e) {
-			ZenLogger.VerboseException(e);
+			ZLogger.VerboseException(e);
 			LibNative.Exit(1, e.toString());
 		}
 		return null;
 	}
 
-	public final static boolean IsSupportedNode(ZenVisitor Visitor, ZenNode Node) {
+	public final static boolean IsSupportedNode(ZVisitor Visitor, ZenNode Node) {
 		try {
 			Visitor.getClass().getMethod(Node.GetVisitName(), Node.getClass());
 			return true;
@@ -453,7 +453,7 @@ public class LibNative {
 		return false;
 	}
 
-	public final static void DispatchVisitNode(ZenVisitor Visitor, ZenNode Node) {
+	public final static void DispatchVisitNode(ZVisitor Visitor, ZenNode Node) {
 		try {
 			Method JavaMethod = Visitor.getClass().getMethod(Node.GetVisitName(), Node.getClass());
 			JavaMethod.invoke(Visitor, Node);
@@ -488,7 +488,7 @@ public class LibNative {
 	}
 
 	public final static String LoadScript(String FileName) {
-		ZenLogger.VerboseLog(ZenLogger.VerboseFile, "loading " + FileName);
+		ZLogger.VerboseLog(ZLogger.VerboseFile, "loading " + FileName);
 		InputStream Stream = LibZen.class.getResourceAsStream("/" + FileName);
 		if (Stream == null) {
 			File f = new File(LibZen.FormatFilePath(FileName));

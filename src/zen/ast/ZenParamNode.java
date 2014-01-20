@@ -27,7 +27,7 @@ package zen.ast;
 import zen.deps.Field;
 import zen.lang.ZenType;
 import zen.parser.ZToken;
-import zen.parser.ZenVisitor;
+import zen.parser.ZVisitor;
 
 public class ZenParamNode extends ZenNode {
 	@Field public String  Name;
@@ -37,7 +37,7 @@ public class ZenParamNode extends ZenNode {
 		this.SourceToken = SourceToken;
 		this.Name = Name;
 	}
-	@Override public void Accept(ZenVisitor Visitor) {
+	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitParamNode(this);
 	}
 	@Override

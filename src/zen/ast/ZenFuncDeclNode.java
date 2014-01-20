@@ -30,7 +30,7 @@ import zen.deps.Field;
 import zen.lang.ZenFunc;
 import zen.parser.ZenNameSpace;
 import zen.parser.ZToken;
-import zen.parser.ZenVisitor;
+import zen.parser.ZVisitor;
 
 final public class ZenFuncDeclNode extends ZenFunctionNode {
 	@Field public String FuncName;
@@ -46,7 +46,7 @@ final public class ZenFuncDeclNode extends ZenFunctionNode {
 		this.ResolvedFunc = null;
 
 	}
-	@Override public void Accept(ZenVisitor Visitor) {
+	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitFuncDeclNode(this);
 	}
 }

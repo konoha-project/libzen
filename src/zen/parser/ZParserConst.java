@@ -27,7 +27,7 @@ package zen.parser;
 
 /*ZenConst Begin*/
 //ifdef JAVA
-public interface ZenParserConst {
+public interface ZParserConst {
 	//endif VAJA
 	// Version
 	public final static String  ProgName  = "LibZen";
@@ -180,7 +180,7 @@ public interface ZenParserConst {
 	//	public final static int PrecedenceCStyleCOMMA			= (1300 << PrecedenceShift) | BinaryOperator;
 
 
-	public final static Object UndefinedSymbol = new ZenUndefinedSymbol();
+	public final static Object UndefinedSymbol = new ZUndefinedSymbol();
 	public final static String NativeNameSuffix = "__";
 
 	public final static boolean UseLangStat = true;

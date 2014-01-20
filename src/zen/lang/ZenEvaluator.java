@@ -34,9 +34,9 @@ import zen.ast.ZenOrNode;
 import zen.ast.ZenUnaryNode;
 import zen.deps.Field;
 import zen.parser.ZenNameSpace;
-import zen.parser.ZenVisitor;
+import zen.parser.ZVisitor;
 
-public abstract class ZenEvaluator implements ZenVisitor {
+public abstract class ZenEvaluator implements ZVisitor {
 	@Field private ZenNameSpace NameSpace_;
 	@Field private boolean IsEnforced_;
 	@Field private Object EvaledValue_;

@@ -26,14 +26,14 @@ package zen.ast;
 
 
 import zen.parser.ZToken;
-import zen.parser.ZenVisitor;
+import zen.parser.ZVisitor;
 
 final public class ZenEmptyNode extends ZenNode {
 	public ZenEmptyNode/*constructor*/(ZToken Token) {
 		this.SourceToken = Token;
 	}
 
-	@Override public void Accept(ZenVisitor Visitor) {
+	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitEmptyNode(this);
 	}
 }

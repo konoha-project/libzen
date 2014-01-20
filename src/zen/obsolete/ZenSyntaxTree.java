@@ -29,10 +29,10 @@ import zen.parser.ZenNameSpace;
 import zen.parser.ZSyntaxPattern;
 import zen.parser.ZToken;
 //endif VAJA
-import zen.parser.ZenUtils;
+import zen.parser.ZUtils;
 
 @Deprecated
-public final class ZenSyntaxTree extends ZenUtils {
+public final class ZenSyntaxTree extends ZUtils {
 //	@Field public ZenMap               Annotation;
 //	@Field public ZenSyntaxTree		ParentTree;
 //	@Field public ZenSyntaxTree		PrevTree;

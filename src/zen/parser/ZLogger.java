@@ -28,18 +28,19 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import zen.deps.Field;
+import zen.deps.Init;
 import zen.deps.LibNative;
 import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.deps.ZenMap;
 import zen.lang.ZenSystem;
 
-public final class ZenLogger {
-	public final static int		ErrorLevel						= 0;
-	public final static int     TypeErrorLevel                  = 1;
-	public final static int		WarningLevel					= 2;
-	public final static int		InfoLevel					    = 3;
-	public final static int		DebugLevel					    = 4;
+public final class ZLogger {
+	public final static int	ErrorLevel						= 0;
+	public final static int TypeErrorLevel                  = 1;
+	public final static int	WarningLevel					= 2;
+	public final static int	InfoLevel					    = 3;
+	public final static int	DebugLevel					    = 4;
 
 	public final static int VerboseRuntime   = (1 << 9);
 	public final static int VerboseException = (1 << 8);
@@ -52,11 +53,10 @@ public final class ZenLogger {
 	public final static int VerboseType      = (1 << 1);
 	public final static int VerboseSymbol    = 1;
 
-	@Field public ArrayList<String>  ReportedErrorList;
+	@Field public ArrayList<String>  ReportedErrorList = new ArrayList<String>();
 	@Field public ZenMap<ZenCounter> StatMap;
 
-	public ZenLogger() {
-		this.ReportedErrorList = new ArrayList<String>();
+	public ZLogger() {
 		if(LibNative.GetEnv("ZENSTAT") != null) {
 			this.StatMap = new ZenMap<ZenCounter>(null);
 		}
@@ -67,16 +67,16 @@ public final class ZenLogger {
 
 	public final String Report(int Level, ZToken Token, String Message) {
 		if(Token != null && !Token.IsNull()) {
-			if(Level == ZenLogger.ErrorLevel) {
+			if(Level == ZLogger.ErrorLevel) {
 				Message = "(error) " + ZenSystem.FormatFileLineNumber(Token.FileLine) + " " + Message;
 			}
-			else if(Level == ZenLogger.TypeErrorLevel) {
+			else if(Level == ZLogger.TypeErrorLevel) {
 				Message = "(error) " + ZenSystem.FormatFileLineNumber(Token.FileLine) + " " + Message;
 			}
-			else if(Level == ZenLogger.WarningLevel) {
+			else if(Level == ZLogger.WarningLevel) {
 				Message = "(warning) " + ZenSystem.FormatFileLineNumber(Token.FileLine) + " " + Message;
 			}
-			else if(Level == ZenLogger.InfoLevel) {
+			else if(Level == ZLogger.InfoLevel) {
 				Message = "(info) " + ZenSystem.FormatFileLineNumber(Token.FileLine) + " " + Message;
 			}
 			else {
@@ -134,8 +134,8 @@ public final class ZenLogger {
 
 	public final void CountCreation(Object CreatedObject) {
 		if(this.StatMap != null) {
-			String EventName = "CreationOf" + LibNative.GetClassName(CreatedObject);
-			ZenCounter Counter = this.StatMap.GetOrNull(EventName);
+			@Var String EventName = "CreationOf" + LibNative.GetClassName(CreatedObject);
+			@Var ZenCounter Counter = this.StatMap.GetOrNull(EventName);
 			if(Counter == null) {
 				Counter = new ZenCounter();
 				this.StatMap.put(EventName, Counter);
@@ -146,8 +146,7 @@ public final class ZenLogger {
 		}
 	}
 
-
-	public static int VerboseMask = VerboseUndefined | VerboseException;
+	public static int VerboseMask = ZLogger.VerboseUndefined | ZLogger.VerboseException;
 
 	public final static void TODO(String msg) {
 		LibNative.println("TODO" + LibZen.GetStackInfo(2) + ": " + msg);
@@ -185,8 +184,7 @@ public final class ZenLogger {
 }
 
 class ZenCounter {
-	public int count;
+	@Field @Init public int count = 1;
 	ZenCounter() {
-		this.count = 1;
 	}
 }

@@ -25,11 +25,11 @@
 //ifdef JAVA
 package zen.obsolete;
 
-import zen.parser.ZenUtils;
+import zen.parser.ZUtils;
 
 
 @Deprecated
-public final class ZenParserContext extends ZenUtils {
+public final class ZenParserContext extends ZUtils {
 //	@Field public final  int ParserId;
 //	@Field public final  ZenGenerator   Generator;
 //	@Field public final  ZenNameSpace   RootNameSpace;

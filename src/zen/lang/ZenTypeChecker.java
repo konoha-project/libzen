@@ -42,13 +42,13 @@ import zen.ast.ZenSymbolNode;
 import zen.deps.Field;
 import zen.deps.LibNative;
 import zen.deps.Var;
-import zen.parser.ZenLogger;
+import zen.parser.ZLogger;
 import zen.parser.ZenNameSpace;
 import zen.parser.ZToken;
-import zen.parser.ZenUtils;
-import zen.parser.ZenVisitor;
+import zen.parser.ZUtils;
+import zen.parser.ZVisitor;
 
-public abstract class ZenTypeChecker implements ZenVisitor {
+public abstract class ZenTypeChecker implements ZVisitor {
 
 	protected void println(String string) {
 		System.err.println("debug " + string);
@@ -70,12 +70,12 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 	@Field private ZenType StackedContextType;
 	@Field private ZenNode StackedTypedNode;
 
-	@Field public ZenLogger Logger;
+	@Field public ZLogger Logger;
 	@Field private boolean StoppedVisitor;
 
 	@Field public FuncContext FuncScope;
 
-	public ZenTypeChecker(ZenLogger Logger) {
+	public ZenTypeChecker(ZLogger Logger) {
 		this.Logger = Logger;
 		this.StackedNameSpace = null;
 		this.StackedContextType = null;
@@ -318,7 +318,7 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 			this.FuncScope.CountUnknownTypeNode(Node);
 			return this.InferType(ContextType, Node);
 		}
-		if(Node.Type == ContextType || ContextType.IsVarType() || ContextType.Accept(Node.Type) || ZenUtils.IsFlag(TypeCheckPolicy, NoCheckPolicy)) {
+		if(Node.Type == ContextType || ContextType.IsVarType() || ContextType.Accept(Node.Type) || ZUtils.IsFlag(TypeCheckPolicy, NoCheckPolicy)) {
 			return this.InferType(ContextType, Node);
 		}
 		if(ContextType.IsVoidType() && !Node.Type.IsVoidType()) {
@@ -331,7 +331,7 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		if(ContextType.IsFloatType() && Node.Type.IsIntType()) {
 			return this.InferType(ContextType, new ZenCastNode(ContextType, Node));
 		}
-		if(ZenUtils.IsFlag(TypeCheckPolicy, EnforceCoercion) && ContextType.IsStringType()) {
+		if(ZUtils.IsFlag(TypeCheckPolicy, EnforceCoercion) && ContextType.IsStringType()) {
 			return this.InferType(ContextType, new ZenCastNode(ContextType, Node));
 		}
 		//System.err.println("node="+ LibZen.GetClassName(Node) + "type error: requested = " + Type + ", given = " + Node.Type);

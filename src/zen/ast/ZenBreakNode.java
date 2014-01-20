@@ -25,7 +25,7 @@
 package zen.ast;
 
 import zen.deps.Field;
-import zen.parser.ZenVisitor;
+import zen.parser.ZVisitor;
 
 final public class ZenBreakNode extends ZenStatementNode {
 	@Field public String Label;
@@ -33,7 +33,7 @@ final public class ZenBreakNode extends ZenStatementNode {
 		super();
 		this.Label = null;
 	}
-	@Override public void Accept(ZenVisitor Visitor) {
+	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitBreakNode(this);
 	}
 }

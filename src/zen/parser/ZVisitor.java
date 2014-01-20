@@ -68,7 +68,7 @@ import zen.ast.ZenUnaryNode;
 import zen.ast.ZenVarDeclNode;
 import zen.ast.ZenWhileNode;
 
-public interface ZenVisitor {
+public interface ZVisitor {
 	public void VisitEmptyNode(ZenEmptyNode Node);
 	public void VisitNullNode(ZenNullNode Node);
 	public void VisitBooleanNode(ZenBooleanNode Node);

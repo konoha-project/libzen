@@ -33,14 +33,14 @@ import zen.lang.ZenTypeChecker;
 import zen.lang.ZenTypeInfer;
 //endif VAJA
 
-public abstract class ZenGenerator extends ZenNodeUtils implements ZenVisitor {
+public abstract class ZenGenerator extends ZNodeUtils implements ZVisitor {
 	@Field private String            GrammarInfo;
 	@Field public final String       TargetCode;
 	@Field public final String       TargetVersion;
 
 	@Field public final ZenNameSpace  RootNameSpace;
 	@Field public String             OutputFile;
-	@Field public ZenLogger          Logger;
+	@Field public ZLogger          Logger;
 
 	@Field public ZenTypeChecker TypeChecker;
 	@Field private boolean StoppedVisitor;
@@ -53,7 +53,7 @@ public abstract class ZenGenerator extends ZenNodeUtils implements ZenVisitor {
 		this.TargetVersion = TargetVersion;
 
 		this.OutputFile = null;
-		this.Logger = new ZenLogger();
+		this.Logger = new ZLogger();
 		this.TypeChecker = new ZenTypeInfer(this.Logger);
 		this.StoppedVisitor = false;
 

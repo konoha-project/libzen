@@ -25,7 +25,7 @@
 package zen.ast;
 
 import zen.parser.ZToken;
-import zen.parser.ZenVisitor;
+import zen.parser.ZVisitor;
 
 final public class ZenNullNode extends ZenConstNode {
 	public ZenNullNode/*constructor*/(ZToken SourceToken) {
@@ -34,7 +34,7 @@ final public class ZenNullNode extends ZenConstNode {
 	@Override public final Object GetValue() {
 		return null;
 	}
-	@Override public void Accept(ZenVisitor Visitor) {
+	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitNullNode(this);
 	}
 }

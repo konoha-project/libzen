@@ -25,7 +25,7 @@
 package zen.ast;
 
 import zen.deps.Field;
-import zen.parser.ZenVisitor;
+import zen.parser.ZVisitor;
 
 //E.g., "while" "(" $Cond ")" $Body
 final public class ZenWhileNode extends ZenStatementNode {
@@ -46,7 +46,7 @@ final public class ZenWhileNode extends ZenStatementNode {
 		}
 		/*return this;*/
 	}
-	@Override public void Accept(ZenVisitor Visitor) {
+	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitWhileNode(this);
 	}
 }

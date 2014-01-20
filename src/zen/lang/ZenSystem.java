@@ -31,7 +31,7 @@ import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.deps.ZenMap;
 import zen.deps.ZenTypedObject;
-import zen.parser.ZenLogger;
+import zen.parser.ZLogger;
 import zen.parser.ZenNameSpace;
 
 public class ZenSystem implements ZenTypeFlag {
@@ -135,7 +135,7 @@ public class ZenSystem implements ZenTypeFlag {
 
 	public final static void SetTypeTable(String Key, ZenType Type) {
 		ZenSystem.ClassNameMap.put(Key, Type);
-		ZenLogger.VerboseLog(ZenLogger.VerboseSymbol, "global type name: " + Key + ", " + Type);
+		ZLogger.VerboseLog(ZLogger.VerboseSymbol, "global type name: " + Key + ", " + Type);
 	}
 
 

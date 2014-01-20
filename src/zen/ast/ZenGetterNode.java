@@ -26,7 +26,7 @@ package zen.ast;
 
 import zen.deps.Field;
 import zen.parser.ZToken;
-import zen.parser.ZenVisitor;
+import zen.parser.ZVisitor;
 
 //E.g., $RecvNode.$NativeName
 final public class ZenGetterNode extends ZenNode {
@@ -39,7 +39,7 @@ final public class ZenGetterNode extends ZenNode {
 		this.RecvNode = this.SetChild(RecvNode);
 
 	}
-	@Override public void Accept(ZenVisitor Visitor) {
+	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitGetterNode(this);
 	}
 	//	@Override public Object ToConstValue(ZenParserContext Context, boolean EnforceConst)  {

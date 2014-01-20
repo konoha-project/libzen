@@ -25,7 +25,7 @@
 package zen.ast;
 
 import zen.deps.Field;
-import zen.parser.ZenVisitor;
+import zen.parser.ZVisitor;
 
 //E.g., "if" "(" $Cond ")" $ThenNode "else" $ElseNode
 final public class ZenIfNode extends ZenStatementNode {
@@ -52,7 +52,7 @@ final public class ZenIfNode extends ZenStatementNode {
 		}
 		/*return this;*/
 	}
-	@Override public void Accept(ZenVisitor Visitor) {
+	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitIfNode(this);
 	}
 }

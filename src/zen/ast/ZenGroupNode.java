@@ -25,7 +25,7 @@
 package zen.ast;
 
 import zen.deps.Field;
-import zen.parser.ZenVisitor;
+import zen.parser.ZVisitor;
 
 //E.g., "~" $RecvNode
 final public class ZenGroupNode extends ZenNode {
@@ -40,7 +40,7 @@ final public class ZenGroupNode extends ZenNode {
 		this.Type = Node.Type;
 		/*return this;*/
 	}
-	@Override public void Accept(ZenVisitor Visitor) {
+	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitGroupNode(this);
 	}
 }

@@ -6,9 +6,9 @@ import zen.ast.ZenFuncDeclNode;
 import zen.ast.ZenFunctionNode;
 import zen.ast.ZenGetLocalNode;
 import zen.ast.ZenReturnNode;
-import zen.parser.ZenTransformer;
+import zen.parser.ZTransformer;
 
-public class PythonTransformer extends ZenTransformer {
+public class PythonTransformer extends ZTransformer {
 
 	public PythonTransformer(ZenBlockNode BlockNode) {
 		super(BlockNode);

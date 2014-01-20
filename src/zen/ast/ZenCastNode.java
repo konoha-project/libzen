@@ -27,7 +27,7 @@ package zen.ast;
 import zen.deps.Constructor;
 import zen.deps.Field;
 import zen.lang.ZenType;
-import zen.parser.ZenVisitor;
+import zen.parser.ZVisitor;
 
 //E.g., (T) $Expr
 public class ZenCastNode extends ZenNode {
@@ -49,7 +49,7 @@ public class ZenCastNode extends ZenNode {
 		}
 	}
 
-	@Override public void Accept(ZenVisitor Visitor) {
+	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitCastNode(this);
 	}
 

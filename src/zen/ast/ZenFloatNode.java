@@ -26,7 +26,7 @@ package zen.ast;
 
 import zen.deps.Field;
 import zen.parser.ZToken;
-import zen.parser.ZenVisitor;
+import zen.parser.ZVisitor;
 
 final public class ZenFloatNode extends ZenConstNode {
 	@Field public double	Value;
@@ -37,7 +37,7 @@ final public class ZenFloatNode extends ZenConstNode {
 	@Override public final Object GetValue() {
 		return this.Value;
 	}
-	@Override public void Accept(ZenVisitor Visitor) {
+	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitFloatNode(this);
 	}
 }

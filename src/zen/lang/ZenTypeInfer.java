@@ -76,15 +76,15 @@ import zen.ast.ZenWhileNode;
 import zen.deps.LibZen;
 import zen.deps.Nullable;
 import zen.deps.Var;
-import zen.parser.ZenLogger;
+import zen.parser.ZLogger;
 import zen.parser.ZenNameSpace;
-import zen.parser.ZenNodeUtils;
+import zen.parser.ZNodeUtils;
 import zen.parser.ZToken;
-import zen.parser.ZenUtils;
+import zen.parser.ZUtils;
 
 public class ZenTypeInfer extends ZenTypeChecker {
 
-	public ZenTypeInfer(ZenLogger Logger) {
+	public ZenTypeInfer(ZLogger Logger) {
 		super(Logger);
 	}
 
@@ -164,7 +164,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		}
 		@Var Object Value = NameSpace.GetSymbol(Node.GivenName);
 		if(Value != null) {
-			@Var ZenNode NewNode = ZenNodeUtils.CreateConstNode(Node.SourceToken, Value);
+			@Var ZenNode NewNode = ZNodeUtils.CreateConstNode(Node.SourceToken, Value);
 			NewNode = this.TypeCheck(NewNode, NameSpace, ZenSystem.VarType, 0);
 			this.TypedNode(NewNode, NewNode.Type);
 		}
@@ -636,7 +636,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 				ClassType.AppendField(FieldNode.DeclType, FieldNode.FieldName, FieldNode.SourceToken);
 				i = i + 1;
 			}
-			ClassType.TypeFlag = ZenUtils.UnsetFlag(ClassType.TypeFlag, ZenTypeFlag.OpenType);
+			ClassType.TypeFlag = ZUtils.UnsetFlag(ClassType.TypeFlag, ZenTypeFlag.OpenType);
 			this.CheckErrorNode(ClassType.CheckAllFields(NameSpace));
 		}
 		this.TypedNode(Node, ZenSystem.VoidType);

@@ -25,7 +25,7 @@
 package zen.ast;
 
 import zen.deps.Field;
-import zen.parser.ZenVisitor;
+import zen.parser.ZVisitor;
 
 public final class ZenReturnNode extends ZenNode {
 	@Field public ZenNode ValueNode;
@@ -36,7 +36,7 @@ public final class ZenReturnNode extends ZenNode {
 	@Override public void Append(ZenNode ValueNode) {
 		this.ValueNode = this.SetChild(ValueNode);
 	}
-	@Override public void Accept(ZenVisitor Visitor) {
+	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitReturnNode(this);
 	}
 	@Override public ZenReturnNode ToReturnNode() {

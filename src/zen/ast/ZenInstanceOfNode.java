@@ -26,7 +26,7 @@ package zen.ast;
 
 import zen.parser.ZSyntaxPattern;
 import zen.parser.ZToken;
-import zen.parser.ZenVisitor;
+import zen.parser.ZVisitor;
 
 //E.g., $ExprNode instanceof TypeInfo
 final public class ZenInstanceOfNode extends ZenBinaryNode {
@@ -34,7 +34,7 @@ final public class ZenInstanceOfNode extends ZenBinaryNode {
 		super(Token, Left, Pattern);
 	}
 
-	@Override public void Accept(ZenVisitor Visitor) {
+	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitInstanceOfNode(this);
 	}
 //	@Override public Object Eval(ZenNameSpace NameSpace, boolean EnforceConst)  {

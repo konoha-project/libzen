@@ -25,7 +25,7 @@
 package zen.ast;
 
 import zen.deps.Field;
-import zen.parser.ZenVisitor;
+import zen.parser.ZVisitor;
 
 //E.g., $Recv[$Index]
 final public class ZenGetIndexNode extends ZenNode {
@@ -41,7 +41,7 @@ final public class ZenGetIndexNode extends ZenNode {
 		this.IndexNode = Node;
 		this.SetChild(Node);
 	}
-	@Override public void Accept(ZenVisitor Visitor) {
+	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitGetIndexNode(this);
 	}
 	//	@Override public Object Eval(ZenNameSpace NameSpace, boolean EnforceConst)  {

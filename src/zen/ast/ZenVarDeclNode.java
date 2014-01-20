@@ -29,7 +29,7 @@ import zen.deps.Field;
 import zen.lang.ZenSystem;
 import zen.lang.ZenType;
 import zen.parser.ZenNameSpace;
-import zen.parser.ZenVisitor;
+import zen.parser.ZVisitor;
 
 /**
  * int a = 1;
@@ -65,7 +65,7 @@ final public class ZenVarDeclNode extends ZenBlockNode {
 		}
 	}
 
-	@Override public void Accept(ZenVisitor Visitor) {
+	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitVarDeclNode(this);
 	}
 }

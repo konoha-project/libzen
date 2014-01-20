@@ -7,11 +7,11 @@ import zen.ast.ZenNode;
 import zen.deps.Constructor;
 import zen.deps.Field;
 import zen.deps.Var;
-import zen.parser.ZenLogger;
+import zen.parser.ZLogger;
 
 class FuncContext {
 	@Field FuncContext Parent;
-	@Field ZenLogger Logger;
+	@Field ZLogger Logger;
 	@Field ZenFunctionNode FuncNode;
 	@Field ZenFuncType FuncType;
 	@Field int ReturnCount;
@@ -19,7 +19,7 @@ class FuncContext {
 	@Field int VarIndex;
 	@Field int CountOfUnknownTypeNode;
 
-	@Constructor FuncContext(FuncContext Parent, ZenLogger Logger, ZenFunctionNode FuncNode, ZenFuncType FuncType) {
+	@Constructor FuncContext(FuncContext Parent, ZLogger Logger, ZenFunctionNode FuncNode, ZenFuncType FuncType) {
 		this.Parent = Parent;
 		this.Logger = Logger;
 		this.FuncNode = FuncNode;

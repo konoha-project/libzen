@@ -27,7 +27,7 @@ package zen.ast;
 import java.util.ArrayList;
 
 import zen.deps.Field;
-import zen.parser.ZenVisitor;
+import zen.parser.ZVisitor;
 
 //E.g., "{" StringNode, $Node, StringNode, $Node "}"
 final public class ZenMapLiteralNode extends ZenNode {   // => ArrayLiteral
@@ -39,7 +39,7 @@ final public class ZenMapLiteralNode extends ZenNode {   // => ArrayLiteral
 	@Override public void Append(ZenNode Node) {
 		this.NodeList.add(Node);
 	}
-	@Override public void Accept(ZenVisitor Visitor) {
+	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitMapLiteralNode(this);
 	}
 }

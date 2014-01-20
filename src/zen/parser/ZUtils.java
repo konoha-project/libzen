@@ -27,9 +27,7 @@ package zen.parser;
 import zen.deps.Var;
 
 
-public class ZenUtils implements ZenParserConst {
-	//endif VAJA
-	/*ZenUtils Begin*/
+public class ZUtils {
 	public final static boolean IsFlag(int flag, int flag2) {
 		return ((flag & flag2) == flag2);
 	}
@@ -40,21 +38,23 @@ public class ZenUtils implements ZenParserConst {
 
 	public final static String JoinStrings(String Unit, int Times) {
 		@Var String s = "";
-		for(@Var int i = 0; i < Times; i += 1) {
+		@Var int i = 0;
+		while(i < Times) {
 			s = s + Unit;
+			i = i + 1;
 		}
 		return s;
 	}
 
 	public final static int AsciiToTokenMatrixIndex(char c) {
 		if(c < 128) {
-			return CharMatrix[c];
+			return ZParserConst.CharMatrix[c];
 		}
-		return UnicodeChar;
+		return ZParserConst.UnicodeChar;
 	}
 
 	public final static String NativeVariableName(String Name, int Index) {
-		return Name + NativeNameSuffix + Index;
+		return Name + ZParserConst.NativeNameSuffix + Index;
 	}
 
 	//	public final static boolean IsMismatchedOrError(ZenSyntaxTree Tree) {
@@ -136,8 +136,4 @@ public class ZenUtils implements ZenParserConst {
 	//		}
 	//		return Gamma.Generator.CreateEmptyNode(ZenSystem.VoidType);
 	//	}
-
-	/*ZenUtils End*/
-	//ifdef JAVA
-
 }

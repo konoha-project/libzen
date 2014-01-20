@@ -29,8 +29,8 @@ import zen.deps.Var;
 import zen.parser.ZenNameSpace;
 import zen.parser.ZSyntaxPattern;
 import zen.parser.ZToken;
-import zen.parser.ZenTokenContext;
-import zen.parser.ZenVisitor;
+import zen.parser.ZTokenContext;
+import zen.parser.ZVisitor;
 
 public class ZenBinaryNode extends ZenNode {
 	@Field public ZenNode   LeftNode;
@@ -69,9 +69,9 @@ public class ZenBinaryNode extends ZenNode {
 		return RightNode;
 	}
 
-	public final ZenNode AppendParsedRightNode(ZenNameSpace NameSpace, ZenTokenContext TokenContext) {
+	public final ZenNode AppendParsedRightNode(ZenNameSpace NameSpace, ZTokenContext TokenContext) {
 
-		@Var ZenNode RightNode = TokenContext.ParsePattern(NameSpace, "$Expression$", ZenTokenContext.Required);
+		@Var ZenNode RightNode = TokenContext.ParsePattern(NameSpace, "$Expression$", ZTokenContext.Required);
 		if(RightNode.IsErrorNode()) {
 			return RightNode;
 		}
@@ -83,7 +83,7 @@ public class ZenBinaryNode extends ZenNode {
 		return this;
 	}
 
-	@Override public void Accept(ZenVisitor Visitor) {
+	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitBinaryNode(this);
 	}
 }

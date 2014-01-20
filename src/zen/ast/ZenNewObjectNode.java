@@ -30,7 +30,7 @@ import zen.deps.Field;
 import zen.lang.ZenFunc;
 import zen.lang.ZenType;
 import zen.parser.ZToken;
-import zen.parser.ZenVisitor;
+import zen.parser.ZVisitor;
 
 // E.g., ConstructorNode is for object creation in Native language defined
 final public class ZenNewObjectNode extends ZenNode {
@@ -42,7 +42,7 @@ final public class ZenNewObjectNode extends ZenNode {
 	@Override public final void Append(ZenNode Node) {
 		this.ParamList.add(this.SetChild(Node));
 	}
-	@Override public void Accept(ZenVisitor Visitor) {
+	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitNewObjectNode(this);
 	}
 	//	@Override public Object ToConstValue(ZenParserContext Context, boolean EnforceConst)  {

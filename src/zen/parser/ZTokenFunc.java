@@ -21,7 +21,7 @@ import zen.lang.ZenFunc;
 		return this.Func.toString();
 	}
 
-	final static int ApplyTokenFunc(ZTokenFunc TokenFunc, ZenTokenContext TokenContext, String ScriptSource, int Pos) {
+	final static int ApplyTokenFunc(ZTokenFunc TokenFunc, ZTokenContext TokenContext, String ScriptSource, int Pos) {
 		while(TokenFunc != null) {
 			@Var int NextIdx = (int)LibNative.ApplyTokenFunc(TokenFunc.Func, TokenContext, ScriptSource, Pos);
 			if(NextIdx > Pos) {
@@ -29,6 +29,6 @@ import zen.lang.ZenFunc;
 			}
 			TokenFunc = TokenFunc.ParentFunc;
 		}
-		return ZenTokenContext.MismatchedPosition;
+		return ZTokenContext.MismatchedPosition;
 	}
 }

@@ -25,14 +25,14 @@
 package zen.ast;
 
 import zen.parser.ZToken;
-import zen.parser.ZenVisitor;
+import zen.parser.ZVisitor;
 
 public class ZenNotNode extends ZenUnaryNode {
 	public ZenNotNode(ZToken Token) {
 		super(Token);
 	}
 
-	@Override public void Accept(ZenVisitor Visitor) {
+	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitNotNode(this);
 	}
 

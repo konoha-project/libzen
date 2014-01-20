@@ -33,7 +33,7 @@ import zen.lang.ZenFuncType;
 import zen.lang.ZenSystem;
 import zen.lang.ZenType;
 import zen.parser.ZToken;
-import zen.parser.ZenVisitor;
+import zen.parser.ZVisitor;
 
 public class ZenFunctionNode extends ZenNode {
 	@Field public ZenType ReturnType;
@@ -58,7 +58,7 @@ public class ZenFunctionNode extends ZenNode {
 		}
 		/*return this;*/
 	}
-	@Override public void Accept(ZenVisitor Visitor) {
+	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitFunctionNode(this);
 	}
 

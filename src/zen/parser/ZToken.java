@@ -45,31 +45,31 @@ import zen.lang.ZenType;
 	}
 
 	public boolean IsSource() {
-		return ZenUtils.IsFlag(this.TokenFlag, ZenParserConst.SourceTokenFlag);
+		return ZUtils.IsFlag(this.TokenFlag, ZParserConst.SourceTokenFlag);
 	}
 
 	public boolean IsError() {
-		return ZenUtils.IsFlag(this.TokenFlag, ZenParserConst.ErrorTokenFlag);
+		return ZUtils.IsFlag(this.TokenFlag, ZParserConst.ErrorTokenFlag);
 	}
 
 	public boolean IsIndent() {
-		return ZenUtils.IsFlag(this.TokenFlag, ZenParserConst.IndentTokenFlag);
+		return ZUtils.IsFlag(this.TokenFlag, ZParserConst.IndentTokenFlag);
 	}
 
 	public boolean IsDelim() {
-		return ZenUtils.IsFlag(this.TokenFlag, ZenParserConst.DelimTokenFlag);
+		return ZUtils.IsFlag(this.TokenFlag, ZParserConst.DelimTokenFlag);
 	}
 
 	public final boolean IsNextWhiteSpace() {
-		return ZenUtils.IsFlag(this.TokenFlag, ZenParserConst.WhiteSpaceTokenFlag);
+		return ZUtils.IsFlag(this.TokenFlag, ZParserConst.WhiteSpaceTokenFlag);
 	}
 
 	public boolean IsQuoted() {
-		return ZenUtils.IsFlag(this.TokenFlag, ZenParserConst.QuotedTokenFlag);
+		return ZUtils.IsFlag(this.TokenFlag, ZParserConst.QuotedTokenFlag);
 	}
 
 	public boolean IsNameSymbol() {
-		return ZenUtils.IsFlag(this.TokenFlag, ZenParserConst.NameSymbolTokenFlag);
+		return ZUtils.IsFlag(this.TokenFlag, ZParserConst.NameSymbolTokenFlag);
 	}
 
 	public boolean EqualsText(String text) {
@@ -101,7 +101,7 @@ import zen.lang.ZenType;
 
 	public void SetError(ZSyntaxPattern ErrorPattern) {
 		if(this.ParsedText.length() > 0) {  // skip null token
-			this.TokenFlag = ZenParserConst.ErrorTokenFlag;
+			this.TokenFlag = ZParserConst.ErrorTokenFlag;
 			this.PresetPattern = ErrorPattern;
 		}
 	}

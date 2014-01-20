@@ -26,7 +26,7 @@ package zen.ast;
 
 import zen.deps.Field;
 import zen.parser.ZToken;
-import zen.parser.ZenVisitor;
+import zen.parser.ZVisitor;
 
 final public class ZenBooleanNode extends ZenConstNode {
 	@Field public boolean	BooleanValue;
@@ -34,7 +34,7 @@ final public class ZenBooleanNode extends ZenConstNode {
 		super(Token);
 		this.BooleanValue = Value;
 	}
-	@Override public void Accept(ZenVisitor Visitor) {
+	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitBooleanNode(this);
 	}
 	@Override public final Object GetValue() {

@@ -26,7 +26,7 @@
 package zen.lang;
 import zen.deps.Field;
 import zen.deps.Var;
-import zen.parser.ZenUtils;
+import zen.parser.ZUtils;
 //endif VAJA
 
 public class ZenType implements ZenTypeFlag {
@@ -39,7 +39,7 @@ public class ZenType implements ZenTypeFlag {
 		this.TypeFlag = TypeFlag;
 		this.ShortName = ShortName;
 		this.RefType = RefType;
-		if(ZenUtils.IsFlag(TypeFlag, UniqueType)) {
+		if(ZUtils.IsFlag(TypeFlag, UniqueType)) {
 			this.TypeId = ZenSystem.IssueTypeId(this);
 		}
 		else {
@@ -154,7 +154,7 @@ public class ZenType implements ZenTypeFlag {
 
 
 	public boolean IsOpenType() {
-		return ZenUtils.IsFlag(this.TypeFlag, ZenTypeFlag.OpenType);
+		return ZUtils.IsFlag(this.TypeFlag, ZenTypeFlag.OpenType);
 	}
 
 	//	public final boolean IsAbstractType() {

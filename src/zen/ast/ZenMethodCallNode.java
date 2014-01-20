@@ -27,7 +27,7 @@ package zen.ast;
 import zen.deps.Constructor;
 import zen.deps.Field;
 import zen.parser.ZToken;
-import zen.parser.ZenVisitor;
+import zen.parser.ZVisitor;
 
 //E.g., $NativeFuncName "(" $Param[0], $Param[1], ... ")"
 final public class ZenMethodCallNode extends ZenApplyNode {
@@ -38,7 +38,7 @@ final public class ZenMethodCallNode extends ZenApplyNode {
 		this.RecvNode = this.SetChild(RecvNode);
 		this.MethodName = MethodName;
 	}
-	@Override public void Accept(ZenVisitor Visitor) {
+	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitMethodCallNode(this);
 	}
 }

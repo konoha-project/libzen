@@ -109,15 +109,15 @@ public final class ZenNameSpace {
 
 	public final void AppendTokenFunc(String keys, ZenFunc TokenFunc) {
 		if(this.TokenMatrix == null) {
-			this.TokenMatrix = new ZTokenFunc[ZenParserConst.MaxSizeOfChars];
+			this.TokenMatrix = new ZTokenFunc[ZParserConst.MaxSizeOfChars];
 			if(this.ParentNameSpace != null) {
-				for(@Var int i = 0; i < ZenParserConst.MaxSizeOfChars; i += 1) {
+				for(@Var int i = 0; i < ZParserConst.MaxSizeOfChars; i += 1) {
 					this.TokenMatrix[i] = this.ParentNameSpace.GetTokenFunc(i);
 				}
 			}
 		}
 		for(@Var int i = 0; i < keys.length(); i += 1) {
-			@Var int kchar = ZenUtils.AsciiToTokenMatrixIndex(LibZen.CharAt(keys, i));
+			@Var int kchar = ZUtils.AsciiToTokenMatrixIndex(LibZen.CharAt(keys, i));
 			this.TokenMatrix[kchar] = this.JoinParentFunc(TokenFunc, this.TokenMatrix[kchar]);
 		}
 	}
@@ -134,7 +134,7 @@ public final class ZenNameSpace {
 		if(this.SymbolPatternTable != null) {
 			@Var Object Value = this.SymbolPatternTable.GetOrNull(Key);
 			if(Value != null) {
-				return Value == ZenParserConst.UndefinedSymbol ? null : Value;
+				return Value == ZParserConst.UndefinedSymbol ? null : Value;
 			}
 		}
 		return null;
@@ -146,7 +146,7 @@ public final class ZenNameSpace {
 			if(NameSpace.SymbolPatternTable != null) {
 				@Var Object Value = NameSpace.SymbolPatternTable.GetOrNull(Key);
 				if(Value != null) {
-					return Value == ZenParserConst.UndefinedSymbol ? null : Value;
+					return Value == ZParserConst.UndefinedSymbol ? null : Value;
 				}
 			}
 			NameSpace = NameSpace.ParentNameSpace;
@@ -164,7 +164,7 @@ public final class ZenNameSpace {
 		}
 		if(SourceToken != null) {
 			@Var Object OldValue = this.SymbolPatternTable.GetOrNull(Key);
-			if(OldValue != null && OldValue != ZenParserConst.UndefinedSymbol) {
+			if(OldValue != null && OldValue != ZParserConst.UndefinedSymbol) {
 				if(LibZen.DebugMode) {
 					this.Generator.Logger.ReportWarning(SourceToken, "duplicated symbol: " + SourceToken + " old, new =" + OldValue + ", " + Value);
 				}
@@ -176,11 +176,11 @@ public final class ZenNameSpace {
 			}
 		}
 		this.SymbolPatternTable.put(Key, Value);
-		ZenLogger.VerboseLog(ZenLogger.VerboseSymbol, "symbol: " + Key + ", " + Value);
+		ZLogger.VerboseLog(ZLogger.VerboseSymbol, "symbol: " + Key + ", " + Value);
 	}
 
 	public final void SetUndefinedSymbol(String Symbol, ZToken SourceToken) {
-		this.SetSymbol(Symbol, ZenParserConst.UndefinedSymbol, SourceToken);
+		this.SetSymbol(Symbol, ZParserConst.UndefinedSymbol, SourceToken);
 	}
 
 	public final String GetSymbolText(String Key) {
@@ -581,13 +581,13 @@ public final class ZenNameSpace {
 	}
 
 	public final Object Eval(String ScriptText, long FileLine, boolean IsInteractive) {
-		@Var Object ResultValue = ZenParserConst.UndefinedSymbol;
+		@Var Object ResultValue = ZParserConst.UndefinedSymbol;
 		//ZenLogger.VerboseLog(ZenLogger.VerboseEval, "eval: " + ScriptText);
-		@Var ZenTokenContext TokenContext = new ZenTokenContext(this, ScriptText, FileLine);
+		@Var ZTokenContext TokenContext = new ZTokenContext(this, ScriptText, FileLine);
 		TokenContext.SkipEmptyStatement();
 		while(TokenContext.HasNext()) {
 			TokenContext.SetParseFlag(0); // init
-			@Var ZenNode TopLevelNode = TokenContext.ParsePattern(this, "$Statement$", ZenTokenContext.Required);
+			@Var ZenNode TopLevelNode = TokenContext.ParsePattern(this, "$Statement$", ZTokenContext.Required);
 			TopLevelNode = this.TypeCheck(TopLevelNode, ZenSystem.VoidType);
 			this.Generator.DoCodeGeneration(this, TopLevelNode);
 			if(TopLevelNode.IsErrorNode() && TokenContext.HasNext()) {
@@ -622,7 +622,7 @@ public final class ZenNameSpace {
 	}
 
 	public final boolean LoadRequiredLib(String LibName) {
-		@Var String Key = ZenParserConst.NativeNameSuffix + "L" + LibName.toLowerCase();
+		@Var String Key = ZParserConst.NativeNameSuffix + "L" + LibName.toLowerCase();
 		if(!this.HasSymbol(Key)) {
 			@Var String Path = LibZen.GetLibPath(this.Generator.TargetCode, LibName);
 			@Var String Script = LibNative.LoadScript(Path);

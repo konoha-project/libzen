@@ -26,7 +26,7 @@ package zen.ast;
 
 import zen.lang.ZenType;
 import zen.parser.ZToken;
-import zen.parser.ZenVisitor;
+import zen.parser.ZVisitor;
 
 final public class ZenTypeNode extends ZenConstNode {
 	public ZenTypeNode/*constructor*/(ZToken SourceToken, ZenType ParsedType) {
@@ -36,7 +36,7 @@ final public class ZenTypeNode extends ZenConstNode {
 	@Override public final Object GetValue() {
 		return this.Type;
 	}
-	@Override public void Accept(ZenVisitor Visitor) {
+	@Override public void Accept(ZVisitor Visitor) {
 		throw new RuntimeException("TODO");
 	}
 }

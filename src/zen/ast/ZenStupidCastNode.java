@@ -26,14 +26,14 @@ package zen.ast;
 
 import zen.deps.Constructor;
 import zen.lang.ZenType;
-import zen.parser.ZenVisitor;
+import zen.parser.ZVisitor;
 
 public class ZenStupidCastNode extends ZenCastNode {
 	@Constructor public ZenStupidCastNode(ZenType CastType, ZenNode Node) {
 		super(CastType, Node);
 	}
 
-	@Override public void Accept(ZenVisitor Visitor) {
+	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitCastNode(this);
 	}
 

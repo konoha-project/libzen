@@ -25,10 +25,10 @@
 package zen.obsolete;
 
 import zen.parser.ZenNameSpace;
-import zen.parser.ZenUtils;
+import zen.parser.ZUtils;
 
 @Deprecated
-public final class ZenTypeEnv extends ZenUtils {
+public final class ZenTypeEnv extends ZUtils {
 //	@Field public final ZenParserContext    Context;
 //	@Field public final ZenGenerator        Generator;
 //	@Field public ZenNameSpace	    NameSpace;
