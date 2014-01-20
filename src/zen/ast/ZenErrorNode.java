@@ -25,7 +25,7 @@
 package zen.ast;
 
 import zen.lang.ZenSystem;
-import zen.parser.ZenToken;
+import zen.parser.ZToken;
 import zen.parser.ZenVisitor;
 
 /**
@@ -35,7 +35,7 @@ import zen.parser.ZenVisitor;
 
 final public class ZenErrorNode extends ZenConstNode {
 	public String ErrorMessage;
-	public ZenErrorNode/*constructor*/(ZenToken SourceToken, String ErrorMessage) {
+	public ZenErrorNode/*constructor*/(ZToken SourceToken, String ErrorMessage) {
 		super(SourceToken);
 		this.Type = ZenSystem.VoidType;
 		this.ErrorMessage = ErrorMessage;

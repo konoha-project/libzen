@@ -27,14 +27,14 @@ package zen.sugar;
 import zen.ast.ZenNode;
 import zen.deps.Field;
 import zen.lang.ZenType;
-import zen.parser.ZenToken;
+import zen.parser.ZToken;
 
 //E.g., $Expr "[" $Index ":" $Index2 "]"
 final public class ZenSliceNode extends ZenNode {
 	@Field public ZenNode RecvNode;
 	@Field public ZenNode Index1;
 	@Field public ZenNode Index2;
-	public ZenSliceNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode RecvNode, ZenNode Index1, ZenNode Index2) {
+	public ZenSliceNode/*constructor*/(ZenType Type, ZToken Token, ZenNode RecvNode, ZenNode Index1, ZenNode Index2) {
 		super();
 		this.RecvNode = RecvNode;
 		this.Index1 = Index1;

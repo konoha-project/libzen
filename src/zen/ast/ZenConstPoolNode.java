@@ -25,12 +25,12 @@
 package zen.ast;
 
 import zen.deps.Field;
-import zen.parser.ZenToken;
+import zen.parser.ZToken;
 import zen.parser.ZenVisitor;
 
 final public class ZenConstPoolNode extends ZenConstNode {
 	@Field public Object	ConstValue;
-	public ZenConstPoolNode/*constructor*/(ZenToken Token, Object ConstValue) {
+	public ZenConstPoolNode/*constructor*/(ZToken Token, Object ConstValue) {
 		super(Token);
 		this.ConstValue = ConstValue;
 	}

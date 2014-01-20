@@ -29,13 +29,13 @@ import java.util.ArrayList;
 import zen.deps.Field;
 import zen.lang.ZenFunc;
 import zen.lang.ZenType;
-import zen.parser.ZenToken;
+import zen.parser.ZToken;
 import zen.parser.ZenVisitor;
 
 // E.g., ConstructorNode is for object creation in Native language defined
 final public class ZenNewObjectNode extends ZenNode {
 	@Field public ArrayList<ZenNode>	ParamList;
-	public ZenNewObjectNode/*constructor*/(ZenType Type, ZenToken Token, ZenFunc Func) {
+	public ZenNewObjectNode/*constructor*/(ZenType Type, ZToken Token, ZenFunc Func) {
 		super();
 		this.ParamList = new ArrayList<ZenNode>();
 	}

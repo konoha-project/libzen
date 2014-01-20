@@ -25,12 +25,12 @@
 package zen.ast;
 
 import zen.deps.Field;
-import zen.parser.ZenToken;
+import zen.parser.ZToken;
 import zen.parser.ZenVisitor;
 
 final public class ZenFloatNode extends ZenConstNode {
 	@Field public double	Value;
-	public ZenFloatNode/*constructor*/(ZenToken Token, double Value) {
+	public ZenFloatNode/*constructor*/(ZToken Token, double Value) {
 		super(Token);
 		this.Value = Value;
 	}

@@ -24,22 +24,23 @@
 
 //ifdef JAVA
 package zen.parser;
+import zen.deps.Constructor;
 import zen.deps.Field;
+import zen.deps.Init;
 import zen.deps.Var;
 import zen.lang.ZenType;
 
-final public class ZenToken extends ZenUtils {
-	@Field public int		        TokenFlag;
-	@Field public String	        ParsedText;
-	@Field public long		    FileLine;
-	@Field public ZenSyntaxPattern	PresetPattern;
-	@Field public final static ZenToken NullToken = new ZenToken(0, "/**/", 0);
+public final class ZToken {
+	@Field public final static ZToken NullToken = new ZToken(0, "/**/", 0);
+	@Field @Init public int		    TokenFlag;
+	@Field @Init public String	    ParsedText;
+	@Field @Init public long		FileLine;
+	@Field public ZenSyntaxPattern	PresetPattern = null;
 
-	public ZenToken(int TokenFlag, String Text, long FileLine) {
+	@Constructor public ZToken(int TokenFlag, String Text, long FileLine) {
 		this.TokenFlag = TokenFlag;
 		this.ParsedText = Text;
 		this.FileLine = FileLine;
-		this.PresetPattern = null;
 	}
 
 	public boolean IsSource() {
@@ -74,7 +75,7 @@ final public class ZenToken extends ZenUtils {
 		return this.ParsedText.equals(text);
 	}
 
-	public int CompareIndent(ZenToken IndentToken) {
+	public int CompareIndent(ZToken IndentToken) {
 		if(IndentToken == null) {
 			if(this.EqualsText("")) {
 				return 0;
@@ -104,13 +105,13 @@ final public class ZenToken extends ZenUtils {
 		}
 	}
 
-	public final ZenToken AddTypeInfoToErrorMessage(ZenType ClassType) {
-		this.ParsedText += " of " + ClassType.ShortName;
+	public final ZToken AddTypeInfoToErrorMessage(ZenType ClassType) {
+		this.ParsedText = this.ParsedText + " of " + ClassType.ShortName;
 		return this;
 	}
 
 	public final boolean IsNull() {
-		return (this == ZenToken.NullToken);
+		return (this == ZToken.NullToken);
 	}
 
 }

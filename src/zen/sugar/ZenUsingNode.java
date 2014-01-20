@@ -27,7 +27,7 @@ package zen.sugar;
 import zen.ast.ZenNode;
 import zen.deps.Field;
 import zen.lang.ZenType;
-import zen.parser.ZenToken;
+import zen.parser.ZToken;
 
 /**
  * using(File f = new File() {
@@ -41,7 +41,7 @@ final public class ZenUsingNode extends ZenNode {
 	@Field public ZenNode	InitNode;
 	@Field public ZenNode	BlockNode;   // release resource of NativeName after BlockNode
 	/* let VarNode in Block end */
-	public ZenUsingNode/*constructor*/(ZenType Type, ZenToken Token, ZenType DeclType, String VariableName, ZenNode InitNode, ZenNode Block) {
+	public ZenUsingNode/*constructor*/(ZenType Type, ZToken Token, ZenType DeclType, String VariableName, ZenNode InitNode, ZenNode Block) {
 		super();
 		this.NativeName = VariableName;
 		this.DeclType  = DeclType;

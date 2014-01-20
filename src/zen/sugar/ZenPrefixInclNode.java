@@ -27,12 +27,12 @@ package zen.sugar;
 import zen.ast.ZenNode;
 import zen.deps.Field;
 import zen.lang.ZenType;
-import zen.parser.ZenToken;
+import zen.parser.ZToken;
 
 //E.g.,  "++" $RecvNode
 final public class ZenPrefixInclNode extends ZenNode {
 	@Field public ZenNode	RecvNode;
-	public ZenPrefixInclNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode RecvNode) {
+	public ZenPrefixInclNode/*constructor*/(ZenType Type, ZToken Token, ZenNode RecvNode) {
 		super();
 		this.RecvNode = RecvNode;
 		this.SetChild(RecvNode);

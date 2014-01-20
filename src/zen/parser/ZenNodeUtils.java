@@ -41,7 +41,7 @@ public abstract class ZenNodeUtils {
 	//		return new ZenErrorNode(ZenSystem.VoidType, ParsedTree.KeyToken);
 	//	}
 
-	public final static ZenNode CreateConstNode(ZenToken SourceToken, Object Value) {
+	public final static ZenNode CreateConstNode(ZToken SourceToken, Object Value) {
 		if(Value instanceof Boolean) {
 			return new ZenBooleanNode(SourceToken, (Boolean) Value);
 		}
@@ -57,7 +57,7 @@ public abstract class ZenNodeUtils {
 		return new ZenConstPoolNode(SourceToken, Value);
 	}
 
-	public final ZenNode CreateSymbolNode(ZenToken SourceToken, ZenType Type, String NativeName, ZenNode AssignedNode) {
+	public final ZenNode CreateSymbolNode(ZToken SourceToken, ZenType Type, String NativeName, ZenNode AssignedNode) {
 		if(AssignedNode != null) {
 			return new ZenSetLocalNode(SourceToken, NativeName, AssignedNode);
 		}

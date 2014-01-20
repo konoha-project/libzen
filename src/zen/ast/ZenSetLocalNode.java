@@ -25,7 +25,7 @@
 package zen.ast;
 
 import zen.deps.Field;
-import zen.parser.ZenToken;
+import zen.parser.ZToken;
 import zen.parser.ZenVisitor;
 
 // E.g., $NativeName = $ValueNode
@@ -34,7 +34,7 @@ public class ZenSetLocalNode extends ZenNode {
 	@Field public String   VarName;
 	@Field public ZenNode	 ValueNode;
 	@Field public int VarIndex;
-	public ZenSetLocalNode/*constructor*/(ZenToken Token, String VarName, ZenNode ValueNode) {
+	public ZenSetLocalNode/*constructor*/(ZToken Token, String VarName, ZenNode ValueNode) {
 		super();
 		this.VarName = VarName;
 		this.VarIndex = 0;

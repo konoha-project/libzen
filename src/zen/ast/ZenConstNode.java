@@ -24,10 +24,10 @@
 
 package zen.ast;
 
-import zen.parser.ZenToken;
+import zen.parser.ZToken;
 
 abstract public class ZenConstNode extends ZenNode {
-	protected ZenConstNode/*constructor*/(ZenToken Token) {
+	protected ZenConstNode/*constructor*/(ZToken Token) {
 		super();
 		this.SourceToken = Token;
 	}

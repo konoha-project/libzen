@@ -27,7 +27,7 @@ package zen.obsolete;
 
 import zen.parser.ZenNameSpace;
 import zen.parser.ZenSyntaxPattern;
-import zen.parser.ZenToken;
+import zen.parser.ZToken;
 //endif VAJA
 import zen.parser.ZenUtils;
 
@@ -44,7 +44,7 @@ public final class ZenSyntaxTree extends ZenUtils {
 //	@Field public ArrayList<ZenSyntaxTree>  SubTreeList;
 //	@Field public Object                   ParsedValue;
 
-	public ZenSyntaxTree/*constructor*/(ZenSyntaxPattern Pattern, ZenNameSpace NameSpace, ZenToken KeyToken, Object ParsedValue) {
+	public ZenSyntaxTree/*constructor*/(ZenSyntaxPattern Pattern, ZenNameSpace NameSpace, ZToken KeyToken, Object ParsedValue) {
 //		this.NameSpace   = NameSpace;
 //		this.Annotation  = null;
 //		this.KeyToken    = KeyToken;

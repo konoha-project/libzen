@@ -32,14 +32,14 @@ import zen.deps.Var;
 import zen.lang.ZenFuncType;
 import zen.lang.ZenSystem;
 import zen.lang.ZenType;
-import zen.parser.ZenToken;
+import zen.parser.ZToken;
 import zen.parser.ZenVisitor;
 
 public class ZenFunctionNode extends ZenNode {
 	@Field public ZenType ReturnType;
 	@Field public ArrayList<ZenNode>  ArgumentList;  // list of ParamNode
 	@Field public ZenNode BodyNode;
-	public ZenFunctionNode/*constructor*/(ZenToken Token) {
+	public ZenFunctionNode/*constructor*/(ZToken Token) {
 		super();
 		this.SourceToken = Token;
 		this.ReturnType = ZenSystem.VarType;

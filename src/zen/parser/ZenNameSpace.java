@@ -40,7 +40,7 @@ import zen.lang.ZenSystem;
 import zen.lang.ZenType;
 
 final class ZenSymbolSource {
-	@Field public ZenToken SourceToken;
+	@Field public ZToken SourceToken;
 	@Field public ZenType  Type; // nullable
 	@Field public Object  Value;
 }
@@ -158,7 +158,7 @@ public final class ZenNameSpace {
 		return (this.GetSymbol(Key) != null);
 	}
 
-	public final void SetSymbol(String Key, Object Value, ZenToken SourceToken) {
+	public final void SetSymbol(String Key, Object Value, ZToken SourceToken) {
 		if(this.SymbolPatternTable == null) {
 			this.SymbolPatternTable = new ZenMap<Object>(null);
 		}
@@ -179,7 +179,7 @@ public final class ZenNameSpace {
 		ZenLogger.VerboseLog(ZenLogger.VerboseSymbol, "symbol: " + Key + ", " + Value);
 	}
 
-	public final void SetUndefinedSymbol(String Symbol, ZenToken SourceToken) {
+	public final void SetUndefinedSymbol(String Symbol, ZToken SourceToken) {
 		this.SetSymbol(Symbol, ZenParserConst.UndefinedSymbol, SourceToken);
 	}
 
@@ -216,7 +216,7 @@ public final class ZenNameSpace {
 		return null;
 	}
 
-	private void AppendSyntaxPattern(String PatternName, ZenSyntaxPattern NewPattern, ZenToken SourceToken) {
+	private void AppendSyntaxPattern(String PatternName, ZenSyntaxPattern NewPattern, ZToken SourceToken) {
 		LibNative.Assert(NewPattern.ParentPattern == null);
 		@Var ZenSyntaxPattern ParentPattern = this.GetSyntaxPattern(PatternName);
 		NewPattern.ParentPattern = ParentPattern;
@@ -245,7 +245,7 @@ public final class ZenNameSpace {
 	}
 
 	// Type
-	public final ZenType GetType(String TypeName, @Nullable ZenToken SourceToken) {
+	public final ZenType GetType(String TypeName, @Nullable ZToken SourceToken) {
 		@Var Object TypeInfo = this.GetSymbol(TypeName);
 		if(TypeInfo instanceof ZenType) {
 			return (/*cast*/ZenType)TypeInfo;
@@ -259,7 +259,7 @@ public final class ZenNameSpace {
 		return null;
 	}
 
-	public final ZenType AppendTypeName(ZenType Type, ZenToken SourceToken) {
+	public final ZenType AppendTypeName(ZenType Type, ZToken SourceToken) {
 		if(Type.GetBaseType() == Type) {
 			this.SetSymbol(Type.ShortName, Type, SourceToken);
 		}
@@ -283,7 +283,7 @@ public final class ZenNameSpace {
 	}
 
 	// Function
-	public final void AppendFuncName(ZenFunc Func, ZenToken SourceToken) {
+	public final void AppendFuncName(ZenFunc Func, ZToken SourceToken) {
 		@Var Object OldValue = this.GetLocalSymbol(Func.FuncName);
 		assert(!(OldValue instanceof ZenSyntaxPattern));
 		@Var ZenFuncSet FuncSet = null;
@@ -591,7 +591,7 @@ public final class ZenNameSpace {
 			TopLevelNode = this.TypeCheck(TopLevelNode, ZenSystem.VoidType);
 			this.Generator.DoCodeGeneration(this, TopLevelNode);
 			if(TopLevelNode.IsErrorNode() && TokenContext.HasNext()) {
-				@Var ZenToken Token = TokenContext.GetToken();
+				@Var ZToken Token = TokenContext.GetToken();
 				this.Generator.Logger.ReportInfo(Token, "stopped script at this line");
 				return TopLevelNode;
 			}
@@ -606,7 +606,7 @@ public final class ZenNameSpace {
 
 	public final boolean Load(String ScriptText, long FileLine) {
 		@Var Object Token = this.Eval(ScriptText, FileLine, false);
-		if(Token instanceof ZenToken && ((/*cast*/ZenToken)Token).IsError()) {
+		if(Token instanceof ZToken && ((/*cast*/ZToken)Token).IsError()) {
 			return false;
 		}
 		return true;

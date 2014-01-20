@@ -24,14 +24,14 @@
 
 package zen.ast;
 import zen.deps.ZenMap;
-import zen.parser.ZenToken;
+import zen.parser.ZToken;
 import zen.parser.ZenVisitor;
 
 public final class ZenAnnotationNode extends ZenNode {
 	public ZenMap<Object> Annotation;
 	public ZenNode AnnotatedNode;
 
-	public ZenAnnotationNode/*constructor*/(ZenToken Token, ZenMap<Object> Anno) {
+	public ZenAnnotationNode/*constructor*/(ZToken Token, ZenMap<Object> Anno) {
 		this.SourceToken = Token;
 		this.Annotation = Anno;
 		this.AnnotatedNode = null;

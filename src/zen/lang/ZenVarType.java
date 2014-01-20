@@ -25,13 +25,13 @@
 package zen.lang;
 
 import zen.deps.Field;
-import zen.parser.ZenToken;
+import zen.parser.ZToken;
 
 public class ZenVarType extends ZenType {
-	@Field public ZenToken SourceToken;
+	@Field public ZToken SourceToken;
 	@Field public int AlphaId;
 
-	public ZenVarType(String Name, int AlphaId, ZenToken SourceToken) {
+	public ZenVarType(String Name, int AlphaId, ZToken SourceToken) {
 		super(0, Name, ZenSystem.VarType);
 		this.SourceToken = SourceToken;
 		this.TypeId = this.RefType.TypeId;
@@ -58,7 +58,7 @@ public class ZenVarType extends ZenType {
 		return "typeof("+this.ShortName+"): " + this.RefType;
 	}
 
-	public void Infer(ZenType ContextType, ZenToken SourceToken) {
+	public void Infer(ZenType ContextType, ZToken SourceToken) {
 		if(this.RefType.IsVarType()) {
 			if(ContextType instanceof ZenVarType && ContextType.IsVarType()) {
 				ZenVarType VarType = (ZenVarType)ContextType;

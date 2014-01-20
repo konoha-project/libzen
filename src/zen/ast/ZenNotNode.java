@@ -24,11 +24,11 @@
 
 package zen.ast;
 
-import zen.parser.ZenToken;
+import zen.parser.ZToken;
 import zen.parser.ZenVisitor;
 
 public class ZenNotNode extends ZenUnaryNode {
-	public ZenNotNode(ZenToken Token) {
+	public ZenNotNode(ZToken Token) {
 		super(Token);
 	}
 

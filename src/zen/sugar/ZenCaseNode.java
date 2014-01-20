@@ -27,12 +27,12 @@ package zen.sugar;
 import zen.ast.ZenNode;
 import zen.deps.Field;
 import zen.lang.ZenType;
-import zen.parser.ZenToken;
+import zen.parser.ZToken;
 
 final public class ZenCaseNode extends ZenNode {
 	@Field public ZenNode  CaseNode;;
 	@Field public ZenNode	BodyNode;
-	public ZenCaseNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode CaseNode, ZenNode BodyNode) {
+	public ZenCaseNode/*constructor*/(ZenType Type, ZToken Token, ZenNode CaseNode, ZenNode BodyNode) {
 		super();
 		this.CaseNode = CaseNode;
 		this.BodyNode = BodyNode;

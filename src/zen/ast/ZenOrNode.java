@@ -25,12 +25,12 @@
 package zen.ast;
 
 import zen.parser.ZenSyntaxPattern;
-import zen.parser.ZenToken;
+import zen.parser.ZToken;
 import zen.parser.ZenVisitor;
 
 //E.g., $LeftNode || $RightNode
 final public class ZenOrNode extends ZenBinaryNode {
-	public ZenOrNode/*constructor*/(ZenToken Token, ZenNode Left, ZenSyntaxPattern Pattern) {
+	public ZenOrNode/*constructor*/(ZToken Token, ZenNode Left, ZenSyntaxPattern Pattern) {
 		super(Token, Left, Pattern);
 	}
 	@Override public void Accept(ZenVisitor Visitor) {

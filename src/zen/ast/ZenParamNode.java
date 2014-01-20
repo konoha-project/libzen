@@ -26,12 +26,12 @@ package zen.ast;
 
 import zen.deps.Field;
 import zen.lang.ZenType;
-import zen.parser.ZenToken;
+import zen.parser.ZToken;
 import zen.parser.ZenVisitor;
 
 public class ZenParamNode extends ZenNode {
 	@Field public String  Name;
-	public ZenParamNode/*constructor*/(ZenType Type, ZenToken SourceToken, String Name) {
+	public ZenParamNode/*constructor*/(ZenType Type, ZToken SourceToken, String Name) {
 		super(); // TODO
 		this.Type = Type;
 		this.SourceToken = SourceToken;

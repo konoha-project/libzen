@@ -26,16 +26,16 @@ package zen.lang;
 
 import zen.deps.Constructor;
 import zen.deps.Field;
-import zen.parser.ZenToken;
+import zen.parser.ZToken;
 
 public class ZenField {
 	@Field public int        FieldFlag = 0;
 	@Field public ZenType	 FieldType = null;
 	@Field public String	 FieldName = null;
 	@Field public int        FieldNativeIndex = 0;
-	@Field public ZenToken   SourceToken = null;
+	@Field public ZToken   SourceToken = null;
 
-	@Constructor public ZenField(String FieldName, ZenType FieldType, ZenToken SourceToken) {
+	@Constructor public ZenField(String FieldName, ZenType FieldType, ZToken SourceToken) {
 		this.FieldType = FieldType;
 		this.FieldName = FieldName;
 		this.SourceToken = SourceToken;

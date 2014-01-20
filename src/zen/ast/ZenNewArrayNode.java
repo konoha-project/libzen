@@ -28,12 +28,12 @@ import java.util.ArrayList;
 
 import zen.deps.Field;
 import zen.lang.ZenType;
-import zen.parser.ZenToken;
+import zen.parser.ZToken;
 
 //E.g., new T "[" 10, [10] "]"
 final public class ZenNewArrayNode extends ZenNode {
 	@Field public ArrayList<ZenNode>	NodeList;
-	public ZenNewArrayNode/*constructor*/(ZenType Type, ZenToken Token) {
+	public ZenNewArrayNode/*constructor*/(ZenType Type, ZToken Token) {
 		super();
 		this.NodeList = new ArrayList<ZenNode>();
 	}

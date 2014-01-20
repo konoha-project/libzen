@@ -79,7 +79,7 @@ import zen.deps.Var;
 import zen.parser.ZenLogger;
 import zen.parser.ZenNameSpace;
 import zen.parser.ZenNodeUtils;
-import zen.parser.ZenToken;
+import zen.parser.ZToken;
 import zen.parser.ZenUtils;
 
 public class ZenTypeInfer extends ZenTypeChecker {
@@ -533,7 +533,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		this.Todo(Node);
 	}
 
-	public ZenFunc DefineFunc(ZenNameSpace NameSpace, String FuncName, ZenFuncType FuncType, ZenToken SourceToken) {
+	public ZenFunc DefineFunc(ZenNameSpace NameSpace, String FuncName, ZenFuncType FuncType, ZToken SourceToken) {
 		if(FuncName != null && FuncType.HasCallableSignature()) {
 			@Var String Signature = FuncType.StringfySignature(FuncName);
 			@Var Object FuncObject = NameSpace.GetSymbol(Signature);

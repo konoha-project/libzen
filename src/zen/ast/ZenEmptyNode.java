@@ -25,11 +25,11 @@
 package zen.ast;
 
 
-import zen.parser.ZenToken;
+import zen.parser.ZToken;
 import zen.parser.ZenVisitor;
 
 final public class ZenEmptyNode extends ZenNode {
-	public ZenEmptyNode/*constructor*/(ZenToken Token) {
+	public ZenEmptyNode/*constructor*/(ZToken Token) {
 		this.SourceToken = Token;
 	}
 

@@ -25,14 +25,14 @@
 package zen.ast;
 
 import zen.deps.Field;
-import zen.parser.ZenToken;
+import zen.parser.ZToken;
 import zen.parser.ZenVisitor;
 
 //E.g., $RecvNode.$NativeName
 final public class ZenGetterNode extends ZenNode {
 	@Field public ZenNode RecvNode;
 	@Field public String  NativeName;
-	public ZenGetterNode/*constructor*/(ZenToken SourceToken, ZenNode RecvNode, String FieldName) {
+	public ZenGetterNode/*constructor*/(ZToken SourceToken, ZenNode RecvNode, String FieldName) {
 		super();
 		this.SourceToken = SourceToken;
 		this.NativeName = FieldName;

@@ -29,13 +29,13 @@ import java.util.ArrayList;
 import zen.ast.ZenNode;
 import zen.deps.Field;
 import zen.lang.ZenType;
-import zen.parser.ZenToken;
+import zen.parser.ZToken;
 
 // E.g., "ls" "-a"..
 final public class ZenCommandNode extends ZenNode {
 	@Field public ArrayList<ZenNode>  ArgumentList; /* ["/bin/ls" , "-la", "/", ...] */
 	@Field public ZenNode PipedNextNode;
-	public ZenCommandNode/*constructor*/(ZenType Type, ZenToken Token, ZenNode PipedNextNode) {
+	public ZenCommandNode/*constructor*/(ZenType Type, ZToken Token, ZenNode PipedNextNode) {
 		super();
 		this.PipedNextNode = PipedNextNode;
 		this.ArgumentList = new ArrayList<ZenNode>();

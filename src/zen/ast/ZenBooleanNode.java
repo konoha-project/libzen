@@ -25,12 +25,12 @@
 package zen.ast;
 
 import zen.deps.Field;
-import zen.parser.ZenToken;
+import zen.parser.ZToken;
 import zen.parser.ZenVisitor;
 
 final public class ZenBooleanNode extends ZenConstNode {
 	@Field public boolean	BooleanValue;
-	public ZenBooleanNode/*constructor*/(ZenToken Token, boolean Value) {
+	public ZenBooleanNode/*constructor*/(ZToken Token, boolean Value) {
 		super(Token);
 		this.BooleanValue = Value;
 	}

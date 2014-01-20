@@ -25,12 +25,12 @@
 package zen.ast;
 
 import zen.parser.ZenSyntaxPattern;
-import zen.parser.ZenToken;
+import zen.parser.ZToken;
 import zen.parser.ZenVisitor;
 
 public class ZenComparatorNode extends ZenBinaryNode {
 
-	public ZenComparatorNode(ZenToken SourceToken, ZenNode Left, ZenSyntaxPattern Pattern) {
+	public ZenComparatorNode(ZToken SourceToken, ZenNode Left, ZenSyntaxPattern Pattern) {
 		super(SourceToken, Left, Pattern);
 	}
 	@Override public void Accept(ZenVisitor Visitor) {

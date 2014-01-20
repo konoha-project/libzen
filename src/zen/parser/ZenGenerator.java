@@ -84,7 +84,7 @@ public abstract class ZenGenerator extends ZenNodeUtils implements ZenVisitor {
 	}
 
 
-	public final String ReportError(int Level, ZenToken Token, String Message) {
+	public final String ReportError(int Level, ZToken Token, String Message) {
 		return this.Logger.Report(Level, Token, Message);
 	}
 

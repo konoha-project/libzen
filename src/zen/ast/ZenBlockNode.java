@@ -29,13 +29,13 @@ import java.util.ArrayList;
 import zen.deps.Field;
 import zen.lang.ZenSystem;
 import zen.parser.ZenNameSpace;
-import zen.parser.ZenToken;
+import zen.parser.ZToken;
 import zen.parser.ZenVisitor;
 
 public class ZenBlockNode extends ZenStatementNode {
 	@Field public ArrayList<ZenNode> StmtList;
 	@Field public ZenNameSpace NameSpace;
-	public ZenBlockNode(ZenToken SourceToken, ZenNameSpace NameSpace) {
+	public ZenBlockNode(ZToken SourceToken, ZenNameSpace NameSpace) {
 		super(ZenSystem.VarType, SourceToken);
 		this.SourceToken = SourceToken;
 		this.StmtList = new ArrayList<ZenNode>();

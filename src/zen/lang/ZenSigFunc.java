@@ -1,13 +1,13 @@
 package zen.lang;
 
 import zen.deps.Field;
-import zen.parser.ZenToken;
+import zen.parser.ZToken;
 
 public class ZenSigFunc extends ZenFunc {
 	@Field public int DefinedCount = 0;
 	@Field public int UsedCount = 0;
 
-	public ZenSigFunc(int FuncFlag, String FuncName, ZenFuncType FuncType, ZenToken SourceToken) {
+	public ZenSigFunc(int FuncFlag, String FuncName, ZenFuncType FuncType, ZToken SourceToken) {
 		super(FuncFlag, FuncName, FuncType);
 		this.DefinedCount = 0;
 		this.UsedCount = 0;

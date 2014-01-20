@@ -44,7 +44,7 @@ import zen.deps.LibNative;
 import zen.deps.Var;
 import zen.parser.ZenLogger;
 import zen.parser.ZenNameSpace;
-import zen.parser.ZenToken;
+import zen.parser.ZToken;
 import zen.parser.ZenUtils;
 import zen.parser.ZenVisitor;
 
@@ -226,7 +226,7 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 	//		}
 	//	}
 
-	protected ZenFunc InferFuncType(ZenNameSpace NameSpace, String FuncName, ZenType FuncType, ZenToken SourceToken) {
+	protected ZenFunc InferFuncType(ZenNameSpace NameSpace, String FuncName, ZenType FuncType, ZToken SourceToken) {
 		if(FuncType.IsCompleteFunc(false)) {
 			@Var ZenNameSpace RootNameSpace = NameSpace.GetRootNameSpace();
 			@Var String Signature = FuncType.StringfySignature(FuncName);
@@ -358,7 +358,7 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		return ZenSystem.VarType;
 	}
 
-	private void SetClassField(ZenNameSpace NameSpace, ZenType ClassType, String FieldName, ZenType FieldType, ZenToken SourceToken) {
+	private void SetClassField(ZenNameSpace NameSpace, ZenType ClassType, String FieldName, ZenType FieldType, ZToken SourceToken) {
 		ZenField Field = new ZenField(FieldName, FieldType, SourceToken);
 		NameSpace.GetRootNameSpace().SetSymbol(ZenNameSpace.StringfyClassSymbol(ClassType, FieldName), Field, SourceToken);
 	}
@@ -393,7 +393,7 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		return NameSpace.Generator.GetSetterType(ClassType, FieldName);
 	}
 
-	protected ZenType InferFieldType(ZenNameSpace NameSpace, ZenType ClassType, String FieldName, ZenType InferredType, ZenToken SourceToken) {
+	protected ZenType InferFieldType(ZenNameSpace NameSpace, ZenType ClassType, String FieldName, ZenType InferredType, ZToken SourceToken) {
 		this.println("field inferrence " + ClassType + "." + FieldName + ": " + InferredType);
 		if(ClassType.IsVarType() || !InferredType.IsInferrableType()) {
 			return ZenSystem.VarType;
@@ -430,7 +430,7 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		return new ZenErrorNode(Node.SourceToken, "undefined name: " + Name);
 	}
 
-	protected final ZenType NewVarType(ZenType VarType, String Name, ZenToken SourceToken) {
+	protected final ZenType NewVarType(ZenType VarType, String Name, ZToken SourceToken) {
 		if(!(VarType instanceof ZenVarType) && VarType.IsVarType()) {
 			int AlphaId = this.FuncScope.VarTypeList.size();
 			ZenVarType VarType1 = new ZenVarType(Name, AlphaId, SourceToken);
@@ -448,7 +448,7 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		return null;
 	}
 
-	protected void SetLocalVariable(ZenNameSpace NameSpace, ZenType VarType, String VarName, ZenToken SourceToken) {
+	protected void SetLocalVariable(ZenNameSpace NameSpace, ZenType VarType, String VarName, ZToken SourceToken) {
 		@Var ZenVariable VarInfo = new ZenVariable(NameSpace.GetDefiningFunc(), 0, VarType, VarName, this.FuncScope.GetVarIndex(), SourceToken);
 		NameSpace.SetSymbol(VarName, VarInfo, SourceToken);
 	}

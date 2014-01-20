@@ -27,7 +27,7 @@ package zen.lang;
 import zen.ast.ZenNode;
 import zen.deps.Field;
 import zen.parser.ZenNameSpace;
-import zen.parser.ZenToken;
+import zen.parser.ZToken;
 
 public class ZenVariable {
 	@Field public ZenNode   DefiningFunc;
@@ -35,11 +35,11 @@ public class ZenVariable {
 	@Field public ZenType	 VarType;
 	@Field public String	 VarName;
 	@Field public int        VarUniqueIndex;
-	@Field public ZenToken   SourceToken;
+	@Field public ZToken   SourceToken;
 	@Field public int        DefCount;
 	@Field public int        UsedCount;
 
-	ZenVariable(ZenNode DefiningFunc, int VarFlag, ZenType VarType, String VarName, int VarIndex, ZenToken SourceToken) {
+	ZenVariable(ZenNode DefiningFunc, int VarFlag, ZenType VarType, String VarName, int VarIndex, ZToken SourceToken) {
 		this.DefiningFunc  = DefiningFunc;
 		this.VarFlag = VarFlag;
 		this.VarType = VarType;

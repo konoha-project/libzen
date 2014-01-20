@@ -24,11 +24,11 @@
 
 package zen.ast;
 
-import zen.parser.ZenToken;
+import zen.parser.ZToken;
 import zen.parser.ZenVisitor;
 
 final public class ZenNullNode extends ZenConstNode {
-	public ZenNullNode/*constructor*/(ZenToken SourceToken) {
+	public ZenNullNode/*constructor*/(ZToken SourceToken) {
 		super(SourceToken); 
 	}
 	@Override public final Object GetValue() {

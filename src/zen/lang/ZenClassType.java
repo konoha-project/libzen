@@ -31,7 +31,7 @@ import zen.deps.Field;
 import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.parser.ZenNameSpace;
-import zen.parser.ZenToken;
+import zen.parser.ZToken;
 
 public class ZenClassType extends ZenType {
 	@Field ArrayList<ZenField> FieldList = null;
@@ -82,7 +82,7 @@ public class ZenClassType extends ZenType {
 		return Type;
 	}
 
-	public ZenField AppendField(ZenType FieldType, String FieldName, ZenToken SourceToken) {
+	public ZenField AppendField(ZenType FieldType, String FieldName, ZToken SourceToken) {
 		if(this.FieldList == null) {
 			this.FieldList = new ArrayList<ZenField>();
 		}

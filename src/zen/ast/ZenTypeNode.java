@@ -25,11 +25,11 @@
 package zen.ast;
 
 import zen.lang.ZenType;
-import zen.parser.ZenToken;
+import zen.parser.ZToken;
 import zen.parser.ZenVisitor;
 
 final public class ZenTypeNode extends ZenConstNode {
-	public ZenTypeNode/*constructor*/(ZenToken SourceToken, ZenType ParsedType) {
+	public ZenTypeNode/*constructor*/(ZToken SourceToken, ZenType ParsedType) {
 		super(SourceToken);
 		this.Type = ParsedType;
 	}

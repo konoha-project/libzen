@@ -26,14 +26,14 @@ package zen.ast;
 
 import zen.deps.Constructor;
 import zen.deps.Field;
-import zen.parser.ZenToken;
+import zen.parser.ZToken;
 import zen.parser.ZenVisitor;
 
 //E.g., $NativeFuncName "(" $Param[0], $Param[1], ... ")"
 final public class ZenMethodCallNode extends ZenApplyNode {
 	@Field public ZenNode RecvNode;
 	@Field public String MethodName;
-	@Constructor public ZenMethodCallNode(ZenToken SourceToken, ZenNode RecvNode, String MethodName) {
+	@Constructor public ZenMethodCallNode(ZToken SourceToken, ZenNode RecvNode, String MethodName) {
 		super(); this.SourceToken = SourceToken;
 		this.RecvNode = this.SetChild(RecvNode);
 		this.MethodName = MethodName;
