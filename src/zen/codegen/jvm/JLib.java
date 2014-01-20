@@ -7,7 +7,6 @@ import org.objectweb.asm.Type;
 
 import zen.ast.ZenFuncDeclNode;
 import zen.deps.LibNative;
-import zen.deps.LibZen;
 import zen.deps.ZenArray;
 import zen.lang.ZenFunc;
 import zen.lang.ZenSystem;
@@ -56,12 +55,12 @@ class JLib {
 			GetConstPool = ZenSystem.class.getMethod("GetConstPool", int.class);
 			GetTypeById = ZenSystem.class.getMethod("GetTypeById", int.class);
 			GetFuncById = ZenSystem.class.getMethod("GetFuncById", int.class);
-			DynamicGetter = LibZen.class.getMethod("DynamicGetter", Object.class, String.class);
-			DynamicSetter = LibZen.class.getMethod("DynamicSetter", Object.class, String.class, Object.class);
-			InvokeFunc = LibZen.class.getMethod("InvokeFunc", ZenFunc.class, Object[].class);
-			InvokeOverridedFunc = LibZen.class.getMethod("InvokeOverridedMethod", long.class, ZenNameSpace.class, ZenFunc.class, Object[].class);
-			InvokeDynamicFunc = LibZen.class.getMethod("InvokeDynamicFunc", long.class, ZenType.class, ZenNameSpace.class, String.class, Object[].class);
-			InvokeDynamicMethod = LibZen.class.getMethod("InvokeDynamicMethod", long.class, ZenType.class, ZenNameSpace.class, String.class, Object[].class);
+			DynamicGetter = JMethod.class.getMethod("DynamicGetter", Object.class, String.class);
+			DynamicSetter = JMethod.class.getMethod("DynamicSetter", Object.class, String.class, Object.class);
+			//			InvokeFunc = JMethod.class.getMethod("InvokeFunc", ZenFunc.class, Object[].class);
+			//			InvokeOverridedFunc = JMethod.class.getMethod("InvokeOverridedMethod", long.class, ZenNameSpace.class, ZenFunc.class, Object[].class);
+			//			InvokeDynamicFunc = JMethod.class.getMethod("InvokeDynamicFunc", long.class, ZenType.class, ZenNameSpace.class, String.class, Object[].class);
+			//			InvokeDynamicMethod = JMethod.class.getMethod("InvokeDynamicMethod", long.class, ZenType.class, ZenNameSpace.class, String.class, Object[].class);
 
 			BoxBooleanValue = Boolean.class.getMethod("valueOf", boolean.class);
 			BoxIntValue = Long.class.getMethod("valueOf", long.class);
@@ -70,10 +69,10 @@ class JLib {
 			UnboxIntValue = Long.class.getMethod("longValue");
 			UnboxFloatValue = Double.class.getMethod("doubleValue");
 
-			GreenCastOperator = LibZen.class.getMethod("DynamicCast", ZenType.class, Object.class);
-			GreenInstanceOfOperator = LibZen.class.getMethod("DynamicInstanceOf", Object.class, ZenType.class);
-			NewNewArray = LibZen.class.getMethod("NewNewArray", ZenType.class, Object[].class);
-			NewArray = LibZen.class.getMethod("NewArray", ZenType.class, Object[].class);
+			//GreenCastOperator = LibZen.class.getMethod("DynamicCast", ZenType.class, Object.class);
+			//GreenInstanceOfOperator = LibZen.class.getMethod("DynamicInstanceOf", Object.class, ZenType.class);
+			//NewNewArray = LibZen.class.getMethod("NewNewArray", ZenType.class, Object[].class);
+			//NewArray = LibZen.class.getMethod("NewArray", ZenType.class, Object[].class);
 			//			ExecCommandVoid = DShellProcess.class.getMethod("ExecCommandVoid", String[][].class);
 			//			ExecCommandBool = DShellProcess.class.getMethod("ExecCommandBool", String[][].class);
 			//			ExecCommandString = DShellProcess.class.getMethod("ExecCommandString", String[][].class);

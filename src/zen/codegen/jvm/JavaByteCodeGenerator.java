@@ -67,7 +67,7 @@ import zen.parser.ZenGenerator;
 public class JavaByteCodeGenerator extends ZenGenerator {
 	JMethodBuilder CurrentVisitor;
 	ZenClassLoader ClassGenerator;
-	protected JavaByteCodeGenerator() {
+	public JavaByteCodeGenerator() {
 		super("java", "1.6");
 	}
 
@@ -179,25 +179,25 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 	@Override
 	public void VisitMethodCallNode(ZenMethodCallNode Node) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void VisitFuncCallNode(ZenFuncCallNode Node) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void VisitUnaryNode(ZenUnaryNode Node) {
-		// TODO Auto-generated method stub
-
+		JMethod Method = JMethod.FindMethod(Node);
+		this.CurrentVisitor.PushEvaluatedNode(Method.GetType(0), Node.RecvNode);
+		this.CurrentVisitor.InvokeMethodCall(Method.GetReturnType(), Method.Body);
 	}
 
 	@Override
 	public void VisitNotNode(ZenNotNode Node) {
-		// TODO Auto-generated method stub
-
+		JMethod Method = JMethod.FindMethod(Node);
+		this.CurrentVisitor.PushEvaluatedNode(Method.GetType(0), Node.RecvNode);
+		this.CurrentVisitor.InvokeMethodCall(Method.GetReturnType(), Method.Body);
 	}
 
 	@Override
@@ -213,13 +213,18 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 	}
 
 	@Override public void VisitBinaryNode(ZenBinaryNode Node) {
-		//		this.CurrentVisitor.PushEvaluatedNode(Node.LeftNode.Type, Node.LeftNode);
-		//		this.CurrentVisitor.PushEvaluatedNode(Node.RightNode.Type, Node.RightNode);
-		//		this.CurrentVisitor.InvokeMethodCall(Node.Type, Node.ResolvedFunc.FuncBody);
+		JMethod Method = JMethod.FindMethod(Node);
+		this.CurrentVisitor.PushEvaluatedNode(Method.GetType(0), Node.LeftNode);
+		this.CurrentVisitor.PushEvaluatedNode(Method.GetType(1), Node.RightNode);
+		this.CurrentVisitor.InvokeMethodCall(Method.GetReturnType(), Method.Body);
 	}
 
 	@Override
 	public void VisitComparatorNode(ZenComparatorNode Node) {
+		JMethod Method = JMethod.FindMethod(Node);
+		this.CurrentVisitor.PushEvaluatedNode(Method.GetType(0), Node.LeftNode);
+		this.CurrentVisitor.PushEvaluatedNode(Method.GetType(1), Node.RightNode);
+		this.CurrentVisitor.InvokeMethodCall(Method.GetReturnType(), Method.Body);
 	}
 
 	@Override public void VisitAndNode(ZenAndNode Node) {
@@ -356,6 +361,10 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 
 	@Override
 	public void VisitFuncDeclNode(ZenFuncDeclNode Node) {
+		if(this.ClassGenerator == null) {
+			this.ClassGenerator = new ZenClassLoader(Node.NameSpace);
+		}
+
 		String MethodName = Node.FuncName;
 		String MethodDesc = JLib.GetMethodDescriptor(Node);
 		MethodNode AsmMethodNode = new MethodNode(ACC_PUBLIC | ACC_STATIC, MethodName, MethodDesc, null, null);

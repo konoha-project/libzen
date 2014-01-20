@@ -11,8 +11,6 @@ import static org.objectweb.asm.Opcodes.INVOKESPECIAL;
 import static org.objectweb.asm.Opcodes.INVOKESTATIC;
 import static org.objectweb.asm.Opcodes.INVOKEVIRTUAL;
 import static org.objectweb.asm.Opcodes.ISTORE;
-import static org.objectweb.asm.Opcodes.POP;
-import static org.objectweb.asm.Opcodes.POP2;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -247,15 +245,6 @@ class JMethodBuilder {
 		this.AsmVisitor.visitMethodInsn(inst, owner, method.getName(), Type.getMethodDescriptor(method));
 		//System.err.println("\tRequiredType="+RequiredType+", " + method);
 		this.CheckCast(RequiredType, method.getReturnType());
-	}
-
-	public void PopValue(boolean IsLong) {
-		if(IsLong) {
-			this.AsmVisitor.visitInsn(POP2);
-		}
-		else {
-			this.AsmVisitor.visitInsn(POP);
-		}
 	}
 
 	public void PushEvaluatedNode(ZenType RequestedType, ZenNode ParamNode) {

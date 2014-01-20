@@ -103,47 +103,47 @@ public class LibNative {
 		return true;
 	}
 
-	//	private final static boolean MatchNativeMethod(ZenType[] GreenTypeParams, Method JavaMethod) {
-	//		if (!LibNative.AcceptJavaType(GreenTypeParams[0], JavaMethod.getReturnType())) {
-	//			LibNative.DebugP("return mismatched: " + GreenTypeParams[0] + ", " + JavaMethod.getReturnType() + " of " + JavaMethod);
-	//			return false;
-	//		}
-	//		@Var int StartIndex = 2;
-	//		if (Modifier.isStatic(JavaMethod.getModifiers())) {
-	//			StartIndex = 1;
-	//		} else {
-	//			if ((GreenTypeParams.length == 1)
-	//					|| !LibNative.AcceptJavaType(GreenTypeParams[1],
-	//							JavaMethod.getDeclaringClass())) {
-	//				LibNative.DebugP("recv mismatched: " + GreenTypeParams[1]
-	//						+ ", " + JavaMethod.getDeclaringClass() + " of "
-	//						+ JavaMethod);
-	//				return false;
-	//			}
-	//			StartIndex = 2;
-	//		}
-	//		@Var int ParamSize = GreenTypeParams.length - StartIndex;
-	//		@Var Class<?>[] ParamTypes = JavaMethod.getParameterTypes();
-	//		if (ParamTypes != null) {
-	//			if (ParamTypes.length != ParamSize) {
-	//				LibNative.DebugP("param.length mismatched: " + ParamSize
-	//						+ " != " + ParamTypes.length + " of " + JavaMethod);
-	//				return false;
-	//			}
-	//			for (int j = 0; j < ParamTypes.length; j++) {
-	//				if (!LibNative.AcceptJavaType(GreenTypeParams[StartIndex + j],
-	//						ParamTypes[j])) {
-	//					LibNative.DebugP("param mismatched: "
-	//							+ GreenTypeParams[StartIndex + j] + " != "
-	//							+ ParamTypes[j] + " at index " + j + " of "
-	//							+ JavaMethod);
-	//					return false;
-	//				}
-	//			}
-	//			return true;
-	//		}
-	//		return (ParamSize == 0);
-	//	}
+	private final static boolean MatchNativeMethod(ZenType[] TypeParams, Method JavaMethod) {
+		if (!LibNative.AcceptJavaType(TypeParams[0], JavaMethod.getReturnType())) {
+			ZenLogger.VerboseLog(ZenLogger.DebugLevel, "return mismatched: " + TypeParams[0] + ", " + JavaMethod.getReturnType() + " of " + JavaMethod);
+			return false;
+		}
+		@Var int StartIndex = 2;
+		if (Modifier.isStatic(JavaMethod.getModifiers())) {
+			StartIndex = 1;
+		} else {
+			if ((TypeParams.length == 1)
+					|| !LibNative.AcceptJavaType(TypeParams[1],
+							JavaMethod.getDeclaringClass())) {
+				ZenLogger.VerboseLog(ZenLogger.DebugLevel, "recv mismatched: " + TypeParams[1]
+						+ ", " + JavaMethod.getDeclaringClass() + " of "
+						+ JavaMethod);
+				return false;
+			}
+			StartIndex = 2;
+		}
+		@Var int ParamSize = TypeParams.length - StartIndex;
+		@Var Class<?>[] ParamTypes = JavaMethod.getParameterTypes();
+		if (ParamTypes != null) {
+			if (ParamTypes.length != ParamSize) {
+				ZenLogger.VerboseLog(ZenLogger.DebugLevel, "param.length mismatched: " + ParamSize
+						+ " != " + ParamTypes.length + " of " + JavaMethod);
+				return false;
+			}
+			for (int j = 0; j < ParamTypes.length; j++) {
+				if (!LibNative.AcceptJavaType(TypeParams[StartIndex + j],
+						ParamTypes[j])) {
+					ZenLogger.VerboseLog(ZenLogger.DebugLevel, "param mismatched: "
+							+ TypeParams[StartIndex + j] + " != "
+							+ ParamTypes[j] + " at index " + j + " of "
+							+ JavaMethod);
+					return false;
+				}
+			}
+			return true;
+		}
+		return (ParamSize == 0);
+	}
 
 	private final static Class<?> LoadClass(String ClassName) throws ClassNotFoundException {
 		try {
@@ -154,48 +154,43 @@ public class LibNative {
 		return Class.forName(ClassName);
 	}
 
-	// public final static Method ImportMethod(ZenType ContextType, String
-	// FullName, boolean StaticMethodOnly) {
-	// @Var Method FoundMethod = null;
-	// int Index = FullName.lastIndexOf(".");
-	// if(Index == -1) {
-	// return null;
-	// }
-	// try {
-	// @Var String FuncName = FullName.substring(Index+1);
-	// @Var Class<?> NativeClass = LibNative.LoadClass(FullName.substring(0,
-	// Index));
-	// Method[] Methods = NativeClass.getDeclaredMethods();
-	// assert(Methods != null);
-	// for(int i = 0; i < Methods.length; i++) {
-	// if(LibZen.EqualsString(FuncName, Methods[i].getName())) {
-	// if(!Modifier.isPublic(Methods[i].getModifiers())) {
-	// continue;
-	// }
-	// if(StaticMethodOnly && !Modifier.isStatic(Methods[i].getModifiers())) {
-	// continue;
-	// }
-	// if(ContextType.IsFuncType() &&
-	// !LibNative.MatchNativeMethod(ContextType.TypeParams, Methods[i])) {
-	// continue;
-	// }
-	// if(FoundMethod != null) {
-	// LibZen.VerboseLog(ZenUtils.VerboseUndefined, "overloaded method: " +
-	// FullName);
-	// return FoundMethod; // return the first one
-	// }
-	// FoundMethod = Methods[i];
-	// }
-	// }
-	// if(FoundMethod == null) {
-	// LibZen.VerboseLog(ZenUtils.VerboseUndefined, "undefined method: " +
-	// FullName + " for " + ContextType);
-	// }
-	// } catch (ClassNotFoundException e) {
-	// LibZen.VerboseLog(ZenUtils.VerboseException, e.toString());
-	// }
-	// return FoundMethod;
-	// }
+	public final static Method ImportMethod(ZenType[] TypeParams, String FullName, boolean StaticMethodOnly) {
+		@Var Method FoundMethod = null;
+		int Index = FullName.lastIndexOf(".");
+		if(Index == -1) {
+			return null;
+		}
+		try {
+			@Var String FuncName = FullName.substring(Index+1);
+			@Var Class<?> NativeClass = LibNative.LoadClass(FullName.substring(0, Index));
+			Method[] Methods = NativeClass.getDeclaredMethods();
+			assert(Methods != null);
+			for(int i = 0; i < Methods.length; i++) {
+				if(LibZen.EqualsString(FuncName, Methods[i].getName())) {
+					if(!Modifier.isPublic(Methods[i].getModifiers())) {
+						continue;
+					}
+					if(StaticMethodOnly && !Modifier.isStatic(Methods[i].getModifiers())) {
+						continue;
+					}
+					if(!LibNative.MatchNativeMethod(TypeParams, Methods[i])) {
+						continue;
+					}
+					if(FoundMethod != null) {
+						ZenLogger.VerboseLog(ZenLogger.VerboseUndefined, "overloaded method: " + FullName);
+						return FoundMethod; // return the first one
+					}
+					FoundMethod = Methods[i];
+				}
+			}
+			if(FoundMethod == null) {
+				ZenLogger.VerboseLog(ZenLogger.VerboseUndefined, "undefined method: " + FullName + " for " + TypeParams);
+			}
+		} catch (ClassNotFoundException e) {
+			ZenLogger.VerboseLog(ZenLogger.VerboseException, e.toString());
+		}
+		return FoundMethod;
+	}
 	//
 	// public static Object GetNativeFieldValue(Object ObjectValue, Field
 	// NativeField) {
@@ -390,27 +385,6 @@ public class LibNative {
 	// }
 	// }
 
-	// // Method
-	// public final static Object ApplyMethod(ZenFunc Func, Object Self,
-	// Object[] Params) {
-	// try {
-	// // System.err.println("** debug: " + Func.FuncBody);
-	// // System.err.println("** debug: " + Self + ", Params.length=" +
-	// Params.length);
-	// return ((Method)Func.FuncBody).invoke(Self, Params);
-	// }
-	// catch (InvocationTargetException e) {
-	// LibZen.VerboseException(e);
-	// }
-	// catch (IllegalArgumentException e) {
-	// LibZen.VerboseException(e);
-	// }
-	// catch (IllegalAccessException e) {
-	// LibZen.VerboseException(e);
-	// }
-	// return null;
-	// }
-
 	public final static long ApplyTokenFunc(ZenFunc TokenFunc, Object TokenContext, String Text, long pos) {
 		Object[] Argvs = new Object[3];
 		Argvs[0] = TokenContext;
@@ -550,6 +524,7 @@ public class LibNative {
 		GenMap.put("ruby", zen.codegen.jruby.RubySourceGenerator.class);
 		GenMap.put("clisp", zen.codegen.clisp.CommonLispSourceGenerator.class);
 		//GenMap.put("c", zen.codegen.c.CSourceGenerator.class);
+		GenMap.put("jvm", zen.codegen.jvm.JavaByteCodeGenerator.class);
 	}
 
 	public final static ZenGenerator LoadGenerator(@Nullable String ClassName, String OutputFile) {

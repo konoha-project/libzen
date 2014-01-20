@@ -44,76 +44,6 @@ import zen.parser.ZenSourceBuilder;
 import zen.parser.ZenUtils;
 
 public abstract class LibZen {
-	//	public final static ZenArray NewArray(ZenType Type, Object[] InitSizes) {
-	//		if(InitSizes.length == 1) {
-	//			return ZenArray.NewArray1(Type.GetParamType(0), ((Number)InitSizes[0]).intValue());
-	//		}
-	//		else if(InitSizes.length == 2) {
-	//			return ZenArray.NewArray2(Type.GetParamType(0).GetParamType(0), ((Number)InitSizes[0]).intValue(), ((Number)InitSizes[1]).intValue());
-	//		}
-	//		else {
-	//			return ZenArray.NewArray3(Type.GetParamType(0).GetParamType(0).GetParamType(0), ((Number)InitSizes[0]).intValue(), ((Number)InitSizes[1]).intValue(), ((Number)InitSizes[2]).intValue());
-	//		}
-	//
-	//	}
-	//
-	//	public final static ZenArray NewNewArray(ZenType ArrayType, Object[] Values) {
-	//		return ZenArray.NewNewArray(ArrayType, Values);
-	//	}
-	//
-	//
-	//	public static Object InvokeOverridedMethod(long FileLine, ZenNameSpace NameSpace, ZenFunc Func, Object[] Arguments) {
-	//		@Var ZenType ClassType = ZenSystem.GuessType(Arguments[0]);
-	//		Func = NameSpace.GetOverridedMethod(ClassType, Func);
-	//		return LibZen.InvokeFunc(Func, Arguments);
-	//	}
-	//
-	//	public static Object InvokeDynamicFunc(long FileLine, ZenType ContextType, ZenNameSpace NameSpace, String FuncName, Object[] Arguments) {
-	//		@Var ZenFuncSet FuncSet = NameSpace.GetFuncSet(FuncName);
-	//		@Var ZenFunc Func = FuncSet.GetMatchedFunc(NameSpace, Arguments);
-	//		@Var Object Value = ContextType.DefaultNullValue;
-	//		if(Func != null) {
-	//			Value = LibZen.InvokeFunc(Func, Arguments);
-	//			return LibZen.DynamicCast(ContextType, Value);
-	//		}
-	//		LibZen.VerboseLog(VerboseRuntime, FuncSet.FormatTypeErrorMessage("function", null, FuncName));
-	//		return Value;
-	//	}
-	//
-	//	public static final Object InvokeDynamicMethod(long FileLine, ZenType ContextType, ZenNameSpace NameSpace, String FuncName, Object[] Arguments) {
-	//		@Var ZenType ClassType = ZenSystem.GuessType(Arguments[0]);
-	//		@Var ZenFuncSet FuncSet = NameSpace.GetMethod(ClassType, FuncName, true);
-	//		@Var ZenFunc Func = FuncSet.GetMatchedFunc(NameSpace, Arguments);
-	//		@Var Object Value = ContextType.DefaultNullValue;
-	//		if(Func != null) {
-	//			Value = LibZen.InvokeFunc(Func, Arguments);
-	//			return LibZen.DynamicCast(ContextType, Value);
-	//		}
-	//		LibZen.VerboseLog(VerboseRuntime, FuncSet.FormatTypeErrorMessage("method", ClassType, FuncName));
-	//		return Value;
-	//	}
-	//
-	//	public static Object DynamicGetter(Object RecvObject, String FieldName) {
-	//		try {
-	//			Field JavaField = RecvObject.getClass().getField(FieldName);
-	//			return JavaField.get(RecvObject);
-	//		} catch (Exception e) {
-	//			LibZen.VerboseException(e);
-	//		}
-	//		return null;
-	//	}
-	//
-	//	public static Object DynamicSetter(Object RecvObject, String FieldName, Object Value) {
-	//		try {
-	//			Field JavaField = RecvObject.getClass().getField(FieldName);
-	//			JavaField.set(RecvObject, Value);
-	//			return JavaField.get(RecvObject);
-	//		} catch (Exception e) {
-	//			LibZen.VerboseException(e);
-	//		}
-	//		return null;
-	//	}
-
 	public final static String GetPlatform() {
 		return "Java JVM-" + System.getProperty("java.version");
 	}
@@ -555,43 +485,6 @@ public abstract class LibZen {
 	public static boolean booleanValue(Object Value) {
 		return ((Boolean)Value).booleanValue();
 	}
-
-	//	public static Object DynamicCast(ZenType CastType, Object Value) {
-	//		if(Value != null) {
-	//			ZenType FromType = ZenSystem.GuessType(Value);
-	//			if(CastType == FromType || CastType.Accept(FromType)) {
-	//				return Value;
-	//			}
-	//		}
-	//		return null;
-	//	}
-	//
-	//	public static boolean DynamicInstanceOf(Object Value, ZenType Type) {
-	//		if(Value != null) {
-	//			ZenType ValueType = ZenSystem.GuessType(Value);
-	//			if(ValueType == Type || Type.Accept(ValueType)) {
-	//				return true;
-	//			}
-	//		}
-	//		return false;
-	//	}
-	//
-	//	public final static Object DynamicConvertTo(ZenType CastType, Object Value) {
-	//		if(Value != null) {
-	//			ZenType ValueType = ZenTypeSystem.GuessType(Value);
-	//			if(ValueType == CastType || CastType.Accept(ValueType)) {
-	//				return Value;
-	//			}
-	//			ZenFunc Func = ZenTypeSystem.GetConverterFunc(ValueType, CastType, true);
-	//			if(Func != null) {
-	//				Object[] Argvs = new Object[2];
-	//				Argvs[0] = CastType;
-	//				Argvs[1] = Value;
-	//				return LibNative.ApplyMethod(Func, null, Argvs);
-	//			}
-	//		}
-	//		return null;
-	//	}
 
 	//	public static boolean ImportMethodToFunc(ZenFunc Func, String FullName) {
 	//		Method JavaMethod = LibNative.ImportMethod(Func.GetFuncType(), FullName, false);
