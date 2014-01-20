@@ -28,9 +28,10 @@ import zen.deps.Constructor;
 import zen.deps.Field;
 import zen.deps.Init;
 import zen.deps.Var;
+import zen.deps.Zen;
 import zen.lang.ZenType;
 
-public final class ZToken {
+@Zen public final class ZToken {
 	@Field public final static ZToken NullToken = new ZToken(0, "/**/", 0);
 	@Field @Init public int		    TokenFlag;
 	@Field @Init public String	    ParsedText;
