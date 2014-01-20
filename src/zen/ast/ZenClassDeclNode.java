@@ -28,6 +28,7 @@ import java.util.ArrayList;
 
 import zen.deps.Constructor;
 import zen.deps.Field;
+import zen.lang.ZenClassType;
 import zen.lang.ZenType;
 import zen.parser.ZenNameSpace;
 import zen.parser.ZenVisitor;
@@ -62,6 +63,26 @@ final public class ZenClassDeclNode extends ZenNode {
 	}
 	@Override public void Accept(ZenVisitor Visitor) {
 		Visitor.VisitClassDeclNode(this);
+	}
+
+	public ZenNode CheckClassName(ZenNameSpace NameSpace) {
+		if(this.ClassType == null || !(this.ClassType instanceof ZenClassType)) {
+			return new ZenErrorNode(this.SourceToken, "" + this.ClassName + " is not a Zen class.");
+		}
+		if(!this.ClassType.IsOpenType()) {
+			return new ZenErrorNode(this.SourceToken, "" + this.ClassName + " has been defined.");
+		}
+		if(this.SuperType != null) {
+			if(!(this.SuperType instanceof ZenClassType)) {
+				return new ZenErrorNode(this.SourceToken, "" + this.SuperType + " cannot be extended.");
+			}
+			if(this.SuperType.IsOpenType()) {
+				NameSpace.Generator.Logger.ReportWarning(this.SourceToken, "" + this.SuperType + " is not defined with class.");
+				//				return new ZenErrorNode(this.SourceToken, "" + this.SuperType + " is not defined with class.");
+			}
+			((ZenClassType)this.ClassType).ResetSuperType((ZenClassType)this.SuperType);
+		}
+		return null;
 	}
 
 }

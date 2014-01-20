@@ -26,6 +26,7 @@ package zen.ast;
 
 import zen.deps.Constructor;
 import zen.deps.Field;
+import zen.lang.ZenSystem;
 import zen.lang.ZenType;
 
 final public class ZenFieldNode extends ZenNode {
@@ -36,6 +37,7 @@ final public class ZenFieldNode extends ZenNode {
 	@Constructor public ZenFieldNode(ZenType ClassType) {
 		super(); // TODO
 		this.ClassType = ClassType;
+		this.DeclType = ZenSystem.VarType;
 		this.FieldName = null;
 		this.InitNode  = null;
 	}
@@ -50,5 +52,12 @@ final public class ZenFieldNode extends ZenNode {
 		else {
 			this.InitNode = this.SetChild(Node);
 		}
+	}
+
+	public ZenNode CheckFieldType() {
+		if(this.DeclType.IsVarType()) {
+			return new ZenErrorNode(this.SourceToken, "field " + this.FieldName + " is ambigious");
+		}
+		return null;
 	}
 }

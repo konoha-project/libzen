@@ -33,11 +33,11 @@ import zen.deps.LibZen;
 import zen.deps.Nullable;
 import zen.deps.Var;
 import zen.deps.ZenMap;
+import zen.lang.ZenClassType;
 import zen.lang.ZenFunc;
 import zen.lang.ZenFuncSet;
 import zen.lang.ZenSystem;
 import zen.lang.ZenType;
-import zen.lang.ZenTypeFlag;
 
 final class ZenSymbolSource {
 	@Field public ZenToken SourceToken;
@@ -251,7 +251,7 @@ public final class ZenNameSpace {
 			return (/*cast*/ZenType)TypeInfo;
 		}
 		if(SourceToken != null && TypeInfo == null) {
-			ZenType Type = new ZenType(ZenTypeFlag.UniqueType|ZenTypeFlag.OpenType, TypeName, ZenSystem.VarType);
+			ZenType Type = new ZenClassType(TypeName, ZenSystem.VarType);
 			//			this.Generator.Logger.ReportInfo(SourceToken, "implicit definition of type " + TypeName);
 			this.GetRootNameSpace().SetSymbol(TypeName, Type, SourceToken);
 			return Type;

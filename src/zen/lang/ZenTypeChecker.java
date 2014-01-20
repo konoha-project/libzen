@@ -29,11 +29,16 @@ package zen.lang;
 import java.util.ArrayList;
 
 import zen.ast.ZenApplyNode;
+import zen.ast.ZenBooleanNode;
 import zen.ast.ZenCastNode;
 import zen.ast.ZenErrorNode;
+import zen.ast.ZenFloatNode;
+import zen.ast.ZenIntNode;
 import zen.ast.ZenMethodCallNode;
 import zen.ast.ZenNode;
+import zen.ast.ZenNullNode;
 import zen.ast.ZenStupidCastNode;
+import zen.ast.ZenSymbolNode;
 import zen.deps.Field;
 import zen.deps.LibNative;
 import zen.deps.Var;
@@ -160,7 +165,7 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 	}
 
 	public final void CheckErrorNode(ZenNode Node) {
-		if(Node.IsErrorNode()) {
+		if(Node != null && Node.IsErrorNode()) {
 			Node.Type = ZenSystem.VoidType;
 			this.StackedTypedNode = Node;
 			this.StopVisitor();
@@ -355,11 +360,19 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 
 	private void SetClassField(ZenNameSpace NameSpace, ZenType ClassType, String FieldName, ZenType FieldType, ZenToken SourceToken) {
 		ZenField Field = new ZenField(FieldName, FieldType, SourceToken);
-		NameSpace.SetSymbol(ZenNameSpace.StringfyClassSymbol(ClassType, FieldName), Field, SourceToken);
+		NameSpace.GetRootNameSpace().SetSymbol(ZenNameSpace.StringfyClassSymbol(ClassType, FieldName), Field, SourceToken);
+	}
+
+	protected final ZenField GetField(ZenNameSpace NameSpace, ZenType ClassType, String FieldName) {
+		Object Field = NameSpace.GetRootNameSpace().GetClassSymbol(ClassType, FieldName, true);
+		if(Field instanceof ZenField) {
+			return (ZenField)Field;
+		}
+		return null;
 	}
 
 	protected final ZenType GetFieldType(ZenNameSpace NameSpace, ZenType ClassType, String FieldName) {
-		Object Field = NameSpace.GetClassSymbol(ClassType, FieldName, true);
+		Object Field = NameSpace.GetRootNameSpace().GetClassSymbol(ClassType, FieldName, true);
 		if(Field instanceof ZenField) {
 			return ((ZenField)Field).FieldType;
 		}
@@ -367,7 +380,7 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 	}
 
 	protected final ZenType GetSetterType(ZenNameSpace NameSpace, ZenType ClassType, String FieldName) {
-		Object Field = NameSpace.GetClassSymbol(ClassType, FieldName, true);
+		Object Field = NameSpace.GetRootNameSpace().GetClassSymbol(ClassType, FieldName, true);
 		if(Field instanceof ZenField) {
 			return ((ZenField)Field).FieldType;
 		}
@@ -386,9 +399,20 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		return InferredType;
 	}
 
-	protected ZenNode CreateDefaultValueNode(ZenType Type) {
-		// TODO Auto-generated method stub
-		return null;
+	protected ZenNode CreateDefaultValueNode(ZenType Type, String FieldName) {
+		if(FieldName != null && Type.IsFuncType()) {
+			return new ZenSymbolNode(Type, null, FieldName, Type.StringfySignature(FieldName));
+		}
+		if(Type.IsIntType()) {
+			return new ZenIntNode(null, 0);
+		}
+		else if(Type.IsBooleanType()) {
+			return new ZenBooleanNode(null, false);
+		}
+		else if(Type.IsFloatType()) {
+			return new ZenFloatNode(null, 0.0);
+		}
+		return new ZenNullNode(null);
 	}
 
 	protected ZenNode CreateReadOnlyErrorNode(ZenNode Node, ZenType ClassType, String VarName) {

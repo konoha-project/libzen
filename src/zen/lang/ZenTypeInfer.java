@@ -41,6 +41,7 @@ import zen.ast.ZenComparatorNode;
 import zen.ast.ZenConstPoolNode;
 import zen.ast.ZenEmptyNode;
 import zen.ast.ZenErrorNode;
+import zen.ast.ZenFieldNode;
 import zen.ast.ZenFloatNode;
 import zen.ast.ZenFuncCallNode;
 import zen.ast.ZenFuncDeclNode;
@@ -79,6 +80,7 @@ import zen.parser.ZenLogger;
 import zen.parser.ZenNameSpace;
 import zen.parser.ZenNodeUtils;
 import zen.parser.ZenToken;
+import zen.parser.ZenUtils;
 
 public class ZenTypeInfer extends ZenTypeChecker {
 
@@ -473,7 +475,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		}
 		else if(Node.ValueNode == null && !ReturnType.IsVoidType() && !ReturnType.IsVoidType()) {
 			this.Logger.ReportWarning(Node.SourceToken, "returning default value of " + ReturnType);
-			Node.ValueNode = this.CreateDefaultValueNode(ReturnType);
+			Node.ValueNode = this.CreateDefaultValueNode(ReturnType, null);
 		}
 		if(Node.ValueNode != null) {
 			Node.ValueNode = this.TypeCheck(Node.ValueNode, NameSpace, ReturnType, ZenTypeChecker.DefaultTypeCheckPolicy);
@@ -611,7 +613,28 @@ public class ZenTypeInfer extends ZenTypeChecker {
 	}
 
 	@Override public void VisitClassDeclNode(ZenClassDeclNode Node) {
-
+		@Var ZenNameSpace NameSpace = this.GetNameSpace();
+		this.CheckErrorNode(Node.CheckClassName(NameSpace));
+		if(this.IsVisitable()) {
+			@Var ZenClassType ClassType = (ZenClassType)Node.ClassType;
+			@Var int i = 0;
+			while(this.IsVisitable() && i < Node.FieldList.size()) {
+				@Var ZenFieldNode FieldNode = Node.FieldList.get(i);
+				if(FieldNode.InitNode == null) {
+					FieldNode.InitNode = this.CreateDefaultValueNode(FieldNode.DeclType, FieldNode.FieldName);
+				}
+				FieldNode.InitNode = this.TypeCheck(FieldNode.InitNode, NameSpace, FieldNode.DeclType, ZenTypeChecker.DefaultTypeCheckPolicy);
+				if(FieldNode.DeclType.IsVarType()) {
+					FieldNode.DeclType = FieldNode.InitNode.Type;
+					this.CheckErrorNode(FieldNode.CheckFieldType());
+				}
+				ClassType.AppendField(FieldNode.DeclType, FieldNode.FieldName, FieldNode.SourceToken);
+				i = i + 1;
+			}
+			ZenUtils.UnsetFlag(ClassType.TypeFlag, ZenTypeFlag.OpenType);
+			this.CheckErrorNode(ClassType.CheckAllFields(NameSpace));
+		}
+		this.TypedNode(Node, ZenSystem.VoidType);
 	}
 
 	@Override public void VisitErrorNode(ZenErrorNode Node) {

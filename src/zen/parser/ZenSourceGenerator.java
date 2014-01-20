@@ -40,6 +40,7 @@ import zen.ast.ZenComparatorNode;
 import zen.ast.ZenConstPoolNode;
 import zen.ast.ZenEmptyNode;
 import zen.ast.ZenErrorNode;
+import zen.ast.ZenFieldNode;
 import zen.ast.ZenFloatNode;
 import zen.ast.ZenFuncCallNode;
 import zen.ast.ZenFuncDeclNode;
@@ -193,9 +194,9 @@ public class ZenSourceGenerator extends ZenGenerator {
 	}
 
 	public void VisitStmtList(ArrayList<ZenNode> StmtList) {
-		int i = 0;
+		@Var int i = 0;
 		while (i < StmtList.size()) {
-			ZenNode SubNode = StmtList.get(i);
+			@Var ZenNode SubNode = StmtList.get(i);
 			this.CurrentBuilder.AppendLineFeed();
 			this.CurrentBuilder.AppendIndent();
 			this.GenerateCode(SubNode);
@@ -506,6 +507,31 @@ public class ZenSourceGenerator extends ZenGenerator {
 		this.CurrentBuilder.Append("class");
 		this.CurrentBuilder.AppendWhiteSpace();
 		this.CurrentBuilder.Append(Node.ClassName);
+		if(Node.SuperType != null) {
+			this.CurrentBuilder.AppendToken("extends");
+			this.VisitType(Node.SuperType);
+		}
+		this.CurrentBuilder.AppendWhiteSpace();
+		this.CurrentBuilder.Append("{");
+		this.CurrentBuilder.Indent();
+		@Var int i = 0;
+		while (i < Node.FieldList.size()) {
+			@Var ZenFieldNode FieldNode = Node.FieldList.get(i);
+			this.CurrentBuilder.AppendLineFeed();
+			this.CurrentBuilder.AppendIndent();
+			this.CurrentBuilder.Append("field");
+			this.CurrentBuilder.AppendWhiteSpace();
+			this.CurrentBuilder.Append(FieldNode.FieldName);
+			this.VisitTypeAnnotation(FieldNode.DeclType);
+			this.CurrentBuilder.AppendToken("=");
+			this.GenerateCode(FieldNode.InitNode);
+			this.CurrentBuilder.Append(this.SemiColon);
+			i = i + 1;
+		}
+		this.CurrentBuilder.UnIndent();
+		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.AppendIndent();
+		this.CurrentBuilder.Append("}");
 	}
 
 
