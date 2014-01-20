@@ -372,6 +372,9 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 	}
 
 	protected final ZenType GetFieldType(ZenNameSpace NameSpace, ZenType ClassType, String FieldName) {
+		if(ClassType instanceof ZenClassType) {
+			return ((ZenClassType)ClassType).GetFieldType(FieldName, ZenSystem.VoidType);
+		}
 		Object Field = NameSpace.GetRootNameSpace().GetClassSymbol(ClassType, FieldName, true);
 		if(Field instanceof ZenField) {
 			return ((ZenField)Field).FieldType;
@@ -380,6 +383,9 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 	}
 
 	protected final ZenType GetSetterType(ZenNameSpace NameSpace, ZenType ClassType, String FieldName) {
+		if(ClassType instanceof ZenClassType) {
+			return ((ZenClassType)ClassType).GetFieldType(FieldName, ZenSystem.VoidType);
+		}
 		Object Field = NameSpace.GetRootNameSpace().GetClassSymbol(ClassType, FieldName, true);
 		if(Field instanceof ZenField) {
 			return ((ZenField)Field).FieldType;
@@ -415,12 +421,13 @@ public abstract class ZenTypeChecker implements ZenVisitor {
 		return new ZenNullNode(null);
 	}
 
-	protected ZenNode CreateReadOnlyErrorNode(ZenNode Node, ZenType ClassType, String VarName) {
+
+	protected ZenNode ReadOnlyName(ZenNode Node, ZenType ClassType, String VarName) {
 		return new ZenErrorNode(Node.SourceToken, "readonly: " + VarName);
 	}
 
-	protected ZenNode CreateUndefinedVarErrorNode(ZenNode Node, String VarName) {
-		return new ZenErrorNode(Node.SourceToken, "undefined name: " + VarName);
+	protected ZenNode UndefinedName(ZenNode Node, String Name) {
+		return new ZenErrorNode(Node.SourceToken, "undefined name: " + Name);
 	}
 
 	protected final ZenType NewVarType(ZenType VarType, String Name, ZenToken SourceToken) {

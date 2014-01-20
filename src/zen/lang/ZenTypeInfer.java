@@ -197,7 +197,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		ZenNameSpace NameSpace = this.GetNameSpace();
 		ZenVariable VarInfo = this.GetLocalVariable(NameSpace, Node.VarName);
 		if(VarInfo == null) {
-			this.CheckErrorNode(this.CreateUndefinedVarErrorNode(Node, Node.VarName));
+			this.CheckErrorNode(this.UndefinedName(Node, Node.VarName));
 		}
 		else {
 			Node.VarName = VarInfo.VarName;
@@ -233,8 +233,13 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		@Var ZenType ContextType = this.GetContextType();
 		Node.RecvNode = this.TypeCheck(Node.RecvNode, NameSpace, ZenSystem.VarType, ZenTypeChecker.DefaultTypeCheckPolicy);
 		ZenType FieldType = this.GetFieldType(NameSpace, Node.RecvNode.Type, Node.NativeName);
-		this.TypedCastNode(Node, ContextType, Node.RecvNode.Type);
-		this.InferFieldType(NameSpace, Node.RecvNode.Type, Node.NativeName, ContextType, Node.SourceToken);
+		if(FieldType.IsVarType() && ContextType.IsInferrableType()) {
+			this.InferFieldType(NameSpace, Node.RecvNode.Type, Node.NativeName, ContextType, Node.SourceToken);
+		}
+		if(FieldType.IsVoidType() && !Node.RecvNode.Type.IsVarType()) {
+			this.CheckErrorNode(this.UndefinedName(Node, Node.RecvNode.Type.StringfyClassMember(Node.NativeName)));
+			return;
+		}
 		this.TypedNodeIf(Node, FieldType, Node.RecvNode);
 	}
 
@@ -243,7 +248,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		Node.RecvNode = this.TypeCheck(Node.RecvNode, NameSpace, ZenSystem.VarType, ZenTypeChecker.DefaultTypeCheckPolicy);
 		@Var ZenType FieldType = this.GetSetterType(NameSpace, Node.RecvNode.Type, Node.NativeName);
 		if(FieldType.IsVoidType()) {
-			this.CheckErrorNode(this.CreateReadOnlyErrorNode(Node, Node.RecvNode.Type, Node.NativeName));
+			this.CheckErrorNode(this.ReadOnlyName(Node, Node.RecvNode.Type, Node.NativeName));
 			return;
 		}
 		Node.ValueNode = this.TypeCheck(Node.ValueNode, NameSpace, FieldType, ZenTypeChecker.DefaultTypeCheckPolicy);
@@ -631,7 +636,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 				ClassType.AppendField(FieldNode.DeclType, FieldNode.FieldName, FieldNode.SourceToken);
 				i = i + 1;
 			}
-			ZenUtils.UnsetFlag(ClassType.TypeFlag, ZenTypeFlag.OpenType);
+			ClassType.TypeFlag = ZenUtils.UnsetFlag(ClassType.TypeFlag, ZenTypeFlag.OpenType);
 			this.CheckErrorNode(ClassType.CheckAllFields(NameSpace));
 		}
 		this.TypedNode(Node, ZenSystem.VoidType);

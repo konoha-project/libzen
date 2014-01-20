@@ -184,6 +184,10 @@ public class ZenType implements ZenTypeFlag {
 		return this.ShortName;
 	}
 
+	public final String StringfyClassMember(String Name) {
+		return Name + " of " + this.ShortName;
+	}
+
 	private final static String[] Matrix = {
 		"q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "0", "4",
 		"a", "s", "d", "f", "g", "h", "j", "k", "l", "9", "1", "6",

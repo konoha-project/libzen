@@ -6,6 +6,9 @@ class Person {
 
 class Student extends Person {
 	field SchoolName: String;
-	field gender = true;
+	field hasSchalar = true;
 }
 
+function isChild(p: Person) {
+	return p.age <= 20;
+}

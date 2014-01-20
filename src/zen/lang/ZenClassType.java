@@ -68,7 +68,7 @@ public class ZenClassType extends ZenType {
 		return false;
 	}
 
-	public ZenType GetFieldType(String FieldName) {
+	public ZenType GetFieldType(String FieldName, ZenType Type) {
 		if(this.FieldList != null) {
 			@Var int i = 0;
 			while(i < this.FieldList.size()) {
@@ -79,7 +79,7 @@ public class ZenClassType extends ZenType {
 				i = i + 1;
 			}
 		}
-		return null;
+		return Type;
 	}
 
 	public ZenField AppendField(ZenType FieldType, String FieldName, ZenToken SourceToken) {
