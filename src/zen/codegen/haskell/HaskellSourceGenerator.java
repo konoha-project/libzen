@@ -46,7 +46,7 @@ import zen.ast.ZenWhileNode;
 import zen.deps.Constructor;
 import zen.deps.LibZen;
 import zen.lang.ZenSystem;
-import zen.parser.ZenSourceBuilder;
+import zen.parser.ZSourceBuilder;
 import zen.parser.ZenSourceGenerator;
 
 public class HaskellSourceGenerator extends ZenSourceGenerator {
@@ -78,12 +78,12 @@ public class HaskellSourceGenerator extends ZenSourceGenerator {
 		this.SetNativeType(ZenSystem.StringType, "String");
 	}
 
-	private void Indent(ZenSourceBuilder builder) {
+	private void Indent(ZSourceBuilder builder) {
 		IndentLevel = IndentLevel + 1;
 		builder.Indent();
 	}
 
-	private void UnIndent(ZenSourceBuilder builder) {
+	private void UnIndent(ZSourceBuilder builder) {
 		IndentLevel--;
 		builder.UnIndent();
 	}

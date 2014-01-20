@@ -40,7 +40,7 @@ import java.util.Iterator;
 
 import zen.lang.ZenType;
 import zen.parser.ZenLogger;
-import zen.parser.ZenSourceBuilder;
+import zen.parser.ZSourceBuilder;
 import zen.parser.ZenUtils;
 
 public abstract class LibZen {
@@ -367,7 +367,7 @@ public abstract class LibZen {
 		}
 	}
 
-	public final static void WriteSource(String OutputFile, ArrayList<ZenSourceBuilder> SourceList) {
+	public final static void WriteSource(String OutputFile, ArrayList<ZSourceBuilder> SourceList) {
 		try {
 			PrintStream Stream = null;
 			if(OutputFile.equals("-")) {
@@ -377,7 +377,7 @@ public abstract class LibZen {
 			else {
 				Stream = new PrintStream(OutputFile);
 			}
-			for(ZenSourceBuilder Builder : SourceList) {
+			for(ZSourceBuilder Builder : SourceList) {
 				for(String Source : Builder.SourceList) {
 					Stream.print(Source);
 				}
@@ -554,7 +554,7 @@ public abstract class LibZen {
 		e.printStackTrace();
 	}
 
-	public static String SourceBuilderToString(ZenSourceBuilder Builder) {
+	public static String SourceBuilderToString(ZSourceBuilder Builder) {
 		StringBuilder builder = new StringBuilder();
 		for(String s : Builder.SourceList){
 			builder.append(s);

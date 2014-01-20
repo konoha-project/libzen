@@ -83,9 +83,9 @@ import zen.lang.ZenType;
 
 public class ZenSourceGenerator extends ZenGenerator {
 	@Field public ZenMap<String> NativeTypeMap;
-	@Field private final ArrayList<ZenSourceBuilder> BuilderList;
-	@Field protected ZenSourceBuilder HeaderBuilder;
-	@Field protected ZenSourceBuilder CurrentBuilder;
+	@Field private final ArrayList<ZSourceBuilder> BuilderList;
+	@Field protected ZSourceBuilder HeaderBuilder;
+	@Field protected ZSourceBuilder CurrentBuilder;
 
 	@Field public String Tab;
 	@Field public String LineFeed;
@@ -108,7 +108,7 @@ public class ZenSourceGenerator extends ZenGenerator {
 	public ZenSourceGenerator(String TargetCode, String TargetVersion) {
 		super(TargetCode, TargetVersion);
 		this.NativeTypeMap = new ZenMap<String>(null);
-		this.BuilderList = new ArrayList<ZenSourceBuilder>();
+		this.BuilderList = new ArrayList<ZSourceBuilder>();
 		this.HeaderBuilder = this.NewSourceBuilder();
 		this.CurrentBuilder = this.HeaderBuilder;
 		this.LineFeed = "\n";
@@ -127,8 +127,8 @@ public class ZenSourceGenerator extends ZenGenerator {
 		this.TopType = "var";
 	}
 
-	protected ZenSourceBuilder NewSourceBuilder() {
-		@Var ZenSourceBuilder Builder = new ZenSourceBuilder(this);
+	protected ZSourceBuilder NewSourceBuilder() {
+		@Var ZSourceBuilder Builder = new ZSourceBuilder(this);
 		this.BuilderList.add(Builder);
 		return Builder;
 	}

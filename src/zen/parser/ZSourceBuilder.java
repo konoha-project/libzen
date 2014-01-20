@@ -29,25 +29,22 @@ import java.util.ArrayList;
 
 import zen.ast.ZenNode;
 import zen.deps.Field;
+import zen.deps.Init;
 import zen.deps.LibNative;
 import zen.deps.LibZen;
 import zen.deps.Var;
 
 //endif VAJA
 
-public class ZenSourceBuilder {
-	@Field public ArrayList<String> SourceList;
-	@Field ZenSourceGenerator Template;
+public final class ZSourceBuilder {
+	@Field public ArrayList<String> SourceList = new ArrayList<String>();
+	@Field @Init ZenSourceGenerator Template;
 	@Field int IndentLevel = 0;
-	@Field String CurrentIndentString;
-	@Field String BufferedLineComment;
+	@Field String CurrentIndentString = "";
+	@Field String BufferedLineComment = "";
 
-	public ZenSourceBuilder(ZenSourceGenerator Template) {
+	public ZSourceBuilder(ZenSourceGenerator Template) {
 		this.Template = Template;
-		this.SourceList = new ArrayList<String>();
-		this.IndentLevel = 0;
-		this.CurrentIndentString = "";
-		this.BufferedLineComment = "";
 	}
 
 	public void Clear() {
@@ -105,49 +102,48 @@ public class ZenSourceBuilder {
 	}
 
 	public final void Indent() {
-		this.IndentLevel += 1;
+		this.IndentLevel = this.IndentLevel + 1;
 		this.CurrentIndentString = null;
 	}
 
 	public final void UnIndent() {
-		this.IndentLevel -= 1;
+		this.IndentLevel = this.IndentLevel - 1;
 		this.CurrentIndentString = null;
 		LibNative.Assert(this.IndentLevel >= 0);
 	}
 
 	private final String GetIndentString() {
 		if (this.CurrentIndentString == null) {
-			this.CurrentIndentString = ZenUtils.JoinStrings(this.Template.Tab,
-					this.IndentLevel);
+			this.CurrentIndentString = ZenUtils.JoinStrings(this.Template.Tab,this.IndentLevel);
 		}
 		return this.CurrentIndentString;
 	}
 
-	public void AppendIndent() {
+	public final void AppendIndent() {
 		this.SourceList.add(this.GetIndentString());
 	}
 
-	public void IndentAndAppend(String Text) {
+	public final void IndentAndAppend(String Text) {
 		this.SourceList.add(this.GetIndentString());
 		this.SourceList.add(Text);
 	}
 
-	public void AppendParamList(ArrayList<ZenNode> ParamList, int BeginIdx, int EndIdx) {
-		for(@Var int i = BeginIdx; i < EndIdx; i = i + 1) {
+	public final void AppendParamList(ArrayList<ZenNode> ParamList, int BeginIdx, int EndIdx) {
+		@Var int i = BeginIdx;
+		while(i < EndIdx) {
 			if (i > BeginIdx) {
 				this.Append(this.Template.Camma);
 			}
 			ParamList.get(i).Accept(this.Template);
+			i = i + 1;
 		}
 	}
 
-	@Override
-	public String toString() {
+	@Override public String toString() {
 		return LibZen.SourceBuilderToString(this);
 	}
 
-	@Deprecated
-	public void AppendLine(String Text) {
+	@Deprecated public void AppendLine(String Text) {
 		this.Append(Text);
 		this.AppendLineFeed();
 	}
