@@ -153,8 +153,8 @@ public final class ZenTokenContext {
 	}
 
 	private int DispatchFunc(String ScriptSource, int ZenChar, int pos) {
-		@Var ZenTokenFunc TokenFunc = this.TopLevelNameSpace.GetTokenFunc(ZenChar);
-		@Var int NextIdx = ZenTokenFunc.ApplyTokenFunc(TokenFunc, this, ScriptSource, pos);
+		@Var ZTokenFunc TokenFunc = this.TopLevelNameSpace.GetTokenFunc(ZenChar);
+		@Var int NextIdx = ZTokenFunc.ApplyTokenFunc(TokenFunc, this, ScriptSource, pos);
 		if(NextIdx == ZenTokenContext.MismatchedPosition) {
 			ZenLogger.VerboseLog(ZenLogger.VerboseUndefined, "undefined tokenizer: " + ScriptSource.substring(pos, pos+1));
 			this.AppendParsedToken(ScriptSource.substring(pos, pos + 1), 0, null);
@@ -533,7 +533,7 @@ public final class ZenTokenContext {
 		@Var int Index = SourceMap.lastIndexOf(":");
 		if(Index != -1) {
 			@Var String FileName = SourceMap.substring(0, Index);
-			@Var int Line = (/*cast*/int)LibZen.ParseInt(SourceMap.substring(Index+1));
+			@Var int Line = (int)LibZen.ParseInt(SourceMap.substring(Index+1));
 			this.ParsingLine = ZenSystem.GetFileLine(FileName, Line);
 		}
 	}

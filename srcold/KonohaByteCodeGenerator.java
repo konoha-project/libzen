@@ -667,7 +667,7 @@ public class KonohaByteCodeGenerator extends ZenSourceGenerator {
 		this.CurrentBuilder = this.NewSourceBuilder();
 		this.CurrentBuilder.Append("(METHOD" + Index + " " + MethodName);
 		@Var int ParamSize = LibZen.ListSize(ParamNameList);
-		//@Var HashMap<String,Integer> PushedMap = (/*cast*/HashMap<String,Integer>)this.LocalVarMap.clone();
+		//@Var HashMap<String,Integer> PushedMap = (HashMap<String,Integer>)this.LocalVarMap.clone();
 		for(@Var int i = 0; i < ParamSize; ++i) {
 			@Var String ParamName = ParamNameList.get(i);
 			this.LocalVarMap.put(ParamName, this.AllocRegister());

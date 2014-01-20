@@ -258,7 +258,7 @@ public class DShellGrammar extends ZenUtils {
 			if(Env == null) {
 				@Var ZenTypeEnv Gamma = new ZenTypeEnv(NameSpace);
 				@Var ZenNode ConstNode = ConstTree.TypeCheck(Gamma, ZenSystem.StringType, DefaultTypeCheckPolicy);
-				Env = (/*cast*/String)ConstNode.ToConstValue(Gamma.Context, true);
+				Env = (String)ConstNode.ToConstValue(Gamma.Context, true);
 			}
 		}
 		if(Env == null) {
@@ -449,7 +449,7 @@ public class DShellGrammar extends ZenUtils {
 			CommandTree.AppendParsedTree2(CommandTree.CreateConstTree(RedirectSymbol));
 		}
 		else {
-			@Var String Command = (/*cast*/String)NameSpace.GetSymbol(DShellGrammar.CommandSymbol(CommandToken.ParsedText));
+			@Var String Command = (String)NameSpace.GetSymbol(DShellGrammar.CommandSymbol(CommandToken.ParsedText));
 			if(Command != null) {
 				CommandTree.AppendParsedTree2(CommandTree.CreateConstTree(Command));
 				TokenContext.Next();
@@ -547,7 +547,7 @@ public class DShellGrammar extends ZenUtils {
 		@Var ZenSyntaxTree AtomicTree = TokenContext.CreateMatchedSyntaxTree(NameSpace, Pattern, "atomic");
 		@Var ZenSyntaxTree TargetTree = TokenContext.ParsePattern_OLD(NameSpace, "$FilePath$", Required);
 
-		@Var String TargetPath = LibZen.QuoteString((/*cast*/String)TargetTree.ParsedValue);
+		@Var String TargetPath = LibZen.QuoteString((String)TargetTree.ParsedValue);
 		DShellGrammar.checkpointCount += 1;
 		@Var String CheckPointName = "___def_check_point__" + DShellGrammar.checkpointCount;
 
@@ -624,9 +624,9 @@ public class DShellGrammar extends ZenUtils {
 				return Gamma.CreateSyntaxErrorNode(ParsedTree, "constant variable 'Location' is not defined");
 			}
 
-			@Var ZenFunc ActionFunc = ((/*cast*/ZenApplySymbolNode)ActionNode).ResolvedFunc;
+			@Var ZenFunc ActionFunc = ((ZenApplySymbolNode)ActionNode).ResolvedFunc;
 			if(ActionFunc.GetFuncParamSize() == 0) {
-				@Var ZenFunc ReportFunc = (/*cast*/ZenFunc)Gamma.NameSpace.GetSymbol("$ReportBuiltInFunc");
+				@Var ZenFunc ReportFunc = (ZenFunc)Gamma.NameSpace.GetSymbol("$ReportBuiltInFunc");
 				@Var ZenNode ApplyNode = Gamma.Generator.CreateApplySymbolNode(ContextType, ParsedTree, "$ReportBuiltInFunc", ReportFunc);
 				ApplyNode.Append(Gamma.Generator.CreateConstNode_OLD(ZenSystem.VarType, ParsedTree, ReportFunc));
 				ApplyNode.Append(Gamma.Generator.CreateConstNode_OLD(ZenSystem.VarType, ParsedTree, Gamma.NameSpace));
@@ -655,7 +655,7 @@ public class DShellGrammar extends ZenUtils {
 	}
 
 	public static ZenNode TypeFault(ZenTypeEnv Gamma, ZenSyntaxTree ParsedTree, ZenType ContextType) {
-		@Var ZenFunc CreateFunc = (/*cast*/ZenFunc)Gamma.NameSpace.GetSymbol("$CreateFaultBuiltInFunc");
+		@Var ZenFunc CreateFunc = (ZenFunc)Gamma.NameSpace.GetSymbol("$CreateFaultBuiltInFunc");
 		@Var ZenNode ApplyNode = Gamma.Generator.CreateApplySymbolNode(ContextType, ParsedTree, "$CreateFaultBuiltInFunc", CreateFunc);
 		ApplyNode.Append(Gamma.Generator.CreateConstNode_OLD(ZenSystem.VarType, ParsedTree, CreateFunc));
 		ApplyNode.Append(Gamma.Generator.CreateConstNode_OLD(ZenSystem.VarType, ParsedTree, Gamma.NameSpace));
@@ -702,7 +702,7 @@ public class DShellGrammar extends ZenUtils {
 		if(ConstValue == null) {
 			return Gamma.CreateSyntaxErrorNode(ParsedTree, "constant variable DCaseRevision is not defined in this context");
 		}
-		@Var ZenType DFaultType = (/*cast*/ZenType) ParsedTree.NameSpace.GetSymbol("DFault");
+		@Var ZenType DFaultType = (ZenType) ParsedTree.NameSpace.GetSymbol("DFault");
 		if(DFaultType == null) {
 			return Gamma.CreateSyntaxErrorNode(ParsedTree, "DFault type is not defined in this context");
 		}
@@ -734,7 +734,7 @@ public class DShellGrammar extends ZenUtils {
 		if(!(ConstValue instanceof ZenFunc)) {
 			return Gamma.CreateSyntaxErrorNode(ParsedTree, "ReportAction is not defined in this context");
 		}
-		@Var ZenFunc Func = (/*cast*/ZenFunc) ConstValue;
+		@Var ZenFunc Func = (ZenFunc) ConstValue;
 		@Var ZenNode ApplyNode2 = Gamma.Generator.CreateApplySymbolNode(Func.GetReturnType(), ParsedTree, "ReportAction", Func);
 		ApplyNode2.Append(DShellGrammar.CreateConstNode(Gamma, ParsedTree, Func));
 		ApplyNode2.Append(ApplyNode);
@@ -759,7 +759,7 @@ public class DShellGrammar extends ZenUtils {
 		}
 		@Var ZenNode Expr = ParsedTree.TypeCheckAt(UnaryTerm, Gamma, ZenSystem.TypeType, DefaultTypeCheckPolicy);
 		if(Expr.IsConstNode() && Expr.Type.IsTypeType()) {
-			@Var ZenType ObjectType = (/*cast*/ZenType)((/*cast*/ZenConstPoolNode)Expr).ConstValue;
+			@Var ZenType ObjectType = (ZenType)((ZenConstPoolNode)Expr).ConstValue;
 			Expr = Gamma.Generator.CreateAllocateNode(ObjectType, ParsedTree);
 			//Expr = KonohaGrammar.TypeApply(Gamma, ParsedTree, ObjectType);
 		}

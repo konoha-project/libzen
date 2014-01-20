@@ -83,14 +83,14 @@ public class CGrammar extends ZenUtils {
 		// 1. To start, check class const such as Math.Pi if base is a type value
 		@Var String TypeName = ObjectNode.Type.ShortName;
 //		if(ObjectNode instanceof ConstNode && ObjectNode.Type.IsTypeType()) {
-//			@Var ZenType ObjectType = (/*cast*/ZenType)((/*cast*/ConstNode)ObjectNode).ConstValue;
+//			@Var ZenType ObjectType = (ZenType)((ConstNode)ObjectNode).ConstValue;
 //			@Var Object ConstValue = ParsedTree.NameSpace.GetClassSymbol(ObjectType, ClassStaticName(Name), true);
 //			if(ConstValue instanceof ZenEnum) {
 //				if(ContextType.IsStringType()) {
-//					ConstValue = ((/*cast*/ZenEnum)ConstValue).EnumSymbol;
+//					ConstValue = ((ZenEnum)ConstValue).EnumSymbol;
 //				}
 //				else {
-//					ConstValue = ((/*cast*/ZenEnum)ConstValue).EnumValue;
+//					ConstValue = ((ZenEnum)ConstValue).EnumValue;
 //				}
 //			}
 //			if(ConstValue != null) {
@@ -104,7 +104,7 @@ public class CGrammar extends ZenUtils {
 			@Var ZenFunc FirstFunc = FuncSet.FuncList.get(0);
 			ZenNode Node = Gamma.Generator.CreateGetterNode(ContextType, ParsedTree, ObjectNode, Name);
 			if(Node instanceof ZenSymbolNode) {
-				((/*cast*/ZenSymbolNode)Node).ResolvedFunc = FirstFunc;
+				((ZenSymbolNode)Node).ResolvedFunc = FirstFunc;
 			}
 		}
 
@@ -113,7 +113,7 @@ public class CGrammar extends ZenUtils {
 		@Var ZenType ReturnType = (GetterFunc != null) ? GetterFunc.GetReturnType() : ZenSystem.AnyType;
 		@Var ZenNode Node = Gamma.Generator.CreateGetterNode(ReturnType, ParsedTree, ObjectNode, Name);
 		if(Node instanceof ZenSymbolNode) {
-			((/*cast*/ZenGetterNode)Node).ResolvedFunc = GetterFunc;
+			((ZenGetterNode)Node).ResolvedFunc = GetterFunc;
 		}
 		if(GetterFunc == null) {
 			if(!ObjectNode.Type.IsDynamicType() && ContextType != ZenSystem.FuncType) {
@@ -173,7 +173,7 @@ public class CGrammar extends ZenUtils {
 	}
 
 	public static ZenNode TypeStructDecl2(ZenTypeEnv Gamma, ZenSyntaxTree ParsedTree, ZenType ContextType) {
-		@Var ZenClassField ClassField = (/*cast*/ZenClassField)ParsedTree.ParsedValue;
+		@Var ZenClassField ClassField = (ZenClassField)ParsedTree.ParsedValue;
 		if(ClassField != null) {
 			@Var ZenType DefinedType = ClassField.DefinedType;
 			DefinedType.SetClassField(ClassField);
@@ -182,7 +182,7 @@ public class CGrammar extends ZenUtils {
 			@Var ArrayList<ZenFunc> MemberList = new ArrayList<ZenFunc>();
 			while(SubTree != null) {
 				//if(SubTree.Pattern.EqualsName("$FuncDecl$") || SubTree.Pattern.EqualsName("$Constructor2$")) {
-				//	MemberList.add((/*cast*/ZenFunc)SubTree.ParsedValue);
+				//	MemberList.add((ZenFunc)SubTree.ParsedValue);
 				//}
 				if(!SubTree.Pattern.EqualsName("$VarDecl$")) {
 					SubTree.TypeCheck(Gamma, ZenSystem.VoidType, DefaultTypeCheckPolicy);

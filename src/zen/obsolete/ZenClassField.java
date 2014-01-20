@@ -45,7 +45,7 @@ public final class ZenClassField extends ZenUtils {
 		this.FieldList = new ArrayList<ZenFieldInfo>();
 		//@Var ZenType SuperClass = DefinedType.RefType;
 		//if(SuperClass.TypeBody instanceof ZenClassField) {
-		//	@Var ZenClassField SuperField = (/*cast*/ZenClassField)SuperClass.TypeBody;
+		//	@Var ZenClassField SuperField = (ZenClassField)SuperClass.TypeBody;
 		//	@Var int i = 0;
 		//	while(i < SuperField.FieldList.size()) {
 		//		this.FieldList.add(SuperField.FieldList.get(i));

@@ -100,7 +100,7 @@ public abstract class ZenFunc {
 
 	//	public void GenerateNativeFunc() {
 	//		if(this.HasStaticBlock()) {
-	//			@Var ZenFuncBlock FuncBlock = (/*cast*/ZenFuncBlock)this.FuncBody;
+	//			@Var ZenFuncBlock FuncBlock = (ZenFuncBlock)this.FuncBody;
 	//			@Var ZenTypeEnv Gamma = new ZenTypeEnv(FuncBlock.NameSpace);
 	//			@Var int i = 0;
 	//			@Var ArrayList<String> NameList = new ArrayList<String>();
@@ -124,7 +124,7 @@ public abstract class ZenFunc {
 	//
 	//	public boolean HasLazyBlock() {
 	//		if(this.FuncBody instanceof ZenFuncBlock) {
-	//			@Var ZenFuncBlock FuncBlock = (/*cast*/ZenFuncBlock)this.FuncBody;
+	//			@Var ZenFuncBlock FuncBlock = (ZenFuncBlock)this.FuncBody;
 	//			return FuncBlock.IsVarArgument;
 	//		}
 	//		return false;

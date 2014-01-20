@@ -391,7 +391,7 @@ var CLASS = (function (_super) {
 		this.VisitIndentBlock("{", Node.TryNode, "}");
 		assert(LibZen.ListSize(Node.CatchList) <= 1);
 		for (int i = 0; i < LibZen.ListSize(Node.CatchList); i++) {
-			ZenCatchNode Catch = (/*cast*/ZenCatchNode) Node.CatchList.get(i);
+			ZenCatchNode Catch = (ZenCatchNode) Node.CatchList.get(i);
 			this.CurrentBuilder.Append("catch(" + Catch.ExceptionName + ")");
 			this.VisitIndentBlock("{", Catch.BodyNode, "}");
 		}
@@ -518,7 +518,7 @@ var CLASS = (function (_super) {
 //		@Var String Code = "try ";
 //		Code += this.VisitBlockJSWithIndent(Node.TryBlock);
 //		if(Node.CatchExpr != null) {
-//			@Var ZenVarNode Val = (/*cast*/ZenVarNode) Node.CatchExpr;
+//			@Var ZenVarNode Val = (ZenVarNode) Node.CatchExpr;
 //			Code += " catch (" + Val.Type.toString() + " " + Val.NativeName + ") ";
 //			Code += this.VisitBlockJSWithIndent(Node.CatchBlock);
 //		}

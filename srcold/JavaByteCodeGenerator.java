@@ -499,14 +499,14 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 		// prepare
 		for(int i = 0; i < catchSize; i++) { //TODO: add exception class name
 			catchLabel[i] = new Label();
-			ZenCatchNode Catch = (/*cast*/ZenCatchNode) Node.CatchList.get(i);
+			ZenCatchNode Catch = (ZenCatchNode) Node.CatchList.get(i);
 			String throwType = JLib.GetAsmType(Catch.ExceptionType).getInternalName();
 			mv.visitTryCatchBlock(beginTryLabel, endTryLabel, catchLabel[i], throwType);
 		}
 
 		// catch block
 		for(int i = 0; i < catchSize; i++) { //TODO: add exception class name
-			ZenCatchNode Catch = (/*cast*/ZenCatchNode) Node.CatchList.get(i);
+			ZenCatchNode Catch = (ZenCatchNode) Node.CatchList.get(i);
 			JLocalVarStack local = this.CurrentVisitor.AddLocal(Catch.ExceptionType, Catch.ExceptionName);
 			mv.visitLabel(catchLabel[i]);
 			this.CurrentVisitor.StoreLocal(local);

@@ -49,7 +49,7 @@ public final class ZenNameSpace {
 	@Field public final ZenNameSpace   ParentNameSpace;
 	@Field public final ZenGenerator   Generator;
 
-	@Field ZenTokenFunc[] TokenMatrix;
+	@Field ZTokenFunc[] TokenMatrix;
 	@Field ZenMap<Object>	 SymbolPatternTable;
 	@Field private ZenNode  FuncNode;
 
@@ -93,23 +93,23 @@ public final class ZenNameSpace {
 	//	}
 
 	// TokenMatrix
-	public final ZenTokenFunc GetTokenFunc(int ZenChar) {
+	public final ZTokenFunc GetTokenFunc(int ZenChar) {
 		if(this.TokenMatrix == null) {
 			return this.ParentNameSpace.GetTokenFunc(ZenChar);
 		}
 		return this.TokenMatrix[ZenChar];
 	}
 
-	private final ZenTokenFunc JoinParentFunc(ZenFunc Func, ZenTokenFunc Parent) {
+	private final ZTokenFunc JoinParentFunc(ZenFunc Func, ZTokenFunc Parent) {
 		if(Parent != null && Parent.Func == Func) {
 			return Parent;
 		}
-		return new ZenTokenFunc(Func, Parent);
+		return new ZTokenFunc(Func, Parent);
 	}
 
 	public final void AppendTokenFunc(String keys, ZenFunc TokenFunc) {
 		if(this.TokenMatrix == null) {
-			this.TokenMatrix = new ZenTokenFunc[ZenParserConst.MaxSizeOfChars];
+			this.TokenMatrix = new ZTokenFunc[ZenParserConst.MaxSizeOfChars];
 			if(this.ParentNameSpace != null) {
 				for(@Var int i = 0; i < ZenParserConst.MaxSizeOfChars; i += 1) {
 					this.TokenMatrix[i] = this.ParentNameSpace.GetTokenFunc(i);
@@ -186,7 +186,7 @@ public final class ZenNameSpace {
 	public final String GetSymbolText(String Key) {
 		@Var Object Body = this.GetSymbol(Key);
 		if(Body instanceof String) {
-			return (/*cast*/String)Body;
+			return (String)Body;
 		}
 		return null;
 	}
@@ -199,7 +199,7 @@ public final class ZenNameSpace {
 	public ZenSyntaxPattern GetSyntaxPattern(String PatternName) {
 		@Var Object Body = this.GetSymbol(PatternName);
 		if(Body instanceof ZenSyntaxPattern) {
-			return (/*cast*/ZenSyntaxPattern)Body;
+			return (ZenSyntaxPattern)Body;
 		}
 		return null;
 	}
@@ -211,7 +211,7 @@ public final class ZenNameSpace {
 	public ZenSyntaxPattern GetExtendedSyntaxPattern(String PatternName) {
 		@Var Object Body = this.GetSymbol(ZenNameSpace.SuffixPatternSymbol(PatternName));
 		if(Body instanceof ZenSyntaxPattern) {
-			return (/*cast*/ZenSyntaxPattern)Body;
+			return (ZenSyntaxPattern)Body;
 		}
 		return null;
 	}
@@ -248,7 +248,7 @@ public final class ZenNameSpace {
 	public final ZenType GetType(String TypeName, @Nullable ZToken SourceToken) {
 		@Var Object TypeInfo = this.GetSymbol(TypeName);
 		if(TypeInfo instanceof ZenType) {
-			return (/*cast*/ZenType)TypeInfo;
+			return (ZenType)TypeInfo;
 		}
 		if(SourceToken != null && TypeInfo == null) {
 			ZenType Type = new ZenClassType(TypeName, ZenSystem.VarType);
@@ -288,13 +288,13 @@ public final class ZenNameSpace {
 		assert(!(OldValue instanceof ZenSyntaxPattern));
 		@Var ZenFuncSet FuncSet = null;
 		if(OldValue instanceof ZenFunc) {
-			@Var ZenFunc OldFunc = (/*cast*/ZenFunc)OldValue;
+			@Var ZenFunc OldFunc = (ZenFunc)OldValue;
 			if(OldFunc.FuncType != Func.FuncType) {
 				FuncSet = new ZenFuncSet(OldFunc);
 			}
 		}
 		else if(OldValue instanceof ZenFuncSet) {
-			FuncSet = (/*cast*/ZenFuncSet)OldValue;
+			FuncSet = (ZenFuncSet)OldValue;
 		}
 		if(FuncSet != null) {
 			FuncSet.Append(Func, this.Generator.Logger, SourceToken);
@@ -309,7 +309,7 @@ public final class ZenNameSpace {
 		while(NameSpace != null) {
 			@Var Object FuncValue = NameSpace.GetLocalSymbol(FuncName);
 			if(FuncValue instanceof ZenFunc) {
-				@Var ZenFunc Func = (/*cast*/ZenFunc)FuncValue;
+				@Var ZenFunc Func = (ZenFunc)FuncValue;
 				if(FuncParamSize == Func.FuncType.GetFuncParamSize()) {
 					if(ClassType == null || Func.FuncType.GetRecvType() == ClassType) {
 						FuncList.add(Func);
@@ -317,7 +317,7 @@ public final class ZenNameSpace {
 				}
 			}
 			else if(FuncValue instanceof ZenFuncSet) {
-				@Var ZenFuncSet FuncSet = (/*cast*/ZenFuncSet)FuncValue;
+				@Var ZenFuncSet FuncSet = (ZenFuncSet)FuncValue;
 				@Var int i = FuncSet.FuncList.size() - 1;
 				while(i >= 0) {
 					@Var ZenFunc Func = FuncSet.FuncList.get(i);
@@ -419,7 +419,7 @@ public final class ZenNameSpace {
 	//	public final ZenFunc GetGetterFunc(ZenType ClassType, String Symbol, boolean RecursiveSearch) {
 	//		@Var Object Func = this.Context.RootNameSpace.GetClassSymbol(ClassType, ZenNameSpace.GetterSymbol(Symbol), RecursiveSearch);
 	//		if(Func instanceof ZenFunc) {
-	//			return (/*cast*/ZenFunc)Func;
+	//			return (ZenFunc)Func;
 	//		}
 	//		Func = this.Context.RootNameSpace.GetLocalUndefinedSymbol(ZenNameSpace.ClassSymbol(ClassType, ZenNameSpace.GetterSymbol(Symbol)));
 	//		if(ClassType.IsDynamicNaitiveLoading() && Func == null) {
@@ -431,7 +431,7 @@ public final class ZenNameSpace {
 	//	public final ZenFunc GetSetterFunc(ZenType ClassType, String Symbol, boolean RecursiveSearch) {
 	//		@Var Object Func = this.Context.RootNameSpace.GetClassSymbol(ClassType, ZenNameSpace.SetterSymbol(Symbol), RecursiveSearch);
 	//		if(Func instanceof ZenFunc) {
-	//			return (/*cast*/ZenFunc)Func;
+	//			return (ZenFunc)Func;
 	//		}
 	//		Func = this.Context.RootNameSpace.GetLocalUndefinedSymbol(ZenNameSpace.ClassSymbol(ClassType, ZenNameSpace.SetterSymbol(Symbol)));
 	//		if(ClassType.IsDynamicNaitiveLoading() && Func == null) {
@@ -443,7 +443,7 @@ public final class ZenNameSpace {
 	//	public final ZenFunc GetConverterFunc(ZenType FromType, ZenType ToType, boolean RecursiveSearch) {
 	//		@Var Object Func = this.GetClassSymbol(FromType, ZenNameSpace.ConverterSymbol(ToType), RecursiveSearch);
 	//		if(Func instanceof ZenFunc) {
-	//			return (/*cast*/ZenFunc)Func;
+	//			return (ZenFunc)Func;
 	//		}
 	//		return null;
 	//	}
@@ -606,7 +606,7 @@ public final class ZenNameSpace {
 
 	public final boolean Load(String ScriptText, long FileLine) {
 		@Var Object Token = this.Eval(ScriptText, FileLine, false);
-		if(Token instanceof ZToken && ((/*cast*/ZToken)Token).IsError()) {
+		if(Token instanceof ZToken && ((ZToken)Token).IsError()) {
 			return false;
 		}
 		return true;
@@ -651,7 +651,7 @@ public final class ZenNameSpace {
 	//
 	//	public void Revert(ArrayList<Object> RevertList) {
 	//		for(@Var int i = 0; i < RevertList.size(); i += 2) {
-	//			@Var String Key = (/*cast*/String)RevertList.get(i);
+	//			@Var String Key = (String)RevertList.get(i);
 	//			@Var Object Value = RevertList.get(i+1);
 	//			this.SetSymbol(Key, Value, null);
 	//		}

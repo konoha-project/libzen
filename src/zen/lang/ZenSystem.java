@@ -58,7 +58,7 @@ public class ZenSystem implements ZenTypeFlag {
 
 	public final static long GetFileLine(String FileName, int Line) {
 		@Var Object IdOrNull = ZenSystem.SourceMap.GetOrNull(FileName);
-		@Var Integer Id = IdOrNull == null ? -1 : (/*cast*/Integer)IdOrNull;
+		@Var Integer Id = IdOrNull == null ? -1 : (Integer)IdOrNull;
 		if(IdOrNull == null) {
 			ZenSystem.SourceList.add(FileName);
 			Id = ZenSystem.SourceList.size();
@@ -130,7 +130,7 @@ public class ZenSystem implements ZenTypeFlag {
 	}
 
 	public final static ZenType LookupTypeTable(String Key) {
-		return (/*cast*/ZenType) ZenSystem.ClassNameMap.GetOrNull(Key);
+		return (ZenType) ZenSystem.ClassNameMap.GetOrNull(Key);
 	}
 
 	public final static void SetTypeTable(String Key, ZenType Type) {
@@ -145,14 +145,14 @@ public class ZenSystem implements ZenTypeFlag {
 
 	public final static ZenType GuessType (Object Value) {
 		if(Value instanceof ZenFunc) {
-			return ((/*cast*/ZenFunc)Value).GetFuncType();
+			return ((ZenFunc)Value).GetFuncType();
 		}
 		else if(Value instanceof ZenFuncSet) {
 			return ZenSystem.FuncType;
 		}
 		else if(Value instanceof ZenTypedObject) {
 			// FIXME In typescript, we cannot use ZenObject
-			return ((/*cast*/ZenTypedObject)Value).GetObjectType();
+			return ((ZenTypedObject)Value).GetObjectType();
 		}
 		else {
 			return ZenSystem.GetNativeTypeOfValue(Value);
@@ -174,7 +174,7 @@ public class ZenSystem implements ZenTypeFlag {
 
 	public final static ZenType[] UniqueTypes(int BaseIdx, ArrayList<ZenType> TypeList) {
 		@Var String MangleName = "[]" + ZenSystem.MangleTypes(BaseIdx, TypeList);
-		@Var ZenType[] Types = (/*cast*/ZenType[])ZenSystem.ClassNameMap.GetOrNull(MangleName);
+		@Var ZenType[] Types = (ZenType[])ZenSystem.ClassNameMap.GetOrNull(MangleName);
 		if(Types == null) {
 			Types = LibZen.CompactTypeList(BaseIdx, TypeList);
 			ZenSystem.ClassNameMap.put(MangleName, Types);
@@ -184,7 +184,7 @@ public class ZenSystem implements ZenTypeFlag {
 
 	public final static ZenType GetGenericType1(ZenType BaseType, ZenType ParamType, boolean IsCreation) {
 		@Var String MangleName = ZenSystem.MangleType2(BaseType, ParamType);
-		@Var ZenType GenericType = (/*cast*/ZenType)ZenSystem.ClassNameMap.GetOrNull(MangleName);
+		@Var ZenType GenericType = (ZenType)ZenSystem.ClassNameMap.GetOrNull(MangleName);
 		if((GenericType == null) && IsCreation) {
 			@Var String Name = BaseType.ShortName + "<" + ParamType + ">";
 			if(BaseType.IsArrayType()) {
@@ -202,7 +202,7 @@ public class ZenSystem implements ZenTypeFlag {
 			return ZenSystem.GetGenericType1(BaseType, TypeList.get(BaseIdx), IsCreation);
 		}
 		@Var String MangleName = ":" + BaseType.TypeId + ZenSystem.MangleTypes(BaseIdx, TypeList);
-		@Var ZenType GenericType = (/*cast*/ZenType)ZenSystem.ClassNameMap.GetOrNull(MangleName);
+		@Var ZenType GenericType = (ZenType)ZenSystem.ClassNameMap.GetOrNull(MangleName);
 		if((GenericType == null) && IsCreation) {
 			@Var String ShortName = BaseType.ShortName + "<";
 			for(@Var int i = BaseIdx; i < LibZen.ListSize(TypeList); i += 1) {

@@ -421,7 +421,7 @@ public class BashSourceGenerator extends SourceGenerator {
 				Code += " | ";
 			}
 			Code += this.AppendCommand(CurrentNode);
-			CurrentNode = (/*cast*/ZenCommandNode) CurrentNode.PipedNextNode;
+			CurrentNode = (ZenCommandNode) CurrentNode.PipedNextNode;
 			count += 1;
 		}
 
@@ -450,11 +450,11 @@ public class BashSourceGenerator extends SourceGenerator {
 			return true;
 		}
 		else if(TargetNode instanceof ZenUnaryNode) {
-			@Var ZenUnaryNode Unary = (/*cast*/ZenUnaryNode) TargetNode;
+			@Var ZenUnaryNode Unary = (ZenUnaryNode) TargetNode;
 			return this.CheckConstFolding(Unary.RecvNode);
 		}
 		else if(TargetNode instanceof ZenBinaryNode) {
-			@Var ZenBinaryNode Binary = (/*cast*/ZenBinaryNode) TargetNode;
+			@Var ZenBinaryNode Binary = (ZenBinaryNode) TargetNode;
 			if(this.CheckConstFolding(Binary.LeftNode) && this.CheckConstFolding(Binary.RightNode)) {
 				return true;
 			}
@@ -490,7 +490,7 @@ public class BashSourceGenerator extends SourceGenerator {
 //			ResolvedValue = "$(" + Value + ")";
 //		}
 		else if(TargetNode instanceof ZenGetLocalNode && !this.IsNativeType(Type)) {
-			@Var ZenGetLocalNode Local = (/*cast*/ZenGetLocalNode) TargetNode;
+			@Var ZenGetLocalNode Local = (ZenGetLocalNode) TargetNode;
 			@Var String Name = Local.NativeName;
 			ResolvedValue = "${" + Value + "[@]}";
 			if(Name.length() == 1 && LibZen.IsDigit(Name, 0)) {

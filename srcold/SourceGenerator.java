@@ -213,10 +213,10 @@ public class SourceGenerator extends ZenGenerator {
 			}
 		}
 		if(ConstValue instanceof String) {
-			return LibZen.QuoteString((/*cast*/String)ConstValue);
+			return LibZen.QuoteString((String)ConstValue);
 		}
 		if(ConstValue instanceof ZenEnum) {
-			return "" + ((/*cast*/ZenEnum) ConstValue).EnumValue;
+			return "" + ((ZenEnum) ConstValue).EnumValue;
 		}
 		return ConstValue.toString();
 	}
@@ -230,7 +230,7 @@ public class SourceGenerator extends ZenGenerator {
 	}
 
 	protected final String PopSourceCode() {
-		return (/*cast*/String) this.PopCode();
+		return (String) this.PopCode();
 	}
 
 	public final String VisitNode(ZenNode Node) {

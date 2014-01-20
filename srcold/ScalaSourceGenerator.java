@@ -165,7 +165,7 @@
 //		@Var String Code = "try ";
 //		Code += this.VisitBlockWithIndent(Node.TryNode, true);
 //		for (int i = 0; i < LibZen.ListSize(Node.CatchList); i++) {
-//			ZenCatchNode Catch = (/*cast*/ZenCatchNode) Node.CatchList.get(i);
+//			ZenCatchNode Catch = (ZenCatchNode) Node.CatchList.get(i);
 //			Code += " catch (" + Catch.ExceptionType + " " + Catch.ExceptionName + ") ";
 //			Code += this.VisitBlockWithIndent(Catch.BodyNode, true);
 //		}

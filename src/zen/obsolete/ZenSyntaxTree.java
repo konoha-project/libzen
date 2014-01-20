@@ -225,7 +225,7 @@ public final class ZenSyntaxTree extends ZenUtils {
 //	}
 //
 //	public final ZenType GetParsedType() {
-//		return (this.ParsedValue instanceof ZenType) ? (/*cast*/ZenType)this.ParsedValue : null;
+//		return (this.ParsedValue instanceof ZenType) ? (ZenType)this.ParsedValue : null;
 //	}
 //
 //	public final boolean HasNodeAt(int Index) {

@@ -44,10 +44,10 @@
 //		return this.Stack[this.StackTop + Index];
 //	}
 //	public final boolean GetBooleanAt(int Index) {
-//		return ((/*cast*/Boolean)this.Stack[this.StackTop + Index]).booleanValue();
+//		return ((Boolean)this.Stack[this.StackTop + Index]).booleanValue();
 //	}
 //	public final long GetIntAt(int Index) {
-//		return ((/*cast*/Long)this.Stack[this.StackTop + Index]).longValue();
+//		return ((Long)this.Stack[this.StackTop + Index]).longValue();
 //	}
 //}
 //
