@@ -7,6 +7,8 @@ import java.lang.reflect.Modifier;
 import java.util.HashMap;
 
 import zen.ast.ZenBinaryNode;
+import zen.ast.ZenGetIndexNode;
+import zen.ast.ZenSetIndexNode;
 import zen.ast.ZenUnaryNode;
 import zen.deps.LibNative;
 import zen.deps.LibZen;
@@ -106,6 +108,21 @@ public class JMethod {
 		TypeParams[0] = Node.RecvNode.Type;
 		return GetMethodFromMethodTable(Node.SourceToken.ParsedText, TypeParams);
 	}
+	public static JMethod FindMethod(ZenGetIndexNode Node) {
+		ZenType[] TypeParams = new ZenType[2];
+		TypeParams[0] = Node.RecvNode.Type;
+		TypeParams[1] = Node.IndexNode.Type;
+		return GetMethodFromMethodTable(Node.SourceToken.ParsedText, TypeParams);
+	}
+
+	public static JMethod FindMethod(ZenSetIndexNode Node) {
+		ZenType[] TypeParams = new ZenType[3];
+		TypeParams[0] = Node.RecvNode.Type;
+		TypeParams[1] = Node.IndexNode.Type;
+		TypeParams[2] = Node.ValueNode.Type;
+		return GetMethodFromMethodTable(Node.SourceToken.ParsedText, TypeParams);
+	}
+
 
 	public static String FormatTypeErrorMessage(ZenFuncSet Set, String FuncType, ZenType ClassType, String MethodName) {
 		if(ClassType != null) {

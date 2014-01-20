@@ -7,13 +7,20 @@ import static org.objectweb.asm.Opcodes.ACC_STATIC;
 import static org.objectweb.asm.Opcodes.ACONST_NULL;
 import static org.objectweb.asm.Opcodes.ATHROW;
 import static org.objectweb.asm.Opcodes.DUP;
+import static org.objectweb.asm.Opcodes.GETFIELD;
 import static org.objectweb.asm.Opcodes.GOTO;
 import static org.objectweb.asm.Opcodes.IFEQ;
 import static org.objectweb.asm.Opcodes.IFNE;
 import static org.objectweb.asm.Opcodes.INVOKESPECIAL;
+import static org.objectweb.asm.Opcodes.IRETURN;
 import static org.objectweb.asm.Opcodes.NEW;
+import static org.objectweb.asm.Opcodes.PUTFIELD;
+import static org.objectweb.asm.Opcodes.RETURN;
+
+import java.util.ArrayList;
 
 import org.objectweb.asm.Label;
+import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.MethodNode;
 
@@ -64,11 +71,26 @@ import zen.deps.LibNative;
 import zen.lang.ZenSystem;
 import zen.parser.ZenGenerator;
 
+
+class TryCatchLabel {
+	public Label beginTryLabel;
+	public Label endTryLabel;
+	public Label finallyLabel;
+	public TryCatchLabel() {
+		this.beginTryLabel = new Label();
+		this.endTryLabel = new Label();
+		this.finallyLabel = new Label();
+	}
+}
+
+
 public class JavaByteCodeGenerator extends ZenGenerator {
 	JMethodBuilder CurrentVisitor;
 	ZenClassLoader ClassGenerator;
+	ArrayList<TryCatchLabel> TryCatchLabel;
 	public JavaByteCodeGenerator() {
 		super("java", "1.6");
+		this.TryCatchLabel = new ArrayList<TryCatchLabel>();
 	}
 
 	@Override
@@ -124,8 +146,16 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 
 	@Override
 	public void VisitNewObjectNode(ZenNewObjectNode Node) {
-		// TODO Auto-generated method stub
-
+		Type type = JLib.GetAsmType(Node.Type);
+		String owner = type.getInternalName();
+		this.CurrentVisitor.AsmVisitor.visitTypeInsn(NEW, owner);
+		this.CurrentVisitor.AsmVisitor.visitInsn(DUP);
+		if(!((Node.Type.TypeFlag & ZenSystem.UniqueType) == ZenSystem.UniqueType)) {
+			this.CurrentVisitor.LoadConst(Node.Type);
+			this.CurrentVisitor.AsmVisitor.visitMethodInsn(INVOKESPECIAL, owner, "<init>", "(Lorg/ZenScript/ZenType;)V");
+		} else {
+			this.CurrentVisitor.AsmVisitor.visitMethodInsn(INVOKESPECIAL, owner, "<init>", "()V");
+		}
 	}
 
 	@Override public void VisitGetLocalNode(ZenGetLocalNode Node) {
@@ -145,45 +175,50 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 	}
 
 	@Override public void VisitGetterNode(ZenGetterNode Node) {
-		//		String name = Node.NativeName;
-		//		Type fieldType = JLib.GetAsmType(Node.ResolvedFunc.GetReturnType());
-		//		Type ownerType = JLib.GetAsmType(Node.ResolvedFunc.GetFuncParamType(0));
-		//		Node.RecvNode.Accept(this);
-		//		this.CurrentVisitor.AsmVisitor.visitFieldInsn(GETFIELD, ownerType.getInternalName(), name, fieldType.getDescriptor());
+		String Name = Node.NativeName;
+		Type FieldType = JLib.GetAsmType(Node.Type);
+		Type OwnerType = JLib.GetAsmType(Node.RecvNode.Type);
+		Node.RecvNode.Accept(this);
+		this.CurrentVisitor.AsmVisitor.visitFieldInsn(GETFIELD, OwnerType.getInternalName(), Name, FieldType.getDescriptor());
 	}
 
 	@Override public void VisitSetterNode(ZenSetterNode Node) {
-		//		String name = Node.NativeName;
-		//		Type fieldType = JLib.GetAsmType(Node.ResolvedFunc.GetFuncParamType(1));
-		//		Type ownerType = JLib.GetAsmType(Node.ResolvedFunc.GetFuncParamType(0));
-		//		Node.RecvNode.Accept(this);
-		//		this.CurrentVisitor.PushEvaluatedNode(Node.ResolvedFunc.GetFuncParamType(1), Node.ValueNode);
-		//		this.CurrentVisitor.AsmVisitor.visitFieldInsn(PUTFIELD, ownerType.getInternalName(), name, fieldType.getDescriptor());
+		String Name = Node.NativeName;
+		Type FieldType = JLib.GetAsmType(Node.Type);
+		Type OwnerType = JLib.GetAsmType(Node.RecvNode.Type);
+		Node.RecvNode.Accept(this);
+		this.CurrentVisitor.PushEvaluatedNode(Node.Type, Node.ValueNode);
+		this.CurrentVisitor.AsmVisitor.visitFieldInsn(PUTFIELD, OwnerType.getInternalName(), Name, FieldType.getDescriptor());
 	}
 
 	@Override public void VisitGetIndexNode(ZenGetIndexNode Node) {
-		// TODO Auto-generated method stub
+		JMethod Method = JMethod.FindMethod(Node);
 		Node.RecvNode.Accept(this);
-		//this.CurrentVisitor.PushEvaluatedNode(Node.ResolvedFunc.GetFuncParamType(1), Node.IndexNode);
-		//this.CurrentVisitor.InvokeMethodCall(Node.Type, (Method) Node.ResolvedFunc.FuncBody);
+		this.CurrentVisitor.PushEvaluatedNode(Method.GetType(1), Node.IndexNode);
+		this.CurrentVisitor.InvokeMethodCall(Method.GetReturnType(), Method.Body);
 	}
 
 	@Override public void VisitSetIndexNode(ZenSetIndexNode Node) {
-		// TODO Auto-generated method stub
+		JMethod Method = JMethod.FindMethod(Node);
 		Node.RecvNode.Accept(this);
-		//this.CurrentVisitor.PushEvaluatedNode(Node.ResolvedFunc.GetFuncParamType(1), Node.IndexNode);
-		//this.CurrentVisitor.PushEvaluatedNode(Node.ResolvedFunc.GetFuncParamType(2), Node.ValueNode);
-		//this.CurrentVisitor.InvokeMethodCall(Node.Type, (Method) Node.ResolvedFunc.FuncBody);
+		this.CurrentVisitor.PushEvaluatedNode(Method.GetType(1), Node.IndexNode);
+		this.CurrentVisitor.PushEvaluatedNode(Method.GetType(2), Node.ValueNode);
+		this.CurrentVisitor.InvokeMethodCall(Method.GetReturnType(), Method.Body);
 	}
 
 	@Override
 	public void VisitMethodCallNode(ZenMethodCallNode Node) {
-		// TODO Auto-generated method stub
+		Node.RecvNode.Accept(this);
+		this.CurrentVisitor.LoadNewArray(this, 0, Node.ParamList);
+		// FIXME Find method and invoke it.
+		this.CurrentVisitor.InvokeMethodCall(Node.Type, JLib.InvokeFunc);
 	}
 
 	@Override
 	public void VisitFuncCallNode(ZenFuncCallNode Node) {
-		// TODO Auto-generated method stub
+		Node.FuncNode.Accept(this);
+		this.CurrentVisitor.LoadNewArray(this, 0, Node.ParamList);
+		this.CurrentVisitor.InvokeMethodCall(Node.Type, JLib.InvokeFunc);
 	}
 
 	@Override
@@ -298,8 +333,14 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 
 	@Override
 	public void VisitReturnNode(ZenReturnNode Node) {
-		// TODO Auto-generated method stub
-
+		if(Node.ValueNode != null) {
+			Node.ValueNode.Accept(this);
+			Type type = JLib.GetAsmType(Node.ValueNode.Type);
+			this.CurrentVisitor.AsmVisitor.visitInsn(type.getOpcode(IRETURN));
+		}
+		else {
+			this.CurrentVisitor.AsmVisitor.visitInsn(RETURN);
+		}
 	}
 
 	@Override public void VisitWhileNode(ZenWhileNode Node) {
@@ -329,22 +370,55 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 	//	this.CurrentVisitor.AsmVisitor.visitJumpInsn(GOTO, l);
 	//}
 
-	@Override
-	public void VisitThrowNode(ZenThrowNode Node) {
-		// TODO Auto-generated method stub
-
+	@Override public void VisitThrowNode(ZenThrowNode Node) {
+		// use wrapper
+		//String name = Type.getInternalName(ZenThrowableWrapper.class);
+		//this.CurrentVisitor.MethodVisitor.visitTypeInsn(NEW, name);
+		//this.CurrentVisitor.MethodVisitor.visitInsn(DUP);
+		//Node.Expr.Accept(this);
+		//this.box();
+		//this.CurrentVisitor.typeStack.pop();
+		//this.CurrentVisitor.MethodVisitor.visitMethodInsn(INVOKESPECIAL, name, "<init>", "(Ljava/lang/Object;)V");
+		//this.CurrentVisitor.MethodVisitor.visitInsn(ATHROW);
 	}
 
-	@Override
-	public void VisitTryNode(ZenTryNode Node) {
-		// TODO Auto-generated method stub
+	@Override public void VisitTryNode(ZenTryNode Node) {
+		MethodVisitor mv = this.CurrentVisitor.AsmVisitor;
+		TryCatchLabel Label = new TryCatchLabel();
+		this.TryCatchLabel.add(Label); // push
 
+		// try block
+		mv.visitLabel(Label.beginTryLabel);
+		Node.TryNode.Accept(this);
+		mv.visitLabel(Label.endTryLabel);
+		mv.visitJumpInsn(GOTO, Label.finallyLabel);
+
+		// finally block
+		mv.visitLabel(Label.finallyLabel);
+		if(Node.FinallyNode != null) {
+			Node.FinallyNode.Accept(this);
+		}
+		this.TryCatchLabel.remove(this.TryCatchLabel.size() - 1); // pop
 	}
 
 	@Override
 	public void VisitCatchNode(ZenCatchNode Node) {
-		// TODO Auto-generated method stub
+		MethodVisitor mv = this.CurrentVisitor.AsmVisitor;
+		Label catchLabel = new Label();
+		TryCatchLabel Label = this.TryCatchLabel.get(this.TryCatchLabel.size() - 1);
 
+		// prepare
+		//TODO: add exception class name
+		String throwType = JLib.GetAsmType(Node.ExceptionType).getInternalName();
+		mv.visitTryCatchBlock(Label.beginTryLabel, Label.endTryLabel, catchLabel, throwType);
+
+		// catch block
+		JLocalVarStack local = this.CurrentVisitor.AddLocal(Node.ExceptionType, Node.ExceptionName);
+		mv.visitLabel(catchLabel);
+		this.CurrentVisitor.StoreLocal(local);
+		Node.BodyNode.Accept(this);
+		mv.visitJumpInsn(GOTO, Label.finallyLabel);
+		//FIXME: remove local
 	}
 
 	@Override

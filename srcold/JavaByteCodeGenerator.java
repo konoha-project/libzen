@@ -315,14 +315,6 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 //		this.PushStack(Node.Type);
 //	}
 
-	@Override public void VisitFuncCallNode(ZenApplyNode Node) {
-		Node.FuncNode.Accept(this);
-		this.CurrentVisitor.LoadNewArray(this, 0, Node.ParamList);
-		this.CurrentVisitor.InvokeMethodCall(Node.Type, JLib.InvokeFunc);
-		this.RemoveStack(Node.ParamList.size());
-		PushStack(Node.Type);
-	}
-
 	@Override public void VisitApplyOverridedMethodNode(ZenApplyOverridedMethodNode Node) {
 		this.CurrentVisitor.AsmVisitor.visitLdcInsn(Node.SourceToken.FileLine);
 		this.CurrentVisitor.LoadConst(Node.NameSpace);
@@ -469,67 +461,6 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 
 	@Override public void VisitForEachNode(ZenForEachNode Node) {
 		LibZen.TODO("ForEach");
-	}
-
-	@Override public void VisitReturnNode(ZenReturnNode Node) {
-		if(Node.ValueNode != null) {
-			Node.ValueNode.Accept(this);
-			Type type = JLib.GetAsmType(Node.ValueNode.Type);
-			this.CurrentVisitor.AsmVisitor.visitInsn(type.getOpcode(IRETURN));
-		}
-		else {
-			this.CurrentVisitor.AsmVisitor.visitInsn(RETURN);
-		}
-	}
-
-	@Override public void VisitTryNode(ZenTryNode Node) {
-		int catchSize = LibZen.ListSize(Node.CatchList);
-		MethodVisitor mv = this.CurrentVisitor.AsmVisitor;
-		Label beginTryLabel = new Label();
-		Label endTryLabel = new Label();
-		Label finallyLabel = new Label();
-		Label catchLabel[] = new Label[catchSize];
-
-		// try block
-		mv.visitLabel(beginTryLabel);
-		this.VisitBlock(Node.TryNode);
-		mv.visitLabel(endTryLabel);
-		mv.visitJumpInsn(GOTO, finallyLabel);
-
-		// prepare
-		for(int i = 0; i < catchSize; i++) { //TODO: add exception class name
-			catchLabel[i] = new Label();
-			ZenCatchNode Catch = (ZenCatchNode) Node.CatchList.get(i);
-			String throwType = JLib.GetAsmType(Catch.ExceptionType).getInternalName();
-			mv.visitTryCatchBlock(beginTryLabel, endTryLabel, catchLabel[i], throwType);
-		}
-
-		// catch block
-		for(int i = 0; i < catchSize; i++) { //TODO: add exception class name
-			ZenCatchNode Catch = (ZenCatchNode) Node.CatchList.get(i);
-			JLocalVarStack local = this.CurrentVisitor.AddLocal(Catch.ExceptionType, Catch.ExceptionName);
-			mv.visitLabel(catchLabel[i]);
-			this.CurrentVisitor.StoreLocal(local);
-			this.VisitBlock(Catch.BodyNode);
-			mv.visitJumpInsn(GOTO, finallyLabel);
-			//FIXME: remove local
-		}
-
-		// finally block
-		mv.visitLabel(finallyLabel);
-		this.VisitBlock(Node.FinallyNode);
-	}
-
-	@Override public void VisitThrowNode(ZenThrowNode Node) {
-		// use wrapper
-		//String name = Type.getInternalName(ZenThrowableWrapper.class);
-		//this.CurrentVisitor.MethodVisitor.visitTypeInsn(NEW, name);
-		//this.CurrentVisitor.MethodVisitor.visitInsn(DUP);
-		//Node.Expr.Accept(this);
-		//this.box();
-		//this.CurrentVisitor.typeStack.pop();
-		//this.CurrentVisitor.MethodVisitor.visitMethodInsn(INVOKESPECIAL, name, "<init>", "(Ljava/lang/Object;)V");
-		//this.CurrentVisitor.MethodVisitor.visitInsn(ATHROW);
 	}
 
 	@Override public void VisitInstanceOfNode(ZenInstanceOfNode Node) {

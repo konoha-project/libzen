@@ -88,8 +88,8 @@ class JLib {
 		return "FuncHolder" + FuncName + "$" + 0; //Context.ParserId;
 	}
 
-	static Type GetAsmType(ZenType GreenType) {
-		Type type = TypeMap.get(GreenType.ShortName);
+	static Type GetAsmType(ZenType ZType) {
+		Type type = TypeMap.get(ZType.ShortName);
 		if(type != null) {
 			return type;
 		}
@@ -102,7 +102,7 @@ class JLib {
 		//		if(GreenType.IsGenericType()) {
 		//			return GetAsmType(GreenType.BaseType);
 		//		}
-		return Type.getType("L" + GreenType.GetNativeName() + ";");
+		return Type.getType("L" + ZType.GetNativeName() + ";");
 	}
 
 	static String GetMethodDescriptor(ZenFuncDeclNode Func) {
