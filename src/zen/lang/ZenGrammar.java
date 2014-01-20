@@ -75,7 +75,7 @@ import zen.deps.ZenMap;
 import zen.parser.ZenLogger;
 import zen.parser.ZenNameSpace;
 import zen.parser.ZenParserConst;
-import zen.parser.ZenSyntaxPattern;
+import zen.parser.ZSyntaxPattern;
 import zen.parser.ZToken;
 import zen.parser.ZenTokenContext;
 
@@ -140,7 +140,7 @@ public class ZenGrammar {
 		@Var boolean Matched = false;
 		while(NextPos > pos) {
 			@Var String Sub = LibZen.SubString(SourceText, pos, NextPos);
-			@Var ZenSyntaxPattern Pattern = TokenContext.TopLevelNameSpace.GetExtendedSyntaxPattern(Sub);
+			@Var ZSyntaxPattern Pattern = TokenContext.TopLevelNameSpace.GetExtendedSyntaxPattern(Sub);
 			if(Pattern != null) {
 				Matched = true;
 				break;
@@ -539,10 +539,10 @@ public class ZenGrammar {
 	}
 
 	public static ZenNode MatchSuffixExpression(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenNode LeftNode) {
-		ZenSyntaxPattern Pattern = TokenContext.GetFirstPattern(NameSpace);
+		ZSyntaxPattern Pattern = TokenContext.GetFirstPattern(NameSpace);
 		LeftNode = TokenContext.ApplyMatchPattern(NameSpace, LeftNode, Pattern);
 		while(LeftNode != null) {
-			@Var ZenSyntaxPattern SuffixPattern = TokenContext.GetSuffixPattern(NameSpace);
+			@Var ZSyntaxPattern SuffixPattern = TokenContext.GetSuffixPattern(NameSpace);
 			if(SuffixPattern == null || SuffixPattern.IsBinaryOperator()) {
 				break;
 			}
@@ -568,10 +568,10 @@ public class ZenGrammar {
 	}
 
 	public static ZenNode MatchExpression(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenNode LeftNode) {
-		ZenSyntaxPattern Pattern = TokenContext.GetFirstPattern(NameSpace);
+		ZSyntaxPattern Pattern = TokenContext.GetFirstPattern(NameSpace);
 		LeftNode = TokenContext.ApplyMatchPattern(NameSpace, LeftNode, Pattern);
 		while(LeftNode != null) {
-			@Var ZenSyntaxPattern SuffixPattern = TokenContext.GetSuffixPattern(NameSpace);
+			@Var ZSyntaxPattern SuffixPattern = TokenContext.GetSuffixPattern(NameSpace);
 			if(SuffixPattern == null) {
 				break;
 			}

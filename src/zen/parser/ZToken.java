@@ -36,7 +36,7 @@ import zen.lang.ZenType;
 	@Field @Init public int		    TokenFlag;
 	@Field @Init public String	    ParsedText;
 	@Field @Init public long		FileLine;
-	@Field public ZenSyntaxPattern	PresetPattern = null;
+	@Field public ZSyntaxPattern	PresetPattern = null;
 
 	@Constructor public ZToken(int TokenFlag, String Text, long FileLine) {
 		this.TokenFlag = TokenFlag;
@@ -99,7 +99,7 @@ import zen.lang.ZenType;
 		return TokenText + this.ParsedText;
 	}
 
-	public void SetError(ZenSyntaxPattern ErrorPattern) {
+	public void SetError(ZSyntaxPattern ErrorPattern) {
 		if(this.ParsedText.length() > 0) {  // skip null token
 			this.TokenFlag = ZenParserConst.ErrorTokenFlag;
 			this.PresetPattern = ErrorPattern;

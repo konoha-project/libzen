@@ -26,23 +26,22 @@
 package zen.parser;
 
 import zen.deps.Field;
+import zen.deps.Init;
 import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.lang.ZenFunc;
 
-public final class ZenSyntaxPattern extends ZenUtils {
-	@Field public ZenNameSpace	          PackageNameSpace;
-	@Field public String		          PatternName;
-	@Field public int				      SyntaxFlag;
-	@Field public ZenFunc               MatchFunc;
-	@Field public ZenSyntaxPattern	  ParentPattern;
+public final class ZSyntaxPattern extends ZenUtils {
+	@Field @Init public ZenNameSpace	          PackageNameSpace;
+	@Field @Init public String		          PatternName;
+	@Field @Init public ZenFunc                 MatchFunc;
+	@Field public int				      SyntaxFlag = 0;
+	@Field public ZSyntaxPattern ParentPattern = null;
 
-	public ZenSyntaxPattern(ZenNameSpace NameSpace, String PatternName, ZenFunc MatchFunc) {
+	public ZSyntaxPattern(ZenNameSpace NameSpace, String PatternName, ZenFunc MatchFunc) {
 		this.PackageNameSpace = NameSpace;
 		this.PatternName = PatternName;
-		this.SyntaxFlag = 0;
 		this.MatchFunc = MatchFunc;
-		this.ParentPattern = null;
 	}
 
 	@Override public String toString() {
@@ -53,7 +52,7 @@ public final class ZenSyntaxPattern extends ZenUtils {
 		return ZenUtils.IsFlag(this.SyntaxFlag, ZenParserConst.BinaryOperator);
 	}
 
-	public final boolean IsRightJoin(ZenSyntaxPattern Right) {
+	public final boolean IsRightJoin(ZSyntaxPattern Right) {
 		@Var int left = this.SyntaxFlag;
 		@Var int right = Right.SyntaxFlag;
 		return (left < right || (left == right && !ZenUtils.IsFlag(left, ZenParserConst.LeftJoin) && !ZenUtils.IsFlag(right, ZenParserConst.LeftJoin)));
@@ -63,11 +62,11 @@ public final class ZenSyntaxPattern extends ZenUtils {
 		return LibZen.EqualsString(this.PatternName, Name);
 	}
 
-	public final static ZenSyntaxPattern MergeSyntaxPattern(ZenSyntaxPattern Pattern, ZenSyntaxPattern Parent) {
+	public final static ZSyntaxPattern MergeSyntaxPattern(ZSyntaxPattern Pattern, ZSyntaxPattern Parent) {
 		if(Parent == null) {
 			return Pattern;
 		}
-		@Var ZenSyntaxPattern MergedPattern = new ZenSyntaxPattern(Pattern.PackageNameSpace, Pattern.PatternName, Pattern.MatchFunc);
+		@Var ZSyntaxPattern MergedPattern = new ZSyntaxPattern(Pattern.PackageNameSpace, Pattern.PatternName, Pattern.MatchFunc);
 		MergedPattern.ParentPattern = Parent;
 		return MergedPattern;
 	}

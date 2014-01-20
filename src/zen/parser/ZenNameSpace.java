@@ -196,10 +196,10 @@ public final class ZenNameSpace {
 	}
 
 	// Pattern
-	public ZenSyntaxPattern GetSyntaxPattern(String PatternName) {
+	public ZSyntaxPattern GetSyntaxPattern(String PatternName) {
 		@Var Object Body = this.GetSymbol(PatternName);
-		if(Body instanceof ZenSyntaxPattern) {
-			return (ZenSyntaxPattern)Body;
+		if(Body instanceof ZSyntaxPattern) {
+			return (ZSyntaxPattern)Body;
 		}
 		return null;
 	}
@@ -208,17 +208,17 @@ public final class ZenNameSpace {
 		return "\t" + PatternName;
 	}
 
-	public ZenSyntaxPattern GetExtendedSyntaxPattern(String PatternName) {
+	public ZSyntaxPattern GetExtendedSyntaxPattern(String PatternName) {
 		@Var Object Body = this.GetSymbol(ZenNameSpace.SuffixPatternSymbol(PatternName));
-		if(Body instanceof ZenSyntaxPattern) {
-			return (ZenSyntaxPattern)Body;
+		if(Body instanceof ZSyntaxPattern) {
+			return (ZSyntaxPattern)Body;
 		}
 		return null;
 	}
 
-	private void AppendSyntaxPattern(String PatternName, ZenSyntaxPattern NewPattern, ZToken SourceToken) {
+	private void AppendSyntaxPattern(String PatternName, ZSyntaxPattern NewPattern, ZToken SourceToken) {
 		LibNative.Assert(NewPattern.ParentPattern == null);
-		@Var ZenSyntaxPattern ParentPattern = this.GetSyntaxPattern(PatternName);
+		@Var ZSyntaxPattern ParentPattern = this.GetSyntaxPattern(PatternName);
 		NewPattern.ParentPattern = ParentPattern;
 		this.SetSymbol(PatternName, NewPattern, SourceToken);
 	}
@@ -226,7 +226,7 @@ public final class ZenNameSpace {
 	public void AppendSyntax(String PatternName, ZenFunc MatchFunc) {
 		@Var int Alias = PatternName.indexOf(" ");
 		@Var String Name = (Alias == -1) ? PatternName : PatternName.substring(0, Alias);
-		@Var ZenSyntaxPattern Pattern = new ZenSyntaxPattern(this, Name, MatchFunc);
+		@Var ZSyntaxPattern Pattern = new ZSyntaxPattern(this, Name, MatchFunc);
 		this.AppendSyntaxPattern(Name, Pattern, null);
 		if(Alias != -1) {
 			this.AppendSyntax(PatternName.substring(Alias+1), MatchFunc);
@@ -236,7 +236,7 @@ public final class ZenNameSpace {
 	public void AppendSuffixSyntax(String PatternName, int SyntaxFlag, ZenFunc MatchFunc) {
 		@Var int Alias = PatternName.indexOf(" ");
 		@Var String Name = (Alias == -1) ? PatternName : PatternName.substring(0, Alias);
-		@Var ZenSyntaxPattern Pattern = new ZenSyntaxPattern(this, Name, MatchFunc);
+		@Var ZSyntaxPattern Pattern = new ZSyntaxPattern(this, Name, MatchFunc);
 		Pattern.SyntaxFlag = SyntaxFlag;
 		this.AppendSyntaxPattern(ZenNameSpace.SuffixPatternSymbol(Name), Pattern, null);
 		if(Alias != -1) {
@@ -285,7 +285,7 @@ public final class ZenNameSpace {
 	// Function
 	public final void AppendFuncName(ZenFunc Func, ZToken SourceToken) {
 		@Var Object OldValue = this.GetLocalSymbol(Func.FuncName);
-		assert(!(OldValue instanceof ZenSyntaxPattern));
+		assert(!(OldValue instanceof ZSyntaxPattern));
 		@Var ZenFuncSet FuncSet = null;
 		if(OldValue instanceof ZenFunc) {
 			@Var ZenFunc OldFunc = (ZenFunc)OldValue;

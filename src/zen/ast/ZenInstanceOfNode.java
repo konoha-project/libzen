@@ -24,13 +24,13 @@
 
 package zen.ast;
 
-import zen.parser.ZenSyntaxPattern;
+import zen.parser.ZSyntaxPattern;
 import zen.parser.ZToken;
 import zen.parser.ZenVisitor;
 
 //E.g., $ExprNode instanceof TypeInfo
 final public class ZenInstanceOfNode extends ZenBinaryNode {
-	public ZenInstanceOfNode/*constructor*/(ZToken Token, ZenNode Left, ZenSyntaxPattern Pattern) {
+	public ZenInstanceOfNode/*constructor*/(ZToken Token, ZenNode Left, ZSyntaxPattern Pattern) {
 		super(Token, Left, Pattern);
 	}
 

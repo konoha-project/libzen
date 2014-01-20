@@ -273,22 +273,22 @@ public final class ZenTokenContext {
 	//		return Token;
 	//	}
 
-	public ZenSyntaxPattern GetFirstPattern(ZenNameSpace NameSpace) {
+	public ZSyntaxPattern GetFirstPattern(ZenNameSpace NameSpace) {
 		@Var ZToken Token = this.GetToken();
 		if(Token.PresetPattern != null) {
 			return Token.PresetPattern;
 		}
-		@Var ZenSyntaxPattern Pattern = NameSpace.GetSyntaxPattern(Token.ParsedText);
+		@Var ZSyntaxPattern Pattern = NameSpace.GetSyntaxPattern(Token.ParsedText);
 		if(Pattern == null) {
 			return NameSpace.GetSyntaxPattern("$Symbol$");
 		}
 		return Pattern;
 	}
 
-	public ZenSyntaxPattern GetSuffixPattern(ZenNameSpace NameSpace) {
+	public ZSyntaxPattern GetSuffixPattern(ZenNameSpace NameSpace) {
 		@Var ZToken Token = this.GetToken();
 		if(Token != ZToken.NullToken) {
-			@Var ZenSyntaxPattern Pattern = NameSpace.GetExtendedSyntaxPattern(Token.ParsedText);
+			@Var ZSyntaxPattern Pattern = NameSpace.GetExtendedSyntaxPattern(Token.ParsedText);
 			return Pattern;
 		}
 		return null;
@@ -359,10 +359,10 @@ public final class ZenTokenContext {
 		return Base;
 	}
 
-	public final ZenNode ApplyMatchPattern(ZenNameSpace NameSpace, ZenNode LeftNode, ZenSyntaxPattern Pattern) {
+	public final ZenNode ApplyMatchPattern(ZenNameSpace NameSpace, ZenNode LeftNode, ZSyntaxPattern Pattern) {
 		@Var int RollbackPosition = this.CurrentPosition;
 		@Var int ParseFlag = this.ParseFlag;
-		@Var ZenSyntaxPattern CurrentPattern = Pattern;
+		@Var ZSyntaxPattern CurrentPattern = Pattern;
 		@Var ZToken TopToken = this.GetToken();
 		while(CurrentPattern != null) {
 			@Var ZenFunc MatchFunc = CurrentPattern.MatchFunc;
@@ -457,7 +457,7 @@ public final class ZenTokenContext {
 		if(ZenUtils.IsFlag(MatchFlag, ZenTokenContext.Optional)) {
 			this.SetParseFlag(this.ParseFlag | ZenTokenContext.BackTrackParseFlag);
 		}
-		@Var ZenSyntaxPattern Pattern = this.TopLevelNameSpace.GetSyntaxPattern(PatternName);
+		@Var ZSyntaxPattern Pattern = this.TopLevelNameSpace.GetSyntaxPattern(PatternName);
 		@Var ZenNode ParsedNode = this.ApplyMatchPattern(NameSpace, LeftNode, Pattern);
 		this.SetParseFlag(ParseFlag);
 		if(ParsedNode != null) {
