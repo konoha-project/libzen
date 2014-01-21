@@ -74,6 +74,7 @@ import zen.deps.Var;
 import zen.deps.ZenMap;
 import zen.parser.ZLogger;
 import zen.parser.ZNameSpace;
+import zen.parser.ZNodeUtils;
 import zen.parser.ZParserConst;
 import zen.parser.ZSyntaxPattern;
 import zen.parser.ZToken;
@@ -438,7 +439,7 @@ public class ZenGrammar {
 				return AssignedNode;
 			}
 		}
-		return NameSpace.Generator.CreateSymbolNode(NameToken, ZenSystem.VarType, NameToken.ParsedText, AssignedNode);
+		return ZNodeUtils.CreateSymbolNode(NameToken, ZenSystem.VarType, NameToken.ParsedText, AssignedNode);
 	}
 
 	// PatternName: "("  (1)

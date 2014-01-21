@@ -48,7 +48,7 @@ import zen.parser.ZToken;
 import zen.parser.ZUtils;
 import zen.parser.ZVisitor;
 
-public abstract class ZenTypeChecker implements ZVisitor {
+public abstract class ZenTypeChecker extends ZVisitor {
 
 	protected void println(String string) {
 		System.err.println("debug " + string);

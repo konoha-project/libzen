@@ -36,7 +36,7 @@ import zen.deps.Field;
 import zen.parser.ZNameSpace;
 import zen.parser.ZVisitor;
 
-public abstract class ZenEvaluator implements ZVisitor {
+public abstract class ZenEvaluator extends ZVisitor {
 	@Field private ZNameSpace NameSpace_;
 	@Field private boolean IsEnforced_;
 	@Field private Object EvaledValue_;

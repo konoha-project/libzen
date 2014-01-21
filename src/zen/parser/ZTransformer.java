@@ -48,7 +48,7 @@ import zen.ast.ZenVarDeclNode;
 import zen.ast.ZenWhileNode;
 import zen.deps.Field;
 
-public class ZTransformer implements ZVisitor {
+public class ZTransformer extends ZVisitor {
 	@Field public ZenBlockNode BlockNode;
 	@Field private ZenNode ReplacedNode;
 	@Field private boolean StoppedVisitor;

@@ -57,7 +57,7 @@ public abstract class ZNodeUtils {
 		return new ZenConstPoolNode(SourceToken, Value);
 	}
 
-	public final ZenNode CreateSymbolNode(ZToken SourceToken, ZenType Type, String NativeName, ZenNode AssignedNode) {
+	public final static ZenNode CreateSymbolNode(ZToken SourceToken, ZenType Type, String NativeName, ZenNode AssignedNode) {
 		if(AssignedNode != null) {
 			return new ZenSetLocalNode(SourceToken, NativeName, AssignedNode);
 		}

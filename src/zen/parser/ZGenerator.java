@@ -33,7 +33,7 @@ import zen.lang.ZenTypeChecker;
 import zen.lang.ZenTypeInfer;
 //endif VAJA
 
-public abstract class ZGenerator extends ZNodeUtils implements ZVisitor {
+public abstract class ZGenerator extends ZVisitor {
 	@Field private String            GrammarInfo;
 	@Field public final String       TargetCode;
 	@Field public final String       TargetVersion;
