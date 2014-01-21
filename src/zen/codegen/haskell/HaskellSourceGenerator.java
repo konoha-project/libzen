@@ -43,7 +43,6 @@ import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZVarDeclNode;
 import zen.ast.ZWhileNode;
-import zen.deps.Constructor;
 import zen.deps.LibZen;
 import zen.lang.ZSystem;
 import zen.parser.ZSourceBuilder;

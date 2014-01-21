@@ -1,6 +1,5 @@
 package zen.parser;
 
-import zen.deps.Constructor;
 import zen.deps.Field;
 import zen.deps.Init;
 import zen.deps.LibNative;

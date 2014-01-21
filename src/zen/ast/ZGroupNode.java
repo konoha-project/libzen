@@ -27,18 +27,14 @@ package zen.ast;
 import zen.deps.Field;
 import zen.parser.ZVisitor;
 
-//E.g., "~" $RecvNode
 public final class ZGroupNode extends ZNode {
-	@Field public ZNode	RecvNode;
+	@Field public ZNode	RecvNode = null;
 	public ZGroupNode() {
 		super();
-		this.RecvNode = null;
 	}
 	@Override public void Append(ZNode Node) {
-		this.RecvNode = Node;
-		this.SetChild(this.RecvNode);
+		this.RecvNode = this.SetChild(this.RecvNode);
 		this.Type = Node.Type;
-		/*return this;*/
 	}
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitGroupNode(this);

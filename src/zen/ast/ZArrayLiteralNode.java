@@ -31,10 +31,9 @@ import zen.parser.ZVisitor;
 
 //E.g., "[" $Node, $Node "]"
 public final class ZArrayLiteralNode extends ZNode {
-	@Field public ArrayList<ZNode>	NodeList;
+	@Field public ArrayList<ZNode>	NodeList = new ArrayList<ZNode>();
 	public ZArrayLiteralNode() {
 		super();
-		this.NodeList = new ArrayList<ZNode>();
 	}
 	@Override public void Append(ZNode Node) {
 		this.NodeList.add(Node);

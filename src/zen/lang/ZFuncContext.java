@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import zen.ast.ZFunctionNode;
 import zen.ast.ZNode;
-import zen.deps.Constructor;
 import zen.deps.Field;
 import zen.deps.Var;
 import zen.parser.ZLogger;

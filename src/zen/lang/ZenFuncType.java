@@ -1,6 +1,5 @@
 package zen.lang;
 
-import zen.deps.Constructor;
 import zen.deps.Field;
 import zen.deps.Var;
 

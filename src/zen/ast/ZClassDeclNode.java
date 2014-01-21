@@ -26,10 +26,9 @@ package zen.ast;
 
 import java.util.ArrayList;
 
-import zen.deps.Constructor;
 import zen.deps.Field;
-import zen.lang.ZenClassType;
 import zen.lang.ZType;
+import zen.lang.ZenClassType;
 import zen.parser.ZNameSpace;
 import zen.parser.ZVisitor;
 

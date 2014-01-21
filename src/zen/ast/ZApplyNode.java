@@ -26,7 +26,6 @@ package zen.ast;
 
 import java.util.ArrayList;
 
-import zen.deps.Constructor;
 import zen.deps.Field;
 import zen.lang.ZFunc;
 import zen.lang.ZSystem;

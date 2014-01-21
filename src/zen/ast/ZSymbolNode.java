@@ -24,7 +24,6 @@
 
 package zen.ast;
 
-import zen.deps.Constructor;
 import zen.deps.Field;
 import zen.lang.ZType;
 import zen.parser.ZToken;

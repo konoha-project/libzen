@@ -28,11 +28,6 @@ import zen.lang.ZSystem;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 
-/**
- * ErrorNode carries error information at the parser level
- * Token.ParsedText has error message
- */
-
 public final class ZErrorNode extends ZConstNode {
 	public String ErrorMessage;
 	public ZErrorNode(ZToken SourceToken, String ErrorMessage) {

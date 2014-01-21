@@ -24,12 +24,10 @@
 
 package zen.ast;
 
-import zen.deps.Constructor;
 import zen.deps.Field;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 
-//E.g., $NativeFuncName "(" $Param[0], $Param[1], ... ")"
 public final class ZMethodCallNode extends ZApplyNode {
 	@Field public ZNode RecvNode;
 	@Field public String MethodName;
