@@ -40,6 +40,7 @@ public final class ZClassDeclNode extends ZNode {
 	@Field public ArrayList<ZFieldNode>  FieldList = new ArrayList<ZFieldNode>();
 	public ZClassDeclNode(ZNameSpace NameSpace) {
 		super();
+		this.NameSpace = NameSpace.GetRootNameSpace();
 	}
 
 	@Override public void Append(ZNode Node) {
