@@ -198,17 +198,25 @@ public class ASTGenerator extends ZenSourceGenerator {
 
 	@Override
 	public void VisitGetterNode(ZGetterNode Node) {
-		this.CurrentBuilder.Append("(get-field " + Node.Type + " " + Node.FieldName);
+		this.CurrentBuilder.Append("(get-field " + Node.Type + " " + Node.FieldName + " ");
+		this.CurrentBuilder.Indent();
+		this.CurrentBuilder.AppendLineFeed();
 		Node.RecvNode.Accept(this);
+		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.UnIndent();
 		this.CurrentBuilder.Append(")");
 	}
 
 	@Override
 	public void VisitSetterNode(ZSetterNode Node) {
-		this.CurrentBuilder.Append("(set-field " + Node.Type + " " + Node.FieldName);
+		this.CurrentBuilder.Append("(set-field " + Node.Type + " " + Node.FieldName + " ");
+		this.CurrentBuilder.Indent();
+		this.CurrentBuilder.AppendLineFeed();
 		Node.RecvNode.Accept(this);
 		this.CurrentBuilder.Append(" ");
 		Node.ValueNode.Accept(this);
+		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.UnIndent();
 		this.CurrentBuilder.Append(")");
 	}
 
@@ -238,9 +246,7 @@ public class ASTGenerator extends ZenSourceGenerator {
 		this.CurrentBuilder.Indent();
 		this.CurrentBuilder.AppendLineFeed();
 		Node.RecvNode.Accept(this);
-		for (int i = 0; i < Node.ParamList.size(); i++) {
-			Node.ParamList.get(i).Accept(this);
-		}
+		this.CurrentBuilder.AppendParamList(Node.ParamList, 0, Node.ParamList.size());
 		this.CurrentBuilder.UnIndent();
 		this.CurrentBuilder.Append(")");
 	}
@@ -251,9 +257,7 @@ public class ASTGenerator extends ZenSourceGenerator {
 		this.CurrentBuilder.Indent();
 		this.CurrentBuilder.AppendLineFeed();
 		Node.FuncNode.Accept(this);
-		for (int i = 0; i < Node.ParamList.size(); i++) {
-			Node.ParamList.get(i).Accept(this);
-		}
+		this.CurrentBuilder.AppendParamList(Node.ParamList, 0, Node.ParamList.size());
 		this.CurrentBuilder.UnIndent();
 		this.CurrentBuilder.Append(")");
 	}

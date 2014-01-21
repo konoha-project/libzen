@@ -68,8 +68,8 @@ import zen.ast.ZUnaryNode;
 import zen.ast.ZVarDeclNode;
 import zen.ast.ZWhileNode;
 import zen.deps.LibNative;
-import zen.lang.ZTypeFlag;
 import zen.lang.ZSystem;
+import zen.lang.ZTypeFlag;
 import zen.parser.ZGenerator;
 
 
