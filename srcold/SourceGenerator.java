@@ -85,7 +85,7 @@ public class SourceGenerator extends ZenGenerator {
 	@Field protected String    BlockBegin;
 	@Field protected String    BlockEnd;
 
-	public SourceGenerator/*constructor*/(String TargetCode, String OutputFile, int GeneratorFlag) {
+	public SourceGenerator(String TargetCode, String OutputFile, int GeneratorFlag) {
 		super(TargetCode, OutputFile, GeneratorFlag);
 		this.LineFeed = "\n";
 		this.IndentLevel = 0;

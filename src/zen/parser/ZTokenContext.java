@@ -26,9 +26,9 @@
 package zen.parser;
 import java.util.ArrayList;
 
-import zen.ast.ZenErrorNode;
-import zen.ast.ZenNode;
-import zen.ast.ZenTypeNode;
+import zen.ast.ZErrorNode;
+import zen.ast.ZNode;
+import zen.ast.ZTypeNode;
 import zen.deps.Field;
 import zen.deps.Init;
 import zen.deps.LibNative;
@@ -125,12 +125,12 @@ public final class ZTokenContext {
 		return this.LatestToken;
 	}
 
-	public ZenNode CreateExpectedErrorNode(ZToken SourceToken, String ExpectedTokenText) {
+	public ZNode CreateExpectedErrorNode(ZToken SourceToken, String ExpectedTokenText) {
 		if(SourceToken == null || SourceToken.IsNull()) {
 			SourceToken = this.GetBeforeToken();
-			return new ZenErrorNode(SourceToken, ExpectedTokenText + " is expected after " + SourceToken.ParsedText);
+			return new ZErrorNode(SourceToken, ExpectedTokenText + " is expected after " + SourceToken.ParsedText);
 		}
-		return new ZenErrorNode(SourceToken, ExpectedTokenText + " is expected; " + SourceToken.ParsedText + " is given");
+		return new ZErrorNode(SourceToken, ExpectedTokenText + " is expected; " + SourceToken.ParsedText + " is given");
 	}
 
 	public void Vacume() {
@@ -326,7 +326,7 @@ public final class ZTokenContext {
 		return false;
 	}
 
-	public ZenNode MatchNodeToken(ZenNode Base, ZNameSpace NameSpace, String TokenText, int MatchFlag) {
+	public ZNode MatchNodeToken(ZNode Base, ZNameSpace NameSpace, String TokenText, int MatchFlag) {
 		if(!Base.IsErrorNode()) {
 			@Var int RollbackPosition = this.CurrentPosition;
 			@Var ZToken Token = this.GetTokenAndMoveForward();
@@ -351,7 +351,7 @@ public final class ZTokenContext {
 		return Base;
 	}
 
-	public final ZenNode ApplyMatchPattern(ZNameSpace NameSpace, ZenNode LeftNode, ZSyntaxPattern Pattern) {
+	public final ZNode ApplyMatchPattern(ZNameSpace NameSpace, ZNode LeftNode, ZSyntaxPattern Pattern) {
 		@Var int RollbackPosition = this.CurrentPosition;
 		@Var int ParseFlag = this.ParseFlag;
 		@Var ZSyntaxPattern CurrentPattern = Pattern;
@@ -365,7 +365,7 @@ public final class ZTokenContext {
 			//LibZen.DebugP("B :" + JoinStrings("  ", this.IndentLevel) + CurrentPattern + ", next=" + CurrentPattern.ParentPattern);
 			this.IndentLevel += 1;
 			//LibZen.DebugP("LeftNode="+LeftNode + ", pattern" + Pattern);
-			@Var ZenNode ParsedNode = LibNative.ApplyMatchFunc(MatchFunc, NameSpace, this, LeftNode);
+			@Var ZNode ParsedNode = LibNative.ApplyMatchFunc(MatchFunc, NameSpace, this, LeftNode);
 			this.IndentLevel -= 1;
 			this.SetParseFlag(ParseFlag);
 			//LibZen.DebugP("E :" + JoinStrings("  ", this.IndentLevel) + CurrentPattern + " => " + ParsedTree);
@@ -385,9 +385,9 @@ public final class ZTokenContext {
 		return this.CreateExpectedErrorNode(TopToken, Pattern.PatternName);
 	}
 
-	public ZenNode AppendMatchedPattern(ZenNode Base, ZNameSpace NameSpace, String PatternName,  int MatchFlag) {
+	public ZNode AppendMatchedPattern(ZNode Base, ZNameSpace NameSpace, String PatternName,  int MatchFlag) {
 		if(!Base.IsErrorNode()) {
-			@Var ZenNode ParsedNode = this.ParsePattern(NameSpace, PatternName, MatchFlag);
+			@Var ZNode ParsedNode = this.ParsePattern(NameSpace, PatternName, MatchFlag);
 			if(ParsedNode != null) {
 				if(ParsedNode.IsErrorNode()) {
 					return ParsedNode;
@@ -443,14 +443,14 @@ public final class ZTokenContext {
 		this.SetParseFlag(OldFlag);
 	}
 
-	public final ZenNode ParsePatternAfter(ZNameSpace NameSpace, ZenNode LeftNode, String PatternName, int MatchFlag) {
+	public final ZNode ParsePatternAfter(ZNameSpace NameSpace, ZNode LeftNode, String PatternName, int MatchFlag) {
 		@Var int Pos = this.CurrentPosition;
 		@Var int ParseFlag = this.ParseFlag;
 		if(ZUtils.IsFlag(MatchFlag, ZTokenContext.Optional)) {
 			this.SetParseFlag(this.ParseFlag | ZTokenContext.BackTrackParseFlag);
 		}
 		@Var ZSyntaxPattern Pattern = this.TopLevelNameSpace.GetSyntaxPattern(PatternName);
-		@Var ZenNode ParsedNode = this.ApplyMatchPattern(NameSpace, LeftNode, Pattern);
+		@Var ZNode ParsedNode = this.ApplyMatchPattern(NameSpace, LeftNode, Pattern);
 		this.SetParseFlag(ParseFlag);
 		if(ParsedNode != null) {
 			return ParsedNode;
@@ -459,12 +459,12 @@ public final class ZTokenContext {
 		return null; // mismatched
 	}
 
-	public final ZenNode ParsePattern(ZNameSpace NameSpace, String PatternName, int MatchFlag) {
+	public final ZNode ParsePattern(ZNameSpace NameSpace, String PatternName, int MatchFlag) {
 		return this.ParsePatternAfter(NameSpace, null, PatternName, MatchFlag);
 	}
 
 	public final ZType ParseType(ZNameSpace NameSpace, String PatternName, ZType DefaultType) {
-		ZenTypeNode TypeNode = (ZenTypeNode)this.ParsePatternAfter(NameSpace, null, PatternName, Optional);
+		ZTypeNode TypeNode = (ZTypeNode)this.ParsePatternAfter(NameSpace, null, PatternName, Optional);
 		if(TypeNode != null) {
 			return TypeNode.Type;
 		}

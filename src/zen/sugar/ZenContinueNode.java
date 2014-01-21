@@ -24,14 +24,14 @@
 
 package zen.sugar;
 
-import zen.ast.ZenNode;
+import zen.ast.ZNode;
 import zen.deps.Field;
 import zen.lang.ZType;
 import zen.parser.ZToken;
 
-final public class ZenContinueNode extends ZenNode {
+public final class ZenContinueNode extends ZNode {
 	@Field public String Label;
-	public ZenContinueNode/*constructor*/(ZType Type, ZToken Token, String Label) {
+	public ZenContinueNode(ZType Type, ZToken Token, String Label) {
 		super();
 		this.Label = Label;
 	}

@@ -49,7 +49,7 @@
 //
 //public class ScalaSourceGenerator extends SourceGenerator {
 //	@Field String OutFileName;
-//	ScalaSourceGenerator/*constructor*/(String TargetCode, String OutputFile, int GeneratorFlag) {
+//	ScalaSourceGenerator(String TargetCode, String OutputFile, int GeneratorFlag) {
 //		super(TargetCode, OutputFile, GeneratorFlag);
 //		this.OutFileName = OutputFile;
 //		if(LibZen.EqualsString(this.OutFileName, "-")) {

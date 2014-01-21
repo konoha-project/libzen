@@ -22,7 +22,7 @@ import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
 
-import zen.ast.ZenNode;
+import zen.ast.ZNode;
 import zen.lang.ZSystem;
 import zen.lang.ZType;
 import zen.parser.ZGenerator;
@@ -73,7 +73,7 @@ class JMethodBuilder {
 		}
 	}
 
-	void SetLineNumber(ZenNode Node) {
+	void SetLineNumber(ZNode Node) {
 		this.SetLineNumber(Node.SourceToken.FileLine);
 	}
 
@@ -131,7 +131,7 @@ class JMethodBuilder {
 		this.InvokeMethodCall(Value.getClass(), JLib.GetConstPool);
 	}
 
-	void LoadNewArray(ZGenerator Visitor, int StartIdx, ArrayList<ZenNode> NodeList) {
+	void LoadNewArray(ZGenerator Visitor, int StartIdx, ArrayList<ZNode> NodeList) {
 		this.AsmVisitor.visitLdcInsn(NodeList.size() - StartIdx);
 		this.AsmVisitor.visitTypeInsn(ANEWARRAY, Type.getInternalName(Object.class));
 		//System.err.println("** arraysize = " + (NodeList.size() - StartIdx));
@@ -247,7 +247,7 @@ class JMethodBuilder {
 		this.CheckCast(RequiredType, method.getReturnType());
 	}
 
-	public void PushEvaluatedNode(ZType RequestedType, ZenNode ParamNode) {
+	public void PushEvaluatedNode(ZType RequestedType, ZNode ParamNode) {
 		//System.err.println("requested=" + RequestedType + ", given="+ParamNode.Type);
 		ParamNode.Accept(this.Generator);
 		this.CheckCast(RequestedType, ParamNode.Type);

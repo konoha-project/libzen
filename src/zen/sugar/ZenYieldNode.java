@@ -24,14 +24,14 @@
 
 package zen.sugar;
 
-import zen.ast.ZenNode;
+import zen.ast.ZNode;
 import zen.deps.Field;
 import zen.lang.ZType;
 import zen.parser.ZToken;
 
-final public class ZenYieldNode extends ZenNode {
-	@Field public ZenNode ValueNode;
-	public ZenYieldNode/*constructor*/(ZType Type, ZToken Token, ZenNode ValueNode) {
+public final class ZenYieldNode extends ZNode {
+	@Field public ZNode ValueNode;
+	public ZenYieldNode(ZType Type, ZToken Token, ZNode ValueNode) {
 		super();
 		this.ValueNode = ValueNode;
 		this.SetChild(ValueNode);

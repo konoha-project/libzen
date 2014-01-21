@@ -37,7 +37,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 
-import zen.ast.ZenNode;
+import zen.ast.ZNode;
 import zen.lang.ZFunc;
 import zen.lang.ZSystem;
 import zen.lang.ZType;
@@ -393,12 +393,12 @@ public class LibNative {
 		return (Long) TokenFunc.Invoke(Argvs);
 	}
 
-	public final static ZenNode ApplyMatchFunc(ZFunc MatchFunc, ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public final static ZNode ApplyMatchFunc(ZFunc MatchFunc, ZNameSpace NameSpace, ZTokenContext TokenContext, ZNode LeftNode) {
 		Object[] Argvs = new Object[3];
 		Argvs[0] = NameSpace;
 		Argvs[1] = TokenContext;
 		Argvs[2] = LeftNode;
-		return (ZenNode) MatchFunc.Invoke(Argvs);
+		return (ZNode) MatchFunc.Invoke(Argvs);
 	}
 
 	public final static ZFunc ConvertNativeMethodToFunc(Method JMethod) {
@@ -435,7 +435,7 @@ public class LibNative {
 			String FuncName) {
 		try {
 			Method JavaMethod = GrammarClass.getMethod(FuncName,
-					ZNameSpace.class, ZTokenContext.class, ZenNode.class);
+					ZNameSpace.class, ZTokenContext.class, ZNode.class);
 			return LibNative.ConvertNativeMethodToFunc(JavaMethod);
 		} catch (NoSuchMethodException e) {
 			ZLogger.VerboseException(e);
@@ -444,7 +444,7 @@ public class LibNative {
 		return null;
 	}
 
-	public final static boolean IsSupportedNode(ZVisitor Visitor, ZenNode Node) {
+	public final static boolean IsSupportedNode(ZVisitor Visitor, ZNode Node) {
 		try {
 			Visitor.getClass().getMethod(Node.GetVisitName(), Node.getClass());
 			return true;
@@ -453,7 +453,7 @@ public class LibNative {
 		return false;
 	}
 
-	public final static void DispatchVisitNode(ZVisitor Visitor, ZenNode Node) {
+	public final static void DispatchVisitNode(ZVisitor Visitor, ZNode Node) {
 		try {
 			Method JavaMethod = Visitor.getClass().getMethod(Node.GetVisitName(), Node.getClass());
 			JavaMethod.invoke(Visitor, Node);

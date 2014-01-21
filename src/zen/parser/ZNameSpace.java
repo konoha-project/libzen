@@ -26,7 +26,7 @@
 package zen.parser;
 import java.util.ArrayList;
 
-import zen.ast.ZenNode;
+import zen.ast.ZNode;
 import zen.deps.Field;
 import zen.deps.LibNative;
 import zen.deps.LibZen;
@@ -51,7 +51,7 @@ public final class ZNameSpace {
 
 	@Field ZTokenFunc[] TokenMatrix;
 	@Field ZenMap<Object>	 SymbolPatternTable;
-	@Field private ZenNode  FuncNode;
+	@Field private ZNode  FuncNode;
 
 	public ZNameSpace(ZGenerator Generator, ZNameSpace ParentNameSpace) {
 		//		this.Context = Context;
@@ -267,7 +267,7 @@ public final class ZNameSpace {
 	}
 
 	// DefiningFunc
-	public final ZenNode GetDefiningFunc() {
+	public final ZNode GetDefiningFunc() {
 		@Var ZNameSpace NameSpace = this;
 		while(NameSpace != null) {
 			if(NameSpace.FuncNode != null) {
@@ -278,7 +278,7 @@ public final class ZNameSpace {
 		return null;
 	}
 
-	public final void SetDefiningFunc(ZenNode FuncNode) {
+	public final void SetDefiningFunc(ZNode FuncNode) {
 		this.FuncNode = FuncNode;
 	}
 
@@ -575,7 +575,7 @@ public final class ZNameSpace {
 	//		this.SetSymbol(Key, Func, SourceToken);
 	//	}
 
-	private ZenNode TypeCheck(ZenNode Node, ZType ContextType) {
+	private ZNode TypeCheck(ZNode Node, ZType ContextType) {
 		this.Generator.TypeChecker.EnableVisitor();
 		return this.Generator.TypeChecker.TypeCheck(Node, this, ContextType, 0);
 	}
@@ -587,7 +587,7 @@ public final class ZNameSpace {
 		TokenContext.SkipEmptyStatement();
 		while(TokenContext.HasNext()) {
 			TokenContext.SetParseFlag(0); // init
-			@Var ZenNode TopLevelNode = TokenContext.ParsePattern(this, "$Statement$", ZTokenContext.Required);
+			@Var ZNode TopLevelNode = TokenContext.ParsePattern(this, "$Statement$", ZTokenContext.Required);
 			TopLevelNode = this.TypeCheck(TopLevelNode, ZSystem.VoidType);
 			this.Generator.DoCodeGeneration(this, TopLevelNode);
 			if(TopLevelNode.IsErrorNode() && TokenContext.HasNext()) {

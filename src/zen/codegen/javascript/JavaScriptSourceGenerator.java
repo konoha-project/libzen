@@ -30,18 +30,18 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
-import zen.ast.ZenBlockNode;
-import zen.ast.ZenCastNode;
-import zen.ast.ZenCatchNode;
-import zen.ast.ZenFuncDeclNode;
-import zen.ast.ZenFunctionNode;
-import zen.ast.ZenInstanceOfNode;
-import zen.ast.ZenParamNode;
-import zen.ast.ZenReturnNode;
-import zen.ast.ZenThrowNode;
-import zen.ast.ZenTryNode;
-import zen.ast.ZenVarDeclNode;
-import zen.ast.ZenNode;
+import zen.ast.ZBlockNode;
+import zen.ast.ZCastNode;
+import zen.ast.ZCatchNode;
+import zen.ast.ZFuncDeclNode;
+import zen.ast.ZFunctionNode;
+import zen.ast.ZInstanceOfNode;
+import zen.ast.ZParamNode;
+import zen.ast.ZReturnNode;
+import zen.ast.ZThrowNode;
+import zen.ast.ZTryNode;
+import zen.ast.ZVarDeclNode;
+import zen.ast.ZNode;
 import zen.lang.ZSystem;
 import zen.parser.ZenSourceGenerator;
 
@@ -74,7 +74,7 @@ public class JavaScriptSourceGenerator extends ZenSourceGenerator {
 	}
 
 	@Override
-	public Object EvalTopLevelNode(ZenNode Node) {
+	public Object EvalTopLevelNode(ZNode Node) {
 		String Code = this.CurrentBuilder.toString() + ";";
 		System.out.println(Code);
 		this.CurrentBuilder.Clear();
@@ -87,10 +87,10 @@ public class JavaScriptSourceGenerator extends ZenSourceGenerator {
 	}
 
 	@Override
-	public void VisitBlockNode(ZenBlockNode Node) {
+	public void VisitBlockNode(ZBlockNode Node) {
 		this.CurrentBuilder.Append("{");
 		this.CurrentBuilder.Indent();
-		for (ZenNode SubNode : Node.StmtList) {
+		for (ZNode SubNode : Node.StmtList) {
 			this.CurrentBuilder.AppendLineFeed();
 			this.CurrentBuilder.AppendIndent();
 			this.GenerateCode(SubNode);
@@ -102,11 +102,11 @@ public class JavaScriptSourceGenerator extends ZenSourceGenerator {
 		this.CurrentBuilder.Append("}");
 	}
 
-	@Override public void VisitCastNode(ZenCastNode Node) {
+	@Override public void VisitCastNode(ZCastNode Node) {
 		this.GenerateCode(Node.ExprNode);
 	}
 
-	@Override public void VisitInstanceOfNode(ZenInstanceOfNode Node) {
+	@Override public void VisitInstanceOfNode(ZInstanceOfNode Node) {
 		this.CurrentBuilder.Append("isinstance(");
 		this.GenerateCode(Node.LeftNode);
 		this.CurrentBuilder.Append(this.Camma);
@@ -115,13 +115,13 @@ public class JavaScriptSourceGenerator extends ZenSourceGenerator {
 	}
 
 	@Override
-	public void VisitThrowNode(ZenThrowNode Node) {
+	public void VisitThrowNode(ZThrowNode Node) {
 		this.CurrentBuilder.Append("throw ");
 		this.GenerateCode(Node.ValueNode);
 	}
 
 	@Override
-	public void VisitTryNode(ZenTryNode Node) {
+	public void VisitTryNode(ZTryNode Node) {
 		this.CurrentBuilder.Append("try");
 		this.GenerateCode(Node.TryNode);
 		//for (ZenNode CatchNode : Node.CatchList) {
@@ -135,14 +135,14 @@ public class JavaScriptSourceGenerator extends ZenSourceGenerator {
 	}
 
 	@Override
-	public void VisitCatchNode(ZenCatchNode Node) {
+	public void VisitCatchNode(ZCatchNode Node) {
 		this.CurrentBuilder.Append("catch ");
 		this.CurrentBuilder.Append(Node.ExceptionName);
 		this.GenerateCode(Node.BodyNode);
 	}
 
 	@Override
-	public void VisitVarDeclNode(ZenVarDeclNode Node) {
+	public void VisitVarDeclNode(ZVarDeclNode Node) {
 		this.CurrentBuilder.AppendToken("var ");
 		this.CurrentBuilder.Append(Node.NativeName);
 		this.CurrentBuilder.AppendToken("=");
@@ -150,13 +150,13 @@ public class JavaScriptSourceGenerator extends ZenSourceGenerator {
 	}
 
 	@Override
-	public void VisitParamNode(ZenParamNode Node) {
+	public void VisitParamNode(ZParamNode Node) {
 		this.CurrentBuilder.Append(Node.Name);
 	}
 
 	@Override
-	public void VisitFunctionNode(ZenFunctionNode Node) {
-		ZenReturnNode ReturnNode = Node.BodyNode.ToReturnNode();
+	public void VisitFunctionNode(ZFunctionNode Node) {
+		ZReturnNode ReturnNode = Node.BodyNode.ToReturnNode();
 		this.CurrentBuilder.Append("(function");
 		this.VisitParamList("(", Node.ArgumentList, ")");
 		if(ReturnNode != null && ReturnNode.ValueNode != null) {
@@ -171,7 +171,7 @@ public class JavaScriptSourceGenerator extends ZenSourceGenerator {
 	}
 
 	@Override
-	public void VisitFuncDeclNode(ZenFuncDeclNode Node) {
+	public void VisitFuncDeclNode(ZFuncDeclNode Node) {
 		this.CurrentBuilder.Append("function ");
 		this.CurrentBuilder.Append(Node.FuncName);
 		this.VisitParamList("(", Node.ArgumentList, ")");

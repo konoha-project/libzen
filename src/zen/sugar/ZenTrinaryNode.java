@@ -24,17 +24,17 @@
 
 package zen.sugar;
 
-import zen.ast.ZenNode;
+import zen.ast.ZNode;
 import zen.deps.Field;
 import zen.lang.ZType;
 import zen.parser.ZToken;
 
 //E.g., $CondNode "?" $ThenExpr ":" $ElseExpr
-final public class ZenTrinaryNode extends ZenNode {
-	@Field public ZenNode	CondNode;
-	@Field public ZenNode	ThenNode;
-	@Field public ZenNode	ElseNode;
-	public ZenTrinaryNode/*constructor*/(ZType Type, ZToken Token, ZenNode CondNode, ZenNode ThenNode, ZenNode ElseNode) {
+public final class ZenTrinaryNode extends ZNode {
+	@Field public ZNode	CondNode;
+	@Field public ZNode	ThenNode;
+	@Field public ZNode	ElseNode;
+	public ZenTrinaryNode(ZType Type, ZToken Token, ZNode CondNode, ZNode ThenNode, ZNode ElseNode) {
 		super();
 		this.CondNode = CondNode;
 		this.ThenNode = ThenNode;

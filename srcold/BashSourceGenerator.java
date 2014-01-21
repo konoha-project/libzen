@@ -68,7 +68,7 @@ public class BashSourceGenerator extends SourceGenerator {
 	@Field boolean inFunc = false;
 	@Field boolean inMainFunc = false;
 
-	public BashSourceGenerator/*constructor*/(String TargetCode, String OutputFile, int GeneratorFlag) {
+	public BashSourceGenerator(String TargetCode, String OutputFile, int GeneratorFlag) {
 		super(TargetCode, OutputFile, GeneratorFlag);
 		this.TrueLiteral  = "0";
 		this.FalseLiteral = "1";

@@ -2,8 +2,8 @@ package zen.lang;
 
 import java.util.ArrayList;
 
-import zen.ast.ZenFunctionNode;
-import zen.ast.ZenNode;
+import zen.ast.ZFunctionNode;
+import zen.ast.ZNode;
 import zen.deps.Constructor;
 import zen.deps.Field;
 import zen.deps.Var;
@@ -12,14 +12,14 @@ import zen.parser.ZLogger;
 final class ZFuncContext {
 	@Field ZFuncContext Parent;
 	@Field ZLogger Logger;
-	@Field ZenFunctionNode FuncNode;
+	@Field ZFunctionNode FuncNode;
 	@Field ZenFuncType FuncType;
 	@Field int ReturnCount;
 	@Field ArrayList<ZenVarType> VarTypeList;
 	@Field int VarIndex;
 	@Field int CountOfUnknownTypeNode;
 
-	@Constructor ZFuncContext(ZFuncContext Parent, ZLogger Logger, ZenFunctionNode FuncNode, ZenFuncType FuncType) {
+	ZFuncContext(ZFuncContext Parent, ZLogger Logger, ZFunctionNode FuncNode, ZenFuncType FuncType) {
 		this.Parent = Parent;
 		this.Logger = Logger;
 		this.FuncNode = FuncNode;
@@ -35,7 +35,7 @@ final class ZFuncContext {
 		return this.FuncNode.ReturnType;
 	}
 
-	public ZenFuncType RecheckCompleteFuncType(ZenFunctionNode FuncNode) {
+	public ZenFuncType RecheckCompleteFuncType(ZFunctionNode FuncNode) {
 		@Var ZenFuncType FuncType = this.FuncType;
 		if(!FuncType.IsCompleteFunc(false)) {
 			if(FuncNode.ReturnType.IsVarType() && this.ReturnCount == 0) {
@@ -83,7 +83,7 @@ final class ZFuncContext {
 		return Index;
 	}
 
-	public void CountUnknownTypeNode(ZenNode Node) {
+	public void CountUnknownTypeNode(ZNode Node) {
 		this.CountOfUnknownTypeNode = this.CountOfUnknownTypeNode + 1;
 	}
 

@@ -93,7 +93,7 @@ import parser.deps.LibZen;
 //Zen Generator should be written in each language.
 
 public class CSourceGenerator extends ZenSourceGenerator {
-	public CSourceGenerator/*constructor*/(String TargetCode, String OutputFile, int GeneratorFlag) {
+	public CSourceGenerator(String TargetCode, String OutputFile, int GeneratorFlag) {
 		super(TargetCode, OutputFile, GeneratorFlag);
 		this.TrueLiteral  = "1";
 		this.FalseLiteral = "0";

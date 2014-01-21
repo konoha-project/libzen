@@ -43,7 +43,7 @@ public class ZenTopObject implements ZenTypedObject {
 
 final class ZenAnyObject extends ZenTopObject {
 	public final Object NativeValue;
-	ZenAnyObject/*constructor*/(ZType GreenType, Object NativeValue) {
+	ZenAnyObject(ZType GreenType, Object NativeValue) {
 		super(GreenType);
 		this.NativeValue = NativeValue;
 	}

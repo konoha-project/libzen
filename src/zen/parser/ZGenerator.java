@@ -25,7 +25,7 @@
 //ifdef JAVA
 package zen.parser;
 
-import zen.ast.ZenNode;
+import zen.ast.ZNode;
 import zen.deps.Field;
 import zen.lang.ZSystem;
 import zen.lang.ZType;
@@ -88,11 +88,11 @@ public abstract class ZGenerator extends ZVisitor {
 		return this.Logger.Report(Level, Token, Message);
 	}
 
-	public void DoCodeGeneration(ZNameSpace NameSpace, ZenNode Node) {
+	public void DoCodeGeneration(ZNameSpace NameSpace, ZNode Node) {
 		Node.Accept(this);
 	}
 
-	public Object EvalTopLevelNode(ZenNode TopLevelNode) {
+	public Object EvalTopLevelNode(ZNode TopLevelNode) {
 		return null;
 	}
 

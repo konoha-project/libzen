@@ -5,18 +5,18 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
-import zen.ast.ZenBlockNode;
-import zen.ast.ZenCastNode;
-import zen.ast.ZenCatchNode;
-import zen.ast.ZenFuncDeclNode;
-import zen.ast.ZenFunctionNode;
-import zen.ast.ZenInstanceOfNode;
-import zen.ast.ZenParamNode;
-import zen.ast.ZenReturnNode;
-import zen.ast.ZenThrowNode;
-import zen.ast.ZenTryNode;
-import zen.ast.ZenVarDeclNode;
-import zen.ast.ZenNode;
+import zen.ast.ZBlockNode;
+import zen.ast.ZCastNode;
+import zen.ast.ZCatchNode;
+import zen.ast.ZFuncDeclNode;
+import zen.ast.ZFunctionNode;
+import zen.ast.ZInstanceOfNode;
+import zen.ast.ZParamNode;
+import zen.ast.ZReturnNode;
+import zen.ast.ZThrowNode;
+import zen.ast.ZTryNode;
+import zen.ast.ZVarDeclNode;
+import zen.ast.ZNode;
 import zen.lang.ZSystem;
 import zen.parser.ZenSourceGenerator;
 
@@ -50,7 +50,7 @@ public class RubySourceGenerator extends ZenSourceGenerator {
 	}
 
 	@Override
-	public Object EvalTopLevelNode(ZenNode Node) {
+	public Object EvalTopLevelNode(ZNode Node) {
 		String Code = this.CurrentBuilder.toString();
 		System.out.println(Code);
 		this.CurrentBuilder.Clear();
@@ -63,10 +63,10 @@ public class RubySourceGenerator extends ZenSourceGenerator {
 	}
 
 	@Override
-	public void VisitBlockNode(ZenBlockNode Node) {
+	public void VisitBlockNode(ZBlockNode Node) {
 		this.CurrentBuilder.Append("do");
 		this.CurrentBuilder.Indent();
-		for(ZenNode SubNode : Node.StmtList) {
+		for(ZNode SubNode : Node.StmtList) {
 			this.CurrentBuilder.AppendLineFeed();
 			this.CurrentBuilder.AppendIndent();
 			this.GenerateCode(SubNode);
@@ -78,22 +78,22 @@ public class RubySourceGenerator extends ZenSourceGenerator {
 		this.CurrentBuilder.Append("end");
 	}
 
-	@Override public void VisitCastNode(ZenCastNode Node) {
+	@Override public void VisitCastNode(ZCastNode Node) {
 		// Use method (like 1.to_s) in Ruby.
 	}
 
-	@Override public void VisitInstanceOfNode(ZenInstanceOfNode Node) {
+	@Override public void VisitInstanceOfNode(ZInstanceOfNode Node) {
 		// Use method (like "a".is_a?(Object)) in Ruby.
 	}
 
 	@Override
-	public void VisitThrowNode(ZenThrowNode Node) {
+	public void VisitThrowNode(ZThrowNode Node) {
 		this.CurrentBuilder.Append("raise ");
 		this.GenerateCode(Node.ValueNode);
 	}
 
 	@Override
-	public void VisitTryNode(ZenTryNode Node) {
+	public void VisitTryNode(ZTryNode Node) {
 		this.CurrentBuilder.Append("begin");
 		this.GenerateCode(Node.TryNode);
 		if (Node.CatchNode != null) {
@@ -106,7 +106,7 @@ public class RubySourceGenerator extends ZenSourceGenerator {
 	}
 
 	@Override
-	public void VisitCatchNode(ZenCatchNode Node) {
+	public void VisitCatchNode(ZCatchNode Node) {
 		this.CurrentBuilder.Append("rescue => ");
 		//this.VisitType(Node.ExceptionType);
 		this.CurrentBuilder.Append(Node.ExceptionName);
@@ -114,27 +114,27 @@ public class RubySourceGenerator extends ZenSourceGenerator {
 	}
 
 	@Override
-	public void VisitVarDeclNode(ZenVarDeclNode Node) {
+	public void VisitVarDeclNode(ZVarDeclNode Node) {
 		this.CurrentBuilder.Append(Node.NativeName);
 		this.CurrentBuilder.AppendToken("=");
 		this.GenerateCode(Node.InitNode);
 	}
 
 	@Override
-	public void VisitParamNode(ZenParamNode Node) {
+	public void VisitParamNode(ZParamNode Node) {
 		this.CurrentBuilder.Append(Node.Name);
 	}
 
 	@Override
-	public void VisitFunctionNode(ZenFunctionNode Node) {
-		ZenReturnNode ReturnNode = Node.BodyNode.ToReturnNode();
+	public void VisitFunctionNode(ZFunctionNode Node) {
+		ZReturnNode ReturnNode = Node.BodyNode.ToReturnNode();
 		this.CurrentBuilder.Append("->");
 		this.VisitParamList("(", Node.ArgumentList, ")");
 		this.GenerateCode(Node.BodyNode);
 	}
 
 	@Override
-	public void VisitFuncDeclNode(ZenFuncDeclNode Node) {
+	public void VisitFuncDeclNode(ZFuncDeclNode Node) {
 		this.CurrentBuilder.Append("def ");
 		this.CurrentBuilder.Append(Node.FuncName);
 		this.VisitParamList("(", Node.ArgumentList, ")");

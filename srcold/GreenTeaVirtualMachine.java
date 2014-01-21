@@ -27,7 +27,7 @@
 //final class ZenStack {
 //	@Field public final Object[] Stack;
 //	@Field public int StackTop;
-//	ZenStack/*constructor*/() {
+//	ZenStack() {
 //		this.Stack = new Object[4096];
 //		this.StackTop = 0;
 //	}
@@ -52,7 +52,7 @@
 //}
 //
 //class ZenException extends RuntimeException {
-//	ZenException/*constructor*/(String Message) {
+//	ZenException(String Message) {
 //		super(Message);
 //	}
 //}
@@ -78,7 +78,7 @@
 //	@Field public final int Index_B;
 //	@Field public final int Index_C;  /* C = A op B */
 //	@Field public final Object Ref;
-//	ZenCode/*constructor*/(int OpCode, int Index_A, int Index_B, int Index_C, Object Ref) {
+//	ZenCode(int OpCode, int Index_A, int Index_B, int Index_C, Object Ref) {
 //		this.OpCode = OpCode;
 //		this.Index_A = Index_A;
 //		this.Index_B = Index_B;

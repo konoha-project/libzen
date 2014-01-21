@@ -83,7 +83,7 @@ public class JavaScriptSourceGenerator extends ZenSourceGenerator {
 //	@Field private boolean UseLetKeyword = false;
 //	@Field private boolean IsForNodeJS = false;
 
-	public JavaScriptSourceGenerator/*constructor*/(String TargetCode, String OutputFile, int GeneratorFlag) {
+	public JavaScriptSourceGenerator(String TargetCode, String OutputFile, int GeneratorFlag) {
 		super(TargetCode, OutputFile, GeneratorFlag);
 	}
 	
@@ -416,7 +416,7 @@ var CLASS = (function (_super) {
 
 	
 //
-//	JavaScriptSourceGenerator/*constructor*/(String TargetCode, String OutputFile, int GeneratorFlag) {
+//	JavaScriptSourceGenerator(String TargetCode, String OutputFile, int GeneratorFlag) {
 //		super(TargetCode, OutputFile, GeneratorFlag);
 //		this.IsNodeJS = LibZen.EqualsString(TargetCode, "nodejs");
 //		this.HasLabelSupport= false;

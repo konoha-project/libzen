@@ -26,12 +26,12 @@
 
 package zen.lang;
 
-import zen.ast.ZenAndNode;
-import zen.ast.ZenBinaryNode;
-import zen.ast.ZenCastNode;
-import zen.ast.ZenNode;
-import zen.ast.ZenOrNode;
-import zen.ast.ZenUnaryNode;
+import zen.ast.ZAndNode;
+import zen.ast.ZBinaryNode;
+import zen.ast.ZCastNode;
+import zen.ast.ZNode;
+import zen.ast.ZOrNode;
+import zen.ast.ZUnaryNode;
 import zen.deps.Field;
 import zen.parser.ZNameSpace;
 import zen.parser.ZVisitor;
@@ -41,7 +41,7 @@ public abstract class ZenEvaluator extends ZVisitor {
 	@Field private boolean IsEnforced_;
 	@Field private Object EvaledValue_;
 
-	public final Object Eval(ZenNode Node, ZNameSpace NameSpace, boolean IsEnforced) {
+	public final Object Eval(ZNode Node, ZNameSpace NameSpace, boolean IsEnforced) {
 		this.NameSpace_ = NameSpace;
 		this.IsEnforced_ = IsEnforced;
 		Node.Accept(this);
@@ -50,7 +50,7 @@ public abstract class ZenEvaluator extends ZVisitor {
 
 
 	@Override
-	public void VisitAndNode(ZenAndNode Node) {
+	public void VisitAndNode(ZAndNode Node) {
 		//		@Override public Object Eval(ZenNameSpace NameSpace, boolean EnforceConst)  {
 		//			@Var Object LeftValue = this.LeftNode.Eval(NameSpace, EnforceConst) ;
 		//			if((LeftValue instanceof Boolean) && LibZen.booleanValue(LeftValue)) {
@@ -63,7 +63,7 @@ public abstract class ZenEvaluator extends ZVisitor {
 	}
 
 	@Override
-	public void VisitOrNode(ZenOrNode Node) {
+	public void VisitOrNode(ZOrNode Node) {
 		//		@Override public Object Eval(ZenNameSpace NameSpace, boolean EnforceConst)  {
 		//			@Var Object LeftValue = this.LeftNode.Eval(NameSpace, EnforceConst) ;
 		//			if(LeftValue instanceof Boolean) {
@@ -261,7 +261,7 @@ public abstract class ZenEvaluator extends ZVisitor {
 	//	}
 
 	@Override
-	public void VisitUnaryNode(ZenUnaryNode Node) {
+	public void VisitUnaryNode(ZUnaryNode Node) {
 		//		@Override public Object Eval(ZenNameSpace NameSpace, boolean EnforceConst)  {
 		//			@Var Object Value = this.RecvNode.Eval(NameSpace, EnforceConst) ;
 		//			if(Value != null) {
@@ -272,12 +272,12 @@ public abstract class ZenEvaluator extends ZVisitor {
 	}
 
 	@Override
-	public void VisitBinaryNode(ZenBinaryNode Node) {
+	public void VisitBinaryNode(ZBinaryNode Node) {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void VisitCastNode(ZenCastNode Node) {
+	public void VisitCastNode(ZCastNode Node) {
 		//		@Override public Object Eval(ZenNameSpace NameSpace, boolean EnforceConst)  {
 		//			@Var Object Value = this.ExprNode.Eval(NameSpace, EnforceConst) ;
 		//			if(Value != null) {

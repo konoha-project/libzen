@@ -25,12 +25,12 @@
 //ifdef JAVA
 package zen.codegen.c;
 
-import zen.ast.ZenCastNode;
-import zen.ast.ZenFuncDeclNode;
-import zen.ast.ZenFunctionNode;
-import zen.ast.ZenInstanceOfNode;
-import zen.ast.ZenParamNode;
-import zen.ast.ZenVarDeclNode;
+import zen.ast.ZCastNode;
+import zen.ast.ZFuncDeclNode;
+import zen.ast.ZFunctionNode;
+import zen.ast.ZInstanceOfNode;
+import zen.ast.ZParamNode;
+import zen.ast.ZVarDeclNode;
 import zen.lang.ZSystem;
 import zen.parser.ZenSourceGenerator;
 //endif VAJA
@@ -57,14 +57,14 @@ public class CSourceGenerator extends ZenSourceGenerator {
 		this.SetNativeType(ZSystem.StringType, "char*");
 	}
 
-	@Override public void VisitCastNode(ZenCastNode Node) {
+	@Override public void VisitCastNode(ZCastNode Node) {
 		this.CurrentBuilder.Append("(");
 		this.VisitType(Node.Type);
 		this.CurrentBuilder.Append(") ");
 		this.GenerateCode(Node.ExprNode);
 	}
 
-	@Override public void VisitInstanceOfNode(ZenInstanceOfNode Node) {
+	@Override public void VisitInstanceOfNode(ZInstanceOfNode Node) {
 		this.CurrentBuilder.Append("isinstance(");
 		this.GenerateCode(Node.LeftNode);
 		this.CurrentBuilder.Append(this.Camma);
@@ -72,7 +72,7 @@ public class CSourceGenerator extends ZenSourceGenerator {
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override public void VisitVarDeclNode(ZenVarDeclNode Node) {
+	@Override public void VisitVarDeclNode(ZVarDeclNode Node) {
 		this.VisitType(Node.Type);
 		this.CurrentBuilder.Append(" ");
 		this.CurrentBuilder.Append(Node.NativeName);
@@ -82,13 +82,13 @@ public class CSourceGenerator extends ZenSourceGenerator {
 		this.VisitStmtList(Node.StmtList);
 	}
 
-	@Override public void VisitParamNode(ZenParamNode Node) {
+	@Override public void VisitParamNode(ZParamNode Node) {
 		this.VisitType(Node.Type);
 		this.CurrentBuilder.Append(" ");
 		this.CurrentBuilder.Append(Node.Name);
 	}
 
-	@Override public void VisitFunctionNode(ZenFunctionNode Node) {
+	@Override public void VisitFunctionNode(ZFunctionNode Node) {
 		this.VisitType(Node.ReturnType);
 		this.CurrentBuilder.Append(" ");
 
@@ -98,7 +98,7 @@ public class CSourceGenerator extends ZenSourceGenerator {
 		this.GenerateCode(Node.BodyNode);
 	}
 
-	@Override public void VisitFuncDeclNode(ZenFuncDeclNode Node) {
+	@Override public void VisitFuncDeclNode(ZFuncDeclNode Node) {
 		this.VisitType(Node.ReturnType);
 		this.CurrentBuilder.Append(" ");
 		this.CurrentBuilder.Append(Node.FuncName);

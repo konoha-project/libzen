@@ -24,18 +24,18 @@
 
 package zen.sugar;
 
-import zen.ast.ZenConstNode;
+import zen.ast.ZConstNode;
 import zen.deps.Field;
 import zen.lang.ZType;
 import zen.parser.ZToken;
 
-public abstract class ZenRegexNode extends ZenConstNode {
+public abstract class ZenRegexNode extends ZConstNode {
 	protected ZenRegexNode(ZType Type, ZToken Token) {
 		super(Token);
 		// TODO Auto-generated constructor stub
 	}
 	@Field public String	Value;
-	//	public ZenRegexNode/*constructor*/(ZenType Type, ZenToken Token, String Value) {
+	//	public ZenRegexNode(ZenType Type, ZenToken Token, String Value) {
 	//		super();
 	//		this.Value = Value;
 	//		throw new RuntimeException("FIXME: Regex object must be defined");

@@ -27,52 +27,52 @@ package zen.parser;
 
 import java.util.ArrayList;
 
-import zen.ast.ZenAndNode;
-import zen.ast.ZenArrayLiteralNode;
-import zen.ast.ZenBinaryNode;
-import zen.ast.ZenBlockNode;
-import zen.ast.ZenBooleanNode;
-import zen.ast.ZenBreakNode;
-import zen.ast.ZenCastNode;
-import zen.ast.ZenCatchNode;
-import zen.ast.ZenClassDeclNode;
-import zen.ast.ZenComparatorNode;
-import zen.ast.ZenConstPoolNode;
-import zen.ast.ZenEmptyNode;
-import zen.ast.ZenErrorNode;
-import zen.ast.ZenFieldNode;
-import zen.ast.ZenFloatNode;
-import zen.ast.ZenFuncCallNode;
-import zen.ast.ZenFuncDeclNode;
-import zen.ast.ZenFunctionNode;
-import zen.ast.ZenGetIndexNode;
-import zen.ast.ZenGetLocalNode;
-import zen.ast.ZenGetterNode;
-import zen.ast.ZenGroupNode;
-import zen.ast.ZenIfNode;
-import zen.ast.ZenInstanceOfNode;
-import zen.ast.ZenIntNode;
-import zen.ast.ZenMapLiteralNode;
-import zen.ast.ZenMethodCallNode;
-import zen.ast.ZenNewArrayNode;
-import zen.ast.ZenNewObjectNode;
-import zen.ast.ZenNode;
-import zen.ast.ZenNotNode;
-import zen.ast.ZenNullNode;
-import zen.ast.ZenOrNode;
-import zen.ast.ZenParamNode;
-import zen.ast.ZenReturnNode;
-import zen.ast.ZenSetIndexNode;
-import zen.ast.ZenSetLocalNode;
-import zen.ast.ZenSetterNode;
-import zen.ast.ZenStringNode;
-import zen.ast.ZenStupidCastNode;
-import zen.ast.ZenSymbolNode;
-import zen.ast.ZenThrowNode;
-import zen.ast.ZenTryNode;
-import zen.ast.ZenUnaryNode;
-import zen.ast.ZenVarDeclNode;
-import zen.ast.ZenWhileNode;
+import zen.ast.ZAndNode;
+import zen.ast.ZArrayLiteralNode;
+import zen.ast.ZBinaryNode;
+import zen.ast.ZBlockNode;
+import zen.ast.ZBooleanNode;
+import zen.ast.ZBreakNode;
+import zen.ast.ZCastNode;
+import zen.ast.ZCatchNode;
+import zen.ast.ZClassDeclNode;
+import zen.ast.ZComparatorNode;
+import zen.ast.ZConstPoolNode;
+import zen.ast.ZEmptyNode;
+import zen.ast.ZErrorNode;
+import zen.ast.ZFieldNode;
+import zen.ast.ZFloatNode;
+import zen.ast.ZFuncCallNode;
+import zen.ast.ZFuncDeclNode;
+import zen.ast.ZFunctionNode;
+import zen.ast.ZGetIndexNode;
+import zen.ast.ZGetLocalNode;
+import zen.ast.ZGetterNode;
+import zen.ast.ZGroupNode;
+import zen.ast.ZIfNode;
+import zen.ast.ZInstanceOfNode;
+import zen.ast.ZIntNode;
+import zen.ast.ZMapLiteralNode;
+import zen.ast.ZMethodCallNode;
+import zen.ast.ZNewArrayNode;
+import zen.ast.ZNewObjectNode;
+import zen.ast.ZNode;
+import zen.ast.ZNotNode;
+import zen.ast.ZNullNode;
+import zen.ast.ZOrNode;
+import zen.ast.ZParamNode;
+import zen.ast.ZReturnNode;
+import zen.ast.ZSetIndexNode;
+import zen.ast.ZSetLocalNode;
+import zen.ast.ZSetterNode;
+import zen.ast.ZStringNode;
+import zen.ast.ZStupidCastNode;
+import zen.ast.ZSymbolNode;
+import zen.ast.ZThrowNode;
+import zen.ast.ZTryNode;
+import zen.ast.ZUnaryNode;
+import zen.ast.ZVarDeclNode;
+import zen.ast.ZWhileNode;
 import zen.deps.Field;
 import zen.deps.LibZen;
 import zen.deps.Var;
@@ -150,7 +150,7 @@ public class ZenSourceGenerator extends ZGenerator {
 		return TypeName;
 	}
 
-	@Override public Object EvalTopLevelNode(ZenNode Node) {
+	@Override public Object EvalTopLevelNode(ZNode Node) {
 		String Code = this.CurrentBuilder.toString();
 		System.out.println(Code);
 		this.CurrentBuilder.Clear();
@@ -167,18 +167,18 @@ public class ZenSourceGenerator extends ZGenerator {
 	//		Builder.AppendLine("");
 	//	}
 
-	public void GenerateCode(ZenNode Node) {
+	public void GenerateCode(ZNode Node) {
 		Node.Accept(this);
 	}
 
-	protected boolean IsNeededSurroud(ZenNode Node) {
-		if(Node instanceof ZenBinaryNode) {
+	protected boolean IsNeededSurroud(ZNode Node) {
+		if(Node instanceof ZBinaryNode) {
 			return true;
 		}
 		return false;
 	}
 
-	protected void GenerateSurroundCode(ZenNode Node) {
+	protected void GenerateSurroundCode(ZNode Node) {
 		if(this.IsNeededSurroud(Node)) {
 			this.CurrentBuilder.Append("(");
 			this.GenerateCode(Node);
@@ -193,10 +193,10 @@ public class ZenSourceGenerator extends ZGenerator {
 		this.CurrentBuilder.Append(RawSource);
 	}
 
-	public void VisitStmtList(ArrayList<ZenNode> StmtList) {
+	public void VisitStmtList(ArrayList<ZNode> StmtList) {
 		@Var int i = 0;
 		while (i < StmtList.size()) {
-			@Var ZenNode SubNode = StmtList.get(i);
+			@Var ZNode SubNode = StmtList.get(i);
 			this.CurrentBuilder.AppendLineFeed();
 			this.CurrentBuilder.AppendIndent();
 			this.GenerateCode(SubNode);
@@ -207,7 +207,7 @@ public class ZenSourceGenerator extends ZGenerator {
 		}
 	}
 
-	@Override public void VisitBlockNode(ZenBlockNode Node) {
+	@Override public void VisitBlockNode(ZBlockNode Node) {
 		this.CurrentBuilder.AppendWhiteSpace();
 		this.CurrentBuilder.Append("{");
 		this.CurrentBuilder.Indent();
@@ -222,16 +222,16 @@ public class ZenSourceGenerator extends ZGenerator {
 	}
 
 	@Override
-	public void VisitEmptyNode(ZenEmptyNode Node) {
+	public void VisitEmptyNode(ZEmptyNode Node) {
 	}
 
 	@Override
-	public void VisitNullNode(ZenNullNode Node) {
+	public void VisitNullNode(ZNullNode Node) {
 		this.CurrentBuilder.Append(this.NullLiteral);
 	}
 
 	@Override
-	public void VisitBooleanNode(ZenBooleanNode Node) {
+	public void VisitBooleanNode(ZBooleanNode Node) {
 		if (Node.BooleanValue) {
 			this.CurrentBuilder.Append(this.TrueLiteral);
 		} else {
@@ -240,34 +240,34 @@ public class ZenSourceGenerator extends ZGenerator {
 	}
 
 	@Override
-	public void VisitIntNode(ZenIntNode Node) {
-		this.CurrentBuilder.Append("" + Node.Value);
+	public void VisitIntNode(ZIntNode Node) {
+		this.CurrentBuilder.Append("" + Node.FloatValue);
 	}
 
 	@Override
-	public void VisitFloatNode(ZenFloatNode Node) {
-		this.CurrentBuilder.Append("" + Node.Value);
+	public void VisitFloatNode(ZFloatNode Node) {
+		this.CurrentBuilder.Append("" + Node.FloatValue);
 	}
 
 	@Override
-	public void VisitStringNode(ZenStringNode Node) {
-		this.CurrentBuilder.Append(LibZen.QuoteString(Node.Value));
+	public void VisitStringNode(ZStringNode Node) {
+		this.CurrentBuilder.Append(LibZen.QuoteString(Node.StringValue));
 	}
 
 	@Override
-	public void VisitConstPoolNode(ZenConstPoolNode Node) {
+	public void VisitConstPoolNode(ZConstPoolNode Node) {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void VisitGroupNode(ZenGroupNode Node) {
+	public void VisitGroupNode(ZGroupNode Node) {
 		this.CurrentBuilder.Append("(");
 		this.GenerateCode(Node.RecvNode);
 		this.CurrentBuilder.Append(")");
 	}
 
 	@Override
-	public void VisitGetIndexNode(ZenGetIndexNode Node) {
+	public void VisitGetIndexNode(ZGetIndexNode Node) {
 		this.GenerateCode(Node.RecvNode);
 		this.CurrentBuilder.Append("[");
 		this.GenerateCode(Node.IndexNode);
@@ -275,7 +275,7 @@ public class ZenSourceGenerator extends ZGenerator {
 	}
 
 	@Override
-	public void VisitSetIndexNode(ZenSetIndexNode Node) {
+	public void VisitSetIndexNode(ZSetIndexNode Node) {
 		this.GenerateCode(Node.RecvNode);
 		this.CurrentBuilder.Append("[");
 		this.GenerateCode(Node.IndexNode);
@@ -284,7 +284,7 @@ public class ZenSourceGenerator extends ZGenerator {
 		this.GenerateCode(Node.ValueNode);
 	}
 
-	@Override public void VisitSymbolNode(ZenSymbolNode Node) {
+	@Override public void VisitSymbolNode(ZSymbolNode Node) {
 		//		if(Node.GivenName.equals(Node.ReferenceName) && Node.Type.IsFuncType()) {
 		//			Node.ReferenceName = Node.Type.StringfySignature(Node.GivenName); // FIXME
 		//		}
@@ -292,35 +292,35 @@ public class ZenSourceGenerator extends ZGenerator {
 	}
 
 	@Override
-	public void VisitGetLocalNode(ZenGetLocalNode Node) {
+	public void VisitGetLocalNode(ZGetLocalNode Node) {
 		this.CurrentBuilder.Append(Node.VarName);
 	}
 
 	@Override
-	public void VisitSetLocalNode(ZenSetLocalNode Node) {
+	public void VisitSetLocalNode(ZSetLocalNode Node) {
 		this.CurrentBuilder.Append(Node.VarName);
 		this.CurrentBuilder.AppendToken("=");
 		this.GenerateCode(Node.ValueNode);
 	}
 
 
-	@Override public void VisitGetterNode(ZenGetterNode Node) {
+	@Override public void VisitGetterNode(ZGetterNode Node) {
 		this.GenerateSurroundCode(Node.RecvNode);
 		this.CurrentBuilder.Append(".");
-		this.CurrentBuilder.Append(Node.NativeName);
+		this.CurrentBuilder.Append(Node.FieldName);
 	}
 
 	@Override
-	public void VisitSetterNode(ZenSetterNode Node) {
+	public void VisitSetterNode(ZSetterNode Node) {
 		this.GenerateSurroundCode(Node.RecvNode);
 		this.CurrentBuilder.Append(".");
-		this.CurrentBuilder.Append(Node.NativeName);
+		this.CurrentBuilder.Append(Node.FieldName);
 		this.CurrentBuilder.AppendToken("=");
 		this.GenerateCode(Node.ValueNode);
 	}
 
 	@Override
-	public void VisitMethodCallNode(ZenMethodCallNode Node) {
+	public void VisitMethodCallNode(ZMethodCallNode Node) {
 		this.GenerateSurroundCode(Node.RecvNode);
 		this.CurrentBuilder.Append(".");
 		this.CurrentBuilder.Append(Node.MethodName);
@@ -328,27 +328,27 @@ public class ZenSourceGenerator extends ZGenerator {
 	}
 
 	@Override
-	public void VisitFuncCallNode(ZenFuncCallNode Node) {
+	public void VisitFuncCallNode(ZFuncCallNode Node) {
 		this.GenerateCode(Node.FuncNode);
 		this.VisitParamList("(", Node.ParamList, ")");
 	}
 
 	@Override
-	public void VisitUnaryNode(ZenUnaryNode Node) {
+	public void VisitUnaryNode(ZUnaryNode Node) {
 		this.CurrentBuilder.Append(Node.SourceToken.ParsedText);
 		this.GenerateCode(Node.RecvNode);
 	}
 
 	@Override
-	public void VisitNotNode(ZenNotNode Node) {
+	public void VisitNotNode(ZNotNode Node) {
 		this.CurrentBuilder.Append(this.NotOperator);
 		this.GenerateSurroundCode(Node.RecvNode);
 	}
 
 	@Override
-	public void VisitCastNode(ZenCastNode Node) {
+	public void VisitCastNode(ZCastNode Node) {
 		this.CurrentBuilder.Append("(");
-		if(Node instanceof ZenStupidCastNode) {
+		if(Node instanceof ZStupidCastNode) {
 			this.CurrentBuilder.AppendBlockComment("stupid");
 		}
 		this.VisitType(Node.Type);
@@ -356,45 +356,45 @@ public class ZenSourceGenerator extends ZGenerator {
 		this.GenerateSurroundCode(Node.ExprNode);
 	}
 
-	@Override public void VisitInstanceOfNode(ZenInstanceOfNode Node) {
+	@Override public void VisitInstanceOfNode(ZInstanceOfNode Node) {
 		this.GenerateCode(Node.LeftNode);
 		this.CurrentBuilder.AppendToken("instanceof");
 		this.VisitType(Node.RightNode.Type);
 	}
 
-	@Override public void VisitBinaryNode(ZenBinaryNode Node) {
-		if (Node.ParentNode instanceof ZenBinaryNode) {
+	@Override public void VisitBinaryNode(ZBinaryNode Node) {
+		if (Node.ParentNode instanceof ZBinaryNode) {
 			this.CurrentBuilder.Append("(");
 		}
 		this.GenerateCode(Node.LeftNode);
 		this.CurrentBuilder.AppendToken(Node.SourceToken.ParsedText);
 		this.GenerateCode(Node.RightNode);
-		if (Node.ParentNode instanceof ZenBinaryNode) {
+		if (Node.ParentNode instanceof ZBinaryNode) {
 			this.CurrentBuilder.Append(")");
 		}
 	}
 
-	@Override public void VisitComparatorNode(ZenComparatorNode Node) {
+	@Override public void VisitComparatorNode(ZComparatorNode Node) {
 		this.GenerateCode(Node.LeftNode);
 		this.CurrentBuilder.AppendToken(Node.SourceToken.ParsedText);
 		this.GenerateCode(Node.RightNode);
 	}
 
-	@Override public void VisitAndNode(ZenAndNode Node) {
+	@Override public void VisitAndNode(ZAndNode Node) {
 		this.GenerateCode(Node.LeftNode);
 		this.CurrentBuilder.AppendToken(this.AndOperator);
 		this.GenerateCode(Node.RightNode);
 	}
 
 	@Override
-	public void VisitOrNode(ZenOrNode Node) {
+	public void VisitOrNode(ZOrNode Node) {
 		this.GenerateCode(Node.LeftNode);
 		this.CurrentBuilder.AppendToken(this.OrOperator);
 		this.GenerateCode(Node.RightNode);
 	}
 
 	@Override
-	public void VisitIfNode(ZenIfNode Node) {
+	public void VisitIfNode(ZIfNode Node) {
 		this.CurrentBuilder.Append("if (");
 		this.GenerateCode(Node.CondNode);
 		this.CurrentBuilder.Append(")");
@@ -405,7 +405,7 @@ public class ZenSourceGenerator extends ZGenerator {
 		}
 	}
 
-	@Override public void VisitReturnNode(ZenReturnNode Node) {
+	@Override public void VisitReturnNode(ZReturnNode Node) {
 		this.CurrentBuilder.Append("return");
 		if (Node.ValueNode != null) {
 			this.CurrentBuilder.AppendWhiteSpace();
@@ -413,24 +413,24 @@ public class ZenSourceGenerator extends ZGenerator {
 		}
 	}
 
-	@Override public void VisitWhileNode(ZenWhileNode Node) {
+	@Override public void VisitWhileNode(ZWhileNode Node) {
 		this.CurrentBuilder.Append("while (");
 		this.GenerateCode(Node.CondNode);
 		this.CurrentBuilder.Append(")");
 		this.GenerateCode(Node.BodyNode);
 	}
 
-	@Override public void VisitBreakNode(ZenBreakNode Node) {
+	@Override public void VisitBreakNode(ZBreakNode Node) {
 		this.CurrentBuilder.Append("break");
 	}
 
-	@Override public void VisitThrowNode(ZenThrowNode Node) {
+	@Override public void VisitThrowNode(ZThrowNode Node) {
 		this.CurrentBuilder.Append("throw");
 		this.CurrentBuilder.AppendWhiteSpace();
 		this.GenerateCode(Node.ValueNode);
 	}
 
-	@Override public void VisitTryNode(ZenTryNode Node) {
+	@Override public void VisitTryNode(ZTryNode Node) {
 		this.CurrentBuilder.Append("try");
 		this.GenerateCode(Node.TryNode);
 		if(Node.CatchNode != null) {
@@ -442,7 +442,7 @@ public class ZenSourceGenerator extends ZGenerator {
 		}
 	}
 
-	@Override public void VisitCatchNode(ZenCatchNode Node) {
+	@Override public void VisitCatchNode(ZCatchNode Node) {
 		this.CurrentBuilder.Append("catch (");
 		this.CurrentBuilder.Append(Node.ExceptionName);
 		this.VisitTypeAnnotation(Node.ExceptionType);
@@ -450,7 +450,7 @@ public class ZenSourceGenerator extends ZGenerator {
 		this.GenerateCode(Node.BodyNode);
 	}
 
-	@Override public void VisitVarDeclNode(ZenVarDeclNode Node) {
+	@Override public void VisitVarDeclNode(ZVarDeclNode Node) {
 		this.CurrentBuilder.Append("var");
 		this.CurrentBuilder.AppendWhiteSpace();
 		this.CurrentBuilder.Append(Node.NativeName);
@@ -477,12 +477,12 @@ public class ZenSourceGenerator extends ZGenerator {
 		this.VisitType(Type);
 	}
 
-	@Override public void VisitParamNode(ZenParamNode Node) {
+	@Override public void VisitParamNode(ZParamNode Node) {
 		this.CurrentBuilder.Append(Node.Name);
 		this.VisitTypeAnnotation(Node.Type);
 	}
 
-	@Override public void VisitFunctionNode(ZenFunctionNode Node) {
+	@Override public void VisitFunctionNode(ZFunctionNode Node) {
 		this.CurrentBuilder.Append("function");
 		this.CurrentBuilder.AppendWhiteSpace();
 		this.VisitParamList("(", Node.ArgumentList, ")");
@@ -490,7 +490,7 @@ public class ZenSourceGenerator extends ZGenerator {
 		this.GenerateCode(Node.BodyNode);
 	}
 
-	@Override public void VisitFuncDeclNode(ZenFuncDeclNode Node) {
+	@Override public void VisitFuncDeclNode(ZFuncDeclNode Node) {
 		this.CurrentBuilder.Append("function");
 		this.CurrentBuilder.AppendWhiteSpace();
 		this.CurrentBuilder.Append(Node.ReferenceName);
@@ -503,7 +503,7 @@ public class ZenSourceGenerator extends ZGenerator {
 		}
 	}
 
-	@Override public void VisitClassDeclNode(ZenClassDeclNode Node) {
+	@Override public void VisitClassDeclNode(ZClassDeclNode Node) {
 		this.CurrentBuilder.Append("class");
 		this.CurrentBuilder.AppendWhiteSpace();
 		this.CurrentBuilder.Append(Node.ClassName);
@@ -516,7 +516,7 @@ public class ZenSourceGenerator extends ZGenerator {
 		this.CurrentBuilder.Indent();
 		@Var int i = 0;
 		while (i < Node.FieldList.size()) {
-			@Var ZenFieldNode FieldNode = Node.FieldList.get(i);
+			@Var ZFieldNode FieldNode = Node.FieldList.get(i);
 			this.CurrentBuilder.AppendLineFeed();
 			this.CurrentBuilder.AppendIndent();
 			this.CurrentBuilder.Append("field");
@@ -535,7 +535,7 @@ public class ZenSourceGenerator extends ZGenerator {
 	}
 
 
-	@Override public void VisitErrorNode(ZenErrorNode Node) {
+	@Override public void VisitErrorNode(ZErrorNode Node) {
 		this.Logger.ReportError(Node.SourceToken, Node.ErrorMessage);
 	}
 
@@ -544,11 +544,11 @@ public class ZenSourceGenerator extends ZGenerator {
 		this.CurrentBuilder.Append(this.GetNativeType(Type.GetRealType()));
 	}
 
-	protected void VisitParamList(String OpenToken, ArrayList<ZenNode> ParamList, String CloseToken) {
+	protected void VisitParamList(String OpenToken, ArrayList<ZNode> ParamList, String CloseToken) {
 		this.CurrentBuilder.Append(OpenToken);
 		@Var int i = 0;
 		while(i < ParamList.size()) {
-			@Var ZenNode ParamNode = ParamList.get(i);
+			@Var ZNode ParamNode = ParamList.get(i);
 			if (i > 0) {
 				this.CurrentBuilder.Append(", ");
 			}
@@ -559,22 +559,22 @@ public class ZenSourceGenerator extends ZGenerator {
 	}
 
 	@Override
-	public void VisitArrayLiteralNode(ZenArrayLiteralNode Node) {
+	public void VisitArrayLiteralNode(ZArrayLiteralNode Node) {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void VisitMapLiteralNode(ZenMapLiteralNode Node) {
+	public void VisitMapLiteralNode(ZMapLiteralNode Node) {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void VisitNewArrayNode(ZenNewArrayNode Node) {
+	public void VisitNewArrayNode(ZNewArrayNode Node) {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void VisitNewObjectNode(ZenNewObjectNode Node) {
+	public void VisitNewObjectNode(ZNewObjectNode Node) {
 		// TODO Auto-generated method stub
 	}
 

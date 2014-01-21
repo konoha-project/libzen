@@ -26,19 +26,19 @@ package zen.sugar;
 
 import java.util.ArrayList;
 
-import zen.ast.ZenNode;
+import zen.ast.ZNode;
 import zen.deps.Field;
 import zen.lang.ZType;
 import zen.parser.ZToken;
 
 // E.g., "ls" "-a"..
-final public class ZenCommandNode extends ZenNode {
-	@Field public ArrayList<ZenNode>  ArgumentList; /* ["/bin/ls" , "-la", "/", ...] */
-	@Field public ZenNode PipedNextNode;
-	public ZenCommandNode/*constructor*/(ZType Type, ZToken Token, ZenNode PipedNextNode) {
+public final class ZenCommandNode extends ZNode {
+	@Field public ArrayList<ZNode>  ArgumentList; /* ["/bin/ls" , "-la", "/", ...] */
+	@Field public ZNode PipedNextNode;
+	public ZenCommandNode(ZType Type, ZToken Token, ZNode PipedNextNode) {
 		super();
 		this.PipedNextNode = PipedNextNode;
-		this.ArgumentList = new ArrayList<ZenNode>();
+		this.ArgumentList = new ArrayList<ZNode>();
 	}
 	//	@Override public final ArrayList<ZenNode> GetList() {
 	//		return this.ArgumentList;

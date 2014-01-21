@@ -92,7 +92,7 @@ import parser.deps.LibZen;
 //Zen Generator should be written in each language.
 
 public class PerlSourceGenerator extends ZenSourceGenerator {
-	public PerlSourceGenerator/*constructor*/(String TargetCode, String OutputFile, int GeneratorFlag) {
+	public PerlSourceGenerator(String TargetCode, String OutputFile, int GeneratorFlag) {
 		super("perl", OutputFile, GeneratorFlag);
 		this.TrueLiteral  = "1";
 		this.FalseLiteral = "0";

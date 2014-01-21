@@ -12,7 +12,7 @@ import zen.lang.ZFunc;
 	@Field @Init public ZFunc      Func;
 	@Field @Init public ZTokenFunc	ParentFunc;
 
-	@Constructor ZTokenFunc(ZFunc Func, ZTokenFunc Parent) {
+	ZTokenFunc(ZFunc Func, ZTokenFunc Parent) {
 		this.Func = Func;
 		this.ParentFunc = Parent;
 	}

@@ -24,14 +24,14 @@
 
 package zen.parser;
 
-import zen.ast.ZenBooleanNode;
-import zen.ast.ZenConstPoolNode;
-import zen.ast.ZenFloatNode;
-import zen.ast.ZenGetLocalNode;
-import zen.ast.ZenIntNode;
-import zen.ast.ZenNode;
-import zen.ast.ZenSetLocalNode;
-import zen.ast.ZenStringNode;
+import zen.ast.ZBooleanNode;
+import zen.ast.ZConstPoolNode;
+import zen.ast.ZFloatNode;
+import zen.ast.ZGetLocalNode;
+import zen.ast.ZIntNode;
+import zen.ast.ZNode;
+import zen.ast.ZSetLocalNode;
+import zen.ast.ZStringNode;
 import zen.lang.ZType;
 
 public abstract class ZNodeUtils {
@@ -41,28 +41,28 @@ public abstract class ZNodeUtils {
 	//		return new ZenErrorNode(ZenSystem.VoidType, ParsedTree.KeyToken);
 	//	}
 
-	public final static ZenNode CreateConstNode(ZToken SourceToken, Object Value) {
+	public final static ZNode CreateConstNode(ZToken SourceToken, Object Value) {
 		if(Value instanceof Boolean) {
-			return new ZenBooleanNode(SourceToken, (Boolean) Value);
+			return new ZBooleanNode(SourceToken, (Boolean) Value);
 		}
 		if((Value instanceof Long) || (Value instanceof Integer)) {
-			return new ZenIntNode(SourceToken, ((Number)Value).longValue());
+			return new ZIntNode(SourceToken, ((Number)Value).longValue());
 		}
 		if((Value instanceof Double) || (Value instanceof Float)) {
-			return new ZenFloatNode(SourceToken, ((Number)Value).doubleValue());
+			return new ZFloatNode(SourceToken, ((Number)Value).doubleValue());
 		}
 		if(Value instanceof String) {
-			return new ZenStringNode(SourceToken, Value.toString());
+			return new ZStringNode(SourceToken, Value.toString());
 		}
-		return new ZenConstPoolNode(SourceToken, Value);
+		return new ZConstPoolNode(SourceToken, Value);
 	}
 
-	public final static ZenNode CreateSymbolNode(ZToken SourceToken, ZType Type, String NativeName, ZenNode AssignedNode) {
+	public final static ZNode CreateSymbolNode(ZToken SourceToken, ZType Type, String NativeName, ZNode AssignedNode) {
 		if(AssignedNode != null) {
-			return new ZenSetLocalNode(SourceToken, NativeName, AssignedNode);
+			return new ZSetLocalNode(SourceToken, NativeName, AssignedNode);
 		}
 		else {
-			return new ZenGetLocalNode(SourceToken, NativeName);
+			return new ZGetLocalNode(SourceToken, NativeName);
 		}
 	}
 }

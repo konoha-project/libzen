@@ -27,15 +27,16 @@ package zen.ast;
 import zen.lang.ZType;
 import zen.parser.ZToken;
 
-public abstract class ZenStatementNode extends ZenNode {
+@Deprecated
+public abstract class ZenStatementNode extends ZNode {
 	/**
 	 * int f(int n);
 	 * f(1)
 	 */
-	public ZenStatementNode/*constructor*/(ZType Type, ZToken Token) {
+	public ZenStatementNode(ZType Type, ZToken Token) {
 		super();
 	}
-	public ZenStatementNode/*constructor*/() {
+	public ZenStatementNode() {
 		super();
 	}
 	//	@Override public boolean Accept(ZenVisitor Visitor) {

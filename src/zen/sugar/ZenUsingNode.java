@@ -24,7 +24,7 @@
 
 package zen.sugar;
 
-import zen.ast.ZenNode;
+import zen.ast.ZNode;
 import zen.deps.Field;
 import zen.lang.ZType;
 import zen.parser.ZToken;
@@ -35,13 +35,13 @@ import zen.parser.ZToken;
  * }
  * try-catch is needed
  */
-final public class ZenUsingNode extends ZenNode {
+public final class ZenUsingNode extends ZNode {
 	@Field public ZType	DeclType;
 	@Field public String  NativeName;
-	@Field public ZenNode	InitNode;
-	@Field public ZenNode	BlockNode;   // release resource of NativeName after BlockNode
+	@Field public ZNode	InitNode;
+	@Field public ZNode	BlockNode;   // release resource of NativeName after BlockNode
 	/* let VarNode in Block end */
-	public ZenUsingNode/*constructor*/(ZType Type, ZToken Token, ZType DeclType, String VariableName, ZenNode InitNode, ZenNode Block) {
+	public ZenUsingNode(ZType Type, ZToken Token, ZType DeclType, String VariableName, ZNode InitNode, ZNode Block) {
 		super();
 		this.NativeName = VariableName;
 		this.DeclType  = DeclType;

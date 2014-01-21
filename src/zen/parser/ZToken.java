@@ -38,7 +38,7 @@ import zen.lang.ZType;
 	@Field @Init public long		FileLine;
 	@Field public ZSyntaxPattern	PresetPattern = null;
 
-	@Constructor public ZToken(int TokenFlag, String Text, long FileLine) {
+	public ZToken(int TokenFlag, String Text, long FileLine) {
 		this.TokenFlag = TokenFlag;
 		this.ParsedText = Text;
 		this.FileLine = FileLine;

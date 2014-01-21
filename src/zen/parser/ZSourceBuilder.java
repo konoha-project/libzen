@@ -27,7 +27,7 @@ package zen.parser;
 
 import java.util.ArrayList;
 
-import zen.ast.ZenNode;
+import zen.ast.ZNode;
 import zen.deps.Field;
 import zen.deps.Init;
 import zen.deps.LibNative;
@@ -128,7 +128,7 @@ public final class ZSourceBuilder {
 		this.SourceList.add(Text);
 	}
 
-	public final void AppendParamList(ArrayList<ZenNode> ParamList, int BeginIdx, int EndIdx) {
+	public final void AppendParamList(ArrayList<ZNode> ParamList, int BeginIdx, int EndIdx) {
 		@Var int i = BeginIdx;
 		while(i < EndIdx) {
 			if (i > BeginIdx) {

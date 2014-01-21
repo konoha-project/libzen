@@ -26,7 +26,7 @@ package zen.lang;
 
 import java.util.ArrayList;
 
-import zen.ast.ZenNode;
+import zen.ast.ZNode;
 import zen.deps.Field;
 import zen.deps.LibZen;
 import zen.deps.Var;
@@ -101,7 +101,7 @@ public class ZenClassType extends ZType {
 		return null;
 	}
 
-	public ZenNode CheckAllFields(ZNameSpace NameSpace) {
+	public ZNode CheckAllFields(ZNameSpace NameSpace) {
 		// TODO Auto-generated method stub
 
 		return null;  // if no error

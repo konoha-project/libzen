@@ -7,7 +7,7 @@ import zen.deps.Var;
 public final class ZenFuncType extends ZType {
 
 	@Field public ZType[]		TypeParams;
-	@Constructor public ZenFuncType(String ShortName, ZType[] UniqueTypeParams) {
+	public ZenFuncType(String ShortName, ZType[] UniqueTypeParams) {
 		super(ZTypeFlag.UniqueType, ShortName, ZSystem.TopType);
 		if(UniqueTypeParams == null) {
 			this.TypeParams = new ZType[1];

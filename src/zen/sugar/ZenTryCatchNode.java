@@ -26,23 +26,23 @@ package zen.sugar;
 
 import java.util.ArrayList;
 
-import zen.ast.ZenCatchNode;
-import zen.ast.ZenNode;
+import zen.ast.ZCatchNode;
+import zen.ast.ZNode;
 import zen.deps.Field;
 
-final public class ZenTryCatchNode extends ZenNode {
-	@Field public ZenNode	TryNode;
-	@Field public ArrayList<ZenNode> 	CatchList;
-	@Field public ZenNode	FinallyNode;
-	public ZenTryCatchNode/*constructor*/() {
+public final class ZenTryCatchNode extends ZNode {
+	@Field public ZNode	TryNode;
+	@Field public ArrayList<ZNode> 	CatchList;
+	@Field public ZNode	FinallyNode;
+	public ZenTryCatchNode() {
 		super();
 		this.TryNode = null;
 		this.FinallyNode = null;
-		this.CatchList = new ArrayList<ZenNode>();
+		this.CatchList = new ArrayList<ZNode>();
 	}
-	@Override public void Append(ZenNode Node) {
+	@Override public void Append(ZNode Node) {
 		this.SetChild(Node);
-		if(Node instanceof ZenCatchNode) {
+		if(Node instanceof ZCatchNode) {
 			this.CatchList.add(Node);
 		}
 		else if(this.TryNode == null) {

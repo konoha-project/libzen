@@ -27,7 +27,7 @@ package org.ZenScript;
 public class SoftwareFaultException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 	public Object ErrorSource;
-	public SoftwareFaultException/*constructor*/(Object ErrorSource) {
+	public SoftwareFaultException(Object ErrorSource) {
 		super(ErrorSource.toString());
 		this.ErrorSource = ErrorSource;
 	}

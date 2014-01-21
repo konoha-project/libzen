@@ -26,20 +26,20 @@ package zen.sugar;
 
 import java.util.ArrayList;
 
-import zen.ast.ZenNode;
+import zen.ast.ZNode;
 import zen.deps.Field;
 import zen.lang.ZType;
 import zen.parser.ZToken;
 
-final public class ZenSwitchNode extends ZenNode {
-	@Field public ZenNode	MatchNode;
-	@Field public ZenNode	DefaultBlock;
-	@Field public ArrayList<ZenNode> CaseList; // [expr, block, expr, block, ....]
-	public ZenSwitchNode/*constructor*/(ZType Type, ZToken Token, ZenNode MatchNode, ZenNode DefaultBlock) {
+public final class ZenSwitchNode extends ZNode {
+	@Field public ZNode	MatchNode;
+	@Field public ZNode	DefaultBlock;
+	@Field public ArrayList<ZNode> CaseList; // [expr, block, expr, block, ....]
+	public ZenSwitchNode(ZType Type, ZToken Token, ZNode MatchNode, ZNode DefaultBlock) {
 		super();
 		this.MatchNode = MatchNode;
 		this.DefaultBlock = DefaultBlock;
-		this.CaseList = new ArrayList<ZenNode>();
+		this.CaseList = new ArrayList<ZNode>();
 		this.SetChild(DefaultBlock);
 	}
 	//	@Override public boolean Accept(ZenVisitor Visitor) {

@@ -6,10 +6,10 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 
-import zen.ast.ZenBinaryNode;
-import zen.ast.ZenGetIndexNode;
-import zen.ast.ZenSetIndexNode;
-import zen.ast.ZenUnaryNode;
+import zen.ast.ZBinaryNode;
+import zen.ast.ZGetIndexNode;
+import zen.ast.ZSetIndexNode;
+import zen.ast.ZUnaryNode;
 import zen.deps.LibNative;
 import zen.deps.LibZen;
 import zen.deps.Var;
@@ -96,26 +96,26 @@ public class JMethod {
 		return this.ReturnType;
 	}
 
-	public static JMethod FindMethod(ZenBinaryNode Node) {
+	public static JMethod FindMethod(ZBinaryNode Node) {
 		ZType[] TypeParams = new ZType[2];
 		TypeParams[0] = Node.LeftNode.Type;
 		TypeParams[1] = Node.RightNode.Type;
 		return GetMethodFromMethodTable(Node.SourceToken.ParsedText, TypeParams);
 	}
 
-	public static JMethod FindMethod(ZenUnaryNode Node) {
+	public static JMethod FindMethod(ZUnaryNode Node) {
 		ZType[] TypeParams = new ZType[1];
 		TypeParams[0] = Node.RecvNode.Type;
 		return GetMethodFromMethodTable(Node.SourceToken.ParsedText, TypeParams);
 	}
-	public static JMethod FindMethod(ZenGetIndexNode Node) {
+	public static JMethod FindMethod(ZGetIndexNode Node) {
 		ZType[] TypeParams = new ZType[2];
 		TypeParams[0] = Node.RecvNode.Type;
 		TypeParams[1] = Node.IndexNode.Type;
 		return GetMethodFromMethodTable(Node.SourceToken.ParsedText, TypeParams);
 	}
 
-	public static JMethod FindMethod(ZenSetIndexNode Node) {
+	public static JMethod FindMethod(ZSetIndexNode Node) {
 		ZType[] TypeParams = new ZType[3];
 		TypeParams[0] = Node.RecvNode.Type;
 		TypeParams[1] = Node.IndexNode.Type;

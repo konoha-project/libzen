@@ -24,15 +24,15 @@
 
 package zen.sugar;
 
-import zen.ast.ZenNode;
+import zen.ast.ZNode;
 import zen.deps.Field;
 import zen.lang.ZType;
 import zen.parser.ZToken;
 
-final public class ZenDoWhileNode extends ZenNode {
-	@Field public ZenNode	CondNode;
-	@Field public ZenNode	BodyNode;
-	public ZenDoWhileNode/*constructor*/(ZType Type, ZToken Token, ZenNode CondNode, ZenNode BodyNode) {
+public final class ZenDoWhileNode extends ZNode {
+	@Field public ZNode	CondNode;
+	@Field public ZNode	BodyNode;
+	public ZenDoWhileNode(ZType Type, ZToken Token, ZNode CondNode, ZNode BodyNode) {
 		super();
 		this.CondNode = CondNode;
 		this.BodyNode = BodyNode;
@@ -41,7 +41,7 @@ final public class ZenDoWhileNode extends ZenNode {
 	//	@Override public boolean Accept(ZenVisitor Visitor) {
 	//		Visitor.VisitDoWhileNode(this);
 	//	}
-	public ZenNode ToWhileNode() {
+	public ZNode ToWhileNode() {
 		/**
 		while(true) {
 			$BodyNode;

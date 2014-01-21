@@ -24,15 +24,15 @@
 
 package zen.sugar;
 
-import zen.ast.ZenNode;
+import zen.ast.ZNode;
 import zen.deps.Field;
 import zen.lang.ZType;
 import zen.parser.ZToken;
 
-final public class ZenCaseNode extends ZenNode {
-	@Field public ZenNode  CaseNode;;
-	@Field public ZenNode	BodyNode;
-	public ZenCaseNode/*constructor*/(ZType Type, ZToken Token, ZenNode CaseNode, ZenNode BodyNode) {
+public final class ZenCaseNode extends ZNode {
+	@Field public ZNode  CaseNode;;
+	@Field public ZNode	BodyNode;
+	public ZenCaseNode(ZType Type, ZToken Token, ZNode CaseNode, ZNode BodyNode) {
 		super();
 		this.CaseNode = CaseNode;
 		this.BodyNode = BodyNode;

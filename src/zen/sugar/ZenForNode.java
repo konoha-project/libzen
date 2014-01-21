@@ -24,17 +24,17 @@
 
 package zen.sugar;
 
-import zen.ast.ZenNode;
+import zen.ast.ZNode;
 import zen.deps.Field;
 import zen.lang.ZType;
 import zen.parser.ZToken;
 
 //E.g., "for" "(" ";" $CondNode ";" $IterNode ")" $LoopNode
-final public class ZenForNode extends ZenNode {
-	@Field public ZenNode	CondNode;
-	@Field public ZenNode	IterNode;
-	@Field public ZenNode	BodyNode;
-	public ZenForNode/*constructor*/(ZType Type, ZToken Token, ZenNode CondNode, ZenNode IterNode, ZenNode BodyNode) {
+public final class ZenForNode extends ZNode {
+	@Field public ZNode	CondNode;
+	@Field public ZNode	IterNode;
+	@Field public ZNode	BodyNode;
+	public ZenForNode(ZType Type, ZToken Token, ZNode CondNode, ZNode IterNode, ZNode BodyNode) {
 		super();
 		this.CondNode = CondNode;
 		this.BodyNode = BodyNode;

@@ -24,23 +24,23 @@
 
 package zen.codegen.clisp;
 
-import zen.ast.ZenAndNode;
-import zen.ast.ZenBinaryNode;
-import zen.ast.ZenBlockNode;
-import zen.ast.ZenBooleanNode;
-import zen.ast.ZenConstPoolNode;
-import zen.ast.ZenErrorNode;
-import zen.ast.ZenGetLocalNode;
-import zen.ast.ZenIfNode;
-import zen.ast.ZenIntNode;
-import zen.ast.ZenNullNode;
-import zen.ast.ZenOrNode;
-import zen.ast.ZenReturnNode;
-import zen.ast.ZenSetLocalNode;
-import zen.ast.ZenStringNode;
-import zen.ast.ZenUnaryNode;
-import zen.ast.ZenVarDeclNode;
-import zen.ast.ZenWhileNode;
+import zen.ast.ZAndNode;
+import zen.ast.ZBinaryNode;
+import zen.ast.ZBlockNode;
+import zen.ast.ZBooleanNode;
+import zen.ast.ZConstPoolNode;
+import zen.ast.ZErrorNode;
+import zen.ast.ZGetLocalNode;
+import zen.ast.ZIfNode;
+import zen.ast.ZIntNode;
+import zen.ast.ZNullNode;
+import zen.ast.ZOrNode;
+import zen.ast.ZReturnNode;
+import zen.ast.ZSetLocalNode;
+import zen.ast.ZStringNode;
+import zen.ast.ZUnaryNode;
+import zen.ast.ZVarDeclNode;
+import zen.ast.ZWhileNode;
 import zen.parser.ZenSourceGenerator;
 
 public class CommonLispSourceGenerator extends ZenSourceGenerator {
@@ -49,11 +49,11 @@ public class CommonLispSourceGenerator extends ZenSourceGenerator {
 		super("CommonLisp", "0.0");
 	}
 
-	@Override public void VisitGetLocalNode(ZenGetLocalNode Node) {
+	@Override public void VisitGetLocalNode(ZGetLocalNode Node) {
 		this.CurrentBuilder.Append(Node.SourceToken.ParsedText);
 	}
 
-	@Override public void VisitBooleanNode(ZenBooleanNode Node) {
+	@Override public void VisitBooleanNode(ZBooleanNode Node) {
 		if(Node.BooleanValue) {
 			this.CurrentBuilder.Append("t");
 		}
@@ -61,14 +61,14 @@ public class CommonLispSourceGenerator extends ZenSourceGenerator {
 			this.CurrentBuilder.Append("nil");
 		}
 	}
-	@Override public void VisitIntNode(ZenIntNode Node) {
+	@Override public void VisitIntNode(ZIntNode Node) {
 		this.CurrentBuilder.Append(Node.SourceToken.ParsedText);
 	}
 
-	@Override public void VisitStringNode(ZenStringNode Node) {
+	@Override public void VisitStringNode(ZStringNode Node) {
 		this.CurrentBuilder.Append(Node.SourceToken.ParsedText);
 	}
-	@Override public void VisitConstPoolNode(ZenConstPoolNode Node) {
+	@Override public void VisitConstPoolNode(ZConstPoolNode Node) {
 		if(Node.ConstValue == null) {
 			this.CurrentBuilder.Append("nil");
 		}
@@ -77,17 +77,17 @@ public class CommonLispSourceGenerator extends ZenSourceGenerator {
 		}
 	}
 
-	@Override public void VisitReturnNode(ZenReturnNode Node) {
+	@Override public void VisitReturnNode(ZReturnNode Node) {
 		if (Node.ValueNode != null) {
 			Node.ValueNode.Accept(this);
 		}
 	}
 
-	@Override public void VisitNullNode(ZenNullNode Node) {
+	@Override public void VisitNullNode(ZNullNode Node) {
 		this.CurrentBuilder.Append("nil");
 	}
 
-	@Override public void VisitBlockNode(ZenBlockNode Node) {
+	@Override public void VisitBlockNode(ZBlockNode Node) {
 		this.CurrentBuilder.Indent();
 		this.VisitStmtList(Node.StmtList);
 		this.CurrentBuilder.UnIndent();
@@ -130,7 +130,7 @@ public class CommonLispSourceGenerator extends ZenSourceGenerator {
 	//
 	// Visitor API
 	//
-	@Override public void VisitWhileNode(ZenWhileNode Node) {
+	@Override public void VisitWhileNode(ZWhileNode Node) {
 		this.CurrentBuilder.Append("(while ");
 
 		Node.CondNode.Accept(this);
@@ -189,7 +189,7 @@ public class CommonLispSourceGenerator extends ZenSourceGenerator {
 	//		this.CurrentBuilder.Append(")");
 	//	}
 
-	@Override public void VisitVarDeclNode(ZenVarDeclNode Node) {
+	@Override public void VisitVarDeclNode(ZVarDeclNode Node) {
 		this.CurrentBuilder.Append("(setq  ");
 		this.CurrentBuilder.Append(Node.NativeName);
 		this.CurrentBuilder.Append(" ");
@@ -213,7 +213,7 @@ public class CommonLispSourceGenerator extends ZenSourceGenerator {
 	//		this.CurrentBuilder.Append(")");
 	//	}
 
-	@Override public void VisitIfNode(ZenIfNode Node) {
+	@Override public void VisitIfNode(ZIfNode Node) {
 		this.CurrentBuilder.Append("(if  ");
 		Node.CondNode.Accept(this);
 		this.CurrentBuilder.Indent();
@@ -240,7 +240,7 @@ public class CommonLispSourceGenerator extends ZenSourceGenerator {
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override public void VisitErrorNode(ZenErrorNode Node) {
+	@Override public void VisitErrorNode(ZErrorNode Node) {
 		this.CurrentBuilder.Append("(error ");
 		Node.Accept(this);
 		this.CurrentBuilder.Append(")");
@@ -281,12 +281,12 @@ public class CommonLispSourceGenerator extends ZenSourceGenerator {
 	//		this.CurrentBuilder.AppendLine(")");
 	//	}
 
-	@Override public void VisitUnaryNode(ZenUnaryNode Node) {
+	@Override public void VisitUnaryNode(ZUnaryNode Node) {
 		this.CurrentBuilder.Append(Node.SourceToken.ParsedText);
 		Node.RecvNode.Accept(this);
 	}
 
-	@Override public void VisitBinaryNode(ZenBinaryNode Node) {
+	@Override public void VisitBinaryNode(ZBinaryNode Node) {
 		this.CurrentBuilder.Append("(");
 		this.CurrentBuilder.Append(Node.SourceToken.ParsedText);
 		this.CurrentBuilder.Append(" ");
@@ -296,14 +296,14 @@ public class CommonLispSourceGenerator extends ZenSourceGenerator {
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override public void VisitAndNode(ZenAndNode Node) {
+	@Override public void VisitAndNode(ZAndNode Node) {
 		this.CurrentBuilder.Append("(and ");
 		Node.LeftNode.Accept(this);
 		this.CurrentBuilder.Append(" ");
 		Node.RightNode.Accept(this);
 		this.CurrentBuilder.Append(")");
 	}
-	@Override public void VisitOrNode(ZenOrNode Node) {
+	@Override public void VisitOrNode(ZOrNode Node) {
 		this.CurrentBuilder.Append("(or ");
 		Node.LeftNode.Accept(this);
 		this.CurrentBuilder.Append(" ");
@@ -311,7 +311,7 @@ public class CommonLispSourceGenerator extends ZenSourceGenerator {
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override public void VisitSetLocalNode(ZenSetLocalNode Node) {
+	@Override public void VisitSetLocalNode(ZSetLocalNode Node) {
 		this.CurrentBuilder.Append("(setq  " + Node.VarName);
 		this.CurrentBuilder.Append(" ");
 		Node.ValueNode.Accept(this);

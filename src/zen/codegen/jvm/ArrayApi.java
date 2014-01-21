@@ -221,7 +221,7 @@
 ////class ZenIntArray extends ZenTopObject {
 ////	public long[] ArrayBody;
 ////	public int Size;
-////	public ZenIntArray/*constructor*/(ZenType GreenType, int InitCapacity) {
+////	public ZenIntArray(ZenType GreenType, int InitCapacity) {
 ////		super(GreenType);
 ////		this.ArrayBody = new long[InitCapacity < 8 ? 8 : InitCapacity];
 ////		this.Size = 0;

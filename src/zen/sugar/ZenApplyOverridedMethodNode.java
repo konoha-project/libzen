@@ -26,22 +26,22 @@ package zen.sugar;
 
 import java.util.ArrayList;
 
-import zen.ast.ZenNode;
+import zen.ast.ZNode;
 import zen.deps.Field;
 import zen.lang.ZFunc;
 import zen.lang.ZType;
 import zen.parser.ZNameSpace;
 import zen.parser.ZToken;
 
-final public class ZenApplyOverridedMethodNode extends ZenNode {
+public final class ZenApplyOverridedMethodNode extends ZNode {
 	@Field public ZNameSpace NameSpace;
 	@Field public ZFunc Func;
-	@Field public ArrayList<ZenNode>  ParamList; /* [arg1, arg2, ...] */
-	public ZenApplyOverridedMethodNode/*constructor*/(ZType Type, ZToken Token, ZNameSpace NameSpace, ZFunc Func) {
+	@Field public ArrayList<ZNode>  ParamList; /* [arg1, arg2, ...] */
+	public ZenApplyOverridedMethodNode(ZType Type, ZToken Token, ZNameSpace NameSpace, ZFunc Func) {
 		super();
 		//		this.NameSpace = NameSpace.Minimum();
 		this.Func = Func;
-		this.ParamList = new ArrayList<ZenNode>();
+		this.ParamList = new ArrayList<ZNode>();
 		throw new RuntimeException("FIXME: ApplyOverridedMethodNode is not finished");
 	}
 	//	@Override public final ArrayList<ZenNode> GetList() {

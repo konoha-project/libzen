@@ -28,51 +28,51 @@ package zen.lang;
 
 import java.util.ArrayList;
 
-import zen.ast.ZenAndNode;
-import zen.ast.ZenArrayLiteralNode;
-import zen.ast.ZenBinaryNode;
-import zen.ast.ZenBlockNode;
-import zen.ast.ZenBooleanNode;
-import zen.ast.ZenBreakNode;
-import zen.ast.ZenCastNode;
-import zen.ast.ZenCatchNode;
-import zen.ast.ZenClassDeclNode;
-import zen.ast.ZenComparatorNode;
-import zen.ast.ZenConstPoolNode;
-import zen.ast.ZenEmptyNode;
-import zen.ast.ZenErrorNode;
-import zen.ast.ZenFieldNode;
-import zen.ast.ZenFloatNode;
-import zen.ast.ZenFuncCallNode;
-import zen.ast.ZenFuncDeclNode;
-import zen.ast.ZenFunctionNode;
-import zen.ast.ZenGetIndexNode;
-import zen.ast.ZenGetLocalNode;
-import zen.ast.ZenGetterNode;
-import zen.ast.ZenGroupNode;
-import zen.ast.ZenIfNode;
-import zen.ast.ZenInstanceOfNode;
-import zen.ast.ZenIntNode;
-import zen.ast.ZenMapLiteralNode;
-import zen.ast.ZenMethodCallNode;
-import zen.ast.ZenNewArrayNode;
-import zen.ast.ZenNewObjectNode;
-import zen.ast.ZenNode;
-import zen.ast.ZenNotNode;
-import zen.ast.ZenNullNode;
-import zen.ast.ZenOrNode;
-import zen.ast.ZenParamNode;
-import zen.ast.ZenReturnNode;
-import zen.ast.ZenSetIndexNode;
-import zen.ast.ZenSetLocalNode;
-import zen.ast.ZenSetterNode;
-import zen.ast.ZenStringNode;
-import zen.ast.ZenSymbolNode;
-import zen.ast.ZenThrowNode;
-import zen.ast.ZenTryNode;
-import zen.ast.ZenUnaryNode;
-import zen.ast.ZenVarDeclNode;
-import zen.ast.ZenWhileNode;
+import zen.ast.ZAndNode;
+import zen.ast.ZArrayLiteralNode;
+import zen.ast.ZBinaryNode;
+import zen.ast.ZBlockNode;
+import zen.ast.ZBooleanNode;
+import zen.ast.ZBreakNode;
+import zen.ast.ZCastNode;
+import zen.ast.ZCatchNode;
+import zen.ast.ZClassDeclNode;
+import zen.ast.ZComparatorNode;
+import zen.ast.ZConstPoolNode;
+import zen.ast.ZEmptyNode;
+import zen.ast.ZErrorNode;
+import zen.ast.ZFieldNode;
+import zen.ast.ZFloatNode;
+import zen.ast.ZFuncCallNode;
+import zen.ast.ZFuncDeclNode;
+import zen.ast.ZFunctionNode;
+import zen.ast.ZGetIndexNode;
+import zen.ast.ZGetLocalNode;
+import zen.ast.ZGetterNode;
+import zen.ast.ZGroupNode;
+import zen.ast.ZIfNode;
+import zen.ast.ZInstanceOfNode;
+import zen.ast.ZIntNode;
+import zen.ast.ZMapLiteralNode;
+import zen.ast.ZMethodCallNode;
+import zen.ast.ZNewArrayNode;
+import zen.ast.ZNewObjectNode;
+import zen.ast.ZNode;
+import zen.ast.ZNotNode;
+import zen.ast.ZNullNode;
+import zen.ast.ZOrNode;
+import zen.ast.ZParamNode;
+import zen.ast.ZReturnNode;
+import zen.ast.ZSetIndexNode;
+import zen.ast.ZSetLocalNode;
+import zen.ast.ZSetterNode;
+import zen.ast.ZStringNode;
+import zen.ast.ZSymbolNode;
+import zen.ast.ZThrowNode;
+import zen.ast.ZTryNode;
+import zen.ast.ZUnaryNode;
+import zen.ast.ZVarDeclNode;
+import zen.ast.ZWhileNode;
 import zen.deps.LibZen;
 import zen.deps.Nullable;
 import zen.deps.Var;
@@ -88,57 +88,57 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		super(Logger);
 	}
 
-	@Override public void VisitEmptyNode(ZenEmptyNode Node) {
+	@Override public void VisitEmptyNode(ZEmptyNode Node) {
 		this.TypedNode(Node, ZSystem.VoidType);
 	}
 
-	@Override public void VisitNullNode(ZenNullNode Node) {
+	@Override public void VisitNullNode(ZNullNode Node) {
 		ZType Type = this.GetContextType();
 		this.TypedNode(Node, Type);
 	}
 
-	@Override public void VisitBooleanNode(ZenBooleanNode Node) {
+	@Override public void VisitBooleanNode(ZBooleanNode Node) {
 		this.TypedNode(Node, ZSystem.BooleanType);
 	}
 
-	@Override public void VisitIntNode(ZenIntNode Node) {
+	@Override public void VisitIntNode(ZIntNode Node) {
 		this.TypedNode(Node, ZSystem.IntType);
 	}
 
-	@Override public void VisitFloatNode(ZenFloatNode Node) {
+	@Override public void VisitFloatNode(ZFloatNode Node) {
 		this.TypedNode(Node, ZSystem.FloatType);
 	}
 
-	@Override public void VisitStringNode(ZenStringNode Node) {
+	@Override public void VisitStringNode(ZStringNode Node) {
 		this.TypedNode(Node, ZSystem.StringType);
 	}
 
-	@Override public void VisitConstPoolNode(ZenConstPoolNode Node) {
+	@Override public void VisitConstPoolNode(ZConstPoolNode Node) {
 		this.TypedNode(Node, ZSystem.GuessType(Node.ConstValue));
 	}
 
-	@Override public void VisitArrayLiteralNode(ZenArrayLiteralNode Node) {
+	@Override public void VisitArrayLiteralNode(ZArrayLiteralNode Node) {
 		this.Todo(Node);
 	}
 
-	@Override public void VisitMapLiteralNode(ZenMapLiteralNode Node) {
+	@Override public void VisitMapLiteralNode(ZMapLiteralNode Node) {
 		this.Todo(Node);
 	}
 
-	@Override public void VisitNewArrayNode(ZenNewArrayNode Node) {
+	@Override public void VisitNewArrayNode(ZNewArrayNode Node) {
 		this.Todo(Node);
 	}
 
-	@Override public void VisitNewObjectNode(ZenNewObjectNode Node) {
+	@Override public void VisitNewObjectNode(ZNewObjectNode Node) {
 		this.Todo(Node);
 	}
 
-	@Override public void VisitSymbolNode(ZenSymbolNode Node) {
+	@Override public void VisitSymbolNode(ZSymbolNode Node) {
 		@Var ZNameSpace NameSpace = this.GetNameSpace();
 		@Var ZType FuncType = this.GetContextType();
-		if(Node.ParentNode instanceof ZenFuncCallNode) {
+		if(Node.ParentNode instanceof ZFuncCallNode) {
 			//			this.println("1 ContextualTyping .." + FuncType);
-			FuncType = this.GuessFuncType(NameSpace, Node.GivenName, (ZenFuncCallNode)Node.ParentNode, FuncType);
+			FuncType = this.GuessFuncType(NameSpace, Node.GivenName, (ZFuncCallNode)Node.ParentNode, FuncType);
 			//			this.println("2 ContextualTyping .." + FuncType);
 			if(FuncType.HasCallableSignature()) {
 				Node.ReferenceName = FuncType.StringfySignature(Node.GivenName);
@@ -164,7 +164,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		}
 		@Var Object Value = NameSpace.GetSymbol(Node.GivenName);
 		if(Value != null) {
-			@Var ZenNode NewNode = ZNodeUtils.CreateConstNode(Node.SourceToken, Value);
+			@Var ZNode NewNode = ZNodeUtils.CreateConstNode(Node.SourceToken, Value);
 			NewNode = this.TypeCheck(NewNode, NameSpace, ZSystem.VarType, 0);
 			this.TypedNode(NewNode, NewNode.Type);
 		}
@@ -173,7 +173,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		}
 	}
 
-	@Override public void VisitGetLocalNode(ZenGetLocalNode Node) {
+	@Override public void VisitGetLocalNode(ZGetLocalNode Node) {
 		@Var ZNameSpace NameSpace = this.GetNameSpace();
 		@Var ZType ContextType = this.GetContextType();
 		@Var ZenVariable VarInfo = this.GetLocalVariable(NameSpace, Node.VarName);
@@ -186,14 +186,14 @@ public class ZenTypeInfer extends ZenTypeChecker {
 			this.TypedNode(Node, VarType);
 		}
 		else {
-			@Var ZenNode NewNode = new ZenSymbolNode(ZSystem.VarType, Node.SourceToken, Node.VarName, Node.VarName);
+			@Var ZNode NewNode = new ZSymbolNode(ZSystem.VarType, Node.SourceToken, Node.VarName, Node.VarName);
 			NewNode.ParentNode = Node.ParentNode;
 			NewNode = this.TypeCheck(NewNode, NameSpace, ContextType, 0);
 			this.TypedNode(NewNode, NewNode.Type);
 		}
 	}
 
-	@Override public void VisitSetLocalNode(ZenSetLocalNode Node) {
+	@Override public void VisitSetLocalNode(ZSetLocalNode Node) {
 		ZNameSpace NameSpace = this.GetNameSpace();
 		ZenVariable VarInfo = this.GetLocalVariable(NameSpace, Node.VarName);
 		if(VarInfo == null) {
@@ -208,14 +208,14 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		}
 	}
 
-	@Override public void VisitGetIndexNode(ZenGetIndexNode Node) {
+	@Override public void VisitGetIndexNode(ZGetIndexNode Node) {
 		ZNameSpace NameSpace = this.GetNameSpace();
 		Node.RecvNode = this.TypeCheck(Node.RecvNode, NameSpace, ZSystem.VarType, ZenTypeChecker.DefaultTypeCheckPolicy);
 		Node.IndexNode = this.TypeCheck(Node.IndexNode, NameSpace, this.GetIndexType(NameSpace, Node.RecvNode.Type), ZenTypeChecker.DefaultTypeCheckPolicy);
 		this.TypedNodeIf2(Node, this.GetElementType(NameSpace, Node.RecvNode.Type), Node.RecvNode, Node.IndexNode);
 	}
 
-	@Override public void VisitSetIndexNode(ZenSetIndexNode Node) {
+	@Override public void VisitSetIndexNode(ZSetIndexNode Node) {
 		ZNameSpace NameSpace = this.GetNameSpace();
 		Node.RecvNode = this.TypeCheck(Node.RecvNode, NameSpace, ZSystem.VarType, ZenTypeChecker.DefaultTypeCheckPolicy);
 		Node.IndexNode = this.TypeCheck(Node.IndexNode, NameSpace, this.GetIndexType(NameSpace, Node.RecvNode.Type), ZenTypeChecker.DefaultTypeCheckPolicy);
@@ -223,42 +223,42 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		this.TypedNodeIf3(Node, ZSystem.VoidType,  Node.RecvNode, Node.IndexNode, Node.ValueNode);
 	}
 
-	@Override public void VisitGroupNode(ZenGroupNode Node) {
+	@Override public void VisitGroupNode(ZGroupNode Node) {
 		Node.RecvNode.Accept(this); // this is shortcut
 		this.TypedNode(Node, Node.RecvNode.Type);
 	}
 
-	@Override public void VisitGetterNode(ZenGetterNode Node) {
+	@Override public void VisitGetterNode(ZGetterNode Node) {
 		@Var ZNameSpace NameSpace = this.GetNameSpace();
 		@Var ZType ContextType = this.GetContextType();
 		Node.RecvNode = this.TypeCheck(Node.RecvNode, NameSpace, ZSystem.VarType, ZenTypeChecker.DefaultTypeCheckPolicy);
-		ZType FieldType = this.GetFieldType(NameSpace, Node.RecvNode.Type, Node.NativeName);
+		ZType FieldType = this.GetFieldType(NameSpace, Node.RecvNode.Type, Node.FieldName);
 		if(FieldType.IsVarType() && ContextType.IsInferrableType()) {
-			this.InferFieldType(NameSpace, Node.RecvNode.Type, Node.NativeName, ContextType, Node.SourceToken);
+			this.InferFieldType(NameSpace, Node.RecvNode.Type, Node.FieldName, ContextType, Node.SourceToken);
 		}
 		if(FieldType.IsVoidType() && !Node.RecvNode.Type.IsVarType()) {
-			this.CheckErrorNode(this.UndefinedName(Node, Node.RecvNode.Type.StringfyClassMember(Node.NativeName)));
+			this.CheckErrorNode(this.UndefinedName(Node, Node.RecvNode.Type.StringfyClassMember(Node.FieldName)));
 			return;
 		}
 		this.TypedNodeIf(Node, FieldType, Node.RecvNode);
 	}
 
-	@Override public void VisitSetterNode(ZenSetterNode Node) {
+	@Override public void VisitSetterNode(ZSetterNode Node) {
 		@Var ZNameSpace NameSpace = this.GetNameSpace();
 		Node.RecvNode = this.TypeCheck(Node.RecvNode, NameSpace, ZSystem.VarType, ZenTypeChecker.DefaultTypeCheckPolicy);
-		@Var ZType FieldType = this.GetSetterType(NameSpace, Node.RecvNode.Type, Node.NativeName);
+		@Var ZType FieldType = this.GetSetterType(NameSpace, Node.RecvNode.Type, Node.FieldName);
 		if(FieldType.IsVoidType()) {
-			this.CheckErrorNode(this.ReadOnlyName(Node, Node.RecvNode.Type, Node.NativeName));
+			this.CheckErrorNode(this.ReadOnlyName(Node, Node.RecvNode.Type, Node.FieldName));
 			return;
 		}
 		Node.ValueNode = this.TypeCheck(Node.ValueNode, NameSpace, FieldType, ZenTypeChecker.DefaultTypeCheckPolicy);
 		if(FieldType.IsVarType()) {
-			this.InferFieldType(NameSpace, Node.RecvNode.Type, Node.NativeName, Node.ValueNode.Type, Node.SourceToken);
+			this.InferFieldType(NameSpace, Node.RecvNode.Type, Node.FieldName, Node.ValueNode.Type, Node.SourceToken);
 		}
 		this.TypedNodeIf2(Node, ZSystem.VoidType, Node.RecvNode, Node.ValueNode);
 	}
 
-	private ZenFuncType GuessFuncTypeFromContext(ZType ReturnType, @Nullable ZType RecvType, ArrayList<ZenNode> ParamList) {
+	private ZenFuncType GuessFuncTypeFromContext(ZType ReturnType, @Nullable ZType RecvType, ArrayList<ZNode> ParamList) {
 		if(ReturnType.IsVoidType()) {
 			ReturnType = ZSystem.VarType;
 		}
@@ -269,7 +269,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		}
 		@Var int i = 0;
 		while(i < ParamList.size()) {
-			ZenNode SubNode = ParamList.get(i);
+			ZNode SubNode = ParamList.get(i);
 			ZType ParamType = SubNode.Type.GetRealType();
 			TypeList.add(ParamType);
 			i = i + 1;
@@ -277,13 +277,13 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		return ZSystem.LookupFuncType(TypeList);
 	}
 
-	private ZType TypeCheckFuncParam(ZNameSpace NameSpace, ArrayList<ZenNode> ParamList, ZType ContextType, int ParamIdx /* 1: Func 2: Method*/) {
+	private ZType TypeCheckFuncParam(ZNameSpace NameSpace, ArrayList<ZNode> ParamList, ZType ContextType, int ParamIdx /* 1: Func 2: Method*/) {
 		//this.println("TypeCheck FuncType: " + ContextType);
 		if(this.IsVisitable() && ContextType.IsFuncType()) {
 			@Var ZenFuncType FuncType = (ZenFuncType)ContextType;
 			@Var int i = 0;
 			while(i < ParamList.size()) {
-				@Var ZenNode SubNode = ParamList.get(i);
+				@Var ZNode SubNode = ParamList.get(i);
 				SubNode = this.TypeCheck(SubNode, NameSpace, FuncType.GetParamType(i+ParamIdx), ZenTypeChecker.DefaultTypeCheckPolicy);
 				ParamList.set(i, SubNode);
 				i = i + 1;
@@ -295,7 +295,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		return ZSystem.VarType;
 	}
 
-	@Override public void VisitMethodCallNode(ZenMethodCallNode Node) {
+	@Override public void VisitMethodCallNode(ZMethodCallNode Node) {
 		@Var ZNameSpace NameSpace = this.GetNameSpace();
 		@Var ZType ContextType = this.GetContextType();
 		Node.RecvNode = this.TypeCheck(Node.RecvNode, NameSpace, ZSystem.VarType, ZenTypeChecker.DefaultTypeCheckPolicy);
@@ -308,7 +308,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		}
 	}
 
-	@Override public void VisitFuncCallNode(ZenFuncCallNode Node) {
+	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
 		@Var ZNameSpace NameSpace = this.GetNameSpace();
 		@Var ZType ContextType = this.GetContextType();
 		this.TypeCheckNodeList(NameSpace, Node.ParamList);
@@ -316,7 +316,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		Node.FuncNode = this.TypeCheck(Node.FuncNode, NameSpace, PartialFuncType, ZenTypeChecker.NoCheckPolicy);
 		@Var ZType FuncType = Node.FuncNode.Type;
 		if(!FuncType.IsFuncType() && !FuncType.IsVarType()) {
-			this.CheckErrorNode(new ZenErrorNode(Node.SourceToken, "not function: given = " + FuncType));
+			this.CheckErrorNode(new ZErrorNode(Node.SourceToken, "not function: given = " + FuncType));
 		}
 		else {
 			if(FuncType.IsVarType()) {
@@ -327,25 +327,25 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		}
 	}
 
-	@Override public void VisitUnaryNode(ZenUnaryNode Node) {
+	@Override public void VisitUnaryNode(ZUnaryNode Node) {
 		@Var ZNameSpace NameSpace = this.GetNameSpace();
 		Node.RecvNode = this.TypeCheck(Node.RecvNode, NameSpace, ZSystem.VarType, ZenTypeChecker.DefaultTypeCheckPolicy);
 		this.TypedNode(Node, Node.RecvNode.Type);
 	}
 
-	@Override public void VisitNotNode(ZenNotNode Node) {
+	@Override public void VisitNotNode(ZNotNode Node) {
 		@Var ZNameSpace NameSpace = this.GetNameSpace();
 		Node.RecvNode = this.TypeCheck(Node.RecvNode, NameSpace, ZSystem.BooleanType, ZenTypeChecker.DefaultTypeCheckPolicy);
 		this.TypedNodeIf(Node, ZSystem.BooleanType, Node.RecvNode);
 	}
 
-	@Override public void VisitCastNode(ZenCastNode Node) {
+	@Override public void VisitCastNode(ZCastNode Node) {
 		@Var ZNameSpace NameSpace = this.GetNameSpace();
 		Node.ExprNode = this.TypeCheck(Node.ExprNode, NameSpace, Node.Type, ZenTypeChecker.DefaultTypeCheckPolicy);
 		this.TypedNode(Node, Node.Type);
 	}
 
-	@Override public void VisitInstanceOfNode(ZenInstanceOfNode Node) {
+	@Override public void VisitInstanceOfNode(ZInstanceOfNode Node) {
 		@Var ZNameSpace NameSpace = this.GetNameSpace();
 		Node.LeftNode = this.TypeCheck(Node.LeftNode, NameSpace, ZSystem.VarType, ZenTypeChecker.DefaultTypeCheckPolicy);
 		this.TypedNodeIf(Node, ZSystem.BooleanType, Node.LeftNode);
@@ -375,7 +375,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		return ZSystem.VarType;
 	}
 
-	private void UnifyBinaryNodeType(ZNameSpace NameSpace, ZenBinaryNode Node, ZType Type, int Policy) {
+	private void UnifyBinaryNodeType(ZNameSpace NameSpace, ZBinaryNode Node, ZType Type, int Policy) {
 		if(Node.LeftNode.Type.Equals(Type)) {
 			Node.RightNode = this.TypeCheck(Node.RightNode, NameSpace, Type, Policy);
 			return;
@@ -385,7 +385,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		}
 	}
 
-	@Override public void VisitBinaryNode(ZenBinaryNode Node) {
+	@Override public void VisitBinaryNode(ZBinaryNode Node) {
 		ZNameSpace NameSpace = this.GetNameSpace();
 		ZType ContextType = this.GetContextType();
 		ZType LeftType = this.GetBinaryLeftType(Node.SourceToken.ParsedText, ContextType);
@@ -404,7 +404,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		this.TypedNodeIf(Node, Node.LeftNode.Type, Node.RightNode);
 	}
 
-	@Override public void VisitComparatorNode(ZenComparatorNode Node) {
+	@Override public void VisitComparatorNode(ZComparatorNode Node) {
 		ZNameSpace NameSpace = this.GetNameSpace();
 		Node.LeftNode = this.TypeCheck(Node.LeftNode, NameSpace, ZSystem.VarType, ZenTypeChecker.DefaultTypeCheckPolicy);
 		Node.RightNode = this.TypeCheck(Node.RightNode, NameSpace, Node.LeftNode.Type, ZenTypeChecker.NoCheckPolicy);
@@ -413,26 +413,26 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		this.TypedNodeIf2(Node, ZSystem.BooleanType, Node.LeftNode, Node.RightNode);
 	}
 
-	@Override public void VisitAndNode(ZenAndNode Node) {
+	@Override public void VisitAndNode(ZAndNode Node) {
 		ZNameSpace NameSpace = this.GetNameSpace();
 		Node.LeftNode = this.TypeCheck(Node.LeftNode, NameSpace, ZSystem.BooleanType, ZenTypeChecker.DefaultTypeCheckPolicy);
 		Node.RightNode = this.TypeCheck(Node.RightNode, NameSpace, ZSystem.BooleanType, ZenTypeChecker.DefaultTypeCheckPolicy);
 		this.TypedNodeIf2(Node, ZSystem.BooleanType, Node.LeftNode, Node.RightNode);
 	}
 
-	@Override public void VisitOrNode(ZenOrNode Node) {
+	@Override public void VisitOrNode(ZOrNode Node) {
 		ZNameSpace NameSpace = this.GetNameSpace();
 		Node.LeftNode = this.TypeCheck(Node.LeftNode, NameSpace, ZSystem.BooleanType, ZenTypeChecker.DefaultTypeCheckPolicy);
 		Node.RightNode = this.TypeCheck(Node.RightNode, NameSpace, ZSystem.BooleanType, ZenTypeChecker.DefaultTypeCheckPolicy);
 		this.TypedNodeIf2(Node, ZSystem.BooleanType, Node.LeftNode, Node.RightNode);
 	}
 
-	@Override public void VisitBlockNode(ZenBlockNode Node) {
+	@Override public void VisitBlockNode(ZBlockNode Node) {
 		if(this.IsVisitable()) {
 			int i = 0;
 			ZType BlockType = ZSystem.VoidType;
 			while(i < Node.StmtList.size()) {
-				ZenNode SubNode = Node.StmtList.get(i).GetStatementNode();  // without annotation
+				ZNode SubNode = Node.StmtList.get(i).GetStatementNode();  // without annotation
 				SubNode = this.TypeCheck(SubNode, Node.NameSpace, ZSystem.VoidType, ZenTypeChecker.DefaultTypeCheckPolicy);
 				Node.StmtList.set(i, SubNode);
 				if(SubNode.Type.IsVarType()) {
@@ -448,7 +448,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		}
 	}
 
-	@Override public void VisitVarDeclNode(ZenVarDeclNode Node) {
+	@Override public void VisitVarDeclNode(ZVarDeclNode Node) {
 		@Var ZNameSpace NameSpace = this.GetNameSpace();
 		if(!(Node.DeclType instanceof ZenVarType)) {
 			Node.DeclType = this.NewVarType(Node.DeclType, Node.NativeName, Node.SourceToken);
@@ -459,7 +459,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		this.TypedNodeIf2(Node, ZSystem.VoidType, Node.InitNode, Node);
 	}
 
-	@Override public void VisitIfNode(ZenIfNode Node) {
+	@Override public void VisitIfNode(ZIfNode Node) {
 		@Var ZNameSpace NameSpace = this.GetNameSpace();
 		Node.CondNode = this.TypeCheck(Node.CondNode, NameSpace, ZSystem.BooleanType, ZenTypeChecker.DefaultTypeCheckPolicy);
 		Node.ThenNode = this.TypeCheck(Node.ThenNode, NameSpace, ZSystem.VoidType, ZenTypeChecker.DefaultTypeCheckPolicy);
@@ -472,7 +472,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		}
 	}
 
-	@Override public void VisitReturnNode(ZenReturnNode Node) {
+	@Override public void VisitReturnNode(ZReturnNode Node) {
 		@Var ZNameSpace NameSpace = this.GetNameSpace();
 		@Var ZType ReturnType = this.FuncScope.GetReturnType();
 		if(Node.ValueNode != null && ReturnType.IsVoidType()) {
@@ -494,24 +494,24 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		}
 	}
 
-	@Override public void VisitWhileNode(ZenWhileNode Node) {
+	@Override public void VisitWhileNode(ZWhileNode Node) {
 		@Var ZNameSpace NameSpace = this.GetNameSpace();
 		Node.CondNode = this.TypeCheck(Node.CondNode, NameSpace, ZSystem.BooleanType, ZenTypeChecker.DefaultTypeCheckPolicy);
 		Node.BodyNode = this.TypeCheck(Node.BodyNode, NameSpace, ZSystem.VoidType, ZenTypeChecker.DefaultTypeCheckPolicy);
 		this.TypedNodeIf2(Node, ZSystem.VoidType, Node.CondNode, Node.BodyNode);
 	}
 
-	@Override public void VisitBreakNode(ZenBreakNode Node) {
+	@Override public void VisitBreakNode(ZBreakNode Node) {
 		this.TypedNode(Node, ZSystem.VoidType);
 	}
 
-	@Override public void VisitThrowNode(ZenThrowNode Node) {
+	@Override public void VisitThrowNode(ZThrowNode Node) {
 		@Var ZNameSpace NameSpace = this.GetNameSpace();
 		Node.ValueNode = this.TypeCheck(Node.ValueNode, NameSpace, ZSystem.VarType, ZenTypeChecker.DefaultTypeCheckPolicy);
 		this.TypedNodeIf(Node, ZSystem.VoidType, Node.ValueNode);
 	}
 
-	@Override public void VisitTryNode(ZenTryNode Node) {
+	@Override public void VisitTryNode(ZTryNode Node) {
 		@Var ZNameSpace NameSpace = this.GetNameSpace();
 		Node.TryNode = this.TypeCheck(Node.TryNode, NameSpace, ZSystem.BooleanType, ZenTypeChecker.DefaultTypeCheckPolicy);
 		if(Node.CatchNode != null) {
@@ -523,12 +523,12 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		this.TypedNode(Node, ZSystem.VoidType);
 	}
 
-	@Override public void VisitCatchNode(ZenCatchNode Node) {
+	@Override public void VisitCatchNode(ZCatchNode Node) {
 		// TODO Auto-generated method stub
 		this.Todo(Node);
 	}
 
-	@Override public void VisitParamNode(ZenParamNode Node) {
+	@Override public void VisitParamNode(ZParamNode Node) {
 		// TODO Auto-generated method stub
 		this.Todo(Node);
 	}
@@ -544,7 +544,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 					return PreDefined;
 				}
 				else {
-					this.CheckErrorNode(new ZenErrorNode(SourceToken, "overloaded functions:\n\tPrevious: " + PreDefined + "\n\tPresent:" + FuncName + ": " + FuncType));
+					this.CheckErrorNode(new ZErrorNode(SourceToken, "overloaded functions:\n\tPrevious: " + PreDefined + "\n\tPresent:" + FuncName + ": " + FuncType));
 				}
 				this.println("redefined func: " + PreDefined);
 			}
@@ -555,12 +555,12 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		return null;
 	}
 
-	public void PushFuncNode(ZNameSpace NameSpace, ZenFunctionNode FuncNode, ZenFuncType FuncType) {
+	public void PushFuncNode(ZNameSpace NameSpace, ZFunctionNode FuncNode, ZenFuncType FuncType) {
 		NameSpace.SetDefiningFunc(FuncNode);
 		this.FuncScope = new ZFuncContext(this.FuncScope, this.Logger, FuncNode, FuncType);
 		@Var int i = 0;
 		while(i < FuncNode.ArgumentList.size()) {
-			@Var ZenParamNode ParamNode = (ZenParamNode)FuncNode.ArgumentList.get(i);
+			@Var ZParamNode ParamNode = (ZParamNode)FuncNode.ArgumentList.get(i);
 			ParamNode.Type = this.NewVarType(ParamNode.Type, ParamNode.Name, ParamNode.SourceToken);
 			this.SetLocalVariable(NameSpace, ParamNode.Type, ParamNode.Name, null);
 			i = i + 1;
@@ -568,7 +568,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		FuncNode.ReturnType = this.NewVarType(FuncNode.ReturnType, "return", FuncNode.SourceToken);
 	}
 
-	public final void TypeCheckFuncBody(ZNameSpace NameSpace, ZenFuncDeclNode FuncNode) {
+	public final void TypeCheckFuncBody(ZNameSpace NameSpace, ZFuncDeclNode FuncNode) {
 		@Var int Stopper = Integer.MAX_VALUE;
 		while(this.IsVisitable()) {
 			this.FuncScope.CountOfUnknownTypeNode = 0;
@@ -586,7 +586,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		}
 	}
 
-	public ZenFuncType PopFuncNode(ZNameSpace NameSpace, ZenFunctionNode FuncNode) {
+	public ZenFuncType PopFuncNode(ZNameSpace NameSpace, ZFunctionNode FuncNode) {
 		NameSpace.SetDefiningFunc(null);
 		this.FuncScope.Dump();
 		ZenFuncType FuncType = this.FuncScope.FuncType;
@@ -594,7 +594,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		return FuncType;
 	}
 
-	@Override public void VisitFunctionNode(ZenFunctionNode Node) {
+	@Override public void VisitFunctionNode(ZFunctionNode Node) {
 		@Var ZType ContextType = this.GetContextType();
 		@Var ZNameSpace NameSpace = this.GetNameSpace();
 		@Var ZenFuncType FuncType = Node.GetFuncType(ContextType);
@@ -605,7 +605,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		this.TypedNode(Node, FuncType);
 	}
 
-	@Override public void VisitFuncDeclNode(ZenFuncDeclNode Node) {
+	@Override public void VisitFuncDeclNode(ZFuncDeclNode Node) {
 		@Var ZNameSpace NameSpace = this.GetNameSpace();
 		@Var ZenFuncType FuncType = Node.GetFuncType(null);
 		assert(Node.BodyNode != null);
@@ -617,14 +617,14 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		this.TypedNode(Node, ZSystem.VoidType);
 	}
 
-	@Override public void VisitClassDeclNode(ZenClassDeclNode Node) {
+	@Override public void VisitClassDeclNode(ZClassDeclNode Node) {
 		@Var ZNameSpace NameSpace = this.GetNameSpace();
 		this.CheckErrorNode(Node.CheckClassName(NameSpace));
 		if(this.IsVisitable()) {
 			@Var ZenClassType ClassType = (ZenClassType)Node.ClassType;
 			@Var int i = 0;
 			while(this.IsVisitable() && i < Node.FieldList.size()) {
-				@Var ZenFieldNode FieldNode = Node.FieldList.get(i);
+				@Var ZFieldNode FieldNode = Node.FieldList.get(i);
 				if(FieldNode.InitNode == null) {
 					FieldNode.InitNode = this.CreateDefaultValueNode(FieldNode.DeclType, FieldNode.FieldName);
 				}
@@ -642,7 +642,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		this.TypedNode(Node, ZSystem.VoidType);
 	}
 
-	@Override public void VisitErrorNode(ZenErrorNode Node) {
+	@Override public void VisitErrorNode(ZErrorNode Node) {
 		this.CheckErrorNode(Node);
 	}
 }
