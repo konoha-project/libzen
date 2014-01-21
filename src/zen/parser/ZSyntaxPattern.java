@@ -31,7 +31,7 @@ import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.lang.ZenFunc;
 
-public final class ZSyntaxPattern extends ZUtils {
+public final class ZSyntaxPattern {
 	@Field @Init public ZNameSpace	          PackageNameSpace;
 	@Field @Init public String		          PatternName;
 	@Field @Init public ZenFunc                 MatchFunc;

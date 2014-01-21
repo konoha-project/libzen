@@ -27,7 +27,7 @@ package zen.parser;
 import zen.deps.Var;
 
 
-public class ZUtils {
+public final class ZUtils {
 	public final static boolean IsFlag(int flag, int flag2) {
 		return ((flag & flag2) == flag2);
 	}

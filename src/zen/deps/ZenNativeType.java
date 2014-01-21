@@ -1,12 +1,13 @@
 package zen.deps;
 
 import zen.lang.ZenType;
+import zen.lang.ZTypeFlag;
 
 public class ZenNativeType extends ZenType {
 	@Field public Class<?>          JClass;
-	
+
 	ZenNativeType(Class<?> JType) {
-		super(UniqueType, JType.getSimpleName(), null);
+		super(ZTypeFlag.UniqueType, JType.getSimpleName(), null);
 		this.JClass = JType;
 	}
 

@@ -24,7 +24,7 @@
 
 package zen.lang;
 
-public abstract class ZenTypeFlag {
+public abstract class ZTypeFlag {
 	//	// ClassFlag
 	//	public final static int     ExportType         = 1 << 0;  // @Export
 	//	public final static int     PublicType         = 1 << 1;  // @Public

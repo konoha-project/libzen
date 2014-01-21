@@ -636,7 +636,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 				ClassType.AppendField(FieldNode.DeclType, FieldNode.FieldName, FieldNode.SourceToken);
 				i = i + 1;
 			}
-			ClassType.TypeFlag = ZUtils.UnsetFlag(ClassType.TypeFlag, ZenTypeFlag.OpenType);
+			ClassType.TypeFlag = ZUtils.UnsetFlag(ClassType.TypeFlag, ZTypeFlag.OpenType);
 			this.CheckErrorNode(ClassType.CheckAllFields(NameSpace));
 		}
 		this.TypedNode(Node, ZenSystem.VoidType);

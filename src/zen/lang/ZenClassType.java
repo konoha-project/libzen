@@ -36,7 +36,7 @@ import zen.parser.ZToken;
 public class ZenClassType extends ZenType {
 	@Field ArrayList<ZenField> FieldList = null;
 	public ZenClassType(String ShortName, ZenType RefType) {
-		super(ZenTypeFlag.OpenType|ZenTypeFlag.UniqueType, ShortName, RefType);
+		super(ZTypeFlag.OpenType|ZTypeFlag.UniqueType, ShortName, RefType);
 		if(RefType instanceof ZenClassType) {
 			this.ResetSuperType((ZenClassType)RefType);
 		}

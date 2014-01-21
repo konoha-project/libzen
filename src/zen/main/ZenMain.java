@@ -38,9 +38,8 @@ import zen.lang.ZenSystem;
 import zen.parser.ZGenerator;
 import zen.parser.ZLogger;
 import zen.parser.ZParserConst;
-import zen.parser.ZUtils;
 
-public class ZenMain extends ZUtils {
+public class ZenMain {
 	private static jline.ConsoleReader ConsoleReader = null;
 
 	public final static String ReadLine2(String Prompt, String Prompt2) {

@@ -29,7 +29,7 @@ import zen.deps.Var;
 import zen.parser.ZUtils;
 //endif VAJA
 
-public class ZenType implements ZenTypeFlag {
+public class ZenType  {
 	@Field public int			  TypeFlag;
 	@Field public int             TypeId;
 	@Field public String		  ShortName;
@@ -39,7 +39,7 @@ public class ZenType implements ZenTypeFlag {
 		this.TypeFlag = TypeFlag;
 		this.ShortName = ShortName;
 		this.RefType = RefType;
-		if(ZUtils.IsFlag(TypeFlag, UniqueType)) {
+		if(ZUtils.IsFlag(TypeFlag, ZTypeFlag.UniqueType)) {
 			this.TypeId = ZenSystem.IssueTypeId(this);
 		}
 		else {
@@ -154,7 +154,7 @@ public class ZenType implements ZenTypeFlag {
 
 
 	public boolean IsOpenType() {
-		return ZUtils.IsFlag(this.TypeFlag, ZenTypeFlag.OpenType);
+		return ZUtils.IsFlag(this.TypeFlag, ZTypeFlag.OpenType);
 	}
 
 	//	public final boolean IsAbstractType() {
@@ -210,7 +210,7 @@ public class ZenType implements ZenTypeFlag {
 		//		else {
 		//			return this.GetBaseType().ShortName + NativeNameSuffix + this.TypeId;
 		//		}
-		return this.GetBaseType().ShortName + NativeNameSuffix + this.TypeId;
+		return this.GetBaseType().ShortName + ZTypeFlag.NativeNameSuffix + this.TypeId;
 	}
 
 	//	public final String GetUniqueName() {

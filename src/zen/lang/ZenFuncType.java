@@ -8,7 +8,7 @@ public final class ZenFuncType extends ZenType {
 
 	@Field public ZenType[]		TypeParams;
 	@Constructor public ZenFuncType(String ShortName, ZenType[] UniqueTypeParams) {
-		super(UniqueType, ShortName, ZenSystem.TopType);
+		super(ZTypeFlag.UniqueType, ShortName, ZenSystem.TopType);
 		if(UniqueTypeParams == null) {
 			this.TypeParams = new ZenType[1];
 			this.TypeParams[0] = ZenSystem.VarType;

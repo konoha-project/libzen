@@ -68,6 +68,7 @@ import zen.ast.ZenUnaryNode;
 import zen.ast.ZenVarDeclNode;
 import zen.ast.ZenWhileNode;
 import zen.deps.LibNative;
+import zen.lang.ZTypeFlag;
 import zen.lang.ZenSystem;
 import zen.parser.ZGenerator;
 
@@ -150,7 +151,7 @@ public class JavaByteCodeGenerator extends ZGenerator {
 		String owner = type.getInternalName();
 		this.CurrentVisitor.AsmVisitor.visitTypeInsn(NEW, owner);
 		this.CurrentVisitor.AsmVisitor.visitInsn(DUP);
-		if(!((Node.Type.TypeFlag & ZenSystem.UniqueType) == ZenSystem.UniqueType)) {
+		if(!((Node.Type.TypeFlag & ZTypeFlag.UniqueType) == ZTypeFlag.UniqueType)) {
 			this.CurrentVisitor.LoadConst(Node.Type);
 			this.CurrentVisitor.AsmVisitor.visitMethodInsn(INVOKESPECIAL, owner, "<init>", "(Lorg/ZenScript/ZenType;)V");
 		} else {

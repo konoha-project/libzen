@@ -34,7 +34,7 @@ import zen.deps.ZenTypedObject;
 import zen.parser.ZLogger;
 import zen.parser.ZNameSpace;
 
-public class ZenSystem implements ZenTypeFlag {
+public class ZenSystem {
 	public final static ZenMap<Integer>     SourceMap = new ZenMap<Integer>(null);
 	public final static ArrayList<String>   SourceList = new ArrayList<String>();
 
@@ -42,17 +42,17 @@ public class ZenSystem implements ZenTypeFlag {
 	public final static ArrayList<ZenType>  TypePools = new ArrayList<ZenType>();
 	public final static ArrayList<ZenFunc>  FuncPools = new ArrayList<ZenFunc>();
 
-	public final static ZenType		TopType = new ZenType(UniqueType, "var", null);
+	public final static ZenType		TopType = new ZenType(ZTypeFlag.UniqueType, "var", null);
 	public final static ZenType		VarType = TopType;
-	public final static ZenType		VoidType = new ZenType(UniqueType, "void", null);
-	public final static ZenType		BooleanType = new ZenType(UniqueType, "boolean", TopType);
-	public final static ZenType		IntType = new ZenType(UniqueType, "int", TopType);
-	public final static ZenType     FloatType = new ZenType(UniqueType, "float", TopType);
-	public final static ZenType		StringType = new ZenType(UniqueType, "String", TopType);
+	public final static ZenType		VoidType = new ZenType(ZTypeFlag.UniqueType, "void", null);
+	public final static ZenType		BooleanType = new ZenType(ZTypeFlag.UniqueType, "boolean", TopType);
+	public final static ZenType		IntType = new ZenType(ZTypeFlag.UniqueType, "int", TopType);
+	public final static ZenType     FloatType = new ZenType(ZTypeFlag.UniqueType, "float", TopType);
+	public final static ZenType		StringType = new ZenType(ZTypeFlag.UniqueType, "String", TopType);
 	//	public final static ZenType		AnyType = new ZenType(UniqueType|DynamicType, "any", TopType);
-	public final static ZenType     TypeType = new ZenType(UniqueType, "Type", TopType);
-	public final static ZenType		ArrayType = new ZenGeneric1Type(UniqueType, "Array", null, VarType);
-	public final static ZenType		MapType = new ZenGeneric1Type(UniqueType, "Map", null, VarType);
+	public final static ZenType     TypeType = new ZenType(ZTypeFlag.UniqueType, "Type", TopType);
+	public final static ZenType		ArrayType = new ZenGeneric1Type(ZTypeFlag.UniqueType, "Array", null, VarType);
+	public final static ZenType		MapType = new ZenGeneric1Type(ZTypeFlag.UniqueType, "Map", null, VarType);
 
 	public final static ZenType		FuncType  = new ZenFuncType("Func", null);
 
@@ -190,7 +190,7 @@ public class ZenSystem implements ZenTypeFlag {
 			if(BaseType.IsArrayType()) {
 				Name = BaseType.ShortName + "<" + ParamType + ">";
 			}
-			GenericType = new ZenGeneric1Type(UniqueType, Name, BaseType, ParamType);
+			GenericType = new ZenGeneric1Type(ZTypeFlag.UniqueType, Name, BaseType, ParamType);
 			ZenSystem.SetTypeTable(MangleName, GenericType);
 		}
 		return GenericType;
