@@ -1,6 +1,6 @@
 package zen.lang;
 
-public interface ZenPrecedence {
+public abstract class ZenPrecedence {
 	public final static int BinaryOperator					= 1;
 	public final static int LeftJoin						= 1 << 1;
 	public final static int PrecedenceShift					= 3;

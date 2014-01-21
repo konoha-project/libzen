@@ -27,7 +27,7 @@ package zen.parser;
 
 /*ZenConst Begin*/
 //ifdef JAVA
-public interface ZParserConst {
+public abstract class ZParserConst {
 	//endif VAJA
 	// Version
 	public final static String  ProgName  = "LibZen";

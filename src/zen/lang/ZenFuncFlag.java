@@ -24,7 +24,7 @@
 
 package zen.lang;
 
-public interface ZenFuncFlag {
+public abstract class ZenFuncFlag {
 
 	public final static int PhantomFunc = 1 << 10;
 	public final static int ConverterFunc       = 1 << 16;
