@@ -525,6 +525,7 @@ public class LibNative {
 		GenMap.put("clisp", zen.codegen.clisp.CommonLispSourceGenerator.class);
 		//GenMap.put("c", zen.codegen.c.CSourceGenerator.class);
 		GenMap.put("jvm", zen.codegen.jvm.JavaByteCodeGenerator.class);
+		GenMap.put("debug", zen.codegen.debug.ASTGenerator.class);
 	}
 
 	public final static ZGenerator LoadGenerator(@Nullable String ClassName, String OutputFile) {
