@@ -28,18 +28,18 @@ import java.util.ArrayList;
 
 import zen.deps.Field;
 import zen.lang.ZenType;
-import zen.parser.ZenNameSpace;
+import zen.parser.ZNameSpace;
 import zen.parser.ZUtils;
 
 
 
 public final class ZenClassField extends ZUtils {
 	@Field  public ZenType DefinedType;
-	@Field  private final ZenNameSpace NameSpace;
+	@Field  private final ZNameSpace NameSpace;
 	@Field  public ArrayList<ZenFieldInfo> FieldList;
 	@Field  public int ThisClassIndex;
 
-	public ZenClassField/*constructor*/(ZenType DefinedType, ZenNameSpace NameSpace) {
+	public ZenClassField/*constructor*/(ZenType DefinedType, ZNameSpace NameSpace) {
 		this.DefinedType = DefinedType;
 		this.NameSpace = NameSpace;
 		this.FieldList = new ArrayList<ZenFieldInfo>();

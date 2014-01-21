@@ -43,7 +43,7 @@ import zen.deps.Field;
 import zen.deps.LibNative;
 import zen.deps.Var;
 import zen.parser.ZLogger;
-import zen.parser.ZenNameSpace;
+import zen.parser.ZNameSpace;
 import zen.parser.ZToken;
 import zen.parser.ZUtils;
 import zen.parser.ZVisitor;
@@ -66,7 +66,7 @@ public abstract class ZenTypeChecker implements ZVisitor {
 	//	public final static int NullablePolicy                  = (1 << 8);
 	//	public final static int BlockPolicy                     = (1 << 7);
 
-	@Field private ZenNameSpace StackedNameSpace;
+	@Field private ZNameSpace StackedNameSpace;
 	@Field private ZenType StackedContextType;
 	@Field private ZenNode StackedTypedNode;
 
@@ -96,7 +96,7 @@ public abstract class ZenTypeChecker implements ZVisitor {
 		return !this.StoppedVisitor;
 	}
 
-	public final ZenNameSpace GetNameSpace() {
+	public final ZNameSpace GetNameSpace() {
 		return this.StackedNameSpace;
 	}
 
@@ -172,7 +172,7 @@ public abstract class ZenTypeChecker implements ZVisitor {
 		}
 	}
 
-	public final boolean TypeCheckNodeList(ZenNameSpace NameSpace, ArrayList<ZenNode> ParamList) {
+	public final boolean TypeCheckNodeList(ZNameSpace NameSpace, ArrayList<ZenNode> ParamList) {
 		if(this.IsVisitable()) {
 			@Var boolean AllTyped = true;
 			@Var int i = 0;
@@ -226,9 +226,9 @@ public abstract class ZenTypeChecker implements ZVisitor {
 	//		}
 	//	}
 
-	protected ZenFunc InferFuncType(ZenNameSpace NameSpace, String FuncName, ZenType FuncType, ZToken SourceToken) {
+	protected ZenFunc InferFuncType(ZNameSpace NameSpace, String FuncName, ZenType FuncType, ZToken SourceToken) {
 		if(FuncType.IsCompleteFunc(false)) {
-			@Var ZenNameSpace RootNameSpace = NameSpace.GetRootNameSpace();
+			@Var ZNameSpace RootNameSpace = NameSpace.GetRootNameSpace();
 			@Var String Signature = FuncType.StringfySignature(FuncName);
 			LibNative.Assert(!RootNameSpace.HasSymbol(Signature));
 			@Var ZenFunc Func = new ZenSigFunc(0, FuncName, (ZenFuncType)FuncType, SourceToken);
@@ -239,7 +239,7 @@ public abstract class ZenTypeChecker implements ZVisitor {
 		return null;
 	}
 
-	protected ZenType GuessFuncType(ZenNameSpace NameSpace, String FuncName, ZenApplyNode Node, ZenType ContextFuncType) {
+	protected ZenType GuessFuncType(ZNameSpace NameSpace, String FuncName, ZenApplyNode Node, ZenType ContextFuncType) {
 		if(Node.ResolvedFunc == null) {
 			@Var int FuncParamSize = Node.ParamList.size();
 			@Var ZenType RecvType = Node.GetRecvType();
@@ -259,7 +259,7 @@ public abstract class ZenTypeChecker implements ZVisitor {
 		return Node.ResolvedFunc.FuncType;
 	}
 
-	protected ZenType GuessMethodFuncType(ZenNameSpace NameSpace, String FuncName, ZenMethodCallNode Node, ZenType ContextType) {
+	protected ZenType GuessMethodFuncType(ZNameSpace NameSpace, String FuncName, ZenMethodCallNode Node, ZenType ContextType) {
 		if(Node.ResolvedFunc == null) {
 			Node.ParamList.add(0, Node.RecvNode);
 			this.GuessFuncType(NameSpace, FuncName, Node, ContextType);
@@ -271,11 +271,11 @@ public abstract class ZenTypeChecker implements ZVisitor {
 		return Node.ResolvedFunc.FuncType;
 	}
 
-	public final ZenNode TypeCheck(ZenNode Node, ZenNameSpace NameSpace, ZenType ContextType, int TypeCheckPolicy) {
+	public final ZenNode TypeCheck(ZenNode Node, ZNameSpace NameSpace, ZenType ContextType, int TypeCheckPolicy) {
 		if(this.IsVisitable()) {
 			if(Node.IsUntyped()) {
 				ZenNode ParentNode = Node.ParentNode;
-				ZenNameSpace NameSpace_ = this.StackedNameSpace;
+				ZNameSpace NameSpace_ = this.StackedNameSpace;
 				ZenType ContextType_ = this.StackedContextType;
 				this.StackedNameSpace = NameSpace;
 				this.StackedContextType = ContextType;
@@ -310,7 +310,7 @@ public abstract class ZenTypeChecker implements ZVisitor {
 		return Node;
 	}
 
-	private final ZenNode TypeCheckImpl(ZenNode Node, ZenNameSpace NameSpace, ZenType ContextType, int TypeCheckPolicy) {
+	private final ZenNode TypeCheckImpl(ZenNode Node, ZNameSpace NameSpace, ZenType ContextType, int TypeCheckPolicy) {
 		if(Node.IsErrorNode()) {
 			return Node;
 		}
@@ -338,7 +338,7 @@ public abstract class ZenTypeChecker implements ZVisitor {
 		return new ZenStupidCastNode(ContextType, Node);
 	}
 
-	protected ZenType GetIndexType(ZenNameSpace NameSpace, ZenType RecvType) {
+	protected ZenType GetIndexType(ZNameSpace NameSpace, ZenType RecvType) {
 		if(RecvType.IsArrayType() || RecvType.IsStringType()) {
 			return ZenSystem.IntType;
 		}
@@ -348,7 +348,7 @@ public abstract class ZenTypeChecker implements ZVisitor {
 		return ZenSystem.VarType;
 	}
 
-	protected ZenType GetElementType(ZenNameSpace NameSpace, ZenType RecvType) {
+	protected ZenType GetElementType(ZNameSpace NameSpace, ZenType RecvType) {
 		if(RecvType.IsArrayType() || RecvType.IsMapType()) {
 			return RecvType.GetParamType(0);
 		}
@@ -358,12 +358,12 @@ public abstract class ZenTypeChecker implements ZVisitor {
 		return ZenSystem.VarType;
 	}
 
-	private void SetClassField(ZenNameSpace NameSpace, ZenType ClassType, String FieldName, ZenType FieldType, ZToken SourceToken) {
+	private void SetClassField(ZNameSpace NameSpace, ZenType ClassType, String FieldName, ZenType FieldType, ZToken SourceToken) {
 		ZenField Field = new ZenField(FieldName, FieldType, SourceToken);
-		NameSpace.GetRootNameSpace().SetSymbol(ZenNameSpace.StringfyClassSymbol(ClassType, FieldName), Field, SourceToken);
+		NameSpace.GetRootNameSpace().SetSymbol(ZNameSpace.StringfyClassSymbol(ClassType, FieldName), Field, SourceToken);
 	}
 
-	protected final ZenField GetField(ZenNameSpace NameSpace, ZenType ClassType, String FieldName) {
+	protected final ZenField GetField(ZNameSpace NameSpace, ZenType ClassType, String FieldName) {
 		Object Field = NameSpace.GetRootNameSpace().GetClassSymbol(ClassType, FieldName, true);
 		if(Field instanceof ZenField) {
 			return (ZenField)Field;
@@ -371,7 +371,7 @@ public abstract class ZenTypeChecker implements ZVisitor {
 		return null;
 	}
 
-	protected final ZenType GetFieldType(ZenNameSpace NameSpace, ZenType ClassType, String FieldName) {
+	protected final ZenType GetFieldType(ZNameSpace NameSpace, ZenType ClassType, String FieldName) {
 		if(ClassType instanceof ZenClassType) {
 			return ((ZenClassType)ClassType).GetFieldType(FieldName, ZenSystem.VoidType);
 		}
@@ -382,7 +382,7 @@ public abstract class ZenTypeChecker implements ZVisitor {
 		return NameSpace.Generator.GetFieldType(ClassType, FieldName);
 	}
 
-	protected final ZenType GetSetterType(ZenNameSpace NameSpace, ZenType ClassType, String FieldName) {
+	protected final ZenType GetSetterType(ZNameSpace NameSpace, ZenType ClassType, String FieldName) {
 		if(ClassType instanceof ZenClassType) {
 			return ((ZenClassType)ClassType).GetFieldType(FieldName, ZenSystem.VoidType);
 		}
@@ -393,7 +393,7 @@ public abstract class ZenTypeChecker implements ZVisitor {
 		return NameSpace.Generator.GetSetterType(ClassType, FieldName);
 	}
 
-	protected ZenType InferFieldType(ZenNameSpace NameSpace, ZenType ClassType, String FieldName, ZenType InferredType, ZToken SourceToken) {
+	protected ZenType InferFieldType(ZNameSpace NameSpace, ZenType ClassType, String FieldName, ZenType InferredType, ZToken SourceToken) {
 		this.println("field inferrence " + ClassType + "." + FieldName + ": " + InferredType);
 		if(ClassType.IsVarType() || !InferredType.IsInferrableType()) {
 			return ZenSystem.VarType;
@@ -440,7 +440,7 @@ public abstract class ZenTypeChecker implements ZVisitor {
 		return VarType;
 	}
 
-	protected ZenVariable GetLocalVariable(ZenNameSpace NameSpace, String VarName) {
+	protected ZenVariable GetLocalVariable(ZNameSpace NameSpace, String VarName) {
 		@Var Object VarInfo = NameSpace.GetSymbol(VarName);
 		if(VarInfo instanceof ZenVariable) {
 			return (ZenVariable)VarInfo;
@@ -448,7 +448,7 @@ public abstract class ZenTypeChecker implements ZVisitor {
 		return null;
 	}
 
-	protected void SetLocalVariable(ZenNameSpace NameSpace, ZenType VarType, String VarName, ZToken SourceToken) {
+	protected void SetLocalVariable(ZNameSpace NameSpace, ZenType VarType, String VarName, ZToken SourceToken) {
 		@Var ZenVariable VarInfo = new ZenVariable(NameSpace.GetDefiningFunc(), 0, VarType, VarName, this.FuncScope.GetVarIndex(), SourceToken);
 		NameSpace.SetSymbol(VarName, VarInfo, SourceToken);
 	}

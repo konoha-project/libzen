@@ -39,21 +39,21 @@ import zen.lang.ZenFuncSet;
 import zen.lang.ZenSystem;
 import zen.lang.ZenType;
 
-final class ZenSymbolSource {
+final class ZSymbolSource {
 	@Field public ZToken SourceToken;
 	@Field public ZenType  Type; // nullable
 	@Field public Object  Value;
 }
 
-public final class ZenNameSpace {
-	@Field public final ZenNameSpace   ParentNameSpace;
-	@Field public final ZenGenerator   Generator;
+public final class ZNameSpace {
+	@Field public final ZNameSpace   ParentNameSpace;
+	@Field public final ZGenerator   Generator;
 
 	@Field ZTokenFunc[] TokenMatrix;
 	@Field ZenMap<Object>	 SymbolPatternTable;
 	@Field private ZenNode  FuncNode;
 
-	public ZenNameSpace(ZenGenerator Generator, ZenNameSpace ParentNameSpace) {
+	public ZNameSpace(ZGenerator Generator, ZNameSpace ParentNameSpace) {
 		//		this.Context = Context;
 		this.ParentNameSpace = ParentNameSpace;
 		this.TokenMatrix = null;
@@ -69,11 +69,11 @@ public final class ZenNameSpace {
 
 	}
 
-	public ZenNameSpace CreateSubNameSpace() {
-		return new ZenNameSpace(null, this);
+	public ZNameSpace CreateSubNameSpace() {
+		return new ZNameSpace(null, this);
 	}
 
-	public ZenNameSpace GetRootNameSpace() {
+	public ZNameSpace GetRootNameSpace() {
 		return this.Generator.RootNameSpace;
 	}
 
@@ -141,7 +141,7 @@ public final class ZenNameSpace {
 	}
 
 	public final Object GetSymbol(String Key) {
-		@Var ZenNameSpace NameSpace = this;
+		@Var ZNameSpace NameSpace = this;
 		while(NameSpace != null) {
 			if(NameSpace.SymbolPatternTable != null) {
 				@Var Object Value = NameSpace.SymbolPatternTable.GetOrNull(Key);
@@ -209,7 +209,7 @@ public final class ZenNameSpace {
 	}
 
 	public ZSyntaxPattern GetExtendedSyntaxPattern(String PatternName) {
-		@Var Object Body = this.GetSymbol(ZenNameSpace.SuffixPatternSymbol(PatternName));
+		@Var Object Body = this.GetSymbol(ZNameSpace.SuffixPatternSymbol(PatternName));
 		if(Body instanceof ZSyntaxPattern) {
 			return (ZSyntaxPattern)Body;
 		}
@@ -238,7 +238,7 @@ public final class ZenNameSpace {
 		@Var String Name = (Alias == -1) ? PatternName : PatternName.substring(0, Alias);
 		@Var ZSyntaxPattern Pattern = new ZSyntaxPattern(this, Name, MatchFunc);
 		Pattern.SyntaxFlag = SyntaxFlag;
-		this.AppendSyntaxPattern(ZenNameSpace.SuffixPatternSymbol(Name), Pattern, null);
+		this.AppendSyntaxPattern(ZNameSpace.SuffixPatternSymbol(Name), Pattern, null);
 		if(Alias != -1) {
 			this.AppendSuffixSyntax(PatternName.substring(Alias+1), SyntaxFlag, MatchFunc);
 		}
@@ -268,7 +268,7 @@ public final class ZenNameSpace {
 
 	// DefiningFunc
 	public final ZenNode GetDefiningFunc() {
-		@Var ZenNameSpace NameSpace = this;
+		@Var ZNameSpace NameSpace = this;
 		while(NameSpace != null) {
 			if(NameSpace.FuncNode != null) {
 				return NameSpace.FuncNode;
@@ -305,7 +305,7 @@ public final class ZenNameSpace {
 	}
 
 	public void RetrieveFuncList(ArrayList<ZenFunc> FuncList, ZenType ClassType, String FuncName, int FuncParamSize) {
-		@Var ZenNameSpace NameSpace = this;
+		@Var ZNameSpace NameSpace = this;
 		while(NameSpace != null) {
 			@Var Object FuncValue = NameSpace.GetLocalSymbol(FuncName);
 			if(FuncValue instanceof ZenFunc) {
@@ -346,7 +346,7 @@ public final class ZenNameSpace {
 
 	public final Object GetClassSymbol(ZenType ClassType, String Symbol, boolean RecursiveSearch) {
 		while(ClassType != null) {
-			@Var String Key = ZenNameSpace.StringfyClassSymbol(ClassType, Symbol);
+			@Var String Key = ZNameSpace.StringfyClassSymbol(ClassType, Symbol);
 			@Var Object Value = this.GetSymbol(Key);
 			if(Value != null) {
 				return Value;

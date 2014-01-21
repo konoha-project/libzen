@@ -28,16 +28,16 @@ import java.util.ArrayList;
 
 import zen.deps.Field;
 import zen.lang.ZenFunc;
-import zen.parser.ZenNameSpace;
+import zen.parser.ZNameSpace;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 
 final public class ZenFuncDeclNode extends ZenFunctionNode {
 	@Field public String FuncName;
-	@Field public ZenNameSpace NameSpace;
+	@Field public ZNameSpace NameSpace;
 	@Field public ZenFunc ResolvedFunc;
 	@Field public String ReferenceName;
-	public ZenFuncDeclNode/*constructor*/(ZToken SourceToken, ZenNameSpace NameSpace, String FuncName) {
+	public ZenFuncDeclNode/*constructor*/(ZToken SourceToken, ZNameSpace NameSpace, String FuncName) {
 		super(SourceToken);
 		this.ArgumentList = new ArrayList<ZenNode>();
 		this.NameSpace = NameSpace;

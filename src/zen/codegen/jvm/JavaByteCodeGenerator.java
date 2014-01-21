@@ -69,7 +69,7 @@ import zen.ast.ZenVarDeclNode;
 import zen.ast.ZenWhileNode;
 import zen.deps.LibNative;
 import zen.lang.ZenSystem;
-import zen.parser.ZenGenerator;
+import zen.parser.ZGenerator;
 
 
 class TryCatchLabel {
@@ -84,7 +84,7 @@ class TryCatchLabel {
 }
 
 
-public class JavaByteCodeGenerator extends ZenGenerator {
+public class JavaByteCodeGenerator extends ZGenerator {
 	JMethodBuilder CurrentVisitor;
 	ZenClassLoader ClassGenerator;
 	ArrayList<TryCatchLabel> TryCatchLabel;

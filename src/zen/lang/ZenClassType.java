@@ -30,7 +30,7 @@ import zen.ast.ZenNode;
 import zen.deps.Field;
 import zen.deps.LibZen;
 import zen.deps.Var;
-import zen.parser.ZenNameSpace;
+import zen.parser.ZNameSpace;
 import zen.parser.ZToken;
 
 public class ZenClassType extends ZenType {
@@ -101,7 +101,7 @@ public class ZenClassType extends ZenType {
 		return null;
 	}
 
-	public ZenNode CheckAllFields(ZenNameSpace NameSpace) {
+	public ZenNode CheckAllFields(ZNameSpace NameSpace) {
 		// TODO Auto-generated method stub
 
 		return null;  // if no error

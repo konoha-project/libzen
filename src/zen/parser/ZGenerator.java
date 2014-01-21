@@ -33,21 +33,21 @@ import zen.lang.ZenTypeChecker;
 import zen.lang.ZenTypeInfer;
 //endif VAJA
 
-public abstract class ZenGenerator extends ZNodeUtils implements ZVisitor {
+public abstract class ZGenerator extends ZNodeUtils implements ZVisitor {
 	@Field private String            GrammarInfo;
 	@Field public final String       TargetCode;
 	@Field public final String       TargetVersion;
 
-	@Field public final ZenNameSpace  RootNameSpace;
+	@Field public final ZNameSpace  RootNameSpace;
 	@Field public String             OutputFile;
 	@Field public ZLogger          Logger;
 
 	@Field public ZenTypeChecker TypeChecker;
 	@Field private boolean StoppedVisitor;
 
-	protected ZenGenerator(String TargetCode, String TargetVersion) {
+	protected ZGenerator(String TargetCode, String TargetVersion) {
 		super();
-		this.RootNameSpace = new ZenNameSpace(this, null);
+		this.RootNameSpace = new ZNameSpace(this, null);
 		this.GrammarInfo = "";
 		this.TargetCode = TargetCode;
 		this.TargetVersion = TargetVersion;
@@ -88,7 +88,7 @@ public abstract class ZenGenerator extends ZNodeUtils implements ZVisitor {
 		return this.Logger.Report(Level, Token, Message);
 	}
 
-	public void DoCodeGeneration(ZenNameSpace NameSpace, ZenNode Node) {
+	public void DoCodeGeneration(ZNameSpace NameSpace, ZenNode Node) {
 		Node.Accept(this);
 	}
 

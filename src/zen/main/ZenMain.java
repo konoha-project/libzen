@@ -35,7 +35,7 @@ import zen.deps.Var;
 import zen.deps.ZenArray;
 import zen.lang.ZenGrammar;
 import zen.lang.ZenSystem;
-import zen.parser.ZenGenerator;
+import zen.parser.ZGenerator;
 import zen.parser.ZLogger;
 import zen.parser.ZParserConst;
 import zen.parser.ZUtils;
@@ -165,7 +165,7 @@ public class ZenMain extends ZUtils {
 			}
 			ZenMain.Usage(Argu + " is unknown");
 		}
-		@Var ZenGenerator Generator = LibNative.LoadGenerator(TargetCode, OutputFile);
+		@Var ZGenerator Generator = LibNative.LoadGenerator(TargetCode, OutputFile);
 		LibNative.ImportGrammar(Generator.RootNameSpace, ZenGrammar.class.getName());
 		// @Var ZenParserContext Context = new ZenParserContext(new KonohaGrammar(), Generator);
 		// if(RequiredLibName != null) {

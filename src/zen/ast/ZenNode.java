@@ -28,7 +28,7 @@ import zen.deps.Field;
 import zen.deps.LibNative;
 import zen.lang.ZenSystem;
 import zen.lang.ZenType;
-import zen.parser.ZenNameSpace;
+import zen.parser.ZNameSpace;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 
@@ -91,7 +91,7 @@ public abstract class ZenNode {
 		}
 		return null;
 	}
-	public Object Eval(ZenNameSpace NameSpace, boolean EnforceConst)  {
+	public Object Eval(ZNameSpace NameSpace, boolean EnforceConst)  {
 		return null;
 		//return this.ToNullValue(NameSpace, EnforceConst);
 	}

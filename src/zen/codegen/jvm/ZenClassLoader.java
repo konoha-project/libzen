@@ -12,22 +12,22 @@ import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.MethodNode;
 
-import zen.parser.ZenNameSpace;
+import zen.parser.ZNameSpace;
 
 class ZenClassLoader extends ClassLoader {
-	final ZenNameSpace NameSpace;
+	final ZNameSpace NameSpace;
 	final HashMap<String,JClassBuilder> ByteCodeMap;
 	final String GlobalStaticClassName;
 	final String ContextFieldName;
 	final String GontextDescripter;
 
-	public ZenClassLoader(ZenNameSpace NameSpace) {
+	public ZenClassLoader(ZNameSpace NameSpace) {
 		this.NameSpace = NameSpace;
 		this.ByteCodeMap = new HashMap<String,JClassBuilder>();
 
 		this.GlobalStaticClassName = "Global$" + 0/*Context.ParserId*/;
 		JClassBuilder GlobalClass = new JClassBuilder(ACC_PUBLIC|ACC_FINAL, null, this.GlobalStaticClassName, "java/lang/Object");
-		FieldNode fn = new FieldNode(ACC_STATIC, "ParserContext", Type.getDescriptor(ZenNameSpace.class), null, null);
+		FieldNode fn = new FieldNode(ACC_STATIC, "ParserContext", Type.getDescriptor(ZNameSpace.class), null, null);
 		this.ContextFieldName = fn.name;
 		this.GontextDescripter = fn.desc;
 		GlobalClass.AddField(fn);

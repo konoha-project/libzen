@@ -41,9 +41,9 @@ import zen.ast.ZenNode;
 import zen.lang.ZenFunc;
 import zen.lang.ZenSystem;
 import zen.lang.ZenType;
-import zen.parser.ZenGenerator;
+import zen.parser.ZGenerator;
 import zen.parser.ZLogger;
-import zen.parser.ZenNameSpace;
+import zen.parser.ZNameSpace;
 import zen.parser.ZenSourceGenerator;
 import zen.parser.ZTokenContext;
 import zen.parser.ZVisitor;
@@ -251,12 +251,12 @@ public class LibNative {
 	// Symbol);
 	// }
 
-	public final static boolean ImportGrammar(ZenNameSpace NameSpace,
+	public final static boolean ImportGrammar(ZNameSpace NameSpace,
 			String PackageName) {
 		try {
 			@Var Class<?> NativeClass = LibNative.LoadClass(PackageName);
 			Method LoaderMethod = NativeClass.getMethod("ImportGrammar",
-					ZenNameSpace.class, Class.class);
+					ZNameSpace.class, Class.class);
 			LoaderMethod.invoke(null, NameSpace, NativeClass);
 			return true;
 		} catch (Exception e) { // naming
@@ -393,7 +393,7 @@ public class LibNative {
 		return (Long) TokenFunc.Invoke(Argvs);
 	}
 
-	public final static ZenNode ApplyMatchFunc(ZenFunc MatchFunc, ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public final static ZenNode ApplyMatchFunc(ZenFunc MatchFunc, ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		Object[] Argvs = new Object[3];
 		Argvs[0] = NameSpace;
 		Argvs[1] = TokenContext;
@@ -435,7 +435,7 @@ public class LibNative {
 			String FuncName) {
 		try {
 			Method JavaMethod = GrammarClass.getMethod(FuncName,
-					ZenNameSpace.class, ZTokenContext.class, ZenNode.class);
+					ZNameSpace.class, ZTokenContext.class, ZenNode.class);
 			return LibNative.ConvertNativeMethodToFunc(JavaMethod);
 		} catch (NoSuchMethodException e) {
 			ZLogger.VerboseException(e);
@@ -527,7 +527,7 @@ public class LibNative {
 		GenMap.put("jvm", zen.codegen.jvm.JavaByteCodeGenerator.class);
 	}
 
-	public final static ZenGenerator LoadGenerator(@Nullable String ClassName, String OutputFile) {
+	public final static ZGenerator LoadGenerator(@Nullable String ClassName, String OutputFile) {
 		if(ClassName == null) {
 			ClassName = System.getenv("ZENCODE");
 		}
@@ -537,7 +537,7 @@ public class LibNative {
 				if(GeneratorClass == null) {
 					GeneratorClass = Class.forName(ClassName);
 				}
-				return (ZenGenerator) GeneratorClass.newInstance();
+				return (ZGenerator) GeneratorClass.newInstance();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

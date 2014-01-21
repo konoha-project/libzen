@@ -50,7 +50,7 @@ public final class ZTokenContext {
 	public final static int     Optional          = (1 << 1);
 	public final static int     Required          = (1 << 0);
 
-	@Field @Init public ZenNameSpace TopLevelNameSpace;
+	@Field @Init public ZNameSpace TopLevelNameSpace;
 	@Field public ArrayList<ZToken> SourceTokenList = new ArrayList<ZToken>();
 	@Field private int CurrentPosition = 0;
 	@Field @Init public long ParsingLine;
@@ -58,7 +58,7 @@ public final class ZTokenContext {
 	@Field public ZToken LatestToken = null;
 	@Field int IndentLevel = 0;
 
-	public ZTokenContext(ZenNameSpace NameSpace, String Text, long FileLine) {
+	public ZTokenContext(ZNameSpace NameSpace, String Text, long FileLine) {
 		this.TopLevelNameSpace = NameSpace;
 		this.ParsingLine = FileLine;
 		this.AppendParsedToken(Text, ZParserConst.SourceTokenFlag, null);
@@ -265,7 +265,7 @@ public final class ZTokenContext {
 	//		return Token;
 	//	}
 
-	public ZSyntaxPattern GetFirstPattern(ZenNameSpace NameSpace) {
+	public ZSyntaxPattern GetFirstPattern(ZNameSpace NameSpace) {
 		@Var ZToken Token = this.GetToken();
 		if(Token.PresetPattern != null) {
 			return Token.PresetPattern;
@@ -277,7 +277,7 @@ public final class ZTokenContext {
 		return Pattern;
 	}
 
-	public ZSyntaxPattern GetSuffixPattern(ZenNameSpace NameSpace) {
+	public ZSyntaxPattern GetSuffixPattern(ZNameSpace NameSpace) {
 		@Var ZToken Token = this.GetToken();
 		if(Token != ZToken.NullToken) {
 			@Var ZSyntaxPattern Pattern = NameSpace.GetExtendedSyntaxPattern(Token.ParsedText);
@@ -326,7 +326,7 @@ public final class ZTokenContext {
 		return false;
 	}
 
-	public ZenNode MatchNodeToken(ZenNode Base, ZenNameSpace NameSpace, String TokenText, int MatchFlag) {
+	public ZenNode MatchNodeToken(ZenNode Base, ZNameSpace NameSpace, String TokenText, int MatchFlag) {
 		if(!Base.IsErrorNode()) {
 			@Var int RollbackPosition = this.CurrentPosition;
 			@Var ZToken Token = this.GetTokenAndMoveForward();
@@ -351,7 +351,7 @@ public final class ZTokenContext {
 		return Base;
 	}
 
-	public final ZenNode ApplyMatchPattern(ZenNameSpace NameSpace, ZenNode LeftNode, ZSyntaxPattern Pattern) {
+	public final ZenNode ApplyMatchPattern(ZNameSpace NameSpace, ZenNode LeftNode, ZSyntaxPattern Pattern) {
 		@Var int RollbackPosition = this.CurrentPosition;
 		@Var int ParseFlag = this.ParseFlag;
 		@Var ZSyntaxPattern CurrentPattern = Pattern;
@@ -385,7 +385,7 @@ public final class ZTokenContext {
 		return this.CreateExpectedErrorNode(TopToken, Pattern.PatternName);
 	}
 
-	public ZenNode AppendMatchedPattern(ZenNode Base, ZenNameSpace NameSpace, String PatternName,  int MatchFlag) {
+	public ZenNode AppendMatchedPattern(ZenNode Base, ZNameSpace NameSpace, String PatternName,  int MatchFlag) {
 		if(!Base.IsErrorNode()) {
 			@Var ZenNode ParsedNode = this.ParsePattern(NameSpace, PatternName, MatchFlag);
 			if(ParsedNode != null) {
@@ -443,7 +443,7 @@ public final class ZTokenContext {
 		this.SetParseFlag(OldFlag);
 	}
 
-	public final ZenNode ParsePatternAfter(ZenNameSpace NameSpace, ZenNode LeftNode, String PatternName, int MatchFlag) {
+	public final ZenNode ParsePatternAfter(ZNameSpace NameSpace, ZenNode LeftNode, String PatternName, int MatchFlag) {
 		@Var int Pos = this.CurrentPosition;
 		@Var int ParseFlag = this.ParseFlag;
 		if(ZUtils.IsFlag(MatchFlag, ZTokenContext.Optional)) {
@@ -459,11 +459,11 @@ public final class ZTokenContext {
 		return null; // mismatched
 	}
 
-	public final ZenNode ParsePattern(ZenNameSpace NameSpace, String PatternName, int MatchFlag) {
+	public final ZenNode ParsePattern(ZNameSpace NameSpace, String PatternName, int MatchFlag) {
 		return this.ParsePatternAfter(NameSpace, null, PatternName, MatchFlag);
 	}
 
-	public final ZenType ParseType(ZenNameSpace NameSpace, String PatternName, ZenType DefaultType) {
+	public final ZenType ParseType(ZNameSpace NameSpace, String PatternName, ZenType DefaultType) {
 		ZenTypeNode TypeNode = (ZenTypeNode)this.ParsePatternAfter(NameSpace, null, PatternName, Optional);
 		if(TypeNode != null) {
 			return TypeNode.Type;

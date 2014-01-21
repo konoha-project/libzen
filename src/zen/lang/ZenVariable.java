@@ -26,7 +26,7 @@ package zen.lang;
 
 import zen.ast.ZenNode;
 import zen.deps.Field;
-import zen.parser.ZenNameSpace;
+import zen.parser.ZNameSpace;
 import zen.parser.ZToken;
 
 public class ZenVariable {
@@ -50,7 +50,7 @@ public class ZenVariable {
 		this.DefCount  = 1;
 	}
 
-	public final boolean IsCaptured(ZenNameSpace NameSpace) {
+	public final boolean IsCaptured(ZNameSpace NameSpace) {
 		return (NameSpace.GetDefiningFunc() != this.DefiningFunc);
 	}
 

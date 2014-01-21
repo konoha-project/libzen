@@ -32,7 +32,7 @@ import zen.deps.Var;
 import zen.deps.ZenMap;
 import zen.deps.ZenTypedObject;
 import zen.parser.ZLogger;
-import zen.parser.ZenNameSpace;
+import zen.parser.ZNameSpace;
 
 public class ZenSystem implements ZenTypeFlag {
 	public final static ZenMap<Integer>     SourceMap = new ZenMap<Integer>(null);
@@ -85,7 +85,7 @@ public class ZenSystem implements ZenTypeFlag {
 
 	private static boolean IsInit = false;
 
-	public final static void InitNameSpace(ZenNameSpace NameSpace) {
+	public final static void InitNameSpace(ZNameSpace NameSpace) {
 		//ifdef JAVA
 		if(!ZenSystem.IsInit) {
 			ZenSystem.SetTypeTable("org.ZenScript.ZenTopObject", ZenSystem.TopType);

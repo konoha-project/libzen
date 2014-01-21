@@ -24,7 +24,7 @@
 
 package zen.obsolete;
 
-import zen.parser.ZenNameSpace;
+import zen.parser.ZNameSpace;
 import zen.parser.ZUtils;
 
 @Deprecated
@@ -38,7 +38,7 @@ public final class ZenTypeEnv extends ZUtils {
 //	@Field public ZenFuncBlock	FuncBlock;
 //	@Field public boolean FoundUncommonFunc;
 	
-	public ZenTypeEnv/*constructor*/(ZenNameSpace NameSpace) {
+	public ZenTypeEnv/*constructor*/(ZNameSpace NameSpace) {
 //		this.NameSpace = NameSpace;
 //		this.Context   = NameSpace.Context;
 //		this.Generator = NameSpace.Context.Generator;

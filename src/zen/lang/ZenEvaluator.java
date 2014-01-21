@@ -33,15 +33,15 @@ import zen.ast.ZenNode;
 import zen.ast.ZenOrNode;
 import zen.ast.ZenUnaryNode;
 import zen.deps.Field;
-import zen.parser.ZenNameSpace;
+import zen.parser.ZNameSpace;
 import zen.parser.ZVisitor;
 
 public abstract class ZenEvaluator implements ZVisitor {
-	@Field private ZenNameSpace NameSpace_;
+	@Field private ZNameSpace NameSpace_;
 	@Field private boolean IsEnforced_;
 	@Field private Object EvaledValue_;
 
-	public final Object Eval(ZenNode Node, ZenNameSpace NameSpace, boolean IsEnforced) {
+	public final Object Eval(ZenNode Node, ZNameSpace NameSpace, boolean IsEnforced) {
 		this.NameSpace_ = NameSpace;
 		this.IsEnforced_ = IsEnforced;
 		Node.Accept(this);

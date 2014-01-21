@@ -239,6 +239,7 @@ public class JMethod {
 		}
 		return null;
 	}
+
 	public static Object DynamicCast(ZenType CastType, Object Value) {
 		if(Value != null) {
 			ZenType FromType = ZenSystem.GuessType(Value);

@@ -30,16 +30,16 @@ import zen.deps.Constructor;
 import zen.deps.Field;
 import zen.lang.ZenClassType;
 import zen.lang.ZenType;
-import zen.parser.ZenNameSpace;
+import zen.parser.ZNameSpace;
 import zen.parser.ZVisitor;
 
 final public class ZenClassDeclNode extends ZenNode {
 	@Field public String ClassName;
 	@Field public ZenType ClassType;
 	@Field public ZenType SuperType;
-	@Field public ZenNameSpace NameSpace;
+	@Field public ZNameSpace NameSpace;
 	@Field public ArrayList<ZenFieldNode>  FieldList;
-	@Constructor public ZenClassDeclNode(ZenNameSpace NameSpace) {
+	@Constructor public ZenClassDeclNode(ZNameSpace NameSpace) {
 		super();
 		this.NameSpace = NameSpace.GetRootNameSpace();
 		this.ClassName = null;
@@ -65,7 +65,7 @@ final public class ZenClassDeclNode extends ZenNode {
 		Visitor.VisitClassDeclNode(this);
 	}
 
-	public ZenNode CheckClassName(ZenNameSpace NameSpace) {
+	public ZenNode CheckClassName(ZNameSpace NameSpace) {
 		if(this.ClassType == null || !(this.ClassType instanceof ZenClassType)) {
 			return new ZenErrorNode(this.SourceToken, "" + this.ClassName + " is not a Zen class.");
 		}

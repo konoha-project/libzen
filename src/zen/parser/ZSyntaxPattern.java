@@ -32,13 +32,13 @@ import zen.deps.Var;
 import zen.lang.ZenFunc;
 
 public final class ZSyntaxPattern extends ZUtils {
-	@Field @Init public ZenNameSpace	          PackageNameSpace;
+	@Field @Init public ZNameSpace	          PackageNameSpace;
 	@Field @Init public String		          PatternName;
 	@Field @Init public ZenFunc                 MatchFunc;
 	@Field public int				      SyntaxFlag = 0;
 	@Field public ZSyntaxPattern ParentPattern = null;
 
-	public ZSyntaxPattern(ZenNameSpace NameSpace, String PatternName, ZenFunc MatchFunc) {
+	public ZSyntaxPattern(ZNameSpace NameSpace, String PatternName, ZenFunc MatchFunc) {
 		this.PackageNameSpace = NameSpace;
 		this.PatternName = PatternName;
 		this.MatchFunc = MatchFunc;

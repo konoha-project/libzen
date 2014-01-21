@@ -73,7 +73,7 @@ import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.deps.ZenMap;
 import zen.parser.ZLogger;
-import zen.parser.ZenNameSpace;
+import zen.parser.ZNameSpace;
 import zen.parser.ZParserConst;
 import zen.parser.ZSyntaxPattern;
 import zen.parser.ZToken;
@@ -322,34 +322,34 @@ public class ZenGrammar {
 
 	// Match
 
-	public static ZenNode MatchNull(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public static ZenNode MatchNull(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		return new ZenNullNode(TokenContext.GetTokenAndMoveForward());
 	}
 
-	public static ZenNode MatchTrue(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public static ZenNode MatchTrue(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		return new ZenBooleanNode(TokenContext.GetTokenAndMoveForward(), true);
 	}
 
-	public static ZenNode MatchFalse(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public static ZenNode MatchFalse(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		return new ZenBooleanNode(TokenContext.GetTokenAndMoveForward(), false);
 	}
 
-	public static ZenNode MatchIntLiteral(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public static ZenNode MatchIntLiteral(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		@Var ZToken Token = TokenContext.GetTokenAndMoveForward();
 		return new ZenIntNode(Token, LibZen.ParseInt(Token.ParsedText));
 	}
 
-	public static ZenNode MatchFloatLiteral(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public static ZenNode MatchFloatLiteral(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		@Var ZToken Token = TokenContext.GetTokenAndMoveForward();
 		return new ZenFloatNode(Token, LibZen.ParseFloat(Token.ParsedText));
 	}
 
-	public static ZenNode MatchStringLiteral(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public static ZenNode MatchStringLiteral(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		@Var ZToken Token = TokenContext.GetTokenAndMoveForward();
 		return new ZenStringNode(Token, LibZen.UnquoteString(Token.ParsedText));
 	}
 
-	public static ZenNode MatchArrayLiteral(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public static ZenNode MatchArrayLiteral(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		@Var ZenNode LiteralNode = new ZenArrayLiteralNode();
 		@Var ZToken Token = TokenContext.GetTokenAndMoveForward(); /* "[" */
 		LiteralNode.SourceToken = Token;
@@ -368,7 +368,7 @@ public class ZenGrammar {
 		return LiteralNode;
 	}
 
-	public static ZenNode MatchMapLiteral(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public static ZenNode MatchMapLiteral(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		@Var ZenNode LiteralNode = new ZenMapLiteralNode();
 		@Var ZToken Token = TokenContext.GetTokenAndMoveForward(); /* "{" */
 		LiteralNode.SourceToken = Token;
@@ -389,7 +389,7 @@ public class ZenGrammar {
 		return LiteralNode;
 	}
 
-	public static ZenNode MatchType(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public static ZenNode MatchType(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		@Var ZToken Token = TokenContext.GetTokenAndMoveForward();
 		@Var ZenType Type = NameSpace.GetType(Token.ParsedText, Token);
 		if(Type != null) {
@@ -400,7 +400,7 @@ public class ZenGrammar {
 		return null; // Not Matched
 	}
 
-	public static ZenNode MatchTypeSuffix(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode TypeNode) {
+	public static ZenNode MatchTypeSuffix(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode TypeNode) {
 		if(TypeNode.Type.GetParamSize() > 0) {
 			if(TokenContext.MatchToken("<")) {  // Generics
 				@Var ArrayList<ZenType> TypeList = new ArrayList<ZenType>();
@@ -426,7 +426,7 @@ public class ZenGrammar {
 		return TypeNode;
 	}
 
-	public static ZenNode MatchSymbol(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public static ZenNode MatchSymbol(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		@Var ZToken NameToken = TokenContext.GetTokenAndMoveForward();
 		if(!NameToken.IsNameSymbol()) {
 			return TokenContext.CreateExpectedErrorNode(NameToken, "identifier");
@@ -442,7 +442,7 @@ public class ZenGrammar {
 	}
 
 	// PatternName: "("  (1)
-	public static ZenNode MatchGroup(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public static ZenNode MatchGroup(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		@Var ZenNode GroupNode = new ZenGroupNode();
 		GroupNode = TokenContext.MatchNodeToken(GroupNode, NameSpace, "(", ZTokenContext.Required | ZTokenContext.AllowSkipIndent);
 		GroupNode = TokenContext.AppendMatchedPattern(GroupNode, NameSpace, "$Expression$", ZTokenContext.Required);
@@ -450,7 +450,7 @@ public class ZenGrammar {
 		return GroupNode;
 	}
 
-	public static ZenNode MatchCast(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public static ZenNode MatchCast(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		@Var ZenNode CastNode = new ZenCastNode(ZenSystem.VarType, null);
 		CastNode = TokenContext.MatchNodeToken(CastNode, NameSpace, "(", ZTokenContext.Required | ZTokenContext.AllowSkipIndent);
 		CastNode = TokenContext.AppendMatchedPattern(CastNode, NameSpace, "$Type$", ZTokenContext.Required);
@@ -459,7 +459,7 @@ public class ZenGrammar {
 		return CastNode;
 	}
 
-	public static ZenNode MatchGetter(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public static ZenNode MatchGetter(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		TokenContext.MatchToken(".");
 		@Var ZToken Token = TokenContext.GetTokenAndMoveForward();
 		if(!Token.IsNameSymbol()) {
@@ -488,7 +488,7 @@ public class ZenGrammar {
 		}
 	}
 
-	public static ZenNode MatchApply(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public static ZenNode MatchApply(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		@Var ZenNode ApplyNode = new ZenFuncCallNode(LeftNode);
 		ApplyNode = TokenContext.MatchNodeToken(ApplyNode, NameSpace, "(", ZTokenContext.Required | ZTokenContext.AllowSkipIndent);
 		if(!TokenContext.MatchToken(")")) {
@@ -503,7 +503,7 @@ public class ZenGrammar {
 		return ApplyNode;
 	}
 
-	public static ZenNode MatchIndexer(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public static ZenNode MatchIndexer(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		@Var ZenNode IndexerNode = new ZenGetIndexNode(LeftNode);
 		IndexerNode = TokenContext.MatchNodeToken(IndexerNode, NameSpace, "[", ZTokenContext.Required);
 		IndexerNode = TokenContext.AppendMatchedPattern(IndexerNode, NameSpace, "$Expression$", ZTokenContext.Required);
@@ -515,30 +515,30 @@ public class ZenGrammar {
 		return IndexerNode;
 	}
 
-	public static ZenNode MatchUnary(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public static ZenNode MatchUnary(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		@Var ZenNode UnaryNode = new ZenUnaryNode(TokenContext.GetTokenAndMoveForward());
 		return TokenContext.AppendMatchedPattern(UnaryNode, NameSpace, "$SuffixExpression$", ZTokenContext.Required);
 	}
 
-	public static ZenNode MatchNot(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public static ZenNode MatchNot(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		@Var ZenNode UnaryNode = new ZenNotNode(TokenContext.GetTokenAndMoveForward());
 		UnaryNode = TokenContext.AppendMatchedPattern(UnaryNode, NameSpace, "$SuffixExpression$", ZTokenContext.Required);
 		return UnaryNode;
 	}
 
-	public static ZenNode MatchBinary(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public static ZenNode MatchBinary(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		@Var ZToken Token = TokenContext.GetTokenAndMoveForward();
 		@Var ZenBinaryNode BinaryNode = new ZenBinaryNode(Token, LeftNode, NameSpace.GetExtendedSyntaxPattern(Token.ParsedText));
 		return BinaryNode.AppendParsedRightNode(NameSpace, TokenContext);
 	}
 
-	public static ZenNode MatchComparator(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public static ZenNode MatchComparator(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		@Var ZToken Token = TokenContext.GetTokenAndMoveForward();
 		@Var ZenBinaryNode BinaryNode = new ZenComparatorNode(Token, LeftNode, NameSpace.GetExtendedSyntaxPattern(Token.ParsedText));
 		return BinaryNode.AppendParsedRightNode(NameSpace, TokenContext);
 	}
 
-	public static ZenNode MatchSuffixExpression(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public static ZenNode MatchSuffixExpression(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		ZSyntaxPattern Pattern = TokenContext.GetFirstPattern(NameSpace);
 		LeftNode = TokenContext.ApplyMatchPattern(NameSpace, LeftNode, Pattern);
 		while(LeftNode != null) {
@@ -551,23 +551,23 @@ public class ZenGrammar {
 		return LeftNode;
 	}
 
-	public static ZenNode MatchAnd(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public static ZenNode MatchAnd(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		@Var ZenBinaryNode BinaryNode = new ZenAndNode(TokenContext.GetTokenAndMoveForward(), LeftNode, NameSpace.GetExtendedSyntaxPattern("&&"));
 		return BinaryNode.AppendParsedRightNode(NameSpace, TokenContext);
 	}
 
-	public static ZenNode MatchOr(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public static ZenNode MatchOr(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		@Var ZenBinaryNode BinaryNode = new ZenOrNode(TokenContext.GetTokenAndMoveForward(), LeftNode, NameSpace.GetExtendedSyntaxPattern("||"));
 		return BinaryNode.AppendParsedRightNode(NameSpace, TokenContext);
 	}
 
-	public static ZenNode MatchInstanceOf(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public static ZenNode MatchInstanceOf(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		@Var ZenNode BinaryNode = new ZenInstanceOfNode(TokenContext.GetTokenAndMoveForward(), LeftNode, NameSpace.GetSyntaxPattern("instanceof"));
 		BinaryNode = TokenContext.AppendMatchedPattern(BinaryNode, NameSpace, "$Type$", ZTokenContext.Required);
 		return BinaryNode;
 	}
 
-	public static ZenNode MatchExpression(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public static ZenNode MatchExpression(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		ZSyntaxPattern Pattern = TokenContext.GetFirstPattern(NameSpace);
 		LeftNode = TokenContext.ApplyMatchPattern(NameSpace, LeftNode, Pattern);
 		while(LeftNode != null) {
@@ -580,7 +580,7 @@ public class ZenGrammar {
 		return LeftNode;
 	}
 
-	public static ZenNode MatchIf(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public static ZenNode MatchIf(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		@Var ZenNode IfNode = new ZenIfNode();
 		IfNode = TokenContext.MatchNodeToken(IfNode, NameSpace, "if", ZTokenContext.Required);
 		IfNode = TokenContext.MatchNodeToken(IfNode, NameSpace, "(", ZTokenContext.Required | ZTokenContext.AllowSkipIndent);
@@ -597,14 +597,14 @@ public class ZenGrammar {
 		return IfNode;
 	}
 
-	public static ZenNode MatchReturn(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public static ZenNode MatchReturn(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		@Var ZenNode ReturnNode = new ZenReturnNode();
 		ReturnNode = TokenContext.MatchNodeToken(ReturnNode, NameSpace, "return", ZTokenContext.Required);
 		ReturnNode = TokenContext.AppendMatchedPattern(ReturnNode, NameSpace, "$Expression$", ZTokenContext.Optional);
 		return ReturnNode;
 	}
 
-	public static ZenNode MatchWhile(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public static ZenNode MatchWhile(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		@Var ZenNode WhileNode = new ZenWhileNode();
 		WhileNode = TokenContext.MatchNodeToken(WhileNode, NameSpace, "while", ZTokenContext.Required);
 		WhileNode = TokenContext.MatchNodeToken(WhileNode, NameSpace, "(", ZTokenContext.Required | ZTokenContext.AllowSkipIndent);
@@ -614,13 +614,13 @@ public class ZenGrammar {
 		return WhileNode;
 	}
 
-	public static ZenNode MatchBreak(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public static ZenNode MatchBreak(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		@Var ZenNode BreakNode = new ZenBreakNode();
 		BreakNode = TokenContext.MatchNodeToken(BreakNode, NameSpace, "break", ZTokenContext.Required);
 		return BreakNode;
 	}
 
-	public static ZenNode MatchCatch(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public static ZenNode MatchCatch(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		@Var ZenNode CatchNode = new ZenCatchNode();
 		CatchNode = TokenContext.MatchNodeToken(CatchNode, NameSpace, "catch", ZTokenContext.Required);
 		CatchNode = TokenContext.MatchNodeToken(CatchNode, NameSpace, "(", ZTokenContext.Required | ZTokenContext.AllowSkipIndent);
@@ -631,7 +631,7 @@ public class ZenGrammar {
 		return CatchNode;
 	}
 
-	public static ZenNode MatchTry(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public static ZenNode MatchTry(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		@Var ZenNode TryNode = new ZenTryNode();
 		TryNode = TokenContext.MatchNodeToken(TryNode, NameSpace, "try", ZTokenContext.Required);
 		TryNode = TokenContext.AppendMatchedPattern(TryNode, NameSpace, "$Block$", ZTokenContext.Required);
@@ -651,14 +651,14 @@ public class ZenGrammar {
 
 	}
 
-	public static ZenNode MatchThrow(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public static ZenNode MatchThrow(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		@Var ZenNode ThrowNode = new ZenThrowNode();
 		ThrowNode = TokenContext.MatchNodeToken(ThrowNode, NameSpace, "throw", ZTokenContext.Required);
 		ThrowNode = TokenContext.AppendMatchedPattern(ThrowNode, NameSpace, "$Expression$", ZTokenContext.Required);
 		return ThrowNode;
 	}
 
-	public static ZenNode MatchLetDecl(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public static ZenNode MatchLetDecl(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		@Var ZToken SourceToken = TokenContext.GetTokenAndMoveForward(); /* let */
 		@Var ZToken SymbolToken = TokenContext.GetTokenAndMoveForward(); /* name */
 		@Var String SymbolName = SymbolToken.ParsedText;
@@ -669,7 +669,7 @@ public class ZenGrammar {
 				return new ZenErrorNode(SymbolToken, ClassName + " is not type");
 			}
 			SymbolToken = TokenContext.GetTokenAndMoveForward(); /* class name */
-			SymbolName = ZenNameSpace.StringfyClassStaticSymbol(SymbolClass, SymbolName);
+			SymbolName = ZNameSpace.StringfyClassStaticSymbol(SymbolClass, SymbolName);
 			SourceToken.AddTypeInfoToErrorMessage(SymbolClass);
 		}
 		@Var ZenType SymbolType = TokenContext.ParseType(NameSpace, "$TypeAnnotation$", ZenSystem.VarType);
@@ -694,7 +694,7 @@ public class ZenGrammar {
 		return ConstNode;
 	}
 
-	public static ZenNode MatchIdentifier(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public static ZenNode MatchIdentifier(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		@Var ZToken Token = TokenContext.GetTokenAndMoveForward();
 		if(LibZen.IsVariableName(Token.ParsedText, 0)) {
 			return new ZenGetLocalNode(Token, Token.ParsedText);
@@ -702,7 +702,7 @@ public class ZenGrammar {
 		return new ZenErrorNode(Token, "illegal name:" + Token.ParsedText);
 	}
 
-	public static ZenNode MatchTypeAnnotation(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public static ZenNode MatchTypeAnnotation(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		if(TokenContext.MatchToken(":")) {
 			return TokenContext.ParsePattern(NameSpace, "$Type$", ZTokenContext.Required);
 		}
@@ -710,7 +710,7 @@ public class ZenGrammar {
 	}
 
 	// "var" $Identifier [: $Type$] "=" $Expression$
-	public static ZenNode MatchVarDecl(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public static ZenNode MatchVarDecl(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		@Var ZenNode VarNode = new ZenVarDeclNode(NameSpace.CreateSubNameSpace());
 		VarNode = TokenContext.MatchNodeToken(VarNode, NameSpace, "var", ZTokenContext.Required);
 		VarNode = TokenContext.AppendMatchedPattern(VarNode, NameSpace, "$Identifier$", ZTokenContext.Required);
@@ -721,7 +721,7 @@ public class ZenGrammar {
 	}
 
 	// FuncDecl
-	public static ZenNode MatchParam(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public static ZenNode MatchParam(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		@Var ZToken NameToken = TokenContext.GetTokenAndMoveForward();
 		if(!NameToken.IsNameSymbol()) {
 			return TokenContext.CreateExpectedErrorNode(NameToken, "parameter name");
@@ -731,7 +731,7 @@ public class ZenGrammar {
 		return VarNode;
 	}
 
-	public static ZenNode MatchFunction(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public static ZenNode MatchFunction(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		@Var ZToken FuncToken = TokenContext.GetTokenAndMoveForward(); /* function*/
 		@Var ZenNode FuncNode;
 		@Var int BlockOption = ZTokenContext.Required;
@@ -759,7 +759,7 @@ public class ZenGrammar {
 		return FuncNode;
 	}
 
-	public static ZenNode MatchAnnotation(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public static ZenNode MatchAnnotation(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		@Var ZenMap<Object> Anno = null;
 		@Var ZToken Token = null;
 		while(TokenContext.MatchToken("@")) {
@@ -776,7 +776,7 @@ public class ZenGrammar {
 		return null;
 	}
 
-	public static ZenNode MatchStatement(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public static ZenNode MatchStatement(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		@Var ZenAnnotationNode AnnotationNode = (ZenAnnotationNode)TokenContext.ParsePattern(NameSpace, "$Annotation$", ZTokenContext.Optional);
 		@Var ZenNode ParsedNode = TokenContext.ParsePattern(NameSpace, "$Expression$", ZTokenContext.Required);
 		if(!ParsedNode.IsErrorNode() && TokenContext.HasNext()) {
@@ -799,11 +799,11 @@ public class ZenGrammar {
 		return ParsedNode;
 	}
 
-	public static ZenNode MatchBlock(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public static ZenNode MatchBlock(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		if(TokenContext.IsNewLineToken("{")) {
 			TokenContext.SetParseFlag(0);
 			@Var ZToken IndentToken = TokenContext.GetCurrentIndentToken();
-			@Var ZenNameSpace BlockNameSpace = NameSpace.CreateSubNameSpace();
+			@Var ZNameSpace BlockNameSpace = NameSpace.CreateSubNameSpace();
 			@Var ZenBlockNode BlockNode = new ZenBlockNode(TokenContext.GetTokenAndMoveForward(), BlockNameSpace);
 			@Var ZenNode ResultNode = BlockNode;
 			while(TokenContext.HasNext()) {
@@ -829,14 +829,14 @@ public class ZenGrammar {
 		return TokenContext.CreateExpectedErrorNode(TokenContext.GetToken(), "block");
 	}
 
-	public static ZenNode MatchError(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public static ZenNode MatchError(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		// FIXME this method is not suitable with "zen" mind.
 		ZToken Token = TokenContext.GetTokenAndMoveForward();
 		return new ZenErrorNode(Token, Token.ParsedText);
 	}
 
 	// "var" $Identifier [: $Type$] "=" $Expression$
-	public static ZenNode MatchFieldDecl(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode ClassNode) {
+	public static ZenNode MatchFieldDecl(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode ClassNode) {
 		@Var ZenNode FieldNode = new ZenFieldNode(null);
 		FieldNode = TokenContext.MatchNodeToken(FieldNode, NameSpace, "field", ZTokenContext.Required);
 		FieldNode = TokenContext.AppendMatchedPattern(FieldNode, NameSpace, "$Identifier$", ZTokenContext.Required);
@@ -847,7 +847,7 @@ public class ZenGrammar {
 		return FieldNode;
 	}
 
-	public static ZenNode MatchClassDecl(ZenNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public static ZenNode MatchClassDecl(ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		@Var ZenNode ClassNode = new ZenClassDeclNode(NameSpace);
 		ClassNode = TokenContext.MatchNodeToken(ClassNode, NameSpace, "class", ZTokenContext.Required);
 		ClassNode = TokenContext.AppendMatchedPattern(ClassNode, NameSpace, "$Identifier$", ZTokenContext.Required);
@@ -867,7 +867,7 @@ public class ZenGrammar {
 		return ClassNode;
 	}
 
-	public static void ImportGrammar(ZenNameSpace NameSpace, Class<?> Grammar) {
+	public static void ImportGrammar(ZNameSpace NameSpace, Class<?> Grammar) {
 		NameSpace.AppendTokenFunc(" \t", LibNative.LoadTokenFunc(Grammar, "WhiteSpaceToken"));
 		NameSpace.AppendTokenFunc("\n",  LibNative.LoadTokenFunc(Grammar, "IndentToken"));
 		NameSpace.AppendTokenFunc(";", LibNative.LoadTokenFunc(Grammar, "SemiColonToken"));

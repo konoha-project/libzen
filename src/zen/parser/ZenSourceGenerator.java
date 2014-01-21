@@ -81,7 +81,7 @@ import zen.lang.ZenType;
 
 //endif VAJA
 
-public class ZenSourceGenerator extends ZenGenerator {
+public class ZenSourceGenerator extends ZGenerator {
 	@Field public ZenMap<String> NativeTypeMap;
 	@Field private final ArrayList<ZSourceBuilder> BuilderList;
 	@Field protected ZSourceBuilder HeaderBuilder;

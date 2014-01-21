@@ -25,8 +25,8 @@ import org.objectweb.asm.Type;
 import zen.ast.ZenNode;
 import zen.lang.ZenSystem;
 import zen.lang.ZenType;
-import zen.parser.ZenGenerator;
-import zen.parser.ZenNameSpace;
+import zen.parser.ZGenerator;
+import zen.parser.ZNameSpace;
 
 
 final class JLocalVarStack {
@@ -44,14 +44,14 @@ final class JLocalVarStack {
 class JMethodBuilder {
 	final ZenClassLoader           LocalClassLoader;
 	final MethodVisitor                 AsmVisitor;
-	final ZenGenerator                   Generator;
+	final ZGenerator                   Generator;
 	ArrayList<JLocalVarStack>     LocalVals;
 	int                           LocalSize;
 	Stack<Label>                  BreakLabelStack;
 	Stack<Label>                  ContinueLabelStack;
 	int PreviousLine;
 
-	public JMethodBuilder(ZenGenerator Generator, ZenClassLoader ClassLoader, MethodVisitor AsmVisitor) {
+	public JMethodBuilder(ZGenerator Generator, ZenClassLoader ClassLoader, MethodVisitor AsmVisitor) {
 		this.Generator = Generator;
 		this.LocalClassLoader = ClassLoader;
 		this.AsmVisitor = AsmVisitor;
@@ -110,7 +110,7 @@ class JMethodBuilder {
 			this.AsmVisitor.visitLdcInsn(Value);
 			return;
 		}
-		if(Value instanceof ZenNameSpace) {
+		if(Value instanceof ZNameSpace) {
 			this.AsmVisitor.visitFieldInsn(GETSTATIC, this.LocalClassLoader.GlobalStaticClassName, this.LocalClassLoader.ContextFieldName, this.LocalClassLoader.GontextDescripter);
 			return;
 		}
@@ -131,7 +131,7 @@ class JMethodBuilder {
 		this.InvokeMethodCall(Value.getClass(), JLib.GetConstPool);
 	}
 
-	void LoadNewArray(ZenGenerator Visitor, int StartIdx, ArrayList<ZenNode> NodeList) {
+	void LoadNewArray(ZGenerator Visitor, int StartIdx, ArrayList<ZenNode> NodeList) {
 		this.AsmVisitor.visitLdcInsn(NodeList.size() - StartIdx);
 		this.AsmVisitor.visitTypeInsn(ANEWARRAY, Type.getInternalName(Object.class));
 		//System.err.println("** arraysize = " + (NodeList.size() - StartIdx));
