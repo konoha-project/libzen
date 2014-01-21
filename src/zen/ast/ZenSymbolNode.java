@@ -26,7 +26,7 @@ package zen.ast;
 
 import zen.deps.Constructor;
 import zen.deps.Field;
-import zen.lang.ZenType;
+import zen.lang.ZType;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 
@@ -34,7 +34,7 @@ public class ZenSymbolNode extends ZenNode {
 	@Field public String  GivenName;
 	@Field public String  ReferenceName;
 
-	@Constructor public ZenSymbolNode(ZenType Type, ZToken SourceToken, String GivenName, String ResourceName) {
+	@Constructor public ZenSymbolNode(ZType Type, ZToken SourceToken, String GivenName, String ResourceName) {
 		super();
 		this.Type = Type;
 		this.SourceToken = SourceToken;

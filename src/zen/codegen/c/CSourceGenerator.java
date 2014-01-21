@@ -31,7 +31,7 @@ import zen.ast.ZenFunctionNode;
 import zen.ast.ZenInstanceOfNode;
 import zen.ast.ZenParamNode;
 import zen.ast.ZenVarDeclNode;
-import zen.lang.ZenSystem;
+import zen.lang.ZSystem;
 import zen.parser.ZenSourceGenerator;
 //endif VAJA
 
@@ -51,10 +51,10 @@ public class CSourceGenerator extends ZenSourceGenerator {
 		this.NullLiteral  = "NULL";
 
 		this.TopType = "void*";
-		this.SetNativeType(ZenSystem.BooleanType, "int");
-		this.SetNativeType(ZenSystem.IntType, "long long int");
-		this.SetNativeType(ZenSystem.FloatType, "double");
-		this.SetNativeType(ZenSystem.StringType, "char*");
+		this.SetNativeType(ZSystem.BooleanType, "int");
+		this.SetNativeType(ZSystem.IntType, "long long int");
+		this.SetNativeType(ZSystem.FloatType, "double");
+		this.SetNativeType(ZSystem.StringType, "char*");
 	}
 
 	@Override public void VisitCastNode(ZenCastNode Node) {

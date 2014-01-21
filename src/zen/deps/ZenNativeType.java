@@ -1,9 +1,9 @@
 package zen.deps;
 
-import zen.lang.ZenType;
+import zen.lang.ZType;
 import zen.lang.ZTypeFlag;
 
-public class ZenNativeType extends ZenType {
+public class ZenNativeType extends ZType {
 	@Field public Class<?>          JClass;
 
 	ZenNativeType(Class<?> JType) {
@@ -11,7 +11,7 @@ public class ZenNativeType extends ZenType {
 		this.JClass = JType;
 	}
 
-	@Override public ZenType GetSuperType() {
+	@Override public ZType GetSuperType() {
 		return LibNative.GetNativeType(this.JClass.getSuperclass());
 	}
 

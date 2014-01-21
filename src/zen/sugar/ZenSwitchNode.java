@@ -28,14 +28,14 @@ import java.util.ArrayList;
 
 import zen.ast.ZenNode;
 import zen.deps.Field;
-import zen.lang.ZenType;
+import zen.lang.ZType;
 import zen.parser.ZToken;
 
 final public class ZenSwitchNode extends ZenNode {
 	@Field public ZenNode	MatchNode;
 	@Field public ZenNode	DefaultBlock;
 	@Field public ArrayList<ZenNode> CaseList; // [expr, block, expr, block, ....]
-	public ZenSwitchNode/*constructor*/(ZenType Type, ZToken Token, ZenNode MatchNode, ZenNode DefaultBlock) {
+	public ZenSwitchNode/*constructor*/(ZType Type, ZToken Token, ZenNode MatchNode, ZenNode DefaultBlock) {
 		super();
 		this.MatchNode = MatchNode;
 		this.DefaultBlock = DefaultBlock;

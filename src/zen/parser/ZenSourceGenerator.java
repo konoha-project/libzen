@@ -77,7 +77,7 @@ import zen.deps.Field;
 import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.deps.ZenMap;
-import zen.lang.ZenType;
+import zen.lang.ZType;
 
 //endif VAJA
 
@@ -133,12 +133,12 @@ public class ZenSourceGenerator extends ZGenerator {
 		return Builder;
 	}
 
-	protected void SetNativeType(ZenType Type, String TypeName) {
+	protected void SetNativeType(ZType Type, String TypeName) {
 		String Key = "" + Type.TypeId;
 		this.NativeTypeMap.put(Key, TypeName);
 	}
 
-	protected String GetNativeType(ZenType Type) {
+	protected String GetNativeType(ZType Type) {
 		if (Type == null) {
 			return this.TopType;
 		}
@@ -472,7 +472,7 @@ public class ZenSourceGenerator extends ZGenerator {
 		this.CurrentBuilder.Append("}");
 	}
 
-	protected void VisitTypeAnnotation(ZenType Type) {
+	protected void VisitTypeAnnotation(ZType Type) {
 		this.CurrentBuilder.Append(": ");
 		this.VisitType(Type);
 	}
@@ -540,7 +540,7 @@ public class ZenSourceGenerator extends ZGenerator {
 	}
 
 	// Utils
-	protected void VisitType(ZenType Type) {
+	protected void VisitType(ZType Type) {
 		this.CurrentBuilder.Append(this.GetNativeType(Type.GetRealType()));
 	}
 

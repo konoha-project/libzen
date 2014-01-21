@@ -45,7 +45,7 @@ import zen.ast.ZenVarDeclNode;
 import zen.ast.ZenWhileNode;
 import zen.deps.Constructor;
 import zen.deps.LibZen;
-import zen.lang.ZenSystem;
+import zen.lang.ZSystem;
 import zen.parser.ZSourceBuilder;
 import zen.parser.ZenSourceGenerator;
 
@@ -72,10 +72,10 @@ public class HaskellSourceGenerator extends ZenSourceGenerator {
 		this.NotOperator = "not ";
 
 		this.TopType = "object";
-		this.SetNativeType(ZenSystem.BooleanType, "Bool");
-		this.SetNativeType(ZenSystem.IntType, "Int");
-		this.SetNativeType(ZenSystem.FloatType, "Float");
-		this.SetNativeType(ZenSystem.StringType, "String");
+		this.SetNativeType(ZSystem.BooleanType, "Bool");
+		this.SetNativeType(ZSystem.IntType, "Int");
+		this.SetNativeType(ZSystem.FloatType, "Float");
+		this.SetNativeType(ZSystem.StringType, "String");
 	}
 
 	private void Indent(ZSourceBuilder builder) {

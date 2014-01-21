@@ -38,9 +38,9 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 
 import zen.ast.ZenNode;
-import zen.lang.ZenFunc;
-import zen.lang.ZenSystem;
-import zen.lang.ZenType;
+import zen.lang.ZFunc;
+import zen.lang.ZSystem;
+import zen.lang.ZType;
 import zen.parser.ZGenerator;
 import zen.parser.ZLogger;
 import zen.parser.ZNameSpace;
@@ -63,31 +63,31 @@ public class LibNative {
 		return Value.getClass();
 	}
 
-	public final static ZenType GetNativeType(Class<?> NativeClass) {
-		ZenType NativeType = ZenSystem.LookupTypeTable(NativeClass.getCanonicalName());
+	public final static ZType GetNativeType(Class<?> NativeClass) {
+		ZType NativeType = ZSystem.LookupTypeTable(NativeClass.getCanonicalName());
 		if (NativeType == null) { /* create native type */
 			// DebugP("** creating native class: " + NativeClass.getSimpleName()
 			// + ", " + NativeClass.getCanonicalName());
 			NativeType = new ZenNativeType(NativeClass);
-			ZenSystem.SetTypeTable(NativeClass.getCanonicalName(), NativeType);
+			ZSystem.SetTypeTable(NativeClass.getCanonicalName(), NativeType);
 			ZLogger.VerboseLog(ZLogger.VerboseNative, "creating native class: " + NativeClass.getSimpleName() + ", " + NativeClass.getCanonicalName());
 		}
 		return NativeType;
 	}
 
 	public static <T> ZenArray<T> NewZenArray(Class<?> NativeClass) {
-		ZenType ElementType = LibNative.GetNativeType(NativeClass);
+		ZType ElementType = LibNative.GetNativeType(NativeClass);
 		return ZenArray.NewZenArray(ElementType);
 	}
 
-	private static boolean AcceptJavaType(ZenType GreenType, Class<?> NativeType) {
+	private static boolean AcceptJavaType(ZType GreenType, Class<?> NativeType) {
 		if (GreenType.IsVarType() /* || GreenType.IsTypeVariable() */) {
 			return true;
 		}
 		if (GreenType.IsTopType()) {
 			return (NativeType == Object.class);
 		}
-		@Var ZenType JavaType = LibNative.GetNativeType(NativeType);
+		@Var ZType JavaType = LibNative.GetNativeType(NativeType);
 		if (GreenType != JavaType) {
 			//			LibNative.DebugP("*** " + JavaType + ", " + GreenType
 			//					+ ", equals? "
@@ -103,7 +103,7 @@ public class LibNative {
 		return true;
 	}
 
-	private final static boolean MatchNativeMethod(ZenType[] TypeParams, Method JavaMethod) {
+	private final static boolean MatchNativeMethod(ZType[] TypeParams, Method JavaMethod) {
 		if (!LibNative.AcceptJavaType(TypeParams[0], JavaMethod.getReturnType())) {
 			ZLogger.VerboseLog(ZLogger.DebugLevel, "return mismatched: " + TypeParams[0] + ", " + JavaMethod.getReturnType() + " of " + JavaMethod);
 			return false;
@@ -154,7 +154,7 @@ public class LibNative {
 		return Class.forName(ClassName);
 	}
 
-	public final static Method ImportMethod(ZenType[] TypeParams, String FullName, boolean StaticMethodOnly) {
+	public final static Method ImportMethod(ZType[] TypeParams, String FullName, boolean StaticMethodOnly) {
 		@Var Method FoundMethod = null;
 		int Index = FullName.lastIndexOf(".");
 		if(Index == -1) {
@@ -385,7 +385,7 @@ public class LibNative {
 	// }
 	// }
 
-	public final static long ApplyTokenFunc(ZenFunc TokenFunc, Object TokenContext, String Text, long pos) {
+	public final static long ApplyTokenFunc(ZFunc TokenFunc, Object TokenContext, String Text, long pos) {
 		Object[] Argvs = new Object[3];
 		Argvs[0] = TokenContext;
 		Argvs[1] = Text;
@@ -393,7 +393,7 @@ public class LibNative {
 		return (Long) TokenFunc.Invoke(Argvs);
 	}
 
-	public final static ZenNode ApplyMatchFunc(ZenFunc MatchFunc, ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
+	public final static ZenNode ApplyMatchFunc(ZFunc MatchFunc, ZNameSpace NameSpace, ZTokenContext TokenContext, ZenNode LeftNode) {
 		Object[] Argvs = new Object[3];
 		Argvs[0] = NameSpace;
 		Argvs[1] = TokenContext;
@@ -401,8 +401,8 @@ public class LibNative {
 		return (ZenNode) MatchFunc.Invoke(Argvs);
 	}
 
-	public final static ZenFunc ConvertNativeMethodToFunc(Method JMethod) {
-		@Var ArrayList<ZenType> TypeList = new ArrayList<ZenType>();
+	public final static ZFunc ConvertNativeMethodToFunc(Method JMethod) {
+		@Var ArrayList<ZType> TypeList = new ArrayList<ZType>();
 		TypeList.add(LibNative.GetNativeType(JMethod.getReturnType()));
 		if (!Modifier.isStatic(JMethod.getModifiers())) {
 			TypeList.add(LibNative.GetNativeType(JMethod.getDeclaringClass()));
@@ -415,10 +415,10 @@ public class LibNative {
 				j = j + 1;
 			}
 		}
-		return new ZenNativeFunc(0, JMethod.getName(), ZenSystem.LookupFuncType(TypeList), null, JMethod);
+		return new ZenNativeFunc(0, JMethod.getName(), ZSystem.LookupFuncType(TypeList), null, JMethod);
 	}
 
-	public final static ZenFunc LoadTokenFunc(Class<?> GrammarClass,
+	public final static ZFunc LoadTokenFunc(Class<?> GrammarClass,
 			String FuncName) {
 		try {
 			Method JavaMethod = GrammarClass.getMethod(FuncName,
@@ -431,7 +431,7 @@ public class LibNative {
 		return null;
 	}
 
-	public final static ZenFunc LoadMatchFunc(Class<?> GrammarClass,
+	public final static ZFunc LoadMatchFunc(Class<?> GrammarClass,
 			String FuncName) {
 		try {
 			Method JavaMethod = GrammarClass.getMethod(FuncName,

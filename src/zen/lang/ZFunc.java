@@ -25,15 +25,16 @@
 //ifdef JAVA
 package zen.lang;
 import zen.deps.Field;
+import zen.deps.Init;
 import zen.deps.LibZen;
 import zen.parser.ZUtils;
 
-public abstract class ZenFunc {
-	@Field public int			  FuncFlag;
-	@Field public String		  FuncName;  // NativeReferenceNamr
-	@Field public ZenFuncType     FuncType;
+public abstract class ZFunc {
+	@Field @Init public int			  FuncFlag;
+	@Field @Init public String		  FuncName;  // NativeReferenceNamr
+	@Field @Init public ZenFuncType     FuncType;
 
-	public ZenFunc(int FuncFlag, String FuncName, ZenFuncType FuncType) {
+	public ZFunc(int FuncFlag, String FuncName, ZenFuncType FuncType) {
 		this.FuncFlag = FuncFlag;
 		this.FuncName = FuncName;
 		this.FuncType = FuncType;
@@ -54,35 +55,15 @@ public abstract class ZenFunc {
 	}
 
 	public final boolean IsConverterFunc() {
-		return ZUtils.IsFlag(this.FuncFlag, ZenFuncFlag.ConverterFunc);
+		return ZUtils.IsFlag(this.FuncFlag, ZFuncFlag.ConverterFunc);
 	}
 	public final boolean IsCoercionFunc() {
-		return ZUtils.IsFlag(this.FuncFlag, ZenFuncFlag.CoercionFunc);
+		return ZUtils.IsFlag(this.FuncFlag, ZFuncFlag.CoercionFunc);
 	}
 
 	protected boolean Is(int Flag) {
 		return ZUtils.IsFlag(this.FuncFlag, Flag);
 	}
-
-	//	public final ZenType GetReturnType() {
-	//		return this.FuncType.TypeParams[0];
-	//	}
-	//
-	//	public final ZenType GetRecvType() {
-	//		return this.FuncType.GetRecvType();
-	//	}
-	//
-	//	public final int GetFuncParamSize() {
-	//		return this.FuncType.GetFuncParamSize();
-	//	}
-	//
-	//	public final ZenType GetFuncParamType(int ParamIdx) {
-	//		return this.FuncType.TypeParams[ParamIdx+1];
-	//	}
-	//
-	//	public final int GetMethodParamSize() {
-	//		return this.FuncType.TypeParams.length - 2;
-	//	}
 
 	public Object Invoke(Object[] Params) {
 		LibZen.DebugP("not native method");
@@ -90,7 +71,7 @@ public abstract class ZenFunc {
 	}
 
 
-	public static String StringfySignature(String FuncName, int FuncParamSize, ZenType RecvType) {
+	public static String StringfySignature(String FuncName, int FuncParamSize, ZType RecvType) {
 		return FuncName + "__" + FuncParamSize + RecvType.GetUniqueName();
 	}
 

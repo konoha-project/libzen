@@ -29,14 +29,14 @@ import java.util.ArrayList;
 import zen.deps.Constructor;
 import zen.deps.Field;
 import zen.lang.ZenClassType;
-import zen.lang.ZenType;
+import zen.lang.ZType;
 import zen.parser.ZNameSpace;
 import zen.parser.ZVisitor;
 
 final public class ZenClassDeclNode extends ZenNode {
 	@Field public String ClassName;
-	@Field public ZenType ClassType;
-	@Field public ZenType SuperType;
+	@Field public ZType ClassType;
+	@Field public ZType SuperType;
 	@Field public ZNameSpace NameSpace;
 	@Field public ArrayList<ZenFieldNode>  FieldList;
 	@Constructor public ZenClassDeclNode(ZNameSpace NameSpace) {

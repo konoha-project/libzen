@@ -27,21 +27,21 @@ package zen.lang;
 import zen.deps.Field;
 
 
-public class ZenGeneric1Type extends ZenType {
-	@Field public ZenType			BaseType;
-	@Field public ZenType         ParamType;
-	public ZenGeneric1Type(int TypeFlag, String ShortName, ZenType BaseType, ZenType ParamType) {
-		super(TypeFlag, ShortName, ZenSystem.TopType);
+public class ZenGeneric1Type extends ZType {
+	@Field public ZType			BaseType;
+	@Field public ZType         ParamType;
+	public ZenGeneric1Type(int TypeFlag, String ShortName, ZType BaseType, ZType ParamType) {
+		super(TypeFlag, ShortName, ZSystem.TopType);
 		this.BaseType = BaseType == null ? this : BaseType;
 		this.ParamType = ParamType;
 	}
 
 	@Override
-	public ZenType GetSuperType() {
+	public ZType GetSuperType() {
 		return this.BaseType == this ? this.RefType : this.BaseType;
 	}
 
-	@Override public ZenType GetBaseType() {
+	@Override public ZType GetBaseType() {
 		return this.BaseType;
 	}
 
@@ -49,7 +49,7 @@ public class ZenGeneric1Type extends ZenType {
 		return 1;
 	}
 
-	@Override public ZenType GetParamType(int Index) {
+	@Override public ZType GetParamType(int Index) {
 		if(Index == 0) {
 			return this.ParamType;
 		}

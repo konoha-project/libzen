@@ -33,9 +33,9 @@ import zen.deps.Var;
 import zen.parser.ZNameSpace;
 import zen.parser.ZToken;
 
-public class ZenClassType extends ZenType {
+public class ZenClassType extends ZType {
 	@Field ArrayList<ZenField> FieldList = null;
-	public ZenClassType(String ShortName, ZenType RefType) {
+	public ZenClassType(String ShortName, ZType RefType) {
 		super(ZTypeFlag.OpenType|ZTypeFlag.UniqueType, ShortName, RefType);
 		if(RefType instanceof ZenClassType) {
 			this.ResetSuperType((ZenClassType)RefType);
@@ -68,7 +68,7 @@ public class ZenClassType extends ZenType {
 		return false;
 	}
 
-	public ZenType GetFieldType(String FieldName, ZenType Type) {
+	public ZType GetFieldType(String FieldName, ZType Type) {
 		if(this.FieldList != null) {
 			@Var int i = 0;
 			while(i < this.FieldList.size()) {
@@ -82,7 +82,7 @@ public class ZenClassType extends ZenType {
 		return Type;
 	}
 
-	public ZenField AppendField(ZenType FieldType, String FieldName, ZToken SourceToken) {
+	public ZenField AppendField(ZType FieldType, String FieldName, ZToken SourceToken) {
 		if(this.FieldList == null) {
 			this.FieldList = new ArrayList<ZenField>();
 		}

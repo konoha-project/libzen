@@ -26,18 +26,18 @@ package zen.ast;
 
 import zen.deps.Constructor;
 import zen.deps.Field;
-import zen.lang.ZenSystem;
-import zen.lang.ZenType;
+import zen.lang.ZSystem;
+import zen.lang.ZType;
 
 final public class ZenFieldNode extends ZenNode {
-	@Field public ZenType  ClassType;
-	@Field public ZenType  DeclType;
+	@Field public ZType  ClassType;
+	@Field public ZType  DeclType;
 	@Field public String   FieldName;
 	@Field public ZenNode  InitNode;
-	@Constructor public ZenFieldNode(ZenType ClassType) {
+	@Constructor public ZenFieldNode(ZType ClassType) {
 		super(); // TODO
 		this.ClassType = ClassType;
-		this.DeclType = ZenSystem.VarType;
+		this.DeclType = ZSystem.VarType;
 		this.FieldName = null;
 		this.InitNode  = null;
 	}

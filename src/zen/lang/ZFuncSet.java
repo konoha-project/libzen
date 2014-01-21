@@ -31,11 +31,10 @@ import zen.deps.Var;
 import zen.parser.ZLogger;
 import zen.parser.ZToken;
 
-public class ZenFuncSet {
-	@Field public ArrayList<ZenFunc> FuncList;
+public final class ZFuncSet {
+	@Field public ArrayList<ZFunc> FuncList = new ArrayList<ZFunc>();
 
-	public ZenFuncSet(ZenFunc Func) {
-		this.FuncList = new ArrayList<ZenFunc>();
+	public ZFuncSet(ZFunc Func) {
 		if(Func != null) {
 			this.FuncList.add(Func);
 		}
@@ -58,11 +57,11 @@ public class ZenFuncSet {
 		return s;
 	}
 
-	public void Append(ZenFunc Func, ZLogger Logger, ZToken SourceToken) {
+	public void Append(ZFunc Func, ZLogger Logger, ZToken SourceToken) {
 		if(SourceToken != null) {
 			@Var int i = 0;
 			while(i < this.FuncList.size()) {
-				@Var ZenFunc ListedFunc = this.FuncList.get(i);
+				@Var ZFunc ListedFunc = this.FuncList.get(i);
 				if(ListedFunc == Func) {
 					/*return this;*/ /* same function */
 				}

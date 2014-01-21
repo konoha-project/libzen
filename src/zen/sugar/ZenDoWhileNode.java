@@ -26,13 +26,13 @@ package zen.sugar;
 
 import zen.ast.ZenNode;
 import zen.deps.Field;
-import zen.lang.ZenType;
+import zen.lang.ZType;
 import zen.parser.ZToken;
 
 final public class ZenDoWhileNode extends ZenNode {
 	@Field public ZenNode	CondNode;
 	@Field public ZenNode	BodyNode;
-	public ZenDoWhileNode/*constructor*/(ZenType Type, ZToken Token, ZenNode CondNode, ZenNode BodyNode) {
+	public ZenDoWhileNode/*constructor*/(ZType Type, ZToken Token, ZenNode CondNode, ZenNode BodyNode) {
 		super();
 		this.CondNode = CondNode;
 		this.BodyNode = BodyNode;

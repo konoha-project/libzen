@@ -3,7 +3,7 @@ package zen.lang;
 import zen.deps.Field;
 import zen.parser.ZToken;
 
-public class ZenSigFunc extends ZenFunc {
+public class ZenSigFunc extends ZFunc {
 	@Field public int DefinedCount = 0;
 	@Field public int UsedCount = 0;
 

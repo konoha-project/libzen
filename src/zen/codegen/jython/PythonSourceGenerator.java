@@ -39,7 +39,7 @@ import zen.ast.ZenReturnNode;
 import zen.ast.ZenThrowNode;
 import zen.ast.ZenTryNode;
 import zen.ast.ZenVarDeclNode;
-import zen.lang.ZenSystem;
+import zen.lang.ZSystem;
 import zen.parser.ZenSourceGenerator;
 //endif VAJA
 
@@ -66,10 +66,10 @@ public class PythonSourceGenerator extends ZenSourceGenerator {
 		this.NotOperator = "not ";
 
 		this.TopType = "object";
-		this.SetNativeType(ZenSystem.BooleanType, "bool");
-		this.SetNativeType(ZenSystem.IntType, "int");
-		this.SetNativeType(ZenSystem.FloatType, "float");
-		this.SetNativeType(ZenSystem.StringType, "str");
+		this.SetNativeType(ZSystem.BooleanType, "bool");
+		this.SetNativeType(ZSystem.IntType, "int");
+		this.SetNativeType(ZSystem.FloatType, "float");
+		this.SetNativeType(ZSystem.StringType, "str");
 	}
 
 	@Override public void VisitStmtList(ArrayList<ZenNode> StmtList) {

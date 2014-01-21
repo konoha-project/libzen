@@ -34,7 +34,7 @@ import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.deps.ZenArray;
 import zen.lang.ZenGrammar;
-import zen.lang.ZenSystem;
+import zen.lang.ZSystem;
 import zen.parser.ZGenerator;
 import zen.parser.ZLogger;
 import zen.parser.ZParserConst;
@@ -180,7 +180,7 @@ public class ZenMain {
 		if (!(Index < Args.length)) {
 			ShellMode = true;
 		}
-		@Var ZenArray<String> ARGV = ZenArray.NewZenArray(ZenSystem.StringType);
+		@Var ZenArray<String> ARGV = ZenArray.NewZenArray(ZSystem.StringType);
 		while (Index < Args.length) {
 			ARGV.add(Args[Index]);
 			Index += 1;
@@ -192,7 +192,7 @@ public class ZenMain {
 			if (ScriptText == null) {
 				LibNative.Exit(1, "file not found: " + FileName);
 			}
-			@Var long FileLine = ZenSystem.GetFileLine(FileName, 1);
+			@Var long FileLine = ZSystem.GetFileLine(FileName, 1);
 			@Var boolean Success = Generator.RootNameSpace.Load(ScriptText, FileLine);
 			Generator.Logger.ShowReportedErrors();
 			if (!Success) {
@@ -212,7 +212,7 @@ public class ZenMain {
 					@Var Object EvaledValue = Generator.RootNameSpace.Eval(Line, linenum, true);
 					Generator.Logger.ShowReportedErrors();
 					if (EvaledValue != null) {
-						LibNative.println(" (" + ZenSystem.GuessType(EvaledValue) + ":" + LibNative.GetClassName(EvaledValue) + ") " + LibZen.Stringify(EvaledValue));
+						LibNative.println(" (" + ZSystem.GuessType(EvaledValue) + ":" + LibNative.GetClassName(EvaledValue) + ") " + LibZen.Stringify(EvaledValue));
 					}
 					linenum += 1;
 				} catch (Exception e) {

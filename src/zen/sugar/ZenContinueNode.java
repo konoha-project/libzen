@@ -26,12 +26,12 @@ package zen.sugar;
 
 import zen.ast.ZenNode;
 import zen.deps.Field;
-import zen.lang.ZenType;
+import zen.lang.ZType;
 import zen.parser.ZToken;
 
 final public class ZenContinueNode extends ZenNode {
 	@Field public String Label;
-	public ZenContinueNode/*constructor*/(ZenType Type, ZToken Token, String Label) {
+	public ZenContinueNode/*constructor*/(ZType Type, ZToken Token, String Label) {
 		super();
 		this.Label = Label;
 	}

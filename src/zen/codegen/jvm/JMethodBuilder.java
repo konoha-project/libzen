@@ -23,8 +23,8 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
 
 import zen.ast.ZenNode;
-import zen.lang.ZenSystem;
-import zen.lang.ZenType;
+import zen.lang.ZSystem;
+import zen.lang.ZType;
 import zen.parser.ZGenerator;
 import zen.parser.ZNameSpace;
 
@@ -64,7 +64,7 @@ class JMethodBuilder {
 
 	void SetLineNumber(long FileLine) {
 		if(FileLine != 0) {
-			int Line = ZenSystem.GetFileLineNumber(FileLine);
+			int Line = ZSystem.GetFileLineNumber(FileLine);
 			if(Line != this.PreviousLine) {
 				Label LineLabel = new Label();
 				this.AsmVisitor.visitLineNumber(Line, LineLabel);
@@ -97,7 +97,7 @@ class JMethodBuilder {
 		return null;
 	}
 
-	public JLocalVarStack AddLocal(ZenType GreenType, String Name) {
+	public JLocalVarStack AddLocal(ZType GreenType, String Name) {
 		Type LocalType =  JLib.GetAsmType(GreenType);
 		JLocalVarStack local = new JLocalVarStack(this.LocalSize, LocalType, Name);
 		this.LocalVals.add(local);
@@ -114,10 +114,10 @@ class JMethodBuilder {
 			this.AsmVisitor.visitFieldInsn(GETSTATIC, this.LocalClassLoader.GlobalStaticClassName, this.LocalClassLoader.ContextFieldName, this.LocalClassLoader.GontextDescripter);
 			return;
 		}
-		if(Value instanceof ZenType) {
-			int id = ((ZenType)Value).TypeId;
+		if(Value instanceof ZType) {
+			int id = ((ZType)Value).TypeId;
 			this.AsmVisitor.visitLdcInsn(id);
-			this.InvokeMethodCall(ZenType.class, JLib.GetTypeById);
+			this.InvokeMethodCall(ZType.class, JLib.GetTypeById);
 			return;
 		}
 		//		else if(Value instanceof ZenFunc) {
@@ -126,7 +126,7 @@ class JMethodBuilder {
 		//			this.InvokeMethodCall(ZenFunc.class, JLib.GetFuncById);
 		//			return;
 		//		}
-		int id = ZenSystem.AddConstPool(Value);
+		int id = ZSystem.AddConstPool(Value);
 		this.AsmVisitor.visitLdcInsn(id);
 		this.InvokeMethodCall(Value.getClass(), JLib.GetConstPool);
 	}
@@ -199,7 +199,7 @@ class JMethodBuilder {
 		this.AsmVisitor.visitTypeInsn(CHECKCAST, Type.getInternalName(RequiredType));
 	}
 
-	void CheckCast(Class<?> RequiredType, ZenType GivenType) {
+	void CheckCast(Class<?> RequiredType, ZType GivenType) {
 		//		if(GivenType != null) {
 		//			this.CheckCast(RequiredType, GivenType.GetNativeType(false));
 		//		}
@@ -208,7 +208,7 @@ class JMethodBuilder {
 		//		//		}
 	}
 
-	void CheckCast(ZenType RequiredType, ZenType GivenType) {
+	void CheckCast(ZType RequiredType, ZType GivenType) {
 		//		this.CheckCast(RequiredType.GetNativeType(false), GivenType);
 	}
 
@@ -222,7 +222,7 @@ class JMethodBuilder {
 		this.InvokeMethodCall(void.class, method);
 	}
 
-	void InvokeMethodCall(ZenType RequiredType, Method method) {
+	void InvokeMethodCall(ZType RequiredType, Method method) {
 		Class<?> RequiredNativeType = Object.class;
 		//		if(RequiredType != null) {
 		//			RequiredNativeType = RequiredType.GetNativeType(false);
@@ -247,7 +247,7 @@ class JMethodBuilder {
 		this.CheckCast(RequiredType, method.getReturnType());
 	}
 
-	public void PushEvaluatedNode(ZenType RequestedType, ZenNode ParamNode) {
+	public void PushEvaluatedNode(ZType RequestedType, ZenNode ParamNode) {
 		//System.err.println("requested=" + RequestedType + ", given="+ParamNode.Type);
 		ParamNode.Accept(this.Generator);
 		this.CheckCast(RequestedType, ParamNode.Type);

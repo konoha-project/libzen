@@ -26,25 +26,25 @@
 package zen.deps;
 import java.util.ArrayList;
 
-import zen.lang.ZenSystem;
-import zen.lang.ZenType;
+import zen.lang.ZSystem;
+import zen.lang.ZType;
 
 public class ZenArray<T> extends ArrayList<T> implements ZenTypedObject {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 4931064639290182147L;
-	private final ZenType ObjectType;
-	private ZenArray(ZenType ZType) {
+	private final ZType ObjectType;
+	private ZenArray(ZType ZType) {
 		super();
-		this.ObjectType = ZType == null ? ZenSystem.ArrayType : ZType;
+		this.ObjectType = ZType == null ? ZSystem.ArrayType : ZType;
 	}
 
-	public static <T> ZenArray<T> NewZenArray(ZenType ElementType) {
-		return new ZenArray<T>(ZenSystem.GetGenericType1(ZenSystem.ArrayType, ElementType, true));
+	public static <T> ZenArray<T> NewZenArray(ZType ElementType) {
+		return new ZenArray<T>(ZSystem.GetGenericType1(ZSystem.ArrayType, ElementType, true));
 	}
 
-	@Override public ZenType GetObjectType() {
+	@Override public ZType GetObjectType() {
 		return this.ObjectType;
 	}
 
@@ -99,7 +99,7 @@ public class ZenArray<T> extends ArrayList<T> implements ZenTypedObject {
 	//		}
 	//		return ArrayObject;
 	//	}
-	public final static <T> ZenArray<T> NewNewArray(ZenType ArrayType, T[] Values) {
+	public final static <T> ZenArray<T> NewNewArray(ZType ArrayType, T[] Values) {
 		@Var ZenArray<T> ArrayObject =  new ZenArray<T>(ArrayType);
 		for(@Var int i = 0; i < Values.length; i++) {
 			ArrayObject.add(Values[i]);

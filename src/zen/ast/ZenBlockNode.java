@@ -27,7 +27,7 @@ package zen.ast;
 import java.util.ArrayList;
 
 import zen.deps.Field;
-import zen.lang.ZenSystem;
+import zen.lang.ZSystem;
 import zen.parser.ZNameSpace;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
@@ -36,7 +36,7 @@ public class ZenBlockNode extends ZenStatementNode {
 	@Field public ArrayList<ZenNode> StmtList;
 	@Field public ZNameSpace NameSpace;
 	public ZenBlockNode(ZToken SourceToken, ZNameSpace NameSpace) {
-		super(ZenSystem.VarType, SourceToken);
+		super(ZSystem.VarType, SourceToken);
 		this.SourceToken = SourceToken;
 		this.StmtList = new ArrayList<ZenNode>();
 		this.NameSpace = NameSpace;

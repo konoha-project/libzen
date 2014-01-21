@@ -6,13 +6,13 @@ import zen.deps.Init;
 import zen.deps.LibNative;
 import zen.deps.Var;
 import zen.deps.Zen;
-import zen.lang.ZenFunc;
+import zen.lang.ZFunc;
 
 @Zen final class ZTokenFunc {
-	@Field @Init public ZenFunc      Func;
+	@Field @Init public ZFunc      Func;
 	@Field @Init public ZTokenFunc	ParentFunc;
 
-	@Constructor ZTokenFunc(ZenFunc Func, ZTokenFunc Parent) {
+	@Constructor ZTokenFunc(ZFunc Func, ZTokenFunc Parent) {
 		this.Func = Func;
 		this.ParentFunc = Parent;
 	}

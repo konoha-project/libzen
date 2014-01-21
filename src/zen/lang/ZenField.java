@@ -30,12 +30,12 @@ import zen.parser.ZToken;
 
 public class ZenField {
 	@Field public int        FieldFlag = 0;
-	@Field public ZenType	 FieldType = null;
+	@Field public ZType	 FieldType = null;
 	@Field public String	 FieldName = null;
 	@Field public int        FieldNativeIndex = 0;
 	@Field public ZToken   SourceToken = null;
 
-	@Constructor public ZenField(String FieldName, ZenType FieldType, ZToken SourceToken) {
+	@Constructor public ZenField(String FieldName, ZType FieldType, ZToken SourceToken) {
 		this.FieldType = FieldType;
 		this.FieldName = FieldName;
 		this.SourceToken = SourceToken;

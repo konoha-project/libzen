@@ -26,7 +26,7 @@ package zen.sugar;
 
 import zen.ast.ZenNode;
 import zen.deps.Field;
-import zen.lang.ZenType;
+import zen.lang.ZType;
 import zen.parser.ZToken;
 
 //E.g., "for" "(" $Variable "in" $IterNode ")" $BodyNode
@@ -34,7 +34,7 @@ final public class ZenForEachNode extends ZenNode {
 	@Field public ZenNode	Variable;
 	@Field public ZenNode	IterNode;
 	@Field public ZenNode	BodyNode;
-	public ZenForEachNode/*constructor*/(ZenType Type, ZToken Token, ZenNode Variable, ZenNode IterNode, ZenNode BodyNode) {
+	public ZenForEachNode/*constructor*/(ZType Type, ZToken Token, ZenNode Variable, ZenNode IterNode, ZenNode BodyNode) {
 		super();
 		this.Variable = Variable;
 		this.IterNode = IterNode;

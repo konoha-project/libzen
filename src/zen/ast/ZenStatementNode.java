@@ -24,7 +24,7 @@
 
 package zen.ast;
 
-import zen.lang.ZenType;
+import zen.lang.ZType;
 import zen.parser.ZToken;
 
 public abstract class ZenStatementNode extends ZenNode {
@@ -32,7 +32,7 @@ public abstract class ZenStatementNode extends ZenNode {
 	 * int f(int n);
 	 * f(1)
 	 */
-	public ZenStatementNode/*constructor*/(ZenType Type, ZToken Token) {
+	public ZenStatementNode/*constructor*/(ZType Type, ZToken Token) {
 		super();
 	}
 	public ZenStatementNode/*constructor*/() {

@@ -25,16 +25,16 @@
 
 //ifdef JAVA
 package zen.deps;
-import zen.lang.ZenType;
+import zen.lang.ZType;
 //endif VAJA
 
 
 public class ZenTopObject implements ZenTypedObject {
-	public ZenType GreenType;
-	protected ZenTopObject(ZenType GreenType) {
+	public ZType GreenType;
+	protected ZenTopObject(ZType GreenType) {
 		this.GreenType = GreenType;
 	}
-	@Override public final ZenType GetObjectType() {
+	@Override public final ZType GetObjectType() {
 		return this.GreenType;
 	}
 
@@ -43,7 +43,7 @@ public class ZenTopObject implements ZenTypedObject {
 
 final class ZenAnyObject extends ZenTopObject {
 	public final Object NativeValue;
-	ZenAnyObject/*constructor*/(ZenType GreenType, Object NativeValue) {
+	ZenAnyObject/*constructor*/(ZType GreenType, Object NativeValue) {
 		super(GreenType);
 		this.NativeValue = NativeValue;
 	}

@@ -26,19 +26,19 @@
 package zen.ast;
 import zen.deps.Field;
 import zen.deps.LibNative;
-import zen.lang.ZenSystem;
-import zen.lang.ZenType;
+import zen.lang.ZSystem;
+import zen.lang.ZType;
 import zen.parser.ZNameSpace;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 
 public abstract class ZenNode {
 	@Field public ZenNode	ParentNode;
-	@Field public ZenType	Type;
+	@Field public ZType	Type;
 	@Field public ZToken	SourceToken;
 
 	public ZenNode() {
-		this.Type = ZenSystem.VarType;
+		this.Type = ZSystem.VarType;
 		this.SourceToken = null;
 		this.ParentNode = null;
 	}

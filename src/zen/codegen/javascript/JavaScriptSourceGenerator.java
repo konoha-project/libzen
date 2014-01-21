@@ -42,7 +42,7 @@ import zen.ast.ZenThrowNode;
 import zen.ast.ZenTryNode;
 import zen.ast.ZenVarDeclNode;
 import zen.ast.ZenNode;
-import zen.lang.ZenSystem;
+import zen.lang.ZSystem;
 import zen.parser.ZenSourceGenerator;
 
 public class JavaScriptSourceGenerator extends ZenSourceGenerator {
@@ -64,10 +64,10 @@ public class JavaScriptSourceGenerator extends ZenSourceGenerator {
 		this.FalseLiteral = "false";
 		this.NullLiteral = "null";
 		this.TopType = "Object";
-		this.SetNativeType(ZenSystem.BooleanType, "Boolean");
-		this.SetNativeType(ZenSystem.IntType, "Number");
-		this.SetNativeType(ZenSystem.FloatType, "Number");
-		this.SetNativeType(ZenSystem.StringType, "String");
+		this.SetNativeType(ZSystem.BooleanType, "Boolean");
+		this.SetNativeType(ZSystem.IntType, "Number");
+		this.SetNativeType(ZSystem.FloatType, "Number");
+		this.SetNativeType(ZSystem.StringType, "String");
 
 		this.EngineManager = new ScriptEngineManager();
 		this.Engine = this.EngineManager.getEngineByName("js");

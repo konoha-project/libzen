@@ -27,8 +27,8 @@ package zen.parser;
 
 import zen.ast.ZenNode;
 import zen.deps.Field;
-import zen.lang.ZenSystem;
-import zen.lang.ZenType;
+import zen.lang.ZSystem;
+import zen.lang.ZType;
 import zen.lang.ZenTypeChecker;
 import zen.lang.ZenTypeInfer;
 //endif VAJA
@@ -96,12 +96,12 @@ public abstract class ZGenerator extends ZVisitor {
 		return null;
 	}
 
-	public ZenType GetFieldType(ZenType BaseType, String Name) {
-		return ZenSystem.VarType;     // undefined
+	public ZType GetFieldType(ZType BaseType, String Name) {
+		return ZSystem.VarType;     // undefined
 	}
 
-	public ZenType GetSetterType(ZenType BaseType, String Name) {
-		return ZenSystem.VarType;     // undefined
+	public ZType GetSetterType(ZType BaseType, String Name) {
+		return ZSystem.VarType;     // undefined
 		//return ZenSystem.VoidType;   // readonly
 	}
 

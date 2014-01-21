@@ -27,18 +27,18 @@ package zen.lang;
 import zen.deps.Field;
 import zen.parser.ZToken;
 
-public class ZenVarType extends ZenType {
+public class ZenVarType extends ZType {
 	@Field public ZToken SourceToken;
 	@Field public int AlphaId;
 
 	public ZenVarType(String Name, int AlphaId, ZToken SourceToken) {
-		super(0, Name, ZenSystem.VarType);
+		super(0, Name, ZSystem.VarType);
 		this.SourceToken = SourceToken;
 		this.TypeId = this.RefType.TypeId;
 		this.AlphaId = AlphaId;
 	}
 
-	@Override public final ZenType GetRealType() {
+	@Override public final ZType GetRealType() {
 		return this.RefType;
 	}
 
@@ -46,7 +46,7 @@ public class ZenVarType extends ZenType {
 		return this.RefType.GetParamSize();
 	}
 
-	@Override public ZenType GetParamType(int Index) {
+	@Override public ZType GetParamType(int Index) {
 		return this.RefType.GetParamType(Index);
 	}
 
@@ -58,7 +58,7 @@ public class ZenVarType extends ZenType {
 		return "typeof("+this.ShortName+"): " + this.RefType;
 	}
 
-	public void Infer(ZenType ContextType, ZToken SourceToken) {
+	public void Infer(ZType ContextType, ZToken SourceToken) {
 		if(this.RefType.IsVarType()) {
 			if(ContextType instanceof ZenVarType && ContextType.IsVarType()) {
 				ZenVarType VarType = (ZenVarType)ContextType;

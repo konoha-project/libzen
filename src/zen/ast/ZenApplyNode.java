@@ -28,13 +28,13 @@ import java.util.ArrayList;
 
 import zen.deps.Constructor;
 import zen.deps.Field;
-import zen.lang.ZenFunc;
-import zen.lang.ZenSystem;
-import zen.lang.ZenType;
+import zen.lang.ZFunc;
+import zen.lang.ZSystem;
+import zen.lang.ZType;
 
 public abstract class ZenApplyNode extends ZenNode {
 	@Field public ArrayList<ZenNode>  ParamList; /* [arg0, arg1, ...] */
-	@Field public ZenFunc ResolvedFunc;
+	@Field public ZFunc ResolvedFunc;
 	@Constructor public ZenApplyNode() {
 		super();
 		this.ParamList = new ArrayList<ZenNode>();
@@ -44,11 +44,11 @@ public abstract class ZenApplyNode extends ZenNode {
 		this.ParamList.add(this.SetChild(Node));
 	}
 
-	public final ZenType GetRecvType() {
+	public final ZType GetRecvType() {
 		if(this.ParamList.size()>0) {
 			return this.ParamList.get(0).Type.GetRealType();
 		}
-		return ZenSystem.VoidType;
+		return ZSystem.VoidType;
 	}
 
 }

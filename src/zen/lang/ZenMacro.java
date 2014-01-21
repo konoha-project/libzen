@@ -7,7 +7,7 @@ import zen.deps.Field;
 import zen.deps.LibZen;
 import zen.parser.ZenSourceGenerator;
 
-public class ZenMacro extends ZenFunc {
+public class ZenMacro extends ZFunc {
 	@Field String Macro;
 	public ZenMacro(int FuncFlag, String FuncName, ZenFuncType FuncType, String Macro) {
 		super(FuncFlag, FuncName, FuncType);

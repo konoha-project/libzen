@@ -30,19 +30,19 @@ import zen.deps.Field;
 import zen.deps.Nullable;
 import zen.deps.Var;
 import zen.lang.ZenFuncType;
-import zen.lang.ZenSystem;
-import zen.lang.ZenType;
+import zen.lang.ZSystem;
+import zen.lang.ZType;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 
 public class ZenFunctionNode extends ZenNode {
-	@Field public ZenType ReturnType;
+	@Field public ZType ReturnType;
 	@Field public ArrayList<ZenNode>  ArgumentList;  // list of ParamNode
 	@Field public ZenNode BodyNode;
 	public ZenFunctionNode/*constructor*/(ZToken Token) {
 		super();
 		this.SourceToken = Token;
-		this.ReturnType = ZenSystem.VarType;
+		this.ReturnType = ZSystem.VarType;
 		this.ArgumentList = new ArrayList<ZenNode>();
 		this.BodyNode = null;
 	}
@@ -62,12 +62,12 @@ public class ZenFunctionNode extends ZenNode {
 		Visitor.VisitFunctionNode(this);
 	}
 
-	public ZenFuncType GetFuncType(@Nullable ZenType ContextType) {
+	public ZenFuncType GetFuncType(@Nullable ZType ContextType) {
 		@Var ZenFuncType FuncType = null;
 		if(ContextType instanceof ZenFuncType) {
 			FuncType = (ZenFuncType)ContextType;
 		}
-		@Var ArrayList<ZenType> TypeList = new ArrayList<ZenType>();
+		@Var ArrayList<ZType> TypeList = new ArrayList<ZType>();
 		if(this.ReturnType.IsVarType() && FuncType != null) {
 			this.ReturnType = FuncType.GetParamType(0);
 		}
@@ -75,14 +75,14 @@ public class ZenFunctionNode extends ZenNode {
 		@Var int i = 0;
 		while(i < this.ArgumentList.size()) {
 			@Var ZenParamNode Node = (ZenParamNode) this.ArgumentList.get(i);
-			@Var ZenType ParamType = Node.Type.GetRealType();
+			@Var ZType ParamType = Node.Type.GetRealType();
 			if(ParamType.IsVarType() && FuncType != null) {
 				ParamType = FuncType.GetParamType(i+1);
 			}
 			TypeList.add(ParamType);
 			i = i + 1;
 		}
-		return ZenSystem.LookupFuncType(TypeList);
+		return ZSystem.LookupFuncType(TypeList);
 	}
 
 }

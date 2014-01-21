@@ -25,16 +25,16 @@
 package zen.ast;
 
 import zen.deps.Field;
-import zen.lang.ZenSystem;
-import zen.lang.ZenType;
+import zen.lang.ZSystem;
+import zen.lang.ZType;
 
 final public class ZenCatchNode extends ZenNode {
-	@Field public ZenType  ExceptionType;
+	@Field public ZType  ExceptionType;
 	@Field public String  ExceptionName;
 	@Field public ZenNode	BodyNode;
 	public ZenCatchNode/*constructor*/() {
 		super();
-		this.ExceptionType = ZenSystem.VarType;
+		this.ExceptionType = ZSystem.VarType;
 		this.ExceptionName = null;
 		this.BodyNode = null;
 	}

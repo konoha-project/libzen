@@ -9,8 +9,8 @@ import zen.deps.Field;
 import zen.deps.Var;
 import zen.parser.ZLogger;
 
-class FuncContext {
-	@Field FuncContext Parent;
+final class ZFuncContext {
+	@Field ZFuncContext Parent;
 	@Field ZLogger Logger;
 	@Field ZenFunctionNode FuncNode;
 	@Field ZenFuncType FuncType;
@@ -19,7 +19,7 @@ class FuncContext {
 	@Field int VarIndex;
 	@Field int CountOfUnknownTypeNode;
 
-	@Constructor FuncContext(FuncContext Parent, ZLogger Logger, ZenFunctionNode FuncNode, ZenFuncType FuncType) {
+	@Constructor ZFuncContext(ZFuncContext Parent, ZLogger Logger, ZenFunctionNode FuncNode, ZenFuncType FuncType) {
 		this.Parent = Parent;
 		this.Logger = Logger;
 		this.FuncNode = FuncNode;
@@ -30,7 +30,7 @@ class FuncContext {
 		this.CountOfUnknownTypeNode = 0;
 	}
 
-	public ZenType GetReturnType() {
+	public ZType GetReturnType() {
 		this.ReturnCount = this.ReturnCount + 1;
 		return this.FuncNode.ReturnType;
 	}
@@ -39,7 +39,7 @@ class FuncContext {
 		@Var ZenFuncType FuncType = this.FuncType;
 		if(!FuncType.IsCompleteFunc(false)) {
 			if(FuncNode.ReturnType.IsVarType() && this.ReturnCount == 0) {
-				((ZenVarType)FuncNode.ReturnType).Infer(ZenSystem.VoidType, FuncNode.SourceToken);
+				((ZenVarType)FuncNode.ReturnType).Infer(ZSystem.VoidType, FuncNode.SourceToken);
 			}
 			this.FuncType = this.FuncNode.GetFuncType(null);
 			if(this.FuncType.IsCompleteFunc(false)) {

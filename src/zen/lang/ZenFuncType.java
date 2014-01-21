@@ -4,14 +4,14 @@ import zen.deps.Constructor;
 import zen.deps.Field;
 import zen.deps.Var;
 
-public final class ZenFuncType extends ZenType {
+public final class ZenFuncType extends ZType {
 
-	@Field public ZenType[]		TypeParams;
-	@Constructor public ZenFuncType(String ShortName, ZenType[] UniqueTypeParams) {
-		super(ZTypeFlag.UniqueType, ShortName, ZenSystem.TopType);
+	@Field public ZType[]		TypeParams;
+	@Constructor public ZenFuncType(String ShortName, ZType[] UniqueTypeParams) {
+		super(ZTypeFlag.UniqueType, ShortName, ZSystem.TopType);
 		if(UniqueTypeParams == null) {
-			this.TypeParams = new ZenType[1];
-			this.TypeParams[0] = ZenSystem.VarType;
+			this.TypeParams = new ZType[1];
+			this.TypeParams[0] = ZSystem.VarType;
 		}
 		else {
 			this.TypeParams = UniqueTypeParams;
@@ -41,22 +41,22 @@ public final class ZenFuncType extends ZenType {
 	}
 
 	@Override public String StringfySignature(String FuncName) {
-		return ZenFunc.StringfySignature(FuncName, this.GetFuncParamSize(), this.GetRecvType());
+		return ZFunc.StringfySignature(FuncName, this.GetFuncParamSize(), this.GetRecvType());
 	}
 
-	@Override public ZenType GetBaseType() {
-		return ZenSystem.FuncType;
+	@Override public ZType GetBaseType() {
+		return ZSystem.FuncType;
 	}
 
 	@Override public int GetParamSize() {
 		return this.TypeParams.length;
 	}
 
-	@Override public ZenType GetParamType(int Index) {
+	@Override public ZType GetParamType(int Index) {
 		return this.TypeParams[Index];
 	}
 
-	public final ZenType GetReturnType() {
+	public final ZType GetReturnType() {
 		return this.TypeParams[0];
 	}
 
@@ -64,14 +64,14 @@ public final class ZenFuncType extends ZenType {
 		return this.TypeParams.length - 1;
 	}
 
-	public final ZenType GetRecvType() {
+	public final ZType GetRecvType() {
 		if(this.TypeParams.length == 1) {
-			return ZenSystem.VoidType;
+			return ZSystem.VoidType;
 		}
 		return this.TypeParams[1];
 	}
 
-	public final ZenType GetFuncParamType(int Index) {
+	public final ZType GetFuncParamType(int Index) {
 		return this.TypeParams[Index+1];
 	}
 
@@ -81,7 +81,7 @@ public final class ZenFuncType extends ZenType {
 			i = 1;
 		}
 		while(i < this.TypeParams.length) {
-			@Var ZenType ParamType =  ContextFuncType.TypeParams[i];
+			@Var ZType ParamType =  ContextFuncType.TypeParams[i];
 			if(this.TypeParams[i] != ParamType && !ParamType.IsVarType()) {
 				return false;
 			}

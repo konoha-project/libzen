@@ -32,7 +32,7 @@ import zen.ast.ZenIntNode;
 import zen.ast.ZenNode;
 import zen.ast.ZenSetLocalNode;
 import zen.ast.ZenStringNode;
-import zen.lang.ZenType;
+import zen.lang.ZType;
 
 public abstract class ZNodeUtils {
 	//	public final ZenNode CreateUnsupportedNode(ZenType Type, ZenSyntaxTree ParsedTree) {
@@ -57,7 +57,7 @@ public abstract class ZNodeUtils {
 		return new ZenConstPoolNode(SourceToken, Value);
 	}
 
-	public final static ZenNode CreateSymbolNode(ZToken SourceToken, ZenType Type, String NativeName, ZenNode AssignedNode) {
+	public final static ZenNode CreateSymbolNode(ZToken SourceToken, ZType Type, String NativeName, ZenNode AssignedNode) {
 		if(AssignedNode != null) {
 			return new ZenSetLocalNode(SourceToken, NativeName, AssignedNode);
 		}

@@ -25,12 +25,12 @@
 package zen.sugar;
 
 import zen.ast.ZenNode;
-import zen.lang.ZenType;
+import zen.lang.ZType;
 import zen.parser.ZToken;
 
 // E.g., AllocateNode (without parameters); StaticApply is needed to init
 final public class ZenAllocateNode extends ZenNode {
-	public ZenAllocateNode/*constructor*/(ZenType Type, ZToken Token) {
+	public ZenAllocateNode/*constructor*/(ZType Type, ZToken Token) {
 		super();
 	}
 //	@Override public boolean Accept(ZenVisitor Visitor) {

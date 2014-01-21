@@ -34,9 +34,9 @@ import zen.deps.Init;
 import zen.deps.LibNative;
 import zen.deps.LibZen;
 import zen.deps.Var;
-import zen.lang.ZenFunc;
-import zen.lang.ZenSystem;
-import zen.lang.ZenType;
+import zen.lang.ZFunc;
+import zen.lang.ZSystem;
+import zen.lang.ZType;
 
 public final class ZTokenContext {
 	// ParseFlag
@@ -357,7 +357,7 @@ public final class ZTokenContext {
 		@Var ZSyntaxPattern CurrentPattern = Pattern;
 		@Var ZToken TopToken = this.GetToken();
 		while(CurrentPattern != null) {
-			@Var ZenFunc MatchFunc = CurrentPattern.MatchFunc;
+			@Var ZFunc MatchFunc = CurrentPattern.MatchFunc;
 			this.CurrentPosition = RollbackPosition;
 			if(CurrentPattern.ParentPattern != null) {   // This means it has next patterns
 				this.SetParseFlag(ParseFlag | ZTokenContext.BackTrackParseFlag);
@@ -463,7 +463,7 @@ public final class ZTokenContext {
 		return this.ParsePatternAfter(NameSpace, null, PatternName, MatchFlag);
 	}
 
-	public final ZenType ParseType(ZNameSpace NameSpace, String PatternName, ZenType DefaultType) {
+	public final ZType ParseType(ZNameSpace NameSpace, String PatternName, ZType DefaultType) {
 		ZenTypeNode TypeNode = (ZenTypeNode)this.ParsePatternAfter(NameSpace, null, PatternName, Optional);
 		if(TypeNode != null) {
 			return TypeNode.Type;
@@ -526,7 +526,7 @@ public final class ZTokenContext {
 		if(Index != -1) {
 			@Var String FileName = SourceMap.substring(0, Index);
 			@Var int Line = (int)LibZen.ParseInt(SourceMap.substring(Index+1));
-			this.ParsingLine = ZenSystem.GetFileLine(FileName, Line);
+			this.ParsingLine = ZSystem.GetFileLine(FileName, Line);
 		}
 	}
 

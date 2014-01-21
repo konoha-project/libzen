@@ -69,7 +69,7 @@ import zen.ast.ZenVarDeclNode;
 import zen.ast.ZenWhileNode;
 import zen.deps.LibNative;
 import zen.lang.ZTypeFlag;
-import zen.lang.ZenSystem;
+import zen.lang.ZSystem;
 import zen.parser.ZGenerator;
 
 
@@ -266,10 +266,10 @@ public class JavaByteCodeGenerator extends ZGenerator {
 	@Override public void VisitAndNode(ZenAndNode Node) {
 		Label elseLabel = new Label();
 		Label mergeLabel = new Label();
-		this.CurrentVisitor.PushEvaluatedNode(ZenSystem.BooleanType, Node.LeftNode);
+		this.CurrentVisitor.PushEvaluatedNode(ZSystem.BooleanType, Node.LeftNode);
 		this.CurrentVisitor.AsmVisitor.visitJumpInsn(IFEQ, elseLabel);
 
-		this.CurrentVisitor.PushEvaluatedNode(ZenSystem.BooleanType, Node.RightNode);
+		this.CurrentVisitor.PushEvaluatedNode(ZSystem.BooleanType, Node.RightNode);
 		this.CurrentVisitor.AsmVisitor.visitJumpInsn(IFEQ, elseLabel);
 
 		this.CurrentVisitor.AsmVisitor.visitLdcInsn(true);
@@ -285,10 +285,10 @@ public class JavaByteCodeGenerator extends ZGenerator {
 	@Override public void VisitOrNode(ZenOrNode Node) {
 		Label thenLabel = new Label();
 		Label mergeLabel = new Label();
-		this.CurrentVisitor.PushEvaluatedNode(ZenSystem.BooleanType, Node.LeftNode);
+		this.CurrentVisitor.PushEvaluatedNode(ZSystem.BooleanType, Node.LeftNode);
 		this.CurrentVisitor.AsmVisitor.visitJumpInsn(IFNE, thenLabel);
 
-		this.CurrentVisitor.PushEvaluatedNode(ZenSystem.BooleanType, Node.RightNode);
+		this.CurrentVisitor.PushEvaluatedNode(ZSystem.BooleanType, Node.RightNode);
 		this.CurrentVisitor.AsmVisitor.visitJumpInsn(IFNE, thenLabel);
 
 		this.CurrentVisitor.AsmVisitor.visitLdcInsn(false);
@@ -316,7 +316,7 @@ public class JavaByteCodeGenerator extends ZGenerator {
 	@Override public void VisitIfNode(ZenIfNode Node) {
 		Label ElseLabel = new Label();
 		Label EndLabel = new Label();
-		this.CurrentVisitor.PushEvaluatedNode(ZenSystem.BooleanType, Node.CondNode);
+		this.CurrentVisitor.PushEvaluatedNode(ZSystem.BooleanType, Node.CondNode);
 		this.CurrentVisitor.AsmVisitor.visitJumpInsn(IFEQ, ElseLabel);
 
 		// Then
@@ -351,7 +351,7 @@ public class JavaByteCodeGenerator extends ZGenerator {
 		this.CurrentVisitor.ContinueLabelStack.push(continueLabel);
 
 		this.CurrentVisitor.AsmVisitor.visitLabel(continueLabel);
-		this.CurrentVisitor.PushEvaluatedNode(ZenSystem.BooleanType, Node.CondNode);
+		this.CurrentVisitor.PushEvaluatedNode(ZSystem.BooleanType, Node.CondNode);
 		this.CurrentVisitor.AsmVisitor.visitJumpInsn(IFEQ, breakLabel); // condition
 		Node.BodyNode.Accept(this);
 		this.CurrentVisitor.AsmVisitor.visitJumpInsn(GOTO, continueLabel);
@@ -443,7 +443,7 @@ public class JavaByteCodeGenerator extends ZGenerator {
 		String MethodName = Node.FuncName;
 		String MethodDesc = JLib.GetMethodDescriptor(Node);
 		MethodNode AsmMethodNode = new MethodNode(ACC_PUBLIC | ACC_STATIC, MethodName, MethodDesc, null, null);
-		JClassBuilder ClassHolder = this.ClassGenerator.GenerateMethodHolderClass(ZenSystem.GetSourceFileName(Node.SourceToken.FileLine), MethodName, AsmMethodNode);
+		JClassBuilder ClassHolder = this.ClassGenerator.GenerateMethodHolderClass(ZSystem.GetSourceFileName(Node.SourceToken.FileLine), MethodName, AsmMethodNode);
 
 		JMethodBuilder LocalBuilder = new JMethodBuilder(this, this.ClassGenerator, AsmMethodNode);
 		JMethodBuilder PushedBuilder = this.CurrentVisitor;

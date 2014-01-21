@@ -29,33 +29,33 @@ import zen.deps.Var;
 import zen.parser.ZUtils;
 //endif VAJA
 
-public class ZenType  {
-	@Field public int			  TypeFlag;
-	@Field public int             TypeId;
-	@Field public String		  ShortName;
-	@Field public ZenType		  RefType;
+public class ZType  {
+	@Field public int		  TypeFlag = 0;
+	@Field public int         TypeId = 0;
+	@Field public String      ShortName = null;
+	@Field public ZType		  RefType = null;
 
-	public ZenType(int TypeFlag, String ShortName, ZenType RefType) {
+	public ZType(int TypeFlag, String ShortName, ZType RefType) {
 		this.TypeFlag = TypeFlag;
 		this.ShortName = ShortName;
 		this.RefType = RefType;
 		if(ZUtils.IsFlag(TypeFlag, ZTypeFlag.UniqueType)) {
-			this.TypeId = ZenSystem.IssueTypeId(this);
+			this.TypeId = ZSystem.IssueTypeId(this);
 		}
 		else {
 			this.TypeId = -1;  // unused
 		}
 	}
 
-	public ZenType GetRealType() {
+	public ZType GetRealType() {
 		return this;
 	}
 
-	public ZenType GetSuperType() {
+	public ZType GetSuperType() {
 		return this.RefType;
 	}
 
-	public ZenType GetBaseType() {
+	public ZType GetBaseType() {
 		return this;
 	}
 
@@ -68,41 +68,41 @@ public class ZenType  {
 		return 0;
 	}
 
-	public ZenType GetParamType(int Index) {
+	public ZType GetParamType(int Index) {
 		return null;
 	}
 
 
-	public final boolean Equals(ZenType Type) {
+	public final boolean Equals(ZType Type) {
 		return (this.GetRealType() == Type.GetRealType());
 	}
 
-	public final boolean Accept(ZenType Type) {
-		@Var ZenType ThisType = this.GetRealType();
+	public final boolean Accept(ZType Type) {
+		@Var ZType ThisType = this.GetRealType();
 		if(ThisType == Type.GetRealType() /*|| ThisType == ZenSystem.AnyType*/) {
 			return true;
 		}
-		@Var ZenType SuperClass = Type.GetSuperType();
+		@Var ZType SuperClass = Type.GetSuperType();
 		while(SuperClass != null) {
 			if(SuperClass == ThisType) {
 				return true;
 			}
 			SuperClass = SuperClass.GetSuperType();
 		}
-		return ZenSystem.CheckSubType(Type, this);
+		return ZSystem.CheckSubType(Type, this);
 	}
 
 
 	public final boolean IsTopType() {
-		return (this.GetRealType() == ZenSystem.TopType);
+		return (this.GetRealType() == ZSystem.TopType);
 	}
 
 	public final boolean IsVoidType() {
-		return (this.GetRealType() == ZenSystem.VoidType);
+		return (this.GetRealType() == ZSystem.VoidType);
 	}
 
 	public final boolean IsVarType() {
-		return (this.GetRealType() == ZenSystem.VarType);
+		return (this.GetRealType() == ZSystem.VarType);
 	}
 
 	public final boolean IsInferrableType() {
@@ -114,41 +114,41 @@ public class ZenType  {
 	}
 
 	public final boolean IsTypeType() {
-		return (this.GetRealType() == ZenSystem.TypeType);
+		return (this.GetRealType() == ZSystem.TypeType);
 	}
 
 	public final boolean IsBooleanType() {
-		return (this.GetRealType() == ZenSystem.BooleanType);
+		return (this.GetRealType() == ZSystem.BooleanType);
 	}
 
 	public final boolean IsIntType() {
-		return (this.GetRealType() == ZenSystem.IntType);
+		return (this.GetRealType() == ZSystem.IntType);
 	}
 
 	public final boolean IsFloatType() {
-		return (this.GetRealType() == ZenSystem.FloatType);
+		return (this.GetRealType() == ZSystem.FloatType);
 	}
 	public final boolean IsNumberType() {
 		return (this.IsIntType() || this.IsFloatType());
 	}
 	public final boolean IsStringType() {
-		return (this.GetRealType() == ZenSystem.StringType);
+		return (this.GetRealType() == ZSystem.StringType);
 	}
 
 	public final boolean IsArrayType() {
-		return (this.GetBaseType() == ZenSystem.ArrayType);
+		return (this.GetBaseType() == ZSystem.ArrayType);
 	}
 
 	public final boolean IsMapType() {
-		return (this.GetBaseType() == ZenSystem.ArrayType);
+		return (this.GetBaseType() == ZSystem.ArrayType);
 	}
 
 	//	public final boolean IsEnumType() {
 	//		return ZenUtils.IsFlag(this.TypeFlag, EnumType);
 	//	}
 
-	public ZenType CreateSubType(int ClassFlag, String ClassName) {
-		@Var ZenType SubType = new ZenType(ClassFlag, ClassName, this);
+	public ZType CreateSubType(int ClassFlag, String ClassName) {
+		@Var ZType SubType = new ZType(ClassFlag, ClassName, this);
 		return SubType;
 	}
 
@@ -234,7 +234,7 @@ public class ZenType  {
 	//	}
 
 	public final boolean AcceptValue(Object Value) {
-		return (Value != null) ? this.Accept(ZenSystem.GuessType(Value)) : true;
+		return (Value != null) ? this.Accept(ZSystem.GuessType(Value)) : true;
 	}
 
 	public boolean IsFuncType() {

@@ -24,11 +24,11 @@
 //ifdef JAVA
 package zen.deps;
 
-import zen.lang.ZenType;
+import zen.lang.ZType;
 
 //endif VAJA
 /*ZenObject Begin*/
 public interface ZenTypedObject {
-	public ZenType GetObjectType();
+	public ZType GetObjectType();
 }
 /*ZenObject End*/

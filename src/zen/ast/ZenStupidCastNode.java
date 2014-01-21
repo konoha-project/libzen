@@ -25,11 +25,11 @@
 package zen.ast;
 
 import zen.deps.Constructor;
-import zen.lang.ZenType;
+import zen.lang.ZType;
 import zen.parser.ZVisitor;
 
 public class ZenStupidCastNode extends ZenCastNode {
-	@Constructor public ZenStupidCastNode(ZenType CastType, ZenNode Node) {
+	@Constructor public ZenStupidCastNode(ZType CastType, ZenNode Node) {
 		super(CastType, Node);
 	}
 

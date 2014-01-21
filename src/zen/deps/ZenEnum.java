@@ -25,12 +25,12 @@
 //ifdef JAVA
 package zen.deps;
 
-import zen.lang.ZenType;
+import zen.lang.ZType;
 
 public class ZenEnum extends ZenTopObject {
 	@Field public final long EnumValue;
 	@Field public final String EnumSymbol;
-	public ZenEnum(ZenType GreenType, long EnumValue, String EnumSymbol) {
+	public ZenEnum(ZType GreenType, long EnumValue, String EnumSymbol) {
 		super(GreenType);
 		this.EnumValue = EnumValue;
 		this.EnumSymbol = EnumSymbol;

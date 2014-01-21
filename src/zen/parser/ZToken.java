@@ -29,7 +29,7 @@ import zen.deps.Field;
 import zen.deps.Init;
 import zen.deps.Var;
 import zen.deps.Zen;
-import zen.lang.ZenType;
+import zen.lang.ZType;
 
 @Zen public final class ZToken {
 	@Field public final static ZToken NullToken = new ZToken(0, "/**/", 0);
@@ -106,7 +106,7 @@ import zen.lang.ZenType;
 		}
 	}
 
-	public final ZToken AddTypeInfoToErrorMessage(ZenType ClassType) {
+	public final ZToken AddTypeInfoToErrorMessage(ZType ClassType) {
 		this.ParsedText = this.ParsedText + " of " + ClassType.ShortName;
 		return this;
 	}

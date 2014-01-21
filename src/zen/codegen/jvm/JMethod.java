@@ -13,24 +13,24 @@ import zen.ast.ZenUnaryNode;
 import zen.deps.LibNative;
 import zen.deps.LibZen;
 import zen.deps.Var;
-import zen.lang.ZenFuncSet;
-import zen.lang.ZenSystem;
-import zen.lang.ZenType;
+import zen.lang.ZFuncSet;
+import zen.lang.ZSystem;
+import zen.lang.ZType;
 import zen.parser.ZLogger;
 
 public class JMethod {
 	public Method Body;
-	private final ZenType ReturnType;
-	private final ZenType[] TypeParams;
-	public JMethod(ZenType ReturnType, String Name, ZenType ThisType, String MethodName) {
-		this.TypeParams = new ZenType[1];
+	private final ZType ReturnType;
+	private final ZType[] TypeParams;
+	public JMethod(ZType ReturnType, String Name, ZType ThisType, String MethodName) {
+		this.TypeParams = new ZType[1];
 		this.TypeParams[0] = ThisType;
 		this.ReturnType = ReturnType;
 		this.Body = LibNative.ImportMethod(this.TypeParams, MethodName, true);
 	}
 
-	public JMethod(ZenType ReturnType, String Name, ZenType ThisType, ZenType Arg1Type, String MethodName) {
-		this.TypeParams = new ZenType[2];
+	public JMethod(ZType ReturnType, String Name, ZType ThisType, ZType Arg1Type, String MethodName) {
+		this.TypeParams = new ZType[2];
 		this.TypeParams[0] = ThisType;
 		this.TypeParams[1] = Arg1Type;
 		this.ReturnType = ReturnType;
@@ -38,85 +38,85 @@ public class JMethod {
 	}
 
 	static {
-		ImportMethod(ZenSystem.IntType, "+", ZenSystem.IntType, "IntApi.Plus");
-		ImportMethod(ZenSystem.IntType, "-", ZenSystem.IntType, "IntApi.Minus");
-		ImportMethod(ZenSystem.IntType, "~", ZenSystem.IntType, "IntApi.BitwiseNot");
-		ImportMethod(ZenSystem.IntType, "+", ZenSystem.IntType, ZenSystem.IntType, "IntApi.Add");
-		ImportMethod(ZenSystem.IntType, "-", ZenSystem.IntType, ZenSystem.IntType, "IntApi.Sub");
-		ImportMethod(ZenSystem.IntType, "*", ZenSystem.IntType, ZenSystem.IntType, "IntApi.Mul");
-		ImportMethod(ZenSystem.IntType, "/", ZenSystem.IntType, ZenSystem.IntType, "IntApi.Div");
-		ImportMethod(ZenSystem.IntType, "%", ZenSystem.IntType, ZenSystem.IntType, "IntApi.Mod");
-		ImportMethod(ZenSystem.IntType, "<<", ZenSystem.IntType, ZenSystem.IntType, "IntApi.LeftShift");
-		ImportMethod(ZenSystem.IntType, ">>", ZenSystem.IntType, ZenSystem.IntType, "IntApi.RightShift");
-		ImportMethod(ZenSystem.IntType, "^", ZenSystem.IntType, ZenSystem.IntType, "IntApi.BitwiseAnd");
-		ImportMethod(ZenSystem.IntType, "|", ZenSystem.IntType, ZenSystem.IntType, "IntApi.BitwiseOr");
-		ImportMethod(ZenSystem.IntType, "&", ZenSystem.IntType, ZenSystem.IntType, "IntApi.BitwiseXor");
-		ImportMethod(ZenSystem.BooleanType, "<", ZenSystem.IntType,  ZenSystem.IntType, "IntApi.LessThan");
-		ImportMethod(ZenSystem.BooleanType, "<=", ZenSystem.IntType, ZenSystem.IntType, "IntApi.LessThanEquals");
-		ImportMethod(ZenSystem.BooleanType, ">", ZenSystem.IntType, ZenSystem.IntType, "IntApi.GreaterThan");
-		ImportMethod(ZenSystem.BooleanType, ">=", ZenSystem.IntType, ZenSystem.IntType, "IntApi.GreaterThanEquals");
-		ImportMethod(ZenSystem.BooleanType, "==", ZenSystem.IntType, ZenSystem.IntType, "IntApi.Equals");
-		ImportMethod(ZenSystem.BooleanType, "!=", ZenSystem.IntType, ZenSystem.IntType, "IntApi.NotEquals");
+		ImportMethod(ZSystem.IntType, "+", ZSystem.IntType, "IntApi.Plus");
+		ImportMethod(ZSystem.IntType, "-", ZSystem.IntType, "IntApi.Minus");
+		ImportMethod(ZSystem.IntType, "~", ZSystem.IntType, "IntApi.BitwiseNot");
+		ImportMethod(ZSystem.IntType, "+", ZSystem.IntType, ZSystem.IntType, "IntApi.Add");
+		ImportMethod(ZSystem.IntType, "-", ZSystem.IntType, ZSystem.IntType, "IntApi.Sub");
+		ImportMethod(ZSystem.IntType, "*", ZSystem.IntType, ZSystem.IntType, "IntApi.Mul");
+		ImportMethod(ZSystem.IntType, "/", ZSystem.IntType, ZSystem.IntType, "IntApi.Div");
+		ImportMethod(ZSystem.IntType, "%", ZSystem.IntType, ZSystem.IntType, "IntApi.Mod");
+		ImportMethod(ZSystem.IntType, "<<", ZSystem.IntType, ZSystem.IntType, "IntApi.LeftShift");
+		ImportMethod(ZSystem.IntType, ">>", ZSystem.IntType, ZSystem.IntType, "IntApi.RightShift");
+		ImportMethod(ZSystem.IntType, "^", ZSystem.IntType, ZSystem.IntType, "IntApi.BitwiseAnd");
+		ImportMethod(ZSystem.IntType, "|", ZSystem.IntType, ZSystem.IntType, "IntApi.BitwiseOr");
+		ImportMethod(ZSystem.IntType, "&", ZSystem.IntType, ZSystem.IntType, "IntApi.BitwiseXor");
+		ImportMethod(ZSystem.BooleanType, "<", ZSystem.IntType,  ZSystem.IntType, "IntApi.LessThan");
+		ImportMethod(ZSystem.BooleanType, "<=", ZSystem.IntType, ZSystem.IntType, "IntApi.LessThanEquals");
+		ImportMethod(ZSystem.BooleanType, ">", ZSystem.IntType, ZSystem.IntType, "IntApi.GreaterThan");
+		ImportMethod(ZSystem.BooleanType, ">=", ZSystem.IntType, ZSystem.IntType, "IntApi.GreaterThanEquals");
+		ImportMethod(ZSystem.BooleanType, "==", ZSystem.IntType, ZSystem.IntType, "IntApi.Equals");
+		ImportMethod(ZSystem.BooleanType, "!=", ZSystem.IntType, ZSystem.IntType, "IntApi.NotEquals");
 	}
 
-	static private final HashMap<String, HashMap<ZenType[], JMethod>> MethodTable = new HashMap<String, HashMap<ZenType[],JMethod>>();;
+	static private final HashMap<String, HashMap<ZType[], JMethod>> MethodTable = new HashMap<String, HashMap<ZType[],JMethod>>();;
 
 	private static void PutMethodTable(JMethod Method, String MethodName) {
-		HashMap<ZenType[], JMethod> Table = MethodTable.get(MethodName);
+		HashMap<ZType[], JMethod> Table = MethodTable.get(MethodName);
 		if(Table == null) {
-			Table = new HashMap<ZenType[], JMethod>();
+			Table = new HashMap<ZType[], JMethod>();
 			MethodTable.put(MethodName, Table);
 		}
 		Table.put(Method.TypeParams, Method);
 	}
 
-	private static JMethod GetMethodFromMethodTable(String MethodName, ZenType[] TypeParams) {
-		HashMap<ZenType[], JMethod> Table = MethodTable.get(MethodName);
+	private static JMethod GetMethodFromMethodTable(String MethodName, ZType[] TypeParams) {
+		HashMap<ZType[], JMethod> Table = MethodTable.get(MethodName);
 		if(Table == null) {
 			return null;
 		}
 		return Table.get(TypeParams);
 	}
 
-	private static void ImportMethod(ZenType ReturnType, String MethodName, ZenType ThisType, String ClassName) {
+	private static void ImportMethod(ZType ReturnType, String MethodName, ZType ThisType, String ClassName) {
 		JMethod Method = new JMethod(ReturnType, MethodName, ThisType, ClassName);
 		PutMethodTable(Method, MethodName);
 	}
 
-	private static void ImportMethod(ZenType ReturnType, String MethodName, ZenType ThisType, ZenType Arg1Type, String ClassName) {
+	private static void ImportMethod(ZType ReturnType, String MethodName, ZType ThisType, ZType Arg1Type, String ClassName) {
 		JMethod Method = new JMethod(ReturnType, MethodName, ThisType, Arg1Type, ClassName);
 		PutMethodTable(Method, MethodName);
 	}
 
-	public ZenType GetType(int Index) {
+	public ZType GetType(int Index) {
 		return this.TypeParams[Index];
 	}
 
-	public ZenType GetReturnType() {
+	public ZType GetReturnType() {
 		return this.ReturnType;
 	}
 
 	public static JMethod FindMethod(ZenBinaryNode Node) {
-		ZenType[] TypeParams = new ZenType[2];
+		ZType[] TypeParams = new ZType[2];
 		TypeParams[0] = Node.LeftNode.Type;
 		TypeParams[1] = Node.RightNode.Type;
 		return GetMethodFromMethodTable(Node.SourceToken.ParsedText, TypeParams);
 	}
 
 	public static JMethod FindMethod(ZenUnaryNode Node) {
-		ZenType[] TypeParams = new ZenType[1];
+		ZType[] TypeParams = new ZType[1];
 		TypeParams[0] = Node.RecvNode.Type;
 		return GetMethodFromMethodTable(Node.SourceToken.ParsedText, TypeParams);
 	}
 	public static JMethod FindMethod(ZenGetIndexNode Node) {
-		ZenType[] TypeParams = new ZenType[2];
+		ZType[] TypeParams = new ZType[2];
 		TypeParams[0] = Node.RecvNode.Type;
 		TypeParams[1] = Node.IndexNode.Type;
 		return GetMethodFromMethodTable(Node.SourceToken.ParsedText, TypeParams);
 	}
 
 	public static JMethod FindMethod(ZenSetIndexNode Node) {
-		ZenType[] TypeParams = new ZenType[3];
+		ZType[] TypeParams = new ZType[3];
 		TypeParams[0] = Node.RecvNode.Type;
 		TypeParams[1] = Node.IndexNode.Type;
 		TypeParams[2] = Node.ValueNode.Type;
@@ -124,7 +124,7 @@ public class JMethod {
 	}
 
 
-	public static String FormatTypeErrorMessage(ZenFuncSet Set, String FuncType, ZenType ClassType, String MethodName) {
+	public static String FormatTypeErrorMessage(ZFuncSet Set, String FuncType, ZType ClassType, String MethodName) {
 		if(ClassType != null) {
 			if(LibZen.EqualsString(MethodName, "")) {
 				MethodName = ClassType.toString();
@@ -240,9 +240,9 @@ public class JMethod {
 		return null;
 	}
 
-	public static Object DynamicCast(ZenType CastType, Object Value) {
+	public static Object DynamicCast(ZType CastType, Object Value) {
 		if(Value != null) {
-			ZenType FromType = ZenSystem.GuessType(Value);
+			ZType FromType = ZSystem.GuessType(Value);
 			if(CastType == FromType || CastType.Accept(FromType)) {
 				return Value;
 			}
@@ -250,9 +250,9 @@ public class JMethod {
 		return null;
 	}
 
-	public static boolean DynamicInstanceOf(Object Value, ZenType Type) {
+	public static boolean DynamicInstanceOf(Object Value, ZType Type) {
 		if(Value != null) {
-			ZenType ValueType = ZenSystem.GuessType(Value);
+			ZType ValueType = ZSystem.GuessType(Value);
 			if(ValueType == Type || Type.Accept(ValueType)) {
 				return true;
 			}

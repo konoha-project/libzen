@@ -28,16 +28,16 @@ import java.util.ArrayList;
 
 import zen.ast.ZenNode;
 import zen.deps.Field;
-import zen.lang.ZenFunc;
-import zen.lang.ZenType;
+import zen.lang.ZFunc;
+import zen.lang.ZType;
 import zen.parser.ZNameSpace;
 import zen.parser.ZToken;
 
 final public class ZenApplyOverridedMethodNode extends ZenNode {
 	@Field public ZNameSpace NameSpace;
-	@Field public ZenFunc Func;
+	@Field public ZFunc Func;
 	@Field public ArrayList<ZenNode>  ParamList; /* [arg1, arg2, ...] */
-	public ZenApplyOverridedMethodNode/*constructor*/(ZenType Type, ZToken Token, ZNameSpace NameSpace, ZenFunc Func) {
+	public ZenApplyOverridedMethodNode/*constructor*/(ZType Type, ZToken Token, ZNameSpace NameSpace, ZFunc Func) {
 		super();
 		//		this.NameSpace = NameSpace.Minimum();
 		this.Func = Func;

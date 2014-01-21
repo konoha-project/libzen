@@ -26,7 +26,7 @@ package zen.sugar;
 
 import zen.ast.ZenNode;
 import zen.deps.Field;
-import zen.lang.ZenType;
+import zen.lang.ZType;
 import zen.parser.ZToken;
 
 //E.g., $CondNode "?" $ThenExpr ":" $ElseExpr
@@ -34,7 +34,7 @@ final public class ZenTrinaryNode extends ZenNode {
 	@Field public ZenNode	CondNode;
 	@Field public ZenNode	ThenNode;
 	@Field public ZenNode	ElseNode;
-	public ZenTrinaryNode/*constructor*/(ZenType Type, ZToken Token, ZenNode CondNode, ZenNode ThenNode, ZenNode ElseNode) {
+	public ZenTrinaryNode/*constructor*/(ZType Type, ZToken Token, ZenNode CondNode, ZenNode ThenNode, ZenNode ElseNode) {
 		super();
 		this.CondNode = CondNode;
 		this.ThenNode = ThenNode;

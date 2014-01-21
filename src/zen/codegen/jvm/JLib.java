@@ -8,9 +8,9 @@ import org.objectweb.asm.Type;
 import zen.ast.ZenFuncDeclNode;
 import zen.deps.LibNative;
 import zen.deps.ZenArray;
-import zen.lang.ZenFunc;
-import zen.lang.ZenSystem;
-import zen.lang.ZenType;
+import zen.lang.ZFunc;
+import zen.lang.ZSystem;
+import zen.lang.ZType;
 import zen.parser.ZNameSpace;
 
 class JLib {
@@ -49,12 +49,12 @@ class JLib {
 		TypeMap.put("any", Type.getType(Object.class));
 		TypeMap.put("String", Type.getType(String.class));
 		TypeMap.put("Array", Type.getType(ZenArray.class));
-		TypeMap.put("Func", Type.getType(ZenFunc.class));
+		TypeMap.put("Func", Type.getType(ZFunc.class));
 
 		try {
-			GetConstPool = ZenSystem.class.getMethod("GetConstPool", int.class);
-			GetTypeById = ZenSystem.class.getMethod("GetTypeById", int.class);
-			GetFuncById = ZenSystem.class.getMethod("GetFuncById", int.class);
+			GetConstPool = ZSystem.class.getMethod("GetConstPool", int.class);
+			GetTypeById = ZSystem.class.getMethod("GetTypeById", int.class);
+			GetFuncById = ZSystem.class.getMethod("GetFuncById", int.class);
 			DynamicGetter = JMethod.class.getMethod("DynamicGetter", Object.class, String.class);
 			DynamicSetter = JMethod.class.getMethod("DynamicSetter", Object.class, String.class, Object.class);
 			InvokeFunc = JMethod.class.getMethod("InvokeFunc", JMethod.class, Object[].class);
@@ -88,7 +88,7 @@ class JLib {
 		return "FuncHolder" + FuncName + "$" + 0; //Context.ParserId;
 	}
 
-	static Type GetAsmType(ZenType ZType) {
+	static Type GetAsmType(ZType ZType) {
 		Type type = TypeMap.get(ZType.ShortName);
 		if(type != null) {
 			return type;
@@ -109,7 +109,7 @@ class JLib {
 		Type ReturnType = GetAsmType(Func.ReturnType);
 		Type[] argTypes = new Type[Func.ArgumentList.size()];
 		for(int i = 0; i < argTypes.length; i++) {
-			ZenType ParamType = Func.ArgumentList.get(i).Type;
+			ZType ParamType = Func.ArgumentList.get(i).Type;
 			argTypes[i] = GetAsmType(ParamType);
 		}
 		return Type.getMethodDescriptor(ReturnType, argTypes);

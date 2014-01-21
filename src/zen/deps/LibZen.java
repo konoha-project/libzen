@@ -38,7 +38,7 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import zen.lang.ZenType;
+import zen.lang.ZType;
 import zen.parser.ZLogger;
 import zen.parser.ZSourceBuilder;
 import zen.parser.ZUtils;
@@ -313,8 +313,8 @@ public abstract class LibZen {
 		return List.size();
 	}
 
-	public final static ZenType[] CompactTypeList(int BaseIndex, ArrayList<ZenType> TypeList) {
-		ZenType[] Tuple = new ZenType[TypeList.size() - BaseIndex];
+	public final static ZType[] CompactTypeList(int BaseIndex, ArrayList<ZType> TypeList) {
+		ZType[] Tuple = new ZType[TypeList.size() - BaseIndex];
 		for(int i = BaseIndex; i < TypeList.size(); i++) {
 			Tuple[i] = TypeList.get(i).GetRealType();
 		}

@@ -26,11 +26,11 @@ package zen.sugar;
 
 import zen.ast.ZenConstNode;
 import zen.deps.Field;
-import zen.lang.ZenType;
+import zen.lang.ZType;
 import zen.parser.ZToken;
 
 public abstract class ZenRegexNode extends ZenConstNode {
-	protected ZenRegexNode(ZenType Type, ZToken Token) {
+	protected ZenRegexNode(ZType Type, ZToken Token) {
 		super(Token);
 		// TODO Auto-generated constructor stub
 	}

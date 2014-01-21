@@ -27,11 +27,11 @@ package zen.deps;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import zen.lang.ZenFunc;
+import zen.lang.ZFunc;
 import zen.lang.ZenFuncType;
 import zen.parser.ZLogger;
 
-public class ZenNativeFunc extends ZenFunc {
+public class ZenNativeFunc extends ZFunc {
 	@Field public Object Recv;
 	@Field public Method JMethod;  // Abstract function if null
 

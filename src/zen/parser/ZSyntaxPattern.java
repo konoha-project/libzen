@@ -29,16 +29,16 @@ import zen.deps.Field;
 import zen.deps.Init;
 import zen.deps.LibZen;
 import zen.deps.Var;
-import zen.lang.ZenFunc;
+import zen.lang.ZFunc;
 
 public final class ZSyntaxPattern {
 	@Field @Init public ZNameSpace	          PackageNameSpace;
 	@Field @Init public String		          PatternName;
-	@Field @Init public ZenFunc                 MatchFunc;
+	@Field @Init public ZFunc                 MatchFunc;
 	@Field public int				      SyntaxFlag = 0;
 	@Field public ZSyntaxPattern ParentPattern = null;
 
-	public ZSyntaxPattern(ZNameSpace NameSpace, String PatternName, ZenFunc MatchFunc) {
+	public ZSyntaxPattern(ZNameSpace NameSpace, String PatternName, ZFunc MatchFunc) {
 		this.PackageNameSpace = NameSpace;
 		this.PatternName = PatternName;
 		this.MatchFunc = MatchFunc;

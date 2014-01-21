@@ -33,7 +33,7 @@ import zen.deps.LibNative;
 import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.deps.ZenMap;
-import zen.lang.ZenSystem;
+import zen.lang.ZSystem;
 
 public final class ZLogger {
 	public final static int	ErrorLevel						= 0;
@@ -68,19 +68,19 @@ public final class ZLogger {
 	public final String Report(int Level, ZToken Token, String Message) {
 		if(Token != null && !Token.IsNull()) {
 			if(Level == ZLogger.ErrorLevel) {
-				Message = "(error) " + ZenSystem.FormatFileLineNumber(Token.FileLine) + " " + Message;
+				Message = "(error) " + ZSystem.FormatFileLineNumber(Token.FileLine) + " " + Message;
 			}
 			else if(Level == ZLogger.TypeErrorLevel) {
-				Message = "(error) " + ZenSystem.FormatFileLineNumber(Token.FileLine) + " " + Message;
+				Message = "(error) " + ZSystem.FormatFileLineNumber(Token.FileLine) + " " + Message;
 			}
 			else if(Level == ZLogger.WarningLevel) {
-				Message = "(warning) " + ZenSystem.FormatFileLineNumber(Token.FileLine) + " " + Message;
+				Message = "(warning) " + ZSystem.FormatFileLineNumber(Token.FileLine) + " " + Message;
 			}
 			else if(Level == ZLogger.InfoLevel) {
-				Message = "(info) " + ZenSystem.FormatFileLineNumber(Token.FileLine) + " " + Message;
+				Message = "(info) " + ZSystem.FormatFileLineNumber(Token.FileLine) + " " + Message;
 			}
 			else {
-				Message = "(debug) " + ZenSystem.FormatFileLineNumber(Token.FileLine) + " " + Message;
+				Message = "(debug) " + ZSystem.FormatFileLineNumber(Token.FileLine) + " " + Message;
 			}
 			this.ReportedErrorList.add(Message);
 		}
