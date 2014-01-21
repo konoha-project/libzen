@@ -41,4 +41,7 @@ public class ZGetLocalNode extends ZNode {
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitGetLocalNode(this);
 	}
+	public ZNode ToStringNode() {
+		return new ZStringNode(this.SourceToken, this.VarName);
+	}
 }

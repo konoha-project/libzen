@@ -118,18 +118,99 @@ public class ZenTypeInfer extends ZenTypeChecker {
 	}
 
 	@Override public void VisitArrayLiteralNode(ZArrayLiteralNode Node) {
-		this.Todo(Node);
+		@Var ZNameSpace NameSpace = this.GetNameSpace();
+		@Var ZType ArrayType = this.GetContextType();
+		@Var ZType ElementType = ZSystem.VarType;
+		if(ArrayType.IsArrayType()) {
+			ElementType = ArrayType.GetParamType(0);
+		}
+		@Var boolean AllTyped = true;
+		@Var int i = 0;
+		while(i < Node.NodeList.size()) {
+			ZNode SubNode = Node.NodeList.get(i);
+			SubNode = this.TypeCheck(SubNode, NameSpace, ElementType, ZenTypeChecker.DefaultTypeCheckPolicy);
+			Node.NodeList.set(i, SubNode);
+			if(SubNode.Type.IsVarType()) {
+				AllTyped = false;
+				ArrayType = ZSystem.VarType;
+			}
+			else {
+				if(ElementType.IsVarType()) {
+					ElementType = SubNode.Type;
+				}
+			}
+			i = i + 1;
+		}
+		if(this.IsVisitable()) {
+			if( AllTyped && !ElementType.IsVarType()) {
+				ArrayType = ZSystem.GetGenericType1(ZSystem.ArrayType, ElementType, true);
+			}
+			this.TypedNode(Node, ArrayType);
+		}
 	}
 
 	@Override public void VisitMapLiteralNode(ZMapLiteralNode Node) {
+		@Var ZNameSpace NameSpace = this.GetNameSpace();
+		@Var ZType ContextType = this.GetContextType();
+		@Var int i = 0;
+		while(i < Node.NodeList.size()) {
+			@Var ZNode SubNode = Node.NodeList.get(i);
+			if(SubNode instanceof ZGetLocalNode) {
+				SubNode = ((ZGetLocalNode)SubNode).ToStringNode();
+			}
+			SubNode = this.TypeCheck(SubNode, NameSpace, ZSystem.StringType, ZenTypeChecker.DefaultTypeCheckPolicy);
+			Node.NodeList.set(i, SubNode);
+			i = i + 2;
+		}
+		if(this.IsVisitable()) {
+			@Var boolean AllTyped = true;
+			if(ContextType instanceof ZenClassType) {
+				@Var ZenClassType ClassType = (ZenClassType)ContextType;
+				i = 0;
+				while(i < Node.NodeList.size()) {
+					@Var ZStringNode KeyNode = (ZStringNode)Node.NodeList.get(i);
+					@Var ZType FieldType = ClassType.GetFieldType(KeyNode.StringValue, null);
+					if(FieldType == null) {
+						this.CheckErrorNode(this.UndefinedName(KeyNode, KeyNode.StringValue));
+					}
+					else {
+						@Var ZNode SubNode = Node.NodeList.get(i+1);
+						SubNode = this.TypeCheck(SubNode, NameSpace, FieldType, ZenTypeChecker.DefaultTypeCheckPolicy);
+						Node.NodeList.set(i+1, SubNode);
+						if(SubNode.Type.IsVarType()) {
+							AllTyped = false;
+							ContextType = ZSystem.VarType;
+						}
+					}
+					i = i + 2;
+				}
+			}
+			else if(ContextType.IsMapType()) {
+				@Var ZType ElementType = ContextType.GetParamType(0);
+				i = 1;
+				while(i < Node.NodeList.size()) {
+					@Var ZNode SubNode = Node.NodeList.get(i);
+					SubNode = this.TypeCheck(SubNode, NameSpace, ElementType, ZenTypeChecker.DefaultTypeCheckPolicy);
+					Node.NodeList.set(i, SubNode);
+					if(SubNode.Type.IsVarType()) {
+						AllTyped = false;
+						ContextType = ZSystem.VarType;
+					}
+					i = i + 2;
+				}
+			}
+			else {
+				AllTyped = false;
+			}
+			this.TypedNode(Node, ContextType);
+		}
+	}
+
+	@Override public void VisitNewObjectNode(ZNewObjectNode Node) {
 		this.Todo(Node);
 	}
 
 	@Override public void VisitNewArrayNode(ZNewArrayNode Node) {
-		this.Todo(Node);
-	}
-
-	@Override public void VisitNewObjectNode(ZNewObjectNode Node) {
 		this.Todo(Node);
 	}
 
