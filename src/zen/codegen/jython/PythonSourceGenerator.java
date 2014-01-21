@@ -40,12 +40,12 @@ import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZVarDeclNode;
 import zen.lang.ZSystem;
-import zen.parser.ZenSourceGenerator;
+import zen.parser.ZSourceGenerator;
 //endif VAJA
 
 //Zen Generator should be written in each language.
 
-public class PythonSourceGenerator extends ZenSourceGenerator {
+public class PythonSourceGenerator extends ZSourceGenerator {
 
 	public PythonSourceGenerator/* constructor */() {
 		super("Python", "2.0");

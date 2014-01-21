@@ -46,9 +46,9 @@ import zen.ast.ZWhileNode;
 import zen.deps.LibZen;
 import zen.lang.ZSystem;
 import zen.parser.ZSourceBuilder;
-import zen.parser.ZenSourceGenerator;
+import zen.parser.ZSourceGenerator;
 
-public class HaskellSourceGenerator extends ZenSourceGenerator {
+public class HaskellSourceGenerator extends ZSourceGenerator {
 	public ArrayList <String> Variables;
 	private static int IndentLevel = 0;
 

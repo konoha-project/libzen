@@ -38,12 +38,12 @@ import zen.deps.Var;
 
 public final class ZSourceBuilder {
 	@Field public ArrayList<String> SourceList = new ArrayList<String>();
-	@Field @Init ZenSourceGenerator Template;
+	@Field @Init ZSourceGenerator Template;
 	@Field int IndentLevel = 0;
 	@Field String CurrentIndentString = "";
 	@Field String BufferedLineComment = "";
 
-	public ZSourceBuilder(ZenSourceGenerator Template) {
+	public ZSourceBuilder(ZSourceGenerator Template) {
 		this.Template = Template;
 	}
 
