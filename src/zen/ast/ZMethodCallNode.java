@@ -25,6 +25,7 @@
 package zen.ast;
 
 import zen.deps.Field;
+import zen.lang.ZType;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 
@@ -38,5 +39,9 @@ public final class ZMethodCallNode extends ZApplyNode {
 	}
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitMethodCallNode(this);
+	}
+	public ZType[] GetParamType() {
+
+		return null;
 	}
 }

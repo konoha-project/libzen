@@ -26,21 +26,9 @@ import zen.lang.ZSystem;
 import zen.lang.ZType;
 import zen.parser.ZGenerator;
 
-
-final class JLocalVarStack {
-	public final String Name;
-	public final Type   TypeInfo;
-	public final int    Index;
-	public JLocalVarStack(int Index, Type TypeInfo, String Name) {
-		this.Index = Index;
-		this.TypeInfo = TypeInfo;
-		this.Name = Name;
-	}
-}
-
 class JMethodBuilder {
 	final MethodVisitor           AsmVisitor;
-	final JavaByteCodeGenerator2   Generator2;
+	final JavaByteCodeGenerator   Generator;
 	final JMethodBuilder          Parent;
 	ArrayList<JLocalVarStack>     LocalVals;
 	int                           LocalSize;
@@ -48,7 +36,7 @@ class JMethodBuilder {
 	Stack<Label>                  ContinueLabelStack;
 	int PreviousLine;
 
-	JMethodBuilder(JavaByteCodeGenerator2 Generator, MethodVisitor AsmVisitor, JMethodBuilder Parent) {
+	JMethodBuilder(JavaByteCodeGenerator Generator, MethodVisitor AsmVisitor, JMethodBuilder Parent) {
 		this.Generator = Generator;
 		this.AsmVisitor = AsmVisitor;
 		this.Parent = Parent;
@@ -75,12 +63,12 @@ class JMethodBuilder {
 	}
 
 	void LoadLocal(JLocalVarStack local) {
-		Type type = local.TypeInfo;
+		Type type = local.AsmType;
 		this.AsmVisitor.visitVarInsn(type.getOpcode(ILOAD), local.Index);
 	}
 
 	void StoreLocal(JLocalVarStack local) {
-		Type type = local.TypeInfo;
+		Type type = local.AsmType;
 		this.AsmVisitor.visitVarInsn(type.getOpcode(ISTORE), local.Index);
 	}
 
@@ -96,7 +84,7 @@ class JMethodBuilder {
 
 	JLocalVarStack AddLocal(ZType GreenType, String Name) {
 		Type LocalType =  this.Generator.GetAsmType(GreenType);
-		JLocalVarStack local = new JLocalVarStack(this.LocalSize, LocalType, Name);
+		JLocalVarStack local = new JLocalVarStack(this.LocalSize, null, LocalType, Name);
 		this.LocalVals.add(local);
 		this.LocalSize += LocalType.getSize();
 		return local;
@@ -126,7 +114,6 @@ class JMethodBuilder {
 			this.AsmVisitor.visitInsn(DUP);
 			this.AsmVisitor.visitLdcInsn(i);
 			NodeList.get(i).Accept(Visitor);
-			//			System.out.println("i="+i+" type="+NodeList.get(i).Type);
 			this.CheckCast(Object.class, NodeList.get(i).Type);
 			this.AsmVisitor.visitInsn(AASTORE);
 		}

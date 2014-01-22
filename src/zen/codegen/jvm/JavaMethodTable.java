@@ -51,10 +51,24 @@ public class JavaMethodTable {
 		Import(ZSystem.VarType, "^", ZSystem.VarType, ZenVarApi.class, "BitwiseXor");
 		Import(ZSystem.VarType, "<<", ZSystem.VarType, ZenVarApi.class, "LeftShift");
 		Import(ZSystem.VarType, ">>", ZSystem.VarType, ZenVarApi.class, "RightShift");
+
 		Import(boolean.class, ZenVarApi.class, "toObject");
 		Import(long.class, ZenVarApi.class, "toObject");
 		Import(double.class, ZenVarApi.class, "toObject");
+
+		Import(ZenVarApi.class, "GetField", Object.class, String.class);
+		Import(ZenVarApi.class, "SetField", Object.class, String.class, Object.class);
 	}
+
+	static void Import(Class<?> BaseClass, String Name, Class<?> ... T1) {
+		try {
+			Method sMethod = BaseClass.getMethod(Name, T1);
+			MethodMap.put(Name, sMethod);
+		} catch (Exception e) {
+			System.err.println("FIXME:" + e);
+		}
+	}
+
 	static String BinaryKey(ZType T1, String Op, ZType T2) {
 		return T1.GetUniqueName()+Op+T2.GetUniqueName();
 	}
@@ -87,6 +101,10 @@ public class JavaMethodTable {
 		} catch (Exception e) {
 			System.err.println("FIXME:" + e);
 		}
+	}
+
+	static Method GetStaticMethod(String Name) {
+		return MethodMap.get(Name);
 	}
 
 	static Method GetBinaryStaticMethod(ZType T1, String Op, ZType T2) {
