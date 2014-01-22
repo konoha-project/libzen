@@ -462,14 +462,18 @@ public class JavaByteCodeGenerator extends ZGenerator {
 	}
 
 	@Override public void VisitBlockNode(ZBlockNode Node) {
-		// TODO Auto-generated method stub
-
+		for (int i = 0; i < Node.StmtList.size(); i++) {
+			Node.StmtList.get(i).Accept(this);
+		}
 	}
 
 	@Override public void VisitVarDeclNode(ZVarDeclNode Node) {
 		JLocalVarStack local = this.CurrentBuilder.AddLocal(Node.Type, Node.NativeName);
 		this.CurrentBuilder.PushEvaluatedNode(Node.DeclType, Node.InitNode);
 		this.CurrentBuilder.StoreLocal(local);
+		for (int i = 0; i < Node.StmtList.size(); i++) {
+			Node.StmtList.get(i).Accept(this);
+		}
 	}
 
 	@Override public void VisitIfNode(ZIfNode Node) {

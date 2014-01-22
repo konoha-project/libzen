@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import zen.ast.ZBinaryNode;
@@ -16,62 +17,66 @@ import zen.deps.Var;
 import zen.lang.ZFuncSet;
 import zen.lang.ZSystem;
 import zen.lang.ZType;
+import zen.lang.ZenVarType;
 import zen.parser.ZLogger;
 
 public class JMethod {
 	public Method Body;
-	private final ZType ReturnType;
 	private final ZType[] TypeParams;
 	public JMethod(ZType ReturnType, String Name, ZType ThisType, String MethodName) {
-		this.TypeParams = new ZType[1];
-		this.TypeParams[0] = ThisType;
-		this.ReturnType = ReturnType;
+		this.TypeParams = new ZType[2];
+		this.TypeParams[0] = ReturnType;
+		this.TypeParams[1] = ThisType;
 		this.Body = LibNative.ImportMethod(this.TypeParams, MethodName, true);
 	}
 
 	public JMethod(ZType ReturnType, String Name, ZType ThisType, ZType Arg1Type, String MethodName) {
-		this.TypeParams = new ZType[2];
-		this.TypeParams[0] = ThisType;
-		this.TypeParams[1] = Arg1Type;
-		this.ReturnType = ReturnType;
+		this.TypeParams = new ZType[3];
+		this.TypeParams[0] = ReturnType;
+		this.TypeParams[1] = ThisType;
+		this.TypeParams[2] = Arg1Type;
 		this.Body = LibNative.ImportMethod(this.TypeParams, MethodName, true);
 	}
 
-	static {
-		ImportMethod(ZSystem.IntType, "+", ZSystem.IntType, "IntApi.Plus");
-		ImportMethod(ZSystem.IntType, "-", ZSystem.IntType, "IntApi.Minus");
-		ImportMethod(ZSystem.IntType, "~", ZSystem.IntType, "IntApi.BitwiseNot");
-		ImportMethod(ZSystem.IntType, "+", ZSystem.IntType, ZSystem.IntType, "IntApi.Add");
-		ImportMethod(ZSystem.IntType, "-", ZSystem.IntType, ZSystem.IntType, "IntApi.Sub");
-		ImportMethod(ZSystem.IntType, "*", ZSystem.IntType, ZSystem.IntType, "IntApi.Mul");
-		ImportMethod(ZSystem.IntType, "/", ZSystem.IntType, ZSystem.IntType, "IntApi.Div");
-		ImportMethod(ZSystem.IntType, "%", ZSystem.IntType, ZSystem.IntType, "IntApi.Mod");
-		ImportMethod(ZSystem.IntType, "<<", ZSystem.IntType, ZSystem.IntType, "IntApi.LeftShift");
-		ImportMethod(ZSystem.IntType, ">>", ZSystem.IntType, ZSystem.IntType, "IntApi.RightShift");
-		ImportMethod(ZSystem.IntType, "^", ZSystem.IntType, ZSystem.IntType, "IntApi.BitwiseAnd");
-		ImportMethod(ZSystem.IntType, "|", ZSystem.IntType, ZSystem.IntType, "IntApi.BitwiseOr");
-		ImportMethod(ZSystem.IntType, "&", ZSystem.IntType, ZSystem.IntType, "IntApi.BitwiseXor");
-		ImportMethod(ZSystem.BooleanType, "<", ZSystem.IntType,  ZSystem.IntType, "IntApi.LessThan");
-		ImportMethod(ZSystem.BooleanType, "<=", ZSystem.IntType, ZSystem.IntType, "IntApi.LessThanEquals");
-		ImportMethod(ZSystem.BooleanType, ">", ZSystem.IntType, ZSystem.IntType, "IntApi.GreaterThan");
-		ImportMethod(ZSystem.BooleanType, ">=", ZSystem.IntType, ZSystem.IntType, "IntApi.GreaterThanEquals");
-		ImportMethod(ZSystem.BooleanType, "==", ZSystem.IntType, ZSystem.IntType, "IntApi.Equals");
-		ImportMethod(ZSystem.BooleanType, "!=", ZSystem.IntType, ZSystem.IntType, "IntApi.NotEquals");
-	}
+	static private final HashMap<String, HashMap<ArrayList<ZType>, JMethod>> MethodTable = new HashMap<String, HashMap<ArrayList<ZType>,JMethod>>();;
 
-	static private final HashMap<String, HashMap<ZType[], JMethod>> MethodTable = new HashMap<String, HashMap<ZType[],JMethod>>();;
+	static {
+		ImportMethod(ZSystem.IntType, "+", ZSystem.IntType, "zen.codegen.jvm.IntApi.Plus");
+		ImportMethod(ZSystem.IntType, "-", ZSystem.IntType, "zen.codegen.jvm.IntApi.Minus");
+		ImportMethod(ZSystem.IntType, "~", ZSystem.IntType, "zen.codegen.jvm.IntApi.BitwiseNot");
+		ImportMethod(ZSystem.IntType, "+", ZSystem.IntType, ZSystem.IntType, "zen.codegen.jvm.IntApi.Add");
+		ImportMethod(ZSystem.IntType, "-", ZSystem.IntType, ZSystem.IntType, "zen.codegen.jvm.IntApi.Sub");
+		ImportMethod(ZSystem.IntType, "*", ZSystem.IntType, ZSystem.IntType, "zen.codegen.jvm.IntApi.Mul");
+		ImportMethod(ZSystem.IntType, "/", ZSystem.IntType, ZSystem.IntType, "zen.codegen.jvm.IntApi.Div");
+		ImportMethod(ZSystem.IntType, "%", ZSystem.IntType, ZSystem.IntType, "zen.codegen.jvm.IntApi.Mod");
+		ImportMethod(ZSystem.IntType, "<<", ZSystem.IntType, ZSystem.IntType, "zen.codegen.jvm.IntApi.LeftShift");
+		ImportMethod(ZSystem.IntType, ">>", ZSystem.IntType, ZSystem.IntType, "zen.codegen.jvm.IntApi.RightShift");
+		ImportMethod(ZSystem.IntType, "^", ZSystem.IntType, ZSystem.IntType, "zen.codegen.jvm.IntApi.BitwiseAnd");
+		ImportMethod(ZSystem.IntType, "|", ZSystem.IntType, ZSystem.IntType, "zen.codegen.jvm.IntApi.BitwiseOr");
+		ImportMethod(ZSystem.IntType, "&", ZSystem.IntType, ZSystem.IntType, "zen.codegen.jvm.IntApi.BitwiseXor");
+		ImportMethod(ZSystem.BooleanType, "<", ZSystem.IntType,  ZSystem.IntType, "zen.codegen.jvm.IntApi.LessThan");
+		ImportMethod(ZSystem.BooleanType, "<=", ZSystem.IntType, ZSystem.IntType, "zen.codegen.jvm.IntApi.LessThanEquals");
+		ImportMethod(ZSystem.BooleanType, ">", ZSystem.IntType, ZSystem.IntType, "zen.codegen.jvm.IntApi.GreaterThan");
+		ImportMethod(ZSystem.BooleanType, ">=", ZSystem.IntType, ZSystem.IntType, "zen.codegen.jvm.IntApi.GreaterThanEquals");
+		ImportMethod(ZSystem.BooleanType, "==", ZSystem.IntType, ZSystem.IntType, "zen.codegen.jvm.IntApi.Equals");
+		ImportMethod(ZSystem.BooleanType, "!=", ZSystem.IntType, ZSystem.IntType, "zen.codegen.jvm.IntApi.NotEquals");
+	}
 
 	private static void PutMethodTable(JMethod Method, String MethodName) {
-		HashMap<ZType[], JMethod> Table = MethodTable.get(MethodName);
+		HashMap<ArrayList<ZType>, JMethod> Table = MethodTable.get(MethodName);
 		if(Table == null) {
-			Table = new HashMap<ZType[], JMethod>();
+			Table = new HashMap<ArrayList<ZType>, JMethod>();
 			MethodTable.put(MethodName, Table);
 		}
-		Table.put(Method.TypeParams, Method);
+		ArrayList<ZType> TypeParam = new ArrayList<ZType>();
+		for (int i = 0; i < Method.TypeParams.length; i++) {
+			TypeParam.add(Method.TypeParams[i]);
+		}
+		Table.put(TypeParam, Method);
 	}
 
-	private static JMethod GetMethodFromMethodTable(String MethodName, ZType[] TypeParams) {
-		HashMap<ZType[], JMethod> Table = MethodTable.get(MethodName);
+	private static JMethod GetMethodFromMethodTable(String MethodName, ArrayList<ZType> TypeParams) {
+		HashMap<ArrayList<ZType>, JMethod> Table = MethodTable.get(MethodName);
 		if(Table == null) {
 			return null;
 		}
@@ -89,37 +94,48 @@ public class JMethod {
 	}
 
 	public ZType GetType(int Index) {
-		return this.TypeParams[Index];
+		return this.TypeParams[Index + 1];
 	}
 
 	public ZType GetReturnType() {
-		return this.ReturnType;
+		return this.TypeParams[0];
+	}
+
+	private static ZType Peel(ZType VarType) {
+		while(VarType instanceof ZenVarType) {
+			VarType = VarType.RefType;
+		}
+		return VarType;
 	}
 
 	public static JMethod FindMethod(ZBinaryNode Node) {
-		ZType[] TypeParams = new ZType[2];
-		TypeParams[0] = Node.LeftNode.Type;
-		TypeParams[1] = Node.RightNode.Type;
+		ArrayList<ZType> TypeParams = new ArrayList<ZType>();
+		TypeParams.add(Peel(Node.Type));
+		TypeParams.add(Peel(Node.LeftNode.Type));
+		TypeParams.add(Peel(Node.RightNode.Type));
 		return GetMethodFromMethodTable(Node.SourceToken.ParsedText, TypeParams);
 	}
 
 	public static JMethod FindMethod(ZUnaryNode Node) {
-		ZType[] TypeParams = new ZType[1];
-		TypeParams[0] = Node.RecvNode.Type;
+		ArrayList<ZType> TypeParams = new ArrayList<ZType>();
+		TypeParams.add(Peel(Node.Type));
+		TypeParams.add(Peel(Node.RecvNode.Type));
 		return GetMethodFromMethodTable(Node.SourceToken.ParsedText, TypeParams);
 	}
 	public static JMethod FindMethod(ZGetIndexNode Node) {
-		ZType[] TypeParams = new ZType[2];
-		TypeParams[0] = Node.RecvNode.Type;
-		TypeParams[1] = Node.IndexNode.Type;
+		ArrayList<ZType> TypeParams = new ArrayList<ZType>();
+		TypeParams.add(Peel(Node.Type));
+		TypeParams.add(Peel(Node.RecvNode.Type));
+		TypeParams.add(Peel(Node.IndexNode.Type));
 		return GetMethodFromMethodTable(Node.SourceToken.ParsedText, TypeParams);
 	}
 
 	public static JMethod FindMethod(ZSetIndexNode Node) {
-		ZType[] TypeParams = new ZType[3];
-		TypeParams[0] = Node.RecvNode.Type;
-		TypeParams[1] = Node.IndexNode.Type;
-		TypeParams[2] = Node.ValueNode.Type;
+		ArrayList<ZType> TypeParams = new ArrayList<ZType>();
+		TypeParams.add(Peel(Node.Type));
+		TypeParams.add(Peel(Node.RecvNode.Type));
+		TypeParams.add(Peel(Node.IndexNode.Type));
+		TypeParams.add(Peel(Node.ValueNode.Type));
 		return GetMethodFromMethodTable(Node.SourceToken.ParsedText, TypeParams);
 	}
 
