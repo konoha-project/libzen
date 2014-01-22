@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import zen.ast.ZNode;
 import zen.deps.Field;
 import zen.deps.LibZen;
-import zen.parser.ZenSourceGenerator;
+import zen.parser.ZSourceGenerator;
 
 public class ZenMacro extends ZFunc {
 	@Field String Macro;
@@ -14,7 +14,7 @@ public class ZenMacro extends ZFunc {
 		this.Macro = Macro;
 	}
 
-	public void Expand(ZenSourceGenerator Generator, ArrayList<ZNode> ParamList) {
+	public void Expand(ZSourceGenerator Generator, ArrayList<ZNode> ParamList) {
 		int BeginIndex = 0;
 		while(true) {
 			int Index = this.Macro.indexOf("${", BeginIndex);

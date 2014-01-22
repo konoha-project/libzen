@@ -44,7 +44,7 @@ import zen.lang.ZType;
 import zen.parser.ZGenerator;
 import zen.parser.ZLogger;
 import zen.parser.ZNameSpace;
-import zen.parser.ZenSourceGenerator;
+import zen.parser.ZSourceGenerator;
 import zen.parser.ZTokenContext;
 import zen.parser.ZVisitor;
 
@@ -543,7 +543,7 @@ public class LibNative {
 				e.printStackTrace();
 			}
 		}
-		return new ZenSourceGenerator("zen", "0.1");
+		return new ZSourceGenerator("zen", "0.1");
 	}
 
 }

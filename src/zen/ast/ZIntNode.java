@@ -29,13 +29,13 @@ import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 
 public final class ZIntNode extends ZConstNode {
-	@Field public long	FloatValue;
+	@Field public long	IntValue;
 	public ZIntNode(ZToken Token, long Value) {
 		super(Token);
-		this.FloatValue = Value;
+		this.IntValue = Value;
 	}
 	@Override public final Object GetValue() {
-		return this.FloatValue;
+		return this.IntValue;
 	}
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitIntNode(this);

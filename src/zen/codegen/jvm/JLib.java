@@ -5,13 +5,10 @@ import java.util.HashMap;
 
 import org.objectweb.asm.Type;
 
-import zen.ast.ZFuncDeclNode;
 import zen.deps.LibNative;
 import zen.deps.ZenArray;
 import zen.lang.ZFunc;
 import zen.lang.ZSystem;
-import zen.lang.ZType;
-import zen.parser.ZNameSpace;
 
 class JLib {
 	static HashMap<String, Type> TypeMap = new HashMap<String, Type>();
@@ -84,34 +81,9 @@ class JLib {
 		}
 	}
 
-	public static String GetHolderClassName(ZNameSpace NameSpace, String FuncName) {
+	public static String GetHolderClassName(String FuncName) {
 		return "FuncHolder" + FuncName + "$" + 0; //Context.ParserId;
 	}
 
-	static Type GetAsmType(ZType ZType) {
-		Type type = TypeMap.get(ZType.ShortName);
-		if(type != null) {
-			return type;
-		}
-		//		if(GreenType.TypeBody != null && GreenType.TypeBody instanceof Class<?>) {
-		//			return Type.getType((Class<?>) GreenType.TypeBody);
-		//		}
-		//		if(GreenType.IsTypeVariable()) {
-		//			return Type.getType(Object.class);
-		//		}
-		//		if(GreenType.IsGenericType()) {
-		//			return GetAsmType(GreenType.BaseType);
-		//		}
-		return Type.getType("L" + ZType.GetNativeName() + ";");
-	}
 
-	static String GetMethodDescriptor(ZFuncDeclNode Func) {
-		Type ReturnType = GetAsmType(Func.ReturnType);
-		Type[] argTypes = new Type[Func.ArgumentList.size()];
-		for(int i = 0; i < argTypes.length; i++) {
-			ZType ParamType = Func.ArgumentList.get(i).Type;
-			argTypes[i] = GetAsmType(ParamType);
-		}
-		return Type.getMethodDescriptor(ReturnType, argTypes);
-	}
 }

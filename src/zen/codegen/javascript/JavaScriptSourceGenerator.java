@@ -43,9 +43,9 @@ import zen.ast.ZTryNode;
 import zen.ast.ZVarDeclNode;
 import zen.ast.ZNode;
 import zen.lang.ZSystem;
-import zen.parser.ZenSourceGenerator;
+import zen.parser.ZSourceGenerator;
 
-public class JavaScriptSourceGenerator extends ZenSourceGenerator {
+public class JavaScriptSourceGenerator extends ZSourceGenerator {
 
 	private final ScriptEngineManager EngineManager;
 	private final ScriptEngine Engine;

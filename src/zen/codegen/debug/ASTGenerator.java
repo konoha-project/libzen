@@ -70,9 +70,9 @@ import zen.ast.ZUnaryNode;
 import zen.ast.ZVarDeclNode;
 import zen.ast.ZWhileNode;
 import zen.lang.ZSystem;
-import zen.parser.ZenSourceGenerator;
+import zen.parser.ZSourceGenerator;
 
-public class ASTGenerator extends ZenSourceGenerator {
+public class ASTGenerator extends ZSourceGenerator {
 
 	public ASTGenerator() {
 		super("ast", "1");

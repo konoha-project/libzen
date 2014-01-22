@@ -81,7 +81,7 @@ import zen.lang.ZType;
 
 //endif VAJA
 
-public class ZenSourceGenerator extends ZGenerator {
+public class ZSourceGenerator extends ZGenerator {
 	@Field public ZenMap<String> NativeTypeMap;
 	@Field private final ArrayList<ZSourceBuilder> BuilderList;
 	@Field protected ZSourceBuilder HeaderBuilder;
@@ -105,7 +105,7 @@ public class ZenSourceGenerator extends ZGenerator {
 
 	@Field public String TopType;
 
-	public ZenSourceGenerator(String TargetCode, String TargetVersion) {
+	public ZSourceGenerator(String TargetCode, String TargetVersion) {
 		super(TargetCode, TargetVersion);
 		this.NativeTypeMap = new ZenMap<String>(null);
 		this.BuilderList = new ArrayList<ZSourceBuilder>();
@@ -241,7 +241,7 @@ public class ZenSourceGenerator extends ZGenerator {
 
 	@Override
 	public void VisitIntNode(ZIntNode Node) {
-		this.CurrentBuilder.Append("" + Node.FloatValue);
+		this.CurrentBuilder.Append("" + Node.IntValue);
 	}
 
 	@Override

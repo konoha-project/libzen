@@ -41,9 +41,9 @@ import zen.ast.ZStringNode;
 import zen.ast.ZUnaryNode;
 import zen.ast.ZVarDeclNode;
 import zen.ast.ZWhileNode;
-import zen.parser.ZenSourceGenerator;
+import zen.parser.ZSourceGenerator;
 
-public class CommonLispSourceGenerator extends ZenSourceGenerator {
+public class CommonLispSourceGenerator extends ZSourceGenerator {
 
 	public CommonLispSourceGenerator() {
 		super("CommonLisp", "0.0");

@@ -32,12 +32,12 @@ import zen.ast.ZInstanceOfNode;
 import zen.ast.ZParamNode;
 import zen.ast.ZVarDeclNode;
 import zen.lang.ZSystem;
-import zen.parser.ZenSourceGenerator;
+import zen.parser.ZSourceGenerator;
 //endif VAJA
 
 //Zen Generator should be written in each language.
 
-public class CSourceGenerator extends ZenSourceGenerator {
+public class CSourceGenerator extends ZSourceGenerator {
 
 	public CSourceGenerator/* constructor */() {
 		super("C", "99");

@@ -4,7 +4,6 @@ import static org.objectweb.asm.Opcodes.AASTORE;
 import static org.objectweb.asm.Opcodes.ANEWARRAY;
 import static org.objectweb.asm.Opcodes.CHECKCAST;
 import static org.objectweb.asm.Opcodes.DUP;
-import static org.objectweb.asm.Opcodes.GETSTATIC;
 import static org.objectweb.asm.Opcodes.ILOAD;
 import static org.objectweb.asm.Opcodes.INVOKEINTERFACE;
 import static org.objectweb.asm.Opcodes.INVOKESPECIAL;
@@ -26,14 +25,12 @@ import zen.ast.ZNode;
 import zen.lang.ZSystem;
 import zen.lang.ZType;
 import zen.parser.ZGenerator;
-import zen.parser.ZNameSpace;
 
 
 final class JLocalVarStack {
 	public final String Name;
 	public final Type   TypeInfo;
 	public final int    Index;
-
 	public JLocalVarStack(int Index, Type TypeInfo, String Name) {
 		this.Index = Index;
 		this.TypeInfo = TypeInfo;
@@ -42,19 +39,19 @@ final class JLocalVarStack {
 }
 
 class JMethodBuilder {
-	final ZenClassLoader           LocalClassLoader;
-	final MethodVisitor                 AsmVisitor;
-	final ZGenerator                   Generator;
+	final MethodVisitor           AsmVisitor;
+	final JavaByteCodeGenerator   Generator;
+	final JMethodBuilder          Parent;
 	ArrayList<JLocalVarStack>     LocalVals;
 	int                           LocalSize;
 	Stack<Label>                  BreakLabelStack;
 	Stack<Label>                  ContinueLabelStack;
 	int PreviousLine;
 
-	public JMethodBuilder(ZGenerator Generator, ZenClassLoader ClassLoader, MethodVisitor AsmVisitor) {
+	JMethodBuilder(JavaByteCodeGenerator Generator, MethodVisitor AsmVisitor, JMethodBuilder Parent) {
 		this.Generator = Generator;
-		this.LocalClassLoader = ClassLoader;
 		this.AsmVisitor = AsmVisitor;
+		this.Parent = Parent;
 		this.LocalVals = new ArrayList<JLocalVarStack>();
 		this.LocalSize = 0;
 		this.BreakLabelStack = new Stack<Label>();
@@ -98,7 +95,7 @@ class JMethodBuilder {
 	}
 
 	public JLocalVarStack AddLocal(ZType GreenType, String Name) {
-		Type LocalType =  JLib.GetAsmType(GreenType);
+		Type LocalType =  this.Generator.GetAsmType(GreenType);
 		JLocalVarStack local = new JLocalVarStack(this.LocalSize, LocalType, Name);
 		this.LocalVals.add(local);
 		this.LocalSize += LocalType.getSize();
@@ -110,22 +107,12 @@ class JMethodBuilder {
 			this.AsmVisitor.visitLdcInsn(Value);
 			return;
 		}
-		if(Value instanceof ZNameSpace) {
-			this.AsmVisitor.visitFieldInsn(GETSTATIC, this.LocalClassLoader.GlobalStaticClassName, this.LocalClassLoader.ContextFieldName, this.LocalClassLoader.GontextDescripter);
-			return;
-		}
 		if(Value instanceof ZType) {
 			int id = ((ZType)Value).TypeId;
 			this.AsmVisitor.visitLdcInsn(id);
 			this.InvokeMethodCall(ZType.class, JLib.GetTypeById);
 			return;
 		}
-		//		else if(Value instanceof ZenFunc) {
-		//			int id = ((ZenFunc)Value).FuncId;
-		//			this.AsmVisitor.visitLdcInsn(id);
-		//			this.InvokeMethodCall(ZenFunc.class, JLib.GetFuncById);
-		//			return;
-		//		}
 		int id = ZSystem.AddConstPool(Value);
 		this.AsmVisitor.visitLdcInsn(id);
 		this.InvokeMethodCall(Value.getClass(), JLib.GetConstPool);

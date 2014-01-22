@@ -54,11 +54,11 @@ public final class ZLogger {
 	public final static int VerboseSymbol    = 1;
 
 	@Field public ArrayList<String>  ReportedErrorList = new ArrayList<String>();
-	@Field public ZenMap<ZenCounter> StatMap;
+	@Field public ZenMap<ZCounter> StatMap;
 
 	public ZLogger() {
 		if(LibNative.GetEnv("ZENSTAT") != null) {
-			this.StatMap = new ZenMap<ZenCounter>(null);
+			this.StatMap = new ZenMap<ZCounter>(null);
 		}
 		else {
 			this.StatMap = null;
@@ -121,9 +121,9 @@ public final class ZLogger {
 
 	public final void Count(String EventName) {
 		if(this.StatMap != null) {
-			ZenCounter Counter = this.StatMap.GetOrNull(EventName);
+			ZCounter Counter = this.StatMap.GetOrNull(EventName);
 			if(Counter == null) {
-				Counter = new ZenCounter();
+				Counter = new ZCounter();
 				this.StatMap.put(EventName, Counter);
 			}
 			else {
@@ -135,9 +135,9 @@ public final class ZLogger {
 	public final void CountCreation(Object CreatedObject) {
 		if(this.StatMap != null) {
 			@Var String EventName = "CreationOf" + LibNative.GetClassName(CreatedObject);
-			@Var ZenCounter Counter = this.StatMap.GetOrNull(EventName);
+			@Var ZCounter Counter = this.StatMap.GetOrNull(EventName);
 			if(Counter == null) {
-				Counter = new ZenCounter();
+				Counter = new ZCounter();
 				this.StatMap.put(EventName, Counter);
 			}
 			else {
@@ -183,8 +183,8 @@ public final class ZLogger {
 
 }
 
-class ZenCounter {
+class ZCounter {
 	@Field @Init public int count = 1;
-	ZenCounter() {
+	ZCounter() {
 	}
 }
