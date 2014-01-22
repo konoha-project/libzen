@@ -5,8 +5,6 @@ import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
 
 import java.util.HashMap;
 
-import org.objectweb.asm.tree.MethodNode;
-
 import zen.ast.ZNode;
 import zen.deps.Var;
 import zen.lang.ZSystem;
@@ -50,12 +48,11 @@ class JClassLoader extends ClassLoader {
 		return cb;
 	}
 
-	JClassBuilder NewFunctionHolderClass(ZNode Node, String FuncName, MethodNode AsmMethodNode) {
+	JClassBuilder NewFunctionHolderClass(ZNode Node, String FuncName) {
 		@Var String SourceFile = ZSystem.GetSourceFileName(Node.SourceToken.FileLine);
-		@Var JClassBuilder HolderClass = new JClassBuilder(ACC_PUBLIC|ACC_FINAL, SourceFile, JLib.GetHolderClassName(FuncName), "java/lang/Object");
-		this.AddClassBuilder(HolderClass);
-		HolderClass.AddMethod(AsmMethodNode);
-		return HolderClass;
+		@Var JClassBuilder cb = new JClassBuilder(ACC_PUBLIC|ACC_FINAL, SourceFile, JLib.GetHolderClassName(FuncName), "java/lang/Object");
+		this.AddClassBuilder(cb);
+		return cb;
 	}
 
 	@Override protected Class<?> findClass(String name) {

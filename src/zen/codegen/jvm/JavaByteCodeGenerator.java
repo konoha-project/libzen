@@ -104,6 +104,7 @@ import zen.lang.ZFunc;
 import zen.lang.ZSystem;
 import zen.lang.ZType;
 import zen.lang.ZTypeFlag;
+import zen.lang.ZenFuncType;
 import zen.parser.ZGenerator;
 
 public class JavaByteCodeGenerator extends ZGenerator {
@@ -151,6 +152,20 @@ public class JavaByteCodeGenerator extends ZGenerator {
 	private String GetTypeDesc(ZType zType) {
 		Class<?> JClass = this.GetJClass(zType);
 		return Type.getDescriptor(JClass);
+	}
+
+	Type GetAsmType(ZType zType) {
+		return Type.getType(this.GetJClass(zType));
+	}
+
+	String GetMethodDescriptor(ZenFuncType FuncType) {
+		@Var Type ReturnType = this.GetAsmType(FuncType.GetReturnType());
+		@Var Type[] ArgTypes = new Type[FuncType.GetFuncParamSize()];
+		for(int i = 0; i < ArgTypes.length; i++) {
+			ZType ParamType = FuncType.GetParamType(i);
+			ArgTypes[i] = this.GetAsmType(ParamType);
+		}
+		return Type.getMethodDescriptor(ReturnType, ArgTypes);
 	}
 
 	private Object GetConstValue(ZNode Node) {
@@ -208,7 +223,7 @@ public class JavaByteCodeGenerator extends ZGenerator {
 	}
 
 	@Override public void VisitNewObjectNode(ZNewObjectNode Node) {
-		Type type = JLib.GetAsmType(Node.Type);
+		Type type = this.GetAsmType(Node.Type);
 		String owner = type.getInternalName();
 		this.CurrentBuilder.AsmVisitor.visitTypeInsn(NEW, owner);
 		this.CurrentBuilder.AsmVisitor.visitInsn(DUP);
@@ -242,16 +257,16 @@ public class JavaByteCodeGenerator extends ZGenerator {
 
 	@Override public void VisitGetterNode(ZGetterNode Node) {
 		String Name = Node.FieldName;
-		Type FieldType = JLib.GetAsmType(Node.Type);
-		Type OwnerType = JLib.GetAsmType(Node.RecvNode.Type);
+		Type FieldType = this.GetAsmType(Node.Type);
+		Type OwnerType = this.GetAsmType(Node.RecvNode.Type);
 		Node.RecvNode.Accept(this);
 		this.CurrentBuilder.AsmVisitor.visitFieldInsn(GETFIELD, OwnerType.getInternalName(), Name, FieldType.getDescriptor());
 	}
 
 	@Override public void VisitSetterNode(ZSetterNode Node) {
 		String Name = Node.FieldName;
-		Type FieldType = JLib.GetAsmType(Node.Type);
-		Type OwnerType = JLib.GetAsmType(Node.RecvNode.Type);
+		Type FieldType = this.GetAsmType(Node.Type);
+		Type OwnerType = this.GetAsmType(Node.RecvNode.Type);
 		Node.RecvNode.Accept(this);
 		this.CurrentBuilder.PushEvaluatedNode(Node.Type, Node.ValueNode);
 		this.CurrentBuilder.AsmVisitor.visitFieldInsn(PUTFIELD, OwnerType.getInternalName(), Name, FieldType.getDescriptor());
@@ -393,7 +408,7 @@ public class JavaByteCodeGenerator extends ZGenerator {
 	@Override public void VisitReturnNode(ZReturnNode Node) {
 		if(Node.ValueNode != null) {
 			Node.ValueNode.Accept(this);
-			Type type = JLib.GetAsmType(Node.ValueNode.Type);
+			Type type = this.GetAsmType(Node.ValueNode.Type);
 			this.CurrentBuilder.AsmVisitor.visitInsn(type.getOpcode(IRETURN));
 		}
 		else {
@@ -466,7 +481,7 @@ public class JavaByteCodeGenerator extends ZGenerator {
 
 		// prepare
 		//TODO: add exception class name
-		String throwType = JLib.GetAsmType(Node.ExceptionType).getInternalName();
+		String throwType = this.GetAsmType(Node.ExceptionType).getInternalName();
 		mv.visitTryCatchBlock(Label.beginTryLabel, Label.endTryLabel, catchLabel, throwType);
 
 		// catch block
@@ -489,21 +504,18 @@ public class JavaByteCodeGenerator extends ZGenerator {
 	}
 
 	@Override public void VisitFuncDeclNode(ZFuncDeclNode Node) {
-		String MethodName = Node.FuncName;
-		String MethodDesc = JLib.GetMethodDescriptor(Node);
-		MethodNode AsmMethodNode = new MethodNode(ACC_PUBLIC | ACC_STATIC, MethodName, MethodDesc, null, null);
-		JClassBuilder ClassHolder = this.ClassLoader.NewFunctionHolderClass(Node, MethodName, AsmMethodNode);
-
-		JMethodBuilder LocalBuilder = new JMethodBuilder(this, this.ClassLoader, AsmMethodNode);
-		JMethodBuilder PushedBuilder = this.CurrentBuilder;
-
+		String FuncName = Node.ReferenceName;
+		JClassBuilder  HolderClass = this.ClassLoader.NewFunctionHolderClass(Node, FuncName);
+		String MethodDesc = this.GetMethodDescriptor(Node.GetFuncType(null));
+		MethodNode AsmMethodNode = new MethodNode(ACC_PUBLIC | ACC_STATIC, FuncName, MethodDesc, null, null);
+		HolderClass.AddMethod(AsmMethodNode);
+		this.CurrentBuilder = new JMethodBuilder(this, AsmMethodNode, this.CurrentBuilder);
 		for(int i = 0; i < Node.ArgumentList.size(); i++) {
-			//String Name = Node.ArgumentList.get(i);
-			//LocalBuilder.AddLocal(Func.GetFuncParamType(i), Name);
+			ZParamNode ParamNode =(ZParamNode)Node.ArgumentList.get(i);
+			this.CurrentBuilder.AddLocal(ParamNode.Type, ParamNode.Name);
 		}
-		this.CurrentBuilder = LocalBuilder;
 		Node.BodyNode.Accept(this);
-		this.CurrentBuilder = PushedBuilder;
+		this.CurrentBuilder = this.CurrentBuilder.Parent;
 	}
 
 	@Override public void VisitClassDeclNode(ZClassDeclNode Node) {

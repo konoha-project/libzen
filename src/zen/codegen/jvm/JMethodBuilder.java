@@ -39,19 +39,19 @@ final class JLocalVarStack {
 }
 
 class JMethodBuilder {
-	final JClassLoader           LocalClassLoader;
-	final MethodVisitor                 AsmVisitor;
-	final ZGenerator                   Generator;
+	final MethodVisitor           AsmVisitor;
+	final JavaByteCodeGenerator   Generator;
+	final JMethodBuilder          Parent;
 	ArrayList<JLocalVarStack>     LocalVals;
 	int                           LocalSize;
 	Stack<Label>                  BreakLabelStack;
 	Stack<Label>                  ContinueLabelStack;
 	int PreviousLine;
 
-	public JMethodBuilder(ZGenerator Generator, JClassLoader ClassLoader, MethodVisitor AsmVisitor) {
+	JMethodBuilder(JavaByteCodeGenerator Generator, MethodVisitor AsmVisitor, JMethodBuilder Parent) {
 		this.Generator = Generator;
-		this.LocalClassLoader = ClassLoader;
 		this.AsmVisitor = AsmVisitor;
+		this.Parent = Parent;
 		this.LocalVals = new ArrayList<JLocalVarStack>();
 		this.LocalSize = 0;
 		this.BreakLabelStack = new Stack<Label>();
@@ -95,7 +95,7 @@ class JMethodBuilder {
 	}
 
 	public JLocalVarStack AddLocal(ZType GreenType, String Name) {
-		Type LocalType =  JLib.GetAsmType(GreenType);
+		Type LocalType =  this.Generator.GetAsmType(GreenType);
 		JLocalVarStack local = new JLocalVarStack(this.LocalSize, LocalType, Name);
 		this.LocalVals.add(local);
 		this.LocalSize += LocalType.getSize();
