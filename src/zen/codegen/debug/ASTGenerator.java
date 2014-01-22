@@ -38,6 +38,7 @@ import zen.ast.ZComparatorNode;
 import zen.ast.ZConstPoolNode;
 import zen.ast.ZEmptyNode;
 import zen.ast.ZErrorNode;
+import zen.ast.ZFieldNode;
 import zen.ast.ZFloatNode;
 import zen.ast.ZFuncCallNode;
 import zen.ast.ZFuncDeclNode;
@@ -201,8 +202,8 @@ public class ASTGenerator extends ZenSourceGenerator {
 		this.CurrentBuilder.Append("(get-field " + Node.Type + " " + Node.FieldName + " ");
 		this.CurrentBuilder.Indent();
 		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.AppendIndent();
 		Node.RecvNode.Accept(this);
-		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.UnIndent();
 		this.CurrentBuilder.Append(")");
 	}
@@ -212,10 +213,10 @@ public class ASTGenerator extends ZenSourceGenerator {
 		this.CurrentBuilder.Append("(set-field " + Node.Type + " " + Node.FieldName + " ");
 		this.CurrentBuilder.Indent();
 		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.AppendIndent();
 		Node.RecvNode.Accept(this);
 		this.CurrentBuilder.Append(" ");
 		Node.ValueNode.Accept(this);
-		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.UnIndent();
 		this.CurrentBuilder.Append(")");
 	}
@@ -333,9 +334,8 @@ public class ASTGenerator extends ZenSourceGenerator {
 		this.CurrentBuilder.Append("(block");
 		this.CurrentBuilder.Indent();
 		this.CurrentBuilder.AppendLineFeed();
-		for (int i = 0; i < Node.StmtList.size(); i++) {
-			Node.StmtList.get(i).Accept(this);
-		}
+		this.CurrentBuilder.AppendIndent();
+		this.CurrentBuilder.AppendParamList(Node.StmtList, 0, Node.StmtList.size());
 		this.CurrentBuilder.UnIndent();
 		this.CurrentBuilder.Append(")");
 	}
@@ -451,13 +451,14 @@ public class ASTGenerator extends ZenSourceGenerator {
 	@Override
 	public void VisitFuncDeclNode(ZFuncDeclNode Node) {
 		this.CurrentBuilder.Append("(func-decl " + Node.FuncName);
-		this.CurrentBuilder.Indent();
 		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.Indent();
+		this.CurrentBuilder.AppendIndent();
 		this.CurrentBuilder.Append("(");
-		for (int i = 0; i < Node.ArgumentList.size(); i++) {
-			Node.ArgumentList.get(i).Accept(this);
-		}
+		this.CurrentBuilder.AppendParamList(Node.ArgumentList, 0, Node.ArgumentList.size());
 		this.CurrentBuilder.Append(")");
+		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.AppendIndent();
 		Node.BodyNode.Accept(this);
 		this.CurrentBuilder.UnIndent();
 		this.CurrentBuilder.Append(")");
@@ -468,12 +469,30 @@ public class ASTGenerator extends ZenSourceGenerator {
 		this.CurrentBuilder.Append("(class-decl " + Node.ClassName);
 		this.CurrentBuilder.Indent();
 		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.AppendIndent();
 		this.CurrentBuilder.Append("(");
+		this.CurrentBuilder.Indent();
 		for (int i = 0; i < Node.FieldList.size(); i++) {
-			Node.FieldList.get(i).Accept(this);
+			this.CurrentBuilder.AppendIndent();
+			this.VisitClassField(Node.FieldList.get(i));
+			this.CurrentBuilder.AppendLineFeed();
 		}
+		this.CurrentBuilder.UnIndent();
 		this.CurrentBuilder.Append(")");
 		this.CurrentBuilder.UnIndent();
+		this.CurrentBuilder.Append(")");
+	}
+
+	private void VisitClassField(ZFieldNode Node) {
+		this.CurrentBuilder.Append("(field-decl " + Node.DeclType + " " + Node.FieldName + " ");
+		if(Node.InitNode != null) {
+			this.CurrentBuilder.Append("(");
+			Node.InitNode.Accept(this);
+			this.CurrentBuilder.Append(")");
+		}
+		else {
+			this.CurrentBuilder.Append(")");
+		}
 		this.CurrentBuilder.Append(")");
 	}
 
