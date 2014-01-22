@@ -31,7 +31,6 @@ final class JLocalVarStack {
 	public final String Name;
 	public final Type   TypeInfo;
 	public final int    Index;
-
 	public JLocalVarStack(int Index, Type TypeInfo, String Name) {
 		this.Index = Index;
 		this.TypeInfo = TypeInfo;

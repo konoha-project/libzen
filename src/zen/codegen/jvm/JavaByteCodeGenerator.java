@@ -98,6 +98,9 @@ import zen.ast.ZVarDeclNode;
 import zen.ast.ZWhileNode;
 import zen.deps.LibNative;
 import zen.deps.Var;
+import zen.deps.ZenArray;
+import zen.deps.ZenMap;
+import zen.lang.ZFunc;
 import zen.lang.ZSystem;
 import zen.lang.ZType;
 import zen.lang.ZTypeFlag;
@@ -105,6 +108,7 @@ import zen.parser.ZGenerator;
 
 public class JavaByteCodeGenerator extends ZGenerator {
 	HashMap<String, Class<?>> ClassMap = new HashMap<String,Class<?>>();
+	HashMap<String, ZType> TypeMap = new HashMap<String,ZType>();
 	JMethodBuilder CurrentBuilder;
 	JClassLoader ClassLoader = null;
 	ArrayList<TryCatchLabel> TryCatchLabel;
@@ -113,10 +117,31 @@ public class JavaByteCodeGenerator extends ZGenerator {
 		super("java", "1.6");
 		this.TryCatchLabel = new ArrayList<TryCatchLabel>();
 		this.ClassLoader = new JClassLoader(this);
+
+		this.SetTypeTable(ZSystem.VarType, Object.class);
+		this.SetTypeTable(ZSystem.VoidType, void.class);
+		this.SetTypeTable(ZSystem.BooleanType, boolean.class);
+		this.SetTypeTable(ZSystem.IntType, long.class);
+		this.SetTypeTable(ZSystem.FloatType, double.class);
+		this.SetTypeTable(ZSystem.StringType, String.class);
+		this.SetTypeTable(ZSystem.FuncType, ZFunc.class);
+		this.SetTypeTable(ZSystem.ArrayType, ZenArray.class);
+		this.SetTypeTable(ZSystem.MapType, ZenMap.class);
+
+		this.SetTypeTable(ZSystem.BooleanType, Boolean.class);
+		this.SetTypeTable(ZSystem.IntType, Long.class);
+		this.SetTypeTable(ZSystem.FloatType, Double.class);
+		this.SetTypeTable(ZSystem.IntType, int.class);
+		this.SetTypeTable(ZSystem.IntType, Integer.class);
+		this.SetTypeTable(ZSystem.FloatType, float.class);
+		this.SetTypeTable(ZSystem.FloatType, Float.class);
 	}
 
-	void PutJClass(ZType zType, Class<?> c) {
-		this.ClassMap.put(zType.GetUniqueName(), c);
+	void SetTypeTable(ZType zType, Class<?> c) {
+		if(this.GetJClass(zType) == null) {
+			this.ClassMap.put(zType.GetUniqueName(), c);
+		}
+		this.TypeMap.put(c.getCanonicalName(), zType);
 	}
 
 	private Class<?> GetJClass(ZType zType) {
