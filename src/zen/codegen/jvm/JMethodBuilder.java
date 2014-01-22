@@ -40,7 +40,7 @@ final class JLocalVarStack {
 
 class JMethodBuilder {
 	final MethodVisitor           AsmVisitor;
-	final JavaByteCodeGenerator   Generator;
+	final JavaByteCodeGenerator2   Generator2;
 	final JMethodBuilder          Parent;
 	ArrayList<JLocalVarStack>     LocalVals;
 	int                           LocalSize;
@@ -48,7 +48,7 @@ class JMethodBuilder {
 	Stack<Label>                  ContinueLabelStack;
 	int PreviousLine;
 
-	JMethodBuilder(JavaByteCodeGenerator Generator, MethodVisitor AsmVisitor, JMethodBuilder Parent) {
+	JMethodBuilder(JavaByteCodeGenerator2 Generator, MethodVisitor AsmVisitor, JMethodBuilder Parent) {
 		this.Generator = Generator;
 		this.AsmVisitor = AsmVisitor;
 		this.Parent = Parent;
