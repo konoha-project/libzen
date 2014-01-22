@@ -11,7 +11,6 @@ import zen.deps.ZenArray;
 import zen.lang.ZFunc;
 import zen.lang.ZSystem;
 import zen.lang.ZType;
-import zen.parser.ZNameSpace;
 
 class JLib {
 	static HashMap<String, Type> TypeMap = new HashMap<String, Type>();
@@ -84,7 +83,7 @@ class JLib {
 		}
 	}
 
-	public static String GetHolderClassName(ZNameSpace NameSpace, String FuncName) {
+	public static String GetHolderClassName(String FuncName) {
 		return "FuncHolder" + FuncName + "$" + 0; //Context.ParserId;
 	}
 

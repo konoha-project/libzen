@@ -12,12 +12,12 @@ import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.MethodNode;
 
 class JClassBuilder /*implements Opcodes */{
+	final int ClassQualifer;
 	final String SourceFile;
 	final String ClassName;
 	final String SuperClassName;
 	final ArrayList<MethodNode> MethodList = new ArrayList<MethodNode>();
 	final ArrayList<FieldNode> FieldList = new ArrayList<FieldNode>();
-	final int ClassQualifer;
 
 	JClassBuilder(int ClassQualifer, String SourceFile, String ClassName, String SuperClass) {
 		this.ClassQualifer = ClassQualifer;
@@ -48,7 +48,6 @@ class JClassBuilder /*implements Opcodes */{
 		for(FieldNode f : this.FieldList) {
 			f.accept(Visitor);
 		}
-
 		for(MethodNode m : this.MethodList) {
 			m.accept(Visitor);
 		}

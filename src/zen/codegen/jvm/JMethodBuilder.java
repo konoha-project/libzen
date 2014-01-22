@@ -4,7 +4,6 @@ import static org.objectweb.asm.Opcodes.AASTORE;
 import static org.objectweb.asm.Opcodes.ANEWARRAY;
 import static org.objectweb.asm.Opcodes.CHECKCAST;
 import static org.objectweb.asm.Opcodes.DUP;
-import static org.objectweb.asm.Opcodes.GETSTATIC;
 import static org.objectweb.asm.Opcodes.ILOAD;
 import static org.objectweb.asm.Opcodes.INVOKEINTERFACE;
 import static org.objectweb.asm.Opcodes.INVOKESPECIAL;
@@ -26,7 +25,6 @@ import zen.ast.ZNode;
 import zen.lang.ZSystem;
 import zen.lang.ZType;
 import zen.parser.ZGenerator;
-import zen.parser.ZNameSpace;
 
 
 final class JLocalVarStack {
@@ -42,7 +40,7 @@ final class JLocalVarStack {
 }
 
 class JMethodBuilder {
-	final ZClassLoader           LocalClassLoader;
+	final JClassLoader           LocalClassLoader;
 	final MethodVisitor                 AsmVisitor;
 	final ZGenerator                   Generator;
 	ArrayList<JLocalVarStack>     LocalVals;
@@ -51,7 +49,7 @@ class JMethodBuilder {
 	Stack<Label>                  ContinueLabelStack;
 	int PreviousLine;
 
-	public JMethodBuilder(ZGenerator Generator, ZClassLoader ClassLoader, MethodVisitor AsmVisitor) {
+	public JMethodBuilder(ZGenerator Generator, JClassLoader ClassLoader, MethodVisitor AsmVisitor) {
 		this.Generator = Generator;
 		this.LocalClassLoader = ClassLoader;
 		this.AsmVisitor = AsmVisitor;
@@ -110,22 +108,12 @@ class JMethodBuilder {
 			this.AsmVisitor.visitLdcInsn(Value);
 			return;
 		}
-		if(Value instanceof ZNameSpace) {
-			this.AsmVisitor.visitFieldInsn(GETSTATIC, this.LocalClassLoader.GlobalStaticClassName, this.LocalClassLoader.ContextFieldName, this.LocalClassLoader.GontextDescripter);
-			return;
-		}
 		if(Value instanceof ZType) {
 			int id = ((ZType)Value).TypeId;
 			this.AsmVisitor.visitLdcInsn(id);
 			this.InvokeMethodCall(ZType.class, JLib.GetTypeById);
 			return;
 		}
-		//		else if(Value instanceof ZenFunc) {
-		//			int id = ((ZenFunc)Value).FuncId;
-		//			this.AsmVisitor.visitLdcInsn(id);
-		//			this.InvokeMethodCall(ZenFunc.class, JLib.GetFuncById);
-		//			return;
-		//		}
 		int id = ZSystem.AddConstPool(Value);
 		this.AsmVisitor.visitLdcInsn(id);
 		this.InvokeMethodCall(Value.getClass(), JLib.GetConstPool);
