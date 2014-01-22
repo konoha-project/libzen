@@ -38,6 +38,7 @@ public final class ZFieldNode extends ZNode {
 		super();
 		this.ClassType = ClassType;
 	}
+
 	@Override public void Append(ZNode Node) {
 		if(Node instanceof ZTypeNode) {
 			this.DeclType = Node.Type;

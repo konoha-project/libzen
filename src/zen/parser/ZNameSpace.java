@@ -33,11 +33,11 @@ import zen.deps.LibZen;
 import zen.deps.Nullable;
 import zen.deps.Var;
 import zen.deps.ZenMap;
-import zen.lang.ZenClassType;
 import zen.lang.ZFunc;
 import zen.lang.ZFuncSet;
 import zen.lang.ZSystem;
 import zen.lang.ZType;
+import zen.lang.ZenClassType;
 
 final class ZSymbolSource {
 	@Field public ZToken SourceToken;

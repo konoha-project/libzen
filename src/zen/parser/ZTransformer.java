@@ -15,6 +15,7 @@ import zen.ast.ZComparatorNode;
 import zen.ast.ZConstPoolNode;
 import zen.ast.ZEmptyNode;
 import zen.ast.ZErrorNode;
+import zen.ast.ZFieldNode;
 import zen.ast.ZFloatNode;
 import zen.ast.ZFuncCallNode;
 import zen.ast.ZFuncDeclNode;
@@ -306,7 +307,9 @@ public class ZTransformer extends ZVisitor {
 	}
 
 	@Override public void VisitClassDeclNode(ZClassDeclNode Node) {
-
+		for (int i = 0; i < Node.FieldList.size(); i++) {
+			Node.FieldList.set(i, (ZFieldNode) this.Transform(Node, Node.FieldList.get(i)));
+		}
 	}
 
 
