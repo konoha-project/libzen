@@ -188,7 +188,7 @@ public class JavaByteCodeGenerator extends ZGenerator {
 	}
 
 	@Override public void VisitIntNode(ZIntNode Node) {
-		this.CurrentBuilder.AsmVisitor.visitLdcInsn(Node.FloatValue);
+		this.CurrentBuilder.AsmVisitor.visitLdcInsn(Node.IntValue);
 	}
 
 	@Override public void VisitFloatNode(ZFloatNode Node) {
@@ -495,19 +495,17 @@ public class JavaByteCodeGenerator extends ZGenerator {
 
 	@Override public void VisitParamNode(ZParamNode Node) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override public void VisitFuncDeclNode(ZFuncDeclNode Node) {
-		String FuncName = Node.ReferenceName;
-		JClassBuilder  HolderClass = this.ClassLoader.NewFunctionHolderClass(Node, FuncName);
-		String MethodDesc = this.GetMethodDescriptor(Node.GetFuncType(null));
-		MethodNode AsmMethodNode = new MethodNode(ACC_PUBLIC | ACC_STATIC, FuncName, MethodDesc, null, null);
+		@Var String FuncName = Node.ReferenceName;
+		@Var JClassBuilder  HolderClass = this.ClassLoader.NewFunctionHolderClass(Node, FuncName);
+		@Var String MethodDesc = this.GetMethodDescriptor(Node.GetFuncType(null));
+		@Var MethodNode AsmMethodNode = new MethodNode(ACC_PUBLIC | ACC_STATIC, FuncName, MethodDesc, null, null);
 		HolderClass.AddMethod(AsmMethodNode);
 		this.CurrentBuilder = new JMethodBuilder(this, AsmMethodNode, this.CurrentBuilder);
 		for(int i = 0; i < Node.ArgumentList.size(); i++) {
@@ -527,9 +525,7 @@ public class JavaByteCodeGenerator extends ZGenerator {
 				ClassBuilder.AddField(fn);
 			}
 		}
-
 	}
-
 
 	@Override public void VisitErrorNode(ZErrorNode Node) {
 		String name = Type.getInternalName(SoftwareFaultException.class);
