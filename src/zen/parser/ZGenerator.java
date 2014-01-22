@@ -105,6 +105,8 @@ public abstract class ZGenerator extends ZVisitor {
 		//return ZenSystem.VoidType;   // readonly
 	}
 
-
+	public ZType GetMethodReturnType(ZType RecvType, String MethodName, ZType[] ParamType) {
+		return ZSystem.VarType;     // undefined
+	}
 
 }

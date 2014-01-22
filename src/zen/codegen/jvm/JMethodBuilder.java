@@ -94,7 +94,7 @@ class JMethodBuilder {
 		return null;
 	}
 
-	public JLocalVarStack AddLocal(ZType GreenType, String Name) {
+	JLocalVarStack AddLocal(ZType GreenType, String Name) {
 		Type LocalType =  this.Generator.GetAsmType(GreenType);
 		JLocalVarStack local = new JLocalVarStack(this.LocalSize, LocalType, Name);
 		this.LocalVals.add(local);

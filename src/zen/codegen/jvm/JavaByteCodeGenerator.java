@@ -41,6 +41,8 @@ import static org.objectweb.asm.Opcodes.NEW;
 import static org.objectweb.asm.Opcodes.PUTFIELD;
 import static org.objectweb.asm.Opcodes.RETURN;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -100,6 +102,7 @@ import zen.deps.LibNative;
 import zen.deps.Var;
 import zen.deps.ZenArray;
 import zen.deps.ZenMap;
+import zen.deps.ZenNativeType;
 import zen.lang.ZFunc;
 import zen.lang.ZSystem;
 import zen.lang.ZType;
@@ -134,6 +137,8 @@ public class JavaByteCodeGenerator extends ZGenerator {
 		this.SetTypeTable(ZSystem.FloatType, Double.class);
 		this.SetTypeTable(ZSystem.IntType, int.class);
 		this.SetTypeTable(ZSystem.IntType, Integer.class);
+		this.SetTypeTable(ZSystem.IntType, short.class);
+		this.SetTypeTable(ZSystem.IntType, Short.class);
 		this.SetTypeTable(ZSystem.FloatType, float.class);
 		this.SetTypeTable(ZSystem.FloatType, Float.class);
 	}
@@ -147,6 +152,15 @@ public class JavaByteCodeGenerator extends ZGenerator {
 
 	private Class<?> GetJClass(ZType zType) {
 		return this.ClassMap.get(zType.GetUniqueName());
+	}
+
+	private ZType GetZenType(Class<?> JavaClass) {
+		ZType NativeType = this.TypeMap.get(JavaClass.getCanonicalName());
+		if (NativeType != null) {
+			NativeType = new ZenNativeType(JavaClass);
+			this.SetTypeTable(NativeType, JavaClass);
+		}
+		return NativeType;
 	}
 
 	private String GetTypeDesc(ZType zType) {
@@ -173,6 +187,80 @@ public class JavaByteCodeGenerator extends ZGenerator {
 			return ((ZConstNode)Node).GetValue();
 		}
 		return null;
+	}
+
+	@Override public ZType GetFieldType(ZType RecvType, String FieldName) {
+		Class<?> NativeClass = this.GetJClass(RecvType);
+		if(NativeClass != null) {
+			try {
+				java.lang.reflect.Field NativeField = NativeClass.getField(FieldName);
+				if(Modifier.isPublic(NativeField.getModifiers())) {
+					return this.GetZenType(NativeField.getType());
+				}
+			} catch (SecurityException e) {
+			} catch (NoSuchFieldException e) {
+			}
+			return ZSystem.VoidType;     // undefined
+		}
+		return ZSystem.VarType;     // undefined
+	}
+
+	@Override public ZType GetSetterType(ZType RecvType, String FieldName) {
+		Class<?> NativeClass = this.GetJClass(RecvType);
+		if(NativeClass != null) {
+			try {
+				java.lang.reflect.Field NativeField = NativeClass.getField(FieldName);
+				if(Modifier.isPublic(NativeField.getModifiers()) && !Modifier.isFinal(NativeField.getModifiers())) {
+					return this.GetZenType(NativeField.getType());
+				}
+			} catch (SecurityException e) {
+			} catch (NoSuchFieldException e) {
+			}
+			return ZSystem.VoidType;     // undefined
+		}
+		return ZSystem.VarType;     // undefined
+	}
+
+	Method GetMethod(ZType RecvType, String MethodName, ZType[] ParamType) {
+		Class<?> NativeClass = this.GetJClass(RecvType);
+		if(NativeClass != null) {
+			try {
+				Method[] Methods = NativeClass.getMethods();
+				for(int i = 0; i < Methods.length; i++) {
+					@Var Method JMethod = Methods[i];
+					if(!MethodName.equals(JMethod.getName())) {
+						continue;
+					}
+					if(!Modifier.isPublic(JMethod.getModifiers()) && Modifier.isStatic(JMethod.getModifiers())) {
+						continue;
+					}
+					Class<?>[] JParamClass = JMethod.getParameterTypes();
+					if(JParamClass.length != ParamType.length) {
+						continue;
+					}
+					for(int j = 0; i < ParamType.length; j++) {
+						@Var ZType JParamType = this.GetZenType(JParamClass[j]);
+						if(!JParamType.Accept(ParamType[j])) {
+							JMethod = null;
+							break;
+						}
+					}
+					if(JMethod != null) {
+						return JMethod;
+					}
+				}
+			} catch (SecurityException e) {
+			}
+		}
+		return null;
+	}
+
+	@Override public ZType GetMethodReturnType(ZType RecvType, String MethodName, ZType[] ParamType) {
+		Method JMethod = this.GetMethod(RecvType, MethodName, ParamType);
+		if(JMethod != null) {
+			return this.GetZenType(JMethod.getReturnType());
+		}
+		return ZSystem.VarType;
 	}
 
 	@Override public void VisitEmptyNode(ZEmptyNode Node) {
@@ -213,7 +301,6 @@ public class JavaByteCodeGenerator extends ZGenerator {
 
 	@Override public void VisitMapLiteralNode(ZMapLiteralNode Node) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override public void VisitNewArrayNode(ZNewArrayNode Node) {
@@ -237,7 +324,6 @@ public class JavaByteCodeGenerator extends ZGenerator {
 
 	@Override public void VisitSymbolNode(ZSymbolNode Node) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override public void VisitGetLocalNode(ZGetLocalNode Node) {
