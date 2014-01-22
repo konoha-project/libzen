@@ -241,7 +241,7 @@ public class ZSourceGenerator extends ZGenerator {
 
 	@Override
 	public void VisitIntNode(ZIntNode Node) {
-		this.CurrentBuilder.Append("" + Node.FloatValue);
+		this.CurrentBuilder.Append("" + Node.IntValue);
 	}
 
 	@Override
