@@ -42,7 +42,7 @@ final class JLocalVarStack {
 }
 
 class JMethodBuilder {
-	final ZenClassLoader           LocalClassLoader;
+	final ZClassLoader           LocalClassLoader;
 	final MethodVisitor                 AsmVisitor;
 	final ZGenerator                   Generator;
 	ArrayList<JLocalVarStack>     LocalVals;
@@ -51,7 +51,7 @@ class JMethodBuilder {
 	Stack<Label>                  ContinueLabelStack;
 	int PreviousLine;
 
-	public JMethodBuilder(ZGenerator Generator, ZenClassLoader ClassLoader, MethodVisitor AsmVisitor) {
+	public JMethodBuilder(ZGenerator Generator, ZClassLoader ClassLoader, MethodVisitor AsmVisitor) {
 		this.Generator = Generator;
 		this.LocalClassLoader = ClassLoader;
 		this.AsmVisitor = AsmVisitor;

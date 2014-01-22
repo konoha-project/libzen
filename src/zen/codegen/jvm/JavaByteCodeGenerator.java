@@ -1,6 +1,30 @@
+// ***************************************************************************
+// Copyright (c) 2013, JST/CREST DEOS project authors. All rights reserved.
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are met:
+//
+// *  Redistributions of source code must retain the above copyright notice,
+//    this list of conditions and the following disclaimer.
+// *  Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+// TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+// PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+// CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+// OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+// WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+// OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+// ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// **************************************************************************
+
+//ifdef JAVA
+
 package zen.codegen.jvm;
-
-
 
 import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
 import static org.objectweb.asm.Opcodes.ACC_STATIC;
@@ -68,39 +92,26 @@ import zen.ast.ZUnaryNode;
 import zen.ast.ZVarDeclNode;
 import zen.ast.ZWhileNode;
 import zen.deps.LibNative;
-import zen.lang.ZTypeFlag;
 import zen.lang.ZSystem;
+import zen.lang.ZTypeFlag;
 import zen.parser.ZGenerator;
 
-
-class TryCatchLabel {
-	public Label beginTryLabel;
-	public Label endTryLabel;
-	public Label finallyLabel;
-	public TryCatchLabel() {
-		this.beginTryLabel = new Label();
-		this.endTryLabel = new Label();
-		this.finallyLabel = new Label();
-	}
-}
-
-
 public class JavaByteCodeGenerator extends ZGenerator {
+
 	JMethodBuilder CurrentVisitor;
-	ZenClassLoader ClassGenerator;
+	ZClassLoader ClassGenerator;
 	ArrayList<TryCatchLabel> TryCatchLabel;
+
 	public JavaByteCodeGenerator() {
 		super("java", "1.6");
 		this.TryCatchLabel = new ArrayList<TryCatchLabel>();
 	}
 
-	@Override
-	public void VisitEmptyNode(ZEmptyNode Node) {
+	@Override public void VisitEmptyNode(ZEmptyNode Node) {
 		/* do nothing */
 	}
 
-	@Override
-	public void VisitNullNode(ZNullNode Node) {
+	@Override public void VisitNullNode(ZNullNode Node) {
 		this.CurrentVisitor.AsmVisitor.visitInsn(ACONST_NULL);
 	}
 
@@ -132,21 +143,18 @@ public class JavaByteCodeGenerator extends ZGenerator {
 		this.CurrentVisitor.InvokeMethodCall(Node.Type, JLib.NewNewArray);
 	}
 
-	@Override
-	public void VisitMapLiteralNode(ZMapLiteralNode Node) {
+	@Override public void VisitMapLiteralNode(ZMapLiteralNode Node) {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
-	public void VisitNewArrayNode(ZNewArrayNode Node) {
+	@Override public void VisitNewArrayNode(ZNewArrayNode Node) {
 		this.CurrentVisitor.LoadConst(Node.Type);
 		this.CurrentVisitor.LoadNewArray(this, 0, Node.NodeList);
 		this.CurrentVisitor.InvokeMethodCall(Node.Type, JLib.NewArray);
 	}
 
-	@Override
-	public void VisitNewObjectNode(ZNewObjectNode Node) {
+	@Override public void VisitNewObjectNode(ZNewObjectNode Node) {
 		Type type = JLib.GetAsmType(Node.Type);
 		String owner = type.getInternalName();
 		this.CurrentVisitor.AsmVisitor.visitTypeInsn(NEW, owner);
@@ -157,6 +165,11 @@ public class JavaByteCodeGenerator extends ZGenerator {
 		} else {
 			this.CurrentVisitor.AsmVisitor.visitMethodInsn(INVOKESPECIAL, owner, "<init>", "()V");
 		}
+	}
+
+	@Override public void VisitSymbolNode(ZSymbolNode Node) {
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override public void VisitGetLocalNode(ZGetLocalNode Node) {
@@ -170,8 +183,7 @@ public class JavaByteCodeGenerator extends ZGenerator {
 		this.CurrentVisitor.StoreLocal(local);
 	}
 
-	@Override
-	public void VisitGroupNode(ZGroupNode Node) {
+	@Override public void VisitGroupNode(ZGroupNode Node) {
 		Node.RecvNode.Accept(this);
 	}
 
@@ -207,30 +219,26 @@ public class JavaByteCodeGenerator extends ZGenerator {
 		this.CurrentVisitor.InvokeMethodCall(Method.GetReturnType(), Method.Body);
 	}
 
-	@Override
-	public void VisitMethodCallNode(ZMethodCallNode Node) {
+	@Override public void VisitMethodCallNode(ZMethodCallNode Node) {
 		Node.RecvNode.Accept(this);
 		this.CurrentVisitor.LoadNewArray(this, 0, Node.ParamList);
 		// FIXME Find method and invoke it.
 		this.CurrentVisitor.InvokeMethodCall(Node.Type, JLib.InvokeFunc);
 	}
 
-	@Override
-	public void VisitFuncCallNode(ZFuncCallNode Node) {
+	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
 		Node.FuncNode.Accept(this);
 		this.CurrentVisitor.LoadNewArray(this, 0, Node.ParamList);
 		this.CurrentVisitor.InvokeMethodCall(Node.Type, JLib.InvokeFunc);
 	}
 
-	@Override
-	public void VisitUnaryNode(ZUnaryNode Node) {
+	@Override public void VisitUnaryNode(ZUnaryNode Node) {
 		JMethod Method = JMethod.FindMethod(Node);
 		this.CurrentVisitor.PushEvaluatedNode(Method.GetType(0), Node.RecvNode);
 		this.CurrentVisitor.InvokeMethodCall(Method.GetReturnType(), Method.Body);
 	}
 
-	@Override
-	public void VisitNotNode(ZNotNode Node) {
+	@Override public void VisitNotNode(ZNotNode Node) {
 		JMethod Method = JMethod.FindMethod(Node);
 		this.CurrentVisitor.PushEvaluatedNode(Method.GetType(0), Node.RecvNode);
 		this.CurrentVisitor.InvokeMethodCall(Method.GetReturnType(), Method.Body);
@@ -242,8 +250,7 @@ public class JavaByteCodeGenerator extends ZGenerator {
 
 	}
 
-	@Override
-	public void VisitInstanceOfNode(ZInstanceOfNode Node) {
+	@Override public void VisitInstanceOfNode(ZInstanceOfNode Node) {
 		// TODO Auto-generated method stub
 
 	}
@@ -255,8 +262,7 @@ public class JavaByteCodeGenerator extends ZGenerator {
 		this.CurrentVisitor.InvokeMethodCall(Method.GetReturnType(), Method.Body);
 	}
 
-	@Override
-	public void VisitComparatorNode(ZComparatorNode Node) {
+	@Override public void VisitComparatorNode(ZComparatorNode Node) {
 		JMethod Method = JMethod.FindMethod(Node);
 		this.CurrentVisitor.PushEvaluatedNode(Method.GetType(0), Node.LeftNode);
 		this.CurrentVisitor.PushEvaluatedNode(Method.GetType(1), Node.RightNode);
@@ -301,8 +307,7 @@ public class JavaByteCodeGenerator extends ZGenerator {
 		this.CurrentVisitor.AsmVisitor.visitLabel(mergeLabel);
 	}
 
-	@Override
-	public void VisitBlockNode(ZBlockNode Node) {
+	@Override public void VisitBlockNode(ZBlockNode Node) {
 		// TODO Auto-generated method stub
 
 	}
@@ -332,8 +337,7 @@ public class JavaByteCodeGenerator extends ZGenerator {
 		this.CurrentVisitor.AsmVisitor.visitLabel(EndLabel);
 	}
 
-	@Override
-	public void VisitReturnNode(ZReturnNode Node) {
+	@Override public void VisitReturnNode(ZReturnNode Node) {
 		if(Node.ValueNode != null) {
 			Node.ValueNode.Accept(this);
 			Type type = JLib.GetAsmType(Node.ValueNode.Type);
@@ -402,8 +406,7 @@ public class JavaByteCodeGenerator extends ZGenerator {
 		this.TryCatchLabel.remove(this.TryCatchLabel.size() - 1); // pop
 	}
 
-	@Override
-	public void VisitCatchNode(ZCatchNode Node) {
+	@Override public void VisitCatchNode(ZCatchNode Node) {
 		MethodVisitor mv = this.CurrentVisitor.AsmVisitor;
 		Label catchLabel = new Label();
 		TryCatchLabel Label = this.TryCatchLabel.get(this.TryCatchLabel.size() - 1);
@@ -422,22 +425,19 @@ public class JavaByteCodeGenerator extends ZGenerator {
 		//FIXME: remove local
 	}
 
-	@Override
-	public void VisitParamNode(ZParamNode Node) {
+	@Override public void VisitParamNode(ZParamNode Node) {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
-	public void VisitFunctionNode(ZFunctionNode Node) {
+	@Override public void VisitFunctionNode(ZFunctionNode Node) {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
-	public void VisitFuncDeclNode(ZFuncDeclNode Node) {
+	@Override public void VisitFuncDeclNode(ZFuncDeclNode Node) {
 		if(this.ClassGenerator == null) {
-			this.ClassGenerator = new ZenClassLoader(Node.NameSpace);
+			this.ClassGenerator = new ZClassLoader(Node.NameSpace);
 		}
 
 		String MethodName = Node.FuncName;
@@ -471,11 +471,6 @@ public class JavaByteCodeGenerator extends ZGenerator {
 		this.CurrentVisitor.AsmVisitor.visitInsn(ATHROW);
 	}
 
-	@Override
-	public void VisitSymbolNode(ZSymbolNode Node) {
-		// TODO Auto-generated method stub
-
-	}
 
 }
 

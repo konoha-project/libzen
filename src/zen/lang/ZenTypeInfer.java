@@ -200,6 +200,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 				}
 			}
 			else {
+				ContextType = ZSystem.VarType;
 				AllTyped = false;
 			}
 			this.TypedNode(Node, ContextType);
