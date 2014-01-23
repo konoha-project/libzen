@@ -220,6 +220,4 @@ public class JavaMethodTable {
 		}
 		return sMethod;
 	}
-
-
 }

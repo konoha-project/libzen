@@ -99,13 +99,16 @@ import zen.ast.ZTryNode;
 import zen.ast.ZUnaryNode;
 import zen.ast.ZVarDeclNode;
 import zen.ast.ZWhileNode;
+import zen.deps.LibNative;
 import zen.deps.Var;
 import zen.lang.ZSystem;
 import zen.lang.ZType;
 import zen.lang.ZenFuncType;
 import zen.parser.ZGenerator;
+import zen.parser.ZNameSpace;
 
 public class JavaByteCodeGenerator2 extends ZGenerator {
+	TopLevelIntereter Intereter;
 	JMethodBuilder2 CurrentBuilder;
 	JClassLoader ClassLoader = null;
 	ArrayList<TryCatchLabel> TryCatchLabel;
@@ -113,8 +116,9 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 	public JavaByteCodeGenerator2() {
 		super("java", "1.6");
 		this.TryCatchLabel = new ArrayList<TryCatchLabel>();
-		this.ClassLoader = new JClassLoader(this);	}
-
+		this.ClassLoader = new JClassLoader(this);
+		this.Intereter = new TopLevelIntereter();
+	}
 
 	private String GetTypeDesc(ZType zType) {
 		Class<?> JClass = JavaTypeTable.GetJClass(zType);
@@ -174,7 +178,7 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 		return ZSystem.VarType;     // undefined
 	}
 
-	Method GetMethod(ZType RecvType, String MethodName, ZType[] ParamType) {
+	Method GetMethod(ZType RecvType, String MethodName, ArrayList<ZNode> ParamList) {
 		Class<?> NativeClass = JavaTypeTable.GetJClass(RecvType);
 		if(NativeClass != null) {
 			try {
@@ -188,12 +192,13 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 						continue;
 					}
 					Class<?>[] JParamClass = JMethod.getParameterTypes();
-					if(JParamClass.length != ParamType.length) {
+					if(JParamClass.length != ParamList.size()) {
 						continue;
 					}
-					for(int j = 0; i < ParamType.length; j++) {
+					System.err.println("debug searching.. method: " + JMethod);
+					for(int j = 0; j < JParamClass.length; j++) {
 						@Var ZType JParamType = JavaTypeTable.GetZenType(JParamClass[j]);
-						if(!JParamType.Accept(ParamType[j])) {
+						if(!JParamType.Accept(ParamList.get(j).Type)) {
 							JMethod = null;
 							break;
 						}
@@ -208,14 +213,28 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 		return null;
 	}
 
-	@Override public ZType GetMethodReturnType(ZType RecvType, String MethodName, ZType[] ParamType) {
-		Method JMethod = this.GetMethod(RecvType, MethodName, ParamType);
+	public ZType GetMethodReturnType(ZType RecvType, String MethodName, ArrayList<ZNode> ParamList) {
+		Method JMethod = this.GetMethod(RecvType, MethodName, ParamList);
 		if(JMethod != null) {
-			return JavaTypeTable.GetZenType(JMethod.getReturnType());
+			System.err.println("debug native method: " + JMethod);
+			//return JavaTypeTable.ConvertToFuncType(JMethod);
 		}
 		return ZSystem.VarType;
 	}
 
+	@Override public void DoCodeGeneration(ZNameSpace NameSpace, ZNode Node) {
+		if(this.CurrentBuilder == null && !(Node instanceof ZFuncDeclNode) && !(Node instanceof ZClassDeclNode)) {
+			this.Intereter.EnableVisitor();
+			Object Value = this.Intereter.Eval(Node);
+			if(this.Intereter.IsVisitable()) {
+				LibNative.println(" (" + Node.Type + ") " + Value);
+			}
+			else {
+				LibNative.println(" Error: " + Value);
+			}
+		}
+		Node.Accept(this);
+	}
 
 	@Override public void VisitEmptyNode(ZEmptyNode Node) {
 		/* do nothing */
@@ -353,25 +372,22 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 	}
 
 	@Override public void VisitMethodCallNode(ZMethodCallNode Node) {
-		Method JMethod = this.GetMethod(Node.RecvNode.Type, Node.MethodName, Node.GetParamType());
+		Method jMethod = this.GetMethod(Node.RecvNode.Type, Node.MethodName, Node.ParamList);
 		Node.RecvNode.Accept(this);
-		Class<?>[] P = JMethod.getParameterTypes();
+		Class<?>[] P = jMethod.getParameterTypes();
 		for(int i = 0; i < P.length; i++) {
 			this.CurrentBuilder.PushNode(P[i], Node.ParamList.get(i));
 		}
 		int inst;
-		if(Modifier.isInterface(JMethod.getModifiers())) {
+		if(Modifier.isInterface(jMethod.getModifiers())) {
 			inst = INVOKEINTERFACE;
 		}
 		else {
 			inst = INVOKEVIRTUAL;
 		}
-		String owner = Type.getInternalName(JMethod.getDeclaringClass());
-		this.CurrentBuilder.visitMethodInsn(inst, owner, JMethod.getName(), Type.getMethodDescriptor(JMethod));
-		this.CurrentBuilder.CheckReturnCast(Node.Type, JMethod.getReturnType());
-		//		this.CurrentBuilder.LoadNewArray(this, 0, Node.ParamList);
-		//		// FIXME Find method and invoke it.
-		//		this.CurrentBuilder.InvokeMethodCall(Node.Type, JLib.InvokeFunc);
+		String owner = Type.getInternalName(jMethod.getDeclaringClass());
+		this.CurrentBuilder.visitMethodInsn(inst, owner, jMethod.getName(), Type.getMethodDescriptor(jMethod));
+		this.CurrentBuilder.CheckReturnCast(Node.Type, jMethod.getReturnType());
 	}
 
 	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {

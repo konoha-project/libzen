@@ -24,14 +24,19 @@
 
 package zen.codegen.jvm;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.HashMap;
 
+import zen.deps.Var;
 import zen.deps.ZenArray;
 import zen.deps.ZenMap;
-import zen.deps.ZenNativeType;
+import zen.deps.ZNativeType;
 import zen.lang.ZFunc;
 import zen.lang.ZSystem;
 import zen.lang.ZType;
+import zen.lang.ZenFuncType;
 
 public class JavaTypeTable {
 	static HashMap<String, Class<?>> ClassMap = new HashMap<String,Class<?>>();
@@ -54,8 +59,12 @@ public class JavaTypeTable {
 		JavaTypeTable.SetTypeTable(ZSystem.IntType, Integer.class);
 		JavaTypeTable.SetTypeTable(ZSystem.IntType, short.class);
 		JavaTypeTable.SetTypeTable(ZSystem.IntType, Short.class);
+		JavaTypeTable.SetTypeTable(ZSystem.IntType, byte.class);
+		JavaTypeTable.SetTypeTable(ZSystem.IntType, Byte.class);
 		JavaTypeTable.SetTypeTable(ZSystem.FloatType, float.class);
 		JavaTypeTable.SetTypeTable(ZSystem.FloatType, Float.class);
+		JavaTypeTable.SetTypeTable(ZSystem.StringType, char.class);
+		JavaTypeTable.SetTypeTable(ZSystem.StringType, Character.class);
 	}
 
 	public static void SetTypeTable(ZType zType, Class<?> c) {
@@ -72,10 +81,27 @@ public class JavaTypeTable {
 	public static ZType GetZenType(Class<?> JavaClass) {
 		ZType NativeType = JavaTypeTable.TypeMap.get(JavaClass.getCanonicalName());
 		if (NativeType != null) {
-			NativeType = new ZenNativeType(JavaClass);
+			NativeType = new ZNativeType(JavaClass);
 			JavaTypeTable.SetTypeTable(NativeType, JavaClass);
 		}
 		return NativeType;
+	}
+
+	public final static ZenFuncType ConvertToFuncType(Method JMethod) {
+		@Var ArrayList<ZType> TypeList = new ArrayList<ZType>();
+		TypeList.add(JavaTypeTable.GetZenType(JMethod.getReturnType()));
+		if (!Modifier.isStatic(JMethod.getModifiers())) {
+			TypeList.add(JavaTypeTable.GetZenType(JMethod.getDeclaringClass()));
+		}
+		@Var Class<?>[] ParamTypes = JMethod.getParameterTypes();
+		if (ParamTypes != null) {
+			@Var int j = 0;
+			while(j < ParamTypes.length) {
+				TypeList.add(JavaTypeTable.GetZenType(ParamTypes[j]));
+				j = j + 1;
+			}
+		}
+		return ZSystem.LookupFuncType(TypeList);
 	}
 
 }
