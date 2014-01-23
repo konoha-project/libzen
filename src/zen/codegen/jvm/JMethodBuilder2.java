@@ -13,6 +13,8 @@ import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.MethodNode;
 
 import zen.ast.ZNode;
+import zen.deps.NativeMethodTable;
+import zen.deps.NativeTypeTable;
 import zen.lang.ZSystem;
 import zen.lang.ZType;
 
@@ -105,18 +107,18 @@ public class JMethodBuilder2 extends MethodNode {
 	}
 
 	void CheckParamCast(Class<?> C1, ZType T2) {
-		Class<?> C2 = JavaTypeTable.GetJClass(T2);
+		Class<?> C2 = NativeTypeTable.GetJClass(T2);
 		if(C1 != C2) {
-			Method sMethod = JavaMethodTable.GetCastMethod(C1, C2);
+			Method sMethod = NativeMethodTable.GetCastMethod(C1, C2);
 			String owner = Type.getInternalName(sMethod.getDeclaringClass());
 			this.visitMethodInsn(INVOKESTATIC, owner, sMethod.getName(), Type.getMethodDescriptor(sMethod));
 		}
 	}
 
 	void CheckReturnCast(ZType T1, Class<?> C2) {
-		Class<?> C1 = JavaTypeTable.GetJClass(T1);
+		Class<?> C1 = NativeTypeTable.GetJClass(T1);
 		if(C1 != C2) {
-			Method sMethod = JavaMethodTable.GetCastMethod(C1, C2);
+			Method sMethod = NativeMethodTable.GetCastMethod(C1, C2);
 			String owner = Type.getInternalName(sMethod.getDeclaringClass());
 			this.visitMethodInsn(INVOKESTATIC, owner, sMethod.getName(), Type.getMethodDescriptor(sMethod));
 		}

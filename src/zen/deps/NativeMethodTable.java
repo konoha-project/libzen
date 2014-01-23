@@ -22,14 +22,16 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package zen.codegen.jvm;
+package zen.deps;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 
+import zen.codegen.jvm.CastApi;
+import zen.codegen.jvm.OpApi;
 import zen.lang.ZSystem;
 import zen.lang.ZType;
 
-public class JavaMethodTable {
+public class NativeMethodTable {
 	static HashMap<String, Method> MethodMap = new HashMap<String,Method>();
 	static {
 		Import("!", ZSystem.VarType, OpApi.class, "Not");
@@ -167,7 +169,7 @@ public class JavaMethodTable {
 	}
 	static void Import(ZType T1, String Op, ZType T2, Class<?> BaseClass, String Name) {
 		try {
-			Method sMethod = BaseClass.getMethod(Name, JavaTypeTable.GetJClass(T1), JavaTypeTable.GetJClass(T2));
+			Method sMethod = BaseClass.getMethod(Name, NativeTypeTable.GetJClass(T1), NativeTypeTable.GetJClass(T2));
 			MethodMap.put(BinaryKey(T1, Op, T2), sMethod);
 		} catch (Exception e) {
 			System.err.println("FIXME:" + e);
@@ -175,7 +177,7 @@ public class JavaMethodTable {
 	}
 	static void Import(String Op, ZType T1, Class<?> BaseClass, String Name) {
 		try {
-			Method sMethod = BaseClass.getMethod(Name, JavaTypeTable.GetJClass(T1));
+			Method sMethod = BaseClass.getMethod(Name, NativeTypeTable.GetJClass(T1));
 			MethodMap.put(UnaryKey(Op, T1), sMethod);
 		} catch (Exception e) {
 			System.err.println("FIXME:" + e);
@@ -190,11 +192,11 @@ public class JavaMethodTable {
 		}
 	}
 
-	static Method GetStaticMethod(String Name) {
+	public static Method GetStaticMethod(String Name) {
 		return MethodMap.get(Name);
 	}
 
-	static Method GetBinaryStaticMethod(ZType T1, String Op, ZType T2) {
+	public static Method GetBinaryStaticMethod(ZType T1, String Op, ZType T2) {
 		Method sMethod = MethodMap.get(BinaryKey(T1, Op, T2));
 		if(sMethod != null) {
 			// if undefined Object "op" Object must be default
@@ -203,7 +205,7 @@ public class JavaMethodTable {
 		return sMethod;
 	}
 
-	static Method GetUnaryStaticMethod(String Op, ZType T2) {
+	public static Method GetUnaryStaticMethod(String Op, ZType T2) {
 		Method sMethod = MethodMap.get(UnaryKey(Op, T2));
 		if(sMethod != null) {
 			// if undefined Object "op" Object must be default
@@ -212,7 +214,7 @@ public class JavaMethodTable {
 		return sMethod;
 	}
 
-	static Method GetCastMethod(Class<?> T1, Class<?> T2) {
+	public static Method GetCastMethod(Class<?> T1, Class<?> T2) {
 		Method sMethod = MethodMap.get(CastKey(T1, T2));
 		if(sMethod != null) {
 			// if undefined Object "op" Object must be default

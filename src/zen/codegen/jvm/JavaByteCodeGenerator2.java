@@ -99,6 +99,8 @@ import zen.ast.ZTryNode;
 import zen.ast.ZUnaryNode;
 import zen.ast.ZVarDeclNode;
 import zen.ast.ZWhileNode;
+import zen.deps.NativeMethodTable;
+import zen.deps.NativeTypeTable;
 import zen.deps.LibNative;
 import zen.deps.Var;
 import zen.lang.ZSystem;
@@ -108,7 +110,7 @@ import zen.parser.ZGenerator;
 import zen.parser.ZNameSpace;
 
 public class JavaByteCodeGenerator2 extends ZGenerator {
-	TopLevelIntereter Intereter;
+	TopLevelInterpreter Interpreter;
 	JMethodBuilder2 CurrentBuilder;
 	JClassLoader ClassLoader = null;
 	ArrayList<TryCatchLabel> TryCatchLabel;
@@ -117,16 +119,16 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 		super("java", "1.6");
 		this.TryCatchLabel = new ArrayList<TryCatchLabel>();
 		this.ClassLoader = new JClassLoader(this);
-		this.Intereter = new TopLevelIntereter();
+		this.Interpreter = new TopLevelInterpreter(this);
 	}
 
 	private String GetTypeDesc(ZType zType) {
-		Class<?> JClass = JavaTypeTable.GetJClass(zType);
+		Class<?> JClass = NativeTypeTable.GetJClass(zType);
 		return Type.getDescriptor(JClass);
 	}
 
 	Type GetAsmType(ZType zType) {
-		return Type.getType(JavaTypeTable.GetJClass(zType));
+		return Type.getType(NativeTypeTable.GetJClass(zType));
 	}
 
 	String GetMethodDescriptor(ZenFuncType FuncType) {
@@ -147,12 +149,12 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 	}
 
 	@Override public ZType GetFieldType(ZType RecvType, String FieldName) {
-		Class<?> NativeClass = JavaTypeTable.GetJClass(RecvType);
+		Class<?> NativeClass = NativeTypeTable.GetJClass(RecvType);
 		if(NativeClass != null) {
 			try {
 				java.lang.reflect.Field NativeField = NativeClass.getField(FieldName);
 				if(Modifier.isPublic(NativeField.getModifiers())) {
-					return JavaTypeTable.GetZenType(NativeField.getType());
+					return NativeTypeTable.GetZenType(NativeField.getType());
 				}
 			} catch (SecurityException e) {
 			} catch (NoSuchFieldException e) {
@@ -163,12 +165,12 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 	}
 
 	@Override public ZType GetSetterType(ZType RecvType, String FieldName) {
-		Class<?> NativeClass = JavaTypeTable.GetJClass(RecvType);
+		Class<?> NativeClass = NativeTypeTable.GetJClass(RecvType);
 		if(NativeClass != null) {
 			try {
 				java.lang.reflect.Field NativeField = NativeClass.getField(FieldName);
 				if(Modifier.isPublic(NativeField.getModifiers()) && !Modifier.isFinal(NativeField.getModifiers())) {
-					return JavaTypeTable.GetZenType(NativeField.getType());
+					return NativeTypeTable.GetZenType(NativeField.getType());
 				}
 			} catch (SecurityException e) {
 			} catch (NoSuchFieldException e) {
@@ -179,7 +181,7 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 	}
 
 	Method GetMethod(ZType RecvType, String MethodName, ArrayList<ZNode> ParamList) {
-		Class<?> NativeClass = JavaTypeTable.GetJClass(RecvType);
+		Class<?> NativeClass = NativeTypeTable.GetJClass(RecvType);
 		if(NativeClass != null) {
 			try {
 				Method[] Methods = NativeClass.getMethods();
@@ -197,7 +199,7 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 					}
 					System.err.println("debug searching.. method: " + JMethod);
 					for(int j = 0; j < JParamClass.length; j++) {
-						@Var ZType JParamType = JavaTypeTable.GetZenType(JParamClass[j]);
+						@Var ZType JParamType = NativeTypeTable.GetZenType(JParamClass[j]);
 						if(!JParamType.Accept(ParamList.get(j).Type)) {
 							JMethod = null;
 							break;
@@ -216,16 +218,16 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 	public ZType GetMethodReturnType(ZType RecvType, String MethodName, ArrayList<ZNode> ParamList) {
 		Method JMethod = this.GetMethod(RecvType, MethodName, ParamList);
 		if(JMethod != null) {
-			return JavaTypeTable.ConvertToFuncType(JMethod);
+			return NativeTypeTable.ConvertToFuncType(JMethod);
 		}
 		return ZSystem.VarType;
 	}
 
 	@Override public void DoCodeGeneration(ZNameSpace NameSpace, ZNode Node) {
 		if(this.CurrentBuilder == null && !(Node instanceof ZFuncDeclNode) && !(Node instanceof ZClassDeclNode)) {
-			this.Intereter.EnableVisitor();
-			Object Value = this.Intereter.Eval(Node);
-			if(this.Intereter.IsVisitable()) {
+			this.Interpreter.EnableVisitor();
+			Object Value = this.Interpreter.Eval(Node);
+			if(this.Interpreter.IsVisitable()) {
 				LibNative.println(" (" + Node.Type + ") " + Value);
 			}
 			else {
@@ -323,12 +325,12 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 
 	@Override public void VisitGetterNode(ZGetterNode Node) {
 		if(Node.IsUntyped()) {
-			Method sMethod = JavaMethodTable.GetStaticMethod("GetField");
+			Method sMethod = NativeMethodTable.GetStaticMethod("GetField");
 			ZNode NameNode = new ZStringNode(null, Node.FieldName);
 			this.CurrentBuilder.ApplyStaticMethod(Node.Type, sMethod, new ZNode[] {Node.RecvNode, NameNode});
 		}
 		else {
-			Class<?> RecvClass = JavaTypeTable.GetJClass(Node.RecvNode.Type);
+			Class<?> RecvClass = NativeTypeTable.GetJClass(Node.RecvNode.Type);
 			Class<?> FieldClass = this.GetFieldType(RecvClass, Node.FieldName);
 			Type FieldType = Type.getType(FieldClass);
 			Type OwnerType = Type.getType(RecvClass);
@@ -340,12 +342,12 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 
 	@Override public void VisitSetterNode(ZSetterNode Node) {
 		if(Node.IsUntyped()) {
-			Method sMethod = JavaMethodTable.GetStaticMethod("SetField");
+			Method sMethod = NativeMethodTable.GetStaticMethod("SetField");
 			ZNode NameNode = new ZStringNode(null, Node.FieldName);
 			this.CurrentBuilder.ApplyStaticMethod(Node.Type, sMethod, new ZNode[] {Node.RecvNode, NameNode, Node.ValueNode});
 		}
 		else {
-			Class<?> RecvClass = JavaTypeTable.GetJClass(Node.RecvNode.Type);
+			Class<?> RecvClass = NativeTypeTable.GetJClass(Node.RecvNode.Type);
 			Class<?> FieldClass = this.GetFieldType(RecvClass, Node.FieldName);
 			Type FieldType = Type.getType(FieldClass);
 			Type OwnerType = Type.getType(RecvClass);
@@ -396,12 +398,12 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 	}
 
 	@Override public void VisitUnaryNode(ZUnaryNode Node) {
-		Method sMethod = JavaMethodTable.GetUnaryStaticMethod(Node.SourceToken.ParsedText, Node.RecvNode.Type);
+		Method sMethod = NativeMethodTable.GetUnaryStaticMethod(Node.SourceToken.ParsedText, Node.RecvNode.Type);
 		this.CurrentBuilder.ApplyStaticMethod(Node.Type, sMethod, new ZNode[] {Node.RecvNode});
 	}
 
 	@Override public void VisitNotNode(ZNotNode Node) {
-		Method sMethod = JavaMethodTable.GetUnaryStaticMethod(Node.SourceToken.ParsedText, Node.RecvNode.Type);
+		Method sMethod = NativeMethodTable.GetUnaryStaticMethod(Node.SourceToken.ParsedText, Node.RecvNode.Type);
 		this.CurrentBuilder.ApplyStaticMethod(Node.Type, sMethod, new ZNode[] {Node.RecvNode});
 	}
 
@@ -416,12 +418,12 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 	}
 
 	@Override public void VisitBinaryNode(ZBinaryNode Node) {
-		Method sMethod = JavaMethodTable.GetBinaryStaticMethod(Node.LeftNode.Type, Node.SourceToken.ParsedText, Node.RightNode.Type);
+		Method sMethod = NativeMethodTable.GetBinaryStaticMethod(Node.LeftNode.Type, Node.SourceToken.ParsedText, Node.RightNode.Type);
 		this.CurrentBuilder.ApplyStaticMethod(Node.Type, sMethod, new ZNode[] {Node.LeftNode, Node.RightNode});
 	}
 
 	@Override public void VisitComparatorNode(ZComparatorNode Node) {
-		Method sMethod = JavaMethodTable.GetBinaryStaticMethod(Node.LeftNode.Type, Node.SourceToken.ParsedText, Node.RightNode.Type);
+		Method sMethod = NativeMethodTable.GetBinaryStaticMethod(Node.LeftNode.Type, Node.SourceToken.ParsedText, Node.RightNode.Type);
 		this.CurrentBuilder.ApplyStaticMethod(Node.Type, sMethod, new ZNode[] {Node.LeftNode, Node.RightNode});
 	}
 
@@ -472,7 +474,7 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 	}
 
 	@Override public void VisitVarDeclNode(ZVarDeclNode Node) {
-		Class<?> DeclClass = JavaTypeTable.GetJClass(Node.DeclType);
+		Class<?> DeclClass = NativeTypeTable.GetJClass(Node.DeclType);
 		this.CurrentBuilder.AddLocal(DeclClass, Node.NativeName);
 		this.CurrentBuilder.PushNode(DeclClass, Node.InitNode);
 		this.CurrentBuilder.StoreLocal(Node.NativeName);
@@ -577,7 +579,7 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 		mv.visitTryCatchBlock(Label.beginTryLabel, Label.endTryLabel, catchLabel, throwType);
 
 		// catch block
-		JLocalVarStack local = this.CurrentBuilder.AddLocal(JavaTypeTable.GetJClass(Node.ExceptionType), Node.ExceptionName);
+		JLocalVarStack local = this.CurrentBuilder.AddLocal(NativeTypeTable.GetJClass(Node.ExceptionType), Node.ExceptionName);
 		mv.visitLabel(catchLabel);
 		this.CurrentBuilder.StoreLocal(Node.ExceptionName);
 		Node.BodyNode.Accept(this);
@@ -602,7 +604,7 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 		this.CurrentBuilder = new JMethodBuilder2(ACC_PUBLIC | ACC_STATIC, FuncName, MethodDesc, this, this.CurrentBuilder);
 		for(int i = 0; i < Node.ArgumentList.size(); i++) {
 			ZParamNode ParamNode =(ZParamNode)Node.ArgumentList.get(i);
-			this.CurrentBuilder.AddLocal(JavaTypeTable.GetJClass(ParamNode.Type), ParamNode.Name);
+			this.CurrentBuilder.AddLocal(NativeTypeTable.GetJClass(ParamNode.Type), ParamNode.Name);
 		}
 		Node.BodyNode.Accept(this);
 		this.CurrentBuilder = this.CurrentBuilder.Parent;
@@ -627,6 +629,23 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 		this.CurrentBuilder.LoadConst(Node.ErrorMessage);
 		this.CurrentBuilder.visitMethodInsn(INVOKESPECIAL, name, "<init>", "(Ljava/lang/Object;)V");
 		this.CurrentBuilder.visitInsn(ATHROW);
+	}
+
+	Method GetStaticFuncMethod(ZNode FuncNode) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	ZNode[] PackNodes(ZNode Node, ArrayList<ZNode> List) {
+		int Start = 0;
+		if(Node != null) {
+			Start = 1;
+		}
+		ZNode[] Nodes = new ZNode[List.size() + 1];
+		for(int i = 0; i < Nodes.length; i++) {
+			Nodes[i+Start] = List.get(i);
+		}
+		return Nodes;
 	}
 
 

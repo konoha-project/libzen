@@ -27,13 +27,14 @@ package zen.codegen.jvm;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import zen.deps.NativeTypeTable;
 import zen.deps.Var;
 import zen.deps.ZenMap;
 
 public final class OpApi {
 
 	private static String t(Object x) {
-		return JavaTypeTable.GetZenType(x.getClass()).toString();
+		return NativeTypeTable.GetZenType(x.getClass()).toString();
 	}
 
 	public static boolean Not(Object x) {

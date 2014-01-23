@@ -72,14 +72,16 @@ import zen.ast.ZTryNode;
 import zen.ast.ZUnaryNode;
 import zen.ast.ZVarDeclNode;
 import zen.ast.ZWhileNode;
+import zen.deps.NativeMethodTable;
 import zen.parser.ZVisitor;
 
-public class TopLevelIntereter extends ZVisitor {
+public class TopLevelInterpreter extends ZVisitor {
 	private boolean IsVisitable = true;
 	private Object EvaledValue = null;
+	private final JavaByteCodeGenerator2 Generator;
 
-	TopLevelIntereter() {
-
+	TopLevelInterpreter(JavaByteCodeGenerator2 Generator) {
+		this.Generator = Generator;
 	}
 
 	@Override public boolean IsVisitable() {
@@ -102,14 +104,15 @@ public class TopLevelIntereter extends ZVisitor {
 	}
 
 	void Unsupported(ZNode Node) {
-		this.EvaledValue = "unsupported node: " + Node.getClass().getSimpleName();
+		this.Generator.Logger.ReportError(Node.SourceToken, "unsupported (at the top level): " + Node.SourceToken.ParsedText);
+		this.EvaledValue = null; //"unsupported node: " + Node.getClass().getSimpleName();
 		this.IsVisitable = false;
 	}
 
 
 	public final Object Eval(ZNode Node) {
 		if(this.IsVisitable()) {
-			System.err.println("visiting .." + Node.getClass());
+			//System.err.println("visiting .." + Node.getClass());
 			Node.Accept(this);
 		}
 		return this.EvaledValue;
@@ -158,62 +161,46 @@ public class TopLevelIntereter extends ZVisitor {
 		this.EvaledValue = Node.ConstValue;
 	}
 
-	@Override
-	public void VisitArrayLiteralNode(ZArrayLiteralNode Node) {
+	@Override public void VisitArrayLiteralNode(ZArrayLiteralNode Node) {
 		this.Unsupported(Node);
-
 	}
 
-	@Override
-	public void VisitMapLiteralNode(ZMapLiteralNode Node) {
+	@Override public void VisitMapLiteralNode(ZMapLiteralNode Node) {
 		this.Unsupported(Node);
-
 	}
 
-	@Override
-	public void VisitNewArrayNode(ZNewArrayNode Node) {
+	@Override public void VisitNewArrayNode(ZNewArrayNode Node) {
 		this.Unsupported(Node);
-
 	}
 
-	@Override
-	public void VisitNewObjectNode(ZNewObjectNode Node) {
+	@Override public void VisitNewObjectNode(ZNewObjectNode Node) {
 		this.Unsupported(Node);
-
 	}
 
-	@Override
-	public void VisitSymbolNode(ZSymbolNode Node) {
+	@Override public void VisitSymbolNode(ZSymbolNode Node) {
 		this.Unsupported(Node);
-
 	}
 
-	@Override
-	public void VisitGetLocalNode(ZGetLocalNode Node) {
+	@Override public void VisitGetLocalNode(ZGetLocalNode Node) {
 		this.Unsupported(Node);
-
 	}
 
-	@Override
-	public void VisitSetLocalNode(ZSetLocalNode Node) {
+	@Override public void VisitSetLocalNode(ZSetLocalNode Node) {
 		this.Unsupported(Node);
-
 	}
 
-	@Override
-	public void VisitGroupNode(ZGroupNode Node) {
-		this.Unsupported(Node);
-
+	@Override public void VisitGroupNode(ZGroupNode Node) {
+		this.EvaledValue = this.Eval(Node.RecvNode);
 	}
 
 	@Override public void VisitGetterNode(ZGetterNode Node) {
-		Method sMethod = JavaMethodTable.GetStaticMethod("GetField");
+		Method sMethod = NativeMethodTable.GetStaticMethod("GetField");
 		ZNode NameNode = new ZStringNode(null, Node.FieldName);
 		this.EvalStaticMethod(sMethod, new ZNode[] {Node.RecvNode, NameNode});
 	}
 
 	@Override public void VisitSetterNode(ZSetterNode Node) {
-		Method sMethod = JavaMethodTable.GetStaticMethod("SetField");
+		Method sMethod = NativeMethodTable.GetStaticMethod("SetField");
 		ZNode NameNode = new ZStringNode(null, Node.FieldName);
 		this.EvalStaticMethod(sMethod, new ZNode[] {Node.RecvNode, NameNode, Node.ValueNode});
 	}
@@ -224,31 +211,36 @@ public class TopLevelIntereter extends ZVisitor {
 
 	}
 
-	@Override
-	public void VisitSetIndexNode(ZSetIndexNode Node) {
+	@Override public void VisitSetIndexNode(ZSetIndexNode Node) {
 		this.Unsupported(Node);
-
 	}
 
-	@Override
-	public void VisitMethodCallNode(ZMethodCallNode Node) {
+	@Override public void VisitMethodCallNode(ZMethodCallNode Node) {
 		this.Unsupported(Node);
-
 	}
 
-	@Override
-	public void VisitFuncCallNode(ZFuncCallNode Node) {
-		this.Unsupported(Node);
+	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
+		Method sMethod = this.Generator.GetStaticFuncMethod(Node.FuncNode);
+		if(sMethod != null) {
+			this.EvalStaticMethod(sMethod, this.Generator.PackNodes(null, Node.ParamList));
+		}
+		else if(Node.Type.IsFuncType()) {
+			sMethod = NativeMethodTable.GetStaticMethod("ApplyFunc");
+			this.EvalStaticMethod(sMethod, this.Generator.PackNodes(Node.FuncNode, Node.ParamList));
+		}
+		else {
 
+		}
+		this.Unsupported(Node);
 	}
 
 	@Override public void VisitUnaryNode(ZUnaryNode Node) {
-		Method sMethod = JavaMethodTable.GetUnaryStaticMethod(Node.SourceToken.ParsedText, Node.RecvNode.Type);
+		Method sMethod = NativeMethodTable.GetUnaryStaticMethod(Node.SourceToken.ParsedText, Node.RecvNode.Type);
 		this.EvalStaticMethod(sMethod, new ZNode[] {Node.RecvNode});
 	}
 
 	@Override public void VisitNotNode(ZNotNode Node) {
-		Method sMethod = JavaMethodTable.GetUnaryStaticMethod(Node.SourceToken.ParsedText, Node.RecvNode.Type);
+		Method sMethod = NativeMethodTable.GetUnaryStaticMethod(Node.SourceToken.ParsedText, Node.RecvNode.Type);
 		this.EvalStaticMethod(sMethod, new ZNode[] {Node.RecvNode});
 	}
 
@@ -266,12 +258,12 @@ public class TopLevelIntereter extends ZVisitor {
 	}
 
 	@Override public void VisitBinaryNode(ZBinaryNode Node) {
-		Method sMethod = JavaMethodTable.GetBinaryStaticMethod(Node.LeftNode.Type, Node.SourceToken.ParsedText, Node.RightNode.Type);
+		Method sMethod = NativeMethodTable.GetBinaryStaticMethod(Node.LeftNode.Type, Node.SourceToken.ParsedText, Node.RightNode.Type);
 		this.EvalStaticMethod(sMethod, new ZNode[] {Node.LeftNode, Node.RightNode});
 	}
 
 	@Override public void VisitComparatorNode(ZComparatorNode Node) {
-		Method sMethod = JavaMethodTable.GetBinaryStaticMethod(Node.LeftNode.Type, Node.SourceToken.ParsedText, Node.RightNode.Type);
+		Method sMethod = NativeMethodTable.GetBinaryStaticMethod(Node.LeftNode.Type, Node.SourceToken.ParsedText, Node.RightNode.Type);
 		this.EvalStaticMethod(sMethod, new ZNode[] {Node.LeftNode, Node.RightNode});
 	}
 
