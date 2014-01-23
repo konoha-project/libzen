@@ -216,8 +216,7 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 	public ZType GetMethodReturnType(ZType RecvType, String MethodName, ArrayList<ZNode> ParamList) {
 		Method JMethod = this.GetMethod(RecvType, MethodName, ParamList);
 		if(JMethod != null) {
-			System.err.println("debug native method: " + JMethod);
-			//return JavaTypeTable.ConvertToFuncType(JMethod);
+			return JavaTypeTable.ConvertToFuncType(JMethod);
 		}
 		return ZSystem.VarType;
 	}

@@ -524,7 +524,7 @@ public class LibNative {
 		GenMap.put("ruby", zen.codegen.jruby.RubySourceGenerator.class);
 		GenMap.put("clisp", zen.codegen.clisp.CommonLispSourceGenerator.class);
 		//GenMap.put("c", zen.codegen.c.CSourceGenerator.class);
-		GenMap.put("jvm", zen.codegen.jvm.JavaByteCodeGenerator.class);
+		GenMap.put("jvm", zen.codegen.jvm.JavaByteCodeGenerator2.class);
 		GenMap.put("debug", zen.codegen.debug.ASTGenerator.class);
 	}
 
