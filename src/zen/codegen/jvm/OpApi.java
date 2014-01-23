@@ -239,6 +239,9 @@ public final class OpApi {
 		return x != y;
 	}
 	//
+	public static String Add(String x, String y) {
+		return x + y;
+	}
 	public static boolean Equals(String x, String y) {
 		if(x == null || y == null) {
 			return x == y;
@@ -249,9 +252,6 @@ public final class OpApi {
 	}
 	public static boolean NotEquals(String x, String y) {
 		return !Equals(x, y);
-	}
-	public static String Add(String x, Object y) {
-		return x + y;
 	}
 
 

@@ -51,6 +51,10 @@ public class CastApi {
 	public static long tolong(Float x) { return x.longValue(); }
 	public static long tolong(Double x) { return x.longValue(); }
 
+	public static Long toLong(byte x)  { return (long)x; }
+	public static Long toLong(short x) { return (long)x; }
+	public static Long toLong(int x) { return (long)x; }
+
 	public static byte   tobyte(long x)  { return (byte)x; }
 	public static short  toshort(long x) { return (short)x; }
 	public static int    toint(long x) { return (int)x; }
