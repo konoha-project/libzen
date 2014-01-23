@@ -25,15 +25,8 @@
 package zen.codegen.jvm;
 
 public class BooleanApi {
-	public static boolean Not(boolean b) {
-		return !b;
-	}
-	public static boolean Equals(boolean x, boolean y) {
-		return x == y;
-	}
-	public static boolean NotEquals(boolean x, boolean y) {
-		return x != y;
-	}
+
+
 	// converter
 	public final static String ToString(boolean value) {
 		return value ? "true" : "false";
