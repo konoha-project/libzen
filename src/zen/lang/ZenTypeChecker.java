@@ -104,20 +104,21 @@ public abstract class ZenTypeChecker extends ZVisitor {
 	}
 
 	public final void TypedNode(ZNode Node, ZType Type) {
-		Node.Type = Type;
 		if(this.IsVisitable()) {
+			Node.Type = Type;
 			this.StackedTypedNode = Node;
+			System.err.println("Node="+Node.getClass().getSimpleName() + ":" + Type);
 		}
 	}
 
-	public final void TypedCastNode(ZNode Node, ZType ContextType, ZType NodeType) {
-		if(NodeType.IsVarType() && !ContextType.IsVarType() && !(Node.ParentNode instanceof ZCastNode)) {
-			this.TypedNode(new ZCastNode(ContextType, Node), ContextType);
-		}
-		else {
-			this.TypedNode(Node, NodeType);
-		}
-	}
+	//	public final void TypedCastNode(ZNode Node, ZType ContextType, ZType NodeType) {
+	//		if(NodeType.IsVarType() && !ContextType.IsVarType() && !(Node.ParentNode instanceof ZCastNode)) {
+	//			this.TypedNode(new ZCastNode(ContextType, Node), ContextType);
+	//		}
+	//		else {
+	//			this.TypedNode(Node, NodeType);
+	//		}
+	//	}
 
 	public final void TypedNodeIf(ZNode Node, ZType Type, ZNode P1) {
 		if(P1.IsVarType()) {
@@ -243,9 +244,9 @@ public abstract class ZenTypeChecker extends ZVisitor {
 			@Var int FuncParamSize = Node.ParamList.size();
 			@Var ZType RecvType = Node.GetRecvType();
 			@Var String Signature = ZFunc.StringfySignature(FuncName, FuncParamSize, RecvType);
-			@Var Object Func = NameSpace.GetSymbol(Signature);
-			if(Func instanceof ZFunc) {
-				Node.ResolvedFunc = ((ZFunc)Func);
+			@Var ZFunc Func = ZenGamma.GetFunc(NameSpace, Signature, null);
+			if(Func != null) {
+				Node.ResolvedFunc = Func;
 				Node.ResolvedFunc.Used();
 				return Node.ResolvedFunc.GetFuncType();
 			}
@@ -263,15 +264,15 @@ public abstract class ZenTypeChecker extends ZVisitor {
 		if(this.IsVisitable()) {
 			if(Node.IsUntyped()) {
 				ZNode ParentNode = Node.ParentNode;
-				ZNameSpace NameSpace_ = this.StackedNameSpace;
-				ZType ContextType_ = this.StackedContextType;
+				//				ZNameSpace NameSpace_ = this.StackedNameSpace;
+				//				ZType ContextType_ = this.StackedContextType;
 				this.StackedNameSpace = NameSpace;
 				this.StackedContextType = ContextType;
 				Node.Accept(this);
 				Node = this.TypeCheckImpl(this.StackedTypedNode, NameSpace, ContextType, TypeCheckPolicy);
 				this.StackedTypedNode = Node;
-				this.StackedNameSpace = NameSpace_;
-				this.StackedContextType = ContextType_;
+				//				this.StackedNameSpace = NameSpace_;
+				//				this.StackedContextType = ContextType_;
 				if(ParentNode != Node.ParentNode && ParentNode != null) {
 					ParentNode.SetChild(Node);
 				}
@@ -437,7 +438,7 @@ public abstract class ZenTypeChecker extends ZVisitor {
 	}
 
 	protected void SetLocalVariable(ZNameSpace NameSpace, ZType VarType, String VarName, ZToken SourceToken) {
-		@Var ZenVariable VarInfo = new ZenVariable(NameSpace.GetDefiningFunc(), 0, VarType, VarName, this.FuncScope.GetVarIndex(), SourceToken);
+		@Var ZenVariable VarInfo = new ZenVariable(NameSpace.GetDefiningFuncNode(), 0, VarType, VarName, this.FuncScope.GetVarIndex(), SourceToken);
 		NameSpace.SetSymbol(VarName, VarInfo, SourceToken);
 	}
 

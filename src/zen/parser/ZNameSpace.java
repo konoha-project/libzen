@@ -24,8 +24,6 @@
 
 //ifdef JAVA
 package zen.parser;
-import java.util.ArrayList;
-
 import zen.ast.ZNode;
 import zen.deps.Field;
 import zen.deps.LibNative;
@@ -34,27 +32,19 @@ import zen.deps.Nullable;
 import zen.deps.Var;
 import zen.deps.ZenMap;
 import zen.lang.ZFunc;
-import zen.lang.ZFuncSet;
 import zen.lang.ZSystem;
 import zen.lang.ZType;
 import zen.lang.ZenClassType;
-
-final class ZSymbolSource {
-	@Field public ZToken SourceToken;
-	@Field public ZType  Type; // nullable
-	@Field public Object  Value;
-}
 
 public final class ZNameSpace {
 	@Field public final ZNameSpace   ParentNameSpace;
 	@Field public final ZGenerator   Generator;
 
-	@Field ZTokenFunc[] TokenMatrix;
-	@Field ZenMap<Object>	 SymbolPatternTable;
+	@Field ZTokenFunc[]   TokenMatrix;
+	@Field ZenMap<Object> SymbolPatternTable;
 	@Field private ZNode  FuncNode;
 
 	public ZNameSpace(ZGenerator Generator, ZNameSpace ParentNameSpace) {
-		//		this.Context = Context;
 		this.ParentNameSpace = ParentNameSpace;
 		this.TokenMatrix = null;
 		this.SymbolPatternTable = null;
@@ -76,21 +66,6 @@ public final class ZNameSpace {
 	public ZNameSpace GetRootNameSpace() {
 		return this.Generator.RootNameSpace;
 	}
-
-	//	public final ZenNameSpace Minimum() {
-	//		@Var ZenNameSpace NameSpace = this;
-	//		while(NameSpace.SymbolPatternTable == null) {
-	//			NameSpace = NameSpace.ParentNameSpace;
-	//		}
-	//		return NameSpace;
-	//	}
-	//
-	//	public final ZenNameSpace GetNameSpace(int NameSpaceFlag) {
-	//		if(ZenUtils.IsFlag(NameSpaceFlag, ZenParserConst.PublicNameSpace)) {
-	//			return this.ParentNameSpace;
-	//		}
-	//		return this;
-	//	}
 
 	// TokenMatrix
 	public final ZTokenFunc GetTokenFunc(int ZenChar) {
@@ -191,10 +166,6 @@ public final class ZNameSpace {
 		return null;
 	}
 
-	public final ZType GetSymbolType(String Symbol) {
-		return ZSystem.VarType;
-	}
-
 	// Pattern
 	public ZSyntaxPattern GetSyntaxPattern(String PatternName) {
 		@Var Object Body = this.GetSymbol(PatternName);
@@ -267,7 +238,7 @@ public final class ZNameSpace {
 	}
 
 	// DefiningFunc
-	public final ZNode GetDefiningFunc() {
+	public final ZNode GetDefiningFuncNode() {
 		@Var ZNameSpace NameSpace = this;
 		while(NameSpace != null) {
 			if(NameSpace.FuncNode != null) {
@@ -282,56 +253,59 @@ public final class ZNameSpace {
 		this.FuncNode = FuncNode;
 	}
 
-	// Function
-	public final void AppendFuncName(ZFunc Func, ZToken SourceToken) {
-		@Var Object OldValue = this.GetLocalSymbol(Func.FuncName);
-		assert(!(OldValue instanceof ZSyntaxPattern));
-		@Var ZFuncSet FuncSet = null;
-		if(OldValue instanceof ZFunc) {
-			@Var ZFunc OldFunc = (ZFunc)OldValue;
-			if(OldFunc.FuncType != Func.FuncType) {
-				FuncSet = new ZFuncSet(OldFunc);
-			}
-		}
-		else if(OldValue instanceof ZFuncSet) {
-			FuncSet = (ZFuncSet)OldValue;
-		}
-		if(FuncSet != null) {
-			FuncSet.Append(Func, this.Generator.Logger, SourceToken);
-		}
-		else {
-			this.SetSymbol(Func.FuncName, Func, SourceToken);
-		}
-	}
 
-	public void RetrieveFuncList(ArrayList<ZFunc> FuncList, ZType ClassType, String FuncName, int FuncParamSize) {
-		@Var ZNameSpace NameSpace = this;
-		while(NameSpace != null) {
-			@Var Object FuncValue = NameSpace.GetLocalSymbol(FuncName);
-			if(FuncValue instanceof ZFunc) {
-				@Var ZFunc Func = (ZFunc)FuncValue;
-				if(FuncParamSize == Func.FuncType.GetFuncParamSize()) {
-					if(ClassType == null || Func.FuncType.GetRecvType() == ClassType) {
-						FuncList.add(Func);
-					}
-				}
-			}
-			else if(FuncValue instanceof ZFuncSet) {
-				@Var ZFuncSet FuncSet = (ZFuncSet)FuncValue;
-				@Var int i = FuncSet.FuncList.size() - 1;
-				while(i >= 0) {
-					@Var ZFunc Func = FuncSet.FuncList.get(i);
-					if(FuncParamSize == Func.FuncType.GetFuncParamSize()) {
-						if(ClassType == null || Func.FuncType.GetRecvType() == ClassType) {
-							FuncList.add(Func);
-						}
-					}
-					i = i - 1;
-				}
-			}
-			NameSpace = NameSpace.ParentNameSpace;
-		}
-	}
+
+
+	//	// Function
+	//	public final void AppendFuncName(ZFunc Func, ZToken SourceToken) {
+	//		@Var Object OldValue = this.GetLocalSymbol(Func.FuncName);
+	//		assert(!(OldValue instanceof ZSyntaxPattern));
+	//		@Var ZFuncSet FuncSet = null;
+	//		if(OldValue instanceof ZFunc) {
+	//			@Var ZFunc OldFunc = (ZFunc)OldValue;
+	//			if(OldFunc.FuncType != Func.FuncType) {
+	//				FuncSet = new ZFuncSet(OldFunc);
+	//			}
+	//		}
+	//		else if(OldValue instanceof ZFuncSet) {
+	//			FuncSet = (ZFuncSet)OldValue;
+	//		}
+	//		if(FuncSet != null) {
+	//			FuncSet.Append(Func, this.Generator.Logger, SourceToken);
+	//		}
+	//		else {
+	//			this.SetSymbol(Func.FuncName, Func, SourceToken);
+	//		}
+	//	}
+	//
+	//	public void RetrieveFuncList(ArrayList<ZFunc> FuncList, ZType ClassType, String FuncName, int FuncParamSize) {
+	//		@Var ZNameSpace NameSpace = this;
+	//		while(NameSpace != null) {
+	//			@Var Object FuncValue = NameSpace.GetLocalSymbol(FuncName);
+	//			if(FuncValue instanceof ZFunc) {
+	//				@Var ZFunc Func = (ZFunc)FuncValue;
+	//				if(FuncParamSize == Func.FuncType.GetFuncParamSize()) {
+	//					if(ClassType == null || Func.FuncType.GetRecvType() == ClassType) {
+	//						FuncList.add(Func);
+	//					}
+	//				}
+	//			}
+	//			else if(FuncValue instanceof ZFuncSet) {
+	//				@Var ZFuncSet FuncSet = (ZFuncSet)FuncValue;
+	//				@Var int i = FuncSet.FuncList.size() - 1;
+	//				while(i >= 0) {
+	//					@Var ZFunc Func = FuncSet.FuncList.get(i);
+	//					if(FuncParamSize == Func.FuncType.GetFuncParamSize()) {
+	//						if(ClassType == null || Func.FuncType.GetRecvType() == ClassType) {
+	//							FuncList.add(Func);
+	//						}
+	//					}
+	//					i = i - 1;
+	//				}
+	//			}
+	//			NameSpace = NameSpace.ParentNameSpace;
+	//		}
+	//	}
 
 	//	public final ZenType AppendTypeVariable(String Name, ZenType ParamBaseType, ZenToken SourceToken, ArrayList<Object> RevertList) {
 	//		this.UpdateRevertList(Name, RevertList);

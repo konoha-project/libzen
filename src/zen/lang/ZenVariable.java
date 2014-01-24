@@ -51,7 +51,7 @@ public class ZenVariable {
 	}
 
 	public final boolean IsCaptured(ZNameSpace NameSpace) {
-		return (NameSpace.GetDefiningFunc() != this.DefiningFunc);
+		return (NameSpace.GetDefiningFuncNode() != this.DefiningFunc);
 	}
 
 	public final void Defined() {

@@ -70,7 +70,6 @@ public abstract class ZFunc {
 		return null;
 	}
 
-
 	public static String StringfySignature(String FuncName, int FuncParamSize, ZType RecvType) {
 		return FuncName + "__" + FuncParamSize + RecvType.GetUniqueName();
 	}
