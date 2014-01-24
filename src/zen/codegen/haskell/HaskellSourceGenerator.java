@@ -179,15 +179,14 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 		}
 	}
 
-	@Override
-	protected void VisitParamList(String OpenToken, ArrayList<ZNode> ParamList, String CloseToken) {
+	@Override protected void VisitParamList(String OpenToken, ArrayList<ZNode> ParamList, String CloseToken) {
 		this.CurrentBuilder.Append(OpenToken);
 		for (int i = 0; i < ParamList.size(); i++) {
-			ZNode ParamNode = ParamList.get(i);
+			ZParamNode ParamNode = (ZParamNode)ParamList.get(i);
 			if (i > 0) {
 				this.CurrentBuilder.Append(" ");
 			}
-			this.GenerateCode(ParamNode);
+			this.VisitParamNode(ParamNode);
 		}
 		this.CurrentBuilder.Append(CloseToken);
 	}
@@ -323,8 +322,7 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 		}
 	}
 
-	@Override
-	public void VisitFuncCallNode(ZFuncCallNode Node) {
+	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
 		this.GenerateCode(Node.FuncNode);
 		this.VisitParamList(" ", Node.ParamList, " ");
 	}

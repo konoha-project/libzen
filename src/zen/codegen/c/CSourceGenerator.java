@@ -82,7 +82,8 @@ public class CSourceGenerator extends ZSourceGenerator {
 		this.VisitStmtList(Node.StmtList);
 	}
 
-	@Override public void VisitParamNode(ZParamNode Node) {
+	@Override
+	public void VisitParamNode(ZParamNode Node) {
 		this.VisitType(Node.Type);
 		this.CurrentBuilder.Append(" ");
 		this.CurrentBuilder.Append(Node.Name);
