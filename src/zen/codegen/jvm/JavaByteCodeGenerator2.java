@@ -318,7 +318,7 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 
 	@Override public void VisitGetLocalNode(ZGetLocalNode Node) {
 		this.CurrentBuilder.LoadLocal(Node.VarName);
-		this.CurrentBuilder.CheckReturnCast(Node.Type, this.CurrentBuilder.GetLocalType(Node.VarName));
+		this.CurrentBuilder.CheckReturnCast(Node, this.CurrentBuilder.GetLocalType(Node.VarName));
 	}
 
 	@Override public void VisitSetLocalNode(ZSetLocalNode Node) {
@@ -343,7 +343,7 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 		if(Node.IsUntyped()) {
 			Method sMethod = NativeMethodTable.GetStaticMethod("GetField");
 			ZNode NameNode = new ZStringNode(null, Node.FieldName);
-			this.CurrentBuilder.ApplyStaticMethod(Node.Type, sMethod, new ZNode[] {Node.RecvNode, NameNode});
+			this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.RecvNode, NameNode});
 		}
 		else {
 			Class<?> RecvClass = NativeTypeTable.GetJavaClass(Node.RecvNode.Type);
@@ -352,7 +352,7 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 			Type OwnerType = Type.getType(RecvClass);
 			Node.RecvNode.Accept(this);
 			this.CurrentBuilder.visitFieldInsn(GETFIELD, OwnerType.getInternalName(), Node.FieldName, FieldType.getDescriptor());
-			this.CurrentBuilder.CheckReturnCast(Node.Type, FieldClass);
+			this.CurrentBuilder.CheckReturnCast(Node, FieldClass);
 		}
 	}
 
@@ -360,7 +360,7 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 		if(Node.IsUntyped()) {
 			Method sMethod = NativeMethodTable.GetStaticMethod("SetField");
 			ZNode NameNode = new ZStringNode(null, Node.FieldName);
-			this.CurrentBuilder.ApplyStaticMethod(Node.Type, sMethod, new ZNode[] {Node.RecvNode, NameNode, Node.ValueNode});
+			this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.RecvNode, NameNode, Node.ValueNode});
 		}
 		else {
 			Class<?> RecvClass = NativeTypeTable.GetJavaClass(Node.RecvNode.Type);
@@ -405,15 +405,14 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 			}
 			String owner = Type.getInternalName(jMethod.getDeclaringClass());
 			this.CurrentBuilder.visitMethodInsn(inst, owner, jMethod.getName(), Type.getMethodDescriptor(jMethod));
-			this.CurrentBuilder.CheckReturnCast(Node.Type, jMethod.getReturnType());
+			this.CurrentBuilder.CheckReturnCast(Node, jMethod.getReturnType());
 		}
 		else {
 			jMethod = NativeMethodTable.GetStaticMethod("InvokeUnresolvedMethod");
 			this.CurrentBuilder.PushNode(Object.class, Node.RecvNode);
 			this.CurrentBuilder.LoadConst(Node.MethodName);
 			this.CurrentBuilder.PushNodeListAsArray(Object.class, 0, Node.ParamList);
-			this.CurrentBuilder.ApplyStaticMethod(Node.Type, jMethod, null);
-			this.CurrentBuilder.CheckReturnCast(Node.Type, jMethod.getReturnType());
+			this.CurrentBuilder.ApplyStaticMethod(Node, jMethod, null);
 		}
 	}
 
@@ -425,12 +424,12 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 
 	@Override public void VisitUnaryNode(ZUnaryNode Node) {
 		Method sMethod = NativeMethodTable.GetUnaryStaticMethod(Node.SourceToken.ParsedText, Node.RecvNode.Type);
-		this.CurrentBuilder.ApplyStaticMethod(Node.Type, sMethod, new ZNode[] {Node.RecvNode});
+		this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.RecvNode});
 	}
 
 	@Override public void VisitNotNode(ZNotNode Node) {
 		Method sMethod = NativeMethodTable.GetUnaryStaticMethod(Node.SourceToken.ParsedText, Node.RecvNode.Type);
-		this.CurrentBuilder.ApplyStaticMethod(Node.Type, sMethod, new ZNode[] {Node.RecvNode});
+		this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.RecvNode});
 	}
 
 	@Override public void VisitCastNode(ZCastNode Node) {
@@ -445,12 +444,12 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 
 	@Override public void VisitBinaryNode(ZBinaryNode Node) {
 		Method sMethod = NativeMethodTable.GetBinaryStaticMethod(Node.LeftNode.Type, Node.SourceToken.ParsedText, Node.RightNode.Type);
-		this.CurrentBuilder.ApplyStaticMethod(Node.Type, sMethod, new ZNode[] {Node.LeftNode, Node.RightNode});
+		this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.LeftNode, Node.RightNode});
 	}
 
 	@Override public void VisitComparatorNode(ZComparatorNode Node) {
 		Method sMethod = NativeMethodTable.GetBinaryStaticMethod(Node.LeftNode.Type, Node.SourceToken.ParsedText, Node.RightNode.Type);
-		this.CurrentBuilder.ApplyStaticMethod(Node.Type, sMethod, new ZNode[] {Node.LeftNode, Node.RightNode});
+		this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.LeftNode, Node.RightNode});
 	}
 
 	@Override public void VisitAndNode(ZAndNode Node) {

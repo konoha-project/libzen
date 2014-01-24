@@ -19,7 +19,6 @@ import org.objectweb.asm.tree.MethodNode;
 import zen.ast.ZNode;
 import zen.deps.NativeTypeTable;
 import zen.lang.ZSystem;
-import zen.lang.ZType;
 
 public class JMethodBuilder2 extends MethodNode {
 
@@ -122,26 +121,28 @@ public class JMethodBuilder2 extends MethodNode {
 		}
 	}
 
-	void CheckParamCast(Class<?> C1, ZType T2) {
-		Class<?> C2 = NativeTypeTable.GetJavaClass(T2);
+	void CheckParamCast(Class<?> C1, ZNode Node) {
+		Class<?> C2 = NativeTypeTable.GetJavaClass(Node.Type);
 		if(C1 != C2) {
+			this.Generator.Debug("C2="+Node.getClass().getSimpleName() + ": " + Node.Type);
 			this.CheckCast(C1, C2);
 		}
 	}
 
-	void CheckReturnCast(ZType T1, Class<?> C2) {
-		Class<?> C1 = NativeTypeTable.GetJavaClass(T1);
+	void CheckReturnCast(ZNode Node, Class<?> C2) {
+		Class<?> C1 = NativeTypeTable.GetJavaClass(Node.Type);
 		if(C1 != C2) {
+			this.Generator.Debug("C1"+Node.getClass().getSimpleName() + ": " + Node.Type);
 			this.CheckCast(C1, C2);
 		}
 	}
 
 	void PushNode(Class<?> T, ZNode Node) {
 		Node.Accept(this.Generator);
-		this.CheckParamCast(T, Node.Type);
+		this.CheckParamCast(T, Node);
 	}
 
-	void ApplyStaticMethod(ZType ReturnType, Method sMethod, ZNode[] Nodes) {
+	void ApplyStaticMethod(ZNode Node, Method sMethod, ZNode[] Nodes) {
 		if(Nodes != null) {
 			Class<?>[] P = sMethod.getParameterTypes();
 			for(int i = 0; i < P.length; i++) {
@@ -150,7 +151,7 @@ public class JMethodBuilder2 extends MethodNode {
 		}
 		String owner = Type.getInternalName(sMethod.getDeclaringClass());
 		this.visitMethodInsn(INVOKESTATIC, owner, sMethod.getName(), Type.getMethodDescriptor(sMethod));
-		this.CheckReturnCast(ReturnType, sMethod.getReturnType());
+		this.CheckReturnCast(Node, sMethod.getReturnType());
 	}
 
 	void PushNodeListAsArray(Class<?> T, int StartIdx, ArrayList<ZNode> NodeList) {
