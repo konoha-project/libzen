@@ -198,7 +198,7 @@ public class NativeMethodTable {
 
 	public static Method GetBinaryStaticMethod(ZType T1, String Op, ZType T2) {
 		Method sMethod = MethodMap.get(BinaryKey(T1, Op, T2));
-		if(sMethod != null) {
+		if(sMethod == null) {
 			// if undefined Object "op" Object must be default
 			sMethod = MethodMap.get(BinaryKey(ZSystem.VarType, Op, ZSystem.VarType));
 		}
@@ -207,7 +207,7 @@ public class NativeMethodTable {
 
 	public static Method GetUnaryStaticMethod(String Op, ZType T2) {
 		Method sMethod = MethodMap.get(UnaryKey(Op, T2));
-		if(sMethod != null) {
+		if(sMethod == null) {
 			// if undefined Object "op" Object must be default
 			sMethod = MethodMap.get(UnaryKey(Op, ZSystem.VarType));
 		}
@@ -216,7 +216,7 @@ public class NativeMethodTable {
 
 	public static Method GetCastMethod(Class<?> T1, Class<?> T2) {
 		Method sMethod = MethodMap.get(CastKey(T1, T2));
-		if(sMethod != null) {
+		if(sMethod == null) {
 			// if undefined Object "op" Object must be default
 			sMethod = MethodMap.get(CastKey(Object.class, T2));
 		}

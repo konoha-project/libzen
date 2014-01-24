@@ -138,6 +138,7 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 	}
 
 	Type GetAsmType(ZType zType) {
+		//System.err.println("debug * " + NativeTypeTable.GetJavaClass(zType));
 		return Type.getType(NativeTypeTable.GetJavaClass(zType));
 	}
 
@@ -148,7 +149,9 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 			ZType ParamType = FuncType.GetParamType(i);
 			ArgTypes[i] = this.GetAsmType(ParamType);
 		}
-		return Type.getMethodDescriptor(ReturnType, ArgTypes);
+		String Desc = Type.getMethodDescriptor(ReturnType, ArgTypes);
+		//System.err.println("Desc: " + Desc + ", FuncType: " + FuncType);
+		return Desc;
 	}
 
 	private Object GetConstValue(ZNode Node) {
@@ -624,7 +627,8 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 		@Var String FuncName = Node.ReferenceName;
 		@Var JClassBuilder  HolderClass = this.ClassLoader.NewFunctionHolderClass(Node, FuncName);
 		@Var String MethodDesc = this.GetMethodDescriptor(Node.GetFuncType(null));
-		this.CurrentBuilder = new JMethodBuilder2(ACC_PUBLIC | ACC_STATIC, FuncName, MethodDesc, this, this.CurrentBuilder);
+		System.out.println("*** " + MethodDesc);
+		this.CurrentBuilder = new JMethodBuilder2(ACC_PUBLIC | ACC_STATIC, Node.FuncName, MethodDesc, this, this.CurrentBuilder);
 		HolderClass.AddMethod(this.CurrentBuilder);
 		for(int i = 0; i < Node.ArgumentList.size(); i++) {
 			ZParamNode ParamNode =(ZParamNode)Node.ArgumentList.get(i);
@@ -635,7 +639,7 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 			// JVM always needs return;
 			this.CurrentBuilder.visitInsn(RETURN);
 		}
-		Method Func = HolderClass.GetDefinedMethod(this.ClassLoader, FuncName);
+		Method Func = HolderClass.GetDefinedMethod(this.ClassLoader, Node.FuncName);
 		System.err.println(Func);
 		this.CurrentBuilder = this.CurrentBuilder.Parent;
 	}
