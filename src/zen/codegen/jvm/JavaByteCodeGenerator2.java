@@ -100,7 +100,6 @@ import zen.ast.ZUnaryNode;
 import zen.ast.ZVarDeclNode;
 import zen.ast.ZWhileNode;
 import zen.deps.LibNative;
-import zen.deps.NativeMethodTable;
 import zen.deps.NativeTypeTable;
 import zen.deps.Var;
 import zen.lang.ZFuncType;
@@ -395,6 +394,14 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 			this.CurrentBuilder.visitMethodInsn(inst, owner, jMethod.getName(), Type.getMethodDescriptor(jMethod));
 			this.CurrentBuilder.CheckReturnCast(Node.Type, jMethod.getReturnType());
 		}
+		else {
+			jMethod = NativeMethodTable.GetStaticMethod("InvokeUnresolvedMethod");
+			this.CurrentBuilder.PushNode(Object.class, Node.RecvNode);
+			this.CurrentBuilder.LoadConst(Node.MethodName);
+			this.CurrentBuilder.PushNodeListAsArray(Object.class, 0, Node.ParamList);
+			this.CurrentBuilder.ApplyStaticMethod(Node.Type, jMethod, null);
+			this.CurrentBuilder.CheckReturnCast(Node.Type, jMethod.getReturnType());
+		}
 	}
 
 	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
@@ -654,6 +661,9 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 		return Nodes;
 	}
 
+	public void Debug(String Message) {
+		LibNative.Debug(Message);
+	}
 
 }
 

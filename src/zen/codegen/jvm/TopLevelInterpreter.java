@@ -72,7 +72,6 @@ import zen.ast.ZTryNode;
 import zen.ast.ZUnaryNode;
 import zen.ast.ZVarDeclNode;
 import zen.ast.ZWhileNode;
-import zen.deps.NativeMethodTable;
 import zen.parser.ZVisitor;
 
 public class TopLevelInterpreter extends ZVisitor {
@@ -118,19 +117,26 @@ public class TopLevelInterpreter extends ZVisitor {
 		return this.EvaledValue;
 	}
 
-	void EvalStaticMethod(Method sMethod, ZNode[] Nodes) {
+	void EvalMethod(Method sMethod, ZNode RecvNode, ZNode[] Nodes) {
 		try {
+			Object Recv = null;
+			if(RecvNode != null) {
+				Recv = this.Eval(RecvNode);
+			}
 			Object Values[] = new Object[Nodes.length];
 			for(int i = 0; i < Nodes.length; i++) {
 				Values[i] = this.Eval(Nodes[i]);
-				if(!this.IsVisitable()) {
-					return ;
-				}
 			}
-			this.EvaledValue = sMethod.invoke(null, Values);
+			if(this.IsVisitable()) {
+				this.EvaledValue = sMethod.invoke(Recv, Values);
+			}
 		} catch (Exception e) {
 			this.FoundError(e.getMessage());
 		}
+	}
+
+	void EvalStaticMethod(Method sMethod, ZNode[] Nodes) {
+		this.EvalMethod(sMethod, null, Nodes);
 	}
 
 	@Override public void VisitEmptyNode(ZEmptyNode Node) {
@@ -216,7 +222,25 @@ public class TopLevelInterpreter extends ZVisitor {
 	}
 
 	@Override public void VisitMethodCallNode(ZMethodCallNode Node) {
-		this.Unsupported(Node);
+		Method jMethod = this.Generator.GetMethod(Node.RecvNode.Type, Node.MethodName, Node.ParamList);
+		if(jMethod != null) {
+			this.EvalMethod(jMethod, Node.RecvNode, this.Generator.PackNodes(null, Node.ParamList));
+		}
+		else {
+			jMethod = NativeMethodTable.GetStaticMethod("InvokeUnresolvedMethod");
+			Object Recv = this.Eval(Node.RecvNode);
+			Object Values[] = new Object[Node.ParamList.size()];
+			for(int i = 0; i < Node.ParamList.size(); i++) {
+				Values[i] = this.Eval(Node.ParamList.get(i));
+			}
+			if(this.IsVisitable()) {
+				try {
+					this.EvaledValue = jMethod.invoke(Recv, Node.MethodName, Values);
+				} catch (Exception e) {
+					this.FoundError(e.toString());
+				}
+			}
+		}
 	}
 
 	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {

@@ -62,9 +62,24 @@ public class LibNative {
 		return System.getenv(Name);
 	}
 
+	private final static String GetStackInfo(int depth) {
+		String LineNumber = " ";
+		Exception e =  new Exception();
+		StackTraceElement[] Elements = e.getStackTrace();
+		if(depth < Elements.length) {
+			StackTraceElement elem = Elements[depth];
+			LineNumber += elem;
+		}
+		return LineNumber;
+	}
+
 	public final static void FixMe(Exception e) {
-		System.err.println("FIXME: " + e);
+		System.err.println("FIXME" + LibNative.GetStackInfo(3) + ": " + e);
 		e.printStackTrace();
+	}
+
+	public final static void Debug(String msg) {
+		LibNative.println("DEBUG " + LibNative.GetStackInfo(3) + ": " + msg);
 	}
 
 	public final static void Assert(boolean TestResult) {

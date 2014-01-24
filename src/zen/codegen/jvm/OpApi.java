@@ -25,6 +25,7 @@
 package zen.codegen.jvm;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.List;
 
 import zen.deps.NativeTypeTable;
@@ -302,5 +303,21 @@ public final class OpApi {
 			throw new SoftwareFaultException(e.toString());
 		}
 	}
+
+	public static Object InvokeUnresolvedMethod(Object x, String name, Object[] y) {
+		try {
+			Method[] ms = x.getClass().getMethods();
+			for(int i = 0; i < ms.length; i++) {
+				if(ms[i].getName().equals(name) && ms[i].getParameterTypes().length == y.length) {
+					return ms[i].invoke(x, y);
+				}
+			}
+			throw new SoftwareFaultException("undefined method " + name + " of " + x.getClass().getSimpleName());
+		}
+		catch(Exception e) {
+			throw new SoftwareFaultException("mismatched method " + name + " of " + x.getClass().getSimpleName());
+		}
+	}
+
 
 }
