@@ -359,6 +359,18 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		return ZSystem.LookupFuncType(TypeList);
 	}
 
+	private ZType GuessMethodFuncType(ZNameSpace NameSpace, ZMethodCallNode Node, ZType ContextType) {
+		if(Node.ResolvedFunc == null) {
+			Node.ParamList.add(0, Node.RecvNode);
+			this.GuessFuncType(NameSpace, Node.MethodName, Node, ContextType);
+			Node.ParamList.remove(0);
+		}
+		if(Node.ResolvedFunc == null) {
+			return NameSpace.Generator.GetMethodFuncType(Node.RecvNode.Type, Node.MethodName, Node.ParamList);
+		}
+		return Node.ResolvedFunc.FuncType;
+	}
+
 	private ZType TypeCheckFuncParam(ZNameSpace NameSpace, ArrayList<ZNode> ParamList, ZType ContextType, int ParamIdx /* 1: Func 2: Method*/) {
 		//this.println("TypeCheck FuncType: " + ContextType);
 		if(this.IsVisitable() && ContextType.IsFuncType()) {
@@ -384,7 +396,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		this.TypeCheckNodeList(NameSpace, Node.ParamList);
 		if(this.IsVisitable()) {
 			@Var ZType FuncType = this.GuessFuncTypeFromContext(ContextType, Node.RecvNode.Type, Node.ParamList);
-			FuncType = this.GuessMethodFuncType(NameSpace, Node.MethodName, Node, FuncType);
+			FuncType = this.GuessMethodFuncType(NameSpace, Node, FuncType);
 			@Var ZType ReturnType = this.TypeCheckFuncParam(NameSpace, Node.ParamList, FuncType, 2);
 			this.TypedCastNode(Node, ContextType, ReturnType);
 		}

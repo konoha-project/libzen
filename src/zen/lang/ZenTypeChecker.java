@@ -34,7 +34,6 @@ import zen.ast.ZCastNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZFloatNode;
 import zen.ast.ZIntNode;
-import zen.ast.ZMethodCallNode;
 import zen.ast.ZNode;
 import zen.ast.ZNullNode;
 import zen.ast.ZStupidCastNode;
@@ -259,17 +258,6 @@ public abstract class ZenTypeChecker extends ZVisitor {
 		return Node.ResolvedFunc.FuncType;
 	}
 
-	protected ZType GuessMethodFuncType(ZNameSpace NameSpace, String FuncName, ZMethodCallNode Node, ZType ContextType) {
-		if(Node.ResolvedFunc == null) {
-			Node.ParamList.add(0, Node.RecvNode);
-			this.GuessFuncType(NameSpace, FuncName, Node, ContextType);
-			Node.ParamList.remove(0);
-		}
-		if(Node.ResolvedFunc == null) {
-			return ZSystem.VarType; // unspecified
-		}
-		return Node.ResolvedFunc.FuncType;
-	}
 
 	public final ZNode TypeCheck(ZNode Node, ZNameSpace NameSpace, ZType ContextType, int TypeCheckPolicy) {
 		if(this.IsVisitable()) {

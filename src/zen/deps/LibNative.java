@@ -35,10 +35,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 
 import zen.ast.ZNode;
 import zen.lang.ZFunc;
+import zen.lang.ZFuncType;
 import zen.lang.ZSystem;
 import zen.lang.ZType;
 import zen.parser.ZGenerator;
@@ -213,21 +213,9 @@ public class LibNative {
 		return NativeTypeTable.GetZenType(NativeClass);
 	}
 
-	public final static ZNativeFunc ConvertToNativeFunc(Method JMethod) {
-		@Var ArrayList<ZType> TypeList = new ArrayList<ZType>();
-		TypeList.add(LibNative.GetNativeType(JMethod.getReturnType()));
-		if (!Modifier.isStatic(JMethod.getModifiers())) {
-			TypeList.add(LibNative.GetNativeType(JMethod.getDeclaringClass()));
-		}
-		@Var Class<?>[] ParamTypes = JMethod.getParameterTypes();
-		if (ParamTypes != null) {
-			@Var int j = 0;
-			while(j < ParamTypes.length) {
-				TypeList.add(LibNative.GetNativeType(ParamTypes[j]));
-				j = j + 1;
-			}
-		}
-		return new ZNativeFunc(0, JMethod.getName(), ZSystem.LookupFuncType(TypeList), null, JMethod);
+	public final static ZNativeFunc ConvertToNativeFunc(Method jMethod) {
+		@Var ZFuncType FuncType = NativeTypeTable.ConvertToFuncType(jMethod);
+		return new ZNativeFunc(0, jMethod.getName(), FuncType, null, jMethod);
 	}
 
 

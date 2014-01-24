@@ -25,6 +25,8 @@
 //ifdef JAVA
 package zen.parser;
 
+import java.util.ArrayList;
+
 import zen.ast.ZNode;
 import zen.deps.Field;
 import zen.lang.ZSystem;
@@ -102,10 +104,9 @@ public abstract class ZGenerator extends ZVisitor {
 
 	public ZType GetSetterType(ZType BaseType, String Name) {
 		return ZSystem.VarType;     // undefined
-		//return ZenSystem.VoidType;   // readonly
 	}
 
-	public ZType GetMethodReturnType(ZType RecvType, String MethodName, ZType[] ParamType) {
+	public ZType GetMethodFuncType(ZType RecvType, String MethodName, ArrayList<ZNode> ParamList) {
 		return ZSystem.VarType;     // undefined
 	}
 
