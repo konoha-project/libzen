@@ -190,6 +190,7 @@ public class JavaReflectionEngine extends ZenEngine {
 
 	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
 		Method sMethod = ((JavaByteCodeGenerator2)this.Generator).GetStaticFuncMethod(Node.FuncNode);
+
 		if(sMethod != null) {
 			this.EvalStaticMethod(Node, sMethod, ((JavaByteCodeGenerator2)this.Generator).PackNodes(null, Node.ParamList));
 		}

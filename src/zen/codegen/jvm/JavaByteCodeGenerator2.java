@@ -101,6 +101,7 @@ import zen.ast.ZWhileNode;
 import zen.deps.LibNative;
 import zen.deps.NativeTypeTable;
 import zen.deps.Var;
+import zen.deps.ZenMap;
 import zen.lang.ZFuncType;
 import zen.lang.ZSystem;
 import zen.lang.ZType;
@@ -112,6 +113,7 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 	JMethodBuilder2 CurrentBuilder;
 	JClassLoader ClassLoader = null;
 	ArrayList<TryCatchLabel> TryCatchLabel;
+	private final ZenMap<Method> FuncMap = new ZenMap<Method>(null);
 
 	public JavaByteCodeGenerator2() {
 		super("java", "1.6");
@@ -623,11 +625,16 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 		// TODO Auto-generated method stub
 	}
 
+	public Method LoadDefinedFunc(String FuncName, ZFuncType FuncType) {
+		return this.FuncMap.GetOrNull(FuncType.StringfySignature(FuncName));
+	}
+
 	@Override public void VisitFuncDeclNode(ZFuncDeclNode Node) {
 		@Var String FuncName = Node.ReferenceName;
 		@Var JClassBuilder  HolderClass = this.ClassLoader.NewFunctionHolderClass(Node, FuncName);
-		@Var String MethodDesc = this.GetMethodDescriptor(Node.GetFuncType(null));
-		System.out.println("*** " + MethodDesc);
+		@Var ZFuncType FuncType = Node.GetFuncType(null);
+		@Var String MethodDesc = this.GetMethodDescriptor(FuncType);
+		//System.out.println("*** " + MethodDesc);
 		this.CurrentBuilder = new JMethodBuilder2(ACC_PUBLIC | ACC_STATIC, Node.FuncName, MethodDesc, this, this.CurrentBuilder);
 		HolderClass.AddMethod(this.CurrentBuilder);
 		for(int i = 0; i < Node.ArgumentList.size(); i++) {
@@ -639,8 +646,13 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 			// JVM always needs return;
 			this.CurrentBuilder.visitInsn(RETURN);
 		}
-		Method Func = HolderClass.GetDefinedMethod(this.ClassLoader, Node.FuncName);
-		System.err.println(Func);
+		try {
+			Method FuncMethod = HolderClass.GetDefinedMethod(this.ClassLoader, Node.FuncName);
+			this.FuncMap.put(Node.ReferenceName, FuncMethod);
+		}
+		catch(Error e) {
+			e.printStackTrace();
+		}
 		this.CurrentBuilder = this.CurrentBuilder.Parent;
 	}
 
@@ -665,8 +677,12 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 		this.CurrentBuilder.visitInsn(ATHROW);
 	}
 
-	Method GetStaticFuncMethod(ZNode FuncNode) {
-		// TODO Auto-generated method stub
+	public Method GetStaticFuncMethod(ZNode FuncNode) {
+		if(FuncNode.Type.IsFuncType()) {
+			if(FuncNode instanceof ZSymbolNode) {
+				return this.FuncMap.GetOrNull(((ZSymbolNode)FuncNode).ReferenceName);
+			}
+		}
 		return null;
 	}
 
