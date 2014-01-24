@@ -75,7 +75,7 @@ public abstract class ZGenerator extends ZVisitor {
 		return this.GrammarInfo.trim();
 	}
 
-	public void SetGrammarInfo(String GrammarInfo) {
+	public void AppendGrammarInfo(String GrammarInfo) {
 		this.GrammarInfo = this.GrammarInfo + GrammarInfo + " ";
 	}
 
