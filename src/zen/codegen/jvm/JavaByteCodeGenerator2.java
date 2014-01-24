@@ -51,7 +51,6 @@ import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.FieldNode;
-import org.objectweb.asm.tree.MethodNode;
 
 import zen.ast.ZAndNode;
 import zen.ast.ZArrayLiteralNode;
@@ -626,14 +625,19 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 		@Var String FuncName = Node.ReferenceName;
 		@Var JClassBuilder  HolderClass = this.ClassLoader.NewFunctionHolderClass(Node, FuncName);
 		@Var String MethodDesc = this.GetMethodDescriptor(Node.GetFuncType(null));
-		@Var MethodNode AsmMethodNode = new MethodNode(ACC_PUBLIC | ACC_STATIC, FuncName, MethodDesc, null, null);
-		HolderClass.AddMethod(AsmMethodNode);
 		this.CurrentBuilder = new JMethodBuilder2(ACC_PUBLIC | ACC_STATIC, FuncName, MethodDesc, this, this.CurrentBuilder);
+		HolderClass.AddMethod(this.CurrentBuilder);
 		for(int i = 0; i < Node.ArgumentList.size(); i++) {
 			ZParamNode ParamNode =(ZParamNode)Node.ArgumentList.get(i);
 			this.CurrentBuilder.AddLocal(NativeTypeTable.GetJavaClass(ParamNode.Type), ParamNode.Name);
 		}
 		Node.BodyNode.Accept(this);
+		if(Node.ReturnType.IsVoidType()) {
+			// JVM always needs return;
+			this.CurrentBuilder.visitInsn(RETURN);
+		}
+		Method Func = HolderClass.GetDefinedMethod(this.ClassLoader, FuncName);
+		System.err.println(Func);
 		this.CurrentBuilder = this.CurrentBuilder.Parent;
 	}
 

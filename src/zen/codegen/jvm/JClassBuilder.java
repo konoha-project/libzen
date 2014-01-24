@@ -5,13 +5,16 @@ import static org.objectweb.asm.Opcodes.V1_6;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.MethodNode;
 
-class JClassBuilder /*implements Opcodes */{
+import zen.deps.LibNative;
+
+class JClassBuilder {
 	final int ClassQualifer;
 	final String SourceFile;
 	final String ClassName;
@@ -53,6 +56,22 @@ class JClassBuilder /*implements Opcodes */{
 		}
 		Visitor.visitEnd();
 		return Visitor.toByteArray();
+	}
+
+
+	Method GetDefinedMethod(ClassLoader ClassLoader, String FuncName) {
+		try {
+			Class<?> DefinedClass = ClassLoader.loadClass(this.ClassName);
+			Method[] DefinedMethods = DefinedClass.getMethods();
+			for(Method m : DefinedMethods) {
+				if(m.getName().equals(FuncName)) {
+					return m;
+				}
+			}
+		} catch(Exception e) {
+			LibNative.FixMe(e);
+		}
+		return null;
 	}
 
 	void OutputClassFile(String className, String dir) {

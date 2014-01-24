@@ -50,7 +50,7 @@ class JClassLoader extends ClassLoader {
 
 	JClassBuilder NewFunctionHolderClass(ZNode Node, String FuncName) {
 		@Var String SourceFile = ZSystem.GetSourceFileName(Node.SourceToken.FileLine);
-		@Var JClassBuilder cb = new JClassBuilder(ACC_PUBLIC|ACC_FINAL, SourceFile, FuncName, "java/lang/Object");
+		@Var JClassBuilder cb = new JClassBuilder(ACC_PUBLIC|ACC_FINAL, SourceFile, "C"+ FuncName, "java/lang/Object");
 		this.AddClassBuilder(cb);
 		return cb;
 	}
