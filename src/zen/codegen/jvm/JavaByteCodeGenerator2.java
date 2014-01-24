@@ -100,6 +100,7 @@ import zen.ast.ZUnaryNode;
 import zen.ast.ZVarDeclNode;
 import zen.ast.ZWhileNode;
 import zen.deps.LibNative;
+import zen.deps.LibZen;
 import zen.deps.NativeTypeTable;
 import zen.deps.Var;
 import zen.lang.ZFuncType;
@@ -196,7 +197,7 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 					if(JParamClass.length != ParamList.size()) {
 						continue;
 					}
-					System.err.println("debug searching.. method: " + jMethod);
+					this.Debug("debug searching.. method: " + jMethod);
 					for(int j = 0; j < JParamClass.length; j++) {
 						if(JParamClass[j] == Object.class) {
 							continue; // accepting all types
@@ -220,7 +221,7 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 	@Override public ZType GetMethodFuncType(ZType RecvType, String MethodName, ArrayList<ZNode> ParamList) {
 		Method jMethod = this.GetMethod(RecvType, MethodName, ParamList);
 		if(jMethod != null) {
-			System.err.println("debug  matched: " + jMethod);
+			this.Debug("debug  matched: " + jMethod);
 			return NativeTypeTable.ConvertToFuncType(jMethod);
 		}
 		return ZSystem.VarType;
@@ -231,13 +232,15 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 			this.Interpreter.EnableVisitor();
 			Object Value = this.Interpreter.Eval(Node);
 			if(this.Interpreter.IsVisitable()) {
-				LibNative.println(" (" + Node.Type + ") " + Value);
+				LibNative.println(" (" + Node.Type + ") " + LibZen.Stringify(Value));
 			}
-			else {
+			else if(Value != null) {
 				LibNative.println(" Error: " + Value);
 			}
 		}
-		Node.Accept(this);
+		else {
+			Node.Accept(this);
+		}
 	}
 
 	@Override public void VisitEmptyNode(ZEmptyNode Node) {
@@ -651,10 +654,11 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 
 	ZNode[] PackNodes(ZNode Node, ArrayList<ZNode> List) {
 		int Start = 0;
+		ZNode[] Nodes = new ZNode[List.size() + Start];
 		if(Node != null) {
 			Start = 1;
+			Nodes[0] = Node;
 		}
-		ZNode[] Nodes = new ZNode[List.size() + 1];
 		for(int i = 0; i < Nodes.length; i++) {
 			Nodes[i+Start] = List.get(i);
 		}

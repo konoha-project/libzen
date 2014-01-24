@@ -26,6 +26,7 @@
 
 package zen.codegen.jvm;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import zen.ast.ZAndNode;
@@ -72,6 +73,7 @@ import zen.ast.ZTryNode;
 import zen.ast.ZUnaryNode;
 import zen.ast.ZVarDeclNode;
 import zen.ast.ZWhileNode;
+import zen.deps.LibNative;
 import zen.parser.ZVisitor;
 
 public class TopLevelInterpreter extends ZVisitor {
@@ -107,7 +109,6 @@ public class TopLevelInterpreter extends ZVisitor {
 		this.EvaledValue = null; //"unsupported node: " + Node.getClass().getSimpleName();
 		this.IsVisitable = false;
 	}
-
 
 	public final Object Eval(ZNode Node) {
 		if(this.IsVisitable()) {
@@ -235,9 +236,13 @@ public class TopLevelInterpreter extends ZVisitor {
 			}
 			if(this.IsVisitable()) {
 				try {
-					this.EvaledValue = jMethod.invoke(Recv, Node.MethodName, Values);
-				} catch (Exception e) {
-					this.FoundError(e.toString());
+					this.EvaledValue = jMethod.invoke(null, Recv, Node.MethodName, Values);
+				} catch (IllegalArgumentException e1) {
+					LibNative.FixMe(e1);
+				} catch (IllegalAccessException e1) {
+					LibNative.FixMe(e1);
+				} catch (InvocationTargetException e1) {
+					this.FoundError(e1.getMessage());
 				}
 			}
 		}
