@@ -100,7 +100,6 @@ import zen.ast.ZUnaryNode;
 import zen.ast.ZVarDeclNode;
 import zen.ast.ZWhileNode;
 import zen.deps.LibNative;
-import zen.deps.LibZen;
 import zen.deps.NativeTypeTable;
 import zen.deps.Var;
 import zen.lang.ZFuncType;
@@ -109,10 +108,8 @@ import zen.lang.ZType;
 import zen.lang.ZenEngine;
 import zen.lang.ZenTypeInfer;
 import zen.parser.ZGenerator;
-import zen.parser.ZNameSpace;
 
 public class JavaByteCodeGenerator2 extends ZGenerator {
-	JavaReflectionEngine Interpreter;
 	JMethodBuilder2 CurrentBuilder;
 	JClassLoader ClassLoader = null;
 	ArrayList<TryCatchLabel> TryCatchLabel;
@@ -121,12 +118,20 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 		super("java", "1.6");
 		this.TryCatchLabel = new ArrayList<TryCatchLabel>();
 		this.ClassLoader = new JClassLoader(this);
-		this.Interpreter = new JavaReflectionEngine(null, this);
 	}
 
 	@Override public ZenEngine GetEngine() {
 		return new JavaReflectionEngine(new ZenTypeInfer(this.Logger), this);
 	}
+
+	@Override public boolean StartCodeGeneration(ZNode Node,  boolean AllowLazy, boolean IsInteractive) {
+		if (AllowLazy && Node.IsVarType()) {
+			return false;
+		}
+		Node.Accept(this);
+		return true;
+	}
+
 
 	private String GetTypeDesc(ZType zType) {
 		Class<?> JClass = NativeTypeTable.GetJavaClass(zType);
@@ -233,21 +238,21 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 		return ZSystem.VarType;
 	}
 
-	@Override public void DoCodeGeneration(ZNameSpace NameSpace, ZNode Node) {
-		if(this.CurrentBuilder == null && !(Node instanceof ZFuncDeclNode) && !(Node instanceof ZClassDeclNode)) {
-			this.Interpreter.EnableVisitor();
-			Object Value = this.Interpreter.Exec(Node, true);
-			if(this.Interpreter.IsVisitable()) {
-				LibNative.println(" (" + Node.Type + ") " + LibZen.Stringify(Value));
-			}
-			else if(Value != null) {
-				LibNative.println(" Error: " + Value);
-			}
-		}
-		else {
-			Node.Accept(this);
-		}
-	}
+	//	@Override public void DoCodeGeneration(ZNode Node) {
+	//		if(this.CurrentBuilder == null && !(Node instanceof ZFuncDeclNode) && !(Node instanceof ZClassDeclNode)) {
+	//			this.Interpreter.EnableVisitor();
+	//			Object Value = this.Interpreter.Exec(Node, true);
+	//			if(this.Interpreter.IsVisitable()) {
+	//				LibNative.println(" (" + Node.Type + ") " + LibZen.Stringify(Value));
+	//			}
+	//			else if(Value != null) {
+	//				LibNative.println(" Error: " + Value);
+	//			}
+	//		}
+	//		else {
+	//			Node.Accept(this);
+	//		}
+	//	}
 
 	@Override public void VisitEmptyNode(ZEmptyNode Node) {
 		/* do nothing */
