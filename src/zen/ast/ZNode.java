@@ -76,11 +76,11 @@ public abstract class ZNode {
 	}
 
 	public final boolean IsVarType() {
-		return this.IsVarType();
+		return this.Type.IsVarType();
 	}
 
 	public boolean IsUntyped() {
-		return this.IsVarType();
+		return this.Type.IsVarType();
 	}
 
 	public ZConstNode ToConstNode(boolean EnforceConst) {

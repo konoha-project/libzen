@@ -33,9 +33,9 @@ import zen.deps.LibNative;
 import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.deps.ZenArray;
-import zen.lang.ZenGrammar;
 import zen.lang.ZSystem;
-import zen.parser.ZGenerator;
+import zen.lang.ZenEngine;
+import zen.lang.ZenGrammar;
 import zen.parser.ZLogger;
 import zen.parser.ZParserConst;
 
@@ -164,8 +164,7 @@ public class ZenMain {
 			}
 			ZenMain.Usage(Argu + " is unknown");
 		}
-		@Var ZGenerator Generator = LibNative.LoadGenerator(TargetCode, OutputFile);
-		LibNative.ImportGrammar(Generator.RootNameSpace, ZenGrammar.class.getName());
+		@Var ZenEngine ScriptEngine = LibNative.LoadEngine(TargetCode, ZenGrammar.class);
 		// @Var ZenParserContext Context = new ZenParserContext(new KonohaGrammar(), Generator);
 		// if(RequiredLibName != null) {
 		// if(!Context.TopLevelNameSpace.LoadRequiredLib(RequiredLibName)) {
@@ -185,7 +184,7 @@ public class ZenMain {
 			ARGV.add(Args[Index]);
 			Index += 1;
 		}
-		Generator.RootNameSpace.SetSymbol("ARGV", ARGV, null);
+		//ScriptEngine.SetSymbol("ARGV", ARGV, null);
 		if (ARGV.size() > 0) {
 			@Var String FileName = ARGV.get(0);
 			@Var String ScriptText = LibNative.LoadTextFile(FileName);
@@ -193,8 +192,7 @@ public class ZenMain {
 				LibNative.Exit(1, "file not found: " + FileName);
 			}
 			@Var long FileLine = ZSystem.GetFileLine(FileName, 1);
-			@Var boolean Success = Generator.RootNameSpace.Load(ScriptText, FileLine);
-			Generator.Logger.ShowReportedErrors();
+			@Var boolean Success = ScriptEngine.Load(ScriptText, FileLine);
 			if (!Success) {
 				LibNative.Exit(1, "abort loading: " + FileName);
 			}
@@ -202,15 +200,15 @@ public class ZenMain {
 		if (ShellMode) {
 			LibNative.println(ZParserConst.ProgName + ZParserConst.Version + " (" + ZParserConst.CodeName + ") on " + LibZen.GetPlatform());
 			LibNative.println(ZParserConst.Copyright);
-			LibNative.println("Accept: " + Generator.GetGrammarInfo());
-			LibNative.println("Produce: " + Generator.GetTargetLangInfo());
-			Generator.Logger.ShowReportedErrors();
+			LibNative.println("Accept: " + ScriptEngine.Generator.GetGrammarInfo());
+			LibNative.println("Produce: " + ScriptEngine.Generator.GetTargetLangInfo());
+			ScriptEngine.Generator.Logger.ShowReportedErrors();
 			@Var int linenum = 1;
 			@Var String Line = null;
 			while ((Line = ZenMain.ReadLine2(">>> ", "    ")) != null) {
 				try {
-					@Var Object EvaledValue = Generator.RootNameSpace.Eval(Line, linenum, true);
-					Generator.Logger.ShowReportedErrors();
+					@Var Object EvaledValue = ScriptEngine.Eval(Line, linenum, true);
+					ScriptEngine.Generator.Logger.ShowReportedErrors();
 					if (EvaledValue != null) {
 						LibNative.println(" (" + ZSystem.GuessType(EvaledValue) + ":" + LibNative.GetClassName(EvaledValue) + ") " + LibZen.Stringify(EvaledValue));
 					}

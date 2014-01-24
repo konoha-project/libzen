@@ -41,6 +41,8 @@ import zen.lang.ZFunc;
 import zen.lang.ZFuncType;
 import zen.lang.ZSystem;
 import zen.lang.ZType;
+import zen.lang.ZenEngine;
+import zen.lang.ZenGrammar;
 import zen.parser.ZGenerator;
 import zen.parser.ZLogger;
 import zen.parser.ZNameSpace;
@@ -221,6 +223,12 @@ public class LibNative {
 			}
 		}
 		return new ZSourceGenerator("zen", "0.1");
+	}
+
+	public final static ZenEngine LoadEngine(@Nullable String ClassName, Class<?> GrammarClass) {
+		@Var ZGenerator Generator = LibNative.LoadGenerator(ClassName, null);
+		LibNative.ImportGrammar(Generator.RootNameSpace, ZenGrammar.class.getName());
+		return Generator.GetEngine();
 	}
 
 	//

@@ -31,8 +31,7 @@ import zen.ast.ZNode;
 import zen.deps.Field;
 import zen.lang.ZSystem;
 import zen.lang.ZType;
-import zen.lang.ZenTypeChecker;
-import zen.lang.ZenTypeInfer;
+import zen.lang.ZenEngine;
 //endif VAJA
 
 public abstract class ZGenerator extends ZVisitor {
@@ -40,11 +39,10 @@ public abstract class ZGenerator extends ZVisitor {
 	@Field public final String       TargetCode;
 	@Field public final String       TargetVersion;
 
-	@Field public final ZNameSpace  RootNameSpace;
+	@Field public final ZNameSpace   RootNameSpace;
 	@Field public String             OutputFile;
-	@Field public ZLogger          Logger;
+	@Field public ZLogger            Logger;
 
-	@Field public ZenTypeChecker TypeChecker;
 	@Field private boolean StoppedVisitor;
 
 	protected ZGenerator(String TargetCode, String TargetVersion) {
@@ -56,10 +54,10 @@ public abstract class ZGenerator extends ZVisitor {
 
 		this.OutputFile = null;
 		this.Logger = new ZLogger();
-		this.TypeChecker = new ZenTypeInfer(this.Logger);
 		this.StoppedVisitor = false;
-
 	}
+
+	public abstract ZenEngine GetEngine();
 
 	@Override public final void EnableVisitor() {
 		this.StoppedVisitor = false;
@@ -84,6 +82,7 @@ public abstract class ZGenerator extends ZVisitor {
 	public String GetTargetLangInfo() {
 		return this.TargetCode + this.TargetVersion;
 	}
+
 
 
 	public final String ReportError(int Level, ZToken Token, String Message) {

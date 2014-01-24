@@ -574,69 +574,35 @@ public final class ZNameSpace {
 	//		LibNative.Assert(Func.Is(ConverterFunc));
 	//		this.SetSymbol(Key, Func, SourceToken);
 	//	}
-
-	private ZNode TypeCheck(ZNode Node, ZType ContextType) {
-		this.Generator.TypeChecker.EnableVisitor();
-		return this.Generator.TypeChecker.TypeCheck(Node, this, ContextType, 0);
-	}
-
-	public final Object Eval(String ScriptText, long FileLine, boolean IsInteractive) {
-		@Var Object ResultValue = ZParserConst.UndefinedSymbol;
-		//ZenLogger.VerboseLog(ZenLogger.VerboseEval, "eval: " + ScriptText);
-		@Var ZTokenContext TokenContext = new ZTokenContext(this, ScriptText, FileLine);
-		TokenContext.SkipEmptyStatement();
-		while(TokenContext.HasNext()) {
-			TokenContext.SetParseFlag(0); // init
-			@Var ZNode TopLevelNode = TokenContext.ParsePattern(this, "$Statement$", ZTokenContext.Required);
-			TopLevelNode = this.TypeCheck(TopLevelNode, ZSystem.VoidType);
-			this.Generator.DoCodeGeneration(this, TopLevelNode);
-			if(TopLevelNode.IsErrorNode() && TokenContext.HasNext()) {
-				@Var ZToken Token = TokenContext.GetToken();
-				this.Generator.Logger.ReportInfo(Token, "stopped script at this line");
-				return TopLevelNode;
-			}
-			//			if(!TopLevelNode.Type.IsVoidType()) {
-			ResultValue = this.Generator.EvalTopLevelNode(TopLevelNode);
-			//			}
-			TokenContext.SkipEmptyStatement();
-			TokenContext.Vacume();
-		}
-		return ResultValue;
-	}
-
-	public final boolean Load(String ScriptText, long FileLine) {
-		@Var Object Token = this.Eval(ScriptText, FileLine, false);
-		if(Token instanceof ZToken && ((ZToken)Token).IsError()) {
-			return false;
-		}
-		return true;
-	}
-
-	public final boolean LoadFile(String FileName) {
-		@Var String ScriptText = LibNative.LoadTextFile(FileName);
-		if(ScriptText != null) {
-			@Var long FileLine = ZSystem.GetFileLine(FileName, 1);
-			return this.Load(ScriptText, FileLine);
-		}
-		return false;
-	}
-
-	public final boolean LoadRequiredLib(String LibName) {
-		@Var String Key = ZParserConst.NativeNameSuffix + "L" + LibName.toLowerCase();
-		if(!this.HasSymbol(Key)) {
-			@Var String Path = LibZen.GetLibPath(this.Generator.TargetCode, LibName);
-			@Var String Script = LibNative.LoadTextFile(Path);
-			if(Script != null) {
-				@Var long FileLine = ZSystem.GetFileLine(Path, 1);
-				if(this.Load(Script, FileLine)) {
-					this.SetSymbol(Key, Path, null);
-					return true;
-				}
-			}
-			return false;
-		}
-		return true;
-	}
+	//
+	//	private ZNode TypeCheck(ZNode Node, ZType ContextType) {
+	//		this.Generator.TypeChecker.EnableVisitor();
+	//		return this.Generator.TypeChecker.TypeCheck(Node, this, ContextType, 0);
+	//	}
+	//
+	//	public final Object Eval(String ScriptText, long FileLine, boolean IsInteractive) {
+	//		@Var Object ResultValue = ZParserConst.UndefinedSymbol;
+	//		//ZenLogger.VerboseLog(ZenLogger.VerboseEval, "eval: " + ScriptText);
+	//		@Var ZTokenContext TokenContext = new ZTokenContext(this, ScriptText, FileLine);
+	//		TokenContext.SkipEmptyStatement();
+	//		while(TokenContext.HasNext()) {
+	//			TokenContext.SetParseFlag(0); // init
+	//			@Var ZNode TopLevelNode = TokenContext.ParsePattern(this, "$Statement$", ZTokenContext.Required);
+	//			TopLevelNode = this.TypeCheck(TopLevelNode, ZSystem.VoidType);
+	//			this.Generator.DoCodeGeneration(this, TopLevelNode);
+	//			if(TopLevelNode.IsErrorNode() && TokenContext.HasNext()) {
+	//				@Var ZToken Token = TokenContext.GetToken();
+	//				this.Generator.Logger.ReportInfo(Token, "stopped script at this line");
+	//				return TopLevelNode;
+	//			}
+	//			//			if(!TopLevelNode.Type.IsVoidType()) {
+	//			ResultValue = this.Generator.EvalTopLevelNode(TopLevelNode);
+	//			//			}
+	//			TokenContext.SkipEmptyStatement();
+	//			TokenContext.Vacume();
+	//		}
+	//		return ResultValue;
+	//	}
 
 	//	private void UpdateRevertList(String Key, ArrayList<Object> RevertList) {
 	//		@Var Object Value = this.GetLocalSymbol(Key);

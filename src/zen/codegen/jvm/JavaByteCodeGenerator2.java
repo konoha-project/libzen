@@ -106,11 +106,13 @@ import zen.deps.Var;
 import zen.lang.ZFuncType;
 import zen.lang.ZSystem;
 import zen.lang.ZType;
+import zen.lang.ZenEngine;
+import zen.lang.ZenTypeInfer;
 import zen.parser.ZGenerator;
 import zen.parser.ZNameSpace;
 
 public class JavaByteCodeGenerator2 extends ZGenerator {
-	TopLevelInterpreter Interpreter;
+	JavaReflectionEngine Interpreter;
 	JMethodBuilder2 CurrentBuilder;
 	JClassLoader ClassLoader = null;
 	ArrayList<TryCatchLabel> TryCatchLabel;
@@ -119,7 +121,11 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 		super("java", "1.6");
 		this.TryCatchLabel = new ArrayList<TryCatchLabel>();
 		this.ClassLoader = new JClassLoader(this);
-		this.Interpreter = new TopLevelInterpreter(this);
+		this.Interpreter = new JavaReflectionEngine(null, this);
+	}
+
+	@Override public ZenEngine GetEngine() {
+		return new JavaReflectionEngine(new ZenTypeInfer(this.Logger), this);
 	}
 
 	private String GetTypeDesc(ZType zType) {
@@ -230,7 +236,7 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 	@Override public void DoCodeGeneration(ZNameSpace NameSpace, ZNode Node) {
 		if(this.CurrentBuilder == null && !(Node instanceof ZFuncDeclNode) && !(Node instanceof ZClassDeclNode)) {
 			this.Interpreter.EnableVisitor();
-			Object Value = this.Interpreter.Eval(Node);
+			Object Value = this.Interpreter.Exec(Node, true);
 			if(this.Interpreter.IsVisitable()) {
 				LibNative.println(" (" + Node.Type + ") " + LibZen.Stringify(Value));
 			}

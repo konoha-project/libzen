@@ -78,6 +78,8 @@ import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.deps.ZenMap;
 import zen.lang.ZType;
+import zen.lang.ZenEngine;
+import zen.lang.ZenTypeInfer;
 
 //endif VAJA
 
@@ -125,6 +127,10 @@ public class ZSourceGenerator extends ZGenerator {
 		this.OrOperator = "||";
 		this.NotOperator = "!";
 		this.TopType = "var";
+	}
+
+	@Override public ZenEngine GetEngine() {
+		return new ZenEngine(new ZenTypeInfer(this.Logger), this);
 	}
 
 	protected ZSourceBuilder NewSourceBuilder() {
@@ -577,6 +583,7 @@ public class ZSourceGenerator extends ZGenerator {
 	public void VisitNewObjectNode(ZNewObjectNode Node) {
 		// TODO Auto-generated method stub
 	}
+
 
 
 }
