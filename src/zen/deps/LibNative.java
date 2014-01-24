@@ -70,7 +70,7 @@ public class LibNative {
 	public final static void Assert(boolean TestResult) {
 		if (!TestResult) {
 			assert TestResult;
-			LibNative.Exit(1, "Assertion Failed");
+			throw new RuntimeException("ASSERTION FAILED");
 		}
 	}
 
@@ -78,6 +78,158 @@ public class LibNative {
 		System.err.println(Message);
 		System.exit(1);
 	}
+
+	public final static String LoadTextFile(String FileName) {
+		ZLogger.VerboseLog(ZLogger.VerboseFile, "loading " + FileName);
+		InputStream Stream = LibZen.class.getResourceAsStream("/" + FileName);
+		if (Stream == null) {
+			File f = new File(LibZen.FormatFilePath(FileName));
+			try {
+				Stream = new FileInputStream(f);
+			} catch (FileNotFoundException e) {
+				return null;
+			}
+		}
+		BufferedReader reader = new BufferedReader(new InputStreamReader(Stream));
+		String buffer = "";
+		try {
+			int buflen = 4096;
+			int readed = 0;
+			char[] buf = new char[buflen];
+			StringBuilder builder = new StringBuilder();
+			while ((readed = reader.read(buf, 0, buflen)) >= 0) {
+				builder.append(buf, 0, readed);
+			}
+			buffer = builder.toString();
+		} catch (IOException e) {
+			return null;
+		}
+		return buffer;
+	}
+
+	// HighLevel Library
+
+	public final static boolean ImportGrammar(ZNameSpace NameSpace, String ClassName) {
+		try {
+			@Var Class<?> NativeClass =  Class.forName(ClassName);
+			Method LoaderMethod = NativeClass.getMethod("ImportGrammar", ZNameSpace.class, Class.class);
+			LoaderMethod.invoke(null, NameSpace, NativeClass);
+			return true;
+		} catch (Exception e) { // naming
+			LibNative.FixMe(e);
+		}
+		return false;
+	}
+
+	public final static ZFunc LoadTokenFunc(Class<?> GrammarClass, String FuncName) {
+		try {
+			Method JavaMethod = GrammarClass.getMethod(FuncName, ZTokenContext.class, String.class, long.class);
+			return LibNative.ConvertToNativeFunc(JavaMethod);
+		} catch (NoSuchMethodException e) {
+			LibNative.FixMe(e);
+		}
+		return null;
+	}
+
+	public final static ZFunc LoadMatchFunc(Class<?> GrammarClass, String FuncName) {
+		try {
+			Method JavaMethod = GrammarClass.getMethod(FuncName, ZNameSpace.class, ZTokenContext.class, ZNode.class);
+			return LibNative.ConvertToNativeFunc(JavaMethod);
+		} catch (NoSuchMethodException e) {
+			LibNative.FixMe(e);
+		}
+		return null;
+	}
+
+	public final static long ApplyTokenFunc(ZFunc TokenFunc, Object TokenContext, String Text, long pos) {
+		Object[] Argvs = new Object[3];
+		Argvs[0] = TokenContext;
+		Argvs[1] = Text;
+		Argvs[2] = pos;
+		return (Long) TokenFunc.Invoke(Argvs);
+	}
+
+	public final static ZNode ApplyMatchFunc(ZFunc MatchFunc, ZNameSpace NameSpace, ZTokenContext TokenContext, ZNode LeftNode) {
+		Object[] Argvs = new Object[3];
+		Argvs[0] = NameSpace;
+		Argvs[1] = TokenContext;
+		Argvs[2] = LeftNode;
+		return (ZNode) MatchFunc.Invoke(Argvs);
+	}
+
+	// Visitor Reflection
+	public final static boolean IsSupportedNode(ZVisitor Visitor, ZNode Node) {
+		try {
+			Visitor.getClass().getMethod(Node.GetVisitName(), Node.getClass());
+			return true;
+		} catch (NoSuchMethodException e) {
+			LibNative.FixMe(e);
+		}
+		return false;
+	}
+
+	public final static void DispatchVisitNode(ZVisitor Visitor, ZNode Node) {
+		try {
+			Method JavaMethod = Visitor.getClass().getMethod(Node.GetVisitName(), Node.getClass());
+			JavaMethod.invoke(Visitor, Node);
+		} catch (Exception e) {
+			LibNative.FixMe(e);
+		}
+		LibNative.println("unsupported syntax: " + Node.SourceToken.ParsedText + " " + Node.getClass());
+	}
+
+	private final static ZenMap<Class<?>> GenMap = new ZenMap<Class<?>>(null);
+
+	static {
+		GenMap.put("python", zen.codegen.jython.PythonSourceGenerator.class);
+		GenMap.put("javascript", zen.codegen.javascript.JavaScriptSourceGenerator.class);
+		GenMap.put("ruby", zen.codegen.jruby.RubySourceGenerator.class);
+		GenMap.put("clisp", zen.codegen.clisp.CommonLispSourceGenerator.class);
+		//GenMap.put("c", zen.codegen.c.CSourceGenerator.class);
+		GenMap.put("jvm", zen.codegen.jvm.JavaByteCodeGenerator2.class);
+		GenMap.put("debug", zen.codegen.debug.ASTGenerator.class);
+	}
+
+	public final static ZGenerator LoadGenerator(@Nullable String ClassName, String OutputFile) {
+		if(ClassName == null) {
+			ClassName = System.getenv("ZENCODE");
+		}
+		if (ClassName != null) {
+			try {
+				Class<?> GeneratorClass = GenMap.GetOrNull(ClassName);
+				if(GeneratorClass == null) {
+					GeneratorClass = Class.forName(ClassName);
+				}
+				return (ZGenerator) GeneratorClass.newInstance();
+			} catch (Exception e) {
+				LibNative.FixMe(e);
+			}
+		}
+		return new ZSourceGenerator("zen", "0.1");
+	}
+
+	//
+	public final static ZType GetNativeType(Class<?> NativeClass) {
+		return NativeTypeTable.GetZenType(NativeClass);
+	}
+
+	public final static ZNativeFunc ConvertToNativeFunc(Method JMethod) {
+		@Var ArrayList<ZType> TypeList = new ArrayList<ZType>();
+		TypeList.add(LibNative.GetNativeType(JMethod.getReturnType()));
+		if (!Modifier.isStatic(JMethod.getModifiers())) {
+			TypeList.add(LibNative.GetNativeType(JMethod.getDeclaringClass()));
+		}
+		@Var Class<?>[] ParamTypes = JMethod.getParameterTypes();
+		if (ParamTypes != null) {
+			@Var int j = 0;
+			while(j < ParamTypes.length) {
+				TypeList.add(LibNative.GetNativeType(ParamTypes[j]));
+				j = j + 1;
+			}
+		}
+		return new ZNativeFunc(0, JMethod.getName(), ZSystem.LookupFuncType(TypeList), null, JMethod);
+	}
+
 
 
 	// Type
@@ -89,9 +241,6 @@ public class LibNative {
 		return Value.getClass();
 	}
 
-	public final static ZType GetNativeType(Class<?> NativeClass) {
-		return NativeTypeTable.GetZenType(NativeClass);
-	}
 
 	public final static ZType GetNativeType1(Class<?> NativeClass) {
 		ZType NativeType = ZSystem.LookupTypeTable(NativeClass.getCanonicalName());
@@ -281,17 +430,6 @@ public class LibNative {
 	// Symbol);
 	// }
 
-	public final static boolean ImportGrammar(ZNameSpace NameSpace, String ClassName) {
-		try {
-			@Var Class<?> NativeClass =  Class.forName(ClassName);
-			Method LoaderMethod = NativeClass.getMethod("ImportGrammar", ZNameSpace.class, Class.class);
-			LoaderMethod.invoke(null, NameSpace, NativeClass);
-			return true;
-		} catch (Exception e) { // naming
-			LibNative.FixMe(e);
-		}
-		return false;
-	}
 
 	// public final static Object ImportNativeObject(ZenNameSpace NameSpace,
 	// String PackageName) {
@@ -414,147 +552,9 @@ public class LibNative {
 	// }
 	// }
 
-	public final static long ApplyTokenFunc(ZFunc TokenFunc, Object TokenContext, String Text, long pos) {
-		Object[] Argvs = new Object[3];
-		Argvs[0] = TokenContext;
-		Argvs[1] = Text;
-		Argvs[2] = pos;
-		return (Long) TokenFunc.Invoke(Argvs);
-	}
-
-	public final static ZNode ApplyMatchFunc(ZFunc MatchFunc, ZNameSpace NameSpace, ZTokenContext TokenContext, ZNode LeftNode) {
-		Object[] Argvs = new Object[3];
-		Argvs[0] = NameSpace;
-		Argvs[1] = TokenContext;
-		Argvs[2] = LeftNode;
-		return (ZNode) MatchFunc.Invoke(Argvs);
-	}
-
-	public final static ZFunc ConvertNativeMethodToFunc(Method JMethod) {
-		@Var ArrayList<ZType> TypeList = new ArrayList<ZType>();
-		TypeList.add(LibNative.GetNativeType(JMethod.getReturnType()));
-		if (!Modifier.isStatic(JMethod.getModifiers())) {
-			TypeList.add(LibNative.GetNativeType(JMethod.getDeclaringClass()));
-		}
-		@Var Class<?>[] ParamTypes = JMethod.getParameterTypes();
-		if (ParamTypes != null) {
-			@Var int j = 0;
-			while(j < ParamTypes.length) {
-				TypeList.add(LibNative.GetNativeType(ParamTypes[j]));
-				j = j + 1;
-			}
-		}
-		return new ZNativeFunc(0, JMethod.getName(), ZSystem.LookupFuncType(TypeList), null, JMethod);
-	}
-
-	public final static ZFunc LoadTokenFunc(Class<?> GrammarClass,
-			String FuncName) {
-		try {
-			Method JavaMethod = GrammarClass.getMethod(FuncName,
-					ZTokenContext.class, String.class, long.class);
-			return LibNative.ConvertNativeMethodToFunc(JavaMethod);
-		} catch (NoSuchMethodException e) {
-			ZLogger.VerboseException(e);
-			LibNative.Exit(1, e.toString());
-		}
-		return null;
-	}
-
-	public final static ZFunc LoadMatchFunc(Class<?> GrammarClass,
-			String FuncName) {
-		try {
-			Method JavaMethod = GrammarClass.getMethod(FuncName,
-					ZNameSpace.class, ZTokenContext.class, ZNode.class);
-			return LibNative.ConvertNativeMethodToFunc(JavaMethod);
-		} catch (NoSuchMethodException e) {
-			ZLogger.VerboseException(e);
-			LibNative.Exit(1, e.toString());
-		}
-		return null;
-	}
-
-	public final static boolean IsSupportedNode(ZVisitor Visitor, ZNode Node) {
-		try {
-			Visitor.getClass().getMethod(Node.GetVisitName(), Node.getClass());
-			return true;
-		} catch (NoSuchMethodException e) {
-		}
-		return false;
-	}
-
-	public final static void DispatchVisitNode(ZVisitor Visitor, ZNode Node) {
-		try {
-			Method JavaMethod = Visitor.getClass().getMethod(Node.GetVisitName(), Node.getClass());
-			JavaMethod.invoke(Visitor, Node);
-		} catch (Exception e) {
-		}
-		LibNative.println("unsupported syntax: " + Node.SourceToken.ParsedText
-				+ " " + Node.getClass());
-		// Visitor.ReportError(ZenConsts.ErrorLevel, Node.SourceToken,
-		// "unsupported syntax: " + Node.SourceToken.ParsedText + " " +
-		// Node.getClass());
-	}
 
 	// LibZen KonohaApi
 
-	public final static String LoadScript(String FileName) {
-		ZLogger.VerboseLog(ZLogger.VerboseFile, "loading " + FileName);
-		InputStream Stream = LibZen.class.getResourceAsStream("/" + FileName);
-		if (Stream == null) {
-			File f = new File(LibZen.FormatFilePath(FileName));
-			try {
-				Stream = new FileInputStream(f);
-			} catch (FileNotFoundException e) {
-				return null;
-			}
-		}
-		BufferedReader reader = new BufferedReader(new InputStreamReader(Stream));
-		String buffer = "";
-		try {
-			int buflen = 4096;
-			int readed = 0;
-			char[] buf = new char[buflen];
-			StringBuilder builder = new StringBuilder();
-			while ((readed = reader.read(buf, 0, buflen)) >= 0) {
-				builder.append(buf, 0, readed);
-			}
-			buffer = builder.toString();
-		} catch (IOException e) {
-			return null;
-		}
-		return buffer;
-	}
 
-
-
-	private final static ZenMap<Class<?>> GenMap = new ZenMap<Class<?>>(null);
-
-	static {
-		GenMap.put("python", zen.codegen.jython.PythonSourceGenerator.class);
-		GenMap.put("javascript", zen.codegen.javascript.JavaScriptSourceGenerator.class);
-		GenMap.put("ruby", zen.codegen.jruby.RubySourceGenerator.class);
-		GenMap.put("clisp", zen.codegen.clisp.CommonLispSourceGenerator.class);
-		//GenMap.put("c", zen.codegen.c.CSourceGenerator.class);
-		GenMap.put("jvm", zen.codegen.jvm.JavaByteCodeGenerator2.class);
-		GenMap.put("debug", zen.codegen.debug.ASTGenerator.class);
-	}
-
-	public final static ZGenerator LoadGenerator(@Nullable String ClassName, String OutputFile) {
-		if(ClassName == null) {
-			ClassName = System.getenv("ZENCODE");
-		}
-		if (ClassName != null) {
-			try {
-				Class<?> GeneratorClass = GenMap.GetOrNull(ClassName);
-				if(GeneratorClass == null) {
-					GeneratorClass = Class.forName(ClassName);
-				}
-				return (ZGenerator) GeneratorClass.newInstance();
-			} catch (Exception e) {
-				LibNative.FixMe(e);
-			}
-		}
-		return new ZSourceGenerator("zen", "0.1");
-	}
 
 }

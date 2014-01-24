@@ -613,7 +613,7 @@ public final class ZNameSpace {
 	}
 
 	public final boolean LoadFile(String FileName) {
-		@Var String ScriptText = LibNative.LoadScript(FileName);
+		@Var String ScriptText = LibNative.LoadTextFile(FileName);
 		if(ScriptText != null) {
 			@Var long FileLine = ZSystem.GetFileLine(FileName, 1);
 			return this.Load(ScriptText, FileLine);
@@ -625,7 +625,7 @@ public final class ZNameSpace {
 		@Var String Key = ZParserConst.NativeNameSuffix + "L" + LibName.toLowerCase();
 		if(!this.HasSymbol(Key)) {
 			@Var String Path = LibZen.GetLibPath(this.Generator.TargetCode, LibName);
-			@Var String Script = LibNative.LoadScript(Path);
+			@Var String Script = LibNative.LoadTextFile(Path);
 			if(Script != null) {
 				@Var long FileLine = ZSystem.GetFileLine(Path, 1);
 				if(this.Load(Script, FileLine)) {

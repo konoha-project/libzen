@@ -188,7 +188,7 @@ public class ZenMain {
 		Generator.RootNameSpace.SetSymbol("ARGV", ARGV, null);
 		if (ARGV.size() > 0) {
 			@Var String FileName = ARGV.get(0);
-			@Var String ScriptText = LibNative.LoadScript(FileName);
+			@Var String ScriptText = LibNative.LoadTextFile(FileName);
 			if (ScriptText == null) {
 				LibNative.Exit(1, "file not found: " + FileName);
 			}

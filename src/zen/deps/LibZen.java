@@ -33,7 +33,6 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.io.Writer;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -268,43 +267,43 @@ public abstract class LibZen {
 	//		LibNative.LoadNativeMethods(Context, ClassType, FuncName, FuncList);
 	//	}
 
-	public static Object NativeFieldGetter(Object ObjectValue, Field NativeField) {
-		try {
-			//			Class<?> NativeType = NativeField.getType();
-			return NativeField.get(ObjectValue);
-		} catch (IllegalAccessException e) {
-			ZLogger.VerboseException(e);
-		} catch (SecurityException e) {
-			ZLogger.VerboseException(e);
-		}
-		return null;
-	}
-
-	public static Object NativeFieldSetter(Object ObjectValue, Field NativeField, Object Value) {
-		try {
-			NativeField.set(ObjectValue, Value);
-		} catch (IllegalAccessException e) {
-			ZLogger.VerboseException(e);
-		} catch (SecurityException e) {
-			ZLogger.VerboseException(e);
-		}
-		return Value;
-	}
-
-
-	public final static Method LookupNativeMethod(Object Callee, String FuncName) {
-		if(FuncName != null) {
-			// LibZen.DebugP("looking up method : " + Callee.getClass().getSimpleName() + "." + FuncName);
-			Method[] methods = Callee.getClass().getMethods();
-			for(int i = 0; i < methods.length; i++) {
-				if(FuncName.equals(methods[i].getName())) {
-					return methods[i];
-				}
-			}
-			ZLogger.VerboseLog(ZLogger.VerboseUndefined, "undefined method: " + Callee.getClass().getSimpleName() + "." + FuncName);
-		}
-		return null;
-	}
+	//	public static Object NativeFieldGetter(Object ObjectValue, Field NativeField) {
+	//		try {
+	//			//			Class<?> NativeType = NativeField.getType();
+	//			return NativeField.get(ObjectValue);
+	//		} catch (IllegalAccessException e) {
+	//			ZLogger.VerboseException(e);
+	//		} catch (SecurityException e) {
+	//			ZLogger.VerboseException(e);
+	//		}
+	//		return null;
+	//	}
+	//
+	//	public static Object NativeFieldSetter(Object ObjectValue, Field NativeField, Object Value) {
+	//		try {
+	//			NativeField.set(ObjectValue, Value);
+	//		} catch (IllegalAccessException e) {
+	//			ZLogger.VerboseException(e);
+	//		} catch (SecurityException e) {
+	//			ZLogger.VerboseException(e);
+	//		}
+	//		return Value;
+	//	}
+	//
+	//
+	//	public final static Method LookupNativeMethod(Object Callee, String FuncName) {
+	//		if(FuncName != null) {
+	//			// LibZen.DebugP("looking up method : " + Callee.getClass().getSimpleName() + "." + FuncName);
+	//			Method[] methods = Callee.getClass().getMethods();
+	//			for(int i = 0; i < methods.length; i++) {
+	//				if(FuncName.equals(methods[i].getName())) {
+	//					return methods[i];
+	//				}
+	//			}
+	//			ZLogger.VerboseLog(ZLogger.VerboseUndefined, "undefined method: " + Callee.getClass().getSimpleName() + "." + FuncName);
+	//		}
+	//		return null;
+	//	}
 
 	public final static int ListSize(ArrayList<?> List) {
 		if(List == null) {
