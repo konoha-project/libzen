@@ -74,6 +74,7 @@ import zen.ast.ZUnaryNode;
 import zen.ast.ZVarDeclNode;
 import zen.ast.ZWhileNode;
 import zen.deps.Field;
+import zen.deps.LibNative;
 import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.deps.ZenMap;
@@ -156,11 +157,17 @@ public class ZSourceGenerator extends ZGenerator {
 		return TypeName;
 	}
 
-	@Override public Object EvalTopLevelNode(ZNode Node) {
-		String Code = this.CurrentBuilder.toString();
-		System.out.println(Code);
-		this.CurrentBuilder.Clear();
-		return null;
+	@Override public boolean StartCodeGeneration(ZNode Node,  boolean AllowLazy, boolean IsInteractive) {
+		if (AllowLazy && Node.IsVarType()) {
+			return false;
+		}
+		Node.Accept(this);
+		if(IsInteractive) {
+			String Code = this.CurrentBuilder.toString();
+			LibNative.println(Code);
+			this.CurrentBuilder.Clear();
+		}
+		return true;
 	}
 
 	//	public final void FlushErrorReport() {
@@ -173,7 +180,8 @@ public class ZSourceGenerator extends ZGenerator {
 	//		Builder.AppendLine("");
 	//	}
 
-	public void GenerateCode(ZNode Node) {
+
+	protected final void GenerateCode(ZNode Node) {
 		Node.Accept(this);
 	}
 

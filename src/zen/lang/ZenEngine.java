@@ -88,6 +88,7 @@ public class ZenEngine extends ZVisitor {
 
 	private final ArrayList<ZNode> LazyNodeList = new ArrayList<ZNode>();
 	public ZLogger Logger;
+	private boolean IsInteractive;
 
 	public ZenEngine(ZenTypeChecker TypeChecker, ZGenerator Generator) {
 		this.TypeChecker = TypeChecker;
@@ -103,7 +104,7 @@ public class ZenEngine extends ZVisitor {
 		@Var int i = 0;
 		while(i < this.LazyNodeList.size()) {
 			@Var ZNode Node = this.LazyNodeList.get(i);
-			this.Generator.DoCodeGeneration(null, Node);
+			this.Generator.StartCodeGeneration(Node, false, this.IsInteractive);
 		}
 	}
 
@@ -335,11 +336,15 @@ public class ZenEngine extends ZVisitor {
 	}
 
 	@Override public void VisitFuncDeclNode(ZFuncDeclNode Node) {
-		this.Unsupported(Node, "Function");
+		if(!this.Generator.StartCodeGeneration(Node, true, this.IsInteractive)) {
+			this.LazyNode(Node);
+		}
 	}
 
 	@Override public void VisitClassDeclNode(ZClassDeclNode Node) {
-		this.Unsupported(Node, "function");
+		if(!this.Generator.StartCodeGeneration(Node, true, this.IsInteractive)) {
+			this.LazyNode(Node);
+		}
 	}
 
 	@Override public void VisitErrorNode(ZErrorNode Node) {
@@ -352,10 +357,13 @@ public class ZenEngine extends ZVisitor {
 
 	}
 
+
 	public final Object Exec(ZNode Node, boolean IsInteractive) {
+		this.IsInteractive = IsInteractive;
 		this.EnableVisitor();
 		Node = this.TypeChecker.TypeCheck(Node, this.Generator.RootNameSpace, ZSystem.VoidType, 0);
-		return this.Eval(Node);
+		@Var Object ResultValue = this.Eval(Node);
+		return ResultValue;
 	}
 
 	public final Object Eval(String ScriptText, long FileLine, boolean IsInteractive) {
@@ -372,9 +380,6 @@ public class ZenEngine extends ZVisitor {
 				this.Generator.Logger.ReportInfo(Token, "stopped script at this line");
 				return TopLevelNode;
 			}
-			//			if(!TopLevelNode.Type.IsVoidType()) {
-			ResultValue = this.Generator.EvalTopLevelNode(TopLevelNode);
-			//			}
 			TokenContext.SkipEmptyStatement();
 			TokenContext.Vacume();
 		}

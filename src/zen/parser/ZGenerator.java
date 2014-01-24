@@ -83,19 +83,7 @@ public abstract class ZGenerator extends ZVisitor {
 		return this.TargetCode + this.TargetVersion;
 	}
 
-
-
-	public final String ReportError(int Level, ZToken Token, String Message) {
-		return this.Logger.Report(Level, Token, Message);
-	}
-
-	public void DoCodeGeneration(ZNameSpace NameSpace, ZNode Node) {
-		Node.Accept(this);
-	}
-
-	public Object EvalTopLevelNode(ZNode TopLevelNode) {
-		return null;
-	}
+	public abstract boolean StartCodeGeneration(ZNode Node, boolean AllowLazy, boolean IsInteractive);
 
 	public ZType GetFieldType(ZType BaseType, String Name) {
 		return ZSystem.VarType;     // undefined
