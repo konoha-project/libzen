@@ -231,7 +231,7 @@ public abstract class ZenTypeChecker extends ZVisitor {
 			@Var ZNameSpace RootNameSpace = NameSpace.GetRootNameSpace();
 			@Var String Signature = FuncType.StringfySignature(FuncName);
 			LibNative.Assert(!RootNameSpace.HasSymbol(Signature));
-			@Var ZFunc Func = new ZenSigFunc(0, FuncName, (ZenFuncType)FuncType, SourceToken);
+			@Var ZFunc Func = new ZSignature(0, FuncName, (ZFuncType)FuncType, SourceToken);
 			RootNameSpace.SetSymbol(Signature, Func, null);
 			Func.Used();
 			return Func;
@@ -298,13 +298,13 @@ public abstract class ZenTypeChecker extends ZVisitor {
 	}
 
 	private final ZNode InferType(ZType ContextType, ZNode Node) {
-		if(ContextType.IsInferrableType() && Node.Type instanceof ZenVarType) {
-			((ZenVarType)Node.Type).Infer(ContextType, Node.SourceToken);
+		if(ContextType.IsInferrableType() && Node.Type instanceof ZVarType) {
+			((ZVarType)Node.Type).Infer(ContextType, Node.SourceToken);
 			Node.Type = ContextType;
 			return Node;
 		}
-		if(ContextType instanceof ZenVarType && !Node.Type.IsVarType()) {
-			((ZenVarType)ContextType).Infer(Node.Type, Node.SourceToken);
+		if(ContextType instanceof ZVarType && !Node.Type.IsVarType()) {
+			((ZVarType)ContextType).Infer(Node.Type, Node.SourceToken);
 			return Node;
 		}
 		return Node;
@@ -431,9 +431,9 @@ public abstract class ZenTypeChecker extends ZVisitor {
 	}
 
 	protected final ZType NewVarType(ZType VarType, String Name, ZToken SourceToken) {
-		if(!(VarType instanceof ZenVarType) && VarType.IsVarType()) {
+		if(!(VarType instanceof ZVarType) && VarType.IsVarType()) {
 			int AlphaId = this.FuncScope.VarTypeList.size();
-			ZenVarType VarType1 = new ZenVarType(Name, AlphaId, SourceToken);
+			ZVarType VarType1 = new ZVarType(Name, AlphaId, SourceToken);
 			this.FuncScope.VarTypeList.add(VarType1);
 			VarType = VarType1;
 		}

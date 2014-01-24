@@ -17,7 +17,7 @@ import zen.deps.Var;
 import zen.lang.ZFuncSet;
 import zen.lang.ZSystem;
 import zen.lang.ZType;
-import zen.lang.ZenVarType;
+import zen.lang.ZVarType;
 import zen.parser.ZLogger;
 
 public class JMethod {
@@ -102,7 +102,7 @@ public class JMethod {
 	}
 
 	private static ZType Peel(ZType VarType) {
-		while(VarType instanceof ZenVarType) {
+		while(VarType instanceof ZVarType) {
 			VarType = VarType.RefType;
 		}
 		return VarType;

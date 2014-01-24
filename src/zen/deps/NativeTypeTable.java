@@ -32,7 +32,7 @@ import java.util.HashMap;
 import zen.lang.ZFunc;
 import zen.lang.ZSystem;
 import zen.lang.ZType;
-import zen.lang.ZenFuncType;
+import zen.lang.ZFuncType;
 
 public class NativeTypeTable {
 	static HashMap<String, Class<?>> ClassMap = new HashMap<String,Class<?>>();
@@ -83,7 +83,7 @@ public class NativeTypeTable {
 		return NativeType;
 	}
 
-	public final static ZenFuncType ConvertToFuncType(Method JMethod) {
+	public final static ZFuncType ConvertToFuncType(Method JMethod) {
 		@Var ArrayList<ZType> TypeList = new ArrayList<ZType>();
 		TypeList.add(NativeTypeTable.GetZenType(JMethod.getReturnType()));
 		if (!Modifier.isStatic(JMethod.getModifiers())) {

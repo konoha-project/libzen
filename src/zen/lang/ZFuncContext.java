@@ -12,19 +12,19 @@ final class ZFuncContext {
 	@Field ZFuncContext Parent;
 	@Field ZLogger Logger;
 	@Field ZFunctionNode FuncNode;
-	@Field ZenFuncType FuncType;
+	@Field ZFuncType FuncType;
 	@Field int ReturnCount;
-	@Field ArrayList<ZenVarType> VarTypeList;
+	@Field ArrayList<ZVarType> VarTypeList;
 	@Field int VarIndex;
 	@Field int CountOfUnknownTypeNode;
 
-	ZFuncContext(ZFuncContext Parent, ZLogger Logger, ZFunctionNode FuncNode, ZenFuncType FuncType) {
+	ZFuncContext(ZFuncContext Parent, ZLogger Logger, ZFunctionNode FuncNode, ZFuncType FuncType) {
 		this.Parent = Parent;
 		this.Logger = Logger;
 		this.FuncNode = FuncNode;
 		this.FuncType = FuncType;
 		this.ReturnCount = 0;
-		this.VarTypeList = new ArrayList<ZenVarType>();
+		this.VarTypeList = new ArrayList<ZVarType>();
 		this.VarIndex = 0;
 		this.CountOfUnknownTypeNode = 0;
 	}
@@ -34,11 +34,11 @@ final class ZFuncContext {
 		return this.FuncNode.ReturnType;
 	}
 
-	public ZenFuncType RecheckCompleteFuncType(ZFunctionNode FuncNode) {
-		@Var ZenFuncType FuncType = this.FuncType;
+	public ZFuncType RecheckCompleteFuncType(ZFunctionNode FuncNode) {
+		@Var ZFuncType FuncType = this.FuncType;
 		if(!FuncType.IsCompleteFunc(false)) {
 			if(FuncNode.ReturnType.IsVarType() && this.ReturnCount == 0) {
-				((ZenVarType)FuncNode.ReturnType).Infer(ZSystem.VoidType, FuncNode.SourceToken);
+				((ZVarType)FuncNode.ReturnType).Infer(ZSystem.VoidType, FuncNode.SourceToken);
 			}
 			this.FuncType = this.FuncNode.GetFuncType(null);
 			if(this.FuncType.IsCompleteFunc(false)) {
@@ -65,7 +65,7 @@ final class ZFuncContext {
 		@Var int i = 0;
 		//		this.println("returning type: " + this.FuncNode.ReturnType);
 		while(i < this.VarTypeList.size()) {
-			@Var ZenVarType VarType = this.VarTypeList.get(i);
+			@Var ZVarType VarType = this.VarTypeList.get(i);
 			if(VarType.IsVarType()) {
 				this.Logger.ReportInfo(VarType.SourceToken, "ambigious type: " + VarType.ShortName);
 			}

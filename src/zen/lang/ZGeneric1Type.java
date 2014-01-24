@@ -25,56 +25,53 @@
 package zen.lang;
 
 import zen.deps.Field;
-import zen.parser.ZToken;
 
-public class ZenVarType extends ZType {
-	@Field public ZToken SourceToken;
-	@Field public int AlphaId;
 
-	public ZenVarType(String Name, int AlphaId, ZToken SourceToken) {
-		super(0, Name, ZSystem.VarType);
-		this.SourceToken = SourceToken;
-		this.TypeId = this.RefType.TypeId;
-		this.AlphaId = AlphaId;
+public class ZGeneric1Type extends ZType {
+	@Field public ZType			BaseType;
+	@Field public ZType         ParamType;
+	public ZGeneric1Type(int TypeFlag, String ShortName, ZType BaseType, ZType ParamType) {
+		super(TypeFlag, ShortName, ZSystem.TopType);
+		this.BaseType = BaseType == null ? this : BaseType;
+		this.ParamType = ParamType;
 	}
 
-	@Override public final ZType GetRealType() {
-		return this.RefType;
+	@Override
+	public ZType GetSuperType() {
+		return this.BaseType == this ? this.RefType : this.BaseType;
+	}
+
+	@Override public ZType GetBaseType() {
+		return this.BaseType;
 	}
 
 	@Override public int GetParamSize() {
-		return this.RefType.GetParamSize();
+		return 1;
 	}
 
 	@Override public ZType GetParamType(int Index) {
-		return this.RefType.GetParamType(Index);
-	}
-
-	@Override public boolean IsFuncType() {
-		return this.RefType.IsFuncType();
-	}
-
-	@Override public String toString() {
-		return "typeof("+this.ShortName+"): " + this.RefType;
-	}
-
-	public void Infer(ZType ContextType, ZToken SourceToken) {
-		if(this.RefType.IsVarType()) {
-			if(ContextType instanceof ZenVarType && ContextType.IsVarType()) {
-				ZenVarType VarType = (ZenVarType)ContextType;
-				if(this.AlphaId < VarType.AlphaId) {
-					VarType.AlphaId = this.AlphaId;
-				}
-				else {
-					this.AlphaId = VarType.AlphaId;
-				}
-			}
-			else {
-				this.RefType = ContextType.GetRealType();
-				this.SourceToken = SourceToken;
-				this.TypeId = this.RefType.TypeId;
-				this.TypeFlag = this.RefType.TypeFlag;
-			}
+		if(Index == 0) {
+			return this.ParamType;
 		}
+		return null;
 	}
+
+	//	// Note Don't call this directly. Use Context.GetGenericType instead.
+	//	public ZenType CreateGenericType(int BaseIndex, ArrayList<ZenType> TypeList, String ShortName) {
+	//		@Var int TypeVariableFlag = (this.TypeFlag & (~GenericVariable));
+	//		for(@Var int i = BaseIndex; i < TypeList.size(); i = i + 1) {
+	//			if(TypeList.get(i).HasTypeVariable()) {
+	//				TypeVariableFlag |= GenericVariable;
+	//				break;
+	//			}
+	//		}
+	//		@Var ZenType GenericType = new ZenType(TypeVariableFlag, ShortName, null, null);
+	//		GenericType.BaseType = this.BaseType;
+	//		GenericType.ParentMethodSearch = this.BaseType;
+	//		GenericType.RefType = this.RefType;
+	//		GenericType.TypeParams = LibZen.CompactTypeList(BaseIndex, TypeList);
+	//		LibZen.VerboseLog(VerboseType, "new generic type: " + GenericType.ShortName + ", ClassId=" + GenericType.TypeId);
+	//		return GenericType;
+	//	}
+
 }

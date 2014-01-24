@@ -105,7 +105,7 @@ import zen.deps.LibNative;
 import zen.deps.Var;
 import zen.lang.ZSystem;
 import zen.lang.ZType;
-import zen.lang.ZenFuncType;
+import zen.lang.ZFuncType;
 import zen.parser.ZGenerator;
 import zen.parser.ZNameSpace;
 
@@ -131,7 +131,7 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 		return Type.getType(NativeTypeTable.GetJavaClass(zType));
 	}
 
-	String GetMethodDescriptor(ZenFuncType FuncType) {
+	String GetMethodDescriptor(ZFuncType FuncType) {
 		@Var Type ReturnType = this.GetAsmType(FuncType.GetReturnType());
 		@Var Type[] ArgTypes = new Type[FuncType.GetFuncParamSize()];
 		for(int i = 0; i < ArgTypes.length; i++) {

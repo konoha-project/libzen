@@ -3,10 +3,10 @@ package zen.lang;
 import zen.deps.Field;
 import zen.deps.Var;
 
-public final class ZenFuncType extends ZType {
+public final class ZFuncType extends ZType {
 
 	@Field public ZType[]		TypeParams;
-	public ZenFuncType(String ShortName, ZType[] UniqueTypeParams) {
+	public ZFuncType(String ShortName, ZType[] UniqueTypeParams) {
 		super(ZTypeFlag.UniqueType, ShortName, ZSystem.TopType);
 		if(UniqueTypeParams == null) {
 			this.TypeParams = new ZType[1];
@@ -74,7 +74,7 @@ public final class ZenFuncType extends ZType {
 		return this.TypeParams[Index+1];
 	}
 
-	public boolean MatchFunc(ZenFuncType ContextFuncType) {
+	public boolean MatchFunc(ZFuncType ContextFuncType) {
 		@Var int i = 0;
 		if(this.TypeParams[0].IsVarType() && !ContextFuncType.TypeParams[0].IsVarType()) {
 			i = 1;

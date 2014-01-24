@@ -28,14 +28,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import zen.lang.ZFunc;
-import zen.lang.ZenFuncType;
+import zen.lang.ZFuncType;
 import zen.parser.ZLogger;
 
 public class ZNativeFunc extends ZFunc {
 	@Field public Object Recv;
 	@Field public Method JMethod;  // Abstract function if null
 
-	public ZNativeFunc(int FuncFlag, String FuncName, ZenFuncType FuncType, Object Recv, Method JMethod) {
+	public ZNativeFunc(int FuncFlag, String FuncName, ZFuncType FuncType, Object Recv, Method JMethod) {
 		super(FuncFlag, FuncName, FuncType);
 		this.Recv = Recv;
 		this.JMethod = JMethod;

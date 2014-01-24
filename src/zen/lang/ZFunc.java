@@ -32,15 +32,15 @@ import zen.parser.ZUtils;
 public abstract class ZFunc {
 	@Field @Init public int			  FuncFlag;
 	@Field @Init public String		  FuncName;  // NativeReferenceNamr
-	@Field @Init public ZenFuncType     FuncType;
+	@Field @Init public ZFuncType     FuncType;
 
-	public ZFunc(int FuncFlag, String FuncName, ZenFuncType FuncType) {
+	public ZFunc(int FuncFlag, String FuncName, ZFuncType FuncType) {
 		this.FuncFlag = FuncFlag;
 		this.FuncName = FuncName;
 		this.FuncType = FuncType;
 	}
 
-	public final ZenFuncType GetFuncType() {
+	public final ZFuncType GetFuncType() {
 		return this.FuncType;
 	}
 

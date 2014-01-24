@@ -3,11 +3,11 @@ package zen.lang;
 import zen.deps.Field;
 import zen.parser.ZToken;
 
-public class ZenSigFunc extends ZFunc {
+public class ZSignature extends ZFunc {
 	@Field public int DefinedCount = 0;
 	@Field public int UsedCount = 0;
 
-	public ZenSigFunc(int FuncFlag, String FuncName, ZenFuncType FuncType, ZToken SourceToken) {
+	public ZSignature(int FuncFlag, String FuncName, ZFuncType FuncType, ZToken SourceToken) {
 		super(FuncFlag, FuncName, FuncType);
 		this.DefinedCount = 0;
 		this.UsedCount = 0;

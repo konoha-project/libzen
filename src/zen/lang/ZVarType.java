@@ -25,53 +25,56 @@
 package zen.lang;
 
 import zen.deps.Field;
+import zen.parser.ZToken;
 
+public class ZVarType extends ZType {
+	@Field public ZToken SourceToken;
+	@Field public int AlphaId;
 
-public class ZenGeneric1Type extends ZType {
-	@Field public ZType			BaseType;
-	@Field public ZType         ParamType;
-	public ZenGeneric1Type(int TypeFlag, String ShortName, ZType BaseType, ZType ParamType) {
-		super(TypeFlag, ShortName, ZSystem.TopType);
-		this.BaseType = BaseType == null ? this : BaseType;
-		this.ParamType = ParamType;
+	public ZVarType(String Name, int AlphaId, ZToken SourceToken) {
+		super(0, Name, ZSystem.VarType);
+		this.SourceToken = SourceToken;
+		this.TypeId = this.RefType.TypeId;
+		this.AlphaId = AlphaId;
 	}
 
-	@Override
-	public ZType GetSuperType() {
-		return this.BaseType == this ? this.RefType : this.BaseType;
-	}
-
-	@Override public ZType GetBaseType() {
-		return this.BaseType;
+	@Override public final ZType GetRealType() {
+		return this.RefType;
 	}
 
 	@Override public int GetParamSize() {
-		return 1;
+		return this.RefType.GetParamSize();
 	}
 
 	@Override public ZType GetParamType(int Index) {
-		if(Index == 0) {
-			return this.ParamType;
-		}
-		return null;
+		return this.RefType.GetParamType(Index);
 	}
 
-	//	// Note Don't call this directly. Use Context.GetGenericType instead.
-	//	public ZenType CreateGenericType(int BaseIndex, ArrayList<ZenType> TypeList, String ShortName) {
-	//		@Var int TypeVariableFlag = (this.TypeFlag & (~GenericVariable));
-	//		for(@Var int i = BaseIndex; i < TypeList.size(); i = i + 1) {
-	//			if(TypeList.get(i).HasTypeVariable()) {
-	//				TypeVariableFlag |= GenericVariable;
-	//				break;
-	//			}
-	//		}
-	//		@Var ZenType GenericType = new ZenType(TypeVariableFlag, ShortName, null, null);
-	//		GenericType.BaseType = this.BaseType;
-	//		GenericType.ParentMethodSearch = this.BaseType;
-	//		GenericType.RefType = this.RefType;
-	//		GenericType.TypeParams = LibZen.CompactTypeList(BaseIndex, TypeList);
-	//		LibZen.VerboseLog(VerboseType, "new generic type: " + GenericType.ShortName + ", ClassId=" + GenericType.TypeId);
-	//		return GenericType;
-	//	}
+	@Override public boolean IsFuncType() {
+		return this.RefType.IsFuncType();
+	}
 
+	@Override public String toString() {
+		return "typeof("+this.ShortName+"): " + this.RefType;
+	}
+
+	public void Infer(ZType ContextType, ZToken SourceToken) {
+		if(this.RefType.IsVarType()) {
+			if(ContextType instanceof ZVarType && ContextType.IsVarType()) {
+				ZVarType VarType = (ZVarType)ContextType;
+				if(this.AlphaId < VarType.AlphaId) {
+					VarType.AlphaId = this.AlphaId;
+				}
+				else {
+					this.AlphaId = VarType.AlphaId;
+				}
+			}
+			else {
+				this.RefType = ContextType.GetRealType();
+				this.SourceToken = SourceToken;
+				this.TypeId = this.RefType.TypeId;
+				this.TypeFlag = this.RefType.TypeFlag;
+			}
+		}
+	}
 }

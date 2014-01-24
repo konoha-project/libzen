@@ -679,7 +679,7 @@ public class ZenGrammar {
 		}
 		@Var ZNode ValueNode = TokenContext.ParsePattern(NameSpace, "$Expression$", ZTokenContext.Required);
 		if(ValueNode instanceof ZStringNode && SymbolType.IsFuncType()) {
-			@Var ZenMacro MacroFunc = new ZenMacro(0, SymbolName, (ZenFuncType)SymbolType, ((ZStringNode)ValueNode).StringValue);
+			@Var ZMacro MacroFunc = new ZMacro(0, SymbolName, (ZFuncType)SymbolType, ((ZStringNode)ValueNode).StringValue);
 			NameSpace.AppendFuncName(MacroFunc, SourceToken);
 			return ValueNode.Done();
 		}

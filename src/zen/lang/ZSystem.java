@@ -51,10 +51,10 @@ public class ZSystem {
 	public final static ZType		StringType = new ZType(ZTypeFlag.UniqueType, "String", TopType);
 	//	public final static ZenType		AnyType = new ZenType(UniqueType|DynamicType, "any", TopType);
 	public final static ZType     TypeType = new ZType(ZTypeFlag.UniqueType, "Type", TopType);
-	public final static ZType		ArrayType = new ZenGeneric1Type(ZTypeFlag.UniqueType, "Array", null, VarType);
-	public final static ZType		MapType = new ZenGeneric1Type(ZTypeFlag.UniqueType, "Map", null, VarType);
+	public final static ZType		ArrayType = new ZGeneric1Type(ZTypeFlag.UniqueType, "Array", null, VarType);
+	public final static ZType		MapType = new ZGeneric1Type(ZTypeFlag.UniqueType, "Map", null, VarType);
 
-	public final static ZType		FuncType  = new ZenFuncType("Func", null);
+	public final static ZType		FuncType  = new ZFuncType("Func", null);
 
 	public final static long GetFileLine(String FileName, int Line) {
 		@Var Object IdOrNull = ZSystem.SourceMap.GetOrNull(FileName);
@@ -190,7 +190,7 @@ public class ZSystem {
 			if(BaseType.IsArrayType()) {
 				Name = BaseType.ShortName + "<" + ParamType + ">";
 			}
-			GenericType = new ZenGeneric1Type(ZTypeFlag.UniqueType, Name, BaseType, ParamType);
+			GenericType = new ZGeneric1Type(ZTypeFlag.UniqueType, Name, BaseType, ParamType);
 			ZSystem.SetTypeTable(MangleName, GenericType);
 		}
 		return GenericType;
@@ -215,7 +215,7 @@ public class ZSystem {
 				}
 			}
 			if(BaseType.IsFuncType()) {
-				GenericType = new ZenFuncType(ShortName, ZSystem.UniqueTypes(BaseIdx, TypeList));
+				GenericType = new ZFuncType(ShortName, ZSystem.UniqueTypes(BaseIdx, TypeList));
 			}
 			else {
 				throw new RuntimeException("TODO: Make ZenGenericType");
@@ -262,8 +262,8 @@ public class ZSystem {
 	}
 
 
-	public static ZenFuncType LookupFuncType(ArrayList<ZType> TypeList) {
-		return (ZenFuncType)ZSystem.GetGenericType(ZSystem.FuncType, 0, TypeList, true);
+	public static ZFuncType LookupFuncType(ArrayList<ZType> TypeList) {
+		return (ZFuncType)ZSystem.GetGenericType(ZSystem.FuncType, 0, TypeList, true);
 	}
 
 

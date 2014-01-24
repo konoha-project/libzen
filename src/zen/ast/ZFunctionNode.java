@@ -31,7 +31,7 @@ import zen.deps.Nullable;
 import zen.deps.Var;
 import zen.lang.ZSystem;
 import zen.lang.ZType;
-import zen.lang.ZenFuncType;
+import zen.lang.ZFuncType;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 
@@ -59,10 +59,10 @@ public class ZFunctionNode extends ZNode {
 		Visitor.VisitFunctionNode(this);
 	}
 
-	public ZenFuncType GetFuncType(@Nullable ZType ContextType) {
-		@Var ZenFuncType FuncType = null;
-		if(ContextType instanceof ZenFuncType) {
-			FuncType = (ZenFuncType)ContextType;
+	public ZFuncType GetFuncType(@Nullable ZType ContextType) {
+		@Var ZFuncType FuncType = null;
+		if(ContextType instanceof ZFuncType) {
+			FuncType = (ZFuncType)ContextType;
 		}
 		@Var ArrayList<ZType> TypeList = new ArrayList<ZType>();
 		if(this.ReturnType.IsVarType() && FuncType != null) {

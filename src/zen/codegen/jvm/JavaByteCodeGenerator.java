@@ -107,7 +107,7 @@ import zen.lang.ZFunc;
 import zen.lang.ZSystem;
 import zen.lang.ZType;
 import zen.lang.ZTypeFlag;
-import zen.lang.ZenFuncType;
+import zen.lang.ZFuncType;
 import zen.parser.ZGenerator;
 
 public class JavaByteCodeGenerator extends ZGenerator {
@@ -172,7 +172,7 @@ public class JavaByteCodeGenerator extends ZGenerator {
 		return Type.getType(this.GetJClass(zType));
 	}
 
-	String GetMethodDescriptor(ZenFuncType FuncType) {
+	String GetMethodDescriptor(ZFuncType FuncType) {
 		@Var Type ReturnType = this.GetAsmType(FuncType.GetReturnType());
 		@Var Type[] ArgTypes = new Type[FuncType.GetFuncParamSize()];
 		for(int i = 0; i < ArgTypes.length; i++) {
