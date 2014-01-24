@@ -50,7 +50,7 @@ import zen.parser.ZVisitor;
 public abstract class ZenTypeChecker extends ZVisitor {
 
 	protected void println(String string) {
-		System.err.println("debug " + string);
+		LibNative.Debug("debug " + string);
 	}
 
 	public final static int DefaultTypeCheckPolicy			= 0;
@@ -120,7 +120,7 @@ public abstract class ZenTypeChecker extends ZVisitor {
 	}
 
 	public final void TypedNodeIf(ZNode Node, ZType Type, ZNode P1) {
-		if(P1.Type.IsVarType()) {
+		if(P1.IsVarType()) {
 			Node.Type = ZSystem.VarType;
 		}
 		else {
@@ -132,7 +132,7 @@ public abstract class ZenTypeChecker extends ZVisitor {
 	}
 
 	public final void TypedNodeIf2(ZNode Node, ZType Type, ZNode P1, ZNode P2) {
-		if(P1.Type.IsVarType() || P2.Type.IsVarType()) {
+		if(P1.IsVarType() || P2.IsVarType()) {
 			Node.Type = ZSystem.VarType;
 		}
 		else {
@@ -144,7 +144,7 @@ public abstract class ZenTypeChecker extends ZVisitor {
 	}
 
 	public final void TypedNodeIf3(ZNode Node, ZType Type, ZNode P1, ZNode P2, ZNode P3) {
-		if(P1.Type.IsVarType() || P2.Type.IsVarType() || P3.Type.IsVarType()) {
+		if(P1.IsVarType() || P2.IsVarType() || P3.IsVarType()) {
 			Node.Type = ZSystem.VarType;
 		}
 		else {
@@ -179,7 +179,7 @@ public abstract class ZenTypeChecker extends ZVisitor {
 				ZNode SubNode = ParamList.get(i);
 				SubNode = this.TypeCheck(SubNode, NameSpace, ZSystem.VarType, ZenTypeChecker.DefaultTypeCheckPolicy);
 				ParamList.set(i, SubNode);
-				if(SubNode.Type.IsVarType()) {
+				if(SubNode.IsVarType()) {
 					AllTyped = false;
 				}
 				i = i + 1;
@@ -291,7 +291,7 @@ public abstract class ZenTypeChecker extends ZVisitor {
 			Node.Type = ContextType;
 			return Node;
 		}
-		if(ContextType instanceof ZVarType && !Node.Type.IsVarType()) {
+		if(ContextType instanceof ZVarType && !Node.IsVarType()) {
 			((ZVarType)ContextType).Infer(Node.Type, Node.SourceToken);
 			return Node;
 		}
@@ -302,7 +302,7 @@ public abstract class ZenTypeChecker extends ZVisitor {
 		if(Node.IsErrorNode()) {
 			return Node;
 		}
-		if(Node.Type.IsVarType()) {
+		if(Node.IsVarType()) {
 			this.FuncScope.CountUnknownTypeNode(Node);
 			return this.InferType(ContextType, Node);
 		}

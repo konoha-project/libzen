@@ -37,9 +37,6 @@ public abstract class ZNode {
 	@Field public ZType	Type = ZSystem.VarType;
 	@Field public ZToken	SourceToken = null;
 
-	//	public ZNode() {
-	//	}
-
 	public final ZNode SetChild(ZNode Node) {
 		assert(Node != null);
 		if(Node != null) {
@@ -78,8 +75,12 @@ public abstract class ZNode {
 		LibNative.DispatchVisitNode(Visitor, this);
 	}
 
+	public final boolean IsVarType() {
+		return this.IsVarType();
+	}
+
 	public boolean IsUntyped() {
-		return this.Type.IsVarType();
+		return this.IsVarType();
 	}
 
 	public ZConstNode ToConstNode(boolean EnforceConst) {

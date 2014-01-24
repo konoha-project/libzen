@@ -130,7 +130,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 			ZNode SubNode = Node.NodeList.get(i);
 			SubNode = this.TypeCheck(SubNode, NameSpace, ElementType, ZenTypeChecker.DefaultTypeCheckPolicy);
 			Node.NodeList.set(i, SubNode);
-			if(SubNode.Type.IsVarType()) {
+			if(SubNode.IsVarType()) {
 				AllTyped = false;
 				ArrayType = ZSystem.VarType;
 			}
@@ -177,7 +177,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 						@Var ZNode SubNode = Node.NodeList.get(i+1);
 						SubNode = this.TypeCheck(SubNode, NameSpace, FieldType, ZenTypeChecker.DefaultTypeCheckPolicy);
 						Node.NodeList.set(i+1, SubNode);
-						if(SubNode.Type.IsVarType()) {
+						if(SubNode.IsVarType()) {
 							AllTyped = false;
 							ContextType = ZSystem.VarType;
 						}
@@ -192,7 +192,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 					@Var ZNode SubNode = Node.NodeList.get(i);
 					SubNode = this.TypeCheck(SubNode, NameSpace, ElementType, ZenTypeChecker.DefaultTypeCheckPolicy);
 					Node.NodeList.set(i, SubNode);
-					if(SubNode.Type.IsVarType()) {
+					if(SubNode.IsVarType()) {
 						AllTyped = false;
 						ContextType = ZSystem.VarType;
 					}
@@ -318,7 +318,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		if(FieldType.IsVarType() && ContextType.IsInferrableType()) {
 			this.InferFieldType(NameSpace, Node.RecvNode.Type, Node.FieldName, ContextType, Node.SourceToken);
 		}
-		if(FieldType.IsVoidType() && !Node.RecvNode.Type.IsVarType()) {
+		if(FieldType.IsVoidType() && !Node.RecvNode.IsVarType()) {
 			this.CheckErrorNode(this.UndefinedName(Node, Node.RecvNode.Type.StringfyClassMember(Node.FieldName)));
 			return;
 		}
@@ -529,7 +529,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 				ZNode SubNode = Node.StmtList.get(i).GetStatementNode();  // without annotation
 				SubNode = this.TypeCheck(SubNode, Node.NameSpace, ZSystem.VoidType, ZenTypeChecker.DefaultTypeCheckPolicy);
 				Node.StmtList.set(i, SubNode);
-				if(SubNode.Type.IsVarType()) {
+				if(SubNode.IsVarType()) {
 					BlockType = ZSystem.VarType;
 				}
 				if(SubNode.IsBreakingBlock()) {

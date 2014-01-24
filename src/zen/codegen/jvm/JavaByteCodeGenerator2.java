@@ -197,7 +197,7 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 					if(JParamClass.length != ParamList.size()) {
 						continue;
 					}
-					this.Debug("debug searching.. method: " + jMethod);
+					//this.Debug("searching.. method: " + jMethod);
 					for(int j = 0; j < JParamClass.length; j++) {
 						if(JParamClass[j] == Object.class) {
 							continue; // accepting all types
@@ -221,7 +221,7 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 	@Override public ZType GetMethodFuncType(ZType RecvType, String MethodName, ArrayList<ZNode> ParamList) {
 		Method jMethod = this.GetMethod(RecvType, MethodName, ParamList);
 		if(jMethod != null) {
-			this.Debug("debug  matched: " + jMethod);
+			//this.Debug("matched: " + jMethod);
 			return NativeTypeTable.ConvertToFuncType(jMethod);
 		}
 		return ZSystem.VarType;
