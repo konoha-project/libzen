@@ -25,10 +25,8 @@
 //ifdef JAVA
 package zen.codegen.javascript;
 
-import javax.script.Compilable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
 
 import zen.ast.ZBlockNode;
 import zen.ast.ZCastNode;
@@ -36,12 +34,12 @@ import zen.ast.ZCatchNode;
 import zen.ast.ZFuncDeclNode;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZInstanceOfNode;
+import zen.ast.ZNode;
 import zen.ast.ZParamNode;
 import zen.ast.ZReturnNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZVarDeclNode;
-import zen.ast.ZNode;
 import zen.lang.ZSystem;
 import zen.parser.ZSourceGenerator;
 
@@ -73,18 +71,18 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 		this.Engine = this.EngineManager.getEngineByName("js");
 	}
 
-	@Override
-	public Object EvalTopLevelNode(ZNode Node) {
-		String Code = this.CurrentBuilder.toString() + ";";
-		System.out.println(Code);
-		this.CurrentBuilder.Clear();
-		try {
-			return ((Compilable)this.Engine).compile(Code).eval();
-		} catch (ScriptException ex) {
-			ex.printStackTrace();
-		}
-		return null;
-	}
+	//	@Override
+	//	public Object EvalTopLevelNode(ZNode Node) {
+	//		String Code = this.CurrentBuilder.toString() + ";";
+	//		System.out.println(Code);
+	//		this.CurrentBuilder.Clear();
+	//		try {
+	//			return ((Compilable)this.Engine).compile(Code).eval();
+	//		} catch (ScriptException ex) {
+	//			ex.printStackTrace();
+	//		}
+	//		return null;
+	//	}
 
 	@Override
 	public void VisitBlockNode(ZBlockNode Node) {

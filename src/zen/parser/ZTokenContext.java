@@ -97,7 +97,7 @@ public final class ZTokenContext {
 	@Deprecated
 	public void ReportTokenError1(int Level, String Message, String TokenText) {
 		@Var ZToken Token = this.AppendParsedToken(TokenText, 0, "$Error$");
-		this.TopLevelNameSpace.Generator.ReportError(Level, Token, Message);
+		this.TopLevelNameSpace.Generator.Logger.Report(Level, Token, Message);
 	}
 
 	public void SkipErrorStatement() {
