@@ -123,12 +123,12 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 	}
 
 	private String GetTypeDesc(ZType zType) {
-		Class<?> JClass = NativeTypeTable.GetJClass(zType);
+		Class<?> JClass = NativeTypeTable.GetJavaClass(zType);
 		return Type.getDescriptor(JClass);
 	}
 
 	Type GetAsmType(ZType zType) {
-		return Type.getType(NativeTypeTable.GetJClass(zType));
+		return Type.getType(NativeTypeTable.GetJavaClass(zType));
 	}
 
 	String GetMethodDescriptor(ZenFuncType FuncType) {
@@ -149,7 +149,7 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 	}
 
 	@Override public ZType GetFieldType(ZType RecvType, String FieldName) {
-		Class<?> NativeClass = NativeTypeTable.GetJClass(RecvType);
+		Class<?> NativeClass = NativeTypeTable.GetJavaClass(RecvType);
 		if(NativeClass != null) {
 			try {
 				java.lang.reflect.Field NativeField = NativeClass.getField(FieldName);
@@ -165,7 +165,7 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 	}
 
 	@Override public ZType GetSetterType(ZType RecvType, String FieldName) {
-		Class<?> NativeClass = NativeTypeTable.GetJClass(RecvType);
+		Class<?> NativeClass = NativeTypeTable.GetJavaClass(RecvType);
 		if(NativeClass != null) {
 			try {
 				java.lang.reflect.Field NativeField = NativeClass.getField(FieldName);
@@ -181,7 +181,7 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 	}
 
 	Method GetMethod(ZType RecvType, String MethodName, ArrayList<ZNode> ParamList) {
-		Class<?> NativeClass = NativeTypeTable.GetJClass(RecvType);
+		Class<?> NativeClass = NativeTypeTable.GetJavaClass(RecvType);
 		if(NativeClass != null) {
 			try {
 				Method[] Methods = NativeClass.getMethods();
@@ -330,7 +330,7 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 			this.CurrentBuilder.ApplyStaticMethod(Node.Type, sMethod, new ZNode[] {Node.RecvNode, NameNode});
 		}
 		else {
-			Class<?> RecvClass = NativeTypeTable.GetJClass(Node.RecvNode.Type);
+			Class<?> RecvClass = NativeTypeTable.GetJavaClass(Node.RecvNode.Type);
 			Class<?> FieldClass = this.GetFieldType(RecvClass, Node.FieldName);
 			Type FieldType = Type.getType(FieldClass);
 			Type OwnerType = Type.getType(RecvClass);
@@ -347,7 +347,7 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 			this.CurrentBuilder.ApplyStaticMethod(Node.Type, sMethod, new ZNode[] {Node.RecvNode, NameNode, Node.ValueNode});
 		}
 		else {
-			Class<?> RecvClass = NativeTypeTable.GetJClass(Node.RecvNode.Type);
+			Class<?> RecvClass = NativeTypeTable.GetJavaClass(Node.RecvNode.Type);
 			Class<?> FieldClass = this.GetFieldType(RecvClass, Node.FieldName);
 			Type FieldType = Type.getType(FieldClass);
 			Type OwnerType = Type.getType(RecvClass);
@@ -474,7 +474,7 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 	}
 
 	@Override public void VisitVarDeclNode(ZVarDeclNode Node) {
-		Class<?> DeclClass = NativeTypeTable.GetJClass(Node.DeclType);
+		Class<?> DeclClass = NativeTypeTable.GetJavaClass(Node.DeclType);
 		this.CurrentBuilder.AddLocal(DeclClass, Node.NativeName);
 		this.CurrentBuilder.PushNode(DeclClass, Node.InitNode);
 		this.CurrentBuilder.StoreLocal(Node.NativeName);
@@ -579,7 +579,7 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 		mv.visitTryCatchBlock(Label.beginTryLabel, Label.endTryLabel, catchLabel, throwType);
 
 		// catch block
-		JLocalVarStack local = this.CurrentBuilder.AddLocal(NativeTypeTable.GetJClass(Node.ExceptionType), Node.ExceptionName);
+		JLocalVarStack local = this.CurrentBuilder.AddLocal(NativeTypeTable.GetJavaClass(Node.ExceptionType), Node.ExceptionName);
 		mv.visitLabel(catchLabel);
 		this.CurrentBuilder.StoreLocal(Node.ExceptionName);
 		Node.BodyNode.Accept(this);
@@ -604,7 +604,7 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 		this.CurrentBuilder = new JMethodBuilder2(ACC_PUBLIC | ACC_STATIC, FuncName, MethodDesc, this, this.CurrentBuilder);
 		for(int i = 0; i < Node.ArgumentList.size(); i++) {
 			ZParamNode ParamNode =(ZParamNode)Node.ArgumentList.get(i);
-			this.CurrentBuilder.AddLocal(NativeTypeTable.GetJClass(ParamNode.Type), ParamNode.Name);
+			this.CurrentBuilder.AddLocal(NativeTypeTable.GetJavaClass(ParamNode.Type), ParamNode.Name);
 		}
 		Node.BodyNode.Accept(this);
 		this.CurrentBuilder = this.CurrentBuilder.Parent;

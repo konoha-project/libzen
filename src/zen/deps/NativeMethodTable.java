@@ -169,7 +169,7 @@ public class NativeMethodTable {
 	}
 	static void Import(ZType T1, String Op, ZType T2, Class<?> BaseClass, String Name) {
 		try {
-			Method sMethod = BaseClass.getMethod(Name, NativeTypeTable.GetJClass(T1), NativeTypeTable.GetJClass(T2));
+			Method sMethod = BaseClass.getMethod(Name, NativeTypeTable.GetJavaClass(T1), NativeTypeTable.GetJavaClass(T2));
 			MethodMap.put(BinaryKey(T1, Op, T2), sMethod);
 		} catch (Exception e) {
 			System.err.println("FIXME:" + e);
@@ -177,7 +177,7 @@ public class NativeMethodTable {
 	}
 	static void Import(String Op, ZType T1, Class<?> BaseClass, String Name) {
 		try {
-			Method sMethod = BaseClass.getMethod(Name, NativeTypeTable.GetJClass(T1));
+			Method sMethod = BaseClass.getMethod(Name, NativeTypeTable.GetJavaClass(T1));
 			MethodMap.put(UnaryKey(Op, T1), sMethod);
 		} catch (Exception e) {
 			System.err.println("FIXME:" + e);

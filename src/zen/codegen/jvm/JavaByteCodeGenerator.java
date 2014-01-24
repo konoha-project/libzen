@@ -100,9 +100,9 @@ import zen.ast.ZVarDeclNode;
 import zen.ast.ZWhileNode;
 import zen.deps.LibNative;
 import zen.deps.Var;
+import zen.deps.ZNativeType;
 import zen.deps.ZenArray;
 import zen.deps.ZenMap;
-import zen.deps.ZenNativeType;
 import zen.lang.ZFunc;
 import zen.lang.ZSystem;
 import zen.lang.ZType;
@@ -156,8 +156,8 @@ public class JavaByteCodeGenerator extends ZGenerator {
 
 	private ZType GetZenType(Class<?> JavaClass) {
 		ZType NativeType = this.TypeMap.get(JavaClass.getCanonicalName());
-		if (NativeType != null) {
-			NativeType = new ZenNativeType(JavaClass);
+		if (NativeType == null) {
+			NativeType = new ZNativeType(JavaClass);
 			this.SetTypeTable(NativeType, JavaClass);
 		}
 		return NativeType;

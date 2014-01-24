@@ -107,7 +107,7 @@ public class JMethodBuilder2 extends MethodNode {
 	}
 
 	void CheckParamCast(Class<?> C1, ZType T2) {
-		Class<?> C2 = NativeTypeTable.GetJClass(T2);
+		Class<?> C2 = NativeTypeTable.GetJavaClass(T2);
 		if(C1 != C2) {
 			Method sMethod = NativeMethodTable.GetCastMethod(C1, C2);
 			String owner = Type.getInternalName(sMethod.getDeclaringClass());
@@ -116,7 +116,7 @@ public class JMethodBuilder2 extends MethodNode {
 	}
 
 	void CheckReturnCast(ZType T1, Class<?> C2) {
-		Class<?> C1 = NativeTypeTable.GetJClass(T1);
+		Class<?> C1 = NativeTypeTable.GetJavaClass(T1);
 		if(C1 != C2) {
 			Method sMethod = NativeMethodTable.GetCastMethod(C1, C2);
 			String owner = Type.getInternalName(sMethod.getDeclaringClass());

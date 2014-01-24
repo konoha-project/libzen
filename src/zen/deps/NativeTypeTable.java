@@ -64,19 +64,19 @@ public class NativeTypeTable {
 	}
 
 	public static void SetTypeTable(ZType zType, Class<?> c) {
-		if(NativeTypeTable.GetJClass(zType) == null) {
+		if(NativeTypeTable.GetJavaClass(zType) == null) {
 			NativeTypeTable.ClassMap.put(zType.GetUniqueName(), c);
 		}
 		NativeTypeTable.TypeMap.put(c.getCanonicalName(), zType);
 	}
 
-	public static Class<?> GetJClass(ZType zType) {
+	public static Class<?> GetJavaClass(ZType zType) {
 		return NativeTypeTable.ClassMap.get(zType.GetUniqueName());
 	}
 
 	public static ZType GetZenType(Class<?> JavaClass) {
 		ZType NativeType = NativeTypeTable.TypeMap.get(JavaClass.getCanonicalName());
-		if (NativeType != null) {
+		if (NativeType == null) {
 			NativeType = new ZNativeType(JavaClass);
 			NativeTypeTable.SetTypeTable(NativeType, JavaClass);
 		}

@@ -50,9 +50,35 @@ import zen.parser.ZVisitor;
 
 public class LibNative {
 
+	public final static void print(Object msg) {
+		System.out.print(msg);
+	}
+
+	public final static void println(Object msg) {
+		System.out.println(msg);
+	}
+
 	public final static String GetEnv(String Name) {
 		return System.getenv(Name);
 	}
+
+	public final static void FixMe(Exception e) {
+		System.err.println("FIXME: " + e);
+		e.printStackTrace();
+	}
+
+	public final static void Assert(boolean TestResult) {
+		if (!TestResult) {
+			assert TestResult;
+			LibNative.Exit(1, "Assertion Failed");
+		}
+	}
+
+	public final static void Exit(int status, String Message) {
+		System.err.println(Message);
+		System.exit(1);
+	}
+
 
 	// Type
 	public final static String GetClassName(Object Value) {
@@ -64,11 +90,15 @@ public class LibNative {
 	}
 
 	public final static ZType GetNativeType(Class<?> NativeClass) {
+		return NativeTypeTable.GetZenType(NativeClass);
+	}
+
+	public final static ZType GetNativeType1(Class<?> NativeClass) {
 		ZType NativeType = ZSystem.LookupTypeTable(NativeClass.getCanonicalName());
 		if (NativeType == null) { /* create native type */
 			// DebugP("** creating native class: " + NativeClass.getSimpleName()
 			// + ", " + NativeClass.getCanonicalName());
-			NativeType = new ZenNativeType(NativeClass);
+			NativeType = new ZNativeType(NativeClass);
 			ZSystem.SetTypeTable(NativeClass.getCanonicalName(), NativeType);
 			ZLogger.VerboseLog(ZLogger.VerboseNative, "creating native class: " + NativeClass.getSimpleName() + ", " + NativeClass.getCanonicalName());
 		}
@@ -251,15 +281,14 @@ public class LibNative {
 	// Symbol);
 	// }
 
-	public final static boolean ImportGrammar(ZNameSpace NameSpace,
-			String PackageName) {
+	public final static boolean ImportGrammar(ZNameSpace NameSpace, String ClassName) {
 		try {
-			@Var Class<?> NativeClass = LibNative.LoadClass(PackageName);
-			Method LoaderMethod = NativeClass.getMethod("ImportGrammar",
-					ZNameSpace.class, Class.class);
+			@Var Class<?> NativeClass =  Class.forName(ClassName);
+			Method LoaderMethod = NativeClass.getMethod("ImportGrammar", ZNameSpace.class, Class.class);
 			LoaderMethod.invoke(null, NameSpace, NativeClass);
 			return true;
 		} catch (Exception e) { // naming
+			LibNative.FixMe(e);
 		}
 		return false;
 	}
@@ -415,7 +444,7 @@ public class LibNative {
 				j = j + 1;
 			}
 		}
-		return new ZenNativeFunc(0, JMethod.getName(), ZSystem.LookupFuncType(TypeList), null, JMethod);
+		return new ZNativeFunc(0, JMethod.getName(), ZSystem.LookupFuncType(TypeList), null, JMethod);
 	}
 
 	public final static ZFunc LoadTokenFunc(Class<?> GrammarClass,
@@ -467,25 +496,6 @@ public class LibNative {
 	}
 
 	// LibZen KonohaApi
-	public final static void print(Object msg) {
-		System.out.print(msg);
-	}
-
-	public final static void println(Object msg) {
-		System.out.println(msg);
-	}
-
-	public final static void Assert(boolean TestResult) {
-		if (!TestResult) {
-			assert TestResult;
-			LibNative.Exit(1, "Assertion Failed");
-		}
-	}
-
-	public final static void Exit(int status, String Message) {
-		System.err.println(Message);
-		System.exit(1);
-	}
 
 	public final static String LoadScript(String FileName) {
 		ZLogger.VerboseLog(ZLogger.VerboseFile, "loading " + FileName);
@@ -518,6 +528,7 @@ public class LibNative {
 
 
 	private final static ZenMap<Class<?>> GenMap = new ZenMap<Class<?>>(null);
+
 	static {
 		GenMap.put("python", zen.codegen.jython.PythonSourceGenerator.class);
 		GenMap.put("javascript", zen.codegen.javascript.JavaScriptSourceGenerator.class);
@@ -540,7 +551,7 @@ public class LibNative {
 				}
 				return (ZGenerator) GeneratorClass.newInstance();
 			} catch (Exception e) {
-				e.printStackTrace();
+				LibNative.FixMe(e);
 			}
 		}
 		return new ZSourceGenerator("zen", "0.1");
