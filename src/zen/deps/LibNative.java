@@ -76,7 +76,7 @@ public class LibNative {
 	}
 
 	public final static void FixMe(Exception e) {
-		System.err.println("FIXME" + LibNative.GetStackInfo(3) + ": " + e);
+		System.err.println("FIXME " + LibNative.GetStackInfo(3) + ": " + e);
 		e.printStackTrace();
 	}
 

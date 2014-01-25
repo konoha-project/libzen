@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZNode;
 import zen.deps.Field;
+import zen.deps.LibNative;
 import zen.deps.Var;
 import zen.parser.ZLogger;
 
@@ -87,7 +88,7 @@ final class ZFuncContext {
 	}
 
 	protected void println(String string) {
-		System.err.println("debug " + string);
+		LibNative.Debug("debug " + string);
 	}
 
 }

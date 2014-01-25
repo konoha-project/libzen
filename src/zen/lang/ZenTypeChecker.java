@@ -49,7 +49,7 @@ import zen.parser.ZVisitor;
 
 public abstract class ZenTypeChecker extends ZVisitor {
 
-	protected void println(String string) {
+	protected void Debug(String string) {
 		LibNative.Debug("debug " + string);
 	}
 
@@ -107,7 +107,7 @@ public abstract class ZenTypeChecker extends ZVisitor {
 		if(this.IsVisitable()) {
 			Node.Type = Type;
 			this.StackedTypedNode = Node;
-			System.err.println("Node="+Node.getClass().getSimpleName() + ":" + Type);
+			//			System.err.println("Node="+Node.getClass().getSimpleName() + ":" + Type);
 		}
 	}
 
@@ -253,7 +253,7 @@ public abstract class ZenTypeChecker extends ZVisitor {
 			Node.ResolvedFunc = this.InferFuncType(NameSpace, FuncName, ContextFuncType, Node.SourceToken);
 		}
 		if(Node.ResolvedFunc == null) {
-			this.println("unfound function call: " + FuncName + ", " + ContextFuncType);
+			this.Debug("unfound function call: " + FuncName + ", " + ContextFuncType);
 			return ContextFuncType;
 		}
 		return Node.ResolvedFunc.FuncType;
@@ -383,7 +383,7 @@ public abstract class ZenTypeChecker extends ZVisitor {
 	}
 
 	protected ZType InferFieldType(ZNameSpace NameSpace, ZType ClassType, String FieldName, ZType InferredType, ZToken SourceToken) {
-		this.println("field inferrence " + ClassType + "." + FieldName + ": " + InferredType);
+		this.Debug("field inferrence " + ClassType + "." + FieldName + ": " + InferredType);
 		if(ClassType.IsVarType() || !InferredType.IsInferrableType()) {
 			return ZSystem.VarType;
 		}
