@@ -250,10 +250,10 @@ public abstract class ZenTypeChecker extends ZVisitor {
 				Node.ResolvedFunc.Used();
 				return Node.ResolvedFunc.GetFuncType();
 			}
-			Node.ResolvedFunc = this.InferFuncType(NameSpace, FuncName, ContextFuncType, Node.SourceToken);
+			//			Node.ResolvedFunc = this.InferFuncType(NameSpace, FuncName, ContextFuncType, Node.SourceToken);
 		}
 		if(Node.ResolvedFunc == null) {
-			this.Debug("unfound function call: " + FuncName + ", " + ContextFuncType);
+			//this.Debug("unfound function call: " + FuncName + ", " + ContextFuncType);
 			return ContextFuncType;
 		}
 		return Node.ResolvedFunc.FuncType;

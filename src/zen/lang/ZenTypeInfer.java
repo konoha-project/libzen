@@ -626,19 +626,20 @@ public class ZenTypeInfer extends ZenTypeChecker {
 		this.Todo(Node);
 	}
 
-	public ZFunc DefineFunc(ZNameSpace NameSpace, String FuncName, ZFuncType FuncType, ZToken SourceToken) {
+	private boolean DefineFunc(ZNameSpace NameSpace, String FuncName, ZFuncType FuncType, ZToken SourceToken) {
 		if(FuncName != null) {
 			@Var ZFunc Func = ZenGamma.GetFunc(NameSpace, FuncName, FuncType, null);
 			if(Func != null) {
 				this.Logger.ReportError(SourceToken, "redefinition of function: " + Func);
+				return false;
 			}
 			else if(FuncType.IsCompleteFunc(false)) {
 				Func = new ZSignature(0, FuncName, FuncType, SourceToken);
 				ZenGamma.DefineFunc(NameSpace, Func);
 			}
-			return Func;
+			return true;
 		}
-		return null;
+		return false;
 	}
 
 	private void PushFuncNode(ZNameSpace NameSpace, ZFunctionNode FuncNode, ZFuncType FuncType) {
