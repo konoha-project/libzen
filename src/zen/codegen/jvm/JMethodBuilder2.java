@@ -18,6 +18,7 @@ import org.objectweb.asm.tree.MethodNode;
 
 import zen.ast.ZNode;
 import zen.deps.NativeTypeTable;
+import zen.lang.ZFuncType;
 import zen.lang.ZSystem;
 
 public class JMethodBuilder2 extends MethodNode {
@@ -139,7 +140,9 @@ public class JMethodBuilder2 extends MethodNode {
 
 	void PushNode(Class<?> T, ZNode Node) {
 		Node.Accept(this.Generator);
-		this.CheckParamCast(T, Node);
+		if(T != null) {
+			this.CheckParamCast(T, Node);
+		}
 	}
 
 	void ApplyStaticMethod(ZNode Node, Method sMethod, ZNode[] Nodes) {
@@ -152,6 +155,18 @@ public class JMethodBuilder2 extends MethodNode {
 		String owner = Type.getInternalName(sMethod.getDeclaringClass());
 		this.visitMethodInsn(INVOKESTATIC, owner, sMethod.getName(), Type.getMethodDescriptor(sMethod));
 		this.CheckReturnCast(Node, sMethod.getReturnType());
+	}
+
+	void ApplyFuncName(ZNode Node, String FuncName, ZFuncType FuncType, ZNode[] Nodes) {
+		if(Nodes != null) {
+			//			Class<?>[] P = sMethod.getParameterTypes();
+			for(int i = 0; i < Nodes.length; i++) {
+				this.PushNode(null, Nodes[i]);
+			}
+		}
+		String owner = "C" + FuncType.StringfySignature(FuncName);
+		this.visitMethodInsn(INVOKESTATIC, owner, FuncName, this.Generator.GetMethodDescriptor(FuncType));
+		//this.CheckReturnCast(Node, FuncType.GetReturnType());
 	}
 
 	void PushNodeListAsArray(Class<?> T, int StartIdx, ArrayList<ZNode> NodeList) {

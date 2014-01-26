@@ -133,14 +133,12 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 		return true;
 	}
 
-
 	private String GetTypeDesc(ZType zType) {
 		Class<?> JClass = NativeTypeTable.GetJavaClass(zType);
 		return Type.getDescriptor(JClass);
 	}
 
 	Type GetAsmType(ZType zType) {
-		//System.err.println("debug * " + NativeTypeTable.GetJavaClass(zType));
 		return Type.getType(NativeTypeTable.GetJavaClass(zType));
 	}
 
@@ -152,7 +150,7 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 			ArgTypes[i] = this.GetAsmType(ParamType);
 		}
 		String Desc = Type.getMethodDescriptor(ReturnType, ArgTypes);
-		//System.err.println("Desc: " + Desc + ", FuncType: " + FuncType);
+		//this.Debug("Desc: " + Desc + ", FuncType: " + FuncType);
 		return Desc;
 	}
 
@@ -242,22 +240,6 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 		return ZSystem.VarType;
 	}
 
-	//	@Override public void DoCodeGeneration(ZNode Node) {
-	//		if(this.CurrentBuilder == null && !(Node instanceof ZFuncDeclNode) && !(Node instanceof ZClassDeclNode)) {
-	//			this.Interpreter.EnableVisitor();
-	//			Object Value = this.Interpreter.Exec(Node, true);
-	//			if(this.Interpreter.IsVisitable()) {
-	//				LibNative.println(" (" + Node.Type + ") " + LibZen.Stringify(Value));
-	//			}
-	//			else if(Value != null) {
-	//				LibNative.println(" Error: " + Value);
-	//			}
-	//		}
-	//		else {
-	//			Node.Accept(this);
-	//		}
-	//	}
-
 	@Override public void VisitEmptyNode(ZEmptyNode Node) {
 		/* do nothing */
 	}
@@ -283,28 +265,39 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 	}
 
 	@Override public void VisitConstPoolNode(ZConstPoolNode Node) {
+		this.Debug("TODO");
+		this.CurrentBuilder.visitInsn(ACONST_NULL);
+
 		//		Object constValue = Node.ConstValue;
 		//		LibNative.Assert(Node.ConstValue != null);
 		//		this.CurrentBuilder.LoadConst(constValue);
 	}
 
 	@Override public void VisitArrayLiteralNode(ZArrayLiteralNode Node) {
+		this.Debug("TODO");
+		this.CurrentBuilder.visitInsn(ACONST_NULL);
 		//		this.CurrentBuilder.LoadConst(Node.Type);
 		//		this.CurrentBuilder.LoadNewArray(this, 0, Node.NodeList);
 		//		this.CurrentBuilder.InvokeMethodCall(Node.Type, JLib.NewNewArray);
 	}
 
 	@Override public void VisitMapLiteralNode(ZMapLiteralNode Node) {
+		this.Debug("TODO");
+		this.CurrentBuilder.visitInsn(ACONST_NULL);
 		// TODO Auto-generated method stub
 	}
 
 	@Override public void VisitNewArrayNode(ZNewArrayNode Node) {
+		this.Debug("TODO");
+		this.CurrentBuilder.visitInsn(ACONST_NULL);
 		//		this.CurrentBuilder.LoadConst(Node.Type);
 		//		this.CurrentBuilder.LoadNewArray(this, 0, Node.NodeList);
 		//		this.CurrentBuilder.InvokeMethodCall(Node.Type, JLib.NewArray);
 	}
 
 	@Override public void VisitNewObjectNode(ZNewObjectNode Node) {
+		this.Debug("TODO");
+		this.CurrentBuilder.visitInsn(ACONST_NULL);
 		//		Type type = this.GetAsmType(Node.Type);
 		//		String owner = type.getInternalName();
 		//		this.CurrentBuilder.visitTypeInsn(NEW, owner);
@@ -318,6 +311,8 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 	}
 
 	@Override public void VisitSymbolNode(ZSymbolNode Node) {
+		this.Debug("TODO");
+		this.CurrentBuilder.visitInsn(ACONST_NULL);
 		// TODO Auto-generated method stub
 	}
 
@@ -379,6 +374,8 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 	}
 
 	@Override public void VisitGetIndexNode(ZGetIndexNode Node) {
+		this.Debug("TODO");
+		this.CurrentBuilder.visitInsn(ACONST_NULL);
 		//		JMethod Method = JMethod.FindMethod(Node);
 		//		Node.RecvNode.Accept(this);
 		//		this.CurrentBuilder.PushEvaluatedNode(Method.GetType(1), Node.IndexNode);
@@ -386,6 +383,8 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 	}
 
 	@Override public void VisitSetIndexNode(ZSetIndexNode Node) {
+		this.Debug("TODO");
+		this.CurrentBuilder.visitInsn(ACONST_NULL);
 		//		JMethod Method = JMethod.FindMethod(Node);
 		//		Node.RecvNode.Accept(this);
 		//		this.CurrentBuilder.PushEvaluatedNode(Method.GetType(1), Node.IndexNode);
@@ -394,6 +393,7 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 	}
 
 	@Override public void VisitMethodCallNode(ZMethodCallNode Node) {
+		this.CurrentBuilder.SetLineNumber(Node);
 		Method jMethod = this.GetMethod(Node.RecvNode.Type, Node.MethodName, Node.ParamList);
 		if(jMethod != null) {
 			Node.RecvNode.Accept(this);
@@ -422,9 +422,14 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 	}
 
 	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
-		//		Node.FuncNode.Accept(this);
-		//this.CurrentBuilder.LoadNewArray(this, 0, Node.ParamList);
-		//		this.CurrentBuilder.InvokeMethodCall(Node.Type, JLib.InvokeFunc);
+		this.CurrentBuilder.SetLineNumber(Node);
+		if(Node.ResolvedFuncName != null) {
+			ZNode[] Nodes = this.PackNodes(null, Node.ParamList);
+			this.CurrentBuilder.ApplyFuncName(Node, Node.ResolvedFuncName, Node.ResolvedFuncType, Nodes);
+		}
+		else {
+			this.Debug("TODO");
+		}
 	}
 
 	@Override public void VisitUnaryNode(ZUnaryNode Node) {
@@ -648,6 +653,7 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 		}
 		try {
 			Method FuncMethod = HolderClass.GetDefinedMethod(this.ClassLoader, Node.FuncName);
+			//this.Debug("InteranalName: " +Type.getInternalName(FuncMethod.getDeclaringClass()));
 			this.FuncMap.put(Node.ReferenceName, FuncMethod);
 		}
 		catch(Error e) {
@@ -677,13 +683,8 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 		this.CurrentBuilder.visitInsn(ATHROW);
 	}
 
-	public Method GetStaticFuncMethod(ZNode FuncNode) {
-		if(FuncNode.Type.IsFuncType()) {
-			if(FuncNode instanceof ZSymbolNode) {
-				return this.FuncMap.GetOrNull(((ZSymbolNode)FuncNode).ReferenceName);
-			}
-		}
-		return null;
+	public Method GetStaticFuncMethod(String FuncName) {
+		return this.FuncMap.GetOrNull(FuncName);
 	}
 
 	ZNode[] PackNodes(ZNode Node, ArrayList<ZNode> List) {

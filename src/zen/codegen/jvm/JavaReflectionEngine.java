@@ -189,17 +189,16 @@ public class JavaReflectionEngine extends ZenEngine {
 	}
 
 	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
-		Method sMethod = ((JavaByteCodeGenerator2)this.Generator).GetStaticFuncMethod(Node.FuncNode);
+		if(Node.ResolvedFuncName != null) {
+			if(Node.ResolvedFuncType == null) {
 
-		if(sMethod != null) {
+			}
+			Method sMethod = ((JavaByteCodeGenerator2)this.Generator).GetStaticFuncMethod(Node.ResolvedFuncType.StringfySignature(Node.ResolvedFuncName));
 			this.EvalStaticMethod(Node, sMethod, ((JavaByteCodeGenerator2)this.Generator).PackNodes(null, Node.ParamList));
 		}
-		else if(Node.Type.IsFuncType()) {
-			sMethod = NativeMethodTable.GetStaticMethod("ApplyFunc");
-			this.EvalStaticMethod(Node, sMethod, ((JavaByteCodeGenerator2)this.Generator).PackNodes(Node.FuncNode, Node.ParamList));
-		}
 		else {
-			this.Unsupported(Node, "function call");
+			Method sMethod = NativeMethodTable.GetStaticMethod("InvokeFunc");
+			this.EvalStaticMethod(Node, sMethod, ((JavaByteCodeGenerator2)this.Generator).PackNodes(Node.FuncNode, Node.ParamList));
 		}
 	}
 

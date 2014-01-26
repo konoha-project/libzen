@@ -28,11 +28,15 @@ import java.util.ArrayList;
 
 import zen.deps.Field;
 import zen.lang.ZFunc;
+import zen.lang.ZFuncType;
 import zen.lang.ZSystem;
 import zen.lang.ZType;
 
 public abstract class ZApplyNode extends ZNode {
 	@Field public ArrayList<ZNode>  ParamList = new ArrayList<ZNode>();
+	@Field public String ResolvedFuncName = null;
+	@Field public ZFuncType ResolvedFuncType = null;
+
 	@Field public ZFunc ResolvedFunc = null;
 	public ZApplyNode() {
 		super();
