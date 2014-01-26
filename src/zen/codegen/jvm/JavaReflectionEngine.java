@@ -53,7 +53,7 @@ import zen.lang.ZenTypeChecker;
 
 public class JavaReflectionEngine extends ZenEngine {
 
-	JavaReflectionEngine(ZenTypeChecker TypeChecker, JavaByteCodeGenerator2 Generator) {
+	JavaReflectionEngine(ZenTypeChecker TypeChecker, Java6ByteCodeGenerator Generator) {
 		super(TypeChecker, Generator);
 	}
 
@@ -163,9 +163,9 @@ public class JavaReflectionEngine extends ZenEngine {
 	//	}
 
 	@Override public void VisitMethodCallNode(ZMethodCallNode Node) {
-		Method jMethod = ((JavaByteCodeGenerator2)this.Generator).GetMethod(Node.RecvNode.Type, Node.MethodName, Node.ParamList);
+		Method jMethod = ((Java6ByteCodeGenerator)this.Generator).GetMethod(Node.RecvNode.Type, Node.MethodName, Node.ParamList);
 		if(jMethod != null) {
-			this.EvalMethod(Node, jMethod, Node.RecvNode, ((JavaByteCodeGenerator2)this.Generator).PackNodes(null, Node.ParamList));
+			this.EvalMethod(Node, jMethod, Node.RecvNode, ((Java6ByteCodeGenerator)this.Generator).PackNodes(null, Node.ParamList));
 		}
 		else {
 			jMethod = NativeMethodTable.GetStaticMethod("InvokeUnresolvedMethod");
@@ -193,12 +193,12 @@ public class JavaReflectionEngine extends ZenEngine {
 			if(Node.ResolvedFuncType == null) {
 
 			}
-			Method sMethod = ((JavaByteCodeGenerator2)this.Generator).GetStaticFuncMethod(Node.ResolvedFuncType.StringfySignature(Node.ResolvedFuncName));
-			this.EvalStaticMethod(Node, sMethod, ((JavaByteCodeGenerator2)this.Generator).PackNodes(null, Node.ParamList));
+			Method sMethod = ((Java6ByteCodeGenerator)this.Generator).GetStaticFuncMethod(Node.ResolvedFuncType.StringfySignature(Node.ResolvedFuncName));
+			this.EvalStaticMethod(Node, sMethod, ((Java6ByteCodeGenerator)this.Generator).PackNodes(null, Node.ParamList));
 		}
 		else {
 			Method sMethod = NativeMethodTable.GetStaticMethod("InvokeFunc");
-			this.EvalStaticMethod(Node, sMethod, ((JavaByteCodeGenerator2)this.Generator).PackNodes(Node.FuncNode, Node.ParamList));
+			this.EvalStaticMethod(Node, sMethod, ((Java6ByteCodeGenerator)this.Generator).PackNodes(Node.FuncNode, Node.ParamList));
 		}
 	}
 

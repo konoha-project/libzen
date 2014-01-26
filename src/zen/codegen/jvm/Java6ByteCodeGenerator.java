@@ -109,13 +109,13 @@ import zen.lang.ZenEngine;
 import zen.lang.ZenTypeInfer;
 import zen.parser.ZGenerator;
 
-public class JavaByteCodeGenerator2 extends ZGenerator {
+public class Java6ByteCodeGenerator extends ZGenerator {
 	JMethodBuilder2 CurrentBuilder;
 	JClassLoader ClassLoader = null;
 	ArrayList<TryCatchLabel> TryCatchLabel;
 	private final ZenMap<Method> FuncMap = new ZenMap<Method>(null);
 
-	public JavaByteCodeGenerator2() {
+	public Java6ByteCodeGenerator() {
 		super("java", "1.6");
 		this.TryCatchLabel = new ArrayList<TryCatchLabel>();
 		this.ClassLoader = new JClassLoader(this);

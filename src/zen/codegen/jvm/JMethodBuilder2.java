@@ -24,14 +24,14 @@ import zen.lang.ZSystem;
 public class JMethodBuilder2 extends MethodNode {
 
 	final JMethodBuilder2          Parent;
-	final JavaByteCodeGenerator2   Generator;
+	final Java6ByteCodeGenerator   Generator;
 	ArrayList<JLocalVarStack>     LocalVals;
 	int                           LocalSize;
 	Stack<Label>                  BreakLabelStack;
 	Stack<Label>                  ContinueLabelStack;
 	int PreviousLine;
 
-	public JMethodBuilder2(int acc, String Name, String Desc, JavaByteCodeGenerator2 Generator, JMethodBuilder2 Parent) {
+	public JMethodBuilder2(int acc, String Name, String Desc, Java6ByteCodeGenerator Generator, JMethodBuilder2 Parent) {
 		super(acc, Name, Desc, null, null);
 		this.Parent = Parent;
 		this.Generator = Generator;
