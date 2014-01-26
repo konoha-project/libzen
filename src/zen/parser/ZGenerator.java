@@ -29,6 +29,7 @@ import java.util.ArrayList;
 
 import zen.ast.ZNode;
 import zen.deps.Field;
+import zen.lang.ZFuncType;
 import zen.lang.ZSystem;
 import zen.lang.ZType;
 import zen.lang.ZenEngine;
@@ -93,8 +94,8 @@ public abstract class ZGenerator extends ZVisitor {
 		return ZSystem.VarType;     // undefined
 	}
 
-	public ZType GetMethodFuncType(ZType RecvType, String MethodName, ArrayList<ZNode> ParamList) {
-		return ZSystem.VarType;     // undefined
+	public ZFuncType GetMethodFuncType(ZType RecvType, String MethodName, ArrayList<ZNode> ParamList) {
+		return null;     // undefined
 	}
 
 }

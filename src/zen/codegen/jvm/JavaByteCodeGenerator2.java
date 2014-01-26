@@ -231,13 +231,13 @@ public class JavaByteCodeGenerator2 extends ZGenerator {
 		return null;
 	}
 
-	@Override public ZType GetMethodFuncType(ZType RecvType, String MethodName, ArrayList<ZNode> ParamList) {
+	@Override public ZFuncType GetMethodFuncType(ZType RecvType, String MethodName, ArrayList<ZNode> ParamList) {
 		Method jMethod = this.GetMethod(RecvType, MethodName, ParamList);
 		if(jMethod != null) {
 			//this.Debug("matched: " + jMethod);
 			return NativeTypeTable.ConvertToFuncType(jMethod);
 		}
-		return ZSystem.VarType;
+		return null;
 	}
 
 	@Override public void VisitEmptyNode(ZEmptyNode Node) {

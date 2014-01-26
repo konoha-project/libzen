@@ -28,7 +28,6 @@ package zen.lang;
 
 import java.util.ArrayList;
 
-import zen.ast.ZApplyNode;
 import zen.ast.ZBooleanNode;
 import zen.ast.ZCastNode;
 import zen.ast.ZErrorNode;
@@ -225,40 +224,19 @@ public abstract class ZenTypeChecker extends ZVisitor {
 	//			i = i + 1;
 	//		}
 	//	}
-
-	protected ZFunc InferFuncType(ZNameSpace NameSpace, String FuncName, ZType FuncType, ZToken SourceToken) {
-		if(FuncType.IsCompleteFunc(false)) {
-			@Var ZNameSpace RootNameSpace = NameSpace.GetRootNameSpace();
-			@Var String Signature = FuncType.StringfySignature(FuncName);
-			LibNative.Assert(!RootNameSpace.HasSymbol(Signature));
-			@Var ZFunc Func = new ZSignature(0, FuncName, (ZFuncType)FuncType, SourceToken);
-			RootNameSpace.SetSymbol(Signature, Func, null);
-			Func.Used();
-			return Func;
-		}
-		return null;
-	}
-
-	protected ZType GuessFuncType(ZNameSpace NameSpace, String FuncName, ZApplyNode Node, ZType ContextFuncType) {
-		if(Node.ResolvedFunc == null) {
-			@Var int FuncParamSize = Node.ParamList.size();
-			@Var ZType RecvType = Node.GetRecvType();
-			@Var String Signature = ZFunc.StringfySignature(FuncName, FuncParamSize, RecvType);
-			@Var ZFunc Func = ZenGamma.GetFunc(NameSpace, Signature, null);
-			if(Func != null) {
-				Node.ResolvedFunc = Func;
-				Node.ResolvedFunc.Used();
-				return Node.ResolvedFunc.GetFuncType();
-			}
-			//			Node.ResolvedFunc = this.InferFuncType(NameSpace, FuncName, ContextFuncType, Node.SourceToken);
-		}
-		if(Node.ResolvedFunc == null) {
-			//this.Debug("unfound function call: " + FuncName + ", " + ContextFuncType);
-			return ContextFuncType;
-		}
-		return Node.ResolvedFunc.FuncType;
-	}
-
+	//
+	//	protected ZFunc InferFuncType(ZNameSpace NameSpace, String FuncName, ZType FuncType, ZToken SourceToken) {
+	//		if(FuncType.IsCompleteFunc(false)) {
+	//			@Var ZNameSpace RootNameSpace = NameSpace.GetRootNameSpace();
+	//			@Var String Signature = FuncType.StringfySignature(FuncName);
+	//			LibNative.Assert(!RootNameSpace.HasSymbol(Signature));
+	//			@Var ZFunc Func = new ZSignature(0, FuncName, (ZFuncType)FuncType, SourceToken);
+	//			RootNameSpace.SetSymbol(Signature, Func, null);
+	//			Func.Used();
+	//			return Func;
+	//		}
+	//		return null;
+	//	}
 
 	public final ZNode TypeCheck(ZNode Node, ZNameSpace NameSpace, ZType ContextType, int TypeCheckPolicy) {
 		if(this.IsVisitable()) {

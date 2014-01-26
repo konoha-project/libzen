@@ -25,6 +25,8 @@
 package zen.ast;
 
 import zen.deps.Field;
+import zen.deps.Var;
+import zen.lang.ZFunc;
 import zen.lang.ZType;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
@@ -44,4 +46,32 @@ public final class ZMethodCallNode extends ZApplyNode {
 
 		return null;
 	}
+
+	public final ZFuncCallNode ToGetterFuncCall() {
+		ZGetterNode Getter = new ZGetterNode(this.SourceToken, this.RecvNode, this.MethodName);
+		ZFuncCallNode FuncNode = new ZFuncCallNode(Getter);
+		FuncNode.SourceToken = this.SourceToken;
+		@Var int i = 0;
+		while(i < this.ParamList.size()) {
+			FuncNode.Append(this.ParamList.get(i));
+			i = i + 1;
+		}
+		return FuncNode;
+	}
+
+	public final ZFuncCallNode ToStaticFuncCall(ZFunc Func) {
+		ZGetLocalNode Dummy = new ZGetLocalNode(this.SourceToken, Func.FuncName);
+		ZFuncCallNode FuncNode = new ZFuncCallNode(Dummy);
+		FuncNode.SourceToken = this.SourceToken;
+		FuncNode.Append(this.RecvNode);
+		@Var int i = 0;
+		while(i < this.ParamList.size()) {
+			FuncNode.Append(this.ParamList.get(i));
+			i = i + 1;
+		}
+		FuncNode.ResolvedFuncName = Func.FuncName;
+		FuncNode.ResolvedFuncType = Func.GetFuncType();
+		return FuncNode;
+	}
+
 }
