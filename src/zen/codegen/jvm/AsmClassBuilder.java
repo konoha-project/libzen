@@ -14,7 +14,7 @@ import org.objectweb.asm.tree.MethodNode;
 
 import zen.deps.LibNative;
 
-class JClassBuilder {
+class AsmClassBuilder {
 	final int ClassQualifer;
 	final String SourceFile;
 	final String ClassName;
@@ -22,7 +22,7 @@ class JClassBuilder {
 	final ArrayList<MethodNode> MethodList = new ArrayList<MethodNode>();
 	final ArrayList<FieldNode> FieldList = new ArrayList<FieldNode>();
 
-	JClassBuilder(int ClassQualifer, String SourceFile, String ClassName, String SuperClass) {
+	AsmClassBuilder(int ClassQualifer, String SourceFile, String ClassName, String SuperClass) {
 		this.ClassQualifer = ClassQualifer;
 		this.SourceFile = SourceFile;
 		this.ClassName = ClassName;

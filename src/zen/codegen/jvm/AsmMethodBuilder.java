@@ -6,6 +6,7 @@ import static org.objectweb.asm.Opcodes.CHECKCAST;
 import static org.objectweb.asm.Opcodes.DUP;
 import static org.objectweb.asm.Opcodes.ILOAD;
 import static org.objectweb.asm.Opcodes.INVOKESTATIC;
+import static org.objectweb.asm.Opcodes.INVOKEVIRTUAL;
 import static org.objectweb.asm.Opcodes.ISTORE;
 
 import java.lang.reflect.Method;
@@ -21,9 +22,9 @@ import zen.deps.NativeTypeTable;
 import zen.lang.ZFuncType;
 import zen.lang.ZSystem;
 
-public class JMethodBuilder2 extends MethodNode {
+public class AsmMethodBuilder extends MethodNode {
 
-	final JMethodBuilder2          Parent;
+	final AsmMethodBuilder          Parent;
 	final Java6ByteCodeGenerator   Generator;
 	ArrayList<JLocalVarStack>     LocalVals;
 	int                           LocalSize;
@@ -31,7 +32,7 @@ public class JMethodBuilder2 extends MethodNode {
 	Stack<Label>                  ContinueLabelStack;
 	int PreviousLine;
 
-	public JMethodBuilder2(int acc, String Name, String Desc, Java6ByteCodeGenerator Generator, JMethodBuilder2 Parent) {
+	public AsmMethodBuilder(int acc, String Name, String Desc, Java6ByteCodeGenerator Generator, AsmMethodBuilder Parent) {
 		super(acc, Name, Desc, null, null);
 		this.Parent = Parent;
 		this.Generator = Generator;
@@ -166,6 +167,18 @@ public class JMethodBuilder2 extends MethodNode {
 		}
 		String owner = "C" + FuncType.StringfySignature(FuncName);
 		this.visitMethodInsn(INVOKESTATIC, owner, FuncName, AsmClassLoader.GetMethodDescriptor(FuncType));
+		//this.CheckReturnCast(Node, FuncType.GetReturnType());
+	}
+
+	void ApplyFuncObject(ZNode Node, Class<?> FuncClass, ZNode FuncNode, ZFuncType FuncType, ZNode[] Nodes) {
+		this.PushNode(FuncClass, FuncNode);
+		if(Nodes != null) {
+			for(int i = 0; i < Nodes.length; i++) {
+				this.PushNode(null, Nodes[i]);
+			}
+		}
+		String owner = Type.getInternalName(FuncClass);
+		this.visitMethodInsn(INVOKEVIRTUAL, owner, "Invoke", AsmClassLoader.GetMethodDescriptor(FuncType));
 		//this.CheckReturnCast(Node, FuncType.GetReturnType());
 	}
 

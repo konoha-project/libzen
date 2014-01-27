@@ -144,6 +144,7 @@ public class NativeMethodTable {
 		Import(Object.class, CastApi.class, "toDouble");
 		Import(double.class, CastApi.class, "toDouble");
 
+		Import(OpApi.class, "ThrowError", String.class);
 		Import(OpApi.class, "GetField", Object.class, String.class);
 		Import(OpApi.class, "SetField", Object.class, String.class, Object.class);
 		Import(OpApi.class, "InvokeUnresolvedMethod", Object.class, String.class, Object[].class);

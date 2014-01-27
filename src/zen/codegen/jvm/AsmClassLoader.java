@@ -27,13 +27,13 @@ import zen.parser.ZNameSpace;
 import zen.parser.ZTokenContext;
 
 class AsmClassLoader extends ClassLoader {
-	final HashMap<String,JClassBuilder> ByteCodeMap;
+	final HashMap<String,AsmClassBuilder> ByteCodeMap;
 	//	final String GlobalStaticClassName;
 	//	final String ContextFieldName;
 	//	final String GontextDescripter;
 
 	public AsmClassLoader(ZGenerator Generator) {
-		this.ByteCodeMap = new HashMap<String, JClassBuilder>();
+		this.ByteCodeMap = new HashMap<String, AsmClassBuilder>();
 		this.InitFuncClass();
 
 		//		this.GlobalStaticClassName = "Global$" + 0/*Context.ParserId*/;
@@ -55,7 +55,7 @@ class AsmClassLoader extends ClassLoader {
 
 
 
-	private void AddClassBuilder(JClassBuilder ClassBuilder) {
+	private void AddClassBuilder(AsmClassBuilder ClassBuilder) {
 		this.ByteCodeMap.put(ClassBuilder.ClassName, ClassBuilder);
 	}
 
@@ -85,7 +85,7 @@ class AsmClassLoader extends ClassLoader {
 		String ClassName = FuncClassName(FuncType);
 		Class<?> FuncClass = this.FuncClassMap.get(ClassName);
 		if(FuncClass == null) {
-			@Var JClassBuilder cb = new JClassBuilder(ACC_PUBLIC| ACC_ABSTRACT, null, ClassName, "java/lang/Object");
+			@Var AsmClassBuilder cb = new AsmClassBuilder(ACC_PUBLIC| ACC_ABSTRACT, null, ClassName, "java/lang/Object");
 			String Desc = AsmClassLoader.GetMethodDescriptor(FuncType);
 			MethodNode InvokeMethod = new MethodNode(ACC_PUBLIC | ACC_ABSTRACT, "Invoke", Desc, null, null);
 			cb.AddMethod(InvokeMethod);
@@ -96,10 +96,10 @@ class AsmClassLoader extends ClassLoader {
 		return FuncClass;
 	}
 
-	JClassBuilder NewFunctionHolderClass(ZNode Node, String FuncName, ZFuncType FuncType) {
+	AsmClassBuilder NewFunctionHolderClass(ZNode Node, String FuncName, ZFuncType FuncType) {
 		@Var String SourceFile = ZSystem.GetSourceFileName(Node.SourceToken.FileLine);
 		Class<?> FuncClass = this.LoadFuncClass(FuncType);
-		@Var JClassBuilder cb = new JClassBuilder(ACC_PUBLIC|ACC_FINAL, SourceFile, "C"+ FuncName, Type.getInternalName(FuncClass));
+		@Var AsmClassBuilder cb = new AsmClassBuilder(ACC_PUBLIC|ACC_FINAL, SourceFile, "C"+ FuncName, Type.getInternalName(FuncClass));
 		this.AddClassBuilder(cb);
 		String FuncTypeDesc = AsmClassLoader.GetMethodDescriptor(FuncType);
 		MethodNode InvokeMethod = new MethodNode(ACC_PUBLIC, "Invoke", FuncTypeDesc, null, null);
@@ -124,16 +124,16 @@ class AsmClassLoader extends ClassLoader {
 	}
 
 
-	JClassBuilder NewClass(ZNode Node, String ClassName, ZType SuperType) {
+	AsmClassBuilder NewClass(ZNode Node, String ClassName, ZType SuperType) {
 		@Var String SourceFile = ZSystem.GetSourceFileName(Node.SourceToken.FileLine);
-		@Var JClassBuilder cb = new JClassBuilder(ACC_PUBLIC, SourceFile, ClassName, "java/lang/Object" /*FIXME*/);
+		@Var AsmClassBuilder cb = new AsmClassBuilder(ACC_PUBLIC, SourceFile, ClassName, "java/lang/Object" /*FIXME*/);
 		this.AddClassBuilder(cb);
 		return cb;
 	}
 
 
 	@Override protected Class<?> findClass(String name) {
-		JClassBuilder cb = this.ByteCodeMap.get(name);
+		AsmClassBuilder cb = this.ByteCodeMap.get(name);
 		if(cb != null) {
 			byte[] b = cb.GenerateBytecode();
 			this.ByteCodeMap.remove(name);

@@ -257,6 +257,12 @@ public final class OpApi {
 	}
 
 
+
+
+	public static Object ThrowError(String Message) {
+		throw new SoftwareFaultException("SoftwareFault: " + Message);
+	}
+
 	public static Object GetIndex(Object x, Object y) {
 		if(x instanceof String && y instanceof Number) {
 			@Var String s = (String)x;
@@ -318,6 +324,7 @@ public final class OpApi {
 			throw new SoftwareFaultException("mismatched method " + name + " of " + x.getClass().getSimpleName());
 		}
 	}
+
 
 
 }

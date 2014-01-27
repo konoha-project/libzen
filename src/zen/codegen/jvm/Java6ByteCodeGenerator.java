@@ -29,17 +29,13 @@ package zen.codegen.jvm;
 import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
 import static org.objectweb.asm.Opcodes.ACC_STATIC;
 import static org.objectweb.asm.Opcodes.ACONST_NULL;
-import static org.objectweb.asm.Opcodes.ATHROW;
-import static org.objectweb.asm.Opcodes.DUP;
 import static org.objectweb.asm.Opcodes.GETFIELD;
 import static org.objectweb.asm.Opcodes.GOTO;
 import static org.objectweb.asm.Opcodes.IFEQ;
 import static org.objectweb.asm.Opcodes.IFNE;
 import static org.objectweb.asm.Opcodes.INVOKEINTERFACE;
-import static org.objectweb.asm.Opcodes.INVOKESPECIAL;
 import static org.objectweb.asm.Opcodes.INVOKEVIRTUAL;
 import static org.objectweb.asm.Opcodes.IRETURN;
-import static org.objectweb.asm.Opcodes.NEW;
 import static org.objectweb.asm.Opcodes.PUTFIELD;
 import static org.objectweb.asm.Opcodes.RETURN;
 
@@ -110,7 +106,7 @@ import zen.lang.ZenTypeInfer;
 import zen.parser.ZGenerator;
 
 public class Java6ByteCodeGenerator extends ZGenerator {
-	JMethodBuilder2 CurrentBuilder;
+	AsmMethodBuilder CurrentBuilder;
 	AsmClassLoader ClassLoader = null;
 	ArrayList<TryCatchLabel> TryCatchLabel;
 	private final ZenMap<Method> FuncMap = new ZenMap<Method>(null);
@@ -407,7 +403,15 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 			this.CurrentBuilder.ApplyFuncName(Node, Node.ResolvedFuncName, Node.ResolvedFuncType, Nodes);
 		}
 		else {
-			this.Debug("TODO");
+			if(Node.FuncNode.Type.IsFuncType()) {
+				ZFuncType FuncType = (ZFuncType)Node.FuncNode.Type;
+				Class<?> FuncClass = this.ClassLoader.LoadFuncClass(FuncType);
+				ZNode[] Nodes = this.PackNodes(null, Node.ParamList);
+				this.CurrentBuilder.ApplyFuncObject(Node, FuncClass, Node.FuncNode, FuncType, Nodes);
+			}
+			else {
+
+			}
 		}
 	}
 
@@ -616,10 +620,10 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 	@Override public void VisitFuncDeclNode(ZFuncDeclNode Node) {
 		@Var String FuncName = Node.ReferenceName;
 		@Var ZFuncType FuncType = Node.GetFuncType(null);
-		@Var JClassBuilder  HolderClass = this.ClassLoader.NewFunctionHolderClass(Node, FuncName, FuncType);
+		@Var AsmClassBuilder  HolderClass = this.ClassLoader.NewFunctionHolderClass(Node, FuncName, FuncType);
 		@Var String MethodDesc = AsmClassLoader.GetMethodDescriptor(FuncType);
 		//System.out.println("*** " + MethodDesc);
-		this.CurrentBuilder = new JMethodBuilder2(ACC_PUBLIC | ACC_STATIC, Node.FuncName, MethodDesc, this, this.CurrentBuilder);
+		this.CurrentBuilder = new AsmMethodBuilder(ACC_PUBLIC | ACC_STATIC, Node.FuncName, MethodDesc, this, this.CurrentBuilder);
 		HolderClass.AddMethod(this.CurrentBuilder);
 		for(int i = 0; i < Node.ArgumentList.size(); i++) {
 			ZParamNode ParamNode =(ZParamNode)Node.ArgumentList.get(i);
@@ -642,7 +646,7 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 	}
 
 	@Override public void VisitClassDeclNode(ZClassDeclNode Node) {
-		@Var JClassBuilder ClassBuilder = this.ClassLoader.NewClass(Node, Node.ClassName, Node.SuperType);
+		@Var AsmClassBuilder ClassBuilder = this.ClassLoader.NewClass(Node, Node.ClassName, Node.SuperType);
 		for(@Var int i = 0; i < Node.FieldList.size(); i++) {
 			@Var ZFieldNode Field = Node.FieldList.get(i);
 			if(Field.ClassType.Equals(Node.ClassType)) {
@@ -653,13 +657,17 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 	}
 
 	@Override public void VisitErrorNode(ZErrorNode Node) {
-		String name = Type.getInternalName(SoftwareFaultException.class);
-		this.CurrentBuilder.SetLineNumber(Node);
-		this.CurrentBuilder.visitTypeInsn(NEW, name);
-		this.CurrentBuilder.visitInsn(DUP);
-		this.CurrentBuilder.LoadConst(Node.ErrorMessage);
-		this.CurrentBuilder.visitMethodInsn(INVOKESPECIAL, name, "<init>", "(Ljava/lang/Object;)V");
-		this.CurrentBuilder.visitInsn(ATHROW);
+		String Message = this.Logger.ReportError(Node.SourceToken, Node.ErrorMessage);
+		this.CurrentBuilder.LoadConst(Message);
+		Method sMethod = NativeMethodTable.GetStaticMethod("ThrowError");
+		this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, null);
+		//		String name = Type.getInternalName(SoftwareFaultException.class);
+		//		this.CurrentBuilder.SetLineNumber(Node);
+		//		this.CurrentBuilder.visitTypeInsn(NEW, name);
+		//		this.CurrentBuilder.visitInsn(DUP);
+		//		this.CurrentBuilder.LoadConst(Node.ErrorMessage);
+		//		this.CurrentBuilder.visitMethodInsn(INVOKESPECIAL, name, "<init>", "(Ljava/lang/Object;)V");
+		//		this.CurrentBuilder.visitInsn(ATHROW);
 	}
 
 	public Method GetStaticFuncMethod(String FuncName) {
