@@ -165,7 +165,7 @@ public class JMethodBuilder2 extends MethodNode {
 			}
 		}
 		String owner = "C" + FuncType.StringfySignature(FuncName);
-		this.visitMethodInsn(INVOKESTATIC, owner, FuncName, this.Generator.GetMethodDescriptor(FuncType));
+		this.visitMethodInsn(INVOKESTATIC, owner, FuncName, AsmClassLoader.GetMethodDescriptor(FuncType));
 		//this.CheckReturnCast(Node, FuncType.GetReturnType());
 	}
 

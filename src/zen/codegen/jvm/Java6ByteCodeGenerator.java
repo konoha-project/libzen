@@ -111,14 +111,14 @@ import zen.parser.ZGenerator;
 
 public class Java6ByteCodeGenerator extends ZGenerator {
 	JMethodBuilder2 CurrentBuilder;
-	JClassLoader ClassLoader = null;
+	AsmClassLoader ClassLoader = null;
 	ArrayList<TryCatchLabel> TryCatchLabel;
 	private final ZenMap<Method> FuncMap = new ZenMap<Method>(null);
 
 	public Java6ByteCodeGenerator() {
 		super("java", "1.6");
 		this.TryCatchLabel = new ArrayList<TryCatchLabel>();
-		this.ClassLoader = new JClassLoader(this);
+		this.ClassLoader = new AsmClassLoader(this);
 	}
 
 	@Override public ZenEngine GetEngine() {
@@ -131,27 +131,6 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 		}
 		Node.Accept(this);
 		return true;
-	}
-
-	private String GetTypeDesc(ZType zType) {
-		Class<?> JClass = NativeTypeTable.GetJavaClass(zType);
-		return Type.getDescriptor(JClass);
-	}
-
-	Type GetAsmType(ZType zType) {
-		return Type.getType(NativeTypeTable.GetJavaClass(zType));
-	}
-
-	String GetMethodDescriptor(ZFuncType FuncType) {
-		@Var Type ReturnType = this.GetAsmType(FuncType.GetReturnType());
-		@Var Type[] ArgTypes = new Type[FuncType.GetFuncParamSize()];
-		for(int i = 0; i < ArgTypes.length; i++) {
-			ZType ParamType = FuncType.GetParamType(i);
-			ArgTypes[i] = this.GetAsmType(ParamType);
-		}
-		String Desc = Type.getMethodDescriptor(ReturnType, ArgTypes);
-		//this.Debug("Desc: " + Desc + ", FuncType: " + FuncType);
-		return Desc;
 	}
 
 	private Object GetConstValue(ZNode Node) {
@@ -537,7 +516,7 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 	@Override public void VisitReturnNode(ZReturnNode Node) {
 		if(Node.ValueNode != null) {
 			Node.ValueNode.Accept(this);
-			Type type = this.GetAsmType(Node.ValueNode.Type);
+			Type type = AsmClassLoader.GetAsmType(Node.ValueNode.Type);
 			this.CurrentBuilder.visitInsn(type.getOpcode(IRETURN));
 		}
 		else {
@@ -610,7 +589,7 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 
 		// prepare
 		//TODO: add exception class name
-		String throwType = this.GetAsmType(Node.ExceptionType).getInternalName();
+		String throwType = AsmClassLoader.GetAsmType(Node.ExceptionType).getInternalName();
 		mv.visitTryCatchBlock(Label.beginTryLabel, Label.endTryLabel, catchLabel, throwType);
 
 		// catch block
@@ -636,9 +615,9 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 
 	@Override public void VisitFuncDeclNode(ZFuncDeclNode Node) {
 		@Var String FuncName = Node.ReferenceName;
-		@Var JClassBuilder  HolderClass = this.ClassLoader.NewFunctionHolderClass(Node, FuncName);
 		@Var ZFuncType FuncType = Node.GetFuncType(null);
-		@Var String MethodDesc = this.GetMethodDescriptor(FuncType);
+		@Var JClassBuilder  HolderClass = this.ClassLoader.NewFunctionHolderClass(Node, FuncName, FuncType);
+		@Var String MethodDesc = AsmClassLoader.GetMethodDescriptor(FuncType);
 		//System.out.println("*** " + MethodDesc);
 		this.CurrentBuilder = new JMethodBuilder2(ACC_PUBLIC | ACC_STATIC, Node.FuncName, MethodDesc, this, this.CurrentBuilder);
 		HolderClass.AddMethod(this.CurrentBuilder);
@@ -667,7 +646,7 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 		for(@Var int i = 0; i < Node.FieldList.size(); i++) {
 			@Var ZFieldNode Field = Node.FieldList.get(i);
 			if(Field.ClassType.Equals(Node.ClassType)) {
-				@Var FieldNode fn = new FieldNode(ACC_PUBLIC, Field.FieldName, this.GetTypeDesc(Field.DeclType), null, this.GetConstValue(Field.InitNode));
+				@Var FieldNode fn = new FieldNode(ACC_PUBLIC, Field.FieldName, AsmClassLoader.GetTypeDesc(Field.DeclType), null, this.GetConstValue(Field.InitNode));
 				ClassBuilder.AddField(fn);
 			}
 		}
