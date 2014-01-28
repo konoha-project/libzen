@@ -189,10 +189,11 @@ public class LibNative {
 		try {
 			Method JavaMethod = Visitor.getClass().getMethod(Node.GetVisitName(), Node.getClass());
 			JavaMethod.invoke(Visitor, Node);
+		} catch (NoSuchMethodException e) {
+			System.err.println("Visitor:" + Visitor.getClass().getSimpleName() + " do not support for " + Node.getClass().getSimpleName());
 		} catch (Exception e) {
 			LibNative.FixMe(e);
 		}
-		LibNative.println("unsupported syntax: " + Node.SourceToken.ParsedText + " " + Node.getClass());
 	}
 
 	private final static ZenMap<Class<?>> GenMap = new ZenMap<Class<?>>(null);

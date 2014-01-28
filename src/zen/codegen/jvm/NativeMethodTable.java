@@ -92,6 +92,9 @@ public class NativeMethodTable {
 		Import(ZSystem.StringType, "+", ZSystem.StringType, OpApi.class, "Add");
 		Import(ZSystem.StringType, "==", ZSystem.StringType, OpApi.class, "Equals");
 		Import(ZSystem.StringType, "!=", ZSystem.StringType, OpApi.class, "NotEquals");
+		Import(ZSystem.StringType, "[]", ZSystem.IntType, OpApi.class, "GetIndex");
+
+		Import(ZSystem.ArrayType, "[]", ZSystem.IntType, OpApi.class, "GetIndex");
 
 		Import(boolean.class, CastApi.class, "toObject");
 		Import(byte.class, CastApi.class, "toObject");

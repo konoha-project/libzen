@@ -102,6 +102,12 @@ public abstract class ZenTypeChecker extends ZVisitor {
 		return this.StackedContextType;
 	}
 
+	public final void TypedNode(ZNode Node) {
+		if(this.IsVisitable()) {
+			this.StackedTypedNode = Node;
+		}
+	}
+
 	public final void TypedNode(ZNode Node, ZType Type) {
 		if(this.IsVisitable()) {
 			Node.Type = Type;

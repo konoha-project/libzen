@@ -25,6 +25,7 @@
 package zen.ast;
 
 import zen.deps.Field;
+import zen.lang.ZSystem;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 
@@ -32,6 +33,7 @@ public final class ZIntNode extends ZConstNode {
 	@Field public long	IntValue;
 	public ZIntNode(ZToken Token, long Value) {
 		super(Token);
+		this.Type = ZSystem.IntType;
 		this.IntValue = Value;
 	}
 	@Override public final Object GetValue() {

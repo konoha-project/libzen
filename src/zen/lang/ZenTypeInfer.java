@@ -78,7 +78,6 @@ import zen.deps.Nullable;
 import zen.deps.Var;
 import zen.parser.ZLogger;
 import zen.parser.ZNameSpace;
-import zen.parser.ZNodeUtils;
 import zen.parser.ZToken;
 import zen.parser.ZUtils;
 
@@ -244,22 +243,18 @@ public class ZenTypeInfer extends ZenTypeChecker {
 
 	@Override public void VisitGetLocalNode(ZGetLocalNode Node) {
 		@Var ZNameSpace NameSpace = this.GetNameSpace();
-		@Var ZType ContextType = this.GetContextType();
 		@Var ZenVariable VarInfo = this.GetLocalVariable(NameSpace, Node.VarName);
 		if(VarInfo != null) {
-			@Var ZType VarType = ZSystem.VarType;
 			Node.VarName = VarInfo.VarName;
 			Node.VarIndex = VarInfo.VarUniqueIndex;
-			VarType = VarInfo.VarType;
+			@Var ZType VarType = VarInfo.VarType;
 			Node.IsCaptured = VarInfo.IsCaptured(NameSpace);
 			this.TypedNode(Node, VarType);
 		}
 		else {
-			@Var Object Value = NameSpace.GetSymbol(Node.VarName);
-			if(Value != null) {
-				@Var ZNode NewNode = ZNodeUtils.CreateConstNode(Node.SourceToken, Value);
-				NewNode = this.TypeCheck(NewNode, NameSpace, ContextType, 0);
-				this.TypedNode(NewNode, NewNode.Type);
+			@Var ZNode ConstNode = NameSpace.GetSymbolNode(Node.VarName, Node.SourceToken);
+			if(ConstNode != null) {
+				this.TypedNode(ConstNode);
 			}
 			else {
 				this.TypedNode(Node, ZSystem.VarType);

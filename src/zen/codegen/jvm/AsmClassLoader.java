@@ -2,16 +2,24 @@ package zen.codegen.jvm;
 
 import static org.objectweb.asm.Opcodes.ACC_ABSTRACT;
 import static org.objectweb.asm.Opcodes.ACC_FINAL;
+import static org.objectweb.asm.Opcodes.ACC_PRIVATE;
 import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
+import static org.objectweb.asm.Opcodes.ACC_STATIC;
+import static org.objectweb.asm.Opcodes.ALOAD;
+import static org.objectweb.asm.Opcodes.DUP;
 import static org.objectweb.asm.Opcodes.ILOAD;
+import static org.objectweb.asm.Opcodes.INVOKESPECIAL;
 import static org.objectweb.asm.Opcodes.INVOKESTATIC;
 import static org.objectweb.asm.Opcodes.IRETURN;
+import static org.objectweb.asm.Opcodes.NEW;
+import static org.objectweb.asm.Opcodes.PUTSTATIC;
 import static org.objectweb.asm.Opcodes.RETURN;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.objectweb.asm.Type;
+import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.MethodNode;
 
 import zen.ast.ZNode;
@@ -19,6 +27,7 @@ import zen.deps.IMatchFunc;
 import zen.deps.ITokenFunc;
 import zen.deps.NativeTypeTable;
 import zen.deps.Var;
+import zen.deps.ZenFunction;
 import zen.lang.ZFuncType;
 import zen.lang.ZSystem;
 import zen.lang.ZType;
@@ -85,10 +94,18 @@ class AsmClassLoader extends ClassLoader {
 		String ClassName = FuncClassName(FuncType);
 		Class<?> FuncClass = this.FuncClassMap.get(ClassName);
 		if(FuncClass == null) {
-			@Var AsmClassBuilder cb = new AsmClassBuilder(ACC_PUBLIC| ACC_ABSTRACT, null, ClassName, "java/lang/Object");
+			@Var String SuperClassName = Type.getInternalName(ZenFunction.class);
+			@Var AsmClassBuilder cb = new AsmClassBuilder(ACC_PUBLIC| ACC_ABSTRACT, null, ClassName, SuperClassName);
 			String Desc = AsmClassLoader.GetMethodDescriptor(FuncType);
 			MethodNode InvokeMethod = new MethodNode(ACC_PUBLIC | ACC_ABSTRACT, "Invoke", Desc, null, null);
 			cb.AddMethod(InvokeMethod);
+
+			MethodNode InitMethod = new MethodNode(ACC_PUBLIC, "<init>", "(Ljava/lang/String;)V", null, null);
+			InitMethod.visitVarInsn(ALOAD, 0);
+			InitMethod.visitVarInsn(ALOAD, 1);
+			InitMethod.visitMethodInsn(INVOKESPECIAL, SuperClassName, "<init>", "(Ljava/lang/String;)V");
+			InitMethod.visitInsn(RETURN);
+			cb.AddMethod(InitMethod);
 			this.AddClassBuilder(cb);
 			FuncClass = this.findClass(ClassName);
 			this.FuncClassMap.put(ClassName, FuncClass);
@@ -96,13 +113,13 @@ class AsmClassLoader extends ClassLoader {
 		return FuncClass;
 	}
 
-	AsmClassBuilder NewFunctionHolderClass(ZNode Node, String FuncName, ZFuncType FuncType) {
+	AsmClassBuilder NewFunctionHolderClass(ZNode Node, JvmFuncNode FuncNode, ZFuncType FuncType) {
 		@Var String SourceFile = ZSystem.GetSourceFileName(Node.SourceToken.FileLine);
 		Class<?> FuncClass = this.LoadFuncClass(FuncType);
-		@Var AsmClassBuilder cb = new AsmClassBuilder(ACC_PUBLIC|ACC_FINAL, SourceFile, "C"+ FuncName, Type.getInternalName(FuncClass));
+		@Var AsmClassBuilder cb = new AsmClassBuilder(ACC_PUBLIC|ACC_FINAL, SourceFile, FuncNode.ClassName, Type.getInternalName(FuncClass));
 		this.AddClassBuilder(cb);
 		String FuncTypeDesc = AsmClassLoader.GetMethodDescriptor(FuncType);
-		MethodNode InvokeMethod = new MethodNode(ACC_PUBLIC, "Invoke", FuncTypeDesc, null, null);
+		MethodNode InvokeMethod = new MethodNode(ACC_PUBLIC | ACC_FINAL, "Invoke", FuncTypeDesc, null, null);
 		int index = 1;
 		for(int i = 0; i < FuncType.GetFuncParamSize(); i++) {
 			Type AsmType = GetAsmType(FuncType.GetFuncParamType(i));
@@ -110,8 +127,7 @@ class AsmClassLoader extends ClassLoader {
 			index += AsmType.getSize();
 		}
 		//		String owner = "C" + FuncType.StringfySignature(FuncName);
-		String owner = "C" + FuncName;
-		InvokeMethod.visitMethodInsn(INVOKESTATIC, owner, FuncName, FuncTypeDesc);
+		InvokeMethod.visitMethodInsn(INVOKESTATIC, FuncNode.ClassName, FuncNode.FuncName, FuncTypeDesc);
 		if(FuncType.GetReturnType().IsVoidType()) {
 			InvokeMethod.visitInsn(RETURN);
 		}
@@ -120,6 +136,25 @@ class AsmClassLoader extends ClassLoader {
 			InvokeMethod.visitInsn(type.getOpcode(IRETURN));
 		}
 		cb.AddMethod(InvokeMethod);
+		FuncNode.FieldDesc = Type.getDescriptor(FuncClass);
+		FieldNode StaticField = new FieldNode(ACC_PUBLIC | ACC_STATIC | ACC_FINAL, "function", FuncNode.FieldDesc, null, null);
+		cb.AddField(StaticField);
+
+		// static init
+		MethodNode StaticInitMethod = new MethodNode(ACC_PUBLIC | ACC_STATIC , "<clinit>", "()V", null, null);
+		StaticInitMethod.visitTypeInsn(NEW, FuncNode.ClassName);
+		StaticInitMethod.visitInsn(DUP);
+		StaticInitMethod.visitMethodInsn(INVOKESPECIAL, FuncNode.ClassName, "<init>", "()V");
+		StaticInitMethod.visitFieldInsn(PUTSTATIC, FuncNode.ClassName, "function",  FuncNode.FieldDesc);
+		StaticInitMethod.visitInsn(RETURN);
+		cb.AddMethod(StaticInitMethod);
+
+		MethodNode InitMethod = new MethodNode(ACC_PRIVATE, "<init>", "()V", null, null);
+		InitMethod.visitVarInsn(ALOAD, 0);
+		InitMethod.visitLdcInsn(FuncNode.FuncName + ": " + FuncType);
+		InitMethod.visitMethodInsn(INVOKESPECIAL, Type.getInternalName(FuncClass), "<init>", "(Ljava/lang/String;)V");
+		InitMethod.visitInsn(RETURN);
+		cb.AddMethod(InitMethod);
 		return cb;
 	}
 

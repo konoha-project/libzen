@@ -26,6 +26,7 @@ package zen.codegen.jvm;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 
 import zen.deps.NativeTypeTable;
@@ -256,11 +257,21 @@ public final class OpApi {
 		return !Equals(x, y);
 	}
 
-
-
+	public static String GetIndex(String x, long y) {
+		return String.valueOf(x.charAt((int)y));
+	}
 
 	public static Object ThrowError(String Message) {
 		throw new SoftwareFaultException("SoftwareFault: " + Message);
+	}
+
+
+	public static <T> T GetIndex(ArrayList<T> x, long y) {
+		return x.get((int)y);
+	}
+
+	public static <T> void SetIndex(ArrayList<T> x, long y, T z) {
+		x.set((int)y, z);
 	}
 
 	public static Object GetIndex(Object x, Object y) {
@@ -278,15 +289,15 @@ public final class OpApi {
 		}
 		throw new RuntimeException("unsupported operator: " + t(x) + "[" + t(y) + "]");
 	}
-	public static void SetIndex(Object x, Object y, Object z) {
-		//		if(x instanceof ArrayList && y instanceof Number) {
-		//			@Var ArrayList<?> a = (ArrayList<?>)x;
-		//			return a.set(((Number)y).intValue(), z);
-		//		}
-		//		if(x instanceof ZenMap && y instanceof String) {
-		//			@Var ZenMap<?> m = (ZenMap<?>)x;
-		//			return m.put(y.toString(), z);
-		//		}
+	public static <T> void SetIndex(Object x, Object y, T z) {
+		if(x instanceof ArrayList && y instanceof Number) {
+			@Var ArrayList<T> a = (ArrayList<T>)x;
+			a.set(((Number)y).intValue(), z);
+		}
+		if(x instanceof ZenMap && y instanceof String) {
+			@Var ZenMap<T> m = (ZenMap<T>)x;
+			m.put(y.toString(), z);
+		}
 		throw new RuntimeException("unsupported operator: " + t(x) + "[" + t(y) + "]");
 	}
 

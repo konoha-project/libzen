@@ -25,6 +25,7 @@
 package zen.ast;
 
 import zen.deps.Field;
+import zen.lang.ZSystem;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 
@@ -32,6 +33,7 @@ public final class ZStringNode extends ZConstNode {
 	@Field public String	StringValue;
 	public ZStringNode(ZToken Token, String Value) {
 		super(Token);
+		this.Type = ZSystem.StringType;
 		this.StringValue = Value;
 	}
 	@Override public final Object GetValue() {

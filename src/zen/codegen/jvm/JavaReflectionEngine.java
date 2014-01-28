@@ -26,6 +26,7 @@
 
 package zen.codegen.jvm;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -37,6 +38,8 @@ import zen.ast.ZConstPoolNode;
 import zen.ast.ZEmptyNode;
 import zen.ast.ZFloatNode;
 import zen.ast.ZFuncCallNode;
+import zen.ast.ZGetIndexNode;
+import zen.ast.ZGetLocalNode;
 import zen.ast.ZGetterNode;
 import zen.ast.ZGroupNode;
 import zen.ast.ZIntNode;
@@ -48,6 +51,7 @@ import zen.ast.ZSetterNode;
 import zen.ast.ZStringNode;
 import zen.ast.ZUnaryNode;
 import zen.deps.LibNative;
+import zen.deps.Var;
 import zen.lang.ZenEngine;
 import zen.lang.ZenTypeChecker;
 
@@ -108,6 +112,16 @@ public class JavaReflectionEngine extends ZenEngine {
 		this.EvaledValue = Node.ConstValue;
 	}
 
+	public void VisitJvmFuncNode(JvmFuncNode Node) {
+		try {
+			Field f = Node.FuncClass.getField("function");
+			this.EvaledValue = f.get(null);
+		} catch (Exception e) {
+			LibNative.FixMe(e);
+			this.EvaledValue = null;
+		}
+	}
+
 	//	@Override public void VisitArrayLiteralNode(ZArrayLiteralNode Node) {
 	//		this.Unsupported(Node);
 	//	}
@@ -128,9 +142,17 @@ public class JavaReflectionEngine extends ZenEngine {
 	//		this.Unsupported(Node);
 	//	}
 	//
-	//	@Override public void VisitGetLocalNode(ZGetLocalNode Node) {
-	//		this.Unsupported(Node);
-	//	}
+
+	@Override public void VisitGetLocalNode(ZGetLocalNode Node) {
+		@Var ZNode Node1 = this.Generator.RootNameSpace.GetSymbolNode(Node.VarName, Node.SourceToken);
+		if(Node1 != null) {
+			this.EvaledValue = this.Eval(Node1);
+		}
+		else {
+			this.Unsupported(Node, "undefined symbol: " + Node.VarName);
+		}
+	}
+
 	//
 	//	@Override public void VisitSetLocalNode(ZSetLocalNode Node) {
 	//		this.Unsupported(Node);
@@ -152,11 +174,11 @@ public class JavaReflectionEngine extends ZenEngine {
 		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.RecvNode, NameNode, Node.ValueNode});
 	}
 
-	//	@Override
-	//	public void VisitGetIndexNode(ZGetIndexNode Node) {
-	//		this.Unsupported(Node);
-	//
-	//	}
+	@Override public void VisitGetIndexNode(ZGetIndexNode Node) {
+		Method sMethod = NativeMethodTable.GetBinaryStaticMethod(Node.RecvNode.Type, "[]", Node.IndexNode.Type);
+		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.RecvNode, Node.IndexNode});
+	}
+
 	//
 	//	@Override public void VisitSetIndexNode(ZSetIndexNode Node) {
 	//		this.Unsupported(Node);

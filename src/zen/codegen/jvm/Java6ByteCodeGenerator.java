@@ -29,13 +29,16 @@ package zen.codegen.jvm;
 import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
 import static org.objectweb.asm.Opcodes.ACC_STATIC;
 import static org.objectweb.asm.Opcodes.ACONST_NULL;
+import static org.objectweb.asm.Opcodes.DUP;
 import static org.objectweb.asm.Opcodes.GETFIELD;
 import static org.objectweb.asm.Opcodes.GOTO;
 import static org.objectweb.asm.Opcodes.IFEQ;
 import static org.objectweb.asm.Opcodes.IFNE;
 import static org.objectweb.asm.Opcodes.INVOKEINTERFACE;
+import static org.objectweb.asm.Opcodes.INVOKESPECIAL;
 import static org.objectweb.asm.Opcodes.INVOKEVIRTUAL;
 import static org.objectweb.asm.Opcodes.IRETURN;
+import static org.objectweb.asm.Opcodes.NEW;
 import static org.objectweb.asm.Opcodes.PUTFIELD;
 import static org.objectweb.asm.Opcodes.RETURN;
 
@@ -45,6 +48,7 @@ import java.util.ArrayList;
 
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.FieldNode;
 
@@ -271,8 +275,17 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 	}
 
 	@Override public void VisitNewObjectNode(ZNewObjectNode Node) {
-		this.Debug("TODO");
-		this.CurrentBuilder.visitInsn(ACONST_NULL);
+		String ClassName = Type.getInternalName(NativeTypeTable.GetJavaClass(Node.Type));
+		this.CurrentBuilder.visitTypeInsn(NEW, ClassName);
+		this.CurrentBuilder.visitInsn(DUP);
+		this.CurrentBuilder.visitMethodInsn(INVOKESPECIAL, ClassName, "<init>", "()V");
+		//		String name = Type.getInternalName(SoftwareFaultException.class);
+		//		this.CurrentBuilder.SetLineNumber(Node);
+		//		this.CurrentBuilder.visitTypeInsn(NEW, name);
+		//		this.CurrentBuilder.visitInsn(DUP);
+		//		this.CurrentBuilder.LoadConst(Node.ErrorMessage);
+		//		this.CurrentBuilder.visitMethodInsn(INVOKESPECIAL, name, "<init>", "(Ljava/lang/Object;)V");
+
 		//		Type type = this.GetAsmType(Node.Type);
 		//		String owner = type.getInternalName();
 		//		this.CurrentBuilder.visitTypeInsn(NEW, owner);
@@ -349,22 +362,13 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 	}
 
 	@Override public void VisitGetIndexNode(ZGetIndexNode Node) {
-		this.Debug("TODO");
-		this.CurrentBuilder.visitInsn(ACONST_NULL);
-		//		JMethod Method = JMethod.FindMethod(Node);
-		//		Node.RecvNode.Accept(this);
-		//		this.CurrentBuilder.PushEvaluatedNode(Method.GetType(1), Node.IndexNode);
-		//		this.CurrentBuilder.InvokeMethodCall(Method.GetReturnType(), Method.Body);
+		Method sMethod = NativeMethodTable.GetBinaryStaticMethod(Node.RecvNode.Type, "[]", Node.IndexNode.Type);
+		this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.RecvNode, Node.IndexNode});
 	}
 
 	@Override public void VisitSetIndexNode(ZSetIndexNode Node) {
-		this.Debug("TODO");
-		this.CurrentBuilder.visitInsn(ACONST_NULL);
-		//		JMethod Method = JMethod.FindMethod(Node);
-		//		Node.RecvNode.Accept(this);
-		//		this.CurrentBuilder.PushEvaluatedNode(Method.GetType(1), Node.IndexNode);
-		//		this.CurrentBuilder.PushEvaluatedNode(Method.GetType(2), Node.ValueNode);
-		//		this.CurrentBuilder.InvokeMethodCall(Method.GetReturnType(), Method.Body);
+		Method sMethod = NativeMethodTable.GetBinaryStaticMethod(Node.RecvNode.Type, "[]=", Node.IndexNode.Type);
+		this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.RecvNode, Node.IndexNode, Node.ValueNode});
 	}
 
 	@Override public void VisitMethodCallNode(ZMethodCallNode Node) {
@@ -618,9 +622,9 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 	}
 
 	@Override public void VisitFuncDeclNode(ZFuncDeclNode Node) {
-		@Var String FuncName = Node.ReferenceName;
 		@Var ZFuncType FuncType = Node.GetFuncType(null);
-		@Var AsmClassBuilder  HolderClass = this.ClassLoader.NewFunctionHolderClass(Node, FuncName, FuncType);
+		@Var JvmFuncNode FuncNode = new JvmFuncNode(FuncType, Node.FuncName);
+		@Var AsmClassBuilder  HolderClass = this.ClassLoader.NewFunctionHolderClass(Node, FuncNode, FuncType);
 		@Var String MethodDesc = AsmClassLoader.GetMethodDescriptor(FuncType);
 		//System.out.println("*** " + MethodDesc);
 		this.CurrentBuilder = new AsmMethodBuilder(ACC_PUBLIC | ACC_STATIC, Node.FuncName, MethodDesc, this, this.CurrentBuilder);
@@ -638,11 +642,17 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 			Method FuncMethod = HolderClass.GetDefinedMethod(this.ClassLoader, Node.FuncName);
 			//this.Debug("InteranalName: " +Type.getInternalName(FuncMethod.getDeclaringClass()));
 			this.FuncMap.put(Node.ReferenceName, FuncMethod);
+			FuncNode.FuncClass = FuncMethod.getDeclaringClass();
+			Node.NameSpace.SetTypedNode(Node.FuncName, FuncNode);
 		}
 		catch(Error e) {
 			e.printStackTrace();
 		}
 		this.CurrentBuilder = this.CurrentBuilder.Parent;
+	}
+
+	public void VisitJvmFuncNode(JvmFuncNode Node) {
+		this.CurrentBuilder.visitFieldInsn(Opcodes.GETSTATIC, Node.ClassName, "FUNCTION", Node.FieldDesc);
 	}
 
 	@Override public void VisitClassDeclNode(ZClassDeclNode Node) {
@@ -654,20 +664,30 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 				ClassBuilder.AddField(fn);
 			}
 		}
+		//		MethodNode constructor = new MethodNode(ACC_PUBLIC, "<init>", "(Lorg/ZenScript/ZenType;)V", null, null);
+		//		constructor.visitVarInsn(ALOAD, 0);
+		//		constructor.visitVarInsn(ALOAD, 1);
+		//		constructor.visitMethodInsn(INVOKESPECIAL, superClassName, "<init>", "(Lorg/ZenScript/ZenType;)V");
+		//		for(ZenFieldInfo field : ClassField.FieldList) {
+		//			if(field.FieldIndex >= ClassField.ThisClassIndex && field.InitValue != null) {
+		//				String name = field.NativeName;
+		//				String desc = JLib.GetAsmType(field.Type).getDescriptor();
+		//				constructor.visitVarInsn(ALOAD, 0);
+		//				constructor.visitLdcInsn(field.InitValue);
+		//				constructor.visitFieldInsn(PUTFIELD, ClassName, name, desc);
+		//			}
+		//		}
+		//		constructor.visitInsn(RETURN);
+		//		ClassBuilder.AddMethod(constructor);
+
 	}
 
 	@Override public void VisitErrorNode(ZErrorNode Node) {
 		String Message = this.Logger.ReportError(Node.SourceToken, Node.ErrorMessage);
 		this.CurrentBuilder.LoadConst(Message);
 		Method sMethod = NativeMethodTable.GetStaticMethod("ThrowError");
+		this.CurrentBuilder.SetLineNumber(Node);
 		this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, null);
-		//		String name = Type.getInternalName(SoftwareFaultException.class);
-		//		this.CurrentBuilder.SetLineNumber(Node);
-		//		this.CurrentBuilder.visitTypeInsn(NEW, name);
-		//		this.CurrentBuilder.visitInsn(DUP);
-		//		this.CurrentBuilder.LoadConst(Node.ErrorMessage);
-		//		this.CurrentBuilder.visitMethodInsn(INVOKESPECIAL, name, "<init>", "(Ljava/lang/Object;)V");
-		//		this.CurrentBuilder.visitInsn(ATHROW);
 	}
 
 	public Method GetStaticFuncMethod(String FuncName) {
