@@ -45,6 +45,7 @@ import static org.objectweb.asm.Opcodes.RETURN;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Stack;
 
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
@@ -113,12 +114,12 @@ import zen.parser.ZGenerator;
 public class Java6ByteCodeGenerator extends ZGenerator {
 	AsmMethodBuilder CurrentBuilder;
 	AsmClassLoader ClassLoader = null;
-	ArrayList<TryCatchLabel> TryCatchLabel;
+	Stack<TryCatchLabel> TryCatchLabel;
 	private final ZenMap<Method> FuncMap = new ZenMap<Method>(null);
 
 	public Java6ByteCodeGenerator() {
 		super("java", "1.6");
-		this.TryCatchLabel = new ArrayList<TryCatchLabel>();
+		this.TryCatchLabel = new Stack<TryCatchLabel>();
 		this.ClassLoader = new AsmClassLoader(this);
 	}
 
@@ -579,7 +580,7 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 	@Override public void VisitTryNode(ZTryNode Node) {
 		MethodVisitor mv = this.CurrentBuilder;
 		TryCatchLabel Label = new TryCatchLabel();
-		this.TryCatchLabel.add(Label); // push
+		this.TryCatchLabel.push(Label); // push
 
 		// try block
 		mv.visitLabel(Label.beginTryLabel);
@@ -592,13 +593,13 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 		if(Node.FinallyNode != null) {
 			Node.FinallyNode.Accept(this);
 		}
-		this.TryCatchLabel.remove(this.TryCatchLabel.size() - 1); // pop
+		this.TryCatchLabel.pop();
 	}
 
 	@Override public void VisitCatchNode(ZCatchNode Node) {
 		MethodVisitor mv = this.CurrentBuilder;
 		Label catchLabel = new Label();
-		TryCatchLabel Label = this.TryCatchLabel.get(this.TryCatchLabel.size() - 1);
+		TryCatchLabel Label = this.TryCatchLabel.peek();
 
 		// prepare
 		//TODO: add exception class name
@@ -612,6 +613,7 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 		Node.BodyNode.Accept(this);
 		mv.visitJumpInsn(GOTO, Label.finallyLabel);
 		//FIXME: remove local
+		this.CurrentBuilder.RemoveLocal(NativeTypeTable.GetJavaClass(Node.ExceptionType), Node.ExceptionName);
 	}
 
 	@Override public void VisitParamNode(ZParamNode Node) {
