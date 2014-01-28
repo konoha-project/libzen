@@ -98,6 +98,35 @@ public abstract class ZNode {
 		return null;
 	}
 
+	public ZNode GetPrevNode() {
+		if(this.ParentNode == null) {
+			return null;
+		}
+		if(this.ParentNode instanceof ZBlockNode) {
+			ZBlockNode Block = (ZBlockNode) this.ParentNode;
+			for (int i = 1; i < Block.StmtList.size(); i++) {
+				if(Block.StmtList.get(i) == this) {
+					return Block.StmtList.get(i-1);
+				}
+			}
+		}
+		return null;
+	}
+
+	public ZNode GetNextNode() {
+		if(this.ParentNode == null) {
+			return null;
+		}
+		if(this.ParentNode instanceof ZBlockNode) {
+			ZBlockNode Block = (ZBlockNode) this.ParentNode;
+			for (int i = 0; i < Block.StmtList.size() - 1; i++) {
+				if(Block.StmtList.get(i) == this) {
+					return Block.StmtList.get(i+1);
+				}
+			}
+		}
+		return null;
+	}
 
 }
 
