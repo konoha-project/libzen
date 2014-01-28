@@ -1,11 +1,15 @@
-package zen.lang;
+package zen.type;
 
 import zen.deps.Field;
 import zen.deps.Var;
+import zen.lang.ZFunc;
+import zen.lang.ZSystem;
+import zen.lang.ZType;
+import zen.lang.ZTypeFlag;
 
 public final class ZFuncType extends ZType {
-
 	@Field public ZType[]		TypeParams;
+	@Field private boolean HasUnknownType = false;
 	public ZFuncType(String ShortName, ZType[] UniqueTypeParams) {
 		super(ZTypeFlag.UniqueType, ShortName, ZSystem.TopType);
 		if(UniqueTypeParams == null) {
@@ -15,29 +19,41 @@ public final class ZFuncType extends ZType {
 		else {
 			this.TypeParams = UniqueTypeParams;
 		}
+		@Var int i = 0;
+		while(i < this.TypeParams.length) {
+			if(this.TypeParams[i].IsVarType()) {
+				this.HasUnknownType = true;
+				break;
+			}
+			i = i + 1;
+		}
 	}
 
 	@Override public final boolean IsFuncType() {
 		return true;
 	}
 
-	@Override public final boolean IsCompleteFunc(boolean IgnoreReturn) {
-		@Var int i = 0;
-		if(IgnoreReturn) {
-			i = 1;
-		}
-		while(i < this.TypeParams.length) {
-			if(this.TypeParams[i].IsVarType()) {
-				return false;
-			}
-			i = i + 1;
-		}
-		return true;
+	@Override public final boolean IsVarType() {
+		return this.HasUnknownType;
 	}
 
-	@Override public boolean HasCallableSignature() {
-		return !(this.GetRecvType().IsVarType());
-	}
+	//	@Override public final boolean IsVarType(boolean IgnoreReturn) {
+	//		@Var int i = 0;
+	//		if(IgnoreReturn) {
+	//			i = 1;
+	//		}
+	//		while(i < this.TypeParams.length) {
+	//			if(this.TypeParams[i].IsVarType()) {
+	//				return false;
+	//			}
+	//			i = i + 1;
+	//		}
+	//		return true;
+	//	}
+	//
+	//	@Override public boolean HasCallableSignature() {
+	//		return !(this.GetRecvType().IsVarType());
+	//	}
 
 	@Override public String StringfySignature(String FuncName) {
 		return ZFunc.StringfySignature(FuncName, this.GetFuncParamSize(), this.GetRecvType());

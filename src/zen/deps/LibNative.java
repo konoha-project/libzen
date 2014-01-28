@@ -38,7 +38,6 @@ import java.lang.reflect.Modifier;
 
 import zen.ast.ZNode;
 import zen.lang.ZFunc;
-import zen.lang.ZFuncType;
 import zen.lang.ZSystem;
 import zen.lang.ZType;
 import zen.lang.ZenEngine;
@@ -49,6 +48,7 @@ import zen.parser.ZNameSpace;
 import zen.parser.ZSourceGenerator;
 import zen.parser.ZTokenContext;
 import zen.parser.ZVisitor;
+import zen.type.ZFuncType;
 
 public class LibNative {
 

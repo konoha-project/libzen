@@ -33,6 +33,7 @@ import zen.deps.ZenMap;
 import zen.deps.ZenTypedObject;
 import zen.parser.ZLogger;
 import zen.parser.ZNameSpace;
+import zen.type.ZFuncType;
 
 public class ZSystem {
 	public final static ZenMap<Integer>     SourceMap = new ZenMap<Integer>(null);

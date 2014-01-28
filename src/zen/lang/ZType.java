@@ -101,7 +101,7 @@ public class ZType  {
 		return (this.GetRealType() == ZSystem.VoidType);
 	}
 
-	public final boolean IsVarType() {
+	public boolean IsVarType() {
 		return (this.GetRealType() == ZSystem.VarType);
 	}
 
@@ -241,7 +241,7 @@ public class ZType  {
 		return false;
 	}
 
-	public boolean IsCompleteFunc(boolean IgnoreReturn) {
+	public boolean IsVarType(boolean IgnoreReturn) {
 		return false;
 	}
 

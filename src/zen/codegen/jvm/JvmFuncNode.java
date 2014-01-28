@@ -1,7 +1,7 @@
 package zen.codegen.jvm;
 
 import zen.ast.ZNode;
-import zen.lang.ZFuncType;
+import zen.type.ZFuncType;
 
 class JvmFuncNode extends ZNode {
 	String FuncName;

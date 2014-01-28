@@ -19,8 +19,8 @@ import org.objectweb.asm.tree.MethodNode;
 
 import zen.ast.ZNode;
 import zen.deps.NativeTypeTable;
-import zen.lang.ZFuncType;
 import zen.lang.ZSystem;
+import zen.type.ZFuncType;
 
 public class AsmMethodBuilder extends MethodNode {
 

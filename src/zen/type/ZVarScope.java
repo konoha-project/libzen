@@ -2,6 +2,7 @@ package zen.type;
 
 import java.util.ArrayList;
 
+import zen.ast.ZFunctionNode;
 import zen.ast.ZNode;
 import zen.deps.Field;
 import zen.deps.Var;
@@ -16,25 +17,15 @@ public final class ZVarScope {
 	@Field public ZVarScope Parent;
 	@Field public ZLogger Logger;
 	@Field ArrayList<ZVarType> VarList;
-	@Field int VarNodeCount;
+	@Field int VarNodeCount = 0;
 
-	////	@Field ZFunctionNode FuncNode;
-	////	@Field ZFuncType FuncType;
-	//	@Field int ReturnCount;
-	@Field int VarIndex;
-
-	ZVarScope(ZVarScope Parent, ZLogger Logger, ArrayList<ZVarType> VarList) {
+	public ZVarScope(ZVarScope Parent, ZLogger Logger, ArrayList<ZVarType> VarList) {
 		this.Parent = Parent;
 		this.Logger = Logger;
 		this.VarList = VarList;
 		if(this.VarList == null) {
 			this.VarList = new ArrayList<ZVarType>();
 		}
-		this.VarIndex = 0;
-		this.VarNodeCount = 0;
-		//		this.FuncNode = FuncNode;
-		//		this.FuncType = FuncType;
-		//		this.ReturnCount = 0;
 	}
 
 	public final ZType NewVarType(ZType VarType, String Name, ZToken SourceToken) {
@@ -60,16 +51,16 @@ public final class ZVarScope {
 		}
 	}
 
-	public final boolean TypeCheckNodeList(ZNameSpace NameSpace, ZTypeChecker TypeChecker, ArrayList<ZNode> NodeList) {
-		@Var int i = 0;
+	public final boolean TypeCheckStmtList(ZNameSpace NameSpace, ZTypeSafer TypeSafer, ArrayList<ZNode> StmtList) {
 		@Var int PrevCount = -1;
 		while(true) {
+			@Var int i = 0;
 			this.VarNodeCount = 0;
-			while(i < NodeList.size()) {
-				NodeList.set(i, TypeChecker.CheckType(NodeList.get(i), NameSpace, ZSystem.VoidType));
+			while(i < StmtList.size()) {
+				StmtList.set(i, TypeSafer.CheckType(StmtList.get(i), NameSpace, ZSystem.VoidType));
 				i = i + 1;
 			}
-			if(this.VarNodeCount == 0 && PrevCount != this.VarNodeCount) {
+			if(this.VarNodeCount == 0 || PrevCount == this.VarNodeCount) {
 				break;
 			}
 			PrevCount = this.VarNodeCount;
@@ -79,44 +70,19 @@ public final class ZVarScope {
 		}
 		return false;
 	}
-	//
-	//
-	//	public ZVarType NewVarType() {
-	//
-	//	}
-	//
-	//	public ZType GetReturnType() {
-	//		this.ReturnCount = this.ReturnCount + 1;
-	//		return this.FuncNode.ReturnType;
-	//	}
-	//
-	//	public ZFuncType RecheckCompleteFuncType(ZFunctionNode FuncNode) {
-	//		@Var ZFuncType FuncType = this.FuncType;
-	//		if(!FuncType.IsCompleteFunc(false)) {
-	//			if(FuncNode.ReturnType.IsVarType() && this.ReturnCount == 0) {
-	//				((ZVarType)FuncNode.ReturnType).Infer(ZSystem.VoidType, FuncNode.SourceToken);
-	//			}
-	//			this.FuncType = this.FuncNode.GetFuncType(null);
-	//			if(this.FuncType.IsCompleteFunc(false)) {
-	//				return this.FuncType;
-	//			}
-	//		}
-	//		return null;  // no renewal
-	//	}
-	//
-	//	//	public int GetVarSize() {
-	//	//		@Var int count = 0;
-	//	//		@Var int i = 0;
-	//	//		while(i < this.VarTypeList.size()) {
-	//	//			@Var ZenVarType VarType = this.VarTypeList.get(i);
-	//	//			if(VarType.IsVarType()) {
-	//	//				count = count + 1;
-	//	//			}
-	//	//			i = i + 1;
-	//	//		}
-	//	//		return count;
-	//	//	}
-	//
+
+	public final void TypeCheckFunctionBody(ZNameSpace NameSpace, ZTypeSafer TypeSafer, ZFunctionNode FunctionNode) {
+		@Var int PrevCount = -1;
+		while(true) {
+			this.VarNodeCount = 0;
+			TypeSafer.DefineFunction(NameSpace, FunctionNode, false/*Enforced*/);
+			FunctionNode.BodyNode = TypeSafer.CheckType(FunctionNode.BodyNode, NameSpace, ZSystem.VoidType);
+			if(this.VarNodeCount == 0 || PrevCount == this.VarNodeCount) {
+				break;
+			}
+			PrevCount = this.VarNodeCount;
+		}
+	}
 	//	public void Dump() {
 	//		@Var int i = 0;
 	//		//		this.println("returning type: " + this.FuncNode.ReturnType);
@@ -132,15 +98,5 @@ public final class ZVarScope {
 	//		this.VarTypeList.clear();
 	//	}
 	//
-	//	public int GetVarIndex() {
-	//		int Index = this.VarIndex;
-	//		this.VarIndex = this.VarIndex + 1;
-	//		return Index;
-	//	}
-	//
-	//
-	//	protected void println(String string) {
-	//		System.err.println("debug " + string);
-	//	}
 
 }

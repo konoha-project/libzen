@@ -28,8 +28,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import zen.lang.ZFunc;
-import zen.lang.ZFuncType;
 import zen.parser.ZLogger;
+import zen.type.ZFuncType;
 
 public class ZNativeFunc extends ZFunc {
 	@Field public Object Recv;

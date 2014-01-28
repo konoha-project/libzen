@@ -28,6 +28,7 @@ import zen.deps.Field;
 import zen.deps.Init;
 import zen.deps.LibZen;
 import zen.parser.ZUtils;
+import zen.type.ZFuncType;
 
 public abstract class ZFunc {
 	@Field @Init public int			  FuncFlag;

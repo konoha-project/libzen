@@ -29,11 +29,11 @@ import java.util.ArrayList;
 
 import zen.ast.ZNode;
 import zen.deps.Field;
-import zen.lang.ZFuncType;
 import zen.lang.ZSystem;
 import zen.lang.ZType;
 import zen.lang.ZenEngine;
 //endif VAJA
+import zen.type.ZFuncType;
 
 public abstract class ZGenerator extends ZVisitor {
 	@Field private String            GrammarInfo;

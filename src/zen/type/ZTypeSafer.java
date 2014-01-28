@@ -24,7 +24,10 @@
 
 package zen.type;
 
+import java.util.ArrayList;
+
 import zen.ast.ZCastNode;
+import zen.ast.ZFunctionNode;
 import zen.ast.ZNode;
 import zen.ast.ZStupidCastNode;
 import zen.deps.Field;
@@ -38,27 +41,31 @@ import zen.parser.ZNameSpace;
 import zen.parser.ZUtils;
 import zen.parser.ZVisitor;
 
-public abstract class ZTypeChecker extends ZVisitor {
+public abstract class ZTypeSafer extends ZVisitor {
 
 	protected void println(String string) {
-		LibNative.Debug("debug " + string);
+		LibNative.Debug("debug: " + string);
+	}
+
+	protected void FIXME(String string) {
+		LibNative.Debug("FIXME: " + string);
 	}
 
 	@Field private ZNameSpace StackedNameSpace;
 	@Field private ZType      StackedContextType;
-	@Field private ZNode      StackedTypedNode;
+	@Field private ZNode      ReturnedNode;
 
 	@Field public ZLogger     Logger;
 	@Field private boolean    StoppedVisitor;
-	@Field public ZVarScope FuncScope;
+	@Field public ZVarScope   VarScope;
 
-	public ZTypeChecker(ZLogger Logger) {
+	public ZTypeSafer(ZLogger Logger) {
 		this.Logger = Logger;
 		this.StackedNameSpace = null;
 		this.StackedContextType = null;
-		this.StackedTypedNode = null;
+		this.ReturnedNode = null;
 		this.StoppedVisitor = false;
-		this.FuncScope = new ZVarScope(null, Logger, null);
+		this.VarScope = new ZVarScope(null, Logger, null);
 	}
 
 	@Override public final void EnableVisitor() {
@@ -79,6 +86,32 @@ public abstract class ZTypeChecker extends ZVisitor {
 
 	public final ZType GetContextType() {
 		return this.StackedContextType;
+	}
+
+	private final ZNode VisitTypeSafer(ZNode Node, ZNameSpace NameSpace, ZType ContextType, int TypeCheckPolicy) {
+		if(this.IsVisitable()) {
+			if(Node.IsUntyped()) {
+				ZNode ParentNode = Node.ParentNode;
+				this.StackedNameSpace = NameSpace;
+				this.StackedContextType = ContextType;
+				this.ReturnedNode = null;
+				Node.Accept(this);
+				if(this.ReturnedNode == null) {
+					this.FIXME(Node.getClass().getSimpleName() + " returns no value");
+					this.ReturnedNode = Node;
+				}
+				Node = this.TypeCheckImpl(this.ReturnedNode, NameSpace, ContextType, TypeCheckPolicy);
+				this.VarScope.CheckVarNode(ContextType, Node);
+				if(ParentNode != Node.ParentNode && ParentNode != null) {
+					ParentNode.SetChild(Node);
+				}
+			}
+			else {
+				Node = this.TypeCheckImpl(Node, NameSpace, ContextType, TypeCheckPolicy);
+				this.VarScope.CheckVarNode(ContextType, Node);
+			}
+		}
+		return Node;
 	}
 
 	public final static int DefaultTypeCheckPolicy			= 0;
@@ -109,62 +142,69 @@ public abstract class ZTypeChecker extends ZVisitor {
 		return new ZStupidCastNode(ContextType, Node);
 	}
 
-	private final ZNode VisitTypeCheck(ZNode Node, ZNameSpace NameSpace, ZType ContextType, int TypeCheckPolicy) {
-		if(this.IsVisitable()) {
-			if(Node.IsUntyped()) {
-				ZNode ParentNode      = Node.ParentNode;
-				//				ZNameSpace NameSpace_ = this.StackedNameSpace;
-				//				ZType ContextType_    = this.StackedContextType;
-				this.StackedNameSpace = NameSpace;
-				this.StackedContextType = ContextType;
-				Node.Accept(this);
-				Node = this.TypeCheckImpl(this.StackedTypedNode, NameSpace, ContextType, TypeCheckPolicy);
-				this.FuncScope.CheckVarNode(ContextType, Node);
-				this.StackedTypedNode = Node;
-				//				this.StackedNameSpace = NameSpace_;
-				//				this.StackedContextType = ContextType_;
-				if(ParentNode != Node.ParentNode && ParentNode != null) {
-					ParentNode.SetChild(Node);
-				}
-			}
-			else {
-				Node = this.TypeCheckImpl(Node, NameSpace, ContextType, TypeCheckPolicy);
-				this.FuncScope.CheckVarNode(ContextType, Node);
-				this.StackedTypedNode = Node;
-			}
-		}
-		this.CheckErrorNode(Node);
-		return Node;
-	}
-
 	public final ZNode TryType(ZNode Node, ZNameSpace NameSpace, ZType ContextType) {
-		return this.VisitTypeCheck(Node, NameSpace, ContextType, NoCheckPolicy);
+		return this.VisitTypeSafer(Node, NameSpace, ContextType, NoCheckPolicy);
 	}
 
 	public final ZNode CheckType(ZNode Node, ZNameSpace NameSpace, ZType ContextType) {
-		return this.VisitTypeCheck(Node, NameSpace, ContextType, DefaultTypeCheckPolicy);
+		return this.VisitTypeSafer(Node, NameSpace, ContextType, DefaultTypeCheckPolicy);
 	}
 
 	public final ZNode EnforceType(ZNode Node, ZNameSpace NameSpace, ZType ContextType) {
-		return this.VisitTypeCheck(Node, NameSpace, ContextType, EnforceCoercion);
+		return this.VisitTypeSafer(Node, NameSpace, ContextType, EnforceCoercion);
 	}
 
+	public final boolean TypeCheckNodeList(ZNameSpace NameSpace, ArrayList<ZNode> ParamList) {
+		if(this.IsVisitable()) {
+			@Var boolean AllTyped = true;
+			@Var int i = 0;
+			while(i < ParamList.size()) {
+				ZNode SubNode = ParamList.get(i);
+				SubNode = this.CheckType(SubNode, NameSpace, ZSystem.VarType);
+				ParamList.set(i, SubNode);
+				if(SubNode.IsVarType()) {
+					AllTyped = false;
+				}
+				i = i + 1;
+			}
+			return AllTyped;
+		}
+		return false;
+	}
+
+	public final void Return(ZNode Node) {
+		if(Node != null) {
+			if(this.ReturnedNode == null) {
+				this.ReturnedNode = Node;
+			}
+			else {
+				if(this.ReturnedNode == Node) {
+					this.FIXME("type safer returns twice");
+				}
+			}
+		}
+	}
 
 	public final void TypedNode(ZNode Node, ZType Type) {
 		Node.Type = Type;
-		if(this.IsVisitable()) {
-			this.StackedTypedNode = Node;
+		if(this.ReturnedNode == null) {
+			this.ReturnedNode = Node;
+		}
+		else {
+			if(this.ReturnedNode == Node) {
+				this.FIXME("type safer returns twice");
+			}
 		}
 	}
 
-	public final void TypedCastNode(ZNode Node, ZType ContextType, ZType NodeType) {
-		if(NodeType.IsVarType() && !ContextType.IsVarType() && !(Node.ParentNode instanceof ZCastNode)) {
-			this.TypedNode(new ZCastNode(ContextType, Node), ContextType);
-		}
-		else {
-			this.TypedNode(Node, NodeType);
-		}
-	}
+	//	public final void TypedCastNode(ZNode Node, ZType ContextType, ZType NodeType) {
+	//		if(NodeType.IsVarType() && !ContextType.IsVarType() && !(Node.ParentNode instanceof ZCastNode)) {
+	//			this.TypedNode(new ZCastNode(ContextType, Node), ContextType);
+	//		}
+	//		else {
+	//			this.TypedNode(Node, NodeType);
+	//		}
+	//	}
 
 	public final void TypedNodeIf(ZNode Node, ZType Type, ZNode P1) {
 		if(P1.IsVarType()) {
@@ -173,9 +213,7 @@ public abstract class ZTypeChecker extends ZVisitor {
 		else {
 			Node.Type = Type;
 		}
-		if(this.IsVisitable()) {
-			this.StackedTypedNode = Node;
-		}
+		this.ReturnedNode = Node;
 	}
 
 	public final void TypedNodeIf2(ZNode Node, ZType Type, ZNode P1, ZNode P2) {
@@ -185,9 +223,7 @@ public abstract class ZTypeChecker extends ZVisitor {
 		else {
 			Node.Type = Type;
 		}
-		if(this.IsVisitable()) {
-			this.StackedTypedNode = Node;
-		}
+		this.ReturnedNode = Node;
 	}
 
 	public final void TypedNodeIf3(ZNode Node, ZType Type, ZNode P1, ZNode P2, ZNode P3) {
@@ -197,28 +233,16 @@ public abstract class ZTypeChecker extends ZVisitor {
 		else {
 			Node.Type = Type;
 		}
-		if(this.IsVisitable()) {
-			this.StackedTypedNode = Node;
-		}
+		this.ReturnedNode = Node;
 	}
 
 	public final void Todo(ZNode Node) {
 		this.Logger.ReportWarning(Node.SourceToken, "TODO: unimplemented type checker node: " + Node.getClass().getSimpleName());
 		Node.Type = ZSystem.VarType;
-		if(this.IsVisitable()) {
-			this.StackedTypedNode = Node;
-		}
+		this.ReturnedNode = Node;
 	}
 
-	public final void CheckErrorNode(ZNode Node) {
-		if(Node != null && Node.IsErrorNode()) {
-			Node.Type = ZSystem.VoidType;
-			this.StackedTypedNode = Node;
-			this.StopVisitor();
-		}
-	}
-
-
+	public abstract void DefineFunction(ZNameSpace NameSpace, ZFunctionNode FunctionNode, boolean Enforced);
 
 	//	public final boolean TypeCheckNodeList(ZNameSpace NameSpace, ArrayList<ZNode> ParamList) {
 	//		if(this.IsVisitable()) {

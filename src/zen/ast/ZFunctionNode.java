@@ -31,17 +31,23 @@ import zen.deps.Nullable;
 import zen.deps.Var;
 import zen.lang.ZSystem;
 import zen.lang.ZType;
-import zen.lang.ZFuncType;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
+import zen.type.ZFuncType;
 
 public class ZFunctionNode extends ZNode {
 	@Field public ZType ReturnType = ZSystem.VarType;
-	@Field public ArrayList<ZNode>  ArgumentList = new ArrayList<ZNode>();
+	@Field public String FuncName = null;
+	@Field public ArrayList<ZNode> ArgumentList = new ArrayList<ZNode>();
 	@Field public ZNode BodyNode = null;
+
+	@Field public ZFunctionNode ParentFunctionNode = null;
+	@Field public ZFuncType ResolvedFuncType = null;
+	@Field public String ReferenceName = null;
+	@Field public int VarIndex = 0;
+
 	public ZFunctionNode(ZToken Token) {
 		super();
-		this.SourceToken = Token;
 	}
 	@Override public void Append(ZNode Node) {
 		if(Node instanceof ZParamNode) {
@@ -53,33 +59,53 @@ public class ZFunctionNode extends ZNode {
 		else if(Node instanceof ZBlockNode) {
 			this.BodyNode = Node;
 		}
-		/*return this;*/
 	}
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitFunctionNode(this);
 	}
 
-	public ZFuncType GetFuncType(@Nullable ZType ContextType) {
-		@Var ZFuncType FuncType = null;
-		if(ContextType instanceof ZFuncType) {
-			FuncType = (ZFuncType)ContextType;
-		}
-		@Var ArrayList<ZType> TypeList = new ArrayList<ZType>();
-		if(this.ReturnType.IsVarType() && FuncType != null) {
-			this.ReturnType = FuncType.GetParamType(0);
-		}
-		TypeList.add(this.ReturnType.GetRealType());
-		@Var int i = 0;
-		while(i < this.ArgumentList.size()) {
-			@Var ZParamNode Node = (ZParamNode) this.ArgumentList.get(i);
-			@Var ZType ParamType = Node.Type.GetRealType();
-			if(ParamType.IsVarType() && FuncType != null) {
-				ParamType = FuncType.GetParamType(i+1);
+	public final ZFuncType GetFuncType(@Nullable ZType ContextType) {
+		if(this.ResolvedFuncType == null) {
+			@Var ZFuncType FuncType = null;
+			if(ContextType instanceof ZFuncType) {
+				FuncType = (ZFuncType)ContextType;
 			}
-			TypeList.add(ParamType);
-			i = i + 1;
+			@Var ArrayList<ZType> TypeList = new ArrayList<ZType>();
+			if(this.ReturnType.IsVarType() && FuncType != null) {
+				this.ReturnType = FuncType.GetParamType(0);
+			}
+			TypeList.add(this.ReturnType.GetRealType());
+			@Var int i = 0;
+			while(i < this.ArgumentList.size()) {
+				@Var ZParamNode Node = (ZParamNode) this.ArgumentList.get(i);
+				@Var ZType ParamType = Node.Type.GetRealType();
+				if(ParamType.IsVarType() && FuncType != null) {
+					ParamType = FuncType.GetParamType(i+1);
+				}
+				TypeList.add(ParamType);
+				i = i + 1;
+			}
+			FuncType = ZSystem.LookupFuncType(TypeList);
+			if(!FuncType.IsVarType()) {
+				this.ResolvedFuncType = FuncType;
+			}
+			return FuncType;
 		}
-		return ZSystem.LookupFuncType(TypeList);
+		return this.ResolvedFuncType;
 	}
 
+	public final ZFunctionNode Push(ZFunctionNode Parent) {
+		this.ParentFunctionNode = Parent;
+		return this;
+	}
+
+	public final ZFunctionNode Pop() {
+		return this.ParentFunctionNode;
+	}
+
+	public final int GetVarIndex() {
+		@Var int Index = this.VarIndex;
+		this.VarIndex = this.VarIndex + 1;
+		return Index;
+	}
 }

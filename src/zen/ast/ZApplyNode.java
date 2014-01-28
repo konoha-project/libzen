@@ -27,9 +27,9 @@ package zen.ast;
 import java.util.ArrayList;
 
 import zen.deps.Field;
-import zen.lang.ZFuncType;
 import zen.lang.ZSystem;
 import zen.lang.ZType;
+import zen.type.ZFuncType;
 
 abstract class ZApplyNode extends ZNode {
 	@Field public ArrayList<ZNode>  ParamList = new ArrayList<ZNode>();

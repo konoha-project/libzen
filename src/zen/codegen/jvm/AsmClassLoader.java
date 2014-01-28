@@ -28,12 +28,12 @@ import zen.deps.ITokenFunc;
 import zen.deps.NativeTypeTable;
 import zen.deps.Var;
 import zen.deps.ZenFunction;
-import zen.lang.ZFuncType;
 import zen.lang.ZSystem;
 import zen.lang.ZType;
 import zen.parser.ZGenerator;
 import zen.parser.ZNameSpace;
 import zen.parser.ZTokenContext;
+import zen.type.ZFuncType;
 
 class AsmClassLoader extends ClassLoader {
 	final HashMap<String,AsmClassBuilder> ByteCodeMap;
