@@ -308,7 +308,7 @@ public abstract class ZenTypeChecker extends ZVisitor {
 			return this.InferType(ContextType, new ZCastNode(ContextType, Node));
 		}
 		//System.err.println("node="+ LibZen.GetClassName(Node) + "type error: requested = " + Type + ", given = " + Node.Type);
-		return new ZStupidCastNode(ContextType, Node);
+		return new ZStupidCastNode(Node.SourceToken, ContextType, Node);
 	}
 
 	protected ZType GetIndexType(ZNameSpace NameSpace, ZType RecvType) {

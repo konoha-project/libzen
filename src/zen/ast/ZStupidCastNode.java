@@ -25,11 +25,13 @@
 package zen.ast;
 
 import zen.lang.ZType;
+import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 
 public class ZStupidCastNode extends ZCastNode {
-	public ZStupidCastNode(ZType CastType, ZNode Node) {
+	public ZStupidCastNode(ZToken SourceToken, ZType CastType, ZNode Node) {
 		super(CastType, Node);
+		this.SourceToken = SourceToken;
 	}
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitCastNode(this);

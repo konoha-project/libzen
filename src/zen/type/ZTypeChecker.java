@@ -106,7 +106,7 @@ public abstract class ZTypeChecker extends ZVisitor {
 			return new ZCastNode(ContextType, Node);
 		}
 		//System.err.println("node="+ LibZen.GetClassName(Node) + "type error: requested = " + Type + ", given = " + Node.Type);
-		return new ZStupidCastNode(ContextType, Node);
+		return new ZStupidCastNode(Node.SourceToken, ContextType, Node);
 	}
 
 	private final ZNode VisitTypeCheck(ZNode Node, ZNameSpace NameSpace, ZType ContextType, int TypeCheckPolicy) {
