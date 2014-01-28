@@ -33,7 +33,7 @@ public final class ZGroupNode extends ZNode {
 		super();
 	}
 	@Override public void Append(ZNode Node) {
-		this.RecvNode = this.SetChild(this.RecvNode);
+		this.RecvNode = this.SetChild(Node);
 		this.Type = Node.Type;
 	}
 	@Override public void Accept(ZVisitor Visitor) {
