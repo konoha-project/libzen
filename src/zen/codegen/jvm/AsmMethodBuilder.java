@@ -27,7 +27,6 @@ public class AsmMethodBuilder extends MethodNode {
 	final AsmMethodBuilder          Parent;
 	final Java6ByteCodeGenerator   Generator;
 	ArrayList<JLocalVarStack>     LocalVals;
-	int                           LocalSize;
 	Stack<Label>                  BreakLabelStack;
 	Stack<Label>                  ContinueLabelStack;
 	int PreviousLine;
@@ -37,7 +36,6 @@ public class AsmMethodBuilder extends MethodNode {
 		this.Parent = Parent;
 		this.Generator = Generator;
 		this.LocalVals = new ArrayList<JLocalVarStack>();
-		this.LocalSize = 0;
 		this.BreakLabelStack = new Stack<Label>();
 		this.ContinueLabelStack = new Stack<Label>();
 		this.PreviousLine = 0;
@@ -77,10 +75,19 @@ public class AsmMethodBuilder extends MethodNode {
 
 	JLocalVarStack AddLocal(Class<?> JType, String Name) {
 		Type LocalType =  Type.getType(JType);
-		JLocalVarStack local = new JLocalVarStack(this.LocalSize, JType, LocalType, Name);
+		JLocalVarStack local = new JLocalVarStack(this.LocalVals.size(), JType, LocalType, Name);
 		this.LocalVals.add(local);
-		this.LocalSize += LocalType.getSize();
 		return local;
+	}
+
+	void RemoveLocal(Class<?> JType, String Name) {
+		for(int i = this.LocalVals.size() - 1; i >= 0; i--) {
+			JLocalVarStack Local = this.LocalVals.get(i);
+			if(Local.Name.equals(Name)) {
+				this.LocalVals.remove(i);
+				return;
+			}
+		}
 	}
 
 	JLocalVarStack FindLocalVariable(String Name) {

@@ -139,7 +139,7 @@ public abstract class ZTypeSafer extends ZVisitor {
 			return new ZCastNode(ContextType, Node);
 		}
 		//System.err.println("node="+ LibZen.GetClassName(Node) + "type error: requested = " + Type + ", given = " + Node.Type);
-		return new ZStupidCastNode(ContextType, Node);
+		return new ZStupidCastNode(Node.SourceToken, ContextType, Node);
 	}
 
 	public final ZNode TryType(ZNode Node, ZNameSpace NameSpace, ZType ContextType) {

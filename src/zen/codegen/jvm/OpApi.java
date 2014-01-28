@@ -31,6 +31,7 @@ import java.util.List;
 
 import zen.deps.NativeTypeTable;
 import zen.deps.Var;
+import zen.deps.ZenArray;
 import zen.deps.ZenMap;
 
 public final class OpApi {
@@ -265,6 +266,13 @@ public final class OpApi {
 		throw new SoftwareFaultException("SoftwareFault: " + Message);
 	}
 
+	public static <T> T GetIndex(ZenArray<T> x, long y) {
+		return x.get((int)y);
+	}
+
+	public static <T> void SetIndex(ZenArray<T> x, long y, T z) {
+		x.set((int)y, z);
+	}
 
 	public static <T> T GetIndex(ArrayList<T> x, long y) {
 		return x.get((int)y);

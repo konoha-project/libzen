@@ -45,6 +45,7 @@ import static org.objectweb.asm.Opcodes.RETURN;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Stack;
 
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
@@ -92,6 +93,7 @@ import zen.ast.ZSetIndexNode;
 import zen.ast.ZSetLocalNode;
 import zen.ast.ZSetterNode;
 import zen.ast.ZStringNode;
+import zen.ast.ZStupidCastNode;
 import zen.ast.ZSymbolNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
@@ -112,12 +114,12 @@ import zen.type.ZFuncType;
 public class Java6ByteCodeGenerator extends ZGenerator {
 	AsmMethodBuilder CurrentBuilder;
 	AsmClassLoader ClassLoader = null;
-	ArrayList<TryCatchLabel> TryCatchLabel;
+	Stack<TryCatchLabel> TryCatchLabel;
 	private final ZenMap<Method> FuncMap = new ZenMap<Method>(null);
 
 	public Java6ByteCodeGenerator() {
 		super("java", "1.6");
-		this.TryCatchLabel = new ArrayList<TryCatchLabel>();
+		this.TryCatchLabel = new Stack<TryCatchLabel>();
 		this.ClassLoader = new AsmClassLoader(this);
 	}
 
@@ -430,8 +432,17 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 	}
 
 	@Override public void VisitCastNode(ZCastNode Node) {
-		// TODO Auto-generated method stub
-
+		if(Node instanceof ZStupidCastNode) {
+			// FIXME
+			ZErrorNode Error = new ZErrorNode(Node.SourceToken, "Stupid Cast");
+			Error.Type = ZSystem.TopType;
+			Error.Accept(this);
+			return;
+		}
+		Class<?> C1 = NativeTypeTable.GetJavaClass(Node.Type);
+		Class<?> C2 = NativeTypeTable.GetJavaClass(Node.ExprNode.Type);
+		Method sMethod = NativeMethodTable.GetCastMethod(C1, C2);
+		this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.ExprNode});
 	}
 
 	@Override public void VisitInstanceOfNode(ZInstanceOfNode Node) {
@@ -554,11 +565,6 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 		this.CurrentBuilder.visitJumpInsn(GOTO, l);
 	}
 
-	//@Override public void VisitContinueNode(ZenContinueNode Node) {
-	//	Label l = this.CurrentVisitor.ContinueLabelStack.peek();
-	//	this.CurrentVisitor.visitJumpInsn(GOTO, l);
-	//}
-
 	@Override public void VisitThrowNode(ZThrowNode Node) {
 		// use wrapper
 		//String name = Type.getInternalName(ZenThrowableWrapper.class);
@@ -574,7 +580,7 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 	@Override public void VisitTryNode(ZTryNode Node) {
 		MethodVisitor mv = this.CurrentBuilder;
 		TryCatchLabel Label = new TryCatchLabel();
-		this.TryCatchLabel.add(Label); // push
+		this.TryCatchLabel.push(Label); // push
 
 		// try block
 		mv.visitLabel(Label.beginTryLabel);
@@ -587,13 +593,13 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 		if(Node.FinallyNode != null) {
 			Node.FinallyNode.Accept(this);
 		}
-		this.TryCatchLabel.remove(this.TryCatchLabel.size() - 1); // pop
+		this.TryCatchLabel.pop();
 	}
 
 	@Override public void VisitCatchNode(ZCatchNode Node) {
 		MethodVisitor mv = this.CurrentBuilder;
 		Label catchLabel = new Label();
-		TryCatchLabel Label = this.TryCatchLabel.get(this.TryCatchLabel.size() - 1);
+		TryCatchLabel Label = this.TryCatchLabel.peek();
 
 		// prepare
 		//TODO: add exception class name
@@ -601,16 +607,17 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 		mv.visitTryCatchBlock(Label.beginTryLabel, Label.endTryLabel, catchLabel, throwType);
 
 		// catch block
-		JLocalVarStack local = this.CurrentBuilder.AddLocal(NativeTypeTable.GetJavaClass(Node.ExceptionType), Node.ExceptionName);
+		this.CurrentBuilder.AddLocal(NativeTypeTable.GetJavaClass(Node.ExceptionType), Node.ExceptionName);
 		mv.visitLabel(catchLabel);
 		this.CurrentBuilder.StoreLocal(Node.ExceptionName);
 		Node.BodyNode.Accept(this);
 		mv.visitJumpInsn(GOTO, Label.finallyLabel);
 		//FIXME: remove local
+		this.CurrentBuilder.RemoveLocal(NativeTypeTable.GetJavaClass(Node.ExceptionType), Node.ExceptionName);
 	}
 
 	@Override public void VisitParamNode(ZParamNode Node) {
-		// TODO Auto-generated method stub
+		this.CurrentBuilder.AddLocal(NativeTypeTable.GetJavaClass(Node.Type), Node.Name);
 	}
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
@@ -630,8 +637,7 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 		this.CurrentBuilder = new AsmMethodBuilder(ACC_PUBLIC | ACC_STATIC, Node.FuncName, MethodDesc, this, this.CurrentBuilder);
 		HolderClass.AddMethod(this.CurrentBuilder);
 		for(int i = 0; i < Node.ArgumentList.size(); i++) {
-			ZParamNode ParamNode =(ZParamNode)Node.ArgumentList.get(i);
-			this.CurrentBuilder.AddLocal(NativeTypeTable.GetJavaClass(ParamNode.Type), ParamNode.Name);
+			Node.ArgumentList.get(i).Accept(this);
 		}
 		Node.BodyNode.Accept(this);
 		if(Node.ReturnType.IsVoidType()) {
@@ -688,6 +694,7 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 		Method sMethod = NativeMethodTable.GetStaticMethod("ThrowError");
 		this.CurrentBuilder.SetLineNumber(Node);
 		this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, null);
+		//this.CurrentBuilder.visitInsn(ATHROW);
 	}
 
 	public Method GetStaticFuncMethod(String FuncName) {
