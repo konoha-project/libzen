@@ -26,9 +26,6 @@ package zen.deps;
 
 import zen.type.ZType;
 
-//endif VAJA
-/*ZenObject Begin*/
 public interface ZenTypedObject {
-	public ZType GetObjectType();
+	public ZType GetZenType();
 }
-/*ZenObject End*/

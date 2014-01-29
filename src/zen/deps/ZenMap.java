@@ -51,7 +51,7 @@ public final class ZenMap <T> implements ZenTypedObject {
 		return this.Map.keySet().iterator();
 	}
 
-	@Override public ZType GetObjectType() {
+	@Override public ZType GetZenType() {
 		// TODO Auto-generated method stub
 		return null;
 	}

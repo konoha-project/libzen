@@ -33,7 +33,7 @@ public class ZenTopObject implements ZenTypedObject {
 	protected ZenTopObject(ZType GreenType) {
 		this.GreenType = GreenType;
 	}
-	@Override public final ZType GetObjectType() {
+	@Override public final ZType GetZenType() {
 		return this.GreenType;
 	}
 

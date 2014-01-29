@@ -23,11 +23,11 @@ import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.MethodNode;
 
 import zen.ast.ZNode;
-import zen.deps.IMatchFunc;
-import zen.deps.ITokenFunc;
 import zen.deps.NativeTypeTable;
 import zen.deps.Var;
 import zen.deps.ZenFunction;
+import zen.deps.ZenMatchFunc;
+import zen.deps.ZenTokenFunc;
 import zen.lang.ZSystem;
 import zen.parser.ZGenerator;
 import zen.parser.ZNameSpace;
@@ -80,14 +80,14 @@ class AsmClassLoader extends ClassLoader {
 		TypeList.add(ZSystem.StringType);
 		TypeList.add(ZSystem.IntType);
 		ZFuncType FuncType = ZSystem.LookupFuncType(TypeList);
-		this.FuncClassMap.put(FuncClassName(FuncType), ITokenFunc.class);
+		this.FuncClassMap.put(FuncClassName(FuncType), ZenTokenFunc.class);
 		TypeList.clear();
 		TypeList.add(NativeTypeTable.GetZenType(ZNode.class));
 		TypeList.add(NativeTypeTable.GetZenType(ZNameSpace.class));
 		TypeList.add(NativeTypeTable.GetZenType(ZTokenContext.class));
 		TypeList.add(NativeTypeTable.GetZenType(ZNode.class));
 		FuncType = ZSystem.LookupFuncType(TypeList);
-		this.FuncClassMap.put(FuncClassName(FuncType), IMatchFunc.class);
+		this.FuncClassMap.put(FuncClassName(FuncType), ZenMatchFunc.class);
 	}
 
 	public Class<?> LoadFuncClass(ZFuncType FuncType) {
@@ -100,10 +100,11 @@ class AsmClassLoader extends ClassLoader {
 			MethodNode InvokeMethod = new MethodNode(ACC_PUBLIC | ACC_ABSTRACT, "Invoke", Desc, null, null);
 			cb.AddMethod(InvokeMethod);
 
-			MethodNode InitMethod = new MethodNode(ACC_PUBLIC, "<init>", "(Ljava/lang/String;)V", null, null);
+			MethodNode InitMethod = new MethodNode(ACC_PUBLIC, "<init>", "(ILjava/lang/String;)V", null, null);
 			InitMethod.visitVarInsn(ALOAD, 0);
-			InitMethod.visitVarInsn(ALOAD, 1);
-			InitMethod.visitMethodInsn(INVOKESPECIAL, SuperClassName, "<init>", "(Ljava/lang/String;)V");
+			InitMethod.visitVarInsn(ILOAD, 1);
+			InitMethod.visitVarInsn(ALOAD, 2);
+			InitMethod.visitMethodInsn(INVOKESPECIAL, SuperClassName, "<init>", "(ILjava/lang/String;)V");
 			InitMethod.visitInsn(RETURN);
 			cb.AddMethod(InitMethod);
 			this.AddClassBuilder(cb);
@@ -151,8 +152,10 @@ class AsmClassLoader extends ClassLoader {
 
 		MethodNode InitMethod = new MethodNode(ACC_PRIVATE, "<init>", "()V", null, null);
 		InitMethod.visitVarInsn(ALOAD, 0);
-		InitMethod.visitLdcInsn(FuncNode.FuncName + ": " + FuncType);
-		InitMethod.visitMethodInsn(INVOKESPECIAL, Type.getInternalName(FuncClass), "<init>", "(Ljava/lang/String;)V");
+		InitMethod.visitLdcInsn(FuncType.TypeId);  // FIXME
+		//InitMethod.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Integer", "intValue", "(Ljva/lang/Integer;)I");
+		InitMethod.visitLdcInsn(FuncNode.FuncName);
+		InitMethod.visitMethodInsn(INVOKESPECIAL, Type.getInternalName(FuncClass), "<init>", "(ILjava/lang/String;)V");
 		InitMethod.visitInsn(RETURN);
 		cb.AddMethod(InitMethod);
 		return cb;

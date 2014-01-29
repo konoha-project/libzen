@@ -1,12 +1,19 @@
 package zen.deps;
 
-public class ZenFunction {
+import zen.type.ZType;
+import zen.type.ZTypePools;
+
+public abstract class ZenFunction implements ZenTypedObject {
+	@Field final ZType  ZenType;
 	@Field final String FUNCTION;
-	public ZenFunction(String f) {
+	public ZenFunction(int TypeId, String f) {
+		this.ZenType  = ZTypePools.TypeOf(TypeId);
 		this.FUNCTION = f;
 	}
-	@Override
-	public String toString() {
+	@Override public final ZType GetZenType() {
+		return this.ZenType;
+	}
+	@Override public String toString() {
 		return this.FUNCTION;
 	}
 }
