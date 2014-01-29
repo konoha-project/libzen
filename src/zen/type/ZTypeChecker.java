@@ -101,8 +101,8 @@ public abstract class ZTypeChecker extends ZVisitor {
 				else {
 					Node = this.ReturnedNode;
 				}
-				Node = this.TypeCheckImpl(Node, NameSpace, ContextType, TypeCheckPolicy);
 				this.VarScope.CheckVarNode(ContextType, Node);
+				Node = this.TypeCheckImpl(Node, NameSpace, ContextType, TypeCheckPolicy);
 				if(ParentNode != Node.ParentNode && ParentNode != null) {
 					ParentNode.SetChild(Node);
 				}
@@ -124,7 +124,10 @@ public abstract class ZTypeChecker extends ZVisitor {
 		if(Node.IsErrorNode()) {
 			return Node;
 		}
-		if(Node.Type == ContextType || ContextType.IsVarType() || ContextType.Accept(Node.Type) || ZUtils.IsFlag(TypeCheckPolicy, NoCheckPolicy)) {
+		if(Node.IsVarType() || ContextType.IsVarType() || ZUtils.IsFlag(TypeCheckPolicy, NoCheckPolicy)) {
+			return Node;
+		}
+		if(Node.Type == ContextType || ContextType.Accept(Node.Type)) {
 			return Node;
 		}
 		if(ContextType.IsVoidType() && !Node.Type.IsVoidType()) {

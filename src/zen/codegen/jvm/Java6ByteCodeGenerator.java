@@ -85,6 +85,7 @@ import zen.ast.ZNode;
 import zen.ast.ZNotNode;
 import zen.ast.ZNullNode;
 import zen.ast.ZOrNode;
+import zen.ast.ZParamNode;
 import zen.ast.ZReturnNode;
 import zen.ast.ZSetIndexNode;
 import zen.ast.ZSetLocalNode;
@@ -614,7 +615,9 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 		this.CurrentBuilder = new AsmMethodBuilder(ACC_PUBLIC | ACC_STATIC, Node.FuncName, MethodDesc, this, this.CurrentBuilder);
 		HolderClass.AddMethod(this.CurrentBuilder);
 		for(int i = 0; i < Node.ParamList.size(); i++) {
-			Node.ParamList.get(i).Accept(this);
+			ZParamNode ParamNode = Node.ParamList.get(i);
+			Class<?> DeclClass = NativeTypeTable.GetJavaClass(ParamNode.Type);
+			this.CurrentBuilder.AddLocal(DeclClass, ParamNode.Name);
 		}
 		Node.BodyNode.Accept(this);
 		if(Node.ReturnType.IsVoidType()) {
