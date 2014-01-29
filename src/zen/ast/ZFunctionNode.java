@@ -38,7 +38,7 @@ import zen.type.ZType;
 public class ZFunctionNode extends ZNode {
 	@Field public ZType ReturnType = ZSystem.VarType;
 	@Field public String FuncName = null;
-	@Field public ArrayList<ZNode> ParamList = new ArrayList<ZNode>();
+	@Field public ArrayList<ZParamNode> ParamList = new ArrayList<ZParamNode>();
 	@Field public ZNode BodyNode = null;
 	@Field public ZNameSpace NameSpace;
 
@@ -54,7 +54,7 @@ public class ZFunctionNode extends ZNode {
 
 	@Override public void Append(ZNode Node) {
 		if(Node instanceof ZParamNode) {
-			this.ParamList.add(Node);
+			this.ParamList.add((ZParamNode)Node);
 		}
 		else if(this.FuncName == null) {
 			this.FuncName = Node.SourceToken.ParsedText;
@@ -84,7 +84,7 @@ public class ZFunctionNode extends ZNode {
 			TypeList.add(this.ReturnType.GetRealType());
 			@Var int i = 0;
 			while(i < this.ParamList.size()) {
-				@Var ZParamNode Node = (ZParamNode) this.ParamList.get(i);
+				@Var ZParamNode Node = this.ParamList.get(i);
 				@Var ZType ParamType = Node.Type.GetRealType();
 				if(ParamType.IsVarType() && FuncType != null) {
 					ParamType = FuncType.GetParamType(i+1);

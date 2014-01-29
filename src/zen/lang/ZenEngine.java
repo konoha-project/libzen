@@ -360,7 +360,7 @@ public class ZenEngine extends ZVisitor {
 		while(TokenContext.HasNext()) {
 			TokenContext.SetParseFlag(0); // init
 			@Var ZNode TopLevelNode = TokenContext.ParsePattern(this.Generator.RootNameSpace, "$Statement$", ZTokenContext.Required);
-			System.out.println("interprinting .." + TopLevelNode.getClass().getSimpleName());
+			//System.out.println("interprinting .." + TopLevelNode.getClass().getSimpleName());
 			ResultValue = this.Exec(TopLevelNode, IsInteractive);
 			if(TopLevelNode.IsErrorNode() && TokenContext.HasNext()) {
 				@Var ZToken Token = TokenContext.GetToken();
