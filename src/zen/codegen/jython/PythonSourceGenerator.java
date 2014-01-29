@@ -176,13 +176,13 @@ public class PythonSourceGenerator extends ZSourceGenerator {
 		ZReturnNode ReturnNode = Node.BodyNode.ToReturnNode();
 		if(ReturnNode != null && ReturnNode.ValueNode != null) {
 			this.CurrentBuilder.Append("lambda");
-			this.VisitParamList(" ", Node.ArgumentList, ": ");
+			this.VisitParamList(" ", Node.ParamList, ": ");
 			this.GenerateCode(ReturnNode.ValueNode);
 		}
 		else {
 			this.CurrentBuilder.Append("def");
 			this.CurrentBuilder.AppendToken("lambda");
-			this.VisitParamList("(", Node.ArgumentList, ")");
+			this.VisitParamList("(", Node.ParamList, ")");
 			this.GenerateCode(Node.BodyNode);
 		}
 	}
@@ -191,7 +191,7 @@ public class PythonSourceGenerator extends ZSourceGenerator {
 	public void VisitFuncDeclNode(ZFuncDeclNode Node) {
 		this.CurrentBuilder.Append("def ");
 		this.CurrentBuilder.Append(Node.FuncName);
-		this.VisitParamList("(", Node.ArgumentList, ")");
+		this.VisitParamList("(", Node.ParamList, ")");
 		if (Node.BodyNode == null) {
 			this.CurrentBuilder.Append(": pass");
 		} else {

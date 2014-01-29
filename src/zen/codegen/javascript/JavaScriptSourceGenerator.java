@@ -156,7 +156,7 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 	public void VisitFunctionNode(ZFunctionNode Node) {
 		ZReturnNode ReturnNode = Node.BodyNode.ToReturnNode();
 		this.CurrentBuilder.Append("(function");
-		this.VisitParamList("(", Node.ArgumentList, ")");
+		this.VisitParamList("(", Node.ParamList, ")");
 		if(ReturnNode != null && ReturnNode.ValueNode != null) {
 			this.CurrentBuilder.Append("{ return ");
 			this.GenerateCode(ReturnNode.ValueNode);
@@ -172,7 +172,7 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 	public void VisitFuncDeclNode(ZFuncDeclNode Node) {
 		this.CurrentBuilder.Append("function ");
 		this.CurrentBuilder.Append(Node.FuncName);
-		this.VisitParamList("(", Node.ArgumentList, ")");
+		this.VisitParamList("(", Node.ParamList, ")");
 		this.GenerateCode(Node.BodyNode);
 	}
 

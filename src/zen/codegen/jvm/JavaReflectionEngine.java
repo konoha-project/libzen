@@ -53,11 +53,11 @@ import zen.ast.ZUnaryNode;
 import zen.deps.LibNative;
 import zen.deps.Var;
 import zen.lang.ZenEngine;
-import zen.type.ZTypeSafer;
+import zen.type.ZTypeChecker;
 
 public class JavaReflectionEngine extends ZenEngine {
 
-	JavaReflectionEngine(ZTypeSafer TypeChecker, Java6ByteCodeGenerator Generator) {
+	JavaReflectionEngine(ZTypeChecker TypeChecker, Java6ByteCodeGenerator Generator) {
 		super(TypeChecker, Generator);
 	}
 

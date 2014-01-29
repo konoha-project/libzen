@@ -127,7 +127,7 @@ public class RubySourceGenerator extends ZSourceGenerator {
 	public void VisitFunctionNode(ZFunctionNode Node) {
 		ZReturnNode ReturnNode = Node.BodyNode.ToReturnNode();
 		this.CurrentBuilder.Append("->");
-		this.VisitParamList("(", Node.ArgumentList, ")");
+		this.VisitParamList("(", Node.ParamList, ")");
 		this.GenerateCode(Node.BodyNode);
 	}
 
@@ -135,7 +135,7 @@ public class RubySourceGenerator extends ZSourceGenerator {
 	public void VisitFuncDeclNode(ZFuncDeclNode Node) {
 		this.CurrentBuilder.Append("def ");
 		this.CurrentBuilder.Append(Node.FuncName);
-		this.VisitParamList("(", Node.ArgumentList, ")");
+		this.VisitParamList("(", Node.ParamList, ")");
 		if (Node.BodyNode != null) {
 			this.GenerateCode(Node.BodyNode);
 		}

@@ -300,7 +300,7 @@ public class ZTransformer extends ZVisitor {
 	}
 
 	@Override public void VisitFuncDeclNode(ZFuncDeclNode Node) {
-		this.TransformNodeList(Node, Node.ArgumentList);
+		this.TransformNodeList(Node, Node.ParamList);
 		if(Node.BodyNode != null) {
 			Node.BodyNode = this.Transform(Node, Node.BodyNode);
 		}

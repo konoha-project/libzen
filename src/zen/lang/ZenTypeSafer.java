@@ -83,12 +83,12 @@ import zen.parser.ZUtils;
 import zen.type.ZFuncType;
 import zen.type.ZGreekType;
 import zen.type.ZType;
+import zen.type.ZTypeChecker;
 import zen.type.ZTypeFlag;
-import zen.type.ZTypeSafer;
 import zen.type.ZVarScope;
 import zen.type.ZVarType;
 
-public class ZenTypeSafer extends ZTypeSafer {
+public class ZenTypeSafer extends ZTypeChecker {
 
 	@Field private ZFunctionNode CurrentFunctionNode = null;
 
@@ -683,8 +683,8 @@ public class ZenTypeSafer extends ZTypeSafer {
 		this.CurrentFunctionNode = FunctionNode.Push(this.CurrentFunctionNode);
 		this.VarScope = new ZVarScope(this.VarScope, this.Logger, null);
 		@Var int i = 0;
-		while(i < FunctionNode.ArgumentList.size()) {
-			@Var ZParamNode ParamNode = (ZParamNode)FunctionNode.ArgumentList.get(i);
+		while(i < FunctionNode.ParamList.size()) {
+			@Var ZParamNode ParamNode = (ZParamNode)FunctionNode.ParamList.get(i);
 			ParamNode.Type = this.VarScope.NewVarType(ParamNode.Type, ParamNode.Name, ParamNode.SourceToken);
 			ZenGamma.SetLocalVariable(NameSpace, this.CurrentFunctionNode, ParamNode.Type, ParamNode.Name, null);
 			i = i + 1;
@@ -714,8 +714,8 @@ public class ZenTypeSafer extends ZTypeSafer {
 		this.PushFunctionNode(Node.NameSpace, Node);
 		this.VarScope.TypeCheckFunctionBody(NameSpace, this, Node);
 		this.PopFunctionNode(Node.NameSpace);
-		FuncType = Node.GetFuncType(null);
-		this.TypedNode(Node, FuncType);
+		//		FuncType = Node.GetFuncType(null);
+		this.TypedNode(Node, ZSystem.VoidType);
 	}
 
 	@Override public void VisitClassDeclNode(ZClassDeclNode Node) {

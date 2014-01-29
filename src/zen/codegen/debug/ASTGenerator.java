@@ -439,8 +439,8 @@ public class ASTGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Indent();
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.Append("(");
-		for (int i = 0; i < Node.ArgumentList.size(); i++) {
-			Node.ArgumentList.get(i).Accept(this);
+		for (int i = 0; i < Node.ParamList.size(); i++) {
+			Node.ParamList.get(i).Accept(this);
 		}
 		this.CurrentBuilder.Append(")");
 		Node.BodyNode.Accept(this);
@@ -455,7 +455,7 @@ public class ASTGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Indent();
 		this.CurrentBuilder.AppendIndent();
 		this.CurrentBuilder.Append("(");
-		this.CurrentBuilder.AppendParamList(Node.ArgumentList, 0, Node.ArgumentList.size());
+		this.CurrentBuilder.AppendParamList(Node.ParamList, 0, Node.ParamList.size());
 		this.CurrentBuilder.Append(")");
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.AppendIndent();

@@ -79,19 +79,19 @@ import zen.parser.ZParserConst;
 import zen.parser.ZToken;
 import zen.parser.ZTokenContext;
 import zen.parser.ZVisitor;
-import zen.type.ZTypeSafer;
+import zen.type.ZTypeChecker;
 
 public class ZenEngine extends ZVisitor {
 	private boolean IsVisitable = true;
 	protected Object EvaledValue = null;
-	protected ZTypeSafer TypeChecker;
+	protected ZTypeChecker TypeChecker;
 	public final ZGenerator Generator;
 
 	private final ArrayList<ZNode> LazyNodeList = new ArrayList<ZNode>();
 	public ZLogger Logger;
 	private boolean IsInteractive;
 
-	public ZenEngine(ZTypeSafer TypeChecker, ZGenerator Generator) {
+	public ZenEngine(ZTypeChecker TypeChecker, ZGenerator Generator) {
 		this.TypeChecker = TypeChecker;
 		this.Generator = Generator;
 		this.Logger = Generator.Logger;
@@ -122,11 +122,6 @@ public class ZenEngine extends ZVisitor {
 		this.EvaledValue = null;
 		this.IsVisitable = false;
 	}
-
-	//	protected void FoundError(Object ErrorInfo) {
-	//		this.EvaledValue = ErrorInfo;
-	//		this.IsVisitable = false;
-	//	}
 
 	protected void Unsupported(ZNode Node, String Message) {
 		this.Logger.ReportError(Node.SourceToken, "unsupported " + Message + " (at the top level)");
@@ -310,6 +305,7 @@ public class ZenEngine extends ZVisitor {
 
 	@Override public void VisitReturnNode(ZReturnNode Node) {
 		this.Unsupported(Node, "return");
+		throw new RuntimeException();
 	}
 
 	@Override public void VisitWhileNode(ZWhileNode Node) {
@@ -358,11 +354,12 @@ public class ZenEngine extends ZVisitor {
 
 	}
 
-
 	public final Object Exec(ZNode Node, boolean IsInteractive) {
 		this.IsInteractive = IsInteractive;
 		this.EnableVisitor();
+		System.err.println("Before: " +Node);
 		Node = this.TypeChecker.CheckType(Node, this.Generator.RootNameSpace, ZSystem.VoidType);
+		System.err.println("After:" + Node);
 		@Var Object ResultValue = this.Eval(Node);
 		return ResultValue;
 	}
@@ -375,6 +372,7 @@ public class ZenEngine extends ZVisitor {
 		while(TokenContext.HasNext()) {
 			TokenContext.SetParseFlag(0); // init
 			@Var ZNode TopLevelNode = TokenContext.ParsePattern(this.Generator.RootNameSpace, "$Statement$", ZTokenContext.Required);
+			System.out.println("interprinting .." + TopLevelNode.getClass().getSimpleName());
 			ResultValue = this.Exec(TopLevelNode, IsInteractive);
 			if(TopLevelNode.IsErrorNode() && TokenContext.HasNext()) {
 				@Var ZToken Token = TokenContext.GetToken();

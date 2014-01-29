@@ -168,13 +168,13 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 		ZReturnNode ReturnNode = Node.BodyNode.ToReturnNode();
 		if(ReturnNode != null && ReturnNode.ValueNode != null) {
 			this.CurrentBuilder.Append("\\");
-			this.VisitParamList(" ", Node.ArgumentList, " ");
+			this.VisitParamList(" ", Node.ParamList, " ");
 			this.CurrentBuilder.Append("");
 			this.GenerateCode(ReturnNode.ValueNode);
 		}
 		else {
 			this.CurrentBuilder.Append("\\");
-			this.VisitParamList(" ", Node.ArgumentList, " -> ");
+			this.VisitParamList(" ", Node.ParamList, " -> ");
 			this.GenerateCode(Node.BodyNode);
 		}
 	}
@@ -196,12 +196,12 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 		this.Variables = new ArrayList<String>();
 
 		this.CurrentBuilder.Append(Node.FuncName);
-		this.VisitParamList(" ", Node.ArgumentList, " = do");
+		this.VisitParamList(" ", Node.ParamList, " = do");
 		this.CurrentBuilder.AppendLineFeed();
 
 		this.Indent(this.CurrentBuilder);
 		// Argument variable declarations as IORef
-		for (ZNode node : Node.ArgumentList) {
+		for (ZNode node : Node.ParamList) {
 			ZParamNode node1 = (ZParamNode)node;
 
 			this.Variables.add(node1.Name);
@@ -211,7 +211,7 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 			this.CurrentBuilder.AppendLineFeed();
 		}
 
-		for (ZNode node : Node.ArgumentList) {
+		for (ZNode node : Node.ParamList) {
 			ZParamNode node1 = (ZParamNode)node;
 			this.CurrentBuilder.AppendIndent();
 			this.CurrentBuilder.Append(node1.Name + " <- readIORef " + node1.Name + "_ref");

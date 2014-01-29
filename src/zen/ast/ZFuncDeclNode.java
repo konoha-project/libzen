@@ -25,16 +25,15 @@
 package zen.ast;
 
 import zen.deps.Field;
-import zen.lang.ZFunc;
 import zen.parser.ZNameSpace;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 
+@Deprecated
 public final class ZFuncDeclNode extends ZFunctionNode {
 	@Field public String FuncName;
 	@Field public ZNameSpace NameSpace;
 	@Field public String ReferenceName;
-	@Field public ZFunc ResolvedFunc = null;
 	public ZFuncDeclNode(ZToken SourceToken, ZNameSpace NameSpace, String FuncName) {
 		super(SourceToken);
 		this.NameSpace = NameSpace;

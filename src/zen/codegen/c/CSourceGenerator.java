@@ -94,7 +94,7 @@ public class CSourceGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Append(" ");
 
 		this.CurrentBuilder.Append("function ");
-		this.VisitParamList("(", Node.ArgumentList, ")");
+		this.VisitParamList("(", Node.ParamList, ")");
 		this.VisitTypeAnnotation(Node.ReturnType);
 		this.GenerateCode(Node.BodyNode);
 	}
@@ -103,7 +103,7 @@ public class CSourceGenerator extends ZSourceGenerator {
 		this.VisitType(Node.ReturnType);
 		this.CurrentBuilder.Append(" ");
 		this.CurrentBuilder.Append(Node.FuncName);
-		this.VisitParamList("(", Node.ArgumentList, ")");
+		this.VisitParamList("(", Node.ParamList, ")");
 		if (Node.BodyNode == null) {
 			this.CurrentBuilder.Append(this.SemiColon);
 		} else {

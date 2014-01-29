@@ -46,7 +46,7 @@ public final class ZVarScope {
 		}
 	}
 
-	public final boolean TypeCheckStmtList(ZNameSpace NameSpace, ZTypeSafer TypeSafer, ArrayList<ZNode> StmtList) {
+	public final boolean TypeCheckStmtList(ZNameSpace NameSpace, ZTypeChecker TypeSafer, ArrayList<ZNode> StmtList) {
 		@Var int PrevCount = -1;
 		while(true) {
 			@Var int i = 0;
@@ -66,7 +66,7 @@ public final class ZVarScope {
 		return false;
 	}
 
-	public final void TypeCheckFunctionBody(ZNameSpace NameSpace, ZTypeSafer TypeSafer, ZFunctionNode FunctionNode) {
+	public final void TypeCheckFunctionBody(ZNameSpace NameSpace, ZTypeChecker TypeSafer, ZFunctionNode FunctionNode) {
 		@Var int PrevCount = -1;
 		while(true) {
 			this.VarNodeCount = 0;

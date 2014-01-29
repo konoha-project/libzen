@@ -46,6 +46,11 @@ public abstract class ZNode {
 		return Node;
 	}
 
+	@Override
+	public String toString() {
+		return "Node" + this.getClass().getSimpleName() + ", Source=" + this.SourceToken;
+	}
+
 	public boolean IsErrorNode() {
 		return (this instanceof ZErrorNode);
 	}

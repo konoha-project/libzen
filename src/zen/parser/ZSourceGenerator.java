@@ -499,7 +499,7 @@ public class ZSourceGenerator extends ZGenerator {
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
 		this.CurrentBuilder.Append("function");
 		this.CurrentBuilder.AppendWhiteSpace();
-		this.VisitParamList("(", Node.ArgumentList, ")");
+		this.VisitParamList("(", Node.ParamList, ")");
 		this.VisitTypeAnnotation(Node.ReturnType);
 		this.GenerateCode(Node.BodyNode);
 	}
@@ -508,7 +508,7 @@ public class ZSourceGenerator extends ZGenerator {
 		this.CurrentBuilder.Append("function");
 		this.CurrentBuilder.AppendWhiteSpace();
 		this.CurrentBuilder.Append(Node.ReferenceName);
-		this.VisitParamList("(", Node.ArgumentList, ")");
+		this.VisitParamList("(", Node.ParamList, ")");
 		this.VisitTypeAnnotation(Node.ReturnType);
 		if (Node.BodyNode == null) {
 			this.CurrentBuilder.Append(this.SemiColon);
@@ -547,7 +547,6 @@ public class ZSourceGenerator extends ZGenerator {
 		this.CurrentBuilder.AppendIndent();
 		this.CurrentBuilder.Append("}");
 	}
-
 
 	@Override public void VisitErrorNode(ZErrorNode Node) {
 		this.Logger.ReportError(Node.SourceToken, Node.ErrorMessage);

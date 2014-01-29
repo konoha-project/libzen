@@ -30,6 +30,7 @@ import zen.deps.Field;
 import zen.deps.Nullable;
 import zen.deps.Var;
 import zen.lang.ZSystem;
+import zen.parser.ZNameSpace;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 import zen.type.ZFuncType;
@@ -38,20 +39,26 @@ import zen.type.ZType;
 public class ZFunctionNode extends ZNode {
 	@Field public ZType ReturnType = ZSystem.VarType;
 	@Field public String FuncName = null;
-	@Field public ArrayList<ZNode> ArgumentList = new ArrayList<ZNode>();
+	@Field public ArrayList<ZNode> ParamList = new ArrayList<ZNode>();
 	@Field public ZNode BodyNode = null;
+	@Field public ZNameSpace NameSpace;
 
 	@Field public ZFunctionNode ParentFunctionNode = null;
 	@Field public ZFuncType ResolvedFuncType = null;
 	@Field public String ReferenceName = null;
 	@Field public int VarIndex = 0;
 
-	public ZFunctionNode(ZToken Token) {
+	public ZFunctionNode(ZToken Token, ZNameSpace NameSpace, @Nullable ZToken FuncNameToken) {
 		super();
+		this.SourceToken = FuncNameToken;
+		this.NameSpace = NameSpace;
+		if(FuncNameToken != null) {
+			this.FuncName = FuncNameToken.ParsedText;
+		}
 	}
 	@Override public void Append(ZNode Node) {
 		if(Node instanceof ZParamNode) {
-			this.ArgumentList.add(Node);
+			this.ParamList.add(Node);
 		}
 		else if(Node instanceof ZTypeNode) {
 			this.ReturnType = Node.Type;
@@ -76,8 +83,8 @@ public class ZFunctionNode extends ZNode {
 			}
 			TypeList.add(this.ReturnType.GetRealType());
 			@Var int i = 0;
-			while(i < this.ArgumentList.size()) {
-				@Var ZParamNode Node = (ZParamNode) this.ArgumentList.get(i);
+			while(i < this.ParamList.size()) {
+				@Var ZParamNode Node = (ZParamNode) this.ParamList.get(i);
 				@Var ZType ParamType = Node.Type.GetRealType();
 				if(ParamType.IsVarType() && FuncType != null) {
 					ParamType = FuncType.GetParamType(i+1);

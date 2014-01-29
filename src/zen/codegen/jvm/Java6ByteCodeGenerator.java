@@ -636,8 +636,8 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 		//System.out.println("*** " + MethodDesc);
 		this.CurrentBuilder = new AsmMethodBuilder(ACC_PUBLIC | ACC_STATIC, Node.FuncName, MethodDesc, this, this.CurrentBuilder);
 		HolderClass.AddMethod(this.CurrentBuilder);
-		for(int i = 0; i < Node.ArgumentList.size(); i++) {
-			Node.ArgumentList.get(i).Accept(this);
+		for(int i = 0; i < Node.ParamList.size(); i++) {
+			Node.ParamList.get(i).Accept(this);
 		}
 		Node.BodyNode.Accept(this);
 		if(Node.ReturnType.IsVoidType()) {
