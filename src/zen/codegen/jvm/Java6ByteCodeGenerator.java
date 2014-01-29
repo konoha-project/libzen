@@ -42,6 +42,7 @@ import static org.objectweb.asm.Opcodes.NEW;
 import static org.objectweb.asm.Opcodes.PUTFIELD;
 import static org.objectweb.asm.Opcodes.RETURN;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -169,6 +170,59 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 			return ZSystem.VoidType;     // undefined
 		}
 		return ZSystem.VarType;     // undefined
+	}
+
+	Constructor<?> GetConstructor(ZType RecvType, ArrayList<ZNode> ParamList) {
+		Class<?> NativeClass = NativeTypeTable.GetJavaClass(RecvType);
+		if(NativeClass != null) {
+			try {
+				Constructor<?>[] Methods = NativeClass.getConstructors();
+				for(int i = 0; i < Methods.length; i++) {
+					@Var Constructor<?> jMethod = Methods[i];
+					if(!Modifier.isPublic(jMethod.getModifiers())) {
+						continue;
+					}
+					Class<?>[] JParamClass = jMethod.getParameterTypes();
+					if(JParamClass.length != ParamList.size()) {
+						continue;
+					}
+					//this.Debug("searching.. method: " + jMethod);
+					for(int j = 0; j < JParamClass.length; j++) {
+						if(JParamClass[j] == Object.class) {
+							continue; // accepting all types
+						}
+						@Var ZType JParamType = NativeTypeTable.GetZenType(JParamClass[j]);
+						if(!JParamType.Accept(ParamList.get(j).Type)) {
+							jMethod = null;
+							break;
+						}
+					}
+					if(jMethod != null) {
+						return jMethod;
+					}
+				}
+			} catch (SecurityException e) {
+			}
+		}
+		return null;
+	}
+
+	@Override public ZFuncType GetConstructorFuncType(ZType ClassType, ArrayList<ZNode> ParamList) {
+		Constructor<?> jMethod = this.GetConstructor(ClassType, ParamList);
+		if(jMethod != null) {
+			@Var ArrayList<ZType> TypeList = new ArrayList<ZType>();
+			TypeList.add(ClassType);
+			@Var Class<?>[] ParamTypes = jMethod.getParameterTypes();
+			if (ParamTypes != null) {
+				@Var int j = 0;
+				while(j < ParamTypes.length) {
+					TypeList.add(NativeTypeTable.GetZenType(ParamTypes[j]));
+					j = j + 1;
+				}
+			}
+			return ZSystem.LookupFuncType(TypeList);
+		}
+		return null;
 	}
 
 	Method GetMethod(ZType RecvType, String MethodName, ArrayList<ZNode> ParamList) {

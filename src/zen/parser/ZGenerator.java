@@ -31,9 +31,9 @@ import zen.ast.ZNode;
 import zen.deps.Field;
 import zen.lang.ZSystem;
 import zen.lang.ZenEngine;
-//endif VAJA
 import zen.type.ZFuncType;
 import zen.type.ZType;
+//endif VAJA
 
 public abstract class ZGenerator extends ZVisitor {
 	@Field private String            GrammarInfo;
@@ -92,6 +92,10 @@ public abstract class ZGenerator extends ZVisitor {
 
 	public ZType GetSetterType(ZType BaseType, String Name) {
 		return ZSystem.VarType;     // undefined
+	}
+
+	public ZFuncType GetConstructorFuncType(ZType ClassType, ArrayList<ZNode> ParamList) {
+		return null;     // undefined
 	}
 
 	public ZFuncType GetMethodFuncType(ZType RecvType, String MethodName, ArrayList<ZNode> ParamList) {
