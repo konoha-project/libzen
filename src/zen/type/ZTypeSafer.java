@@ -249,7 +249,7 @@ public abstract class ZTypeSafer extends ZVisitor {
 	//			@Var int i = 0;
 	//			while(i < ParamList.size()) {
 	//				ZNode SubNode = ParamList.get(i);
-	//				SubNode = this.TypeCheck(SubNode, NameSpace, ZSystem.VarType, ZenTypeChecker.DefaultTypeCheckPolicy);
+	//				SubNode = this.TypeCheck(SubNode, NameSpace, ZSystem.VarType, ZTypeSafer.DefaultTypeCheckPolicy);
 	//				ParamList.set(i, SubNode);
 	//				if(SubNode.IsVarType()) {
 	//					AllTyped = false;

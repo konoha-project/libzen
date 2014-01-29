@@ -79,18 +79,19 @@ import zen.parser.ZParserConst;
 import zen.parser.ZToken;
 import zen.parser.ZTokenContext;
 import zen.parser.ZVisitor;
+import zen.type.ZTypeSafer;
 
 public class ZenEngine extends ZVisitor {
 	private boolean IsVisitable = true;
 	protected Object EvaledValue = null;
-	protected ZenTypeChecker TypeChecker;
+	protected ZTypeSafer TypeChecker;
 	public final ZGenerator Generator;
 
 	private final ArrayList<ZNode> LazyNodeList = new ArrayList<ZNode>();
 	public ZLogger Logger;
 	private boolean IsInteractive;
 
-	public ZenEngine(ZenTypeChecker TypeChecker, ZGenerator Generator) {
+	public ZenEngine(ZTypeSafer TypeChecker, ZGenerator Generator) {
 		this.TypeChecker = TypeChecker;
 		this.Generator = Generator;
 		this.Logger = Generator.Logger;
@@ -361,7 +362,7 @@ public class ZenEngine extends ZVisitor {
 	public final Object Exec(ZNode Node, boolean IsInteractive) {
 		this.IsInteractive = IsInteractive;
 		this.EnableVisitor();
-		Node = this.TypeChecker.TypeCheck(Node, this.Generator.RootNameSpace, ZSystem.VoidType, 0);
+		Node = this.TypeChecker.CheckType(Node, this.Generator.RootNameSpace, ZSystem.VoidType);
 		@Var Object ResultValue = this.Eval(Node);
 		return ResultValue;
 	}

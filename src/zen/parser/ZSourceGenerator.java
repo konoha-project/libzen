@@ -79,7 +79,7 @@ import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.deps.ZenMap;
 import zen.lang.ZenEngine;
-import zen.lang.ZenTypeInfer;
+import zen.lang.ZenTypeSafer;
 import zen.type.ZType;
 
 //endif VAJA
@@ -131,7 +131,7 @@ public class ZSourceGenerator extends ZGenerator {
 	}
 
 	@Override public ZenEngine GetEngine() {
-		return new ZenEngine(new ZenTypeInfer(this.Logger), this);
+		return new ZenEngine(new ZenTypeSafer(this.Logger), this);
 	}
 
 	protected ZSourceBuilder NewSourceBuilder() {

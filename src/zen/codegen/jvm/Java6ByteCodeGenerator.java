@@ -106,7 +106,7 @@ import zen.deps.Var;
 import zen.deps.ZenMap;
 import zen.lang.ZSystem;
 import zen.lang.ZenEngine;
-import zen.lang.ZenTypeInfer;
+import zen.lang.ZenTypeSafer;
 import zen.parser.ZGenerator;
 import zen.type.ZFuncType;
 import zen.type.ZType;
@@ -124,7 +124,7 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 	}
 
 	@Override public ZenEngine GetEngine() {
-		return new JavaReflectionEngine(new ZenTypeInfer(this.Logger), this);
+		return new JavaReflectionEngine(new ZenTypeSafer(this.Logger), this);
 	}
 
 	@Override public boolean StartCodeGeneration(ZNode Node,  boolean AllowLazy, boolean IsInteractive) {
