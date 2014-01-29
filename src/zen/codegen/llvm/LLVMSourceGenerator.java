@@ -34,30 +34,20 @@ import zen.ast.ZBinaryNode;
 import zen.ast.ZBlockNode;
 import zen.ast.ZBooleanNode;
 import zen.ast.ZBreakNode;
-import zen.ast.ZCastNode; //TODO
-//import zen.ast.ZCatchNode;
+import zen.ast.ZCastNode;
 import zen.ast.ZClassDeclNode;
 import zen.ast.ZComparatorNode;
-//import zen.ast.ZConstPoolNode;
-//import zen.ast.ZEmptyNode;
-//import zen.ast.ZErrorNode;
 import zen.ast.ZFieldNode;
 import zen.ast.ZFloatNode;
 import zen.ast.ZFuncCallNode;
-import zen.ast.ZFuncDeclNode;
-import zen.ast.ZFunctionNode; //TODO
+import zen.ast.ZFunctionNode;
 import zen.ast.ZGetIndexNode;
 import zen.ast.ZGetLocalNode;
-//import zen.ast.ZGetterNode; //TODO
 import zen.ast.ZGroupNode;
 import zen.ast.ZIfNode;
-//import zen.ast.ZInstanceOfNode;
 import zen.ast.ZIntNode;
-import zen.ast.ZMapLiteralNode; //TODO
+import zen.ast.ZMapLiteralNode;
 import zen.ast.ZNode;
-//import zen.ast.ZMethodCallNode; //TODO
-//import zen.ast.ZNewArrayNode; //TODO
-//import zen.ast.ZNewObjectNode; //TODO
 import zen.ast.ZNotNode;
 import zen.ast.ZNullNode;
 import zen.ast.ZOrNode;
@@ -65,23 +55,35 @@ import zen.ast.ZParamNode;
 import zen.ast.ZReturnNode;
 import zen.ast.ZSetIndexNode;
 import zen.ast.ZSetLocalNode;
-//import zen.ast.ZSetterNode; //TODO
 import zen.ast.ZStringNode;
 import zen.ast.ZStupidCastNode;
 import zen.ast.ZSymbolNode;
-//import zen.ast.ZThrowNode;
-//import zen.ast.ZTryNode;
 import zen.ast.ZUnaryNode;
 import zen.ast.ZVarDeclNode;
 import zen.ast.ZWhileNode;
 import zen.deps.LibNative;
 import zen.deps.Var;
-import zen.lang.ZGeneric1Type;
 import zen.lang.ZSystem;
-import zen.lang.ZType;
 import zen.lang.ZenClassType;
 import zen.parser.ZSourceGenerator;
 import zen.type.ZFuncType;
+import zen.type.ZGeneric1Type;
+import zen.type.ZType;
+//TODO
+//import zen.ast.ZCatchNode;
+//import zen.ast.ZConstPoolNode;
+//import zen.ast.ZEmptyNode;
+//import zen.ast.ZErrorNode;
+//TODO
+//import zen.ast.ZGetterNode; //TODO
+//import zen.ast.ZInstanceOfNode;
+//TODO
+//import zen.ast.ZMethodCallNode; //TODO
+//import zen.ast.ZNewArrayNode; //TODO
+//import zen.ast.ZNewObjectNode; //TODO
+//import zen.ast.ZSetterNode; //TODO
+//import zen.ast.ZThrowNode;
+//import zen.ast.ZTryNode;
 
 
 public class LLVMSourceGenerator extends ZSourceGenerator {
@@ -610,12 +612,12 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override
-	public void VisitFuncDeclNode(ZFuncDeclNode Node) {
+	public void VisitFuncDeclNode(ZFunctionNode Node) {
 		this.PushNewBuffer("define ");
 		this.VisitType(Node.ReturnType);
 		this.PutGlobalSymbol(Node.FuncName);
 		this.AddCodeToCurrentBuffer(" " + this.GetIdentifierAttachedSymbol(Node.FuncName) + " ");
-		this.VisitParamList("(", Node.ArgumentList, ") {");
+		this.VisitParamList("(", Node.ParamList, ") {");
 		this.AppendBufferAsNewLine();
 
 		this.CurrentBuilder.Indent();
