@@ -90,7 +90,6 @@ import zen.ast.ZSetIndexNode;
 import zen.ast.ZSetLocalNode;
 import zen.ast.ZSetterNode;
 import zen.ast.ZStringNode;
-import zen.ast.ZStupidCastNode;
 import zen.ast.ZSymbolNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
@@ -425,13 +424,6 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 	}
 
 	@Override public void VisitCastNode(ZCastNode Node) {
-		if(Node instanceof ZStupidCastNode) {
-			// FIXME
-			ZErrorNode Error = new ZErrorNode(Node.SourceToken, "Stupid Cast");
-			Error.Type = ZSystem.TopType;
-			Error.Accept(this);
-			return;
-		}
 		Class<?> C1 = NativeTypeTable.GetJavaClass(Node.Type);
 		Class<?> C2 = NativeTypeTable.GetJavaClass(Node.ExprNode.Type);
 		Method sMethod = NativeMethodTable.GetCastMethod(C1, C2);

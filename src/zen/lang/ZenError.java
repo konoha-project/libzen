@@ -7,11 +7,6 @@ import zen.type.ZType;
 
 public class ZenError {
 
-	static ZNode TypeErrorMessage(ZType Requested, ZNode Node, String Message) {
-		ZErrorNode ErrorNode = new ZErrorNode(Node.SourceToken, Message);
-		ErrorNode.Type = Requested;
-		return ErrorNode;
-	}
 
 	static ZNode ReadOnlyName(ZNode Node, ZType ClassType, String VarName) {
 		return new ZErrorNode(Node.SourceToken, "readonly: " + VarName);
@@ -20,6 +15,17 @@ public class ZenError {
 	static ZNode UndefinedName(ZNode Node, String Name) {
 		return new ZErrorNode(Node.SourceToken, "undefined name: " + Name);
 	}
+
+	static ZNode TypeErrorMessage(ZType Requested, ZNode Node, String Message) {
+		ZErrorNode ErrorNode = new ZErrorNode(Node.SourceToken, Message);
+		ErrorNode.Type = Requested;
+		return ErrorNode;
+	}
+
+	public static ZNode CreateStupidCast(ZType Requested, ZNode Node) {
+		return ZenError.TypeErrorMessage(Requested, Node, "type error: requested=" +  Requested + ", given=" + Node.Type);
+	}
+
 
 	public static ZNode FuncCallTypeError(ZType Requested, ZFuncCallNode FuncNode, int ArgumentIndex, ZType GivenType) {
 		String Fname = "function";

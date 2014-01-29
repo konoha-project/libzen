@@ -64,7 +64,6 @@ import zen.ast.ZSetIndexNode;
 import zen.ast.ZSetLocalNode;
 import zen.ast.ZSetterNode;
 import zen.ast.ZStringNode;
-import zen.ast.ZStupidCastNode;
 import zen.ast.ZSymbolNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
@@ -361,9 +360,6 @@ public class ZSourceGenerator extends ZGenerator {
 
 	@Override public void VisitCastNode(ZCastNode Node) {
 		this.CurrentBuilder.Append("(");
-		if(Node instanceof ZStupidCastNode) {
-			this.CurrentBuilder.AppendBlockComment("stupid");
-		}
 		this.VisitType(Node.Type);
 		this.CurrentBuilder.Append(")");
 		this.GenerateSurroundCode(Node.ExprNode);

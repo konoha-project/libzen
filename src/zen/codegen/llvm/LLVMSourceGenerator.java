@@ -56,7 +56,6 @@ import zen.ast.ZReturnNode;
 import zen.ast.ZSetIndexNode;
 import zen.ast.ZSetLocalNode;
 import zen.ast.ZStringNode;
-import zen.ast.ZStupidCastNode;
 import zen.ast.ZSymbolNode;
 import zen.ast.ZUnaryNode;
 import zen.ast.ZVarDeclNode;
@@ -502,23 +501,22 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		}
 	}
 
-	@Override
-	public void VisitCastNode(ZCastNode Node) {
+	@Override public void VisitCastNode(ZCastNode Node) {
 		/*FIXME*/
 		ZType BeforeType = Node.ExprNode.Type;
 		ZType AfterType = Node.Type;
 		if(BeforeType == AfterType) {
 			this.GenerateCode(Node.ExprNode);
 		}
-		else if(Node instanceof ZStupidCastNode) {
-			this.PushNewBuffer(";");
-			this.AddCodeToCurrentBuffer("stupid cast ");
-			this.AddCodeToCurrentBuffer(BeforeType.ShortName);
-			this.AddCodeToCurrentBuffer(" to ");
-			this.AddCodeToCurrentBuffer(AfterType.ShortName);
-			this.AppendBufferAsNewLine();
-			this.GenerateSurroundCode(Node.ExprNode);
-		}
+		//		else if(Node instanceof ZStupidCastNode) {
+		//			this.PushNewBuffer(";");
+		//			this.AddCodeToCurrentBuffer("stupid cast ");
+		//			this.AddCodeToCurrentBuffer(BeforeType.ShortName);
+		//			this.AddCodeToCurrentBuffer(" to ");
+		//			this.AddCodeToCurrentBuffer(AfterType.ShortName);
+		//			this.AppendBufferAsNewLine();
+		//			this.GenerateSurroundCode(Node.ExprNode);
+		//		}
 		else if(!(BeforeType.IsVoidType()) && AfterType.IsVoidType()) {
 			this.GenerateCode(Node.ExprNode);
 			this.PopCurrentBuffer();

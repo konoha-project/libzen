@@ -29,12 +29,12 @@ import java.util.ArrayList;
 import zen.ast.ZCastNode;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZNode;
-import zen.ast.ZStupidCastNode;
 import zen.deps.Field;
 import zen.deps.LibNative;
 import zen.deps.Var;
 import zen.lang.ZFunc;
 import zen.lang.ZSystem;
+import zen.lang.ZenError;
 import zen.parser.ZLogger;
 import zen.parser.ZNameSpace;
 import zen.parser.ZUtils;
@@ -140,8 +140,7 @@ public abstract class ZTypeChecker extends ZVisitor {
 		if(ZUtils.IsFlag(TypeCheckPolicy, EnforceCoercion) && ContextType.IsStringType()) {
 			return new ZCastNode(ContextType, Node);
 		}
-		//System.err.println("node="+ LibZen.GetClassName(Node) + "type error: requested = " + Type + ", given = " + Node.Type);
-		return new ZStupidCastNode(Node.SourceToken, ContextType, Node);
+		return ZenError.CreateStupidCast(ContextType, Node);
 	}
 
 	public final ZNode TryType(ZNode Node, ZNameSpace NameSpace, ZType ContextType) {
