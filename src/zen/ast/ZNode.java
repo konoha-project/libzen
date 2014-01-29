@@ -71,7 +71,7 @@ public abstract class ZNode {
 	}
 
 	public String GetVisitName() {
-		return "VisitNode"; // override this if you want to use additional node
+		return "VisitExtendedNode"; // override this if you want to use additional node
 	}
 
 	//	public abstract boolean Accept(ZenVisitor Visitor);

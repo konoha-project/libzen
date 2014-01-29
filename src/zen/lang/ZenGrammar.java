@@ -857,11 +857,8 @@ public class ZenGrammar {
 
 	public static ZNode MatchPath(ZNameSpace NameSpace, ZTokenContext TokenContext, ZNode LeftNode) {
 		@Var ZToken Token = TokenContext.ParseLargeToken();
-		System.err.println("debug '" + Token.ParsedText + "'");
-		if(LibZen.IsVariableName(Token.ParsedText, 0)) {
-			return new ZGetLocalNode(Token, Token.ParsedText);
-		}
-		return new ZErrorNode(Token, "illegal path:" + Token.ParsedText);
+		//		System.err.println("debug '" + Token.ParsedText + "'");
+		return new ZGetLocalNode(Token, Token.ParsedText);
 	}
 
 	public static ZNode MatchImport(ZNameSpace NameSpace, ZTokenContext TokenContext, ZNode LeftNode) {

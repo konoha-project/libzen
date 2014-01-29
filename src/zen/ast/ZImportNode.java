@@ -16,4 +16,8 @@ public class ZImportNode extends ZNode {
 			this.SourceToken = Node.SourceToken;
 		}
 	}
+	@Override public String GetVisitName() {
+		return "VisitImportNode"; // override this if you want to use additional node
+	}
+
 }

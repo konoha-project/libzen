@@ -256,7 +256,7 @@ public final class ZTokenContext {
 
 	public ZToken ParseLargeToken() {
 		@Var ZToken Token = this.GetTokenAndMoveForward();
-		System.err.println(Token.ParsedText + " IsWhite=" + Token.IsNextWhiteSpace());
+		//		System.err.println(Token.ParsedText + " IsWhite=" + Token.IsNextWhiteSpace());
 		if(Token.IsNextWhiteSpace()) {
 			return Token;
 		}
@@ -264,7 +264,7 @@ public final class ZTokenContext {
 		while(!Token.IsNextWhiteSpace()) {
 			@Var int RollbackPosition = this.CurrentPosition;
 			Token = this.GetTokenAndMoveForward();
-			System.err.println(Token.ParsedText + " IsWhite=" + Token.IsNextWhiteSpace());
+			//			System.err.println(Token.ParsedText + " IsWhite=" + Token.IsNextWhiteSpace());
 			if(Token.EqualsText(";") || Token.EqualsText(",")) {
 				this.CurrentPosition = RollbackPosition;
 				break;
