@@ -10,5 +10,10 @@ public class ZImportNode extends ZNode {
 		super();
 		this.NameSpace = NameSpace.GetRootNameSpace();
 	}
-
+	@Override public void Append(ZNode Node) {
+		if(this.ResourcePath == null) {
+			this.ResourcePath = Node.SourceToken.ParsedText;
+			this.SourceToken = Node.SourceToken;
+		}
+	}
 }

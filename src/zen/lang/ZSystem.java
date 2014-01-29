@@ -155,7 +155,6 @@ public class ZSystem {
 			return ZSystem.FuncType;
 		}
 		else if(Value instanceof ZenTypedObject) {
-			// FIXME In typescript, we cannot use ZenObject
 			return ((ZenTypedObject)Value).GetZenType();
 		}
 		else {

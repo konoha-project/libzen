@@ -254,16 +254,25 @@ public final class ZTokenContext {
 		}
 	}
 
-	//	public ZenToken NextConcatinatedToken() {
-	//		@Var ZenToken Token = this.Next();
-	//		if(Token.IsNextWhiteSpace()) {
-	//			return Token;
-	//		}
-	//		String JoinedToken = Token.ParsedText;
-	//		Token = this.Next();
-	//		if(Token.)
-	//		return Token;
-	//	}
+	public ZToken ParseLargeToken() {
+		@Var ZToken Token = this.GetTokenAndMoveForward();
+		System.err.println(Token.ParsedText + " IsWhite=" + Token.IsNextWhiteSpace());
+		if(Token.IsNextWhiteSpace()) {
+			return Token;
+		}
+		@Var String JoinedToken = Token.ParsedText;
+		while(!Token.IsNextWhiteSpace()) {
+			@Var int RollbackPosition = this.CurrentPosition;
+			Token = this.GetTokenAndMoveForward();
+			System.err.println(Token.ParsedText + " IsWhite=" + Token.IsNextWhiteSpace());
+			if(Token.EqualsText(";") || Token.EqualsText(",")) {
+				this.CurrentPosition = RollbackPosition;
+				break;
+			}
+			JoinedToken = JoinedToken + Token.ParsedText;
+		}
+		return new ZToken(0, JoinedToken, Token.FileLine);
+	}
 
 	public ZSyntaxPattern GetFirstPattern(ZNameSpace NameSpace) {
 		@Var ZToken Token = this.GetToken();

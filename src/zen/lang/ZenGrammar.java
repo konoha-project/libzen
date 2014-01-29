@@ -48,6 +48,7 @@ import zen.ast.ZGetLocalNode;
 import zen.ast.ZGetterNode;
 import zen.ast.ZGroupNode;
 import zen.ast.ZIfNode;
+import zen.ast.ZImportNode;
 import zen.ast.ZInstanceOfNode;
 import zen.ast.ZIntNode;
 import zen.ast.ZMapLiteralNode;
@@ -752,36 +753,6 @@ public class ZenGrammar {
 		return FuncNode;
 	}
 
-	//	public static ZNode MatchFunction(ZNameSpace NameSpace, ZTokenContext TokenContext, ZNode LeftNode) {
-	//		@Var ZNode VarNode = new ZVarDeclNode(NameSpace);
-	//
-	//		@Var ZToken FuncToken = TokenContext.GetTokenAndMoveForward();
-	//		@Var ZNode FuncNode;
-	//		@Var int BlockOption = ZTokenContext.Required;
-	//		if(TokenContext.IsToken("(")) {
-	//			FuncNode = new ZFunctionNode(FuncToken);
-	//			BlockOption = ZTokenContext.Optional;
-	//		}
-	//		else {
-	//			@Var ZToken NameToken = TokenContext.GetTokenAndMoveForward();
-	//			NameSpace = NameSpace.CreateSubNameSpace();
-	//			FuncNode = new ZFunctionNode/*Decl*/(NameToken, NameSpace, NameToken.ParsedText);
-	//		}
-	//		FuncNode = TokenContext.MatchNodeToken(FuncNode,  NameSpace, "(", ZTokenContext.Required | ZTokenContext.AllowSkipIndent);
-	//		if(!TokenContext.MatchToken(")")) {
-	//			while(!FuncNode.IsErrorNode()) {
-	//				FuncNode = TokenContext.AppendMatchedPattern(FuncNode, NameSpace, "$Param$", ZTokenContext.Required);
-	//				if(TokenContext.MatchToken(")")) {
-	//					break;
-	//				}
-	//				FuncNode = TokenContext.MatchNodeToken(FuncNode,  NameSpace, ",", ZTokenContext.Required);
-	//			}
-	//		}
-	//		FuncNode = TokenContext.AppendMatchedPattern(FuncNode, NameSpace, "$TypeAnnotation$", ZTokenContext.Optional);
-	//		FuncNode = TokenContext.AppendMatchedPattern(FuncNode, NameSpace, "$Block$", BlockOption);
-	//		return FuncNode;
-	//	}
-
 	public static ZNode MatchAnnotation(ZNameSpace NameSpace, ZTokenContext TokenContext, ZNode LeftNode) {
 		@Var ZenMap<Object> Anno = null;
 		@Var ZToken Token = null;
@@ -803,17 +774,11 @@ public class ZenGrammar {
 		@Var ZAnnotationNode AnnotationNode = (ZAnnotationNode)TokenContext.ParsePattern(NameSpace, "$Annotation$", ZTokenContext.Optional);
 		@Var ZNode ParsedNode = TokenContext.ParsePattern(NameSpace, "$Expression$", ZTokenContext.Required);
 		if(!ParsedNode.IsErrorNode() && TokenContext.HasNext()) {
-			//			if(ParsedNode instanceof ZenStatementNode) {  IMIFU
-			//				System.out.println();
-			//			}
-			//			else {
-
 			ZToken Token = TokenContext.GetToken(); //AndMoveForward();
 			if(!Token.IsDelim() && !Token.IsIndent() && !Token.EqualsText("}")) {
 				/* }  is added because function f(x) { x } is parsed */
 				return TokenContext.CreateExpectedErrorNode(Token, ";");
 			}
-			//			}
 		}
 		if(AnnotationNode != null) {
 			AnnotationNode.Append(ParsedNode);
@@ -888,6 +853,22 @@ public class ZenGrammar {
 			}
 		}
 		return ClassNode;
+	}
+
+	public static ZNode MatchPath(ZNameSpace NameSpace, ZTokenContext TokenContext, ZNode LeftNode) {
+		@Var ZToken Token = TokenContext.ParseLargeToken();
+		System.err.println("debug '" + Token.ParsedText + "'");
+		if(LibZen.IsVariableName(Token.ParsedText, 0)) {
+			return new ZGetLocalNode(Token, Token.ParsedText);
+		}
+		return new ZErrorNode(Token, "illegal path:" + Token.ParsedText);
+	}
+
+	public static ZNode MatchImport(ZNameSpace NameSpace, ZTokenContext TokenContext, ZNode LeftNode) {
+		@Var ZNode ImportNode = new ZImportNode(NameSpace);
+		ImportNode = TokenContext.MatchNodeToken(ImportNode, NameSpace, "import", ZTokenContext.Required);
+		ImportNode = TokenContext.AppendMatchedPattern(ImportNode, NameSpace, "$Path$", ZTokenContext.Required);
+		return ImportNode;
 	}
 
 	public static void ImportGrammar(ZNameSpace NameSpace, Class<?> Grammar) {
@@ -980,6 +961,9 @@ public class ZenGrammar {
 
 		NameSpace.AppendSyntax("class", LibNative.LoadMatchFunc(Grammar, "MatchClassDecl"));
 		NameSpace.AppendSyntax("$FieldDecl$", LibNative.LoadMatchFunc(Grammar, "MatchFieldDecl"));
+		NameSpace.AppendSyntax("import", LibNative.LoadMatchFunc(Grammar, "MatchImport"));
+		NameSpace.AppendSyntax("$Path$", LibNative.LoadMatchFunc(Grammar, "MatchPath"));
+
 		NameSpace.Generator.AppendGrammarInfo("zen-class-0.1");
 	}
 
