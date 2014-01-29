@@ -74,7 +74,8 @@ public class JavaReflectionEngine extends ZenEngine {
 				this.EvaledValue = sMethod.invoke(Recv, Values);
 			}
 		} catch (Exception e) {
-			this.Logger.ReportInfo(Node.SourceToken, "runtime error: " + e.getMessage());
+			this.Logger.ReportInfo(Node.SourceToken, "runtime error: " + e);
+			e.printStackTrace();
 			this.StopVisitor();
 		}
 	}

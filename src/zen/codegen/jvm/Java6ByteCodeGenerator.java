@@ -681,7 +681,7 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 		try {
 			Method FuncMethod = HolderClass.GetDefinedMethod(this.ClassLoader, Node.FuncName);
 			//this.Debug("InteranalName: " +Type.getInternalName(FuncMethod.getDeclaringClass()));
-			this.FuncMap.put(Node.ReferenceName, FuncMethod);
+			this.FuncMap.put(FuncType.StringfySignature(Node.FuncName), FuncMethod);
 			FuncNode.FuncClass = FuncMethod.getDeclaringClass();
 			Node.NameSpace.SetTypedNode(Node.FuncName, FuncNode);
 		}
