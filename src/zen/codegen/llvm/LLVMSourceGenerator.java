@@ -76,12 +76,12 @@ import zen.ast.ZVarDeclNode;
 import zen.ast.ZWhileNode;
 import zen.deps.LibNative;
 import zen.deps.Var;
-import zen.lang.ZFuncType;
 import zen.lang.ZGeneric1Type;
 import zen.lang.ZSystem;
 import zen.lang.ZType;
 import zen.lang.ZenClassType;
 import zen.parser.ZSourceGenerator;
+import zen.type.ZFuncType;
 
 
 public class LLVMSourceGenerator extends ZSourceGenerator {
