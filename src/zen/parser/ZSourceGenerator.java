@@ -155,15 +155,17 @@ public class ZSourceGenerator extends ZGenerator {
 		return TypeName;
 	}
 
-	@Override public boolean StartCodeGeneration(ZNode Node,  boolean AllowLazy, boolean IsInteractive) {
-		if (AllowLazy && Node.IsVarType()) {
-			return false;
-		}
+	@Override public boolean StartCodeGeneration(ZNode Node, boolean AllowLazy, boolean IsInteractive) {
+		System.out.println("debug Node.Type="+Node.Type + ", node=" + Node);
+		//		if (AllowLazy && Node.IsVarType()) {
+		//			return false;
+		//		}
 		Node.Accept(this);
 		if(IsInteractive) {
-			String Code = this.CurrentBuilder.toString();
-			LibNative.println(Code);
+			LibNative.println("---");
+			LibNative.println(this.CurrentBuilder.toString());
 			this.CurrentBuilder.Clear();
+			LibNative.println("---");
 		}
 		return true;
 	}
@@ -484,7 +486,7 @@ public class ZSourceGenerator extends ZGenerator {
 		this.CurrentBuilder.Append("function");
 		this.CurrentBuilder.AppendWhiteSpace();
 		if(Node.FuncName != null) {
-			this.CurrentBuilder.Append(Node.ReferenceName);
+			this.CurrentBuilder.Append(Node.FuncName);
 		}
 		this.VisitParamList("(", Node.ParamList, ")");
 		this.VisitTypeAnnotation(Node.ReturnType);

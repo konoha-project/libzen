@@ -67,8 +67,13 @@ public class ZFunctionNode extends ZNode {
 			this.BodyNode = Node;
 		}
 	}
+
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitFunctionNode(this);
+	}
+
+	@Override public final boolean IsUntyped() {
+		return this.IsVarType() || this.BodyNode.IsVarType();
 	}
 
 	public final ZFuncType GetFuncType(@Nullable ZType ContextType) {
