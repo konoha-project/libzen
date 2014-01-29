@@ -600,7 +600,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 			this.VisitFuncTypeAsPointer(Node.ResolvedFuncType);
 			this.AddCodeToCurrentBuffer(" " + this.GetIdentifierAttachedSymbol(Node.ResolvedFuncName));
 			//this.GenerateCode(Node.FuncNode);
-			this.VisitParamList(" (", Node.ParamList, ")");
+			this.VisitNodeList(" (", Node.ParamList, ")");
 			this.AppendBufferAsNewLine();
 			if(!ReturnType.IsVoidType()) {
 				this.AddCodeToCurrentBuffer(TempVar);
@@ -611,7 +611,6 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		}
 	}
 
-	@Override
 	public void VisitFuncDeclNode(ZFunctionNode Node) {
 		this.PushNewBuffer("define ");
 		this.VisitType(Node.ReturnType);
@@ -987,7 +986,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override
-	protected void VisitParamList(String OpenToken, ArrayList<ZNode> ParamList, String CloseToken) {
+	protected void VisitParamList(String OpenToken, ArrayList<ZParamNode> ParamList, String CloseToken) {
 		this.AddCodeToCurrentBuffer(OpenToken);
 		@Var int i = 0;
 		while(i < ParamList.size()) {

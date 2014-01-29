@@ -291,12 +291,12 @@ public class ZTransformer extends ZVisitor {
 		Node.BodyNode = this.Transform(Node, Node.BodyNode);
 	}
 
-	public void VisitFuncDeclNode(ZFunctionNode/*Decl*/ Node) {
-		this.TransformNodeList(Node, Node.ParamList);
-		if(Node.BodyNode != null) {
-			Node.BodyNode = this.Transform(Node, Node.BodyNode);
-		}
-	}
+	//	public void VisitFuncDeclNode(ZFunctionNode/*Decl*/ Node) {
+	//		this.TransformNodeList(Node, Node.ParamList);
+	//		if(Node.BodyNode != null) {
+	//			Node.BodyNode = this.Transform(Node, Node.BodyNode);
+	//		}
+	//	}
 
 	@Override public void VisitClassDeclNode(ZClassDeclNode Node) {
 		for (int i = 0; i < Node.FieldList.size(); i++) {

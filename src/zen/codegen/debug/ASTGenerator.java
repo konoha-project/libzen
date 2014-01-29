@@ -441,21 +441,21 @@ public class ASTGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override
-	public void VisitFuncDeclNode(ZFunctionNode/*Decl*/ Node) {
-		this.CurrentBuilder.Append("(func-decl " + Node.FuncName);
-		this.CurrentBuilder.AppendLineFeed();
-		this.CurrentBuilder.Indent();
-		this.CurrentBuilder.AppendIndent();
-		this.CurrentBuilder.Append("(");
-		this.CurrentBuilder.AppendParamList(Node.ParamList, 0, Node.ParamList.size());
-		this.CurrentBuilder.Append(")");
-		this.CurrentBuilder.AppendLineFeed();
-		this.CurrentBuilder.AppendIndent();
-		Node.BodyNode.Accept(this);
-		this.CurrentBuilder.UnIndent();
-		this.CurrentBuilder.Append(")");
-	}
+	//	@Override
+	//	public void VisitFuncDeclNode(ZFunctionNode/*Decl*/ Node) {
+	//		this.CurrentBuilder.Append("(func-decl " + Node.FuncName);
+	//		this.CurrentBuilder.AppendLineFeed();
+	//		this.CurrentBuilder.Indent();
+	//		this.CurrentBuilder.AppendIndent();
+	//		this.CurrentBuilder.Append("(");
+	//		this.CurrentBuilder.AppendParamList(Node.ParamList, 0, Node.ParamList.size());
+	//		this.CurrentBuilder.Append(")");
+	//		this.CurrentBuilder.AppendLineFeed();
+	//		this.CurrentBuilder.AppendIndent();
+	//		Node.BodyNode.Accept(this);
+	//		this.CurrentBuilder.UnIndent();
+	//		this.CurrentBuilder.Append(")");
+	//	}
 
 	@Override
 	public void VisitClassDeclNode(ZClassDeclNode Node) {

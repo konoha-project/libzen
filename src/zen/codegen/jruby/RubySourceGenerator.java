@@ -6,7 +6,6 @@ import javax.script.ScriptEngineManager;
 import zen.ast.ZBlockNode;
 import zen.ast.ZCastNode;
 import zen.ast.ZCatchNode;
-import zen.ast.ZFunctionNode/*Decl*/;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZInstanceOfNode;
 import zen.ast.ZNode;
@@ -131,7 +130,6 @@ public class RubySourceGenerator extends ZSourceGenerator {
 		this.GenerateCode(Node.BodyNode);
 	}
 
-	@Override
 	public void VisitFuncDeclNode(ZFunctionNode/*Decl*/ Node) {
 		this.CurrentBuilder.Append("def ");
 		this.CurrentBuilder.Append(Node.FuncName);

@@ -32,7 +32,6 @@ import zen.ast.ZBlockNode;
 import zen.ast.ZCastNode;
 import zen.ast.ZCatchNode;
 import zen.ast.ZFuncCallNode;
-import zen.ast.ZFunctionNode/*Decl*/;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZGetLocalNode;
 import zen.ast.ZNode;
@@ -179,7 +178,7 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 		}
 	}
 
-	@Override protected void VisitParamList(String OpenToken, ArrayList<ZNode> ParamList, String CloseToken) {
+	@Override protected void VisitNodeList(String OpenToken, ArrayList<ZNode> ParamList, String CloseToken) {
 		this.CurrentBuilder.Append(OpenToken);
 		for (int i = 0; i < ParamList.size(); i++) {
 			ZParamNode ParamNode = (ZParamNode)ParamList.get(i);
@@ -191,40 +190,52 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Append(CloseToken);
 	}
 
-	@Override
-	public void VisitFuncDeclNode(ZFunctionNode/*Decl*/ Node) {
-		this.Variables = new ArrayList<String>();
-
-		this.CurrentBuilder.Append(Node.FuncName);
-		this.VisitParamList(" ", Node.ParamList, " = do");
-		this.CurrentBuilder.AppendLineFeed();
-
-		this.Indent(this.CurrentBuilder);
-		// Argument variable declarations as IORef
-		for (ZNode node : Node.ParamList) {
-			ZParamNode node1 = (ZParamNode)node;
-
-			this.Variables.add(node1.Name);
-
-			this.CurrentBuilder.AppendIndent();
-			this.CurrentBuilder.Append(node1.Name + "_ref <- newIORef " + node1.Name);
-			this.CurrentBuilder.AppendLineFeed();
+	@Override protected void VisitParamList(String OpenToken, ArrayList<ZParamNode> ParamList, String CloseToken) {
+		this.CurrentBuilder.Append(OpenToken);
+		for (int i = 0; i < ParamList.size(); i++) {
+			ZParamNode ParamNode = ParamList.get(i);
+			if (i > 0) {
+				this.CurrentBuilder.Append(" ");
+			}
+			this.VisitParamNode(ParamNode);
 		}
-
-		for (ZNode node : Node.ParamList) {
-			ZParamNode node1 = (ZParamNode)node;
-			this.CurrentBuilder.AppendIndent();
-			this.CurrentBuilder.Append(node1.Name + " <- readIORef " + node1.Name + "_ref");
-			this.CurrentBuilder.AppendLineFeed();
-		}
-		this.UnIndent(this.CurrentBuilder);
-
-		if (Node.BodyNode == null) {
-			// XXX Can we define empty function in Haskell ?
-		} else {
-			this.GenerateCode(Node.BodyNode);
-		}
+		this.CurrentBuilder.Append(CloseToken);
 	}
+
+	//	@Override
+	//	public void VisitFuncDeclNode(ZFunctionNode/*Decl*/ Node) {
+	//		this.Variables = new ArrayList<String>();
+	//
+	//		this.CurrentBuilder.Append(Node.FuncName);
+	//		this.VisitParamList(" ", Node.ParamList, " = do");
+	//		this.CurrentBuilder.AppendLineFeed();
+	//
+	//		this.Indent(this.CurrentBuilder);
+	//		// Argument variable declarations as IORef
+	//		for (ZNode node : Node.ParamList) {
+	//			ZParamNode node1 = (ZParamNode)node;
+	//
+	//			this.Variables.add(node1.Name);
+	//
+	//			this.CurrentBuilder.AppendIndent();
+	//			this.CurrentBuilder.Append(node1.Name + "_ref <- newIORef " + node1.Name);
+	//			this.CurrentBuilder.AppendLineFeed();
+	//		}
+	//
+	//		for (ZNode node : Node.ParamList) {
+	//			ZParamNode node1 = (ZParamNode)node;
+	//			this.CurrentBuilder.AppendIndent();
+	//			this.CurrentBuilder.Append(node1.Name + " <- readIORef " + node1.Name + "_ref");
+	//			this.CurrentBuilder.AppendLineFeed();
+	//		}
+	//		this.UnIndent(this.CurrentBuilder);
+	//
+	//		if (Node.BodyNode == null) {
+	//			// XXX Can we define empty function in Haskell ?
+	//		} else {
+	//			this.GenerateCode(Node.BodyNode);
+	//		}
+	//	}
 
 	@Override
 	public void VisitGetLocalNode(ZGetLocalNode Node) {
@@ -324,6 +335,6 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 
 	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
 		this.GenerateCode(Node.FuncNode);
-		this.VisitParamList(" ", Node.ParamList, " ");
+		this.VisitNodeList(" ", Node.ParamList, " ");
 	}
 }

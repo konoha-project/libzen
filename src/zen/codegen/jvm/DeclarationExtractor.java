@@ -38,11 +38,11 @@ class FunctionNodeFilter extends ZTransformer {
 		this.InsertInBlockStatementBefore(this.GetBlockNode(), Node, FuncDeclNode);
 		this.Transformed(new ZSymbolNode(FuncDeclNode.Type, Node.SourceToken, FuncName, FuncName));
 	}
-	@Override
-	public void VisitFuncDeclNode(ZFunctionNode Node) {
-		this.Decls.add(Node);
-		super.VisitFuncDeclNode(Node);
-	}
+
+	//	public void VisitFuncDeclNode(ZFunctionNode Node) {
+	//		this.Decls.add(Node);
+	//		super.VisitFuncDeclNode(Node);
+	//	}
 }
 
 class Edge {
@@ -120,9 +120,9 @@ public class DeclarationExtractor extends ZTransformer {
 		this.FunctionFilter.VisitFunctionNode(Node);
 		super.VisitFunctionNode(Node);
 	}
-	@Override
-	public void VisitFuncDeclNode(ZFunctionNode Node) {
-		this.FunctionFilter.VisitFuncDeclNode(Node);
-		super.VisitFuncDeclNode(Node);
-	}
+	//	@Override
+	//	public void VisitFuncDeclNode(ZFunctionNode Node) {
+	//		this.FunctionFilter.VisitFuncDeclNode(Node);
+	//		super.VisitFuncDeclNode(Node);
+	//	}
 }

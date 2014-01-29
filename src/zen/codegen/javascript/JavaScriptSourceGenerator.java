@@ -31,7 +31,6 @@ import javax.script.ScriptEngineManager;
 import zen.ast.ZBlockNode;
 import zen.ast.ZCastNode;
 import zen.ast.ZCatchNode;
-import zen.ast.ZFunctionNode/*Decl*/;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZInstanceOfNode;
 import zen.ast.ZNode;
@@ -147,15 +146,16 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 		this.GenerateCode(Node.InitNode);
 	}
 
-	@Override
-	public void VisitParamNode(ZParamNode Node) {
+	@Override public void VisitParamNode(ZParamNode Node) {
 		this.CurrentBuilder.Append(Node.Name);
 	}
 
-	@Override
-	public void VisitFunctionNode(ZFunctionNode Node) {
+	@Override public void VisitFunctionNode(ZFunctionNode Node) {
 		ZReturnNode ReturnNode = Node.BodyNode.ToReturnNode();
 		this.CurrentBuilder.Append("(function");
+		if(Node.FuncName != null) {
+			this.CurrentBuilder.Append(Node.ReferenceName);
+		}
 		this.VisitParamList("(", Node.ParamList, ")");
 		if(ReturnNode != null && ReturnNode.ValueNode != null) {
 			this.CurrentBuilder.Append("{ return ");
@@ -168,12 +168,12 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override
-	public void VisitFuncDeclNode(ZFunctionNode/*Decl*/ Node) {
-		this.CurrentBuilder.Append("function ");
-		this.CurrentBuilder.Append(Node.FuncName);
-		this.VisitParamList("(", Node.ParamList, ")");
-		this.GenerateCode(Node.BodyNode);
-	}
+	//	@Override
+	//	public void VisitFuncDeclNode(ZFunctionNode/*Decl*/ Node) {
+	//		this.CurrentBuilder.Append("function ");
+	//		this.CurrentBuilder.Append(Node.FuncName);
+	//		this.VisitParamList("(", Node.ParamList, ")");
+	//		this.GenerateCode(Node.BodyNode);
+	//	}
 
 }

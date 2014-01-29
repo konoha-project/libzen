@@ -26,7 +26,6 @@
 package zen.codegen.c;
 
 import zen.ast.ZCastNode;
-import zen.ast.ZFunctionNode/*Decl*/;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZInstanceOfNode;
 import zen.ast.ZParamNode;
@@ -82,8 +81,7 @@ public class CSourceGenerator extends ZSourceGenerator {
 		this.VisitStmtList(Node.StmtList);
 	}
 
-	@Override
-	public void VisitParamNode(ZParamNode Node) {
+	@Override public void VisitParamNode(ZParamNode Node) {
 		this.VisitType(Node.Type);
 		this.CurrentBuilder.Append(" ");
 		this.CurrentBuilder.Append(Node.Name);
@@ -92,14 +90,16 @@ public class CSourceGenerator extends ZSourceGenerator {
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
 		this.VisitType(Node.ReturnType);
 		this.CurrentBuilder.Append(" ");
-
-		this.CurrentBuilder.Append("function ");
+		this.CurrentBuilder.Append(Node.FuncName);
 		this.VisitParamList("(", Node.ParamList, ")");
-		this.VisitTypeAnnotation(Node.ReturnType);
+		//		if (Node.BodyNode == null) {
+		//			this.CurrentBuilder.Append(this.SemiColon);
+		//		} else {
 		this.GenerateCode(Node.BodyNode);
+		//		}
 	}
 
-	@Override public void VisitFuncDeclNode(ZFunctionNode/*Decl*/ Node) {
+	public void VisitFuncDeclNode(ZFunctionNode/*Decl*/ Node) {
 		this.VisitType(Node.ReturnType);
 		this.CurrentBuilder.Append(" ");
 		this.CurrentBuilder.Append(Node.FuncName);
