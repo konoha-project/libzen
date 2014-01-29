@@ -39,12 +39,10 @@ import zen.ast.ZCatchNode;
 import zen.ast.ZClassDeclNode;
 import zen.ast.ZComparatorNode;
 import zen.ast.ZConstPoolNode;
-import zen.ast.ZEmptyNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZFieldNode;
 import zen.ast.ZFloatNode;
 import zen.ast.ZFuncCallNode;
-import zen.ast.ZFuncDeclNode;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZGetIndexNode;
 import zen.ast.ZGetLocalNode;
@@ -96,8 +94,8 @@ public class ZenTypeSafer extends ZTypeChecker {
 		super(Logger);
 	}
 
-	@Override public void VisitEmptyNode(ZEmptyNode Node) {
-		this.TypedNode(Node, ZSystem.VoidType);
+	public final boolean IsTopLevel() {
+		return (this.CurrentFunctionNode == null);
 	}
 
 	@Override public void VisitNullNode(ZNullNode Node) {
@@ -657,13 +655,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 		this.Todo(Node);
 	}
 
-	@Override public void VisitParamNode(ZParamNode Node) {
-		// TODO Auto-generated method stub
-		this.Todo(Node);
-	}
-
-	@Override
-	public void DefineFunction(ZNameSpace NameSpace, ZFunctionNode FunctionNode, boolean Enforced) {
+	@Override public void DefineFunction(ZNameSpace NameSpace, ZFunctionNode FunctionNode, boolean Enforced) {
 		if(FunctionNode.FuncName != null && FunctionNode.ReferenceName == null) {
 			@Var ZFuncType FuncType = FunctionNode.GetFuncType(null);
 			if(Enforced || !FuncType.IsVarType()) {
@@ -679,17 +671,27 @@ public class ZenTypeSafer extends ZTypeChecker {
 		}
 	}
 
-	private void PushFunctionNode(ZNameSpace NameSpace, ZFunctionNode FunctionNode) {
+	private void PushFunctionNode(ZNameSpace NameSpace, ZFunctionNode FunctionNode, ZType ContextType) {
+		@Var ZFuncType FuncType = null;
+		if(ContextType instanceof ZFuncType) {
+			FuncType = (ZFuncType)ContextType;
+		}
 		this.CurrentFunctionNode = FunctionNode.Push(this.CurrentFunctionNode);
 		this.VarScope = new ZVarScope(this.VarScope, this.Logger, null);
 		@Var int i = 0;
 		while(i < FunctionNode.ParamList.size()) {
 			@Var ZParamNode ParamNode = (ZParamNode)FunctionNode.ParamList.get(i);
 			ParamNode.Type = this.VarScope.NewVarType(ParamNode.Type, ParamNode.Name, ParamNode.SourceToken);
+			if(FuncType != null) {
+				ParamNode.Type.Maybe(FuncType.GetParamType(i+1), null);
+			}
 			ZenGamma.SetLocalVariable(NameSpace, this.CurrentFunctionNode, ParamNode.Type, ParamNode.Name, null);
 			i = i + 1;
 		}
 		FunctionNode.ReturnType = this.VarScope.NewVarType(FunctionNode.ReturnType, "return", FunctionNode.SourceToken);
+		if(FuncType != null) {
+			FunctionNode.Type.Maybe(FuncType.GetParamType(0), null);
+		}
 	}
 
 	private void PopFunctionNode(ZNameSpace NameSpace) {
@@ -698,20 +700,25 @@ public class ZenTypeSafer extends ZTypeChecker {
 	}
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
-		@Var ZType ContextType = this.GetContextType();
 		@Var ZNameSpace NameSpace = this.GetNameSpace();
-		@Var ZFuncType FuncType = Node.GetFuncType(ContextType);
-		this.PushFunctionNode(NameSpace, Node);
+		@Var ZType ContextType = this.GetContextType();
+		this.PushFunctionNode(NameSpace, Node, ContextType);
 		this.VarScope.TypeCheckFunctionBody(NameSpace, this, Node);
 		this.PopFunctionNode(NameSpace);
-		this.TypedNode(Node, FuncType);
+		@Var ZFuncType FuncType = Node.GetFuncType(ContextType);
+		if(this.IsTopLevel() && !FuncType.IsVarType()) {
+			this.TypedNode(Node, ZSystem.VoidType);
+		}
+		else {
+			this.TypedNode(Node, FuncType);
+		}
 	}
 
-	@Override public void VisitFuncDeclNode(ZFuncDeclNode Node) {
+	public void VisitFuncDeclNode(ZFunctionNode/*Decl*/ Node) {
 		@Var ZNameSpace NameSpace = this.GetNameSpace();
 		@Var ZFuncType FuncType = Node.GetFuncType(null);
 		assert(Node.BodyNode != null);
-		this.PushFunctionNode(Node.NameSpace, Node);
+		this.PushFunctionNode(Node.NameSpace, Node, null);
 		this.VarScope.TypeCheckFunctionBody(NameSpace, this, Node);
 		this.PopFunctionNode(Node.NameSpace);
 		//		FuncType = Node.GetFuncType(null);

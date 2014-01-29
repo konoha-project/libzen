@@ -26,7 +26,6 @@ package zen.ast;
 
 import zen.deps.Field;
 import zen.parser.ZToken;
-import zen.parser.ZVisitor;
 import zen.type.ZType;
 
 public class ZParamNode extends ZNode {
@@ -37,8 +36,9 @@ public class ZParamNode extends ZNode {
 		this.SourceToken = SourceToken;
 		this.Name = Name;
 	}
-	@Override public void Accept(ZVisitor Visitor) {
-		Visitor.VisitParamNode(this);
+
+	@Override public String GetVisitName() {
+		return "VisitParamNode"; // override this if you want to use additional node
 	}
 	@Override public void Append(ZNode Node) {
 		if(Node instanceof ZTypeNode) {

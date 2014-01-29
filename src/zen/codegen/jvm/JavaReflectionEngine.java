@@ -35,7 +35,6 @@ import zen.ast.ZBooleanNode;
 import zen.ast.ZCastNode;
 import zen.ast.ZComparatorNode;
 import zen.ast.ZConstPoolNode;
-import zen.ast.ZEmptyNode;
 import zen.ast.ZFloatNode;
 import zen.ast.ZFuncCallNode;
 import zen.ast.ZGetIndexNode;
@@ -82,10 +81,6 @@ public class JavaReflectionEngine extends ZenEngine {
 
 	void EvalStaticMethod(ZNode Node, Method sMethod, ZNode[] Nodes) {
 		this.EvalMethod(Node, sMethod, null, Nodes);
-	}
-
-	@Override public void VisitEmptyNode(ZEmptyNode Node) {
-		this.StopVisitor();
 	}
 
 	@Override public void VisitNullNode(ZNullNode Node) {
@@ -344,7 +339,7 @@ public class JavaReflectionEngine extends ZenEngine {
 	//
 	//	}
 	//
-	//	@Override public void VisitFuncDeclNode(ZFuncDeclNode Node) {
+	//	@Override public void VisitFuncDeclNode(ZFunctionNode/*Decl*/ Node) {
 	//		this.Unsupported(Node);
 	//	}
 	//

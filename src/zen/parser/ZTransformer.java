@@ -13,12 +13,10 @@ import zen.ast.ZCatchNode;
 import zen.ast.ZClassDeclNode;
 import zen.ast.ZComparatorNode;
 import zen.ast.ZConstPoolNode;
-import zen.ast.ZEmptyNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZFieldNode;
 import zen.ast.ZFloatNode;
 import zen.ast.ZFuncCallNode;
-import zen.ast.ZFuncDeclNode;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZGetIndexNode;
 import zen.ast.ZGetLocalNode;
@@ -35,7 +33,6 @@ import zen.ast.ZNode;
 import zen.ast.ZNotNode;
 import zen.ast.ZNullNode;
 import zen.ast.ZOrNode;
-import zen.ast.ZParamNode;
 import zen.ast.ZReturnNode;
 import zen.ast.ZSetIndexNode;
 import zen.ast.ZSetLocalNode;
@@ -123,9 +120,6 @@ public class ZTransformer extends ZVisitor {
 	protected void ReplaceInBlockStatement(ZBlockNode BlockNode, ZNode Node, ZNode ReplacedNode) {
 		int index = this.FindInBlockStatementIndex(BlockNode, Node);
 		BlockNode.StmtList.set(index, BlockNode.SetChild(ReplacedNode));
-	}
-
-	@Override public void VisitEmptyNode(ZEmptyNode Node) {
 	}
 
 	@Override public void VisitNullNode(ZNullNode Node) {
@@ -292,14 +286,12 @@ public class ZTransformer extends ZVisitor {
 		Node.BodyNode = this.Transform(Node, Node.BodyNode);
 	}
 
-	@Override public void VisitParamNode(ZParamNode Node) {
-	}
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
 		Node.BodyNode = this.Transform(Node, Node.BodyNode);
 	}
 
-	@Override public void VisitFuncDeclNode(ZFuncDeclNode Node) {
+	public void VisitFuncDeclNode(ZFunctionNode/*Decl*/ Node) {
 		this.TransformNodeList(Node, Node.ParamList);
 		if(Node.BodyNode != null) {
 			Node.BodyNode = this.Transform(Node, Node.BodyNode);

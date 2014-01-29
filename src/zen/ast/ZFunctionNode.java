@@ -31,7 +31,6 @@ import zen.deps.Nullable;
 import zen.deps.Var;
 import zen.lang.ZSystem;
 import zen.parser.ZNameSpace;
-import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 import zen.type.ZFuncType;
 import zen.type.ZType;
@@ -48,17 +47,18 @@ public class ZFunctionNode extends ZNode {
 	@Field public String ReferenceName = null;
 	@Field public int VarIndex = 0;
 
-	public ZFunctionNode(ZToken Token, ZNameSpace NameSpace, @Nullable ZToken FuncNameToken) {
+	public ZFunctionNode(ZNameSpace NameSpace) {
 		super();
-		this.SourceToken = FuncNameToken;
 		this.NameSpace = NameSpace;
-		if(FuncNameToken != null) {
-			this.FuncName = FuncNameToken.ParsedText;
-		}
 	}
+
 	@Override public void Append(ZNode Node) {
 		if(Node instanceof ZParamNode) {
 			this.ParamList.add(Node);
+		}
+		else if(this.FuncName == null) {
+			this.FuncName = Node.SourceToken.ParsedText;
+			this.SourceToken = Node.SourceToken;
 		}
 		else if(Node instanceof ZTypeNode) {
 			this.ReturnType = Node.Type;

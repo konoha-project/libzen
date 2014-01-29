@@ -42,7 +42,6 @@ import zen.ast.ZErrorNode;
 import zen.ast.ZFieldNode;
 import zen.ast.ZFloatNode;
 import zen.ast.ZFuncCallNode;
-import zen.ast.ZFuncDeclNode;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZGetIndexNode;
 import zen.ast.ZGetLocalNode;
@@ -735,18 +734,9 @@ public class ZenGrammar {
 	}
 
 	public static ZNode MatchFunction(ZNameSpace NameSpace, ZTokenContext TokenContext, ZNode LeftNode) {
-		@Var ZToken FuncToken = TokenContext.GetTokenAndMoveForward(); /* function*/
-		@Var ZNode FuncNode;
-		@Var int BlockOption = ZTokenContext.Required;
-		if(TokenContext.IsToken("(")) {
-			FuncNode = new ZFunctionNode(FuncToken);
-			BlockOption = ZTokenContext.Optional;
-		}
-		else {
-			@Var ZToken NameToken = TokenContext.GetTokenAndMoveForward();
-			NameSpace = NameSpace.CreateSubNameSpace();
-			FuncNode = new ZFuncDeclNode(NameToken, NameSpace, NameToken.ParsedText);
-		}
+		@Var ZNode FuncNode = new ZFunctionNode(NameSpace);
+		FuncNode = TokenContext.MatchNodeToken(FuncNode, NameSpace, "function", ZTokenContext.Required);
+		FuncNode = TokenContext.AppendMatchedPattern(FuncNode, NameSpace, "$Identifier$", ZTokenContext.Optional);
 		FuncNode = TokenContext.MatchNodeToken(FuncNode,  NameSpace, "(", ZTokenContext.Required | ZTokenContext.AllowSkipIndent);
 		if(!TokenContext.MatchToken(")")) {
 			while(!FuncNode.IsErrorNode()) {
@@ -758,9 +748,39 @@ public class ZenGrammar {
 			}
 		}
 		FuncNode = TokenContext.AppendMatchedPattern(FuncNode, NameSpace, "$TypeAnnotation$", ZTokenContext.Optional);
-		FuncNode = TokenContext.AppendMatchedPattern(FuncNode, NameSpace, "$Block$", BlockOption);
+		FuncNode = TokenContext.AppendMatchedPattern(FuncNode, NameSpace, "$Block$", ZTokenContext.Required);
 		return FuncNode;
 	}
+
+	//	public static ZNode MatchFunction(ZNameSpace NameSpace, ZTokenContext TokenContext, ZNode LeftNode) {
+	//		@Var ZNode VarNode = new ZVarDeclNode(NameSpace);
+	//
+	//		@Var ZToken FuncToken = TokenContext.GetTokenAndMoveForward();
+	//		@Var ZNode FuncNode;
+	//		@Var int BlockOption = ZTokenContext.Required;
+	//		if(TokenContext.IsToken("(")) {
+	//			FuncNode = new ZFunctionNode(FuncToken);
+	//			BlockOption = ZTokenContext.Optional;
+	//		}
+	//		else {
+	//			@Var ZToken NameToken = TokenContext.GetTokenAndMoveForward();
+	//			NameSpace = NameSpace.CreateSubNameSpace();
+	//			FuncNode = new ZFunctionNode/*Decl*/(NameToken, NameSpace, NameToken.ParsedText);
+	//		}
+	//		FuncNode = TokenContext.MatchNodeToken(FuncNode,  NameSpace, "(", ZTokenContext.Required | ZTokenContext.AllowSkipIndent);
+	//		if(!TokenContext.MatchToken(")")) {
+	//			while(!FuncNode.IsErrorNode()) {
+	//				FuncNode = TokenContext.AppendMatchedPattern(FuncNode, NameSpace, "$Param$", ZTokenContext.Required);
+	//				if(TokenContext.MatchToken(")")) {
+	//					break;
+	//				}
+	//				FuncNode = TokenContext.MatchNodeToken(FuncNode,  NameSpace, ",", ZTokenContext.Required);
+	//			}
+	//		}
+	//		FuncNode = TokenContext.AppendMatchedPattern(FuncNode, NameSpace, "$TypeAnnotation$", ZTokenContext.Optional);
+	//		FuncNode = TokenContext.AppendMatchedPattern(FuncNode, NameSpace, "$Block$", BlockOption);
+	//		return FuncNode;
+	//	}
 
 	public static ZNode MatchAnnotation(ZNameSpace NameSpace, ZTokenContext TokenContext, ZNode LeftNode) {
 		@Var ZenMap<Object> Anno = null;

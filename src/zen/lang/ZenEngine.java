@@ -39,11 +39,9 @@ import zen.ast.ZCatchNode;
 import zen.ast.ZClassDeclNode;
 import zen.ast.ZComparatorNode;
 import zen.ast.ZConstPoolNode;
-import zen.ast.ZEmptyNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZFloatNode;
 import zen.ast.ZFuncCallNode;
-import zen.ast.ZFuncDeclNode;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZGetIndexNode;
 import zen.ast.ZGetLocalNode;
@@ -60,7 +58,6 @@ import zen.ast.ZNode;
 import zen.ast.ZNotNode;
 import zen.ast.ZNullNode;
 import zen.ast.ZOrNode;
-import zen.ast.ZParamNode;
 import zen.ast.ZReturnNode;
 import zen.ast.ZSetIndexNode;
 import zen.ast.ZSetLocalNode;
@@ -134,10 +131,6 @@ public class ZenEngine extends ZVisitor {
 			Node.Accept(this);
 		}
 		return this.EvaledValue;
-	}
-
-	@Override public void VisitEmptyNode(ZEmptyNode Node) {
-		this.StopVisitor();
 	}
 
 	@Override public void VisitNullNode(ZNullNode Node) {
@@ -329,14 +322,16 @@ public class ZenEngine extends ZVisitor {
 	}
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
-		this.Unsupported(Node, "function");
-	}
-
-	@Override public void VisitFuncDeclNode(ZFuncDeclNode Node) {
 		if(!this.Generator.StartCodeGeneration(Node, true, this.IsInteractive)) {
 			this.LazyNode(Node);
 		}
 	}
+
+	//	@Override public void VisitFuncDeclNode(ZFunctionNode/*Decl*/ Node) {
+	//		if(!this.Generator.StartCodeGeneration(Node, true, this.IsInteractive)) {
+	//			this.LazyNode(Node);
+	//		}
+	//	}
 
 	@Override public void VisitClassDeclNode(ZClassDeclNode Node) {
 		if(!this.Generator.StartCodeGeneration(Node, true, this.IsInteractive)) {
@@ -349,17 +344,10 @@ public class ZenEngine extends ZVisitor {
 		//this.FoundError(Node.ErrorMessage);
 	}
 
-	@Override public void VisitParamNode(ZParamNode Node) {
-		// TODO Auto-generated method stub
-
-	}
-
 	public final Object Exec(ZNode Node, boolean IsInteractive) {
 		this.IsInteractive = IsInteractive;
 		this.EnableVisitor();
-		System.err.println("Before: " +Node);
 		Node = this.TypeChecker.CheckType(Node, this.Generator.RootNameSpace, ZSystem.VoidType);
-		System.err.println("After:" + Node);
 		@Var Object ResultValue = this.Eval(Node);
 		return ResultValue;
 	}

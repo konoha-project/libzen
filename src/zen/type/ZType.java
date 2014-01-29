@@ -27,6 +27,7 @@ package zen.type;
 import zen.deps.Field;
 import zen.deps.Var;
 import zen.lang.ZSystem;
+import zen.parser.ZToken;
 import zen.parser.ZUtils;
 
 public class ZType  {
@@ -234,6 +235,10 @@ public class ZType  {
 
 	public String StringfySignature(String FuncName) {
 		return FuncName;
+	}
+
+	public void Maybe(ZType T, ZToken SourceToken) {
+
 	}
 
 

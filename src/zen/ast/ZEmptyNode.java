@@ -24,16 +24,13 @@
 
 package zen.ast;
 
-
 import zen.parser.ZToken;
-import zen.parser.ZVisitor;
 
 public final class ZEmptyNode extends ZNode {
 	public ZEmptyNode(ZToken Token) {
 		this.SourceToken = Token;
 	}
-
-	@Override public void Accept(ZVisitor Visitor) {
-		Visitor.VisitEmptyNode(this);
+	@Override public String GetVisitName() {
+		return "VisitEmptyNode";
 	}
 }

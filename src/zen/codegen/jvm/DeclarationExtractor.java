@@ -5,7 +5,6 @@ import java.util.Collections;
 
 import zen.ast.ZBlockNode;
 import zen.ast.ZClassDeclNode;
-import zen.ast.ZFuncDeclNode;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZSymbolNode;
 import zen.parser.ZTransformer;
@@ -24,23 +23,23 @@ class ClassNodeFilter extends ZTransformer {
 }
 
 class FunctionNodeFilter extends ZTransformer {
-	ArrayList<ZFuncDeclNode> Decls;
+	ArrayList<ZFunctionNode> Decls;
 	int MethodId;
 	public FunctionNodeFilter(ZBlockNode BlockNode) {
 		super(BlockNode);
-		this.Decls = new ArrayList<ZFuncDeclNode>();
+		this.Decls = new ArrayList<ZFunctionNode>();
 		this.MethodId = 0;
 	}
 	@Override
 	public void VisitFunctionNode(ZFunctionNode Node) {
 		String FuncName = "lambda" + this.MethodId++;
-		ZFuncDeclNode FuncDeclNode = new ZFuncDeclNode(Node.SourceToken, this.BlockNode.NameSpace, FuncName);
+		ZFunctionNode FuncDeclNode = new ZFunctionNode(this.BlockNode.NameSpace);
 		this.Decls.add(FuncDeclNode);
 		this.InsertInBlockStatementBefore(this.GetBlockNode(), Node, FuncDeclNode);
 		this.Transformed(new ZSymbolNode(FuncDeclNode.Type, Node.SourceToken, FuncName, FuncName));
 	}
 	@Override
-	public void VisitFuncDeclNode(ZFuncDeclNode Node) {
+	public void VisitFuncDeclNode(ZFunctionNode Node) {
 		this.Decls.add(Node);
 		super.VisitFuncDeclNode(Node);
 	}
@@ -108,7 +107,7 @@ public class DeclarationExtractor extends ZTransformer {
 	public ArrayList<ZClassDeclNode> GetClassDecls() {
 		return this.ClassFilter.Decls;
 	}
-	public ArrayList<ZFuncDeclNode> GetFuncDecls() {
+	public ArrayList<ZFunctionNode> GetFuncDecls() {
 		return this.FunctionFilter.Decls;
 	}
 	@Override
@@ -122,7 +121,7 @@ public class DeclarationExtractor extends ZTransformer {
 		super.VisitFunctionNode(Node);
 	}
 	@Override
-	public void VisitFuncDeclNode(ZFuncDeclNode Node) {
+	public void VisitFuncDeclNode(ZFunctionNode Node) {
 		this.FunctionFilter.VisitFuncDeclNode(Node);
 		super.VisitFuncDeclNode(Node);
 	}

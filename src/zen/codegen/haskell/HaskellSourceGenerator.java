@@ -32,7 +32,7 @@ import zen.ast.ZBlockNode;
 import zen.ast.ZCastNode;
 import zen.ast.ZCatchNode;
 import zen.ast.ZFuncCallNode;
-import zen.ast.ZFuncDeclNode;
+import zen.ast.ZFunctionNode/*Decl*/;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZGetLocalNode;
 import zen.ast.ZNode;
@@ -192,7 +192,7 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override
-	public void VisitFuncDeclNode(ZFuncDeclNode Node) {
+	public void VisitFuncDeclNode(ZFunctionNode/*Decl*/ Node) {
 		this.Variables = new ArrayList<String>();
 
 		this.CurrentBuilder.Append(Node.FuncName);

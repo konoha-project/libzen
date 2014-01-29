@@ -31,7 +31,7 @@ import javax.script.ScriptEngineManager;
 import zen.ast.ZBlockNode;
 import zen.ast.ZCastNode;
 import zen.ast.ZCatchNode;
-import zen.ast.ZFuncDeclNode;
+import zen.ast.ZFunctionNode/*Decl*/;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZInstanceOfNode;
 import zen.ast.ZNode;
@@ -169,7 +169,7 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override
-	public void VisitFuncDeclNode(ZFuncDeclNode Node) {
+	public void VisitFuncDeclNode(ZFunctionNode/*Decl*/ Node) {
 		this.CurrentBuilder.Append("function ");
 		this.CurrentBuilder.Append(Node.FuncName);
 		this.VisitParamList("(", Node.ParamList, ")");

@@ -26,7 +26,7 @@
 package zen.codegen.c;
 
 import zen.ast.ZCastNode;
-import zen.ast.ZFuncDeclNode;
+import zen.ast.ZFunctionNode/*Decl*/;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZInstanceOfNode;
 import zen.ast.ZParamNode;
@@ -99,7 +99,7 @@ public class CSourceGenerator extends ZSourceGenerator {
 		this.GenerateCode(Node.BodyNode);
 	}
 
-	@Override public void VisitFuncDeclNode(ZFuncDeclNode Node) {
+	@Override public void VisitFuncDeclNode(ZFunctionNode/*Decl*/ Node) {
 		this.VisitType(Node.ReturnType);
 		this.CurrentBuilder.Append(" ");
 		this.CurrentBuilder.Append(Node.FuncName);

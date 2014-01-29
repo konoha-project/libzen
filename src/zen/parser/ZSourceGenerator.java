@@ -38,12 +38,10 @@ import zen.ast.ZCatchNode;
 import zen.ast.ZClassDeclNode;
 import zen.ast.ZComparatorNode;
 import zen.ast.ZConstPoolNode;
-import zen.ast.ZEmptyNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZFieldNode;
 import zen.ast.ZFloatNode;
 import zen.ast.ZFuncCallNode;
-import zen.ast.ZFuncDeclNode;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZGetIndexNode;
 import zen.ast.ZGetLocalNode;
@@ -233,10 +231,6 @@ public class ZSourceGenerator extends ZGenerator {
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.AppendIndent();
 		this.CurrentBuilder.Append("}");
-	}
-
-	@Override
-	public void VisitEmptyNode(ZEmptyNode Node) {
 	}
 
 	@Override
@@ -491,7 +485,7 @@ public class ZSourceGenerator extends ZGenerator {
 		this.VisitType(Type);
 	}
 
-	@Override public void VisitParamNode(ZParamNode Node) {
+	public void VisitParamNode(ZParamNode Node) {
 		this.CurrentBuilder.Append(Node.Name);
 		this.VisitTypeAnnotation(Node.Type);
 	}
@@ -499,22 +493,21 @@ public class ZSourceGenerator extends ZGenerator {
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
 		this.CurrentBuilder.Append("function");
 		this.CurrentBuilder.AppendWhiteSpace();
+		if(Node.FuncName != null) {
+			this.CurrentBuilder.Append(Node.ReferenceName);
+		}
 		this.VisitParamList("(", Node.ParamList, ")");
 		this.VisitTypeAnnotation(Node.ReturnType);
 		this.GenerateCode(Node.BodyNode);
 	}
 
-	@Override public void VisitFuncDeclNode(ZFuncDeclNode Node) {
+	public void VisitFuncDeclNode(ZFunctionNode/*Decl*/ Node) {
 		this.CurrentBuilder.Append("function");
 		this.CurrentBuilder.AppendWhiteSpace();
 		this.CurrentBuilder.Append(Node.ReferenceName);
 		this.VisitParamList("(", Node.ParamList, ")");
 		this.VisitTypeAnnotation(Node.ReturnType);
-		if (Node.BodyNode == null) {
-			this.CurrentBuilder.Append(this.SemiColon);
-		} else {
-			this.GenerateCode(Node.BodyNode);
-		}
+		this.GenerateCode(Node.BodyNode);
 	}
 
 	@Override public void VisitClassDeclNode(ZClassDeclNode Node) {

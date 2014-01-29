@@ -65,12 +65,10 @@ import zen.ast.ZClassDeclNode;
 import zen.ast.ZComparatorNode;
 import zen.ast.ZConstNode;
 import zen.ast.ZConstPoolNode;
-import zen.ast.ZEmptyNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZFieldNode;
 import zen.ast.ZFloatNode;
 import zen.ast.ZFuncCallNode;
-import zen.ast.ZFuncDeclNode;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZGetIndexNode;
 import zen.ast.ZGetLocalNode;
@@ -87,7 +85,6 @@ import zen.ast.ZNode;
 import zen.ast.ZNotNode;
 import zen.ast.ZNullNode;
 import zen.ast.ZOrNode;
-import zen.ast.ZParamNode;
 import zen.ast.ZReturnNode;
 import zen.ast.ZSetIndexNode;
 import zen.ast.ZSetLocalNode;
@@ -219,10 +216,6 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 			return NativeTypeTable.ConvertToFuncType(jMethod);
 		}
 		return null;
-	}
-
-	@Override public void VisitEmptyNode(ZEmptyNode Node) {
-		/* do nothing */
 	}
 
 	@Override public void VisitNullNode(ZNullNode Node) {
@@ -616,19 +609,11 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 		this.CurrentBuilder.RemoveLocal(NativeTypeTable.GetJavaClass(Node.ExceptionType), Node.ExceptionName);
 	}
 
-	@Override public void VisitParamNode(ZParamNode Node) {
-		this.CurrentBuilder.AddLocal(NativeTypeTable.GetJavaClass(Node.Type), Node.Name);
-	}
-
-	@Override public void VisitFunctionNode(ZFunctionNode Node) {
-		// TODO Auto-generated method stub
-	}
-
 	public Method LoadDefinedFunc(String FuncName, ZFuncType FuncType) {
 		return this.FuncMap.GetOrNull(FuncType.StringfySignature(FuncName));
 	}
 
-	@Override public void VisitFuncDeclNode(ZFuncDeclNode Node) {
+	@Override public void VisitFunctionNode(ZFunctionNode Node) {
 		@Var ZFuncType FuncType = Node.GetFuncType(null);
 		@Var JvmFuncNode FuncNode = new JvmFuncNode(FuncType, Node.FuncName);
 		@Var AsmClassBuilder  HolderClass = this.ClassLoader.NewFunctionHolderClass(Node, FuncNode, FuncType);
