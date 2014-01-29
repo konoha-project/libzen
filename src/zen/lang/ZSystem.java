@@ -34,6 +34,9 @@ import zen.deps.ZenTypedObject;
 import zen.parser.ZLogger;
 import zen.parser.ZNameSpace;
 import zen.type.ZFuncType;
+import zen.type.ZGeneric1Type;
+import zen.type.ZType;
+import zen.type.ZTypeFlag;
 
 public class ZSystem {
 	public final static ZenMap<Integer>     SourceMap = new ZenMap<Integer>(null);

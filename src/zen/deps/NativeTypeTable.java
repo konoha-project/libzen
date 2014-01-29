@@ -31,8 +31,8 @@ import java.util.HashMap;
 
 import zen.lang.ZFunc;
 import zen.lang.ZSystem;
-import zen.lang.ZType;
 import zen.type.ZFuncType;
+import zen.type.ZType;
 
 public class NativeTypeTable {
 	static HashMap<String, Class<?>> ClassMap = new HashMap<String,Class<?>>();

@@ -26,8 +26,8 @@ package zen.sugar;
 
 import zen.ast.ZNode;
 import zen.deps.Field;
-import zen.lang.ZType;
 import zen.parser.ZToken;
+import zen.type.ZType;
 
 /**
  * using(File f = new File() {

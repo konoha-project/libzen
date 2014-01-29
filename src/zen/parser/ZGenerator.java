@@ -30,10 +30,10 @@ import java.util.ArrayList;
 import zen.ast.ZNode;
 import zen.deps.Field;
 import zen.lang.ZSystem;
-import zen.lang.ZType;
 import zen.lang.ZenEngine;
 //endif VAJA
 import zen.type.ZFuncType;
+import zen.type.ZType;
 
 public abstract class ZGenerator extends ZVisitor {
 	@Field private String            GrammarInfo;

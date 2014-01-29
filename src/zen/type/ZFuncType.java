@@ -1,15 +1,17 @@
 package zen.type;
 
+import java.util.ArrayList;
+
 import zen.deps.Field;
 import zen.deps.Var;
 import zen.lang.ZFunc;
 import zen.lang.ZSystem;
-import zen.lang.ZType;
-import zen.lang.ZTypeFlag;
 
 public final class ZFuncType extends ZType {
-	@Field public ZType[]		TypeParams;
+	@Field public ZType[]  TypeParams;
 	@Field private boolean HasUnknownType = false;
+	@Field private boolean HasGreekType = false;
+
 	public ZFuncType(String ShortName, ZType[] UniqueTypeParams) {
 		super(ZTypeFlag.UniqueType, ShortName, ZSystem.TopType);
 		if(UniqueTypeParams == null) {
@@ -23,7 +25,9 @@ public final class ZFuncType extends ZType {
 		while(i < this.TypeParams.length) {
 			if(this.TypeParams[i].IsVarType()) {
 				this.HasUnknownType = true;
-				break;
+			}
+			if(this.TypeParams[i].IsGreekType()) {
+				this.HasGreekType = true;
 			}
 			i = i + 1;
 		}
@@ -36,6 +40,37 @@ public final class ZFuncType extends ZType {
 	@Override public final boolean IsVarType() {
 		return this.HasUnknownType;
 	}
+
+	@Override public boolean IsGreekType() {
+		return this.HasGreekType;
+	}
+
+	@Override public final ZType GetRealType(ZType[] Greek) {
+		if(this.HasGreekType) {
+			@Var ArrayList<ZType> TypeList = new ArrayList<ZType>();
+			@Var int i = 0;
+			while(i < this.TypeParams.length) {
+				TypeList.add(this.TypeParams[i].GetRealType(Greek));
+			}
+			return ZSystem.LookupFuncType(TypeList);
+		}
+		return this;
+	}
+
+	@Override public final boolean AcceptValueType(ZType ValueType, boolean ExactMatch, ZType[] Greek) {
+		if(ValueType.IsFuncType() && ValueType.GetParamSize() == this.GetParamSize()) {
+			@Var int i = 0;
+			while(i < this.TypeParams.length) {
+				if(!this.TypeParams[i].AcceptValueType(ValueType.GetParamType(i), true, Greek)) {
+					return false;
+				}
+				i = i + 1;
+			}
+			return true;
+		}
+		return false;
+	}
+
 
 	//	@Override public final boolean IsVarType(boolean IgnoreReturn) {
 	//		@Var int i = 0;

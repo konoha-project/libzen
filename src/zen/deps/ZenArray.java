@@ -27,7 +27,7 @@ package zen.deps;
 import java.util.ArrayList;
 
 import zen.lang.ZSystem;
-import zen.lang.ZType;
+import zen.type.ZType;
 
 public class ZenArray<T> extends ArrayList<T> implements ZenTypedObject {
 	/**

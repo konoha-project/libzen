@@ -25,8 +25,8 @@
 package zen.sugar;
 
 import zen.ast.ZNode;
-import zen.lang.ZType;
 import zen.parser.ZToken;
+import zen.type.ZType;
 
 // E.g., AllocateNode (without parameters); StaticApply is needed to init
 public final class ZenAllocateNode extends ZNode {

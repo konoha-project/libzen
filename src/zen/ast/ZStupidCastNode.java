@@ -24,9 +24,9 @@
 
 package zen.ast;
 
-import zen.lang.ZType;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
+import zen.type.ZType;
 
 public class ZStupidCastNode extends ZCastNode {
 	public ZStupidCastNode(ZToken SourceToken, ZType CastType, ZNode Node) {

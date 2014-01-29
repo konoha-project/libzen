@@ -30,10 +30,10 @@ import zen.deps.Field;
 import zen.deps.Nullable;
 import zen.deps.Var;
 import zen.lang.ZSystem;
-import zen.lang.ZType;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 import zen.type.ZFuncType;
+import zen.type.ZType;
 
 public class ZFunctionNode extends ZNode {
 	@Field public ZType ReturnType = ZSystem.VarType;

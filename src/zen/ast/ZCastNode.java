@@ -25,8 +25,8 @@
 package zen.ast;
 
 import zen.deps.Field;
-import zen.lang.ZType;
 import zen.parser.ZVisitor;
+import zen.type.ZType;
 
 //E.g., (T) $Expr
 public class ZCastNode extends ZNode {

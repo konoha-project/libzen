@@ -26,7 +26,7 @@ package zen.ast;
 
 import zen.deps.Field;
 import zen.lang.ZSystem;
-import zen.lang.ZType;
+import zen.type.ZType;
 
 public final class ZCatchNode extends ZNode {
 	@Field public ZType   ExceptionType = ZSystem.VarType;

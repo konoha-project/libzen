@@ -9,6 +9,8 @@ import zen.deps.LibNative;
 import zen.deps.Var;
 import zen.parser.ZLogger;
 import zen.type.ZFuncType;
+import zen.type.ZType;
+import zen.type.ZVarType;
 
 final class ZFuncContext {
 	@Field ZFuncContext Parent;
@@ -38,12 +40,12 @@ final class ZFuncContext {
 
 	public ZFuncType RecheckCompleteFuncType(ZFunctionNode FuncNode) {
 		@Var ZFuncType FuncType = this.FuncType;
-		if(!FuncType.IsVarType(false)) {
+		if(!FuncType.IsVarType()) {
 			if(FuncNode.ReturnType.IsVarType() && this.ReturnCount == 0) {
 				((ZVarType)FuncNode.ReturnType).Infer(ZSystem.VoidType, FuncNode.SourceToken);
 			}
 			this.FuncType = this.FuncNode.GetFuncType(null);
-			if(this.FuncType.IsVarType(false)) {
+			if(this.FuncType.IsVarType()) {
 				return this.FuncType;
 			}
 		}

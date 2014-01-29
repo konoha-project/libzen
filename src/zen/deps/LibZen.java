@@ -37,10 +37,10 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import zen.lang.ZType;
 import zen.parser.ZLogger;
 import zen.parser.ZSourceBuilder;
 import zen.parser.ZUtils;
+import zen.type.ZType;
 
 public abstract class LibZen {
 	public final static String GetPlatform() {

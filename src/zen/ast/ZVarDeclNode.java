@@ -26,9 +26,9 @@ package zen.ast;
 
 import zen.deps.Field;
 import zen.lang.ZSystem;
-import zen.lang.ZType;
 import zen.parser.ZNameSpace;
 import zen.parser.ZVisitor;
+import zen.type.ZType;
 
 /**
  * int a = 1;

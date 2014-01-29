@@ -27,7 +27,7 @@ package zen.deps;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import zen.lang.ZType;
+import zen.type.ZType;
 
 public final class ZenMap <T> implements ZenTypedObject {
 	final ZType ElementType;

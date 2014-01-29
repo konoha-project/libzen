@@ -81,8 +81,12 @@ import zen.parser.ZLogger;
 import zen.parser.ZNameSpace;
 import zen.parser.ZUtils;
 import zen.type.ZFuncType;
+import zen.type.ZGreekType;
+import zen.type.ZType;
+import zen.type.ZTypeFlag;
 import zen.type.ZTypeSafer;
 import zen.type.ZVarScope;
+import zen.type.ZVarType;
 
 public class ZenTypeSafer extends ZTypeSafer {
 
@@ -327,17 +331,22 @@ public class ZenTypeSafer extends ZTypeSafer {
 	private void TypeCheckFuncCall(ZFuncCallNode FuncNode, ZNameSpace NameSpace, ZFuncType FuncType) {
 		@Var int i = 0;
 		@Var boolean IsAllTyped = true;
+		@Var ZType[] Greek = ZGreekType.NewGreekTypes(null);
 		while(i < FuncNode.ParamList.size()) {
 			@Var ZNode SubNode = FuncNode.ParamList.get(i);
-			SubNode = this.CheckType(SubNode, NameSpace, FuncType.GetParamType(i+1));
-			FuncNode.ParamList.set(i, SubNode);
+			@Var ZType ParamType =  FuncType.GetParamType(i+1);
+			SubNode = this.TryType(SubNode, NameSpace, ParamType);
 			if(SubNode.IsUntyped()) {
 				IsAllTyped = false;
 			}
+			if(!ParamType.AcceptValueType(SubNode.Type, false, Greek)) {
+				SubNode = ZenError.FuncCallTypeError(ParamType.GetRealType(Greek), FuncNode, i+1, SubNode.Type);
+			}
+			FuncNode.ParamList.set(i, SubNode);
 			i = i + 1;
 		}
-		if(FuncType.IsVarType(false) && IsAllTyped) {
-			this.TypedNode(FuncNode, FuncType.GetReturnType());
+		if(!FuncType.IsVarType() && IsAllTyped) {
+			this.TypedNode(FuncNode, FuncType.GetReturnType().GetRealType(Greek));
 		}
 		else {
 			this.TypedNode(FuncNode, ZSystem.VarType);

@@ -28,6 +28,7 @@ import zen.ast.ZNode;
 import zen.deps.Field;
 import zen.parser.ZNameSpace;
 import zen.parser.ZToken;
+import zen.type.ZType;
 
 public class ZenVariable {
 	@Field public ZNode   DefiningFunc;

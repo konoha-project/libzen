@@ -28,8 +28,8 @@ import java.util.ArrayList;
 
 import zen.deps.Field;
 import zen.lang.ZSystem;
-import zen.lang.ZType;
 import zen.type.ZFuncType;
+import zen.type.ZType;
 
 abstract class ZApplyNode extends ZNode {
 	@Field public ArrayList<ZNode>  ParamList = new ArrayList<ZNode>();

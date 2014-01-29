@@ -11,6 +11,7 @@ import zen.deps.Nullable;
 import zen.deps.Var;
 import zen.parser.ZNameSpace;
 import zen.parser.ZToken;
+import zen.type.ZType;
 
 public class ZenGamma {
 	public static void Debug(String Message) {

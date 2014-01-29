@@ -25,9 +25,9 @@
 package zen.ast;
 
 import zen.deps.Field;
-import zen.lang.ZType;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
+import zen.type.ZType;
 
 public class ZParamNode extends ZNode {
 	@Field public String  Name;

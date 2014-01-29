@@ -28,8 +28,8 @@ import java.util.ArrayList;
 
 import zen.ast.ZNode;
 import zen.deps.Field;
-import zen.lang.ZType;
 import zen.parser.ZToken;
+import zen.type.ZType;
 
 public final class ZenSwitchNode extends ZNode {
 	@Field public ZNode	MatchNode;

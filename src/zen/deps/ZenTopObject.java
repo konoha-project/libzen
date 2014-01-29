@@ -25,8 +25,7 @@
 
 //ifdef JAVA
 package zen.deps;
-import zen.lang.ZType;
-//endif VAJA
+import zen.type.ZType;
 
 
 public class ZenTopObject implements ZenTypedObject {

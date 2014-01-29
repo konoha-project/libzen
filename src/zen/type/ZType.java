@@ -23,11 +23,11 @@
 // **************************************************************************
 
 //ifdef JAVA
-package zen.lang;
+package zen.type;
 import zen.deps.Field;
 import zen.deps.Var;
+import zen.lang.ZSystem;
 import zen.parser.ZUtils;
-//endif VAJA
 
 public class ZType  {
 	@Field public int		  TypeFlag = 0;
@@ -40,10 +40,7 @@ public class ZType  {
 		this.ShortName = ShortName;
 		this.RefType = RefType;
 		if(ZUtils.IsFlag(TypeFlag, ZTypeFlag.UniqueType)) {
-			this.TypeId = ZSystem.IssueTypeId(this);
-		}
-		else {
-			this.TypeId = -1;  // unused
+			this.TypeId = ZTypePools.NewTypeId(this);
 		}
 	}
 
@@ -59,11 +56,6 @@ public class ZType  {
 		return this;
 	}
 
-	public boolean IsFoundTypeError() {
-		// ZenVarInfo should be implemented
-		return false;
-	}
-
 	public int GetParamSize() {
 		return 0;
 	}
@@ -72,12 +64,11 @@ public class ZType  {
 		return null;
 	}
 
-
 	public final boolean Equals(ZType Type) {
 		return (this.GetRealType() == Type.GetRealType());
 	}
 
-	public final boolean Accept(ZType Type) {
+	public boolean Accept(ZType Type) {
 		@Var ZType ThisType = this.GetRealType();
 		if(ThisType == Type.GetRealType() /*|| ThisType == ZenSystem.AnyType*/) {
 			return true;
@@ -92,10 +83,24 @@ public class ZType  {
 		return ZSystem.CheckSubType(Type, this);
 	}
 
-
-	public final boolean IsTopType() {
-		return (this.GetRealType() == ZSystem.TopType);
+	public boolean IsGreekType() {
+		return false;
 	}
+
+	public ZType GetRealType(ZType[] Greek) {
+		return this.GetRealType();
+	}
+
+	public boolean AcceptValueType(ZType ValueType, boolean ExactMatch, ZType[] Greek) {
+		if(this.GetRealType() != ValueType && !ValueType.IsVarType()) {
+			if(ExactMatch && !this.Accept(ValueType)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+
 
 	public final boolean IsVoidType() {
 		return (this.GetRealType() == ZSystem.VoidType);
@@ -107,10 +112,6 @@ public class ZType  {
 
 	public final boolean IsInferrableType() {
 		return (!this.IsVarType() && !this.IsVoidType());
-	}
-
-	public final boolean IsAnyType() {
-		return false; //(this.GetRealType() == ZenSystem.AnyType);
 	}
 
 	public final boolean IsTypeType() {
@@ -128,9 +129,11 @@ public class ZType  {
 	public final boolean IsFloatType() {
 		return (this.GetRealType() == ZSystem.FloatType);
 	}
+
 	public final boolean IsNumberType() {
 		return (this.IsIntType() || this.IsFloatType());
 	}
+
 	public final boolean IsStringType() {
 		return (this.GetRealType() == ZSystem.StringType);
 	}
@@ -140,7 +143,7 @@ public class ZType  {
 	}
 
 	public final boolean IsMapType() {
-		return (this.GetBaseType() == ZSystem.ArrayType);
+		return (this.GetBaseType() == ZSystem.MapType);
 	}
 
 	//	public final boolean IsEnumType() {
@@ -152,33 +155,17 @@ public class ZType  {
 		return SubType;
 	}
 
-
 	public boolean IsOpenType() {
 		return ZUtils.IsFlag(this.TypeFlag, ZTypeFlag.OpenType);
 	}
 
-	//	public final boolean IsAbstractType() {
-	//		return (this.TypeBody == null && this.ReferenceType == ZenTypeSystem.TopType/*default*/);
-	//	}
-	//	public final boolean IsNativeType() {
-	//		return ZenUtils.IsFlag(this.TypeFlag, NativeType);
-	//	}
+	public boolean IsImmutableType() {
+		return false;
+	}
 
-	//	public final boolean IsDynamicType() {
-	//		return ZenUtils.IsFlag(this.TypeFlag, DynamicType);
-	//	}
-	//
-	//	public boolean IsVirtualType() {
-	//		return ZenUtils.IsFlag(this.TypeFlag, VirtualType);
-	//	}
-	//
-	//	public final boolean IsUnboxType() {
-	//		return ZenUtils.IsFlag(this.BaseType.TypeFlag, UnboxType);
-	//	}
-	//
-	//	public final boolean IsGenericType() {
-	//		return ZenUtils.IsFlag(this.TypeFlag, GenericVariable);
-	//	}
+	public boolean IsNullableType() {
+		return true;
+	}
 
 	@Override public String toString() {
 		return this.ShortName;
@@ -241,17 +228,15 @@ public class ZType  {
 		return false;
 	}
 
-	public boolean IsVarType(boolean IgnoreReturn) {
-		return false;
-	}
-
-	public boolean HasCallableSignature() {
-		return false;
-	}
+	//	public boolean HasCallableSignature() {
+	//		return false;
+	//	}
 
 	public String StringfySignature(String FuncName) {
 		return FuncName;
 	}
+
+
 
 
 	//	public void SetClassField(ZenClassField ClassField) {

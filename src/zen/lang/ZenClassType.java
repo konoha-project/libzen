@@ -32,6 +32,8 @@ import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.parser.ZNameSpace;
 import zen.parser.ZToken;
+import zen.type.ZType;
+import zen.type.ZTypeFlag;
 
 public class ZenClassType extends ZType {
 	@Field ArrayList<ZenField> FieldList = null;

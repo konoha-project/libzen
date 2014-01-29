@@ -22,22 +22,26 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package zen.lang;
+package zen.type;
 
 import zen.deps.Field;
-
+import zen.deps.Nullable;
+import zen.lang.ZSystem;
 
 public class ZGeneric1Type extends ZType {
 	@Field public ZType			BaseType;
 	@Field public ZType         ParamType;
-	public ZGeneric1Type(int TypeFlag, String ShortName, ZType BaseType, ZType ParamType) {
+
+	public ZGeneric1Type(int TypeFlag, String ShortName, @Nullable ZType BaseType, ZType ParamType) {
 		super(TypeFlag, ShortName, ZSystem.TopType);
-		this.BaseType = BaseType == null ? this : BaseType;
+		this.BaseType = BaseType;
+		if(this.BaseType == null) {
+			this.BaseType = this;
+		}
 		this.ParamType = ParamType;
 	}
 
-	@Override
-	public ZType GetSuperType() {
+	@Override public ZType GetSuperType() {
 		return this.BaseType == this ? this.RefType : this.BaseType;
 	}
 
@@ -56,22 +60,22 @@ public class ZGeneric1Type extends ZType {
 		return null;
 	}
 
-	//	// Note Don't call this directly. Use Context.GetGenericType instead.
-	//	public ZenType CreateGenericType(int BaseIndex, ArrayList<ZenType> TypeList, String ShortName) {
-	//		@Var int TypeVariableFlag = (this.TypeFlag & (~GenericVariable));
-	//		for(@Var int i = BaseIndex; i < TypeList.size(); i = i + 1) {
-	//			if(TypeList.get(i).HasTypeVariable()) {
-	//				TypeVariableFlag |= GenericVariable;
-	//				break;
-	//			}
-	//		}
-	//		@Var ZenType GenericType = new ZenType(TypeVariableFlag, ShortName, null, null);
-	//		GenericType.BaseType = this.BaseType;
-	//		GenericType.ParentMethodSearch = this.BaseType;
-	//		GenericType.RefType = this.RefType;
-	//		GenericType.TypeParams = LibZen.CompactTypeList(BaseIndex, TypeList);
-	//		LibZen.VerboseLog(VerboseType, "new generic type: " + GenericType.ShortName + ", ClassId=" + GenericType.TypeId);
-	//		return GenericType;
-	//	}
+	@Override public boolean IsGreekType() {
+		return (this.ParamType.IsGreekType());
+	}
+
+	@Override public final ZType GetRealType(ZType[] Greek) {
+		if(this.ParamType.IsGreekType()) {
+			return ZSystem.GetGenericType1(this.BaseType, this.ParamType.GetRealType(Greek), true);
+		}
+		return this.GetRealType();
+	}
+
+	@Override public final boolean AcceptValueType(ZType ValueType, boolean ExactMatch, ZType[] Greek) {
+		if(this.BaseType == ValueType.GetBaseType() && ValueType.GetParamSize() == 1) {
+			return this.ParamType.AcceptValueType(ValueType.GetParamType(0), true, Greek);
+		}
+		return false;
+	}
 
 }

@@ -26,8 +26,8 @@ package zen.sugar;
 
 import zen.ast.ZConstNode;
 import zen.deps.Field;
-import zen.lang.ZType;
 import zen.parser.ZToken;
+import zen.type.ZType;
 
 public abstract class ZenRegexNode extends ZConstNode {
 	protected ZenRegexNode(ZType Type, ZToken Token) {

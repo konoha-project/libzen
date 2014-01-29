@@ -24,8 +24,8 @@
 
 package zen.ast;
 
-import zen.lang.ZType;
 import zen.parser.ZToken;
+import zen.type.ZType;
 
 @Deprecated
 public abstract class ZenStatementNode extends ZNode {

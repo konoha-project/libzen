@@ -25,7 +25,7 @@
 //ifdef JAVA
 package zen.deps;
 
-import zen.lang.ZType;
+import zen.type.ZType;
 
 public class ZenEnum extends ZenTopObject {
 	@Field public final long EnumValue;

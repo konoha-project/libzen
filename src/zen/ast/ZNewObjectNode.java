@@ -28,9 +28,9 @@ import java.util.ArrayList;
 
 import zen.deps.Field;
 import zen.lang.ZFunc;
-import zen.lang.ZType;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
+import zen.type.ZType;
 
 // E.g., ConstructorNode is for object creation in Native language defined
 public final class ZNewObjectNode extends ZNode {

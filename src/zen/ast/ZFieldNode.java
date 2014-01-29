@@ -27,7 +27,7 @@ package zen.ast;
 import zen.deps.Field;
 import zen.deps.Init;
 import zen.lang.ZSystem;
-import zen.lang.ZType;
+import zen.type.ZType;
 
 public final class ZFieldNode extends ZNode {
 	@Field @Init public  ZType  ClassType;

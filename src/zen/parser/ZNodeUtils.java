@@ -32,7 +32,7 @@ import zen.ast.ZIntNode;
 import zen.ast.ZNode;
 import zen.ast.ZSetLocalNode;
 import zen.ast.ZStringNode;
-import zen.lang.ZType;
+import zen.type.ZType;
 
 public abstract class ZNodeUtils {
 	//	public final ZenNode CreateUnsupportedNode(ZenType Type, ZenSyntaxTree ParsedTree) {

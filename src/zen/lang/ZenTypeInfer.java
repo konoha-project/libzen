@@ -81,6 +81,9 @@ import zen.parser.ZNameSpace;
 import zen.parser.ZToken;
 import zen.parser.ZUtils;
 import zen.type.ZFuncType;
+import zen.type.ZType;
+import zen.type.ZTypeFlag;
+import zen.type.ZVarType;
 
 public class ZenTypeInfer extends ZenTypeChecker {
 
@@ -376,7 +379,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 			}
 			i = i + 1;
 		}
-		if(FuncType.IsVarType(false) && IsAllTyped) {
+		if(FuncType.IsVarType() && IsAllTyped) {
 			this.TypedNode(FuncNode, FuncType.GetReturnType());
 		}
 		else {
@@ -692,7 +695,7 @@ public class ZenTypeInfer extends ZenTypeChecker {
 				this.Logger.ReportError(SourceToken, "redefinition of function: " + Func);
 				return false;
 			}
-			else if(FuncType.IsVarType(false)) {
+			else if(FuncType.IsVarType()) {
 				Func = new ZSignature(0, FuncName, FuncType, SourceToken);
 				ZenGamma.DefineFunc(NameSpace, Func);
 			}

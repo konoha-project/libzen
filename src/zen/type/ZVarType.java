@@ -22,20 +22,27 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package zen.lang;
+package zen.type;
+
+import java.util.ArrayList;
 
 import zen.deps.Field;
+import zen.lang.ZSystem;
 import zen.parser.ZToken;
 
 public class ZVarType extends ZType {
-	@Field public ZToken SourceToken;
-	@Field public int AlphaId;
 
-	public ZVarType(String Name, int AlphaId, ZToken SourceToken) {
+	@Field public final ArrayList<ZVarType> VarList;
+	@Field public ZToken SourceToken;
+	@Field public int GreekId;
+
+	public ZVarType(ArrayList<ZVarType> VarList, String Name, ZToken SourceToken) {
 		super(0, Name, ZSystem.VarType);
+		this.VarList = VarList;
 		this.SourceToken = SourceToken;
+		this.GreekId = VarList.size();
+		VarList.add(this);
 		this.TypeId = this.RefType.TypeId;
-		this.AlphaId = AlphaId;
 	}
 
 	@Override public final ZType GetRealType() {
@@ -54,6 +61,10 @@ public class ZVarType extends ZType {
 		return this.RefType.IsFuncType();
 	}
 
+	@Override public boolean IsVarType() {
+		return this.RefType.IsVarType();
+	}
+
 	@Override public String toString() {
 		return "typeof("+this.ShortName+"): " + this.RefType;
 	}
@@ -62,11 +73,11 @@ public class ZVarType extends ZType {
 		if(this.RefType.IsVarType()) {
 			if(ContextType instanceof ZVarType && ContextType.IsVarType()) {
 				ZVarType VarType = (ZVarType)ContextType;
-				if(this.AlphaId < VarType.AlphaId) {
-					VarType.AlphaId = this.AlphaId;
+				if(this.GreekId < VarType.GreekId) {
+					VarType.GreekId = this.GreekId;
 				}
 				else {
-					this.AlphaId = VarType.AlphaId;
+					this.GreekId = VarType.GreekId;
 				}
 			}
 			else {
@@ -77,4 +88,25 @@ public class ZVarType extends ZType {
 			}
 		}
 	}
+
+	public void Maybe(ZType T, ZToken SourceToken) {
+		if(this.RefType.IsVarType()) {
+			if(T instanceof ZVarType && T.IsVarType()) {
+				ZVarType VarType = (ZVarType)T;
+				if(this.GreekId < VarType.GreekId) {
+					VarType.GreekId = this.GreekId;
+				}
+				else {
+					this.GreekId = VarType.GreekId;
+				}
+			}
+			else {
+				this.RefType = T.GetRealType();
+				this.SourceToken = SourceToken;
+				this.TypeId = T.TypeId;
+				this.TypeFlag = T.TypeFlag;
+			}
+		}
+	}
+
 }

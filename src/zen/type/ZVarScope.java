@@ -7,8 +7,6 @@ import zen.ast.ZNode;
 import zen.deps.Field;
 import zen.deps.Var;
 import zen.lang.ZSystem;
-import zen.lang.ZType;
-import zen.lang.ZVarType;
 import zen.parser.ZLogger;
 import zen.parser.ZNameSpace;
 import zen.parser.ZToken;
@@ -30,10 +28,7 @@ public final class ZVarScope {
 
 	public final ZType NewVarType(ZType VarType, String Name, ZToken SourceToken) {
 		if(!(VarType instanceof ZVarType) && VarType.IsVarType()) {
-			int AlphaId = this.VarList.size();
-			ZVarType VarType1 = new ZVarType(Name, AlphaId, SourceToken);
-			this.VarList.add(VarType1);
-			VarType = VarType1;
+			VarType = new ZVarType(this.VarList, Name, SourceToken);
 		}
 		return VarType;
 	}

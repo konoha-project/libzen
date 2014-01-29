@@ -28,7 +28,7 @@ import zen.deps.Field;
 import zen.deps.Init;
 import zen.deps.Var;
 import zen.deps.Zen;
-import zen.lang.ZType;
+import zen.type.ZType;
 
 @Zen public final class ZToken {
 	@Field public final static ZToken NullToken = new ZToken(0, "/**/", 0);

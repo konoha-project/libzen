@@ -29,9 +29,9 @@ import java.util.ArrayList;
 import zen.ast.ZNode;
 import zen.deps.Field;
 import zen.lang.ZFunc;
-import zen.lang.ZType;
 import zen.parser.ZNameSpace;
 import zen.parser.ZToken;
+import zen.type.ZType;
 
 public final class ZenApplyOverridedMethodNode extends ZNode {
 	@Field public ZNameSpace NameSpace;

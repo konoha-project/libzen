@@ -1,8 +1,8 @@
 package zen.ast;
 
 import zen.deps.Field;
-import zen.lang.ZType;
 import zen.parser.ZNameSpace;
+import zen.type.ZType;
 
 public class ZSymbolDeclNode {
 	@Field public ZNameSpace NameSpace;

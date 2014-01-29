@@ -22,7 +22,7 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package zen.lang;
+package zen.type;
 
 public abstract class ZTypeFlag {
 	//	// ClassFlag

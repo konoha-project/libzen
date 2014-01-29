@@ -24,7 +24,7 @@
 //ifdef JAVA
 package zen.deps;
 
-import zen.lang.ZType;
+import zen.type.ZType;
 
 //endif VAJA
 /*ZenObject Begin*/

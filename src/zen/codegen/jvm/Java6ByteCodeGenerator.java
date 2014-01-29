@@ -105,11 +105,11 @@ import zen.deps.NativeTypeTable;
 import zen.deps.Var;
 import zen.deps.ZenMap;
 import zen.lang.ZSystem;
-import zen.lang.ZType;
 import zen.lang.ZenEngine;
 import zen.lang.ZenTypeInfer;
 import zen.parser.ZGenerator;
 import zen.type.ZFuncType;
+import zen.type.ZType;
 
 public class Java6ByteCodeGenerator extends ZGenerator {
 	AsmMethodBuilder CurrentBuilder;

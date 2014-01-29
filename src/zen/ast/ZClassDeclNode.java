@@ -27,10 +27,10 @@ package zen.ast;
 import java.util.ArrayList;
 
 import zen.deps.Field;
-import zen.lang.ZType;
 import zen.lang.ZenClassType;
 import zen.parser.ZNameSpace;
 import zen.parser.ZVisitor;
+import zen.type.ZType;
 
 public final class ZClassDeclNode extends ZNode {
 	@Field public String ClassName = null;

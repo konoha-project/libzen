@@ -1,7 +1,7 @@
 package zen.deps;
 
-import zen.lang.ZType;
-import zen.lang.ZTypeFlag;
+import zen.type.ZType;
+import zen.type.ZTypeFlag;
 
 public class ZNativeType extends ZType {
 	@Field public Class<?>          JClass;

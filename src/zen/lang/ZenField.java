@@ -26,6 +26,7 @@ package zen.lang;
 
 import zen.deps.Field;
 import zen.parser.ZToken;
+import zen.type.ZType;
 
 public class ZenField {
 	@Field public int        FieldFlag = 0;

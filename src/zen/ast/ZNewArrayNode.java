@@ -27,8 +27,8 @@ package zen.ast;
 import java.util.ArrayList;
 
 import zen.deps.Field;
-import zen.lang.ZType;
 import zen.parser.ZToken;
+import zen.type.ZType;
 
 //E.g., new T "[" 10, [10] "]"
 public final class ZNewArrayNode extends ZNode {

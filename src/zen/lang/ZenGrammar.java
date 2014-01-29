@@ -80,6 +80,7 @@ import zen.parser.ZSyntaxPattern;
 import zen.parser.ZToken;
 import zen.parser.ZTokenContext;
 import zen.type.ZFuncType;
+import zen.type.ZType;
 
 //endif VAJA
 

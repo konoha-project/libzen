@@ -35,7 +35,6 @@ import zen.deps.LibNative;
 import zen.deps.Var;
 import zen.lang.ZFunc;
 import zen.lang.ZSystem;
-import zen.lang.ZType;
 import zen.parser.ZLogger;
 import zen.parser.ZNameSpace;
 import zen.parser.ZUtils;

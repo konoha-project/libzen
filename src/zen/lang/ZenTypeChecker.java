@@ -45,6 +45,8 @@ import zen.parser.ZNameSpace;
 import zen.parser.ZToken;
 import zen.parser.ZUtils;
 import zen.parser.ZVisitor;
+import zen.type.ZType;
+import zen.type.ZVarType;
 
 public abstract class ZenTypeChecker extends ZVisitor {
 
@@ -405,10 +407,7 @@ public abstract class ZenTypeChecker extends ZVisitor {
 
 	protected final ZType NewVarType(ZType VarType, String Name, ZToken SourceToken) {
 		if(!(VarType instanceof ZVarType) && VarType.IsVarType()) {
-			int AlphaId = this.FuncScope.VarTypeList.size();
-			ZVarType VarType1 = new ZVarType(Name, AlphaId, SourceToken);
-			this.FuncScope.VarTypeList.add(VarType1);
-			VarType = VarType1;
+			VarType = new ZVarType(this.FuncScope.VarTypeList, Name, SourceToken);
 		}
 		return VarType;
 	}

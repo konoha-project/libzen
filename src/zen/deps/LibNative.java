@@ -34,12 +34,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 
 import zen.ast.ZNode;
 import zen.lang.ZFunc;
 import zen.lang.ZSystem;
-import zen.lang.ZType;
 import zen.lang.ZenEngine;
 import zen.lang.ZenGrammar;
 import zen.parser.ZGenerator;
@@ -49,6 +47,7 @@ import zen.parser.ZSourceGenerator;
 import zen.parser.ZTokenContext;
 import zen.parser.ZVisitor;
 import zen.type.ZFuncType;
+import zen.type.ZType;
 
 public class LibNative {
 
@@ -271,70 +270,70 @@ public class LibNative {
 		return ZenArray.NewZenArray(ElementType);
 	}
 
-	private static boolean AcceptJavaType(ZType GreenType, Class<?> NativeType) {
-		if (GreenType.IsVarType() /* || GreenType.IsTypeVariable() */) {
-			return true;
-		}
-		if (GreenType.IsTopType()) {
-			return (NativeType == Object.class);
-		}
-		@Var ZType JavaType = LibNative.GetNativeType(NativeType);
-		if (GreenType != JavaType) {
-			//			LibNative.DebugP("*** " + JavaType + ", " + GreenType
-			//					+ ", equals? "
-			//					+ (GreenType.GetBaseType() == JavaType.GetBaseType()));
-			// if(GreenType.IsGenericType() && GreenType.HasTypeVariable()) {
-			// return GreenType.BaseType == JavaType.BaseType;
-			// }
-			// if(JavaType.IsGenericType() && JavaType.HasTypeVariable()) {
-			// return GreenType.BaseType == JavaType.BaseType;
-			// }
-			return false;
-		}
-		return true;
-	}
-
-	private final static boolean MatchNativeMethod(ZType[] TypeParams, Method JavaMethod) {
-		if (!LibNative.AcceptJavaType(TypeParams[0], JavaMethod.getReturnType())) {
-			ZLogger.VerboseLog(ZLogger.DebugLevel, "return mismatched: " + TypeParams[0] + ", " + JavaMethod.getReturnType() + " of " + JavaMethod);
-			return false;
-		}
-		@Var int StartIndex = 2;
-		if (Modifier.isStatic(JavaMethod.getModifiers())) {
-			StartIndex = 1;
-		} else {
-			if ((TypeParams.length == 1)
-					|| !LibNative.AcceptJavaType(TypeParams[1],
-							JavaMethod.getDeclaringClass())) {
-				ZLogger.VerboseLog(ZLogger.DebugLevel, "recv mismatched: " + TypeParams[1]
-						+ ", " + JavaMethod.getDeclaringClass() + " of "
-						+ JavaMethod);
-				return false;
-			}
-			StartIndex = 2;
-		}
-		@Var int ParamSize = TypeParams.length - StartIndex;
-		@Var Class<?>[] ParamTypes = JavaMethod.getParameterTypes();
-		if (ParamTypes != null) {
-			if (ParamTypes.length != ParamSize) {
-				ZLogger.VerboseLog(ZLogger.DebugLevel, "param.length mismatched: " + ParamSize
-						+ " != " + ParamTypes.length + " of " + JavaMethod);
-				return false;
-			}
-			for (int j = 0; j < ParamTypes.length; j++) {
-				if (!LibNative.AcceptJavaType(TypeParams[StartIndex + j],
-						ParamTypes[j])) {
-					ZLogger.VerboseLog(ZLogger.DebugLevel, "param mismatched: "
-							+ TypeParams[StartIndex + j] + " != "
-							+ ParamTypes[j] + " at index " + j + " of "
-							+ JavaMethod);
-					return false;
-				}
-			}
-			return true;
-		}
-		return (ParamSize == 0);
-	}
+	//	private static boolean AcceptJavaType(ZType GreenType, Class<?> NativeType) {
+	//		if (GreenType.IsVarType() /* || GreenType.IsTypeVariable() */) {
+	//			return true;
+	//		}
+	//		if (GreenType.IsTopType()) {
+	//			return (NativeType == Object.class);
+	//		}
+	//		@Var ZType JavaType = LibNative.GetNativeType(NativeType);
+	//		if (GreenType != JavaType) {
+	//			//			LibNative.DebugP("*** " + JavaType + ", " + GreenType
+	//			//					+ ", equals? "
+	//			//					+ (GreenType.GetBaseType() == JavaType.GetBaseType()));
+	//			// if(GreenType.IsGenericType() && GreenType.HasTypeVariable()) {
+	//			// return GreenType.BaseType == JavaType.BaseType;
+	//			// }
+	//			// if(JavaType.IsGenericType() && JavaType.HasTypeVariable()) {
+	//			// return GreenType.BaseType == JavaType.BaseType;
+	//			// }
+	//			return false;
+	//		}
+	//		return true;
+	//	}
+	//
+	//	private final static boolean MatchNativeMethod(ZType[] TypeParams, Method JavaMethod) {
+	//		if (!LibNative.AcceptJavaType(TypeParams[0], JavaMethod.getReturnType())) {
+	//			ZLogger.VerboseLog(ZLogger.DebugLevel, "return mismatched: " + TypeParams[0] + ", " + JavaMethod.getReturnType() + " of " + JavaMethod);
+	//			return false;
+	//		}
+	//		@Var int StartIndex = 2;
+	//		if (Modifier.isStatic(JavaMethod.getModifiers())) {
+	//			StartIndex = 1;
+	//		} else {
+	//			if ((TypeParams.length == 1)
+	//					|| !LibNative.AcceptJavaType(TypeParams[1],
+	//							JavaMethod.getDeclaringClass())) {
+	//				ZLogger.VerboseLog(ZLogger.DebugLevel, "recv mismatched: " + TypeParams[1]
+	//						+ ", " + JavaMethod.getDeclaringClass() + " of "
+	//						+ JavaMethod);
+	//				return false;
+	//			}
+	//			StartIndex = 2;
+	//		}
+	//		@Var int ParamSize = TypeParams.length - StartIndex;
+	//		@Var Class<?>[] ParamTypes = JavaMethod.getParameterTypes();
+	//		if (ParamTypes != null) {
+	//			if (ParamTypes.length != ParamSize) {
+	//				ZLogger.VerboseLog(ZLogger.DebugLevel, "param.length mismatched: " + ParamSize
+	//						+ " != " + ParamTypes.length + " of " + JavaMethod);
+	//				return false;
+	//			}
+	//			for (int j = 0; j < ParamTypes.length; j++) {
+	//				if (!LibNative.AcceptJavaType(TypeParams[StartIndex + j],
+	//						ParamTypes[j])) {
+	//					ZLogger.VerboseLog(ZLogger.DebugLevel, "param mismatched: "
+	//							+ TypeParams[StartIndex + j] + " != "
+	//							+ ParamTypes[j] + " at index " + j + " of "
+	//							+ JavaMethod);
+	//					return false;
+	//				}
+	//			}
+	//			return true;
+	//		}
+	//		return (ParamSize == 0);
+	//	}
 
 	private final static Class<?> LoadClass(String ClassName) throws ClassNotFoundException {
 		try {
@@ -345,43 +344,43 @@ public class LibNative {
 		return Class.forName(ClassName);
 	}
 
-	public final static Method ImportMethod(ZType[] TypeParams, String FullName, boolean StaticMethodOnly) {
-		@Var Method FoundMethod = null;
-		int Index = FullName.lastIndexOf(".");
-		if(Index == -1) {
-			return null;
-		}
-		try {
-			@Var String FuncName = FullName.substring(Index+1);
-			@Var Class<?> NativeClass = LibNative.LoadClass(FullName.substring(0, Index));
-			Method[] Methods = NativeClass.getDeclaredMethods();
-			assert(Methods != null);
-			for(int i = 0; i < Methods.length; i++) {
-				if(LibZen.EqualsString(FuncName, Methods[i].getName())) {
-					if(!Modifier.isPublic(Methods[i].getModifiers())) {
-						continue;
-					}
-					if(StaticMethodOnly && !Modifier.isStatic(Methods[i].getModifiers())) {
-						continue;
-					}
-					if(!LibNative.MatchNativeMethod(TypeParams, Methods[i])) {
-						continue;
-					}
-					if(FoundMethod != null) {
-						ZLogger.VerboseLog(ZLogger.VerboseUndefined, "overloaded method: " + FullName);
-						return FoundMethod; // return the first one
-					}
-					FoundMethod = Methods[i];
-				}
-			}
-			if(FoundMethod == null) {
-				ZLogger.VerboseLog(ZLogger.VerboseUndefined, "undefined method: " + FullName + " for " + TypeParams);
-			}
-		} catch (ClassNotFoundException e) {
-			ZLogger.VerboseLog(ZLogger.VerboseException, e.toString());
-		}
-		return FoundMethod;
-	}
+	//	public final static Method ImportMethod(ZType[] TypeParams, String FullName, boolean StaticMethodOnly) {
+	//		@Var Method FoundMethod = null;
+	//		int Index = FullName.lastIndexOf(".");
+	//		if(Index == -1) {
+	//			return null;
+	//		}
+	//		try {
+	//			@Var String FuncName = FullName.substring(Index+1);
+	//			@Var Class<?> NativeClass = LibNative.LoadClass(FullName.substring(0, Index));
+	//			Method[] Methods = NativeClass.getDeclaredMethods();
+	//			assert(Methods != null);
+	//			for(int i = 0; i < Methods.length; i++) {
+	//				if(LibZen.EqualsString(FuncName, Methods[i].getName())) {
+	//					if(!Modifier.isPublic(Methods[i].getModifiers())) {
+	//						continue;
+	//					}
+	//					if(StaticMethodOnly && !Modifier.isStatic(Methods[i].getModifiers())) {
+	//						continue;
+	//					}
+	//					if(!LibNative.MatchNativeMethod(TypeParams, Methods[i])) {
+	//						continue;
+	//					}
+	//					if(FoundMethod != null) {
+	//						ZLogger.VerboseLog(ZLogger.VerboseUndefined, "overloaded method: " + FullName);
+	//						return FoundMethod; // return the first one
+	//					}
+	//					FoundMethod = Methods[i];
+	//				}
+	//			}
+	//			if(FoundMethod == null) {
+	//				ZLogger.VerboseLog(ZLogger.VerboseUndefined, "undefined method: " + FullName + " for " + TypeParams);
+	//			}
+	//		} catch (ClassNotFoundException e) {
+	//			ZLogger.VerboseLog(ZLogger.VerboseException, e.toString());
+	//		}
+	//		return FoundMethod;
+	//	}
 	//
 	// public static Object GetNativeFieldValue(Object ObjectValue, Field
 	// NativeField) {

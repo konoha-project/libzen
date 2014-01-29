@@ -36,7 +36,7 @@ import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.lang.ZFunc;
 import zen.lang.ZSystem;
-import zen.lang.ZType;
+import zen.type.ZType;
 
 public final class ZTokenContext {
 	// ParseFlag

@@ -78,9 +78,9 @@ import zen.deps.LibNative;
 import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.deps.ZenMap;
-import zen.lang.ZType;
 import zen.lang.ZenEngine;
 import zen.lang.ZenTypeInfer;
+import zen.type.ZType;
 
 //endif VAJA
 

@@ -28,7 +28,7 @@ import java.util.HashMap;
 
 import zen.deps.NativeTypeTable;
 import zen.lang.ZSystem;
-import zen.lang.ZType;
+import zen.type.ZType;
 
 public class NativeMethodTable {
 	static HashMap<String, Method> MethodMap = new HashMap<String,Method>();
