@@ -292,7 +292,7 @@ public class BashSourceGenerator extends SourceGenerator {
 		this.PushSourceCode("(" + this.ResolveCondition(Node.LeftNode) + " || " + this.ResolveCondition(Node.RightNode) + ")");
 	}
 
-	@Override public void VisitSetLocalNode(ZenSetLocalNode Node) {
+	@Override public void VisitSetNameNode(ZenSetLocalNode Node) {
 		this.PushSourceCode(Node.NativeName + "=" + this.ResolveValueType(Node.ValueNode, true));
 	}
 

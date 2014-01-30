@@ -42,7 +42,7 @@ import zen.ast.ZFloatNode;
 import zen.ast.ZFuncCallNode;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZGetIndexNode;
-import zen.ast.ZGetLocalNode;
+import zen.ast.ZGetNameNode;
 import zen.ast.ZGroupNode;
 import zen.ast.ZIfNode;
 import zen.ast.ZIntNode;
@@ -54,7 +54,7 @@ import zen.ast.ZOrNode;
 import zen.ast.ZParamNode;
 import zen.ast.ZReturnNode;
 import zen.ast.ZSetIndexNode;
-import zen.ast.ZSetLocalNode;
+import zen.ast.ZSetNameNode;
 import zen.ast.ZStringNode;
 import zen.ast.ZSymbolNode;
 import zen.ast.ZUnaryNode;
@@ -651,7 +651,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override
-	public void VisitGetLocalNode(ZGetLocalNode Node) {
+	public void VisitGetNameNode(ZGetNameNode Node) {
 		String VarSymbol = this.GetIdentifierAttachedSymbol(Node.VarName);
 		if(this.IsUserDefinedVar(Node.VarName)) {
 			String TempVar = this.CreateTempVar();
@@ -812,8 +812,8 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 
 	@Override
 	public void VisitSetIndexNode(ZSetIndexNode Node) {
-		if(Node.RecvNode instanceof ZGetLocalNode) {
-			String VarName = ((ZGetLocalNode)Node.RecvNode).VarName;
+		if(Node.RecvNode instanceof ZGetNameNode) {
+			String VarName = ((ZGetNameNode)Node.RecvNode).VarName;
 			if(!this.IsUserDefinedVar(VarName)) {
 				throw new RuntimeException("Can't assign to argument");
 			}
@@ -833,7 +833,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override
-	public void VisitSetLocalNode(ZSetLocalNode Node) {
+	public void VisitSetNameNode(ZSetNameNode Node) {
 		if(!this.IsUserDefinedVar(Node.VarName)) {
 			throw new RuntimeException("Can't assign to argument");
 		}

@@ -44,7 +44,7 @@ import zen.ast.ZFloatNode;
 import zen.ast.ZFuncCallNode;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZGetIndexNode;
-import zen.ast.ZGetLocalNode;
+import zen.ast.ZGetNameNode;
 import zen.ast.ZGetterNode;
 import zen.ast.ZGroupNode;
 import zen.ast.ZIfNode;
@@ -60,7 +60,7 @@ import zen.ast.ZNullNode;
 import zen.ast.ZOrNode;
 import zen.ast.ZReturnNode;
 import zen.ast.ZSetIndexNode;
-import zen.ast.ZSetLocalNode;
+import zen.ast.ZSetNameNode;
 import zen.ast.ZSetterNode;
 import zen.ast.ZStringNode;
 import zen.ast.ZSymbolNode;
@@ -183,11 +183,11 @@ public class ZenEngine extends ZVisitor {
 		this.Unsupported(Node, "symbol " + Node.ReferenceName);
 	}
 
-	@Override public void VisitGetLocalNode(ZGetLocalNode Node) {
+	@Override public void VisitGetNameNode(ZGetNameNode Node) {
 		this.Unsupported(Node, "local variable");
 	}
 
-	@Override public void VisitSetLocalNode(ZSetLocalNode Node) {
+	@Override public void VisitSetNameNode(ZSetNameNode Node) {
 		this.Unsupported(Node, "local variable");
 	}
 

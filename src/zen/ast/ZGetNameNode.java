@@ -29,17 +29,17 @@ import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 
 // E.g., $NativeName
-public class ZGetLocalNode extends ZNode {
+public class ZGetNameNode extends ZNode {
 	@Field public String  VarName;
 	@Field public boolean IsCaptured = false;
 	@Field public int VarIndex = 0;
-	public ZGetLocalNode(ZToken Token, String NativeName) {
+	public ZGetNameNode(ZToken Token, String NativeName) {
 		super();
 		this.SourceToken = Token;
 		this.VarName = NativeName;
 	}
 	@Override public void Accept(ZVisitor Visitor) {
-		Visitor.VisitGetLocalNode(this);
+		Visitor.VisitGetNameNode(this);
 	}
 	public ZNode ToStringNode() {
 		return new ZStringNode(this.SourceToken, this.VarName);

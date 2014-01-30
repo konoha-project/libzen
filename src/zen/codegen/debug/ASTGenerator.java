@@ -42,7 +42,7 @@ import zen.ast.ZFloatNode;
 import zen.ast.ZFuncCallNode;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZGetIndexNode;
-import zen.ast.ZGetLocalNode;
+import zen.ast.ZGetNameNode;
 import zen.ast.ZGetterNode;
 import zen.ast.ZGroupNode;
 import zen.ast.ZIfNode;
@@ -58,7 +58,7 @@ import zen.ast.ZOrNode;
 import zen.ast.ZParamNode;
 import zen.ast.ZReturnNode;
 import zen.ast.ZSetIndexNode;
-import zen.ast.ZSetLocalNode;
+import zen.ast.ZSetNameNode;
 import zen.ast.ZSetterNode;
 import zen.ast.ZStringNode;
 import zen.ast.ZSymbolNode;
@@ -174,12 +174,12 @@ public class ASTGenerator extends ZSourceGenerator {
 	}
 
 	@Override
-	public void VisitGetLocalNode(ZGetLocalNode Node) {
+	public void VisitGetNameNode(ZGetNameNode Node) {
 		this.CurrentBuilder.Append("(get-local " + Node.Type + " " + Node.VarName + ")");
 	}
 
 	@Override
-	public void VisitSetLocalNode(ZSetLocalNode Node) {
+	public void VisitSetNameNode(ZSetNameNode Node) {
 		this.CurrentBuilder.Append("(set-local " + Node.Type + " " + Node.VarName);
 		Node.ValueNode.Accept(this);
 		this.CurrentBuilder.Append(")");

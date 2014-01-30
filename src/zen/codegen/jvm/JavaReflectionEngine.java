@@ -36,7 +36,7 @@ import zen.ast.ZCastNode;
 import zen.ast.ZComparatorNode;
 import zen.ast.ZFuncCallNode;
 import zen.ast.ZGetIndexNode;
-import zen.ast.ZGetLocalNode;
+import zen.ast.ZGetNameNode;
 import zen.ast.ZGetterNode;
 import zen.ast.ZGroupNode;
 import zen.ast.ZMethodCallNode;
@@ -135,7 +135,7 @@ public class JavaReflectionEngine extends ZenEngine {
 	//	}
 	//
 
-	@Override public void VisitGetLocalNode(ZGetLocalNode Node) {
+	@Override public void VisitGetNameNode(ZGetNameNode Node) {
 		@Var ZNode Node1 = this.Generator.RootNameSpace.GetSymbolNode(Node.VarName);
 		if(Node1 != null) {
 			this.EvaledValue = this.Eval(Node1);
@@ -146,7 +146,7 @@ public class JavaReflectionEngine extends ZenEngine {
 	}
 
 	//
-	//	@Override public void VisitSetLocalNode(ZSetLocalNode Node) {
+	//	@Override public void VisitSetNameNode(ZSetLocalNode Node) {
 	//		this.Unsupported(Node);
 	//	}
 

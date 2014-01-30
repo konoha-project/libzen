@@ -74,7 +74,7 @@ import zen.ast.ZFloatNode;
 import zen.ast.ZFuncCallNode;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZGetIndexNode;
-import zen.ast.ZGetLocalNode;
+import zen.ast.ZGetNameNode;
 import zen.ast.ZGetterNode;
 import zen.ast.ZGroupNode;
 import zen.ast.ZIfNode;
@@ -92,7 +92,7 @@ import zen.ast.ZOrNode;
 import zen.ast.ZParamNode;
 import zen.ast.ZReturnNode;
 import zen.ast.ZSetIndexNode;
-import zen.ast.ZSetLocalNode;
+import zen.ast.ZSetNameNode;
 import zen.ast.ZSetterNode;
 import zen.ast.ZStringNode;
 import zen.ast.ZSymbolNode;
@@ -356,12 +356,12 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 		// TODO Auto-generated method stub
 	}
 
-	@Override public void VisitGetLocalNode(ZGetLocalNode Node) {
+	@Override public void VisitGetNameNode(ZGetNameNode Node) {
 		this.CurrentBuilder.LoadLocal(Node.VarName);
 		this.CurrentBuilder.CheckReturnCast(Node, this.CurrentBuilder.GetLocalType(Node.VarName));
 	}
 
-	@Override public void VisitSetLocalNode(ZSetLocalNode Node) {
+	@Override public void VisitSetNameNode(ZSetNameNode Node) {
 		this.CurrentBuilder.PushNode(this.CurrentBuilder.GetLocalType(Node.VarName), Node.ValueNode);
 		this.CurrentBuilder.StoreLocal(Node.VarName);
 	}

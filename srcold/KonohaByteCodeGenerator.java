@@ -313,11 +313,11 @@ public class KonohaByteCodeGenerator extends ZenSourceGenerator {
 		/*FIXME*/
 	}
 
-	@Override public void VisitGetLocalNode(ZenGetLocalNode Node) {
+	@Override public void VisitGetNameNode(ZenGetLocalNode Node) {
 		this.PushRegister(this.LocalVarMap.get(Node.NativeName));
 	}
 
-	@Override public void VisitSetLocalNode(ZenSetLocalNode Node) {
+	@Override public void VisitSetNameNode(ZenSetLocalNode Node) {
 		Node.ValueNode.Accept(this);
 		this.CurrentBuilder.Append("NMOV " + "REG" + this.LocalVarMap.get(Node.NativeName) + ", REG" + this.PopRegister() + "\n");
 	}

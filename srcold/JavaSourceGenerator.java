@@ -164,7 +164,7 @@ public class JavaSourceGenerator extends ZenSourceGenerator {
 		this.CurrentBuilder.Append(this.NullLiteral);
 	}
 
-	@Override public void VisitGetLocalNode(ZenGetLocalNode Node) {
+	@Override public void VisitGetNameNode(ZenGetLocalNode Node) {
 		this.CurrentBuilder.Append(Node.NativeName);
 	}
 
@@ -315,7 +315,7 @@ public class JavaSourceGenerator extends ZenSourceGenerator {
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override public void VisitSetLocalNode(ZenSetLocalNode Node) {
+	@Override public void VisitSetNameNode(ZenSetLocalNode Node) {
 //		assert (Node.LeftNode instanceof ZenLocalNode);
 //		ZenLocalNode Left = (ZenLocalNode) Node.LeftNode;
 //		JLocalVarStack local = this.VisitingBuilder.FindLocalVariable(Left.NativeName);

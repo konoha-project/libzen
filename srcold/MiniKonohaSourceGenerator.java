@@ -361,7 +361,7 @@ var CLASS = (function (_super) {
 		this.AddUseLibrary("Syntax.Null");
 		this.CurrentBuilder.Append(this.NullLiteral);
 	}
-	@Override public void VisitGetLocalNode(ZenGetLocalNode Node) {
+	@Override public void VisitGetNameNode(ZenGetLocalNode Node) {
 		this.CurrentBuilder.Append(Node.SourceToken.ParsedText);
 	}
 	@Override public void VisitGetterNode(ZenGetterNode Node) {
@@ -408,7 +408,7 @@ var CLASS = (function (_super) {
 		this.CurrentBuilder.AppendToken("||");
 		Node.RightNode.Accept(this);
 	}
-	@Override public void VisitSetLocalNode(ZenSetLocalNode Node) {
+	@Override public void VisitSetNameNode(ZenSetLocalNode Node) {
 		this.CurrentBuilder.Append(Node.NativeName);
 		this.CurrentBuilder.AppendToken("=");
 		Node.ValueNode.Accept(this);

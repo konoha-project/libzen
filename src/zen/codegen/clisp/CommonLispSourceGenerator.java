@@ -30,13 +30,13 @@ import zen.ast.ZBlockNode;
 import zen.ast.ZBooleanNode;
 import zen.ast.ZConstPoolNode;
 import zen.ast.ZErrorNode;
-import zen.ast.ZGetLocalNode;
+import zen.ast.ZGetNameNode;
 import zen.ast.ZIfNode;
 import zen.ast.ZIntNode;
 import zen.ast.ZNullNode;
 import zen.ast.ZOrNode;
 import zen.ast.ZReturnNode;
-import zen.ast.ZSetLocalNode;
+import zen.ast.ZSetNameNode;
 import zen.ast.ZStringNode;
 import zen.ast.ZUnaryNode;
 import zen.ast.ZVarDeclNode;
@@ -49,7 +49,7 @@ public class CommonLispSourceGenerator extends ZSourceGenerator {
 		super("CommonLisp", "0.0");
 	}
 
-	@Override public void VisitGetLocalNode(ZGetLocalNode Node) {
+	@Override public void VisitGetNameNode(ZGetNameNode Node) {
 		this.CurrentBuilder.Append(Node.SourceToken.ParsedText);
 	}
 
@@ -311,7 +311,7 @@ public class CommonLispSourceGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override public void VisitSetLocalNode(ZSetLocalNode Node) {
+	@Override public void VisitSetNameNode(ZSetNameNode Node) {
 		this.CurrentBuilder.Append("(setq  " + Node.VarName);
 		this.CurrentBuilder.Append(" ");
 		Node.ValueNode.Accept(this);

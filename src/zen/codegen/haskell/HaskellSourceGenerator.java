@@ -33,11 +33,11 @@ import zen.ast.ZCastNode;
 import zen.ast.ZCatchNode;
 import zen.ast.ZFuncCallNode;
 import zen.ast.ZFunctionNode;
-import zen.ast.ZGetLocalNode;
+import zen.ast.ZGetNameNode;
 import zen.ast.ZNode;
 import zen.ast.ZParamNode;
 import zen.ast.ZReturnNode;
-import zen.ast.ZSetLocalNode;
+import zen.ast.ZSetNameNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZVarDeclNode;
@@ -238,12 +238,12 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 	//	}
 
 	@Override
-	public void VisitGetLocalNode(ZGetLocalNode Node) {
+	public void VisitGetNameNode(ZGetNameNode Node) {
 		this.CurrentBuilder.Append(Node.VarName);
 	}
 
 	@Override
-	public void VisitSetLocalNode(ZSetLocalNode Node) {
+	public void VisitSetNameNode(ZSetNameNode Node) {
 		this.CurrentBuilder.Append("writeIORef ");
 		this.CurrentBuilder.Append(Node.VarName + "_ref ");
 		this.GenerateCode(Node.ValueNode);
@@ -305,7 +305,7 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.AppendLineFeed();
 
 		// XXX Is this correct node type ?
-		ZNode LoopNode = new ZGetLocalNode(null, "__loop");
+		ZNode LoopNode = new ZGetNameNode(null, "__loop");
 		Node.BodyNode.Append(LoopNode);
 		Node.BodyNode.Accept(this);
 

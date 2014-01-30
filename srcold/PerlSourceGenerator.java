@@ -194,11 +194,11 @@ public class PerlSourceGenerator extends ZenSourceGenerator {
 //		this.VisitingBuilder.Append("");
 //	}
 
-	@Override public void VisitGetLocalNode(ZenGetLocalNode Node) {
+	@Override public void VisitGetNameNode(ZenGetLocalNode Node) {
 		this.CurrentBuilder.Append("$" + Node.NativeName);
 	}
 
-	@Override public void VisitSetLocalNode(ZenSetLocalNode Node) {
+	@Override public void VisitSetNameNode(ZenSetLocalNode Node) {
 		this.CurrentBuilder.Append(Node.NativeName + " = ");
 		Node.ValueNode.Accept(this);
 	}

@@ -60,7 +60,7 @@ public final class ZMethodCallNode extends ZApplyNode {
 	}
 
 	public final ZFuncCallNode ToStaticFuncCall(ZFunc Func) {
-		ZGetLocalNode Dummy = new ZGetLocalNode(this.SourceToken, Func.FuncName);
+		ZGetNameNode Dummy = new ZGetNameNode(this.SourceToken, Func.FuncName);
 		ZFuncCallNode FuncNode = new ZFuncCallNode(Dummy);
 		FuncNode.SourceToken = this.SourceToken;
 		FuncNode.Append(this.RecvNode);

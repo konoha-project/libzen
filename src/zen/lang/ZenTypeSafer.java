@@ -45,7 +45,7 @@ import zen.ast.ZFloatNode;
 import zen.ast.ZFuncCallNode;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZGetIndexNode;
-import zen.ast.ZGetLocalNode;
+import zen.ast.ZGetNameNode;
 import zen.ast.ZGetterNode;
 import zen.ast.ZGroupNode;
 import zen.ast.ZIfNode;
@@ -62,7 +62,7 @@ import zen.ast.ZOrNode;
 import zen.ast.ZParamNode;
 import zen.ast.ZReturnNode;
 import zen.ast.ZSetIndexNode;
-import zen.ast.ZSetLocalNode;
+import zen.ast.ZSetNameNode;
 import zen.ast.ZSetterNode;
 import zen.ast.ZStringNode;
 import zen.ast.ZSymbolNode;
@@ -165,8 +165,8 @@ public class ZenTypeSafer extends ZTypeChecker {
 		@Var int i = 0;
 		while(i < Node.NodeList.size()) {
 			@Var ZNode SubNode = Node.NodeList.get(i);
-			if(SubNode instanceof ZGetLocalNode) {
-				SubNode = ((ZGetLocalNode)SubNode).ToStringNode();
+			if(SubNode instanceof ZGetNameNode) {
+				SubNode = ((ZGetNameNode)SubNode).ToStringNode();
 			}
 			SubNode = this.CheckType(SubNode, NameSpace, ZType.StringType);
 			Node.NodeList.set(i, SubNode);
@@ -227,7 +227,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 
 	}
 
-	@Override public void VisitGetLocalNode(ZGetLocalNode Node) {
+	@Override public void VisitGetNameNode(ZGetNameNode Node) {
 		@Var ZNameSpace NameSpace = this.GetNameSpace();
 		@Var ZVariable VarInfo = NameSpace.GetLocalVariable(Node.VarName);
 		if(VarInfo != null) {
@@ -248,7 +248,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 		}
 	}
 
-	@Override public void VisitSetLocalNode(ZSetLocalNode Node) {
+	@Override public void VisitSetNameNode(ZSetNameNode Node) {
 		ZNameSpace NameSpace = this.GetNameSpace();
 		ZVariable VarInfo = NameSpace.GetLocalVariable(Node.VarName);
 		if(VarInfo == null) {
@@ -409,8 +409,8 @@ public class ZenTypeSafer extends ZTypeChecker {
 	}
 
 	private boolean IsFuncName(ZFuncCallNode Node1, ZNameSpace NameSpace) {
-		if(Node1.FuncNode instanceof ZGetLocalNode && Node1.FuncNode.IsVarType()) {
-			@Var ZGetLocalNode Node = (ZGetLocalNode)Node1.FuncNode;
+		if(Node1.FuncNode instanceof ZGetNameNode && Node1.FuncNode.IsVarType()) {
+			@Var ZGetNameNode Node = (ZGetNameNode)Node1.FuncNode;
 			@Var ZVariable VarInfo = NameSpace.GetLocalVariable(Node.VarName);
 			if(VarInfo == null || !VarInfo.VarType.IsVarType() || !VarInfo.VarType.IsFuncType()) {
 				Node1.ResolvedFuncName = Node.VarName;

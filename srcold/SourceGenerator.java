@@ -368,7 +368,7 @@ public class SourceGenerator extends ZenGenerator {
 		this.PushSourceCode(this.NullLiteral);
 	}
 
-	@Override public void VisitGetLocalNode(ZenGetLocalNode Node) {
+	@Override public void VisitGetNameNode(ZenGetLocalNode Node) {
 		this.PushSourceCode(Node.NativeName);
 	}
 
@@ -436,7 +436,7 @@ public class SourceGenerator extends ZenGenerator {
 	@Override public void VisitGetterNode(ZenGetterNode Node) {
 		this.PushSourceCode(this.VisitNode(Node.RecvNode) + this.MemberAccessOperator + Node.ResolvedFunc.FuncName);
 	}
-	@Override public void VisitSetLocalNode(ZenSetLocalNode Node) {
+	@Override public void VisitSetNameNode(ZenSetLocalNode Node) {
 		this.PushSourceCode(Node.NativeName + " = " + this.VisitNode(Node.ValueNode));
 	}
 

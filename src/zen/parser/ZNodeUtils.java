@@ -27,10 +27,10 @@ package zen.parser;
 import zen.ast.ZBooleanNode;
 import zen.ast.ZConstPoolNode;
 import zen.ast.ZFloatNode;
-import zen.ast.ZGetLocalNode;
+import zen.ast.ZGetNameNode;
 import zen.ast.ZIntNode;
 import zen.ast.ZNode;
-import zen.ast.ZSetLocalNode;
+import zen.ast.ZSetNameNode;
 import zen.ast.ZStringNode;
 import zen.type.ZType;
 
@@ -59,10 +59,10 @@ public abstract class ZNodeUtils {
 
 	public final static ZNode CreateSymbolNode(ZToken SourceToken, ZType Type, String NativeName, ZNode AssignedNode) {
 		if(AssignedNode != null) {
-			return new ZSetLocalNode(SourceToken, NativeName, AssignedNode);
+			return new ZSetNameNode(SourceToken, NativeName, AssignedNode);
 		}
 		else {
-			return new ZGetLocalNode(SourceToken, NativeName);
+			return new ZGetNameNode(SourceToken, NativeName);
 		}
 	}
 }
