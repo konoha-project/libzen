@@ -176,6 +176,11 @@ public abstract class ZTypeChecker extends ZVisitor {
 		return false;
 	}
 
+	@Override public void VisitExtendedNode(ZNode Node) {
+		this.Return(Node);
+	}
+
+
 	public final void Return(ZNode Node) {
 		if(Node != null) {
 			if(this.ReturnedNode != null) {

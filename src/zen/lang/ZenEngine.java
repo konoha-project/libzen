@@ -349,6 +349,11 @@ public class ZenEngine extends ZVisitor {
 		//this.FoundError(Node.ErrorMessage);
 	}
 
+	@Override public void VisitExtendedNode(ZNode Node) {
+
+	}
+
+
 	public final Object Exec(ZNode Node, boolean IsInteractive) {
 		this.IsInteractive = IsInteractive;
 		this.EnableVisitor();

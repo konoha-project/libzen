@@ -156,7 +156,8 @@ public final class ZNameSpace {
 			}
 		}
 		this.SymbolPatternTable.put(Key, Value);
-		ZLogger.VerboseLog(ZLogger.VerboseSymbol, "symbol: " + Key + ", " + Value);
+		//ZLogger.VerboseLog(ZLogger.VerboseSymbol, "symbol: " + Key + ", " + Value);
+		System.err.println("symbol: " + Key + ", " + Value);
 	}
 
 	public final void SetUndefinedSymbol(String Symbol, ZToken SourceToken) {

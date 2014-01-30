@@ -40,7 +40,7 @@ public final class ZGetterNode extends ZNode {
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitGetterNode(this);
 	}
-	//	@Override public Object ToConstValue(ZenParserContext Context, boolean EnforceConst)  {
-	//		return Context.Generator.EvalGetterNode(this, EnforceConst);
-	//	}
+	public final boolean IsStaticField() {
+		return this.RecvNode instanceof ZTypeNode;
+	}
 }

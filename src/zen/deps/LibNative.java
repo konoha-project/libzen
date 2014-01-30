@@ -189,7 +189,8 @@ public class LibNative {
 			Method JavaMethod = Visitor.getClass().getMethod(Node.GetVisitName(), Node.getClass());
 			JavaMethod.invoke(Visitor, Node);
 		} catch (NoSuchMethodException e) {
-			System.err.println("Visitor:" + Visitor.getClass().getSimpleName() + " do not support for " + Node.getClass().getSimpleName());
+			//System.err.println("Visitor:" + Visitor.getClass().getSimpleName() + " do not support for " + Node.getClass().getSimpleName());
+			Visitor.VisitExtendedNode(Node);
 		} catch (Exception e) {
 			LibNative.FixMe(e);
 		}

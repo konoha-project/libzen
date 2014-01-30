@@ -533,6 +533,11 @@ public class ZSourceGenerator extends ZGenerator {
 		this.CurrentBuilder.Append(")");
 	}
 
+	@Override public void VisitExtendedNode(ZNode Node) {
+
+	}
+
+
 	// Utils
 	protected void VisitType(ZType Type) {
 		this.CurrentBuilder.Append(this.GetNativeType(Type.GetRealType()));

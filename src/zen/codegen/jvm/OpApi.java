@@ -33,6 +33,7 @@ import zen.deps.NativeTypeTable;
 import zen.deps.Var;
 import zen.deps.ZenArray;
 import zen.deps.ZenMap;
+import zen.type.ZType;
 
 public final class OpApi {
 
@@ -311,8 +312,14 @@ public final class OpApi {
 
 	public static Object GetField(Object x, String name) {
 		try {
-			Field f = x.getClass().getField(name);
-			return f.get(x);
+			if(x instanceof ZType) {
+				Field f = NativeTypeTable.GetJavaClass((ZType)x).getField(name);
+				return f.get(null);	  // static field
+			}
+			else {
+				Field f = x.getClass().getField(name);
+				return f.get(x);
+			}
 		}
 		catch(Exception e) {
 			throw new SoftwareFaultException(e.toString());
@@ -321,8 +328,14 @@ public final class OpApi {
 
 	public static void SetField(Object x, String name, Object y) {
 		try {
-			Field f = x.getClass().getField(name);
-			f.set(x,y);
+			if(x instanceof ZType) {
+				Field f = NativeTypeTable.GetJavaClass((ZType)x).getField(name);
+				f.set(null,y); // static field
+			}
+			else {
+				Field f = x.getClass().getField(name);
+				f.set(x,y);
+			}
 		}
 		catch(Exception e) {
 			throw new SoftwareFaultException(e.toString());

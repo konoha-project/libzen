@@ -308,6 +308,9 @@ public class ZTransformer extends ZVisitor {
 	@Override public void VisitErrorNode(ZErrorNode Node) {
 	}
 
+	@Override public void VisitExtendedNode(ZNode Node) {
+	}
+
 
 
 

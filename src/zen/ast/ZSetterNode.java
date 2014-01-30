@@ -44,4 +44,7 @@ public final class ZSetterNode extends ZNode {
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitSetterNode(this);
 	}
+	public final boolean IsStaticField() {
+		return this.RecvNode instanceof ZTypeNode;
+	}
 }

@@ -43,6 +43,7 @@ import static org.objectweb.asm.Opcodes.PUTFIELD;
 import static org.objectweb.asm.Opcodes.RETURN;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -384,6 +385,15 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 		return null;
 	}
 
+	private Field GetJavaField(Class<?> RecvClass, String Name) {
+		try {
+			return RecvClass.getField(Name);
+		} catch (Exception e) {
+			LibNative.FixMe(e);
+		}
+		return null;
+	}
+
 	@Override public void VisitGetterNode(ZGetterNode Node) {
 		if(Node.IsUntyped()) {
 			Method sMethod = NativeMethodTable.GetStaticMethod("GetField");
@@ -392,12 +402,17 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 		}
 		else {
 			Class<?> RecvClass = NativeTypeTable.GetJavaClass(Node.RecvNode.Type);
-			Class<?> FieldClass = this.GetFieldType(RecvClass, Node.FieldName);
-			Type FieldType = Type.getType(FieldClass);
-			Type OwnerType = Type.getType(RecvClass);
-			Node.RecvNode.Accept(this);
-			this.CurrentBuilder.visitFieldInsn(GETFIELD, OwnerType.getInternalName(), Node.FieldName, FieldType.getDescriptor());
-			this.CurrentBuilder.CheckReturnCast(Node, FieldClass);
+			Field jField = this.GetJavaField(RecvClass, Node.FieldName);
+			String Owner = Type.getType(RecvClass).getInternalName();
+			String Desc = Type.getType(jField.getType()).getDescriptor();
+			if(Modifier.isStatic(jField.getModifiers())) {
+				this.CurrentBuilder.visitFieldInsn(Opcodes.GETSTATIC, Owner, Node.FieldName, Desc);
+			}
+			else {
+				this.CurrentBuilder.PushNode(null, Node.RecvNode);
+				this.CurrentBuilder.visitFieldInsn(GETFIELD, Owner, Node.FieldName, Desc);
+			}
+			this.CurrentBuilder.CheckReturnCast(Node, jField.getType());
 		}
 	}
 
@@ -409,12 +424,18 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 		}
 		else {
 			Class<?> RecvClass = NativeTypeTable.GetJavaClass(Node.RecvNode.Type);
-			Class<?> FieldClass = this.GetFieldType(RecvClass, Node.FieldName);
-			Type FieldType = Type.getType(FieldClass);
-			Type OwnerType = Type.getType(RecvClass);
-			Node.RecvNode.Accept(this);
-			this.CurrentBuilder.PushNode(FieldClass, Node.ValueNode);
-			this.CurrentBuilder.visitFieldInsn(PUTFIELD, OwnerType.getInternalName(), Node.FieldName, FieldType.getDescriptor());
+			Field jField = this.GetJavaField(RecvClass, Node.FieldName);
+			String Owner = Type.getType(RecvClass).getInternalName();
+			String Desc = Type.getType(jField.getType()).getDescriptor();
+			if(Modifier.isStatic(jField.getModifiers())) {
+				this.CurrentBuilder.PushNode(jField.getType(), Node.ValueNode);
+				this.CurrentBuilder.visitFieldInsn(Opcodes.PUTSTATIC, Owner, Node.FieldName, Desc);
+			}
+			else {
+				this.CurrentBuilder.PushNode(null, Node.RecvNode);
+				this.CurrentBuilder.PushNode(jField.getType(), Node.ValueNode);
+				this.CurrentBuilder.visitFieldInsn(PUTFIELD, Owner, Node.FieldName, Desc);
+			}
 		}
 	}
 
@@ -737,6 +758,9 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 		this.CurrentBuilder.SetLineNumber(Node);
 		this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, null);
 		//this.CurrentBuilder.visitInsn(ATHROW);
+	}
+
+	@Override public void VisitExtendedNode(ZNode Node) {
 	}
 
 	public Method GetStaticFuncMethod(String FuncName) {

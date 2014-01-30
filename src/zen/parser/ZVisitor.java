@@ -50,6 +50,7 @@ import zen.ast.ZMapLiteralNode;
 import zen.ast.ZMethodCallNode;
 import zen.ast.ZNewArrayNode;
 import zen.ast.ZNewObjectNode;
+import zen.ast.ZNode;
 import zen.ast.ZNotNode;
 import zen.ast.ZNullNode;
 import zen.ast.ZOrNode;
@@ -109,6 +110,8 @@ public abstract class ZVisitor {
 	//	public abstract void VisitFuncDeclNode(ZFunctionNode/*Decl*/ Node);
 	public abstract void VisitClassDeclNode(ZClassDeclNode Node);
 	public abstract void VisitErrorNode(ZErrorNode Node);
+	public abstract void VisitExtendedNode(ZNode Node);
+
 
 	public abstract void EnableVisitor();
 	public abstract void StopVisitor();
