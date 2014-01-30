@@ -26,19 +26,16 @@ public class AsmMethodBuilder extends MethodNode {
 
 	final AsmMethodBuilder          Parent;
 	final Java6ByteCodeGenerator   Generator;
-	ArrayList<JLocalVarStack>     LocalVals;
-	Stack<Label>                  BreakLabelStack;
-	Stack<Label>                  ContinueLabelStack;
-	int PreviousLine;
+	ArrayList<JLocalVarStack>     LocalVals  = new ArrayList<JLocalVarStack>();
+	int UsedStack = 0;
+	Stack<Label>                  BreakLabelStack = new Stack<Label>();
+	Stack<Label>                  ContinueLabelStack = new Stack<Label>();
+	int PreviousLine = 0;
 
 	public AsmMethodBuilder(int acc, String Name, String Desc, Java6ByteCodeGenerator Generator, AsmMethodBuilder Parent) {
 		super(acc, Name, Desc, null, null);
 		this.Parent = Parent;
 		this.Generator = Generator;
-		this.LocalVals = new ArrayList<JLocalVarStack>();
-		this.BreakLabelStack = new Stack<Label>();
-		this.ContinueLabelStack = new Stack<Label>();
-		this.PreviousLine = 0;
 	}
 
 	void SetLineNumber(long FileLine) {
@@ -73,9 +70,10 @@ public class AsmMethodBuilder extends MethodNode {
 		//		this.InvokeMethodCall(Value.getClass(), JLib.GetConstPool);
 	}
 
-	JLocalVarStack AddLocal(Class<?> JType, String Name) {
-		Type LocalType =  Type.getType(JType);
-		JLocalVarStack local = new JLocalVarStack(this.LocalVals.size(), JType, LocalType, Name);
+	JLocalVarStack AddLocal(Class<?> jClass, String Name) {
+		Type AsmType =  Type.getType(jClass);
+		JLocalVarStack local = new JLocalVarStack(this.UsedStack, jClass, AsmType, Name);
+		this.UsedStack = this.UsedStack + AsmType.getSize();
 		this.LocalVals.add(local);
 		return local;
 	}

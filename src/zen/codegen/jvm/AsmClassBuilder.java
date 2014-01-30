@@ -74,16 +74,18 @@ class AsmClassBuilder {
 		return null;
 	}
 
-	void OutputClassFile(String className, String dir) {
+	void OutputClassFile() {  // This is used for debug
 		byte[] ba = this.GenerateBytecode();
-		File file = new File(dir, this.ClassName + ".class");
+		System.out.println("*debug info*: generating" + this.ClassName + ".class");
+		System.out.println("*debug info*: check it out with javap -c " + this.ClassName + ".class");
+		File file = new File(this.ClassName + ".class");
 		try {
 			FileOutputStream fos = new FileOutputStream(file);
 			fos.write(ba);
 			fos.close();
 		}
 		catch(IOException e) {
-			//LibZen.VerboseException(e);
+			System.out.println(e);
 		}
 	}
 

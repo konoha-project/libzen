@@ -21,7 +21,7 @@ public class ZenGamma {
 
 	static ZFunc GetFunc(ZNameSpace NameSpace, String GlobalName, @Nullable ZFunc DefVal) {
 		@Var ZFunc Func = NameSpace.Generator.GetDefinedFunc(GlobalName);
-		Debug("GlobalKey="+GlobalName + ", " + Func);
+		//Debug("GlobalKey="+GlobalName + ", " + Func);
 		if(Func == null) {
 			return DefVal;
 		}
@@ -69,7 +69,7 @@ public class ZenGamma {
 
 
 	static void DefineFunc(ZNameSpace NameSpace, ZFunc Func) {
-		Debug("def GlobalKey="+Func.GetSignature() + ", " + Func);
+		//Debug("def GlobalKey="+Func.GetSignature() + ", " + Func);
 		NameSpace.Generator.SetDefinedFunc(Func);
 	}
 

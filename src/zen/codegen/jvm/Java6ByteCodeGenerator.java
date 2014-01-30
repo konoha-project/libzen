@@ -356,6 +356,14 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 		// TODO Auto-generated method stub
 	}
 
+	@Override public void VisitVarDeclNode(ZVarDeclNode Node) {
+		Class<?> DeclClass = NativeTypeTable.GetJavaClass(Node.DeclType);
+		this.CurrentBuilder.AddLocal(DeclClass, Node.NativeName);
+		this.CurrentBuilder.PushNode(DeclClass, Node.InitNode);
+		this.CurrentBuilder.StoreLocal(Node.NativeName);
+		this.VisitBlockNode(Node);
+	}
+
 	@Override public void VisitGetNameNode(ZGetNameNode Node) {
 		this.CurrentBuilder.LoadLocal(Node.VarName);
 		this.CurrentBuilder.CheckReturnCast(Node, this.CurrentBuilder.GetLocalType(Node.VarName));
@@ -564,14 +572,6 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 			Node.StmtList.get(i).Accept(this);
 
 		}
-	}
-
-	@Override public void VisitVarDeclNode(ZVarDeclNode Node) {
-		Class<?> DeclClass = NativeTypeTable.GetJavaClass(Node.DeclType);
-		this.CurrentBuilder.AddLocal(DeclClass, Node.NativeName);
-		this.CurrentBuilder.PushNode(DeclClass, Node.InitNode);
-		this.CurrentBuilder.StoreLocal(Node.NativeName);
-		this.VisitBlockNode(Node);
 	}
 
 	@Override public void VisitIfNode(ZIfNode Node) {

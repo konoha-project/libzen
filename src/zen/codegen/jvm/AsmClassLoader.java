@@ -176,7 +176,14 @@ class AsmClassLoader extends ClassLoader {
 		if(cb != null) {
 			byte[] b = cb.GenerateBytecode();
 			this.ByteCodeMap.remove(name);
-			return this.defineClass(name, b, 0, b.length);
+			try {
+				return this.defineClass(name, b, 0, b.length);
+			}
+			catch(Error e) {
+				e.printStackTrace();
+				cb.OutputClassFile();
+				System.exit(1);
+			}
 		}
 		return null;
 	}
