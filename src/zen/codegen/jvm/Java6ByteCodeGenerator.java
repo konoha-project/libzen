@@ -376,22 +376,13 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 		Node.RecvNode.Accept(this);
 	}
 
-	private Class<?> GetFieldType(Class<?> RecvClass, String Name) {
-		try {
-			return RecvClass.getField(Name).getType();
-		} catch (Exception e) {
-			LibNative.FixMe(e);
-		}
-		return null;
-	}
-
-	private Field GetJavaField(Class<?> RecvClass, String Name) {
+	private Field GetField(Class<?> RecvClass, String Name) {
 		try {
 			return RecvClass.getField(Name);
 		} catch (Exception e) {
 			LibNative.FixMe(e);
 		}
-		return null;
+		return null;  // type checker guarantees field exists
 	}
 
 	@Override public void VisitGetterNode(ZGetterNode Node) {
@@ -402,7 +393,7 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 		}
 		else {
 			Class<?> RecvClass = NativeTypeTable.GetJavaClass(Node.RecvNode.Type);
-			Field jField = this.GetJavaField(RecvClass, Node.FieldName);
+			Field jField = this.GetField(RecvClass, Node.FieldName);
 			String Owner = Type.getType(RecvClass).getInternalName();
 			String Desc = Type.getType(jField.getType()).getDescriptor();
 			if(Modifier.isStatic(jField.getModifiers())) {
@@ -424,7 +415,7 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 		}
 		else {
 			Class<?> RecvClass = NativeTypeTable.GetJavaClass(Node.RecvNode.Type);
-			Field jField = this.GetJavaField(RecvClass, Node.FieldName);
+			Field jField = this.GetField(RecvClass, Node.FieldName);
 			String Owner = Type.getType(RecvClass).getInternalName();
 			String Desc = Type.getType(jField.getType()).getDescriptor();
 			if(Modifier.isStatic(jField.getModifiers())) {

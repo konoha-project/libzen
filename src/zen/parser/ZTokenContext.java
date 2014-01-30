@@ -256,16 +256,14 @@ public final class ZTokenContext {
 
 	public ZToken ParseLargeToken() {
 		@Var ZToken Token = this.GetTokenAndMoveForward();
-		//		System.err.println(Token.ParsedText + " IsWhite=" + Token.IsNextWhiteSpace());
 		if(Token.IsNextWhiteSpace()) {
 			return Token;
 		}
 		@Var String JoinedToken = Token.ParsedText;
-		while(!Token.IsNextWhiteSpace()) {
+		while(this.HasNext() && !Token.IsNextWhiteSpace()) {
 			@Var int RollbackPosition = this.CurrentPosition;
 			Token = this.GetTokenAndMoveForward();
-			//			System.err.println(Token.ParsedText + " IsWhite=" + Token.IsNextWhiteSpace());
-			if(Token.EqualsText(";") || Token.EqualsText(",")) {
+			if(Token.IsIndent() || Token.EqualsText(";") || Token.EqualsText(",")) {
 				this.CurrentPosition = RollbackPosition;
 				break;
 			}
