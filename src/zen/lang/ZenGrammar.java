@@ -43,7 +43,7 @@ import zen.ast.ZFloatNode;
 import zen.ast.ZFuncCallNode;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZGetIndexNode;
-import zen.ast.ZGetLocalNode;
+import zen.ast.ZGetNameNode;
 import zen.ast.ZGetterNode;
 import zen.ast.ZGroupNode;
 import zen.ast.ZIfNode;
@@ -589,7 +589,7 @@ public class ZenGrammar {
 
 	public static ZNode MatchExpression(ZNameSpace NameSpace, ZTokenContext TokenContext, ZNode LeftNode) {
 		LeftNode = ZenGrammar.MatchFirstExpression(NameSpace, TokenContext, LeftNode);
-		while(LeftNode != null && LeftNode.IsErrorNode()) {
+		while(LeftNode != null && !LeftNode.IsErrorNode()) {
 			@Var ZSyntaxPattern SuffixPattern = ZenGrammar.GetSuffixPattern(NameSpace, TokenContext);
 			if(SuffixPattern == null) {
 				break;
@@ -599,10 +599,9 @@ public class ZenGrammar {
 		return LeftNode;
 	}
 
-
 	public static ZNode MatchSuffixExpression(ZNameSpace NameSpace, ZTokenContext TokenContext, ZNode LeftNode) {
 		LeftNode = ZenGrammar.MatchFirstExpression(NameSpace, TokenContext, LeftNode);
-		while(LeftNode != null) {
+		while(LeftNode != null && !LeftNode.IsErrorNode()) {
 			@Var ZSyntaxPattern SuffixPattern = ZenGrammar.GetSuffixPattern(NameSpace, TokenContext);
 			if(SuffixPattern == null || SuffixPattern.IsBinaryOperator()) {
 				break;
@@ -611,7 +610,6 @@ public class ZenGrammar {
 		}
 		return LeftNode;
 	}
-
 
 	public static ZNode MatchIf(ZNameSpace NameSpace, ZTokenContext TokenContext, ZNode LeftNode) {
 		@Var ZNode IfNode = new ZIfNode();
@@ -731,7 +729,7 @@ public class ZenGrammar {
 	public static ZNode MatchIdentifier(ZNameSpace NameSpace, ZTokenContext TokenContext, ZNode LeftNode) {
 		@Var ZToken Token = TokenContext.GetTokenAndMoveForward();
 		if(LibZen.IsVariableName(Token.ParsedText, 0)) {
-			return new ZGetLocalNode(Token, Token.ParsedText);
+			return new ZGetNameNode(Token, Token.ParsedText);
 		}
 		return new ZErrorNode(Token, "illegal name:" + Token.ParsedText);
 	}
@@ -889,7 +887,7 @@ public class ZenGrammar {
 	public static ZNode MatchPath(ZNameSpace NameSpace, ZTokenContext TokenContext, ZNode LeftNode) {
 		@Var ZToken Token = TokenContext.ParseLargeToken();
 		//		System.err.println("debug '" + Token.ParsedText + "'");
-		return new ZGetLocalNode(Token, Token.ParsedText);
+		return new ZGetNameNode(Token, Token.ParsedText);
 	}
 
 	public static ZNode MatchImport(ZNameSpace NameSpace, ZTokenContext TokenContext, ZNode LeftNode) {
