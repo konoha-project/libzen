@@ -27,74 +27,73 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 
 import zen.deps.NativeTypeTable;
-import zen.lang.ZSystem;
 import zen.type.ZType;
 
 public class NativeMethodTable {
 	static HashMap<String, Method> MethodMap = new HashMap<String,Method>();
 	static {
-		Import("!", ZSystem.VarType, OpApi.class, "Not");
-		Import("+", ZSystem.VarType, OpApi.class, "Plus");
-		Import("-", ZSystem.VarType, OpApi.class, "Minus");
-		Import("~", ZSystem.VarType, OpApi.class, "BitwiseNot");
-		Import(ZSystem.VarType, "+", ZSystem.VarType, OpApi.class, "Add");
-		Import(ZSystem.VarType, "-", ZSystem.VarType, OpApi.class, "Sub");
-		Import(ZSystem.VarType, "*", ZSystem.VarType, OpApi.class, "Mul");
-		Import(ZSystem.VarType, "/", ZSystem.VarType, OpApi.class, "Div");
-		Import(ZSystem.VarType, "%", ZSystem.VarType, OpApi.class, "Mod");
-		Import(ZSystem.VarType, "==", ZSystem.VarType, OpApi.class, "Equals");
-		Import(ZSystem.VarType, "!=", ZSystem.VarType, OpApi.class, "NotEquals");
-		Import(ZSystem.VarType, "<", ZSystem.VarType, OpApi.class, "LessThan");
-		Import(ZSystem.VarType, "<=", ZSystem.VarType, OpApi.class, "LessThanEquals");
-		Import(ZSystem.VarType, ">", ZSystem.VarType, OpApi.class, "GreaterThan");
-		Import(ZSystem.VarType, ">=", ZSystem.VarType, OpApi.class, "GreaterThanEquals");
-		Import(ZSystem.VarType, "&", ZSystem.VarType, OpApi.class, "BitwiseAnd");
-		Import(ZSystem.VarType, "|", ZSystem.VarType, OpApi.class, "BitwiseOr");
-		Import(ZSystem.VarType, "^", ZSystem.VarType, OpApi.class, "BitwiseXor");
-		Import(ZSystem.VarType, "<<", ZSystem.VarType, OpApi.class, "LeftShift");
-		Import(ZSystem.VarType, ">>", ZSystem.VarType, OpApi.class, "RightShift");
+		Import("!", ZType.VarType, OpApi.class, "Not");
+		Import("+", ZType.VarType, OpApi.class, "Plus");
+		Import("-", ZType.VarType, OpApi.class, "Minus");
+		Import("~", ZType.VarType, OpApi.class, "BitwiseNot");
+		Import(ZType.VarType, "+", ZType.VarType, OpApi.class, "Add");
+		Import(ZType.VarType, "-", ZType.VarType, OpApi.class, "Sub");
+		Import(ZType.VarType, "*", ZType.VarType, OpApi.class, "Mul");
+		Import(ZType.VarType, "/", ZType.VarType, OpApi.class, "Div");
+		Import(ZType.VarType, "%", ZType.VarType, OpApi.class, "Mod");
+		Import(ZType.VarType, "==", ZType.VarType, OpApi.class, "Equals");
+		Import(ZType.VarType, "!=", ZType.VarType, OpApi.class, "NotEquals");
+		Import(ZType.VarType, "<", ZType.VarType, OpApi.class, "LessThan");
+		Import(ZType.VarType, "<=", ZType.VarType, OpApi.class, "LessThanEquals");
+		Import(ZType.VarType, ">", ZType.VarType, OpApi.class, "GreaterThan");
+		Import(ZType.VarType, ">=", ZType.VarType, OpApi.class, "GreaterThanEquals");
+		Import(ZType.VarType, "&", ZType.VarType, OpApi.class, "BitwiseAnd");
+		Import(ZType.VarType, "|", ZType.VarType, OpApi.class, "BitwiseOr");
+		Import(ZType.VarType, "^", ZType.VarType, OpApi.class, "BitwiseXor");
+		Import(ZType.VarType, "<<", ZType.VarType, OpApi.class, "LeftShift");
+		Import(ZType.VarType, ">>", ZType.VarType, OpApi.class, "RightShift");
 
-		Import("!", ZSystem.BooleanType, OpApi.class, "Not");
-		Import("+", ZSystem.IntType, OpApi.class, "Plus");
-		Import("-", ZSystem.IntType, OpApi.class, "Minus");
-		Import("~", ZSystem.IntType, OpApi.class, "BitwiseNot");
-		Import(ZSystem.IntType, "+", ZSystem.IntType, OpApi.class, "Add");
-		Import(ZSystem.IntType, "-", ZSystem.IntType, OpApi.class, "Sub");
-		Import(ZSystem.IntType, "*", ZSystem.IntType, OpApi.class, "Mul");
-		Import(ZSystem.IntType, "/", ZSystem.IntType, OpApi.class, "Div");
-		Import(ZSystem.IntType, "%", ZSystem.IntType, OpApi.class, "Mod");
-		Import(ZSystem.IntType, "==", ZSystem.IntType, OpApi.class, "Equals");
-		Import(ZSystem.IntType, "!=", ZSystem.IntType, OpApi.class, "NotEquals");
-		Import(ZSystem.IntType, "<", ZSystem.IntType, OpApi.class, "LessThan");
-		Import(ZSystem.IntType, "<=", ZSystem.IntType, OpApi.class, "LessThanEquals");
-		Import(ZSystem.IntType, ">", ZSystem.IntType, OpApi.class, "GreaterThan");
-		Import(ZSystem.IntType, ">=", ZSystem.IntType, OpApi.class, "GreaterThanEquals");
-		Import(ZSystem.IntType, "&", ZSystem.IntType, OpApi.class, "BitwiseAnd");
-		Import(ZSystem.IntType, "|", ZSystem.IntType, OpApi.class, "BitwiseOr");
-		Import(ZSystem.IntType, "^", ZSystem.IntType, OpApi.class, "BitwiseXor");
-		Import(ZSystem.IntType, "<<", ZSystem.IntType, OpApi.class, "LeftShift");
-		Import(ZSystem.IntType, ">>", ZSystem.IntType, OpApi.class, "RightShift");
+		Import("!", ZType.BooleanType, OpApi.class, "Not");
+		Import("+", ZType.IntType, OpApi.class, "Plus");
+		Import("-", ZType.IntType, OpApi.class, "Minus");
+		Import("~", ZType.IntType, OpApi.class, "BitwiseNot");
+		Import(ZType.IntType, "+", ZType.IntType, OpApi.class, "Add");
+		Import(ZType.IntType, "-", ZType.IntType, OpApi.class, "Sub");
+		Import(ZType.IntType, "*", ZType.IntType, OpApi.class, "Mul");
+		Import(ZType.IntType, "/", ZType.IntType, OpApi.class, "Div");
+		Import(ZType.IntType, "%", ZType.IntType, OpApi.class, "Mod");
+		Import(ZType.IntType, "==", ZType.IntType, OpApi.class, "Equals");
+		Import(ZType.IntType, "!=", ZType.IntType, OpApi.class, "NotEquals");
+		Import(ZType.IntType, "<", ZType.IntType, OpApi.class, "LessThan");
+		Import(ZType.IntType, "<=", ZType.IntType, OpApi.class, "LessThanEquals");
+		Import(ZType.IntType, ">", ZType.IntType, OpApi.class, "GreaterThan");
+		Import(ZType.IntType, ">=", ZType.IntType, OpApi.class, "GreaterThanEquals");
+		Import(ZType.IntType, "&", ZType.IntType, OpApi.class, "BitwiseAnd");
+		Import(ZType.IntType, "|", ZType.IntType, OpApi.class, "BitwiseOr");
+		Import(ZType.IntType, "^", ZType.IntType, OpApi.class, "BitwiseXor");
+		Import(ZType.IntType, "<<", ZType.IntType, OpApi.class, "LeftShift");
+		Import(ZType.IntType, ">>", ZType.IntType, OpApi.class, "RightShift");
 
-		Import("+", ZSystem.FloatType, OpApi.class, "Plus");
-		Import("-", ZSystem.FloatType, OpApi.class, "Minus");
-		Import(ZSystem.FloatType, "+", ZSystem.FloatType, OpApi.class, "Add");
-		Import(ZSystem.FloatType, "-", ZSystem.FloatType, OpApi.class, "Sub");
-		Import(ZSystem.FloatType, "*", ZSystem.FloatType, OpApi.class, "Mul");
-		Import(ZSystem.FloatType, "/", ZSystem.FloatType, OpApi.class, "Div");
-		Import(ZSystem.FloatType, "%", ZSystem.FloatType, OpApi.class, "Mod");
-		Import(ZSystem.FloatType, "==", ZSystem.FloatType, OpApi.class, "Equals");
-		Import(ZSystem.FloatType, "!=", ZSystem.FloatType, OpApi.class, "NotEquals");
-		Import(ZSystem.FloatType, "<", ZSystem.FloatType, OpApi.class, "LessThan");
-		Import(ZSystem.FloatType, "<=", ZSystem.FloatType, OpApi.class, "LessThanEquals");
-		Import(ZSystem.FloatType, ">", ZSystem.FloatType, OpApi.class, "GreaterThan");
-		Import(ZSystem.FloatType, ">=", ZSystem.FloatType, OpApi.class, "GreaterThanEquals");
+		Import("+", ZType.FloatType, OpApi.class, "Plus");
+		Import("-", ZType.FloatType, OpApi.class, "Minus");
+		Import(ZType.FloatType, "+", ZType.FloatType, OpApi.class, "Add");
+		Import(ZType.FloatType, "-", ZType.FloatType, OpApi.class, "Sub");
+		Import(ZType.FloatType, "*", ZType.FloatType, OpApi.class, "Mul");
+		Import(ZType.FloatType, "/", ZType.FloatType, OpApi.class, "Div");
+		Import(ZType.FloatType, "%", ZType.FloatType, OpApi.class, "Mod");
+		Import(ZType.FloatType, "==", ZType.FloatType, OpApi.class, "Equals");
+		Import(ZType.FloatType, "!=", ZType.FloatType, OpApi.class, "NotEquals");
+		Import(ZType.FloatType, "<", ZType.FloatType, OpApi.class, "LessThan");
+		Import(ZType.FloatType, "<=", ZType.FloatType, OpApi.class, "LessThanEquals");
+		Import(ZType.FloatType, ">", ZType.FloatType, OpApi.class, "GreaterThan");
+		Import(ZType.FloatType, ">=", ZType.FloatType, OpApi.class, "GreaterThanEquals");
 
-		Import(ZSystem.StringType, "+", ZSystem.StringType, OpApi.class, "Add");
-		Import(ZSystem.StringType, "==", ZSystem.StringType, OpApi.class, "Equals");
-		Import(ZSystem.StringType, "!=", ZSystem.StringType, OpApi.class, "NotEquals");
-		Import(ZSystem.StringType, "[]", ZSystem.IntType, OpApi.class, "GetIndex");
+		Import(ZType.StringType, "+", ZType.StringType, OpApi.class, "Add");
+		Import(ZType.StringType, "==", ZType.StringType, OpApi.class, "Equals");
+		Import(ZType.StringType, "!=", ZType.StringType, OpApi.class, "NotEquals");
+		Import(ZType.StringType, "[]", ZType.IntType, OpApi.class, "GetIndex");
 
-		Import(ZSystem.ArrayType, "[]", ZSystem.IntType, OpApi.class, "GetIndex");
+		Import(ZType.ArrayType, "[]", ZType.IntType, OpApi.class, "GetIndex");
 
 		Import(boolean.class, CastApi.class, "toObject");
 		Import(byte.class, CastApi.class, "toObject");
@@ -204,7 +203,7 @@ public class NativeMethodTable {
 		Method sMethod = MethodMap.get(BinaryKey(T1, Op, T2));
 		if(sMethod == null) {
 			// if undefined Object "op" Object must be default
-			sMethod = MethodMap.get(BinaryKey(ZSystem.VarType, Op, ZSystem.VarType));
+			sMethod = MethodMap.get(BinaryKey(ZType.VarType, Op, ZType.VarType));
 		}
 		return sMethod;
 	}
@@ -213,7 +212,7 @@ public class NativeMethodTable {
 		Method sMethod = MethodMap.get(UnaryKey(Op, T2));
 		if(sMethod == null) {
 			// if undefined Object "op" Object must be default
-			sMethod = MethodMap.get(UnaryKey(Op, ZSystem.VarType));
+			sMethod = MethodMap.get(UnaryKey(Op, ZType.VarType));
 		}
 		return sMethod;
 	}

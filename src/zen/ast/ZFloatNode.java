@@ -25,15 +25,15 @@
 package zen.ast;
 
 import zen.deps.Field;
-import zen.lang.ZSystem;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
+import zen.type.ZType;
 
 public final class ZFloatNode extends ZConstNode {
 	@Field public double	FloatValue;
 	public ZFloatNode(ZToken Token, double Value) {
 		super(Token);
-		this.Type = ZSystem.FloatType;
+		this.Type = ZType.FloatType;
 		this.FloatValue = Value;
 	}
 	@Override public final Object GetValue() {

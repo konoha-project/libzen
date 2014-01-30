@@ -27,7 +27,6 @@ package zen.type;
 import java.util.ArrayList;
 
 import zen.deps.Field;
-import zen.lang.ZSystem;
 import zen.parser.ZToken;
 
 public class ZVarType extends ZType {
@@ -37,7 +36,7 @@ public class ZVarType extends ZType {
 	@Field public int GreekId;
 
 	public ZVarType(ArrayList<ZVarType> VarList, String Name, ZToken SourceToken) {
-		super(0, Name, ZSystem.VarType);
+		super(0, Name, ZType.VarType);
 		this.VarList = VarList;
 		this.SourceToken = SourceToken;
 		this.GreekId = VarList.size();

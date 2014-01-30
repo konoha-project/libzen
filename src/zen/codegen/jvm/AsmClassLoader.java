@@ -34,6 +34,7 @@ import zen.parser.ZNameSpace;
 import zen.parser.ZTokenContext;
 import zen.type.ZFuncType;
 import zen.type.ZType;
+import zen.type.ZTypePool;
 
 class AsmClassLoader extends ClassLoader {
 	final HashMap<String,AsmClassBuilder> ByteCodeMap;
@@ -75,18 +76,18 @@ class AsmClassLoader extends ClassLoader {
 
 	private void InitFuncClass() {
 		ArrayList<ZType> TypeList = new ArrayList<ZType>();
-		TypeList.add(ZSystem.IntType);
+		TypeList.add(ZType.IntType);
 		TypeList.add(NativeTypeTable.GetZenType(ZTokenContext.class));
-		TypeList.add(ZSystem.StringType);
-		TypeList.add(ZSystem.IntType);
-		ZFuncType FuncType = ZSystem.LookupFuncType(TypeList);
+		TypeList.add(ZType.StringType);
+		TypeList.add(ZType.IntType);
+		ZFuncType FuncType = ZTypePool.LookupFuncType(TypeList);
 		this.FuncClassMap.put(FuncClassName(FuncType), ZenTokenFunc.class);
 		TypeList.clear();
 		TypeList.add(NativeTypeTable.GetZenType(ZNode.class));
 		TypeList.add(NativeTypeTable.GetZenType(ZNameSpace.class));
 		TypeList.add(NativeTypeTable.GetZenType(ZTokenContext.class));
 		TypeList.add(NativeTypeTable.GetZenType(ZNode.class));
-		FuncType = ZSystem.LookupFuncType(TypeList);
+		FuncType = ZTypePool.LookupFuncType(TypeList);
 		this.FuncClassMap.put(FuncClassName(FuncType), ZenMatchFunc.class);
 	}
 

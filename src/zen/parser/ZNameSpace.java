@@ -37,7 +37,6 @@ import zen.deps.Nullable;
 import zen.deps.Var;
 import zen.deps.ZenMap;
 import zen.lang.ZFunc;
-import zen.lang.ZSystem;
 import zen.lang.ZenClassType;
 import zen.type.ZType;
 
@@ -56,7 +55,6 @@ public final class ZNameSpace {
 		this.FuncNode = null;
 		if(ParentNameSpace == null) {
 			this.Generator = Generator;
-			ZSystem.InitNameSpace(this);
 		}
 		else {
 			this.Generator = ParentNameSpace.Generator;
@@ -228,7 +226,7 @@ public final class ZNameSpace {
 			return (ZType)TypeInfo;
 		}
 		if(SourceToken != null && TypeInfo == null) {
-			ZType Type = new ZenClassType(TypeName, ZSystem.VarType);
+			ZType Type = new ZenClassType(TypeName, ZType.VarType);
 			//			this.Generator.Logger.ReportInfo(SourceToken, "implicit definition of type " + TypeName);
 			this.GetRootNameSpace().SetSymbol(TypeName, Type, SourceToken);
 			return Type;

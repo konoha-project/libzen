@@ -14,8 +14,8 @@ import zen.ast.ZReturnNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZVarDeclNode;
-import zen.lang.ZSystem;
 import zen.parser.ZSourceGenerator;
+import zen.type.ZType;
 
 public class RubySourceGenerator extends ZSourceGenerator {
 
@@ -36,10 +36,10 @@ public class RubySourceGenerator extends ZSourceGenerator {
 		this.FalseLiteral = "false";
 		this.NullLiteral = "nil";
 		this.TopType = "Object";
-		this.SetNativeType(ZSystem.BooleanType, "Object"); // No boolean type in Ruby.
-		this.SetNativeType(ZSystem.IntType, "Fixnum");
-		this.SetNativeType(ZSystem.FloatType, "Float");
-		this.SetNativeType(ZSystem.StringType, "String");
+		this.SetNativeType(ZType.BooleanType, "Object"); // No boolean type in Ruby.
+		this.SetNativeType(ZType.IntType, "Fixnum");
+		this.SetNativeType(ZType.FloatType, "Float");
+		this.SetNativeType(ZType.StringType, "String");
 
 		this.EngineManager = new ScriptEngineManager();
 		this.Engine = this.EngineManager.getEngineByName("jruby");

@@ -2,7 +2,6 @@ package zen.type;
 
 import zen.deps.Field;
 import zen.deps.Var;
-import zen.lang.ZSystem;
 
 public class ZGreekType extends ZType {
 	private final static String[] GreekNames = {
@@ -11,7 +10,7 @@ public class ZGreekType extends ZType {
 
 	@Field public final int GreekId;
 	public ZGreekType(int GreekId) {
-		super(ZTypeFlag.UniqueType, GreekNames[GreekId], ZSystem.VarType);
+		super(ZTypeFlag.UniqueType, GreekNames[GreekId], ZType.VarType);
 		this.GreekId = GreekId;
 	}
 
@@ -35,7 +34,7 @@ public class ZGreekType extends ZType {
 
 	@Override public ZType GetRealType(ZType[] Greek) {
 		if(Greek[this.GreekId] == null) {
-			return ZSystem.VarType;
+			return ZType.VarType;
 		}
 		return Greek[this.GreekId];
 	}

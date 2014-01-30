@@ -6,7 +6,6 @@ import zen.ast.ZFunctionNode;
 import zen.ast.ZNode;
 import zen.deps.Field;
 import zen.deps.Var;
-import zen.lang.ZSystem;
 import zen.parser.ZLogger;
 import zen.parser.ZNameSpace;
 import zen.parser.ZToken;
@@ -52,7 +51,7 @@ public final class ZVarScope {
 			@Var int i = 0;
 			this.VarNodeCount = 0;
 			while(i < StmtList.size()) {
-				StmtList.set(i, TypeSafer.CheckType(StmtList.get(i), NameSpace, ZSystem.VoidType));
+				StmtList.set(i, TypeSafer.CheckType(StmtList.get(i), NameSpace, ZType.VoidType));
 				i = i + 1;
 			}
 			if(this.VarNodeCount == 0 || PrevCount == this.VarNodeCount) {
@@ -71,7 +70,7 @@ public final class ZVarScope {
 		while(true) {
 			this.VarNodeCount = 0;
 			TypeSafer.DefineFunction(NameSpace, FunctionNode, false/*Enforced*/);
-			FunctionNode.BodyNode = TypeSafer.CheckType(FunctionNode.BodyNode, NameSpace, ZSystem.VoidType);
+			FunctionNode.BodyNode = TypeSafer.CheckType(FunctionNode.BodyNode, NameSpace, ZType.VoidType);
 			if(this.VarNodeCount == 0 || PrevCount == this.VarNodeCount) {
 				break;
 			}

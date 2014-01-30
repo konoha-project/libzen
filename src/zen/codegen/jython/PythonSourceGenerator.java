@@ -38,9 +38,9 @@ import zen.ast.ZReturnNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZVarDeclNode;
-import zen.lang.ZSystem;
 import zen.parser.ZSourceGenerator;
 //endif VAJA
+import zen.type.ZType;
 
 //Zen Generator should be written in each language.
 
@@ -65,10 +65,10 @@ public class PythonSourceGenerator extends ZSourceGenerator {
 		this.NotOperator = "not ";
 
 		this.TopType = "object";
-		this.SetNativeType(ZSystem.BooleanType, "bool");
-		this.SetNativeType(ZSystem.IntType, "int");
-		this.SetNativeType(ZSystem.FloatType, "float");
-		this.SetNativeType(ZSystem.StringType, "str");
+		this.SetNativeType(ZType.BooleanType, "bool");
+		this.SetNativeType(ZType.IntType, "int");
+		this.SetNativeType(ZType.FloatType, "float");
+		this.SetNativeType(ZType.StringType, "str");
 	}
 
 	@Override public void VisitStmtList(ArrayList<ZNode> StmtList) {

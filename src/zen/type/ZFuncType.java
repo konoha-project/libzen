@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import zen.deps.Field;
 import zen.deps.Var;
 import zen.lang.ZFunc;
-import zen.lang.ZSystem;
 
 public final class ZFuncType extends ZType {
 	@Field public ZType[]  TypeParams;
@@ -13,10 +12,10 @@ public final class ZFuncType extends ZType {
 	@Field private boolean HasGreekType = false;
 
 	public ZFuncType(String ShortName, ZType[] UniqueTypeParams) {
-		super(ZTypeFlag.UniqueType, ShortName, ZSystem.VarType);
+		super(ZTypeFlag.UniqueType, ShortName, ZType.VarType);
 		if(UniqueTypeParams == null) {
 			this.TypeParams = new ZType[1];
-			this.TypeParams[0] = ZSystem.VarType;
+			this.TypeParams[0] = ZType.VarType;
 		}
 		else {
 			this.TypeParams = UniqueTypeParams;
@@ -52,7 +51,7 @@ public final class ZFuncType extends ZType {
 			while(i < this.TypeParams.length) {
 				TypeList.add(this.TypeParams[i].GetRealType(Greek));
 			}
-			return ZSystem.LookupFuncType(TypeList);
+			return ZTypePool.LookupFuncType(TypeList);
 		}
 		return this;
 	}
@@ -95,7 +94,7 @@ public final class ZFuncType extends ZType {
 	}
 
 	@Override public ZType GetBaseType() {
-		return ZSystem.FuncType;
+		return ZType.FuncType;
 	}
 
 	@Override public int GetParamSize() {
@@ -116,7 +115,7 @@ public final class ZFuncType extends ZType {
 
 	public final ZType GetRecvType() {
 		if(this.TypeParams.length == 1) {
-			return ZSystem.VoidType;
+			return ZType.VoidType;
 		}
 		return this.TypeParams[1];
 	}

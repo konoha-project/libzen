@@ -24,15 +24,15 @@
 
 package zen.ast;
 
-import zen.lang.ZSystem;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
+import zen.type.ZType;
 
 public final class ZErrorNode extends ZConstNode {
 	public String ErrorMessage;
 	public ZErrorNode(ZToken SourceToken, String ErrorMessage) {
 		super(SourceToken);
-		this.Type = ZSystem.VoidType;
+		this.Type = ZType.VoidType;
 		this.ErrorMessage = ErrorMessage;
 	}
 	@Override public final Object GetValue() {

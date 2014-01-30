@@ -81,6 +81,7 @@ import zen.parser.ZToken;
 import zen.parser.ZTokenContext;
 import zen.type.ZFuncType;
 import zen.type.ZType;
+import zen.type.ZTypePool;
 
 //endif VAJA
 
@@ -417,14 +418,14 @@ public class ZenGrammar {
 					}
 					TypeList.add(ParamTypeNode.Type);
 				}
-				TypeNode.Type = ZSystem.GetGenericType(TypeNode.Type, 0, TypeList, true);
+				TypeNode.Type = ZTypePool.GetGenericType(TypeNode.Type, 0, TypeList, true);
 			}
 		}
 		while(TokenContext.MatchToken("[")) {  // Array
 			if(!TokenContext.MatchToken("]")) {
 				return null;
 			}
-			TypeNode.Type = ZSystem.GetGenericType1(ZSystem.ArrayType, TypeNode.Type, true);
+			TypeNode.Type = ZTypePool.GetGenericType1(ZType.ArrayType, TypeNode.Type, true);
 		}
 		return TypeNode;
 	}
@@ -441,7 +442,7 @@ public class ZenGrammar {
 				return AssignedNode;
 			}
 		}
-		return ZNodeUtils.CreateSymbolNode(NameToken, ZSystem.VarType, NameToken.ParsedText, AssignedNode);
+		return ZNodeUtils.CreateSymbolNode(NameToken, ZType.VarType, NameToken.ParsedText, AssignedNode);
 	}
 
 	// PatternName: "("  (1)
@@ -454,7 +455,7 @@ public class ZenGrammar {
 	}
 
 	public static ZNode MatchCast(ZNameSpace NameSpace, ZTokenContext TokenContext, ZNode LeftNode) {
-		@Var ZNode CastNode = new ZCastNode(ZSystem.VarType, null);
+		@Var ZNode CastNode = new ZCastNode(ZType.VarType, null);
 		CastNode = TokenContext.MatchNodeToken(CastNode, NameSpace, "(", ZTokenContext.Required | ZTokenContext.AllowSkipIndent);
 		CastNode = TokenContext.AppendMatchedPattern(CastNode, NameSpace, "$Type$", ZTokenContext.Required);
 		CastNode = TokenContext.MatchNodeToken(CastNode, NameSpace, ")", ZTokenContext.Required  | ZTokenContext.DisallowSkipIndent);
@@ -675,7 +676,7 @@ public class ZenGrammar {
 			SymbolName = ZNameSpace.StringfyClassStaticSymbol(SymbolClass, SymbolName);
 			SourceToken.AddTypeInfoToErrorMessage(SymbolClass);
 		}
-		@Var ZType SymbolType = TokenContext.ParseType(NameSpace, "$TypeAnnotation$", ZSystem.VarType);
+		@Var ZType SymbolType = TokenContext.ParseType(NameSpace, "$TypeAnnotation$", ZType.VarType);
 		if(!TokenContext.MatchToken("=")) {
 			return TokenContext.CreateExpectedErrorNode(SymbolToken, "=");
 		}
@@ -729,7 +730,7 @@ public class ZenGrammar {
 		if(!NameToken.IsNameSymbol()) {
 			return TokenContext.CreateExpectedErrorNode(NameToken, "parameter name");
 		}
-		@Var ZNode VarNode = new ZParamNode(ZSystem.VarType, NameToken, NameToken.ParsedText);
+		@Var ZNode VarNode = new ZParamNode(ZType.VarType, NameToken, NameToken.ParsedText);
 		VarNode = TokenContext.AppendMatchedPattern(VarNode, NameSpace, "$TypeAnnotation$", ZTokenContext.Optional);
 		return VarNode;
 	}
@@ -872,6 +873,17 @@ public class ZenGrammar {
 	}
 
 	public static void ImportGrammar(ZNameSpace NameSpace, Class<?> Grammar) {
+		// defined type system
+		NameSpace.AppendTypeName(ZType.VoidType,  null);
+		NameSpace.AppendTypeName(ZType.BooleanType, null);
+		NameSpace.AppendTypeName(ZType.IntType, null);
+		NameSpace.AppendTypeName(ZType.FloatType, null);
+		NameSpace.AppendTypeName(ZType.StringType, null);
+		NameSpace.AppendTypeName(ZType.TypeType, null);
+		NameSpace.AppendTypeName(ZType.ArrayType, null);
+		NameSpace.AppendTypeName(ZType.MapType, null);
+		NameSpace.AppendTypeName(ZType.FuncType, null);
+
 		NameSpace.AppendTokenFunc(" \t", LibNative.LoadTokenFunc(Grammar, "WhiteSpaceToken"));
 		NameSpace.AppendTokenFunc("\n",  LibNative.LoadTokenFunc(Grammar, "IndentToken"));
 		NameSpace.AppendTokenFunc(";", LibNative.LoadTokenFunc(Grammar, "SemiColonToken"));

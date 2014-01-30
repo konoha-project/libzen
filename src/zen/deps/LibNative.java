@@ -37,7 +37,6 @@ import java.lang.reflect.Method;
 
 import zen.ast.ZNode;
 import zen.lang.ZFunc;
-import zen.lang.ZSystem;
 import zen.lang.ZenEngine;
 import zen.lang.ZenGrammar;
 import zen.parser.ZGenerator;
@@ -255,17 +254,17 @@ public class LibNative {
 	}
 
 
-	public final static ZType GetNativeType1(Class<?> NativeClass) {
-		ZType NativeType = ZSystem.LookupTypeTable(NativeClass.getCanonicalName());
-		if (NativeType == null) { /* create native type */
-			// DebugP("** creating native class: " + NativeClass.getSimpleName()
-			// + ", " + NativeClass.getCanonicalName());
-			NativeType = new ZNativeType(NativeClass);
-			ZSystem.SetTypeTable(NativeClass.getCanonicalName(), NativeType);
-			ZLogger.VerboseLog(ZLogger.VerboseNative, "creating native class: " + NativeClass.getSimpleName() + ", " + NativeClass.getCanonicalName());
-		}
-		return NativeType;
-	}
+	//	public final static ZType GetNativeType1(Class<?> NativeClass) {
+	//		ZType NativeType = ZSystem.LookupTypeTable(NativeClass.getCanonicalName());
+	//		if (NativeType == null) { /* create native type */
+	//			// DebugP("** creating native class: " + NativeClass.getSimpleName()
+	//			// + ", " + NativeClass.getCanonicalName());
+	//			NativeType = new ZNativeType(NativeClass);
+	//			ZSystem.SetTypeTable(NativeClass.getCanonicalName(), NativeType);
+	//			ZLogger.VerboseLog(ZLogger.VerboseNative, "creating native class: " + NativeClass.getSimpleName() + ", " + NativeClass.getCanonicalName());
+	//		}
+	//		return NativeType;
+	//	}
 
 	public static <T> ZenArray<T> NewZenArray(Class<?> NativeClass) {
 		ZType ElementType = LibNative.GetNativeType(NativeClass);

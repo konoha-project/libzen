@@ -31,6 +31,18 @@ import zen.parser.ZToken;
 import zen.parser.ZUtils;
 
 public class ZType  {
+	public final static ZType		VarType = new ZType(ZTypeFlag.UniqueType, "var", null);
+	public final static ZType		VoidType = new ZType(ZTypeFlag.UniqueType, "void", null);
+	public final static ZType		BooleanType = new ZType(ZTypeFlag.UniqueType, "boolean", VarType);
+	public final static ZType		IntType = new ZType(ZTypeFlag.UniqueType, "int", VarType);
+	public final static ZType       FloatType = new ZType(ZTypeFlag.UniqueType, "float", VarType);
+	public final static ZType		StringType = new ZType(ZTypeFlag.UniqueType, "String", VarType);
+	public final static ZType       TypeType = new ZType(ZTypeFlag.UniqueType, "Type", VarType);
+	public final static ZType		ArrayType = new ZGeneric1Type(ZTypeFlag.UniqueType, "Array", null, VarType);
+	public final static ZType		MapType = new ZGeneric1Type(ZTypeFlag.UniqueType, "Map", null, VarType);
+	public final static ZType		FuncType  = new ZFuncType("Func", null);
+
+
 	@Field public int		  TypeFlag = 0;
 	@Field public int         TypeId = 0;
 	@Field public String      ShortName = null;
@@ -41,7 +53,7 @@ public class ZType  {
 		this.ShortName = ShortName;
 		this.RefType = RefType;
 		if(ZUtils.IsFlag(TypeFlag, ZTypeFlag.UniqueType)) {
-			this.TypeId = ZTypePools.NewTypeId(this);
+			this.TypeId = ZTypePool.NewTypeId(this);
 		}
 	}
 
@@ -101,14 +113,12 @@ public class ZType  {
 		return true;
 	}
 
-
-
 	public final boolean IsVoidType() {
-		return (this.GetRealType() == ZSystem.VoidType);
+		return (this.GetRealType() == ZType.VoidType);
 	}
 
 	public boolean IsVarType() {
-		return (this.GetRealType() == ZSystem.VarType);
+		return (this.GetRealType() == ZType.VarType);
 	}
 
 	public final boolean IsInferrableType() {
@@ -116,19 +126,19 @@ public class ZType  {
 	}
 
 	public final boolean IsTypeType() {
-		return (this.GetRealType() == ZSystem.TypeType);
+		return (this.GetRealType() == ZType.TypeType);
 	}
 
 	public final boolean IsBooleanType() {
-		return (this.GetRealType() == ZSystem.BooleanType);
+		return (this.GetRealType() == ZType.BooleanType);
 	}
 
 	public final boolean IsIntType() {
-		return (this.GetRealType() == ZSystem.IntType);
+		return (this.GetRealType() == ZType.IntType);
 	}
 
 	public final boolean IsFloatType() {
-		return (this.GetRealType() == ZSystem.FloatType);
+		return (this.GetRealType() == ZType.FloatType);
 	}
 
 	public final boolean IsNumberType() {
@@ -136,20 +146,16 @@ public class ZType  {
 	}
 
 	public final boolean IsStringType() {
-		return (this.GetRealType() == ZSystem.StringType);
+		return (this.GetRealType() == ZType.StringType);
 	}
 
 	public final boolean IsArrayType() {
-		return (this.GetBaseType() == ZSystem.ArrayType);
+		return (this.GetBaseType() == ZType.ArrayType);
 	}
 
 	public final boolean IsMapType() {
-		return (this.GetBaseType() == ZSystem.MapType);
+		return (this.GetBaseType() == ZType.MapType);
 	}
-
-	//	public final boolean IsEnumType() {
-	//		return ZenUtils.IsFlag(this.TypeFlag, EnumType);
-	//	}
 
 	public ZType CreateSubType(int ClassFlag, String ClassName) {
 		@Var ZType SubType = new ZType(ClassFlag, ClassName, this);
@@ -192,34 +198,8 @@ public class ZType  {
 	}
 
 	public final String GetNativeName() {
-		//		if(ZenUtils.IsFlag(this.TypeFlag, ExportType)) {
-		//			return this.ShortName;
-		//		}
-		//		else {
-		//			return this.GetBaseType().ShortName + NativeNameSuffix + this.TypeId;
-		//		}
 		return this.GetBaseType().ShortName + ZTypeFlag.NativeNameSuffix + this.TypeId;
 	}
-
-	//	public final String GetUniqueName() {
-	//		//		if(ZenUtils.IsFlag(this.TypeFlag, TypeVariable)) {
-	//		//			return this.ShortName;
-	//		//		}
-	//		//		else {
-	//		//			if(LibZen.DebugMode) {
-	//		return this.GetBaseType().ShortName + NativeNameSuffix + this.TypeId;
-	//		//			}
-	//		//			else {
-	//		//				return NativeNameSuffix + this.TypeId;
-	//		//			}
-	//		//		}
-	//	}
-
-	//	public final boolean Accept(ZenType Type) {
-	//		boolean b = this.Accept_(Type);
-	//		System.err.println("" + this + " accepts " + Type + " ? " + b);
-	//		return b;
-	//	}
 
 	public final boolean AcceptValue(Object Value) {
 		return (Value != null) ? this.Accept(ZSystem.GuessType(Value)) : true;
@@ -229,113 +209,11 @@ public class ZType  {
 		return false;
 	}
 
-	//	public boolean HasCallableSignature() {
-	//		return false;
-	//	}
-
 	public String StringfySignature(String FuncName) {
 		return FuncName;
 	}
 
 	public void Maybe(ZType T, ZToken SourceToken) {
-
 	}
-
-
-
-
-	//	public void SetClassField(ZenClassField ClassField) {
-	//		this.TypeBody = ClassField;
-	//	}
-	//
-	//	public boolean IsDynamicNaitiveLoading() {
-	//		return this.IsNativeType() /*&& !ZenUtils.IsFlag(this.TypeFlag, CommonType)*/;
-	//	}
-	//
-	//	public final boolean IsTypeVariable() {   // T
-	//		return ZenUtils.IsFlag(this.TypeFlag, TypeVariable);
-	//	}
-	//
-	//	public final boolean HasTypeVariable() {
-	//		return ZenUtils.IsFlag(this.TypeFlag, TypeVariable) || ZenUtils.IsFlag(this.TypeFlag, GenericVariable);
-	//	}
-	//
-	//	public int AppendTypeVariable(ZenNameSpace GenericNameSpace, int Count) {
-	//		if(ZenUtils.IsFlag(this.TypeFlag, TypeVariable)) {
-	//			@Var ZenType TypeVar = GenericNameSpace.GetType(this.ShortName);
-	//			if(TypeVar != null && TypeVar.IsTypeVariable()) {
-	//				return Count;
-	//			}
-	//			GenericNameSpace.SetSymbol(this.ShortName, this, null);
-	//			return Count + 1;
-	//		}
-	//		if(ZenUtils.IsFlag(this.TypeFlag, GenericVariable)) {
-	//			for(@Var int i = 0; i < this.TypeParams.length; i += 1) {
-	//				Count = this.TypeParams[i].AppendTypeVariable(GenericNameSpace, Count);
-	//			}
-	//		}
-	//		return Count;
-	//	}
-	//
-	//	private ZenType GivenParamType(ZenType GivenType, int ParamIndex) {
-	//		if(GivenType.BaseType == this.BaseType && GivenType.TypeParams.length == this.TypeParams.length) {
-	//			return GivenType.TypeParams[ParamIndex];
-	//		}
-	//		return GivenType;
-	//	}
-	//
-	//	public ZenType RealType(ZenNameSpace GenericNameSpace, ZenType GivenType) {
-	//		if(ZenUtils.IsFlag(this.TypeFlag, TypeVariable)) {
-	//			@Var ZenType TypeVar = GenericNameSpace.GetType(this.ShortName);
-	//			//System.err.println("TypeVar="+this.ShortName + ", " + TypeVar);
-	//			if(TypeVar != null && TypeVar.IsTypeVariable()) {
-	//				GenericNameSpace.SetSymbol(this.ShortName, GivenType, null);
-	//				return GivenType;
-	//			}
-	//			else {
-	//				return TypeVar;
-	//			}
-	//		}
-	//		if(ZenUtils.IsFlag(this.TypeFlag, GenericVariable)) {
-	//			@Var ArrayList<ZenType> TypeList = new ArrayList<ZenType>();
-	//			for(@Var int i = 0; i < this.TypeParams.length; i += 1) {
-	//				@Var ZenType RealParamType = this.TypeParams[i].RealType(GenericNameSpace, this.GivenParamType(GivenType, i));
-	//				TypeList.add(RealParamType);
-	//			}
-	//			return ZenTypeSystem.GetGenericType(this.BaseType, 0, TypeList, true);
-	//		}
-	//		return this;
-	//	}
-	//
-	//	public boolean Match(ZenNameSpace GenericNameSpace, ZenType GivenType) {
-	//
-	//		if(ZenUtils.IsFlag(this.TypeFlag, TypeVariable)) {
-	//			@Var ZenType TypeVar = GenericNameSpace.GetType(this.ShortName);
-	//			if(TypeVar.IsTypeVariable()) {
-	//				//System.err.println("updating "+ this.ShortName + " " + GivenType);
-	//				GenericNameSpace.SetSymbol(this.ShortName, GivenType, null);
-	//				return true;
-	//			}
-	//			return TypeVar.Accept(GivenType);
-	//		}
-	//		if(ZenUtils.IsFlag(this.TypeFlag, GenericVariable)) {
-	//			if(GivenType.BaseType == this.BaseType && GivenType.TypeParams.length == this.TypeParams.length) {
-	//				for(@Var int i = 0; i < this.TypeParams.length; i += 1) {
-	//					if(!this.TypeParams[i].Match(GenericNameSpace, GivenType.TypeParams[i])) {
-	//						return false;
-	//					}
-	//				}
-	//				return true;
-	//			}
-	//			return false;
-	//		}
-	//		return this.Accept(GivenType);
-	//	}
-	//
-	////	public boolean Match(ZenNameSpace GenericNameSpace, ZenType GivenType) {
-	////		boolean b = this.Match_(GenericNameSpace, GivenType);
-	////		System.err.println("matching.. " + this + ", given = " + GivenType + ", results=" + b);
-	////		return b;
-	////	}
 
 }

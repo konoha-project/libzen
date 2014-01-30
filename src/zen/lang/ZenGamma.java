@@ -39,12 +39,12 @@ public class ZenGamma {
 
 	static ZType GetIndexType(ZNameSpace NameSpace, ZType RecvType) {
 		if(RecvType.IsArrayType() || RecvType.IsStringType()) {
-			return ZSystem.IntType;
+			return ZType.IntType;
 		}
 		if(RecvType.IsMapType()) {
-			return ZSystem.StringType;
+			return ZType.StringType;
 		}
-		return ZSystem.VarType;
+		return ZType.VarType;
 	}
 
 	static ZType GetElementType(ZNameSpace NameSpace, ZType RecvType) {
@@ -52,9 +52,9 @@ public class ZenGamma {
 			return RecvType.GetParamType(0);
 		}
 		if(RecvType.IsStringType()) {
-			return ZSystem.StringType;
+			return ZType.StringType;
 		}
-		return ZSystem.VarType;
+		return ZType.VarType;
 	}
 
 	static void SetClassField(ZNameSpace NameSpace, ZType ClassType, String FieldName, ZType FieldType, ZToken SourceToken) {
@@ -72,7 +72,7 @@ public class ZenGamma {
 
 	static protected final ZType GetFieldType(ZNameSpace NameSpace, ZType ClassType, String FieldName) {
 		if(ClassType instanceof ZenClassType) {
-			return ((ZenClassType)ClassType).GetFieldType(FieldName, ZSystem.VoidType);
+			return ((ZenClassType)ClassType).GetFieldType(FieldName, ZType.VoidType);
 		}
 		Object Field = NameSpace.GetRootNameSpace().GetClassSymbol(ClassType, FieldName, true);
 		if(Field instanceof ZenField) {
@@ -83,7 +83,7 @@ public class ZenGamma {
 
 	static protected final ZType GetSetterType(ZNameSpace NameSpace, ZType ClassType, String FieldName) {
 		if(ClassType instanceof ZenClassType) {
-			return ((ZenClassType)ClassType).GetFieldType(FieldName, ZSystem.VoidType);
+			return ((ZenClassType)ClassType).GetFieldType(FieldName, ZType.VoidType);
 		}
 		Object Field = NameSpace.GetRootNameSpace().GetClassSymbol(ClassType, FieldName, true);
 		if(Field instanceof ZenField) {

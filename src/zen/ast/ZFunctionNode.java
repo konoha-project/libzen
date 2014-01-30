@@ -29,14 +29,14 @@ import java.util.ArrayList;
 import zen.deps.Field;
 import zen.deps.Nullable;
 import zen.deps.Var;
-import zen.lang.ZSystem;
 import zen.parser.ZNameSpace;
 import zen.parser.ZVisitor;
 import zen.type.ZFuncType;
 import zen.type.ZType;
+import zen.type.ZTypePool;
 
 public class ZFunctionNode extends ZNode {
-	@Field public ZType ReturnType = ZSystem.VarType;
+	@Field public ZType ReturnType = ZType.VarType;
 	@Field public String FuncName = null;
 	@Field public ArrayList<ZParamNode> ParamList = new ArrayList<ZParamNode>();
 	@Field public ZNode BodyNode = null;
@@ -97,7 +97,7 @@ public class ZFunctionNode extends ZNode {
 				TypeList.add(ParamType);
 				i = i + 1;
 			}
-			FuncType = ZSystem.LookupFuncType(TypeList);
+			FuncType = ZTypePool.LookupFuncType(TypeList);
 			if(!FuncType.IsVarType()) {
 				this.ResolvedFuncType = FuncType;
 			}

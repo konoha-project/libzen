@@ -26,7 +26,6 @@
 package zen.ast;
 import zen.deps.Field;
 import zen.deps.LibNative;
-import zen.lang.ZSystem;
 import zen.parser.ZNameSpace;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
@@ -34,7 +33,7 @@ import zen.type.ZType;
 
 public abstract class ZNode {
 	@Field public ZNode	ParentNode = null;
-	@Field public ZType	Type = ZSystem.VarType;
+	@Field public ZType	Type = ZType.VarType;
 	@Field public ZToken	SourceToken = null;
 
 	public final ZNode SetChild(ZNode Node) {

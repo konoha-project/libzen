@@ -30,37 +30,37 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import zen.lang.ZFunc;
-import zen.lang.ZSystem;
 import zen.type.ZFuncType;
 import zen.type.ZType;
+import zen.type.ZTypePool;
 
 public class NativeTypeTable {
 	static HashMap<String, Class<?>> ClassMap = new HashMap<String,Class<?>>();
 	static HashMap<String, ZType> TypeMap = new HashMap<String,ZType>();
 	static {
-		NativeTypeTable.SetTypeTable(ZSystem.VarType, Object.class);
-		NativeTypeTable.SetTypeTable(ZSystem.VoidType, void.class);
-		NativeTypeTable.SetTypeTable(ZSystem.BooleanType, boolean.class);
-		NativeTypeTable.SetTypeTable(ZSystem.IntType, long.class);
-		NativeTypeTable.SetTypeTable(ZSystem.FloatType, double.class);
-		NativeTypeTable.SetTypeTable(ZSystem.StringType, String.class);
-		NativeTypeTable.SetTypeTable(ZSystem.FuncType, ZFunc.class);
-		NativeTypeTable.SetTypeTable(ZSystem.ArrayType, ZenArray.class);
-		NativeTypeTable.SetTypeTable(ZSystem.MapType, ZenMap.class);
+		NativeTypeTable.SetTypeTable(ZType.VarType, Object.class);
+		NativeTypeTable.SetTypeTable(ZType.VoidType, void.class);
+		NativeTypeTable.SetTypeTable(ZType.BooleanType, boolean.class);
+		NativeTypeTable.SetTypeTable(ZType.IntType, long.class);
+		NativeTypeTable.SetTypeTable(ZType.FloatType, double.class);
+		NativeTypeTable.SetTypeTable(ZType.StringType, String.class);
+		NativeTypeTable.SetTypeTable(ZType.FuncType, ZFunc.class);
+		NativeTypeTable.SetTypeTable(ZType.ArrayType, ZenArray.class);
+		NativeTypeTable.SetTypeTable(ZType.MapType, ZenMap.class);
 
-		NativeTypeTable.SetTypeTable(ZSystem.BooleanType, Boolean.class);
-		NativeTypeTable.SetTypeTable(ZSystem.IntType, Long.class);
-		NativeTypeTable.SetTypeTable(ZSystem.FloatType, Double.class);
-		NativeTypeTable.SetTypeTable(ZSystem.IntType, int.class);
-		NativeTypeTable.SetTypeTable(ZSystem.IntType, Integer.class);
-		NativeTypeTable.SetTypeTable(ZSystem.IntType, short.class);
-		NativeTypeTable.SetTypeTable(ZSystem.IntType, Short.class);
-		NativeTypeTable.SetTypeTable(ZSystem.IntType, byte.class);
-		NativeTypeTable.SetTypeTable(ZSystem.IntType, Byte.class);
-		NativeTypeTable.SetTypeTable(ZSystem.FloatType, float.class);
-		NativeTypeTable.SetTypeTable(ZSystem.FloatType, Float.class);
-		NativeTypeTable.SetTypeTable(ZSystem.StringType, char.class);
-		NativeTypeTable.SetTypeTable(ZSystem.StringType, Character.class);
+		NativeTypeTable.SetTypeTable(ZType.BooleanType, Boolean.class);
+		NativeTypeTable.SetTypeTable(ZType.IntType, Long.class);
+		NativeTypeTable.SetTypeTable(ZType.FloatType, Double.class);
+		NativeTypeTable.SetTypeTable(ZType.IntType, int.class);
+		NativeTypeTable.SetTypeTable(ZType.IntType, Integer.class);
+		NativeTypeTable.SetTypeTable(ZType.IntType, short.class);
+		NativeTypeTable.SetTypeTable(ZType.IntType, Short.class);
+		NativeTypeTable.SetTypeTable(ZType.IntType, byte.class);
+		NativeTypeTable.SetTypeTable(ZType.IntType, Byte.class);
+		NativeTypeTable.SetTypeTable(ZType.FloatType, float.class);
+		NativeTypeTable.SetTypeTable(ZType.FloatType, Float.class);
+		NativeTypeTable.SetTypeTable(ZType.StringType, char.class);
+		NativeTypeTable.SetTypeTable(ZType.StringType, Character.class);
 	}
 
 	public static void SetTypeTable(ZType zType, Class<?> c) {
@@ -97,7 +97,7 @@ public class NativeTypeTable {
 				j = j + 1;
 			}
 		}
-		return ZSystem.LookupFuncType(TypeList);
+		return ZTypePool.LookupFuncType(TypeList);
 	}
 
 }

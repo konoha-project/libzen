@@ -26,14 +26,13 @@ package zen.type;
 
 import zen.deps.Field;
 import zen.deps.Nullable;
-import zen.lang.ZSystem;
 
 public class ZGeneric1Type extends ZType {
 	@Field public ZType			BaseType;
 	@Field public ZType         ParamType;
 
 	public ZGeneric1Type(int TypeFlag, String ShortName, @Nullable ZType BaseType, ZType ParamType) {
-		super(TypeFlag, ShortName, ZSystem.VarType);
+		super(TypeFlag, ShortName, ZType.VarType);
 		this.BaseType = BaseType;
 		if(this.BaseType == null) {
 			this.BaseType = this;
@@ -66,7 +65,7 @@ public class ZGeneric1Type extends ZType {
 
 	@Override public final ZType GetRealType(ZType[] Greek) {
 		if(this.ParamType.IsGreekType()) {
-			return ZSystem.GetGenericType1(this.BaseType, this.ParamType.GetRealType(Greek), true);
+			return ZTypePool.GetGenericType1(this.BaseType, this.ParamType.GetRealType(Greek), true);
 		}
 		return this.GetRealType();
 	}

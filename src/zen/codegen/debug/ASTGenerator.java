@@ -67,8 +67,8 @@ import zen.ast.ZTryNode;
 import zen.ast.ZUnaryNode;
 import zen.ast.ZVarDeclNode;
 import zen.ast.ZWhileNode;
-import zen.lang.ZSystem;
 import zen.parser.ZSourceGenerator;
+import zen.type.ZType;
 
 public class ASTGenerator extends ZSourceGenerator {
 
@@ -84,10 +84,10 @@ public class ASTGenerator extends ZSourceGenerator {
 		this.NullLiteral  = "null";
 
 		this.TopType = "object";
-		this.SetNativeType(ZSystem.BooleanType, "int");
-		this.SetNativeType(ZSystem.IntType, "int");
-		this.SetNativeType(ZSystem.FloatType, "double");
-		this.SetNativeType(ZSystem.StringType, "string");
+		this.SetNativeType(ZType.BooleanType, "int");
+		this.SetNativeType(ZType.IntType, "int");
+		this.SetNativeType(ZType.FloatType, "double");
+		this.SetNativeType(ZType.StringType, "string");
 	}
 
 	@Override

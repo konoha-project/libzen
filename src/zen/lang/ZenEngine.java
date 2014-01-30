@@ -77,6 +77,7 @@ import zen.parser.ZParserConst;
 import zen.parser.ZToken;
 import zen.parser.ZTokenContext;
 import zen.parser.ZVisitor;
+import zen.type.ZType;
 import zen.type.ZTypeChecker;
 
 public class ZenEngine extends ZVisitor {
@@ -357,7 +358,7 @@ public class ZenEngine extends ZVisitor {
 	public final Object Exec(ZNode Node, boolean IsInteractive) {
 		this.IsInteractive = IsInteractive;
 		this.EnableVisitor();
-		Node = this.TypeChecker.CheckType(Node, this.Generator.RootNameSpace, ZSystem.VoidType);
+		Node = this.TypeChecker.CheckType(Node, this.Generator.RootNameSpace, ZType.VoidType);
 		@Var Object ResultValue = this.Eval(Node);
 		return ResultValue;
 	}

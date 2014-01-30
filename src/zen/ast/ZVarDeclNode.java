@@ -25,7 +25,6 @@
 package zen.ast;
 
 import zen.deps.Field;
-import zen.lang.ZSystem;
 import zen.parser.ZNameSpace;
 import zen.parser.ZVisitor;
 import zen.type.ZType;
@@ -36,7 +35,7 @@ import zen.type.ZType;
  */
 
 public final class ZVarDeclNode extends ZBlockNode {
-	@Field public ZType   DeclType = ZSystem.VarType;
+	@Field public ZType   DeclType = ZType.VarType;
 	@Field public String  NativeName = null;
 	@Field public ZNode	InitNode = null;
 

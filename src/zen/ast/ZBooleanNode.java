@@ -26,15 +26,15 @@ package zen.ast;
 
 import zen.deps.Field;
 import zen.deps.Init;
-import zen.lang.ZSystem;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
+import zen.type.ZType;
 
 public final class ZBooleanNode extends ZConstNode {
 	@Field @Init public boolean	BooleanValue;
 	public ZBooleanNode(ZToken Token, boolean Value) {
 		super(Token);
-		this.Type = ZSystem.BooleanType;
+		this.Type = ZType.BooleanType;
 		this.BooleanValue = Value;
 	}
 	@Override public void Accept(ZVisitor Visitor) {

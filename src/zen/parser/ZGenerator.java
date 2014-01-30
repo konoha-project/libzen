@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import zen.ast.ZImportNode;
 import zen.ast.ZNode;
 import zen.deps.Field;
-import zen.lang.ZSystem;
 import zen.lang.ZenEngine;
 import zen.type.ZFuncType;
 import zen.type.ZType;
@@ -92,11 +91,11 @@ public abstract class ZGenerator extends ZVisitor {
 	}
 
 	public ZType GetFieldType(ZType BaseType, String Name) {
-		return ZSystem.VarType;     // undefined
+		return ZType.VarType;     // undefined
 	}
 
 	public ZType GetSetterType(ZType BaseType, String Name) {
-		return ZSystem.VarType;     // undefined
+		return ZType.VarType;     // undefined
 	}
 
 	public ZFuncType GetConstructorFuncType(ZType ClassType, ArrayList<ZNode> ParamList) {

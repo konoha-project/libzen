@@ -30,9 +30,9 @@ import zen.ast.ZFunctionNode;
 import zen.ast.ZInstanceOfNode;
 import zen.ast.ZParamNode;
 import zen.ast.ZVarDeclNode;
-import zen.lang.ZSystem;
 import zen.parser.ZSourceGenerator;
 //endif VAJA
+import zen.type.ZType;
 
 //Zen Generator should be written in each language.
 
@@ -50,10 +50,10 @@ public class CSourceGenerator extends ZSourceGenerator {
 		this.NullLiteral  = "NULL";
 
 		this.TopType = "void*";
-		this.SetNativeType(ZSystem.BooleanType, "int");
-		this.SetNativeType(ZSystem.IntType, "long long int");
-		this.SetNativeType(ZSystem.FloatType, "double");
-		this.SetNativeType(ZSystem.StringType, "char*");
+		this.SetNativeType(ZType.BooleanType, "int");
+		this.SetNativeType(ZType.IntType, "long long int");
+		this.SetNativeType(ZType.FloatType, "double");
+		this.SetNativeType(ZType.StringType, "char*");
 	}
 
 	@Override public void VisitCastNode(ZCastNode Node) {

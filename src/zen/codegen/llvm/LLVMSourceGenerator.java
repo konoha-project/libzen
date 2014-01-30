@@ -62,7 +62,6 @@ import zen.ast.ZVarDeclNode;
 import zen.ast.ZWhileNode;
 import zen.deps.LibNative;
 import zen.deps.Var;
-import zen.lang.ZSystem;
 import zen.lang.ZenClassType;
 import zen.parser.ZSourceGenerator;
 import zen.type.ZFuncType;
@@ -113,11 +112,11 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		this.FalseLiteral = "false";
 		this.NullLiteral = "null";
 		this.TopType = "opaque";
-		this.SetNativeType(ZSystem.VoidType, "void");
-		this.SetNativeType(ZSystem.BooleanType, "i1");
-		this.SetNativeType(ZSystem.IntType, "i64");
-		this.SetNativeType(ZSystem.FloatType, "double");
-		this.SetNativeType(ZSystem.StringType, "i8*");
+		this.SetNativeType(ZType.VoidType, "void");
+		this.SetNativeType(ZType.BooleanType, "i1");
+		this.SetNativeType(ZType.IntType, "i64");
+		this.SetNativeType(ZType.FloatType, "double");
+		this.SetNativeType(ZType.StringType, "i8*");
 
 		this.TempSymbolNumber = 0;
 		this.IsBlockTerminated = false;

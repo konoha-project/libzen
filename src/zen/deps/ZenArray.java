@@ -26,8 +26,8 @@
 package zen.deps;
 import java.util.ArrayList;
 
-import zen.lang.ZSystem;
 import zen.type.ZType;
+import zen.type.ZTypePool;
 
 public class ZenArray<T> extends ArrayList<T> implements ZenTypedObject {
 	/**
@@ -37,11 +37,11 @@ public class ZenArray<T> extends ArrayList<T> implements ZenTypedObject {
 	private final ZType ObjectType;
 	private ZenArray(ZType ZType) {
 		super();
-		this.ObjectType = ZType == null ? ZSystem.ArrayType : ZType;
+		this.ObjectType = ZType == null ? zen.type.ZType.ArrayType : ZType;
 	}
 
 	public static <T> ZenArray<T> NewZenArray(ZType ElementType) {
-		return new ZenArray<T>(ZSystem.GetGenericType1(ZSystem.ArrayType, ElementType, true));
+		return new ZenArray<T>(ZTypePool.GetGenericType1(ZType.ArrayType, ElementType, true));
 	}
 
 	@Override public ZType GetZenType() {

@@ -25,11 +25,10 @@
 package zen.ast;
 
 import zen.deps.Field;
-import zen.lang.ZSystem;
 import zen.type.ZType;
 
 public final class ZCatchNode extends ZNode {
-	@Field public ZType   ExceptionType = ZSystem.VarType;
+	@Field public ZType   ExceptionType = ZType.VarType;
 	@Field public String  ExceptionName = null;
 	@Field public ZNode	BodyNode = null;;
 	public ZCatchNode() {

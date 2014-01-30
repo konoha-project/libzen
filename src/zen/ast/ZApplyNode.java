@@ -27,7 +27,6 @@ package zen.ast;
 import java.util.ArrayList;
 
 import zen.deps.Field;
-import zen.lang.ZSystem;
 import zen.type.ZFuncType;
 import zen.type.ZType;
 
@@ -47,7 +46,7 @@ abstract class ZApplyNode extends ZNode {
 		if(this.ParamList.size()>0) {
 			return this.ParamList.get(0).Type.GetRealType();
 		}
-		return ZSystem.VoidType;
+		return ZType.VoidType;
 	}
 
 }

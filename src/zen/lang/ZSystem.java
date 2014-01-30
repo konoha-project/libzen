@@ -31,31 +31,11 @@ import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.deps.ZenMap;
 import zen.deps.ZenTypedObject;
-import zen.parser.ZLogger;
-import zen.parser.ZNameSpace;
-import zen.type.ZFuncType;
-import zen.type.ZGeneric1Type;
 import zen.type.ZType;
-import zen.type.ZTypeFlag;
 
 public class ZSystem {
 	public final static ZenMap<Integer>     SourceMap = new ZenMap<Integer>(null);
 	public final static ArrayList<String>   SourceList = new ArrayList<String>();
-
-	public final static ZenMap<ZType>     ClassNameMap = new ZenMap<ZType>(null);
-	public final static ZenMap<ZType[]>   UniqueMapMap = new ZenMap<ZType[]>(null);
-
-	public final static ZType		VarType = new ZType(ZTypeFlag.UniqueType, "var", null);
-	public final static ZType		VoidType = new ZType(ZTypeFlag.UniqueType, "void", null);
-	public final static ZType		BooleanType = new ZType(ZTypeFlag.UniqueType, "boolean", VarType);
-	public final static ZType		IntType = new ZType(ZTypeFlag.UniqueType, "int", VarType);
-	public final static ZType     FloatType = new ZType(ZTypeFlag.UniqueType, "float", VarType);
-	public final static ZType		StringType = new ZType(ZTypeFlag.UniqueType, "String", VarType);
-	public final static ZType     TypeType = new ZType(ZTypeFlag.UniqueType, "Type", VarType);
-	public final static ZType		ArrayType = new ZGeneric1Type(ZTypeFlag.UniqueType, "Array", null, VarType);
-	public final static ZType		MapType = new ZGeneric1Type(ZTypeFlag.UniqueType, "Map", null, VarType);
-
-	public final static ZType		FuncType  = new ZFuncType("Func", null);
 
 	public final static long GetFileLine(String FileName, int Line) {
 		@Var Object IdOrNull = ZSystem.SourceMap.GetOrNull(FileName);
@@ -84,48 +64,15 @@ public class ZSystem {
 		return "(" + FileName + ":" + Line + ")";
 	}
 
-	private static boolean IsInit = false;
 
-	public final static void InitNameSpace(ZNameSpace NameSpace) {
-		//ifdef JAVA
-		if(!ZSystem.IsInit) {
-			//			ZSystem.SetTypeTable("org.ZenScript.ZenTopObject", ZSystem.TopType);
-			//			ZSystem.SetTypeTable("void",    ZSystem.VoidType);
-			//			//			ZenSystem.SetTypeTable("java.lang.Object",  ZenSystem.AnyType);
-			//			ZSystem.SetTypeTable("boolean", ZSystem.BooleanType);
-			//			ZSystem.SetTypeTable("java.lang.Boolean", ZSystem.BooleanType);
-			//			ZSystem.SetTypeTable("long",    ZSystem.IntType);
-			//			ZSystem.SetTypeTable("java.lang.Long",    ZSystem.IntType);
-			//			ZSystem.SetTypeTable("java.lang.String",  ZSystem.StringType);
-			//			ZSystem.SetTypeTable("org.ZenScript.ZenType", ZSystem.TypeType);
-			//			//			ZenTypeSystem.SetNativeTypeName("org.ZenScript.ZenEnum", ZenTypeSystem.EnumBaseType);
-			//			ZSystem.SetTypeTable("org.ZenScript.ZenArray", ZSystem.ArrayType);
-			//			ZSystem.SetTypeTable("org.ZenScript.Konoha.ZenIntArray", ZSystem.GetGenericType1(ZSystem.ArrayType, ZSystem.IntType, true));
-			//			ZSystem.SetTypeTable("double",    ZSystem.FloatType);
-			//			ZSystem.SetTypeTable("java.lang.Double",  ZSystem.FloatType);
-			//			ZenTypeSystem.SetNativeTypeName("java.util.Iterator",  ZenTypeSystem.IteratorType);
-			ZSystem.IsInit = true;
-		}
-		NameSpace.AppendTypeName(ZSystem.VoidType,  null);
-		NameSpace.AppendTypeName(ZSystem.BooleanType, null);
-		NameSpace.AppendTypeName(ZSystem.IntType, null);
-		NameSpace.AppendTypeName(ZSystem.FloatType, null);
-		NameSpace.AppendTypeName(ZSystem.StringType, null);
-		NameSpace.AppendTypeName(ZSystem.TypeType, null);
-		NameSpace.AppendTypeName(ZSystem.ArrayType, null);
-		NameSpace.AppendTypeName(ZSystem.MapType, null);
-		NameSpace.AppendTypeName(ZSystem.FuncType, null);
-	}
-
-	public final static ZType LookupTypeTable(String Key) {
-		return ZSystem.ClassNameMap.GetOrNull(Key);
-	}
-
-	public final static void SetTypeTable(String Key, ZType Type) {
-		ZSystem.ClassNameMap.put(Key, Type);
-		ZLogger.VerboseLog(ZLogger.VerboseSymbol, "global type name: " + Key + ", " + Type);
-	}
-
+	//	public final static ZType LookupTypeTable(String Key) {
+	//		return ZTypePool.ClassNameMap.GetOrNull(Key);
+	//	}
+	//
+	//	public final static void SetTypeTable(String Key, ZType Type) {
+	//		ZTypePool.ClassNameMap.put(Key, Type);
+	//		ZLogger.VerboseLog(ZLogger.VerboseSymbol, "global type name: " + Key + ", " + Type);
+	//	}
 
 	public final static ZType GetNativeTypeOfValue(Object Value) {
 		return LibNative.GetNativeType(LibNative.GetClassOfValue(Value));
@@ -136,7 +83,7 @@ public class ZSystem {
 			return ((ZFunc)Value).GetFuncType();
 		}
 		else if(Value instanceof ZFuncSet) {
-			return ZSystem.FuncType;
+			return ZType.FuncType;
 		}
 		else if(Value instanceof ZenTypedObject) {
 			return ((ZenTypedObject)Value).GetZenType();
@@ -146,76 +93,6 @@ public class ZSystem {
 		}
 	}
 
-	public final static String MangleType2(ZType Type1, ZType Type2) {
-		return ":" + Type1.TypeId + ":" + Type2.TypeId;
-	}
-
-	public final static String MangleTypes(int BaseIdx, ArrayList<ZType> TypeList) {
-		@Var String s = "";
-		for(@Var int i = BaseIdx; i < LibZen.ListSize(TypeList); i = i + 1) {
-			@Var ZType Type = TypeList.get(i);
-			s = s + ":" + Type.TypeId;
-		}
-		return s;
-	}
-
-	public final static ZType[] UniqueTypes(int BaseIdx, ArrayList<ZType> TypeList) {
-		@Var String MangleName = "[]" + ZSystem.MangleTypes(BaseIdx, TypeList);
-		@Var ZType[] Types = ZSystem.UniqueMapMap.GetOrNull(MangleName);
-		if(Types == null) {
-			Types = LibZen.CompactTypeList(BaseIdx, TypeList);
-			ZSystem.UniqueMapMap.put(MangleName, Types);
-		}
-		return Types;
-	}
-
-	public final static ZType GetGenericType1(ZType BaseType, ZType ParamType, boolean IsCreation) {
-		@Var String MangleName = ZSystem.MangleType2(BaseType, ParamType);
-		@Var ZType GenericType = ZSystem.ClassNameMap.GetOrNull(MangleName);
-		if((GenericType == null) && IsCreation) {
-			@Var String Name = BaseType.ShortName + "<" + ParamType + ">";
-			if(BaseType.IsArrayType()) {
-				Name = BaseType.ShortName + "<" + ParamType + ">";
-			}
-			GenericType = new ZGeneric1Type(ZTypeFlag.UniqueType, Name, BaseType, ParamType);
-			ZSystem.SetTypeTable(MangleName, GenericType);
-		}
-		return GenericType;
-	}
-
-	public final static ZType GetGenericType(ZType BaseType, int BaseIdx, ArrayList<ZType> TypeList, boolean IsCreation) {
-		assert(BaseType.GetParamSize() > 0);
-		if(TypeList.size() - BaseIdx == 1 && !BaseType.IsFuncType()) {
-			return ZSystem.GetGenericType1(BaseType, TypeList.get(BaseIdx), IsCreation);
-		}
-		@Var String MangleName = ":" + BaseType.TypeId + ZSystem.MangleTypes(BaseIdx, TypeList);
-		@Var ZType GenericType = ZSystem.ClassNameMap.GetOrNull(MangleName);
-		if((GenericType == null) && IsCreation) {
-			@Var String ShortName = BaseType.ShortName + "<";
-			for(@Var int i = BaseIdx; i < LibZen.ListSize(TypeList); i += 1) {
-				ShortName = ShortName + TypeList.get(i).GetRealType().ShortName;
-				if(i + 1 == LibZen.ListSize(TypeList)) {
-					ShortName = ShortName + ">";
-				}
-				else {
-					ShortName = ShortName + ",";
-				}
-			}
-			if(BaseType.IsFuncType()) {
-				GenericType = new ZFuncType(ShortName, ZSystem.UniqueTypes(BaseIdx, TypeList));
-			}
-			else {
-				throw new RuntimeException("TODO: Make ZenGenericType");
-			}
-			ZSystem.SetTypeTable(MangleName, GenericType);
-		}
-		return GenericType;
-	}
-
-	//	private final String SubtypeKey(ZenType FromType, ZenType ToType) {
-	//		return FromType.GetUniqueName() + "<" + ToType.GetUniqueName();
-	//	}
-
 	public final static boolean CheckSubType(ZType SubType, ZType SuperType) {
 		// TODO: Structual Typing database
 		return false;
@@ -224,10 +101,6 @@ public class ZSystem {
 	public static ZFunc GetConverterFunc(ZType ValueType, ZType CastType, boolean SearchRecursive) {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	public static ZFuncType LookupFuncType(ArrayList<ZType> TypeList) {
-		return (ZFuncType)ZSystem.GetGenericType(ZSystem.FuncType, 0, TypeList, true);
 	}
 
 

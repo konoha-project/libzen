@@ -33,7 +33,6 @@ import zen.deps.Field;
 import zen.deps.LibNative;
 import zen.deps.Var;
 import zen.lang.ZFunc;
-import zen.lang.ZSystem;
 import zen.lang.ZenError;
 import zen.parser.ZLogger;
 import zen.parser.ZNameSpace;
@@ -131,7 +130,7 @@ public abstract class ZTypeChecker extends ZVisitor {
 			return Node;
 		}
 		if(ContextType.IsVoidType() && !Node.Type.IsVoidType()) {
-			return new ZCastNode(ZSystem.VoidType, Node);
+			return new ZCastNode(ZType.VoidType, Node);
 		}
 		@Var ZFunc CoercionFunc = NameSpace.GetCoercionFunc(Node.Type, ContextType);
 		if(CoercionFunc != null) {
@@ -164,7 +163,7 @@ public abstract class ZTypeChecker extends ZVisitor {
 			@Var int i = 0;
 			while(i < ParamList.size()) {
 				ZNode SubNode = ParamList.get(i);
-				SubNode = this.CheckType(SubNode, NameSpace, ZSystem.VarType);
+				SubNode = this.CheckType(SubNode, NameSpace, ZType.VarType);
 				ParamList.set(i, SubNode);
 				if(SubNode.IsVarType()) {
 					AllTyped = false;
@@ -209,7 +208,7 @@ public abstract class ZTypeChecker extends ZVisitor {
 
 	public final void TypedNodeIf(ZNode Node, ZType Type, ZNode P1) {
 		if(P1.IsVarType()) {
-			Node.Type = ZSystem.VarType;
+			Node.Type = ZType.VarType;
 		}
 		else {
 			Node.Type = Type;
@@ -219,7 +218,7 @@ public abstract class ZTypeChecker extends ZVisitor {
 
 	public final void TypedNodeIf2(ZNode Node, ZType Type, ZNode P1, ZNode P2) {
 		if(P1.IsVarType() || P2.IsVarType()) {
-			Node.Type = ZSystem.VarType;
+			Node.Type = ZType.VarType;
 		}
 		else {
 			Node.Type = Type;
@@ -229,7 +228,7 @@ public abstract class ZTypeChecker extends ZVisitor {
 
 	public final void TypedNodeIf3(ZNode Node, ZType Type, ZNode P1, ZNode P2, ZNode P3) {
 		if(P1.IsVarType() || P2.IsVarType() || P3.IsVarType()) {
-			Node.Type = ZSystem.VarType;
+			Node.Type = ZType.VarType;
 		}
 		else {
 			Node.Type = Type;
@@ -239,7 +238,7 @@ public abstract class ZTypeChecker extends ZVisitor {
 
 	public final void Todo(ZNode Node) {
 		this.Logger.ReportWarning(Node.SourceToken, "TODO: unimplemented type checker node: " + Node.getClass().getSimpleName());
-		Node.Type = ZSystem.VarType;
+		Node.Type = ZType.VarType;
 		this.ReturnedNode = Node;
 	}
 

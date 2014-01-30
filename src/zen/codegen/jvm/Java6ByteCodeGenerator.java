@@ -106,13 +106,13 @@ import zen.deps.LibNative;
 import zen.deps.NativeTypeTable;
 import zen.deps.Var;
 import zen.deps.ZenMap;
-import zen.lang.ZSystem;
 import zen.lang.ZenEngine;
 import zen.lang.ZenTypeSafer;
 import zen.parser.ZGenerator;
 import zen.parser.ZNameSpace;
 import zen.type.ZFuncType;
 import zen.type.ZType;
+import zen.type.ZTypePool;
 
 public class Java6ByteCodeGenerator extends ZGenerator {
 	AsmMethodBuilder CurrentBuilder;
@@ -161,9 +161,9 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 			} catch (SecurityException e) {
 			} catch (NoSuchFieldException e) {
 			}
-			return ZSystem.VoidType;     // undefined
+			return ZType.VoidType;     // undefined
 		}
-		return ZSystem.VarType;     // undefined
+		return ZType.VarType;     // undefined
 	}
 
 	@Override public ZType GetSetterType(ZType RecvType, String FieldName) {
@@ -177,9 +177,9 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 			} catch (SecurityException e) {
 			} catch (NoSuchFieldException e) {
 			}
-			return ZSystem.VoidType;     // undefined
+			return ZType.VoidType;     // undefined
 		}
-		return ZSystem.VarType;     // undefined
+		return ZType.VarType;     // undefined
 	}
 
 	private boolean MatchParam(Class<?>[] jParams, ArrayList<ZNode> ParamList) {
@@ -239,7 +239,7 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 					j = j + 1;
 				}
 			}
-			return ZSystem.LookupFuncType(TypeList);
+			return ZTypePool.LookupFuncType(TypeList);
 		}
 		return null;
 	}

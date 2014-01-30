@@ -38,6 +38,7 @@ import zen.lang.ZenEngine;
 import zen.lang.ZenGrammar;
 import zen.parser.ZLogger;
 import zen.parser.ZParserConst;
+import zen.type.ZType;
 
 public class ZenMain {
 	private static jline.ConsoleReader ConsoleReader = null;
@@ -179,7 +180,7 @@ public class ZenMain {
 		if (!(Index < Args.length)) {
 			ShellMode = true;
 		}
-		@Var ZenArray<String> ARGV = ZenArray.NewZenArray(ZSystem.StringType);
+		@Var ZenArray<String> ARGV = ZenArray.NewZenArray(ZType.StringType);
 		while (Index < Args.length) {
 			ARGV.add(Args[Index]);
 			Index += 1;
