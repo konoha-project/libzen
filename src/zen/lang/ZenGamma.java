@@ -6,6 +6,7 @@ import zen.ast.ZIntNode;
 import zen.ast.ZNode;
 import zen.ast.ZNullNode;
 import zen.ast.ZSymbolNode;
+import zen.deps.LibNative;
 import zen.deps.Nullable;
 import zen.deps.Var;
 import zen.parser.ZNameSpace;
@@ -15,23 +16,60 @@ import zen.type.ZType;
 public class ZenGamma {
 
 	public static void Debug(String Message) {
-		//LibNative.Debug(Message);
+		LibNative.Debug(Message);
 	}
 
-	static ZFunc GetFunc(ZNameSpace NameSpace, String Key, @Nullable ZFunc DefVal) {
-		@Var Object Func = NameSpace.GetSymbol(Key);
-		ZenGamma.Debug("Signature="+Key+ ", " + Func);
-		if(Func instanceof ZFunc) {
-			return (ZFunc)Func;
+	static ZFunc GetFunc(ZNameSpace NameSpace, String GlobalName, @Nullable ZFunc DefVal) {
+		@Var ZFunc Func = NameSpace.Generator.GetDefinedFunc(GlobalName);
+		Debug("GlobalKey="+GlobalName + ", " + Func);
+		if(Func == null) {
+			return DefVal;
 		}
-		return DefVal;
+		return Func;
 	}
 
 	static ZFunc GetFunc(ZNameSpace NameSpace, String FuncName, ZType FuncType, @Nullable ZFunc DefVal) {
 		return ZenGamma.GetFunc(NameSpace, FuncType.StringfySignature(FuncName), DefVal);
 	}
 
+	static ZFunc LookupFunc(ZNameSpace NameSpace, String FuncName, ZType RecvType, int FuncParamSize) {
+		@Var String Signature = ZFunc.StringfySignature(FuncName, FuncParamSize, RecvType);
+		@Var ZFunc Func = NameSpace.Generator.GetDefinedFunc(Signature);
+		if(Func != null) {
+			return Func;
+		}
+		if(RecvType.IsIntType()) {
+			Signature = ZFunc.StringfySignature(FuncName, FuncParamSize, ZType.FloatType);
+			Func = NameSpace.Generator.GetDefinedFunc(Signature);
+			if(Func != null) {
+				return Func;
+			}
+		}
+		if(RecvType.IsFloatType()) {
+			Signature = ZFunc.StringfySignature(FuncName, FuncParamSize, ZType.IntType);
+			Func = NameSpace.Generator.GetDefinedFunc(Signature);
+			if(Func != null) {
+				return Func;
+			}
+		}
+		RecvType = RecvType.GetSuperType();
+		while(RecvType != null) {
+			Signature = ZFunc.StringfySignature(FuncName, FuncParamSize, RecvType);
+			Func = NameSpace.Generator.GetDefinedFunc(Signature);
+			if(Func != null) {
+				return Func;
+			}
+			if(RecvType.IsVarType()) {
+				break;
+			}
+			RecvType = RecvType.GetSuperType();
+		}
+		return null;
+	}
+
+
 	static void DefineFunc(ZNameSpace NameSpace, ZFunc Func) {
+		Debug("def GlobalKey="+Func.GetSignature() + ", " + Func);
 		NameSpace.Generator.SetDefinedFunc(Func);
 	}
 

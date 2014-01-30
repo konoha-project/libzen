@@ -16,6 +16,8 @@ public final class ZVarScope {
 	@Field public ZLogger Logger;
 	@Field ArrayList<ZVarType> VarList;
 	@Field int VarNodeCount = 0;
+	@Field int UnresolvedSymbolCount = 0;
+
 
 	public ZVarScope(ZVarScope Parent, ZLogger Logger, ArrayList<ZVarType> VarList) {
 		this.Parent = Parent;
@@ -31,6 +33,10 @@ public final class ZVarScope {
 			VarType = new ZVarType(this.VarList, Name, SourceToken);
 		}
 		return VarType;
+	}
+
+	public final void FoundUnresolvedFuncName(String FuncName) {
+		this.UnresolvedSymbolCount = this.UnresolvedSymbolCount + 1;
 	}
 
 	public final void CheckVarNode(ZType ContextType, ZNode Node) {
@@ -51,6 +57,7 @@ public final class ZVarScope {
 		while(true) {
 			@Var int i = 0;
 			this.VarNodeCount = 0;
+			this.UnresolvedSymbolCount = 0;
 			while(i < StmtList.size()) {
 				StmtList.set(i, TypeSafer.CheckType(StmtList.get(i), NameSpace, ZType.VoidType));
 				i = i + 1;
@@ -70,12 +77,19 @@ public final class ZVarScope {
 		@Var int PrevCount = -1;
 		while(true) {
 			this.VarNodeCount = 0;
+			this.UnresolvedSymbolCount = 0;
 			TypeSafer.DefineFunction(NameSpace, FunctionNode, false/*Enforced*/);
 			FunctionNode.BodyNode = (ZBlockNode)TypeSafer.CheckType(FunctionNode.BodyNode, NameSpace, ZType.VoidType);
 			if(this.VarNodeCount == 0 || PrevCount == this.VarNodeCount) {
 				break;
 			}
 			PrevCount = this.VarNodeCount;
+		}
+		if(this.UnresolvedSymbolCount == 0) {
+			TypeSafer.DefineFunction(NameSpace, FunctionNode, true);
+		}
+		else {
+			TypeSafer.DefineFunction(NameSpace, FunctionNode, false/*Enforced*/);
 		}
 	}
 	//	public void Dump() {

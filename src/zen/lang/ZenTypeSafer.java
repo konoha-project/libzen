@@ -398,8 +398,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 		}
 		this.TypeCheckNodeList(NameSpace, Node.ParamList);
 		@Var int FuncParamSize = Node.ParamList.size() + 1;
-		@Var String Signature = ZFunc.StringfySignature(Node.MethodName, FuncParamSize, Node.RecvNode.Type);
-		@Var ZFunc Func = ZenGamma.GetFunc(NameSpace, Signature, null);
+		@Var ZFunc Func = ZenGamma.LookupFunc(NameSpace, Node.MethodName, Node.RecvNode.Type, FuncParamSize);
 		if(Func != null) {
 			ZFuncCallNode FuncCall = Node.ToStaticFuncCall(Func);
 			this.TypeCheckFuncCall(FuncCall, NameSpace, Func.GetFuncType());
@@ -408,21 +407,23 @@ public class ZenTypeSafer extends ZTypeChecker {
 		this.TypeCheckMethodCall(Node, NameSpace);
 	}
 
-	private boolean IsFuncName(ZFuncCallNode Node1, ZNameSpace NameSpace) {
-		if(Node1.FuncNode instanceof ZGetNameNode && Node1.FuncNode.IsVarType()) {
-			@Var ZGetNameNode Node = (ZGetNameNode)Node1.FuncNode;
+	private boolean IsFuncName(ZFuncCallNode FuncCallNode, ZNameSpace NameSpace) {
+		if(FuncCallNode.FuncNode instanceof ZGetNameNode && FuncCallNode.FuncNode.IsVarType()) {
+			@Var ZGetNameNode Node = (ZGetNameNode)FuncCallNode.FuncNode;
 			@Var ZVariable VarInfo = NameSpace.GetLocalVariable(Node.VarName);
 			if(VarInfo == null || !VarInfo.VarType.IsVarType() || !VarInfo.VarType.IsFuncType()) {
-				Node1.ResolvedFuncName = Node.VarName;
+				FuncCallNode.ResolvedFuncName = Node.VarName;
 			}
-			if(Node1.ResolvedFuncName != null) {
-				if(Node1.ResolvedFuncType == null) {
-					@Var int FuncParamSize = Node1.ParamList.size();
-					@Var ZType RecvType = Node1.GetRecvType();
-					@Var String Signature = ZFunc.StringfySignature(Node1.ResolvedFuncName, FuncParamSize, RecvType);
-					@Var ZFunc Func = ZenGamma.GetFunc(NameSpace, Signature, null);
+			if(FuncCallNode.ResolvedFuncName != null) {
+				if(FuncCallNode.ResolvedFuncType == null) {
+					@Var int FuncParamSize = FuncCallNode.ParamList.size();
+					@Var ZType RecvType = FuncCallNode.GetRecvType();
+					@Var ZFunc Func = ZenGamma.LookupFunc(NameSpace, FuncCallNode.ResolvedFuncName, RecvType, FuncParamSize);
 					if(Func != null) {
-						Node1.ResolvedFuncType = Func.GetFuncType();
+						FuncCallNode.ResolvedFuncType = Func.GetFuncType();
+					}
+					else {
+						this.VarScope.FoundUnresolvedFuncName(FuncCallNode.ResolvedFuncName);
 					}
 				}
 				return true;
@@ -707,6 +708,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 	@Override public void DefineFunction(ZNameSpace NameSpace, ZFunctionNode FunctionNode, boolean Enforced) {
 		if(FunctionNode.FuncName != null && FunctionNode.ReferenceName == null) {
 			@Var ZFuncType FuncType = FunctionNode.GetFuncType(null);
+			System.err.println("guessing FuncType " + FuncType);
 			if(Enforced || !FuncType.IsVarType()) {
 				@Var ZFunc Func = ZenGamma.GetFunc(NameSpace, FunctionNode.FuncName, FuncType, null);
 				if(Func != null) {

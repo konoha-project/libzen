@@ -205,10 +205,12 @@ public class JavaReflectionEngine extends ZenEngine {
 	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
 		if(Node.ResolvedFuncName != null) {
 			if(Node.ResolvedFuncType == null) {
-
+				this.Logger.ReportWarning(Node.SourceToken, "function: " + Node.ResolvedFuncName + " is unresolved");
 			}
-			Method sMethod = ((Java6ByteCodeGenerator)this.Generator).GetStaticFuncMethod(Node.ResolvedFuncType.StringfySignature(Node.ResolvedFuncName));
-			this.EvalStaticMethod(Node, sMethod, ((Java6ByteCodeGenerator)this.Generator).PackNodes(null, Node.ParamList));
+			else {
+				Method sMethod = ((Java6ByteCodeGenerator)this.Generator).GetStaticFuncMethod(Node.ResolvedFuncType.StringfySignature(Node.ResolvedFuncName));
+				this.EvalStaticMethod(Node, sMethod, ((Java6ByteCodeGenerator)this.Generator).PackNodes(null, Node.ParamList));
+			}
 		}
 		else {
 			Method sMethod = NativeMethodTable.GetStaticMethod("InvokeFunc");
