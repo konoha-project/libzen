@@ -13,7 +13,7 @@ public final class ZFuncType extends ZType {
 	@Field private boolean HasGreekType = false;
 
 	public ZFuncType(String ShortName, ZType[] UniqueTypeParams) {
-		super(ZTypeFlag.UniqueType, ShortName, ZSystem.TopType);
+		super(ZTypeFlag.UniqueType, ShortName, ZSystem.VarType);
 		if(UniqueTypeParams == null) {
 			this.TypeParams = new ZType[1];
 			this.TypeParams[0] = ZSystem.VarType;

@@ -33,7 +33,7 @@ public class ZGeneric1Type extends ZType {
 	@Field public ZType         ParamType;
 
 	public ZGeneric1Type(int TypeFlag, String ShortName, @Nullable ZType BaseType, ZType ParamType) {
-		super(TypeFlag, ShortName, ZSystem.TopType);
+		super(TypeFlag, ShortName, ZSystem.VarType);
 		this.BaseType = BaseType;
 		if(this.BaseType == null) {
 			this.BaseType = this;
