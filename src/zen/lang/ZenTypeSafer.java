@@ -356,9 +356,10 @@ public class ZenTypeSafer extends ZTypeChecker {
 		if(FuncType != null) {
 			@Var int i = 0;
 			@Var boolean IsAllTyped = true;
+			@Var int StaticShift = FuncType.GetParamSize() - Node.ParamList.size();
 			while(i < Node.ParamList.size()) {
 				@Var ZNode SubNode = Node.ParamList.get(i);
-				SubNode = this.CheckType(SubNode, NameSpace, FuncType.GetParamType(i+2));
+				SubNode = this.CheckType(SubNode, NameSpace, FuncType.GetParamType(i+StaticShift));
 				Node.ParamList.set(i, SubNode);
 				if(SubNode.IsUntyped()) {
 					IsAllTyped = false;
@@ -367,6 +368,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 			}
 			if(IsAllTyped) {
 				this.TypedNode(Node, FuncType.GetReturnType());
+				return;
 			}
 		}
 		this.TypedNode(Node, ZSystem.VarType);
@@ -680,7 +682,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 		this.VarScope = new ZVarScope(this.VarScope, this.Logger, null);
 		@Var int i = 0;
 		while(i < FunctionNode.ParamList.size()) {
-			@Var ZParamNode ParamNode = (ZParamNode)FunctionNode.ParamList.get(i);
+			@Var ZParamNode ParamNode = FunctionNode.ParamList.get(i);
 			ParamNode.Type = this.VarScope.NewVarType(ParamNode.Type, ParamNode.Name, ParamNode.SourceToken);
 			if(FuncType != null) {
 				ParamNode.Type.Maybe(FuncType.GetParamType(i+1), null);

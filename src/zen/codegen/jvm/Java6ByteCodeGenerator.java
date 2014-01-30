@@ -36,6 +36,7 @@ import static org.objectweb.asm.Opcodes.IFEQ;
 import static org.objectweb.asm.Opcodes.IFNE;
 import static org.objectweb.asm.Opcodes.INVOKEINTERFACE;
 import static org.objectweb.asm.Opcodes.INVOKESPECIAL;
+import static org.objectweb.asm.Opcodes.INVOKESTATIC;
 import static org.objectweb.asm.Opcodes.INVOKEVIRTUAL;
 import static org.objectweb.asm.Opcodes.IRETURN;
 import static org.objectweb.asm.Opcodes.NEW;
@@ -130,7 +131,7 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 	}
 
 	@Override public boolean StartCodeGeneration(ZNode Node,  boolean AllowLazy, boolean IsInteractive) {
-		if (AllowLazy && Node.IsVarType()) {
+		if (AllowLazy && Node.IsUntyped()) {
 			return false;
 		}
 		Node.Accept(this);
@@ -181,6 +182,30 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 		return ZSystem.VarType;     // undefined
 	}
 
+	private boolean MatchParam(Class<?>[] jParams, ArrayList<ZNode> ParamList) {
+		if(jParams.length != ParamList.size()) {
+			return false;
+		}
+		for(int j = 0; j < jParams.length; j++) {
+			if(jParams[j] == Object.class) {
+				continue; // accepting all types
+			}
+			@Var ZType jParamType = NativeTypeTable.GetZenType(jParams[j]);
+			@Var ZType ParamType = ParamList.get(j).Type;
+			if(jParamType == ParamType || jParamType.Accept(ParamList.get(j).Type)) {
+				continue;
+			}
+			if(jParamType.IsFloatType() && ParamType.IsIntType()) {
+				continue;
+			}
+			if(jParamType.IsIntType() && ParamType.IsFloatType()) {
+				continue;
+			}
+			return false;
+		}
+		return true;
+	}
+
 	Constructor<?> GetConstructor(ZType RecvType, ArrayList<ZNode> ParamList) {
 		Class<?> NativeClass = NativeTypeTable.GetJavaClass(RecvType);
 		if(NativeClass != null) {
@@ -191,22 +216,7 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 					if(!Modifier.isPublic(jMethod.getModifiers())) {
 						continue;
 					}
-					Class<?>[] JParamClass = jMethod.getParameterTypes();
-					if(JParamClass.length != ParamList.size()) {
-						continue;
-					}
-					//this.Debug("searching.. method: " + jMethod);
-					for(int j = 0; j < JParamClass.length; j++) {
-						if(JParamClass[j] == Object.class) {
-							continue; // accepting all types
-						}
-						@Var ZType JParamType = NativeTypeTable.GetZenType(JParamClass[j]);
-						if(!JParamType.Accept(ParamList.get(j).Type)) {
-							jMethod = null;
-							break;
-						}
-					}
-					if(jMethod != null) {
+					if(this.MatchParam(jMethod.getParameterTypes(), ParamList)) {
 						return jMethod;
 					}
 				}
@@ -244,25 +254,10 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 					if(!MethodName.equals(jMethod.getName())) {
 						continue;
 					}
-					if(!Modifier.isPublic(jMethod.getModifiers()) && Modifier.isStatic(jMethod.getModifiers())) {
+					if(!Modifier.isPublic(jMethod.getModifiers())) {
 						continue;
 					}
-					Class<?>[] JParamClass = jMethod.getParameterTypes();
-					if(JParamClass.length != ParamList.size()) {
-						continue;
-					}
-					//this.Debug("searching.. method: " + jMethod);
-					for(int j = 0; j < JParamClass.length; j++) {
-						if(JParamClass[j] == Object.class) {
-							continue; // accepting all types
-						}
-						@Var ZType JParamType = NativeTypeTable.GetZenType(JParamClass[j]);
-						if(!JParamType.Accept(ParamList.get(j).Type)) {
-							jMethod = null;
-							break;
-						}
-					}
-					if(jMethod != null) {
+					if(this.MatchParam(jMethod.getParameterTypes(), ParamList)) {
 						return jMethod;
 					}
 				}
@@ -275,7 +270,6 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 	@Override public ZFuncType GetMethodFuncType(ZType RecvType, String MethodName, ArrayList<ZNode> ParamList) {
 		Method jMethod = this.GetMethod(RecvType, MethodName, ParamList);
 		if(jMethod != null) {
-			//this.Debug("matched: " + jMethod);
 			return NativeTypeTable.ConvertToFuncType(jMethod);
 		}
 		return null;
@@ -440,22 +434,28 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 		this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.RecvNode, Node.IndexNode, Node.ValueNode});
 	}
 
+	private int GetInvokeType(Method jMethod) {
+		if(Modifier.isStatic(jMethod.getModifiers())) {
+			return INVOKESTATIC;
+		}
+		if(Modifier.isInterface(jMethod.getModifiers())) {
+			return INVOKEINTERFACE;
+		}
+		return INVOKEVIRTUAL;
+	}
+
 	@Override public void VisitMethodCallNode(ZMethodCallNode Node) {
 		this.CurrentBuilder.SetLineNumber(Node);
 		Method jMethod = this.GetMethod(Node.RecvNode.Type, Node.MethodName, Node.ParamList);
 		if(jMethod != null) {
-			Node.RecvNode.Accept(this);
+			if(!Modifier.isStatic(jMethod.getModifiers())) {
+				this.CurrentBuilder.PushNode(null, Node.RecvNode);
+			}
 			Class<?>[] P = jMethod.getParameterTypes();
 			for(int i = 0; i < P.length; i++) {
 				this.CurrentBuilder.PushNode(P[i], Node.ParamList.get(i));
 			}
-			int inst;
-			if(Modifier.isInterface(jMethod.getModifiers())) {
-				inst = INVOKEINTERFACE;
-			}
-			else {
-				inst = INVOKEVIRTUAL;
-			}
+			int inst = this.GetInvokeType(jMethod);
 			String owner = Type.getInternalName(jMethod.getDeclaringClass());
 			this.CurrentBuilder.visitMethodInsn(inst, owner, jMethod.getName(), Type.getMethodDescriptor(jMethod));
 			this.CurrentBuilder.CheckReturnCast(Node, jMethod.getReturnType());

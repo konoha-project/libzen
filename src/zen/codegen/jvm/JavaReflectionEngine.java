@@ -29,6 +29,7 @@ package zen.codegen.jvm;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
 import zen.ast.ZBinaryNode;
 import zen.ast.ZCastNode;
@@ -55,10 +56,10 @@ public class JavaReflectionEngine extends ZenEngine {
 		super(TypeChecker, Generator);
 	}
 
-	void EvalMethod(ZNode Node, Method sMethod, ZNode RecvNode, ZNode[] Nodes) {
+	void EvalMethod(ZNode Node, Method jMethod, ZNode RecvNode, ZNode[] Nodes) {
 		try {
 			Object Recv = null;
-			if(RecvNode != null) {
+			if(RecvNode != null && !Modifier.isStatic(jMethod.getModifiers())) {
 				Recv = this.Eval(RecvNode);
 			}
 			Object Values[] = new Object[Nodes.length];
@@ -66,7 +67,7 @@ public class JavaReflectionEngine extends ZenEngine {
 				Values[i] = this.Eval(Nodes[i]);
 			}
 			if(this.IsVisitable()) {
-				this.EvaledValue = sMethod.invoke(Recv, Values);
+				this.EvaledValue = jMethod.invoke(Recv, Values);
 			}
 		} catch (Exception e) {
 			this.Logger.ReportInfo(Node.SourceToken, "runtime error: " + e);
@@ -195,7 +196,7 @@ public class JavaReflectionEngine extends ZenEngine {
 				} catch (IllegalAccessException e1) {
 					LibNative.FixMe(e1);
 				} catch (InvocationTargetException e1) {
-					this.Logger.ReportWarning(Node.SourceToken, "runtime error: " + e1.getMessage());
+					this.Logger.ReportWarning(Node.SourceToken, "runtime error: " + e1);
 				}
 			}
 		}
