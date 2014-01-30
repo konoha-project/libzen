@@ -680,6 +680,10 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 		return this.FuncMap.GetOrNull(FuncType.StringfySignature(FuncName));
 	}
 
+	public void VisitJvmFuncNode(JvmFuncNode Node) {
+		this.CurrentBuilder.visitFieldInsn(Opcodes.GETSTATIC, Node.ClassName, "FUNCTION", Node.FieldDesc);
+	}
+
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
 		@Var ZFuncType FuncType = Node.GetFuncType(null);
 		@Var JvmFuncNode FuncNode = new JvmFuncNode(FuncType, Node.FuncName);
@@ -703,7 +707,7 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 			//this.Debug("InteranalName: " +Type.getInternalName(FuncMethod.getDeclaringClass()));
 			this.FuncMap.put(FuncType.StringfySignature(Node.FuncName), FuncMethod);
 			FuncNode.FuncClass = FuncMethod.getDeclaringClass();
-			Node.NameSpace.SetTypedNode(Node.FuncName, FuncNode);
+			Node.NameSpace.SetLocalSymbol(Node.FuncName, FuncNode);
 		}
 		catch(Error e) {
 			e.printStackTrace();
@@ -711,9 +715,6 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 		this.CurrentBuilder = this.CurrentBuilder.Parent;
 	}
 
-	public void VisitJvmFuncNode(JvmFuncNode Node) {
-		this.CurrentBuilder.visitFieldInsn(Opcodes.GETSTATIC, Node.ClassName, "FUNCTION", Node.FieldDesc);
-	}
 
 	@Override public void VisitClassDeclNode(ZClassDeclNode Node) {
 		@Var AsmClassBuilder ClassBuilder = this.ClassLoader.NewClass(Node, Node.ClassName, Node.SuperType);

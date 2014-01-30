@@ -78,6 +78,7 @@ import zen.deps.Var;
 import zen.parser.ZLogger;
 import zen.parser.ZNameSpace;
 import zen.parser.ZUtils;
+import zen.parser.ZVariable;
 import zen.type.ZFuncType;
 import zen.type.ZGreekType;
 import zen.type.ZType;
@@ -224,16 +225,16 @@ public class ZenTypeSafer extends ZTypeChecker {
 
 	@Override public void VisitGetLocalNode(ZGetLocalNode Node) {
 		@Var ZNameSpace NameSpace = this.GetNameSpace();
-		@Var ZenVariable VarInfo = ZenGamma.GetLocalVariable(NameSpace, Node.VarName);
+		@Var ZVariable VarInfo = NameSpace.GetLocalVariable(Node.VarName);
 		if(VarInfo != null) {
 			Node.VarName = VarInfo.VarName;
 			Node.VarIndex = VarInfo.VarUniqueIndex;
 			@Var ZType VarType = VarInfo.VarType;
-			Node.IsCaptured = VarInfo.IsCaptured(NameSpace);
+			Node.IsCaptured = VarInfo.IsCaptured(this.CurrentFunctionNode);
 			this.TypedNode(Node, VarType);
 		}
 		else {
-			@Var ZNode ConstNode = NameSpace.GetSymbolNode(Node.VarName, Node.SourceToken);
+			@Var ZNode ConstNode = NameSpace.GetSymbolNode(Node.VarName);
 			if(ConstNode != null) {
 				this.Return(ConstNode);
 			}
@@ -245,16 +246,21 @@ public class ZenTypeSafer extends ZTypeChecker {
 
 	@Override public void VisitSetLocalNode(ZSetLocalNode Node) {
 		ZNameSpace NameSpace = this.GetNameSpace();
-		ZenVariable VarInfo = ZenGamma.GetLocalVariable(NameSpace, Node.VarName);
+		ZVariable VarInfo = NameSpace.GetLocalVariable(Node.VarName);
 		if(VarInfo == null) {
 			this.Return(ZenError.UndefinedName(Node, Node.VarName));
 		}
 		else {
 			Node.VarName = VarInfo.VarName;
 			Node.VarIndex = VarInfo.VarUniqueIndex;
-			Node.IsCaptured = VarInfo.IsCaptured(NameSpace);
-			Node.ValueNode = this.CheckType(Node.ValueNode, NameSpace, VarInfo.VarType);
-			this.TypedNodeIf(Node, ZType.VoidType, Node.ValueNode);
+			Node.IsCaptured = VarInfo.IsCaptured(this.CurrentFunctionNode);
+			if(Node.IsCaptured) {
+				this.Return(ZenError.ReadOnlyLocalVariable(Node, Node.VarName));
+			}
+			else {
+				Node.ValueNode = this.CheckType(Node.ValueNode, NameSpace, VarInfo.VarType);
+				this.TypedNodeIf(Node, ZType.VoidType, Node.ValueNode);
+			}
 		}
 	}
 
@@ -401,7 +407,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 	private boolean IsFuncName(ZFuncCallNode Node1, ZNameSpace NameSpace) {
 		if(Node1.FuncNode instanceof ZGetLocalNode && Node1.FuncNode.IsVarType()) {
 			@Var ZGetLocalNode Node = (ZGetLocalNode)Node1.FuncNode;
-			@Var ZenVariable VarInfo = ZenGamma.GetLocalVariable(NameSpace, Node.VarName);
+			@Var ZVariable VarInfo = NameSpace.GetLocalVariable(Node.VarName);
 			if(VarInfo == null || !VarInfo.VarType.IsVarType() || !VarInfo.VarType.IsFuncType()) {
 				Node1.ResolvedFuncName = Node.VarName;
 			}
@@ -582,7 +588,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 		@Var ZNameSpace NameSpace = this.GetNameSpace();
 		if(!(Node.DeclType instanceof ZVarType)) {
 			Node.DeclType = this.VarScope.NewVarType(Node.DeclType, Node.NativeName, Node.SourceToken);
-			ZenGamma.SetLocalVariable(Node.NameSpace, this.CurrentFunctionNode, Node.DeclType, Node.NativeName, Node.SourceToken);
+			Node.NameSpace.SetLocalVariable(this.CurrentFunctionNode, Node.DeclType, Node.NativeName, Node.SourceToken);
 		}
 		Node.InitNode = this.CheckType(Node.InitNode, NameSpace, Node.DeclType);
 		this.VisitBlockNode(Node);
@@ -688,7 +694,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 			if(FuncType != null) {
 				ParamNode.Type.Maybe(FuncType.GetParamType(i+1), null);
 			}
-			ZenGamma.SetLocalVariable(NameSpace, this.CurrentFunctionNode, ParamNode.Type, ParamNode.Name, null);
+			NameSpace.SetLocalVariable(this.CurrentFunctionNode, ParamNode.Type, ParamNode.Name, null);
 			i = i + 1;
 		}
 		FunctionNode.ReturnType = this.VarScope.NewVarType(FunctionNode.ReturnType, "return", FunctionNode.SourceToken);

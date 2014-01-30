@@ -37,7 +37,6 @@ import zen.ast.ZCastNode;
 import zen.ast.ZCatchNode;
 import zen.ast.ZClassDeclNode;
 import zen.ast.ZComparatorNode;
-import zen.ast.ZConstNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZFieldNode;
 import zen.ast.ZFloatNode;
@@ -79,7 +78,6 @@ import zen.parser.ZParserConst;
 import zen.parser.ZSyntaxPattern;
 import zen.parser.ZToken;
 import zen.parser.ZTokenContext;
-import zen.type.ZFuncType;
 import zen.type.ZType;
 import zen.type.ZTypePool;
 
@@ -144,7 +142,7 @@ public class ZenGrammar {
 		@Var boolean Matched = false;
 		while(NextPos > pos) {
 			@Var String Sub = LibZen.SubString(SourceText, pos, NextPos);
-			@Var ZSyntaxPattern Pattern = TokenContext.TopLevelNameSpace.GetExtendedSyntaxPattern(Sub);
+			@Var ZSyntaxPattern Pattern = TokenContext.TopLevelNameSpace.GetSuffixSyntaxPattern(Sub);
 			if(Pattern != null) {
 				Matched = true;
 				break;
@@ -395,16 +393,15 @@ public class ZenGrammar {
 
 	public static ZNode MatchType(ZNameSpace NameSpace, ZTokenContext TokenContext, ZNode LeftNode) {
 		@Var ZToken Token = TokenContext.GetTokenAndMoveForward();
-		@Var ZType Type = NameSpace.GetType(Token.ParsedText, Token);
-		if(Type != null) {
-			ZNode TypeNode = new ZTypeNode(Token, Type);
-			assert(TypeNode.Type != null);
+		@Var ZTypeNode TypeNode = NameSpace.GetTypeNode(Token.ParsedText, Token);
+		if(TypeNode != null) {
 			return TokenContext.ParsePatternAfter(NameSpace, TypeNode, "$TypeSuffix$", ZTokenContext.Optional);
 		}
 		return null; // Not Matched
 	}
 
 	public static ZNode MatchTypeSuffix(ZNameSpace NameSpace, ZTokenContext TokenContext, ZNode TypeNode) {
+		@Var ZToken SourceToken = TokenContext.GetToken();
 		if(TypeNode.Type.GetParamSize() > 0) {
 			if(TokenContext.MatchToken("<")) {  // Generics
 				@Var ArrayList<ZType> TypeList = new ArrayList<ZType>();
@@ -418,14 +415,14 @@ public class ZenGrammar {
 					}
 					TypeList.add(ParamTypeNode.Type);
 				}
-				TypeNode.Type = ZTypePool.GetGenericType(TypeNode.Type, 0, TypeList, true);
+				TypeNode = new ZTypeNode(SourceToken, ZTypePool.GetGenericType(TypeNode.Type, 0, TypeList, true));
 			}
 		}
 		while(TokenContext.MatchToken("[")) {  // Array
 			if(!TokenContext.MatchToken("]")) {
 				return null;
 			}
-			TypeNode.Type = ZTypePool.GetGenericType1(ZType.ArrayType, TypeNode.Type, true);
+			TypeNode = new ZTypeNode(SourceToken, ZTypePool.GetGenericType1(ZType.ArrayType, TypeNode.Type, true));
 		}
 		return TypeNode;
 	}
@@ -532,13 +529,13 @@ public class ZenGrammar {
 
 	public static ZNode MatchBinary(ZNameSpace NameSpace, ZTokenContext TokenContext, ZNode LeftNode) {
 		@Var ZToken Token = TokenContext.GetTokenAndMoveForward();
-		@Var ZBinaryNode BinaryNode = new ZBinaryNode(Token, LeftNode, NameSpace.GetExtendedSyntaxPattern(Token.ParsedText));
+		@Var ZBinaryNode BinaryNode = new ZBinaryNode(Token, LeftNode, NameSpace.GetSuffixSyntaxPattern(Token.ParsedText));
 		return BinaryNode.AppendParsedRightNode(NameSpace, TokenContext);
 	}
 
 	public static ZNode MatchComparator(ZNameSpace NameSpace, ZTokenContext TokenContext, ZNode LeftNode) {
 		@Var ZToken Token = TokenContext.GetTokenAndMoveForward();
-		@Var ZBinaryNode BinaryNode = new ZComparatorNode(Token, LeftNode, NameSpace.GetExtendedSyntaxPattern(Token.ParsedText));
+		@Var ZBinaryNode BinaryNode = new ZComparatorNode(Token, LeftNode, NameSpace.GetSuffixSyntaxPattern(Token.ParsedText));
 		return BinaryNode.AppendParsedRightNode(NameSpace, TokenContext);
 	}
 
@@ -556,12 +553,12 @@ public class ZenGrammar {
 	}
 
 	public static ZNode MatchAnd(ZNameSpace NameSpace, ZTokenContext TokenContext, ZNode LeftNode) {
-		@Var ZBinaryNode BinaryNode = new ZAndNode(TokenContext.GetTokenAndMoveForward(), LeftNode, NameSpace.GetExtendedSyntaxPattern("&&"));
+		@Var ZBinaryNode BinaryNode = new ZAndNode(TokenContext.GetTokenAndMoveForward(), LeftNode, NameSpace.GetSuffixSyntaxPattern("&&"));
 		return BinaryNode.AppendParsedRightNode(NameSpace, TokenContext);
 	}
 
 	public static ZNode MatchOr(ZNameSpace NameSpace, ZTokenContext TokenContext, ZNode LeftNode) {
-		@Var ZBinaryNode BinaryNode = new ZOrNode(TokenContext.GetTokenAndMoveForward(), LeftNode, NameSpace.GetExtendedSyntaxPattern("||"));
+		@Var ZBinaryNode BinaryNode = new ZOrNode(TokenContext.GetTokenAndMoveForward(), LeftNode, NameSpace.GetSuffixSyntaxPattern("||"));
 		return BinaryNode.AppendParsedRightNode(NameSpace, TokenContext);
 	}
 
@@ -663,39 +660,40 @@ public class ZenGrammar {
 	}
 
 	public static ZNode MatchLetDecl(ZNameSpace NameSpace, ZTokenContext TokenContext, ZNode LeftNode) {
-		@Var ZToken SourceToken = TokenContext.GetTokenAndMoveForward(); /* let */
-		@Var ZToken SymbolToken = TokenContext.GetTokenAndMoveForward(); /* name */
-		@Var String SymbolName = SymbolToken.ParsedText;
-		if(TokenContext.MatchToken(".")) {
-			@Var String ClassName = SymbolToken.ParsedText;
-			@Var ZType SymbolClass = NameSpace.GetType(ClassName, SymbolToken);
-			if(SymbolClass == null) {
-				return new ZErrorNode(SymbolToken, ClassName + " is not type");
-			}
-			SymbolToken = TokenContext.GetTokenAndMoveForward(); /* class name */
-			SymbolName = ZNameSpace.StringfyClassStaticSymbol(SymbolClass, SymbolName);
-			SourceToken.AddTypeInfoToErrorMessage(SymbolClass);
-		}
-		@Var ZType SymbolType = TokenContext.ParseType(NameSpace, "$TypeAnnotation$", ZType.VarType);
-		if(!TokenContext.MatchToken("=")) {
-			return TokenContext.CreateExpectedErrorNode(SymbolToken, "=");
-		}
-		@Var ZNode ValueNode = TokenContext.ParsePattern(NameSpace, "$Expression$", ZTokenContext.Required);
-		if(ValueNode instanceof ZStringNode && SymbolType.IsFuncType()) {
-			@Var ZMacro MacroFunc = new ZMacro(0, SymbolName, (ZFuncType)SymbolType, ((ZStringNode)ValueNode).StringValue);
-			//			NameSpace.AppendFuncName(MacroFunc, SourceToken);
-			return ValueNode.Done();
-		}
-		if(ValueNode.IsErrorNode()) {
-			return ValueNode;
-		}
-		//ValueNode = NameSpace.TypeCheck(ValueNode, NameSpace.GetSymbolType(ConstName), ZenParserConst.DefaultTypeCheckPolicy);
-		ZConstNode ConstNode = ValueNode.ToConstNode(true);
-		if(!ConstNode.IsErrorNode()) {
-			NameSpace.SetSymbol(SymbolName, ConstNode.GetValue(), SourceToken);
-			return ConstNode.Done();
-		}
-		return ConstNode;
+		//		@Var ZToken SourceToken = TokenContext.GetTokenAndMoveForward(); /* let */
+		//		@Var ZToken SymbolToken = TokenContext.GetTokenAndMoveForward(); /* name */
+		//		@Var String SymbolName = SymbolToken.ParsedText;
+		//		if(TokenContext.MatchToken(".")) {
+		//			@Var String ClassName = SymbolToken.ParsedText;
+		//			@Var ZType SymbolClass = NameSpace.GetType(ClassName, SymbolToken);
+		//			if(SymbolClass == null) {
+		//				return new ZErrorNode(SymbolToken, ClassName + " is not type");
+		//			}
+		//			SymbolToken = TokenContext.GetTokenAndMoveForward(); /* class name */
+		//			SymbolName = ZNameSpace.StringfyClassStaticSymbol(SymbolClass, SymbolName);
+		//			SourceToken.AddTypeInfoToErrorMessage(SymbolClass);
+		//		}
+		//		@Var ZType SymbolType = TokenContext.ParseType(NameSpace, "$TypeAnnotation$", ZType.VarType);
+		//		if(!TokenContext.MatchToken("=")) {
+		//			return TokenContext.CreateExpectedErrorNode(SymbolToken, "=");
+		//		}
+		//		@Var ZNode ValueNode = TokenContext.ParsePattern(NameSpace, "$Expression$", ZTokenContext.Required);
+		//		if(ValueNode instanceof ZStringNode && SymbolType.IsFuncType()) {
+		//			@Var ZMacro MacroFunc = new ZMacro(0, SymbolName, (ZFuncType)SymbolType, ((ZStringNode)ValueNode).StringValue);
+		//			//			NameSpace.AppendFuncName(MacroFunc, SourceToken);
+		//			return ValueNode.Done();
+		//		}
+		//		if(ValueNode.IsErrorNode()) {
+		//			return ValueNode;
+		//		}
+		//		//ValueNode = NameSpace.TypeCheck(ValueNode, NameSpace.GetSymbolType(ConstName), ZenParserConst.DefaultTypeCheckPolicy);
+		//		ZConstNode ConstNode = ValueNode.ToConstNode(true);
+		//		if(!ConstNode.IsErrorNode()) {
+		//			NameSpace.SetSymbol(SymbolName, ConstNode.GetValue(), SourceToken);
+		//			return ConstNode.Done();
+		//		}
+		//		return ConstNode;
+		return null;
 	}
 
 	public static ZNode MatchIdentifier(ZNameSpace NameSpace, ZTokenContext TokenContext, ZNode LeftNode) {
@@ -874,15 +872,15 @@ public class ZenGrammar {
 
 	public static void ImportGrammar(ZNameSpace NameSpace, Class<?> Grammar) {
 		// defined type system
-		NameSpace.AppendTypeName(ZType.VoidType,  null);
-		NameSpace.AppendTypeName(ZType.BooleanType, null);
-		NameSpace.AppendTypeName(ZType.IntType, null);
-		NameSpace.AppendTypeName(ZType.FloatType, null);
-		NameSpace.AppendTypeName(ZType.StringType, null);
-		NameSpace.AppendTypeName(ZType.TypeType, null);
-		NameSpace.AppendTypeName(ZType.ArrayType, null);
-		NameSpace.AppendTypeName(ZType.MapType, null);
-		NameSpace.AppendTypeName(ZType.FuncType, null);
+		NameSpace.SetTypeName(ZType.VoidType,  null);
+		NameSpace.SetTypeName(ZType.BooleanType, null);
+		NameSpace.SetTypeName(ZType.IntType, null);
+		NameSpace.SetTypeName(ZType.FloatType, null);
+		NameSpace.SetTypeName(ZType.StringType, null);
+		NameSpace.SetTypeName(ZType.TypeType, null);
+		NameSpace.SetTypeName(ZType.ArrayType, null);
+		NameSpace.SetTypeName(ZType.MapType, null);
+		NameSpace.SetTypeName(ZType.FuncType, null);
 
 		NameSpace.AppendTokenFunc(" \t", LibNative.LoadTokenFunc(Grammar, "WhiteSpaceToken"));
 		NameSpace.AppendTokenFunc("\n",  LibNative.LoadTokenFunc(Grammar, "IndentToken"));
@@ -898,83 +896,83 @@ public class ZenGrammar {
 		@Var ZFunc MatchBinary    = LibNative.LoadMatchFunc(Grammar, "MatchBinary");
 		@Var ZFunc MatchComparator    = LibNative.LoadMatchFunc(Grammar, "MatchComparator");
 
-		NameSpace.AppendSyntax("null", LibNative.LoadMatchFunc(Grammar, "MatchNull"));
-		NameSpace.AppendSyntax("true", LibNative.LoadMatchFunc(Grammar, "MatchTrue"));
-		NameSpace.AppendSyntax("false", LibNative.LoadMatchFunc(Grammar, "MatchFalse"));
+		NameSpace.DefineSyntax("null", LibNative.LoadMatchFunc(Grammar, "MatchNull"));
+		NameSpace.DefineSyntax("true", LibNative.LoadMatchFunc(Grammar, "MatchTrue"));
+		NameSpace.DefineSyntax("false", LibNative.LoadMatchFunc(Grammar, "MatchFalse"));
 
-		NameSpace.AppendSyntax("+", MatchUnary);
-		NameSpace.AppendSyntax("-", MatchUnary);
-		NameSpace.AppendSyntax("~", MatchUnary);
-		NameSpace.AppendSyntax("!", LibNative.LoadMatchFunc(Grammar, "MatchNot"));
+		NameSpace.DefineSyntax("+", MatchUnary);
+		NameSpace.DefineSyntax("-", MatchUnary);
+		NameSpace.DefineSyntax("~", MatchUnary);
+		NameSpace.DefineSyntax("!", LibNative.LoadMatchFunc(Grammar, "MatchNot"));
 		//		NameSpace.AppendSyntax("++ --", LibNative.LoadMatchFunc(Grammar, "MatchIncl"));
 
-		NameSpace.AppendSuffixSyntax("* / %", ZenPrecedence.CStyleMUL, MatchBinary);
-		NameSpace.AppendSuffixSyntax("+ -", ZenPrecedence.CStyleADD, MatchBinary);
+		NameSpace.DefineSuffixSyntax("* / %", ZenPrecedence.CStyleMUL, MatchBinary);
+		NameSpace.DefineSuffixSyntax("+ -", ZenPrecedence.CStyleADD, MatchBinary);
 
-		NameSpace.AppendSuffixSyntax("< <= > >=", ZenPrecedence.CStyleCOMPARE, MatchComparator);
-		NameSpace.AppendSuffixSyntax("== !=", ZenPrecedence.CStyleEquals, MatchComparator);
+		NameSpace.DefineSuffixSyntax("< <= > >=", ZenPrecedence.CStyleCOMPARE, MatchComparator);
+		NameSpace.DefineSuffixSyntax("== !=", ZenPrecedence.CStyleEquals, MatchComparator);
 
-		NameSpace.AppendSuffixSyntax("<< >>", ZenPrecedence.CStyleSHIFT, MatchBinary);
-		NameSpace.AppendSuffixSyntax("&", ZenPrecedence.CStyleBITAND, MatchBinary);
-		NameSpace.AppendSuffixSyntax("|", ZenPrecedence.CStyleBITOR, MatchBinary);
-		NameSpace.AppendSuffixSyntax("^", ZenPrecedence.CStyleBITXOR, MatchBinary);
+		NameSpace.DefineSuffixSyntax("<< >>", ZenPrecedence.CStyleSHIFT, MatchBinary);
+		NameSpace.DefineSuffixSyntax("&", ZenPrecedence.CStyleBITAND, MatchBinary);
+		NameSpace.DefineSuffixSyntax("|", ZenPrecedence.CStyleBITOR, MatchBinary);
+		NameSpace.DefineSuffixSyntax("^", ZenPrecedence.CStyleBITXOR, MatchBinary);
 
-		NameSpace.AppendSuffixSyntax("=", ZenPrecedence.CStyleAssign | ZParserConst.LeftJoin, MatchBinary);
+		NameSpace.DefineSuffixSyntax("=", ZenPrecedence.CStyleAssign | ZParserConst.LeftJoin, MatchBinary);
 		//		NameSpace.AppendSuffixSyntax("+= -= *= /= %= <<= >>= &= |= ^=", ZenPrecedence.CStyleAssign, MatchBinary);
 		//		NameSpace.AppendExtendedSyntax("++ --", 0, LibNative.LoadMatchFunc(Grammar, "MatchIncl"));
 
-		NameSpace.AppendSuffixSyntax("&&", ZenPrecedence.CStyleAND, LibNative.LoadMatchFunc(Grammar, "MatchAnd"));
-		NameSpace.AppendSuffixSyntax("||", ZenPrecedence.CStyleOR, LibNative.LoadMatchFunc(Grammar, "MatchOr"));
-		NameSpace.AppendSuffixSyntax("instanceof", ZenPrecedence.Instanceof, LibNative.LoadMatchFunc(Grammar, "MatchInstanceOf"));
+		NameSpace.DefineSuffixSyntax("&&", ZenPrecedence.CStyleAND, LibNative.LoadMatchFunc(Grammar, "MatchAnd"));
+		NameSpace.DefineSuffixSyntax("||", ZenPrecedence.CStyleOR, LibNative.LoadMatchFunc(Grammar, "MatchOr"));
+		NameSpace.DefineSuffixSyntax("instanceof", ZenPrecedence.Instanceof, LibNative.LoadMatchFunc(Grammar, "MatchInstanceOf"));
 
 		//		NameSpace.AppendExtendedSyntax("?", 0, LibNative.LoadMatchFunc(Grammar, "MatchTrinary"));
 
-		NameSpace.AppendSyntax("$Error$", LibNative.LoadMatchFunc(Grammar, "MatchError"));
+		NameSpace.DefineSyntax("$Error$", LibNative.LoadMatchFunc(Grammar, "MatchError"));
 		//		NameSpace.AppendSyntax("$Empty$", LibNative.LoadMatchFunc(Grammar, "MatchEmpty"));
-		NameSpace.AppendSyntax("$Symbol$", LibNative.LoadMatchFunc(Grammar, "MatchSymbol"));
-		NameSpace.AppendSyntax("$Type$",LibNative.LoadMatchFunc(Grammar, "MatchType"));
-		NameSpace.AppendSyntax("$TypeSuffix$", LibNative.LoadMatchFunc(Grammar, "MatchTypeSuffix"));
-		NameSpace.AppendSyntax("$TypeAnnotation$", LibNative.LoadMatchFunc(Grammar, "MatchTypeAnnotation"));
+		NameSpace.DefineSyntax("$Symbol$", LibNative.LoadMatchFunc(Grammar, "MatchSymbol"));
+		NameSpace.DefineSyntax("$Type$",LibNative.LoadMatchFunc(Grammar, "MatchType"));
+		NameSpace.DefineSyntax("$TypeSuffix$", LibNative.LoadMatchFunc(Grammar, "MatchTypeSuffix"));
+		NameSpace.DefineSyntax("$TypeAnnotation$", LibNative.LoadMatchFunc(Grammar, "MatchTypeAnnotation"));
 
-		NameSpace.AppendSyntax("$StringLiteral$", LibNative.LoadMatchFunc(Grammar, "MatchStringLiteral"));
-		NameSpace.AppendSyntax("$IntegerLiteral$", LibNative.LoadMatchFunc(Grammar, "MatchIntLiteral"));
-		NameSpace.AppendSyntax("$FloatLiteral$", LibNative.LoadMatchFunc(Grammar, "MatchFloatLiteral"));
+		NameSpace.DefineSyntax("$StringLiteral$", LibNative.LoadMatchFunc(Grammar, "MatchStringLiteral"));
+		NameSpace.DefineSyntax("$IntegerLiteral$", LibNative.LoadMatchFunc(Grammar, "MatchIntLiteral"));
+		NameSpace.DefineSyntax("$FloatLiteral$", LibNative.LoadMatchFunc(Grammar, "MatchFloatLiteral"));
 
-		NameSpace.AppendSuffixSyntax(".", 0, LibNative.LoadMatchFunc(Grammar, "MatchGetter"));
+		NameSpace.DefineSuffixSyntax(".", 0, LibNative.LoadMatchFunc(Grammar, "MatchGetter"));
 
-		NameSpace.AppendSyntax("(", LibNative.LoadMatchFunc(Grammar, "MatchGroup"));
-		NameSpace.AppendSyntax("(", LibNative.LoadMatchFunc(Grammar, "MatchCast"));
-		NameSpace.AppendSuffixSyntax("(", 0, LibNative.LoadMatchFunc(Grammar, "MatchApply"));
+		NameSpace.DefineSyntax("(", LibNative.LoadMatchFunc(Grammar, "MatchGroup"));
+		NameSpace.DefineSyntax("(", LibNative.LoadMatchFunc(Grammar, "MatchCast"));
+		NameSpace.DefineSuffixSyntax("(", 0, LibNative.LoadMatchFunc(Grammar, "MatchApply"));
 
-		NameSpace.AppendSuffixSyntax("[", 0, LibNative.LoadMatchFunc(Grammar, "MatchIndexer"));
-		NameSpace.AppendSyntax("[", LibNative.LoadMatchFunc(Grammar, "MatchArrayLiteral"));
-		NameSpace.AppendSyntax("{", LibNative.LoadMatchFunc(Grammar, "MatchMapLiteral"));
+		NameSpace.DefineSuffixSyntax("[", 0, LibNative.LoadMatchFunc(Grammar, "MatchIndexer"));
+		NameSpace.DefineSyntax("[", LibNative.LoadMatchFunc(Grammar, "MatchArrayLiteral"));
+		NameSpace.DefineSyntax("{", LibNative.LoadMatchFunc(Grammar, "MatchMapLiteral"));
 
-		NameSpace.AppendSyntax("$Block$", LibNative.LoadMatchFunc(Grammar, "MatchBlock"));
-		NameSpace.AppendSyntax("$Annotation$", LibNative.LoadMatchFunc(Grammar, "MatchAnnotation"));
-		NameSpace.AppendSyntax("$Statement$", LibNative.LoadMatchFunc(Grammar, "MatchStatement"));
-		NameSpace.AppendSyntax("$Expression$", LibNative.LoadMatchFunc(Grammar, "MatchExpression"));
-		NameSpace.AppendSyntax("$SuffixExpression$", LibNative.LoadMatchFunc(Grammar, "MatchSuffixExpression"));
+		NameSpace.DefineSyntax("$Block$", LibNative.LoadMatchFunc(Grammar, "MatchBlock"));
+		NameSpace.DefineSyntax("$Annotation$", LibNative.LoadMatchFunc(Grammar, "MatchAnnotation"));
+		NameSpace.DefineSyntax("$Statement$", LibNative.LoadMatchFunc(Grammar, "MatchStatement"));
+		NameSpace.DefineSyntax("$Expression$", LibNative.LoadMatchFunc(Grammar, "MatchExpression"));
+		NameSpace.DefineSyntax("$SuffixExpression$", LibNative.LoadMatchFunc(Grammar, "MatchSuffixExpression"));
 
-		NameSpace.AppendSyntax("if", LibNative.LoadMatchFunc(Grammar, "MatchIf"));
-		NameSpace.AppendSyntax("return", LibNative.LoadMatchFunc(Grammar, "MatchReturn"));
-		NameSpace.AppendSyntax("while", LibNative.LoadMatchFunc(Grammar, "MatchWhile"));
-		NameSpace.AppendSyntax("break", LibNative.LoadMatchFunc(Grammar, "MatchBreak"));
-		NameSpace.AppendSyntax("try", LibNative.LoadMatchFunc(Grammar, "MatchTry"));
-		NameSpace.AppendSyntax("$Catch$", LibNative.LoadMatchFunc(Grammar, "MatchCatch"));
-		NameSpace.AppendSyntax("throw", LibNative.LoadMatchFunc(Grammar, "MatchThrow"));
+		NameSpace.DefineSyntax("if", LibNative.LoadMatchFunc(Grammar, "MatchIf"));
+		NameSpace.DefineSyntax("return", LibNative.LoadMatchFunc(Grammar, "MatchReturn"));
+		NameSpace.DefineSyntax("while", LibNative.LoadMatchFunc(Grammar, "MatchWhile"));
+		NameSpace.DefineSyntax("break", LibNative.LoadMatchFunc(Grammar, "MatchBreak"));
+		NameSpace.DefineSyntax("try", LibNative.LoadMatchFunc(Grammar, "MatchTry"));
+		NameSpace.DefineSyntax("$Catch$", LibNative.LoadMatchFunc(Grammar, "MatchCatch"));
+		NameSpace.DefineSyntax("throw", LibNative.LoadMatchFunc(Grammar, "MatchThrow"));
 
-		NameSpace.AppendSyntax("$Identifier$", LibNative.LoadMatchFunc(Grammar, "MatchIdentifier"));
-		NameSpace.AppendSyntax("var",  LibNative.LoadMatchFunc(Grammar, "MatchVarDecl"));
-		NameSpace.AppendSyntax("$Param$", LibNative.LoadMatchFunc(Grammar, "MatchParam"));
-		NameSpace.AppendSyntax("function", LibNative.LoadMatchFunc(Grammar, "MatchFunction"));
-		NameSpace.AppendSyntax("let", LibNative.LoadMatchFunc(Grammar, "MatchLetDecl"));
+		NameSpace.DefineSyntax("$Identifier$", LibNative.LoadMatchFunc(Grammar, "MatchIdentifier"));
+		NameSpace.DefineSyntax("var",  LibNative.LoadMatchFunc(Grammar, "MatchVarDecl"));
+		NameSpace.DefineSyntax("$Param$", LibNative.LoadMatchFunc(Grammar, "MatchParam"));
+		NameSpace.DefineSyntax("function", LibNative.LoadMatchFunc(Grammar, "MatchFunction"));
+		NameSpace.DefineSyntax("let", LibNative.LoadMatchFunc(Grammar, "MatchLetDecl"));
 		NameSpace.Generator.AppendGrammarInfo("zen-0.1");
 
-		NameSpace.AppendSyntax("class", LibNative.LoadMatchFunc(Grammar, "MatchClassDecl"));
-		NameSpace.AppendSyntax("$FieldDecl$", LibNative.LoadMatchFunc(Grammar, "MatchFieldDecl"));
-		NameSpace.AppendSyntax("import", LibNative.LoadMatchFunc(Grammar, "MatchImport"));
-		NameSpace.AppendSyntax("$Path$", LibNative.LoadMatchFunc(Grammar, "MatchPath"));
+		NameSpace.DefineSyntax("class", LibNative.LoadMatchFunc(Grammar, "MatchClassDecl"));
+		NameSpace.DefineSyntax("$FieldDecl$", LibNative.LoadMatchFunc(Grammar, "MatchFieldDecl"));
+		NameSpace.DefineSyntax("import", LibNative.LoadMatchFunc(Grammar, "MatchImport"));
+		NameSpace.DefineSyntax("$Path$", LibNative.LoadMatchFunc(Grammar, "MatchPath"));
 
 		NameSpace.Generator.AppendGrammarInfo("zen-class-0.1");
 	}

@@ -30,6 +30,8 @@ import java.util.ArrayList;
 import zen.ast.ZImportNode;
 import zen.ast.ZNode;
 import zen.deps.Field;
+import zen.deps.ZenMap;
+import zen.lang.ZFunc;
 import zen.lang.ZenEngine;
 import zen.type.ZFuncType;
 import zen.type.ZType;
@@ -111,6 +113,30 @@ public abstract class ZGenerator extends ZVisitor {
 	public ZFuncType GetMethodFuncType(ZType RecvType, String MethodName, ArrayList<ZNode> ParamList) {
 		return null;     // undefined
 	}
+
+	private final ZenMap<ZFunc> DefinedFuncMap = new ZenMap<ZFunc>(null);
+
+	public final void SetDefinedFunc(ZFunc Func) {
+		this.DefinedFuncMap.put(Func.GetSignature(), Func);
+	}
+
+	public final ZFunc GetDefinedFunc(String GlobalName) {
+		return this.DefinedFuncMap.GetOrNull(GlobalName);
+	}
+
+	public final ZFunc GetDefinedFunc(String FuncName, ZFuncType FuncType) {
+		return this.GetDefinedFunc(FuncType.StringfySignature(FuncName));
+	}
+
+	public ZFunc GetCoercionFunc(ZType FromType, ZType ToType) {
+		//		Object Func = this.GetClassSymbol(FromType, ToType.GetUniqueName(), true);
+		//		if(Func instanceof ZFunc && ((ZFunc)Func).IsCoercionFunc()) {
+		//			return (ZFunc)Func;
+		//		}
+		//		return null;
+		return null;
+	}
+
 
 
 }

@@ -35,7 +35,7 @@ public class JavaImportNode extends ZImportNode {
 			if(this.Alias == null) {
 				this.Alias = this.ParseSymbol(this.ResourcePath);
 			}
-			this.NameSpace.SetSymbol(this.Alias, Type, this.SourceToken);
+			this.NameSpace.SetTypeName(this.Alias, Type, this.SourceToken);
 			return this;
 		} catch (ClassNotFoundException e) {
 		}

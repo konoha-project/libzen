@@ -287,7 +287,7 @@ public final class ZTokenContext {
 	public ZSyntaxPattern GetSuffixPattern(ZNameSpace NameSpace) {
 		@Var ZToken Token = this.GetToken();
 		if(Token != ZToken.NullToken) {
-			@Var ZSyntaxPattern Pattern = NameSpace.GetExtendedSyntaxPattern(Token.ParsedText);
+			@Var ZSyntaxPattern Pattern = NameSpace.GetSuffixSyntaxPattern(Token.ParsedText);
 			return Pattern;
 		}
 		return null;

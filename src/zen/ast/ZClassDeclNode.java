@@ -27,6 +27,7 @@ package zen.ast;
 import java.util.ArrayList;
 
 import zen.deps.Field;
+import zen.deps.Var;
 import zen.lang.ZenClassType;
 import zen.parser.ZNameSpace;
 import zen.parser.ZVisitor;
@@ -53,7 +54,8 @@ public final class ZClassDeclNode extends ZNode {
 		else if(this.ClassName == null) {
 			this.ClassName = Node.SourceToken.ParsedText;
 			this.SourceToken = Node.SourceToken;
-			this.ClassType = this.NameSpace.GetType(this.ClassName, this.SourceToken);
+			@Var ZTypeNode TypeNode = this.NameSpace.GetTypeNode(this.ClassName, this.SourceToken);
+			this.ClassType = TypeNode.Type;
 		}
 	}
 	@Override public void Accept(ZVisitor Visitor) {

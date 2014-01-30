@@ -21,6 +21,10 @@ public class ZenError {
 		return new ZErrorNode(Node.SourceToken, "readonly: " + VarName);
 	}
 
+	static ZNode ReadOnlyLocalVariable(ZNode Node, String VarName) {
+		return new ZErrorNode(Node.SourceToken, "readonly variable: " + VarName);
+	}
+
 	static ZNode UndefinedName(ZNode Node, String Name) {
 		return new ZErrorNode(Node.SourceToken, "undefined name: " + Name);
 	}

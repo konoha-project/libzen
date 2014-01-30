@@ -132,7 +132,7 @@ public abstract class ZTypeChecker extends ZVisitor {
 		if(ContextType.IsVoidType() && !Node.Type.IsVoidType()) {
 			return new ZCastNode(ZType.VoidType, Node);
 		}
-		@Var ZFunc CoercionFunc = NameSpace.GetCoercionFunc(Node.Type, ContextType);
+		@Var ZFunc CoercionFunc = NameSpace.Generator.GetCoercionFunc(Node.Type, ContextType);
 		if(CoercionFunc != null) {
 
 		}

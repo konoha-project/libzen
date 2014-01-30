@@ -136,7 +136,7 @@ public class JavaReflectionEngine extends ZenEngine {
 	//
 
 	@Override public void VisitGetLocalNode(ZGetLocalNode Node) {
-		@Var ZNode Node1 = this.Generator.RootNameSpace.GetSymbolNode(Node.VarName, Node.SourceToken);
+		@Var ZNode Node1 = this.Generator.RootNameSpace.GetSymbolNode(Node.VarName);
 		if(Node1 != null) {
 			this.EvaledValue = this.Eval(Node1);
 		}

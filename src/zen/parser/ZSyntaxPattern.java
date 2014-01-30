@@ -35,8 +35,9 @@ public final class ZSyntaxPattern {
 	@Field @Init public ZNameSpace	          PackageNameSpace;
 	@Field @Init public String		          PatternName;
 	@Field @Init public ZFunc                 MatchFunc;
-	@Field public int				      SyntaxFlag = 0;
-	@Field public ZSyntaxPattern ParentPattern = null;
+	@Field public int				          SyntaxFlag = 0;
+	@Field public ZSyntaxPattern              ParentPattern = null;
+	@Field public boolean IsDisabled          = false;
 
 	public ZSyntaxPattern(ZNameSpace NameSpace, String PatternName, ZFunc MatchFunc) {
 		this.PackageNameSpace = NameSpace;
@@ -45,7 +46,7 @@ public final class ZSyntaxPattern {
 	}
 
 	@Override public String toString() {
-		return this.PatternName + "<" + this.MatchFunc + ">";
+		return this.PatternName + "{" + this.MatchFunc + "}";
 	}
 
 	public boolean IsBinaryOperator() {
