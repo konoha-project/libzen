@@ -38,7 +38,6 @@ import java.lang.reflect.Method;
 import zen.ast.ZNode;
 import zen.lang.ZFunc;
 import zen.lang.ZenEngine;
-import zen.lang.ZenGrammar;
 import zen.parser.ZGenerator;
 import zen.parser.ZLogger;
 import zen.parser.ZNameSpace;
@@ -226,9 +225,10 @@ public class LibNative {
 		return new ZSourceGenerator("zen", "0.1");
 	}
 
-	public final static ZenEngine LoadEngine(@Nullable String ClassName, Class<?> GrammarClass) {
+	public final static ZenEngine LoadEngine(@Nullable String ClassName, String GrammarClass) {
 		@Var ZGenerator Generator = LibNative.LoadGenerator(ClassName, null);
-		LibNative.ImportGrammar(Generator.RootNameSpace, ZenGrammar.class.getName());
+		LibNative.ImportGrammar(Generator.RootNameSpace, GrammarClass);
+		Generator.ImportLocalGrammar(Generator.RootNameSpace);
 		return Generator.GetEngine();
 	}
 

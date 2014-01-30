@@ -7,7 +7,7 @@ import zen.ast.ZBlockNode;
 import zen.ast.ZClassDeclNode;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZSymbolNode;
-import zen.parser.ZTransformer;
+import zen.obsolete.ZTransformer;
 
 class ClassNodeFilter extends ZTransformer {
 	ArrayList<ZClassDeclNode> Decls;

@@ -60,6 +60,12 @@ public abstract class ZGenerator extends ZVisitor {
 
 	public abstract ZenEngine GetEngine();
 
+	public void ImportLocalGrammar(ZNameSpace NameSpace) {
+		// TODO Auto-generated method stub
+
+	}
+
+
 	@Override public final void EnableVisitor() {
 		this.StoppedVisitor = false;
 	}
@@ -105,5 +111,6 @@ public abstract class ZGenerator extends ZVisitor {
 	public ZFuncType GetMethodFuncType(ZType RecvType, String MethodName, ArrayList<ZNode> ParamList) {
 		return null;     // undefined
 	}
+
 
 }

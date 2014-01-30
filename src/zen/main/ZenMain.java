@@ -135,37 +135,37 @@ public class ZenMain {
 						| ZLogger.VerboseSymbol | ZLogger.VerboseNative);
 				continue;
 			}
-			if (LibZen.EqualsString(Argu, "--verbose:token")) {
-				ZLogger.VerboseMask |= ZLogger.VerboseToken;
-				continue;
-			}
-			if (LibZen.EqualsString(Argu, "--verbose:type")) {
-				ZLogger.VerboseMask |= ZLogger.VerboseType;
-				continue;
-			}
-			if (LibZen.EqualsString(Argu, "--verbose:symbol")) {
-				ZLogger.VerboseMask |= ZLogger.VerboseSymbol;
-				continue;
-			}
-			if (LibZen.EqualsString(Argu, "--verbose:native")) {
-				ZLogger.VerboseMask |= ZLogger.VerboseNative;
-				continue;
-			}
-			if (LibZen.EqualsString(Argu, "--verbose:func")) {
-				ZLogger.VerboseMask |= ZLogger.VerboseFunc;
-				continue;
-			}
-			if (LibZen.EqualsString(Argu, "--verbose:all")) {
-				ZLogger.VerboseMask = -1;
-				continue;
-			}
-			if (LibZen.EqualsString(Argu, "--verbose:no")) {
-				ZLogger.VerboseMask = 0;
-				continue;
-			}
-			ZenMain.Usage(Argu + " is unknown");
+			//			if (LibZen.EqualsString(Argu, "--verbose:token")) {
+			//				ZLogger.VerboseMask |= ZLogger.VerboseToken;
+			//				continue;
+			//			}
+			//			if (LibZen.EqualsString(Argu, "--verbose:type")) {
+			//				ZLogger.VerboseMask |= ZLogger.VerboseType;
+			//				continue;
+			//			}
+			//			if (LibZen.EqualsString(Argu, "--verbose:symbol")) {
+			//				ZLogger.VerboseMask |= ZLogger.VerboseSymbol;
+			//				continue;
+			//			}
+			//			if (LibZen.EqualsString(Argu, "--verbose:native")) {
+			//				ZLogger.VerboseMask |= ZLogger.VerboseNative;
+			//				continue;
+			//			}
+			//			if (LibZen.EqualsString(Argu, "--verbose:func")) {
+			//				ZLogger.VerboseMask |= ZLogger.VerboseFunc;
+			//				continue;
+			//			}
+			//			if (LibZen.EqualsString(Argu, "--verbose:all")) {
+			//				ZLogger.VerboseMask = -1;
+			//				continue;
+			//			}
+			//			if (LibZen.EqualsString(Argu, "--verbose:no")) {
+			//				ZLogger.VerboseMask = 0;
+			//				continue;
+			//			}
+			//			ZenMain.Usage(Argu + " is unknown");
 		}
-		@Var ZenEngine ScriptEngine = LibNative.LoadEngine(TargetCode, ZenGrammar.class);
+		@Var ZenEngine ScriptEngine = LibNative.LoadEngine(TargetCode, ZenGrammar.class.getName());
 		// @Var ZenParserContext Context = new ZenParserContext(new KonohaGrammar(), Generator);
 		// if(RequiredLibName != null) {
 		// if(!Context.TopLevelNameSpace.LoadRequiredLib(RequiredLibName)) {

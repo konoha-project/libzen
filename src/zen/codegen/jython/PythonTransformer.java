@@ -3,7 +3,7 @@ package zen.codegen.jython;
 import zen.ast.ZBlockNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZFunctionNode;
-import zen.parser.ZTransformer;
+import zen.obsolete.ZTransformer;
 
 public class PythonTransformer extends ZTransformer {
 
