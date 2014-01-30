@@ -66,6 +66,7 @@ import zen.ast.ZStringNode;
 import zen.ast.ZSymbolNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
+import zen.ast.ZTypeNode;
 import zen.ast.ZUnaryNode;
 import zen.ast.ZVarDeclNode;
 import zen.ast.ZWhileNode;
@@ -151,6 +152,10 @@ public class ZenEngine extends ZVisitor {
 
 	@Override public void VisitStringNode(ZStringNode Node) {
 		this.EvaledValue = Node.StringValue;
+	}
+
+	public void VisitTypeNode(ZTypeNode Node) {
+		this.EvaledValue = Node.Type;
 	}
 
 	@Override public void VisitConstPoolNode(ZConstPoolNode Node) {

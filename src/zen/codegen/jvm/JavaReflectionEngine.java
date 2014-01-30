@@ -31,21 +31,16 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import zen.ast.ZBinaryNode;
-import zen.ast.ZBooleanNode;
 import zen.ast.ZCastNode;
 import zen.ast.ZComparatorNode;
-import zen.ast.ZConstPoolNode;
-import zen.ast.ZFloatNode;
 import zen.ast.ZFuncCallNode;
 import zen.ast.ZGetIndexNode;
 import zen.ast.ZGetLocalNode;
 import zen.ast.ZGetterNode;
 import zen.ast.ZGroupNode;
-import zen.ast.ZIntNode;
 import zen.ast.ZMethodCallNode;
 import zen.ast.ZNode;
 import zen.ast.ZNotNode;
-import zen.ast.ZNullNode;
 import zen.ast.ZSetterNode;
 import zen.ast.ZStringNode;
 import zen.ast.ZUnaryNode;
@@ -84,29 +79,29 @@ public class JavaReflectionEngine extends ZenEngine {
 		this.EvalMethod(Node, sMethod, null, Nodes);
 	}
 
-	@Override public void VisitNullNode(ZNullNode Node) {
-		this.EvaledValue = null;
-	}
-
-	@Override public void VisitBooleanNode(ZBooleanNode Node) {
-		this.EvaledValue = Node.BooleanValue;
-	}
-
-	@Override public void VisitIntNode(ZIntNode Node) {
-		this.EvaledValue = Node.IntValue;
-	}
-
-	@Override public void VisitFloatNode(ZFloatNode Node) {
-		this.EvaledValue = Node.FloatValue;
-	}
-
-	@Override public void VisitStringNode(ZStringNode Node) {
-		this.EvaledValue = Node.StringValue;
-	}
-
-	@Override public void VisitConstPoolNode(ZConstPoolNode Node) {
-		this.EvaledValue = Node.ConstValue;
-	}
+	//	@Override public void VisitNullNode(ZNullNode Node) {
+	//		this.EvaledValue = null;
+	//	}
+	//
+	//	@Override public void VisitBooleanNode(ZBooleanNode Node) {
+	//		this.EvaledValue = Node.BooleanValue;
+	//	}
+	//
+	//	@Override public void VisitIntNode(ZIntNode Node) {
+	//		this.EvaledValue = Node.IntValue;
+	//	}
+	//
+	//	@Override public void VisitFloatNode(ZFloatNode Node) {
+	//		this.EvaledValue = Node.FloatValue;
+	//	}
+	//
+	//	@Override public void VisitStringNode(ZStringNode Node) {
+	//		this.EvaledValue = Node.StringValue;
+	//	}
+	//
+	//	@Override public void VisitConstPoolNode(ZConstPoolNode Node) {
+	//		this.EvaledValue = Node.ConstValue;
+	//	}
 
 	public void VisitJvmFuncNode(JvmFuncNode Node) {
 		try {

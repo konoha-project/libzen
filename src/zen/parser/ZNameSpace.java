@@ -29,6 +29,7 @@ import zen.ast.ZFloatNode;
 import zen.ast.ZIntNode;
 import zen.ast.ZNode;
 import zen.ast.ZStringNode;
+import zen.ast.ZTypeNode;
 import zen.deps.Field;
 import zen.deps.LibNative;
 import zen.deps.LibZen;
@@ -633,11 +634,13 @@ public final class ZNameSpace {
 	public ZNode GetSymbolNode(String Symbol, ZToken SourceToken) {
 		Object SymbolNode = this.GetSymbol(Symbol);
 		if(SymbolNode instanceof ZNode) {
-			// TODO: Set SourceToken
 			return (ZNode)SymbolNode;
 		}
 		if(SymbolNode instanceof String) {
 			return new ZStringNode(SourceToken, (String)SymbolNode);
+		}
+		if(SymbolNode instanceof ZType) {
+			return new ZTypeNode(SourceToken, (ZType)SymbolNode);
 		}
 		if(SymbolNode instanceof Double) {
 			return new ZFloatNode(SourceToken, ((Double)SymbolNode));

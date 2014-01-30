@@ -862,9 +862,12 @@ public class ZenGrammar {
 	}
 
 	public static ZNode MatchImport(ZNameSpace NameSpace, ZTokenContext TokenContext, ZNode LeftNode) {
-		@Var ZNode ImportNode = new ZImportNode(NameSpace);
+		@Var ZNode ImportNode = NameSpace.Generator.CreateImportNode(NameSpace);
 		ImportNode = TokenContext.MatchNodeToken(ImportNode, NameSpace, "import", ZTokenContext.Required);
 		ImportNode = TokenContext.AppendMatchedPattern(ImportNode, NameSpace, "$Path$", ZTokenContext.Required);
+		if(ImportNode instanceof ZImportNode) {
+			return ((ZImportNode)ImportNode).Import();
+		}
 		return ImportNode;
 	}
 

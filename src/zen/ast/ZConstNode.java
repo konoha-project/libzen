@@ -34,4 +34,6 @@ abstract public class ZConstNode extends ZNode {
 		return this;
 	}
 	public abstract Object GetValue();
+
+
 }

@@ -7,7 +7,16 @@ import zen.type.ZType;
 
 public class ZenError {
 
+	public static ZNode NoSupport(ZNode Node, String Syntax) {
+		return new ZErrorNode(Node.SourceToken, "no support for " + Syntax);
+	}
 
+	// import
+	public static ZNode UnfoundResource(ZNode Node, String Path) {
+		return new ZErrorNode(Node.SourceToken, "unfound resource: " + Path);
+	}
+
+	// type checker
 	static ZNode ReadOnlyName(ZNode Node, ZType ClassType, String VarName) {
 		return new ZErrorNode(Node.SourceToken, "readonly: " + VarName);
 	}
@@ -15,6 +24,7 @@ public class ZenError {
 	static ZNode UndefinedName(ZNode Node, String Name) {
 		return new ZErrorNode(Node.SourceToken, "undefined name: " + Name);
 	}
+
 
 	static ZNode TypeErrorMessage(ZType Requested, ZNode Node, String Message) {
 		ZErrorNode ErrorNode = new ZErrorNode(Node.SourceToken, Message);

@@ -76,6 +76,7 @@ import zen.ast.ZGetLocalNode;
 import zen.ast.ZGetterNode;
 import zen.ast.ZGroupNode;
 import zen.ast.ZIfNode;
+import zen.ast.ZImportNode;
 import zen.ast.ZInstanceOfNode;
 import zen.ast.ZIntNode;
 import zen.ast.ZMapLiteralNode;
@@ -98,6 +99,7 @@ import zen.ast.ZTryNode;
 import zen.ast.ZUnaryNode;
 import zen.ast.ZVarDeclNode;
 import zen.ast.ZWhileNode;
+import zen.deps.JavaImportNode;
 import zen.deps.LibNative;
 import zen.deps.NativeTypeTable;
 import zen.deps.Var;
@@ -106,6 +108,7 @@ import zen.lang.ZSystem;
 import zen.lang.ZenEngine;
 import zen.lang.ZenTypeSafer;
 import zen.parser.ZGenerator;
+import zen.parser.ZNameSpace;
 import zen.type.ZFuncType;
 import zen.type.ZType;
 
@@ -139,6 +142,11 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 		}
 		return null;
 	}
+
+	@Override public ZImportNode CreateImportNode(ZNameSpace NameSpace) {
+		return new JavaImportNode(NameSpace);
+	}
+
 
 	@Override public ZType GetFieldType(ZType RecvType, String FieldName) {
 		Class<?> NativeClass = NativeTypeTable.GetJavaClass(RecvType);

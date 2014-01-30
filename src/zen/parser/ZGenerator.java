@@ -27,6 +27,7 @@ package zen.parser;
 
 import java.util.ArrayList;
 
+import zen.ast.ZImportNode;
 import zen.ast.ZNode;
 import zen.deps.Field;
 import zen.lang.ZSystem;
@@ -85,6 +86,10 @@ public abstract class ZGenerator extends ZVisitor {
 	}
 
 	public abstract boolean StartCodeGeneration(ZNode Node, boolean AllowLazy, boolean IsInteractive);
+
+	public ZImportNode CreateImportNode(ZNameSpace NameSpace) {
+		return new ZImportNode(NameSpace);
+	}
 
 	public ZType GetFieldType(ZType BaseType, String Name) {
 		return ZSystem.VarType;     // undefined

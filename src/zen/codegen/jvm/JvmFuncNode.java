@@ -9,8 +9,6 @@ class JvmFuncNode extends ZNode {
 	String ClassName;
 	String FieldDesc;
 	Class<?> FuncClass;
-	//	Class<?> FuncClass;
-	//	Method FuncMethod;
 	JvmFuncNode(ZFuncType FuncType, String FuncName) {
 		super();
 		this.Type = FuncType;
