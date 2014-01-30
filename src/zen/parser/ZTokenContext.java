@@ -34,7 +34,6 @@ import zen.deps.Init;
 import zen.deps.LibNative;
 import zen.deps.LibZen;
 import zen.deps.Var;
-import zen.lang.ZFunc;
 import zen.lang.ZSystem;
 import zen.type.ZType;
 
@@ -49,6 +48,8 @@ public final class ZTokenContext {
 	public final static int     AllowLineFeed     = (1 << 2);
 	public final static int     Optional          = (1 << 1);
 	public final static int     Required          = (1 << 0);
+	public final static boolean     Optional2          = false;
+	public final static boolean     Required2          = true;
 
 	@Field @Init public ZNameSpace TopLevelNameSpace;
 	@Field public ArrayList<ZToken> SourceTokenList = new ArrayList<ZToken>();
@@ -333,7 +334,7 @@ public final class ZTokenContext {
 		return false;
 	}
 
-	public ZNode MatchNodeToken(ZNode Base, ZNameSpace NameSpace, String TokenText, int MatchFlag) {
+	public ZNode MatchNodeToken(ZNode Base, ZNameSpace NameSpace, String TokenText, boolean IsRequired) {
 		if(!Base.IsErrorNode()) {
 			@Var int RollbackPosition = this.CurrentPosition;
 			@Var ZToken Token = this.GetTokenAndMoveForward();
@@ -341,60 +342,77 @@ public final class ZTokenContext {
 				if(Base.SourceToken == null) {
 					Base.SourceToken = Token;
 				}
-				if(ZUtils.IsFlag(MatchFlag, ZTokenContext.AllowSkipIndent)) {
-					this.SetSkipIndent(true);
-				}
-				if(ZUtils.IsFlag(MatchFlag, ZTokenContext.DisallowSkipIndent)) {
-					this.SetSkipIndent(false);
-				}
+				//				if(ZUtils.IsFlag(MatchFlag, ZTokenContext.AllowSkipIndent)) {
+				//					this.SetSkipIndent(true);
+				//				}
+				//				if(ZUtils.IsFlag(MatchFlag, ZTokenContext.DisallowSkipIndent)) {
+				//					this.SetSkipIndent(false);
+				//				}
 			}
 			else {
-				this.CurrentPosition = RollbackPosition;
-				if(ZUtils.IsFlag(MatchFlag, ZTokenContext.Required)) {
+				if(IsRequired) {
 					return this.CreateExpectedErrorNode(Token, TokenText);
+				}
+				else {
+					this.CurrentPosition = RollbackPosition;
 				}
 			}
 		}
 		return Base;
 	}
 
-	public final ZNode ApplyMatchPattern(ZNameSpace NameSpace, ZNode LeftNode, ZSyntaxPattern Pattern) {
+	public final ZNode ApplyMatchPattern(ZNameSpace NameSpace, ZNode LeftNode, ZSyntaxPattern Pattern, boolean IsRequired) {
 		@Var int RollbackPosition = this.CurrentPosition;
 		@Var int ParseFlag = this.ParseFlag;
 		@Var ZSyntaxPattern CurrentPattern = Pattern;
 		@Var ZToken TopToken = this.GetToken();
+		@Var ZNode ParsedNode = null;
 		while(CurrentPattern != null) {
-			@Var ZFunc MatchFunc = CurrentPattern.MatchFunc;
 			this.CurrentPosition = RollbackPosition;
-			if(CurrentPattern.ParentPattern != null) {   // This means it has next patterns
-				this.SetParseFlag(ParseFlag | ZTokenContext.BackTrackParseFlag);
-			}
-			//LibZen.DebugP("B :" + JoinStrings("  ", this.IndentLevel) + CurrentPattern + ", next=" + CurrentPattern.ParentPattern);
 			this.IndentLevel += 1;
-			//LibZen.DebugP("LeftNode="+LeftNode + ", pattern" + Pattern);
-			@Var ZNode ParsedNode = LibNative.ApplyMatchFunc(MatchFunc, NameSpace, this, LeftNode);
+			ParsedNode = LibNative.ApplyMatchFunc(CurrentPattern.MatchFunc, NameSpace, this, LeftNode);
 			this.IndentLevel -= 1;
 			this.SetParseFlag(ParseFlag);
-			//LibZen.DebugP("E :" + JoinStrings("  ", this.IndentLevel) + CurrentPattern + " => " + ParsedTree);
-			if(ParsedNode != null && (CurrentPattern.ParentPattern == null || !ParsedNode.IsErrorNode())) {
+			if(ParsedNode != null && !ParsedNode.IsErrorNode()) {
 				return ParsedNode;
 			}
 			CurrentPattern = CurrentPattern.ParentPattern;
 		}
-		if(this.IsAllowedBackTrack()) {
+		if(!IsRequired) {
 			this.CurrentPosition = RollbackPosition;
 			return null;
 		}
 		this.SkipErrorStatement();
-		if(Pattern == null) {
-			ZLogger.VerboseLog(ZLogger.VerboseUndefined, "undefined syntax pattern: " + Pattern);
+		if(ParsedNode == null) {
+			ParsedNode = this.CreateExpectedErrorNode(TopToken, Pattern.PatternName);
 		}
-		return this.CreateExpectedErrorNode(TopToken, Pattern.PatternName);
+		return ParsedNode;
 	}
 
-	public ZNode AppendMatchedPattern(ZNode Base, ZNameSpace NameSpace, String PatternName,  int MatchFlag) {
+	public final ZNode ParsePatternAfter(ZNameSpace NameSpace, ZNode LeftNode, String PatternName, boolean IsRequired) {
+		//		@Var int Pos = this.CurrentPosition;
+		//		@Var int ParseFlag = this.ParseFlag;
+		//		if(ZUtils.IsFlag(MatchFlag, ZTokenContext.Optional)) {
+		//			this.SetParseFlag(this.ParseFlag | ZTokenContext.BackTrackParseFlag);
+		//		}
+		@Var ZSyntaxPattern Pattern = this.TopLevelNameSpace.GetSyntaxPattern(PatternName);
+		@Var ZNode ParsedNode = this.ApplyMatchPattern(NameSpace, LeftNode, Pattern, IsRequired);
+		return ParsedNode;
+		//		this.SetParseFlag(ParseFlag);
+		//		if(ParsedNode != null) {
+		//			return ParsedNode;
+		//		}
+		//		this.CurrentPosition = Pos;
+		//		return null; // mismatched
+	}
+
+	public final ZNode ParsePattern(ZNameSpace NameSpace, String PatternName, boolean IsRequired) {
+		return this.ParsePatternAfter(NameSpace, null, PatternName, IsRequired);
+	}
+
+	public ZNode AppendMatchedPattern(ZNode Base, ZNameSpace NameSpace, String PatternName, boolean IsRequired) {
 		if(!Base.IsErrorNode()) {
-			@Var ZNode ParsedNode = this.ParsePattern(NameSpace, PatternName, MatchFlag);
+			@Var ZNode ParsedNode = this.ParsePattern(NameSpace, PatternName, IsRequired);
 			if(ParsedNode != null) {
 				if(ParsedNode.IsErrorNode()) {
 					return ParsedNode;
@@ -404,6 +422,41 @@ public final class ZTokenContext {
 		}
 		return Base;
 	}
+
+	//	public final ZNode ApplyMatchPattern(ZNameSpace NameSpace, ZNode LeftNode, ZSyntaxPattern Pattern) {
+	//		@Var int RollbackPosition = this.CurrentPosition;
+	//		@Var int ParseFlag = this.ParseFlag;
+	//		@Var ZSyntaxPattern CurrentPattern = Pattern;
+	//		@Var ZToken TopToken = this.GetToken();
+	//		while(CurrentPattern != null) {
+	//			@Var ZFunc MatchFunc = CurrentPattern.MatchFunc;
+	//			this.CurrentPosition = RollbackPosition;
+	//			if(CurrentPattern.ParentPattern != null) {   // This means it has next patterns
+	//				this.SetParseFlag(ParseFlag | ZTokenContext.BackTrackParseFlag);
+	//			}
+	//			//LibZen.DebugP("B :" + JoinStrings("  ", this.IndentLevel) + CurrentPattern + ", next=" + CurrentPattern.ParentPattern);
+	//			this.IndentLevel += 1;
+	//			//LibZen.DebugP("LeftNode="+LeftNode + ", pattern" + Pattern);
+	//			@Var ZNode ParsedNode = LibNative.ApplyMatchFunc(MatchFunc, NameSpace, this, LeftNode);
+	//			this.IndentLevel -= 1;
+	//			this.SetParseFlag(ParseFlag);
+	//			//LibZen.DebugP("E :" + JoinStrings("  ", this.IndentLevel) + CurrentPattern + " => " + ParsedTree);
+	//			if(ParsedNode != null && (CurrentPattern.ParentPattern == null || !ParsedNode.IsErrorNode())) {
+	//				return ParsedNode;
+	//			}
+	//			CurrentPattern = CurrentPattern.ParentPattern;
+	//		}
+	//		if(this.IsAllowedBackTrack()) {
+	//			this.CurrentPosition = RollbackPosition;
+	//			return null;
+	//		}
+	//		this.SkipErrorStatement();
+	//		if(Pattern == null) {
+	//			ZLogger.VerboseLog(ZLogger.VerboseUndefined, "undefined syntax pattern: " + Pattern);
+	//		}
+	//		return this.CreateExpectedErrorNode(TopToken, Pattern.PatternName);
+	//	}
+
 
 	public final boolean StartsWithToken(String TokenText) {
 		@Var ZToken Token = this.GetToken();
@@ -450,28 +503,9 @@ public final class ZTokenContext {
 		this.SetParseFlag(OldFlag);
 	}
 
-	public final ZNode ParsePatternAfter(ZNameSpace NameSpace, ZNode LeftNode, String PatternName, int MatchFlag) {
-		@Var int Pos = this.CurrentPosition;
-		@Var int ParseFlag = this.ParseFlag;
-		if(ZUtils.IsFlag(MatchFlag, ZTokenContext.Optional)) {
-			this.SetParseFlag(this.ParseFlag | ZTokenContext.BackTrackParseFlag);
-		}
-		@Var ZSyntaxPattern Pattern = this.TopLevelNameSpace.GetSyntaxPattern(PatternName);
-		@Var ZNode ParsedNode = this.ApplyMatchPattern(NameSpace, LeftNode, Pattern);
-		this.SetParseFlag(ParseFlag);
-		if(ParsedNode != null) {
-			return ParsedNode;
-		}
-		this.CurrentPosition = Pos;
-		return null; // mismatched
-	}
-
-	public final ZNode ParsePattern(ZNameSpace NameSpace, String PatternName, int MatchFlag) {
-		return this.ParsePatternAfter(NameSpace, null, PatternName, MatchFlag);
-	}
 
 	public final ZType ParseType(ZNameSpace NameSpace, String PatternName, ZType DefaultType) {
-		ZTypeNode TypeNode = (ZTypeNode)this.ParsePatternAfter(NameSpace, null, PatternName, Optional);
+		ZTypeNode TypeNode = (ZTypeNode)this.ParsePatternAfter(NameSpace, null, PatternName, Optional2);
 		if(TypeNode != null) {
 			return TypeNode.Type;
 		}

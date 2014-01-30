@@ -70,7 +70,7 @@ public class ZBinaryNode extends ZNode {
 	}
 
 	public final ZNode AppendParsedRightNode(ZNameSpace NameSpace, ZTokenContext TokenContext) {
-		@Var ZNode RightNode = TokenContext.ParsePattern(NameSpace, "$Expression$", ZTokenContext.Required);
+		@Var ZNode RightNode = TokenContext.ParsePattern(NameSpace, "$Expression$", ZTokenContext.Required2);
 		if(RightNode.IsErrorNode()) {
 			return RightNode;
 		}
