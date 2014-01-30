@@ -2,6 +2,7 @@ package zen.type;
 
 import java.util.ArrayList;
 
+import zen.ast.ZBlockNode;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZNode;
 import zen.deps.Field;
@@ -70,7 +71,7 @@ public final class ZVarScope {
 		while(true) {
 			this.VarNodeCount = 0;
 			TypeSafer.DefineFunction(NameSpace, FunctionNode, false/*Enforced*/);
-			FunctionNode.BodyNode = TypeSafer.CheckType(FunctionNode.BodyNode, NameSpace, ZType.VoidType);
+			FunctionNode.BodyNode = (ZBlockNode)TypeSafer.CheckType(FunctionNode.BodyNode, NameSpace, ZType.VoidType);
 			if(this.VarNodeCount == 0 || PrevCount == this.VarNodeCount) {
 				break;
 			}

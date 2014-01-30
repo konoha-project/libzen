@@ -290,7 +290,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 
 	@Override public void VisitGetterNode(ZGetterNode Node) {
 		@Var ZNameSpace NameSpace = this.GetNameSpace();
-		@Var ZType ContextType = this.GetContextType();
+		//		@Var ZType ContextType = this.GetContextType();
 		Node.RecvNode = this.CheckType(Node.RecvNode, NameSpace, ZType.VarType);
 		ZType FieldType = ZenGamma.GetFieldType(NameSpace, Node.RecvNode.Type, Node.FieldName);
 		//		if(FieldType.IsVarType() && ContextType.IsInferrableType()) {
@@ -613,29 +613,28 @@ public class ZenTypeSafer extends ZTypeChecker {
 	}
 
 	@Override public void VisitReturnNode(ZReturnNode Node) {
-		if(this.InFunctionScope()) {
-			@Var ZNameSpace NameSpace = this.GetNameSpace();
-			@Var ZType ReturnType = this.CurrentFunctionNode.ReturnType;
-			if(Node.ValueNode != null && ReturnType.IsVoidType()) {
-				Node.ValueNode = null;
-			}
-			else if(Node.ValueNode == null && !ReturnType.IsVarType() && !ReturnType.IsVoidType()) {
-				this.Logger.ReportWarning(Node.SourceToken, "returning default value of " + ReturnType);
-				Node.ValueNode = ZenGamma.CreateDefaultValueNode(ReturnType, null);
-			}
-			if(Node.ValueNode != null) {
-				Node.ValueNode = this.CheckType(Node.ValueNode, NameSpace, ReturnType);
-				this.TypedNodeIf(Node, ZType.VoidType, Node.ValueNode);
-			}
-			else {
-				if(ReturnType instanceof ZVarType) {
-					((ZVarType)ReturnType).Infer(ZType.VoidType, Node.SourceToken);
-				}
-				this.TypedNode(Node, ZType.VoidType);
-			}
+		if(!this.InFunctionScope()) {
+			this.Return(ZenError.NeedFunctionScope(Node, "return"));
+			return;
+		}
+		@Var ZNameSpace NameSpace = this.GetNameSpace();
+		@Var ZType ReturnType = this.CurrentFunctionNode.ReturnType;
+		if(Node.ValueNode != null && ReturnType.IsVoidType()) {
+			Node.ValueNode = null;
+		}
+		else if(Node.ValueNode == null && !ReturnType.IsVarType() && !ReturnType.IsVoidType()) {
+			this.Logger.ReportWarning(Node.SourceToken, "returning default value of " + ReturnType);
+			Node.ValueNode = ZenGamma.CreateDefaultValueNode(ReturnType, null);
+		}
+		if(Node.ValueNode != null) {
+			Node.ValueNode = this.CheckType(Node.ValueNode, NameSpace, ReturnType);
+			this.TypedNodeIf(Node, ZType.VoidType, Node.ValueNode);
 		}
 		else {
-			this.Return(ZenError.NeedFunctionScope(Node, "return"));
+			if(ReturnType instanceof ZVarType) {
+				((ZVarType)ReturnType).Infer(ZType.VoidType, Node.SourceToken);
+			}
+			this.TypedNode(Node, ZType.VoidType);
 		}
 	}
 
@@ -672,6 +671,37 @@ public class ZenTypeSafer extends ZTypeChecker {
 	@Override public void VisitCatchNode(ZCatchNode Node) {
 		// TODO Auto-generated method stub
 		this.Todo(Node);
+	}
+
+
+	private boolean HasReturn(ZNode Node) {
+		if(Node instanceof ZBlockNode) {
+			@Var ZBlockNode BlockNode = (ZBlockNode)Node;
+			@Var int i = 0;
+			@Var ZNode StmtNode = null;
+			while(i < BlockNode.StmtList.size()) {
+				StmtNode = BlockNode.StmtList.get(i);
+				if(StmtNode instanceof ZReturnNode) {
+					return true;
+				}
+				i = i + 1;
+			}
+			Node = StmtNode;
+		}
+		if(Node instanceof ZReturnNode) {
+			return true;
+		}
+		if(Node instanceof ZIfNode) {
+			ZIfNode IfNode = (ZIfNode)Node;
+			if(IfNode.ElseNode != null) {
+				return this.HasReturn(IfNode.ThenNode) && this.HasReturn(IfNode.ElseNode);
+			}
+			return false;
+		}
+		if(Node instanceof ZBlockNode) {
+			return this.HasReturn(Node);
+		}
+		return false;
 	}
 
 	@Override public void DefineFunction(ZNameSpace NameSpace, ZFunctionNode FunctionNode, boolean Enforced) {
@@ -721,6 +751,9 @@ public class ZenTypeSafer extends ZTypeChecker {
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
 		@Var ZNameSpace NameSpace = this.GetNameSpace();
 		@Var ZType ContextType = this.GetContextType();
+		if(!this.HasReturn(Node.BodyNode)) {
+			Node.BodyNode.Append(new ZReturnNode());
+		}
 		this.PushFunctionNode(NameSpace, Node, ContextType);
 		this.VarScope.TypeCheckFunctionBody(NameSpace, this, Node);
 		this.PopFunctionNode(NameSpace);

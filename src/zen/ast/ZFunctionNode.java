@@ -39,7 +39,7 @@ public class ZFunctionNode extends ZNode {
 	@Field public ZType ReturnType = ZType.VarType;
 	@Field public String FuncName = null;
 	@Field public ArrayList<ZParamNode> ParamList = new ArrayList<ZParamNode>();
-	@Field public ZNode BodyNode = null;
+	@Field public ZBlockNode BodyNode = null;
 	@Field public ZNameSpace NameSpace;
 
 	@Field public ZFunctionNode ParentFunctionNode = null;
@@ -64,7 +64,7 @@ public class ZFunctionNode extends ZNode {
 			this.ReturnType = Node.Type;
 		}
 		else if(Node instanceof ZBlockNode) {
-			this.BodyNode = Node;
+			this.BodyNode = (ZBlockNode)Node;
 		}
 	}
 
