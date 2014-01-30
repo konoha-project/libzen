@@ -273,26 +273,14 @@ public final class ZTokenContext {
 		return new ZToken(0, JoinedToken, Token.FileLine);
 	}
 
-	public ZSyntaxPattern GetFirstPattern(ZNameSpace NameSpace) {
-		@Var ZToken Token = this.GetToken();
-		if(Token.PresetPattern != null) {
-			return Token.PresetPattern;
-		}
-		@Var ZSyntaxPattern Pattern = NameSpace.GetSyntaxPattern(Token.ParsedText);
-		if(Pattern == null) {
-			return NameSpace.GetSyntaxPattern("$Symbol$");
-		}
-		return Pattern;
-	}
+	//	public ZSyntaxPattern GetExpressionPattern(ZNameSpace NameSpace) {
+	//		@Var ZToken Token = this.GetToken();
+	//		if(Token.PresetPattern != null) {
+	//			return Token.PresetPattern;
+	//		}
+	//		return NameSpace.GetSyntaxPattern(Token.ParsedText);
+	//	}
 
-	public ZSyntaxPattern GetSuffixPattern(ZNameSpace NameSpace) {
-		@Var ZToken Token = this.GetToken();
-		if(Token != ZToken.NullToken) {
-			@Var ZSyntaxPattern Pattern = NameSpace.GetSuffixSyntaxPattern(Token.ParsedText);
-			return Pattern;
-		}
-		return null;
-	}
 
 	public final boolean IsToken(String TokenText) {
 		@Var ZToken Token = this.GetToken();

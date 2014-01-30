@@ -3,6 +3,7 @@ package zen.lang;
 import zen.ast.ZErrorNode;
 import zen.ast.ZFuncCallNode;
 import zen.ast.ZNode;
+import zen.ast.ZReturnNode;
 import zen.type.ZType;
 
 public class ZenError {
@@ -47,5 +48,9 @@ public class ZenError {
 			Fname = FuncNode.ResolvedFuncName;
 		}
 		return ZenError.TypeErrorMessage(Requested, FuncNode, "type error: " + Fname+"("+ArgumentIndex+") required=" + Requested + ", given=" + GivenType);
+	}
+
+	public static ZNode NeedFunctionScope(ZReturnNode Node, String Statement) {
+		return new ZErrorNode(Node.SourceToken, Statement + " is available only in function scope");
 	}
 }

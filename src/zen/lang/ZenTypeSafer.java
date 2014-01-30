@@ -100,6 +100,10 @@ public class ZenTypeSafer extends ZTypeChecker {
 		return (this.CurrentFunctionNode == null);
 	}
 
+	public final boolean InFunctionScope() {
+		return (this.CurrentFunctionNode != null);
+	}
+
 	@Override public void VisitNullNode(ZNullNode Node) {
 		ZType Type = this.GetContextType();
 		this.TypedNode(Node, Type);
@@ -609,26 +613,32 @@ public class ZenTypeSafer extends ZTypeChecker {
 	}
 
 	@Override public void VisitReturnNode(ZReturnNode Node) {
-		@Var ZNameSpace NameSpace = this.GetNameSpace();
-		@Var ZType ReturnType = this.CurrentFunctionNode.ReturnType;
-		if(Node.ValueNode != null && ReturnType.IsVoidType()) {
-			Node.ValueNode = null;
-		}
-		else if(Node.ValueNode == null && !ReturnType.IsVarType() && !ReturnType.IsVoidType()) {
-			this.Logger.ReportWarning(Node.SourceToken, "returning default value of " + ReturnType);
-			Node.ValueNode = ZenGamma.CreateDefaultValueNode(ReturnType, null);
-		}
-		if(Node.ValueNode != null) {
-			Node.ValueNode = this.CheckType(Node.ValueNode, NameSpace, ReturnType);
-			this.TypedNodeIf(Node, ZType.VoidType, Node.ValueNode);
+		if(this.InFunctionScope()) {
+			@Var ZNameSpace NameSpace = this.GetNameSpace();
+			@Var ZType ReturnType = this.CurrentFunctionNode.ReturnType;
+			if(Node.ValueNode != null && ReturnType.IsVoidType()) {
+				Node.ValueNode = null;
+			}
+			else if(Node.ValueNode == null && !ReturnType.IsVarType() && !ReturnType.IsVoidType()) {
+				this.Logger.ReportWarning(Node.SourceToken, "returning default value of " + ReturnType);
+				Node.ValueNode = ZenGamma.CreateDefaultValueNode(ReturnType, null);
+			}
+			if(Node.ValueNode != null) {
+				Node.ValueNode = this.CheckType(Node.ValueNode, NameSpace, ReturnType);
+				this.TypedNodeIf(Node, ZType.VoidType, Node.ValueNode);
+			}
+			else {
+				if(ReturnType instanceof ZVarType) {
+					((ZVarType)ReturnType).Infer(ZType.VoidType, Node.SourceToken);
+				}
+				this.TypedNode(Node, ZType.VoidType);
+			}
 		}
 		else {
-			if(ReturnType instanceof ZVarType) {
-				((ZVarType)ReturnType).Infer(ZType.VoidType, Node.SourceToken);
-			}
-			this.TypedNode(Node, ZType.VoidType);
+			this.Return(ZenError.NeedFunctionScope(Node, "return"));
 		}
 	}
+
 
 	@Override public void VisitWhileNode(ZWhileNode Node) {
 		@Var ZNameSpace NameSpace = this.GetNameSpace();

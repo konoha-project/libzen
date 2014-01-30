@@ -42,7 +42,6 @@ public class ZType  {
 	public final static ZType		MapType = new ZGeneric1Type(ZTypeFlag.UniqueType, "Map", null, VarType);
 	public final static ZType		FuncType  = new ZFuncType("Func", null);
 
-
 	@Field public int		  TypeFlag = 0;
 	@Field public int         TypeId = 0;
 	@Field public String      ShortName = null;

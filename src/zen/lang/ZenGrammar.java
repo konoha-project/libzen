@@ -539,19 +539,6 @@ public class ZenGrammar {
 		return BinaryNode.AppendParsedRightNode(NameSpace, TokenContext);
 	}
 
-	public static ZNode MatchSuffixExpression(ZNameSpace NameSpace, ZTokenContext TokenContext, ZNode LeftNode) {
-		ZSyntaxPattern Pattern = TokenContext.GetFirstPattern(NameSpace);
-		LeftNode = TokenContext.ApplyMatchPattern(NameSpace, LeftNode, Pattern, ZTokenContext.Required2);
-		while(LeftNode != null) {
-			@Var ZSyntaxPattern SuffixPattern = TokenContext.GetSuffixPattern(NameSpace);
-			if(SuffixPattern == null || SuffixPattern.IsBinaryOperator()) {
-				break;
-			}
-			LeftNode = TokenContext.ApplyMatchPattern(NameSpace, LeftNode, SuffixPattern, ZTokenContext.Required2);
-		}
-		return LeftNode;
-	}
-
 	public static ZNode MatchAnd(ZNameSpace NameSpace, ZTokenContext TokenContext, ZNode LeftNode) {
 		@Var ZBinaryNode BinaryNode = new ZAndNode(TokenContext.GetTokenAndMoveForward(), LeftNode, NameSpace.GetSuffixSyntaxPattern("&&"));
 		return BinaryNode.AppendParsedRightNode(NameSpace, TokenContext);
@@ -568,11 +555,42 @@ public class ZenGrammar {
 		return BinaryNode;
 	}
 
+
+	private static ZNode MatchFirstExpression(ZNameSpace NameSpace, ZTokenContext TokenContext, ZNode LeftNode) {
+		@Var ZToken Token = TokenContext.GetToken();
+		@Var ZSyntaxPattern Pattern = null;
+		if(Token.PresetPattern != null) {
+			Pattern = Token.PresetPattern;
+		}
+		else {
+			Pattern = NameSpace.GetSyntaxPattern(Token.ParsedText);
+		}
+		if(Pattern != null) {
+			LeftNode = TokenContext.ApplyMatchPattern(NameSpace, LeftNode, Pattern, ZTokenContext.Required2);
+		}
+		else {
+			Pattern = NameSpace.GetSyntaxPattern("$Symbol$");
+			LeftNode = TokenContext.ApplyMatchPattern(NameSpace, LeftNode, Pattern, ZTokenContext.Optional2);
+			if(LeftNode == null) {
+				LeftNode = TokenContext.CreateExpectedErrorNode(Token, "an expression");
+			}
+		}
+		return LeftNode;
+	}
+
+	private static ZSyntaxPattern GetSuffixPattern(ZNameSpace NameSpace, ZTokenContext TokenContext) {
+		@Var ZToken Token = TokenContext.GetToken();
+		if(Token != ZToken.NullToken) {
+			@Var ZSyntaxPattern Pattern = NameSpace.GetSuffixSyntaxPattern(Token.ParsedText);
+			return Pattern;
+		}
+		return null;
+	}
+
 	public static ZNode MatchExpression(ZNameSpace NameSpace, ZTokenContext TokenContext, ZNode LeftNode) {
-		ZSyntaxPattern Pattern = TokenContext.GetFirstPattern(NameSpace);
-		LeftNode = TokenContext.ApplyMatchPattern(NameSpace, LeftNode, Pattern, ZTokenContext.Required2);
-		while(LeftNode != null) {
-			@Var ZSyntaxPattern SuffixPattern = TokenContext.GetSuffixPattern(NameSpace);
+		LeftNode = ZenGrammar.MatchFirstExpression(NameSpace, TokenContext, LeftNode);
+		while(LeftNode != null && LeftNode.IsErrorNode()) {
+			@Var ZSyntaxPattern SuffixPattern = ZenGrammar.GetSuffixPattern(NameSpace, TokenContext);
 			if(SuffixPattern == null) {
 				break;
 			}
@@ -580,6 +598,20 @@ public class ZenGrammar {
 		}
 		return LeftNode;
 	}
+
+
+	public static ZNode MatchSuffixExpression(ZNameSpace NameSpace, ZTokenContext TokenContext, ZNode LeftNode) {
+		LeftNode = ZenGrammar.MatchFirstExpression(NameSpace, TokenContext, LeftNode);
+		while(LeftNode != null) {
+			@Var ZSyntaxPattern SuffixPattern = ZenGrammar.GetSuffixPattern(NameSpace, TokenContext);
+			if(SuffixPattern == null || SuffixPattern.IsBinaryOperator()) {
+				break;
+			}
+			LeftNode = TokenContext.ApplyMatchPattern(NameSpace, LeftNode, SuffixPattern, ZTokenContext.Required2);
+		}
+		return LeftNode;
+	}
+
 
 	public static ZNode MatchIf(ZNameSpace NameSpace, ZTokenContext TokenContext, ZNode LeftNode) {
 		@Var ZNode IfNode = new ZIfNode();
