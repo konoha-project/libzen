@@ -71,7 +71,6 @@ import zen.deps.LibNative;
 import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.deps.ZenMap;
-import zen.parser.ZLogger;
 import zen.parser.ZNameSpace;
 import zen.parser.ZNodeUtils;
 import zen.parser.ZParserConst;
@@ -308,17 +307,17 @@ public class ZenGrammar {
 					}
 				}
 			}
-			if(ch == '"') {
+			if(ch == '\"') {
 				TokenContext.AppendParsedToken(LibZen.SubString(SourceText, start, (pos + 1)), ZParserConst.QuotedTokenFlag, "$StringLiteral$");
 				return pos + 1;
 			}
 			if(ch == '\n') {
-				TokenContext.ReportTokenError1(ZLogger.ErrorLevel, "expected \" to close the string literal", LibZen.SubString(SourceText, start, pos));
+				//TokenContext.ReportTokenError1(ZLogger.ErrorLevel, "expected \" to close the string literal", LibZen.SubString(SourceText, start, pos));
 				TokenContext.FoundLineFeed(1);
 				return pos;
 			}
 		}
-		TokenContext.ReportTokenError1(ZLogger.ErrorLevel, "expected \" to close the string literal", LibZen.SubString(SourceText, start, pos));
+		//TokenContext.ReportTokenError1(ZLogger.ErrorLevel, "expected \" to close the string literal", LibZen.SubString(SourceText, start, pos));
 		return pos;
 	}
 
@@ -953,7 +952,6 @@ public class ZenGrammar {
 
 		NameSpace.DefineSuffixSyntax("&&", ZenPrecedence.CStyleAND, LibNative.LoadMatchFunc(Grammar, "MatchAnd"));
 		NameSpace.DefineSuffixSyntax("||", ZenPrecedence.CStyleOR, LibNative.LoadMatchFunc(Grammar, "MatchOr"));
-		NameSpace.DefineSuffixSyntax("instanceof", ZenPrecedence.Instanceof, LibNative.LoadMatchFunc(Grammar, "MatchInstanceOf"));
 
 		//		NameSpace.AppendExtendedSyntax("?", 0, LibNative.LoadMatchFunc(Grammar, "MatchTrinary"));
 
@@ -988,9 +986,6 @@ public class ZenGrammar {
 		NameSpace.DefineSyntax("return", LibNative.LoadMatchFunc(Grammar, "MatchReturn"));
 		NameSpace.DefineSyntax("while", LibNative.LoadMatchFunc(Grammar, "MatchWhile"));
 		NameSpace.DefineSyntax("break", LibNative.LoadMatchFunc(Grammar, "MatchBreak"));
-		NameSpace.DefineSyntax("try", LibNative.LoadMatchFunc(Grammar, "MatchTry"));
-		NameSpace.DefineSyntax("$Catch$", LibNative.LoadMatchFunc(Grammar, "MatchCatch"));
-		NameSpace.DefineSyntax("throw", LibNative.LoadMatchFunc(Grammar, "MatchThrow"));
 
 		NameSpace.DefineSyntax("$Identifier$", LibNative.LoadMatchFunc(Grammar, "MatchIdentifier"));
 		NameSpace.DefineSyntax("var",  LibNative.LoadMatchFunc(Grammar, "MatchVarDecl"));
@@ -999,6 +994,12 @@ public class ZenGrammar {
 		NameSpace.DefineSyntax("let", LibNative.LoadMatchFunc(Grammar, "MatchLetDecl"));
 		NameSpace.Generator.AppendGrammarInfo("zen-0.1");
 
+		NameSpace.DefineSyntax("try", LibNative.LoadMatchFunc(Grammar, "MatchTry"));
+		NameSpace.DefineSyntax("$Catch$", LibNative.LoadMatchFunc(Grammar, "MatchCatch"));
+		NameSpace.DefineSyntax("throw", LibNative.LoadMatchFunc(Grammar, "MatchThrow"));
+		NameSpace.Generator.AppendGrammarInfo("zen-trycatch-0.1");
+
+		NameSpace.DefineSuffixSyntax("instanceof", ZenPrecedence.Instanceof, LibNative.LoadMatchFunc(Grammar, "MatchInstanceOf"));
 		NameSpace.DefineSyntax("class", LibNative.LoadMatchFunc(Grammar, "MatchClassDecl"));
 		NameSpace.DefineSyntax("$FieldDecl$", LibNative.LoadMatchFunc(Grammar, "MatchFieldDecl"));
 		NameSpace.DefineSyntax("import", LibNative.LoadMatchFunc(Grammar, "MatchImport"));
