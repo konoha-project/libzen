@@ -594,7 +594,7 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 	@Override public void VisitReturnNode(ZReturnNode Node) {
 		if(Node.ValueNode != null) {
 			Node.ValueNode.Accept(this);
-			Type type = AsmClassLoader.GetAsmType(Node.ValueNode.Type);
+			Type type = LibAsm.GetAsmType(Node.ValueNode.Type);
 			this.CurrentBuilder.visitInsn(type.getOpcode(IRETURN));
 		}
 		else {
@@ -662,7 +662,7 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 
 		// prepare
 		//TODO: add exception class name
-		String throwType = AsmClassLoader.GetAsmType(Node.ExceptionType).getInternalName();
+		String throwType = LibAsm.GetAsmType(Node.ExceptionType).getInternalName();
 		mv.visitTryCatchBlock(Label.beginTryLabel, Label.endTryLabel, catchLabel, throwType);
 
 		// catch block
@@ -687,7 +687,7 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 		@Var ZFuncType FuncType = Node.GetFuncType(null);
 		@Var JvmFuncNode FuncNode = new JvmFuncNode(FuncType, Node.FuncName);
 		@Var AsmClassBuilder  HolderClass = this.ClassLoader.NewFunctionHolderClass(Node, FuncNode, FuncType);
-		@Var String MethodDesc = AsmClassLoader.GetMethodDescriptor(FuncType);
+		@Var String MethodDesc = LibAsm.GetMethodDescriptor(FuncType);
 		//System.out.println("*** " + MethodDesc);
 		this.CurrentBuilder = new AsmMethodBuilder(ACC_PUBLIC | ACC_STATIC, Node.FuncName, MethodDesc, this, this.CurrentBuilder);
 		HolderClass.AddMethod(this.CurrentBuilder);
@@ -714,20 +714,41 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 		this.CurrentBuilder = this.CurrentBuilder.Parent;
 	}
 
+	private final static String ClassMethodName(ZType ClassType, String FieldName) {
+		return FieldName+ ClassType.TypeId;
+	}
 
 	@Override public void VisitClassDeclNode(ZClassDeclNode Node) {
 		@Var AsmClassBuilder ClassBuilder = this.ClassLoader.NewClass(Node, Node.ClassName, Node.SuperType);
 		for(@Var int i = 0; i < Node.FieldList.size(); i++) {
 			@Var ZFieldNode Field = Node.FieldList.get(i);
 			if(Field.ClassType.Equals(Node.ClassType)) {
-				@Var FieldNode fn = new FieldNode(ACC_PUBLIC, Field.FieldName, AsmClassLoader.GetTypeDesc(Field.DeclType), null, this.GetConstValue(Field.InitNode));
+				@Var FieldNode fn = new FieldNode(ACC_PUBLIC, Field.FieldName, LibAsm.GetTypeDesc(Field.DeclType), null, this.GetConstValue(Field.InitNode));
 				ClassBuilder.AddField(fn);
 			}
 		}
-		//		MethodNode constructor = new MethodNode(ACC_PUBLIC, "<init>", "(Lorg/ZenScript/ZenType;)V", null, null);
+		for(@Var int i = 0; i < Node.FieldList.size(); i++) {
+			@Var ZFieldNode Field = Node.FieldList.get(i);
+			if(Field.Type.IsFuncType()) {
+				@Var FieldNode fn = new FieldNode(ACC_PUBLIC|ACC_STATIC, ClassMethodName(Node.ClassType, Field.FieldName), LibAsm.GetTypeDesc(Field.DeclType), null, this.GetConstValue(Field.InitNode));
+				ClassBuilder.AddField(fn);
+			}
+		}
+		//		AsmMethodBuilder constructor = new AsmMethodBuilder(ACC_PUBLIC, "<init>", MethodDesc, "(I)V", this, this.CurrentBuilder);
 		//		constructor.visitVarInsn(ALOAD, 0);
-		//		constructor.visitVarInsn(ALOAD, 1);
-		//		constructor.visitMethodInsn(INVOKESPECIAL, superClassName, "<init>", "(Lorg/ZenScript/ZenType;)V");
+		//		constructor.visitVarInsn(ILOAD, 1);
+		//		constructor.visitMethodInsn(INVOKESPECIAL, superClassName, "<init>", "(I)V");
+		//		for(@Var int i = 0; i < Node.FieldList.size(); i++) {
+		//			@Var ZFieldNode Field = Node.FieldList.get(i);
+		//			if(Field.ClassType.Equals(Node.ClassType)) {
+		//				this.CurrentBuilder.PushNode(NativeTypeTable.GetJavaClass(Field.Type), Node);
+		//				constructor.visitFieldInsn(PUTFIELD, ClassName, Field.FieldName, desc);
+		//
+		//				@Var FieldNode fn = new FieldNode(ACC_PUBLIC, Field.FieldName, AsmClassLoader.GetTypeDesc(Field.DeclType), null, this.GetConstValue(Field.InitNode));
+		//				ClassBuilder.AddField(fn);
+		//			}
+		//		}
+		//
 		//		for(ZenFieldInfo field : ClassField.FieldList) {
 		//			if(field.FieldIndex >= ClassField.ThisClassIndex && field.InitValue != null) {
 		//				String name = field.NativeName;
@@ -739,7 +760,6 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 		//		}
 		//		constructor.visitInsn(RETURN);
 		//		ClassBuilder.AddMethod(constructor);
-
 	}
 
 	@Override public void VisitErrorNode(ZErrorNode Node) {

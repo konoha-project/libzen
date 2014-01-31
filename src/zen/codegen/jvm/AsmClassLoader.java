@@ -94,7 +94,7 @@ class AsmClassLoader extends ClassLoader {
 		if(FuncClass == null) {
 			@Var String SuperClassName = Type.getInternalName(ZenFunction.class);
 			@Var AsmClassBuilder cb = new AsmClassBuilder(ACC_PUBLIC| ACC_ABSTRACT, null, ClassName, SuperClassName);
-			String Desc = AsmClassLoader.GetMethodDescriptor(FuncType);
+			String Desc = LibAsm.GetMethodDescriptor(FuncType);
 			MethodNode InvokeMethod = new MethodNode(ACC_PUBLIC | ACC_ABSTRACT, "Invoke", Desc, null, null);
 			cb.AddMethod(InvokeMethod);
 
@@ -117,11 +117,11 @@ class AsmClassLoader extends ClassLoader {
 		Class<?> FuncClass = this.LoadFuncClass(FuncType);
 		@Var AsmClassBuilder cb = new AsmClassBuilder(ACC_PUBLIC|ACC_FINAL, SourceFile, FuncNode.ClassName, Type.getInternalName(FuncClass));
 		this.AddClassBuilder(cb);
-		String FuncTypeDesc = AsmClassLoader.GetMethodDescriptor(FuncType);
+		String FuncTypeDesc = LibAsm.GetMethodDescriptor(FuncType);
 		MethodNode InvokeMethod = new MethodNode(ACC_PUBLIC | ACC_FINAL, "Invoke", FuncTypeDesc, null, null);
 		int index = 1;
 		for(int i = 0; i < FuncType.GetFuncParamSize(); i++) {
-			Type AsmType = GetAsmType(FuncType.GetFuncParamType(i));
+			Type AsmType = LibAsm.GetAsmType(FuncType.GetFuncParamType(i));
 			InvokeMethod.visitVarInsn(AsmType.getOpcode(ILOAD), index);
 			index += AsmType.getSize();
 		}
@@ -131,7 +131,7 @@ class AsmClassLoader extends ClassLoader {
 			InvokeMethod.visitInsn(RETURN);
 		}
 		else {
-			Type type = AsmClassLoader.GetAsmType(FuncType.GetReturnType());
+			Type type = LibAsm.GetAsmType(FuncType.GetReturnType());
 			InvokeMethod.visitInsn(type.getOpcode(IRETURN));
 		}
 		cb.AddMethod(InvokeMethod);
@@ -159,7 +159,6 @@ class AsmClassLoader extends ClassLoader {
 		return cb;
 	}
 
-
 	AsmClassBuilder NewClass(ZNode Node, String ClassName, ZType SuperType) {
 		@Var String SourceFile = ZSystem.GetSourceFileName(Node.SourceToken.FileLine);
 		@Var AsmClassBuilder cb = new AsmClassBuilder(ACC_PUBLIC, SourceFile, ClassName, "java/lang/Object" /*FIXME*/);
@@ -183,27 +182,6 @@ class AsmClassLoader extends ClassLoader {
 			}
 		}
 		return null;
-	}
-
-	static String GetTypeDesc(ZType zType) {
-		Class<?> JClass = NativeTypeTable.GetJavaClass(zType);
-		return Type.getDescriptor(JClass);
-	}
-
-	static String GetMethodDescriptor(ZFuncType FuncType) {
-		@Var Type ReturnType = GetAsmType(FuncType.GetReturnType());
-		@Var Type[] ArgTypes = new Type[FuncType.GetFuncParamSize()];
-		for(int i = 0; i < ArgTypes.length; i++) {
-			ZType ParamType = FuncType.GetFuncParamType(i);
-			ArgTypes[i] = GetAsmType(ParamType);
-		}
-		String Desc = Type.getMethodDescriptor(ReturnType, ArgTypes);
-		//System.out.println(" ** Desc: " + Desc + ", FuncType: " + FuncType);
-		return Desc;
-	}
-
-	static Type GetAsmType(ZType zType) {
-		return Type.getType(NativeTypeTable.GetJavaClass(zType));
 	}
 
 
