@@ -409,6 +409,28 @@ public final class ZTokenContext {
 		return Base;
 	}
 
+	public ZNode AppendMatchedPatternNtimes(ZNode Base, ZNameSpace NameSpace, String PatternName, String DelimToken, boolean AllowSkipIndent) {
+		int ParseFlag = this.ParseFlag;
+		while(!Base.IsErrorNode()) {
+			if(AllowSkipIndent) {
+				this.SetSkipIndent(true);
+			}
+			@Var ZNode ParsedNode = this.ParsePattern(NameSpace, PatternName, ZTokenContext.Optional2);
+			if(ParsedNode == null) {
+				break;
+			}
+			Base.Append(ParsedNode);
+			if(AllowSkipIndent) {
+				this.SetSkipIndent(true);
+			}
+			if(!this.MatchToken(DelimToken)) {
+				break;
+			}
+		}
+		this.ParseFlag = ParseFlag;
+		return Base;
+	}
+
 	//	public final ZNode ApplyMatchPattern(ZNameSpace NameSpace, ZNode LeftNode, ZSyntaxPattern Pattern) {
 	//		@Var int RollbackPosition = this.CurrentPosition;
 	//		@Var int ParseFlag = this.ParseFlag;

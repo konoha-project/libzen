@@ -353,20 +353,9 @@ public class ZenGrammar {
 
 	public static ZNode MatchArrayLiteral(ZNameSpace NameSpace, ZTokenContext TokenContext, ZNode LeftNode) {
 		@Var ZNode LiteralNode = new ZArrayLiteralNode();
-		@Var ZToken Token = TokenContext.GetTokenAndMoveForward(); /* "[" */
-		LiteralNode.SourceToken = Token;
-		if(!TokenContext.MatchToken("]")) {
-			while(TokenContext.HasNext()) {
-				LiteralNode = TokenContext.AppendMatchedPattern(LiteralNode, NameSpace, "$Expression$", ZTokenContext.Required2);
-				if(LiteralNode.IsErrorNode() || TokenContext.MatchToken("]")) {
-					break;
-				}
-				LiteralNode = TokenContext.MatchNodeToken(LiteralNode, NameSpace, ",", ZTokenContext.Required2);
-				if(LiteralNode.IsErrorNode() || TokenContext.MatchToken("]")) {
-					break;
-				}
-			}
-		}
+		LiteralNode = TokenContext.MatchNodeToken(LiteralNode, NameSpace, "[", ZTokenContext.Required2);
+		LiteralNode = TokenContext.AppendMatchedPatternNtimes(LiteralNode, NameSpace, "$Expression$", ",", true);
+		LiteralNode = TokenContext.MatchNodeToken(LiteralNode, NameSpace, "]", ZTokenContext.Required2);
 		return LiteralNode;
 	}
 
