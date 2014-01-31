@@ -26,24 +26,16 @@
 //ifdef JAVA
 package zen.deps;
 import zen.type.ZType;
+import zen.type.ZTypePool;
 
 
-public class ZenTopObject implements ZenTypedObject {
-	public ZType GreenType;
-	protected ZenTopObject(ZType GreenType) {
-		this.GreenType = GreenType;
+public class ZenObject implements ZenTypedObject {
+	public ZType ZenType;
+	protected ZenObject(int TypeId) {
+		this.ZenType = ZTypePool.TypeOf(TypeId);
 	}
 	@Override public final ZType GetZenType() {
-		return this.GreenType;
+		return this.ZenType;
 	}
 
-}
-
-
-final class ZenAnyObject extends ZenTopObject {
-	public final Object NativeValue;
-	ZenAnyObject(ZType GreenType, Object NativeValue) {
-		super(GreenType);
-		this.NativeValue = NativeValue;
-	}
 }

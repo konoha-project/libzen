@@ -18,14 +18,17 @@ public class ZTypePool {
 	}
 
 	public final static ZType TypeOf(int TypeId) {
-		return TypeList.get(TypeId);
+		if(TypeId < ZTypePool.TypeList.size()) {
+			return ZTypePool.TypeList.get(TypeId);
+		}
+		return ZType.VarType;
 	}
 
 	public final static ZType GetGreekType(int GreekId) {
-		if(GreekTypes[GreekId] == null) {
-			GreekTypes[GreekId] = new ZGreekType(GreekId);
+		if(ZTypePool.GreekTypes[GreekId] == null) {
+			ZTypePool.GreekTypes[GreekId] = new ZGreekType(GreekId);
 		}
-		return GreekTypes[GreekId];
+		return ZTypePool.GreekTypes[GreekId];
 	}
 
 	private final static ZenMap<ZType>     ClassNameMap = new ZenMap<ZType>(null);
@@ -46,17 +49,17 @@ public class ZTypePool {
 
 	private final static ZType[] UniqueTypes(int BaseIdx, ArrayList<ZType> TypeList) {
 		@Var String MangleName = "[]" + MangleTypes(BaseIdx, TypeList);
-		@Var ZType[] Types = UniqueTypeSetMap.GetOrNull(MangleName);
+		@Var ZType[] Types = ZTypePool.UniqueTypeSetMap.GetOrNull(MangleName);
 		if(Types == null) {
 			Types = LibZen.CompactTypeList(BaseIdx, TypeList);
-			UniqueTypeSetMap.put(MangleName, Types);
+			ZTypePool.UniqueTypeSetMap.put(MangleName, Types);
 		}
 		return Types;
 	}
 
 	public final static ZType GetGenericType1(ZType BaseType, ZType ParamType, boolean IsCreation) {
-		@Var String MangleName = MangleType2(BaseType, ParamType);
-		@Var ZType GenericType = ClassNameMap.GetOrNull(MangleName);
+		@Var String MangleName = ZTypePool.MangleType2(BaseType, ParamType);
+		@Var ZType GenericType = ZTypePool.ClassNameMap.GetOrNull(MangleName);
 		if((GenericType == null) && IsCreation) {
 			@Var String Name = BaseType.ShortName + "<" + ParamType + ">";
 			if(BaseType.IsArrayType()) {
@@ -74,7 +77,7 @@ public class ZTypePool {
 			return GetGenericType1(BaseType, TypeList.get(BaseIdx), IsCreation);
 		}
 		@Var String MangleName = ":" + BaseType.TypeId + MangleTypes(BaseIdx, TypeList);
-		@Var ZType GenericType = ClassNameMap.GetOrNull(MangleName);
+		@Var ZType GenericType = ZTypePool.ClassNameMap.GetOrNull(MangleName);
 		if((GenericType == null) && IsCreation) {
 			@Var String ShortName = BaseType.ShortName + "<";
 			for(@Var int i = BaseIdx; i < LibZen.ListSize(TypeList); i += 1) {
