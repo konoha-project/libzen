@@ -659,7 +659,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 
 	@Override public void VisitTryNode(ZTryNode Node) {
 		@Var ZNameSpace NameSpace = this.GetNameSpace();
-		Node.TryNode = this.CheckType(Node.TryNode, NameSpace, ZType.BooleanType);
+		Node.TryNode = this.CheckType(Node.TryNode, NameSpace, ZType.VoidType);
 		if(Node.CatchNode != null) {
 			Node.CatchNode = this.CheckType(Node.CatchNode, NameSpace, ZType.VoidType);
 		}
