@@ -46,8 +46,11 @@ public final class ZTokenContext {
 	public final static int     AllowSkipIndent    = (1 << 4);
 	public final static int     AllowAnnotation   = (1 << 3);
 	public final static int     AllowLineFeed     = (1 << 2);
-	public final static boolean     Optional2          = false;
+
 	public final static boolean     Required2          = true;
+	public final static boolean     Optional2          = false;
+	public final static boolean     AllowSkipIndent2   = true;
+	public final static boolean     NotAllowSkipIndent2   = false;
 
 	@Field @Init public ZNameSpace TopLevelNameSpace;
 	@Field public ArrayList<ZToken> SourceTokenList = new ArrayList<ZToken>();
