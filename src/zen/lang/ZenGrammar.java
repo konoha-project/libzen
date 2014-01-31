@@ -54,6 +54,7 @@ import zen.ast.ZLetNode;
 import zen.ast.ZMapEntryNode;
 import zen.ast.ZMapLiteralNode;
 import zen.ast.ZMethodCallNode;
+import zen.ast.ZNewObjectNode;
 import zen.ast.ZNode;
 import zen.ast.ZNotNode;
 import zen.ast.ZNullNode;
@@ -372,6 +373,16 @@ public class ZenGrammar {
 		LiteralNode = TokenContext.MatchNodeToken(LiteralNode, NameSpace, "{", ZTokenContext.Required2);
 		LiteralNode = TokenContext.AppendMatchedPatternNtimes(LiteralNode, NameSpace, "$MapEntry$", ",", ZTokenContext.AllowSkipIndent2);
 		LiteralNode = TokenContext.MatchNodeToken(LiteralNode, NameSpace, "}", ZTokenContext.Required2);
+		return LiteralNode;
+	}
+
+	public static ZNode MatchNewObject(ZNameSpace NameSpace, ZTokenContext TokenContext, ZNode LeftNode) {
+		@Var ZNode LiteralNode = new ZNewObjectNode();
+		LiteralNode = TokenContext.MatchNodeToken(LiteralNode, NameSpace, "new", ZTokenContext.Required2);
+		LiteralNode = TokenContext.AppendMatchedPattern(LiteralNode, NameSpace, "$Type$", ZTokenContext.Optional2);
+		LiteralNode = TokenContext.MatchNodeToken(LiteralNode, NameSpace, "(", ZTokenContext.Required2);
+		LiteralNode = TokenContext.AppendMatchedPatternNtimes(LiteralNode, NameSpace, "$Expression$", ",", ZTokenContext.AllowSkipIndent2);
+		LiteralNode = TokenContext.MatchNodeToken(LiteralNode, NameSpace, ")", ZTokenContext.Required2);
 		return LiteralNode;
 	}
 
@@ -925,6 +936,7 @@ public class ZenGrammar {
 		NameSpace.DefineSyntax("[", LibNative.LoadMatchFunc(Grammar, "MatchArrayLiteral"));
 		NameSpace.DefineSyntax("$MapEntry$", LibNative.LoadMatchFunc(Grammar, "MatchMapEntry"));
 		NameSpace.DefineSyntax("{", LibNative.LoadMatchFunc(Grammar, "MatchMapLiteral"));
+		NameSpace.DefineSyntax("new", LibNative.LoadMatchFunc(Grammar, "MatchNewObject"));
 
 		NameSpace.DefineSyntax("$Block$", LibNative.LoadMatchFunc(Grammar, "MatchBlock"));
 		NameSpace.DefineSyntax("$Annotation$", LibNative.LoadMatchFunc(Grammar, "MatchAnnotation"));

@@ -27,19 +27,20 @@ package zen.ast;
 import java.util.ArrayList;
 
 import zen.deps.Field;
-import zen.lang.ZFunc;
-import zen.parser.ZToken;
 import zen.parser.ZVisitor;
-import zen.type.ZType;
 
-// E.g., ConstructorNode is for object creation in Native language defined
 public final class ZNewObjectNode extends ZNode {
 	@Field public ArrayList<ZNode>	ParamList = new ArrayList<ZNode>();
-	public ZNewObjectNode(ZType Type, ZToken Token, ZFunc Func) {
+	public ZNewObjectNode() {
 		super();
 	}
 	@Override public final void Append(ZNode Node) {
-		this.ParamList.add(this.SetChild(Node));
+		if(this.Type.IsVarType() && Node instanceof ZTypeNode) {
+			this.Type = Node.Type;
+		}
+		else {
+			this.ParamList.add(this.SetChild(Node));
+		}
 	}
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitNewObjectNode(this);
