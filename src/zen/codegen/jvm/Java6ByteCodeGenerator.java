@@ -226,24 +226,6 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 		return null;
 	}
 
-	@Override public ZFuncType GetConstructorFuncType(ZType ClassType, ArrayList<ZNode> ParamList) {
-		Constructor<?> jMethod = this.GetConstructor(ClassType, ParamList);
-		if(jMethod != null) {
-			@Var ArrayList<ZType> TypeList = new ArrayList<ZType>();
-			TypeList.add(ClassType);
-			@Var Class<?>[] ParamTypes = jMethod.getParameterTypes();
-			if (ParamTypes != null) {
-				@Var int j = 0;
-				while(j < ParamTypes.length) {
-					TypeList.add(NativeTypeTable.GetZenType(ParamTypes[j]));
-					j = j + 1;
-				}
-			}
-			return ZTypePool.LookupFuncType(TypeList);
-		}
-		return null;
-	}
-
 	Method GetMethod(ZType RecvType, String MethodName, ArrayList<ZNode> ParamList) {
 		Class<?> NativeClass = NativeTypeTable.GetJavaClass(RecvType);
 		if(NativeClass != null) {
@@ -268,9 +250,27 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 	}
 
 	@Override public ZFuncType GetMethodFuncType(ZType RecvType, String MethodName, ArrayList<ZNode> ParamList) {
-		Method jMethod = this.GetMethod(RecvType, MethodName, ParamList);
-		if(jMethod != null) {
-			return NativeTypeTable.ConvertToFuncType(jMethod);
+		if(MethodName == null) {
+			Constructor<?> jMethod = this.GetConstructor(RecvType, ParamList);
+			if(jMethod != null) {
+				@Var ArrayList<ZType> TypeList = new ArrayList<ZType>();
+				TypeList.add(RecvType);
+				@Var Class<?>[] ParamTypes = jMethod.getParameterTypes();
+				if (ParamTypes != null) {
+					@Var int j = 0;
+					while(j < ParamTypes.length) {
+						TypeList.add(NativeTypeTable.GetZenType(ParamTypes[j]));
+						j = j + 1;
+					}
+				}
+				return ZTypePool.LookupFuncType(TypeList);
+			}
+		}
+		else {
+			Method jMethod = this.GetMethod(RecvType, MethodName, ParamList);
+			if(jMethod != null) {
+				return NativeTypeTable.ConvertToFuncType(jMethod);
+			}
 		}
 		return null;
 	}
@@ -327,27 +327,31 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 	}
 
 	@Override public void VisitNewObjectNode(ZNewObjectNode Node) {
-		String ClassName = Type.getInternalName(NativeTypeTable.GetJavaClass(Node.Type));
-		this.CurrentBuilder.visitTypeInsn(NEW, ClassName);
-		this.CurrentBuilder.visitInsn(DUP);
-		this.CurrentBuilder.visitMethodInsn(INVOKESPECIAL, ClassName, "<init>", "()V");
-		//		String name = Type.getInternalName(SoftwareFaultException.class);
-		//		this.CurrentBuilder.SetLineNumber(Node);
-		//		this.CurrentBuilder.visitTypeInsn(NEW, name);
-		//		this.CurrentBuilder.visitInsn(DUP);
-		//		this.CurrentBuilder.LoadConst(Node.ErrorMessage);
-		//		this.CurrentBuilder.visitMethodInsn(INVOKESPECIAL, name, "<init>", "(Ljava/lang/Object;)V");
-
-		//		Type type = this.GetAsmType(Node.Type);
-		//		String owner = type.getInternalName();
-		//		this.CurrentBuilder.visitTypeInsn(NEW, owner);
-		//		this.CurrentBuilder.visitInsn(DUP);
-		//		if(!((Node.Type.TypeFlag & ZTypeFlag.UniqueType) == ZTypeFlag.UniqueType)) {
-		//			this.CurrentBuilder.LoadConst(Node.Type);
-		//			this.CurrentBuilder.visitMethodInsn(INVOKESPECIAL, owner, "<init>", "(Lorg/ZenScript/ZenType;)V");
-		//		} else {
-		//			this.CurrentBuilder.visitMethodInsn(INVOKESPECIAL, owner, "<init>", "()V");
-		//		}
+		if(Node.Type.IsVarType()) {
+			this.Logger.ReportError(Node.SourceToken, "no class for new operator");
+			this.CurrentBuilder.visitInsn(ACONST_NULL);
+		}
+		else {
+			String ClassName = Type.getInternalName(NativeTypeTable.GetJavaClass(Node.Type));
+			this.CurrentBuilder.visitTypeInsn(NEW, ClassName);
+			this.CurrentBuilder.visitInsn(DUP);
+			Constructor<?> jMethod = this.GetConstructor(Node.Type, Node.ParamList);
+			if(jMethod != null) {
+				//				this.CurrentBuilder.visitVarInsn(ALOAD, 0);
+				Class<?>[] P = jMethod.getParameterTypes();
+				for(int i = 0; i < P.length; i++) {
+					this.CurrentBuilder.PushNode(P[i], Node.ParamList.get(i));
+				}
+				this.CurrentBuilder.SetLineNumber(Node);
+				this.CurrentBuilder.visitMethodInsn(INVOKESPECIAL, ClassName, "<init>", Type.getConstructorDescriptor(jMethod));
+			}
+			else {
+				//				this.CurrentBuilder.visitVarInsn(ALOAD, 0);
+				this.CurrentBuilder.visitLdcInsn(Node.Type.TypeId);
+				this.CurrentBuilder.SetLineNumber(Node);
+				this.CurrentBuilder.visitMethodInsn(INVOKESPECIAL, ClassName, "<init>", "(I)V");
+			}
+		}
 	}
 
 	@Override public void VisitSymbolNode(ZSymbolNode Node) {

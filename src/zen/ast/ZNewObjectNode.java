@@ -27,6 +27,8 @@ package zen.ast;
 import java.util.ArrayList;
 
 import zen.deps.Field;
+import zen.deps.Var;
+import zen.lang.ZFunc;
 import zen.parser.ZVisitor;
 
 public final class ZNewObjectNode extends ZNode {
@@ -45,4 +47,21 @@ public final class ZNewObjectNode extends ZNode {
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitNewObjectNode(this);
 	}
+
+	public final ZFuncCallNode ToStaticFuncCall(ZFunc Func) {
+		ZGetNameNode Dummy = new ZGetNameNode(this.SourceToken, Func.FuncName);
+		ZFuncCallNode FuncNode = new ZFuncCallNode(Dummy);
+		FuncNode.SourceToken = this.SourceToken;
+		FuncNode.Append(this);
+		@Var int i = 0;
+		while(i < this.ParamList.size()) {
+			FuncNode.Append(this.ParamList.get(i));
+			i = i + 1;
+		}
+		this.ParamList.clear();
+		FuncNode.ResolvedFuncName = Func.FuncName;
+		FuncNode.ResolvedFuncType = Func.GetFuncType();
+		return FuncNode;
+	}
+
 }

@@ -150,8 +150,7 @@ class AsmClassLoader extends ClassLoader {
 
 		MethodNode InitMethod = new MethodNode(ACC_PRIVATE, "<init>", "()V", null, null);
 		InitMethod.visitVarInsn(ALOAD, 0);
-		InitMethod.visitLdcInsn(FuncType.TypeId);  // FIXME
-		//InitMethod.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Integer", "intValue", "(Ljva/lang/Integer;)I");
+		InitMethod.visitLdcInsn(FuncType.TypeId);
 		InitMethod.visitLdcInsn(FuncNode.FuncName);
 		InitMethod.visitMethodInsn(INVOKESPECIAL, Type.getInternalName(FuncClass), "<init>", "(ILjava/lang/String;)V");
 		InitMethod.visitInsn(RETURN);

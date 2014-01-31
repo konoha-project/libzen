@@ -216,10 +216,6 @@ public class ZenTypeSafer extends ZTypeChecker {
 		this.TypedNode(Node, ContextType);
 	}
 
-	@Override public void VisitNewObjectNode(ZNewObjectNode Node) {
-		this.Todo(Node);
-	}
-
 	@Override public void VisitNewArrayNode(ZNewArrayNode Node) {
 		this.Todo(Node);
 	}
@@ -363,16 +359,16 @@ public class ZenTypeSafer extends ZTypeChecker {
 		}
 	}
 
-	private void TypeCheckMethodCall(ZMethodCallNode Node, ZNameSpace NameSpace) {
-		ZFuncType FuncType = NameSpace.Generator.GetMethodFuncType(Node.RecvNode.Type, Node.MethodName, Node.ParamList);
+	private void TypeCheckNativeMethodCall(ZNameSpace NameSpace, ZNode Node, ZType RecvType, String MethodName, ArrayList<ZNode> ParamList) {
+		ZFuncType FuncType = NameSpace.Generator.GetMethodFuncType(RecvType, MethodName, ParamList);
 		if(FuncType != null) {
 			@Var int i = 0;
 			@Var boolean IsAllTyped = true;
-			@Var int StaticShift = FuncType.GetParamSize() - Node.ParamList.size();
-			while(i < Node.ParamList.size()) {
-				@Var ZNode SubNode = Node.ParamList.get(i);
+			@Var int StaticShift = FuncType.GetParamSize() - ParamList.size();
+			while(i < ParamList.size()) {
+				@Var ZNode SubNode = ParamList.get(i);
 				SubNode = this.CheckType(SubNode, NameSpace, FuncType.GetParamType(i+StaticShift));
-				Node.ParamList.set(i, SubNode);
+				ParamList.set(i, SubNode);
 				if(SubNode.IsUntyped()) {
 					IsAllTyped = false;
 				}
@@ -383,7 +379,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 				return;
 			}
 		}
-		this.TypedNode(Node, ZType.VarType);
+		this.Return(Node);
 	}
 
 	@Override public void VisitMethodCallNode(ZMethodCallNode Node) {
@@ -397,7 +393,6 @@ public class ZenTypeSafer extends ZTypeChecker {
 				return;
 			}
 		}
-		this.TypeCheckNodeList(NameSpace, Node.ParamList);
 		@Var int FuncParamSize = Node.ParamList.size() + 1;
 		@Var ZFunc Func = ZenGamma.LookupFunc(NameSpace, Node.MethodName, Node.RecvNode.Type, FuncParamSize);
 		if(Func != null) {
@@ -405,7 +400,29 @@ public class ZenTypeSafer extends ZTypeChecker {
 			this.TypeCheckFuncCall(FuncCall, NameSpace, Func.GetFuncType());
 			return;
 		}
-		this.TypeCheckMethodCall(Node, NameSpace);
+		this.TypeCheckNodeList(NameSpace, Node.ParamList);
+		this.TypeCheckNativeMethodCall(NameSpace, Node, Node.RecvNode.Type, Node.MethodName, Node.ParamList);
+	}
+
+	@Override public void VisitNewObjectNode(ZNewObjectNode Node) {
+		@Var ZNameSpace NameSpace = this.GetNameSpace();
+		@Var ZType ContextType = this.GetContextType();
+		this.TypeCheckNodeList(NameSpace, Node.ParamList);
+		if(Node.Type.IsVarType()) {
+			if(ContextType.IsVarType()) {
+				this.Return(Node);
+				return;
+			}
+			Node.Type = ContextType;
+		}
+		@Var int FuncParamSize = Node.ParamList.size() + 1;
+		@Var ZFunc Func = ZenGamma.LookupFunc(NameSpace, Node.Type.GetUniqueName(), Node.Type, FuncParamSize);
+		if(Func != null) {
+			ZFuncCallNode FuncCall = Node.ToStaticFuncCall(Func);
+			this.TypeCheckFuncCall(FuncCall, NameSpace, Func.GetFuncType());
+			return;
+		}
+		this.TypeCheckNativeMethodCall(NameSpace, Node, Node.Type, null, Node.ParamList);
 	}
 
 	private boolean IsFuncName(ZFuncCallNode FuncCallNode, ZNameSpace NameSpace) {

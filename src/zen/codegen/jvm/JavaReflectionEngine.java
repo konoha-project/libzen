@@ -26,6 +26,7 @@
 
 package zen.codegen.jvm;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -41,12 +42,14 @@ import zen.ast.ZGetterNode;
 import zen.ast.ZGroupNode;
 import zen.ast.ZLetNode;
 import zen.ast.ZMethodCallNode;
+import zen.ast.ZNewObjectNode;
 import zen.ast.ZNode;
 import zen.ast.ZNotNode;
 import zen.ast.ZSetterNode;
 import zen.ast.ZStringNode;
 import zen.ast.ZUnaryNode;
 import zen.deps.LibNative;
+import zen.deps.NativeTypeTable;
 import zen.deps.Var;
 import zen.lang.ZFunc;
 import zen.lang.ZenEngine;
@@ -79,6 +82,26 @@ public class JavaReflectionEngine extends ZenEngine {
 			return Value.byteValue();
 		}
 		return Value;
+	}
+
+	void EvalConstructor(ZNode Node, Constructor<?> jMethod, ZNode[] Nodes) {
+		try {
+			Object Values[] = new Object[Nodes.length];
+			Class<?> P[] = jMethod.getParameterTypes();
+			for(int i = 0; i < Nodes.length; i++) {
+				Values[i] = this.Eval(Nodes[i]);
+				if(Values[i] instanceof Number) {
+					Values[i] = this.NumberCast(P[i], (Number)Values[i]);
+				}
+			}
+			if(this.IsVisitable()) {
+				this.EvaledValue = jMethod.newInstance(Values);
+			}
+		} catch (Exception e) {
+			this.Logger.ReportInfo(Node.SourceToken, "runtime error: " + e);
+			e.printStackTrace();
+			this.StopVisitor();
+		}
 	}
 
 	void EvalMethod(ZNode Node, Method jMethod, ZNode RecvNode, ZNode[] Nodes) {
@@ -155,8 +178,26 @@ public class JavaReflectionEngine extends ZenEngine {
 	//		this.Unsupported(Node);
 	//	}
 
+	@Override public void VisitNewObjectNode(ZNewObjectNode Node) {
+		Constructor<?> jMethod = ((Java6ByteCodeGenerator)this.Generator).GetConstructor(Node.Type, Node.ParamList);
+		if(jMethod != null) {
+			this.EvalConstructor(Node, jMethod, ((Java6ByteCodeGenerator)this.Generator).PackNodes(null, Node.ParamList));
+		}
+		else {
+			Class<?> jClass = NativeTypeTable.GetJavaClass(Node.Type);
+			try {
+				jMethod = jClass.getConstructor(int.class);
+				this.EvaledValue = jMethod.newInstance(new Object[]{Node.Type.TypeId});
+			}
+			catch(Exception e) {
+				this.Logger.ReportWarning(Node.SourceToken, "runtime error: " + e);
+				this.EvaledValue = null;
+			}
+		}
+	}
+
 	@Override public void VisitMethodCallNode(ZMethodCallNode Node) {
-		Method jMethod = ((Java6ByteCodeGenerator)this.Generator).GetMethod(Node.RecvNode.Type, Node.MethodName, Node.ParamList);
+		Method jMethod = ((Java6ByteCodeGenerator)this.Generator).GetMethod(Node.RecvNode.Type, null, Node.ParamList);
 		if(jMethod != null) {
 			this.EvalMethod(Node, jMethod, Node.RecvNode, ((Java6ByteCodeGenerator)this.Generator).PackNodes(null, Node.ParamList));
 		}
@@ -180,6 +221,7 @@ public class JavaReflectionEngine extends ZenEngine {
 			}
 		}
 	}
+
 
 	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
 		if(Node.ResolvedFuncName != null) {
