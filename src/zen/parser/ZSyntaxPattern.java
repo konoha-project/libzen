@@ -38,6 +38,7 @@ public final class ZSyntaxPattern {
 	@Field public int				          SyntaxFlag = 0;
 	@Field public ZSyntaxPattern              ParentPattern = null;
 	@Field public boolean IsDisabled          = false;
+	@Field public boolean IsStatement         = false;
 
 	public ZSyntaxPattern(ZNameSpace NameSpace, String PatternName, ZFunc MatchFunc) {
 		this.PackageNameSpace = NameSpace;

@@ -138,6 +138,17 @@ public final class ZNameSpace {
 		this.SetSyntaxPattern(PatternName, NewPattern);
 	}
 
+	public void DefineStatement(String PatternName, ZFunc MatchFunc) {
+		@Var int Alias = PatternName.indexOf(" ");
+		@Var String Name = (Alias == -1) ? PatternName : PatternName.substring(0, Alias);
+		@Var ZSyntaxPattern Pattern = new ZSyntaxPattern(this, Name, MatchFunc);
+		Pattern.IsStatement = true;
+		this.AppendSyntaxPattern(Name, Pattern);
+		if(Alias != -1) {
+			this.DefineStatement(PatternName.substring(Alias+1), MatchFunc);
+		}
+	}
+
 	public void DefineSyntax(String PatternName, ZFunc MatchFunc) {
 		@Var int Alias = PatternName.indexOf(" ");
 		@Var String Name = (Alias == -1) ? PatternName : PatternName.substring(0, Alias);
