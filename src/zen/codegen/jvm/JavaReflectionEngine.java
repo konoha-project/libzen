@@ -58,6 +58,28 @@ public class JavaReflectionEngine extends ZenEngine {
 		super(TypeChecker, Generator);
 	}
 
+	Object NumberCast(Class<?> T, Number Value) {
+		if(T == int.class || T == Integer.class) {
+			return Value.intValue();
+		}
+		if(T == long.class || T == Long.class) {
+			return Value.longValue();
+		}
+		if(T == double.class || T == Double.class) {
+			return Value.longValue();
+		}
+		if(T == short.class || T == Short.class) {
+			return Value.shortValue();
+		}
+		if(T == float.class || T == Float.class) {
+			return Value.floatValue();
+		}
+		if(T == byte.class || T == Byte.class) {
+			return Value.byteValue();
+		}
+		return Value;
+	}
+
 	void EvalMethod(ZNode Node, Method jMethod, ZNode RecvNode, ZNode[] Nodes) {
 		try {
 			Object Recv = null;
@@ -68,8 +90,8 @@ public class JavaReflectionEngine extends ZenEngine {
 			Class<?> P[] = jMethod.getParameterTypes();
 			for(int i = 0; i < Nodes.length; i++) {
 				Values[i] = this.Eval(Nodes[i]);
-				if(Values[i] instanceof Long || Values[i] instanceof Double) {
-					Values[i] = P[i].cast(Values[i]);
+				if(Values[i] instanceof Number) {
+					Values[i] = this.NumberCast(P[i], (Number)Values[i]);
 				}
 			}
 			if(this.IsVisitable()) {
