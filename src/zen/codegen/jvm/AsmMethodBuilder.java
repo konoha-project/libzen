@@ -108,6 +108,9 @@ public class AsmMethodBuilder extends MethodNode {
 	}
 
 	void CheckCast(Class<?> C1, Class<?> C2) {
+		if(C1.equals(C2)) {
+			return;
+		}
 		Method sMethod = NativeMethodTable.GetCastMethod(C1, C2);
 		this.Generator.Debug("C1="+C1.getSimpleName()+ ", C2="+C2.getSimpleName()+", CastMethod="+sMethod);
 		if(sMethod != null) {
