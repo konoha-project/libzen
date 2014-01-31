@@ -50,6 +50,7 @@ import zen.ast.ZGroupNode;
 import zen.ast.ZIfNode;
 import zen.ast.ZInstanceOfNode;
 import zen.ast.ZIntNode;
+import zen.ast.ZLetNode;
 import zen.ast.ZMapLiteralNode;
 import zen.ast.ZMethodCallNode;
 import zen.ast.ZNewArrayNode;
@@ -327,17 +328,17 @@ public class ZenEngine extends ZVisitor {
 		this.Unsupported(Node, "catch");
 	}
 
-	@Override public void VisitFunctionNode(ZFunctionNode Node) {
+	@Override public void VisitLetNode(ZLetNode Node) {
 		if(!this.Generator.StartCodeGeneration(Node, true, this.IsInteractive)) {
 			this.LazyNode(Node);
 		}
 	}
 
-	//	@Override public void VisitFuncDeclNode(ZFunctionNode/*Decl*/ Node) {
-	//		if(!this.Generator.StartCodeGeneration(Node, true, this.IsInteractive)) {
-	//			this.LazyNode(Node);
-	//		}
-	//	}
+	@Override public void VisitFunctionNode(ZFunctionNode Node) {
+		if(!this.Generator.StartCodeGeneration(Node, true, this.IsInteractive)) {
+			this.LazyNode(Node);
+		}
+	}
 
 	@Override public void VisitClassDeclNode(ZClassDeclNode Node) {
 		if(!this.Generator.StartCodeGeneration(Node, true, this.IsInteractive)) {

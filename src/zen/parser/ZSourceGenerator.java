@@ -50,6 +50,7 @@ import zen.ast.ZGroupNode;
 import zen.ast.ZIfNode;
 import zen.ast.ZInstanceOfNode;
 import zen.ast.ZIntNode;
+import zen.ast.ZLetNode;
 import zen.ast.ZMapLiteralNode;
 import zen.ast.ZMethodCallNode;
 import zen.ast.ZNewArrayNode;
@@ -479,6 +480,14 @@ public class ZSourceGenerator extends ZGenerator {
 		this.VisitType(Type);
 	}
 
+	@Override public void VisitLetNode(ZLetNode Node) {
+		this.CurrentBuilder.Append("let");
+		this.CurrentBuilder.AppendWhiteSpace();
+		this.CurrentBuilder.Append(Node.GlobalName);
+		this.CurrentBuilder.AppendToken("=");
+		this.GenerateCode(Node.ValueNode);
+	}
+
 	public void VisitParamNode(ZParamNode Node) {
 		this.CurrentBuilder.Append(Node.Name);
 		this.VisitTypeAnnotation(Node.Type);
@@ -570,6 +579,7 @@ public class ZSourceGenerator extends ZGenerator {
 		}
 		this.CurrentBuilder.Append(CloseToken);
 	}
+
 
 
 

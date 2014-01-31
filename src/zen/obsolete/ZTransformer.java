@@ -25,6 +25,7 @@ import zen.ast.ZGroupNode;
 import zen.ast.ZIfNode;
 import zen.ast.ZInstanceOfNode;
 import zen.ast.ZIntNode;
+import zen.ast.ZLetNode;
 import zen.ast.ZMapLiteralNode;
 import zen.ast.ZMethodCallNode;
 import zen.ast.ZNewArrayNode;
@@ -310,6 +311,12 @@ public class ZTransformer extends ZVisitor {
 	}
 
 	@Override public void VisitExtendedNode(ZNode Node) {
+	}
+
+	@Override
+	public void VisitLetNode(ZLetNode Node) {
+		// TODO Auto-generated method stub
+
 	}
 
 

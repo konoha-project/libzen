@@ -46,8 +46,6 @@ public final class ZTokenContext {
 	public final static int     AllowSkipIndent    = (1 << 4);
 	public final static int     AllowAnnotation   = (1 << 3);
 	public final static int     AllowLineFeed     = (1 << 2);
-	public final static int     Optional          = (1 << 1);
-	public final static int     Required          = (1 << 0);
 	public final static boolean     Optional2          = false;
 	public final static boolean     Required2          = true;
 

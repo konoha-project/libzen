@@ -81,6 +81,7 @@ import zen.ast.ZIfNode;
 import zen.ast.ZImportNode;
 import zen.ast.ZInstanceOfNode;
 import zen.ast.ZIntNode;
+import zen.ast.ZLetNode;
 import zen.ast.ZMapLiteralNode;
 import zen.ast.ZMethodCallNode;
 import zen.ast.ZNewArrayNode;
@@ -673,6 +674,10 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 		mv.visitJumpInsn(GOTO, Label.finallyLabel);
 		//FIXME: remove local
 		this.CurrentBuilder.RemoveLocal(NativeTypeTable.GetJavaClass(Node.ExceptionType), Node.ExceptionName);
+	}
+
+	@Override public void VisitLetNode(ZLetNode Node) {
+
 	}
 
 	public Method LoadDefinedFunc(String FuncName, ZFuncType FuncType) {

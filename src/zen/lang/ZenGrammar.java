@@ -61,6 +61,7 @@ import zen.ast.ZReturnNode;
 import zen.ast.ZSetIndexNode;
 import zen.ast.ZSetterNode;
 import zen.ast.ZStringNode;
+import zen.ast.ZLetNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZTypeNode;
@@ -689,40 +690,17 @@ public class ZenGrammar {
 	}
 
 	public static ZNode MatchLetDecl(ZNameSpace NameSpace, ZTokenContext TokenContext, ZNode LeftNode) {
-		//		@Var ZToken SourceToken = TokenContext.GetTokenAndMoveForward(); /* let */
-		//		@Var ZToken SymbolToken = TokenContext.GetTokenAndMoveForward(); /* name */
-		//		@Var String SymbolName = SymbolToken.ParsedText;
-		//		if(TokenContext.MatchToken(".")) {
-		//			@Var String ClassName = SymbolToken.ParsedText;
-		//			@Var ZType SymbolClass = NameSpace.GetType(ClassName, SymbolToken);
-		//			if(SymbolClass == null) {
-		//				return new ZErrorNode(SymbolToken, ClassName + " is not type");
-		//			}
-		//			SymbolToken = TokenContext.GetTokenAndMoveForward(); /* class name */
-		//			SymbolName = ZNameSpace.StringfyClassStaticSymbol(SymbolClass, SymbolName);
-		//			SourceToken.AddTypeInfoToErrorMessage(SymbolClass);
-		//		}
-		//		@Var ZType SymbolType = TokenContext.ParseType(NameSpace, "$TypeAnnotation$", ZType.VarType);
-		//		if(!TokenContext.MatchToken("=")) {
-		//			return TokenContext.CreateExpectedErrorNode(SymbolToken, "=");
-		//		}
-		//		@Var ZNode ValueNode = TokenContext.ParsePattern(NameSpace, "$Expression$", ZTokenContext.Required2);
-		//		if(ValueNode instanceof ZStringNode && SymbolType.IsFuncType()) {
-		//			@Var ZMacro MacroFunc = new ZMacro(0, SymbolName, (ZFuncType)SymbolType, ((ZStringNode)ValueNode).StringValue);
-		//			//			NameSpace.AppendFuncName(MacroFunc, SourceToken);
-		//			return ValueNode.Done();
-		//		}
-		//		if(ValueNode.IsErrorNode()) {
-		//			return ValueNode;
-		//		}
-		//		//ValueNode = NameSpace.TypeCheck(ValueNode, NameSpace.GetSymbolType(ConstName), ZenParserConst.DefaultTypeCheckPolicy);
-		//		ZConstNode ConstNode = ValueNode.ToConstNode(true);
-		//		if(!ConstNode.IsErrorNode()) {
-		//			NameSpace.SetSymbol(SymbolName, ConstNode.GetValue(), SourceToken);
-		//			return ConstNode.Done();
-		//		}
-		//		return ConstNode;
-		return null;
+		@Var ZNode LetNode = new ZLetNode(NameSpace);
+		LetNode = TokenContext.MatchNodeToken(LetNode, NameSpace, "let", ZTokenContext.Required2);
+		LetNode = TokenContext.AppendMatchedPattern(LetNode, NameSpace, "$Identifier$", ZTokenContext.Required2);
+		if(TokenContext.MatchToken(".")) {
+			LetNode = TokenContext.AppendMatchedPattern(LetNode, NameSpace, "$Identifier$", ZTokenContext.Required2);
+		}
+		LetNode.Append(null); // sync
+		LetNode = TokenContext.AppendMatchedPattern(LetNode, NameSpace, "$TypeAnnotation$", ZTokenContext.Optional2);
+		LetNode = TokenContext.MatchNodeToken(LetNode, NameSpace, "=", ZTokenContext.Required2);
+		LetNode = TokenContext.AppendMatchedPattern(LetNode, NameSpace, "$Expression$", ZTokenContext.Required2);
+		return LetNode;
 	}
 
 	public static ZNode MatchIdentifier(ZNameSpace NameSpace, ZTokenContext TokenContext, ZNode LeftNode) {
@@ -730,7 +708,7 @@ public class ZenGrammar {
 		if(LibZen.IsVariableName(Token.ParsedText, 0)) {
 			return new ZGetNameNode(Token, Token.ParsedText);
 		}
-		return new ZErrorNode(Token, "illegal name:" + Token.ParsedText);
+		return new ZErrorNode(Token, "illegal name: '" + Token.ParsedText + "'");
 	}
 
 	public static ZNode MatchTypeAnnotation(ZNameSpace NameSpace, ZTokenContext TokenContext, ZNode LeftNode) {

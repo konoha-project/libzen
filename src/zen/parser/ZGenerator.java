@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import zen.ast.ZImportNode;
 import zen.ast.ZNode;
 import zen.deps.Field;
+import zen.deps.Var;
 import zen.deps.ZenMap;
 import zen.lang.ZFunc;
 import zen.lang.ZenEngine;
@@ -43,6 +44,7 @@ public abstract class ZGenerator extends ZVisitor {
 	@Field public final String       TargetVersion;
 
 	@Field public final ZNameSpace   RootNameSpace;
+	@Field private int UniqueNumber = 0;
 	@Field public String             OutputFile;
 	@Field public ZLogger            Logger;
 
@@ -137,6 +139,24 @@ public abstract class ZGenerator extends ZVisitor {
 		return null;
 	}
 
+	public int GetUniqueNumber() {
+		@Var int UniqueNumber = this.UniqueNumber;
+		this.UniqueNumber = this.UniqueNumber + 1;
+		return UniqueNumber;
+	}
+
+	public String GetGlobalName(String Symbol) {
+		return Symbol + "_Z" + this.GetUniqueNumber();
+	}
+
+	//public abstract ZNode SetGlobalValue(String GlobalName, ZNode Node);
+	public ZNode SetGlobalValue(String GlobalName, Object Value) {
+		return null;
+	}
+
+	public Object GetGlobalValue(String GlobalName) {
+		return null;
+	}
 
 
 }

@@ -39,6 +39,7 @@ import zen.ast.ZGetIndexNode;
 import zen.ast.ZGetNameNode;
 import zen.ast.ZGetterNode;
 import zen.ast.ZGroupNode;
+import zen.ast.ZLetNode;
 import zen.ast.ZMethodCallNode;
 import zen.ast.ZNode;
 import zen.ast.ZNotNode;
@@ -229,4 +230,10 @@ public class JavaReflectionEngine extends ZenEngine {
 		Method sMethod = NativeMethodTable.GetBinaryStaticMethod(Node.LeftNode.Type, Node.SourceToken.ParsedText, Node.RightNode.Type);
 		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.LeftNode, Node.RightNode});
 	}
+
+	@Override public void VisitLetNode(ZLetNode Node) {
+		Node.Value = this.Eval(Node.ValueNode);
+		super.VisitLetNode(Node);
+	}
+
 }

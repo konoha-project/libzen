@@ -51,6 +51,7 @@ import zen.ast.ZGroupNode;
 import zen.ast.ZIfNode;
 import zen.ast.ZInstanceOfNode;
 import zen.ast.ZIntNode;
+import zen.ast.ZLetNode;
 import zen.ast.ZMapLiteralNode;
 import zen.ast.ZMethodCallNode;
 import zen.ast.ZNewArrayNode;
@@ -674,6 +675,16 @@ public class ZenTypeSafer extends ZTypeChecker {
 		this.Todo(Node);
 	}
 
+	@Override public void VisitLetNode(ZLetNode Node) {
+		//		if(Node.PrefixSymbol != null) {
+		//		}
+		//		else {
+		Node.GlobalName = Node.NameSpace.Generator.GetGlobalName(Node.Symbol);
+		//		}
+		Node.ValueNode = this.CheckType(Node.ValueNode, Node.NameSpace, Node.SymbolType);
+		this.TypedNode(Node, ZType.VoidType);
+	}
+
 
 	private boolean HasReturn(ZNode Node) {
 		if(Node instanceof ZBlockNode) {
@@ -806,5 +817,6 @@ public class ZenTypeSafer extends ZTypeChecker {
 	@Override public void VisitErrorNode(ZErrorNode Node) {
 		this.Return(Node);
 	}
+
 }
 
