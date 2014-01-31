@@ -66,10 +66,6 @@ public abstract class ZNode {
 
 	}
 
-	public final ZNode Done() {
-		return new ZEmptyNode(null);
-	}
-
 	public String GetVisitName() {
 		return "VisitExtendedNode"; // override this if you want to use additional node
 	}
@@ -87,22 +83,27 @@ public abstract class ZNode {
 		return this.Type.IsVarType();
 	}
 
-	public ZConstNode ToConstNode(boolean EnforceConst) {
-		if(EnforceConst) {
-			return new ZErrorNode(this.SourceToken, "value must be constant");
-		}
-		return null;
-	}
-	public Object Eval(ZNameSpace NameSpace, boolean EnforceConst)  {
-		return null;
-		//return this.ToNullValue(NameSpace, EnforceConst);
-	}
-
 	public ZReturnNode ToReturnNode() {
 		return null;
 	}
 
-	public ZNode GetPrevNode() {
+	public final ZBlockNode GetScopeBlockNode() {
+		ZNode Node = this;
+		while(Node != null) {
+			if(Node instanceof ZBlockNode) {
+				return (ZBlockNode)Node;
+			}
+			Node = Node.ParentNode;
+		}
+		return null;
+	}
+
+	public final ZNameSpace GetNameSpace() {
+		ZBlockNode BlockNode = this.GetScopeBlockNode();
+		return BlockNode.NameSpace;
+	}
+
+	public final ZNode GetPrevNode() {
 		if(this.ParentNode == null) {
 			return null;
 		}
