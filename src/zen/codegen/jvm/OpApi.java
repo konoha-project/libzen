@@ -68,7 +68,7 @@ public final class OpApi {
 			return "" + x + y;
 		}
 		if(x instanceof Double || y instanceof Double) {
-			return ((Double)x).doubleValue() + ((Double)y).doubleValue();
+			return ((Number)x).doubleValue() + ((Number)y).doubleValue();
 		}
 		return ((Number)x).longValue() + ((Number)y).longValue();
 	}
@@ -80,19 +80,19 @@ public final class OpApi {
 	}
 	public static Object Mul(Object x, Object y) {
 		if(x instanceof Double || y instanceof Double) {
-			return ((Double)x).doubleValue() * ((Double)y).doubleValue();
+			return ((Number)x).doubleValue() * ((Number)y).doubleValue();
 		}
 		return ((Number)x).longValue() * ((Number)y).longValue();
 	}
 	public static Object Div(Object x, Object y) {
 		if(x instanceof Double || y instanceof Double) {
-			return ((Double)x).doubleValue() / ((Double)y).doubleValue();
+			return ((Number)x).doubleValue() / ((Number)y).doubleValue();
 		}
 		return ((Number)x).longValue() / ((Number)y).longValue();
 	}
 	public static Object Mod(Object x, Object y) {
 		if(x instanceof Double || y instanceof Double) {
-			return ((Double)x).doubleValue() % ((Double)y).doubleValue();
+			return ((Number)x).doubleValue() % ((Number)y).doubleValue();
 		}
 		return ((Number)x).longValue() / ((Number)y).longValue();
 	}
@@ -298,6 +298,8 @@ public final class OpApi {
 		}
 		throw new RuntimeException("unsupported operator: " + t(x) + "[" + t(y) + "]");
 	}
+
+	@SuppressWarnings("unchecked")
 	public static <T> void SetIndex(Object x, Object y, T z) {
 		if(x instanceof ArrayList && y instanceof Number) {
 			@Var ArrayList<T> a = (ArrayList<T>)x;

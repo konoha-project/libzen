@@ -159,6 +159,7 @@ public class AsmMethodBuilder extends MethodNode {
 			}
 		}
 		String owner = Type.getInternalName(sMethod.getDeclaringClass());
+		this.SetLineNumber(Node);
 		this.visitMethodInsn(INVOKESTATIC, owner, sMethod.getName(), Type.getMethodDescriptor(sMethod));
 		this.CheckReturnCast(Node, sMethod.getReturnType());
 	}
@@ -171,6 +172,7 @@ public class AsmMethodBuilder extends MethodNode {
 			}
 		}
 		String owner = "C" + FuncType.StringfySignature(FuncName);
+		this.SetLineNumber(Node);
 		this.visitMethodInsn(INVOKESTATIC, owner, FuncName, AsmClassLoader.GetMethodDescriptor(FuncType));
 		//this.CheckReturnCast(Node, FuncType.GetReturnType());
 	}

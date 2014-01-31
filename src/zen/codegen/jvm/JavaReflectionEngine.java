@@ -47,7 +47,9 @@ import zen.ast.ZStringNode;
 import zen.ast.ZUnaryNode;
 import zen.deps.LibNative;
 import zen.deps.Var;
+import zen.lang.ZFunc;
 import zen.lang.ZenEngine;
+import zen.lang.ZenGamma;
 import zen.type.ZTypeChecker;
 
 public class JavaReflectionEngine extends ZenEngine {
@@ -63,8 +65,12 @@ public class JavaReflectionEngine extends ZenEngine {
 				Recv = this.Eval(RecvNode);
 			}
 			Object Values[] = new Object[Nodes.length];
+			Class<?> P[] = jMethod.getParameterTypes();
 			for(int i = 0; i < Nodes.length; i++) {
 				Values[i] = this.Eval(Nodes[i]);
+				if(Values[i] instanceof Long || Values[i] instanceof Double) {
+					Values[i] = P[i].cast(Values[i]);
+				}
 			}
 			if(this.IsVisitable()) {
 				this.EvaledValue = jMethod.invoke(Recv, Values);
@@ -80,30 +86,6 @@ public class JavaReflectionEngine extends ZenEngine {
 		this.EvalMethod(Node, sMethod, null, Nodes);
 	}
 
-	//	@Override public void VisitNullNode(ZNullNode Node) {
-	//		this.EvaledValue = null;
-	//	}
-	//
-	//	@Override public void VisitBooleanNode(ZBooleanNode Node) {
-	//		this.EvaledValue = Node.BooleanValue;
-	//	}
-	//
-	//	@Override public void VisitIntNode(ZIntNode Node) {
-	//		this.EvaledValue = Node.IntValue;
-	//	}
-	//
-	//	@Override public void VisitFloatNode(ZFloatNode Node) {
-	//		this.EvaledValue = Node.FloatValue;
-	//	}
-	//
-	//	@Override public void VisitStringNode(ZStringNode Node) {
-	//		this.EvaledValue = Node.StringValue;
-	//	}
-	//
-	//	@Override public void VisitConstPoolNode(ZConstPoolNode Node) {
-	//		this.EvaledValue = Node.ConstValue;
-	//	}
-
 	public void VisitJvmFuncNode(JvmFuncNode Node) {
 		try {
 			Field f = Node.FuncClass.getField("function");
@@ -114,27 +96,6 @@ public class JavaReflectionEngine extends ZenEngine {
 		}
 	}
 
-	//	@Override public void VisitArrayLiteralNode(ZArrayLiteralNode Node) {
-	//		this.Unsupported(Node);
-	//	}
-	//
-	//	@Override public void VisitMapLiteralNode(ZMapLiteralNode Node) {
-	//		this.Unsupported(Node);
-	//	}
-	//
-	//	@Override public void VisitNewArrayNode(ZNewArrayNode Node) {
-	//		this.Unsupported(Node);
-	//	}
-	//
-	//	@Override public void VisitNewObjectNode(ZNewObjectNode Node) {
-	//		this.Unsupported(Node);
-	//	}
-	//
-	//	@Override public void VisitSymbolNode(ZSymbolNode Node) {
-	//		this.Unsupported(Node);
-	//	}
-	//
-
 	@Override public void VisitGetNameNode(ZGetNameNode Node) {
 		@Var ZNode Node1 = this.Generator.RootNameSpace.GetSymbolNode(Node.VarName);
 		if(Node1 != null) {
@@ -144,11 +105,6 @@ public class JavaReflectionEngine extends ZenEngine {
 			this.Unsupported(Node, "undefined symbol: " + Node.VarName);
 		}
 	}
-
-	//
-	//	@Override public void VisitSetNameNode(ZSetLocalNode Node) {
-	//		this.Unsupported(Node);
-	//	}
 
 	@Override public void VisitGroupNode(ZGroupNode Node) {
 		this.EvaledValue = this.Eval(Node.RecvNode);
@@ -208,7 +164,8 @@ public class JavaReflectionEngine extends ZenEngine {
 				this.Logger.ReportWarning(Node.SourceToken, "function: " + Node.ResolvedFuncName + " is unresolved");
 			}
 			else {
-				Method sMethod = ((Java6ByteCodeGenerator)this.Generator).GetStaticFuncMethod(Node.ResolvedFuncType.StringfySignature(Node.ResolvedFuncName));
+				ZFunc Func = ZenGamma.LookupFunc(this.Generator.RootNameSpace, Node.ResolvedFuncName, Node.ResolvedFuncType.GetRecvType(), Node.ResolvedFuncType.GetFuncParamSize());
+				Method sMethod = ((Java6ByteCodeGenerator)this.Generator).GetStaticFuncMethod(Func.GetSignature());
 				this.EvalStaticMethod(Node, sMethod, ((Java6ByteCodeGenerator)this.Generator).PackNodes(null, Node.ParamList));
 			}
 		}
@@ -250,106 +207,4 @@ public class JavaReflectionEngine extends ZenEngine {
 		Method sMethod = NativeMethodTable.GetBinaryStaticMethod(Node.LeftNode.Type, Node.SourceToken.ParsedText, Node.RightNode.Type);
 		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.LeftNode, Node.RightNode});
 	}
-
-	//	@Override public void VisitAndNode(ZAndNode Node) {
-	//		Object BooleanValue = this.Eval(Node.LeftNode);
-	//		if(BooleanValue instanceof Boolean) {
-	//			if((Boolean)BooleanValue) {
-	//				this.EvaledValue = this.Eval(Node.RightNode);
-	//			}
-	//			else {
-	//				this.EvaledValue = false;
-	//			}
-	//		}
-	//	}
-	//
-	//	@Override public void VisitOrNode(ZOrNode Node) {
-	//		Object BooleanValue = this.Eval(Node.LeftNode);
-	//		if(BooleanValue instanceof Boolean) {
-	//			if(!(Boolean)BooleanValue) {
-	//				this.EvaledValue = this.Eval(Node.RightNode);
-	//			}
-	//			else {
-	//				this.EvaledValue = true;
-	//			}
-	//		}
-	//	}
-	//
-	//	@Override
-	//	public void VisitBlockNode(ZBlockNode Node) {
-	//		this.Unsupported(Node);
-	//
-	//	}
-	//
-	//	@Override public void VisitVarDeclNode(ZVarDeclNode Node) {
-	//		this.Unsupported(Node);
-	//	}
-	//
-	//	@Override
-	//	public void VisitIfNode(ZIfNode Node) {
-	//		Object BooleanValue = this.Eval(Node.CondNode);
-	//		if(BooleanValue instanceof Boolean) {
-	//			if((Boolean)BooleanValue) {
-	//				this.Eval(Node.ThenNode);
-	//			}
-	//			else if(Node.ElseNode != null) {
-	//				this.Eval(Node.ThenNode);
-	//			}
-	//		}
-	//	}
-	//
-	//	@Override public void VisitReturnNode(ZReturnNode Node) {
-	//		this.Unsupported(Node);
-	//	}
-	//
-	//	@Override public void VisitWhileNode(ZWhileNode Node) {
-	//		this.Unsupported(Node);
-	//	}
-	//
-	//	@Override public void VisitBreakNode(ZBreakNode Node) {
-	//		this.Unsupported(Node);
-	//	}
-	//
-	//	@Override public void VisitThrowNode(ZThrowNode Node) {
-	//		this.Unsupported(Node);
-	//	}
-	//
-	//	@Override
-	//	public void VisitTryNode(ZTryNode Node) {
-	//		this.Unsupported(Node);
-	//
-	//	}
-	//
-	//	@Override
-	//	public void VisitCatchNode(ZCatchNode Node) {
-	//		this.Unsupported(Node);
-	//
-	//	}
-	//
-	//	@Override
-	//	public void VisitParamNode(ZParamNode Node) {
-	//		this.Unsupported(Node);
-	//
-	//	}
-	//
-	//	@Override
-	//	public void VisitFunctionNode(ZFunctionNode Node) {
-	//		this.Unsupported(Node);
-	//
-	//	}
-	//
-	//	@Override public void VisitFuncDeclNode(ZFunctionNode/*Decl*/ Node) {
-	//		this.Unsupported(Node);
-	//	}
-	//
-	//	@Override public void VisitClassDeclNode(ZClassDeclNode Node) {
-	//		this.Unsupported(Node);
-	//	}
-	//
-	//	@Override public void VisitErrorNode(ZErrorNode Node) {
-	//
-	//		this.FoundError(Node.ErrorMessage);
-	//	}
-
-
 }

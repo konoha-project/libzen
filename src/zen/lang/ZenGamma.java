@@ -32,7 +32,7 @@ public class ZenGamma {
 		return ZenGamma.GetFunc(NameSpace, FuncType.StringfySignature(FuncName), DefVal);
 	}
 
-	static ZFunc LookupFunc(ZNameSpace NameSpace, String FuncName, ZType RecvType, int FuncParamSize) {
+	public static ZFunc LookupFunc(ZNameSpace NameSpace, String FuncName, ZType RecvType, int FuncParamSize) {
 		@Var String Signature = ZFunc.StringfySignature(FuncName, FuncParamSize, RecvType);
 		@Var ZFunc Func = NameSpace.Generator.GetDefinedFunc(Signature);
 		if(Func != null) {

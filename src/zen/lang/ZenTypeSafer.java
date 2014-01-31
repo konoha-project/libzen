@@ -423,7 +423,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 						FuncCallNode.ResolvedFuncType = Func.GetFuncType();
 					}
 					else {
-						this.VarScope.FoundUnresolvedFuncName(FuncCallNode.ResolvedFuncName);
+						this.VarScope.FoundUnresolvedSymbol(FuncCallNode.ResolvedFuncName);
 					}
 				}
 				return true;
@@ -706,9 +706,8 @@ public class ZenTypeSafer extends ZTypeChecker {
 	}
 
 	@Override public void DefineFunction(ZNameSpace NameSpace, ZFunctionNode FunctionNode, boolean Enforced) {
-		if(FunctionNode.FuncName != null && FunctionNode.ReferenceName == null) {
+		if(FunctionNode.FuncName != null && FunctionNode.GlobalName == null) {
 			@Var ZFuncType FuncType = FunctionNode.GetFuncType(null);
-			System.err.println("guessing FuncType " + FuncType);
 			if(Enforced || !FuncType.IsVarType()) {
 				@Var ZFunc Func = ZenGamma.GetFunc(NameSpace, FunctionNode.FuncName, FuncType, null);
 				if(Func != null) {
@@ -717,6 +716,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 				else {
 					Func = new ZSignature(0, FunctionNode.FuncName, FuncType, FunctionNode.SourceToken);
 					ZenGamma.DefineFunc(NameSpace, Func);
+					FunctionNode.GlobalName = Func.GetSignature();
 				}
 			}
 		}
@@ -753,11 +753,11 @@ public class ZenTypeSafer extends ZTypeChecker {
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
 		@Var ZNameSpace NameSpace = this.GetNameSpace();
 		@Var ZType ContextType = this.GetContextType();
-		if(!this.HasReturn(Node.BodyNode)) {
-			Node.BodyNode.Append(new ZReturnNode());
+		if(!this.HasReturn(Node.FuncBlock)) {
+			Node.FuncBlock.Append(new ZReturnNode());
 		}
 		this.PushFunctionNode(NameSpace, Node, ContextType);
-		this.VarScope.TypeCheckFunctionBody(NameSpace, this, Node);
+		this.VarScope.TypeCheckFuncBlock(NameSpace, this, Node);
 		this.PopFunctionNode(NameSpace);
 		@Var ZFuncType FuncType = Node.GetFuncType(ContextType);
 		if(this.IsTopLevel() && !FuncType.IsVarType()) {
@@ -771,9 +771,9 @@ public class ZenTypeSafer extends ZTypeChecker {
 	public void VisitFuncDeclNode(ZFunctionNode/*Decl*/ Node) {
 		@Var ZNameSpace NameSpace = this.GetNameSpace();
 		@Var ZFuncType FuncType = Node.GetFuncType(null);
-		assert(Node.BodyNode != null);
+		assert(Node.FuncBlock != null);
 		this.PushFunctionNode(Node.NameSpace, Node, null);
-		this.VarScope.TypeCheckFunctionBody(NameSpace, this, Node);
+		this.VarScope.TypeCheckFuncBlock(NameSpace, this, Node);
 		this.PopFunctionNode(Node.NameSpace);
 		//		FuncType = Node.GetFuncType(null);
 		this.TypedNode(Node, ZType.VoidType);

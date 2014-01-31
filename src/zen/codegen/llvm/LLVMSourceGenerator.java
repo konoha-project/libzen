@@ -618,7 +618,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 
 		this.CurrentBuilder.Indent();
 		this.AppendLabel("FirstLabel");
-		this.GenerateCode(Node.BodyNode);
+		this.GenerateCode(Node.FuncBlock);
 		if(!this.IsBlockTerminated) {
 			this.AppendDefaultReturn(Node.ReturnType);
 		}

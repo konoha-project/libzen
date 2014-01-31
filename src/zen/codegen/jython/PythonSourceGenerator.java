@@ -172,7 +172,7 @@ public class PythonSourceGenerator extends ZSourceGenerator {
 	 **/
 	@Override
 	public void VisitFunctionNode(ZFunctionNode Node) {
-		ZReturnNode ReturnNode = Node.BodyNode.ToReturnNode();
+		ZReturnNode ReturnNode = Node.FuncBlock.ToReturnNode();
 		if(ReturnNode != null && ReturnNode.ValueNode != null) {
 			this.CurrentBuilder.Append("lambda");
 			this.VisitParamList(" ", Node.ParamList, ": ");
@@ -182,7 +182,7 @@ public class PythonSourceGenerator extends ZSourceGenerator {
 			this.CurrentBuilder.Append("def");
 			this.CurrentBuilder.AppendToken("lambda");
 			this.VisitParamList("(", Node.ParamList, ")");
-			this.GenerateCode(Node.BodyNode);
+			this.GenerateCode(Node.FuncBlock);
 		}
 	}
 
@@ -190,10 +190,10 @@ public class PythonSourceGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Append("def ");
 		this.CurrentBuilder.Append(Node.FuncName);
 		this.VisitParamList("(", Node.ParamList, ")");
-		if (Node.BodyNode == null) {
+		if (Node.FuncBlock == null) {
 			this.CurrentBuilder.Append(": pass");
 		} else {
-			this.GenerateCode(Node.BodyNode);
+			this.GenerateCode(Node.FuncBlock);
 		}
 	}
 

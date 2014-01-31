@@ -151,10 +151,10 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
-		ZReturnNode ReturnNode = Node.BodyNode.ToReturnNode();
+		ZReturnNode ReturnNode = Node.FuncBlock.ToReturnNode();
 		this.CurrentBuilder.Append("(function");
 		if(Node.FuncName != null) {
-			this.CurrentBuilder.Append(Node.ReferenceName);
+			this.CurrentBuilder.Append(Node.GlobalName);
 		}
 		this.VisitParamList("(", Node.ParamList, ")");
 		if(ReturnNode != null && ReturnNode.ValueNode != null) {
@@ -163,7 +163,7 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 			this.CurrentBuilder.Append("; }");
 		}
 		else {
-			this.GenerateCode(Node.BodyNode);
+			this.GenerateCode(Node.FuncBlock);
 		}
 		this.CurrentBuilder.Append(")");
 	}

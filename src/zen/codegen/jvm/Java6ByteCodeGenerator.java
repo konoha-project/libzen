@@ -149,7 +149,6 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 		return new JavaImportNode(NameSpace);
 	}
 
-
 	@Override public ZType GetFieldType(ZType RecvType, String FieldName) {
 		Class<?> NativeClass = NativeTypeTable.GetJavaClass(RecvType);
 		if(NativeClass != null) {
@@ -697,15 +696,15 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 			Class<?> DeclClass = NativeTypeTable.GetJavaClass(ParamNode.Type);
 			this.CurrentBuilder.AddLocal(DeclClass, ParamNode.Name);
 		}
-		Node.BodyNode.Accept(this);
-		if(Node.ReturnType.IsVoidType()) {
-			// JVM always needs return;
-			this.CurrentBuilder.visitInsn(RETURN);
-		}
+		Node.FuncBlock.Accept(this);
+		//		if(Node.ReturnType.IsVoidType()) {
+		//			// JVM always needs return;
+		//			this.CurrentBuilder.visitInsn(RETURN);
+		//		}
 		try {
 			Method FuncMethod = HolderClass.GetDefinedMethod(this.ClassLoader, Node.FuncName);
 			//this.Debug("InteranalName: " +Type.getInternalName(FuncMethod.getDeclaringClass()));
-			this.FuncMap.put(FuncType.StringfySignature(Node.FuncName), FuncMethod);
+			this.SetStaticFuncMethod(FuncType.StringfySignature(Node.FuncName), FuncMethod);
 			FuncNode.FuncClass = FuncMethod.getDeclaringClass();
 			Node.NameSpace.SetLocalSymbol(Node.FuncName, FuncNode);
 		}
@@ -747,7 +746,6 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 		String Message = this.Logger.ReportError(Node.SourceToken, Node.ErrorMessage);
 		this.CurrentBuilder.LoadConst(Message);
 		Method sMethod = NativeMethodTable.GetStaticMethod("ThrowError");
-		this.CurrentBuilder.SetLineNumber(Node);
 		this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, null);
 		//this.CurrentBuilder.visitInsn(ATHROW);
 	}
@@ -755,8 +753,15 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 	@Override public void VisitExtendedNode(ZNode Node) {
 	}
 
+	void SetStaticFuncMethod(String FuncName, Method jMethod) {
+		//	this.Debug(FuncName + ", " + jMethod);
+		this.FuncMap.put(FuncName, jMethod);
+	}
+
 	public Method GetStaticFuncMethod(String FuncName) {
-		return this.FuncMap.GetOrNull(FuncName);
+		Method jMethod = this.FuncMap.GetOrNull(FuncName);
+		//	this.Debug(FuncName + ", " + jMethod);
+		return jMethod;
 	}
 
 	ZNode[] PackNodes(ZNode Node, ArrayList<ZNode> List) {

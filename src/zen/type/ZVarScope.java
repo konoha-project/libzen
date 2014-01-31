@@ -35,7 +35,7 @@ public final class ZVarScope {
 		return VarType;
 	}
 
-	public final void FoundUnresolvedFuncName(String FuncName) {
+	public final void FoundUnresolvedSymbol(String FuncName) {
 		this.UnresolvedSymbolCount = this.UnresolvedSymbolCount + 1;
 	}
 
@@ -73,13 +73,13 @@ public final class ZVarScope {
 		return false;
 	}
 
-	public final void TypeCheckFunctionBody(ZNameSpace NameSpace, ZTypeChecker TypeSafer, ZFunctionNode FunctionNode) {
+	public final void TypeCheckFuncBlock(ZNameSpace NameSpace, ZTypeChecker TypeSafer, ZFunctionNode FunctionNode) {
 		@Var int PrevCount = -1;
 		while(true) {
 			this.VarNodeCount = 0;
 			this.UnresolvedSymbolCount = 0;
 			TypeSafer.DefineFunction(NameSpace, FunctionNode, false/*Enforced*/);
-			FunctionNode.BodyNode = (ZBlockNode)TypeSafer.CheckType(FunctionNode.BodyNode, NameSpace, ZType.VoidType);
+			FunctionNode.FuncBlock = (ZBlockNode)TypeSafer.CheckType(FunctionNode.FuncBlock, NameSpace, ZType.VoidType);
 			if(this.VarNodeCount == 0 || PrevCount == this.VarNodeCount) {
 				break;
 			}
@@ -90,8 +90,12 @@ public final class ZVarScope {
 		}
 		else {
 			TypeSafer.DefineFunction(NameSpace, FunctionNode, false/*Enforced*/);
+			if(this.Parent != null) {
+				this.Parent.UnresolvedSymbolCount = this.UnresolvedSymbolCount + this.Parent.UnresolvedSymbolCount;
+			}
 		}
 	}
+
 	//	public void Dump() {
 	//		@Var int i = 0;
 	//		//		this.println("returning type: " + this.FuncNode.ReturnType);

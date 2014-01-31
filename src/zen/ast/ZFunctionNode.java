@@ -39,12 +39,12 @@ public class ZFunctionNode extends ZNode {
 	@Field public ZType ReturnType = ZType.VarType;
 	@Field public String FuncName = null;
 	@Field public ArrayList<ZParamNode> ParamList = new ArrayList<ZParamNode>();
-	@Field public ZBlockNode BodyNode = null;
+	@Field public ZBlockNode FuncBlock = null;
 	@Field public ZNameSpace NameSpace;
 
 	@Field public ZFunctionNode ParentFunctionNode = null;
 	@Field public ZFuncType ResolvedFuncType = null;
-	@Field public String ReferenceName = null;
+	@Field public String GlobalName = null;
 	@Field public int VarIndex = 0;
 
 	public ZFunctionNode(ZNameSpace NameSpace) {
@@ -64,7 +64,7 @@ public class ZFunctionNode extends ZNode {
 			this.ReturnType = Node.Type;
 		}
 		else if(Node instanceof ZBlockNode) {
-			this.BodyNode = (ZBlockNode)Node;
+			this.FuncBlock = (ZBlockNode)Node;
 		}
 	}
 
@@ -73,7 +73,10 @@ public class ZFunctionNode extends ZNode {
 	}
 
 	@Override public final boolean IsUntyped() {
-		return this.IsVarType() || this.BodyNode.IsVarType();
+		if(this.GlobalName != null) {
+			return false;
+		}
+		return this.IsVarType() || this.FuncBlock.IsVarType();
 	}
 
 	public final ZFuncType GetFuncType(@Nullable ZType ContextType) {

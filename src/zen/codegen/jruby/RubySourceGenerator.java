@@ -124,18 +124,18 @@ public class RubySourceGenerator extends ZSourceGenerator {
 
 	@Override
 	public void VisitFunctionNode(ZFunctionNode Node) {
-		ZReturnNode ReturnNode = Node.BodyNode.ToReturnNode();
+		ZReturnNode ReturnNode = Node.FuncBlock.ToReturnNode();
 		this.CurrentBuilder.Append("->");
 		this.VisitParamList("(", Node.ParamList, ")");
-		this.GenerateCode(Node.BodyNode);
+		this.GenerateCode(Node.FuncBlock);
 	}
 
 	public void VisitFuncDeclNode(ZFunctionNode/*Decl*/ Node) {
 		this.CurrentBuilder.Append("def ");
 		this.CurrentBuilder.Append(Node.FuncName);
 		this.VisitParamList("(", Node.ParamList, ")");
-		if (Node.BodyNode != null) {
-			this.GenerateCode(Node.BodyNode);
+		if (Node.FuncBlock != null) {
+			this.GenerateCode(Node.FuncBlock);
 		}
 	}
 }

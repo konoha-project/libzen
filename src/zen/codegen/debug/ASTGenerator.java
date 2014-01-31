@@ -436,7 +436,7 @@ public class ASTGenerator extends ZSourceGenerator {
 			Node.ParamList.get(i).Accept(this);
 		}
 		this.CurrentBuilder.Append(")");
-		Node.BodyNode.Accept(this);
+		Node.FuncBlock.Accept(this);
 		this.CurrentBuilder.UnIndent();
 		this.CurrentBuilder.Append(")");
 	}

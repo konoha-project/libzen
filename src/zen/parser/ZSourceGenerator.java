@@ -492,7 +492,7 @@ public class ZSourceGenerator extends ZGenerator {
 		}
 		this.VisitParamList("(", Node.ParamList, ")");
 		this.VisitTypeAnnotation(Node.ReturnType);
-		this.GenerateCode(Node.BodyNode);
+		this.GenerateCode(Node.FuncBlock);
 	}
 
 	@Override public void VisitClassDeclNode(ZClassDeclNode Node) {
