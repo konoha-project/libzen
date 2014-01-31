@@ -30,10 +30,6 @@ abstract public class ZConstNode extends ZNode {
 	protected ZConstNode(ZToken Token) {
 		this.SourceToken = Token;
 	}
-	@Override public final ZConstNode ToConstNode(boolean EnforceConst) {
-		return this;
-	}
 	public abstract Object GetValue();
-
 
 }
