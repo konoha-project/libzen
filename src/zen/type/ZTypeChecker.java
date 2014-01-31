@@ -121,6 +121,9 @@ public abstract class ZTypeChecker extends ZVisitor {
 
 	private final ZNode TypeCheckImpl(ZNode Node, ZNameSpace NameSpace, ZType ContextType, int TypeCheckPolicy) {
 		if(Node.IsErrorNode()) {
+			if(!ContextType.IsVarType()) {
+				Node.Type = ContextType;
+			}
 			return Node;
 		}
 		if(Node.IsVarType() || ContextType.IsVarType() || ZUtils.IsFlag(TypeCheckPolicy, NoCheckPolicy)) {
