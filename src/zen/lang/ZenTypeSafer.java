@@ -233,9 +233,8 @@ public class ZenTypeSafer extends ZTypeChecker {
 		if(VarInfo != null) {
 			Node.VarName = VarInfo.VarName;
 			Node.VarIndex = VarInfo.VarUniqueIndex;
-			@Var ZType VarType = VarInfo.VarType;
 			Node.IsCaptured = VarInfo.IsCaptured(this.CurrentFunctionNode);
-			this.TypedNode(Node, VarType);
+			this.TypedNode(Node, VarInfo.VarType);
 		}
 		else {
 			@Var ZNode ConstNode = NameSpace.GetSymbolNode(Node.VarName);
@@ -243,6 +242,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 				this.Return(ConstNode);
 			}
 			else {
+				this.Logger.ReportWarning(Node.SourceToken, "undefined variable: " + Node.VarName);
 				this.TypedNode(Node, ZType.VarType);
 			}
 		}

@@ -38,9 +38,10 @@ import zen.lang.ZenClassType;
 import zen.type.ZType;
 
 public final class ZNameSpace {
+	private static int SerialNumber = 0;
 	@Field public final ZNameSpace   ParentNameSpace;
 	@Field public final ZGenerator   Generator;
-
+	@Field private int SerialId = 0;
 	@Field ZTokenFunc[]   TokenMatrix = null;
 	@Field ZenMap<Object> SymbolPatternTable = null;
 	@Field ZenMap<ZSyntaxPattern> SyntaxTable = null;
@@ -49,20 +50,25 @@ public final class ZNameSpace {
 
 	public ZNameSpace(ZGenerator Generator, ZNameSpace ParentNameSpace) {
 		this.ParentNameSpace = ParentNameSpace;
-		this.TokenMatrix = null;
-		//		this.SymbolPatternTable = null;
-		//		this.FuncNode = null;
 		if(ParentNameSpace == null) {
 			this.Generator = Generator;
 		}
 		else {
 			this.Generator = ParentNameSpace.Generator;
 		}
+		this.SerialId = SerialNumber;
+		SerialNumber = SerialNumber + 1;
+	}
+
+	@Override public String toString() {
+		return "NS["+this.SerialId+"]";
 	}
 
 	public ZNameSpace CreateSubNameSpace() {
 		return new ZNameSpace(null, this);
 	}
+
+
 
 	public ZNameSpace GetRootNameSpace() {
 		return this.Generator.RootNameSpace;
@@ -158,10 +164,12 @@ public final class ZNameSpace {
 		while(NameSpace != null) {
 			if(NameSpace.SymbolTable != null) {
 				@Var ZSymbol Entry = NameSpace.SymbolTable.GetOrNull(Symbol);
-				if(Entry != null && Entry.IsDisabled) {
-					return null;
+				if(Entry != null) {
+					if(Entry.IsDisabled) {
+						return null;
+					}
+					return Entry;
 				}
-				return Entry;
 			}
 			NameSpace = NameSpace.ParentNameSpace;
 		}

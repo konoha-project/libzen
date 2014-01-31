@@ -60,16 +60,6 @@ public class AsmMethodBuilder extends MethodNode {
 			this.visitLdcInsn(Value);
 			return;
 		}
-
-		//		if(Value instanceof ZType) {
-		//			int id = ((ZType)Value).TypeId;
-		//			this.visitLdcInsn(id);
-		//			this.InvokeMethodCall(ZType.class, JLib.GetTypeById);
-		//			return;
-		//		}
-		//		int id = ZSystem.AddConstPool(Value);
-		//		this.AsmVisitor.visitLdcInsn(id);
-		//		this.InvokeMethodCall(Value.getClass(), JLib.GetConstPool);
 	}
 
 	JLocalVarStack AddLocal(Class<?> jClass, String Name) {
@@ -80,7 +70,7 @@ public class AsmMethodBuilder extends MethodNode {
 		return local;
 	}
 
-	void RemoveLocal(Class<?> JType, String Name) {
+	@Deprecated void RemoveLocal(Class<?> JType, String Name) {
 		for(int i = this.LocalVals.size() - 1; i >= 0; i--) {
 			JLocalVarStack Local = this.LocalVals.get(i);
 			if(Local.Name.equals(Name)) {
@@ -125,7 +115,9 @@ public class AsmMethodBuilder extends MethodNode {
 			this.visitMethodInsn(INVOKESTATIC, owner, sMethod.getName(), Type.getMethodDescriptor(sMethod));
 			this.CheckCast(C1, sMethod.getReturnType());
 		}
-		else {
+		else if (!C2.isAssignableFrom(C1)) {
+			// c1 instanceof C2  C2.
+			this.Generator.Debug("CHECKCAST C1="+C1.getSimpleName()+ ", C2="+C2.getSimpleName());
 			this.visitTypeInsn(CHECKCAST, Type.getInternalName(C1));
 		}
 	}
@@ -133,7 +125,7 @@ public class AsmMethodBuilder extends MethodNode {
 	void CheckParamCast(Class<?> C1, ZNode Node) {
 		Class<?> C2 = NativeTypeTable.GetJavaClass(Node.Type);
 		if(C1 != C2) {
-			this.Generator.Debug("C2="+Node.getClass().getSimpleName() + ": " + Node.Type);
+			this.Generator.Debug("C2="+Node + ": " + Node.Type);
 			this.CheckCast(C1, C2);
 		}
 	}
@@ -141,7 +133,7 @@ public class AsmMethodBuilder extends MethodNode {
 	void CheckReturnCast(ZNode Node, Class<?> C2) {
 		Class<?> C1 = NativeTypeTable.GetJavaClass(Node.Type);
 		if(C1 != C2) {
-			this.Generator.Debug("C1"+Node.getClass().getSimpleName() + ": " + Node.Type);
+			this.Generator.Debug("C1"+Node + ": " + Node.Type);
 			this.CheckCast(C1, C2);
 		}
 	}

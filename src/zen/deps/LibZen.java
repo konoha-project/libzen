@@ -37,6 +37,7 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import zen.ast.ZNode;
 import zen.parser.ZLogger;
 import zen.parser.ZSourceBuilder;
 import zen.parser.ZUtils;
@@ -507,7 +508,6 @@ public abstract class LibZen {
 
 	public static String StringfyObject(Object This) {
 		@Var String s = "{";
-		//ifdef JAVA
 		Field[] Fields = This.getClass().getFields();
 		for(int i = 0; i < Fields.length; i++) {
 			if(Modifier.isPublic(Fields[i].getModifiers())) {
@@ -515,15 +515,12 @@ public abstract class LibZen {
 					s += ", ";
 				}
 				try {
-					s += Fields[i].getName() + ": ";
-					if(Fields[i].getType() == long.class) {
-						s += Fields[i].getLong(This);
-					}
-					else if(Fields[i].getType() == double.class) {
-						s += Fields[i].getDouble(This);
+					Object Value =  Fields[i].get(This);
+					if(!(Value instanceof ZNode)) {
+						s += Fields[i].getName() + ": " + Fields[i].get(This);
 					}
 					else {
-						s += LibZen.Stringify(Fields[i].get(This));
+						s += Fields[i].getName() + ": ...";
 					}
 				} catch (IllegalArgumentException e) {
 					// TODO Auto-generated catch block

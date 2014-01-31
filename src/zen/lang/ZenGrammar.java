@@ -835,8 +835,10 @@ public class ZenGrammar {
 					break;
 				}
 				/* VarDecl is defined as BlockNode to speficy its scope */
-				if(ParsedNode.GetStatementNode() instanceof ZBlockNode) {
+				if(ParsedNode instanceof ZBlockNode) {
+					//System.out.println("nesting scope " + ParsedNode);
 					BlockNode = (ZBlockNode)ParsedNode.GetStatementNode();
+					assert(BlockNode.NameSpace.ParentNameSpace == BlockNameSpace);
 					BlockNameSpace = BlockNode.NameSpace;
 				}
 			}

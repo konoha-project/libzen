@@ -26,6 +26,7 @@
 package zen.ast;
 import zen.deps.Field;
 import zen.deps.LibNative;
+import zen.deps.LibZen;
 import zen.parser.ZNameSpace;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
@@ -46,7 +47,7 @@ public abstract class ZNode {
 	}
 
 	@Override public String toString() {
-		return "#" + this.getClass().getSimpleName() + ", Source=" + this.SourceToken;
+		return "#" + this.getClass().getSimpleName() + LibZen.StringfyObject(this);
 	}
 
 	public boolean IsErrorNode() {
