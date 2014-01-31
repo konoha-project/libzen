@@ -38,9 +38,6 @@ import zen.type.ZTypePool;
 
 class AsmClassLoader extends ClassLoader {
 	final HashMap<String,AsmClassBuilder> ByteCodeMap;
-	//	final String GlobalStaticClassName;
-	//	final String ContextFieldName;
-	//	final String GontextDescripter;
 
 	public AsmClassLoader(ZGenerator Generator) {
 		this.ByteCodeMap = new HashMap<String, AsmClassBuilder>();
@@ -197,11 +194,11 @@ class AsmClassLoader extends ClassLoader {
 		@Var Type ReturnType = GetAsmType(FuncType.GetReturnType());
 		@Var Type[] ArgTypes = new Type[FuncType.GetFuncParamSize()];
 		for(int i = 0; i < ArgTypes.length; i++) {
-			ZType ParamType = FuncType.GetParamType(i);
+			ZType ParamType = FuncType.GetFuncParamType(i);
 			ArgTypes[i] = GetAsmType(ParamType);
 		}
 		String Desc = Type.getMethodDescriptor(ReturnType, ArgTypes);
-		//this.Debug("Desc: " + Desc + ", FuncType: " + FuncType);
+		//System.out.println(" ** Desc: " + Desc + ", FuncType: " + FuncType);
 		return Desc;
 	}
 
