@@ -31,6 +31,7 @@ import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.deps.ZenMap;
 import zen.deps.ZenTypedObject;
+import zen.obsolete.ZFuncSet;
 import zen.type.ZType;
 
 public class ZSystem {
