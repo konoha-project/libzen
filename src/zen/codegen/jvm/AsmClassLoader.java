@@ -30,7 +30,6 @@ import zen.deps.ZenMatchFunc;
 import zen.deps.ZenTokenFunc;
 import zen.lang.ZSystem;
 import zen.parser.ZGenerator;
-import zen.parser.ZNameSpace;
 import zen.parser.ZTokenContext;
 import zen.type.ZFuncType;
 import zen.type.ZType;
@@ -81,7 +80,7 @@ class AsmClassLoader extends ClassLoader {
 		this.FuncClassMap.put(FuncClassName(FuncType), ZenTokenFunc.class);
 		TypeList.clear();
 		TypeList.add(NativeTypeTable.GetZenType(ZNode.class));
-		TypeList.add(NativeTypeTable.GetZenType(ZNameSpace.class));
+		TypeList.add(NativeTypeTable.GetZenType(ZNode.class));
 		TypeList.add(NativeTypeTable.GetZenType(ZTokenContext.class));
 		TypeList.add(NativeTypeTable.GetZenType(ZNode.class));
 		FuncType = ZTypePool.LookupFuncType(TypeList);
