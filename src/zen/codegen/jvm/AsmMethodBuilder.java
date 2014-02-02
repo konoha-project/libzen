@@ -21,6 +21,7 @@ import zen.ast.ZNode;
 import zen.deps.NativeTypeTable;
 import zen.lang.ZSystem;
 import zen.type.ZFuncType;
+import zen.type.ZType;
 
 public class AsmMethodBuilder extends MethodNode {
 
@@ -55,8 +56,18 @@ public class AsmMethodBuilder extends MethodNode {
 		}
 	}
 
+	void PushBoolean(boolean b) {
+		if(b) {
+			this.visitInsn(Opcodes.ICONST_1);
+		}
+		else {
+			this.visitInsn(Opcodes.ICONST_0);
+		}
+	}
+
 	void PushInt(int n) {
 		switch(n) {
+		case -1: this.visitInsn(Opcodes.ICONST_M1); return;
 		case 0: this.visitInsn(Opcodes.ICONST_0); return;
 		case 1: this.visitInsn(Opcodes.ICONST_1); return;
 		case 2: this.visitInsn(Opcodes.ICONST_2); return;
@@ -64,15 +75,67 @@ public class AsmMethodBuilder extends MethodNode {
 		case 4: this.visitInsn(Opcodes.ICONST_4); return;
 		case 5: this.visitInsn(Opcodes.ICONST_5); return;
 		default:
-			this.visitIntInsn(Opcodes.BIPUSH, n); return;
+			if(n >= Byte.MIN_VALUE && n <= Byte.MAX_VALUE) {
+				this.visitIntInsn(Opcodes.BIPUSH, n);
+			}
+			else if(n >= Short.MIN_VALUE && n <= Short.MAX_VALUE) {
+				this.visitIntInsn(Opcodes.SIPUSH, n);
+			}
+			else {
+				this.visitLdcInsn(n);
+			}
 		}
-		//		this.visitLdcInsn(n);
 	}
 
-	void LoadConst(Object Value) {
-		if(Value instanceof Boolean || Value instanceof Long || Value instanceof Double || Value instanceof String) {
+	void PushLong(long n) {
+		if(n == 0) {
+			this.visitInsn(Opcodes.LCONST_0);
+		}
+		else if(n == 1) {
+			this.visitInsn(Opcodes.LCONST_1);
+		}
+		else if(n >= Short.MIN_VALUE && n <= Short.MAX_VALUE) {
+			this.PushInt((int)n);
+			this.visitInsn(Opcodes.I2L);
+		}
+		else {
+			this.visitLdcInsn(n);
+		}
+	}
+
+	void PushDouble(double n) {
+		if(n == 0.0) {
+			this.visitInsn(Opcodes.DCONST_0);
+		}
+		else if(n == 1.0) {
+			this.visitInsn(Opcodes.DCONST_1);
+		}
+		this.visitLdcInsn(n);
+	}
+
+
+	void PushConst(Object Value) {
+		if(Value instanceof Boolean) {
+			this.PushBoolean((Boolean)Value);
+		}
+		else if(Value instanceof Long) {
+			this.PushLong((Long)Value);
+		}
+		else if(Value instanceof Double) {
+			this.PushDouble((Double)Value);
+		}
+		else {
 			this.visitLdcInsn(Value);
 			return;
+		}
+	}
+
+	void Pop(ZType T) {
+		if(T.IsFloatType() || T.IsIntType()) {
+			this.visitInsn(Opcodes.POP2);
+		}
+		else if(!T.IsVoidType()) {
+			this.visitInsn(Opcodes.POP);
 		}
 	}
 
@@ -132,7 +195,7 @@ public class AsmMethodBuilder extends MethodNode {
 			this.visitMethodInsn(INVOKESTATIC, owner, sMethod.getName(), Type.getMethodDescriptor(sMethod));
 			this.CheckCast(C1, sMethod.getReturnType());
 		}
-		else if (!C2.isAssignableFrom(C1)) {
+		else if (!C1.isAssignableFrom(C2)) {
 			// c1 instanceof C2  C2.
 			this.Generator.Debug("CHECKCAST C1="+C1.getSimpleName()+ ", given C2="+C2.getSimpleName());
 			this.visitTypeInsn(CHECKCAST, Type.getInternalName(C1));
@@ -203,10 +266,10 @@ public class AsmMethodBuilder extends MethodNode {
 	void PushNodeListAsArray(Class<?> T, int StartIdx, ArrayList<ZNode> NodeList) {
 		this.PushInt(NodeList.size() - StartIdx);
 		if(T == long.class) {
-			this.visitTypeInsn(Opcodes.NEWARRAY, Type.getInternalName(T));
+			this.visitIntInsn(Opcodes.NEWARRAY, Opcodes.T_LONG);
 		}
-		else if(T == double.class) {
-			this.visitTypeInsn(Opcodes.NEWARRAY, Type.getInternalName(T));
+		else if(T == long.class) {
+			this.visitIntInsn(Opcodes.NEWARRAY, Opcodes.T_DOUBLE);
 		}
 		else {
 			this.visitTypeInsn(ANEWARRAY, Type.getInternalName(T));

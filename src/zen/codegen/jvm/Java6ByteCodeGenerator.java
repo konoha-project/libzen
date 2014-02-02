@@ -65,6 +65,7 @@ import zen.ast.ZCastNode;
 import zen.ast.ZCatchNode;
 import zen.ast.ZClassDeclNode;
 import zen.ast.ZComparatorNode;
+import zen.ast.ZConstNode;
 import zen.ast.ZConstPoolNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZFieldNode;
@@ -104,6 +105,7 @@ import zen.deps.NativeTypeTable;
 import zen.deps.Var;
 import zen.deps.ZenIntArray;
 import zen.deps.ZenObjectArray;
+import zen.lang.ZSystem;
 import zen.type.ZFuncType;
 import zen.type.ZType;
 
@@ -119,21 +121,20 @@ public class Java6ByteCodeGenerator extends JavaSolution {
 		this.ClassLoader = new AsmClassLoader(this);
 	}
 
-
 	@Override public void VisitNullNode(ZNullNode Node) {
 		this.CurrentBuilder.visitInsn(ACONST_NULL);
 	}
 
 	@Override public void VisitBooleanNode(ZBooleanNode Node) {
-		this.CurrentBuilder.visitLdcInsn(Node.BooleanValue);
+		this.CurrentBuilder.PushBoolean(Node.BooleanValue);
 	}
 
 	@Override public void VisitIntNode(ZIntNode Node) {
-		this.CurrentBuilder.visitLdcInsn(Node.IntValue);
+		this.CurrentBuilder.PushLong(Node.IntValue);
 	}
 
 	@Override public void VisitFloatNode(ZFloatNode Node) {
-		this.CurrentBuilder.visitLdcInsn(Node.FloatValue);
+		this.CurrentBuilder.PushDouble(Node.FloatValue);
 	}
 
 	@Override public void VisitStringNode(ZStringNode Node) {
@@ -170,7 +171,7 @@ public class Java6ByteCodeGenerator extends JavaSolution {
 		String Owner = Type.getInternalName(ArrayClass);
 		this.CurrentBuilder.visitTypeInsn(NEW, Owner);
 		this.CurrentBuilder.visitInsn(DUP);
-		this.CurrentBuilder.visitLdcInsn(Node.Type.TypeId);
+		this.CurrentBuilder.PushInt(Node.Type.TypeId);
 		this.CurrentBuilder.PushNodeListAsArray(this.AsElementClass(Node.Type), 0, Node.NodeList);
 		this.CurrentBuilder.SetLineNumber(Node);
 		this.CurrentBuilder.visitMethodInsn(INVOKESPECIAL, Owner, "<init>", LibAsm.NewArrayDescriptor(Node.Type));
@@ -209,7 +210,7 @@ public class Java6ByteCodeGenerator extends JavaSolution {
 				this.CurrentBuilder.visitMethodInsn(INVOKESPECIAL, ClassName, "<init>", Type.getConstructorDescriptor(jMethod));
 			}
 			else {
-				this.CurrentBuilder.visitLdcInsn(Node.Type.TypeId);
+				this.CurrentBuilder.PushInt(Node.Type.TypeId);
 				this.CurrentBuilder.SetLineNumber(Node);
 				this.CurrentBuilder.visitMethodInsn(INVOKESPECIAL, ClassName, "<init>", "(I)V");
 			}
@@ -337,7 +338,7 @@ public class Java6ByteCodeGenerator extends JavaSolution {
 		else {
 			jMethod = NativeMethodTable.GetStaticMethod("InvokeUnresolvedMethod");
 			this.CurrentBuilder.PushNode(Object.class, Node.RecvNode);
-			this.CurrentBuilder.LoadConst(Node.MethodName);
+			this.CurrentBuilder.PushConst(Node.MethodName);
 			this.CurrentBuilder.PushNodeListAsArray(Object.class, 0, Node.ParamList);
 			this.CurrentBuilder.ApplyStaticMethod(Node, jMethod, null);
 		}
@@ -373,10 +374,20 @@ public class Java6ByteCodeGenerator extends JavaSolution {
 	}
 
 	@Override public void VisitCastNode(ZCastNode Node) {
-		Class<?> C1 = NativeTypeTable.GetJavaClass(Node.Type);
-		Class<?> C2 = NativeTypeTable.GetJavaClass(Node.ExprNode.Type);
-		Method sMethod = NativeMethodTable.GetCastMethod(C1, C2);
-		this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.ExprNode});
+		if(Node.Type.IsVoidType()) {
+			this.CurrentBuilder.Pop(Node.ExprNode.Type);
+		}
+		else {
+			Class<?> C1 = NativeTypeTable.GetJavaClass(Node.Type);
+			Class<?> C2 = NativeTypeTable.GetJavaClass(Node.ExprNode.Type);
+			Method sMethod = NativeMethodTable.GetCastMethod(C1, C2);
+			if(sMethod != null) {
+				this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.ExprNode});
+			}
+			else if(!C1.isAssignableFrom(C2)) {
+				this.CurrentBuilder.visitTypeInsn(Opcodes.CHECKCAST, Type.getInternalName(C1));
+			}
+		}
 	}
 
 	@Override public void VisitInstanceOfNode(ZInstanceOfNode Node) {
@@ -542,8 +553,27 @@ public class Java6ByteCodeGenerator extends JavaSolution {
 		this.CurrentBuilder.RemoveLocal(NativeTypeTable.GetJavaClass(Node.ExceptionType), Node.ExceptionName);
 	}
 
-	@Override public void VisitLetNode(ZLetNode Node) {
+	public void VisitStaticField(StaticFieldNode Node) {
+		String FieldDesc = Type.getDescriptor(NativeTypeTable.GetJavaClass(Node.Type));
+		this.CurrentBuilder.visitFieldInsn(Opcodes.GETSTATIC, Node.ClassName, Node.FieldName, FieldDesc);
+	}
 
+	@Override public void VisitLetNode(ZLetNode Node) {
+		if(!(Node.ValueNode instanceof ZConstNode)) {
+			String ClassName = "Symbol" + Node.GlobalName;
+			@Var String SourceFile = ZSystem.GetSourceFileName(Node.SourceToken.FileLine);
+			@Var AsmClassBuilder cb = new AsmClassBuilder(ACC_PUBLIC|Opcodes.ACC_FINAL, SourceFile, ClassName, "java/lang/Onject");
+			this.ClassLoader.AddClassBuilder(cb);
+			Class<?> ValueClass = NativeTypeTable.GetJavaClass(Node.ValueNode.Type);
+			this.CurrentBuilder = new AsmMethodBuilder(ACC_PUBLIC | ACC_STATIC, "<clinit>", "()V", this, this.CurrentBuilder);
+			this.CurrentBuilder.PushNode(ValueClass, Node.ValueNode);
+			this.CurrentBuilder.visitFieldInsn(Opcodes.PUTSTATIC, ClassName, "_",  Type.getDescriptor(ValueClass));
+			this.CurrentBuilder.visitInsn(RETURN);
+			cb.AddMethod(this.CurrentBuilder);
+			this.CurrentBuilder = this.CurrentBuilder.Parent;
+			Node.ValueNode = new StaticFieldNode(null, ClassName, Node.ValueNode.Type, "_");
+		}
+		Node.GetNameSpace().SetLocalSymbol(Node.Symbol, Node.ValueNode);
 	}
 
 	public void VisitJvmFuncNode(JvmFuncNode Node) {
@@ -635,10 +665,9 @@ public class Java6ByteCodeGenerator extends JavaSolution {
 
 	@Override public void VisitErrorNode(ZErrorNode Node) {
 		String Message = this.Logger.ReportError(Node.SourceToken, Node.ErrorMessage);
-		this.CurrentBuilder.LoadConst(Message);
+		this.CurrentBuilder.PushConst(Message);
 		Method sMethod = NativeMethodTable.GetStaticMethod("ThrowError");
 		this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, null);
-		//this.CurrentBuilder.visitInsn(ATHROW);
 	}
 
 	@Override public void VisitExtendedNode(ZNode Node) {

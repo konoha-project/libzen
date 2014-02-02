@@ -61,7 +61,7 @@ class AsmClassLoader extends ClassLoader {
 
 
 
-	private void AddClassBuilder(AsmClassBuilder ClassBuilder) {
+	void AddClassBuilder(AsmClassBuilder ClassBuilder) {
 		this.ByteCodeMap.put(ClassBuilder.ClassName, ClassBuilder);
 	}
 

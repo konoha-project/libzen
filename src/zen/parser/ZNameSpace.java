@@ -204,6 +204,7 @@ public final class ZNameSpace {
 
 	public final ZSymbol SetLocalSymbol(String Symbol, ZNode Node) {
 		@Var ZSymbol Parent = this.GetSymbol(Symbol);
+		Node.ParentNode = null; // kill links
 		this.SetLocalSymbolEntry(Symbol, new ZSymbol(Parent, Node));
 		return Parent;
 	}
