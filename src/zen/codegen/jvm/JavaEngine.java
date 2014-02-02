@@ -207,7 +207,7 @@ public class JavaEngine extends ZenEngine {
 	}
 
 	@Override public void VisitMethodCallNode(ZMethodCallNode Node) {
-		Method jMethod = this.Solution.GetMethod(Node.RecvNode.Type, null, Node.ParamList);
+		Method jMethod = this.Solution.GetMethod(Node.RecvNode.Type, Node.MethodName, Node.ParamList);
 		if(jMethod != null) {
 			this.EvalMethod(Node, jMethod, Node.RecvNode, this.Solution.PackNodes(null, Node.ParamList));
 		}
