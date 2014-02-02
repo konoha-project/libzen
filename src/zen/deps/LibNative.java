@@ -147,7 +147,7 @@ public class LibNative {
 
 	public final static ZFunc LoadMatchFunc(Class<?> GrammarClass, String FuncName) {
 		try {
-			Method JavaMethod = GrammarClass.getMethod(FuncName, ZNameSpace.class, ZTokenContext.class, ZNode.class);
+			Method JavaMethod = GrammarClass.getMethod(FuncName, ZNode.class, ZTokenContext.class, ZNode.class);
 			return LibNative.ConvertToNativeFunc(JavaMethod);
 		} catch (NoSuchMethodException e) {
 			LibNative.FixMe(e);
