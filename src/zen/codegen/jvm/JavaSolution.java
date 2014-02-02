@@ -28,7 +28,7 @@ public abstract class JavaSolution extends ZGenerator {
 	}
 
 	@Override public ZenEngine GetEngine() {
-		return new JavaReflectionEngine(new ZenTypeSafer(this), this);
+		return new JavaEngine(new ZenTypeSafer(this), this);
 	}
 
 	@Override public boolean StartCodeGeneration(ZNode Node,  boolean AllowLazy, boolean IsInteractive) {
@@ -190,7 +190,7 @@ public abstract class JavaSolution extends ZGenerator {
 		return jMethod;
 	}
 
-	ZNode[] PackNodes(ZNode Node, ArrayList<ZNode> List) {
+	protected ZNode[] PackNodes(ZNode Node, ArrayList<ZNode> List) {
 		int Start = 0;
 		ZNode[] Nodes = new ZNode[List.size() + Start];
 		if(Node != null) {

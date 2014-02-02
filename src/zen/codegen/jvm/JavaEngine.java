@@ -59,7 +59,7 @@ import zen.type.ZTypeChecker;
 public class JavaEngine extends ZenEngine {
 
 	private final JavaSolution Solution;
-	JavaEngine(ZTypeChecker TypeChecker, JavaSolution Generator) {
+	public JavaEngine(ZTypeChecker TypeChecker, JavaSolution Generator) {
 		super(TypeChecker, Generator);
 		this.Solution = Generator;
 	}
@@ -181,9 +181,9 @@ public class JavaEngine extends ZenEngine {
 	//	}
 
 	@Override public void VisitNewObjectNode(ZNewObjectNode Node) {
-		Constructor<?> jMethod = ((Java6ByteCodeGenerator)this.Generator).GetConstructor(Node.Type, Node.ParamList);
+		Constructor<?> jMethod = this.Solution.GetConstructor(Node.Type, Node.ParamList);
 		if(jMethod != null) {
-			this.EvalConstructor(Node, jMethod, ((Java6ByteCodeGenerator)this.Generator).PackNodes(null, Node.ParamList));
+			this.EvalConstructor(Node, jMethod, this.Solution.PackNodes(null, Node.ParamList));
 		}
 		else {
 			Class<?> jClass = NativeTypeTable.GetJavaClass(Node.Type);
@@ -199,9 +199,9 @@ public class JavaEngine extends ZenEngine {
 	}
 
 	@Override public void VisitMethodCallNode(ZMethodCallNode Node) {
-		Method jMethod = ((Java6ByteCodeGenerator)this.Generator).GetMethod(Node.RecvNode.Type, null, Node.ParamList);
+		Method jMethod = this.Solution.GetMethod(Node.RecvNode.Type, null, Node.ParamList);
 		if(jMethod != null) {
-			this.EvalMethod(Node, jMethod, Node.RecvNode, ((Java6ByteCodeGenerator)this.Generator).PackNodes(null, Node.ParamList));
+			this.EvalMethod(Node, jMethod, Node.RecvNode, this.Solution.PackNodes(null, Node.ParamList));
 		}
 		else {
 			jMethod = NativeMethodTable.GetStaticMethod("InvokeUnresolvedMethod");
@@ -232,13 +232,13 @@ public class JavaEngine extends ZenEngine {
 			}
 			else {
 				ZFunc Func = ZenGamma.LookupFunc(this.Generator.RootNameSpace, Node.ResolvedFuncName, Node.ResolvedFuncType.GetRecvType(), Node.ResolvedFuncType.GetFuncParamSize());
-				Method sMethod = ((Java6ByteCodeGenerator)this.Generator).GetStaticFuncMethod(Func.GetSignature());
-				this.EvalStaticMethod(Node, sMethod, ((Java6ByteCodeGenerator)this.Generator).PackNodes(null, Node.ParamList));
+				Method sMethod = this.Solution.GetStaticFuncMethod(Func.GetSignature());
+				this.EvalStaticMethod(Node, sMethod, this.Solution.PackNodes(null, Node.ParamList));
 			}
 		}
 		else {
 			Method sMethod = NativeMethodTable.GetStaticMethod("InvokeFunc");
-			this.EvalStaticMethod(Node, sMethod, ((Java6ByteCodeGenerator)this.Generator).PackNodes(Node.FuncNode, Node.ParamList));
+			this.EvalStaticMethod(Node, sMethod, this.Solution.PackNodes(Node.FuncNode, Node.ParamList));
 		}
 	}
 
