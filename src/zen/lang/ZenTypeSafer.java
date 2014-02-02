@@ -38,7 +38,6 @@ import zen.ast.ZCastNode;
 import zen.ast.ZCatchNode;
 import zen.ast.ZClassDeclNode;
 import zen.ast.ZComparatorNode;
-import zen.ast.ZConstPoolNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZFieldNode;
 import zen.ast.ZFloatNode;
@@ -124,10 +123,6 @@ public class ZenTypeSafer extends ZTypeChecker {
 
 	@Override public void VisitStringNode(ZStringNode Node) {
 		this.TypedNode(Node, ZType.StringType);
-	}
-
-	@Override public void VisitConstPoolNode(ZConstPoolNode Node) {
-		this.TypedNode(Node, ZSystem.GuessType(Node.ConstValue));
 	}
 
 	@Override public void VisitArrayLiteralNode(ZArrayLiteralNode Node) {

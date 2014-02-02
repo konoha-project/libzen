@@ -65,7 +65,6 @@ import zen.ast.ZCatchNode;
 import zen.ast.ZClassDeclNode;
 import zen.ast.ZComparatorNode;
 import zen.ast.ZConstNode;
-import zen.ast.ZConstPoolNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZFieldNode;
 import zen.ast.ZFloatNode;
@@ -171,15 +170,6 @@ public class AsmGenerator extends JavaSolution {
 
 	@Override public void VisitStringNode(ZStringNode Node) {
 		this.CurrentBuilder.visitLdcInsn(Node.StringValue);
-	}
-
-	@Override public void VisitConstPoolNode(ZConstPoolNode Node) {
-		this.Debug("TODO");
-		this.CurrentBuilder.visitInsn(Opcodes.ACONST_NULL);
-
-		//		Object constValue = Node.ConstValue;
-		//		LibNative.Assert(Node.ConstValue != null);
-		//		this.CurrentBuilder.LoadConst(constValue);
 	}
 
 	@Override public void VisitArrayLiteralNode(ZArrayLiteralNode Node) {

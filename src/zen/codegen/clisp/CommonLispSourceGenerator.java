@@ -28,7 +28,6 @@ import zen.ast.ZAndNode;
 import zen.ast.ZBinaryNode;
 import zen.ast.ZBlockNode;
 import zen.ast.ZBooleanNode;
-import zen.ast.ZConstPoolNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZGetNameNode;
 import zen.ast.ZIfNode;
@@ -67,14 +66,6 @@ public class CommonLispSourceGenerator extends ZSourceGenerator {
 
 	@Override public void VisitStringNode(ZStringNode Node) {
 		this.CurrentBuilder.Append(Node.SourceToken.ParsedText);
-	}
-	@Override public void VisitConstPoolNode(ZConstPoolNode Node) {
-		if(Node.ConstValue == null) {
-			this.CurrentBuilder.Append("nil");
-		}
-		else {
-			this.CurrentBuilder.Append(Node.SourceToken.ParsedText);
-		}
 	}
 
 	@Override public void VisitReturnNode(ZReturnNode Node) {

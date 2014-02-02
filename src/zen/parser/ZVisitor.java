@@ -34,7 +34,6 @@ import zen.ast.ZCastNode;
 import zen.ast.ZCatchNode;
 import zen.ast.ZClassDeclNode;
 import zen.ast.ZComparatorNode;
-import zen.ast.ZConstPoolNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZFloatNode;
 import zen.ast.ZFuncCallNode;
@@ -74,7 +73,6 @@ public abstract class ZVisitor {
 	public abstract void VisitIntNode(ZIntNode Node);
 	public abstract void VisitFloatNode(ZFloatNode Node);
 	public abstract void VisitStringNode(ZStringNode Node);
-	public abstract void VisitConstPoolNode(ZConstPoolNode Node);
 	public abstract void VisitArrayLiteralNode(ZArrayLiteralNode Node);
 	public abstract void VisitMapLiteralNode(ZMapLiteralNode Node);
 	public abstract void VisitNewArrayNode(ZNewArrayNode Node);

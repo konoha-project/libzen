@@ -12,7 +12,6 @@ import zen.ast.ZCastNode;
 import zen.ast.ZCatchNode;
 import zen.ast.ZClassDeclNode;
 import zen.ast.ZComparatorNode;
-import zen.ast.ZConstPoolNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZFieldNode;
 import zen.ast.ZFloatNode;
@@ -137,9 +136,6 @@ public class ZTransformer extends ZVisitor {
 	}
 
 	@Override public void VisitStringNode(ZStringNode Node) {
-	}
-
-	@Override public void VisitConstPoolNode(ZConstPoolNode Node) {
 	}
 
 	@Override public void VisitArrayLiteralNode(ZArrayLiteralNode Node) {

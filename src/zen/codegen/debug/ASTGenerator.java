@@ -35,7 +35,6 @@ import zen.ast.ZCastNode;
 import zen.ast.ZCatchNode;
 import zen.ast.ZClassDeclNode;
 import zen.ast.ZComparatorNode;
-import zen.ast.ZConstPoolNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZFieldNode;
 import zen.ast.ZFloatNode;
@@ -115,10 +114,6 @@ public class ASTGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Append("(" + Node.GetValue() + ")");
 	}
 
-	@Override
-	public void VisitConstPoolNode(ZConstPoolNode Node) {
-		this.CurrentBuilder.Append("(" + Node.GetValue() + ")");
-	}
 
 	@Override
 	public void VisitArrayLiteralNode(ZArrayLiteralNode Node) {

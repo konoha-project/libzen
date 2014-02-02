@@ -38,7 +38,6 @@ import zen.ast.ZCastNode;
 import zen.ast.ZCatchNode;
 import zen.ast.ZClassDeclNode;
 import zen.ast.ZComparatorNode;
-import zen.ast.ZConstPoolNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZFloatNode;
 import zen.ast.ZFuncCallNode;
@@ -157,10 +156,6 @@ public class ZenEngine extends ZVisitor {
 
 	public void VisitTypeNode(ZTypeNode Node) {
 		this.EvaledValue = Node.Type;
-	}
-
-	@Override public void VisitConstPoolNode(ZConstPoolNode Node) {
-		this.EvaledValue = Node.ConstValue;
 	}
 
 	@Override public void VisitArrayLiteralNode(ZArrayLiteralNode Node) {

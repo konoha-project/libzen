@@ -37,7 +37,6 @@ import zen.ast.ZCastNode;
 import zen.ast.ZCatchNode;
 import zen.ast.ZClassDeclNode;
 import zen.ast.ZComparatorNode;
-import zen.ast.ZConstPoolNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZFieldNode;
 import zen.ast.ZFloatNode;
@@ -283,10 +282,6 @@ public class ZSourceGenerator extends ZGenerator {
 		this.CurrentBuilder.AppendWhiteSpace();
 		this.VisitType(Node.Type);
 		this.VisitNodeList("(", Node.ParamList, ")");
-	}
-
-	@Override public void VisitConstPoolNode(ZConstPoolNode Node) {
-		// TODO Auto-generated method stub
 	}
 
 	@Override public void VisitGroupNode(ZGroupNode Node) {
