@@ -56,10 +56,10 @@ import zen.lang.ZenEngine;
 import zen.lang.ZenGamma;
 import zen.type.ZTypeChecker;
 
-public class JavaReflectionEngine extends ZenEngine {
+public class JavaEngine extends ZenEngine {
 
 	private final JavaSolution Solution;
-	JavaReflectionEngine(ZTypeChecker TypeChecker, JavaSolution Generator) {
+	JavaEngine(ZTypeChecker TypeChecker, JavaSolution Generator) {
 		super(TypeChecker, Generator);
 		this.Solution = Generator;
 	}
