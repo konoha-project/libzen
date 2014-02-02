@@ -53,15 +53,15 @@ public class ZFunctionNode extends ZNode {
 		if(Node instanceof ZParamNode) {
 			this.ParamList.add((ZParamNode)Node);
 		}
-		else if(this.FuncName == null) {
-			this.FuncName = Node.SourceToken.ParsedText;
-			this.SourceToken = Node.SourceToken;
-		}
 		else if(Node instanceof ZTypeNode) {
 			this.ReturnType = Node.Type;
 		}
 		else if(Node instanceof ZBlockNode) {
 			this.FuncBlock = (ZBlockNode)Node;
+		}
+		else if(this.FuncName == null) {
+			this.FuncName = Node.SourceToken.ParsedText;
+			this.SourceToken = Node.SourceToken;
 		}
 	}
 

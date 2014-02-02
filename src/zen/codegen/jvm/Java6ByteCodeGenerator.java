@@ -119,6 +119,7 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 	AsmClassLoader ClassLoader = null;
 	Stack<TryCatchLabel> TryCatchLabel;
 	private final ZenMap<Method> FuncMap = new ZenMap<Method>(null);
+	private int LambdaMethodId = 0;
 
 	public Java6ByteCodeGenerator() {
 		super("java", "1.6");
@@ -690,6 +691,10 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 	}
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
+		if(Node.FuncName == null) {
+			Node.FuncName = "labmda" + this.LambdaMethodId;
+			this.LambdaMethodId += 1;
+		}
 		@Var ZFuncType FuncType = Node.GetFuncType(null);
 		@Var JvmFuncNode FuncNode = new JvmFuncNode(Node, FuncType, Node.FuncName);
 		@Var AsmClassBuilder  HolderClass = this.ClassLoader.NewFunctionHolderClass(Node, FuncNode, FuncType);
