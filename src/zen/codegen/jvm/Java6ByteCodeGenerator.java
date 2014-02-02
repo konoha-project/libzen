@@ -337,7 +337,6 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 			this.CurrentBuilder.visitInsn(DUP);
 			Constructor<?> jMethod = this.GetConstructor(Node.Type, Node.ParamList);
 			if(jMethod != null) {
-				//				this.CurrentBuilder.visitVarInsn(ALOAD, 0);
 				Class<?>[] P = jMethod.getParameterTypes();
 				for(int i = 0; i < P.length; i++) {
 					this.CurrentBuilder.PushNode(P[i], Node.ParamList.get(i));
@@ -346,7 +345,6 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 				this.CurrentBuilder.visitMethodInsn(INVOKESPECIAL, ClassName, "<init>", Type.getConstructorDescriptor(jMethod));
 			}
 			else {
-				//				this.CurrentBuilder.visitVarInsn(ALOAD, 0);
 				this.CurrentBuilder.visitLdcInsn(Node.Type.TypeId);
 				this.CurrentBuilder.SetLineNumber(Node);
 				this.CurrentBuilder.visitMethodInsn(INVOKESPECIAL, ClassName, "<init>", "(I)V");

@@ -74,7 +74,6 @@ import zen.ast.ZWhileNode;
 import zen.deps.Var;
 import zen.parser.ZGenerator;
 import zen.parser.ZLogger;
-import zen.parser.ZParserConst;
 import zen.parser.ZToken;
 import zen.parser.ZTokenContext;
 import zen.parser.ZVisitor;
@@ -365,7 +364,7 @@ public class ZenEngine extends ZVisitor {
 	}
 
 	public final Object Eval(String ScriptText, long FileLine, boolean IsInteractive) {
-		@Var Object ResultValue = ZParserConst.UndefinedSymbol;
+		@Var Object ResultValue = ZEmptyValue.DefaultValue;
 		//ZenLogger.VerboseLog(ZenLogger.VerboseEval, "eval: " + ScriptText);
 		@Var ZTokenContext TokenContext = new ZTokenContext(this.Generator.RootNameSpace, ScriptText, FileLine);
 		TokenContext.SkipEmptyStatement();
