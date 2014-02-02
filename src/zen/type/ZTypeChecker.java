@@ -34,8 +34,8 @@ import zen.deps.LibNative;
 import zen.deps.Var;
 import zen.lang.ZFunc;
 import zen.lang.ZenError;
+import zen.parser.ZGenerator;
 import zen.parser.ZLogger;
-import zen.parser.ZNameSpace;
 import zen.parser.ZUtils;
 import zen.parser.ZVisitor;
 
@@ -49,21 +49,21 @@ public abstract class ZTypeChecker extends ZVisitor {
 		LibNative.Debug("FIXME: " + string);
 	}
 
-	@Field private ZNameSpace StackedNameSpace;
 	@Field private ZType      StackedContextType;
 	@Field private ZNode      ReturnedNode;
 
+	@Field public ZGenerator  Generator;
 	@Field public ZLogger     Logger;
 	@Field private boolean    StoppedVisitor;
 	@Field public ZVarScope   VarScope;
 
-	public ZTypeChecker(ZLogger Logger) {
-		this.Logger = Logger;
-		this.StackedNameSpace = null;
+	public ZTypeChecker(ZGenerator Generator) {
+		this.Generator = Generator;
+		this.Logger = Generator.Logger;
 		this.StackedContextType = null;
 		this.ReturnedNode = null;
 		this.StoppedVisitor = false;
-		this.VarScope = new ZVarScope(null, Logger, null);
+		this.VarScope = new ZVarScope(null, this.Logger, null);
 	}
 
 	@Override public final void EnableVisitor() {
@@ -78,19 +78,14 @@ public abstract class ZTypeChecker extends ZVisitor {
 		return !this.StoppedVisitor;
 	}
 
-	public final ZNameSpace GetNameSpace() {
-		return this.StackedNameSpace;
-	}
-
 	public final ZType GetContextType() {
 		return this.StackedContextType;
 	}
 
-	private final ZNode VisitTypeChecker(ZNode Node, ZNameSpace NameSpace, ZType ContextType, int TypeCheckPolicy) {
+	private final ZNode VisitTypeChecker(ZNode Node, ZType ContextType, int TypeCheckPolicy) {
 		if(this.IsVisitable()) {
 			if(Node.IsUntyped()) {
 				@Var ZNode ParentNode = Node.ParentNode;
-				this.StackedNameSpace = NameSpace;
 				this.StackedContextType = ContextType;
 				this.ReturnedNode = null;
 				Node.Accept(this);
@@ -101,13 +96,13 @@ public abstract class ZTypeChecker extends ZVisitor {
 					Node = this.ReturnedNode;
 				}
 				this.VarScope.CheckVarNode(ContextType, Node);
-				Node = this.TypeCheckImpl(Node, NameSpace, ContextType, TypeCheckPolicy);
+				Node = this.TypeCheckImpl(Node, ContextType, TypeCheckPolicy);
 				if(ParentNode != Node.ParentNode && ParentNode != null) {
 					ParentNode.SetChild(Node);
 				}
 			}
 			else {
-				Node = this.TypeCheckImpl(Node, NameSpace, ContextType, TypeCheckPolicy);
+				Node = this.TypeCheckImpl(Node, ContextType, TypeCheckPolicy);
 				this.VarScope.CheckVarNode(ContextType, Node);
 			}
 		}
@@ -119,7 +114,7 @@ public abstract class ZTypeChecker extends ZVisitor {
 	public final static int NoCheckPolicy                   = 1;
 	public final static int EnforceCoercion                 = (1 << 1);
 
-	private final ZNode TypeCheckImpl(ZNode Node, ZNameSpace NameSpace, ZType ContextType, int TypeCheckPolicy) {
+	private final ZNode TypeCheckImpl(ZNode Node, ZType ContextType, int TypeCheckPolicy) {
 		if(Node.IsErrorNode()) {
 			if(!ContextType.IsVarType()) {
 				Node.Type = ContextType;
@@ -133,40 +128,40 @@ public abstract class ZTypeChecker extends ZVisitor {
 			return Node;
 		}
 		if(ContextType.IsVoidType() && !Node.Type.IsVoidType()) {
-			return new ZCastNode(ZType.VoidType, Node);
+			return new ZCastNode(Node.ParentNode, ZType.VoidType, Node);
 		}
-		@Var ZFunc CoercionFunc = NameSpace.Generator.GetCoercionFunc(Node.Type, ContextType);
+		@Var ZFunc CoercionFunc = this.Generator.GetCoercionFunc(Node.Type, ContextType);
 		if(CoercionFunc != null) {
 
 		}
 		if(ContextType.IsFloatType() && Node.Type.IsIntType()) {
-			return new ZCastNode(ContextType, Node);
+			return new ZCastNode(Node.ParentNode, ContextType, Node);
 		}
 		if(ZUtils.IsFlag(TypeCheckPolicy, EnforceCoercion) && ContextType.IsStringType()) {
-			return new ZCastNode(ContextType, Node);
+			return new ZCastNode(Node.ParentNode, ContextType, Node);
 		}
 		return ZenError.CreateStupidCast(ContextType, Node);
 	}
 
-	public final ZNode TryType(ZNode Node, ZNameSpace NameSpace, ZType ContextType) {
-		return this.VisitTypeChecker(Node, NameSpace, ContextType, NoCheckPolicy);
+	public final ZNode TryType(ZNode Node, ZType ContextType) {
+		return this.VisitTypeChecker(Node, ContextType, NoCheckPolicy);
 	}
 
-	public final ZNode CheckType(ZNode Node, ZNameSpace NameSpace, ZType ContextType) {
-		return this.VisitTypeChecker(Node, NameSpace, ContextType, DefaultTypeCheckPolicy);
+	public final ZNode CheckType(ZNode Node, ZType ContextType) {
+		return this.VisitTypeChecker(Node, ContextType, DefaultTypeCheckPolicy);
 	}
 
-	public final ZNode EnforceType(ZNode Node, ZNameSpace NameSpace, ZType ContextType) {
-		return this.VisitTypeChecker(Node, NameSpace, ContextType, EnforceCoercion);
+	public final ZNode EnforceType(ZNode Node, ZType ContextType) {
+		return this.VisitTypeChecker(Node, ContextType, EnforceCoercion);
 	}
 
-	public final boolean TypeCheckNodeList(ZNameSpace NameSpace, ArrayList<ZNode> ParamList) {
+	public final boolean TypeCheckNodeList(ArrayList<ZNode> ParamList) {
 		if(this.IsVisitable()) {
 			@Var boolean AllTyped = true;
 			@Var int i = 0;
 			while(i < ParamList.size()) {
 				ZNode SubNode = ParamList.get(i);
-				SubNode = this.CheckType(SubNode, NameSpace, ZType.VarType);
+				SubNode = this.CheckType(SubNode, ZType.VarType);
 				ParamList.set(i, SubNode);
 				if(SubNode.IsVarType()) {
 					AllTyped = false;
@@ -245,7 +240,7 @@ public abstract class ZTypeChecker extends ZVisitor {
 		this.ReturnedNode = Node;
 	}
 
-	public abstract void DefineFunction(ZNameSpace NameSpace, ZFunctionNode FunctionNode, boolean Enforced);
+	public abstract void DefineFunction(ZFunctionNode FunctionNode, boolean Enforced);
 
 
 

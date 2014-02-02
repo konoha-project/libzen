@@ -1,13 +1,11 @@
 package zen.ast;
 
 import zen.deps.Field;
-import zen.parser.ZNameSpace;
 import zen.parser.ZVisitor;
 import zen.type.ZType;
 
 public class ZLetNode extends ZNode {
 
-	@Field public ZNameSpace NameSpace;
 	@Field public String PrefixSymbol = null;
 	@Field public String Symbol = null;
 	@Field public ZType  SymbolType = ZType.VarType;
@@ -16,9 +14,8 @@ public class ZLetNode extends ZNode {
 
 	@Field public String GlobalName = null;
 
-	public ZLetNode(ZNode ParentNode, ZNameSpace NameSpace) {
+	public ZLetNode(ZNode ParentNode) {
 		super(ParentNode, null);
-		this.NameSpace = NameSpace;
 	}
 
 	@Override public void Append(ZNode Node) {

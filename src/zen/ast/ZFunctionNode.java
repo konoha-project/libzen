@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import zen.deps.Field;
 import zen.deps.Nullable;
 import zen.deps.Var;
-import zen.parser.ZNameSpace;
 import zen.parser.ZVisitor;
 import zen.type.ZFuncType;
 import zen.type.ZType;
@@ -40,16 +39,14 @@ public class ZFunctionNode extends ZNode {
 	@Field public String FuncName = null;
 	@Field public ArrayList<ZParamNode> ParamList = new ArrayList<ZParamNode>();
 	@Field public ZBlockNode FuncBlock = null;
-	@Field public ZNameSpace NameSpace;
 
 	@Field public ZFunctionNode ParentFunctionNode = null;
 	@Field public ZFuncType ResolvedFuncType = null;
 	@Field public String GlobalName = null;
 	@Field public int VarIndex = 0;
 
-	public ZFunctionNode(ZNode ParentNode, ZNameSpace NameSpace) {
+	public ZFunctionNode(ZNode ParentNode) {
 		super(ParentNode, null);
-		this.NameSpace = NameSpace;
 	}
 
 	@Override public void Append(ZNode Node) {

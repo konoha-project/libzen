@@ -27,7 +27,6 @@ package zen.ast;
 import java.util.ArrayList;
 
 import zen.deps.Field;
-import zen.deps.Var;
 import zen.lang.ZenClassType;
 import zen.parser.ZNameSpace;
 import zen.parser.ZVisitor;
@@ -37,11 +36,9 @@ public final class ZClassDeclNode extends ZNode {
 	@Field public String ClassName = null;
 	@Field public ZType ClassType = null;
 	@Field public ZType SuperType = null;
-	@Field public ZNameSpace NameSpace;
 	@Field public ArrayList<ZFieldNode>  FieldList = new ArrayList<ZFieldNode>();
-	public ZClassDeclNode(ZNode ParentNode, ZNameSpace NameSpace) {
+	public ZClassDeclNode(ZNode ParentNode) {
 		super(ParentNode, null);
-		this.NameSpace = NameSpace.GetRootNameSpace();
 	}
 
 	@Override public void Append(ZNode Node) {
@@ -54,8 +51,8 @@ public final class ZClassDeclNode extends ZNode {
 		else if(this.ClassName == null) {
 			this.ClassName = Node.SourceToken.ParsedText;
 			this.SourceToken = Node.SourceToken;
-			@Var ZTypeNode TypeNode = this.NameSpace.GetTypeNode(this.ClassName, this.SourceToken);
-			this.ClassType = TypeNode.Type;
+			//			@Var ZTypeNode TypeNode = this.NameSpace.GetTypeNode(this.ClassName, this.SourceToken);
+			//			this.ClassType = TypeNode.Type;
 		}
 	}
 	@Override public void Accept(ZVisitor Visitor) {

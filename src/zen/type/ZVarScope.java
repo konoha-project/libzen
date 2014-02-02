@@ -8,7 +8,6 @@ import zen.ast.ZNode;
 import zen.deps.Field;
 import zen.deps.Var;
 import zen.parser.ZLogger;
-import zen.parser.ZNameSpace;
 import zen.parser.ZToken;
 
 public final class ZVarScope {
@@ -52,14 +51,14 @@ public final class ZVarScope {
 		}
 	}
 
-	public final boolean TypeCheckStmtList(ZNameSpace NameSpace, ZTypeChecker TypeSafer, ArrayList<ZNode> StmtList) {
+	public final boolean TypeCheckStmtList(ZTypeChecker TypeSafer, ArrayList<ZNode> StmtList) {
 		@Var int PrevCount = -1;
 		while(true) {
 			@Var int i = 0;
 			this.VarNodeCount = 0;
 			this.UnresolvedSymbolCount = 0;
 			while(i < StmtList.size()) {
-				StmtList.set(i, TypeSafer.CheckType(StmtList.get(i), NameSpace, ZType.VoidType));
+				StmtList.set(i, TypeSafer.CheckType(StmtList.get(i), ZType.VoidType));
 				i = i + 1;
 			}
 			if(this.VarNodeCount == 0 || PrevCount == this.VarNodeCount) {
@@ -73,23 +72,23 @@ public final class ZVarScope {
 		return false;
 	}
 
-	public final void TypeCheckFuncBlock(ZNameSpace NameSpace, ZTypeChecker TypeSafer, ZFunctionNode FunctionNode) {
+	public final void TypeCheckFuncBlock(ZTypeChecker TypeSafer, ZFunctionNode FunctionNode) {
 		@Var int PrevCount = -1;
 		while(true) {
 			this.VarNodeCount = 0;
 			this.UnresolvedSymbolCount = 0;
-			TypeSafer.DefineFunction(NameSpace, FunctionNode, false/*Enforced*/);
-			FunctionNode.FuncBlock = (ZBlockNode)TypeSafer.CheckType(FunctionNode.FuncBlock, NameSpace, ZType.VoidType);
+			TypeSafer.DefineFunction(FunctionNode, false/*Enforced*/);
+			FunctionNode.FuncBlock = (ZBlockNode)TypeSafer.CheckType(FunctionNode.FuncBlock, ZType.VoidType);
 			if(this.VarNodeCount == 0 || PrevCount == this.VarNodeCount) {
 				break;
 			}
 			PrevCount = this.VarNodeCount;
 		}
 		if(this.UnresolvedSymbolCount == 0) {
-			TypeSafer.DefineFunction(NameSpace, FunctionNode, true);
+			TypeSafer.DefineFunction(FunctionNode, true);
 		}
 		else {
-			TypeSafer.DefineFunction(NameSpace, FunctionNode, false/*Enforced*/);
+			TypeSafer.DefineFunction(FunctionNode, false/*Enforced*/);
 			if(this.Parent != null) {
 				this.Parent.UnresolvedSymbolCount = this.UnresolvedSymbolCount + this.Parent.UnresolvedSymbolCount;
 			}

@@ -24,15 +24,6 @@
 
 package zen.parser;
 
-import zen.ast.ZBooleanNode;
-import zen.ast.ZConstPoolNode;
-import zen.ast.ZFloatNode;
-import zen.ast.ZGetNameNode;
-import zen.ast.ZIntNode;
-import zen.ast.ZNode;
-import zen.ast.ZSetNameNode;
-import zen.ast.ZStringNode;
-import zen.type.ZType;
 
 public abstract class ZNodeUtils {
 	//	public final ZenNode CreateUnsupportedNode(ZenType Type, ZenSyntaxTree ParsedTree) {
@@ -41,28 +32,28 @@ public abstract class ZNodeUtils {
 	//		return new ZenErrorNode(ZenSystem.VoidType, ParsedTree.KeyToken);
 	//	}
 
-	public final static ZNode CreateConstNode(ZToken SourceToken, Object Value) {
-		if(Value instanceof Boolean) {
-			return new ZBooleanNode(SourceToken, (Boolean) Value);
-		}
-		if((Value instanceof Long) || (Value instanceof Integer)) {
-			return new ZIntNode(SourceToken, ((Number)Value).longValue());
-		}
-		if((Value instanceof Double) || (Value instanceof Float)) {
-			return new ZFloatNode(SourceToken, ((Number)Value).doubleValue());
-		}
-		if(Value instanceof String) {
-			return new ZStringNode(SourceToken, Value.toString());
-		}
-		return new ZConstPoolNode(SourceToken, Value);
-	}
-
-	public final static ZNode CreateSymbolNode(ZToken SourceToken, ZType Type, String NativeName, ZNode AssignedNode) {
-		if(AssignedNode != null) {
-			return new ZSetNameNode(SourceToken, NativeName, AssignedNode);
-		}
-		else {
-			return new ZGetNameNode(SourceToken, NativeName);
-		}
-	}
+	//	public final static ZNode CreateConstNode(ZToken SourceToken, Object Value) {
+	//		if(Value instanceof Boolean) {
+	//			return new ZBooleanNode(SourceToken, (Boolean) Value);
+	//		}
+	//		if((Value instanceof Long) || (Value instanceof Integer)) {
+	//			return new ZIntNode(SourceToken, ((Number)Value).longValue());
+	//		}
+	//		if((Value instanceof Double) || (Value instanceof Float)) {
+	//			return new ZFloatNode(SourceToken, ((Number)Value).doubleValue());
+	//		}
+	//		if(Value instanceof String) {
+	//			return new ZStringNode(SourceToken, Value.toString());
+	//		}
+	//		return new ZConstPoolNode(SourceToken, Value);
+	//	}
+	//
+	//	public final static ZNode CreateSymbolNode(ZToken SourceToken, ZType Type, String NativeName, ZNode AssignedNode) {
+	//		if(AssignedNode != null) {
+	//			return new ZSetNameNode(SourceToken, NativeName, AssignedNode);
+	//		}
+	//		else {
+	//			return new ZGetNameNode(SourceToken, NativeName);
+	//		}
+	//	}
 }

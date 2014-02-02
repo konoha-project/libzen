@@ -5,7 +5,6 @@ import zen.ast.ZFloatNode;
 import zen.ast.ZIntNode;
 import zen.ast.ZNode;
 import zen.ast.ZNullNode;
-import zen.ast.ZSymbolNode;
 import zen.deps.LibNative;
 import zen.deps.Nullable;
 import zen.deps.Var;
@@ -140,20 +139,20 @@ public class ZenGamma {
 	//		return InferredType;
 	//	}
 
-	static protected ZNode CreateDefaultValueNode(ZType Type, String FieldName) {
-		if(FieldName != null && Type.IsFuncType()) {
-			return new ZSymbolNode(Type, null, FieldName, Type.StringfySignature(FieldName));
-		}
+	static protected ZNode CreateDefaultValueNode(ZNode ParentNode, ZType Type, String FieldName) {
+		//		if(FieldName != null && Type.IsFuncType()) {
+		//			return new ZSymbolNode(ParentNode, null, Type, FieldName, Type.StringfySignature(FieldName));
+		//		}
 		if(Type.IsIntType()) {
-			return new ZIntNode(null, 0);
+			return new ZIntNode(ParentNode, null, 0);
 		}
 		else if(Type.IsBooleanType()) {
-			return new ZBooleanNode(null, false);
+			return new ZBooleanNode(ParentNode, null, false);
 		}
 		else if(Type.IsFloatType()) {
-			return new ZFloatNode(null, 0.0);
+			return new ZFloatNode(ParentNode, null, 0.0);
 		}
-		return new ZNullNode(null);
+		return new ZNullNode(ParentNode, null);
 	}
 
 }

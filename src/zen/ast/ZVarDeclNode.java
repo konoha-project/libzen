@@ -25,7 +25,6 @@
 package zen.ast;
 
 import zen.deps.Field;
-import zen.parser.ZNameSpace;
 import zen.parser.ZVisitor;
 import zen.type.ZType;
 
@@ -39,9 +38,10 @@ public final class ZVarDeclNode extends ZBlockNode {
 	@Field public String  NativeName = null;
 	@Field public ZNode	InitNode = null;
 
-	public ZVarDeclNode(ZNode ParentNode, ZNameSpace NameSpace) {
-		super(ParentNode, null, NameSpace);
+	public ZVarDeclNode(ZNode ParentNode) {
+		super(ParentNode, null);
 	}
+
 	@Override public void Append(ZNode Node) {
 		if(Node instanceof ZTypeNode) {
 			this.DeclType = Node.Type;

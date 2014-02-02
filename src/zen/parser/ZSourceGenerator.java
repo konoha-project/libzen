@@ -129,7 +129,7 @@ public class ZSourceGenerator extends ZGenerator {
 	}
 
 	@Override public ZenEngine GetEngine() {
-		return new ZenEngine(new ZenTypeSafer(this.Logger), this);
+		return new ZenEngine(new ZenTypeSafer(this), this);
 	}
 
 	protected ZSourceBuilder NewSourceBuilder() {

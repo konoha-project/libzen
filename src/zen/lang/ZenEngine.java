@@ -365,7 +365,7 @@ public class ZenEngine extends ZVisitor {
 
 	public final Object Eval(String ScriptText, long FileLine, boolean IsInteractive) {
 		@Var Object ResultValue = ZEmptyValue.DefaultValue;
-		@Var ZBlockNode TopBlockNode = new ZBlockNode(null, this.Generator.RootNameSpace);
+		@Var ZBlockNode TopBlockNode = new ZBlockNode(this.Generator.RootNameSpace);
 		@Var ZTokenContext TokenContext = new ZTokenContext(this.Generator.RootNameSpace, ScriptText, FileLine);
 		TokenContext.SkipEmptyStatement();
 		while(TokenContext.HasNext()) {
