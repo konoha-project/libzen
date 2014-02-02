@@ -120,7 +120,7 @@ class AsmClassLoader extends ClassLoader {
 		MethodNode InvokeMethod = new MethodNode(ACC_PUBLIC | ACC_FINAL, "Invoke", FuncTypeDesc, null, null);
 		int index = 1;
 		for(int i = 0; i < FuncType.GetFuncParamSize(); i++) {
-			Type AsmType = LibAsm.GetAsmType(FuncType.GetFuncParamType(i));
+			Type AsmType = LibAsm.AsmType(FuncType.GetFuncParamType(i));
 			InvokeMethod.visitVarInsn(AsmType.getOpcode(ILOAD), index);
 			index += AsmType.getSize();
 		}
@@ -130,7 +130,7 @@ class AsmClassLoader extends ClassLoader {
 			InvokeMethod.visitInsn(RETURN);
 		}
 		else {
-			Type type = LibAsm.GetAsmType(FuncType.GetReturnType());
+			Type type = LibAsm.AsmType(FuncType.GetReturnType());
 			InvokeMethod.visitInsn(type.getOpcode(IRETURN));
 		}
 		cb.AddMethod(InvokeMethod);
@@ -169,6 +169,7 @@ class AsmClassLoader extends ClassLoader {
 		AsmClassBuilder cb = this.ByteCodeMap.get(name);
 		if(cb != null) {
 			byte[] b = cb.GenerateBytecode();
+			cb.OutputClassFile();
 			this.ByteCodeMap.remove(name);
 			try {
 				return this.defineClass(name, b, 0, b.length);

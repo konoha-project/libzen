@@ -73,7 +73,7 @@ public class ZType  {
 	}
 
 	public ZType GetParamType(int Index) {
-		return null;
+		return ZType.VarType;  // for safety, it is used in Array
 	}
 
 	public final boolean Equals(ZType Type) {

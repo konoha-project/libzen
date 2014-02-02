@@ -1,6 +1,5 @@
 package zen.codegen.jvm;
 
-import static org.objectweb.asm.Opcodes.AASTORE;
 import static org.objectweb.asm.Opcodes.ANEWARRAY;
 import static org.objectweb.asm.Opcodes.CHECKCAST;
 import static org.objectweb.asm.Opcodes.DUP;
@@ -14,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 import org.objectweb.asm.Label;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.MethodNode;
 
@@ -53,6 +53,20 @@ public class AsmMethodBuilder extends MethodNode {
 		if(Node.SourceToken != null) {
 			this.SetLineNumber(Node.SourceToken.FileLine);
 		}
+	}
+
+	void PushInt(int n) {
+		switch(n) {
+		case 0: this.visitInsn(Opcodes.ICONST_0); return;
+		case 1: this.visitInsn(Opcodes.ICONST_1); return;
+		case 2: this.visitInsn(Opcodes.ICONST_2); return;
+		case 3: this.visitInsn(Opcodes.ICONST_3); return;
+		case 4: this.visitInsn(Opcodes.ICONST_4); return;
+		case 5: this.visitInsn(Opcodes.ICONST_5); return;
+		default:
+			this.visitIntInsn(Opcodes.BIPUSH, n); return;
+		}
+		//		this.visitLdcInsn(n);
 	}
 
 	void LoadConst(Object Value) {
@@ -120,7 +134,7 @@ public class AsmMethodBuilder extends MethodNode {
 		}
 		else if (!C2.isAssignableFrom(C1)) {
 			// c1 instanceof C2  C2.
-			this.Generator.Debug("CHECKCAST C1="+C1.getSimpleName()+ ", C2="+C2.getSimpleName());
+			this.Generator.Debug("CHECKCAST C1="+C1.getSimpleName()+ ", given C2="+C2.getSimpleName());
 			this.visitTypeInsn(CHECKCAST, Type.getInternalName(C1));
 		}
 	}
@@ -187,14 +201,29 @@ public class AsmMethodBuilder extends MethodNode {
 	}
 
 	void PushNodeListAsArray(Class<?> T, int StartIdx, ArrayList<ZNode> NodeList) {
-		this.visitLdcInsn(NodeList.size() - StartIdx);
-		this.visitTypeInsn(ANEWARRAY, Type.getInternalName(T));
-		//System.err.println("** arraysize = " + (NodeList.size() - StartIdx));
+		this.PushInt(NodeList.size() - StartIdx);
+		if(T == long.class) {
+			this.visitTypeInsn(Opcodes.NEWARRAY, Type.getInternalName(T));
+		}
+		else if(T == double.class) {
+			this.visitTypeInsn(Opcodes.NEWARRAY, Type.getInternalName(T));
+		}
+		else {
+			this.visitTypeInsn(ANEWARRAY, Type.getInternalName(T));
+		}
 		for(int i = StartIdx; i < NodeList.size(); i++) {
 			this.visitInsn(DUP);
-			this.visitLdcInsn(i);
+			this.PushInt(i - StartIdx);
 			this.PushNode(T, NodeList.get(i));
-			this.visitInsn(AASTORE);
+			if(T == long.class) {
+				this.visitInsn(Opcodes.LASTORE);
+			}
+			else if(T == double.class) {
+				this.visitInsn(Opcodes.DASTORE);
+			}
+			else {
+				this.visitInsn(Opcodes.AASTORE);
+			}
 		}
 	}
 

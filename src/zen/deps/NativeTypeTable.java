@@ -45,7 +45,7 @@ public class NativeTypeTable {
 		NativeTypeTable.SetTypeTable(ZType.FloatType, double.class);
 		NativeTypeTable.SetTypeTable(ZType.StringType, String.class);
 		NativeTypeTable.SetTypeTable(ZType.FuncType, ZFunc.class);
-		NativeTypeTable.SetTypeTable(ZType.ArrayType, ZenArray.class);
+		NativeTypeTable.SetTypeTable(ZType.ArrayType, ZenObjectArray.class);
 		NativeTypeTable.SetTypeTable(ZType.MapType, ZenMap.class);
 
 		NativeTypeTable.SetTypeTable(ZType.BooleanType, Boolean.class);
@@ -61,17 +61,27 @@ public class NativeTypeTable {
 		NativeTypeTable.SetTypeTable(ZType.FloatType, Float.class);
 		NativeTypeTable.SetTypeTable(ZType.StringType, char.class);
 		NativeTypeTable.SetTypeTable(ZType.StringType, Character.class);
+
+		NativeTypeTable.SetTypeTable(ZTypePool.GetGenericType1(ZType.ArrayType, ZType.IntType, true), ZenIntArray.class);
 	}
 
 	public static void SetTypeTable(ZType zType, Class<?> c) {
-		if(NativeTypeTable.GetJavaClass(zType) == null) {
+		if(NativeTypeTable.ClassMap.get(zType.GetUniqueName()) == null) {
 			NativeTypeTable.ClassMap.put(zType.GetUniqueName(), c);
 		}
 		NativeTypeTable.TypeMap.put(c.getCanonicalName(), zType);
 	}
 
 	public static Class<?> GetJavaClass(ZType zType) {
-		return NativeTypeTable.ClassMap.get(zType.GetUniqueName());
+		Class<?> jClass = NativeTypeTable.ClassMap.get(zType.GetUniqueName());
+		if(jClass == null) {
+			jClass = NativeTypeTable.ClassMap.get(zType.GetBaseType().GetUniqueName());
+			if(jClass == null) {
+				LibNative.Debug("FIXME:unknown java class: " + zType);
+				jClass = Object.class;
+			}
+		}
+		return jClass;
 	}
 
 	public static ZType GetZenType(Class<?> JavaClass) {

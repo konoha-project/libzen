@@ -102,6 +102,8 @@ import zen.ast.ZWhileNode;
 import zen.deps.LibNative;
 import zen.deps.NativeTypeTable;
 import zen.deps.Var;
+import zen.deps.ZenIntArray;
+import zen.deps.ZenObjectArray;
 import zen.type.ZFuncType;
 import zen.type.ZType;
 
@@ -147,12 +149,31 @@ public class Java6ByteCodeGenerator extends JavaSolution {
 		//		this.CurrentBuilder.LoadConst(constValue);
 	}
 
+	protected Class<?> AsArrayClass(ZType zType) {
+		ZType zParamType = zType.GetParamType(0);
+		if(zParamType.IsIntType()) {
+			return ZenIntArray.class;
+		}
+		return ZenObjectArray.class;
+	}
+
+	protected Class<?> AsElementClass(ZType zType) {
+		ZType zParamType = zType.GetParamType(0);
+		if(zParamType.IsIntType()) {
+			return long.class;
+		}
+		return Object.class;
+	}
+
 	@Override public void VisitArrayLiteralNode(ZArrayLiteralNode Node) {
-		this.Debug("TODO");
-		this.CurrentBuilder.visitInsn(ACONST_NULL);
-		//		this.CurrentBuilder.LoadConst(Node.Type);
-		//		this.CurrentBuilder.LoadNewArray(this, 0, Node.NodeList);
-		//		this.CurrentBuilder.InvokeMethodCall(Node.Type, JLib.NewNewArray);
+		Class<?> ArrayClass = this.AsArrayClass(Node.Type);
+		String Owner = Type.getInternalName(ArrayClass);
+		this.CurrentBuilder.visitTypeInsn(NEW, Owner);
+		this.CurrentBuilder.visitInsn(DUP);
+		this.CurrentBuilder.visitLdcInsn(Node.Type.TypeId);
+		this.CurrentBuilder.PushNodeListAsArray(this.AsElementClass(Node.Type), 0, Node.NodeList);
+		this.CurrentBuilder.SetLineNumber(Node);
+		this.CurrentBuilder.visitMethodInsn(INVOKESPECIAL, Owner, "<init>", LibAsm.NewArrayDescriptor(Node.Type));
 	}
 
 	@Override public void VisitMapLiteralNode(ZMapLiteralNode Node) {
@@ -440,7 +461,7 @@ public class Java6ByteCodeGenerator extends JavaSolution {
 	@Override public void VisitReturnNode(ZReturnNode Node) {
 		if(Node.ValueNode != null) {
 			Node.ValueNode.Accept(this);
-			Type type = LibAsm.GetAsmType(Node.ValueNode.Type);
+			Type type = LibAsm.AsmType(Node.ValueNode.Type);
 			this.CurrentBuilder.visitInsn(type.getOpcode(IRETURN));
 		}
 		else {
@@ -508,7 +529,7 @@ public class Java6ByteCodeGenerator extends JavaSolution {
 
 		// prepare
 		//TODO: add exception class name
-		String throwType = LibAsm.GetAsmType(Node.ExceptionType).getInternalName();
+		String throwType = LibAsm.AsmType(Node.ExceptionType).getInternalName();
 		mv.visitTryCatchBlock(Label.beginTryLabel, Label.endTryLabel, catchLabel, throwType);
 
 		// catch block
