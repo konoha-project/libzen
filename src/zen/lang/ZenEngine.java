@@ -369,7 +369,7 @@ public class ZenEngine extends ZVisitor {
 		@Var ZTokenContext TokenContext = new ZTokenContext(this.Generator, NameSpace, ScriptText, FileLine);
 		TokenContext.SkipEmptyStatement();
 		while(TokenContext.HasNext()) {
-			TokenContext.SetParseFlag(0); // init
+			TokenContext.SetParseFlag(ZTokenContext.NotAllowSkipIndent2); // init
 			TopBlockNode.StmtList.clear();
 			@Var ZNode ParsedNode = TokenContext.ParsePattern(TopBlockNode, "$Statement$", ZTokenContext.Required2);
 			ResultValue = this.Exec(ParsedNode, IsInteractive);

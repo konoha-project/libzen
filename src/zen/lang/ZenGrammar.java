@@ -612,7 +612,7 @@ public class ZenGrammar {
 
 	public static ZNode MatchBlock(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
 		if(TokenContext.IsNewLineToken("{")) {
-			TokenContext.SetParseFlag(0);
+			TokenContext.SetParseFlag(ZTokenContext.NotAllowSkipIndent2); // init
 			@Var ZToken IndentToken = TokenContext.GetCurrentIndentToken();
 			@Var ZBlockNode BlockNode = new ZBlockNode(ParentNode, TokenContext.GetTokenAndMoveForward());
 			@Var ZNode ResultNode = BlockNode;
@@ -830,7 +830,7 @@ public class ZenGrammar {
 			ClassNode = TokenContext.AppendMatchedPattern(ClassNode, "$Type$", ZTokenContext.Required2);
 		}
 		if(!ClassNode.IsErrorNode() && TokenContext.MatchNewLineToken("{")) {
-			TokenContext.SetParseFlag(0);
+			TokenContext.SetParseFlag(ZTokenContext.NotAllowSkipIndent2); // init
 			while(!ClassNode.IsErrorNode() && TokenContext.HasNext()) {
 				TokenContext.SkipEmptyStatement();
 				if(TokenContext.MatchToken("}")) {
@@ -844,7 +844,6 @@ public class ZenGrammar {
 
 	public static ZNode MatchPath(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
 		@Var ZToken Token = TokenContext.ParseLargeToken();
-		//		System.err.println("debug '" + Token.ParsedText + "'");
 		return new ZGetNameNode(ParentNode, Token, Token.ParsedText);
 	}
 
