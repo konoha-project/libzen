@@ -58,8 +58,10 @@ import zen.type.ZTypeChecker;
 
 public class JavaReflectionEngine extends ZenEngine {
 
-	JavaReflectionEngine(ZTypeChecker TypeChecker, Java6ByteCodeGenerator Generator) {
+	private final JavaSolution Solution;
+	JavaReflectionEngine(ZTypeChecker TypeChecker, JavaSolution Generator) {
 		super(TypeChecker, Generator);
+		this.Solution = Generator;
 	}
 
 	Object NumberCast(Class<?> T, Number Value) {

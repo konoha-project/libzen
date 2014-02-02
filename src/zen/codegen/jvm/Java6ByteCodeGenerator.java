@@ -47,7 +47,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 import java.util.Stack;
 
 import org.objectweb.asm.Label;
@@ -66,7 +65,6 @@ import zen.ast.ZCastNode;
 import zen.ast.ZCatchNode;
 import zen.ast.ZClassDeclNode;
 import zen.ast.ZComparatorNode;
-import zen.ast.ZConstNode;
 import zen.ast.ZConstPoolNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZFieldNode;
@@ -78,7 +76,6 @@ import zen.ast.ZGetNameNode;
 import zen.ast.ZGetterNode;
 import zen.ast.ZGroupNode;
 import zen.ast.ZIfNode;
-import zen.ast.ZImportNode;
 import zen.ast.ZInstanceOfNode;
 import zen.ast.ZIntNode;
 import zen.ast.ZLetNode;
@@ -102,23 +99,16 @@ import zen.ast.ZTryNode;
 import zen.ast.ZUnaryNode;
 import zen.ast.ZVarDeclNode;
 import zen.ast.ZWhileNode;
-import zen.deps.JavaImportNode;
 import zen.deps.LibNative;
 import zen.deps.NativeTypeTable;
 import zen.deps.Var;
-import zen.deps.ZenMap;
-import zen.lang.ZenEngine;
-import zen.lang.ZenTypeSafer;
-import zen.parser.ZGenerator;
 import zen.type.ZFuncType;
 import zen.type.ZType;
-import zen.type.ZTypePool;
 
-public class Java6ByteCodeGenerator extends ZGenerator {
+public class Java6ByteCodeGenerator extends JavaSolution {
 	AsmMethodBuilder CurrentBuilder;
 	AsmClassLoader ClassLoader = null;
 	Stack<TryCatchLabel> TryCatchLabel;
-	private final ZenMap<Method> FuncMap = new ZenMap<Method>(null);
 	private int LambdaMethodId = 0;
 
 	public Java6ByteCodeGenerator() {
@@ -127,153 +117,6 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 		this.ClassLoader = new AsmClassLoader(this);
 	}
 
-	@Override public ZenEngine GetEngine() {
-		return new JavaReflectionEngine(new ZenTypeSafer(this), this);
-	}
-
-	@Override public boolean StartCodeGeneration(ZNode Node,  boolean AllowLazy, boolean IsInteractive) {
-		if (AllowLazy && Node.IsUntyped()) {
-			return false;
-		}
-		Node.Accept(this);
-		return true;
-	}
-
-	private Object GetConstValue(ZNode Node) {
-		if(Node instanceof ZConstNode) {
-			return ((ZConstNode)Node).GetValue();
-		}
-		return null;
-	}
-
-	@Override public ZImportNode CreateImportNode(ZNode ParentNode) {
-		return new JavaImportNode(ParentNode);
-	}
-
-	@Override public ZType GetFieldType(ZType RecvType, String FieldName) {
-		Class<?> NativeClass = NativeTypeTable.GetJavaClass(RecvType);
-		if(NativeClass != null) {
-			try {
-				java.lang.reflect.Field NativeField = NativeClass.getField(FieldName);
-				if(Modifier.isPublic(NativeField.getModifiers())) {
-					return NativeTypeTable.GetZenType(NativeField.getType());
-				}
-			} catch (SecurityException e) {
-			} catch (NoSuchFieldException e) {
-			}
-			return ZType.VoidType;     // undefined
-		}
-		return ZType.VarType;     // undefined
-	}
-
-	@Override public ZType GetSetterType(ZType RecvType, String FieldName) {
-		Class<?> NativeClass = NativeTypeTable.GetJavaClass(RecvType);
-		if(NativeClass != null) {
-			try {
-				java.lang.reflect.Field NativeField = NativeClass.getField(FieldName);
-				if(Modifier.isPublic(NativeField.getModifiers()) && !Modifier.isFinal(NativeField.getModifiers())) {
-					return NativeTypeTable.GetZenType(NativeField.getType());
-				}
-			} catch (SecurityException e) {
-			} catch (NoSuchFieldException e) {
-			}
-			return ZType.VoidType;     // undefined
-		}
-		return ZType.VarType;     // undefined
-	}
-
-	private boolean MatchParam(Class<?>[] jParams, ArrayList<ZNode> ParamList) {
-		if(jParams.length != ParamList.size()) {
-			return false;
-		}
-		for(int j = 0; j < jParams.length; j++) {
-			if(jParams[j] == Object.class) {
-				continue; // accepting all types
-			}
-			@Var ZType jParamType = NativeTypeTable.GetZenType(jParams[j]);
-			@Var ZType ParamType = ParamList.get(j).Type;
-			if(jParamType == ParamType || jParamType.Accept(ParamList.get(j).Type)) {
-				continue;
-			}
-			if(jParamType.IsFloatType() && ParamType.IsIntType()) {
-				continue;
-			}
-			if(jParamType.IsIntType() && ParamType.IsFloatType()) {
-				continue;
-			}
-			return false;
-		}
-		return true;
-	}
-
-	Constructor<?> GetConstructor(ZType RecvType, ArrayList<ZNode> ParamList) {
-		Class<?> NativeClass = NativeTypeTable.GetJavaClass(RecvType);
-		if(NativeClass != null) {
-			try {
-				Constructor<?>[] Methods = NativeClass.getConstructors();
-				for(int i = 0; i < Methods.length; i++) {
-					@Var Constructor<?> jMethod = Methods[i];
-					if(!Modifier.isPublic(jMethod.getModifiers())) {
-						continue;
-					}
-					if(this.MatchParam(jMethod.getParameterTypes(), ParamList)) {
-						return jMethod;
-					}
-				}
-			} catch (SecurityException e) {
-			}
-		}
-		return null;
-	}
-
-	Method GetMethod(ZType RecvType, String MethodName, ArrayList<ZNode> ParamList) {
-		Class<?> NativeClass = NativeTypeTable.GetJavaClass(RecvType);
-		if(NativeClass != null) {
-			try {
-				Method[] Methods = NativeClass.getMethods();
-				for(int i = 0; i < Methods.length; i++) {
-					@Var Method jMethod = Methods[i];
-					if(!MethodName.equals(jMethod.getName())) {
-						continue;
-					}
-					if(!Modifier.isPublic(jMethod.getModifiers())) {
-						continue;
-					}
-					if(this.MatchParam(jMethod.getParameterTypes(), ParamList)) {
-						return jMethod;
-					}
-				}
-			} catch (SecurityException e) {
-			}
-		}
-		return null;
-	}
-
-	@Override public ZFuncType GetMethodFuncType(ZType RecvType, String MethodName, ArrayList<ZNode> ParamList) {
-		if(MethodName == null) {
-			Constructor<?> jMethod = this.GetConstructor(RecvType, ParamList);
-			if(jMethod != null) {
-				@Var ArrayList<ZType> TypeList = new ArrayList<ZType>();
-				TypeList.add(RecvType);
-				@Var Class<?>[] ParamTypes = jMethod.getParameterTypes();
-				if (ParamTypes != null) {
-					@Var int j = 0;
-					while(j < ParamTypes.length) {
-						TypeList.add(NativeTypeTable.GetZenType(ParamTypes[j]));
-						j = j + 1;
-					}
-				}
-				return ZTypePool.LookupFuncType(TypeList);
-			}
-		}
-		else {
-			Method jMethod = this.GetMethod(RecvType, MethodName, ParamList);
-			if(jMethod != null) {
-				return NativeTypeTable.ConvertToFuncType(jMethod);
-			}
-		}
-		return null;
-	}
 
 	@Override public void VisitNullNode(ZNullNode Node) {
 		this.CurrentBuilder.visitInsn(ACONST_NULL);
@@ -682,10 +525,6 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 
 	}
 
-	public Method LoadDefinedFunc(String FuncName, ZFuncType FuncType) {
-		return this.FuncMap.GetOrNull(FuncType.StringfySignature(FuncName));
-	}
-
 	public void VisitJvmFuncNode(JvmFuncNode Node) {
 		this.CurrentBuilder.visitFieldInsn(Opcodes.GETSTATIC, Node.ClassName, "FUNCTION", Node.FieldDesc);
 	}
@@ -782,34 +621,6 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 	}
 
 	@Override public void VisitExtendedNode(ZNode Node) {
-	}
-
-	void SetStaticFuncMethod(String FuncName, Method jMethod) {
-		//	this.Debug(FuncName + ", " + jMethod);
-		this.FuncMap.put(FuncName, jMethod);
-	}
-
-	public Method GetStaticFuncMethod(String FuncName) {
-		Method jMethod = this.FuncMap.GetOrNull(FuncName);
-		//	this.Debug(FuncName + ", " + jMethod);
-		return jMethod;
-	}
-
-	ZNode[] PackNodes(ZNode Node, ArrayList<ZNode> List) {
-		int Start = 0;
-		ZNode[] Nodes = new ZNode[List.size() + Start];
-		if(Node != null) {
-			Start = 1;
-			Nodes[0] = Node;
-		}
-		for(int i = 0; i < Nodes.length; i++) {
-			Nodes[i+Start] = List.get(i);
-		}
-		return Nodes;
-	}
-
-	public void Debug(String Message) {
-		LibNative.Debug(Message);
 	}
 
 }
