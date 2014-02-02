@@ -96,8 +96,8 @@ public abstract class ZGenerator extends ZVisitor {
 
 	public abstract boolean StartCodeGeneration(ZNode Node, boolean AllowLazy, boolean IsInteractive);
 
-	public ZImportNode CreateImportNode(ZNode ParentNode, ZNameSpace NameSpace) {
-		return new ZImportNode(ParentNode, NameSpace);
+	public ZImportNode CreateImportNode(ZNode ParentNode) {
+		return new ZImportNode(ParentNode);
 	}
 
 	public ZType GetFieldType(ZType BaseType, String Name) {

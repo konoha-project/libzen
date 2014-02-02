@@ -2,15 +2,12 @@ package zen.ast;
 
 import zen.deps.Field;
 import zen.lang.ZenError;
-import zen.parser.ZNameSpace;
 
 public class ZImportNode extends ZNode {
-	@Field public ZNameSpace NameSpace;
 	@Field public String ResourcePath = null;
 	@Field public String Alias = null;
-	public ZImportNode(ZNode ParentNode, ZNameSpace NameSpace) {
+	public ZImportNode(ZNode ParentNode) {
 		super(ParentNode, null);
-		this.NameSpace = NameSpace.GetRootNameSpace();
 	}
 	@Override public void Append(ZNode Node) {
 		if(this.ResourcePath == null) {

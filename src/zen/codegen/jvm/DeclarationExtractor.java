@@ -6,7 +6,6 @@ import java.util.Collections;
 import zen.ast.ZBlockNode;
 import zen.ast.ZClassDeclNode;
 import zen.ast.ZFunctionNode;
-import zen.ast.ZSymbolNode;
 import zen.obsolete.ZTransformer;
 
 class ClassNodeFilter extends ZTransformer {
@@ -32,11 +31,12 @@ class FunctionNodeFilter extends ZTransformer {
 	}
 	@Override
 	public void VisitFunctionNode(ZFunctionNode Node) {
-		String FuncName = "lambda" + this.MethodId++;
-		ZFunctionNode FuncDeclNode = new ZFunctionNode(this.BlockNode.NameSpace);
-		this.Decls.add(FuncDeclNode);
-		this.InsertInBlockStatementBefore(this.GetBlockNode(), Node, FuncDeclNode);
-		this.Transformed(new ZSymbolNode(FuncDeclNode.Type, Node.SourceToken, FuncName, FuncName));
+		// OLD interface
+		//		String FuncName = "lambda" + this.MethodId++;
+		//		ZFunctionNode FuncDeclNode = new ZFunctionNode(this.BlockNode.NameSpace);
+		//		this.Decls.add(FuncDeclNode);
+		//		this.InsertInBlockStatementBefore(this.GetBlockNode(), Node, FuncDeclNode);
+		//		this.Transformed(new ZSymbolNode(FuncDeclNode.Type, Node.SourceToken, FuncName, FuncName));
 	}
 
 	//	public void VisitFuncDeclNode(ZFunctionNode Node) {

@@ -47,8 +47,8 @@ public final class ZMethodCallNode extends ZApplyNode {
 	}
 
 	public final ZFuncCallNode ToGetterFuncCall() {
-		ZGetterNode Getter = new ZGetterNode(this.SourceToken, this.RecvNode, this.MethodName);
-		ZFuncCallNode FuncNode = new ZFuncCallNode(Getter);
+		ZGetterNode Getter = new ZGetterNode(null, this.SourceToken, this.RecvNode, this.MethodName);
+		ZFuncCallNode FuncNode = new ZFuncCallNode(this.ParentNode, Getter);
 		FuncNode.SourceToken = this.SourceToken;
 		@Var int i = 0;
 		while(i < this.ParamList.size()) {
@@ -59,8 +59,8 @@ public final class ZMethodCallNode extends ZApplyNode {
 	}
 
 	public final ZFuncCallNode ToStaticFuncCall(ZFunc Func) {
-		ZGetNameNode Dummy = new ZGetNameNode(this.SourceToken, Func.FuncName);
-		ZFuncCallNode FuncNode = new ZFuncCallNode(Dummy);
+		ZGetNameNode Dummy = new ZGetNameNode(null, this.SourceToken, Func.FuncName);
+		ZFuncCallNode FuncNode = new ZFuncCallNode(this.ParentNode, Dummy);
 		FuncNode.SourceToken = this.SourceToken;
 		FuncNode.Append(this.RecvNode);
 		@Var int i = 0;

@@ -56,7 +56,6 @@ public class ZBinaryNode extends ZNode {
 
 	private final ZNode RightJoin(ZNode ParentNode, ZBinaryNode RightNode) {
 		@Var ZNode RightLeftNode = RightNode.LeftNode;
-		//		if(RightLeftNode instanceof ZenBinaryNode && this.Pattern.IsRightJoin(((ZenBinaryNode)RightLeftNode).Pattern)) {
 		if(this.IsRightJoin(RightLeftNode)) {
 			RightNode.LeftNode = this.RightJoin(ParentNode, (ZBinaryNode) RightLeftNode);
 		}

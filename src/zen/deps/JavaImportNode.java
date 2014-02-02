@@ -3,13 +3,12 @@ package zen.deps;
 import zen.ast.ZImportNode;
 import zen.ast.ZNode;
 import zen.lang.ZenError;
-import zen.parser.ZNameSpace;
 import zen.type.ZType;
 
 public class JavaImportNode extends ZImportNode {
 
-	public JavaImportNode(ZNameSpace NameSpace) {
-		super(NameSpace);
+	public JavaImportNode(ZNode ParentNode) {
+		super(ParentNode);
 	}
 
 	private String ParsePath(String Path) {
@@ -35,7 +34,7 @@ public class JavaImportNode extends ZImportNode {
 			if(this.Alias == null) {
 				this.Alias = this.ParseSymbol(this.ResourcePath);
 			}
-			this.NameSpace.SetTypeName(this.Alias, Type, this.SourceToken);
+			this.GetNameSpace().SetTypeName(this.Alias, Type, this.SourceToken);
 			return this;
 		} catch (ClassNotFoundException e) {
 		}

@@ -49,8 +49,8 @@ public final class ZNewObjectNode extends ZNode {
 	}
 
 	public final ZFuncCallNode ToStaticFuncCall(ZFunc Func) {
-		ZGetNameNode Dummy = new ZGetNameNode(this.SourceToken, Func.FuncName);
-		ZFuncCallNode FuncNode = new ZFuncCallNode(Dummy);
+		ZGetNameNode Dummy = new ZGetNameNode(null, this.SourceToken, Func.FuncName);
+		ZFuncCallNode FuncNode = new ZFuncCallNode(this.ParentNode, Dummy);
 		FuncNode.SourceToken = this.SourceToken;
 		FuncNode.Append(this);
 		@Var int i = 0;

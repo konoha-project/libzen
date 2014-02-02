@@ -714,11 +714,12 @@ public class ZenTypeSafer extends ZTypeChecker {
 		return false;
 	}
 
-	@Override public void DefineFunction(ZNameSpace NameSpace, ZFunctionNode FunctionNode, boolean Enforced) {
+	@Override public void DefineFunction(ZFunctionNode FunctionNode, boolean Enforced) {
 		if(FunctionNode.FuncName != null && FunctionNode.GlobalName == null) {
 			@Var ZFuncType FuncType = FunctionNode.GetFuncType(null);
 			//System.out.println("debug guessing " + FuncType);
 			if(Enforced || !FuncType.IsVarType()) {
+				@Var ZNameSpace NameSpace = FunctionNode.GetNameSpace();
 				@Var ZFunc Func = ZenGamma.GetFunc(NameSpace, FunctionNode.FuncName, FuncType, null);
 				if(Func != null) {
 					this.Logger.ReportError(FunctionNode.SourceToken, "redefinition of function: " + Func);
@@ -767,7 +768,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 			Node.FuncBlock.Append(new ZReturnNode(Node));
 		}
 		this.PushFunctionNode(NameSpace, Node, ContextType);
-		this.VarScope.TypeCheckFuncBlock(NameSpace, this, Node);
+		this.VarScope.TypeCheckFuncBlock(this, Node);
 		this.PopFunctionNode(NameSpace);
 		@Var ZFuncType FuncType = Node.GetFuncType(ContextType);
 		if(this.IsTopLevel() && !FuncType.IsVarType()) {

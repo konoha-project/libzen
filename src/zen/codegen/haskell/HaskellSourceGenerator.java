@@ -305,7 +305,7 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.AppendLineFeed();
 
 		// XXX Is this correct node type ?
-		ZNode LoopNode = new ZGetNameNode(null, "__loop");
+		ZNode LoopNode = new ZGetNameNode(Node, null, "__loop");
 		Node.BodyNode.Append(LoopNode);
 		Node.BodyNode.Accept(this);
 

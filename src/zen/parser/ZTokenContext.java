@@ -52,7 +52,8 @@ public final class ZTokenContext {
 	public final static boolean     AllowSkipIndent2   = true;
 	public final static boolean     NotAllowSkipIndent2   = false;
 
-	//	@Field @Init public ZNameSpace TopLevelNameSpace;
+	@Field @Init public ZGenerator Generator;
+	@Field @Init public ZNameSpace NameSpace;
 	@Field public ArrayList<ZToken> SourceTokenList = new ArrayList<ZToken>();
 	@Field private int CurrentPosition = 0;
 	@Field @Init public long ParsingLine;
@@ -61,15 +62,12 @@ public final class ZTokenContext {
 	@Field int IndentLevel = 0;
 	@Field private ZSyntaxPattern ApplyingPattern = null;
 
-	public ZTokenContext(ZNameSpace NameSpace, String Text, long FileLine) {
-		this.TopLevelNameSpace = NameSpace;
+	public ZTokenContext(ZGenerator Generator, ZNameSpace NameSpace, String Text, long FileLine) {
+		this.Generator = Generator;
+		this.NameSpace = NameSpace;
 		this.ParsingLine = FileLine;
 		this.AppendParsedToken(Text, ZParserConst.SourceTokenFlag, null);
 	}
-
-	//	public int GetParseFlag() {
-	//		return this.ParseFlag;
-	//	}
 
 	public void SetParseFlag(int ParseFlag) {
 		this.ParseFlag = ParseFlag;
@@ -78,7 +76,7 @@ public final class ZTokenContext {
 	public ZToken AppendParsedToken(String Text, int TokenFlag, String PatternName) {
 		@Var ZToken Token = new ZToken(TokenFlag, Text, this.ParsingLine);
 		if(PatternName != null) {
-			Token.PresetPattern = this.TopLevelNameSpace.GetSyntaxPattern(PatternName);
+			Token.PresetPattern = this.NameSpace.GetSyntaxPattern(PatternName);
 			LibNative.Assert(Token.PresetPattern != null);
 		}
 		this.SourceTokenList.add(Token);
@@ -100,7 +98,7 @@ public final class ZTokenContext {
 	@Deprecated
 	public void ReportTokenError1(int Level, String Message, String TokenText) {
 		@Var ZToken Token = this.AppendParsedToken(TokenText, 0, "$Error$");
-		this.TopLevelNameSpace.Generator.Logger.Report(Level, Token, Message);
+		this.Generator.Logger.Report(Level, Token, Message);
 	}
 
 	public void SkipErrorStatement() {
@@ -110,7 +108,7 @@ public final class ZTokenContext {
 			if(T.IsDelim() || T.EqualsText("}")) {
 				break;
 			}
-			this.TopLevelNameSpace.Generator.Logger.ReportDebug(T, "skipping: " + T.ParsedText);
+			this.Generator.Logger.ReportDebug(T, "skipping: " + T.ParsedText);
 			this.GetTokenAndMoveForward();
 		}
 		this.LatestToken = LeastRecentToken;
@@ -150,7 +148,7 @@ public final class ZTokenContext {
 	}
 
 	private int DispatchFunc(String ScriptSource, int ZenChar, int pos) {
-		@Var ZTokenFunc TokenFunc = this.TopLevelNameSpace.GetTokenFunc(ZenChar);
+		@Var ZTokenFunc TokenFunc = this.NameSpace.GetTokenFunc(ZenChar);
 		@Var int NextIdx = ZTokenFunc.ApplyTokenFunc(TokenFunc, this, ScriptSource, pos);
 		if(NextIdx == ZTokenContext.MismatchedPosition) {
 			ZLogger.VerboseLog(ZLogger.VerboseUndefined, "undefined tokenizer: " + ScriptSource.substring(pos, pos+1));
@@ -345,7 +343,7 @@ public final class ZTokenContext {
 		return ParentNode;
 	}
 
-	public final ZSyntaxPattern GetApplyingPattern() {
+	public final ZSyntaxPattern GetApplyingSyntax() {
 		return this.ApplyingPattern;
 	}
 
@@ -378,7 +376,7 @@ public final class ZTokenContext {
 	}
 
 	public final ZNode ParsePatternAfter(ZNode ParentNode, ZNode LeftNode, String PatternName, boolean IsRequired) {
-		@Var ZSyntaxPattern Pattern = this.TopLevelNameSpace.GetSyntaxPattern(PatternName);
+		@Var ZSyntaxPattern Pattern = this.NameSpace.GetSyntaxPattern(PatternName);
 		@Var ZNode ParsedNode = this.ApplyMatchPattern(ParentNode, LeftNode, Pattern, IsRequired);
 		return ParsedNode;
 	}

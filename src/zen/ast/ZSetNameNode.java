@@ -32,12 +32,14 @@ import zen.parser.ZVisitor;
 public class ZSetNameNode extends ZNode {
 	@Field public boolean IsCaptured = false;
 	@Field public String   VarName;
-	@Field public ZNode	 ValueNode;
+	@Field public ZNode	 ValueNode = null;
 	@Field public int VarIndex = 0;
-	public ZSetNameNode(ZNode ParentNode, ZToken Token, String VarName, ZNode ValueNode) {
+	public ZSetNameNode(ZNode ParentNode, ZToken Token, String VarName) {
 		super(ParentNode, Token);
 		this.VarName = VarName;
-		this.ValueNode = this.SetChild(ValueNode);
+	}
+	@Override public void Append(ZNode Node) {
+		this.ValueNode = this.SetChild(this.ValueNode);
 	}
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitSetNameNode(this);

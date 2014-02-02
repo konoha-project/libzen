@@ -62,6 +62,7 @@ import zen.ast.ZOrNode;
 import zen.ast.ZParamNode;
 import zen.ast.ZReturnNode;
 import zen.ast.ZSetIndexNode;
+import zen.ast.ZSetNameNode;
 import zen.ast.ZSetterNode;
 import zen.ast.ZStringNode;
 import zen.ast.ZThrowNode;
@@ -75,7 +76,6 @@ import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.deps.ZenMap;
 import zen.parser.ZNameSpace;
-import zen.parser.ZNodeUtils;
 import zen.parser.ZParserConst;
 import zen.parser.ZSyntaxPattern;
 import zen.parser.ZToken;
@@ -144,7 +144,7 @@ public class ZenGrammar {
 		@Var boolean Matched = false;
 		while(NextPos > pos) {
 			@Var String Sub = LibZen.SubString(SourceText, pos, NextPos);
-			@Var ZSyntaxPattern Pattern = TokenContext.TopLevelNameSpace.GetSuffixSyntaxPattern(Sub);
+			@Var ZSyntaxPattern Pattern = TokenContext.NameSpace.GetSuffixSyntaxPattern(Sub);
 			if(Pattern != null) {
 				Matched = true;
 				break;
@@ -427,14 +427,14 @@ public class ZenGrammar {
 		if(!NameToken.IsNameSymbol()) {
 			return TokenContext.CreateExpectedErrorNode(NameToken, "identifier");
 		}
-		@Var ZNode AssignedNode = null;
 		if(TokenContext.MatchToken("=")) {
-			AssignedNode = TokenContext.ParsePattern(NameSpace, "$Expression$", ZTokenContext.Required2);
-			if(AssignedNode.IsErrorNode()) {
-				return AssignedNode;
-			}
+			@Var ZNode AssignedNode = new ZSetNameNode(ParentNode, NameToken, NameToken.ParsedText);
+			AssignedNode = TokenContext.AppendMatchedPattern(ParentNode, "$Expression$", ZTokenContext.Required2);
+			return AssignedNode;
 		}
-		return ZNodeUtils.CreateSymbolNode(NameToken, ZType.VarType, NameToken.ParsedText, AssignedNode);
+		else {
+			return new ZGetNameNode(ParentNode, NameToken, NameToken.ParsedText);
+		}
 	}
 
 	// PatternName: "("  (1)
@@ -511,28 +511,28 @@ public class ZenGrammar {
 
 	public static ZNode MatchBinary(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
 		@Var ZToken Token = TokenContext.GetTokenAndMoveForward();
-		@Var ZBinaryNode BinaryNode = new ZBinaryNode(ParentNode, Token, LeftNode, TokenContext.GetApplyingPattern());
-		return BinaryNode.AppendParsedRightNode(NameSpace, TokenContext);
+		@Var ZBinaryNode BinaryNode = new ZBinaryNode(ParentNode, Token, LeftNode, TokenContext.GetApplyingSyntax());
+		return BinaryNode.AppendParsedRightNode(ParentNode, TokenContext);
 	}
 
 	public static ZNode MatchComparator(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
 		@Var ZToken Token = TokenContext.GetTokenAndMoveForward();
-		@Var ZBinaryNode BinaryNode = new ZComparatorNode(ParentNode, Token, LeftNode, TokenContext.GetApplyingPattern());
-		return BinaryNode.AppendParsedRightNode(NameSpace, TokenContext);
+		@Var ZBinaryNode BinaryNode = new ZComparatorNode(ParentNode, Token, LeftNode, TokenContext.GetApplyingSyntax());
+		return BinaryNode.AppendParsedRightNode(ParentNode, TokenContext);
 	}
 
 	public static ZNode MatchAnd(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
-		@Var ZBinaryNode BinaryNode = new ZAndNode(ParentNode, TokenContext.GetTokenAndMoveForward(), LeftNode, TokenContext.GetApplyingPattern());
-		return BinaryNode.AppendParsedRightNode(NameSpace, TokenContext);
+		@Var ZBinaryNode BinaryNode = new ZAndNode(ParentNode, TokenContext.GetTokenAndMoveForward(), LeftNode, TokenContext.GetApplyingSyntax());
+		return BinaryNode.AppendParsedRightNode(ParentNode, TokenContext);
 	}
 
 	public static ZNode MatchOr(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
-		@Var ZBinaryNode BinaryNode = new ZOrNode(ParentNode, TokenContext.GetTokenAndMoveForward(), LeftNode, TokenContext.GetApplyingPattern());
-		return BinaryNode.AppendParsedRightNode(NameSpace, TokenContext);
+		@Var ZBinaryNode BinaryNode = new ZOrNode(ParentNode, TokenContext.GetTokenAndMoveForward(), LeftNode, TokenContext.GetApplyingSyntax());
+		return BinaryNode.AppendParsedRightNode(ParentNode, TokenContext);
 	}
 
 	public static ZNode MatchInstanceOf(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
-		@Var ZNode BinaryNode = new ZInstanceOfNode(ParentNode, TokenContext.GetTokenAndMoveForward(), LeftNode, TokenContext.GetApplyingPattern());
+		@Var ZNode BinaryNode = new ZInstanceOfNode(ParentNode, TokenContext.GetTokenAndMoveForward(), LeftNode, TokenContext.GetApplyingSyntax());
 		BinaryNode = TokenContext.AppendMatchedPattern(BinaryNode, "$Type$", ZTokenContext.Required2);
 		return BinaryNode;
 	}
@@ -849,7 +849,7 @@ public class ZenGrammar {
 	}
 
 	public static ZNode MatchImport(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
-		@Var ZNode ImportNode = NameSpace.Generator.CreateImportNode(NameSpace.GetRootNameSpace());
+		@Var ZNode ImportNode = TokenContext.Generator.CreateImportNode(ParentNode);
 		ImportNode = TokenContext.MatchNodeToken(ImportNode, "import", ZTokenContext.Required2);
 		ImportNode = TokenContext.AppendMatchedPattern(ImportNode, "$Path$", ZTokenContext.Required2);
 		if(ImportNode instanceof ZImportNode) {

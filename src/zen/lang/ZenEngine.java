@@ -74,6 +74,7 @@ import zen.ast.ZWhileNode;
 import zen.deps.Var;
 import zen.parser.ZGenerator;
 import zen.parser.ZLogger;
+import zen.parser.ZNameSpace;
 import zen.parser.ZToken;
 import zen.parser.ZTokenContext;
 import zen.parser.ZVisitor;
@@ -354,19 +355,18 @@ public class ZenEngine extends ZVisitor {
 
 	}
 
-
 	public final Object Exec(ZNode Node, boolean IsInteractive) {
 		this.IsInteractive = IsInteractive;
 		this.EnableVisitor();
-		Node = this.TypeChecker.CheckType(Node, this.Generator.RootNameSpace, ZType.VoidType);
+		Node = this.TypeChecker.CheckType(Node, ZType.VoidType);
 		@Var Object ResultValue = this.Eval(Node);
 		return ResultValue;
 	}
 
-	public final Object Eval(String ScriptText, long FileLine, boolean IsInteractive) {
-		@Var Object ResultValue = ZEmptyValue.DefaultValue;
-		@Var ZBlockNode TopBlockNode = new ZBlockNode(this.Generator.RootNameSpace);
-		@Var ZTokenContext TokenContext = new ZTokenContext(this.Generator.RootNameSpace, ScriptText, FileLine);
+	public final Object Eval(ZNameSpace NameSpace, String ScriptText, long FileLine, boolean IsInteractive) {
+		@Var Object ResultValue = ZEmptyValue.TrueEmpty;
+		@Var ZBlockNode TopBlockNode = new ZBlockNode(NameSpace);
+		@Var ZTokenContext TokenContext = new ZTokenContext(this.Generator, NameSpace, ScriptText, FileLine);
 		TokenContext.SkipEmptyStatement();
 		while(TokenContext.HasNext()) {
 			TokenContext.SetParseFlag(0); // init
@@ -376,7 +376,7 @@ public class ZenEngine extends ZVisitor {
 			if(ParsedNode.IsErrorNode() && TokenContext.HasNext()) {
 				@Var ZToken Token = TokenContext.GetToken();
 				this.Generator.Logger.ReportInfo(Token, "stopped script at this line");
-				return ZEmptyValue.DefaultValue;
+				return ZEmptyValue.FalseEmpty;
 			}
 			TokenContext.SkipEmptyStatement();
 			TokenContext.Vacume();
@@ -384,15 +384,24 @@ public class ZenEngine extends ZVisitor {
 		return ResultValue;
 	}
 
+	public final Object Eval(String ScriptText, long FileLine, boolean IsInteractive) {
+		return this.Eval(this.Generator.RootNameSpace, ScriptText, FileLine, IsInteractive);
+	}
 
-	public final boolean Load(String ScriptText, long FileLine) {
-		@Var Object Token = this.Eval(ScriptText, FileLine, false);
+	public final boolean Load(ZNameSpace NameSpace, String ScriptText, long FileLine) {
+		@Var Object Token = this.Eval(NameSpace, ScriptText, FileLine, false);
 		this.Logger.ShowReportedErrors();
-		if(Token instanceof ZToken && ((ZToken)Token).IsError()) {
+		if(Token == ZEmptyValue.FalseEmpty) {
 			return false;
 		}
 		return true;
 	}
+
+	public final boolean Load(String ScriptText, long FileLine) {
+		return this.Load(this.Generator.RootNameSpace, ScriptText, FileLine);
+	}
+
+
 	//
 	//	public final boolean LoadFile(String FileName) {
 	//		@Var String ScriptText = LibNative.LoadTextFile(FileName);

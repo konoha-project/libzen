@@ -110,7 +110,6 @@ import zen.deps.ZenMap;
 import zen.lang.ZenEngine;
 import zen.lang.ZenTypeSafer;
 import zen.parser.ZGenerator;
-import zen.parser.ZNameSpace;
 import zen.type.ZFuncType;
 import zen.type.ZType;
 import zen.type.ZTypePool;
@@ -128,7 +127,7 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 	}
 
 	@Override public ZenEngine GetEngine() {
-		return new JavaReflectionEngine(new ZenTypeSafer(this.Logger), this);
+		return new JavaReflectionEngine(new ZenTypeSafer(this), this);
 	}
 
 	@Override public boolean StartCodeGeneration(ZNode Node,  boolean AllowLazy, boolean IsInteractive) {
@@ -146,8 +145,8 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 		return null;
 	}
 
-	@Override public ZImportNode CreateImportNode(ZNameSpace NameSpace) {
-		return new JavaImportNode(NameSpace);
+	@Override public ZImportNode CreateImportNode(ZNode ParentNode) {
+		return new JavaImportNode(ParentNode);
 	}
 
 	@Override public ZType GetFieldType(ZType RecvType, String FieldName) {
@@ -392,7 +391,7 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 	@Override public void VisitGetterNode(ZGetterNode Node) {
 		if(Node.IsUntyped()) {
 			Method sMethod = NativeMethodTable.GetStaticMethod("GetField");
-			ZNode NameNode = new ZStringNode(null, Node.FieldName);
+			ZNode NameNode = new ZStringNode(Node, null, Node.FieldName);
 			this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.RecvNode, NameNode});
 		}
 		else {
@@ -414,7 +413,7 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 	@Override public void VisitSetterNode(ZSetterNode Node) {
 		if(Node.IsUntyped()) {
 			Method sMethod = NativeMethodTable.GetStaticMethod("SetField");
-			ZNode NameNode = new ZStringNode(null, Node.FieldName);
+			ZNode NameNode = new ZStringNode(Node, null, Node.FieldName);
 			this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.RecvNode, NameNode, Node.ValueNode});
 		}
 		else {
@@ -692,7 +691,7 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
 		@Var ZFuncType FuncType = Node.GetFuncType(null);
-		@Var JvmFuncNode FuncNode = new JvmFuncNode(FuncType, Node.FuncName);
+		@Var JvmFuncNode FuncNode = new JvmFuncNode(Node, FuncType, Node.FuncName);
 		@Var AsmClassBuilder  HolderClass = this.ClassLoader.NewFunctionHolderClass(Node, FuncNode, FuncType);
 		@Var String MethodDesc = LibAsm.GetMethodDescriptor(FuncType);
 		//System.out.println("*** " + MethodDesc);
@@ -713,7 +712,7 @@ public class Java6ByteCodeGenerator extends ZGenerator {
 			//this.Debug("InteranalName: " +Type.getInternalName(FuncMethod.getDeclaringClass()));
 			this.SetStaticFuncMethod(FuncType.StringfySignature(Node.FuncName), FuncMethod);
 			FuncNode.FuncClass = FuncMethod.getDeclaringClass();
-			Node.NameSpace.SetLocalSymbol(Node.FuncName, FuncNode);
+			Node.GetNameSpace().SetLocalSymbol(Node.FuncName, FuncNode);
 		}
 		catch(Error e) {
 			e.printStackTrace();

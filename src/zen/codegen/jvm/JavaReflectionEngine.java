@@ -158,13 +158,13 @@ public class JavaReflectionEngine extends ZenEngine {
 
 	@Override public void VisitGetterNode(ZGetterNode Node) {
 		Method sMethod = NativeMethodTable.GetStaticMethod("GetField");
-		ZNode NameNode = new ZStringNode(null, Node.FieldName);
+		ZNode NameNode = new ZStringNode(Node, null, Node.FieldName);
 		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.RecvNode, NameNode});
 	}
 
 	@Override public void VisitSetterNode(ZSetterNode Node) {
 		Method sMethod = NativeMethodTable.GetStaticMethod("SetField");
-		ZNode NameNode = new ZStringNode(null, Node.FieldName);
+		ZNode NameNode = new ZStringNode(Node, null, Node.FieldName);
 		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.RecvNode, NameNode, Node.ValueNode});
 	}
 
