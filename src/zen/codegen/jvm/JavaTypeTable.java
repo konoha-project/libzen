@@ -31,10 +31,12 @@ import java.util.HashMap;
 
 import zen.deps.Var;
 import zen.deps.ZNativeType;
+import zen.deps.ZenFloatArray;
 import zen.deps.ZenFunction;
 import zen.deps.ZenIntArray;
 import zen.deps.ZenMap;
 import zen.deps.ZenObjectArray;
+import zen.deps.ZenStringArray;
 import zen.type.ZFuncType;
 import zen.type.ZType;
 import zen.type.ZTypePool;
@@ -56,8 +58,10 @@ public class JavaTypeTable {
 
 		ZType IntArrayType = ZTypePool.GetGenericType1(ZType.ArrayType, ZType.IntType);
 		ZType FloatArrayType = ZTypePool.GetGenericType1(ZType.ArrayType, ZType.FloatType);
-		ZType StringArrayType = ZTypePool.GetGenericType1(ZType.StringType, ZType.FloatType);
+		ZType StringArrayType = ZTypePool.GetGenericType1(ZType.ArrayType, ZType.StringType);
 		JavaTypeTable.SetTypeTable(IntArrayType, ZenIntArray.class);
+		JavaTypeTable.SetTypeTable(FloatArrayType, ZenFloatArray.class);
+		JavaTypeTable.SetTypeTable(StringArrayType, ZenStringArray.class);
 
 		JavaTypeTable.SetTypeTable(ZType.BooleanType, Boolean.class);
 		JavaTypeTable.SetTypeTable(ZType.IntType, Long.class);

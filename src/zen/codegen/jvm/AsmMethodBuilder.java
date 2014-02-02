@@ -109,7 +109,9 @@ public class AsmMethodBuilder extends MethodNode {
 		else if(n == 1.0) {
 			this.visitInsn(Opcodes.DCONST_1);
 		}
-		this.visitLdcInsn(n);
+		else {
+			this.visitLdcInsn(n);
+		}
 	}
 
 
@@ -267,7 +269,7 @@ public class AsmMethodBuilder extends MethodNode {
 		if(T == long.class) {
 			this.visitIntInsn(Opcodes.NEWARRAY, Opcodes.T_LONG);
 		}
-		else if(T == long.class) {
+		else if(T == double.class) {
 			this.visitIntInsn(Opcodes.NEWARRAY, Opcodes.T_DOUBLE);
 		}
 		else {

@@ -51,7 +51,7 @@ public final class ZenObjectArray extends ZenObject {
 
 	public final void Add(Object Value) {
 		if(this.Size == this.Values.length) {
-			Object[] newValues = new Object[this.Values.length];
+			Object[] newValues = new Object[this.Values.length*2];
 			System.arraycopy(this.Values, 0, newValues, 0, this.Size);
 			this.Values = newValues;
 		}

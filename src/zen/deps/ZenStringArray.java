@@ -1,17 +1,17 @@
 package zen.deps;
 
-public class ZenIntArray extends ZenObject {
+public class ZenStringArray extends ZenObject {
 	@Field private int    Size;
-	@Field private long[] Values;
+	@Field private String[] Values;
 
-	public ZenIntArray(int TypeId, long[] Values) {
+	public ZenStringArray(int TypeId, String[] Values) {
 		super(TypeId);
 		if(Values != null) {
 			this.Values = Values;
 			this.Size = Values.length;
 		}
 		else {
-			this.Values = new long[1];
+			this.Values = new String[1];
 			this.Size = 0;
 		}
 	}
@@ -23,7 +23,7 @@ public class ZenIntArray extends ZenObject {
 			if(i > 0) {
 				s += ", ";
 			}
-			s += String.valueOf(this.Values[i]);
+			s += LibZen.QuoteString(this.Values[i]);
 			i = i + 1;
 		}
 		return s + "]";
@@ -33,24 +33,24 @@ public class ZenIntArray extends ZenObject {
 		return this.Size;
 	}
 
-	public final static long GetIndex(ZenIntArray a, long Index) {
+	public final static String GetIndex(ZenStringArray a, long Index) {
 		if(Index < a.Size) {
 			return a.Values[(int)Index];
 		}
 		ZenObjectArray.ThrowOutOfArrayIndex(a.Size, Index);
-		return 0;
+		return null;
 	}
 
-	public final static void SetIndex(ZenIntArray a, long Index, long Value) {
+	public final static void SetIndex(ZenStringArray a, long Index, String Value) {
 		if(Index < a.Size) {
 			a.Values[(int)Index] = Value;
 		}
 		ZenObjectArray.ThrowOutOfArrayIndex(a.Size, Index);
 	}
 
-	public final void Add(long Value) {
+	public final void Add(String Value) {
 		if(this.Size == this.Values.length) {
-			long[] newValues = new long[this.Values.length*2];
+			String[] newValues = new String[this.Values.length*2];
 			System.arraycopy(this.Values, 0, newValues, 0, this.Size);
 			this.Values = newValues;
 		}
