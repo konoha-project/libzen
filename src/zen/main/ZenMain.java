@@ -33,6 +33,7 @@ import zen.deps.LibNative;
 import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.deps.ZenArray;
+import zen.lang.ZEmptyValue;
 import zen.lang.ZSystem;
 import zen.lang.ZenEngine;
 import zen.lang.ZenGrammar;
@@ -210,8 +211,13 @@ public class ZenMain {
 				try {
 					@Var Object EvaledValue = ScriptEngine.Eval(Line, linenum, true);
 					ScriptEngine.Generator.Logger.ShowReportedErrors();
-					if (EvaledValue != null) {
-						LibNative.println(" (" + ZSystem.GuessType(EvaledValue) + ":" + LibNative.GetClassName(EvaledValue) + ") " + LibZen.Stringify(EvaledValue));
+					if (!(EvaledValue instanceof ZEmptyValue)) {
+						if(EvaledValue == null) {
+							LibNative.println(" null");
+						}
+						else {
+							LibNative.println(" (" + ZSystem.GuessType(EvaledValue) + ":" + LibNative.GetClassName(EvaledValue) + ") " + LibZen.Stringify(EvaledValue));
+						}
 					}
 					linenum += 1;
 				} catch (Exception e) {

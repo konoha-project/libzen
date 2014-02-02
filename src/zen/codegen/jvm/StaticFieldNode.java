@@ -4,11 +4,11 @@ import zen.ast.ZNode;
 import zen.type.ZType;
 
 public class StaticFieldNode extends ZNode {
-	String ClassName;
+	Class<?> StaticClass;
 	String FieldName;
-	StaticFieldNode(ZNode ParentNode, String ClassName, ZType FieldType, String FieldName) {
+	StaticFieldNode(ZNode ParentNode, Class<?> StaticClass, ZType FieldType, String FieldName) {
 		super(ParentNode, null);
-		this.ClassName = ClassName;
+		this.StaticClass = StaticClass;
 		this.Type = FieldType;
 		this.FieldName = FieldName;
 	}

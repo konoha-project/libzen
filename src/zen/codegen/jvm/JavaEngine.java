@@ -40,7 +40,6 @@ import zen.ast.ZGetIndexNode;
 import zen.ast.ZGetNameNode;
 import zen.ast.ZGetterNode;
 import zen.ast.ZGroupNode;
-import zen.ast.ZLetNode;
 import zen.ast.ZMethodCallNode;
 import zen.ast.ZNewObjectNode;
 import zen.ast.ZNode;
@@ -143,8 +142,18 @@ public class JavaEngine extends ZenEngine {
 		}
 	}
 
+	public void VisitStaticFieldNode(StaticFieldNode Node) {
+		try {
+			Field f = Node.StaticClass.getField(Node.FieldName);
+			this.EvaledValue = f.get(null);
+		} catch (Exception e) {
+			LibNative.FixMe(e);
+			this.EvaledValue = null;
+		}
+	}
+
 	@Override public void VisitGetNameNode(ZGetNameNode Node) {
-		@Var ZNode Node1 = this.Generator.RootNameSpace.GetSymbolNode(Node.VarName);
+		@Var ZNode Node1 = Node.GetNameSpace().GetSymbolNode(Node.VarName);
 		if(Node1 != null) {
 			this.EvaledValue = this.Eval(Node1);
 		}
@@ -272,11 +281,6 @@ public class JavaEngine extends ZenEngine {
 	@Override public void VisitComparatorNode(ZComparatorNode Node) {
 		Method sMethod = JavaMethodTable.GetBinaryStaticMethod(Node.LeftNode.Type, Node.SourceToken.ParsedText, Node.RightNode.Type);
 		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.LeftNode, Node.RightNode});
-	}
-
-	@Override public void VisitLetNode(ZLetNode Node) {
-		Node.Value = this.Eval(Node.ValueNode);
-		super.VisitLetNode(Node);
 	}
 
 }

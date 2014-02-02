@@ -114,19 +114,18 @@ public class ZenEngine extends ZVisitor {
 	}
 
 	@Override public final void EnableVisitor() {
-		this.EvaledValue = null;
+		this.EvaledValue = ZEmptyValue.TrueEmpty;
 		this.IsVisitable = true;
 	}
 
 	@Override public final void StopVisitor() {
-		this.EvaledValue = null;
+		this.EvaledValue = ZEmptyValue.FalseEmpty;
 		this.IsVisitable = false;
 	}
 
 	protected void Unsupported(ZNode Node, String Message) {
 		this.Logger.ReportError(Node.SourceToken, "unsupported " + Message + " (at the top level)");
-		this.EvaledValue = null; //"unsupported node: " + Node.getClass().getSimpleName();
-		this.IsVisitable = false;
+		this.StopVisitor();
 	}
 
 	protected final Object Eval(ZNode Node) {
@@ -348,7 +347,7 @@ public class ZenEngine extends ZVisitor {
 
 	@Override public void VisitErrorNode(ZErrorNode Node) {
 		this.Logger.ReportError(Node.SourceToken, Node.ErrorMessage);
-		//this.FoundError(Node.ErrorMessage);
+		this.StopVisitor();
 	}
 
 	@Override public void VisitExtendedNode(ZNode Node) {
@@ -373,13 +372,15 @@ public class ZenEngine extends ZVisitor {
 			TopBlockNode.StmtList.clear();
 			@Var ZNode ParsedNode = TokenContext.ParsePattern(TopBlockNode, "$Statement$", ZTokenContext.Required2);
 			ResultValue = this.Exec(ParsedNode, IsInteractive);
-			if(ParsedNode.IsErrorNode() && TokenContext.HasNext()) {
-				@Var ZToken Token = TokenContext.GetToken();
-				this.Generator.Logger.ReportInfo(Token, "stopped script at this line");
-				return ZEmptyValue.FalseEmpty;
+			if(ResultValue == ZEmptyValue.FalseEmpty) {
+				break;
 			}
 			TokenContext.SkipEmptyStatement();
 			TokenContext.Vacume();
+		}
+		if(TokenContext.HasNext()) {
+			@Var ZToken Token = TokenContext.GetToken();
+			this.Generator.Logger.ReportInfo(Token, "stopped script at this line");
 		}
 		return ResultValue;
 	}

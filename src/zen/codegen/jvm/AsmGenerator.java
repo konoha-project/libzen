@@ -118,6 +118,7 @@ public class AsmGenerator extends JavaSolution {
 		this.ClassLoader = new AsmClassLoader(this);
 	}
 
+	@Override
 	public final Class<?> GetJavaClass(ZType zType) {
 		if(zType instanceof ZFuncType) {
 			return this.ClassLoader.LoadFuncClass((ZFuncType)zType);
@@ -570,23 +571,31 @@ public class AsmGenerator extends JavaSolution {
 
 	public void VisitStaticField(StaticFieldNode Node) {
 		String FieldDesc = Type.getDescriptor(this.GetJavaClass(Node.Type));
-		this.CurrentBuilder.visitFieldInsn(Opcodes.GETSTATIC, Node.ClassName, Node.FieldName, FieldDesc);
+		this.CurrentBuilder.visitFieldInsn(Opcodes.GETSTATIC, Type.getInternalName(Node.StaticClass), Node.FieldName, FieldDesc);
 	}
 
 	@Override public void VisitLetNode(ZLetNode Node) {
 		if(!(Node.ValueNode instanceof ZConstNode)) {
 			String ClassName = "Symbol" + Node.GlobalName;
 			@Var String SourceFile = ZSystem.GetSourceFileName(Node.SourceToken.FileLine);
-			@Var AsmClassBuilder cb = new AsmClassBuilder(ACC_PUBLIC|Opcodes.ACC_FINAL, SourceFile, ClassName, "java/lang/Onject");
+			@Var AsmClassBuilder cb = new AsmClassBuilder(ACC_PUBLIC|Opcodes.ACC_FINAL, SourceFile, ClassName, "java/lang/Object");
 			this.ClassLoader.AddClassBuilder(cb);
 			Class<?> ValueClass = this.GetJavaClass(Node.ValueNode.Type);
+			@Var FieldNode fn = new FieldNode(ACC_PUBLIC|ACC_STATIC, "_", Type.getDescriptor(ValueClass), null, null);
+			cb.AddField(fn);
 			this.CurrentBuilder = new AsmMethodBuilder(ACC_PUBLIC | ACC_STATIC, "<clinit>", "()V", this, this.CurrentBuilder);
 			this.CurrentBuilder.PushNode(ValueClass, Node.ValueNode);
 			this.CurrentBuilder.visitFieldInsn(Opcodes.PUTSTATIC, ClassName, "_",  Type.getDescriptor(ValueClass));
 			this.CurrentBuilder.visitInsn(RETURN);
 			cb.AddMethod(this.CurrentBuilder);
 			this.CurrentBuilder = this.CurrentBuilder.Parent;
-			Node.ValueNode = new StaticFieldNode(null, ClassName, Node.ValueNode.Type, "_");
+			Class<?> StaticClass;
+			try {
+				StaticClass = this.ClassLoader.loadClass(ClassName);
+				Node.ValueNode = new StaticFieldNode(null, StaticClass, Node.ValueNode.Type, "_");
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
 		}
 		Node.GetNameSpace().SetLocalSymbol(Node.Symbol, Node.ValueNode);
 	}
