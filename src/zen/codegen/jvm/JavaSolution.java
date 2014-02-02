@@ -10,7 +10,6 @@ import zen.ast.ZImportNode;
 import zen.ast.ZNode;
 import zen.deps.JavaImportNode;
 import zen.deps.LibNative;
-import zen.deps.NativeTypeTable;
 import zen.deps.Var;
 import zen.deps.ZenMap;
 import zen.lang.ZenEngine;
@@ -50,13 +49,17 @@ public abstract class JavaSolution extends ZGenerator {
 		return new JavaImportNode(ParentNode);
 	}
 
+	public Class<?> GetJavaClass(ZType zType) {
+		return JavaTypeTable.GetJavaClass(zType, Object.class);
+	}
+
 	@Override public ZType GetFieldType(ZType RecvType, String FieldName) {
-		Class<?> NativeClass = NativeTypeTable.GetJavaClass(RecvType);
+		Class<?> NativeClass = this.GetJavaClass(RecvType);
 		if(NativeClass != null) {
 			try {
 				java.lang.reflect.Field NativeField = NativeClass.getField(FieldName);
 				if(Modifier.isPublic(NativeField.getModifiers())) {
-					return NativeTypeTable.GetZenType(NativeField.getType());
+					return JavaTypeTable.GetZenType(NativeField.getType());
 				}
 			} catch (SecurityException e) {
 			} catch (NoSuchFieldException e) {
@@ -67,12 +70,12 @@ public abstract class JavaSolution extends ZGenerator {
 	}
 
 	@Override public ZType GetSetterType(ZType RecvType, String FieldName) {
-		Class<?> NativeClass = NativeTypeTable.GetJavaClass(RecvType);
+		Class<?> NativeClass = this.GetJavaClass(RecvType);
 		if(NativeClass != null) {
 			try {
 				java.lang.reflect.Field NativeField = NativeClass.getField(FieldName);
 				if(Modifier.isPublic(NativeField.getModifiers()) && !Modifier.isFinal(NativeField.getModifiers())) {
-					return NativeTypeTable.GetZenType(NativeField.getType());
+					return JavaTypeTable.GetZenType(NativeField.getType());
 				}
 			} catch (SecurityException e) {
 			} catch (NoSuchFieldException e) {
@@ -90,7 +93,7 @@ public abstract class JavaSolution extends ZGenerator {
 			if(jParams[j] == Object.class) {
 				continue; // accepting all types
 			}
-			@Var ZType jParamType = NativeTypeTable.GetZenType(jParams[j]);
+			@Var ZType jParamType = JavaTypeTable.GetZenType(jParams[j]);
 			@Var ZType ParamType = ParamList.get(j).Type;
 			if(jParamType == ParamType || jParamType.Accept(ParamList.get(j).Type)) {
 				continue;
@@ -107,7 +110,7 @@ public abstract class JavaSolution extends ZGenerator {
 	}
 
 	protected Constructor<?> GetConstructor(ZType RecvType, ArrayList<ZNode> ParamList) {
-		Class<?> NativeClass = NativeTypeTable.GetJavaClass(RecvType);
+		Class<?> NativeClass = this.GetJavaClass(RecvType);
 		if(NativeClass != null) {
 			try {
 				Constructor<?>[] Methods = NativeClass.getConstructors();
@@ -127,7 +130,7 @@ public abstract class JavaSolution extends ZGenerator {
 	}
 
 	protected Method GetMethod(ZType RecvType, String MethodName, ArrayList<ZNode> ParamList) {
-		Class<?> NativeClass = NativeTypeTable.GetJavaClass(RecvType);
+		Class<?> NativeClass = this.GetJavaClass(RecvType);
 		if(NativeClass != null) {
 			try {
 				Method[] Methods = NativeClass.getMethods();
@@ -159,7 +162,7 @@ public abstract class JavaSolution extends ZGenerator {
 				if (ParamTypes != null) {
 					@Var int j = 0;
 					while(j < ParamTypes.length) {
-						TypeList.add(NativeTypeTable.GetZenType(ParamTypes[j]));
+						TypeList.add(JavaTypeTable.GetZenType(ParamTypes[j]));
 						j = j + 1;
 					}
 				}
@@ -169,7 +172,7 @@ public abstract class JavaSolution extends ZGenerator {
 		else {
 			Method jMethod = this.GetMethod(RecvType, MethodName, ParamList);
 			if(jMethod != null) {
-				return NativeTypeTable.ConvertToFuncType(jMethod);
+				return JavaTypeTable.ConvertToFuncType(jMethod);
 			}
 		}
 		return null;

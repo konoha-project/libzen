@@ -155,7 +155,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 			i = i + 1;
 		}
 		if( AllTyped && !ElementType.IsVarType()) {
-			ArrayType = ZTypePool.GetGenericType1(ZType.ArrayType, ElementType, true);
+			ArrayType = ZTypePool.GetGenericType1(ZType.ArrayType, ElementType);
 		}
 		this.TypedNode(Node, ArrayType);
 	}

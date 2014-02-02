@@ -36,6 +36,7 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 
 import zen.ast.ZNode;
+import zen.codegen.jvm.JavaTypeTable;
 import zen.lang.ZFunc;
 import zen.lang.ZenEngine;
 import zen.parser.ZGenerator;
@@ -202,7 +203,7 @@ public class LibNative {
 		GenMap.put("ruby", zen.codegen.jruby.RubySourceGenerator.class);
 		GenMap.put("clisp", zen.codegen.clisp.CommonLispSourceGenerator.class);
 		//GenMap.put("c", zen.codegen.c.CSourceGenerator.class);
-		GenMap.put("jvm", zen.codegen.jvm.Java6ByteCodeGenerator.class);
+		GenMap.put("jvm", zen.codegen.jvm.AsmGenerator.class);
 		GenMap.put("debug", zen.codegen.debug.ASTGenerator.class);
 		GenMap.put("llvm", zen.codegen.llvm.LLVMSourceGenerator.class);
 	}
@@ -234,11 +235,11 @@ public class LibNative {
 
 	//
 	public final static ZType GetNativeType(Class<?> NativeClass) {
-		return NativeTypeTable.GetZenType(NativeClass);
+		return JavaTypeTable.GetZenType(NativeClass);
 	}
 
 	public final static ZNativeFunc ConvertToNativeFunc(Method jMethod) {
-		@Var ZFuncType FuncType = NativeTypeTable.ConvertToFuncType(jMethod);
+		@Var ZFuncType FuncType = JavaTypeTable.ConvertToFuncType(jMethod);
 		return new ZNativeFunc(0, jMethod.getName(), FuncType, null, jMethod);
 	}
 

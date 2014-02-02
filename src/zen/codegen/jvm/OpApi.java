@@ -29,7 +29,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import zen.deps.NativeTypeTable;
 import zen.deps.Var;
 import zen.deps.ZenArray;
 import zen.deps.ZenMap;
@@ -38,7 +37,7 @@ import zen.type.ZType;
 public final class OpApi {
 
 	private static String t(Object x) {
-		return NativeTypeTable.GetZenType(x.getClass()).toString();
+		return JavaTypeTable.GetZenType(x.getClass()).toString();
 	}
 
 	public static boolean Not(Object x) {
@@ -315,7 +314,7 @@ public final class OpApi {
 	public static Object GetField(Object x, String name) {
 		try {
 			if(x instanceof ZType) {
-				Field f = NativeTypeTable.GetJavaClass((ZType)x).getField(name);
+				Field f = JavaTypeTable.GetJavaClass((ZType)x, null).getField(name);
 				return f.get(null);	  // static field
 			}
 			else {
@@ -331,7 +330,7 @@ public final class OpApi {
 	public static void SetField(Object x, String name, Object y) {
 		try {
 			if(x instanceof ZType) {
-				Field f = NativeTypeTable.GetJavaClass((ZType)x).getField(name);
+				Field f = JavaTypeTable.GetJavaClass((ZType)x, null).getField(name);
 				f.set(null,y); // static field
 			}
 			else {

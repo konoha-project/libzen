@@ -1,10 +1,11 @@
 package zen.deps;
 
-public class ZenIntArray {
+public class ZenIntArray extends ZenObject {
 	@Field private int    Size;
 	@Field private long[] Values;
 
-	public ZenIntArray(long[] Values) {
+	public ZenIntArray(int TypeId, long[] Values) {
+		super(TypeId);
 		if(Values != null) {
 			this.Values = Values;
 			this.Size = Values.length;
@@ -15,32 +16,46 @@ public class ZenIntArray {
 		}
 	}
 
-	public final static long Size(ZenIntArray a) {
-		return a.Size;
+	@Override public String toString() {
+		@Var String s = "[";
+		@Var int i = 0;
+		while(i < this.Size) {
+			if(i > 0) {
+				s += ", ";
+			}
+			s += String.valueOf(this.Values[i]);
+			i = i + 1;
+		}
+		return s + "]";
 	}
 
-	public final static long GetAt(ZenIntArray a, int Index) {
+	public final long Size() {
+		return this.Size;
+	}
+
+	public final static long GetIndex(ZenIntArray a, long Index) {
 		if(Index < a.Size) {
-			return a.Values[Index];
+			return a.Values[(int)Index];
 		}
-		throw new RuntimeException("out of array index");
+		ZenObjectArray.ThrowOutOfArrayIndex(a.Size, Index);
+		return 0;
 	}
 
-	public final static void SetAt(ZenIntArray a, int Index, long Value) {
+	public final static void SetIndex(ZenIntArray a, long Index, long Value) {
 		if(Index < a.Size) {
-			a.Values[Index] = Value;
+			a.Values[(int)Index] = Value;
 		}
-		throw new RuntimeException("out of array index");
+		ZenObjectArray.ThrowOutOfArrayIndex(a.Size, Index);
 	}
 
-	public final static void Add(ZenIntArray a, long Value) {
-		if(a.Size == a.Values.length) {
-			long[] newValues = new long[a.Values.length];
-			System.arraycopy(a.Values, 0, newValues, 0, a.Size);
-			a.Values = newValues;
+	public final void Add(long Value) {
+		if(this.Size == this.Values.length) {
+			long[] newValues = new long[this.Values.length];
+			System.arraycopy(this.Values, 0, newValues, 0, this.Size);
+			this.Values = newValues;
 		}
-		a.Values[a.Size] = Value;
-		a.Size = a.Size + 1;
+		this.Values[this.Size] = Value;
+		this.Size = this.Size + 1;
 	}
 
 

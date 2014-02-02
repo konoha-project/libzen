@@ -2,6 +2,7 @@ package zen.deps;
 
 import zen.ast.ZImportNode;
 import zen.ast.ZNode;
+import zen.codegen.jvm.JavaTypeTable;
 import zen.lang.ZenError;
 import zen.type.ZType;
 
@@ -30,7 +31,7 @@ public class JavaImportNode extends ZImportNode {
 	@Override public ZNode Import() {
 		try {
 			Class<?> jClass = Class.forName(this.ResourcePath);
-			ZType Type = NativeTypeTable.GetZenType(jClass);
+			ZType Type = JavaTypeTable.GetZenType(jClass);
 			if(this.Alias == null) {
 				this.Alias = this.ParseSymbol(this.ResourcePath);
 			}

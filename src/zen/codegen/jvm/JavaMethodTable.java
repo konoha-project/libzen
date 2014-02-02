@@ -26,12 +26,15 @@ package zen.codegen.jvm;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 
-import zen.deps.NativeTypeTable;
 import zen.type.ZType;
+import zen.type.ZTypePool;
 
-public class NativeMethodTable {
+public class JavaMethodTable {
+
 	static HashMap<String, Method> MethodMap = new HashMap<String,Method>();
+
 	static {
+
 		Import("!", ZType.VarType, OpApi.class, "Not");
 		Import("+", ZType.VarType, OpApi.class, "Plus");
 		Import("-", ZType.VarType, OpApi.class, "Minus");
@@ -93,8 +96,14 @@ public class NativeMethodTable {
 		Import(ZType.StringType, "!=", ZType.StringType, OpApi.class, "NotEquals");
 		Import(ZType.StringType, "[]", ZType.IntType, OpApi.class, "GetIndex");
 
+		ZType IntArrayType = ZTypePool.GetGenericType1(ZType.ArrayType, ZType.IntType);
+		ZType FloatArrayType = ZTypePool.GetGenericType1(ZType.ArrayType, ZType.FloatType);
+		ZType StringArrayType = ZTypePool.GetGenericType1(ZType.StringType, ZType.FloatType);
+
 		Import(ZType.ArrayType, "[]", ZType.IntType, zen.deps.ZenObjectArray.class, "GetIndex");
 		Import(ZType.ArrayType, "[]=", ZType.IntType, zen.deps.ZenObjectArray.class, "SetIndex", Object.class);
+		Import(IntArrayType, "[]", ZType.IntType, zen.deps.ZenIntArray.class, "GetIndex");
+		Import(IntArrayType, "[]=", ZType.IntType, zen.deps.ZenIntArray.class, "SetIndex", long.class);
 
 		Import(boolean.class, CastApi.class, "toObject");
 		Import(byte.class, CastApi.class, "toObject");
@@ -173,7 +182,7 @@ public class NativeMethodTable {
 	}
 	static void Import(ZType T1, String Op, ZType T2, Class<?> BaseClass, String Name) {
 		try {
-			Method sMethod = BaseClass.getMethod(Name, NativeTypeTable.GetJavaClass(T1), NativeTypeTable.GetJavaClass(T2));
+			Method sMethod = BaseClass.getMethod(Name, JavaTypeTable.GetJavaClass(T1, null), JavaTypeTable.GetJavaClass(T2, null));
 			MethodMap.put(BinaryKey(T1, Op, T2), sMethod);
 		} catch (Exception e) {
 			System.err.println("FIXME:" + e);
@@ -181,7 +190,7 @@ public class NativeMethodTable {
 	}
 	static void Import(ZType T1, String Op, ZType T2, Class<?> BaseClass, String Name, Class<?> T3) {
 		try {
-			Method sMethod = BaseClass.getMethod(Name, NativeTypeTable.GetJavaClass(T1), NativeTypeTable.GetJavaClass(T2), T3);
+			Method sMethod = BaseClass.getMethod(Name, JavaTypeTable.GetJavaClass(T1, null), JavaTypeTable.GetJavaClass(T2, null), T3);
 			MethodMap.put(BinaryKey(T1, Op, T2), sMethod);
 		} catch (Exception e) {
 			System.err.println("FIXME:" + e);
@@ -189,7 +198,7 @@ public class NativeMethodTable {
 	}
 	static void Import(String Op, ZType T1, Class<?> BaseClass, String Name) {
 		try {
-			Method sMethod = BaseClass.getMethod(Name, NativeTypeTable.GetJavaClass(T1));
+			Method sMethod = BaseClass.getMethod(Name, JavaTypeTable.GetJavaClass(T1, null));
 			MethodMap.put(UnaryKey(Op, T1), sMethod);
 		} catch (Exception e) {
 			System.err.println("FIXME:" + e);

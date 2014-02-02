@@ -30,25 +30,26 @@ public final class ZenObjectArray extends ZenObject {
 		return s + "]";
 	}
 
-	public final long size() {
+	public final long Size() {
 		return this.Size;
 	}
 
-	public final static Object GetIndex(ZenObjectArray a, int Index) {
+	public final static Object GetIndex(ZenObjectArray a, long Index) {
 		if(Index < a.Size) {
-			return a.Values[Index];
+			return a.Values[(int)Index];
 		}
-		throw new RuntimeException("out of array index");
+		ZenObjectArray.ThrowOutOfArrayIndex(a.Size, Index);
+		return null;
 	}
 
-	public final static void SetIndex(ZenObjectArray a, int Index, Object Value) {
+	public final static void SetIndex(ZenObjectArray a, long Index, Object Value) {
 		if(Index < a.Size) {
-			a.Values[Index] = Value;
+			a.Values[(int)Index] = Value;
 		}
-		throw new RuntimeException("out of array index");
+		ZenObjectArray.ThrowOutOfArrayIndex(a.Size, Index);
 	}
 
-	public final void add(Object Value) {
+	public final void Add(Object Value) {
 		if(this.Size == this.Values.length) {
 			Object[] newValues = new Object[this.Values.length];
 			System.arraycopy(this.Values, 0, newValues, 0, this.Size);
@@ -56,6 +57,11 @@ public final class ZenObjectArray extends ZenObject {
 		}
 		this.Values[this.Size] = Value;
 		this.Size = this.Size + 1;
+	}
+
+
+	public static void ThrowOutOfArrayIndex(int Size, long Index) {
+		throw new RuntimeException("out of array index " + Index + " < " + Size);
 	}
 
 }

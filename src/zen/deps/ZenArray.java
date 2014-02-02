@@ -41,7 +41,7 @@ public class ZenArray<T> extends ArrayList<T> implements ZenTypedObject {
 	}
 
 	public static <T> ZenArray<T> NewZenArray(ZType ElementType) {
-		return new ZenArray<T>(ZTypePool.GetGenericType1(ZType.ArrayType, ElementType, true));
+		return new ZenArray<T>(ZTypePool.GetGenericType1(ZType.ArrayType, ElementType));
 	}
 
 	@Override public ZType GetZenType() {

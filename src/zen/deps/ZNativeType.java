@@ -1,5 +1,6 @@
 package zen.deps;
 
+import zen.codegen.jvm.JavaTypeTable;
 import zen.type.ZType;
 import zen.type.ZTypeFlag;
 
@@ -12,7 +13,7 @@ public class ZNativeType extends ZType {
 	}
 
 	@Override public ZType GetSuperType() {
-		return NativeTypeTable.GetZenType(this.JClass.getSuperclass());
+		return JavaTypeTable.GetZenType(this.JClass.getSuperclass());
 	}
 
 }

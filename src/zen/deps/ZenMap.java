@@ -35,7 +35,7 @@ public final class ZenMap <T> implements ZenTypedObject {
 
 	public ZenMap(ZType ElementType) {
 		this.Map = new HashMap<String, T>();
-		//NativeTypeTable.GetZenType(T.class);
+		//JavaTypeTable.GetZenType(T.class);
 		this.ElementType = ElementType;
 	}
 

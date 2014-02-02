@@ -417,7 +417,7 @@ public class ZenGrammar {
 			if(!TokenContext.MatchToken("]")) {
 				return null;
 			}
-			TypeNode = new ZTypeNode(ParentNode, SourceToken, ZTypePool.GetGenericType1(ZType.ArrayType, TypeNode.Type, true));
+			TypeNode = new ZTypeNode(ParentNode, SourceToken, ZTypePool.GetGenericType1(ZType.ArrayType, TypeNode.Type));
 		}
 		return TypeNode;
 	}

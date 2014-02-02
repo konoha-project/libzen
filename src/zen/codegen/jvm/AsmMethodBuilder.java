@@ -18,7 +18,6 @@ import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.MethodNode;
 
 import zen.ast.ZNode;
-import zen.deps.NativeTypeTable;
 import zen.lang.ZSystem;
 import zen.type.ZFuncType;
 import zen.type.ZType;
@@ -26,14 +25,14 @@ import zen.type.ZType;
 public class AsmMethodBuilder extends MethodNode {
 
 	final AsmMethodBuilder          Parent;
-	final Java6ByteCodeGenerator   Generator;
+	final AsmGenerator   Generator;
 	ArrayList<JLocalVarStack>     LocalVals  = new ArrayList<JLocalVarStack>();
 	int UsedStack = 0;
 	Stack<Label>                  BreakLabelStack = new Stack<Label>();
 	Stack<Label>                  ContinueLabelStack = new Stack<Label>();
 	int PreviousLine = 0;
 
-	public AsmMethodBuilder(int acc, String Name, String Desc, Java6ByteCodeGenerator Generator, AsmMethodBuilder Parent) {
+	public AsmMethodBuilder(int acc, String Name, String Desc, AsmGenerator Generator, AsmMethodBuilder Parent) {
 		super(acc, Name, Desc, null, null);
 		this.Parent = Parent;
 		this.Generator = Generator;
@@ -188,7 +187,7 @@ public class AsmMethodBuilder extends MethodNode {
 		if(C1.equals(C2)) {
 			return;
 		}
-		Method sMethod = NativeMethodTable.GetCastMethod(C1, C2);
+		Method sMethod = JavaMethodTable.GetCastMethod(C1, C2);
 		this.Generator.Debug("C1="+C1.getSimpleName()+ ", C2="+C2.getSimpleName()+", CastMethod="+sMethod);
 		if(sMethod != null) {
 			String owner = Type.getInternalName(sMethod.getDeclaringClass());
@@ -203,7 +202,7 @@ public class AsmMethodBuilder extends MethodNode {
 	}
 
 	void CheckParamCast(Class<?> C1, ZNode Node) {
-		Class<?> C2 = NativeTypeTable.GetJavaClass(Node.Type);
+		Class<?> C2 = this.Generator.GetJavaClass(Node.Type);
 		if(C1 != C2) {
 			this.Generator.Debug("C2="+Node + ": " + Node.Type);
 			this.CheckCast(C1, C2);
@@ -211,7 +210,7 @@ public class AsmMethodBuilder extends MethodNode {
 	}
 
 	void CheckReturnCast(ZNode Node, Class<?> C2) {
-		Class<?> C1 = NativeTypeTable.GetJavaClass(Node.Type);
+		Class<?> C1 = this.Generator.GetJavaClass(Node.Type);
 		if(C1 != C2) {
 			this.Generator.Debug("C1"+Node + ": " + Node.Type);
 			this.CheckCast(C1, C2);
@@ -247,7 +246,7 @@ public class AsmMethodBuilder extends MethodNode {
 		}
 		String owner = "C" + FuncType.StringfySignature(FuncName);
 		this.SetLineNumber(Node);
-		this.visitMethodInsn(INVOKESTATIC, owner, FuncName, LibAsm.GetMethodDescriptor(FuncType));
+		this.visitMethodInsn(INVOKESTATIC, owner, FuncName, this.Generator.GetMethodDescriptor(FuncType));
 		//this.CheckReturnCast(Node, FuncType.GetReturnType());
 	}
 
@@ -259,7 +258,7 @@ public class AsmMethodBuilder extends MethodNode {
 			}
 		}
 		String owner = Type.getInternalName(FuncClass);
-		this.visitMethodInsn(INVOKEVIRTUAL, owner, "Invoke", LibAsm.GetMethodDescriptor(FuncType));
+		this.visitMethodInsn(INVOKEVIRTUAL, owner, "Invoke", this.Generator.GetMethodDescriptor(FuncType));
 		//this.CheckReturnCast(Node, FuncType.GetReturnType());
 	}
 

@@ -28,7 +28,6 @@ package zen.codegen.jvm;
 
 import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
 import static org.objectweb.asm.Opcodes.ACC_STATIC;
-import static org.objectweb.asm.Opcodes.ACONST_NULL;
 import static org.objectweb.asm.Opcodes.DUP;
 import static org.objectweb.asm.Opcodes.GETFIELD;
 import static org.objectweb.asm.Opcodes.GOTO;
@@ -101,28 +100,60 @@ import zen.ast.ZUnaryNode;
 import zen.ast.ZVarDeclNode;
 import zen.ast.ZWhileNode;
 import zen.deps.LibNative;
-import zen.deps.NativeTypeTable;
 import zen.deps.Var;
-import zen.deps.ZenIntArray;
-import zen.deps.ZenObjectArray;
 import zen.lang.ZSystem;
+import zen.lang.ZenClassType;
 import zen.type.ZFuncType;
 import zen.type.ZType;
 
-public class Java6ByteCodeGenerator extends JavaSolution {
+public class AsmGenerator extends JavaSolution {
 	AsmMethodBuilder CurrentBuilder;
 	AsmClassLoader ClassLoader = null;
 	Stack<TryCatchLabel> TryCatchLabel;
 	private int LambdaMethodId = 0;
 
-	public Java6ByteCodeGenerator() {
+	public AsmGenerator() {
 		super("java", "1.6");
 		this.TryCatchLabel = new Stack<TryCatchLabel>();
 		this.ClassLoader = new AsmClassLoader(this);
 	}
 
+	public final Class<?> GetJavaClass(ZType zType) {
+		if(zType instanceof ZFuncType) {
+			return this.ClassLoader.LoadFuncClass((ZFuncType)zType);
+		}
+		else if(zType instanceof ZenClassType) {
+			return null;
+		}
+		else {
+			return JavaTypeTable.GetJavaClass(zType, Object.class);
+		}
+	}
+
+	final Type AsmType(ZType zType) {
+		return Type.getType(this.GetJavaClass(zType));
+	}
+
+	final String GetTypeDesc(ZType zType) {
+		Class<?> JClass = this.GetJavaClass(zType);
+		return Type.getDescriptor(JClass);
+	}
+
+	final String GetMethodDescriptor(ZFuncType FuncType) {
+		@Var Type ReturnType = this.AsmType(FuncType.GetReturnType());
+		@Var Type[] ArgTypes = new Type[FuncType.GetFuncParamSize()];
+		for(int i = 0; i < ArgTypes.length; i++) {
+			ZType ParamType = FuncType.GetFuncParamType(i);
+			ArgTypes[i] = this.AsmType(ParamType);
+		}
+		String Desc = Type.getMethodDescriptor(ReturnType, ArgTypes);
+		//System.out.println(" ** Desc: " + Desc + ", FuncType: " + FuncType);
+		return Desc;
+	}
+
+
 	@Override public void VisitNullNode(ZNullNode Node) {
-		this.CurrentBuilder.visitInsn(ACONST_NULL);
+		this.CurrentBuilder.visitInsn(Opcodes.ACONST_NULL);
 	}
 
 	@Override public void VisitBooleanNode(ZBooleanNode Node) {
@@ -143,49 +174,33 @@ public class Java6ByteCodeGenerator extends JavaSolution {
 
 	@Override public void VisitConstPoolNode(ZConstPoolNode Node) {
 		this.Debug("TODO");
-		this.CurrentBuilder.visitInsn(ACONST_NULL);
+		this.CurrentBuilder.visitInsn(Opcodes.ACONST_NULL);
 
 		//		Object constValue = Node.ConstValue;
 		//		LibNative.Assert(Node.ConstValue != null);
 		//		this.CurrentBuilder.LoadConst(constValue);
 	}
 
-	protected Class<?> AsArrayClass(ZType zType) {
-		ZType zParamType = zType.GetParamType(0);
-		if(zParamType.IsIntType()) {
-			return ZenIntArray.class;
-		}
-		return ZenObjectArray.class;
-	}
-
-	protected Class<?> AsElementClass(ZType zType) {
-		ZType zParamType = zType.GetParamType(0);
-		if(zParamType.IsIntType()) {
-			return long.class;
-		}
-		return Object.class;
-	}
-
 	@Override public void VisitArrayLiteralNode(ZArrayLiteralNode Node) {
-		Class<?> ArrayClass = this.AsArrayClass(Node.Type);
+		Class<?> ArrayClass = LibAsm.AsArrayClass(Node.Type);
 		String Owner = Type.getInternalName(ArrayClass);
 		this.CurrentBuilder.visitTypeInsn(NEW, Owner);
 		this.CurrentBuilder.visitInsn(DUP);
 		this.CurrentBuilder.PushInt(Node.Type.TypeId);
-		this.CurrentBuilder.PushNodeListAsArray(this.AsElementClass(Node.Type), 0, Node.NodeList);
+		this.CurrentBuilder.PushNodeListAsArray(LibAsm.AsElementClass(Node.Type), 0, Node.NodeList);
 		this.CurrentBuilder.SetLineNumber(Node);
 		this.CurrentBuilder.visitMethodInsn(INVOKESPECIAL, Owner, "<init>", LibAsm.NewArrayDescriptor(Node.Type));
 	}
 
 	@Override public void VisitMapLiteralNode(ZMapLiteralNode Node) {
 		this.Debug("TODO");
-		this.CurrentBuilder.visitInsn(ACONST_NULL);
+		this.CurrentBuilder.visitInsn(Opcodes.ACONST_NULL);
 		// TODO Auto-generated method stub
 	}
 
 	@Override public void VisitNewArrayNode(ZNewArrayNode Node) {
 		this.Debug("TODO");
-		this.CurrentBuilder.visitInsn(ACONST_NULL);
+		this.CurrentBuilder.visitInsn(Opcodes.ACONST_NULL);
 		//		this.CurrentBuilder.LoadConst(Node.Type);
 		//		this.CurrentBuilder.LoadNewArray(this, 0, Node.NodeList);
 		//		this.CurrentBuilder.InvokeMethodCall(Node.Type, JLib.NewArray);
@@ -194,10 +209,10 @@ public class Java6ByteCodeGenerator extends JavaSolution {
 	@Override public void VisitNewObjectNode(ZNewObjectNode Node) {
 		if(Node.Type.IsVarType()) {
 			this.Logger.ReportError(Node.SourceToken, "no class for new operator");
-			this.CurrentBuilder.visitInsn(ACONST_NULL);
+			this.CurrentBuilder.visitInsn(Opcodes.ACONST_NULL);
 		}
 		else {
-			String ClassName = Type.getInternalName(NativeTypeTable.GetJavaClass(Node.Type));
+			String ClassName = Type.getInternalName(this.GetJavaClass(Node.Type));
 			this.CurrentBuilder.visitTypeInsn(NEW, ClassName);
 			this.CurrentBuilder.visitInsn(DUP);
 			Constructor<?> jMethod = this.GetConstructor(Node.Type, Node.ParamList);
@@ -219,12 +234,12 @@ public class Java6ByteCodeGenerator extends JavaSolution {
 
 	@Override public void VisitSymbolNode(ZSymbolNode Node) {
 		this.Debug("TODO");
-		this.CurrentBuilder.visitInsn(ACONST_NULL);
+		this.CurrentBuilder.visitInsn(Opcodes.ACONST_NULL);
 		// TODO Auto-generated method stub
 	}
 
 	@Override public void VisitVarDeclNode(ZVarDeclNode Node) {
-		Class<?> DeclClass = NativeTypeTable.GetJavaClass(Node.DeclType);
+		Class<?> DeclClass = this.GetJavaClass(Node.DeclType);
 		this.CurrentBuilder.AddLocal(DeclClass, Node.NativeName);
 		this.CurrentBuilder.PushNode(DeclClass, Node.InitNode);
 		this.CurrentBuilder.StoreLocal(Node.NativeName);
@@ -256,12 +271,12 @@ public class Java6ByteCodeGenerator extends JavaSolution {
 
 	@Override public void VisitGetterNode(ZGetterNode Node) {
 		if(Node.IsUntyped()) {
-			Method sMethod = NativeMethodTable.GetStaticMethod("GetField");
+			Method sMethod = JavaMethodTable.GetStaticMethod("GetField");
 			ZNode NameNode = new ZStringNode(Node, null, Node.FieldName);
 			this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.RecvNode, NameNode});
 		}
 		else {
-			Class<?> RecvClass = NativeTypeTable.GetJavaClass(Node.RecvNode.Type);
+			Class<?> RecvClass = this.GetJavaClass(Node.RecvNode.Type);
 			Field jField = this.GetField(RecvClass, Node.FieldName);
 			String Owner = Type.getType(RecvClass).getInternalName();
 			String Desc = Type.getType(jField.getType()).getDescriptor();
@@ -278,12 +293,12 @@ public class Java6ByteCodeGenerator extends JavaSolution {
 
 	@Override public void VisitSetterNode(ZSetterNode Node) {
 		if(Node.IsUntyped()) {
-			Method sMethod = NativeMethodTable.GetStaticMethod("SetField");
+			Method sMethod = JavaMethodTable.GetStaticMethod("SetField");
 			ZNode NameNode = new ZStringNode(Node, null, Node.FieldName);
 			this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.RecvNode, NameNode, Node.ValueNode});
 		}
 		else {
-			Class<?> RecvClass = NativeTypeTable.GetJavaClass(Node.RecvNode.Type);
+			Class<?> RecvClass = this.GetJavaClass(Node.RecvNode.Type);
 			Field jField = this.GetField(RecvClass, Node.FieldName);
 			String Owner = Type.getType(RecvClass).getInternalName();
 			String Desc = Type.getType(jField.getType()).getDescriptor();
@@ -300,12 +315,12 @@ public class Java6ByteCodeGenerator extends JavaSolution {
 	}
 
 	@Override public void VisitGetIndexNode(ZGetIndexNode Node) {
-		Method sMethod = NativeMethodTable.GetBinaryStaticMethod(Node.RecvNode.Type, "[]", Node.IndexNode.Type);
+		Method sMethod = JavaMethodTable.GetBinaryStaticMethod(Node.RecvNode.Type, "[]", Node.IndexNode.Type);
 		this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.RecvNode, Node.IndexNode});
 	}
 
 	@Override public void VisitSetIndexNode(ZSetIndexNode Node) {
-		Method sMethod = NativeMethodTable.GetBinaryStaticMethod(Node.RecvNode.Type, "[]=", Node.IndexNode.Type);
+		Method sMethod = JavaMethodTable.GetBinaryStaticMethod(Node.RecvNode.Type, "[]=", Node.IndexNode.Type);
 		this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.RecvNode, Node.IndexNode, Node.ValueNode});
 	}
 
@@ -336,7 +351,7 @@ public class Java6ByteCodeGenerator extends JavaSolution {
 			this.CurrentBuilder.CheckReturnCast(Node, jMethod.getReturnType());
 		}
 		else {
-			jMethod = NativeMethodTable.GetStaticMethod("InvokeUnresolvedMethod");
+			jMethod = JavaMethodTable.GetStaticMethod("InvokeUnresolvedMethod");
 			this.CurrentBuilder.PushNode(Object.class, Node.RecvNode);
 			this.CurrentBuilder.PushConst(Node.MethodName);
 			this.CurrentBuilder.PushNodeListAsArray(Object.class, 0, Node.ParamList);
@@ -364,12 +379,12 @@ public class Java6ByteCodeGenerator extends JavaSolution {
 	}
 
 	@Override public void VisitUnaryNode(ZUnaryNode Node) {
-		Method sMethod = NativeMethodTable.GetUnaryStaticMethod(Node.SourceToken.ParsedText, Node.RecvNode.Type);
+		Method sMethod = JavaMethodTable.GetUnaryStaticMethod(Node.SourceToken.ParsedText, Node.RecvNode.Type);
 		this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.RecvNode});
 	}
 
 	@Override public void VisitNotNode(ZNotNode Node) {
-		Method sMethod = NativeMethodTable.GetUnaryStaticMethod(Node.SourceToken.ParsedText, Node.RecvNode.Type);
+		Method sMethod = JavaMethodTable.GetUnaryStaticMethod(Node.SourceToken.ParsedText, Node.RecvNode.Type);
 		this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.RecvNode});
 	}
 
@@ -378,9 +393,9 @@ public class Java6ByteCodeGenerator extends JavaSolution {
 			this.CurrentBuilder.Pop(Node.ExprNode.Type);
 		}
 		else {
-			Class<?> C1 = NativeTypeTable.GetJavaClass(Node.Type);
-			Class<?> C2 = NativeTypeTable.GetJavaClass(Node.ExprNode.Type);
-			Method sMethod = NativeMethodTable.GetCastMethod(C1, C2);
+			Class<?> C1 = this.GetJavaClass(Node.Type);
+			Class<?> C2 = this.GetJavaClass(Node.ExprNode.Type);
+			Method sMethod = JavaMethodTable.GetCastMethod(C1, C2);
 			if(sMethod != null) {
 				this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.ExprNode});
 			}
@@ -396,12 +411,12 @@ public class Java6ByteCodeGenerator extends JavaSolution {
 	}
 
 	@Override public void VisitBinaryNode(ZBinaryNode Node) {
-		Method sMethod = NativeMethodTable.GetBinaryStaticMethod(Node.LeftNode.Type, Node.SourceToken.ParsedText, Node.RightNode.Type);
+		Method sMethod = JavaMethodTable.GetBinaryStaticMethod(Node.LeftNode.Type, Node.SourceToken.ParsedText, Node.RightNode.Type);
 		this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.LeftNode, Node.RightNode});
 	}
 
 	@Override public void VisitComparatorNode(ZComparatorNode Node) {
-		Method sMethod = NativeMethodTable.GetBinaryStaticMethod(Node.LeftNode.Type, Node.SourceToken.ParsedText, Node.RightNode.Type);
+		Method sMethod = JavaMethodTable.GetBinaryStaticMethod(Node.LeftNode.Type, Node.SourceToken.ParsedText, Node.RightNode.Type);
 		this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.LeftNode, Node.RightNode});
 	}
 
@@ -472,7 +487,7 @@ public class Java6ByteCodeGenerator extends JavaSolution {
 	@Override public void VisitReturnNode(ZReturnNode Node) {
 		if(Node.ValueNode != null) {
 			Node.ValueNode.Accept(this);
-			Type type = LibAsm.AsmType(Node.ValueNode.Type);
+			Type type = this.AsmType(Node.ValueNode.Type);
 			this.CurrentBuilder.visitInsn(type.getOpcode(IRETURN));
 		}
 		else {
@@ -540,21 +555,21 @@ public class Java6ByteCodeGenerator extends JavaSolution {
 
 		// prepare
 		//TODO: add exception class name
-		String throwType = LibAsm.AsmType(Node.ExceptionType).getInternalName();
+		String throwType = this.AsmType(Node.ExceptionType).getInternalName();
 		mv.visitTryCatchBlock(Label.beginTryLabel, Label.endTryLabel, catchLabel, throwType);
 
 		// catch block
-		this.CurrentBuilder.AddLocal(NativeTypeTable.GetJavaClass(Node.ExceptionType), Node.ExceptionName);
+		this.CurrentBuilder.AddLocal(this.GetJavaClass(Node.ExceptionType), Node.ExceptionName);
 		mv.visitLabel(catchLabel);
 		this.CurrentBuilder.StoreLocal(Node.ExceptionName);
 		Node.BodyNode.Accept(this);
 		mv.visitJumpInsn(GOTO, Label.finallyLabel);
 		//FIXME: remove local
-		this.CurrentBuilder.RemoveLocal(NativeTypeTable.GetJavaClass(Node.ExceptionType), Node.ExceptionName);
+		this.CurrentBuilder.RemoveLocal(this.GetJavaClass(Node.ExceptionType), Node.ExceptionName);
 	}
 
 	public void VisitStaticField(StaticFieldNode Node) {
-		String FieldDesc = Type.getDescriptor(NativeTypeTable.GetJavaClass(Node.Type));
+		String FieldDesc = Type.getDescriptor(this.GetJavaClass(Node.Type));
 		this.CurrentBuilder.visitFieldInsn(Opcodes.GETSTATIC, Node.ClassName, Node.FieldName, FieldDesc);
 	}
 
@@ -564,7 +579,7 @@ public class Java6ByteCodeGenerator extends JavaSolution {
 			@Var String SourceFile = ZSystem.GetSourceFileName(Node.SourceToken.FileLine);
 			@Var AsmClassBuilder cb = new AsmClassBuilder(ACC_PUBLIC|Opcodes.ACC_FINAL, SourceFile, ClassName, "java/lang/Onject");
 			this.ClassLoader.AddClassBuilder(cb);
-			Class<?> ValueClass = NativeTypeTable.GetJavaClass(Node.ValueNode.Type);
+			Class<?> ValueClass = this.GetJavaClass(Node.ValueNode.Type);
 			this.CurrentBuilder = new AsmMethodBuilder(ACC_PUBLIC | ACC_STATIC, "<clinit>", "()V", this, this.CurrentBuilder);
 			this.CurrentBuilder.PushNode(ValueClass, Node.ValueNode);
 			this.CurrentBuilder.visitFieldInsn(Opcodes.PUTSTATIC, ClassName, "_",  Type.getDescriptor(ValueClass));
@@ -588,13 +603,13 @@ public class Java6ByteCodeGenerator extends JavaSolution {
 		@Var ZFuncType FuncType = Node.GetFuncType(null);
 		@Var JvmFuncNode FuncNode = new JvmFuncNode(Node, FuncType, Node.FuncName);
 		@Var AsmClassBuilder  HolderClass = this.ClassLoader.NewFunctionHolderClass(Node, FuncNode, FuncType);
-		@Var String MethodDesc = LibAsm.GetMethodDescriptor(FuncType);
+		@Var String MethodDesc = this.GetMethodDescriptor(FuncType);
 		//System.out.println("*** " + MethodDesc);
 		this.CurrentBuilder = new AsmMethodBuilder(ACC_PUBLIC | ACC_STATIC, Node.FuncName, MethodDesc, this, this.CurrentBuilder);
 		HolderClass.AddMethod(this.CurrentBuilder);
 		for(int i = 0; i < Node.ParamList.size(); i++) {
 			ZParamNode ParamNode = Node.ParamList.get(i);
-			Class<?> DeclClass = NativeTypeTable.GetJavaClass(ParamNode.Type);
+			Class<?> DeclClass = this.GetJavaClass(ParamNode.Type);
 			this.CurrentBuilder.AddLocal(DeclClass, ParamNode.Name);
 		}
 		Node.FuncBlock.Accept(this);
@@ -624,14 +639,14 @@ public class Java6ByteCodeGenerator extends JavaSolution {
 		for(@Var int i = 0; i < Node.FieldList.size(); i++) {
 			@Var ZFieldNode Field = Node.FieldList.get(i);
 			if(Field.ClassType.Equals(Node.ClassType)) {
-				@Var FieldNode fn = new FieldNode(ACC_PUBLIC, Field.FieldName, LibAsm.GetTypeDesc(Field.DeclType), null, this.GetConstValue(Field.InitNode));
+				@Var FieldNode fn = new FieldNode(ACC_PUBLIC, Field.FieldName, this.GetTypeDesc(Field.DeclType), null, this.GetConstValue(Field.InitNode));
 				ClassBuilder.AddField(fn);
 			}
 		}
 		for(@Var int i = 0; i < Node.FieldList.size(); i++) {
 			@Var ZFieldNode Field = Node.FieldList.get(i);
 			if(Field.Type.IsFuncType()) {
-				@Var FieldNode fn = new FieldNode(ACC_PUBLIC|ACC_STATIC, ClassMethodName(Node.ClassType, Field.FieldName), LibAsm.GetTypeDesc(Field.DeclType), null, this.GetConstValue(Field.InitNode));
+				@Var FieldNode fn = new FieldNode(ACC_PUBLIC|ACC_STATIC, ClassMethodName(Node.ClassType, Field.FieldName), this.GetTypeDesc(Field.DeclType), null, this.GetConstValue(Field.InitNode));
 				ClassBuilder.AddField(fn);
 			}
 		}
@@ -642,7 +657,7 @@ public class Java6ByteCodeGenerator extends JavaSolution {
 		//		for(@Var int i = 0; i < Node.FieldList.size(); i++) {
 		//			@Var ZFieldNode Field = Node.FieldList.get(i);
 		//			if(Field.ClassType.Equals(Node.ClassType)) {
-		//				this.CurrentBuilder.PushNode(NativeTypeTable.GetJavaClass(Field.Type), Node);
+		//				this.CurrentBuilder.PushNode(JavaTypeTable.GetJavaClass(Field.Type), Node);
 		//				constructor.visitFieldInsn(PUTFIELD, ClassName, Field.FieldName, desc);
 		//
 		//				@Var FieldNode fn = new FieldNode(ACC_PUBLIC, Field.FieldName, AsmClassLoader.GetTypeDesc(Field.DeclType), null, this.GetConstValue(Field.InitNode));
@@ -666,7 +681,7 @@ public class Java6ByteCodeGenerator extends JavaSolution {
 	@Override public void VisitErrorNode(ZErrorNode Node) {
 		String Message = this.Logger.ReportError(Node.SourceToken, Node.ErrorMessage);
 		this.CurrentBuilder.PushConst(Message);
-		Method sMethod = NativeMethodTable.GetStaticMethod("ThrowError");
+		Method sMethod = JavaMethodTable.GetStaticMethod("ThrowError");
 		this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, null);
 	}
 
