@@ -32,7 +32,8 @@ public final class ZIfNode extends ZNode {
 	@Field public ZNode	ThenNode = null;
 	@Field public ZNode	ElseNode = null;
 	/* If CondNode then ThenBlock else ElseBlock */
-	public ZIfNode() {
+	public ZIfNode(ZNode ParentNode) {
+		super(ParentNode, null);
 	}
 	@Override public final void Append(ZNode Node) {
 		this.SetChild(Node);

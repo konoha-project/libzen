@@ -33,8 +33,8 @@ import zen.parser.ZVisitor;
 
 public final class ZNewObjectNode extends ZNode {
 	@Field public ArrayList<ZNode>	ParamList = new ArrayList<ZNode>();
-	public ZNewObjectNode() {
-		super();
+	public ZNewObjectNode(ZNode ParentNode) {
+		super(ParentNode, null);
 	}
 	@Override public final void Append(ZNode Node) {
 		if(this.Type.IsVarType() && Node instanceof ZTypeNode) {

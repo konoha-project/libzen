@@ -32,9 +32,8 @@ import zen.parser.ZVisitor;
 //E.g., "~" $RecvNode
 public class ZUnaryNode extends ZNode {
 	@Field public ZNode	RecvNode = null;
-	public ZUnaryNode(ZToken Token) {
-		super();
-		this.SourceToken = Token;
+	public ZUnaryNode(ZNode ParentNode, ZToken Token) {
+		super(ParentNode, Token);
 	}
 	@Override public void Append(ZNode RecvNode) {
 		this.RecvNode = this.SetChild(RecvNode);

@@ -29,8 +29,8 @@ import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 
 public class ZComparatorNode extends ZBinaryNode {
-	public ZComparatorNode(ZToken SourceToken, ZNode Left, ZSyntaxPattern Pattern) {
-		super(SourceToken, Left, Pattern);
+	public ZComparatorNode(ZNode ParentNode, ZToken SourceToken, ZNode Left, ZSyntaxPattern Pattern) {
+		super(ParentNode, SourceToken, Left, Pattern);
 	}
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitComparatorNode(this);

@@ -16,8 +16,8 @@ public class ZLetNode extends ZNode {
 
 	@Field public String GlobalName = null;
 
-	public ZLetNode(ZNameSpace NameSpace) {
-		super();
+	public ZLetNode(ZNode ParentNode, ZNameSpace NameSpace) {
+		super(ParentNode, null);
 		this.NameSpace = NameSpace;
 	}
 

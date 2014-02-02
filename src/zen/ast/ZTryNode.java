@@ -31,8 +31,8 @@ public final class ZTryNode extends ZNode {
 	@Field public ZNode	TryNode = null;
 	@Field public ZNode CatchNode = null;
 	@Field public ZNode	FinallyNode = null;
-	public ZTryNode() {
-		super();
+	public ZTryNode(ZNode ParentNode) {
+		super(ParentNode, null);
 	}
 	@Override public void Append(ZNode Node) {
 		this.SetChild(Node);

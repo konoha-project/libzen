@@ -31,8 +31,8 @@ import zen.type.ZType;
 //E.g., (T) $Expr
 public class ZCastNode extends ZNode {
 	@Field public ZNode	ExprNode;
-	public ZCastNode(ZType CastType, ZNode Node) {
-		super();
+	public ZCastNode(ZNode ParentNode, ZType CastType, ZNode Node) {
+		super(ParentNode, null);
 		this.Type = CastType;
 		this.ExprNode = null;
 		if(Node != null) {

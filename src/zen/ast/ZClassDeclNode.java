@@ -39,8 +39,8 @@ public final class ZClassDeclNode extends ZNode {
 	@Field public ZType SuperType = null;
 	@Field public ZNameSpace NameSpace;
 	@Field public ArrayList<ZFieldNode>  FieldList = new ArrayList<ZFieldNode>();
-	public ZClassDeclNode(ZNameSpace NameSpace) {
-		super();
+	public ZClassDeclNode(ZNode ParentNode, ZNameSpace NameSpace) {
+		super(ParentNode, null);
 		this.NameSpace = NameSpace.GetRootNameSpace();
 	}
 
@@ -64,14 +64,14 @@ public final class ZClassDeclNode extends ZNode {
 
 	public ZNode CheckClassName(ZNameSpace NameSpace) {
 		if(this.ClassType == null || !(this.ClassType instanceof ZenClassType)) {
-			return new ZErrorNode(this.SourceToken, "" + this.ClassName + " is not a Zen class.");
+			return new ZErrorNode(this, this.SourceToken, "" + this.ClassName + " is not a Zen class.");
 		}
 		if(!this.ClassType.IsOpenType()) {
-			return new ZErrorNode(this.SourceToken, "" + this.ClassName + " has been defined.");
+			return new ZErrorNode(this, this.SourceToken, "" + this.ClassName + " has been defined.");
 		}
 		if(this.SuperType != null) {
 			if(!(this.SuperType instanceof ZenClassType)) {
-				return new ZErrorNode(this.SourceToken, "" + this.SuperType + " cannot be extended.");
+				return new ZErrorNode(this, this.SourceToken, "" + this.SuperType + " cannot be extended.");
 			}
 			if(this.SuperType.IsOpenType()) {
 				NameSpace.Generator.Logger.ReportWarning(this.SourceToken, "" + this.SuperType + " is not defined with class.");

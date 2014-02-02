@@ -30,8 +30,8 @@ import zen.parser.ZVisitor;
 
 //E.g., $ExprNode instanceof TypeInfo
 public final class ZInstanceOfNode extends ZBinaryNode {
-	public ZInstanceOfNode(ZToken Token, ZNode Left, ZSyntaxPattern Pattern) {
-		super(Token, Left, Pattern);
+	public ZInstanceOfNode(ZNode ParentNode, ZToken Token, ZNode Left, ZSyntaxPattern Pattern) {
+		super(ParentNode, Token, Left, Pattern);
 	}
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitInstanceOfNode(this);

@@ -47,8 +47,8 @@ public class ZFunctionNode extends ZNode {
 	@Field public String GlobalName = null;
 	@Field public int VarIndex = 0;
 
-	public ZFunctionNode(ZNameSpace NameSpace) {
-		super();
+	public ZFunctionNode(ZNode ParentNode, ZNameSpace NameSpace) {
+		super(ParentNode, null);
 		this.NameSpace = NameSpace;
 	}
 

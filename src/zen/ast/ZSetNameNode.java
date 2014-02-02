@@ -34,8 +34,8 @@ public class ZSetNameNode extends ZNode {
 	@Field public String   VarName;
 	@Field public ZNode	 ValueNode;
 	@Field public int VarIndex = 0;
-	public ZSetNameNode(ZToken Token, String VarName, ZNode ValueNode) {
-		super();
+	public ZSetNameNode(ZNode ParentNode, ZToken Token, String VarName, ZNode ValueNode) {
+		super(ParentNode, Token);
 		this.VarName = VarName;
 		this.ValueNode = this.SetChild(ValueNode);
 	}

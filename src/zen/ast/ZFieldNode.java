@@ -33,8 +33,8 @@ public final class ZFieldNode extends ZNode {
 	@Field public ZType  DeclType = ZType.VarType;
 	@Field public String FieldName = null;
 	@Field public ZNode  InitNode = null;
-	public ZFieldNode(ZType ClassType) {
-		super();
+	public ZFieldNode(ZNode ParentNode, ZType ClassType) {
+		super(ParentNode, null);
 		this.ClassType = ClassType;
 	}
 
@@ -53,7 +53,7 @@ public final class ZFieldNode extends ZNode {
 
 	public ZNode CheckFieldType() {
 		if(this.DeclType.IsVarType()) {
-			return new ZErrorNode(this.SourceToken, "field " + this.FieldName + " is ambigious");
+			return new ZErrorNode(this, "field " + this.FieldName + " is ambigious");
 		}
 		return null;
 	}

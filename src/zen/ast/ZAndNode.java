@@ -30,8 +30,8 @@ import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 
 public final class ZAndNode extends ZBinaryNode {
-	public ZAndNode(ZToken Token, ZNode Left, ZSyntaxPattern Pattern) {
-		super(Token, Left, Pattern);
+	public ZAndNode(ZNode ParentNode, ZToken Token, ZNode Left, ZSyntaxPattern Pattern) {
+		super(ParentNode, Token, Left, Pattern);
 	}
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitAndNode(this);

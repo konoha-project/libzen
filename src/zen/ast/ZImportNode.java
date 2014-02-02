@@ -8,8 +8,8 @@ public class ZImportNode extends ZNode {
 	@Field public ZNameSpace NameSpace;
 	@Field public String ResourcePath = null;
 	@Field public String Alias = null;
-	public ZImportNode(ZNameSpace NameSpace) {
-		super();
+	public ZImportNode(ZNode ParentNode, ZNameSpace NameSpace) {
+		super(ParentNode, null);
 		this.NameSpace = NameSpace.GetRootNameSpace();
 	}
 	@Override public void Append(ZNode Node) {

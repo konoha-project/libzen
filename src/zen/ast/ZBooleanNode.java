@@ -32,8 +32,8 @@ import zen.type.ZType;
 
 public final class ZBooleanNode extends ZConstNode {
 	@Field @Init public boolean	BooleanValue;
-	public ZBooleanNode(ZToken Token, boolean Value) {
-		super(Token);
+	public ZBooleanNode(ZNode ParentNode, ZToken Token, boolean Value) {
+		super(ParentNode, Token);
 		this.Type = ZType.BooleanType;
 		this.BooleanValue = Value;
 	}

@@ -12,7 +12,7 @@ T ::=   void
         T[]
         Map<T>
         Func<T,T,..>  // 関数型、最初が返り値の型
-	class
+	class T
 
 any 型は、zen 1.1 から 
 
@@ -197,6 +197,12 @@ $EXPR.MethodName(...)
 
 (T) $EXPR  // キャスト
 $EXPR instanceof T   // インスタンス判定
+
+a <: T
+$EXPR : T  // Type Assertion
+(T)$EXPR  // Type Conversion
+
+if($EXPR) then $EXPR else $EXPR;
 
 オブジェクト生成
 ----------------

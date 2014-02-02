@@ -31,8 +31,8 @@ public final class ZCatchNode extends ZNode {
 	@Field public ZType   ExceptionType = ZType.VarType;
 	@Field public String  ExceptionName = null;
 	@Field public ZNode	BodyNode = null;;
-	public ZCatchNode() {
-		super();
+	public ZCatchNode(ZNode ParentNode) {
+		super(ParentNode, null);
 	}
 	@Override public void Append(ZNode Node) {
 		if(Node instanceof ZTypeNode) {

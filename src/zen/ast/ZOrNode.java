@@ -29,8 +29,8 @@ import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 
 public final class ZOrNode extends ZBinaryNode {
-	public ZOrNode(ZToken Token, ZNode Left, ZSyntaxPattern Pattern) {
-		super(Token, Left, Pattern);
+	public ZOrNode(ZNode ParentNode, ZToken Token, ZNode Left, ZSyntaxPattern Pattern) {
+		super(ParentNode, Token, Left, Pattern);
 	}
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitOrNode(this);

@@ -28,8 +28,8 @@ import zen.parser.ZToken;
 import zen.type.ZType;
 
 public final class ZTypeNode extends ZConstNode {
-	public ZTypeNode(ZToken SourceToken, ZType ParsedType) {
-		super(SourceToken);
+	public ZTypeNode(ZNode ParentNode, ZToken SourceToken, ZType ParsedType) {
+		super(ParentNode, SourceToken);
 		this.Type = ParsedType;
 	}
 	@Override public final Object GetValue() {

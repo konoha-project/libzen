@@ -6,8 +6,8 @@ public class ZMapEntryNode extends ZNode {
 	@Field public String  Name = null;
 	@Field public ZNode KeyNode = null;
 	@Field public ZNode ValueNode = null;
-	public ZMapEntryNode() {
-		super(); // TODO
+	public ZMapEntryNode(ZNode ParentNode) {
+		super(ParentNode, null);
 	}
 
 	@Override public String GetVisitName() {

@@ -29,8 +29,8 @@ import zen.parser.ZVisitor;
 
 public final class ZGroupNode extends ZNode {
 	@Field public ZNode	RecvNode = null;
-	public ZGroupNode() {
-		super();
+	public ZGroupNode(ZNode ParentNode) {
+		super(ParentNode, null);
 	}
 	@Override public void Append(ZNode Node) {
 		this.RecvNode = this.SetChild(Node);

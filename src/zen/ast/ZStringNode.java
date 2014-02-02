@@ -31,8 +31,8 @@ import zen.type.ZType;
 
 public final class ZStringNode extends ZConstNode {
 	@Field public String	StringValue;
-	public ZStringNode(ZToken Token, String Value) {
-		super(Token);
+	public ZStringNode(ZNode ParentNode, ZToken Token, String Value) {
+		super(ParentNode, Token);
 		this.Type = ZType.StringType;
 		this.StringValue = Value;
 	}

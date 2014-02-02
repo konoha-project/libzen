@@ -31,9 +31,8 @@ import zen.parser.ZVisitor;
 public final class ZGetterNode extends ZNode {
 	@Field public ZNode RecvNode;
 	@Field public String  FieldName;
-	public ZGetterNode(ZToken SourceToken, ZNode RecvNode, String FieldName) {
-		super();
-		this.SourceToken = SourceToken;
+	public ZGetterNode(ZNode ParentNode, ZToken SourceToken, ZNode RecvNode, String FieldName) {
+		super(ParentNode, SourceToken);
 		this.FieldName = FieldName;
 		this.RecvNode = this.SetChild(RecvNode);
 	}

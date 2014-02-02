@@ -32,8 +32,8 @@ import zen.parser.ZVisitor;
 public final class ZGetIndexNode extends ZNode {
 	@Field @Init public ZNode  RecvNode;
 	@Field public ZNode  IndexNode = null;
-	public ZGetIndexNode(ZNode RecvNode) {
-		super();
+	public ZGetIndexNode(ZNode ParentNode, ZNode RecvNode) {
+		super(ParentNode, null);
 		this.RecvNode = this.SetChild(RecvNode);
 	}
 	@Override public void Append(ZNode Node) {

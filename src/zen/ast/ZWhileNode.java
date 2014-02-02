@@ -31,7 +31,8 @@ import zen.parser.ZVisitor;
 public final class ZWhileNode extends ZNode {
 	@Field public ZNode	CondNode = null;
 	@Field public ZNode	BodyNode = null;
-	public ZWhileNode() {
+	public ZWhileNode(ZNode ParentNode) {
+		super(ParentNode, null);
 	}
 	@Override public final void Append(ZNode Node) {
 		this.SetChild(Node);

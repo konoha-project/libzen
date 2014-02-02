@@ -31,8 +31,8 @@ import zen.type.ZType;
 
 public final class ZIntNode extends ZConstNode {
 	@Field public long	IntValue;
-	public ZIntNode(ZToken Token, long Value) {
-		super(Token);
+	public ZIntNode(ZNode ParentNode, ZToken Token, long Value) {
+		super(ParentNode, Token);
 		this.Type = ZType.IntType;
 		this.IntValue = Value;
 	}

@@ -33,10 +33,9 @@ public class ZSymbolNode extends ZNode {
 	@Field public String  GivenName;
 	@Field public String  ReferenceName;
 
-	public ZSymbolNode(ZType Type, ZToken SourceToken, String GivenName, String ResourceName) {
-		super();
+	public ZSymbolNode(ZNode ParentNode, ZToken SourceToken, ZType Type, String GivenName, String ResourceName) {
+		super(ParentNode, SourceToken);
 		this.Type = Type;
-		this.SourceToken = SourceToken;
 		this.GivenName = GivenName;
 		this.ReferenceName = ResourceName;
 	}

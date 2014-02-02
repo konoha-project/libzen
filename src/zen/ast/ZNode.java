@@ -33,9 +33,14 @@ import zen.parser.ZVisitor;
 import zen.type.ZType;
 
 public abstract class ZNode {
-	@Field public ZNode	ParentNode = null;
+	@Field public ZNode	 ParentNode;
+	@Field public ZToken SourceToken;
 	@Field public ZType	Type = ZType.VarType;
-	@Field public ZToken	SourceToken = null;
+
+	public ZNode(ZNode ParentNode, ZToken SourceToken) {
+		this.ParentNode = ParentNode;
+		this.SourceToken = SourceToken;
+	}
 
 	public final ZNode SetChild(ZNode Node) {
 		assert(Node != null);

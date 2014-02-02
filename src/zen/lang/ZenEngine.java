@@ -365,18 +365,18 @@ public class ZenEngine extends ZVisitor {
 
 	public final Object Eval(String ScriptText, long FileLine, boolean IsInteractive) {
 		@Var Object ResultValue = ZEmptyValue.DefaultValue;
-		//ZenLogger.VerboseLog(ZenLogger.VerboseEval, "eval: " + ScriptText);
+		@Var ZBlockNode TopBlockNode = new ZBlockNode(null, this.Generator.RootNameSpace);
 		@Var ZTokenContext TokenContext = new ZTokenContext(this.Generator.RootNameSpace, ScriptText, FileLine);
 		TokenContext.SkipEmptyStatement();
 		while(TokenContext.HasNext()) {
 			TokenContext.SetParseFlag(0); // init
-			@Var ZNode TopLevelNode = TokenContext.ParsePattern(this.Generator.RootNameSpace, "$Statement$", ZTokenContext.Required2);
-			//System.out.println("interprinting .." + TopLevelNode.getClass().getSimpleName());
-			ResultValue = this.Exec(TopLevelNode, IsInteractive);
-			if(TopLevelNode.IsErrorNode() && TokenContext.HasNext()) {
+			TopBlockNode.StmtList.clear();
+			@Var ZNode ParsedNode = TokenContext.ParsePattern(TopBlockNode, "$Statement$", ZTokenContext.Required2);
+			ResultValue = this.Exec(ParsedNode, IsInteractive);
+			if(ParsedNode.IsErrorNode() && TokenContext.HasNext()) {
 				@Var ZToken Token = TokenContext.GetToken();
 				this.Generator.Logger.ReportInfo(Token, "stopped script at this line");
-				return TopLevelNode;
+				return ZEmptyValue.DefaultValue;
 			}
 			TokenContext.SkipEmptyStatement();
 			TokenContext.Vacume();

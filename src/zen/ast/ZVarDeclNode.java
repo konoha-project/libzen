@@ -39,8 +39,8 @@ public final class ZVarDeclNode extends ZBlockNode {
 	@Field public String  NativeName = null;
 	@Field public ZNode	InitNode = null;
 
-	public ZVarDeclNode(ZNameSpace NameSpace) {
-		super(null, NameSpace);
+	public ZVarDeclNode(ZNode ParentNode, ZNameSpace NameSpace) {
+		super(ParentNode, null, NameSpace);
 	}
 	@Override public void Append(ZNode Node) {
 		if(Node instanceof ZTypeNode) {

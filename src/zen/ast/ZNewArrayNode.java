@@ -33,8 +33,8 @@ import zen.type.ZType;
 //E.g., new T "[" 10, [10] "]"
 public final class ZNewArrayNode extends ZNode {
 	@Field public ArrayList<ZNode>	NodeList = new ArrayList<ZNode>();
-	public ZNewArrayNode(ZType Type, ZToken Token) {
-		super();
+	public ZNewArrayNode(ZNode ParentNode, ZType Type, ZToken Token) {
+		super(ParentNode, null);
 	}
 	//	@Override public ArrayList<ZenNode> GetList() {
 	//		return this.NodeList;

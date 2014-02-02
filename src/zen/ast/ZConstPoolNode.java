@@ -30,8 +30,8 @@ import zen.parser.ZVisitor;
 
 public final class ZConstPoolNode extends ZConstNode {
 	@Field public Object	ConstValue;
-	public ZConstPoolNode(ZToken Token, Object ConstValue) {
-		super(Token);
+	public ZConstPoolNode(ZNode ParentNode, ZToken Token, Object ConstValue) {
+		super(ParentNode, Token);
 		this.ConstValue = ConstValue;
 	}
 	@Override public void Accept(ZVisitor Visitor) {

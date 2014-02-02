@@ -31,8 +31,8 @@ import zen.type.ZType;
 
 public final class ZFloatNode extends ZConstNode {
 	@Field public double	FloatValue;
-	public ZFloatNode(ZToken Token, double Value) {
-		super(Token);
+	public ZFloatNode(ZNode ParentNode, ZToken Token, double Value) {
+		super(ParentNode, Token);
 		this.Type = ZType.FloatType;
 		this.FloatValue = Value;
 	}

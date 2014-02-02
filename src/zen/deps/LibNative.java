@@ -163,9 +163,9 @@ public class LibNative {
 		return (Long) TokenFunc.Invoke(Argvs);
 	}
 
-	public final static ZNode ApplyMatchFunc(ZFunc MatchFunc, ZNameSpace NameSpace, ZTokenContext TokenContext, ZNode LeftNode) {
+	public final static ZNode ApplyMatchFunc(ZFunc MatchFunc, ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
 		Object[] Argvs = new Object[3];
-		Argvs[0] = NameSpace;
+		Argvs[0] = ParentNode;
 		Argvs[1] = TokenContext;
 		Argvs[2] = LeftNode;
 		return (ZNode) MatchFunc.Invoke(Argvs);

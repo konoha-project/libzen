@@ -27,8 +27,8 @@ package zen.ast;
 import zen.parser.ZToken;
 
 abstract public class ZConstNode extends ZNode {
-	protected ZConstNode(ZToken Token) {
-		this.SourceToken = Token;
+	protected ZConstNode(ZNode ParentNode, ZToken SourceToken) {
+		super(ParentNode, SourceToken);
 	}
 	public abstract Object GetValue();
 

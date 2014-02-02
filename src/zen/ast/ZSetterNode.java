@@ -32,9 +32,8 @@ public final class ZSetterNode extends ZNode {
 	@Field public ZNode  RecvNode;
 	@Field public String  FieldName;
 	@Field public ZNode  ValueNode = null;
-	public ZSetterNode(ZToken SourceToken, ZNode RecvNode, String FieldName) {
-		super();
-		this.SourceToken = SourceToken;
+	public ZSetterNode(ZNode ParentNode, ZToken SourceToken, ZNode RecvNode, String FieldName) {
+		super(ParentNode, SourceToken);
 		this.FieldName = FieldName;
 		this.RecvNode  = this.SetChild(RecvNode);
 	}

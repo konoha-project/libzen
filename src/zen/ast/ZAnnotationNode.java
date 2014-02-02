@@ -33,10 +33,9 @@ public final class ZAnnotationNode extends ZNode {
 	@Field @Init public ZenMap<Object> Annotation;
 	@Field public ZNode AnnotatedNode = null;
 
-	public ZAnnotationNode(ZToken Token, ZenMap<Object> Anno) {
-		this.SourceToken = Token;
+	public ZAnnotationNode(ZNode ParentNode, ZToken Token, ZenMap<Object> Anno) {
+		super(ParentNode, Token);
 		this.Annotation = Anno;
-		this.AnnotatedNode = null;
 	}
 
 	@Override public void Append(ZNode Node) {

@@ -30,10 +30,9 @@ import zen.type.ZType;
 
 public class ZParamNode extends ZNode {
 	@Field public String  Name;
-	public ZParamNode(ZType Type, ZToken SourceToken, String Name) {
-		super(); // TODO
+	public ZParamNode(ZNode ParentNode, ZToken SourceToken, ZType Type, String Name) {
+		super(ParentNode, SourceToken);
 		this.Type = Type;
-		this.SourceToken = SourceToken;
 		this.Name = Name;
 	}
 

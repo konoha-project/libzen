@@ -27,6 +27,7 @@ package zen.ast;
 import java.util.ArrayList;
 
 import zen.deps.Field;
+import zen.parser.ZToken;
 import zen.type.ZFuncType;
 import zen.type.ZType;
 
@@ -34,8 +35,8 @@ abstract class ZApplyNode extends ZNode {
 	@Field public ArrayList<ZNode>  ParamList = new ArrayList<ZNode>();
 	@Field public String ResolvedFuncName = null;
 	@Field public ZFuncType ResolvedFuncType = null;
-	public ZApplyNode() {
-		super();
+	public ZApplyNode(ZNode ParentNode, ZToken SourceToken) {
+		super(ParentNode, SourceToken);
 	}
 
 	@Override public void Append(ZNode Node) {

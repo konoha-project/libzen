@@ -28,8 +28,8 @@ import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 
 public class ZNotNode extends ZUnaryNode {
-	public ZNotNode(ZToken Token) {
-		super(Token);
+	public ZNotNode(ZNode ParentNode, ZToken Token) {
+		super(ParentNode, Token);
 	}
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitNotNode(this);

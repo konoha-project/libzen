@@ -27,7 +27,6 @@ package zen.ast;
 import zen.deps.Field;
 import zen.deps.Init;
 import zen.deps.Var;
-import zen.parser.ZNameSpace;
 import zen.parser.ZSyntaxPattern;
 import zen.parser.ZToken;
 import zen.parser.ZTokenContext;
@@ -37,9 +36,8 @@ public class ZBinaryNode extends ZNode {
 	@Field @Init public ZNode  LeftNode;
 	@Field public ZNode	 RightNode = null;
 	@Field @Init public ZSyntaxPattern Pattern;
-	public ZBinaryNode(ZToken SourceToken, ZNode Left, ZSyntaxPattern Pattern) {
-		super();
-		this.SourceToken = SourceToken;
+	public ZBinaryNode(ZNode ParentNode, ZToken SourceToken, ZNode Left, ZSyntaxPattern Pattern) {
+		super(ParentNode, SourceToken);
 		this.LeftNode  = this.SetChild(Left);
 		assert(Pattern != null);
 		this.Pattern = Pattern;
@@ -56,11 +54,11 @@ public class ZBinaryNode extends ZNode {
 		return false;
 	}
 
-	private final ZNode RightJoin(ZNameSpace NameSpace, ZBinaryNode RightNode) {
+	private final ZNode RightJoin(ZNode ParentNode, ZBinaryNode RightNode) {
 		@Var ZNode RightLeftNode = RightNode.LeftNode;
 		//		if(RightLeftNode instanceof ZenBinaryNode && this.Pattern.IsRightJoin(((ZenBinaryNode)RightLeftNode).Pattern)) {
 		if(this.IsRightJoin(RightLeftNode)) {
-			RightNode.LeftNode = this.RightJoin(NameSpace, (ZBinaryNode) RightLeftNode);
+			RightNode.LeftNode = this.RightJoin(ParentNode, (ZBinaryNode) RightLeftNode);
 		}
 		else {
 			RightNode.LeftNode = RightNode.SetChild(this);
@@ -69,13 +67,13 @@ public class ZBinaryNode extends ZNode {
 		return RightNode;
 	}
 
-	public final ZNode AppendParsedRightNode(ZNameSpace NameSpace, ZTokenContext TokenContext) {
-		@Var ZNode RightNode = TokenContext.ParsePattern(NameSpace, "$Expression$", ZTokenContext.Required2);
+	public final ZNode AppendParsedRightNode(ZNode ParentNode, ZTokenContext TokenContext) {
+		@Var ZNode RightNode = TokenContext.ParsePattern(ParentNode, "$Expression$", ZTokenContext.Required2);
 		if(RightNode.IsErrorNode()) {
 			return RightNode;
 		}
 		if(this.IsRightJoin(RightNode)) {
-			return this.RightJoin(NameSpace, (ZBinaryNode) RightNode);
+			return this.RightJoin(ParentNode, (ZBinaryNode) RightNode);
 		}
 		// LeftJoin
 		this.Append(RightNode);

@@ -30,8 +30,8 @@ import zen.parser.ZVisitor;
 //E.g., $FuncNode "(" $Param[0], $Param[1], ... ")"
 public final class ZFuncCallNode extends ZApplyNode {
 	@Field public ZNode	FuncNode;
-	public ZFuncCallNode(ZNode FuncNode) {
-		super();
+	public ZFuncCallNode(ZNode ParentNode, ZNode FuncNode) {
+		super(ParentNode, null);
 		this.FuncNode = this.SetChild(FuncNode);
 	}
 	@Override public void Accept(ZVisitor Visitor) {

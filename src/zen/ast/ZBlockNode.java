@@ -35,8 +35,8 @@ import zen.parser.ZVisitor;
 public class ZBlockNode extends ZNode {
 	@Field public ArrayList<ZNode> StmtList = new ArrayList<ZNode>();
 	@Field @Init public ZNameSpace NameSpace;
-	public ZBlockNode(ZToken SourceToken, ZNameSpace NameSpace) {
-		this.SourceToken = SourceToken;
+	public ZBlockNode(ZNode ParentNode, ZToken SourceToken, ZNameSpace NameSpace) {
+		super(ParentNode, SourceToken);
 		this.NameSpace = NameSpace;
 	}
 	@Override public void Append(ZNode Node) {

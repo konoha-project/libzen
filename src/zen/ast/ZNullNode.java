@@ -28,8 +28,8 @@ import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 
 public final class ZNullNode extends ZConstNode {
-	public ZNullNode(ZToken SourceToken) {
-		super(SourceToken); 
+	public ZNullNode(ZNode ParentNode, ZToken SourceToken) {
+		super(ParentNode, SourceToken);
 	}
 	@Override public final Object GetValue() {
 		return null;

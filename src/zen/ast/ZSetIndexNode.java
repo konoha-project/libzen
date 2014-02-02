@@ -33,7 +33,7 @@ public final class ZSetIndexNode extends ZNode {
 	@Field public ZNode  IndexNode;
 	@Field public ZNode  ValueNode = null;
 	public ZSetIndexNode(ZGetIndexNode Node) {
-		super();
+		super(Node.ParentNode, Node.SourceToken);
 		this.Type = Node.Type;
 		this.SourceToken = Node.SourceToken;
 		this.RecvNode  = this.SetChild(Node.RecvNode);

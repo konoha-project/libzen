@@ -34,8 +34,8 @@ import zen.type.ZType;
 public final class ZMethodCallNode extends ZApplyNode {
 	@Field public ZNode RecvNode;
 	@Field public String MethodName;
-	public ZMethodCallNode(ZToken SourceToken, ZNode RecvNode, String MethodName) {
-		super(); this.SourceToken = SourceToken;
+	public ZMethodCallNode(ZNode ParentNode, ZToken SourceToken, ZNode RecvNode, String MethodName) {
+		super(ParentNode, SourceToken);
 		this.RecvNode = this.SetChild(RecvNode);
 		this.MethodName = MethodName;
 	}
@@ -43,7 +43,6 @@ public final class ZMethodCallNode extends ZApplyNode {
 		Visitor.VisitMethodCallNode(this);
 	}
 	public ZType[] GetParamType() {
-
 		return null;
 	}
 
