@@ -99,7 +99,7 @@ public class ZenClassType extends ZType {
 			}
 			i = i + 1;
 		}
-		this.FieldList.add(new ZenField(FieldName, FieldType, SourceToken));
+		this.FieldList.add(new ZenField(this, FieldName, FieldType, SourceToken));
 		return null;
 	}
 

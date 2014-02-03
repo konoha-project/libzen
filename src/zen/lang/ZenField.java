@@ -30,12 +30,14 @@ import zen.type.ZType;
 
 public class ZenField {
 	@Field public int        FieldFlag = 0;
-	@Field public ZType	 FieldType = null;
+	@Field public ZenClassType ClassType = null;
+	@Field public ZType	     FieldType = null;
 	@Field public String	 FieldName = null;
 	@Field public int        FieldNativeIndex = 0;
 	@Field public ZToken   SourceToken = null;
 
-	public ZenField(String FieldName, ZType FieldType, ZToken SourceToken) {
+	public ZenField(ZenClassType ClassType, String FieldName, ZType FieldType, ZToken SourceToken) {
+		this.ClassType = ClassType;
 		this.FieldType = FieldType;
 		this.FieldName = FieldName;
 		this.SourceToken = SourceToken;

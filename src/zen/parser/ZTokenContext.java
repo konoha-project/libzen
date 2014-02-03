@@ -26,6 +26,7 @@
 package zen.parser;
 import java.util.ArrayList;
 
+import zen.ast.ZEmptyNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZNode;
 import zen.ast.ZTypeNode;
@@ -63,8 +64,13 @@ public final class ZTokenContext {
 		this.AppendParsedToken(Text, ZParserConst.SourceTokenFlag, null);
 	}
 
-	public void SetParseFlag(boolean AllowSkipIndent) {
+	public boolean SetParseFlag(boolean AllowSkipIndent) {
+		boolean OldFlag = this.IsAllowSkipIndent;
+		//		if(this.IsAllowSkipIndent != AllowSkipIndent) {
+		//			LibNative.Debug("switching " + this.IsAllowSkipIndent + " => " + AllowSkipIndent);
+		//		}
 		this.IsAllowSkipIndent = AllowSkipIndent;
+		return OldFlag;
 	}
 
 	public ZToken AppendParsedToken(String Text, int TokenFlag, String PatternName) {
@@ -194,7 +200,9 @@ public final class ZTokenContext {
 					break;
 				}
 			}
+			//			System.out.println("this.IsAllowSkipIndent=" + this.IsAllowSkipIndent);
 			if(this.IsAllowSkipIndent && Token.IsIndent()) {
+				//				System.out.println("skip indent .. '" + Token + "'");
 				this.CurrentPosition = this.CurrentPosition + 1;
 				continue;
 			}
@@ -327,11 +335,11 @@ public final class ZTokenContext {
 
 	public final ZNode ApplyMatchPattern(ZNode ParentNode, ZNode LeftNode, ZSyntaxPattern Pattern, boolean IsRequired) {
 		@Var int RollbackPosition = this.CurrentPosition;
-		@Var boolean Remembered = this.IsAllowSkipIndent;
 		@Var ZSyntaxPattern CurrentPattern = Pattern;
 		@Var ZToken TopToken = this.GetToken();
 		@Var ZNode ParsedNode = null;
 		while(CurrentPattern != null) {
+			@Var boolean Remembered = this.IsAllowSkipIndent;
 			this.CurrentPosition = RollbackPosition;
 			this.ApplyingPattern  = CurrentPattern;
 			ParsedNode = LibNative.ApplyMatchFunc(CurrentPattern.MatchFunc, ParentNode, this, LeftNode);
@@ -365,45 +373,79 @@ public final class ZTokenContext {
 
 	public ZNode AppendMatchedPattern(ZNode ParentNode, String PatternName, boolean IsRequired, boolean AllowSkipIndent) {
 		if(!ParentNode.IsErrorNode()) {
-			@Var boolean Rememberd = this.IsAllowSkipIndent;
-			if(AllowSkipIndent) {
-				this.IsAllowSkipIndent = true;
-			}
+			@Var boolean Rememberd = this.SetParseFlag(AllowSkipIndent);
 			@Var ZNode ParsedNode = this.ParsePattern(ParentNode, PatternName, IsRequired);
-			this.IsAllowSkipIndent = Rememberd;
+			this.SetParseFlag(Rememberd);
 			if(ParsedNode != null) {
 				if(ParsedNode.IsErrorNode()) {
 					return ParsedNode;
 				}
-				ParentNode.Append(ParsedNode);
+				if(!(ParsedNode instanceof ZEmptyNode)) {
+					ParentNode.Append(ParsedNode);
+				}
 			}
 		}
 		return ParentNode;
 	}
 
 	public ZNode AppendMatchedPattern(ZNode ParentNode, String PatternName, boolean IsRequired) {
-		return this.AppendMatchedPattern(ParentNode, PatternName, IsRequired, true);
+		return this.AppendMatchedPattern(ParentNode, PatternName, IsRequired, false);
 	}
 
 	public ZNode AppendMatchedPatternNtimes(ZNode ParentNode, String PatternName, String DelimToken, boolean AllowSkipIndent) {
-		@Var boolean Rememberd = this.IsAllowSkipIndent;
+		@Var boolean Rememberd = this.SetParseFlag(AllowSkipIndent);
 		while(!ParentNode.IsErrorNode()) {
-			if(AllowSkipIndent) {
-				this.IsAllowSkipIndent = true;
-			}
+			//this.IsAllowSkipIndent = AllowSkipIndent;
 			@Var ZNode ParsedNode = this.ParsePattern(ParentNode, PatternName, ZTokenContext.Optional2);
 			if(ParsedNode == null) {
 				break;
 			}
 			ParentNode.Append(ParsedNode);
-			if(AllowSkipIndent) {
-				this.IsAllowSkipIndent = true;
-			}
-			if(!this.MatchToken(DelimToken)) {
-				break;
+			if(DelimToken != null) {
+				//this.IsAllowSkipIndent = AllowSkipIndent;
+				if(!this.MatchToken(DelimToken)) {
+					break;
+				}
 			}
 		}
-		this.IsAllowSkipIndent = Rememberd;
+		this.SetParseFlag(Rememberd);
+		return ParentNode;
+	}
+
+	public ZNode AppendMatchedPatternNtimes(ZNode ParentNode, String StartToken, String PatternName, String DelimToken, String StopToken) {
+		@Var boolean Rememberd = this.SetParseFlag(true);
+		@Var boolean IsRequired =   ZTokenContext.Optional2;
+		if(StartToken != null) {
+			ParentNode = this.MatchNodeToken(ParentNode, StartToken, ZTokenContext.Required2);
+		}
+		while(!ParentNode.IsErrorNode()) {
+			if(StopToken != null) {
+				@Var ZToken Token = this.GetToken();
+				if(Token.EqualsText(StopToken)) {
+					break;
+				}
+				IsRequired = ZTokenContext.Required2;
+			}
+			@Var ZNode ParsedNode = this.ParsePattern(ParentNode, PatternName, IsRequired);
+			if(ParsedNode == null) {
+				break;
+			}
+			if(ParsedNode.IsErrorNode()) {
+				return ParsedNode;
+			}
+			if(!(ParsedNode instanceof ZEmptyNode)) {
+				ParentNode.Append(ParsedNode);
+			}
+			if(DelimToken != null) {
+				if(!this.MatchToken(DelimToken)) {
+					break;
+				}
+			}
+		}
+		if(StopToken != null) {
+			ParentNode = this.MatchNodeToken(ParentNode, StopToken, ZTokenContext.Required2);
+		}
+		this.SetParseFlag(Rememberd);
 		return ParentNode;
 	}
 
@@ -487,6 +529,10 @@ public final class ZTokenContext {
 			LibZen.DebugP(DumpedToken);
 			//			ZenLogger.VerboseLog(ZenLogger.VerboseToken,  DumpedToken);
 		}
+	}
+
+	public final void MoveNext() {
+		this.CurrentPosition = this.CurrentPosition + 1;
 	}
 
 

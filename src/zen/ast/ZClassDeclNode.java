@@ -34,7 +34,7 @@ import zen.type.ZType;
 
 public final class ZClassDeclNode extends ZNode {
 	@Field public String ClassName = null;
-	@Field public ZType ClassType = null;
+	@Field public ZenClassType ClassType = null;
 	@Field public ZType SuperType = null;
 	@Field public ArrayList<ZFieldNode>  FieldList = new ArrayList<ZFieldNode>();
 	public ZClassDeclNode(ZNode ParentNode) {
@@ -51,8 +51,6 @@ public final class ZClassDeclNode extends ZNode {
 		else if(this.ClassName == null) {
 			this.ClassName = Node.SourceToken.ParsedText;
 			this.SourceToken = Node.SourceToken;
-			//			@Var ZTypeNode TypeNode = this.NameSpace.GetTypeNode(this.ClassName, this.SourceToken);
-			//			this.ClassType = TypeNode.Type;
 		}
 	}
 	@Override public void Accept(ZVisitor Visitor) {
@@ -74,7 +72,7 @@ public final class ZClassDeclNode extends ZNode {
 				NameSpace.Generator.Logger.ReportWarning(this.SourceToken, "" + this.SuperType + " is not defined with class.");
 				//				return new ZenErrorNode(this.SourceToken, "" + this.SuperType + " is not defined with class.");
 			}
-			((ZenClassType)this.ClassType).ResetSuperType((ZenClassType)this.SuperType);
+			this.ClassType.ResetSuperType((ZenClassType)this.SuperType);
 		}
 		return null;
 	}

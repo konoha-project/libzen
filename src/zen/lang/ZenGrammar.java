@@ -37,6 +37,7 @@ import zen.ast.ZCastNode;
 import zen.ast.ZCatchNode;
 import zen.ast.ZClassDeclNode;
 import zen.ast.ZComparatorNode;
+import zen.ast.ZEmptyNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZFieldNode;
 import zen.ast.ZFloatNode;
@@ -810,15 +811,41 @@ public class ZenGrammar {
 		return new ZErrorNode(ParentNode, Token, Token.ParsedText);
 	}
 
+	public static ZNode MatchEndOfStatement(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
+		@Var boolean ContextAllowance = TokenContext.SetParseFlag(false);
+		@Var ZToken Token = null;
+		if(TokenContext.HasNext()) {
+			Token = TokenContext.GetToken();
+			if(!Token.EqualsText(";") && !Token.IsIndent()) {
+				TokenContext.SetParseFlag(ContextAllowance);
+				return TokenContext.CreateExpectedErrorNode(Token, ";");
+			}
+			TokenContext.MoveNext();
+			while(TokenContext.HasNext()) {
+				Token = TokenContext.GetToken();
+				if(!Token.EqualsText(";") && !Token.IsIndent()) {
+					break;
+				}
+				TokenContext.MoveNext();
+			}
+		}
+		TokenContext.SetParseFlag(ContextAllowance);
+		return new ZEmptyNode(ParentNode, Token);
+	}
+
 	// "var" $Identifier [: $Type$] "=" $Expression$
 	public static ZNode MatchFieldDecl(ZNode ParentNode, ZTokenContext TokenContext, ZNode ClassNode) {
-		@Var ZNode FieldNode = new ZFieldNode(ParentNode, null);
+		@Var boolean Rememberd = TokenContext.SetParseFlag(false);
+		@Var ZNode FieldNode = new ZFieldNode(ParentNode);
 		FieldNode = TokenContext.MatchNodeToken(FieldNode, "field", ZTokenContext.Required2);
 		FieldNode = TokenContext.AppendMatchedPattern(FieldNode, "$Identifier$", ZTokenContext.Required2);
 		FieldNode = TokenContext.AppendMatchedPattern(FieldNode, "$TypeAnnotation$", ZTokenContext.Optional2);
 		if(TokenContext.MatchToken("=")) {
 			FieldNode = TokenContext.AppendMatchedPattern(FieldNode, "$Expression$", ZTokenContext.Required2);
 		}
+		FieldNode = TokenContext.AppendMatchedPattern(FieldNode, ";", ZTokenContext.Required2);
+		//System.out.println("FieldNode: " + FieldNode);
+		TokenContext.SetParseFlag(Rememberd);
 		return FieldNode;
 	}
 
@@ -829,16 +856,20 @@ public class ZenGrammar {
 		if(TokenContext.MatchNewLineToken("extends")) {
 			ClassNode = TokenContext.AppendMatchedPattern(ClassNode, "$Type$", ZTokenContext.Required2);
 		}
-		if(!ClassNode.IsErrorNode() && TokenContext.MatchNewLineToken("{")) {
-			TokenContext.SetParseFlag(ZTokenContext.NotAllowSkipIndent2); // init
-			while(!ClassNode.IsErrorNode() && TokenContext.HasNext()) {
-				TokenContext.SkipEmptyStatement();
-				if(TokenContext.MatchToken("}")) {
-					break;
-				}
-				ClassNode = TokenContext.AppendMatchedPattern(ClassNode, "$FieldDecl$", ZTokenContext.Required2);
-			}
-		}
+		//		ClassNode = TokenContext.MatchNodeToken(ClassNode, "{", ZTokenContext.Required2);
+		//		TokenContext.SkipEmptyStatement();
+		ClassNode = TokenContext.AppendMatchedPatternNtimes(ClassNode, "{", "$FieldDecl$", null, "}");
+		//	ClassNode = TokenContext.MatchNodeToken(ClassNode, "}", ZTokenContext.Required2);
+		//		if(!ClassNode.IsErrorNode() && TokenContext.MatchNewLineToken("{")) {
+		//			TokenContext.SetParseFlag(ZTokenContext.NotAllowSkipIndent2); // init
+		//			while(!ClassNode.IsErrorNode() && TokenContext.HasNext()) {
+		//				TokenContext.SkipEmptyStatement();
+		//				if(TokenContext.MatchToken("}")) {
+		//					break;
+		//				}
+		//				ClassNode = TokenContext.AppendMatchedPattern(ClassNode, "$FieldDecl$", ZTokenContext.Required2);
+		//			}
+		//		}
 		return ClassNode;
 	}
 
@@ -935,6 +966,7 @@ public class ZenGrammar {
 		NameSpace.DefineSyntax("{", LibNative.LoadMatchFunc(Grammar, "MatchMapLiteral"));
 		NameSpace.DefineSyntax("new", LibNative.LoadMatchFunc(Grammar, "MatchNewObject"));
 
+		NameSpace.DefineStatement(";", LibNative.LoadMatchFunc(Grammar, "MatchEndOfStatement"));
 		NameSpace.DefineSyntax("$Block$", LibNative.LoadMatchFunc(Grammar, "MatchBlock"));
 		NameSpace.DefineSyntax("$Annotation$", LibNative.LoadMatchFunc(Grammar, "MatchAnnotation"));
 		NameSpace.DefineSyntax("$Statement$", LibNative.LoadMatchFunc(Grammar, "MatchStatement"));

@@ -26,16 +26,16 @@ package zen.ast;
 
 import zen.deps.Field;
 import zen.deps.Init;
+import zen.lang.ZenClassType;
 import zen.type.ZType;
 
 public final class ZFieldNode extends ZNode {
-	@Field @Init public  ZType  ClassType;
+	@Field @Init public  ZenClassType  ClassType;
 	@Field public ZType  DeclType = ZType.VarType;
 	@Field public String FieldName = null;
 	@Field public ZNode  InitNode = null;
-	public ZFieldNode(ZNode ParentNode, ZType ClassType) {
+	public ZFieldNode(ZNode ParentNode) {
 		super(ParentNode, null);
-		this.ClassType = ClassType;
 	}
 
 	@Override public void Append(ZNode Node) {

@@ -126,7 +126,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 	}
 
 	@Override public void VisitArrayLiteralNode(ZArrayLiteralNode Node) {
-		@Var ZNameSpace NameSpace = Node.GetNameSpace();
+		//		@Var ZNameSpace NameSpace = Node.GetNameSpace();
 		@Var ZType ArrayType = this.GetContextType();
 		@Var ZType ElementType = ZType.VarType;
 		if(ArrayType.IsArrayType()) {
@@ -773,24 +773,47 @@ public class ZenTypeSafer extends ZTypeChecker {
 
 	@Override public void VisitClassDeclNode(ZClassDeclNode Node) {
 		@Var ZNameSpace NameSpace = Node.GetNameSpace();
-		this.Return(Node.CheckClassName(NameSpace));
-		@Var ZenClassType ClassType = (ZenClassType)Node.ClassType;
+		@Var ZType ClassType = NameSpace.GetType(Node.ClassName, Node.SourceToken);
+		if(ClassType instanceof ZenClassType) {
+			if(!ClassType.IsOpenType()) {
+				this.Return(new ZErrorNode(Node, Node.ClassName + " has been defined."));
+				return;
+			}
+			Node.ClassType = (ZenClassType)ClassType;
+		}
+		else {
+			this.Return(new ZErrorNode(Node, Node.ClassName + " is not a Zen class."));
+			return;
+		}
+		if(Node.SuperType != null) {
+			if(Node.SuperType instanceof ZenClassType && !Node.SuperType.IsOpenType()) {
+				Node.ClassType.ResetSuperType((ZenClassType)Node.SuperType);
+			}
+			else {
+				this.Return(new ZErrorNode(Node, "" + Node.SuperType + " cannot be extended."));
+				return;
+			}
+		}
 		@Var int i = 0;
 		while(i < Node.FieldList.size()) {
 			@Var ZFieldNode FieldNode = Node.FieldList.get(i);
+			FieldNode.ClassType = Node.ClassType;
 			if(FieldNode.InitNode == null) {
 				FieldNode.InitNode = ZenGamma.CreateDefaultValueNode(FieldNode, FieldNode.DeclType, FieldNode.FieldName);
 			}
 			FieldNode.InitNode = this.CheckType(FieldNode.InitNode, FieldNode.DeclType);
 			if(FieldNode.DeclType.IsVarType()) {
 				FieldNode.DeclType = FieldNode.InitNode.Type;
-				this.Return(FieldNode.CheckFieldType());
+				if(FieldNode.DeclType.IsVarType()) {
+					this.Return(new ZErrorNode(FieldNode, "type of " + FieldNode.FieldName + " is unspecific"));
+					return;
+				}
 			}
-			ClassType.AppendField(FieldNode.DeclType, FieldNode.FieldName, FieldNode.SourceToken);
+			Node.ClassType.AppendField(FieldNode.DeclType, FieldNode.FieldName, FieldNode.SourceToken);
 			i = i + 1;
 		}
-		ClassType.TypeFlag = ZUtils.UnsetFlag(ClassType.TypeFlag, ZTypeFlag.OpenType);
-		this.Return(ClassType.CheckAllFields(NameSpace));
+		Node.ClassType.TypeFlag = ZUtils.UnsetFlag(Node.ClassType.TypeFlag, ZTypeFlag.OpenType);
+		this.Return(Node.ClassType.CheckAllFields(NameSpace));
 		this.TypedNode(Node, ZType.VoidType);
 	}
 
