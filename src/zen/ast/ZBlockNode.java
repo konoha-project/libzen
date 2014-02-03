@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import zen.deps.Field;
 import zen.deps.Init;
 import zen.parser.ZNameSpace;
-import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 
 public class ZBlockNode extends ZNode {
@@ -40,8 +39,8 @@ public class ZBlockNode extends ZNode {
 		this.NameSpace = NameSpace;
 	}
 
-	public ZBlockNode(ZNode ParentNode, ZToken SourceToken) {
-		super(ParentNode, SourceToken);
+	public ZBlockNode(ZNode ParentNode) {
+		super(ParentNode, null);
 		this.NameSpace = ParentNode.GetNameSpace().CreateSubNameSpace();
 	}
 

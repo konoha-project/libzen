@@ -39,7 +39,7 @@ public final class ZVarDeclNode extends ZBlockNode {
 	@Field public ZNode	InitNode = null;
 
 	public ZVarDeclNode(ZNode ParentNode) {
-		super(ParentNode, null);
+		super(ParentNode);
 	}
 
 	@Override public void Append(ZNode Node) {

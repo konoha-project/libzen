@@ -595,49 +595,46 @@ public class ZenGrammar {
 	}
 
 	public static ZNode MatchStatement(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
-		@Var ZAnnotationNode AnnotationNode = (ZAnnotationNode)TokenContext.ParsePattern(ParentNode, "$Annotation$", ZTokenContext.Optional2);
-		@Var ZNode ParsedNode = ZenGrammar.DispatchPattern(ParentNode, TokenContext, null, true, true);
-		if(!ParsedNode.IsErrorNode() && TokenContext.HasNext()) {
-			ZToken Token = TokenContext.GetToken(); //AndMoveForward();
-			if(!Token.IsDelim() && !Token.IsIndent() && !Token.EqualsText("}")) {
-				/* }  is added because function f(x) { x } is parsed */
-				return TokenContext.CreateExpectedErrorNode(Token, "end of statement");
-			}
-		}
-		if(AnnotationNode != null) {
-			AnnotationNode.Append(ParsedNode);
-			ParsedNode = AnnotationNode;
-		}
-		return ParsedNode;
+		@Var boolean Rememberd = TokenContext.SetParseFlag(ZTokenContext.AllowSkipIndent2);
+		//		@Var ZAnnotationNode AnnotationNode = (ZAnnotationNode)TokenContext.ParsePattern(ParentNode, "$Annotation$", ZTokenContext.Optional2);
+		TokenContext.SetParseFlag(ZTokenContext.NotAllowSkipIndent2);
+		@Var ZNode StmtNode = ZenGrammar.DispatchPattern(ParentNode, TokenContext, null, true, true);
+		StmtNode = TokenContext.AppendMatchedPattern(StmtNode, ";", ZTokenContext.Required2);
+		//		if(AnnotationNode != null) {
+		//			AnnotationNode.Append(StmtNode);
+		//			StmtNode = AnnotationNode;
+		//		}
+		TokenContext.SetParseFlag(Rememberd);
+		return StmtNode;
 	}
 
 	public static ZNode MatchBlock(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
-		if(TokenContext.IsNewLineToken("{")) {
-			TokenContext.SetParseFlag(ZTokenContext.NotAllowSkipIndent2); // init
+		@Var ZNode BlockNode = new ZBlockNode(ParentNode);
+		BlockNode = TokenContext.MatchNodeToken(BlockNode, "{", ZTokenContext.Required2);
+		if(!BlockNode.IsErrorNode()) {
 			@Var ZToken IndentToken = TokenContext.GetCurrentIndentToken();
-			@Var ZBlockNode BlockNode = new ZBlockNode(ParentNode, TokenContext.GetTokenAndMoveForward());
-			@Var ZNode ResultNode = BlockNode;
+			@Var boolean Remembered = TokenContext.SetParseFlag(ZTokenContext.AllowSkipIndent2); // init
+			@Var ZNode NestedBlockNode = BlockNode;
 			while(TokenContext.HasNext()) {
-				TokenContext.SkipEmptyStatement();
 				if(TokenContext.MatchToken("}")) {
 					break;
 				}
-				@Var ZNode ParsedNode = TokenContext.ParsePattern(BlockNode, "$Statement$", ZTokenContext.Required2);
-				BlockNode.Append(ParsedNode);
-				if(ParsedNode.IsErrorNode()) {
+				@Var ZNode StmtNode = TokenContext.AppendMatchedPattern(NestedBlockNode, "$Statement$", ZTokenContext.Required2);
+				if(StmtNode.IsErrorNode()) {
+					NestedBlockNode.Append(StmtNode);
 					TokenContext.SkipUntilIndent(IndentToken);
 					TokenContext.MatchToken("}");
 					break;
 				}
 				/* VarDecl is defined as BlockNode to speficy its scope */
-				if(ParsedNode instanceof ZBlockNode) {
+				if(StmtNode instanceof ZBlockNode) {
 					//System.out.println("nesting scope " + ParsedNode);
-					BlockNode = (ZBlockNode)ParsedNode.GetStatementNode();
+					NestedBlockNode = StmtNode;
 				}
 			}
-			return ResultNode;
+			TokenContext.SetParseFlag(Remembered);
 		}
-		return TokenContext.CreateExpectedErrorNode(TokenContext.GetToken(), "block");
+		return BlockNode;
 	}
 
 
@@ -805,12 +802,6 @@ public class ZenGrammar {
 		return null;
 	}
 
-	public static ZNode MatchError(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
-		// FIXME this method is not suitable with "zen" mind.
-		ZToken Token = TokenContext.GetTokenAndMoveForward();
-		return new ZErrorNode(ParentNode, Token, Token.ParsedText);
-	}
-
 	public static ZNode MatchEndOfStatement(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
 		@Var boolean ContextAllowance = TokenContext.SetParseFlag(false);
 		@Var ZToken Token = null;
@@ -833,6 +824,13 @@ public class ZenGrammar {
 		return new ZEmptyNode(ParentNode, Token);
 	}
 
+	public static ZNode MatchError(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
+		// FIXME this method is not suitable with "zen" mind.
+		ZToken Token = TokenContext.GetTokenAndMoveForward();
+		return new ZErrorNode(ParentNode, Token, Token.ParsedText);
+	}
+
+
 	// "var" $Identifier [: $Type$] "=" $Expression$
 	public static ZNode MatchFieldDecl(ZNode ParentNode, ZTokenContext TokenContext, ZNode ClassNode) {
 		@Var boolean Rememberd = TokenContext.SetParseFlag(false);
@@ -844,7 +842,6 @@ public class ZenGrammar {
 			FieldNode = TokenContext.AppendMatchedPattern(FieldNode, "$Expression$", ZTokenContext.Required2);
 		}
 		FieldNode = TokenContext.AppendMatchedPattern(FieldNode, ";", ZTokenContext.Required2);
-		//System.out.println("FieldNode: " + FieldNode);
 		TokenContext.SetParseFlag(Rememberd);
 		return FieldNode;
 	}
@@ -856,20 +853,7 @@ public class ZenGrammar {
 		if(TokenContext.MatchNewLineToken("extends")) {
 			ClassNode = TokenContext.AppendMatchedPattern(ClassNode, "$Type$", ZTokenContext.Required2);
 		}
-		//		ClassNode = TokenContext.MatchNodeToken(ClassNode, "{", ZTokenContext.Required2);
-		//		TokenContext.SkipEmptyStatement();
 		ClassNode = TokenContext.AppendMatchedPatternNtimes(ClassNode, "{", "$FieldDecl$", null, "}");
-		//	ClassNode = TokenContext.MatchNodeToken(ClassNode, "}", ZTokenContext.Required2);
-		//		if(!ClassNode.IsErrorNode() && TokenContext.MatchNewLineToken("{")) {
-		//			TokenContext.SetParseFlag(ZTokenContext.NotAllowSkipIndent2); // init
-		//			while(!ClassNode.IsErrorNode() && TokenContext.HasNext()) {
-		//				TokenContext.SkipEmptyStatement();
-		//				if(TokenContext.MatchToken("}")) {
-		//					break;
-		//				}
-		//				ClassNode = TokenContext.AppendMatchedPattern(ClassNode, "$FieldDecl$", ZTokenContext.Required2);
-		//			}
-		//		}
 		return ClassNode;
 	}
 
