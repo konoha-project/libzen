@@ -579,9 +579,8 @@ public class AsmGenerator extends JavaSolution {
 			this.CurrentBuilder.visitInsn(RETURN);
 			cb.AddMethod(this.CurrentBuilder);
 			this.CurrentBuilder = this.CurrentBuilder.Parent;
-			Class<?> StaticClass;
 			try {
-				StaticClass = this.ClassLoader.loadClass(ClassName);
+				Class<?> StaticClass = this.ClassLoader.loadClass(ClassName);
 				Node.ValueNode = new StaticFieldNode(null, StaticClass, Node.ValueNode.Type, "_");
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
@@ -644,37 +643,38 @@ public class AsmGenerator extends JavaSolution {
 		}
 		for(@Var int i = 0; i < Node.FieldList.size(); i++) {
 			@Var ZFieldNode Field = Node.FieldList.get(i);
-			if(Field.Type.IsFuncType()) {
-				@Var FieldNode fn = new FieldNode(ACC_PUBLIC|ACC_STATIC, ClassMethodName(Node.ClassType, Field.FieldName), this.GetTypeDesc(Field.DeclType), null, this.GetConstValue(Field.InitNode));
+			if(Field.DeclType.IsFuncType()) {
+				System.out.println("ClassMethodName(Node.ClassType, Field.FieldName)"+ClassMethodName(Node.ClassType, Field.FieldName));
+				@Var FieldNode fn = new FieldNode(ACC_PUBLIC|ACC_STATIC, ClassMethodName(Node.ClassType, Field.FieldName), this.GetTypeDesc(Field.DeclType), null, null);
 				ClassBuilder.AddField(fn);
 			}
 		}
-		//		AsmMethodBuilder constructor = new AsmMethodBuilder(ACC_PUBLIC, "<init>", MethodDesc, "(I)V", this, this.CurrentBuilder);
-		//		constructor.visitVarInsn(ALOAD, 0);
-		//		constructor.visitVarInsn(ILOAD, 1);
-		//		constructor.visitMethodInsn(INVOKESPECIAL, superClassName, "<init>", "(I)V");
-		//		for(@Var int i = 0; i < Node.FieldList.size(); i++) {
-		//			@Var ZFieldNode Field = Node.FieldList.get(i);
-		//			if(Field.ClassType.Equals(Node.ClassType)) {
-		//				this.CurrentBuilder.PushNode(JavaTypeTable.GetJavaClass(Field.Type), Node);
-		//				constructor.visitFieldInsn(PUTFIELD, ClassName, Field.FieldName, desc);
-		//
-		//				@Var FieldNode fn = new FieldNode(ACC_PUBLIC, Field.FieldName, AsmClassLoader.GetTypeDesc(Field.DeclType), null, this.GetConstValue(Field.InitNode));
-		//				ClassBuilder.AddField(fn);
-		//			}
-		//		}
-		//
-		//		for(ZenFieldInfo field : ClassField.FieldList) {
-		//			if(field.FieldIndex >= ClassField.ThisClassIndex && field.InitValue != null) {
-		//				String name = field.NativeName;
-		//				String desc = JLib.GetAsmType(field.Type).getDescriptor();
-		//				constructor.visitVarInsn(ALOAD, 0);
-		//				constructor.visitLdcInsn(field.InitValue);
-		//				constructor.visitFieldInsn(PUTFIELD, ClassName, name, desc);
-		//			}
-		//		}
-		//		constructor.visitInsn(RETURN);
-		//		ClassBuilder.AddMethod(constructor);
+		this.CurrentBuilder = new AsmMethodBuilder(ACC_PUBLIC, "<init>", "(I)V", this, this.CurrentBuilder);
+		this.CurrentBuilder.visitVarInsn(Opcodes.ALOAD, 0);
+		this.CurrentBuilder.visitVarInsn(Opcodes.ILOAD, 1);
+		this.CurrentBuilder.visitMethodInsn(INVOKESPECIAL, Type.getInternalName(this.GetJavaClass(Node.SuperType)), "<init>", "(I)V");
+		for(@Var int i = 0; i < Node.FieldList.size(); i++) {
+			@Var ZFieldNode Field = Node.FieldList.get(i);
+			if(Field.DeclType.IsFuncType()) {
+				String FieldDesc = Type.getDescriptor(this.GetJavaClass(Field.DeclType));
+				this.CurrentBuilder.visitFieldInsn(Opcodes.GETSTATIC, Node.ClassName, ClassMethodName(Node.ClassType, Field.FieldName), FieldDesc);
+				this.CurrentBuilder.visitFieldInsn(Opcodes.PUTFIELD, Type.getInternalName(this.GetJavaClass(Field.ClassType)), Field.FieldName, FieldDesc);
+			}
+			else if(Field.ClassType.Equals(Node.ClassType) && !(Field.InitNode instanceof ZConstNode)) {
+				this.CurrentBuilder.PushNode(this.GetJavaClass(Field.DeclType), Field.InitNode);
+				this.CurrentBuilder.visitFieldInsn(PUTFIELD, Node.ClassName, Field.FieldName, Type.getDescriptor(this.GetJavaClass(Field.DeclType)));
+			}
+		}
+		this.CurrentBuilder.visitInsn(RETURN);
+		ClassBuilder.AddMethod(this.CurrentBuilder);
+		this.CurrentBuilder = this.CurrentBuilder.Parent;
+		try {
+			Class<?> c = this.ClassLoader.loadClass(Node.ClassName);
+			JavaTypeTable.SetTypeTable(Node.ClassType, c);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	@Override public void VisitErrorNode(ZErrorNode Node) {

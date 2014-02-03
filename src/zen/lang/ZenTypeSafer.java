@@ -574,24 +574,21 @@ public class ZenTypeSafer extends ZTypeChecker {
 	}
 
 	@Override public void VisitBlockNode(ZBlockNode Node) {
-		if(this.IsVisitable()) {
-			int i = 0;
-			ZType BlockType = ZType.VoidType;
-			while(i < Node.StmtList.size()) {
-				ZNode SubNode = Node.StmtList.get(i).GetStatementNode();  // without annotation
-				SubNode = this.CheckType(SubNode, ZType.VoidType);
-				Node.StmtList.set(i, SubNode);
-				if(SubNode.IsVarType()) {
-					BlockType = ZType.VarType;
-				}
-				if(SubNode.IsBreakingBlock()) {
-					break;
-				}
-				i = i + 1;
+		@Var int i = 0;
+		ZType BlockType = ZType.VoidType;
+		while(i < Node.StmtList.size()) {
+			ZNode SubNode = Node.StmtList.get(i).GetStatementNode();  // without annotation
+			SubNode = this.CheckType(SubNode, ZType.VoidType);
+			Node.StmtList.set(i, SubNode);
+			if(SubNode.IsVarType()) {
+				BlockType = ZType.VarType;
 			}
-			this.EnableVisitor();
-			this.TypedNode(Node, BlockType);
+			if(SubNode.IsBreakingBlock()) {
+				break;
+			}
+			i = i + 1;
 		}
+		this.TypedNode(Node, BlockType);
 	}
 
 	@Override public void VisitVarDeclNode(ZVarDeclNode Node) {
@@ -779,7 +776,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 		this.Return(Node.CheckClassName(NameSpace));
 		@Var ZenClassType ClassType = (ZenClassType)Node.ClassType;
 		@Var int i = 0;
-		while(this.IsVisitable() && i < Node.FieldList.size()) {
+		while(i < Node.FieldList.size()) {
 			@Var ZFieldNode FieldNode = Node.FieldList.get(i);
 			if(FieldNode.InitNode == null) {
 				FieldNode.InitNode = ZenGamma.CreateDefaultValueNode(FieldNode, FieldNode.DeclType, FieldNode.FieldName);
