@@ -27,9 +27,8 @@ package zen.parser;
 import zen.deps.Field;
 import zen.deps.Init;
 import zen.deps.Var;
-import zen.type.ZType;
 
-public final class ZToken {
+public class ZToken {
 	@Field public final static ZToken NullToken = new ZToken(0, "/**/", 0);
 	@Field @Init public int		    TokenFlag;
 	@Field @Init public String	    ParsedText;
@@ -42,15 +41,11 @@ public final class ZToken {
 		this.FileLine = FileLine;
 	}
 
-	public boolean IsSource() {
+	public final boolean IsSource() {
 		return ZUtils.IsFlag(this.TokenFlag, ZParserConst.SourceTokenFlag);
 	}
 
-	public boolean IsError() {
-		return ZUtils.IsFlag(this.TokenFlag, ZParserConst.ErrorTokenFlag);
-	}
-
-	public boolean IsIndent() {
+	public final boolean IsIndent() {
 		return ZUtils.IsFlag(this.TokenFlag, ZParserConst.IndentTokenFlag);
 	}
 
@@ -58,19 +53,19 @@ public final class ZToken {
 		return ZUtils.IsFlag(this.TokenFlag, ZParserConst.WhiteSpaceTokenFlag);
 	}
 
-	public boolean IsQuoted() {
+	public final boolean IsQuoted() {
 		return ZUtils.IsFlag(this.TokenFlag, ZParserConst.QuotedTokenFlag);
 	}
 
-	public boolean IsNameSymbol() {
+	public final boolean IsNameSymbol() {
 		return ZUtils.IsFlag(this.TokenFlag, ZParserConst.NameSymbolTokenFlag);
 	}
 
-	public boolean EqualsText(String text) {
+	public final boolean EqualsText(String text) {
 		return this.ParsedText.equals(text);
 	}
 
-	public int CompareIndent(ZToken IndentToken) {
+	public final int CompareIndent(ZToken IndentToken) {
 		if(IndentToken == null) {
 			if(this.EqualsText("")) {
 				return 0;
@@ -93,17 +88,21 @@ public final class ZToken {
 		return TokenText + this.ParsedText;
 	}
 
-	public void SetError(ZSyntaxPattern ErrorPattern) {
-		if(this.ParsedText.length() > 0) {  // skip null token
-			this.TokenFlag = ZParserConst.ErrorTokenFlag;
-			this.PresetPattern = ErrorPattern;
-		}
-	}
+	//	public final boolean IsError() {
+	//		return ZUtils.IsFlag(this.TokenFlag, ZParserConst.ErrorTokenFlag);
+	//	}
 
-	public final ZToken AddTypeInfoToErrorMessage(ZType ClassType) {
-		this.ParsedText = this.ParsedText + " of " + ClassType.ShortName;
-		return this;
-	}
+	//	public void SetError(ZSyntaxPattern ErrorPattern) {
+	//		if(this.ParsedText.length() > 0) {  // skip null token
+	//			this.TokenFlag = ZParserConst.ErrorTokenFlag;
+	//			this.PresetPattern = ErrorPattern;
+	//		}
+	//	}
+	//
+	//	public final ZToken AddTypeInfoToErrorMessage(ZType ClassType) {
+	//		this.ParsedText = this.ParsedText + " of " + ClassType.ShortName;
+	//		return this;
+	//	}
 
 	public final boolean IsNull() {
 		return (this == ZToken.NullToken);
