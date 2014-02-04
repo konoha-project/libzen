@@ -100,70 +100,11 @@ public class ZToken {
 		return LibZen.IsSymbol(ch);
 	}
 
-	//	public final boolean IsQuoted() {
-	//		return ZUtils.IsFlag(this.TokenFlag, ZParserConst.QuotedTokenFlag);
-	//	}
-
-	//
-	//
-	//
-	//	public final boolean IsSource() {
-	//		return ZUtils.IsFlag(this.TokenFlag, ZParserConst.SourceTokenFlag);
-	//	}
-	//
-	//	public final boolean IsIndent() {
-	//		return ZUtils.IsFlag(this.TokenFlag, ZParserConst.IndentTokenFlag);
-	//	}
-	//
-	//	public final boolean IsNextWhiteSpace() {
-	//		return ZUtils.IsFlag(this.TokenFlag, ZParserConst.WhiteSpaceTokenFlag);
-	//	}
-	//
-	//	public final boolean IsQuoted() {
-	//		return ZUtils.IsFlag(this.TokenFlag, ZParserConst.QuotedTokenFlag);
-	//	}
-	//
-	//	public final boolean IsNameSymbol() {
-	//		return ZUtils.IsFlag(this.TokenFlag, ZParserConst.NameSymbolTokenFlag);
-	//	}
-	//
-	//
-	//	public final int CompareIndent(ZToken IndentToken) {
-	//		if(IndentToken == null) {
-	//			if(this.EqualsText("")) {
-	//				return 0;
-	//			}
-	//			return this.GetText().length();
-	//		}
-	//		else {
-	//			if(this.EqualsText(IndentToken.GetText())) {
-	//				return 0;
-	//			}
-	//			return this.GetText().length() - IndentToken.GetText().length();
-	//		}
-	//	}
-	//
-	//
-	//	//	public final boolean IsError() {
-	//	//		return ZUtils.IsFlag(this.TokenFlag, ZParserConst.ErrorTokenFlag);
-	//	//	}
-	//
-	//	//	public void SetError(ZSyntaxPattern ErrorPattern) {
-	//	//		if(this.GetText().length() > 0) {  // skip null token
-	//	//			this.TokenFlag = ZParserConst.ErrorTokenFlag;
-	//	//			this.PresetPattern = ErrorPattern;
-	//	//		}
-	//	//	}
-	//	//
-	//	//	public final ZToken AddTypeInfoToErrorMessage(ZType ClassType) {
-	//	//		this.GetText() = this.GetText() + " of " + ClassType.ShortName;
-	//	//		return this;
-	//	//	}
-	//
-	//	public final boolean IsNull() {
-	//		return (this == ZToken.NullToken);
-	//	}
-	//
-	//}
+	public int GetIndentSize() {
+		if(this.Source != null) {
+			return this.Source.CountIndentSize(this.Source.GetLineHeadPosition(this.StartIndex));
+		}
+		return 0;
+	}
 
 }

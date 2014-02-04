@@ -544,7 +544,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 		Node.RightNode = this.CheckType(Node.RightNode, RightType);
 		//System.err.println("debug left=" + Node.LeftNode.Type + ", right=" + Node.RightNode.Type);
 		if(!Node.LeftNode.Type.Equals(Node.RightNode.Type)) {
-			if(Node.SourceToken.EqualsText("+")) {
+			if(Node.SourceToken.EqualsText('+')) {
 				this.UnifyBinaryEnforcedType(Node, ZType.StringType);
 			}
 			this.UnifyBinaryNodeType(Node, ZType.FloatType);

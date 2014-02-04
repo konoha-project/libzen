@@ -879,10 +879,10 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 
 	@Override
 	public void VisitUnaryNode(ZUnaryNode Node) {
-		if(Node.SourceToken.EqualsText("+")) {
+		if(Node.SourceToken.EqualsText('+')) {
 			this.GenerateCode(Node.RecvNode);
 		}
-		else if(Node.SourceToken.EqualsText("-")){
+		else if(Node.SourceToken.EqualsText('-')){
 			String TempVar = this.CreateTempVar();
 			this.PushNewBuffer(TempVar);
 			this.AddCodeToCurrentBuffer(" = ");

@@ -34,6 +34,46 @@ public class ZSource {
 		}
 		return LineNumber;
 	}
+
+	public final int GetLineHeadPosition(int Position) {
+		@Var String s = this.SourceText;
+		@Var int StartIndex = 0;
+		@Var int EndIndex = s.length();
+		@Var int i = Position;
+		if(!(i < s.length())) {
+			i = s.length() - 1;
+		}
+		while(i >= 0) {
+			char ch = s.charAt(i);
+			if(ch == '\n') {
+				StartIndex = i + 1;
+				break;
+			}
+			i = i - 1;
+		}
+		return StartIndex;
+	}
+
+	public final int CountIndentSize(int Position) {
+		@Var String s = this.SourceText;
+		@Var int length = 0;
+		@Var int i = Position;
+		while(i < s.length()) {
+			@Var char ch = s.charAt(i);
+			if(ch == '\t') {
+				length = length + 8;
+			}
+			else if(ch == ' ') {
+				length = length + 1;
+			}
+			else {
+				break;
+			}
+			i = i + 1;
+		}
+		return length;
+	}
+
 	public final String GetLineText(int Position) {
 		@Var String s = this.SourceText;
 		@Var int StartIndex = 0;
