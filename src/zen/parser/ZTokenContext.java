@@ -29,14 +29,11 @@ import java.util.ArrayList;
 import zen.ast.ZEmptyNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZNode;
-import zen.ast.ZTypeNode;
 import zen.deps.Field;
 import zen.deps.Init;
 import zen.deps.LibNative;
 import zen.deps.LibZen;
 import zen.deps.Var;
-import zen.lang.ZSystem;
-import zen.type.ZType;
 
 public final class ZTokenContext {
 
@@ -93,9 +90,6 @@ public final class ZTokenContext {
 
 	public boolean SetParseFlag(boolean AllowSkipIndent) {
 		boolean OldFlag = this.IsAllowSkipIndent;
-		//		if(this.IsAllowSkipIndent != AllowSkipIndent) {
-		//			LibNative.Debug("switching " + this.IsAllowSkipIndent + " => " + AllowSkipIndent);
-		//		}
 		this.IsAllowSkipIndent = AllowSkipIndent;
 		return OldFlag;
 	}
@@ -108,7 +102,7 @@ public final class ZTokenContext {
 				break;
 			}
 			//this.Generator.Logger.ReportDebug(T, "skipping: " + T.GetText());
-			this.GetTokenAndMoveForward();
+			this.GetToken(ZTokenContext.MoveNext);
 		}
 		this.LatestToken = LeastRecentToken;
 	}
@@ -137,8 +131,11 @@ public final class ZTokenContext {
 	public void Vacume() {
 	}
 
+	//	public final void MoveNext() {
+	//		this.CurrentPosition = this.CurrentPosition + 1;
+	//	}
 
-	public ZToken GetToken(boolean IsMoveNext) {
+	public ZToken GetToken(boolean EnforceMoveNext) {
 		while(true) {
 			if(!(this.CurrentPosition < this.TokenList.size())) {
 				if(!this.Tokenize2(this.Source)) {
@@ -151,7 +148,7 @@ public final class ZTokenContext {
 			}
 			else {
 				this.LatestToken = Token;
-				if(IsMoveNext) {
+				if(EnforceMoveNext) {
 					this.CurrentPosition = this.CurrentPosition + 1;
 				}
 				return Token;
@@ -166,12 +163,6 @@ public final class ZTokenContext {
 
 	public boolean HasNext() {
 		return (this.GetToken() != ZToken.NullToken);
-	}
-
-	public ZToken GetTokenAndMoveForward() {
-		@Var ZToken Token = this.GetToken();
-		this.CurrentPosition += 1;
-		return Token;
 	}
 
 	public void SkipIndent() {
@@ -203,7 +194,7 @@ public final class ZTokenContext {
 	}
 
 	public ZToken ParseLargeToken() {
-		@Var ZToken Token = this.GetTokenAndMoveForward();
+		@Var ZToken Token = this.GetToken(ZTokenContext.MoveNext);
 		if(Token.IsNextWhiteSpace()) {
 			return Token;
 		}
@@ -211,7 +202,7 @@ public final class ZTokenContext {
 		@Var int EndIndex = Token.EndIndex;
 		while(this.HasNext() && !Token.IsNextWhiteSpace()) {
 			@Var int RollbackPosition = this.CurrentPosition;
-			Token = this.GetTokenAndMoveForward();
+			Token = this.GetToken(ZTokenContext.MoveNext);
 			if(Token.IsIndent() || Token.EqualsText(";") || Token.EqualsText(",")) {
 				this.CurrentPosition = RollbackPosition;
 				break;
@@ -242,7 +233,7 @@ public final class ZTokenContext {
 
 	public final boolean MatchToken(String TokenText) {
 		@Var int RollbackPos = this.CurrentPosition;
-		@Var ZToken Token = this.GetTokenAndMoveForward();
+		@Var ZToken Token = this.GetToken(ZTokenContext.MoveNext);
 		if(Token.EqualsText(TokenText)) {
 			return true;
 		}
@@ -253,7 +244,7 @@ public final class ZTokenContext {
 	public final boolean MatchNewLineToken(String TokenText) {
 		@Var int RollbackPos = this.CurrentPosition;
 		this.SkipIndent();
-		@Var ZToken Token = this.GetTokenAndMoveForward();
+		@Var ZToken Token = this.GetToken(ZTokenContext.MoveNext);
 		if(Token.EqualsText(TokenText)) {
 			return true;
 		}
@@ -264,7 +255,7 @@ public final class ZTokenContext {
 	public ZNode MatchToken(ZNode ParentNode, String TokenText, boolean IsRequired) {
 		if(!ParentNode.IsErrorNode()) {
 			@Var int RollbackPosition = this.CurrentPosition;
-			@Var ZToken Token = this.GetTokenAndMoveForward();
+			@Var ZToken Token = this.GetToken(ZTokenContext.MoveNext);
 			if(Token.EqualsText(TokenText)) {
 				if(ParentNode.SourceToken == null) {
 					ParentNode.SourceToken = Token;
@@ -337,7 +328,6 @@ public final class ZTokenContext {
 					return ParsedNode;
 				}
 				if(!(ParsedNode instanceof ZEmptyNode)) {
-					//					System.out.println("Pattern="+PatternName);
 					ParentNode.Append(ParsedNode);
 				}
 			}
@@ -346,28 +336,37 @@ public final class ZTokenContext {
 	}
 
 	public ZNode AppendMatchedPattern(ZNode ParentNode, String PatternName, boolean IsRequired) {
-		return this.AppendMatchedPattern(ParentNode, PatternName, IsRequired, false);
+		return this.AppendMatchedPattern(ParentNode, PatternName, IsRequired, ZTokenContext.NotAllowSkipIndent2);
 	}
 
-	public ZNode AppendMatchedPatternNtimes(ZNode ParentNode, String PatternName, String DelimToken, boolean AllowSkipIndent) {
-		@Var boolean Rememberd = this.SetParseFlag(AllowSkipIndent);
-		while(!ParentNode.IsErrorNode()) {
-			//this.IsAllowSkipIndent = AllowSkipIndent;
-			@Var ZNode ParsedNode = this.ParsePattern(ParentNode, PatternName, ZTokenContext.Optional2);
-			if(ParsedNode == null) {
-				break;
-			}
-			ParentNode.Append(ParsedNode);
-			if(DelimToken != null) {
-				//this.IsAllowSkipIndent = AllowSkipIndent;
-				if(!this.MatchToken(DelimToken)) {
-					break;
-				}
+	public ZNode AppendOptionalPattern(ZNode ParentNode, boolean AllowNewLine, String TokenText, String PatternName) {
+		if(!ParentNode.IsErrorNode()) {
+			if(this.MatchToken(TokenText)) {
+				return this.AppendMatchedPattern(ParentNode, PatternName, ZTokenContext.Optional2, ZTokenContext.NotAllowSkipIndent2);
 			}
 		}
-		this.SetParseFlag(Rememberd);
 		return ParentNode;
 	}
+
+	//	public ZNode AppendMatchedPatternNtimes(ZNode ParentNode, String PatternName, String DelimToken, boolean AllowSkipIndent) {
+	//		@Var boolean Rememberd = this.SetParseFlag(AllowSkipIndent);
+	//		while(!ParentNode.IsErrorNode()) {
+	//			//this.IsAllowSkipIndent = AllowSkipIndent;
+	//			@Var ZNode ParsedNode = this.ParsePattern(ParentNode, PatternName, ZTokenContext.Optional2);
+	//			if(ParsedNode == null) {
+	//				break;
+	//			}
+	//			ParentNode.Append(ParsedNode);
+	//			if(DelimToken != null) {
+	//				//this.IsAllowSkipIndent = AllowSkipIndent;
+	//				if(!this.MatchToken(DelimToken)) {
+	//					break;
+	//				}
+	//			}
+	//		}
+	//		this.SetParseFlag(Rememberd);
+	//		return ParentNode;
+	//	}
 
 	public ZNode AppendMatchedPatternNtimes(ZNode ParentNode, String StartToken, String PatternName, String DelimToken, String StopToken) {
 		@Var boolean Rememberd = this.SetParseFlag(true);
@@ -421,13 +420,13 @@ public final class ZTokenContext {
 		return false;
 	}
 
-	public final ZType ParseType(ZNode ParentNode, String PatternName, ZType DefaultType) {
-		ZTypeNode TypeNode = (ZTypeNode)this.ParsePatternAfter(ParentNode, null, PatternName, Optional2);
-		if(TypeNode != null) {
-			return TypeNode.Type;
-		}
-		return DefaultType;
-	}
+	//	public final ZType ParseType(ZNode ParentNode, String PatternName, ZType DefaultType) {
+	//		ZTypeNode TypeNode = (ZTypeNode)this.ParsePatternAfter(ParentNode, null, PatternName, Optional2);
+	//		if(TypeNode != null) {
+	//			return TypeNode.Type;
+	//		}
+	//		return DefaultType;
+	//	}
 
 	public final void SkipEmptyStatement() {
 		while(this.HasNext()) {
@@ -440,40 +439,40 @@ public final class ZTokenContext {
 		}
 	}
 
-	public final String Stringfy(String PreText, int BeginIdx, int EndIdx) {
-		@Var String Buffer = PreText;
-		for(@Var int Position = BeginIdx; Position < EndIdx; Position += 1) {
-			@Var ZToken Token = this.TokenList.get(Position);
-			if(Token.IsIndent()) {
-				Buffer += "\n";
-			}
-			Buffer += Token.GetText();
-			if(Token.IsNextWhiteSpace()) {
-				Buffer += " ";
-			}
-		}
-		return Buffer;
-	}
-
-	public final void SetSourceMap(String SourceMap) {
-		@Var int Index = SourceMap.lastIndexOf(":");
-		if(Index != -1) {
-			@Var String FileName = SourceMap.substring(0, Index);
-			@Var int Line = (int)LibZen.ParseInt(SourceMap.substring(Index+1));
-			this.ParsingLine = ZSystem.GetFileLine(FileName, Line);
-		}
-	}
-
-	public final void DumpPosition() {
-		@Var int Position = this.CurrentPosition;
-		if(Position < this.TokenList.size()) {
-			@Var ZToken Token = this.TokenList.get(Position);
-			LibZen.DebugP("Position="+Position+" " + Token);
-		}
-		else {
-			LibZen.DebugP("Position="+Position+" EOF");
-		}
-	}
+	//	public final String Stringfy(String PreText, int BeginIdx, int EndIdx) {
+	//		@Var String Buffer = PreText;
+	//		for(@Var int Position = BeginIdx; Position < EndIdx; Position += 1) {
+	//			@Var ZToken Token = this.TokenList.get(Position);
+	//			if(Token.IsIndent()) {
+	//				Buffer += "\n";
+	//			}
+	//			Buffer += Token.GetText();
+	//			if(Token.IsNextWhiteSpace()) {
+	//				Buffer += " ";
+	//			}
+	//		}
+	//		return Buffer;
+	//	}
+	//
+	//	public final void SetSourceMap(String SourceMap) {
+	//		@Var int Index = SourceMap.lastIndexOf(":");
+	//		if(Index != -1) {
+	//			@Var String FileName = SourceMap.substring(0, Index);
+	//			@Var int Line = (int)LibZen.ParseInt(SourceMap.substring(Index+1));
+	//			this.ParsingLine = ZSystem.GetFileLine(FileName, Line);
+	//		}
+	//	}
+	//
+	//	public final void DumpPosition() {
+	//		@Var int Position = this.CurrentPosition;
+	//		if(Position < this.TokenList.size()) {
+	//			@Var ZToken Token = this.TokenList.get(Position);
+	//			LibZen.DebugP("Position="+Position+" " + Token);
+	//		}
+	//		else {
+	//			LibZen.DebugP("Position="+Position+" EOF");
+	//		}
+	//	}
 
 	public final void Dump() {
 		for(@Var int Position = this.CurrentPosition; Position < this.TokenList.size(); Position += 1) {
