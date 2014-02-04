@@ -29,7 +29,7 @@ public class ZToken {
 		if(this.Source != null) {
 			return this.Source.SourceText.substring(this.StartIndex, this.EndIndex);
 		}
-		return "null";
+		return "";
 	}
 
 	@Override public String toString() {

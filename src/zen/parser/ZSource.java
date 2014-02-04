@@ -39,6 +39,9 @@ public class ZSource {
 		@Var int StartIndex = 0;
 		@Var int EndIndex = s.length();
 		@Var int i = Position;
+		if(!(i < s.length())) {
+			i = s.length() - 1;
+		}
 		while(i >= 0) {
 			char ch = s.charAt(i);
 			if(ch == '\n') {
@@ -62,6 +65,9 @@ public class ZSource {
 		@Var String s = this.SourceText;
 		@Var int StartIndex = 0;
 		@Var int i = Position;
+		if(!(i < s.length())) {
+			i = s.length() - 1;
+		}
 		while(i >= 0) {
 			char ch = s.charAt(i);
 			if(ch == '\n') {
@@ -89,11 +95,20 @@ public class ZSource {
 	}
 
 	public String MakeHeader(String Error, int Position, String Message) {
-		return "[" + Error +"] (" + this.FileName + ":" + this.GetLineNumber(Position) + ") " + Message;
+		return "(" + this.FileName + ":" + this.GetLineNumber(Position) + ") [" + Error +"] " + Message;
 	}
 
 	public String MakeBody(String Error, int Position, String Message) {
-		return this.MakeHeader(Error, Position, Message) + "\n\t" + this.GetLineText(Position) + "\n\t" + this.GetLineMarker(Position);
+		@Var String Line = this.GetLineText(Position);
+		@Var String Delim = "\n\t";
+		if(Line.startsWith("\t") || Line.startsWith(" ")) {
+			Delim = "\n";
+		}
+		return this.MakeHeader(Error, Position, Message) + Delim + Line + Delim + this.GetLineMarker(Position);
+	}
+
+	public void Panic(int Position, String Message) {
+		this.Logger.Report(this.MakeBody("panic", Position, Message));
 	}
 
 	public void Warning(int Position, String Message) {
@@ -144,15 +159,27 @@ public class ZSource {
 	}
 
 	public void Tokenize(int StartIndex, int EndIndex) {
-		@Var ZToken Token = new ZToken(this, StartIndex, EndIndex);
 		this.CurrentPosition = EndIndex;
-		this.TokenContext.TokenList.add(Token);
+		if(StartIndex < EndIndex && EndIndex <= this.SourceText.length()) {
+			@Var ZToken Token = new ZToken(this, StartIndex, EndIndex);
+			this.TokenContext.TokenList.add(Token);
+		}
 	}
 
 	public void Tokenize(String PatternName, int StartIndex, int EndIndex) {
-		@Var ZToken Token = new ZPatternToken(this, StartIndex, EndIndex, this.TokenContext.NameSpace.GetSyntaxPattern(PatternName));
 		this.CurrentPosition = EndIndex;
-		this.TokenContext.TokenList.add(Token);
+		if(StartIndex < EndIndex && EndIndex <= this.SourceText.length()) {
+			ZSyntaxPattern Pattern = this.TokenContext.NameSpace.GetSyntaxPattern(PatternName);
+			if(Pattern == null) {
+				this.Panic(StartIndex, "unregistered token pattern: " + PatternName);
+				@Var ZToken Token = new ZToken(this, StartIndex, EndIndex);
+				this.TokenContext.TokenList.add(Token);
+			}
+			else {
+				@Var ZToken Token = new ZPatternToken(this, StartIndex, EndIndex, Pattern);
+				this.TokenContext.TokenList.add(Token);
+			}
+		}
 	}
 
 	public boolean IsDefinedSyntax(int StartIndex, int EndIndex) {

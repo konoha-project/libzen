@@ -66,32 +66,30 @@ public final class ZLogger {
 
 	public final void Report(String Message) {
 		this.ReportedErrorList.add(Message);
-		LibNative.println(Message);
 	}
 
 	public final String Report(int Level, ZToken Token, String Message) {
-		//		if(Token != null && !Token.IsNull()) {
-		//			Token.Source
-		//			if(Level == ZLogger.ErrorLevel) {
-		//				Message = "(error) " + ZSystem.FormatFileLineNumber(Token.FileLine) + " " + Message;
-		//			}
-		//			else if(Level == ZLogger.TypeErrorLevel) {
-		//				Message = "(error) " + ZSystem.FormatFileLineNumber(Token.FileLine) + " " + Message;
-		//			}
-		//			else if(Level == ZLogger.WarningLevel) {
-		//				Message = "(warning) " + ZSystem.FormatFileLineNumber(Token.FileLine) + " " + Message;
-		//			}
-		//			else if(Level == ZLogger.InfoLevel) {
-		//				Message = "(info) " + ZSystem.FormatFileLineNumber(Token.FileLine) + " " + Message;
-		//			}
-		//			else {
-		//				Message = "(debug) " + ZSystem.FormatFileLineNumber(Token.FileLine) + " " + Message;
-		//			}
-		//			this.ReportedErrorList.add(Message);
-		//		}
-		//		else {
-		//			LibZen.DebugP("unknown source error:" + Message);
-		//		}
+		if(Token != null && !Token.IsNull()) {
+			if(Level == ZLogger.ErrorLevel) {
+				Message = Token.Source.MakeBody("error", Token.StartIndex, Message);
+			}
+			else if(Level == ZLogger.TypeErrorLevel) {
+				Message = Token.Source.MakeBody("error", Token.StartIndex, Message);
+			}
+			else if(Level == ZLogger.WarningLevel) {
+				Message = Token.Source.MakeBody("warning", Token.StartIndex, Message);
+			}
+			else if(Level == ZLogger.InfoLevel) {
+				Message = Token.Source.MakeBody("info", Token.StartIndex, Message);
+			}
+			else {
+				Message = Token.Source.MakeBody("debug", Token.StartIndex, Message);
+			}
+			this.ReportedErrorList.add(Message);
+		}
+		else {
+			LibZen.DebugP("unknown source error:" + Message);
+		}
 		return Message;
 	}
 

@@ -167,6 +167,7 @@ public class ZenGrammar {
 			Source.MoveNext();
 		}
 		Source.Warning(StartIndex-1, "unclosed \"");
+		Source.Tokenize("$StringLiteral$", StartIndex, Source.GetPosition());
 		return false;
 	}
 
@@ -458,6 +459,7 @@ public class ZenGrammar {
 		else {
 			Pattern = NameSpace.GetSyntaxPattern(Token.GetText());
 		}
+		//System.out.println("Pattern=" + Pattern + " by '" + Token.GetText() + "'");
 		if(Pattern != null) {
 			if(Pattern.IsStatement && !AllowStatement) {
 				return new ZErrorNode(ParentNode, Token, Token.GetText() + " statement is not here");
@@ -466,6 +468,7 @@ public class ZenGrammar {
 		}
 		else {
 			Pattern = NameSpace.GetSyntaxPattern("$Symbol$");
+
 			LeftNode = TokenContext.ApplyMatchPattern(ParentNode, LeftNode, Pattern, ZTokenContext.Optional2);
 			if(LeftNode == null) {
 				return TokenContext.CreateExpectedErrorNode(Token, "an expression");

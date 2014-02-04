@@ -84,7 +84,7 @@ public final class ZTokenContext {
 				Source.MoveNext();
 			}
 		}
-		this.Dump();
+		//this.Dump();
 		if(this.TokenList.size() > TokenSize) {
 			return true;
 		}
@@ -99,64 +99,6 @@ public final class ZTokenContext {
 		this.IsAllowSkipIndent = AllowSkipIndent;
 		return OldFlag;
 	}
-
-	//	public ZTokenContext(ZGenerator Generator, ZNameSpace NameSpace, String Text, long FileLine) {
-	//	this.Generator = Generator;
-	//	this.NameSpace = NameSpace;
-	//	this.ParsingLine = FileLine;
-	//	this.AppendParsedToken(Text, ZParserConst.SourceTokenFlag, null);
-	//}
-	//	public ZToken AppendParsedToken(String Text, int TokenFlag, String PatternName) {
-	//		@Var ZToken Token = new ZToken(TokenFlag, Text, this.ParsingLine);
-	//		if(PatternName != null) {
-	//			Token.PresetPattern = this.NameSpace.GetSyntaxPattern(PatternName);
-	//			LibNative.Assert(Token.PresetPattern != null);
-	//		}
-	//		this.TokenList.add(Token);
-	//		return Token;
-	//	}
-	//
-	//	public void FoundWhiteSpace() {
-	//		@Var int index = this.TokenList.size() - 1;
-	//		if(index > -1) {
-	//			@Var ZToken Token = this.TokenList.get(index);
-	//			Token.TokenFlag |= ZParserConst.WhiteSpaceTokenFlag;
-	//		}
-	//	}
-	//
-	//	public void FoundLineFeed(long line) {
-	//		this.ParsingLine += line;
-	//	}
-	//
-	//	@Deprecated public void ReportTokenError1(int Level, String Message, String TokenText) {
-	//		@Var ZToken Token = this.AppendParsedToken(TokenText, 0, "$Error$");
-	//		this.Generator.Logger.Report(Level, Token, Message);
-	//	}
-	//	private int DispatchFunc(String ScriptSource, int ZenChar, int pos) {
-	//	@Var ZTokenFunc TokenFunc = this.NameSpace.GetTokenFunc(ZenChar);
-	//	@Var int NextIdx = ZTokenFunc.ApplyTokenFunc(TokenFunc, this, ScriptSource, pos);
-	//	if(NextIdx == ZTokenContext.MismatchedPosition) {
-	//		ZLogger.VerboseLog(ZLogger.VerboseUndefined, "undefined tokenizer: " + ScriptSource.substring(pos, pos+1));
-	//		this.AppendParsedToken(ScriptSource.substring(pos, pos + 1), 0, null);
-	//		return pos + 1;
-	//	}
-	//	return NextIdx;
-	//}
-	//
-	//private void Tokenize(String ScriptSource, long CurrentLine) {
-	//	@Var int CurrentPos = 0;
-	//	@Var int Length = ScriptSource.length();
-	//	this.ParsingLine = CurrentLine;
-	//	while(CurrentPos < Length) {
-	//		@Var int ZenCode = ZUtils.AsciiToTokenMatrixIndex(LibZen.CharAt(ScriptSource, CurrentPos));
-	//		@Var int NextPos = this.DispatchFunc(ScriptSource, ZenCode, CurrentPos);
-	//		if(CurrentPos >= NextPos) {
-	//			break;
-	//		}
-	//		CurrentPos = NextPos;
-	//	}
-	//	this.Dump();
-	//}
 
 	public void SkipErrorStatement() {
 		@Var ZToken LeastRecentToken = this.LatestToken;
@@ -186,9 +128,10 @@ public final class ZTokenContext {
 	public ZNode CreateExpectedErrorNode(ZToken SourceToken, String ExpectedTokenText) {
 		if(SourceToken == null || SourceToken.IsNull()) {
 			SourceToken = this.GetBeforeToken();
-			return new ZErrorNode(null, SourceToken, ExpectedTokenText + " is expected after " + SourceToken.GetText());
+			SourceToken = new ZToken(SourceToken.Source, SourceToken.EndIndex, SourceToken.EndIndex);
+			return new ZErrorNode(null, SourceToken, ExpectedTokenText + " is expected");
 		}
-		return new ZErrorNode(null, SourceToken, ExpectedTokenText + " is expected; " + SourceToken.GetText() + " is given");
+		return new ZErrorNode(null, SourceToken, ExpectedTokenText + " is expected");
 	}
 
 	public void Vacume() {
