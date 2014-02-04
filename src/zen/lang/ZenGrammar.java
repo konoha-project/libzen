@@ -118,11 +118,6 @@ public class ZenGrammar {
 		return pos;
 	}
 
-	public static long SemiColonToken(ZTokenContext TokenContext, String SourceText, long pos) {
-		TokenContext.AppendParsedToken(LibZen.SubString(SourceText, pos, (pos+1)), ZParserConst.DelimTokenFlag, null);
-		return pos+1;
-	}
-
 	public static long SymbolToken(ZTokenContext TokenContext, String SourceText, long pos) {
 		@Var long start = pos;
 		@Var String PresetPattern = null;
@@ -886,8 +881,7 @@ public class ZenGrammar {
 
 		NameSpace.AppendTokenFunc(" \t", LibNative.LoadTokenFunc(Grammar, "WhiteSpaceToken"));
 		NameSpace.AppendTokenFunc("\n",  LibNative.LoadTokenFunc(Grammar, "IndentToken"));
-		NameSpace.AppendTokenFunc(";", LibNative.LoadTokenFunc(Grammar, "SemiColonToken"));
-		NameSpace.AppendTokenFunc("{}()[]<>.,?:+-*/%=&|!@~^$", LibNative.LoadTokenFunc(Grammar, "OperatorToken"));
+		NameSpace.AppendTokenFunc("{}()[]<>.,;?:+-*/%=&|!@~^$", LibNative.LoadTokenFunc(Grammar, "OperatorToken"));
 		NameSpace.AppendTokenFunc("/", LibNative.LoadTokenFunc(Grammar, "CommentToken"));  // overloading
 		NameSpace.AppendTokenFunc("Aa_", LibNative.LoadTokenFunc(Grammar, "SymbolToken"));
 

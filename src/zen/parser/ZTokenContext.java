@@ -104,7 +104,7 @@ public final class ZTokenContext {
 		@Var ZToken LeastRecentToken = this.LatestToken;
 		while(this.HasNext()) {
 			@Var ZToken T = this.GetToken();
-			if(T.IsDelim() || T.EqualsText("}")) {
+			if(T.EqualsText(";") || T.EqualsText("}")) {
 				break;
 			}
 			this.Generator.Logger.ReportDebug(T, "skipping: " + T.ParsedText);
@@ -475,7 +475,7 @@ public final class ZTokenContext {
 	public final void SkipEmptyStatement() {
 		while(this.HasNext()) {
 			@Var ZToken Token = this.GetToken();
-			if(Token.IsIndent() || Token.IsDelim()) {
+			if(Token.IsIndent() || Token.EqualsText(";")) {
 				this.CurrentPosition += 1;
 				continue;
 			}

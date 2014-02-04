@@ -4,10 +4,9 @@ import zen.deps.Field;
 import zen.deps.Init;
 import zen.deps.LibNative;
 import zen.deps.Var;
-import zen.deps.Zen;
 import zen.lang.ZFunc;
 
-@Zen final class ZTokenFunc {
+final class ZTokenFunc {
 	@Field @Init public ZFunc      Func;
 	@Field @Init public ZTokenFunc	ParentFunc;
 

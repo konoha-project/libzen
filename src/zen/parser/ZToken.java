@@ -27,10 +27,9 @@ package zen.parser;
 import zen.deps.Field;
 import zen.deps.Init;
 import zen.deps.Var;
-import zen.deps.Zen;
 import zen.type.ZType;
 
-@Zen public final class ZToken {
+public final class ZToken {
 	@Field public final static ZToken NullToken = new ZToken(0, "/**/", 0);
 	@Field @Init public int		    TokenFlag;
 	@Field @Init public String	    ParsedText;
@@ -53,10 +52,6 @@ import zen.type.ZType;
 
 	public boolean IsIndent() {
 		return ZUtils.IsFlag(this.TokenFlag, ZParserConst.IndentTokenFlag);
-	}
-
-	public boolean IsDelim() {
-		return ZUtils.IsFlag(this.TokenFlag, ZParserConst.DelimTokenFlag);
 	}
 
 	public final boolean IsNextWhiteSpace() {
