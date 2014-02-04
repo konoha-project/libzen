@@ -128,13 +128,20 @@ public class ZSource {
 		return this.SourceText.length() - this.CurrentPosition > 0;
 	}
 
-	public final char GetChar() {
+	public final char ParseChar() {
 		return this.SourceText.charAt(this.CurrentPosition);
 	}
 
-	public final char GetChar(int n) {
+	public final char ParseChar(int n) {
 		if(this.CurrentPosition+n < this.SourceText.length()) {
 			return this.SourceText.charAt(this.CurrentPosition+n);
+		}
+		return '\0';
+	}
+
+	public final char SourceAt(int n) {
+		if(0 <= n && n < this.SourceText.length()) {
+			return this.SourceText.charAt(n);
 		}
 		return '\0';
 	}
@@ -145,7 +152,7 @@ public class ZSource {
 
 	public final void SkipWhiteSpace() {
 		while(this.HasChar()) {
-			@Var char ch = this.GetChar();
+			@Var char ch = this.ParseChar();
 			if(ch != ' ' && ch != '\t') {
 				break;
 			}

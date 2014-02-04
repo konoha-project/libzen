@@ -374,7 +374,7 @@ public class ZenEngine extends ZVisitor {
 			TokenContext.SkipEmptyStatement();
 			TokenContext.Vacume();
 		}
-		if(TokenContext.HasNext()) {
+		if(TokenContext.HasNext() && !IsInteractive) {
 			@Var ZToken Token = TokenContext.GetToken();
 			this.Generator.Logger.ReportInfo(Token, "stopped script at this line");
 		}

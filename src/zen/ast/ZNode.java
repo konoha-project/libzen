@@ -38,6 +38,7 @@ public abstract class ZNode {
 	@Field public ZType	Type = ZType.VarType;
 
 	public ZNode(ZNode ParentNode, ZToken SourceToken) {
+		assert(this != ParentNode);
 		this.ParentNode = ParentNode;
 		this.SourceToken = SourceToken;
 	}
@@ -97,6 +98,9 @@ public abstract class ZNode {
 		while(Node != null) {
 			if(Node instanceof ZBlockNode) {
 				return (ZBlockNode)Node;
+			}
+			if(Node == Node.ParentNode) {
+				throw new RuntimeException("serious error: parent node is same: " + Node);
 			}
 			Node = Node.ParentNode;
 		}

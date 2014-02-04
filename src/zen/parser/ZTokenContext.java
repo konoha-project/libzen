@@ -104,7 +104,7 @@ public final class ZTokenContext {
 		@Var ZToken LeastRecentToken = this.LatestToken;
 		while(this.HasNext()) {
 			@Var ZToken T = this.GetToken();
-			if(T.EqualsText(";") || T.EqualsText("}")) {
+			if(T.EqualsText(";") || T.EqualsText("}") || T.IsIndent()) {
 				break;
 			}
 			//this.Generator.Logger.ReportDebug(T, "skipping: " + T.GetText());
@@ -261,11 +261,11 @@ public final class ZTokenContext {
 		return false;
 	}
 
-	public ZNode MatchNodeToken(ZNode ParentNode, String TokenText, boolean IsRequired) {
+	public ZNode MatchToken(ZNode ParentNode, String TokenText, boolean IsRequired) {
 		if(!ParentNode.IsErrorNode()) {
 			@Var int RollbackPosition = this.CurrentPosition;
 			@Var ZToken Token = this.GetTokenAndMoveForward();
-			if(Token.GetText().equals(TokenText)) {
+			if(Token.EqualsText(TokenText)) {
 				if(ParentNode.SourceToken == null) {
 					ParentNode.SourceToken = Token;
 				}
@@ -295,7 +295,10 @@ public final class ZTokenContext {
 			@Var boolean Remembered = this.IsAllowSkipIndent;
 			this.CurrentPosition = RollbackPosition;
 			this.ApplyingPattern  = CurrentPattern;
+			//			System.out.println("B "+Pattern + "," + ParentNode);
 			ParsedNode = LibNative.ApplyMatchFunc(CurrentPattern.MatchFunc, ParentNode, this, LeftNode);
+			assert(ParsedNode != ParentNode);
+			//			System.out.println("E "+ ParsedNode);
 			this.ApplyingPattern  = null;
 			this.IsAllowSkipIndent = Remembered;
 			if(ParsedNode != null && !ParsedNode.IsErrorNode()) {
@@ -334,6 +337,7 @@ public final class ZTokenContext {
 					return ParsedNode;
 				}
 				if(!(ParsedNode instanceof ZEmptyNode)) {
+					//					System.out.println("Pattern="+PatternName);
 					ParentNode.Append(ParsedNode);
 				}
 			}
@@ -369,7 +373,7 @@ public final class ZTokenContext {
 		@Var boolean Rememberd = this.SetParseFlag(true);
 		@Var boolean IsRequired =   ZTokenContext.Optional2;
 		if(StartToken != null) {
-			ParentNode = this.MatchNodeToken(ParentNode, StartToken, ZTokenContext.Required2);
+			ParentNode = this.MatchToken(ParentNode, StartToken, ZTokenContext.Required2);
 		}
 		while(!ParentNode.IsErrorNode()) {
 			if(StopToken != null) {
@@ -396,7 +400,7 @@ public final class ZTokenContext {
 			}
 		}
 		if(StopToken != null) {
-			ParentNode = this.MatchNodeToken(ParentNode, StopToken, ZTokenContext.Required2);
+			ParentNode = this.MatchToken(ParentNode, StopToken, ZTokenContext.Required2);
 		}
 		this.SetParseFlag(Rememberd);
 		return ParentNode;
