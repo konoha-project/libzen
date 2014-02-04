@@ -25,21 +25,21 @@
 package zen.ast;
 
 import zen.deps.Field;
-import zen.parser.ZToken;
-import zen.type.ZType;
 
 public class ZParamNode extends ZNode {
 	@Field public String  Name;
-	public ZParamNode(ZNode ParentNode, ZToken SourceToken, ZType Type, String Name) {
-		super(ParentNode, SourceToken);
-		this.Type = Type;
-		this.Name = Name;
+	public ZParamNode(ZNode ParentNode) {
+		super(ParentNode, null);
 	}
 
 	@Override public String GetVisitName() {
 		return "VisitParamNode"; // override this if you want to use additional node
 	}
 	@Override public void Append(ZNode Node) {
+		if(Node instanceof ZGetNameNode) {
+			this.SourceToken = Node.SourceToken;
+			this.Name = Node.SourceToken.GetText();
+		}
 		if(Node instanceof ZTypeNode) {
 			this.Type = Node.Type;
 		}

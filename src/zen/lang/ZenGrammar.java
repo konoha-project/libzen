@@ -679,29 +679,17 @@ public class ZenGrammar {
 
 	// FuncDecl
 	public static ZNode MatchParam(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
-		@Var ZToken NameToken = TokenContext.GetTokenAndMoveForward();
-		if(!NameToken.IsNameSymbol()) {
-			return TokenContext.CreateExpectedErrorNode(NameToken, "parameter name");
-		}
-		@Var ZNode VarNode = new ZParamNode(ParentNode, NameToken, ZType.VarType, NameToken.GetText());
-		VarNode = TokenContext.AppendMatchedPattern(VarNode, "$TypeAnnotation$", ZTokenContext.Optional2);
-		return VarNode;
+		@Var ZNode ParamNode = new ZParamNode(ParentNode);
+		ParamNode = TokenContext.AppendMatchedPattern(ParamNode, "$Name$", ZTokenContext.Required2);
+		ParamNode = TokenContext.AppendMatchedPattern(ParamNode, "$TypeAnnotation$", ZTokenContext.Optional2);
+		return ParamNode;
 	}
 
 	public static ZNode MatchFunction(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
 		@Var ZNode FuncNode = new ZFunctionNode(ParentNode);
 		FuncNode = TokenContext.MatchToken(FuncNode, "function", ZTokenContext.Required2);
 		FuncNode = TokenContext.AppendMatchedPattern(FuncNode, "$Name$", ZTokenContext.Optional2);
-		FuncNode = TokenContext.MatchToken(FuncNode, "(", ZTokenContext.Required2);
-		if(!TokenContext.MatchToken(")")) {
-			while(!FuncNode.IsErrorNode()) {
-				FuncNode = TokenContext.AppendMatchedPattern(FuncNode, "$Param$", ZTokenContext.Required2);
-				if(TokenContext.MatchToken(")")) {
-					break;
-				}
-				FuncNode = TokenContext.MatchToken(FuncNode, ",", ZTokenContext.Required2);
-			}
-		}
+		FuncNode = TokenContext.AppendMatchedPatternNtimes(FuncNode, "(", "$Param$", ",", ")");
 		FuncNode = TokenContext.AppendMatchedPattern(FuncNode, "$TypeAnnotation$", ZTokenContext.Optional2);
 		FuncNode = TokenContext.AppendMatchedPattern(FuncNode, "$Block$", ZTokenContext.Required2);
 		return FuncNode;
