@@ -61,6 +61,7 @@ public class ZSource {
 		}
 		return s.substring(StartIndex, EndIndex);
 	}
+
 	public final String GetLineMarker(int Position) {
 		@Var String s = this.SourceText;
 		@Var int StartIndex = 0;
@@ -214,7 +215,4 @@ public class ZSource {
 		}
 		this.Tokenize();
 	}
-
-
-
 }

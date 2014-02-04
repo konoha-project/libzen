@@ -107,7 +107,7 @@ public final class ZTokenContext {
 			if(T.EqualsText(";") || T.EqualsText("}")) {
 				break;
 			}
-			this.Generator.Logger.ReportDebug(T, "skipping: " + T.GetText());
+			//this.Generator.Logger.ReportDebug(T, "skipping: " + T.GetText());
 			this.GetTokenAndMoveForward();
 		}
 		this.LatestToken = LeastRecentToken;
