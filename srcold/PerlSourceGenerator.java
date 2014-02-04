@@ -546,7 +546,7 @@ public class PerlSourceGenerator extends ZenSourceGenerator {
 	}
 
 	@Override public void VisitErrorNode(ZenErrorNode Node) {
-		@Var String Code = "throw Error(\"" + Node.SourceToken.ParsedText + "\")";
+		@Var String Code = "throw Error(\"" + Node.SourceToken.GetText() + "\")";
 		this.CurrentBuilder.Append(Code);
 		this.StopVisitor(Node);
 	}

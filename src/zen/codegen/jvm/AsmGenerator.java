@@ -100,7 +100,6 @@ import zen.ast.ZVarDeclNode;
 import zen.ast.ZWhileNode;
 import zen.deps.LibNative;
 import zen.deps.Var;
-import zen.lang.ZSystem;
 import zen.lang.ZenClassType;
 import zen.type.ZFuncType;
 import zen.type.ZType;
@@ -370,12 +369,12 @@ public class AsmGenerator extends JavaSolution {
 	}
 
 	@Override public void VisitUnaryNode(ZUnaryNode Node) {
-		Method sMethod = JavaMethodTable.GetUnaryStaticMethod(Node.SourceToken.ParsedText, Node.RecvNode.Type);
+		Method sMethod = JavaMethodTable.GetUnaryStaticMethod(Node.SourceToken.GetText(), Node.RecvNode.Type);
 		this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.RecvNode});
 	}
 
 	@Override public void VisitNotNode(ZNotNode Node) {
-		Method sMethod = JavaMethodTable.GetUnaryStaticMethod(Node.SourceToken.ParsedText, Node.RecvNode.Type);
+		Method sMethod = JavaMethodTable.GetUnaryStaticMethod(Node.SourceToken.GetText(), Node.RecvNode.Type);
 		this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.RecvNode});
 	}
 
@@ -402,12 +401,12 @@ public class AsmGenerator extends JavaSolution {
 	}
 
 	@Override public void VisitBinaryNode(ZBinaryNode Node) {
-		Method sMethod = JavaMethodTable.GetBinaryStaticMethod(Node.LeftNode.Type, Node.SourceToken.ParsedText, Node.RightNode.Type);
+		Method sMethod = JavaMethodTable.GetBinaryStaticMethod(Node.LeftNode.Type, Node.SourceToken.GetText(), Node.RightNode.Type);
 		this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.LeftNode, Node.RightNode});
 	}
 
 	@Override public void VisitComparatorNode(ZComparatorNode Node) {
-		Method sMethod = JavaMethodTable.GetBinaryStaticMethod(Node.LeftNode.Type, Node.SourceToken.ParsedText, Node.RightNode.Type);
+		Method sMethod = JavaMethodTable.GetBinaryStaticMethod(Node.LeftNode.Type, Node.SourceToken.GetText(), Node.RightNode.Type);
 		this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.LeftNode, Node.RightNode});
 	}
 
@@ -567,7 +566,7 @@ public class AsmGenerator extends JavaSolution {
 	@Override public void VisitLetNode(ZLetNode Node) {
 		if(!(Node.ValueNode instanceof ZConstNode)) {
 			String ClassName = "Symbol" + Node.GlobalName;
-			@Var String SourceFile = ZSystem.GetSourceFileName(Node.SourceToken.FileLine);
+			@Var String SourceFile = Node.SourceToken.GetFileName();
 			@Var AsmClassBuilder cb = new AsmClassBuilder(ACC_PUBLIC|Opcodes.ACC_FINAL, SourceFile, ClassName, "java/lang/Object");
 			this.ClassLoader.AddClassBuilder(cb);
 			Class<?> ValueClass = this.GetJavaClass(Node.ValueNode.Type);

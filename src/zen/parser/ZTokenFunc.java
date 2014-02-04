@@ -2,8 +2,6 @@ package zen.parser;
 
 import zen.deps.Field;
 import zen.deps.Init;
-import zen.deps.LibNative;
-import zen.deps.Var;
 import zen.lang.ZFunc;
 
 final class ZTokenFunc {
@@ -19,14 +17,4 @@ final class ZTokenFunc {
 		return this.Func.toString();
 	}
 
-	final static int ApplyTokenFunc(ZTokenFunc TokenFunc, ZTokenContext TokenContext, String ScriptSource, int Pos) {
-		while(TokenFunc != null) {
-			@Var int NextIdx = (int)LibNative.ApplyTokenFunc(TokenFunc.Func, TokenContext, ScriptSource, Pos);
-			if(NextIdx > Pos) {
-				return NextIdx;
-			}
-			TokenFunc = TokenFunc.ParentFunc;
-		}
-		return ZTokenContext.MismatchedPosition;
-	}
 }

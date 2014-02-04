@@ -49,7 +49,7 @@ public final class ZClassDeclNode extends ZNode {
 			this.SuperType = Node.Type;
 		}
 		else if(this.ClassName == null) {
-			this.ClassName = Node.SourceToken.ParsedText;
+			this.ClassName = Node.SourceToken.GetText();
 			this.SourceToken = Node.SourceToken;
 		}
 	}

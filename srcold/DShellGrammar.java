@@ -202,16 +202,16 @@ public class DShellGrammar extends ZenUtils {
 		while(TokenContext.HasNext()) {
 			@Var ZenToken Token = TokenContext.Next();
 			if(Token.EqualsText(",")) {
-				Token.ParsedText = "";
+				Token.GetText() = "";
 			}
 			if(Token.EqualsText("~")) {
-				Token.ParsedText = DShellGrammar.GetEnv("HOME");
+				Token.GetText() = DShellGrammar.GetEnv("HOME");
 			}
 			if(Token.IsDelim() || Token.IsIndent()) {
 				break;
 			}
 			SourceToken = Token;
-			Command += Token.ParsedText;
+			Command += Token.GetText();
 			if(Token.IsNextWhiteSpace()) {
 				DShellGrammar.AppendCommand(NameSpace, Command, SourceToken);
 				Command = "";
@@ -245,10 +245,10 @@ public class DShellGrammar extends ZenUtils {
 	public static ZenSyntaxTree ParseEnv(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenSyntaxTree LeftTree, ZenSyntaxPattern Pattern) {
 		@Var ZenSyntaxTree CommandTree = TokenContext.CreateMatchedSyntaxTree(NameSpace, Pattern, "letenv");
 		@Var ZenToken Token = TokenContext.Next();
-		if(!LibZen.IsVariableName(Token.ParsedText, 0)) {
+		if(!LibZen.IsVariableName(Token.GetText(), 0)) {
 			return TokenContext.ReportExpectedMessage(Token, "name", true);
 		}
-		@Var String Name = Token.ParsedText;
+		@Var String Name = Token.GetText();
 		@Var String Env  = DShellGrammar.GetEnv(Name);
 		if(TokenContext.MatchToken("=")) {
 			@Var ZenSyntaxTree ConstTree = TokenContext.ParsePattern_OLD(NameSpace, "$Expression$", Required);
@@ -279,11 +279,11 @@ public class DShellGrammar extends ZenUtils {
 		@Var ZenToken Token = TokenContext.GetToken();
 		@Var boolean HasStringExpr = false;
 		@Var String Path = null;
-		if(Token.IsIndent() || DShellGrammar.StopTokens.indexOf(Token.ParsedText) != -1) {
+		if(Token.IsIndent() || DShellGrammar.StopTokens.indexOf(Token.GetText()) != -1) {
 			return null;
 		}
 		else if(Token.IsQuoted()) {
-			Path = LibZen.UnquoteString(Token.ParsedText);
+			Path = LibZen.UnquoteString(Token.GetText());
 			if(Path.indexOf("${") != -1) {
 				HasStringExpr = true;
 			}
@@ -294,15 +294,15 @@ public class DShellGrammar extends ZenUtils {
 			Path = "";
 			while(TokenContext.HasNext()) {
 				Token = TokenContext.GetToken();
-				@Var String ParsedText = Token.ParsedText;
-				if(Token.IsIndent() || (!FoundOpen && DShellGrammar.StopTokens.indexOf(Token.ParsedText) != -1)) {
+				@Var String ParsedText = Token.GetText();
+				if(Token.IsIndent() || (!FoundOpen && DShellGrammar.StopTokens.indexOf(Token.GetText()) != -1)) {
 					break;
 				}
 				TokenContext.Next();
 				if(Token.EqualsText("$")) {   // $HOME/hoge
 					@Var ZenToken Token2 = TokenContext.GetToken();
-					if(LibZen.IsVariableName(Token2.ParsedText, 0)) {
-						Path += "${" + Token2.ParsedText + "}";
+					if(LibZen.IsVariableName(Token2.GetText(), 0)) {
+						Path += "${" + Token2.GetText() + "}";
 						HasStringExpr = true;
 						TokenContext.Next();
 						if(Token2.IsNextWhiteSpace()) {
@@ -348,8 +348,8 @@ public class DShellGrammar extends ZenUtils {
 		@Var ZenToken Token = TokenContext.Next();   // "-"
 		@Var ZenToken Token2 = TokenContext.Next();  // "f"
 		if(!Token.IsNextWhiteSpace()) {
-			if(DShellGrammar.FileOperators.indexOf(Token2.ParsedText) != -1) {
-				Token.ParsedText += Token2.ParsedText;  // join to "-f";
+			if(DShellGrammar.FileOperators.indexOf(Token2.GetText()) != -1) {
+				Token.GetText() += Token2.GetText();  // join to "-f";
 				@Var ZenSyntaxTree Tree = new ZenSyntaxTree(Pattern, NameSpace, Token, null);
 				Tree.SetMatchedPatternAt(UnaryTerm, NameSpace, TokenContext, "$FilePath$", Required);
 				return Tree;
@@ -361,7 +361,7 @@ public class DShellGrammar extends ZenUtils {
 	public static ZenNode TypeFileOperator(ZenTypeEnv Gamma, ZenSyntaxTree ParsedTree, ZenType ContextType) {
 		@Var ZenNode PathNode = ParsedTree.TypeCheckAt(UnaryTerm, Gamma, ZenSystem.StringType, DefaultTypeCheckPolicy);
 		if(!PathNode.IsErrorNode()) {
-			@Var String OperatorSymbol = ZenNameSpace.FuncSymbol(ParsedTree.KeyToken.ParsedText);
+			@Var String OperatorSymbol = ZenNameSpace.FuncSymbol(ParsedTree.KeyToken.GetText());
 			@Var ZenFuncSet FuncSet = Gamma.NameSpace.GetMethod(ZenSystem.StringType, OperatorSymbol, true);
 			@Var ZenFunc ResolvedFunc = FuncSet.ResolveUnaryMethod(Gamma, PathNode.Type);
 			LibNative.Assert(ResolvedFunc != null);
@@ -386,7 +386,7 @@ public class DShellGrammar extends ZenUtils {
 		@Var ZenToken Token = TokenContext.GetToken();
 		@Var int CurrentPos = TokenContext.GetPosition(0);
 		@Var int NextLen = 0;
-		@Var String RedirectSymbol = Token.ParsedText;
+		@Var String RedirectSymbol = Token.GetText();
 		if(Token.EqualsText(">>")) {
 			DShellGrammar.IncreasePos(TokenContext, 1, allowIncrement);
 			return RedirectSymbol;
@@ -407,10 +407,10 @@ public class DShellGrammar extends ZenUtils {
 
 		if(NextLen == 2) {
 			if(!Token.IsNextWhiteSpace() && NextTokens[0].EqualsText("&")) {
-				RedirectSymbol += NextTokens[0].ParsedText;
+				RedirectSymbol += NextTokens[0].GetText();
 				if(!NextTokens[0].IsNextWhiteSpace()) {
 					if(NextTokens[1].EqualsText("1") || NextTokens[1].EqualsText("2")) {
-						RedirectSymbol += NextTokens[1].ParsedText;
+						RedirectSymbol += NextTokens[1].GetText();
 						DShellGrammar.IncreasePos(TokenContext, 3, allowIncrement);
 						return RedirectSymbol;
 					}
@@ -423,12 +423,12 @@ public class DShellGrammar extends ZenUtils {
 		}
 		else if(NextLen == 3) {
 			if(!Token.IsNextWhiteSpace() && (NextTokens[0].EqualsText(">") || NextTokens[0].EqualsText(">>"))) {
-				RedirectSymbol += NextTokens[0].ParsedText;
+				RedirectSymbol += NextTokens[0].GetText();
 				if(!NextTokens[0].IsNextWhiteSpace() &&
 						(LibZen.EqualsString(RedirectSymbol, "1>") || LibZen.EqualsString(RedirectSymbol, "2>"))) {
 					if(NextTokens[1].EqualsText("&") && !NextTokens[1].IsNextWhiteSpace()) {
 						if(NextTokens[2].EqualsText("1") || NextTokens[2].EqualsText("2")) {
-							RedirectSymbol += NextTokens[1].ParsedText + NextTokens[2].ParsedText;
+							RedirectSymbol += NextTokens[1].GetText() + NextTokens[2].GetText();
 							DShellGrammar.IncreasePos(TokenContext, 4, allowIncrement);
 							return RedirectSymbol;
 						}
@@ -449,7 +449,7 @@ public class DShellGrammar extends ZenUtils {
 			CommandTree.AppendParsedTree2(CommandTree.CreateConstTree(RedirectSymbol));
 		}
 		else {
-			@Var String Command = (String)NameSpace.GetSymbol(DShellGrammar.CommandSymbol(CommandToken.ParsedText));
+			@Var String Command = (String)NameSpace.GetSymbol(DShellGrammar.CommandSymbol(CommandToken.GetText()));
 			if(Command != null) {
 				CommandTree.AppendParsedTree2(CommandTree.CreateConstTree(Command));
 				TokenContext.Next();
@@ -461,7 +461,7 @@ public class DShellGrammar extends ZenUtils {
 		TokenContext.SetBackTrack(false);
 		while(TokenContext.HasNext() && CommandTree.IsValidSyntax()) {
 			@Var ZenToken Token = TokenContext.GetToken();
-			if(Token.IsIndent() || DShellGrammar.StopTokens.indexOf(Token.ParsedText) != -1) {
+			if(Token.IsIndent() || DShellGrammar.StopTokens.indexOf(Token.GetText()) != -1) {
 				if(!Token.EqualsText("|") && !Token.EqualsText("&")) {
 					break;
 				}
@@ -481,7 +481,7 @@ public class DShellGrammar extends ZenUtils {
 			}
 			if(Token.EqualsText("&")) {	// set background job
 				@Var ZenSyntaxTree OptionTree = TokenContext.CreateSyntaxTree(NameSpace, Pattern, null);
-				OptionTree.AppendParsedTree2(OptionTree.CreateConstTree(Token.ParsedText));
+				OptionTree.AppendParsedTree2(OptionTree.CreateConstTree(Token.GetText()));
 				CommandTree.AppendParsedTree2(OptionTree);
 				TokenContext.Next();
 				return CommandTree;
@@ -662,7 +662,7 @@ public class DShellGrammar extends ZenUtils {
 		ApplyNode.Append(DShellGrammar.CreateDCaseNode(Gamma, ParsedTree));
 		@Var String FaultInfo;
 		if(ParsedTree.HasNodeAt(DShellGrammar.FaultTerm)) {
-			FaultInfo = ParsedTree.GetSyntaxTreeAt(DShellGrammar.FaultTerm).KeyToken.ParsedText;
+			FaultInfo = ParsedTree.GetSyntaxTreeAt(DShellGrammar.FaultTerm).KeyToken.GetText();
 		}
 		else {
 			FaultInfo = Gamma.NameSpace.GetSymbolText("AssumedFault");
@@ -714,7 +714,7 @@ public class DShellGrammar extends ZenUtils {
 
 		// create UpdateFaultInfomation(FunctionName(), "FunctionName", CurrentFuncName, DCaseRevision);
 		@Var ZenNode Revision = DShellGrammar.CreateConstNode(Gamma, ParsedTree, ConstValue);
-		@Var String FunctionName = ParsedTree.GetSyntaxTreeAt(UnaryTerm).KeyToken.ParsedText;
+		@Var String FunctionName = ParsedTree.GetSyntaxTreeAt(UnaryTerm).KeyToken.GetText();
 		@Var String CurrentFuncName = Gamma.FuncBlock.DefinedFunc.GetNativeFuncName();
 
 		@Var ZenNode FuncNameNode = DShellGrammar.CreateConstNode(Gamma, ParsedTree, FunctionName);

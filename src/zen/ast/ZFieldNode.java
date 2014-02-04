@@ -43,7 +43,7 @@ public final class ZFieldNode extends ZNode {
 			this.DeclType = Node.Type;
 		}
 		else if(this.FieldName == null) {
-			this.FieldName = Node.SourceToken.ParsedText;
+			this.FieldName = Node.SourceToken.GetText();
 			this.SourceToken = Node.SourceToken;
 		}
 		else {

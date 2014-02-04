@@ -182,7 +182,7 @@
 //	}
 //
 //	@Override public void VisitErrorNode(ZenErrorNode Node) {
-//		@Var String Code = "throw RuntimeError(\"" + Node.SourceToken.ParsedText + "\")";
+//		@Var String Code = "throw RuntimeError(\"" + Node.SourceToken.GetText() + "\")";
 //		this.PushSourceCode(Code);
 //	}
 //

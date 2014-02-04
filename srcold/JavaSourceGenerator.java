@@ -246,7 +246,7 @@ public class JavaSourceGenerator extends ZenSourceGenerator {
 		//if(Node.Func.FuncBody instanceof Method) {
 		this.CurrentBuilder.Append("(");
 		Node.LeftNode.Accept(this);
-		this.CurrentBuilder.AppendToken(Node.SourceToken.ParsedText);
+		this.CurrentBuilder.AppendToken(Node.SourceToken.GetText());
 		Node.RightNode.Accept(this);
 		this.CurrentBuilder.Append(")");
 		//}
@@ -255,7 +255,7 @@ public class JavaSourceGenerator extends ZenSourceGenerator {
 	@Override public void VisitUnaryNode(ZenUnaryNode Node) {
 //		if(Node.Func.FuncBody instanceof Method) {
 		this.CurrentBuilder.Append("(");
-		this.CurrentBuilder.Append(Node.SourceToken.ParsedText);
+		this.CurrentBuilder.Append(Node.SourceToken.GetText());
 		Node.RecvNode.Accept(this);
 		this.CurrentBuilder.Append(")");
 //		}

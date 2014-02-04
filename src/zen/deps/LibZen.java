@@ -62,10 +62,25 @@ public abstract class LibZen {
 	}
 
 	public final static void DebugP(String msg) {
-		if(LibZen.DebugMode) {
-			LibNative.println("DEBUG " + LibZen.GetStackInfo(2) + ": " + msg);
-		}
+		//if(LibZen.DebugMode) {
+		LibNative.println("DEBUG " + LibZen.GetStackInfo(2) + ": " + msg);
+		//}
 	}
+
+	public final static boolean IsLetter(char ch) {
+		return Character.isLetter(ch);
+	}
+
+	public final static boolean IsDigit(char ch) {
+		return Character.isDigit(ch);
+	}
+
+	public final static boolean IsSymbol(char ch) {
+		return Character.isLetter(ch) || ch == '_' || ch > 255;
+	}
+
+
+
 
 	public final static char CharAt(String Text, long Pos) {
 		if(Pos < Text.length()) {

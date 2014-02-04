@@ -246,7 +246,7 @@ var CLASS = (function (_super) {
 	}
 
 	@Override public void VisitEmptyNode(ZenEmptyNode EmptyNode) {
-		LibZen.DebugP("empty node: " + EmptyNode.SourceToken.ParsedText);
+		LibZen.DebugP("empty node: " + EmptyNode.SourceToken.GetText());
 	}
 	@Override public void VisitInstanceOfNode(ZenInstanceOfNode Node) {
 		this.AddUseLibrary("JavaStyle.Object");
@@ -279,7 +279,7 @@ var CLASS = (function (_super) {
 //		this.DebugAppendNode(Node);
 //	}
 	@Override public void VisitUnaryNode(ZenUnaryNode Node) {
-		this.CurrentBuilder.Append(Node.SourceToken.ParsedText);
+		this.CurrentBuilder.Append(Node.SourceToken.GetText());
 		Node.RecvNode.Accept(this);
 	}
 //	@Override public void VisitIndexerNode(ZenGetterNode Node) {
@@ -346,7 +346,7 @@ var CLASS = (function (_super) {
 		this.DebugAppendNode(Node);
 	}
 //	@Override public void VisitConstNode(ZenConstNode Node) {
-//		this.VisitingBuilder.Append(Node.SourceToken.ParsedText);
+//		this.VisitingBuilder.Append(Node.SourceToken.GetText());
 //	}
 //	@Override public void VisitNewNode(ZenAllocateNode Node) {
 //		this.VisitingBuilder.Append("new ");
@@ -362,17 +362,17 @@ var CLASS = (function (_super) {
 		this.CurrentBuilder.Append(this.NullLiteral);
 	}
 	@Override public void VisitGetNameNode(ZenGetLocalNode Node) {
-		this.CurrentBuilder.Append(Node.SourceToken.ParsedText);
+		this.CurrentBuilder.Append(Node.SourceToken.GetText());
 	}
 	@Override public void VisitGetterNode(ZenGetterNode Node) {
 		Node.RecvNode.Accept(this);
 		this.CurrentBuilder.Append(".");
-		this.CurrentBuilder.Append(Node.SourceToken.ParsedText);
+		this.CurrentBuilder.Append(Node.SourceToken.GetText());
 	}
 	@Override public void VisitSetterNode(ZenSetterNode Node) {
 		Node.RecvNode.Accept(this);
 		this.CurrentBuilder.Append(".");
-		this.CurrentBuilder.Append(Node.SourceToken.ParsedText);
+		this.CurrentBuilder.Append(Node.SourceToken.GetText());
 		this.CurrentBuilder.AppendToken("=");
 		Node.ValueNode.Accept(this);
 		this.CurrentBuilder.Append(";");
@@ -395,7 +395,7 @@ var CLASS = (function (_super) {
 	}
 	@Override public void VisitBinaryNode(ZenBinaryNode Node) {
 		Node.LeftNode.Accept(this);
-		this.CurrentBuilder.AppendToken(Node.SourceToken.ParsedText);
+		this.CurrentBuilder.AppendToken(Node.SourceToken.GetText());
 		Node.RightNode.Accept(this);
 	}
 	@Override public void VisitAndNode(ZenAndNode Node) {
@@ -417,10 +417,10 @@ var CLASS = (function (_super) {
 	}
 	@Override public void VisitVarDeclNode(ZenVarDeclNode Node) {
 		this.CurrentBuilder.Append(this.ConvertToNativeTypeName(Node.DeclType));
-		String VarName = Node.SourceToken.ParsedText;
+		String VarName = Node.SourceToken.GetText();
 		this.CurrentBuilder.AppendToken(VarName);
 		//if(this.DoesNodeExist(Node.InitNode)){ //FIXME: Always true
-		if(Node.InitNode.SourceToken.ParsedText != VarName){
+		if(Node.InitNode.SourceToken.GetText() != VarName){
 			this.CurrentBuilder.AppendToken("=");
 			Node.InitNode.Accept(this);
 		}

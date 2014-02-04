@@ -75,7 +75,7 @@ public class CGrammar extends ZenUtils {
 	}
 
 	public static ZenNode TypeGetterP(ZenTypeEnv Gamma, ZenSyntaxTree ParsedTree, ZenType ContextType) {
-		@Var String Name = ParsedTree.KeyToken.ParsedText;
+		@Var String Name = ParsedTree.KeyToken.GetText();
 		@Var ZenNode ObjectNode = ParsedTree.TypeCheckAt(UnaryTerm, Gamma, ZenSystem.VarType, DefaultTypeCheckPolicy);
 		if(ObjectNode.IsErrorNode()) {
 			return ObjectNode;
@@ -140,7 +140,7 @@ public class CGrammar extends ZenUtils {
 		//	SuperType = ClassDeclTree.GetSyntaxTreeAt(ClassDeclSuperType).GetParsedType();
 		//}
 		@Var int ClassFlag = KonohaGrammar.ParseClassFlag(0, TokenContext.ParsingAnnotation);
-		@Var String ClassName = NameToken.ParsedText;
+		@Var String ClassName = NameToken.GetText();
 		@Var ZenType DefinedType = NameSpace.GetType(ClassName);
 		if(DefinedType != null && DefinedType.IsAbstractType()) {
 			DefinedType.TypeFlag = ClassFlag;
@@ -197,7 +197,7 @@ public class CGrammar extends ZenUtils {
 	private static boolean TypeMemberDecl(ZenTypeEnv Gamma, ZenSyntaxTree ParsedTree, ZenClassField ClassField) {
 		@Var int    FieldFlag = KonohaGrammar.ParseVarFlag(0, ParsedTree.Annotation);
 		@Var ZenType DeclType = ParsedTree.GetSyntaxTreeAt(VarDeclType).GetParsedType();
-		@Var String FieldName = ParsedTree.GetSyntaxTreeAt(VarDeclName).KeyToken.ParsedText;
+		@Var String FieldName = ParsedTree.GetSyntaxTreeAt(VarDeclName).KeyToken.GetText();
 		@Var ZenNode InitValueNode = null;
 		@Var Object InitValue = null;
 		if(ParsedTree.HasNodeAt(VarDeclValue)) {
@@ -245,8 +245,8 @@ public class CGrammar extends ZenUtils {
 				break;
 			}
 			if(Token.IsNameSymbol()) {
-				if(!NameSpace.LoadRequiredLib(Token.ParsedText)) {
-					return TokenContext.NewErrorSyntaxTree(Token, "failed to load required library: " + Token.ParsedText);
+				if(!NameSpace.LoadRequiredLib(Token.GetText())) {
+					return TokenContext.NewErrorSyntaxTree(Token, "failed to load required library: " + Token.GetText());
 				}
 			}
 			if(TokenContext.MatchToken(",")) {

@@ -231,7 +231,7 @@ public class BashSourceGenerator extends SourceGenerator {
 	}
 
 	@Override public void VisitUnaryNode(ZenUnaryNode Node) {
-		@Var String FuncName = Node.SourceToken.ParsedText;
+		@Var String FuncName = Node.SourceToken.GetText();
 		@Var ZenFunc Func = Node.ResolvedFunc;
 		@Var String Expr = this.ResolveValueType(Node.RecvNode, false);	//TODO: support ++ --
 		@Var String Macro = null;
@@ -248,7 +248,7 @@ public class BashSourceGenerator extends SourceGenerator {
 	}
 
 	@Override public void VisitBinaryNode(ZenBinaryNode Node) {
-		@Var String FuncName = Node.SourceToken.ParsedText;
+		@Var String FuncName = Node.SourceToken.GetText();
 		@Var ZenFunc Func = Node.ResolvedFunc;
 		@Var String Left = this.ResolveValueType(Node.LeftNode, false);
 		@Var String Right = this.ResolveValueType(Node.RightNode, false);
@@ -297,7 +297,7 @@ public class BashSourceGenerator extends SourceGenerator {
 	}
 
 //	@Override public void VisitSelfAssignNode(ZenSelfAssignNode Node) {
-//		@Var String FuncName = Node.SourceToken.ParsedText;
+//		@Var String FuncName = Node.SourceToken.GetText();
 //		@Var ZenFunc Func = Node.Func;
 //		@Var String Left = this.VisitNode(Node.LeftNode);
 //		@Var String Right = this.ResolveValueType(Node.RightNode, false);
@@ -408,7 +408,7 @@ public class BashSourceGenerator extends SourceGenerator {
 	}
 
 	@Override public void VisitErrorNode(ZenErrorNode Node) {
-		this.PushSourceCode("echo " + LibZen.QuoteString(Node.SourceToken.ParsedText) + " >&2");
+		this.PushSourceCode("echo " + LibZen.QuoteString(Node.SourceToken.GetText()) + " >&2");
 	}
 
 	@Override public void VisitCommandNode(ZenCommandNode Node) {

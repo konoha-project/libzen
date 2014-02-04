@@ -189,12 +189,7 @@ public class ZenMain {
 		//ScriptEngine.SetSymbol("ARGV", ARGV, null);
 		if (ARGV.size() > 0) {
 			@Var String FileName = ARGV.get(0);
-			@Var String ScriptText = LibNative.LoadTextFile(FileName);
-			if (ScriptText == null) {
-				LibNative.Exit(1, "file not found: " + FileName);
-			}
-			@Var long FileLine = ZSystem.GetFileLine(FileName, 1);
-			@Var boolean Success = ScriptEngine.Load(ScriptText, FileLine);
+			@Var boolean Success = ScriptEngine.Load(FileName);
 			if (!Success) {
 				LibNative.Exit(1, "abort loading: " + FileName);
 			}
@@ -209,7 +204,7 @@ public class ZenMain {
 			@Var String Line = null;
 			while ((Line = ZenMain.ReadLine2(">>> ", "    ")) != null) {
 				try {
-					@Var Object EvaledValue = ScriptEngine.Eval(Line, linenum, true);
+					@Var Object EvaledValue = ScriptEngine.Eval(Line, "(stdin)", linenum, true);
 					ScriptEngine.Generator.Logger.ShowReportedErrors();
 					if (!(EvaledValue instanceof ZEmptyValue)) {
 						if(EvaledValue == null) {

@@ -273,7 +273,7 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 
 	@Override
 	public void VisitBinaryNode(ZBinaryNode Node) {
-		String Op = this.ZenOpToHaskellOp(Node.SourceToken.ParsedText);
+		String Op = this.ZenOpToHaskellOp(Node.SourceToken.GetText());
 
 		this.CurrentBuilder.Append("(");
 		Node.LeftNode.Accept(this);

@@ -51,7 +51,7 @@ public class AsmMethodBuilder extends MethodNode {
 
 	void SetLineNumber(ZNode Node) {
 		if(Node.SourceToken != null) {
-			this.SetLineNumber(Node.SourceToken.FileLine);
+			this.SetLineNumber(Node.SourceToken.GetLineNumber());
 		}
 	}
 

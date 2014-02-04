@@ -233,7 +233,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 	}
 
 	private String GetBinaryOpcode(ZBinaryNode Node) {
-		String Binary = Node.SourceToken.ParsedText;
+		String Binary = Node.SourceToken.GetText();
 		if(Binary.equals("+")) {
 			if(Node.LeftNode.Type.IsIntType() && Node.RightNode.Type.IsIntType()) {
 				return "add";
@@ -277,7 +277,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		throw new RuntimeException("Can't use this binary\"" + Binary + "\"");
 	}
 	private String GetCompareOpCodeAndCondition(ZComparatorNode Node) {
-		String Comparator = Node.SourceToken.ParsedText;
+		String Comparator = Node.SourceToken.GetText();
 		if(Comparator.equals("==")) {
 			if(Node.LeftNode.Type.IsIntType() && Node.RightNode.Type.IsIntType()) {
 				return "icmp eq";
@@ -879,10 +879,10 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 
 	@Override
 	public void VisitUnaryNode(ZUnaryNode Node) {
-		if(Node.SourceToken.ParsedText.equals("+")) {
+		if(Node.SourceToken.GetText().equals("+")) {
 			this.GenerateCode(Node.RecvNode);
 		}
-		else if(Node.SourceToken.ParsedText.equals("-")){
+		else if(Node.SourceToken.GetText().equals("-")){
 			String TempVar = this.CreateTempVar();
 			this.PushNewBuffer(TempVar);
 			this.AddCodeToCurrentBuffer(" = ");
@@ -903,7 +903,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 			this.AddCodeToCurrentBuffer(TempVar);
 		}
 		else {
-			throw new RuntimeException("Can't use this Unary\"" + Node.SourceToken.ParsedText + "\"");
+			throw new RuntimeException("Can't use this Unary\"" + Node.SourceToken.GetText() + "\"");
 		}
 	}
 

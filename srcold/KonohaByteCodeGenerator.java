@@ -450,7 +450,7 @@ public class KonohaByteCodeGenerator extends ZenSourceGenerator {
 		@Var int CallReg = TargetReg - ReturnIndex + ThisIndex;
 		Node.RecvNode.Accept(this);
 		this.CurrentBuilder.Append("NMOV " + "REG" + (CallReg+1) + ", REG" + this.PopRegister() + "\n");
-		@Var String Op = Node.SourceToken.ParsedText; //Node.NativeName
+		@Var String Op = Node.SourceToken.GetText(); //Node.NativeName
 		this.CurrentBuilder.Append("NSET " + "REG" + (CallReg+MethodIndex) + ", METHOD\"" + Op + "\"\n");
 		this.CurrentBuilder.Append("CALL " + "REG" + CallReg + ", " + 1/*ArgumentSize*/ + "\n");
 		this.PushRegister(TargetReg);
@@ -490,7 +490,7 @@ public class KonohaByteCodeGenerator extends ZenSourceGenerator {
 		this.CurrentBuilder.Append("NMOV " + "REG" + (CallReg+1) + ", REG" + this.PopRegister() + "\n");
 		Node.RightNode.Accept(this);
 		this.CurrentBuilder.Append("NMOV " + "REG" + (CallReg+2) + ", REG" + this.PopRegister() + "\n");
-		@Var String Op = Node.SourceToken.ParsedText; //Node.NativeName
+		@Var String Op = Node.SourceToken.GetText(); //Node.NativeName
 		this.CurrentBuilder.Append("NSET " + "REG" + (CallReg+MethodIndex) + ", METHOD\"" + Op + "\"\n");
 		this.CurrentBuilder.Append("CALL " + "REG" + CallReg + ", " + 2/*ArgumentSize*/ + "\n");
 		this.PushRegister(TargetReg);

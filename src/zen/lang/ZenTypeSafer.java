@@ -537,8 +537,8 @@ public class ZenTypeSafer extends ZTypeChecker {
 
 	@Override public void VisitBinaryNode(ZBinaryNode Node) {
 		ZType ContextType = this.GetContextType();
-		ZType LeftType = this.GetBinaryLeftType(Node.SourceToken.ParsedText, ContextType);
-		ZType RightType = this.GetBinaryRightType(Node.SourceToken.ParsedText, ContextType);
+		ZType LeftType = this.GetBinaryLeftType(Node.SourceToken.GetText(), ContextType);
+		ZType RightType = this.GetBinaryRightType(Node.SourceToken.GetText(), ContextType);
 		//System.err.println("debug left=" + LeftType + ", right=" + RightType);
 		Node.LeftNode = this.CheckType(Node.LeftNode, LeftType);
 		Node.RightNode = this.CheckType(Node.RightNode, RightType);

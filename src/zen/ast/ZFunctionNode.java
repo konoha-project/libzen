@@ -60,7 +60,7 @@ public class ZFunctionNode extends ZNode {
 			this.FuncBlock = (ZBlockNode)Node;
 		}
 		else if(this.FuncName == null) {
-			this.FuncName = Node.SourceToken.ParsedText;
+			this.FuncName = Node.SourceToken.GetText();
 			this.SourceToken = Node.SourceToken;
 		}
 	}

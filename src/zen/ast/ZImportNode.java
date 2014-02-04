@@ -11,11 +11,11 @@ public class ZImportNode extends ZNode {
 	}
 	@Override public void Append(ZNode Node) {
 		if(this.ResourcePath == null) {
-			this.ResourcePath = Node.SourceToken.ParsedText;
+			this.ResourcePath = Node.SourceToken.GetText();
 			this.SourceToken = Node.SourceToken;
 		}
 		else {
-			this.Alias = Node.SourceToken.ParsedText;
+			this.Alias = Node.SourceToken.GetText();
 		}
 	}
 	@Override public String GetVisitName() {

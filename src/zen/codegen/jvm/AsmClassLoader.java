@@ -27,7 +27,6 @@ import zen.deps.Var;
 import zen.deps.ZenFunction;
 import zen.deps.ZenMatchFunc;
 import zen.deps.ZenTokenFunc;
-import zen.lang.ZSystem;
 import zen.parser.ZTokenContext;
 import zen.type.ZFuncType;
 import zen.type.ZType;
@@ -93,7 +92,7 @@ class AsmClassLoader extends ClassLoader {
 	}
 
 	AsmClassBuilder NewFunctionHolderClass(ZNode Node, JvmFuncNode FuncNode, ZFuncType FuncType) {
-		@Var String SourceFile = ZSystem.GetSourceFileName(Node.SourceToken.FileLine);
+		@Var String SourceFile = Node.SourceToken.GetFileName();
 		Class<?> FuncClass = this.LoadFuncClass(FuncType);
 		@Var AsmClassBuilder cb = new AsmClassBuilder(ACC_PUBLIC|ACC_FINAL, SourceFile, FuncNode.ClassName, Type.getInternalName(FuncClass));
 		this.AddClassBuilder(cb);
@@ -139,7 +138,7 @@ class AsmClassLoader extends ClassLoader {
 	}
 
 	AsmClassBuilder NewClass(ZNode Node, String ClassName, ZType SuperType) {
-		@Var String SourceFile = ZSystem.GetSourceFileName(Node.SourceToken.FileLine);
+		@Var String SourceFile = Node.SourceToken.GetFileName();
 		@Var AsmClassBuilder cb = new AsmClassBuilder(ACC_PUBLIC, SourceFile, ClassName, "java/lang/Object" /*FIXME*/);
 		this.AddClassBuilder(cb);
 		return cb;

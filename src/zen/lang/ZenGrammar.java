@@ -78,6 +78,8 @@ import zen.deps.Var;
 import zen.deps.ZenMap;
 import zen.parser.ZNameSpace;
 import zen.parser.ZParserConst;
+import zen.parser.ZPatternToken;
+import zen.parser.ZSource;
 import zen.parser.ZSyntaxPattern;
 import zen.parser.ZToken;
 import zen.parser.ZTokenContext;
@@ -87,237 +89,141 @@ import zen.type.ZTypePool;
 //endif VAJA
 
 public class ZenGrammar {
+
 	// Token
-	public static long WhiteSpaceToken(ZTokenContext TokenContext, String SourceText, long pos) {
-		TokenContext.FoundWhiteSpace();
-		for(; pos < SourceText.length(); pos += 1) {
-			@Var char ch = LibZen.CharAt(SourceText, pos);
-			if(ch == '\n' || !LibZen.IsWhitespace(SourceText, pos)) {
-				break;
-			}
-		}
-		return pos;
+	public static boolean WhiteSpaceToken(ZSource Source) {
+		Source.SkipWhiteSpace();
+		return true;
 	}
 
-	public static long IndentToken(ZTokenContext TokenContext, String SourceText, long pos) {
-		@Var long LineStart = pos + 1;
-		TokenContext.FoundLineFeed(1);
-		for(pos = pos + 1; pos < SourceText.length(); pos += 1) {
-			if(!LibZen.IsWhitespace(SourceText, pos)) {
-				break;
-			}
-			if(LibZen.CharAt(SourceText, pos) == '\n') {
-				TokenContext.FoundLineFeed(1);
-			}
-		}
-		@Var String Text = "";
-		if(LineStart < pos) {
-			Text = LibZen.SubString(SourceText, LineStart, pos);
-		}
-		TokenContext.AppendParsedToken(Text, ZParserConst.IndentTokenFlag, null);
-		return pos;
+	public static boolean IndentToken(ZSource Source) {
+		@Var int StartIndex = Source.GetPosition() + 1;
+		Source.MoveNext();
+		Source.SkipWhiteSpace();
+		Source.FoundIndent(StartIndex, Source.GetPosition());
+		return true;
 	}
 
-	public static long SymbolToken(ZTokenContext TokenContext, String SourceText, long pos) {
-		@Var long start = pos;
-		@Var String PresetPattern = null;
-		for(; pos < SourceText.length(); pos += 1) {
-			if(!LibZen.IsVariableName(SourceText, pos) && !LibZen.IsDigit(SourceText, pos)) {
-				break;
-			}
-		}
-		TokenContext.AppendParsedToken(LibZen.SubString(SourceText, start, pos), ZParserConst.NameSymbolTokenFlag, PresetPattern);
-		return pos;
+	public static boolean OperatorToken(ZSource Source) {
+		Source.Tokenize();
+		return true;
 	}
 
-	public static long OperatorToken(ZTokenContext TokenContext, String SourceText, long pos) {
-		@Var long NextPos = pos + 1;
-		for(; NextPos < SourceText.length(); NextPos += 1) {
-			if(LibZen.IsWhitespace(SourceText, NextPos) || LibZen.IsLetter(SourceText, NextPos) || LibZen.IsDigit(SourceText, NextPos)) {
+	public static boolean SymbolToken(ZSource Source) {
+		@Var int StartIndex = Source.GetPosition();
+		while(Source.HasChar()) {
+			@Var char ch = Source.GetChar();
+			if(!LibZen.IsSymbol(ch) && !LibZen.IsDigit(ch)) {
 				break;
 			}
+			Source.MoveNext();
 		}
-		@Var boolean Matched = false;
-		while(NextPos > pos) {
-			@Var String Sub = LibZen.SubString(SourceText, pos, NextPos);
-			@Var ZSyntaxPattern Pattern = TokenContext.NameSpace.GetSuffixSyntaxPattern(Sub);
-			if(Pattern != null) {
-				Matched = true;
-				break;
-			}
-			NextPos -= 1;
-		}
-		// FIXME
-		if(Matched == false) {
-			NextPos = pos + 1;
-		}
-		TokenContext.AppendParsedToken(LibZen.SubString(SourceText, pos, NextPos), 0, null);
-		return NextPos;
+		Source.Tokenize(StartIndex, Source.GetPosition());
+		return true;
 	}
 
-	public static long CommentToken(ZTokenContext TokenContext, String SourceText, long pos) {
-		@Var long NextPos = pos + 1;
-		@Var char NextChar = LibZen.CharAt(SourceText, NextPos);
-		if(NextChar != '/' && NextChar != '*') {
-			return ZTokenContext.MismatchedPosition;
-		}
-		if(NextChar == '*') { // MultiLineComment
-			// SourceMap ${file:line}
-			if(LibZen.CharAt(SourceText, NextPos+1) == '$' && LibZen.CharAt(SourceText, NextPos+2) == '{') {
-				@Var long StartPos = NextPos + 3;
-				NextPos += 3;
-				while(NextChar != 0) {
-					NextChar = LibZen.CharAt(SourceText, NextPos);
-					if(NextChar == '}') {
-						TokenContext.SetSourceMap(LibZen.SubString(SourceText, StartPos, NextPos));
-						break;
-					}
-					if(NextChar == '\n' || NextChar == '*') {
-						break;  // stop
-					}
-					NextPos += 1;
-				}
-			}
-			@Var int Level = 1;
-			@Var char PrevChar = '0';
-			for(; NextPos < SourceText.length(); NextPos += 1) {
-				NextChar = LibZen.CharAt(SourceText, NextPos);
-				if(NextChar == '/' && PrevChar == '*') {
-					if(Level == 1) {
-						return NextPos + 1;
-					}
-					Level = Level - 1;
-				}
-				if(Level > 0) {
-					if(NextChar == '*' && PrevChar == '/') {
-						Level = Level + 1;
-					}
-				}
-				PrevChar = NextChar;
-			}
-		}
-		else if(NextChar == '/') { // SingleLineComment
-			for(; NextPos < SourceText.length(); NextPos += 1) {
-				NextChar = LibZen.CharAt(SourceText, NextPos);
-				if(NextChar == '\n') {
-					break;
-				}
-			}
-			return ZenGrammar.IndentToken(TokenContext, SourceText, NextPos);
-		}
-		return ZTokenContext.MismatchedPosition;
-	}
-
-	public static long NumberLiteralToken(ZTokenContext TokenContext, String SourceText, long pos) {
-		@Var long start = pos;
-		@Var long LastMatchedPos = pos;
-		for(; pos < SourceText.length(); pos += 1) {
-			if(!LibZen.IsDigit(SourceText, pos)) {
+	public static boolean NumberLiteralToken(ZSource Source) {
+		@Var int StartIndex = Source.GetPosition();
+		@Var char ch = 0;
+		while(Source.HasChar()) {
+			ch = Source.GetChar();
+			if(!LibZen.IsDigit(ch)) {
 				break;
 			}
-		}
-		LastMatchedPos = pos;
-		@Var char ch = LibZen.CharAt(SourceText, pos);
-		if(ch != '.' && ch != 'e' && ch != 'E') {
-			TokenContext.AppendParsedToken(LibZen.SubString(SourceText, start, pos), 0, "$IntegerLiteral$");
-			return pos;
+			Source.MoveNext();
 		}
 		if(ch == '.') {
-			pos += 1;
-			for(; pos < SourceText.length(); pos += 1) {
-				if(!LibZen.IsDigit(SourceText, pos)) {
+			while(Source.HasChar()) {
+				ch = Source.GetChar();
+				if(!LibZen.IsDigit(ch)) {
 					break;
 				}
+				Source.MoveNext();
 			}
+			Source.Tokenize("$FloatLiteral$", StartIndex, Source.GetPosition());
 		}
-		ch = LibZen.CharAt(SourceText, pos);
-		if(ch == 'e' || ch == 'E') {
-			pos += 1;
-			ch = LibZen.CharAt(SourceText, pos);
-			if(ch == '+' || ch == '-') {
-				pos += 1;
-				ch = LibZen.CharAt(SourceText, pos);
-			}
-			@Var long saved = pos;
-			for(; pos < SourceText.length(); pos += 1) {
-				if(!LibZen.IsDigit(SourceText, pos)) {
-					break;
-				}
-			}
-			if(saved == pos) {
-				pos = LastMatchedPos;
-			}
+		else {
+			Source.Tokenize("$IntegerLiteral$", StartIndex, Source.GetPosition());
 		}
-		TokenContext.AppendParsedToken(LibZen.SubString(SourceText, start, pos), 0, "$FloatLiteral$");
-		return pos;
+		return true;
 	}
 
-	//	public static long CharLiteralToken(ZenTokenContext TokenContext, String SourceText, long pos) {
-	//		@Var long start = pos;
-	//		@Var char prev = '\'';
-	//		pos = pos + 1; // eat "\'"
-	//		for(; pos < SourceText.length(); pos += 1) {
-	//			@Var char ch = LibZen.CharAt(SourceText, pos);
-	//			if(ch == '\'' && prev != '\\') {
-	//				TokenContext.AddNewToken(LibZen.SubString(SourceText, start, (pos + 1)), ZenConsts.QuotedTokenFlag, "$CharLiteral$");
-	//				return pos + 1;
-	//			}
-	//			if(ch == '\n') {
-	//				TokenContext.ReportTokenError1(ZenConsts.ErrorLevel, "expected ' to close the charctor literal", LibZen.SubString(SourceText, start, pos));
-	//				TokenContext.FoundLineFeed(1);
-	//				return pos;
-	//			}
-	//			prev = ch;
-	//		}
-	//		TokenContext.ReportTokenError1(ZenConsts.ErrorLevel, "expected ' to close the charctor literal", LibZen.SubString(SourceText, start, pos));
-	//		return pos;
-	//	}
-
-	private static long SkipBackSlashOrNewLineOrDoubleQuote( String SourceText, long pos) {
-		for(; pos < SourceText.length(); pos += 1) {
-			@Var char ch = LibZen.CharAt(SourceText, pos);
-			if(ch == '\\' || ch == '\n' || ch == '"') {
-				return pos;
-			}
-		}
-		return pos;
-	}
-
-	public static long StringLiteralToken(ZTokenContext TokenContext, String SourceText, long pos) {
-		@Var long start = pos;
-		pos = pos + 1; // eat "\""
-		for(; pos < SourceText.length(); pos += 1) {
-			pos = ZenGrammar.SkipBackSlashOrNewLineOrDoubleQuote(SourceText, pos);
-			@Var char ch = LibZen.CharAt(SourceText, pos);
-			if(ch == '\\') {
-				if(pos + 1 < SourceText.length()) {
-					@Var char NextChar = LibZen.CharAt(SourceText, pos + 1);
-					if(NextChar == 'u') { // \u12345
-						pos += 2; // skip "\\" "u"
-						for(; pos < SourceText.length(); pos += 1) {
-							if(!LibZen.IsDigit(SourceText, pos)) {
-								break;
-							}
-						}
-						ch = LibZen.CharAt(SourceText, pos);
-					}
-					else {
-						pos += 1; // skip "\\"
-					}
-				}
-			}
+	public static boolean StringLiteralToken(ZSource Source) {
+		@Var int StartIndex = Source.GetPosition() + 1;
+		Source.MoveNext();
+		while(Source.HasChar()) {
+			@Var char ch = Source.GetChar();
 			if(ch == '\"') {
-				TokenContext.AppendParsedToken(LibZen.SubString(SourceText, start, (pos + 1)), ZParserConst.QuotedTokenFlag, "$StringLiteral$");
-				return pos + 1;
+				Source.Tokenize("$StringLiteral$", StartIndex, Source.GetPosition());
+				Source.MoveNext();
+				return true;
 			}
 			if(ch == '\n') {
-				//TokenContext.ReportTokenError1(ZLogger.ErrorLevel, "expected \" to close the string literal", LibZen.SubString(SourceText, start, pos));
-				TokenContext.FoundLineFeed(1);
-				return pos;
+				break;
 			}
+			if(ch == '\\') {
+				Source.MoveNext();
+			}
+			Source.MoveNext();
 		}
-		//TokenContext.ReportTokenError1(ZLogger.ErrorLevel, "expected \" to close the string literal", LibZen.SubString(SourceText, start, pos));
-		return pos;
+		Source.Warning(StartIndex-1, "unclosed \"");
+		return false;
+	}
+
+	public static boolean CommentToken(ZSource Source) {
+		@Var int StartIndex = Source.GetPosition();
+		@Var char NextChar = Source.GetChar(+1);
+		if(NextChar != '/' && NextChar != '*') {
+			return false;  // another tokenizer
+		}
+		if(NextChar == '/') { // SingleLineComment
+			while(Source.HasChar()) {
+				@Var char ch = Source.GetChar();
+				if(ch == '\n') {
+					break;
+				}
+				Source.MoveNext();
+			}
+			return true;
+		}
+		//		if(Source.GetChar(+2)== '$' && Source.GetChar(+3) == '{') {
+		//
+		//			if(LibZen.CharAt(SourceText, NextPos+1) == '$' && LibZen.CharAt(SourceText, NextPos+2) == '{') {
+		//				@Var long StartPos = NextPos + 3;
+		//				NextPos += 3;
+		//				while(NextChar != 0) {
+		//					NextChar = LibZen.CharAt(SourceText, NextPos);
+		//					if(NextChar == '}') {
+		//						this.TokenContext.SetSourceMap(LibZen.SubString(SourceText, StartPos, NextPos));
+		//						break;
+		//					}
+		//					if(NextChar == '\n' || NextChar == '*') {
+		//						break;  // stop
+		//					}
+		//					NextPos += 1;
+		//				}
+		//			}
+		@Var int Level = 1;
+		@Var char PrevChar = '\0';
+		while(Source.HasChar()) {
+			NextChar = Source.GetChar();
+			if(NextChar == '/' && PrevChar == '*') {
+				if(Level == 1) {
+					Source.MoveNext();
+					return true;
+				}
+				Level = Level - 1;
+			}
+			if(Level > 0) {
+				if(NextChar == '*' && PrevChar == '/') {
+					Level = Level + 1;
+				}
+			}
+			Source.MoveNext();
+			PrevChar = NextChar;
+		}
+		Source.Warning(StartIndex, "unfound */");
+		return true;
 	}
 
 	// Match
@@ -335,17 +241,17 @@ public class ZenGrammar {
 
 	public static ZNode MatchIntLiteral(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
 		@Var ZToken Token = TokenContext.GetTokenAndMoveForward();
-		return new ZIntNode(ParentNode, Token, LibZen.ParseInt(Token.ParsedText));
+		return new ZIntNode(ParentNode, Token, LibZen.ParseInt(Token.GetText()));
 	}
 
 	public static ZNode MatchFloatLiteral(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
 		@Var ZToken Token = TokenContext.GetTokenAndMoveForward();
-		return new ZFloatNode(ParentNode, Token, LibZen.ParseFloat(Token.ParsedText));
+		return new ZFloatNode(ParentNode, Token, LibZen.ParseFloat(Token.GetText()));
 	}
 
 	public static ZNode MatchStringLiteral(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
 		@Var ZToken Token = TokenContext.GetTokenAndMoveForward();
-		return new ZStringNode(ParentNode, Token, LibZen.UnquoteString(Token.ParsedText));
+		return new ZStringNode(ParentNode, Token, LibZen.UnquoteString(Token.GetText()));
 	}
 
 	public static ZNode MatchArrayLiteral(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
@@ -384,7 +290,7 @@ public class ZenGrammar {
 
 	public static ZNode MatchType(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
 		@Var ZToken Token = TokenContext.GetTokenAndMoveForward();
-		@Var ZTypeNode TypeNode = ParentNode.GetNameSpace().GetTypeNode(Token.ParsedText, Token);
+		@Var ZTypeNode TypeNode = ParentNode.GetNameSpace().GetTypeNode(Token.GetText(), Token);
 		if(TypeNode != null) {
 			return TokenContext.ParsePatternAfter(ParentNode, TypeNode, "$TypeSuffix$", ZTokenContext.Optional2);
 		}
@@ -424,12 +330,12 @@ public class ZenGrammar {
 			return TokenContext.CreateExpectedErrorNode(NameToken, "identifier");
 		}
 		if(TokenContext.MatchToken("=")) {
-			@Var ZNode AssignedNode = new ZSetNameNode(ParentNode, NameToken, NameToken.ParsedText);
+			@Var ZNode AssignedNode = new ZSetNameNode(ParentNode, NameToken, NameToken.GetText());
 			AssignedNode = TokenContext.AppendMatchedPattern(ParentNode, "$Expression$", ZTokenContext.Required2);
 			return AssignedNode;
 		}
 		else {
-			return new ZGetNameNode(ParentNode, NameToken, NameToken.ParsedText);
+			return new ZGetNameNode(ParentNode, NameToken, NameToken.GetText());
 		}
 	}
 
@@ -458,19 +364,19 @@ public class ZenGrammar {
 			return TokenContext.CreateExpectedErrorNode(Token, "field name");
 		}
 		if(TokenContext.IsToken("(")) {  // method call
-			@Var ZNode MethodCallNode = new ZMethodCallNode(ParentNode, Token, LeftNode, Token.ParsedText);
+			@Var ZNode MethodCallNode = new ZMethodCallNode(ParentNode, Token, LeftNode, Token.GetText());
 			MethodCallNode = TokenContext.MatchNodeToken(MethodCallNode, "(", ZTokenContext.Required2);
 			MethodCallNode = TokenContext.AppendMatchedPatternNtimes(MethodCallNode, "$Expression$", ",", ZTokenContext.AllowSkipIndent2);
 			MethodCallNode = TokenContext.MatchNodeToken(MethodCallNode, ")", ZTokenContext.Required2);
 			return MethodCallNode;
 		}
 		if(TokenContext.MatchToken("=")) {
-			ZNode SetterNode = new ZSetterNode(ParentNode, Token, LeftNode, Token.ParsedText);
+			ZNode SetterNode = new ZSetterNode(ParentNode, Token, LeftNode, Token.GetText());
 			SetterNode = TokenContext.AppendMatchedPattern(SetterNode, "$Expression$", ZTokenContext.Required2);
 			return SetterNode;
 		}
 		else {
-			return new ZGetterNode(ParentNode, Token, LeftNode, Token.ParsedText);
+			return new ZGetterNode(ParentNode, Token, LeftNode, Token.GetText());
 		}
 	}
 
@@ -536,7 +442,7 @@ public class ZenGrammar {
 	private static ZSyntaxPattern GetSuffixPattern(ZNameSpace NameSpace, ZTokenContext TokenContext) {
 		@Var ZToken Token = TokenContext.GetToken();
 		if(Token != ZToken.NullToken) {
-			@Var ZSyntaxPattern Pattern = NameSpace.GetSuffixSyntaxPattern(Token.ParsedText);
+			@Var ZSyntaxPattern Pattern = NameSpace.GetSuffixSyntaxPattern(Token.GetText());
 			return Pattern;
 		}
 		return null;
@@ -546,15 +452,15 @@ public class ZenGrammar {
 		@Var ZToken Token = TokenContext.GetToken();
 		@Var ZSyntaxPattern Pattern = null;
 		@Var ZNameSpace NameSpace = ParentNode.GetNameSpace();
-		if(Token.PresetPattern != null) {
-			Pattern = Token.PresetPattern;
+		if(Token instanceof ZPatternToken) {
+			Pattern = ((ZPatternToken)Token).PresetPattern;
 		}
 		else {
-			Pattern = NameSpace.GetSyntaxPattern(Token.ParsedText);
+			Pattern = NameSpace.GetSyntaxPattern(Token.GetText());
 		}
 		if(Pattern != null) {
 			if(Pattern.IsStatement && !AllowStatement) {
-				return new ZErrorNode(ParentNode, Token, Token.ParsedText + " statement is not here");
+				return new ZErrorNode(ParentNode, Token, Token.GetText() + " statement is not here");
 			}
 			LeftNode = TokenContext.ApplyMatchPattern(ParentNode, LeftNode, Pattern, ZTokenContext.Required2);
 		}
@@ -726,10 +632,10 @@ public class ZenGrammar {
 
 	public static ZNode MatchIdentifier(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
 		@Var ZToken Token = TokenContext.GetTokenAndMoveForward();
-		if(LibZen.IsVariableName(Token.ParsedText, 0)) {
-			return new ZGetNameNode(ParentNode, Token, Token.ParsedText);
+		if(LibZen.IsVariableName(Token.GetText(), 0)) {
+			return new ZGetNameNode(ParentNode, Token, Token.GetText());
 		}
-		return new ZErrorNode(ParentNode, Token, "illegal name: '" + Token.ParsedText + "'");
+		return new ZErrorNode(ParentNode, Token, "illegal name: '" + Token.GetText() + "'");
 	}
 
 	public static ZNode MatchTypeAnnotation(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
@@ -756,7 +662,7 @@ public class ZenGrammar {
 		if(!NameToken.IsNameSymbol()) {
 			return TokenContext.CreateExpectedErrorNode(NameToken, "parameter name");
 		}
-		@Var ZNode VarNode = new ZParamNode(ParentNode, NameToken, ZType.VarType, NameToken.ParsedText);
+		@Var ZNode VarNode = new ZParamNode(ParentNode, NameToken, ZType.VarType, NameToken.GetText());
 		VarNode = TokenContext.AppendMatchedPattern(VarNode, "$TypeAnnotation$", ZTokenContext.Optional2);
 		return VarNode;
 	}
@@ -788,7 +694,7 @@ public class ZenGrammar {
 			if(Anno == null) {
 				Anno = new ZenMap<Object>(null);
 			}
-			Anno.put(Token.ParsedText, Token);
+			Anno.put(Token.GetText(), Token);
 			TokenContext.SkipIndent();
 		}
 		if(Anno != null) {
@@ -822,7 +728,7 @@ public class ZenGrammar {
 	public static ZNode MatchError(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
 		// FIXME this method is not suitable with "zen" mind.
 		ZToken Token = TokenContext.GetTokenAndMoveForward();
-		return new ZErrorNode(ParentNode, Token, Token.ParsedText);
+		return new ZErrorNode(ParentNode, Token, Token.GetText());
 	}
 
 
@@ -854,7 +760,7 @@ public class ZenGrammar {
 
 	public static ZNode MatchPath(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
 		@Var ZToken Token = TokenContext.ParseLargeToken();
-		return new ZGetNameNode(ParentNode, Token, Token.ParsedText);
+		return new ZGetNameNode(ParentNode, Token, Token.GetText());
 	}
 
 	public static ZNode MatchImport(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {

@@ -18,7 +18,7 @@ public class ZMapEntryNode extends ZNode {
 		if(this.KeyNode == null) {
 			this.KeyNode = this.SetChild(Node);
 			if(Node instanceof ZGetNameNode) {
-				this.Name = Node.SourceToken.ParsedText;
+				this.Name = Node.SourceToken.GetText();
 			}
 			if(Node instanceof ZStringNode) {
 				this.Name = ((ZStringNode) Node).StringValue;

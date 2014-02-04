@@ -22,10 +22,10 @@ public class ZLetNode extends ZNode {
 		if(this.Symbol == null && Node instanceof ZGetNameNode) {
 			this.SourceToken = Node.SourceToken;
 			if(this.PrefixSymbol == null) {
-				this.PrefixSymbol = Node.SourceToken.ParsedText;
+				this.PrefixSymbol = Node.SourceToken.GetText();
 			}
 			else {
-				this.Symbol = Node.SourceToken.ParsedText;
+				this.Symbol = Node.SourceToken.GetText();
 			}
 			return;
 		}

@@ -43,7 +43,7 @@ public final class ZCatchNode extends ZNode {
 			this.SetChild(Node);
 		}
 		else {
-			this.ExceptionName = Node.SourceToken.ParsedText;
+			this.ExceptionName = Node.SourceToken.GetText();
 		}
 	}
 

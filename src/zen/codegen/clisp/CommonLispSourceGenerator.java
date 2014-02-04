@@ -49,7 +49,7 @@ public class CommonLispSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitGetNameNode(ZGetNameNode Node) {
-		this.CurrentBuilder.Append(Node.SourceToken.ParsedText);
+		this.CurrentBuilder.Append(Node.SourceToken.GetText());
 	}
 
 	@Override public void VisitBooleanNode(ZBooleanNode Node) {
@@ -61,11 +61,11 @@ public class CommonLispSourceGenerator extends ZSourceGenerator {
 		}
 	}
 	@Override public void VisitIntNode(ZIntNode Node) {
-		this.CurrentBuilder.Append(Node.SourceToken.ParsedText);
+		this.CurrentBuilder.Append(Node.SourceToken.GetText());
 	}
 
 	@Override public void VisitStringNode(ZStringNode Node) {
-		this.CurrentBuilder.Append(Node.SourceToken.ParsedText);
+		this.CurrentBuilder.Append(Node.SourceToken.GetText());
 	}
 
 	@Override public void VisitReturnNode(ZReturnNode Node) {
@@ -273,13 +273,13 @@ public class CommonLispSourceGenerator extends ZSourceGenerator {
 	//	}
 
 	@Override public void VisitUnaryNode(ZUnaryNode Node) {
-		this.CurrentBuilder.Append(Node.SourceToken.ParsedText);
+		this.CurrentBuilder.Append(Node.SourceToken.GetText());
 		Node.RecvNode.Accept(this);
 	}
 
 	@Override public void VisitBinaryNode(ZBinaryNode Node) {
 		this.CurrentBuilder.Append("(");
-		this.CurrentBuilder.Append(Node.SourceToken.ParsedText);
+		this.CurrentBuilder.Append(Node.SourceToken.GetText());
 		this.CurrentBuilder.Append(" ");
 		Node.LeftNode.Accept(this);
 		this.CurrentBuilder.Append(" ");

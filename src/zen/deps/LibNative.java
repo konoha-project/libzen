@@ -42,6 +42,7 @@ import zen.lang.ZenEngine;
 import zen.parser.ZGenerator;
 import zen.parser.ZLogger;
 import zen.parser.ZNameSpace;
+import zen.parser.ZSource;
 import zen.parser.ZSourceGenerator;
 import zen.parser.ZTokenContext;
 import zen.parser.ZVisitor;
@@ -138,7 +139,7 @@ public class LibNative {
 
 	public final static ZFunc LoadTokenFunc(Class<?> GrammarClass, String FuncName) {
 		try {
-			Method JavaMethod = GrammarClass.getMethod(FuncName, ZTokenContext.class, String.class, long.class);
+			Method JavaMethod = GrammarClass.getMethod(FuncName, ZSource.class);
 			return LibNative.ConvertToNativeFunc(JavaMethod);
 		} catch (NoSuchMethodException e) {
 			LibNative.FixMe(e);
@@ -156,12 +157,10 @@ public class LibNative {
 		return null;
 	}
 
-	public final static long ApplyTokenFunc(ZFunc TokenFunc, Object TokenContext, String Text, long pos) {
-		Object[] Argvs = new Object[3];
-		Argvs[0] = TokenContext;
-		Argvs[1] = Text;
-		Argvs[2] = pos;
-		return (Long) TokenFunc.Invoke(Argvs);
+	public final static boolean ApplyTokenFunc(ZFunc TokenFunc, ZSource Source) {
+		Object[] Argvs = new Object[1];
+		Argvs[0] = Source;
+		return (Boolean) TokenFunc.Invoke(Argvs);
 	}
 
 	public final static ZNode ApplyMatchFunc(ZFunc MatchFunc, ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {

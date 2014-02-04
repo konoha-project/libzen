@@ -351,7 +351,7 @@ public class ZSourceGenerator extends ZGenerator {
 	}
 
 	@Override public void VisitUnaryNode(ZUnaryNode Node) {
-		this.CurrentBuilder.Append(Node.SourceToken.ParsedText);
+		this.CurrentBuilder.Append(Node.SourceToken.GetText());
 		this.GenerateCode(Node.RecvNode);
 	}
 
@@ -378,7 +378,7 @@ public class ZSourceGenerator extends ZGenerator {
 			this.CurrentBuilder.Append("(");
 		}
 		this.GenerateCode(Node.LeftNode);
-		this.CurrentBuilder.AppendToken(Node.SourceToken.ParsedText);
+		this.CurrentBuilder.AppendToken(Node.SourceToken.GetText());
 		this.GenerateCode(Node.RightNode);
 		if (Node.ParentNode instanceof ZBinaryNode) {
 			this.CurrentBuilder.Append(")");
@@ -387,7 +387,7 @@ public class ZSourceGenerator extends ZGenerator {
 
 	@Override public void VisitComparatorNode(ZComparatorNode Node) {
 		this.GenerateCode(Node.LeftNode);
-		this.CurrentBuilder.AppendToken(Node.SourceToken.ParsedText);
+		this.CurrentBuilder.AppendToken(Node.SourceToken.GetText());
 		this.GenerateCode(Node.RightNode);
 	}
 

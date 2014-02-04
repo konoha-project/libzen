@@ -253,14 +253,14 @@ public class ASTGenerator extends ZSourceGenerator {
 
 	@Override
 	public void VisitUnaryNode(ZUnaryNode Node) {
-		this.CurrentBuilder.Append("(" + Node.SourceToken.ParsedText + " " + Node.Type + " ");
+		this.CurrentBuilder.Append("(" + Node.SourceToken.GetText() + " " + Node.Type + " ");
 		Node.RecvNode.Accept(this);
 		this.CurrentBuilder.Append(")");
 	}
 
 	@Override
 	public void VisitNotNode(ZNotNode Node) {
-		this.CurrentBuilder.Append("(" + Node.SourceToken.ParsedText + " " + Node.Type + " ");
+		this.CurrentBuilder.Append("(" + Node.SourceToken.GetText() + " " + Node.Type + " ");
 		Node.RecvNode.Accept(this);
 		this.CurrentBuilder.Append(")");
 	}
@@ -283,7 +283,7 @@ public class ASTGenerator extends ZSourceGenerator {
 
 	@Override
 	public void VisitBinaryNode(ZBinaryNode Node) {
-		this.CurrentBuilder.Append("(" + Node.SourceToken.ParsedText + " ");
+		this.CurrentBuilder.Append("(" + Node.SourceToken.GetText() + " ");
 		Node.LeftNode.Accept(this);
 		this.CurrentBuilder.Append(" ");
 		Node.RightNode.Accept(this);
@@ -292,7 +292,7 @@ public class ASTGenerator extends ZSourceGenerator {
 
 	@Override
 	public void VisitComparatorNode(ZComparatorNode Node) {
-		this.CurrentBuilder.Append("(" + Node.SourceToken.ParsedText + " ");
+		this.CurrentBuilder.Append("(" + Node.SourceToken.GetText() + " ");
 		Node.LeftNode.Accept(this);
 		this.CurrentBuilder.Append(" ");
 		Node.RightNode.Accept(this);
@@ -301,7 +301,7 @@ public class ASTGenerator extends ZSourceGenerator {
 
 	@Override
 	public void VisitAndNode(ZAndNode Node) {
-		this.CurrentBuilder.Append("(" + Node.SourceToken.ParsedText + " ");
+		this.CurrentBuilder.Append("(" + Node.SourceToken.GetText() + " ");
 		Node.LeftNode.Accept(this);
 		this.CurrentBuilder.Append(" ");
 		Node.RightNode.Accept(this);
@@ -310,7 +310,7 @@ public class ASTGenerator extends ZSourceGenerator {
 
 	@Override
 	public void VisitOrNode(ZOrNode Node) {
-		this.CurrentBuilder.Append("(" + Node.SourceToken.ParsedText + " ");
+		this.CurrentBuilder.Append("(" + Node.SourceToken.GetText() + " ");
 		Node.LeftNode.Accept(this);
 		this.CurrentBuilder.Append(" ");
 		Node.RightNode.Accept(this);

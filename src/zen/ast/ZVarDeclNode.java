@@ -51,7 +51,7 @@ public final class ZVarDeclNode extends ZBlockNode {
 		}
 		else {
 			if(this.NativeName == null) {
-				this.NativeName = Node.SourceToken.ParsedText;
+				this.NativeName = Node.SourceToken.GetText();
 				this.SourceToken = Node.SourceToken;
 			}
 			else {
