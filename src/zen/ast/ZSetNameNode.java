@@ -35,7 +35,6 @@ public class ZSetNameNode extends ZNode {
 	@Field public int    VarIndex = 0;
 	@Field public boolean IsCaptured = false;
 
-	@Deprecated public ZNode SetNameValueNode = null;
 	public ZSetNameNode(ZNode ParentNode, ZToken Token, String VarName) {
 		super(ParentNode, Token, 1);
 		this.VarName = VarName;

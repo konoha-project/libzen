@@ -380,6 +380,7 @@ public class AsmGenerator extends JavaSolution {
 
 	@Override public void VisitCastNode(ZCastNode Node) {
 		if(Node.Type.IsVoidType()) {
+			Node.AST[ZCastNode.Expr].Accept(this);
 			this.CurrentBuilder.Pop(Node.AST[ZCastNode.Expr].Type);
 		}
 		else {
