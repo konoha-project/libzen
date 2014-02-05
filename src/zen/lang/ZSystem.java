@@ -31,7 +31,7 @@ import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.deps.ZenMap;
 import zen.deps.ZenTypedObject;
-import zen.obsolete.ZFuncSet;
+import zen.obsolete.ZFuncSet2;
 import zen.type.ZType;
 
 public class ZSystem {
@@ -83,7 +83,7 @@ public class ZSystem {
 		if(Value instanceof ZFunc) {
 			return ((ZFunc)Value).GetFuncType();
 		}
-		else if(Value instanceof ZFuncSet) {
+		else if(Value instanceof ZFuncSet2) {
 			return ZType.FuncType;
 		}
 		else if(Value instanceof ZenTypedObject) {
