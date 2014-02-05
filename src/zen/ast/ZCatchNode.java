@@ -28,23 +28,20 @@ import zen.deps.Field;
 import zen.type.ZType;
 
 public final class ZCatchNode extends ZNode {
+	public final static int Block = 0;
+
 	@Field public ZType   ExceptionType = ZType.VarType;
 	@Field public String  ExceptionName = null;
-	@Field public ZNode	BodyNode = null;;
+
 	public ZCatchNode(ZNode ParentNode) {
-		super(ParentNode, null);
+		super(ParentNode, null, 1);
 	}
-	@Override public void Append(ZNode Node) {
-		if(Node instanceof ZTypeNode) {
-			this.ExceptionType = Node.Type;
-		}
-		else if(Node instanceof ZBlockNode) {
-			this.BodyNode = Node;
-			this.SetChild(Node);
-		}
-		else {
-			this.ExceptionName = Node.SourceToken.GetText();
-		}
+
+	@Override public void SetType(ZType Type) {
+		this.ExceptionType = Type;
+	}
+	@Override public void SetName(String Name) {
+		this.ExceptionName = Name;
 	}
 
 	@Override public final String GetVisitName() {

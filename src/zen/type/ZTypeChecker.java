@@ -24,10 +24,9 @@
 
 package zen.type;
 
-import java.util.ArrayList;
-
 import zen.ast.ZCastNode;
 import zen.ast.ZFunctionNode;
+import zen.ast.ZListNode;
 import zen.ast.ZNode;
 import zen.deps.Field;
 import zen.deps.LibNative;
@@ -151,18 +150,22 @@ public abstract class ZTypeChecker extends ZVisitor {
 		return this.VisitTypeChecker(Node, ContextType, DefaultTypeCheckPolicy);
 	}
 
+	public final void CheckTypeAt(ZNode Node, int Index, ZType ContextType) {
+		Node.AST[Index] = this.VisitTypeChecker(Node.AST[Index], ContextType, DefaultTypeCheckPolicy);
+	}
+
 	public final ZNode EnforceType(ZNode Node, ZType ContextType) {
 		return this.VisitTypeChecker(Node, ContextType, EnforceCoercion);
 	}
 
-	public final boolean TypeCheckNodeList(ArrayList<ZNode> ParamList) {
+	public final boolean TypeCheckNodeList(ZListNode List) {
 		if(this.IsVisitable()) {
 			@Var boolean AllTyped = true;
 			@Var int i = 0;
-			while(i < ParamList.size()) {
-				ZNode SubNode = ParamList.get(i);
+			while(i < List.GetListSize()) {
+				ZNode SubNode = List.GetListAt(i);
 				SubNode = this.CheckType(SubNode, ZType.VarType);
-				ParamList.set(i, SubNode);
+				List.SetListAt(i, SubNode);
 				if(SubNode.IsVarType()) {
 					AllTyped = false;
 				}

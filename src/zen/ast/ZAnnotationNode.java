@@ -34,18 +34,18 @@ public final class ZAnnotationNode extends ZNode {
 	@Field public ZNode AnnotatedNode = null;
 
 	public ZAnnotationNode(ZNode ParentNode, ZToken Token, ZenMap<Object> Anno) {
-		super(ParentNode, Token);
+		super(ParentNode, Token, 0);
 		this.Annotation = Anno;
 	}
 
-	@Override public void Append(ZNode Node) {
-		if(Node instanceof ZAnnotationNode) {
-			ZAnnotationNode AnnoNode = (ZAnnotationNode)Node;
-			this.Annotation.AddMap(AnnoNode.Annotation);
-			Node = AnnoNode.AnnotatedNode;
-		}
-		this.AnnotatedNode = this.SetChild(Node);
-	}
+	//	@Override public void Append(ZNode Node) {
+	//		if(Node instanceof ZAnnotationNode) {
+	//			ZAnnotationNode AnnoNode = (ZAnnotationNode)Node;
+	//			this.Annotation.AddMap(AnnoNode.Annotation);
+	//			Node = AnnoNode.AnnotatedNode;
+	//		}
+	//		this.AnnotatedNode = this.SetChild(Node);
+	//	}
 
 	@Override public boolean IsBreakingBlock() {
 		return this.AnnotatedNode.IsBreakingBlock();
@@ -53,10 +53,6 @@ public final class ZAnnotationNode extends ZNode {
 
 	@Override public boolean IsErrorNode() {
 		return this.AnnotatedNode.IsErrorNode();
-	}
-
-	@Override public ZNode GetStatementNode() {
-		return this.AnnotatedNode;
 	}
 
 	@Override public void Accept(ZVisitor Visitor) {

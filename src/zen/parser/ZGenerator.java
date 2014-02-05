@@ -25,9 +25,8 @@
 //ifdef JAVA
 package zen.parser;
 
-import java.util.ArrayList;
-
 import zen.ast.ZImportNode;
+import zen.ast.ZListNode;
 import zen.ast.ZNode;
 import zen.deps.Field;
 import zen.deps.Var;
@@ -108,11 +107,11 @@ public abstract class ZGenerator extends ZVisitor {
 		return ZType.VarType;     // undefined
 	}
 
-	public ZFuncType GetConstructorFuncType(ZType ClassType, ArrayList<ZNode> ParamList) {
+	public ZFuncType GetConstructorFuncType(ZType ClassType, ZListNode List) {
 		return null;     // undefined
 	}
 
-	public ZFuncType GetMethodFuncType(ZType RecvType, String MethodName, ArrayList<ZNode> ParamList) {
+	public ZFuncType GetMethodFuncType(ZType RecvType, String MethodName, ZListNode List) {
 		return null;     // undefined
 	}
 

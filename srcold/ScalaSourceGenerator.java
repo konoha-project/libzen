@@ -86,7 +86,7 @@
 //		 * 		BLOCK2;
 //		 * 		ITER
 //		 */
-//		@Var String Program = "while(" + this.VisitNode(Node.CondNode) + ")" + this.LineFeed;
+//		@Var String Program = "while(" + this.VisitNode(Node.AST[ZIfNode.Cond]) + ")" + this.LineFeed;
 //		Program += this.GetIndentString() + "{";
 //		this.Indent();
 //		Program += this.VisitBlockWithIndent(Node.BodyNode, false);
@@ -117,19 +117,19 @@
 //	}
 //	
 //	@Override public void VisitWhileNode(ZenWhileNode Node) {
-//		@Var String Program = "while(" + this.VisitNode(Node.CondNode) + ")";
+//		@Var String Program = "while(" + this.VisitNode(Node.AST[ZIfNode.Cond]) + ")";
 //		Program += this.VisitBlockWithIndent(Node.BodyNode, true);
 //		this.PushSourceCode(Program);
 //	}
 //
 //	@Override public void VisitDoWhileNode(ZenDoWhileNode Node) {
 //		@Var String Program = "do" + this.VisitBlockWithIndent(Node.BodyNode, true);
-//		Program += " while(" + this.VisitNode(Node.CondNode) + ")";
+//		Program += " while(" + this.VisitNode(Node.AST[ZIfNode.Cond]) + ")";
 //		this.PushSourceCode(Program);
 //	}
 //
 //	@Override public void VisitGetterNode(ZenGetterNode Node) {
-//		@Var String Program = this.VisitNode(Node.RecvNode);
+//		@Var String Program = this.VisitNode(Node.AST[ZGetterNode.Recv]);
 //		@Var String FieldName = Node.ResolvedFunc.FuncName;
 //		Program = Program + "." + FieldName;
 //		this.PushSourceCode(Program);
@@ -152,25 +152,25 @@
 //	}
 //
 //	@Override public void VisitIfNode(ZenIfNode Node) {
-//		@Var String CondNode = this.VisitNode(Node.CondNode);
-//		@Var String ThenBlock = this.VisitBlockWithIndent(Node.ThenNode, true);
+//		@Var String CondNode = this.VisitNode(Node.AST[ZIfNode.Cond]);
+//		@Var String ThenBlock = this.VisitBlockWithIndent(Node.AST[ZIfNode.Then], true);
 //		@Var String Code = "if(" + CondNode + ") " + ThenBlock;
-//		if(Node.ElseNode != null) {
-//			Code += " else " + this.VisitBlockWithIndent(Node.ElseNode, true);
+//		if(Node.AST[ZIfNode.Else] != null) {
+//			Code += " else " + this.VisitBlockWithIndent(Node.AST[ZIfNode.Else], true);
 //		}
 //		this.PushSourceCode(Code);
 //	}
 //
 //	@Override public void VisitTryNode(ZenTryNode Node) {
 //		@Var String Code = "try ";
-//		Code += this.VisitBlockWithIndent(Node.TryNode, true);
+//		Code += this.VisitBlockWithIndent(Node.AST[ZTryNode.Try], true);
 //		for (int i = 0; i < LibZen.ListSize(Node.CatchList); i++) {
 //			ZenCatchNode Catch = (ZenCatchNode) Node.CatchList.get(i);
 //			Code += " catch (" + Catch.ExceptionType + " " + Catch.ExceptionName + ") ";
 //			Code += this.VisitBlockWithIndent(Catch.BodyNode, true);
 //		}
-//		if(Node.FinallyNode != null) {
-//			Code += " finally " + this.VisitBlockWithIndent(Node.FinallyNode, true);
+//		if(Node.AST[ZTryNode.Finally] != null) {
+//			Code += " finally " + this.VisitBlockWithIndent(Node.AST[ZTryNode.Finally], true);
 //		}
 //		this.PushSourceCode(Code);
 //	}
@@ -223,8 +223,8 @@
 //		Program += " {" + this.LineFeed;
 //		this.Indent();
 //		@Var int i = ClassField.ThisClassIndex;
-//		while(i < ClassField.FieldList.size()) {
-//			@Var ZenFieldInfo FieldInfo = ClassField.FieldList.get(i);
+//		while(i < ClassField.GetParamSize()) {
+//			@Var ZenFieldInfo FieldInfo = ClassField.GetFieldNode(i);
 //			@Var ZenType VarType = FieldInfo.Type;
 //			@Var String VarName = FieldInfo.NativeName;
 //			Program += this.GetIndentString() + "var " + VarName + " : ";
@@ -239,8 +239,8 @@
 //		i = 0;
 ////		Program += this.GetIndentString() + "var " + this.GetRecvName() + " : " + this.LocalTypeName(Type);
 ////		Program += " = new " + this.LocalTypeName(Type) + "();" + this.LineFeed;
-//		while(i < ClassField.FieldList.size()) {
-//			@Var ZenFieldInfo FieldInfo = ClassField.FieldList.get(i);
+//		while(i < ClassField.GetParamSize()) {
+//			@Var ZenFieldInfo FieldInfo = ClassField.GetFieldNode(i);
 //			@Var String VarName = FieldInfo.NativeName;
 //			@Var String InitValue = this.StringifyConstValue(FieldInfo.InitValue);
 //			if(!FieldInfo.Type.IsNativeType()) {

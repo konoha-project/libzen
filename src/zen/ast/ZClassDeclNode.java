@@ -24,57 +24,35 @@
 
 package zen.ast;
 
-import java.util.ArrayList;
-
 import zen.deps.Field;
+import zen.deps.Var;
 import zen.lang.ZenClassType;
-import zen.parser.ZNameSpace;
 import zen.parser.ZVisitor;
 import zen.type.ZType;
 
-public final class ZClassDeclNode extends ZNode {
+public final class ZClassDeclNode extends ZListNode {
 	@Field public String ClassName = null;
 	@Field public ZenClassType ClassType = null;
 	@Field public ZType SuperType = null;
-	@Field public ArrayList<ZFieldNode>  FieldList = new ArrayList<ZFieldNode>();
 	public ZClassDeclNode(ZNode ParentNode) {
-		super(ParentNode, null);
+		super(ParentNode, null, 0);
 	}
 
-	@Override public void Append(ZNode Node) {
+	@Override public void SetType(ZType Type) {
+		this.SuperType = Type;
+	}
+	@Override public void SetName(String Name) {
+		this.ClassName = Name;
+	}
+	public final ZFieldNode GetFieldNode(int Index) {
+		@Var ZNode Node = this.GetListAt(Index);
 		if(Node instanceof ZFieldNode) {
-			this.FieldList.add((ZFieldNode)this.SetChild(Node));
-		}
-		else if(Node instanceof ZTypeNode) {
-			this.SuperType = Node.Type;
-		}
-		else if(this.ClassName == null) {
-			this.ClassName = Node.SourceToken.GetText();
-			this.SourceToken = Node.SourceToken;
-		}
-	}
-	@Override public void Accept(ZVisitor Visitor) {
-		Visitor.VisitClassDeclNode(this);
-	}
-
-	public ZNode CheckClassName(ZNameSpace NameSpace) {
-		if(this.ClassType == null || !(this.ClassType instanceof ZenClassType)) {
-			return new ZErrorNode(this, this.SourceToken, "" + this.ClassName + " is not a Zen class.");
-		}
-		if(!this.ClassType.IsOpenType()) {
-			return new ZErrorNode(this, this.SourceToken, "" + this.ClassName + " has been defined.");
-		}
-		if(this.SuperType != null) {
-			if(!(this.SuperType instanceof ZenClassType)) {
-				return new ZErrorNode(this, this.SourceToken, "" + this.SuperType + " cannot be extended.");
-			}
-			if(this.SuperType.IsOpenType()) {
-				NameSpace.Generator.Logger.ReportWarning(this.SourceToken, "" + this.SuperType + " is not defined with class.");
-				//				return new ZenErrorNode(this.SourceToken, "" + this.SuperType + " is not defined with class.");
-			}
-			this.ClassType.ResetSuperType((ZenClassType)this.SuperType);
+			return (ZFieldNode)Node;
 		}
 		return null;
 	}
 
+	@Override public void Accept(ZVisitor Visitor) {
+		Visitor.VisitClassDeclNode(this);
+	}
 }

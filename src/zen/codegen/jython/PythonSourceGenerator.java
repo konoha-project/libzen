@@ -25,8 +25,7 @@
 //ifdef JAVA
 package zen.codegen.jython;
 
-import java.util.ArrayList;
-
+import zen.ast.ZBinaryNode;
 import zen.ast.ZBlockNode;
 import zen.ast.ZCastNode;
 import zen.ast.ZCatchNode;
@@ -39,7 +38,6 @@ import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZVarDeclNode;
 import zen.parser.ZSourceGenerator;
-
 import zen.type.ZType;
 
 //Zen Generator should be written in each language.
@@ -71,10 +69,10 @@ public class PythonSourceGenerator extends ZSourceGenerator {
 		this.SetNativeType(ZType.StringType, "str");
 	}
 
-	@Override public void VisitStmtList(ArrayList<ZNode> StmtList) {
+	@Override public void VisitStmtList(ZBlockNode BlockNode) {
 		int i = 0;
-		while (i < StmtList.size()) {
-			ZNode SubNode = StmtList.get(i);
+		while (i < BlockNode.GetListSize()) {
+			ZNode SubNode = BlockNode.GetListAt(i);
 			this.CurrentBuilder.AppendLineFeed();
 			this.CurrentBuilder.AppendIndent();
 			this.GenerateCode(SubNode);
@@ -92,7 +90,7 @@ public class PythonSourceGenerator extends ZSourceGenerator {
 	public void VisitBlockNode(ZBlockNode Node) {
 		this.CurrentBuilder.Append(":");
 		this.CurrentBuilder.Indent();
-		this.VisitStmtList(Node.StmtList);
+		this.VisitStmtList(Node);
 		this.CurrentBuilder.UnIndent();
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.AppendIndent();
@@ -104,33 +102,33 @@ public class PythonSourceGenerator extends ZSourceGenerator {
 		// this.VisitType(Node.Type);
 		// this.CurrentBuilder.Append(") ");
 		this.CurrentBuilder.AppendBlockComment("as " + this.GetNativeType(Node.Type));
-		this.GenerateCode(Node.ExprNode);
+		this.GenerateCode(Node.AST[ZCastNode.Expr]);
 	}
 
 	@Override public void VisitInstanceOfNode(ZInstanceOfNode Node) {
 		this.CurrentBuilder.Append("isinstance(");
-		this.GenerateCode(Node.LeftNode);
+		this.GenerateCode(Node.AST[ZBinaryNode.Left]);
 		this.CurrentBuilder.Append(this.Camma);
-		this.VisitType(Node.RightNode.Type);
+		this.VisitType(Node.AST[ZBinaryNode.Right].Type);
 		this.CurrentBuilder.Append(")");
 	}
 
 	@Override
 	public void VisitThrowNode(ZThrowNode Node) {
 		this.CurrentBuilder.Append("raise ");
-		this.GenerateCode(Node.ValueNode);
+		this.GenerateCode(Node.AST[ZThrowNode.Expr]);
 	}
 
 	@Override
 	public void VisitTryNode(ZTryNode Node) {
 		this.CurrentBuilder.Append("try");
-		this.GenerateCode(Node.TryNode);
-		if (Node.CatchNode != null) {
-			this.GenerateCode(Node.CatchNode);
+		this.GenerateCode(Node.AST[ZTryNode.Try]);
+		if (Node.AST[ZTryNode.Catch] != null) {
+			this.GenerateCode(Node.AST[ZTryNode.Catch]);
 		}
-		if (Node.FinallyNode != null) {
+		if (Node.AST[ZTryNode.Finally] != null) {
 			this.CurrentBuilder.Append("finally");
-			this.GenerateCode(Node.FinallyNode);
+			this.GenerateCode(Node.AST[ZTryNode.Finally]);
 		}
 	}
 
@@ -139,19 +137,19 @@ public class PythonSourceGenerator extends ZSourceGenerator {
 		//		this.VisitType(Node.ExceptionType);
 		//		this.CurrentBuilder.AppendToken("as");
 		//		this.CurrentBuilder.Append(Node.ExceptionName);
-		this.GenerateCode(Node.BodyNode);
+		this.GenerateCode(Node.AST[ZCatchNode.Block]);
 	}
 
 	@Override
 	public void VisitVarDeclNode(ZVarDeclNode Node) {
 		this.CurrentBuilder.Append(Node.NativeName);
 		this.CurrentBuilder.AppendToken("=");
-		this.GenerateCode(Node.InitNode);
+		this.GenerateCode(Node.AST[ZVarDeclNode.InitValue]);
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.AppendIndent();
 
 		// copied from VisitBlock(ZenBlockNode)
-		this.VisitStmtList(Node.StmtList);
+		this.VisitStmtList(Node);
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.AppendIndent();
 	}
@@ -172,28 +170,28 @@ public class PythonSourceGenerator extends ZSourceGenerator {
 	 **/
 	@Override
 	public void VisitFunctionNode(ZFunctionNode Node) {
-		ZReturnNode ReturnNode = Node.FuncBlock.ToReturnNode();
-		if(ReturnNode != null && ReturnNode.ValueNode != null) {
+		ZReturnNode ReturnNode = Node.AST[ZFunctionNode.Block].ToReturnNode();
+		if(ReturnNode != null && ReturnNode.AST[ZReturnNode.Expr] != null) {
 			this.CurrentBuilder.Append("lambda");
-			this.VisitParamList(" ", Node.ParamList, ": ");
-			this.GenerateCode(ReturnNode.ValueNode);
+			this.VisitListNode(" ", Node, ": ");
+			this.GenerateCode(ReturnNode.AST[ZReturnNode.Expr]);
 		}
 		else {
 			this.CurrentBuilder.Append("def");
 			this.CurrentBuilder.AppendToken("lambda");
-			this.VisitParamList("(", Node.ParamList, ")");
-			this.GenerateCode(Node.FuncBlock);
+			this.VisitListNode("(", Node, ")");
+			this.GenerateCode(Node.AST[ZFunctionNode.Block]);
 		}
 	}
 
 	public void VisitFuncDeclNode(ZFunctionNode/*Decl*/ Node) {
 		this.CurrentBuilder.Append("def ");
 		this.CurrentBuilder.Append(Node.FuncName);
-		this.VisitParamList("(", Node.ParamList, ")");
-		if (Node.FuncBlock == null) {
+		this.VisitListNode("(", Node, ")");
+		if (Node.AST[ZFunctionNode.Block] == null) {
 			this.CurrentBuilder.Append(": pass");
 		} else {
-			this.GenerateCode(Node.FuncBlock);
+			this.GenerateCode(Node.AST[ZFunctionNode.Block]);
 		}
 	}
 

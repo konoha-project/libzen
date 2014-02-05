@@ -28,8 +28,7 @@ import zen.parser.ZToken;
 
 abstract public class ZConstNode extends ZNode {
 	protected ZConstNode(ZNode ParentNode, ZToken SourceToken) {
-		super(ParentNode, SourceToken);
+		super(ParentNode, SourceToken, 0);
 	}
 	public abstract Object GetValue();
-
 }

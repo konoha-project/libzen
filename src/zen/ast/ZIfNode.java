@@ -28,24 +28,11 @@ import zen.deps.Field;
 import zen.parser.ZVisitor;
 
 public final class ZIfNode extends ZNode {
-	@Field public ZNode	CondNode = null;
-	@Field public ZNode	ThenNode = null;
-	@Field public ZNode	ElseNode = null;
-	/* If CondNode then ThenBlock else ElseBlock */
+	@Field public final static int Cond = 0;
+	@Field public final static int Then = 1;
+	@Field public final static int Else = 2;
 	public ZIfNode(ZNode ParentNode) {
-		super(ParentNode, null);
-	}
-	@Override public final void Append(ZNode Node) {
-		this.SetChild(Node);
-		if(this.CondNode == null) {
-			this.CondNode = Node;
-		}
-		else if(this.ThenNode == null) {
-			this.ThenNode = Node;
-		}
-		else {
-			this.ElseNode = Node;
-		}
+		super(ParentNode, null, 3);
 	}
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitIfNode(this);

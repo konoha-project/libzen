@@ -215,7 +215,7 @@ public class CSourceGenerator extends ZenSourceGenerator {
 		@Var String FieldName = Node.NativeName;
 		@Var ZenType RecvType = Node.ResolvedFunc.GetRecvType();
 		this.CurrentBuilder.Append("GT_GetField(" + this.LocalTypeName(RecvType) + ", ");
-		Node.RecvNode.Accept(this);
+		Node.AST[ZGetterNode.Recv].Accept(this);
 		this.CurrentBuilder.Append(", " + FieldName + ")");
 	}
 
@@ -223,7 +223,7 @@ public class CSourceGenerator extends ZenSourceGenerator {
 		@Var String FieldName = Node.NativeName;
 		@Var ZenType RecvType = Node.ResolvedFunc.GetRecvType();
 		this.CurrentBuilder.Append("GT_SetField(" + this.LocalTypeName(RecvType) + ", ");
-		Node.RecvNode.Accept(this);
+		Node.AST[ZGetterNode.Recv].Accept(this);
 		this.CurrentBuilder.Append(", " + FieldName + ", ");
 		Node.ValueNode.Accept(this);
 		this.CurrentBuilder.Append(")");
@@ -236,7 +236,7 @@ public class CSourceGenerator extends ZenSourceGenerator {
 			if(i > 0){
 				this.CurrentBuilder.Append(", ");
 			}
-			Node.ParamList.get(i).Accept(this);
+			Node.GetParam(i).Accept(this);
 		}
 		this.CurrentBuilder.Append(")");
 	}
@@ -249,7 +249,7 @@ public class CSourceGenerator extends ZenSourceGenerator {
 			if(i > 0){
 				this.CurrentBuilder.Append(", ");
 			}
-			Node.ParamList.get(i).Accept(this);
+			Node.GetParam(i).Accept(this);
 		}
 		this.CurrentBuilder.Append(")");
 	}
@@ -262,20 +262,20 @@ public class CSourceGenerator extends ZenSourceGenerator {
 			if(i > 0){
 				this.CurrentBuilder.Append(", ");
 			}
-			Node.ParamList.get(i).Accept(this);
+			Node.GetParam(i).Accept(this);
 		}
 		this.CurrentBuilder.Append(")");
 	}
 
 	@Override public void VisitGetIndexNode(ZenGetIndexNode Node) {
-		Node.RecvNode.Accept(this);
+		Node.AST[ZGetterNode.Recv].Accept(this);
 		this.CurrentBuilder.Append("[");
 		Node.IndexNode.Accept(this);
 		this.CurrentBuilder.Append("]");
 	}
 
 	@Override public void VisitSetIndexNode(ZenSetIndexNode Node) {
-		Node.RecvNode.Accept(this);
+		Node.AST[ZGetterNode.Recv].Accept(this);
 		this.CurrentBuilder.Append("[");
 		Node.IndexNode.Accept(this);
 		this.CurrentBuilder.Append("] = ");
@@ -284,7 +284,7 @@ public class CSourceGenerator extends ZenSourceGenerator {
 
 	@Override public void VisitSliceNode(ZenSliceNode Node) {
 		this.CurrentBuilder.Append("GT_Slice(");
-		Node.RecvNode.Accept(this);
+		Node.AST[ZGetterNode.Recv].Accept(this);
 		this.CurrentBuilder.Append(", ");
 		Node.Index1.Accept(this);
 		this.CurrentBuilder.Append(", ");
@@ -294,66 +294,66 @@ public class CSourceGenerator extends ZenSourceGenerator {
 
 	@Override public void VisitAndNode(ZenAndNode Node) {
 		this.CurrentBuilder.Append("(");
-		Node.LeftNode.Accept(this);
+		Node.AST[ZBinaryNode.Left].Accept(this);
 		this.CurrentBuilder.Append(" && ");
-		Node.RightNode.Accept(this);
+		Node.AST[ZBinaryNode.Right].Accept(this);
 		this.CurrentBuilder.Append(")");
 	}
 
 	@Override public void VisitOrNode(ZenOrNode Node) {
 		this.CurrentBuilder.Append("(");
-		Node.LeftNode.Accept(this);
+		Node.AST[ZBinaryNode.Left].Accept(this);
 		this.CurrentBuilder.Append(" || ");
-		Node.RightNode.Accept(this);
+		Node.AST[ZBinaryNode.Right].Accept(this);
 		this.CurrentBuilder.Append(")");
 	}
 
 	@Override public void VisitUnaryNode(ZenUnaryNode Node) {
 		this.CurrentBuilder.Append("(");
 		this.CurrentBuilder.Append(Node.NativeName);
-		Node.RecvNode.Accept(this);
+		Node.AST[ZGetterNode.Recv].Accept(this);
 		this.CurrentBuilder.Append(")");
 	}
 
 	@Override public void VisitPrefixInclNode(ZenPrefixInclNode Node) {
 		this.CurrentBuilder.Append("(++");
-		Node.RecvNode.Accept(this);
+		Node.AST[ZGetterNode.Recv].Accept(this);
 		this.CurrentBuilder.Append(")");
 	}
 
 	@Override public void VisitPrefixDeclNode(ZenPrefixDeclNode Node) {
 		this.CurrentBuilder.Append("(--");
-		Node.RecvNode.Accept(this);
+		Node.AST[ZGetterNode.Recv].Accept(this);
 		this.CurrentBuilder.Append(")");
 	}
 
 	@Override public void VisitSuffixInclNode(ZenSuffixInclNode Node) {
 		this.CurrentBuilder.Append("(");
-		Node.RecvNode.Accept(this);
+		Node.AST[ZGetterNode.Recv].Accept(this);
 		this.CurrentBuilder.Append("++)");
 	}
 
 	@Override public void VisitSuffixDeclNode(ZenSuffixDeclNode Node) {
 		this.CurrentBuilder.Append("(");
-		Node.RecvNode.Accept(this);
+		Node.AST[ZGetterNode.Recv].Accept(this);
 		this.CurrentBuilder.Append("--)");
 	}
 
 	@Override public void VisitBinaryNode(ZenBinaryNode Node) {
 		this.CurrentBuilder.Append("(");
-		Node.LeftNode.Accept(this);
+		Node.AST[ZBinaryNode.Left].Accept(this);
 		this.CurrentBuilder.Append(" " + Node.NativeName + " ");
-		Node.RightNode.Accept(this);
+		Node.AST[ZBinaryNode.Right].Accept(this);
 		this.CurrentBuilder.Append(")");
 	}
 
 	@Override public void VisitTrinaryNode(ZenTrinaryNode Node) {
 		this.CurrentBuilder.Append("(");
-		Node.CondNode.Accept(this);
+		Node.AST[ZIfNode.Cond].Accept(this);
 		this.CurrentBuilder.Append(") ? (");
-		Node.ThenNode.Accept(this);
+		Node.AST[ZIfNode.Then].Accept(this);
 		this.CurrentBuilder.Append(") : (");
-		Node.ElseNode.Accept(this);
+		Node.AST[ZIfNode.Else].Accept(this);
 		this.CurrentBuilder.Append(")");
 	}
 
@@ -364,7 +364,7 @@ public class CSourceGenerator extends ZenSourceGenerator {
 			if(i > 0){
 				this.CurrentBuilder.Append(", ");
 			}
-			Node.ParamList.get(i).Accept(this);
+			Node.GetParam(i).Accept(this);
 		}
 		this.CurrentBuilder.Append(")");
 	}
@@ -420,18 +420,18 @@ public class CSourceGenerator extends ZenSourceGenerator {
 
 	@Override public void VisitIfNode(ZenIfNode Node) {
 		this.CurrentBuilder.Append("if(");
-		Node.CondNode.Accept(this);
+		Node.AST[ZIfNode.Cond].Accept(this);
 		this.CurrentBuilder.Append(")");
-		this.VisitIndentBlock("{", Node.ThenNode, "}");
-		if(Node.ElseNode != null) {
+		this.VisitIndentBlock("{", Node.AST[ZIfNode.Then], "}");
+		if(Node.AST[ZIfNode.Else] != null) {
 			this.CurrentBuilder.Append("else");
-			this.VisitIndentBlock("{", Node.ElseNode, "}");
+			this.VisitIndentBlock("{", Node.AST[ZIfNode.Else], "}");
 		}
 	}
 
 	@Override public void VisitWhileNode(ZenWhileNode Node) {
 		this.CurrentBuilder.Append("while(");
-		Node.CondNode.Accept(this);
+		Node.AST[ZIfNode.Cond].Accept(this);
 		this.CurrentBuilder.Append(")");
 		this.VisitIndentBlock("{", Node.BodyNode, "}");
 	}
@@ -440,13 +440,13 @@ public class CSourceGenerator extends ZenSourceGenerator {
 		this.CurrentBuilder.Append("do ");
 		this.VisitIndentBlock("{", Node.BodyNode, "}");
 		this.CurrentBuilder.Append("while(");
-		Node.CondNode.Accept(this);
+		Node.AST[ZIfNode.Cond].Accept(this);
 		this.CurrentBuilder.Append(")");
 	}
 
 	@Override public void VisitForNode(ZenForNode Node) {
 		this.CurrentBuilder.Append("for(;");
-		Node.CondNode.Accept(this);
+		Node.AST[ZIfNode.Cond].Accept(this);
 		this.CurrentBuilder.Append(";");
 		Node.IterNode.Accept(this);
 		this.CurrentBuilder.Append(") ");
@@ -500,13 +500,13 @@ public class CSourceGenerator extends ZenSourceGenerator {
 
 	@Override public void VisitTryNode(ZenTryNode Node) {
 		this.CurrentBuilder.Append("try ");
-		this.VisitIndentBlock("{", Node.TryNode, "}");
+		this.VisitIndentBlock("{", Node.AST[ZTryNode.Try], "}");
 		for (int i = 0; i < LibZen.ListSize(Node.CatchList); i++) {
 			Node.CatchList.get(i).Accept(this);
 		}
-		if(Node.FinallyNode != null) {
+		if(Node.AST[ZTryNode.Finally] != null) {
 			this.CurrentBuilder.Append("finally ");
-			this.VisitIndentBlock("{", Node.FinallyNode, "}");
+			this.VisitIndentBlock("{", Node.AST[ZTryNode.Finally], "}");
 		}
 	}
 
@@ -593,7 +593,7 @@ public class CSourceGenerator extends ZenSourceGenerator {
 			this.CurrentBuilder.AppendLine("// " + this.LocalTypeName(Type.SuperType) + " __base;");
 		}
 		for(@Var int i = 0; i < LibZen.ListSize(ClassField.FieldList); i = i + 1) {
-			@Var ZenFieldInfo FieldInfo = ClassField.FieldList.get(i);
+			@Var ZenFieldInfo FieldInfo = ClassField.GetFieldNode(i);
 			@Var ZenType VarType = FieldInfo.Type;
 			@Var String VarName = FieldInfo.NativeName;
 			this.CurrentBuilder.AppendIndent();
@@ -611,7 +611,7 @@ public class CSourceGenerator extends ZenSourceGenerator {
 		this.CurrentBuilder.AppendIndent();
 		this.CurrentBuilder.AppendLine(LocalType + " " + this.GetRecvName() + " = " + "GT_New("+LocalType+")" + this.SemiColon);
 		for(@Var int i = 0; i < LibZen.ListSize(ClassField.FieldList); i = i + 1) {
-			@Var ZenFieldInfo FieldInfo = ClassField.FieldList.get(i);
+			@Var ZenFieldInfo FieldInfo = ClassField.GetFieldNode(i);
 			@Var String VarName = FieldInfo.NativeName;
 			@Var String InitValue = this.StringifyConstValue(FieldInfo.InitValue);
 			if(!FieldInfo.Type.IsNativeType()) {

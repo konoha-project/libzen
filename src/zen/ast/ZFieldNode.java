@@ -30,31 +30,21 @@ import zen.lang.ZenClassType;
 import zen.type.ZType;
 
 public final class ZFieldNode extends ZNode {
+	public final static int InitValue = 0;
 	@Field @Init public  ZenClassType  ClassType;
 	@Field public ZType  DeclType = ZType.VarType;
 	@Field public String FieldName = null;
-	@Field public ZNode  InitNode = null;
+	@Deprecated public ZNode  FieldInitNode = null;
 	public ZFieldNode(ZNode ParentNode) {
-		super(ParentNode, null);
+		super(ParentNode, null, 1);
 	}
-
-	@Override public void Append(ZNode Node) {
-		if(Node instanceof ZTypeNode) {
-			this.DeclType = Node.Type;
-		}
-		else if(this.FieldName == null) {
-			this.FieldName = Node.SourceToken.GetText();
-			this.SourceToken = Node.SourceToken;
-		}
-		else {
-			this.InitNode = this.SetChild(Node);
-		}
+	@Override public void SetType(ZType Type) {
+		this.DeclType = Type;
 	}
-
-	public ZNode CheckFieldType() {
-		if(this.DeclType.IsVarType()) {
-			return new ZErrorNode(this, "field " + this.FieldName + " is ambigious");
-		}
-		return null;
+	@Override public void SetName(String Name) {
+		this.FieldName = Name;
+	}
+	@Override public String GetVisitName() {
+		return "VisitFieldNode";
 	}
 }

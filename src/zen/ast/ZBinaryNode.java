@@ -33,18 +33,15 @@ import zen.parser.ZTokenContext;
 import zen.parser.ZVisitor;
 
 public class ZBinaryNode extends ZNode {
-	@Field @Init public ZNode  LeftNode;
-	@Field public ZNode	 RightNode = null;
+	public final static int Left = 0;
+	public final static int Right = 1;
 	@Field @Init public ZSyntaxPattern Pattern;
+
 	public ZBinaryNode(ZNode ParentNode, ZToken SourceToken, ZNode Left, ZSyntaxPattern Pattern) {
-		super(ParentNode, SourceToken);
-		this.LeftNode  = this.SetChild(Left);
+		super(ParentNode, SourceToken, 2);
+		this.Set(ZBinaryNode.Left, Left);
 		assert(Pattern != null);
 		this.Pattern = Pattern;
-	}
-
-	@Override public final void Append(ZNode Node) {
-		this.RightNode = this.SetChild(Node);
 	}
 
 	private final boolean IsRightJoin(ZNode Node) {
@@ -55,13 +52,13 @@ public class ZBinaryNode extends ZNode {
 	}
 
 	private final ZNode RightJoin(ZNode ParentNode, ZBinaryNode RightNode) {
-		@Var ZNode RightLeftNode = RightNode.LeftNode;
+		@Var ZNode RightLeftNode = RightNode.AST[ZBinaryNode.Left];
 		if(this.IsRightJoin(RightLeftNode)) {
-			RightNode.LeftNode = this.RightJoin(ParentNode, (ZBinaryNode) RightLeftNode);
+			RightNode.Set(ZBinaryNode.Left, this.RightJoin(ParentNode, (ZBinaryNode) RightLeftNode));
 		}
 		else {
-			RightNode.LeftNode = RightNode.SetChild(this);
-			this.Append(RightLeftNode);
+			RightNode.Set(ZBinaryNode.Left, this);
+			this.Set(ZBinaryNode.Right, RightLeftNode);
 		}
 		return RightNode;
 	}
@@ -74,8 +71,7 @@ public class ZBinaryNode extends ZNode {
 		if(this.IsRightJoin(RightNode)) {
 			return this.RightJoin(ParentNode, (ZBinaryNode) RightNode);
 		}
-		// LeftJoin
-		this.Append(RightNode);
+		this.Set(ZBinaryNode.Right, RightNode);
 		return this;
 	}
 

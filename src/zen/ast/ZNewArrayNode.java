@@ -24,17 +24,13 @@
 
 package zen.ast;
 
-import java.util.ArrayList;
-
-import zen.deps.Field;
 import zen.parser.ZToken;
 import zen.type.ZType;
 
 //E.g., new T "[" 10, [10] "]"
-public final class ZNewArrayNode extends ZNode {
-	@Field public ArrayList<ZNode>	NodeList = new ArrayList<ZNode>();
+public final class ZNewArrayNode extends ZListNode {
 	public ZNewArrayNode(ZNode ParentNode, ZType Type, ZToken Token) {
-		super(ParentNode, null);
+		super(ParentNode, null, 0);
 	}
 	//	@Override public ArrayList<ZenNode> GetList() {
 	//		return this.NodeList;

@@ -278,13 +278,13 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 //			Type type = Type.getType(klass);
 			this.CurrentVisitor.AsmVisitor.visitTypeInsn(NEW, Type.getInternalName(klass));
 			this.CurrentVisitor.AsmVisitor.visitInsn(DUP);
-			for(int i = 0; i<Node.ParamList.size(); i++) {
-				ZenNode ParamNode = Node.ParamList.get(i);
+			for(int i = 0; i<Node.GetParamSize(); i++) {
+				ZenNode ParamNode = Node.GetParam(i);
 				this.CurrentVisitor.PushEvaluatedNode(Node.Func.GetFuncParamType(i), ParamNode);
 //				ParamNode.Accept(this);
 //				this.CurrentVisitor.CheckCast(Node.Func.GetFuncParamType(i), ParamNode.Type);
 			}
-			this.RemoveStack(Node.ParamList.size());
+			this.RemoveStack(Node.GetParamSize());
 			this.CurrentVisitor.Call((Constructor<?>) Node.Func.FuncBody);
 		} else {
 			LibZen.TODO("TypeBody is not Class<?>");
@@ -296,8 +296,8 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 //	@Override public void VisitMethodCallNode(ZenMethodCall Node) {
 //		ZenFunc Func = Node.ResolvedFunc;
 //		this.CurrentVisitor.SetLineNumber(Node);
-//		for(int i = 0; i < Node.ParamList.size(); i++) {
-//			ZenNode ParamNode = Node.ParamList.get(i);
+//		for(int i = 0; i < Node.GetParamSize(); i++) {
+//			ZenNode ParamNode = Node.GetParam(i);
 //			this.CurrentVisitor.PushEvaluatedNode(Func.GetFuncParamType(i), ParamNode);
 ////			ParamNode.Accept(this);
 ////			this.CurrentVisitor.CheckCast(Func.GetFuncParamType(i), ParamNode.Type);
@@ -311,7 +311,7 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 //			String MethodDescriptor = JLib.GetMethodDescriptor(Func);
 //			this.CurrentVisitor.AsmVisitor.visitMethodInsn(INVOKESTATIC, Owner, MethodName, MethodDescriptor);
 //		}
-//		this.RemoveStack(Node.ParamList.size());
+//		this.RemoveStack(Node.GetParamSize());
 //		this.PushStack(Node.Type);
 //	}
 
@@ -321,7 +321,7 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 		this.CurrentVisitor.LoadConst(Node.Func);
 		this.CurrentVisitor.LoadNewArray(this, 0, Node.ParamList);
 		this.CurrentVisitor.InvokeMethodCall(Node.Type, JLib.InvokeOverridedFunc);		
-		this.RemoveStack(Node.ParamList.size());
+		this.RemoveStack(Node.GetParamSize());
 		PushStack(Node.Type);
 	}
 	
@@ -347,7 +347,7 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 	
 //	@Override public void VisitUnaryNode(ZenUnaryNode Node) {
 //		LibNative.Assert(Node.ResolvedFunc.FuncBody instanceof Method);
-//		this.CurrentVisitor.PushEvaluatedNode(Node.ResolvedFunc.GetFuncParamType(0), Node.RecvNode);
+//		this.CurrentVisitor.PushEvaluatedNode(Node.ResolvedFunc.GetFuncParamType(0), Node.AST[ZGetterNode.Recv]);
 //		this.CurrentVisitor.InvokeMethodCall(Node.Type, (Method)Node.ResolvedFunc.FuncBody);
 //		this.RemoveStack(1);
 //		PushStack(Node.Type);
@@ -355,8 +355,8 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 //
 //	@Override public void VisitBinaryNode(ZenBinaryNode Node) {
 //		LibNative.Assert(Node.ResolvedFunc.FuncBody instanceof Method);
-//		this.CurrentVisitor.PushEvaluatedNode(Node.ResolvedFunc.GetFuncParamType(0), Node.LeftNode);
-//		this.CurrentVisitor.PushEvaluatedNode(Node.ResolvedFunc.GetFuncParamType(1), Node.RightNode);
+//		this.CurrentVisitor.PushEvaluatedNode(Node.ResolvedFunc.GetFuncParamType(0), Node.AST[ZBinaryNode.Left]);
+//		this.CurrentVisitor.PushEvaluatedNode(Node.ResolvedFunc.GetFuncParamType(1), Node.AST[ZBinaryNode.Right]);
 //		this.CurrentVisitor.InvokeMethodCall(Node.Type, (Method)Node.ResolvedFunc.FuncBody);
 //		this.RemoveStack(2);
 //		PushStack(Node.Type);
@@ -364,11 +364,11 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 
 
 //	@Override public void VisitSelfAssignNode(ZenSelfAssignNode Node) {
-//		if(Node.LeftNode instanceof ZenGetLocalNode) {
-//			ZenGetLocalNode Left = (ZenGetLocalNode)Node.LeftNode;
+//		if(Node.AST[ZBinaryNode.Left] instanceof ZenGetLocalNode) {
+//			ZenGetLocalNode Left = (ZenGetLocalNode)Node.AST[ZBinaryNode.Left];
 //			JLocalVarStack local = this.CurrentVisitor.FindLocalVariable(Left.NativeName);
-//			Node.LeftNode.Accept(this);
-//			Node.RightNode.Accept(this);
+//			Node.AST[ZBinaryNode.Left].Accept(this);
+//			Node.AST[ZBinaryNode.Right].Accept(this);
 //			this.CurrentVisitor.InvokeMethodCall((Method)Node.Func.FuncBody);
 //			this.CurrentVisitor.StoreLocal(local);
 //		}
@@ -381,14 +381,14 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 	@Override public void VisitTrinaryNode(ZenTrinaryNode Node) {
 		Label ElseLabel = new Label();
 		Label EndLabel = new Label();
-		this.CurrentVisitor.PushEvaluatedNode(ZenSystem.BooleanType, Node.CondNode);
+		this.CurrentVisitor.PushEvaluatedNode(ZenSystem.BooleanType, Node.AST[ZIfNode.Cond]);
 		this.CurrentVisitor.AsmVisitor.visitJumpInsn(IFEQ, ElseLabel);
 		// Then
-		this.VisitBlock(Node.ThenNode);
+		this.VisitBlock(Node.AST[ZIfNode.Then]);
 		this.CurrentVisitor.AsmVisitor.visitJumpInsn(GOTO, EndLabel);
 		// Else
 		this.CurrentVisitor.AsmVisitor.visitLabel(ElseLabel);
-		this.VisitBlock(Node.ElseNode);
+		this.VisitBlock(Node.AST[ZIfNode.Else]);
 		this.CurrentVisitor.AsmVisitor.visitJumpInsn(GOTO, EndLabel);
 		// End
 		this.CurrentVisitor.AsmVisitor.visitLabel(EndLabel);
@@ -430,7 +430,7 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 		this.CurrentVisitor.AsmVisitor.visitLabel(headLabel);
 		this.VisitBlock(Node.BodyNode);
 		this.CurrentVisitor.AsmVisitor.visitLabel(continueLabel);
-		Node.CondNode.Accept(this);
+		Node.AST[ZIfNode.Cond].Accept(this);
 		this.CurrentVisitor.AsmVisitor.visitJumpInsn(IFEQ, breakLabel); // condition
 		this.CurrentVisitor.AsmVisitor.visitJumpInsn(GOTO, headLabel);
 		this.CurrentVisitor.AsmVisitor.visitLabel(breakLabel);
@@ -447,7 +447,7 @@ public class JavaByteCodeGenerator extends ZenGenerator {
 		this.CurrentVisitor.ContinueLabelStack.push(continueLabel);
 
 		this.CurrentVisitor.AsmVisitor.visitLabel(headLabel);
-		Node.CondNode.Accept(this);
+		Node.AST[ZIfNode.Cond].Accept(this);
 		this.CurrentVisitor.AsmVisitor.visitJumpInsn(IFEQ, breakLabel); // condition
 		this.VisitBlock(Node.BodyNode);
 		this.CurrentVisitor.AsmVisitor.visitLabel(continueLabel);

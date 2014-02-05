@@ -29,30 +29,30 @@ import zen.deps.Var;
 import zen.lang.ZFunc;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
-import zen.type.ZType;
 
-public final class ZMethodCallNode extends ZApplyNode {
-	@Field public ZNode RecvNode;
+public final class ZMethodCallNode extends ZListNode {
+	public final static int Recv = 0;
 	@Field public String MethodName;
 	public ZMethodCallNode(ZNode ParentNode, ZToken SourceToken, ZNode RecvNode, String MethodName) {
-		super(ParentNode, SourceToken);
-		this.RecvNode = this.SetChild(RecvNode);
+		super(ParentNode, SourceToken, 1);
+		this.Set(ZMethodCallNode.Recv, RecvNode);
 		this.MethodName = MethodName;
 	}
+
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitMethodCallNode(this);
 	}
-	public ZType[] GetParamType() {
-		return null;
-	}
+	//	public ZType[] GetParamType() {
+	//		return null;
+	//	}
 
 	public final ZFuncCallNode ToGetterFuncCall() {
-		ZGetterNode Getter = new ZGetterNode(null, this.SourceToken, this.RecvNode, this.MethodName);
+		ZGetterNode Getter = new ZGetterNode(null, this.SourceToken, this.AST[ZGetterNode.Recv], this.MethodName);
 		ZFuncCallNode FuncNode = new ZFuncCallNode(this.ParentNode, Getter);
 		FuncNode.SourceToken = this.SourceToken;
 		@Var int i = 0;
-		while(i < this.ParamList.size()) {
-			FuncNode.Append(this.ParamList.get(i));
+		while(i < this.GetListSize()) {
+			FuncNode.Append(this.GetListAt(i));
 			i = i + 1;
 		}
 		return FuncNode;
@@ -62,10 +62,10 @@ public final class ZMethodCallNode extends ZApplyNode {
 		ZGetNameNode Dummy = new ZGetNameNode(null, this.SourceToken, Func.FuncName);
 		ZFuncCallNode FuncNode = new ZFuncCallNode(this.ParentNode, Dummy);
 		FuncNode.SourceToken = this.SourceToken;
-		FuncNode.Append(this.RecvNode);
+		FuncNode.Append(this.AST[ZGetterNode.Recv]);
 		@Var int i = 0;
-		while(i < this.ParamList.size()) {
-			FuncNode.Append(this.ParamList.get(i));
+		while(i < this.GetListSize()) {
+			FuncNode.Append(this.GetListAt(i));
 			i = i + 1;
 		}
 		FuncNode.ResolvedFuncName = Func.FuncName;

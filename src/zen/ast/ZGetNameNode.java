@@ -30,11 +30,11 @@ import zen.parser.ZVisitor;
 
 // E.g., $NativeName
 public class ZGetNameNode extends ZNode {
-	@Field public String  VarName;
 	@Field public boolean IsCaptured = false;
+	@Field public String  VarName;
 	@Field public int VarIndex = 0;
 	public ZGetNameNode(ZNode ParentNode, ZToken Token, String NativeName) {
-		super(ParentNode, Token);
+		super(ParentNode, Token, 0);
 		this.VarName = NativeName;
 	}
 	@Override public void Accept(ZVisitor Visitor) {

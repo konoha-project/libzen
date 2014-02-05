@@ -24,19 +24,19 @@
 
 package zen.ast;
 
-import java.util.ArrayList;
-
-import zen.deps.Field;
+import zen.deps.Var;
 import zen.parser.ZVisitor;
 
-//E.g., "{" StringNode, $Node, StringNode, $Node "}"
-public final class ZMapLiteralNode extends ZNode {   // => ArrayLiteral
-	@Field public ArrayList<ZNode>	NodeList = new ArrayList<ZNode>();
+public final class ZMapLiteralNode extends ZListNode {
 	public ZMapLiteralNode(ZNode ParentNode) {
-		super(ParentNode, null);
+		super(ParentNode, null, 0);
 	}
-	@Override public void Append(ZNode Node) {
-		this.NodeList.add(Node);
+	public final ZMapEntryNode GetMapEntryNode(int Index) {
+		@Var ZNode Node = this.GetListAt(Index);
+		if(Node instanceof ZMapEntryNode) {
+			return (ZMapEntryNode)Node;
+		}
+		return null;
 	}
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitMapLiteralNode(this);

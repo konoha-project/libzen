@@ -24,30 +24,12 @@
 
 package zen.ast;
 
-import java.util.ArrayList;
-
-import zen.deps.Field;
 import zen.parser.ZToken;
-import zen.type.ZFuncType;
-import zen.type.ZType;
 
-abstract class ZApplyNode extends ZNode {
-	@Field public ArrayList<ZNode>  ParamList = new ArrayList<ZNode>();
-	@Field public String ResolvedFuncName = null;
-	@Field public ZFuncType ResolvedFuncType = null;
+abstract class ZApplyNode extends ZListNode {
+
 	public ZApplyNode(ZNode ParentNode, ZToken SourceToken) {
-		super(ParentNode, SourceToken);
-	}
-
-	@Override public void Append(ZNode Node) {
-		this.ParamList.add(this.SetChild(Node));
-	}
-
-	public final ZType GetRecvType() {
-		if(this.ParamList.size()>0) {
-			return this.ParamList.get(0).Type.GetRealType();
-		}
-		return ZType.VoidType;
+		super(ParentNode, SourceToken, 1);
 	}
 
 }

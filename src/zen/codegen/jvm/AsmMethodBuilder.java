@@ -17,6 +17,7 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.MethodNode;
 
+import zen.ast.ZListNode;
 import zen.ast.ZNode;
 import zen.lang.ZSystem;
 import zen.type.ZFuncType;
@@ -264,8 +265,8 @@ public class AsmMethodBuilder extends MethodNode {
 		//this.CheckReturnCast(Node, FuncType.GetReturnType());
 	}
 
-	void PushNodeListAsArray(Class<?> T, int StartIdx, ArrayList<ZNode> NodeList) {
-		this.PushInt(NodeList.size() - StartIdx);
+	void PushNodeListAsArray(Class<?> T, int StartIdx, ZListNode NodeList) {
+		this.PushInt(NodeList.GetListSize() - StartIdx);
 		if(T == long.class) {
 			this.visitIntInsn(Opcodes.NEWARRAY, Opcodes.T_LONG);
 		}
@@ -275,10 +276,10 @@ public class AsmMethodBuilder extends MethodNode {
 		else {
 			this.visitTypeInsn(ANEWARRAY, Type.getInternalName(T));
 		}
-		for(int i = StartIdx; i < NodeList.size(); i++) {
+		for(int i = StartIdx; i < NodeList.GetListSize() ; i++) {
 			this.visitInsn(DUP);
 			this.PushInt(i - StartIdx);
-			this.PushNode(T, NodeList.get(i));
+			this.PushNode(T, NodeList.GetListAt(i));
 			if(T == long.class) {
 				this.visitInsn(Opcodes.LASTORE);
 			}

@@ -29,19 +29,15 @@ import zen.deps.Field;
 public class ZParamNode extends ZNode {
 	@Field public String  Name;
 	public ZParamNode(ZNode ParentNode) {
-		super(ParentNode, null);
+		super(ParentNode, null, 0);
 	}
 
 	@Override public String GetVisitName() {
 		return "VisitParamNode"; // override this if you want to use additional node
 	}
-	@Override public void Append(ZNode Node) {
-		if(Node instanceof ZGetNameNode) {
-			this.SourceToken = Node.SourceToken;
-			this.Name = Node.SourceToken.GetText();
-		}
-		if(Node instanceof ZTypeNode) {
-			this.Type = Node.Type;
-		}
+
+	@Override public void SetName(String Name) {
+		this.Name = Name;
 	}
+
 }

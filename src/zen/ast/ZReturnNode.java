@@ -24,16 +24,12 @@
 
 package zen.ast;
 
-import zen.deps.Field;
 import zen.parser.ZVisitor;
 
 public final class ZReturnNode extends ZNode {
-	@Field public ZNode ValueNode = null;
+	public final static int Expr = 0;
 	public ZReturnNode(ZNode ParentNode) {
-		super(ParentNode, null);
-	}
-	@Override public void Append(ZNode ValueNode) {
-		this.ValueNode = this.SetChild(ValueNode);
+		super(ParentNode, null, 1);
 	}
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitReturnNode(this);

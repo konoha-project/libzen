@@ -34,11 +34,11 @@ import zen.type.ZFuncType;
 import zen.type.ZType;
 import zen.type.ZTypePool;
 
-public class ZFunctionNode extends ZNode {
+public class ZFunctionNode extends ZListNode {
+	public final static int Block = 0;
+
 	@Field public ZType ReturnType = ZType.VarType;
 	@Field public String FuncName = null;
-	@Field public ArrayList<ZParamNode> ParamList = new ArrayList<ZParamNode>();
-	@Field public ZBlockNode FuncBlock = null;
 
 	@Field public ZFunctionNode ParentFunctionNode = null;
 	@Field public ZFuncType ResolvedFuncType = null;
@@ -46,23 +46,14 @@ public class ZFunctionNode extends ZNode {
 	@Field public int VarIndex = 0;
 
 	public ZFunctionNode(ZNode ParentNode) {
-		super(ParentNode, null);
+		super(ParentNode, null, 1);
 	}
 
-	@Override public void Append(ZNode Node) {
-		if(Node instanceof ZParamNode) {
-			this.ParamList.add((ZParamNode)Node);
-		}
-		else if(Node instanceof ZTypeNode) {
-			this.ReturnType = Node.Type;
-		}
-		else if(Node instanceof ZBlockNode) {
-			this.FuncBlock = (ZBlockNode)Node;
-		}
-		else if(this.FuncName == null) {
-			this.FuncName = Node.SourceToken.GetText();
-			this.SourceToken = Node.SourceToken;
-		}
+	@Override public void SetType(ZType Type) {
+		this.ReturnType = Type;
+	}
+	@Override public void SetName(String Name) {
+		this.FuncName = Name;
 	}
 
 	@Override public void Accept(ZVisitor Visitor) {
@@ -73,7 +64,15 @@ public class ZFunctionNode extends ZNode {
 		if(this.GlobalName != null) {
 			return false;
 		}
-		return this.IsVarType() || this.FuncBlock.IsVarType();
+		return this.IsVarType() || this.AST[ZFunctionNode.Block].IsVarType();
+	}
+
+	public final ZParamNode GetParamNode(int Index) {
+		@Var ZNode Node = this.GetListAt(Index);
+		if(Node instanceof ZParamNode) {
+			return (ZParamNode)Node;
+		}
+		return null;
 	}
 
 	public final ZFuncType GetFuncType(@Nullable ZType ContextType) {
@@ -88,8 +87,8 @@ public class ZFunctionNode extends ZNode {
 			}
 			TypeList.add(this.ReturnType.GetRealType());
 			@Var int i = 0;
-			while(i < this.ParamList.size()) {
-				@Var ZParamNode Node = this.ParamList.get(i);
+			while(i < this.GetListSize()) {
+				@Var ZParamNode Node = this.GetParamNode(i);
 				@Var ZType ParamType = Node.Type.GetRealType();
 				if(ParamType.IsVarType() && FuncType != null) {
 					ParamType = FuncType.GetParamType(i+1);

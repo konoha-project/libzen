@@ -29,17 +29,17 @@ import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 
 public final class ZGetterNode extends ZNode {
-	@Field public ZNode RecvNode;
+	public final static int Recv = 0;
 	@Field public String  FieldName;
 	public ZGetterNode(ZNode ParentNode, ZToken SourceToken, ZNode RecvNode, String FieldName) {
-		super(ParentNode, SourceToken);
+		super(ParentNode, SourceToken, 1);
 		this.FieldName = FieldName;
-		this.RecvNode = this.SetChild(RecvNode);
+		this.Set(ZGetterNode.Recv, RecvNode);
 	}
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitGetterNode(this);
 	}
 	public final boolean IsStaticField() {
-		return this.RecvNode instanceof ZTypeNode;
+		return this.AST[ZGetterNode.Recv] instanceof ZTypeNode;
 	}
 }

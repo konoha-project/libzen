@@ -7,17 +7,18 @@ public class ZImportNode extends ZNode {
 	@Field public String ResourcePath = null;
 	@Field public String Alias = null;
 	public ZImportNode(ZNode ParentNode) {
-		super(ParentNode, null);
+		super(ParentNode, null, 0);
 	}
-	@Override public void Append(ZNode Node) {
+
+	@Override public void SetName(String Name) {
 		if(this.ResourcePath == null) {
-			this.ResourcePath = Node.SourceToken.GetText();
-			this.SourceToken = Node.SourceToken;
+			this.ResourcePath = Name;
 		}
 		else {
-			this.Alias = Node.SourceToken.GetText();
+			this.Alias = Name;
 		}
 	}
+
 	@Override public String GetVisitName() {
 		return "VisitImportNode"; // override this if you want to use additional node
 	}

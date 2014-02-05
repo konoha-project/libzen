@@ -25,18 +25,13 @@
 package zen.ast;
 
 
-import zen.deps.Field;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 
-//E.g., "~" $RecvNode
 public class ZUnaryNode extends ZNode {
-	@Field public ZNode	RecvNode = null;
+	public final static int Recv = 0;
 	public ZUnaryNode(ZNode ParentNode, ZToken Token) {
-		super(ParentNode, Token);
-	}
-	@Override public void Append(ZNode RecvNode) {
-		this.RecvNode = this.SetChild(RecvNode);
+		super(ParentNode, Token, 1);
 	}
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitUnaryNode(this);

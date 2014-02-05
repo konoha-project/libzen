@@ -171,13 +171,13 @@ public class BashSourceGenerator extends SourceGenerator {
 	}
 
 	@Override public void VisitWhileNode(ZenWhileNode Node) {
-		@Var String Program = "while " + this.ResolveCondition(Node.CondNode) + " ;do" + this.LineFeed;
+		@Var String Program = "while " + this.ResolveCondition(Node.AST[ZIfNode.Cond]) + " ;do" + this.LineFeed;
 		Program += this.VisitBlockWithIndent(Node.BodyNode, true) + "done";
 		this.PushSourceCode(Program);
 	}
 
 	@Override public void VisitForNode(ZenForNode Node) {
-		@Var String Cond = this.ResolveCondition(Node.CondNode);
+		@Var String Cond = this.ResolveCondition(Node.AST[ZIfNode.Cond]);
 		@Var String Iter = this.VisitNode(Node.IterNode);
 		@Var String Program = "for((; " + Cond  + "; " + Iter + " )) ;do" + this.LineFeed;
 		Program += this.VisitBlockWithIndent(Node.BodyNode, true) + "done";
@@ -233,7 +233,7 @@ public class BashSourceGenerator extends SourceGenerator {
 	@Override public void VisitUnaryNode(ZenUnaryNode Node) {
 		@Var String FuncName = Node.SourceToken.GetText();
 		@Var ZenFunc Func = Node.ResolvedFunc;
-		@Var String Expr = this.ResolveValueType(Node.RecvNode, false);	//TODO: support ++ --
+		@Var String Expr = this.ResolveValueType(Node.AST[ZGetterNode.Recv], false);	//TODO: support ++ --
 		@Var String Macro = null;
 		if(Func != null) {
 			FuncName = Func.GetNativeFuncName();
@@ -250,8 +250,8 @@ public class BashSourceGenerator extends SourceGenerator {
 	@Override public void VisitBinaryNode(ZenBinaryNode Node) {
 		@Var String FuncName = Node.SourceToken.GetText();
 		@Var ZenFunc Func = Node.ResolvedFunc;
-		@Var String Left = this.ResolveValueType(Node.LeftNode, false);
-		@Var String Right = this.ResolveValueType(Node.RightNode, false);
+		@Var String Left = this.ResolveValueType(Node.AST[ZBinaryNode.Left], false);
+		@Var String Right = this.ResolveValueType(Node.AST[ZBinaryNode.Right], false);
 		@Var String Macro = null;
 		if(Func != null) {
 			FuncName = Func.GetNativeFuncName();
@@ -277,19 +277,19 @@ public class BashSourceGenerator extends SourceGenerator {
 	}
 
 	@Override public void VisitGetterNode(ZenGetterNode Node) {
-		this.PushSourceCode(this.VisitNode(Node.RecvNode) + "[" + this.GetMemberIndex(Node.RecvNode.Type, Node.ResolvedFunc.FuncName) + "]");
+		this.PushSourceCode(this.VisitNode(Node.AST[ZGetterNode.Recv]) + "[" + this.GetMemberIndex(Node.AST[ZGetterNode.Recv].Type, Node.ResolvedFunc.FuncName) + "]");
 	}
 
 	@Override public void VisitGetIndexNode(ZenGetIndexNode Node) {
-		this.PushSourceCode(this.VisitNode(Node.RecvNode) + "[" + this.ResolveValueType(Node.GetAt(0), false) + "]");
+		this.PushSourceCode(this.VisitNode(Node.AST[ZGetterNode.Recv]) + "[" + this.ResolveValueType(Node.GetAt(0), false) + "]");
 	}
 
 	@Override public void VisitAndNode(ZenAndNode Node) {
-		this.PushSourceCode("(" + this.ResolveCondition(Node.LeftNode) + " && " + this.ResolveCondition(Node.RightNode) + ")");
+		this.PushSourceCode("(" + this.ResolveCondition(Node.AST[ZBinaryNode.Left]) + " && " + this.ResolveCondition(Node.AST[ZBinaryNode.Right]) + ")");
 	}
 
 	@Override public void VisitOrNode(ZenOrNode Node) {
-		this.PushSourceCode("(" + this.ResolveCondition(Node.LeftNode) + " || " + this.ResolveCondition(Node.RightNode) + ")");
+		this.PushSourceCode("(" + this.ResolveCondition(Node.AST[ZBinaryNode.Left]) + " || " + this.ResolveCondition(Node.AST[ZBinaryNode.Right]) + ")");
 	}
 
 	@Override public void VisitSetNameNode(ZenSetLocalNode Node) {
@@ -299,8 +299,8 @@ public class BashSourceGenerator extends SourceGenerator {
 //	@Override public void VisitSelfAssignNode(ZenSelfAssignNode Node) {
 //		@Var String FuncName = Node.SourceToken.GetText();
 //		@Var ZenFunc Func = Node.Func;
-//		@Var String Left = this.VisitNode(Node.LeftNode);
-//		@Var String Right = this.ResolveValueType(Node.RightNode, false);
+//		@Var String Left = this.VisitNode(Node.AST[ZBinaryNode.Left]);
+//		@Var String Right = this.ResolveValueType(Node.AST[ZBinaryNode.Right], false);
 //		@Var String Macro = null;
 //		if(Func != null) {
 //			FuncName = Func.GetNativeFuncName();
@@ -335,18 +335,18 @@ public class BashSourceGenerator extends SourceGenerator {
 	}
 
 	@Override public void VisitTrinaryNode(ZenTrinaryNode Node) {
-		@Var String CondNode = this.ResolveCondition(Node.CondNode);
-		@Var String Then = this.ResolveValueType(Node.ThenNode, false);
-		@Var String Else = this.ResolveValueType(Node.ElseNode, false);
+		@Var String CondNode = this.ResolveCondition(Node.AST[ZIfNode.Cond]);
+		@Var String Then = this.ResolveValueType(Node.AST[ZIfNode.Then], false);
+		@Var String Else = this.ResolveValueType(Node.AST[ZIfNode.Else], false);
 		this.PushSourceCode("((" + CondNode + " ? " + Then + " : " + Else + "))");
 	}
 
 	@Override public void VisitIfNode(ZenIfNode Node) {
-		@Var String CondNode = this.ResolveCondition(Node.CondNode);
-		@Var String ThenBlock = this.VisitBlockWithIndent(Node.ThenNode, true);
+		@Var String CondNode = this.ResolveCondition(Node.AST[ZIfNode.Cond]);
+		@Var String ThenBlock = this.VisitBlockWithIndent(Node.AST[ZIfNode.Then], true);
 		@Var String Code = "if " + CondNode + " ;then" + this.LineFeed + ThenBlock;
-		if(!this.IsEmptyBlock(Node.ElseNode)) {
-			Code += "else" + this.LineFeed + this.VisitBlockWithIndent(Node.ElseNode, false);
+		if(!this.IsEmptyBlock(Node.AST[ZIfNode.Else])) {
+			Code += "else" + this.LineFeed + this.VisitBlockWithIndent(Node.AST[ZIfNode.Else], false);
 		}
 		Code += "fi";
 		this.PushSourceCode(Code);
@@ -392,12 +392,12 @@ public class BashSourceGenerator extends SourceGenerator {
 		throw new RuntimeException("FIXME support Try-catch @ BashSourceGenerator");
 //		@Var ZenNode TrueNode = new ZenConstPoolNode(ZenSystem.BooleanType, null, true);
 //		@Var String Code = "trap ";
-//		@Var String Try = this.VisitNode(new ZenIfNode(null, null, TrueNode, Node.TryNode, null));
+//		@Var String Try = this.VisitNode(new ZenIfNode(null, null, TrueNode, Node.AST[ZTryNode.Try], null));
 //		@Var String Catch = this.VisitNode(new ZenIfNode(null, null, TrueNode, Node.CatchBlock, null));
 //		Code += LibZen.QuoteString(Catch) + " ERR" + this.LineFeed;
 //		Code += this.GetIndentString() + Try + this.LineFeed + this.GetIndentString() + "trap ERR";
-//		if(Node.FinallyNode != null) {
-//			@Var String Finally = this.VisitNode(new ZenIfNode(null, null, TrueNode, Node.FinallyNode, null));
+//		if(Node.AST[ZTryNode.Finally] != null) {
+//			@Var String Finally = this.VisitNode(new ZenIfNode(null, null, TrueNode, Node.AST[ZTryNode.Finally], null));
 //			Code += this.LineFeed + this.GetIndentString() + Finally;
 //		}
 //		this.PushSourceCode(Code);
@@ -451,11 +451,11 @@ public class BashSourceGenerator extends SourceGenerator {
 		}
 		else if(TargetNode instanceof ZenUnaryNode) {
 			@Var ZenUnaryNode Unary = (ZenUnaryNode) TargetNode;
-			return this.CheckConstFolding(Unary.RecvNode);
+			return this.CheckConstFolding(Unary.AST[ZGetterNode.Recv]);
 		}
 		else if(TargetNode instanceof ZenBinaryNode) {
 			@Var ZenBinaryNode Binary = (ZenBinaryNode) TargetNode;
-			if(this.CheckConstFolding(Binary.LeftNode) && this.CheckConstFolding(Binary.RightNode)) {
+			if(this.CheckConstFolding(Binary.AST[ZBinaryNode.Left]) && this.CheckConstFolding(Binary.AST[ZBinaryNode.Right])) {
 				return true;
 			}
 		}
@@ -563,7 +563,7 @@ public class BashSourceGenerator extends SourceGenerator {
 
 		@Var int i = 0;
 		while(i < LibZen.ListSize(ClassField.FieldList)) {
-			@Var ZenFieldInfo FieldInfo = ClassField.FieldList.get(i);
+			@Var ZenFieldInfo FieldInfo = ClassField.GetFieldNode(i);
 			@Var String InitValue = this.StringifyConstValue(FieldInfo.InitValue);
 			if(!FieldInfo.Type.IsNativeType()) {
 				InitValue = "NULL";

@@ -30,6 +30,7 @@ import zen.ast.ZBlockNode;
 import zen.ast.ZBooleanNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZGetNameNode;
+import zen.ast.ZGetterNode;
 import zen.ast.ZIfNode;
 import zen.ast.ZIntNode;
 import zen.ast.ZNullNode;
@@ -69,8 +70,8 @@ public class CommonLispSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitReturnNode(ZReturnNode Node) {
-		if (Node.ValueNode != null) {
-			Node.ValueNode.Accept(this);
+		if (Node.AST[ZReturnNode.Expr] != null) {
+			Node.AST[ZReturnNode.Expr].Accept(this);
 		}
 	}
 
@@ -80,7 +81,7 @@ public class CommonLispSourceGenerator extends ZSourceGenerator {
 
 	@Override public void VisitBlockNode(ZBlockNode Node) {
 		this.CurrentBuilder.Indent();
-		this.VisitStmtList(Node.StmtList);
+		this.VisitStmtList(Node);
 		this.CurrentBuilder.UnIndent();
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.AppendIndent();
@@ -124,10 +125,10 @@ public class CommonLispSourceGenerator extends ZSourceGenerator {
 	@Override public void VisitWhileNode(ZWhileNode Node) {
 		this.CurrentBuilder.Append("(while ");
 
-		Node.CondNode.Accept(this);
+		Node.AST[ZWhileNode.Cond].Accept(this);
 
 		this.CurrentBuilder.AppendLineFeed();
-		Node.BodyNode.Accept(this);
+		Node.AST[ZWhileNode.Block].Accept(this);
 		this.CurrentBuilder.AppendIndent();
 		this.CurrentBuilder.Append(")");
 	}
@@ -149,7 +150,7 @@ public class CommonLispSourceGenerator extends ZSourceGenerator {
 	//		this.CurrentBuilder.AppendIndent();
 	//
 	//		this.CurrentBuilder.Append("while ");
-	//		Node.CondNode.Accept(this);
+	//		Node.AST[ZIfNode.Cond].Accept(this);
 	//		this.CurrentBuilder.AppendLine("");
 	//		this.CurrentBuilder.AppendIndent();
 	//		this.CurrentBuilder.AppendIndent();
@@ -164,7 +165,7 @@ public class CommonLispSourceGenerator extends ZSourceGenerator {
 
 	//	@Override public void VisitForNode(ZenForNode Node) {
 	//		this.CurrentBuilder.Append("(loop while ");
-	//		Node.CondNode.Accept(this);
+	//		Node.AST[ZIfNode.Cond].Accept(this);
 	//		this.CurrentBuilder.AppendLine("");
 	//
 	//		this.CurrentBuilder.AppendIndent();
@@ -185,8 +186,8 @@ public class CommonLispSourceGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Append(Node.NativeName);
 		this.CurrentBuilder.Append(" ");
 
-		if (Node.InitNode != null) {
-			Node.InitNode.Accept(this);
+		if (Node.AST[ZVarDeclNode.InitValue] != null) {
+			Node.AST[ZVarDeclNode.InitValue].Accept(this);
 		} else {
 			this.CurrentBuilder.Append("nil");
 		}
@@ -196,33 +197,33 @@ public class CommonLispSourceGenerator extends ZSourceGenerator {
 
 	//	@Override public void VisitTrinaryNode(ZenTrinaryNode Node) {
 	//		this.CurrentBuilder.Append("(if  ");
-	//		Node.CondNode.Accept(this);
+	//		Node.AST[ZIfNode.Cond].Accept(this);
 	//		this.CurrentBuilder.Append(" ");
-	//		Node.ThenNode.Accept(this);
+	//		Node.AST[ZIfNode.Then].Accept(this);
 	//		this.CurrentBuilder.Append(" ");
-	//		Node.ElseNode.Accept(this);
+	//		Node.AST[ZIfNode.Else].Accept(this);
 	//		this.CurrentBuilder.Append(")");
 	//	}
 
 	@Override public void VisitIfNode(ZIfNode Node) {
 		this.CurrentBuilder.Append("(if  ");
-		Node.CondNode.Accept(this);
+		Node.AST[ZIfNode.Cond].Accept(this);
 		this.CurrentBuilder.Indent();
 		this.CurrentBuilder.AppendLineFeed();
 
 		this.CurrentBuilder.Append("(progn ");
 		this.CurrentBuilder.Indent();
 		this.CurrentBuilder.AppendLineFeed();
-		Node.ThenNode.Accept(this);
+		Node.AST[ZIfNode.Then].Accept(this);
 		this.CurrentBuilder.UnIndent();
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.Append(")");
 
-		if(Node.ElseNode != null) {
+		if(Node.AST[ZIfNode.Else] != null) {
 			this.CurrentBuilder.Indent();
 			this.CurrentBuilder.AppendLineFeed();
 			this.CurrentBuilder.Append("(progn ");
-			Node.ElseNode.Accept(this);
+			Node.AST[ZIfNode.Else].Accept(this);
 			this.CurrentBuilder.UnIndent();
 			this.CurrentBuilder.AppendLineFeed();
 			this.CurrentBuilder.Append(")");
@@ -274,38 +275,38 @@ public class CommonLispSourceGenerator extends ZSourceGenerator {
 
 	@Override public void VisitUnaryNode(ZUnaryNode Node) {
 		this.CurrentBuilder.Append(Node.SourceToken.GetText());
-		Node.RecvNode.Accept(this);
+		Node.AST[ZGetterNode.Recv].Accept(this);
 	}
 
 	@Override public void VisitBinaryNode(ZBinaryNode Node) {
 		this.CurrentBuilder.Append("(");
 		this.CurrentBuilder.Append(Node.SourceToken.GetText());
 		this.CurrentBuilder.Append(" ");
-		Node.LeftNode.Accept(this);
+		Node.AST[ZBinaryNode.Left].Accept(this);
 		this.CurrentBuilder.Append(" ");
-		Node.RightNode.Accept(this);
+		Node.AST[ZBinaryNode.Right].Accept(this);
 		this.CurrentBuilder.Append(")");
 	}
 
 	@Override public void VisitAndNode(ZAndNode Node) {
 		this.CurrentBuilder.Append("(and ");
-		Node.LeftNode.Accept(this);
+		Node.AST[ZBinaryNode.Left].Accept(this);
 		this.CurrentBuilder.Append(" ");
-		Node.RightNode.Accept(this);
+		Node.AST[ZBinaryNode.Right].Accept(this);
 		this.CurrentBuilder.Append(")");
 	}
 	@Override public void VisitOrNode(ZOrNode Node) {
 		this.CurrentBuilder.Append("(or ");
-		Node.LeftNode.Accept(this);
+		Node.AST[ZBinaryNode.Left].Accept(this);
 		this.CurrentBuilder.Append(" ");
-		Node.RightNode.Accept(this);
+		Node.AST[ZBinaryNode.Right].Accept(this);
 		this.CurrentBuilder.Append(")");
 	}
 
 	@Override public void VisitSetNameNode(ZSetNameNode Node) {
 		this.CurrentBuilder.Append("(setq  " + Node.VarName);
 		this.CurrentBuilder.Append(" ");
-		Node.ValueNode.Accept(this);
+		Node.AST[ZSetNameNode.Expr].Accept(this);
 		this.CurrentBuilder.Append(")");
 	}
 

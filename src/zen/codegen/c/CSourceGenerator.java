@@ -25,13 +25,13 @@
 //ifdef JAVA
 package zen.codegen.c;
 
+import zen.ast.ZBinaryNode;
 import zen.ast.ZCastNode;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZInstanceOfNode;
 import zen.ast.ZParamNode;
 import zen.ast.ZVarDeclNode;
 import zen.parser.ZSourceGenerator;
-
 import zen.type.ZType;
 
 //Zen Generator should be written in each language.
@@ -60,14 +60,14 @@ public class CSourceGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Append("(");
 		this.VisitType(Node.Type);
 		this.CurrentBuilder.Append(") ");
-		this.GenerateCode(Node.ExprNode);
+		this.GenerateCode(Node.AST[ZCastNode.Expr]);
 	}
 
 	@Override public void VisitInstanceOfNode(ZInstanceOfNode Node) {
 		this.CurrentBuilder.Append("isinstance(");
-		this.GenerateCode(Node.LeftNode);
+		this.GenerateCode(Node.AST[ZBinaryNode.Left]);
 		this.CurrentBuilder.Append(this.Camma);
-		this.VisitType(Node.RightNode.Type);
+		this.VisitType(Node.AST[ZBinaryNode.Right].Type);
 		this.CurrentBuilder.Append(")");
 	}
 
@@ -76,9 +76,9 @@ public class CSourceGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Append(" ");
 		this.CurrentBuilder.Append(Node.NativeName);
 		this.CurrentBuilder.AppendToken("=");
-		this.GenerateCode(Node.InitNode);
+		this.GenerateCode(Node.AST[ZVarDeclNode.InitValue]);
 		this.CurrentBuilder.Append(this.SemiColon);
-		this.VisitStmtList(Node.StmtList);
+		this.VisitStmtList(Node);
 	}
 
 	@Override public void VisitParamNode(ZParamNode Node) {
@@ -91,11 +91,11 @@ public class CSourceGenerator extends ZSourceGenerator {
 		this.VisitType(Node.ReturnType);
 		this.CurrentBuilder.Append(" ");
 		this.CurrentBuilder.Append(Node.FuncName);
-		this.VisitParamList("(", Node.ParamList, ")");
+		this.VisitListNode("(", Node, ")");
 		//		if (Node.BodyNode == null) {
 		//			this.CurrentBuilder.Append(this.SemiColon);
 		//		} else {
-		this.GenerateCode(Node.FuncBlock);
+		this.GenerateCode(Node.AST[ZFunctionNode.Block]);
 		//		}
 	}
 
@@ -103,11 +103,11 @@ public class CSourceGenerator extends ZSourceGenerator {
 		this.VisitType(Node.ReturnType);
 		this.CurrentBuilder.Append(" ");
 		this.CurrentBuilder.Append(Node.FuncName);
-		this.VisitParamList("(", Node.ParamList, ")");
-		if (Node.FuncBlock == null) {
+		this.VisitListNode("(", Node, ")");
+		if (Node.AST[ZFunctionNode.Block] == null) {
 			this.CurrentBuilder.Append(this.SemiColon);
 		} else {
-			this.GenerateCode(Node.FuncBlock);
+			this.GenerateCode(Node.AST[ZFunctionNode.Block]);
 		}
 	}
 

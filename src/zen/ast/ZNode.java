@@ -24,23 +24,37 @@
 
 //ifdef JAVA
 package zen.ast;
+
 import zen.deps.Field;
 import zen.deps.LibNative;
 import zen.deps.LibZen;
+import zen.deps.Var;
 import zen.parser.ZNameSpace;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 import zen.type.ZType;
 
 public abstract class ZNode {
-	@Field public ZNode	 ParentNode;
+	public final static int NameInfo = -2;
+	public final static int TypeInfo = -3;
+	public final static int Nop = -4;
+	public final static int AppendIndex = -1;
+
+	@Field public ZNode ParentNode;
 	@Field public ZToken SourceToken;
 	@Field public ZType	Type = ZType.VarType;
+	@Field public ZNode  AST[];
 
-	public ZNode(ZNode ParentNode, ZToken SourceToken) {
+	public ZNode(ZNode ParentNode, ZToken SourceToken, int Size) {
 		assert(this != ParentNode);
 		this.ParentNode = ParentNode;
 		this.SourceToken = SourceToken;
+		if(Size > 0) {
+			this.AST = new ZNode[Size];
+		}
+		else {
+			this.AST = null;
+		}
 	}
 
 	public final ZNode SetChild(ZNode Node) {
@@ -50,6 +64,31 @@ public abstract class ZNode {
 			Node.ParentNode = this;
 		}
 		return Node;
+	}
+
+	public void SetName(String Name) {
+	}
+
+	public void SetType(ZType Type) {
+		this.Type = Type;  // default behavior
+	}
+
+	public final void Set(int Index, ZNode Node) {
+		if(Index >= 0) {
+			this.AST[Index] = Node;
+		}
+		else if(Index == ZNode.AppendIndex) {
+			@Var ZNode ListNode = this;
+			if(ListNode instanceof ZListNode) {
+				((ZListNode)ListNode).Append(Node);
+			}
+		}
+		else if(Index == ZNode.NameInfo) {
+			this.SetName(Node.SourceToken.GetText());
+		}
+		else if(Index == ZNode.TypeInfo) {
+			this.SetType(Node.Type);
+		}
 	}
 
 	@Override public String toString() {
@@ -62,14 +101,6 @@ public abstract class ZNode {
 
 	public boolean IsBreakingBlock() {
 		return false;
-	}
-
-	public ZNode GetStatementNode() {
-		return this;  // ZenAnnotationNode should return AnnotatedNode;
-	}
-
-	public void Append(ZNode Node) {
-
 	}
 
 	public String GetVisitName() {
@@ -118,9 +149,9 @@ public abstract class ZNode {
 		}
 		if(this.ParentNode instanceof ZBlockNode) {
 			ZBlockNode Block = (ZBlockNode) this.ParentNode;
-			for (int i = 1; i < Block.StmtList.size(); i++) {
-				if(Block.StmtList.get(i) == this) {
-					return Block.StmtList.get(i-1);
+			for (int i = 1; i < Block.GetListSize(); i++) {
+				if(Block.GetListAt(i) == this) {
+					return Block.GetListAt(i-1);
 				}
 			}
 		}
@@ -133,9 +164,9 @@ public abstract class ZNode {
 		}
 		if(this.ParentNode instanceof ZBlockNode) {
 			ZBlockNode Block = (ZBlockNode) this.ParentNode;
-			for (int i = 0; i < Block.StmtList.size() - 1; i++) {
-				if(Block.StmtList.get(i) == this) {
-					return Block.StmtList.get(i+1);
+			for (int i = 0; i < Block.GetListSize() - 1; i++) {
+				if(Block.GetListAt(i) == this) {
+					return Block.GetListAt(i+1);
 				}
 			}
 		}

@@ -7,7 +7,7 @@ public class StaticFieldNode extends ZNode {
 	Class<?> StaticClass;
 	String FieldName;
 	StaticFieldNode(ZNode ParentNode, Class<?> StaticClass, ZType FieldType, String FieldName) {
-		super(ParentNode, null);
+		super(ParentNode, null, 0);
 		this.StaticClass = StaticClass;
 		this.Type = FieldType;
 		this.FieldName = FieldName;

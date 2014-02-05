@@ -10,7 +10,7 @@ class JvmFuncNode extends ZNode {
 	String FieldDesc;
 	Class<?> FuncClass;
 	JvmFuncNode(ZNode ParentNode, ZFuncType FuncType, String FuncName) {
-		super(ParentNode, null);
+		super(ParentNode, null, 0);
 		this.Type = FuncType;
 		this.FuncName = FuncName;
 		this.ReferenceName = FuncType.StringfySignature(FuncName);

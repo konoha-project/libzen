@@ -415,47 +415,47 @@ public class SourceGenerator extends ZenGenerator {
 
 //	@Override public void VisitSelfAssignNode(ZenSelfAssignNode Node) {
 //		@Var String FuncName = Node.SourceToken.GetText();
-//		@Var String Left = this.VisitNode(Node.LeftNode);
-//		@Var String Right = this.VisitNode(Node.RightNode);
+//		@Var String Left = this.VisitNode(Node.AST[ZBinaryNode.Left]);
+//		@Var String Right = this.VisitNode(Node.AST[ZBinaryNode.Right]);
 //		this.PushSourceCode(Left + " = " + SourceGenerator.GenerateApplyFunc2(Node.Func, FuncName, Left, Right));
 //	}
 
 	@Override public void VisitUnaryNode(ZenUnaryNode Node) {
 		@Var String FuncName = Node.SourceToken.GetText();
-		@Var String Expr = this.VisitNode(Node.RecvNode);
+		@Var String Expr = this.VisitNode(Node.AST[ZGetterNode.Recv]);
 		this.PushSourceCode("(" + SourceGenerator.GenerateApplyFunc1(Node.ResolvedFunc, FuncName, false, Expr) + ")");
 	}
 
 	@Override public void VisitBinaryNode(ZenBinaryNode Node) {
 		@Var String FuncName = Node.SourceToken.GetText();
-		@Var String Left = this.VisitNode(Node.LeftNode);
-		@Var String Right = this.VisitNode(Node.RightNode);
+		@Var String Left = this.VisitNode(Node.AST[ZBinaryNode.Left]);
+		@Var String Right = this.VisitNode(Node.AST[ZBinaryNode.Right]);
 		this.PushSourceCode("(" + SourceGenerator.GenerateApplyFunc2(Node.ResolvedFunc, FuncName, Left, Right) + ")");
 	}
 
 	@Override public void VisitGetterNode(ZenGetterNode Node) {
-		this.PushSourceCode(this.VisitNode(Node.RecvNode) + this.MemberAccessOperator + Node.ResolvedFunc.FuncName);
+		this.PushSourceCode(this.VisitNode(Node.AST[ZGetterNode.Recv]) + this.MemberAccessOperator + Node.ResolvedFunc.FuncName);
 	}
 	@Override public void VisitSetNameNode(ZenSetLocalNode Node) {
 		this.PushSourceCode(Node.NativeName + " = " + this.VisitNode(Node.ValueNode));
 	}
 
 	@Override public void VisitAndNode(ZenAndNode Node) {
-		@Var String Left = this.VisitNode(Node.LeftNode);
-		@Var String Right = this.VisitNode(Node.RightNode);
+		@Var String Left = this.VisitNode(Node.AST[ZBinaryNode.Left]);
+		@Var String Right = this.VisitNode(Node.AST[ZBinaryNode.Right]);
 		this.PushSourceCode("(" + Left + " " + this.LogicalAndOperator +" " + Right + ")");
 	}
 
 	@Override public void VisitOrNode(ZenOrNode Node) {
-		@Var String Left = this.VisitNode(Node.LeftNode);
-		@Var String Right = this.VisitNode(Node.RightNode);
+		@Var String Left = this.VisitNode(Node.AST[ZBinaryNode.Left]);
+		@Var String Right = this.VisitNode(Node.AST[ZBinaryNode.Right]);
 		this.PushSourceCode("(" + Left + " " + this.LogicalOrOperator +" " + Right + ")");
 	}
 
 	@Override public void VisitTrinaryNode(ZenTrinaryNode Node) {
-		@Var String CondExpr = this.VisitNode(Node.CondNode);
-		@Var String ThenExpr = this.VisitNode(Node.ThenNode);
-		@Var String ElseExpr = this.VisitNode(Node.ElseNode);
+		@Var String CondExpr = this.VisitNode(Node.AST[ZIfNode.Cond]);
+		@Var String ThenExpr = this.VisitNode(Node.AST[ZIfNode.Then]);
+		@Var String ElseExpr = this.VisitNode(Node.AST[ZIfNode.Else]);
 		this.PushSourceCode("((" + CondExpr + ")? " + ThenExpr + " : " + ElseExpr + ")");
 	}
 

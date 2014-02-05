@@ -31,8 +31,8 @@ import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.deps.ZenMap;
 import zen.deps.ZenTypedObject;
-import zen.obsolete.ZFuncSet;
 import zen.type.ZType;
+//import zen.obsolete.ZFuncSet;
 
 public class ZSystem {
 	public final static ZenMap<Integer>     SourceMap = new ZenMap<Integer>(null);
@@ -83,9 +83,9 @@ public class ZSystem {
 		if(Value instanceof ZFunc) {
 			return ((ZFunc)Value).GetFuncType();
 		}
-		else if(Value instanceof ZFuncSet) {
-			return ZType.FuncType;
-		}
+		//		else if(Value instanceof ZFuncSet) {
+		//			return ZType.FuncType;
+		//		}
 		else if(Value instanceof ZenTypedObject) {
 			return ((ZenTypedObject)Value).GetZenType();
 		}

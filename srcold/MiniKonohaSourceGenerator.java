@@ -210,7 +210,7 @@ var CLASS = (function (_super) {
 		@Var int i = 0;
 		@Var int size = LibZen.ListSize(ClassField.FieldList);
 		while(i < size) {
-			@Var ZenFieldInfo FieldInfo = ClassField.FieldList.get(i);
+			@Var ZenFieldInfo FieldInfo = ClassField.GetFieldNode(i);
 			@Var String InitValue = this.StringifyConstValue(FieldInfo.InitValue);
 			if(!FieldInfo.Type.IsNativeType()) {
 				this.AddUseLibrary("Syntax.Null");
@@ -256,13 +256,13 @@ var CLASS = (function (_super) {
 	}
 	@Override public void VisitTrinaryNode(ZenTrinaryNode Node) {
 		this.CurrentBuilder.Append("if(");
-		Node.CondNode.Accept(this);
+		Node.AST[ZIfNode.Cond].Accept(this);
 		this.CurrentBuilder.Append(") {");
-		Node.ThenNode.Accept(this);
+		Node.AST[ZIfNode.Then].Accept(this);
 		this.CurrentBuilder.Append("} ");
-		if(this.DoesNodeExist(Node.ElseNode)){
+		if(this.DoesNodeExist(Node.AST[ZIfNode.Else])){
 			this.CurrentBuilder.Append("else {");
-			Node.ElseNode.Accept(this);
+			Node.AST[ZIfNode.Else].Accept(this);
 			this.CurrentBuilder.Append("}");
 		}
 	}
@@ -280,12 +280,12 @@ var CLASS = (function (_super) {
 //	}
 	@Override public void VisitUnaryNode(ZenUnaryNode Node) {
 		this.CurrentBuilder.Append(Node.SourceToken.GetText());
-		Node.RecvNode.Accept(this);
+		Node.AST[ZGetterNode.Recv].Accept(this);
 	}
 //	@Override public void VisitIndexerNode(ZenGetterNode Node) {
 //		this.AddUseLibrary("JavaScript.String");
 //		this.VisitingBuilder.Append("[");
-//		Node.RecvNode.Accept(this);
+//		Node.AST[ZGetterNode.Recv].Accept(this);
 //		this.VisitingBuilder.Append("]");
 //	}
 	@Override public void VisitArrayLiteralNode(ZenArrayLiteralNode Node) {
@@ -308,7 +308,7 @@ var CLASS = (function (_super) {
 	@Override public void VisitWhileNode(ZenWhileNode Node) {
 		this.AddUseLibrary("Syntax.CStyleWhile");
 		this.CurrentBuilder.Append("while(");
-		Node.CondNode.Accept(this);
+		Node.AST[ZIfNode.Cond].Accept(this);
 		this.CurrentBuilder.Append(") ");
 		this.VisitIndentBlock("{", Node.BodyNode, "}");
 		this.CurrentBuilder.AppendLine("");
@@ -318,7 +318,7 @@ var CLASS = (function (_super) {
 		this.CurrentBuilder.Append("do ");
 		this.VisitIndentBlock("{", Node.BodyNode, "}");
 		this.CurrentBuilder.Append(" while(");
-		Node.CondNode.Accept(this);
+		Node.AST[ZIfNode.Cond].Accept(this);
 		this.CurrentBuilder.AppendLine(");");
 	}
 
@@ -326,7 +326,7 @@ var CLASS = (function (_super) {
 		this.AddUseLibrary("Syntax.CStyleFor");
 		this.CurrentBuilder.Append("for(");
 		this.CurrentBuilder.Append("; ");
-		Node.CondNode.Accept(this);
+		Node.AST[ZIfNode.Cond].Accept(this);
 		this.CurrentBuilder.Append("; ");
 		Node.IterNode.Accept(this);
 		this.CurrentBuilder.Append(") ");
@@ -336,7 +336,7 @@ var CLASS = (function (_super) {
 	private boolean IsInForExpr(ZenNode Node) {
 		if(Node.ParentNode instanceof ZenForNode){
 			ZenForNode Parent = (ZenForNode) Node.ParentNode;
-			if(Node == Parent.CondNode) return true;
+			if(Node == Parent.AST[ZIfNode.Cond]) return true;
 			if(Node == Parent.IterNode) return true;
 		}
 		return false;
@@ -365,12 +365,12 @@ var CLASS = (function (_super) {
 		this.CurrentBuilder.Append(Node.SourceToken.GetText());
 	}
 	@Override public void VisitGetterNode(ZenGetterNode Node) {
-		Node.RecvNode.Accept(this);
+		Node.AST[ZGetterNode.Recv].Accept(this);
 		this.CurrentBuilder.Append(".");
 		this.CurrentBuilder.Append(Node.SourceToken.GetText());
 	}
 	@Override public void VisitSetterNode(ZenSetterNode Node) {
-		Node.RecvNode.Accept(this);
+		Node.AST[ZGetterNode.Recv].Accept(this);
 		this.CurrentBuilder.Append(".");
 		this.CurrentBuilder.Append(Node.SourceToken.GetText());
 		this.CurrentBuilder.AppendToken("=");
@@ -383,7 +383,7 @@ var CLASS = (function (_super) {
 		this.CurrentBuilder.Append("(");
 		for(@Var int i = 0; i < LibZen.ListSize(Node.ParamList); i++){
 			if(i != 0) this.CurrentBuilder.Append(", ");
-			Node.ParamList.get(i).Accept(this);
+			Node.GetParam(i).Accept(this);
 		}
 		this.CurrentBuilder.Append(")");
 	}
@@ -394,19 +394,19 @@ var CLASS = (function (_super) {
 		this.DebugAppendNode(Node);
 	}
 	@Override public void VisitBinaryNode(ZenBinaryNode Node) {
-		Node.LeftNode.Accept(this);
+		Node.AST[ZBinaryNode.Left].Accept(this);
 		this.CurrentBuilder.AppendToken(Node.SourceToken.GetText());
-		Node.RightNode.Accept(this);
+		Node.AST[ZBinaryNode.Right].Accept(this);
 	}
 	@Override public void VisitAndNode(ZenAndNode Node) {
-		Node.LeftNode.Accept(this);
+		Node.AST[ZBinaryNode.Left].Accept(this);
 		this.CurrentBuilder.AppendToken("&&");
-		Node.RightNode.Accept(this);
+		Node.AST[ZBinaryNode.Right].Accept(this);
 	}
 	@Override public void VisitOrNode(ZenOrNode Node) {
-		Node.LeftNode.Accept(this);
+		Node.AST[ZBinaryNode.Left].Accept(this);
 		this.CurrentBuilder.AppendToken("||");
-		Node.RightNode.Accept(this);
+		Node.AST[ZBinaryNode.Right].Accept(this);
 	}
 	@Override public void VisitSetNameNode(ZenSetLocalNode Node) {
 		this.CurrentBuilder.Append(Node.NativeName);
@@ -429,12 +429,12 @@ var CLASS = (function (_super) {
 	}
 	@Override public void VisitIfNode(ZenIfNode Node) {
 		this.CurrentBuilder.Append("if(");
-		Node.CondNode.Accept(this);
+		Node.AST[ZIfNode.Cond].Accept(this);
 		this.CurrentBuilder.Append(")");
-		this.VisitIndentBlock("{", Node.ThenNode, "}");
-		if(this.DoesNodeExist(Node.ElseNode)){
+		this.VisitIndentBlock("{", Node.AST[ZIfNode.Then], "}");
+		if(this.DoesNodeExist(Node.AST[ZIfNode.Else])){
 			this.CurrentBuilder.Append("else");
-			this.VisitIndentBlock("{", Node.ElseNode, "}");
+			this.VisitIndentBlock("{", Node.AST[ZIfNode.Else], "}");
 		}
 	}
 	@Override public void VisitSwitchNode(ZenSwitchNode Node) {

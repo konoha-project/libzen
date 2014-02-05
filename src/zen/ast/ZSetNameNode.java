@@ -30,16 +30,15 @@ import zen.parser.ZVisitor;
 
 // E.g., $NativeName = $ValueNode
 public class ZSetNameNode extends ZNode {
+	@Field public static int Expr = 0;
+	@Field public String  VarName;
+	@Field public int    VarIndex = 0;
 	@Field public boolean IsCaptured = false;
-	@Field public String   VarName;
-	@Field public ZNode	 ValueNode = null;
-	@Field public int VarIndex = 0;
+
+	@Deprecated public ZNode SetNameValueNode = null;
 	public ZSetNameNode(ZNode ParentNode, ZToken Token, String VarName) {
-		super(ParentNode, Token);
+		super(ParentNode, Token, 1);
 		this.VarName = VarName;
-	}
-	@Override public void Append(ZNode Node) {
-		this.ValueNode = this.SetChild(this.ValueNode);
 	}
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitSetNameNode(this);

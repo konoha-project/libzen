@@ -24,27 +24,13 @@
 
 package zen.ast;
 
-import java.util.ArrayList;
-
-import zen.deps.Field;
 import zen.parser.ZVisitor;
 
-//E.g., "[" $Node, $Node "]"
-public final class ZArrayLiteralNode extends ZNode {
-	@Field public ArrayList<ZNode>	NodeList = new ArrayList<ZNode>();
+public final class ZArrayLiteralNode extends ZListNode {
 	public ZArrayLiteralNode(ZNode ParentNode) {
-		super(ParentNode, null);
-	}
-	@Override public void Append(ZNode Node) {
-		this.NodeList.add(Node);
+		super(ParentNode, null, 0);
 	}
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitArrayLiteralNode(this);
 	}
-	//	@Override public Object ToConstValue(ZenParserContext Context, boolean EnforceConst)  {
-	//		if(EnforceConst) {
-	//			return Context.Generator.EvalArrayNode(this, EnforceConst);
-	//		}
-	//		return null;
-	//	}
 }

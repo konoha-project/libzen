@@ -29,21 +29,21 @@ import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 
 public final class ZSetterNode extends ZNode {
-	@Field public ZNode  RecvNode;
+	public final static int Recv = 0;
+	public final static int Expr = 1;
+
 	@Field public String  FieldName;
-	@Field public ZNode  ValueNode = null;
+	@Deprecated public ZNode  SetterValueNode = null;
+
 	public ZSetterNode(ZNode ParentNode, ZToken SourceToken, ZNode RecvNode, String FieldName) {
-		super(ParentNode, SourceToken);
+		super(ParentNode, SourceToken, 2);
 		this.FieldName = FieldName;
-		this.RecvNode  = this.SetChild(RecvNode);
-	}
-	@Override public void Append(ZNode Node) {
-		this.ValueNode = this.SetChild(Node);
+		this.Set(ZSetterNode.Recv, RecvNode);
 	}
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitSetterNode(this);
 	}
 	public final boolean IsStaticField() {
-		return this.RecvNode instanceof ZTypeNode;
+		return this.AST[ZSetterNode.Recv] instanceof ZTypeNode;
 	}
 }

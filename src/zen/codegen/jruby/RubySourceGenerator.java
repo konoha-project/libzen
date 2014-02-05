@@ -8,7 +8,6 @@ import zen.ast.ZCastNode;
 import zen.ast.ZCatchNode;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZInstanceOfNode;
-import zen.ast.ZNode;
 import zen.ast.ZParamNode;
 import zen.ast.ZReturnNode;
 import zen.ast.ZThrowNode;
@@ -63,16 +62,17 @@ public class RubySourceGenerator extends ZSourceGenerator {
 	public void VisitBlockNode(ZBlockNode Node) {
 		this.CurrentBuilder.Append("do");
 		this.CurrentBuilder.Indent();
-		for(ZNode SubNode : Node.StmtList) {
-			this.CurrentBuilder.AppendLineFeed();
-			this.CurrentBuilder.AppendIndent();
-			this.GenerateCode(SubNode);
-			this.CurrentBuilder.Append(this.SemiColon);
-		}
-		this.CurrentBuilder.UnIndent();
-		this.CurrentBuilder.AppendLineFeed();
-		this.CurrentBuilder.AppendIndent();
-		this.CurrentBuilder.Append("end");
+		throw new RuntimeException("FIXME: don't use for statement");
+		//		for(ZNode SubNode : Node.StmtList) {
+		//			this.CurrentBuilder.AppendLineFeed();
+		//			this.CurrentBuilder.AppendIndent();
+		//			this.GenerateCode(SubNode);
+		//			this.CurrentBuilder.Append(this.SemiColon);
+		//		}
+		//		this.CurrentBuilder.UnIndent();
+		//		this.CurrentBuilder.AppendLineFeed();
+		//		this.CurrentBuilder.AppendIndent();
+		//		this.CurrentBuilder.Append("end");
 	}
 
 	@Override public void VisitCastNode(ZCastNode Node) {
@@ -86,19 +86,19 @@ public class RubySourceGenerator extends ZSourceGenerator {
 	@Override
 	public void VisitThrowNode(ZThrowNode Node) {
 		this.CurrentBuilder.Append("raise ");
-		this.GenerateCode(Node.ValueNode);
+		this.GenerateCode(Node.AST[ZThrowNode.Expr]);
 	}
 
 	@Override
 	public void VisitTryNode(ZTryNode Node) {
 		this.CurrentBuilder.Append("begin");
-		this.GenerateCode(Node.TryNode);
-		if (Node.CatchNode != null) {
-			this.GenerateCode(Node.CatchNode);
+		this.GenerateCode(Node.AST[ZTryNode.Try]);
+		if (Node.AST[ZTryNode.Catch] != null) {
+			this.GenerateCode(Node.AST[ZTryNode.Catch]);
 		}
-		if (Node.FinallyNode != null) {
+		if (Node.AST[ZTryNode.Finally] != null) {
 			this.CurrentBuilder.Append("ensure");
-			this.GenerateCode(Node.FinallyNode);
+			this.GenerateCode(Node.AST[ZTryNode.Finally]);
 		}
 	}
 
@@ -107,14 +107,14 @@ public class RubySourceGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Append("rescue => ");
 		//this.VisitType(Node.ExceptionType);
 		this.CurrentBuilder.Append(Node.ExceptionName);
-		this.GenerateCode(Node.BodyNode);
+		this.GenerateCode(Node.AST[ZCatchNode.Block]);
 	}
 
 	@Override
 	public void VisitVarDeclNode(ZVarDeclNode Node) {
 		this.CurrentBuilder.Append(Node.NativeName);
 		this.CurrentBuilder.AppendToken("=");
-		this.GenerateCode(Node.InitNode);
+		this.GenerateCode(Node.AST[ZVarDeclNode.InitValue]);
 	}
 
 	@Override
@@ -124,18 +124,18 @@ public class RubySourceGenerator extends ZSourceGenerator {
 
 	@Override
 	public void VisitFunctionNode(ZFunctionNode Node) {
-		ZReturnNode ReturnNode = Node.FuncBlock.ToReturnNode();
+		ZReturnNode ReturnNode = Node.AST[ZFunctionNode.Block].ToReturnNode();
 		this.CurrentBuilder.Append("->");
-		this.VisitParamList("(", Node.ParamList, ")");
-		this.GenerateCode(Node.FuncBlock);
+		this.VisitListNode("(", Node, ")");
+		this.GenerateCode(Node.AST[ZFunctionNode.Block]);
 	}
 
 	public void VisitFuncDeclNode(ZFunctionNode/*Decl*/ Node) {
 		this.CurrentBuilder.Append("def ");
 		this.CurrentBuilder.Append(Node.FuncName);
-		this.VisitParamList("(", Node.ParamList, ")");
-		if (Node.FuncBlock != null) {
-			this.GenerateCode(Node.FuncBlock);
+		this.VisitListNode("(", Node, ")");
+		if (Node.AST[ZFunctionNode.Block] != null) {
+			this.GenerateCode(Node.AST[ZFunctionNode.Block]);
 		}
 	}
 }

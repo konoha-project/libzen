@@ -163,24 +163,24 @@ public class JavaEngine extends ZenEngine {
 	}
 
 	@Override public void VisitGroupNode(ZGroupNode Node) {
-		this.EvaledValue = this.Eval(Node.RecvNode);
+		this.EvaledValue = this.Eval(Node.AST[ZGetterNode.Recv]);
 	}
 
 	@Override public void VisitGetterNode(ZGetterNode Node) {
 		Method sMethod = JavaMethodTable.GetStaticMethod("GetField");
 		ZNode NameNode = new ZStringNode(Node, null, Node.FieldName);
-		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.RecvNode, NameNode});
+		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.AST[ZGetterNode.Recv], NameNode});
 	}
 
 	@Override public void VisitSetterNode(ZSetterNode Node) {
 		Method sMethod = JavaMethodTable.GetStaticMethod("SetField");
 		ZNode NameNode = new ZStringNode(Node, null, Node.FieldName);
-		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.RecvNode, NameNode, Node.ValueNode});
+		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.AST[ZGetterNode.Recv], NameNode, Node.AST[ZSetterNode.Expr]});
 	}
 
 	@Override public void VisitGetIndexNode(ZGetIndexNode Node) {
-		Method sMethod = JavaMethodTable.GetBinaryStaticMethod(Node.RecvNode.Type, "[]", Node.IndexNode.Type);
-		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.RecvNode, Node.IndexNode});
+		Method sMethod = JavaMethodTable.GetBinaryStaticMethod(Node.AST[ZGetterNode.Recv].Type, "[]", Node.AST[ZGetIndexNode.Index].Type);
+		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.AST[ZGetterNode.Recv], Node.AST[ZGetIndexNode.Index]});
 	}
 
 	//
@@ -189,9 +189,9 @@ public class JavaEngine extends ZenEngine {
 	//	}
 
 	@Override public void VisitNewObjectNode(ZNewObjectNode Node) {
-		Constructor<?> jMethod = this.Solution.GetConstructor(Node.Type, Node.ParamList);
+		Constructor<?> jMethod = this.Solution.GetConstructor(Node.Type, Node);
 		if(jMethod != null) {
-			this.EvalConstructor(Node, jMethod, this.Solution.PackNodes(null, Node.ParamList));
+			this.EvalConstructor(Node, jMethod, this.Solution.PackNodes(null, Node));
 		}
 		else {
 			Class<?> jClass = this.Solution.GetJavaClass(Node.Type);
@@ -207,16 +207,16 @@ public class JavaEngine extends ZenEngine {
 	}
 
 	@Override public void VisitMethodCallNode(ZMethodCallNode Node) {
-		Method jMethod = this.Solution.GetMethod(Node.RecvNode.Type, Node.MethodName, Node.ParamList);
+		Method jMethod = this.Solution.GetMethod(Node.AST[ZGetterNode.Recv].Type, Node.MethodName, Node);
 		if(jMethod != null) {
-			this.EvalMethod(Node, jMethod, Node.RecvNode, this.Solution.PackNodes(null, Node.ParamList));
+			this.EvalMethod(Node, jMethod, Node.AST[ZGetterNode.Recv], this.Solution.PackNodes(null, Node));
 		}
 		else {
 			jMethod = JavaMethodTable.GetStaticMethod("InvokeUnresolvedMethod");
-			Object Recv = this.Eval(Node.RecvNode);
-			Object Values[] = new Object[Node.ParamList.size()];
-			for(int i = 0; i < Node.ParamList.size(); i++) {
-				Values[i] = this.Eval(Node.ParamList.get(i));
+			Object Recv = this.Eval(Node.AST[ZGetterNode.Recv]);
+			Object Values[] = new Object[Node.GetListSize()];
+			for(int i = 0; i < Node.GetListSize(); i++) {
+				Values[i] = this.Eval(Node.GetListAt(i));
 			}
 			if(this.IsVisitable()) {
 				try {
@@ -241,27 +241,27 @@ public class JavaEngine extends ZenEngine {
 			else {
 				ZFunc Func = ZenGamma.LookupFunc(this.Generator.RootNameSpace, Node.ResolvedFuncName, Node.ResolvedFuncType.GetRecvType(), Node.ResolvedFuncType.GetFuncParamSize());
 				Method sMethod = this.Solution.GetStaticFuncMethod(Func.GetSignature());
-				this.EvalStaticMethod(Node, sMethod, this.Solution.PackNodes(null, Node.ParamList));
+				this.EvalStaticMethod(Node, sMethod, this.Solution.PackNodes(null, Node));
 			}
 		}
 		else {
 			Method sMethod = JavaMethodTable.GetStaticMethod("InvokeFunc");
-			this.EvalStaticMethod(Node, sMethod, this.Solution.PackNodes(Node.FuncNode, Node.ParamList));
+			this.EvalStaticMethod(Node, sMethod, this.Solution.PackNodes(Node.AST[ZFuncCallNode.Func], Node));
 		}
 	}
 
 	@Override public void VisitUnaryNode(ZUnaryNode Node) {
-		Method sMethod = JavaMethodTable.GetUnaryStaticMethod(Node.SourceToken.GetText(), Node.RecvNode.Type);
-		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.RecvNode});
+		Method sMethod = JavaMethodTable.GetUnaryStaticMethod(Node.SourceToken.GetText(), Node.AST[ZGetterNode.Recv].Type);
+		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.AST[ZGetterNode.Recv]});
 	}
 
 	@Override public void VisitNotNode(ZNotNode Node) {
-		Method sMethod = JavaMethodTable.GetUnaryStaticMethod(Node.SourceToken.GetText(), Node.RecvNode.Type);
-		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.RecvNode});
+		Method sMethod = JavaMethodTable.GetUnaryStaticMethod(Node.SourceToken.GetText(), Node.AST[ZGetterNode.Recv].Type);
+		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.AST[ZGetterNode.Recv]});
 	}
 
 	@Override public void VisitCastNode(ZCastNode Node) {
-		this.EvaledValue = this.Eval(Node.ExprNode);
+		this.EvaledValue = this.Eval(Node.AST[ZCastNode.Expr]);
 		if(!Node.Type.IsVoidType()) {
 
 		}
@@ -274,13 +274,13 @@ public class JavaEngine extends ZenEngine {
 	//	}
 
 	@Override public void VisitBinaryNode(ZBinaryNode Node) {
-		Method sMethod = JavaMethodTable.GetBinaryStaticMethod(Node.LeftNode.Type, Node.SourceToken.GetText(), Node.RightNode.Type);
-		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.LeftNode, Node.RightNode});
+		Method sMethod = JavaMethodTable.GetBinaryStaticMethod(Node.AST[ZBinaryNode.Left].Type, Node.SourceToken.GetText(), Node.AST[ZBinaryNode.Right].Type);
+		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.AST[ZBinaryNode.Left], Node.AST[ZBinaryNode.Right]});
 	}
 
 	@Override public void VisitComparatorNode(ZComparatorNode Node) {
-		Method sMethod = JavaMethodTable.GetBinaryStaticMethod(Node.LeftNode.Type, Node.SourceToken.GetText(), Node.RightNode.Type);
-		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.LeftNode, Node.RightNode});
+		Method sMethod = JavaMethodTable.GetBinaryStaticMethod(Node.AST[ZBinaryNode.Left].Type, Node.SourceToken.GetText(), Node.AST[ZBinaryNode.Right].Type);
+		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.AST[ZBinaryNode.Left], Node.AST[ZBinaryNode.Right]});
 	}
 
 }

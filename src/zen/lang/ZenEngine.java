@@ -188,7 +188,7 @@ public class ZenEngine extends ZVisitor {
 	}
 
 	@Override public void VisitGroupNode(ZGroupNode Node) {
-		this.EvaledValue = this.Eval(Node.RecvNode);
+		this.EvaledValue = this.Eval(Node.AST[ZGetterNode.Recv]);
 	}
 
 	@Override public void VisitGetterNode(ZGetterNode Node) {
@@ -225,8 +225,8 @@ public class ZenEngine extends ZVisitor {
 
 	@Override public void VisitCastNode(ZCastNode Node) {
 		if(Node.Type.IsVoidType()) {
-			this.EvaledValue = this.Eval(Node.ExprNode);
-			Node.Type = Node.ExprNode.Type;
+			this.EvaledValue = this.Eval(Node.AST[ZCastNode.Expr]);
+			Node.Type = Node.AST[ZCastNode.Expr].Type;
 		}
 		else {
 			this.Unsupported(Node, "cast");
@@ -246,10 +246,10 @@ public class ZenEngine extends ZVisitor {
 	}
 
 	@Override public void VisitAndNode(ZAndNode Node) {
-		@Var Object BooleanValue = this.Eval(Node.LeftNode);
+		@Var Object BooleanValue = this.Eval(Node.AST[ZBinaryNode.Left]);
 		if(BooleanValue instanceof Boolean) {
 			if((Boolean)BooleanValue) {
-				this.EvaledValue = this.Eval(Node.RightNode);
+				this.EvaledValue = this.Eval(Node.AST[ZBinaryNode.Right]);
 			}
 			else {
 				this.EvaledValue = false;
@@ -258,10 +258,10 @@ public class ZenEngine extends ZVisitor {
 	}
 
 	@Override public void VisitOrNode(ZOrNode Node) {
-		@Var Object BooleanValue = this.Eval(Node.LeftNode);
+		@Var Object BooleanValue = this.Eval(Node.AST[ZBinaryNode.Left]);
 		if(BooleanValue instanceof Boolean) {
 			if(!(Boolean)BooleanValue) {
-				this.EvaledValue = this.Eval(Node.RightNode);
+				this.EvaledValue = this.Eval(Node.AST[ZBinaryNode.Right]);
 			}
 			else {
 				this.EvaledValue = true;
@@ -271,8 +271,8 @@ public class ZenEngine extends ZVisitor {
 
 	@Override public void VisitBlockNode(ZBlockNode Node) {
 		@Var int i = 1;
-		while(i < Node.StmtList.size() && this.IsVisitable()) {
-			ZNode StmtNode = Node.StmtList.get(i).GetStatementNode();
+		while(i < Node.GetListSize() && this.IsVisitable()) {
+			ZNode StmtNode = Node.GetListAt(i);
 			this.Eval(StmtNode);
 			if(StmtNode.IsBreakingBlock()) {
 				break;
@@ -286,13 +286,13 @@ public class ZenEngine extends ZVisitor {
 	}
 
 	@Override public void VisitIfNode(ZIfNode Node) {
-		Object BooleanValue = this.Eval(Node.CondNode);
+		Object BooleanValue = this.Eval(Node.AST[ZIfNode.Cond]);
 		if(BooleanValue instanceof Boolean) {
 			if((Boolean)BooleanValue) {
-				this.Eval(Node.ThenNode);
+				this.Eval(Node.AST[ZIfNode.Then]);
 			}
-			else if(Node.ElseNode != null) {
-				this.Eval(Node.ThenNode);
+			else if(Node.AST[ZIfNode.Else] != null) {
+				this.Eval(Node.AST[ZIfNode.Then]);
 			}
 		}
 		this.EvaledValue = null;
@@ -365,7 +365,7 @@ public class ZenEngine extends ZVisitor {
 		TokenContext.SkipEmptyStatement();
 		while(TokenContext.HasNext()) {
 			TokenContext.SetParseFlag(ZTokenContext.NotAllowSkipIndent); // init
-			TopBlockNode.StmtList.clear();
+			TopBlockNode.ClearList();
 			@Var ZNode ParsedNode = TokenContext.ParsePattern(TopBlockNode, "$Statement$", ZTokenContext.Required);
 			ResultValue = this.Exec(ParsedNode, IsInteractive);
 			if(ResultValue == ZEmptyValue.FalseEmpty) {

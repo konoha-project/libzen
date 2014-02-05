@@ -31,19 +31,12 @@ import zen.deps.Var;
 import zen.lang.ZFunc;
 import zen.parser.ZVisitor;
 
-public final class ZNewObjectNode extends ZNode {
+public final class ZNewObjectNode extends ZListNode {
 	@Field public ArrayList<ZNode>	ParamList = new ArrayList<ZNode>();
 	public ZNewObjectNode(ZNode ParentNode) {
-		super(ParentNode, null);
+		super(ParentNode, null, 0);
 	}
-	@Override public final void Append(ZNode Node) {
-		if(this.Type.IsVarType() && Node instanceof ZTypeNode) {
-			this.Type = Node.Type;
-		}
-		else {
-			this.ParamList.add(this.SetChild(Node));
-		}
-	}
+
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitNewObjectNode(this);
 	}
@@ -54,8 +47,8 @@ public final class ZNewObjectNode extends ZNode {
 		FuncNode.SourceToken = this.SourceToken;
 		FuncNode.Append(this);
 		@Var int i = 0;
-		while(i < this.ParamList.size()) {
-			FuncNode.Append(this.ParamList.get(i));
+		while(i < this.GetListSize()) {
+			FuncNode.Append(this.GetListAt(i));
 			i = i + 1;
 		}
 		this.ParamList.clear();

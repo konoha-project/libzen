@@ -3,29 +3,17 @@ package zen.ast;
 import zen.deps.Field;
 
 public class ZMapEntryNode extends ZNode {
+	public final static int Key = 0;
+	public final static int Value = 1;
 	@Field public String  Name = null;
-	@Field public ZNode KeyNode = null;
-	@Field public ZNode ValueNode = null;
-	public ZMapEntryNode(ZNode ParentNode) {
-		super(ParentNode, null);
-	}
 
+	@Deprecated public ZNode KeyNode = null;
+	@Deprecated public ZNode MapValueNode = null;
+
+	public ZMapEntryNode(ZNode ParentNode) {
+		super(ParentNode, null, 2);
+	}
 	@Override public String GetVisitName() {
 		return "VisitMapEntryNode"; // override this if you want to use additional node
-	}
-
-	@Override public void Append(ZNode Node) {
-		if(this.KeyNode == null) {
-			this.KeyNode = this.SetChild(Node);
-			if(Node instanceof ZGetNameNode) {
-				this.Name = Node.SourceToken.GetText();
-			}
-			if(Node instanceof ZStringNode) {
-				this.Name = ((ZStringNode) Node).StringValue;
-			}
-		}
-		else {
-			this.ValueNode = this.SetChild(Node);
-		}
 	}
 }

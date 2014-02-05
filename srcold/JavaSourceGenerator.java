@@ -175,8 +175,8 @@ public class JavaSourceGenerator extends ZenSourceGenerator {
 //			Type type = Type.getType(klass);
 //			this.VisitingBuilder.MethodVisitor.visitTypeInsn(NEW, Type.getInternalName(klass));
 //			this.VisitingBuilder.MethodVisitor.visitInsn(DUP);
-//			for(int i = 0; i<Node.ParamList.size(); i++) {
-//				ZenNode ParamNode = Node.ParamList.get(i);
+//			for(int i = 0; i<Node.GetParamSize(); i++) {
+//				ZenNode ParamNode = Node.GetParam(i);
 //				ParamNode.Accept(this);
 //				this.VisitingBuilder.BoxIfUnboxed(ParamNode.Type, Node.Func.GetFuncParamType(i));
 //			}
@@ -187,13 +187,13 @@ public class JavaSourceGenerator extends ZenSourceGenerator {
 	}
 
 	@Override public void VisitGetterNode(ZenGetterNode Node) {
-		Node.RecvNode.Accept(this);
+		Node.AST[ZGetterNode.Recv].Accept(this);
 		this.CurrentBuilder.Append(".");
 		this.CurrentBuilder.Append(Node.ResolvedFunc.FuncName);
 	}
 	
 	@Override public void VisitSetterNode(ZenSetterNode Node) {
-		Node.RecvNode.Accept(this);
+		Node.AST[ZGetterNode.Recv].Accept(this);
 		this.CurrentBuilder.Append(".");
 		this.CurrentBuilder.Append(Node.ResolvedFunc.FuncName);
 		this.CurrentBuilder.Append("=");
@@ -225,8 +225,8 @@ public class JavaSourceGenerator extends ZenSourceGenerator {
 
 	@Override public void VisitApplySymbolNode(ZenApplySymbolNode ApplyNode) {
 //		ZenFunc Func = ApplyNode.Func;
-//		for(int i = 0; i < ApplyNode.ParamList.size(); i++) {
-//			ZenNode ParamNode = ApplyNode.ParamList.get(i);
+//		for(int i = 0; i < ApplyNode.GetParamSize(); i++) {
+//			ZenNode ParamNode = ApplyNode.GetParam(i);
 //			ParamNode.Accept(this);
 //			this.VisitingBuilder.BoxIfUnboxed(ParamNode.Type, Func.GetFuncParamType(i));
 //		}
@@ -245,9 +245,9 @@ public class JavaSourceGenerator extends ZenSourceGenerator {
 	@Override public void VisitBinaryNode(ZenBinaryNode Node) {
 		//if(Node.Func.FuncBody instanceof Method) {
 		this.CurrentBuilder.Append("(");
-		Node.LeftNode.Accept(this);
+		Node.AST[ZBinaryNode.Left].Accept(this);
 		this.CurrentBuilder.AppendToken(Node.SourceToken.GetText());
-		Node.RightNode.Accept(this);
+		Node.AST[ZBinaryNode.Right].Accept(this);
 		this.CurrentBuilder.Append(")");
 		//}
 	}
@@ -256,7 +256,7 @@ public class JavaSourceGenerator extends ZenSourceGenerator {
 //		if(Node.Func.FuncBody instanceof Method) {
 		this.CurrentBuilder.Append("(");
 		this.CurrentBuilder.Append(Node.SourceToken.GetText());
-		Node.RecvNode.Accept(this);
+		Node.AST[ZGetterNode.Recv].Accept(this);
 		this.CurrentBuilder.Append(")");
 //		}
 	}
@@ -301,34 +301,34 @@ public class JavaSourceGenerator extends ZenSourceGenerator {
 
 	@Override public void VisitAndNode(ZenAndNode Node) {
 		this.CurrentBuilder.Append("(");
-		Node.LeftNode.Accept(this);
+		Node.AST[ZBinaryNode.Left].Accept(this);
 		this.CurrentBuilder.Append(" && ");
-		Node.RightNode.Accept(this);
+		Node.AST[ZBinaryNode.Right].Accept(this);
 		this.CurrentBuilder.Append(")");
 	}
 
 	@Override public void VisitOrNode(ZenOrNode Node) {
 		this.CurrentBuilder.Append("(");
-		Node.LeftNode.Accept(this);
+		Node.AST[ZBinaryNode.Left].Accept(this);
 		this.CurrentBuilder.Append(" || ");
-		Node.RightNode.Accept(this);
+		Node.AST[ZBinaryNode.Right].Accept(this);
 		this.CurrentBuilder.Append(")");
 	}
 
 	@Override public void VisitSetNameNode(ZenSetLocalNode Node) {
-//		assert (Node.LeftNode instanceof ZenLocalNode);
-//		ZenLocalNode Left = (ZenLocalNode) Node.LeftNode;
+//		assert (Node.AST[ZBinaryNode.Left] instanceof ZenLocalNode);
+//		ZenLocalNode Left = (ZenLocalNode) Node.AST[ZBinaryNode.Left];
 //		JLocalVarStack local = this.VisitingBuilder.FindLocalVariable(Left.NativeName);
-//		Node.RightNode.Accept(this);
+//		Node.AST[ZBinaryNode.Right].Accept(this);
 //		this.VisitingBuilder.StoreLocal(local);
 	}
 
 //	@Override public void VisitSelfAssignNode(ZenSelfAssignNode Node) {
-//		if(Node.LeftNode instanceof ZenLocalNode) {
-//			ZenLocalNode Left = (ZenLocalNode)Node.LeftNode;
+//		if(Node.AST[ZBinaryNode.Left] instanceof ZenLocalNode) {
+//			ZenLocalNode Left = (ZenLocalNode)Node.AST[ZBinaryNode.Left];
 //			JLocalVarStack local = this.VisitingBuilder.FindLocalVariable(Left.NativeName);
-//			Node.LeftNode.Accept(this);
-//			Node.RightNode.Accept(this);
+//			Node.AST[ZBinaryNode.Left].Accept(this);
+//			Node.AST[ZBinaryNode.Right].Accept(this);
 //			this.VisitingBuilder.InvokeMethodCall((Method)Node.Func.FuncBody);
 //			this.VisitingBuilder.StoreLocal(local);
 //		}
@@ -347,22 +347,22 @@ public class JavaSourceGenerator extends ZenSourceGenerator {
 	@Override public void VisitIfNode(ZenIfNode Node) {
 		this.CurrentBuilder.Append("if");
 		this.CurrentBuilder.Append("(");
-		Node.CondNode.Accept(this);
+		Node.AST[ZIfNode.Cond].Accept(this);
 		this.CurrentBuilder.Append(") ");
-		this.VisitIndentBlock("{", Node.ThenNode, "}");
-		if(Node.ElseNode != null) {
+		this.VisitIndentBlock("{", Node.AST[ZIfNode.Then], "}");
+		if(Node.AST[ZIfNode.Else] != null) {
 			this.CurrentBuilder.Append(" else ");			
-			this.VisitIndentBlock("{", Node.ElseNode, "}");
+			this.VisitIndentBlock("{", Node.AST[ZIfNode.Else], "}");
 		}
 	}
 
 	@Override public void VisitTrinaryNode(ZenTrinaryNode Node) {
 		this.CurrentBuilder.Append("(");
-		Node.CondNode.Accept(this);
+		Node.AST[ZIfNode.Cond].Accept(this);
 		this.CurrentBuilder.Append(" ? ");
-		Node.ThenNode.Accept(this);
+		Node.AST[ZIfNode.Then].Accept(this);
 		this.CurrentBuilder.Append(" : ");
-		Node.ElseNode.Accept(this);
+		Node.AST[ZIfNode.Else].Accept(this);
 		this.CurrentBuilder.Append(")");
 	}
 

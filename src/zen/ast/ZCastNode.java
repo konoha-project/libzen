@@ -24,27 +24,19 @@
 
 package zen.ast;
 
-import zen.deps.Field;
 import zen.parser.ZVisitor;
 import zen.type.ZType;
 
 //E.g., (T) $Expr
 public class ZCastNode extends ZNode {
-	@Field public ZNode	ExprNode;
+	public final static int Expr = 0;
+
+	@Deprecated public ZNode	CastExprNode;
 	public ZCastNode(ZNode ParentNode, ZType CastType, ZNode Node) {
-		super(ParentNode, null);
+		super(ParentNode, null, 1);
 		this.Type = CastType;
-		this.ExprNode = null;
 		if(Node != null) {
-			this.ExprNode = this.SetChild(Node);
-		}
-	}
-	@Override public void Append(ZNode Node) {
-		if(Node instanceof ZTypeNode) {
-			this.Type = Node.Type;
-		}
-		else {
-			this.ExprNode = this.SetChild(Node);
+			this.Set(ZCastNode.Expr, Node);
 		}
 	}
 
@@ -53,7 +45,7 @@ public class ZCastNode extends ZNode {
 	}
 
 	@Override public boolean IsUntyped() {
-		return this.ExprNode.IsUntyped();
+		return this.AST[ZCastNode.Expr].IsUntyped();
 	}
 
 }

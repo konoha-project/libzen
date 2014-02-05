@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import zen.ast.ZConstNode;
 import zen.ast.ZImportNode;
+import zen.ast.ZListNode;
 import zen.ast.ZNode;
 import zen.deps.JavaImportNode;
 import zen.deps.LibNative;
@@ -85,8 +86,8 @@ public abstract class JavaSolution extends ZGenerator {
 		return ZType.VarType;     // undefined
 	}
 
-	private boolean MatchParam(Class<?>[] jParams, ArrayList<ZNode> ParamList) {
-		if(jParams.length != ParamList.size()) {
+	private boolean MatchParam(Class<?>[] jParams, ZListNode ParamList) {
+		if(jParams.length != ParamList.GetListSize()) {
 			return false;
 		}
 		for(int j = 0; j < jParams.length; j++) {
@@ -94,8 +95,8 @@ public abstract class JavaSolution extends ZGenerator {
 				continue; // accepting all types
 			}
 			@Var ZType jParamType = JavaTypeTable.GetZenType(jParams[j]);
-			@Var ZType ParamType = ParamList.get(j).Type;
-			if(jParamType == ParamType || jParamType.Accept(ParamList.get(j).Type)) {
+			@Var ZType ParamType = ParamList.GetListAt(j).Type;
+			if(jParamType == ParamType || jParamType.Accept(ParamList.GetListAt(j).Type)) {
 				continue;
 			}
 			if(jParamType.IsFloatType() && ParamType.IsIntType()) {
@@ -109,7 +110,7 @@ public abstract class JavaSolution extends ZGenerator {
 		return true;
 	}
 
-	protected Constructor<?> GetConstructor(ZType RecvType, ArrayList<ZNode> ParamList) {
+	protected Constructor<?> GetConstructor(ZType RecvType, ZListNode ParamList) {
 		Class<?> NativeClass = this.GetJavaClass(RecvType);
 		if(NativeClass != null) {
 			try {
@@ -129,7 +130,7 @@ public abstract class JavaSolution extends ZGenerator {
 		return null;
 	}
 
-	protected Method GetMethod(ZType RecvType, String MethodName, ArrayList<ZNode> ParamList) {
+	protected Method GetMethod(ZType RecvType, String MethodName, ZListNode ParamList) {
 		Class<?> NativeClass = this.GetJavaClass(RecvType);
 		if(NativeClass != null) {
 			try {
@@ -152,7 +153,7 @@ public abstract class JavaSolution extends ZGenerator {
 		return null;
 	}
 
-	@Override public ZFuncType GetMethodFuncType(ZType RecvType, String MethodName, ArrayList<ZNode> ParamList) {
+	@Override public ZFuncType GetMethodFuncType(ZType RecvType, String MethodName, ZListNode ParamList) {
 		if(MethodName == null) {
 			Constructor<?> jMethod = this.GetConstructor(RecvType, ParamList);
 			if(jMethod != null) {
@@ -193,15 +194,15 @@ public abstract class JavaSolution extends ZGenerator {
 		return jMethod;
 	}
 
-	protected ZNode[] PackNodes(ZNode Node, ArrayList<ZNode> List) {
+	protected ZNode[] PackNodes(ZNode Node, ZListNode List) {
 		int Start = 0;
-		ZNode[] Nodes = new ZNode[List.size() + Start];
+		ZNode[] Nodes = new ZNode[List.GetListSize() + Start];
 		if(Node != null) {
 			Start = 1;
 			Nodes[0] = Node;
 		}
 		for(int i = 0; i < Nodes.length; i++) {
-			Nodes[i+Start] = List.get(i);
+			Nodes[i+Start] = List.GetListAt(i);
 		}
 		return Nodes;
 	}

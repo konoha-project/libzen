@@ -34,30 +34,20 @@ import zen.type.ZType;
  */
 
 public final class ZVarDeclNode extends ZBlockNode {
+	public final static int InitValue = 0;
 	@Field public ZType   DeclType = ZType.VarType;
 	@Field public String  NativeName = null;
-	@Field public ZNode	InitNode = null;
+	@Deprecated public ZNode	VarDeclInitNode = null;
 
 	public ZVarDeclNode(ZNode ParentNode) {
-		super(ParentNode);
+		super(ParentNode, 1);
 	}
 
-	@Override public void Append(ZNode Node) {
-		if(Node instanceof ZTypeNode) {
-			this.DeclType = Node.Type;
-		}
-		else if(this.InitNode != null) {
-			super.Append(Node);
-		}
-		else {
-			if(this.NativeName == null) {
-				this.NativeName = Node.SourceToken.GetText();
-				this.SourceToken = Node.SourceToken;
-			}
-			else {
-				this.InitNode = this.SetChild(Node);
-			}
-		}
+	@Override public void SetType(ZType Type) {
+		this.DeclType = Type;
+	}
+	@Override public void SetName(String Name) {
+		this.NativeName = Name;
 	}
 
 	@Override public void Accept(ZVisitor Visitor) {

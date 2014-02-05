@@ -26,14 +26,27 @@ package zen.ast;
 
 import zen.deps.Field;
 import zen.parser.ZVisitor;
+import zen.type.ZFuncType;
+import zen.type.ZType;
 
-//E.g., $FuncNode "(" $Param[0], $Param[1], ... ")"
-public final class ZFuncCallNode extends ZApplyNode {
-	@Field public ZNode	FuncNode;
+public final class ZFuncCallNode extends ZListNode {
+	public final static int Func = 0;
+
+	@Field public String ResolvedFuncName = null;
+	@Field public ZFuncType ResolvedFuncType = null;
+
 	public ZFuncCallNode(ZNode ParentNode, ZNode FuncNode) {
-		super(ParentNode, null);
-		this.FuncNode = this.SetChild(FuncNode);
+		super(ParentNode, null, 1);
+		this.Set(ZFuncCallNode.Func, FuncNode);
 	}
+
+	public final ZType GetRecvType() {
+		if(this.GetListSize() > 0) {
+			return this.GetListAt(0).Type.GetRealType();
+		}
+		return ZType.VoidType;
+	}
+
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitFuncCallNode(this);
 	}

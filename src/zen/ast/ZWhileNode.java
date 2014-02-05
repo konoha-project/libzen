@@ -24,24 +24,14 @@
 
 package zen.ast;
 
-import zen.deps.Field;
 import zen.parser.ZVisitor;
 
-//E.g., "while" "(" $Cond ")" $Body
 public final class ZWhileNode extends ZNode {
-	@Field public ZNode	CondNode = null;
-	@Field public ZNode	BodyNode = null;
+	public final static int Cond = 0;
+	public final static int Block = 1;
+
 	public ZWhileNode(ZNode ParentNode) {
-		super(ParentNode, null);
-	}
-	@Override public final void Append(ZNode Node) {
-		this.SetChild(Node);
-		if(this.CondNode == null) {
-			this.CondNode = Node;
-		}
-		else {
-			this.BodyNode = Node;
-		}
+		super(ParentNode, null, 2);
 	}
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitWhileNode(this);

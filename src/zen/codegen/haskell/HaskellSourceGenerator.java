@@ -94,9 +94,9 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.AppendIndent();
 		this.CurrentBuilder.Append("do ");
 
-		int limit = Node.StmtList.size();
+		int limit = Node.GetListSize();
 		for (int i = 0; i < limit; i++) {
-			ZNode SubNode = Node.StmtList.get(i);
+			ZNode SubNode = Node.GetListAt(i);
 			this.CurrentBuilder.AppendLineFeed();
 			this.CurrentBuilder.AppendIndent();
 
@@ -129,31 +129,31 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 	@Override
 	public void VisitThrowNode(ZThrowNode Node) {
 		this.CurrentBuilder.Append("raise ");
-		this.GenerateCode(Node.ValueNode);
+		this.GenerateCode(Node.AST[ZThrowNode.Expr]);
 	}
 
 	@Override
 	public void VisitTryNode(ZTryNode Node) {
 		// See: http://d.hatena.ne.jp/kazu-yamamoto/20090819/1250660658
-		this.GenerateCode(Node.TryNode);
+		this.GenerateCode(Node.AST[ZTryNode.Try]);
 		this.CurrentBuilder.Append(" `catch` ");
-		if (Node.CatchNode != null) {
-			this.GenerateCode(Node.CatchNode);
+		if (Node.AST[ZTryNode.Catch] != null) {
+			this.GenerateCode(Node.AST[ZTryNode.Catch]);
 		}
-		if (Node.FinallyNode != null) {
-			this.GenerateCode(Node.FinallyNode);
+		if (Node.AST[ZTryNode.Finally] != null) {
+			this.GenerateCode(Node.AST[ZTryNode.Finally]);
 		}
 	}
 
 	@Override public void VisitCatchNode(ZCatchNode Node) {
-		this.GenerateCode(Node.BodyNode);
+		this.GenerateCode(Node.AST[ZCatchNode.Block]);
 	}
 
 	@Override
 	public void VisitVarDeclNode(ZVarDeclNode Node) {
 		this.CurrentBuilder.Append(Node.NativeName + " <- readIORef ");
 		this.CurrentBuilder.Append(Node.NativeName + "_ref");
-		this.GenerateCode(Node.InitNode);
+		this.GenerateCode(Node.AST[ZVarDeclNode.InitValue]);
 		this.CurrentBuilder.AppendLineFeed();
 	}
 
@@ -164,42 +164,18 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 
 	@Override
 	public void VisitFunctionNode(ZFunctionNode Node) {
-		ZReturnNode ReturnNode = Node.FuncBlock.ToReturnNode();
-		if(ReturnNode != null && ReturnNode.ValueNode != null) {
+		ZReturnNode ReturnNode = Node.AST[ZFunctionNode.Block].ToReturnNode();
+		if(ReturnNode != null && ReturnNode.AST[ZReturnNode.Expr] != null) {
 			this.CurrentBuilder.Append("\\");
-			this.VisitParamList(" ", Node.ParamList, " ");
+			this.VisitListNode(" ", Node, " ", " ");
 			this.CurrentBuilder.Append("");
-			this.GenerateCode(ReturnNode.ValueNode);
+			this.GenerateCode(ReturnNode.AST[ZReturnNode.Expr]);
 		}
 		else {
 			this.CurrentBuilder.Append("\\");
-			this.VisitParamList(" ", Node.ParamList, " -> ");
-			this.GenerateCode(Node.FuncBlock);
+			this.VisitListNode(" ", Node, " ", " -> ");
+			this.GenerateCode(Node.AST[ZFunctionNode.Block]);
 		}
-	}
-
-	@Override protected void VisitNodeList(String OpenToken, ArrayList<ZNode> ParamList, String CloseToken) {
-		this.CurrentBuilder.Append(OpenToken);
-		for (int i = 0; i < ParamList.size(); i++) {
-			ZParamNode ParamNode = (ZParamNode)ParamList.get(i);
-			if (i > 0) {
-				this.CurrentBuilder.Append(" ");
-			}
-			this.VisitParamNode(ParamNode);
-		}
-		this.CurrentBuilder.Append(CloseToken);
-	}
-
-	@Override protected void VisitParamList(String OpenToken, ArrayList<ZParamNode> ParamList, String CloseToken) {
-		this.CurrentBuilder.Append(OpenToken);
-		for (int i = 0; i < ParamList.size(); i++) {
-			ZParamNode ParamNode = ParamList.get(i);
-			if (i > 0) {
-				this.CurrentBuilder.Append(" ");
-			}
-			this.VisitParamNode(ParamNode);
-		}
-		this.CurrentBuilder.Append(CloseToken);
 	}
 
 	//	@Override
@@ -207,7 +183,7 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 	//		this.Variables = new ArrayList<String>();
 	//
 	//		this.CurrentBuilder.Append(Node.FuncName);
-	//		this.VisitParamList(" ", Node.ParamList, " = do");
+	//		this.VisitListNode(" ", Node.ParamList, " = do");
 	//		this.CurrentBuilder.AppendLineFeed();
 	//
 	//		this.Indent(this.CurrentBuilder);
@@ -246,7 +222,7 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 	public void VisitSetNameNode(ZSetNameNode Node) {
 		this.CurrentBuilder.Append("writeIORef ");
 		this.CurrentBuilder.Append(Node.VarName + "_ref ");
-		this.GenerateCode(Node.ValueNode);
+		this.GenerateCode(Node.AST[ZSetNameNode.Expr]);
 		this.CurrentBuilder.AppendLineFeed();
 
 		this.CurrentBuilder.AppendIndent();
@@ -258,7 +234,7 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 
 	@Override
 	public void VisitReturnNode(ZReturnNode Node) {
-		this.GenerateCode(Node.ValueNode);
+		this.GenerateCode(Node.AST[ZReturnNode.Expr]);
 	}
 
 	private String ZenOpToHaskellOp(String OpCode) {
@@ -276,9 +252,9 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 		String Op = this.ZenOpToHaskellOp(Node.SourceToken.GetText());
 
 		this.CurrentBuilder.Append("(");
-		Node.LeftNode.Accept(this);
+		Node.AST[ZBinaryNode.Left].Accept(this);
 		this.CurrentBuilder.Append(" " + Op + " ");
-		Node.RightNode.Accept(this);
+		Node.AST[ZBinaryNode.Right].Accept(this);
 		this.CurrentBuilder.Append(")");
 	}
 
@@ -298,7 +274,7 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 
 		this.CurrentBuilder.AppendIndent();
 		this.CurrentBuilder.Append("if ");
-		Node.CondNode.Accept(this);
+		Node.AST[ZWhileNode.Cond].Accept(this);
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.AppendIndent();
 		this.CurrentBuilder.Append("then");
@@ -306,8 +282,8 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 
 		// XXX Is this correct node type ?
 		ZNode LoopNode = new ZGetNameNode(Node, null, "__loop");
-		Node.BodyNode.Append(LoopNode);
-		Node.BodyNode.Accept(this);
+		Node.AST[ZWhileNode.Block].Set(ZNode.AppendIndex, LoopNode);
+		Node.AST[ZWhileNode.Block].Accept(this);
 
 		this.CurrentBuilder.AppendIndent();
 		this.CurrentBuilder.Append("else");
@@ -334,7 +310,7 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
-		this.GenerateCode(Node.FuncNode);
-		this.VisitNodeList(" ", Node.ParamList, " ");
+		this.GenerateCode(Node.AST[ZFuncCallNode.Func]);
+		this.VisitListNode(" ", Node, " ");
 	}
 }

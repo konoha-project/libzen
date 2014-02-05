@@ -24,13 +24,11 @@
 
 package zen.ast;
 
-import zen.deps.Field;
 import zen.parser.ZVisitor;
 
 public final class ZBreakNode extends ZNode {
-	@Field public String Label = null;
 	public ZBreakNode(ZNode ParentNode) {
-		super(ParentNode, null);
+		super(ParentNode, null, 0);
 	}
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitBreakNode(this);

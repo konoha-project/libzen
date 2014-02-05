@@ -24,28 +24,21 @@
 
 package zen.ast;
 
-import java.util.ArrayList;
-
 import zen.deps.Field;
 import zen.deps.Init;
 import zen.parser.ZNameSpace;
 import zen.parser.ZVisitor;
 
-public class ZBlockNode extends ZNode {
-	@Field public ArrayList<ZNode> StmtList = new ArrayList<ZNode>();
+public class ZBlockNode extends ZListNode {
 	@Field @Init public ZNameSpace NameSpace;
 	public ZBlockNode(ZNameSpace NameSpace) {
-		super(null, null);
+		super(null, null, 0);
 		this.NameSpace = NameSpace;
 	}
 
-	public ZBlockNode(ZNode ParentNode) {
-		super(ParentNode, null);
+	public ZBlockNode(ZNode ParentNode, int Init) {
+		super(ParentNode, null, Init);
 		this.NameSpace = ParentNode.GetNameSpace().CreateSubNameSpace();
-	}
-
-	@Override public void Append(ZNode Node) {
-		this.StmtList.add(this.SetChild(Node));
 	}
 
 	@Override public void Accept(ZVisitor Visitor) {
@@ -53,10 +46,9 @@ public class ZBlockNode extends ZNode {
 	}
 
 	@Override public ZReturnNode ToReturnNode() {
-		if(this.StmtList.size() == 1) {
-			return this.StmtList.get(0).ToReturnNode();
+		if(this.GetListSize() == 1) {
+			return this.GetListAt(0).ToReturnNode();
 		}
 		return null;
 	}
-
 }

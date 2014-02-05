@@ -24,17 +24,12 @@
 
 package zen.ast;
 
-import zen.deps.Field;
 import zen.parser.ZVisitor;
 
 public final class ZGroupNode extends ZNode {
-	@Field public ZNode	RecvNode = null;
+	public final static int Expr = 0;
 	public ZGroupNode(ZNode ParentNode) {
-		super(ParentNode, null);
-	}
-	@Override public void Append(ZNode Node) {
-		this.RecvNode = this.SetChild(Node);
-		this.Type = Node.Type;
+		super(ParentNode, null, 1);
 	}
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitGroupNode(this);
