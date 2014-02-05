@@ -57,7 +57,6 @@ import zen.ast.ZReturnNode;
 import zen.ast.ZSetIndexNode;
 import zen.ast.ZSetNameNode;
 import zen.ast.ZStringNode;
-import zen.ast.ZSymbolNode;
 import zen.ast.ZUnaryNode;
 import zen.ast.ZVarDeclNode;
 import zen.ast.ZWhileNode;
@@ -871,11 +870,6 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		this.AppendBufferAsNewLine();
 		this.AddCodeToCurrentBuffer(TempVar);
 
-	}
-
-	@Override
-	public void VisitSymbolNode(ZSymbolNode Node) {
-		this.AddCodeToCurrentBuffer(this.GetIdentifierAttachedSymbol(Node.GivenName));
 	}
 
 	@Override

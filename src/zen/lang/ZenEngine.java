@@ -63,7 +63,6 @@ import zen.ast.ZSetIndexNode;
 import zen.ast.ZSetNameNode;
 import zen.ast.ZSetterNode;
 import zen.ast.ZStringNode;
-import zen.ast.ZSymbolNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZTypeNode;
@@ -173,10 +172,6 @@ public class ZenEngine extends ZVisitor {
 
 	@Override public void VisitNewObjectNode(ZNewObjectNode Node) {
 		this.Unsupported(Node, "new");
-	}
-
-	@Override public void VisitSymbolNode(ZSymbolNode Node) {
-		this.Unsupported(Node, "symbol " + Node.ReferenceName);
 	}
 
 	@Override public void VisitGetNameNode(ZGetNameNode Node) {

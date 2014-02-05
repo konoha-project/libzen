@@ -65,7 +65,6 @@ import zen.ast.ZSetIndexNode;
 import zen.ast.ZSetNameNode;
 import zen.ast.ZSetterNode;
 import zen.ast.ZStringNode;
-import zen.ast.ZSymbolNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZUnaryNode;
@@ -305,13 +304,6 @@ public class ZSourceGenerator extends ZGenerator {
 		this.CurrentBuilder.Append("]");
 		this.CurrentBuilder.AppendToken("=");
 		this.GenerateCode(Node.AST[ZSetIndexNode.Expr]);
-	}
-
-	@Override public void VisitSymbolNode(ZSymbolNode Node) {
-		//		if(Node.GivenName.equals(Node.ReferenceName) && Node.Type.IsFuncType()) {
-		//			Node.ReferenceName = Node.Type.StringfySignature(Node.GivenName); // FIXME
-		//		}
-		this.CurrentBuilder.Append(Node.ReferenceName);
 	}
 
 	@Override public void VisitGetNameNode(ZGetNameNode Node) {

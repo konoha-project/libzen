@@ -7,11 +7,11 @@ import zen.deps.Var;
 
 public class ZSource {
 
+	@Field private final ZTokenContext TokenContext;
+	@Field private final ZLogger Logger;
 	@Field String FileName;
 	@Field int    LineNumber;
 	@Field String  SourceText;
-	@Field private final ZTokenContext TokenContext;
-	@Field private final ZLogger Logger;
 	@Field int CurrentPosition = 0;
 
 	public ZSource(String FileName, int LineNumber, String Source, ZTokenContext TokenContext) {
@@ -38,7 +38,6 @@ public class ZSource {
 	public final int GetLineHeadPosition(int Position) {
 		@Var String s = this.SourceText;
 		@Var int StartIndex = 0;
-		@Var int EndIndex = s.length();
 		@Var int i = Position;
 		if(!(i < s.length())) {
 			i = s.length() - 1;

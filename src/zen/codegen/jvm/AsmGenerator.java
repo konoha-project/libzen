@@ -92,7 +92,6 @@ import zen.ast.ZSetIndexNode;
 import zen.ast.ZSetNameNode;
 import zen.ast.ZSetterNode;
 import zen.ast.ZStringNode;
-import zen.ast.ZSymbolNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZUnaryNode;
@@ -220,12 +219,6 @@ public class AsmGenerator extends JavaSolution {
 				this.CurrentBuilder.visitMethodInsn(INVOKESPECIAL, ClassName, "<init>", "(I)V");
 			}
 		}
-	}
-
-	@Override public void VisitSymbolNode(ZSymbolNode Node) {
-		this.Debug("TODO");
-		this.CurrentBuilder.visitInsn(Opcodes.ACONST_NULL);
-		// TODO Auto-generated method stub
 	}
 
 	@Override public void VisitVarDeclNode(ZVarDeclNode Node) {

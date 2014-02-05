@@ -59,7 +59,6 @@ import zen.ast.ZSetIndexNode;
 import zen.ast.ZSetNameNode;
 import zen.ast.ZSetterNode;
 import zen.ast.ZStringNode;
-import zen.ast.ZSymbolNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZUnaryNode;
@@ -77,7 +76,6 @@ public abstract class ZVisitor {
 	public abstract void VisitMapLiteralNode(ZMapLiteralNode Node);
 	public abstract void VisitNewArrayNode(ZNewArrayNode Node);
 	public abstract void VisitNewObjectNode(ZNewObjectNode Node);
-	public abstract void VisitSymbolNode(ZSymbolNode Node);
 	public abstract void VisitGetNameNode(ZGetNameNode Node);
 	public abstract void VisitSetNameNode(ZSetNameNode Node);
 	public abstract void VisitGroupNode(ZGroupNode Node);
@@ -104,10 +102,8 @@ public abstract class ZVisitor {
 	public abstract void VisitThrowNode(ZThrowNode Node);
 	public abstract void VisitTryNode(ZTryNode Node);
 	public abstract void VisitCatchNode(ZCatchNode Node);
-	//	public abstract void VisitParamNode(ZParamNode Node);
 	public abstract void VisitLetNode(ZLetNode Node);
 	public abstract void VisitFunctionNode(ZFunctionNode Node);
-	//	public abstract void VisitFuncDeclNode(ZFunctionNode/*Decl*/ Node);
 	public abstract void VisitClassDeclNode(ZClassDeclNode Node);
 	public abstract void VisitErrorNode(ZErrorNode Node);
 	public abstract void VisitExtendedNode(ZNode Node);

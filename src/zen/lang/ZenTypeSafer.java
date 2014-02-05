@@ -66,7 +66,6 @@ import zen.ast.ZSetIndexNode;
 import zen.ast.ZSetNameNode;
 import zen.ast.ZSetterNode;
 import zen.ast.ZStringNode;
-import zen.ast.ZSymbolNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZUnaryNode;
@@ -214,10 +213,6 @@ public class ZenTypeSafer extends ZTypeChecker {
 
 	@Override public void VisitNewArrayNode(ZNewArrayNode Node) {
 		this.Todo(Node);
-	}
-
-	@Override public void VisitSymbolNode(ZSymbolNode Node) {
-
 	}
 
 	@Override public void VisitGetNameNode(ZGetNameNode Node) {
