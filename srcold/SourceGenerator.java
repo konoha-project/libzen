@@ -25,7 +25,7 @@
 //ifdef JAVA
 package org.ZenScript;
 import java.util.ArrayList;
-//endif VAJA
+
 
 
 import parser.ZenFunc;

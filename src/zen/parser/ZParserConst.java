@@ -28,7 +28,7 @@ package zen.parser;
 /*ZenConst Begin*/
 //ifdef JAVA
 public abstract class ZParserConst {
-	//endif VAJA
+	
 	// Version
 	public final static String  ProgName  = "LibZen";
 	public final static String  CodeName  = "Reference Implementation of D-Script";

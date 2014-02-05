@@ -49,7 +49,7 @@ import parser.ast.ZenConstPoolNode;
 import parser.ast.ZenNode;
 import parser.deps.LibZen;
 import parser.deps.LibNative;
-//endif VAJA
+
 
 public class DShellGrammar extends ZenUtils {
 	// LibDShell
@@ -57,7 +57,7 @@ public class DShellGrammar extends ZenUtils {
 		@Var String ret = "";
 //ifdef JAVA
 		ret = System.getenv(Key);
-//endif VAJA
+
 		return ret;
 	}
 //ifdef JAVA
@@ -106,7 +106,7 @@ public class DShellGrammar extends ZenUtils {
 		}
 		return new String[0];
 	}
-//endif VAJA
+
 	@Field private static String ErrorMessage = "no error reported";
 
 	public static void SetErrorMessage(String Message) {
@@ -154,7 +154,7 @@ public class DShellGrammar extends ZenUtils {
 
 		return Fault;
 	}
-//endif VAJA
+
 
 	// Grammar
 	private static String CommandSymbol(String Symbol) {
@@ -171,18 +171,18 @@ public class DShellGrammar extends ZenUtils {
 					NameSpace.Context.ReportError_OLD(ZenConsts.ErrorLevel, SourceToken, "not executable: " + CommandPath);
 				}
 				else {
-//endif VAJA
+
 					Command = CommandPath.substring(loc+1);
 					NameSpace.SetSymbol(Command, NameSpace.GetSyntaxPattern("$DShell2$"), SourceToken);
 					NameSpace.SetSymbol(DShellGrammar.CommandSymbol(Command), CommandPath, null);
 //ifdef JAVA
 				}
-//endif VAJA
+
 			}
 			else {
 //ifdef JAVA
 				if(IsUnixCommand(CommandPath)) {
-//endif VAJA
+
 					NameSpace.SetSymbol(Command, NameSpace.GetSyntaxPattern("$DShell2$"), SourceToken);
 					NameSpace.SetSymbol(DShellGrammar.CommandSymbol(Command), CommandPath, null);
 //ifdef JAVA
@@ -190,7 +190,7 @@ public class DShellGrammar extends ZenUtils {
 				else {
 					NameSpace.Context.ReportError_OLD(ZenConsts.ErrorLevel, SourceToken, "unknown command: " + CommandPath);
 				}
-//endif VAJA
+
 			}
 		}
 	}
@@ -807,5 +807,5 @@ public class DShellGrammar extends ZenUtils {
 		NameSpace.AppendSyntax_OLD("dexec", LoadParseFunc2(GrammarClass, "ParseDexec"), LoadTypeFunc2(GrammarClass, "TypeDexec"));
 
 	}
-//endif VAJA
+
 }

@@ -546,7 +546,7 @@ public abstract class LibZen {
 				}
 			}
 		}
-		//endif VAJA
+		
 		return s + "}";
 	}
 

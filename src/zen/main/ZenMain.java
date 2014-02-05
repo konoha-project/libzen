@@ -25,7 +25,7 @@
 //ifdef JAVA
 package zen.main;
 
-//endif VAJA
+
 
 import java.io.IOException;
 

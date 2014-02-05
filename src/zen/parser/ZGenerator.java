@@ -36,7 +36,7 @@ import zen.lang.ZFunc;
 import zen.lang.ZenEngine;
 import zen.type.ZFuncType;
 import zen.type.ZType;
-//endif VAJA
+
 
 public abstract class ZGenerator extends ZVisitor {
 	@Field private String            GrammarInfo;

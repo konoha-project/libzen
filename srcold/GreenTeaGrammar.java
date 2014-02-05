@@ -26,7 +26,7 @@ package org.ZenScript;
 
 import parser.ZenNameSpace;
 
-//endif VAJA
+
 public interface ZenGrammar {
 	public void LoadTo(ZenNameSpace NameSpace);
 }

@@ -31,7 +31,7 @@ import zen.ast.ZInstanceOfNode;
 import zen.ast.ZParamNode;
 import zen.ast.ZVarDeclNode;
 import zen.parser.ZSourceGenerator;
-//endif VAJA
+
 import zen.type.ZType;
 
 //Zen Generator should be written in each language.

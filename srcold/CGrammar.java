@@ -27,7 +27,7 @@ package org.ZenScript;
 import grammar.KonohaGrammar;
 
 import java.util.ArrayList;
-//endif VAJA
+
 
 import parser.ZenUtils;
 import parser.ZenClassField;
@@ -265,5 +265,5 @@ public class CGrammar extends ZenUtils {
 		NameSpace.AppendSyntax_OLD("struct", LoadParseFunc2(ParserContext, GrammarClass, "ParseStructDecl2"), LoadTypeFunc2(ParserContext, GrammarClass, "TypeStructDecl2"));
 		NameSpace.AppendSyntax_OLD("#include", LoadParseFunc2(ParserContext, GrammarClass, "ParseInclude"), null);
 	}
-	//endif VAJA
+	
 }

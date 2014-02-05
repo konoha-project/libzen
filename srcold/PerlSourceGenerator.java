@@ -87,7 +87,7 @@ import parser.ast.ZenVarDeclNode;
 import parser.ast.ZenWhileNode;
 import parser.ast.ZenYieldNode;
 import parser.deps.LibZen;
-//endif VAJA
+
 
 //Zen Generator should be written in each language.
 

@@ -44,7 +44,7 @@ public class SoftwareFaultException extends RuntimeException {
 				break;
 			}
 		}
-//endif VAJA
+
 		return Message;
 	}
 }

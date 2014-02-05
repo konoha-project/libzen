@@ -34,7 +34,7 @@ import zen.deps.LibNative;
 import zen.deps.LibZen;
 import zen.deps.Var;
 
-//endif VAJA
+
 
 public final class ZSourceBuilder {
 	@Field public ArrayList<String> SourceList = new ArrayList<String>();

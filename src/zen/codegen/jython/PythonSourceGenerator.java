@@ -39,7 +39,7 @@ import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZVarDeclNode;
 import zen.parser.ZSourceGenerator;
-//endif VAJA
+
 import zen.type.ZType;
 
 //Zen Generator should be written in each language.

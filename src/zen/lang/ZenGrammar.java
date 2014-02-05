@@ -86,8 +86,6 @@ import zen.parser.ZTokenContext;
 import zen.type.ZType;
 import zen.type.ZTypePool;
 
-//endif VAJA
-
 public class ZenGrammar {
 
 	// Token
@@ -187,23 +185,6 @@ public class ZenGrammar {
 			}
 			return true;
 		}
-		//		if(Source.GetChar(+2)== '$' && Source.GetChar(+3) == '{') {
-		//
-		//			if(LibZen.CharAt(SourceText, NextPos+1) == '$' && LibZen.CharAt(SourceText, NextPos+2) == '{') {
-		//				@Var long StartPos = NextPos + 3;
-		//				NextPos += 3;
-		//				while(NextChar != 0) {
-		//					NextChar = LibZen.CharAt(SourceText, NextPos);
-		//					if(NextChar == '}') {
-		//						this.TokenContext.SetSourceMap(LibZen.SubString(SourceText, StartPos, NextPos));
-		//						break;
-		//					}
-		//					if(NextChar == '\n' || NextChar == '*') {
-		//						break;  // stop
-		//					}
-		//					NextPos += 1;
-		//				}
-		//			}
 		@Var int Level = 1;
 		@Var char PrevChar = '\0';
 		while(Source.HasChar()) {

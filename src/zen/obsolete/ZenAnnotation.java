@@ -46,4 +46,3 @@ public final class ZenAnnotation {
 		return Map.keySet().iterator();
 	}
 }
-//endif VAJA

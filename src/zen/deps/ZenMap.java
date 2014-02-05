@@ -60,4 +60,3 @@ public final class ZenMap <T> implements ZenTypedObject {
 		throw new RuntimeException("unimplemented !!");
 	}
 }
-//endif VAJA

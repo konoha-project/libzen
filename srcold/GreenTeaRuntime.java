@@ -107,4 +107,3 @@ public class ZenRuntime {
 		throw new RuntimeException("error node found");
 	}
 }
-//endif VAJA

@@ -79,7 +79,7 @@ import zen.lang.ZenEngine;
 import zen.lang.ZenTypeSafer;
 import zen.type.ZType;
 
-//endif VAJA
+
 
 public class ZSourceGenerator extends ZGenerator {
 	@Field public ZenMap<String> NativeTypeMap;

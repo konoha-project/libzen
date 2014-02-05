@@ -26,7 +26,7 @@
 package org.ZenScript;
 
 import parser.deps.LibZen;
-//endif VAJA
+
 
 public class NativeClassTest {
 	public String name;
