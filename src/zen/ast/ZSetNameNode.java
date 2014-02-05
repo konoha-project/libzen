@@ -39,7 +39,7 @@ public class ZSetNameNode extends ZNode {
 		this.VarName = VarName;
 	}
 	@Override public void Append(ZNode Node) {
-		this.ValueNode = this.SetChild(this.ValueNode);
+		this.ValueNode = this.SetChild(Node);
 	}
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitSetNameNode(this);
