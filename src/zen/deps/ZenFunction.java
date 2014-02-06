@@ -8,6 +8,9 @@ public abstract class ZenFunction implements ZenTypedObject {
 	@Field final String FUNCTION;
 	public ZenFunction(int TypeId, String f) {
 		this.ZenType  = ZTypePool.TypeOf(TypeId);
+		if(f == null) {
+			f= this.getClass().getSimpleName();
+		}
 		this.FUNCTION = f;
 	}
 	@Override public final ZType GetZenType() {

@@ -45,7 +45,7 @@ public final class ZTokenContext {
 
 	@Field @Init public ZGenerator Generator;
 	@Field @Init public ZNameSpace NameSpace;
-	@Field public ZSource Source;
+	@Field public ZSourceContext Source;
 	@Field public ArrayList<ZToken> TokenList = new ArrayList<ZToken>();
 
 	@Field private int CurrentPosition = 0;
@@ -56,29 +56,7 @@ public final class ZTokenContext {
 	public ZTokenContext(ZGenerator Generator, ZNameSpace NameSpace, String FileName, int LineNumber, String SourceText) {
 		this.Generator = Generator;
 		this.NameSpace = NameSpace;
-		this.Source = new ZSource(FileName, LineNumber, SourceText, this);
-	}
-
-	private boolean Tokenize(ZSource Source) {
-		@Var int TokenSize = this.TokenList.size();
-		@Var int CheckPosition = Source.CurrentPosition;
-		while(Source.HasChar()) {
-			@Var int CharCode = Source.GetCharCode();
-			@Var ZTokenFunc TokenFunc = this.NameSpace.GetTokenFunc(CharCode);
-			this.Source.ApplyTokenFunc(TokenFunc);
-			if(this.TokenList.size() > TokenSize) {
-				break;
-			}
-			if(Source.CurrentPosition == CheckPosition) {
-				LibNative.println("Buggy TokenFunc: " + TokenFunc);
-				Source.MoveNext();
-			}
-		}
-		//this.Dump();
-		if(this.TokenList.size() > TokenSize) {
-			return true;
-		}
-		return false;
+		this.Source = new ZSourceContext(FileName, LineNumber, SourceText, this);
 	}
 
 	public boolean SetParseFlag(boolean AllowSkipIndent) {
@@ -122,7 +100,7 @@ public final class ZTokenContext {
 	public ZToken GetToken(boolean EnforceMoveNext) {
 		while(true) {
 			if(!(this.CurrentPosition < this.TokenList.size())) {
-				if(!this.Tokenize(this.Source)) {
+				if(!this.Source.DoTokenize()) {
 					break;
 				}
 			}

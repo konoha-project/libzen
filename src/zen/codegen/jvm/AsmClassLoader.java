@@ -25,8 +25,8 @@ import org.objectweb.asm.tree.MethodNode;
 import zen.ast.ZNode;
 import zen.deps.Var;
 import zen.deps.ZenFunction;
-import zen.deps.ZenMatchFunc;
-import zen.deps.ZenTokenFunc;
+import zen.deps.ZenMatchFunction;
+import zen.deps.ZenTokenFunction;
 import zen.parser.ZTokenContext;
 import zen.type.ZFuncType;
 import zen.type.ZType;
@@ -57,14 +57,14 @@ class AsmClassLoader extends ClassLoader {
 		TypeList.add(ZType.StringType);
 		TypeList.add(ZType.IntType);
 		ZFuncType FuncType = ZTypePool.LookupFuncType(TypeList);
-		this.FuncClassMap.put(FuncClassName(FuncType), ZenTokenFunc.class);
+		this.FuncClassMap.put(FuncClassName(FuncType), ZenTokenFunction.class);
 		TypeList.clear();
 		TypeList.add(JavaTypeTable.GetZenType(ZNode.class));
 		TypeList.add(JavaTypeTable.GetZenType(ZNode.class));
 		TypeList.add(JavaTypeTable.GetZenType(ZTokenContext.class));
 		TypeList.add(JavaTypeTable.GetZenType(ZNode.class));
 		FuncType = ZTypePool.LookupFuncType(TypeList);
-		this.FuncClassMap.put(FuncClassName(FuncType), ZenMatchFunc.class);
+		this.FuncClassMap.put(FuncClassName(FuncType), ZenMatchFunction.class);
 	}
 
 	public Class<?> LoadFuncClass(ZFuncType FuncType) {

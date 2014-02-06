@@ -35,7 +35,7 @@ import org.ZenScript.DShell.RecAPI;
 import parser.ZenUtils;
 import parser.ZenFunc;
 import parser.ZenNameSpace;
-import parser.ZenParserContext;
+import parser.ZenSourceContext;
 import parser.ZenFuncSet;
 import parser.ZenSystem;
 import parser.ZenSyntaxPattern;
@@ -777,7 +777,7 @@ public class DShellGrammar extends ZenUtils {
 //ifdef JAVA
 	// this is a new interface used in ImportNativeObject
 	public static void ImportGrammar(ZenNameSpace NameSpace, Class<?> GrammarClass) {
-		@Var ZenParserContext ParserContext = NameSpace.Context;
+		@Var ZenSourceContext SourceContext = NameSpace.Context;
 		NameSpace.AppendTokenFunc("#", LoadTokenFunc(GrammarClass, "ShellCommentToken")); 
 		
 		NameSpace.AppendSyntax_OLD("letenv", LoadParseFunc2(GrammarClass, "ParseEnv"), null);

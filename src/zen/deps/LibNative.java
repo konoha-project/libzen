@@ -42,7 +42,7 @@ import zen.lang.ZenEngine;
 import zen.parser.ZGenerator;
 import zen.parser.ZLogger;
 import zen.parser.ZNameSpace;
-import zen.parser.ZSource;
+import zen.parser.ZSourceContext;
 import zen.parser.ZSourceGenerator;
 import zen.parser.ZTokenContext;
 import zen.parser.ZVisitor;
@@ -139,7 +139,7 @@ public class LibNative {
 
 	public final static ZFunc LoadTokenFunc(Class<?> GrammarClass, String FuncName) {
 		try {
-			Method JavaMethod = GrammarClass.getMethod(FuncName, ZSource.class);
+			Method JavaMethod = GrammarClass.getMethod(FuncName, ZSourceContext.class);
 			return LibNative.ConvertToNativeFunc(JavaMethod);
 		} catch (NoSuchMethodException e) {
 			LibNative.FixMe(e);
@@ -157,18 +157,12 @@ public class LibNative {
 		return null;
 	}
 
-	public final static boolean ApplyTokenFunc(ZFunc TokenFunc, ZSource Source) {
-		Object[] Argvs = new Object[1];
-		Argvs[0] = Source;
-		return (Boolean) TokenFunc.Invoke(Argvs);
+	public final static boolean ApplyTokenFunc(ZenTokenFunction TokenFunc, ZSourceContext SourceContext) {
+		return TokenFunc.Invoke(SourceContext);
 	}
 
-	public final static ZNode ApplyMatchFunc(ZFunc MatchFunc, ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
-		Object[] Argvs = new Object[3];
-		Argvs[0] = ParentNode;
-		Argvs[1] = TokenContext;
-		Argvs[2] = LeftNode;
-		return (ZNode) MatchFunc.Invoke(Argvs);
+	public final static ZNode ApplyMatchFunc(ZenMatchFunction MatchFunc, ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
+		return MatchFunc.Invoke(ParentNode, TokenContext, LeftNode);
 	}
 
 	// Visitor Reflection
@@ -471,11 +465,11 @@ public class LibNative {
 	// return null;
 	// }
 
-	// public final static void LoadNativeConstructors(ZenParserContext Context,
+	// public final static void LoadNativeConstructors(ZenSourceContext Context,
 	// ZenType ClassType, ArrayList<ZenFunc> FuncList) {
 	// @Var boolean TransformedResult = false;
 	// Class<?> NativeClass = (Class<?>)ClassType.TypeBody;
-	// // ZenParserContext Context = ClassType.Context;
+	// // ZenSourceContext Context = ClassType.Context;
 	// Constructor<?>[] Constructors = NativeClass.getDeclaredConstructors();
 	// if(Constructors != null) {
 	// for(int i = 0; i < Constructors.length; i++) {
@@ -504,7 +498,7 @@ public class LibNative {
 	// }
 	// }
 
-	// public final static ZenFunc LoadNativeField(ZenParserContext Context,
+	// public final static ZenFunc LoadNativeField(ZenSourceContext Context,
 	// ZenType ClassType, String FieldName, boolean GetSetter) {
 	// try {
 	// Class<?> NativeClass = (Class<?>)ClassType.TypeBody;
@@ -540,7 +534,7 @@ public class LibNative {
 	// return null;
 	// }
 
-	// public final static void LoadNativeMethods(ZenParserContext Context,
+	// public final static void LoadNativeMethods(ZenSourceContext Context,
 	// ZenType ClassType, String FuncName, ArrayList<ZenFunc> FuncList) {
 	// Class<?> NativeClass = (Class<?>)ClassType.TypeBody;
 	// Method[] Methods = NativeClass.getDeclaredMethods();

@@ -38,7 +38,7 @@ public final class ZNewArrayNode extends ZListNode {
 	//	@Override public boolean Accept(ZenVisitor Visitor) {
 	//		Visitor.VisitNewArrayNode(this);
 	//	}
-	//	@Override public Object ToConstValue(ZenParserContext Context, boolean EnforceConst)  {
+	//	@Override public Object ToConstValue(ZenSourceContext Context, boolean EnforceConst)  {
 	//		if(EnforceConst) {
 	//			return Context.Generator.EvalNewArrayNode(this, EnforceConst);
 	//		}

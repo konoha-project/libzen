@@ -33,7 +33,7 @@ import parser.ZenUtils;
 import parser.ZenClassField;
 import parser.ZenFunc;
 import parser.ZenNameSpace;
-import parser.ZenParserContext;
+import parser.ZenSourceContext;
 import parser.ZenFuncSet;
 import parser.ZenSystem;
 import parser.ZenSyntaxPattern;
@@ -259,11 +259,11 @@ public class CGrammar extends ZenUtils {
 	//ifdef JAVA
 	// this is a new interface used in ImportNativeObject
 	public static void ImportGrammar(ZenNameSpace NameSpace, Class<?> GrammarClass) {
-		@Var ZenParserContext ParserContext = NameSpace.Context;
-		NameSpace.AppendTokenFunc("#", LoadTokenFunc2(ParserContext, GrammarClass, "PreprocesserToken"));
-		NameSpace.AppendExtendedSyntax_OLD("->", 0, LoadParseFunc2(ParserContext, GrammarClass, "ParseGetterP"), LoadTypeFunc2(ParserContext, GrammarClass, "TypeGetterP"));
-		NameSpace.AppendSyntax_OLD("struct", LoadParseFunc2(ParserContext, GrammarClass, "ParseStructDecl2"), LoadTypeFunc2(ParserContext, GrammarClass, "TypeStructDecl2"));
-		NameSpace.AppendSyntax_OLD("#include", LoadParseFunc2(ParserContext, GrammarClass, "ParseInclude"), null);
+		@Var ZenSourceContext SourceContext = NameSpace.Context;
+		NameSpace.AppendTokenFunc("#", LoadTokenFunc2(SourceContext, GrammarClass, "PreprocesserToken"));
+		NameSpace.AppendExtendedSyntax_OLD("->", 0, LoadParseFunc2(SourceContext, GrammarClass, "ParseGetterP"), LoadTypeFunc2(SourceContext, GrammarClass, "TypeGetterP"));
+		NameSpace.AppendSyntax_OLD("struct", LoadParseFunc2(SourceContext, GrammarClass, "ParseStructDecl2"), LoadTypeFunc2(SourceContext, GrammarClass, "TypeStructDecl2"));
+		NameSpace.AppendSyntax_OLD("#include", LoadParseFunc2(SourceContext, GrammarClass, "ParseInclude"), null);
 	}
 	
 }

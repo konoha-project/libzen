@@ -33,7 +33,8 @@ import zen.deps.LibZen;
 import zen.deps.Nullable;
 import zen.deps.Var;
 import zen.deps.ZenMap;
-import zen.lang.ZFunc;
+import zen.deps.ZenMatchFunction;
+import zen.deps.ZenTokenFunction;
 import zen.lang.ZenClassType;
 import zen.type.ZType;
 
@@ -82,14 +83,14 @@ public final class ZNameSpace {
 		return this.TokenMatrix[ZenChar];
 	}
 
-	private final ZTokenFunc JoinParentFunc(ZFunc Func, ZTokenFunc Parent) {
+	private final ZTokenFunc JoinParentFunc(ZenTokenFunction Func, ZTokenFunc Parent) {
 		if(Parent != null && Parent.Func == Func) {
 			return Parent;
 		}
 		return new ZTokenFunc(Func, Parent);
 	}
 
-	public final void AppendTokenFunc(String keys, ZFunc TokenFunc) {
+	public final void AppendTokenFunc(String keys, ZenTokenFunction TokenFunc) {
 		if(this.TokenMatrix == null) {
 			this.TokenMatrix = new ZTokenFunc[ZParserConst.MaxSizeOfChars];
 			if(this.ParentNameSpace != null) {
@@ -138,7 +139,7 @@ public final class ZNameSpace {
 		this.SetSyntaxPattern(PatternName, NewPattern);
 	}
 
-	public void DefineStatement(String PatternName, ZFunc MatchFunc) {
+	public void DefineStatement(String PatternName, ZenMatchFunction MatchFunc) {
 		@Var int Alias = PatternName.indexOf(" ");
 		@Var String Name = (Alias == -1) ? PatternName : PatternName.substring(0, Alias);
 		@Var ZSyntaxPattern Pattern = new ZSyntaxPattern(this, Name, MatchFunc);
@@ -149,7 +150,7 @@ public final class ZNameSpace {
 		}
 	}
 
-	public void DefineSyntax(String PatternName, ZFunc MatchFunc) {
+	public void DefineSyntax(String PatternName, ZenMatchFunction MatchFunc) {
 		@Var int Alias = PatternName.indexOf(" ");
 		@Var String Name = (Alias == -1) ? PatternName : PatternName.substring(0, Alias);
 		@Var ZSyntaxPattern Pattern = new ZSyntaxPattern(this, Name, MatchFunc);
@@ -159,7 +160,7 @@ public final class ZNameSpace {
 		}
 	}
 
-	public void DefineSuffixSyntax(String PatternName, int SyntaxFlag, ZFunc MatchFunc) {
+	public void DefineSuffixSyntax(String PatternName, int SyntaxFlag, ZenMatchFunction MatchFunc) {
 		@Var int Alias = PatternName.indexOf(" ");
 		@Var String Name = (Alias == -1) ? PatternName : PatternName.substring(0, Alias);
 		@Var ZSyntaxPattern Pattern = new ZSyntaxPattern(this, Name, MatchFunc);

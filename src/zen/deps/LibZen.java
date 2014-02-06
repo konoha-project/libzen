@@ -271,15 +271,15 @@ public abstract class LibZen {
 	//	}
 	//
 
-	//	public final static void LoadNativeConstructors(ZenParserContext Context, ZenType ClassType, ArrayList<ZenFunc> FuncList) {
+	//	public final static void LoadNativeConstructors(ZenSourceContext Context, ZenType ClassType, ArrayList<ZenFunc> FuncList) {
 	//		LibNative.LoadNativeConstructors(Context, ClassType, FuncList);
 	//	}
 	//
-	//	public final static ZenFunc LoadNativeField(ZenParserContext Context, ZenType ClassType, String FieldName, boolean GetSetter) {
+	//	public final static ZenFunc LoadNativeField(ZenSourceContext Context, ZenType ClassType, String FieldName, boolean GetSetter) {
 	//		return LibNative.LoadNativeField(Context, ClassType, FieldName, GetSetter);
 	//	}
 	//
-	//	public final static void LoadNativeMethods(ZenParserContext Context, ZenType ClassType, String FuncName, ArrayList<ZenFunc> FuncList) {
+	//	public final static void LoadNativeMethods(ZenSourceContext Context, ZenType ClassType, String FuncName, ArrayList<ZenFunc> FuncList) {
 	//		LibNative.LoadNativeMethods(Context, ClassType, FuncName, FuncList);
 	//	}
 
