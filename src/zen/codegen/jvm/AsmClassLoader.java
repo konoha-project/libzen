@@ -24,9 +24,9 @@ import org.objectweb.asm.tree.MethodNode;
 
 import zen.ast.ZNode;
 import zen.deps.Var;
-import zen.deps.ZenFunction;
-import zen.deps.ZenMatchFunction;
-import zen.deps.ZenTokenFunction;
+import zen.deps.ZFunction;
+import zen.deps.ZMatchFunction;
+import zen.deps.ZTokenFunction;
 import zen.parser.ZTokenContext;
 import zen.type.ZFuncType;
 import zen.type.ZType;
@@ -57,21 +57,21 @@ class AsmClassLoader extends ClassLoader {
 		TypeList.add(ZType.StringType);
 		TypeList.add(ZType.IntType);
 		ZFuncType FuncType = ZTypePool.LookupFuncType(TypeList);
-		this.FuncClassMap.put(FuncClassName(FuncType), ZenTokenFunction.class);
+		this.FuncClassMap.put(FuncClassName(FuncType), ZTokenFunction.class);
 		TypeList.clear();
 		TypeList.add(JavaTypeTable.GetZenType(ZNode.class));
 		TypeList.add(JavaTypeTable.GetZenType(ZNode.class));
 		TypeList.add(JavaTypeTable.GetZenType(ZTokenContext.class));
 		TypeList.add(JavaTypeTable.GetZenType(ZNode.class));
 		FuncType = ZTypePool.LookupFuncType(TypeList);
-		this.FuncClassMap.put(FuncClassName(FuncType), ZenMatchFunction.class);
+		this.FuncClassMap.put(FuncClassName(FuncType), ZMatchFunction.class);
 	}
 
 	public Class<?> LoadFuncClass(ZFuncType FuncType) {
 		String ClassName = FuncClassName(FuncType);
 		Class<?> FuncClass = this.FuncClassMap.get(ClassName);
 		if(FuncClass == null) {
-			@Var String SuperClassName = Type.getInternalName(ZenFunction.class);
+			@Var String SuperClassName = Type.getInternalName(ZFunction.class);
 			@Var AsmClassBuilder cb = new AsmClassBuilder(ACC_PUBLIC| ACC_ABSTRACT, null, ClassName, SuperClassName);
 			String Desc = this.Generator.GetMethodDescriptor(FuncType);
 			MethodNode InvokeMethod = new MethodNode(ACC_PUBLIC | ACC_ABSTRACT, "Invoke", Desc, null, null);

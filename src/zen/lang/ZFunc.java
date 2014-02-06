@@ -25,16 +25,16 @@
 //ifdef JAVA
 package zen.lang;
 import zen.deps.Field;
-import zen.deps.Init;
+
 import zen.deps.LibZen;
 import zen.parser.ZUtils;
 import zen.type.ZFuncType;
 import zen.type.ZType;
 
 public abstract class ZFunc {
-	@Field @Init public int			  FuncFlag;
-	@Field @Init public String		  FuncName;  // NativeReferenceNamr
-	@Field @Init public ZFuncType     FuncType;
+	@Field public int			  FuncFlag;
+	@Field public String		  FuncName;  // NativeReferenceNamr
+	@Field public ZFuncType     FuncType;
 
 	public ZFunc(int FuncFlag, String FuncName, ZFuncType FuncType) {
 		this.FuncFlag = FuncFlag;

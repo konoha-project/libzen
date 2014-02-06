@@ -4,11 +4,11 @@ import zen.ast.ZErrorNode;
 import zen.ast.ZGetNameNode;
 import zen.ast.ZNode;
 import zen.deps.Var;
-import zen.deps.ZenMatchFunction;
+import zen.deps.ZMatchFunction;
 import zen.parser.ZToken;
 import zen.parser.ZTokenContext;
 
-public class SymbolExpressionPattern extends ZenMatchFunction {
+public class SymbolExpressionPattern extends ZMatchFunction {
 
 	@Override public ZNode Invoke(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
 		@Var ZToken NameToken = TokenContext.GetToken(ZTokenContext.MoveNext);

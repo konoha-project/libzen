@@ -1,17 +1,17 @@
 package zen.deps;
 
-public class ZenStringArray extends ZenObject {
+public class ZFloatArray extends ZObject {
 	@Field private int    Size;
-	@Field private String[] Values;
+	@Field private double[] Values;
 
-	public ZenStringArray(int TypeId, String[] Values) {
+	public ZFloatArray(int TypeId, double[] Values) {
 		super(TypeId);
 		if(Values != null) {
 			this.Values = Values;
 			this.Size = Values.length;
 		}
 		else {
-			this.Values = new String[1];
+			this.Values = new double[1];
 			this.Size = 0;
 		}
 	}
@@ -23,7 +23,7 @@ public class ZenStringArray extends ZenObject {
 			if(i > 0) {
 				s += ", ";
 			}
-			s += LibZen.QuoteString(this.Values[i]);
+			s += String.valueOf(this.Values[i]);
 			i = i + 1;
 		}
 		return s + "]";
@@ -33,24 +33,24 @@ public class ZenStringArray extends ZenObject {
 		return this.Size;
 	}
 
-	public final static String GetIndex(ZenStringArray a, long Index) {
+	public final static double GetIndex(ZFloatArray a, long Index) {
 		if(Index < a.Size) {
 			return a.Values[(int)Index];
 		}
-		ZenObjectArray.ThrowOutOfArrayIndex(a.Size, Index);
-		return null;
+		ZObjectArray.ThrowOutOfArrayIndex(a.Size, Index);
+		return 0;
 	}
 
-	public final static void SetIndex(ZenStringArray a, long Index, String Value) {
+	public final static void SetIndex(ZFloatArray a, long Index, double Value) {
 		if(Index < a.Size) {
 			a.Values[(int)Index] = Value;
 		}
-		ZenObjectArray.ThrowOutOfArrayIndex(a.Size, Index);
+		ZObjectArray.ThrowOutOfArrayIndex(a.Size, Index);
 	}
 
-	public final void Add(String Value) {
+	public final void Add(double Value) {
 		if(this.Size == this.Values.length) {
-			String[] newValues = new String[this.Values.length*2];
+			double[] newValues = new double[this.Values.length*2];
 			System.arraycopy(this.Values, 0, newValues, 0, this.Size);
 			this.Values = newValues;
 		}

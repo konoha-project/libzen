@@ -4,10 +4,10 @@ import zen.ast.ZGetIndexNode;
 import zen.ast.ZNode;
 import zen.ast.ZSetIndexNode;
 import zen.deps.Var;
-import zen.deps.ZenMatchFunction;
+import zen.deps.ZMatchFunction;
 import zen.parser.ZTokenContext;
 
-public class IndexerPattern extends ZenMatchFunction {
+public class IndexerPattern extends ZMatchFunction {
 
 	@Override public ZNode Invoke(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
 		@Var ZNode IndexerNode = new ZGetIndexNode(ParentNode, LeftNode);

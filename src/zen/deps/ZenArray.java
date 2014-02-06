@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import zen.type.ZType;
 import zen.type.ZTypePool;
 
-public class ZenArray<T> extends ArrayList<T> implements ZenTypedObject {
+public class ZenArray<T> extends ArrayList<T> implements ZTypedObject {
 	/**
 	 * 
 	 */

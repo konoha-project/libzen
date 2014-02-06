@@ -28,7 +28,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import zen.deps.Field;
-import zen.deps.Init;
+
 import zen.deps.LibNative;
 import zen.deps.LibZen;
 import zen.deps.Var;
@@ -187,7 +187,7 @@ public final class ZLogger {
 }
 
 class ZCounter {
-	@Field @Init public int count = 1;
+	@Field public int count = 1;
 	ZCounter() {
 	}
 }

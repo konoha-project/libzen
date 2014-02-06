@@ -25,7 +25,7 @@
 package zen.ast;
 
 import zen.deps.Field;
-import zen.deps.Init;
+
 import zen.deps.Var;
 import zen.parser.ZSyntaxPattern;
 import zen.parser.ZToken;
@@ -35,7 +35,7 @@ import zen.parser.ZVisitor;
 public class ZBinaryNode extends ZNode {
 	public final static int Left = 0;
 	public final static int Right = 1;
-	@Field @Init public ZSyntaxPattern Pattern;
+	@Field public ZSyntaxPattern Pattern;
 
 	public ZBinaryNode(ZNode ParentNode, ZToken SourceToken, ZNode Left, ZSyntaxPattern Pattern) {
 		super(ParentNode, SourceToken, 2);

@@ -1,14 +1,14 @@
 package zen.parser;
 
 import zen.deps.Field;
-import zen.deps.Init;
-import zen.deps.ZenTokenFunction;
+
+import zen.deps.ZTokenFunction;
 
 final class ZTokenFunc {
-	@Field @Init public ZenTokenFunction      Func;
-	@Field @Init public ZTokenFunc	ParentFunc;
+	@Field public ZTokenFunction      Func;
+	@Field public ZTokenFunc	ParentFunc;
 
-	ZTokenFunc(ZenTokenFunction Func, ZTokenFunc Parent) {
+	ZTokenFunc(ZTokenFunction Func, ZTokenFunc Parent) {
 		this.Func = Func;
 		this.ParentFunc = Parent;
 	}

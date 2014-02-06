@@ -26,21 +26,21 @@
 package zen.parser;
 
 import zen.deps.Field;
-import zen.deps.Init;
+
 import zen.deps.LibZen;
 import zen.deps.Var;
-import zen.deps.ZenMatchFunction;
+import zen.deps.ZMatchFunction;
 
 public final class ZSyntaxPattern {
-	@Field @Init public ZNameSpace	          PackageNameSpace;
-	@Field @Init public String		          PatternName;
-	@Field @Init public ZenMatchFunction                 MatchFunc;
+	@Field public ZNameSpace	          PackageNameSpace;
+	@Field public String		          PatternName;
+	@Field public ZMatchFunction                 MatchFunc;
 	@Field public int				          SyntaxFlag = 0;
 	@Field public ZSyntaxPattern              ParentPattern = null;
 	@Field public boolean IsDisabled          = false;
 	@Field public boolean IsStatement         = false;
 
-	public ZSyntaxPattern(ZNameSpace NameSpace, String PatternName, ZenMatchFunction MatchFunc) {
+	public ZSyntaxPattern(ZNameSpace NameSpace, String PatternName, ZMatchFunction MatchFunc) {
 		this.PackageNameSpace = NameSpace;
 		this.PatternName = PatternName;
 		this.MatchFunc = MatchFunc;

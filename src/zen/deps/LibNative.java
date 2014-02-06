@@ -157,11 +157,11 @@ public class LibNative {
 		return null;
 	}
 
-	public final static boolean ApplyTokenFunc(ZenTokenFunction TokenFunc, ZSourceContext SourceContext) {
+	public final static boolean ApplyTokenFunc(ZTokenFunction TokenFunc, ZSourceContext SourceContext) {
 		return TokenFunc.Invoke(SourceContext);
 	}
 
-	public final static ZNode ApplyMatchFunc(ZenMatchFunction MatchFunc, ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
+	public final static ZNode ApplyMatchFunc(ZMatchFunction MatchFunc, ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
 		return MatchFunc.Invoke(ParentNode, TokenContext, LeftNode);
 	}
 

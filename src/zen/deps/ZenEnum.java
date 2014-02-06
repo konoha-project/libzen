@@ -26,7 +26,7 @@
 package zen.deps;
 
 
-public class ZenEnum extends ZenObject {
+public class ZenEnum extends ZObject {
 	@Field public final long EnumValue;
 	@Field public final String EnumSymbol;
 	public ZenEnum(int TypeId, long EnumValue, String EnumSymbol) {

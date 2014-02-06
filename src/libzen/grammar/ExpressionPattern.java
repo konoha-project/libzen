@@ -3,14 +3,14 @@ package libzen.grammar;
 import zen.ast.ZErrorNode;
 import zen.ast.ZNode;
 import zen.deps.Var;
-import zen.deps.ZenMatchFunction;
+import zen.deps.ZMatchFunction;
 import zen.parser.ZNameSpace;
 import zen.parser.ZPatternToken;
 import zen.parser.ZSyntaxPattern;
 import zen.parser.ZToken;
 import zen.parser.ZTokenContext;
 
-public class ExpressionPattern extends ZenMatchFunction {
+public class ExpressionPattern extends ZMatchFunction {
 
 	@Override public ZNode Invoke(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
 		return ExpressionPattern.DispatchPattern(ParentNode, TokenContext, LeftNode, false, true);

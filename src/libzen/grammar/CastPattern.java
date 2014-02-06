@@ -3,11 +3,11 @@ package libzen.grammar;
 import zen.ast.ZCastNode;
 import zen.ast.ZNode;
 import zen.deps.Var;
-import zen.deps.ZenMatchFunction;
+import zen.deps.ZMatchFunction;
 import zen.parser.ZTokenContext;
 import zen.type.ZType;
 
-public class CastPattern extends ZenMatchFunction {
+public class CastPattern extends ZMatchFunction {
 
 	@Override public ZNode Invoke(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
 		@Var ZNode CastNode = new ZCastNode(ParentNode, ZType.VarType, null);

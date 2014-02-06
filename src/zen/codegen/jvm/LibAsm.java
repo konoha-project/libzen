@@ -2,10 +2,10 @@ package zen.codegen.jvm;
 
 import org.objectweb.asm.Type;
 
-import zen.deps.ZenFloatArray;
-import zen.deps.ZenIntArray;
-import zen.deps.ZenObjectArray;
-import zen.deps.ZenStringArray;
+import zen.deps.ZFloatArray;
+import zen.deps.ZIntArray;
+import zen.deps.ZObjectArray;
+import zen.deps.ZStringArray;
 import zen.type.ZType;
 
 public class LibAsm {
@@ -18,15 +18,15 @@ public class LibAsm {
 	static Class<?> AsArrayClass(ZType zType) {
 		ZType zParamType = zType.GetParamType(0);
 		if(zParamType.IsIntType()) {
-			return ZenIntArray.class;
+			return ZIntArray.class;
 		}
 		if(zParamType.IsFloatType()) {
-			return ZenFloatArray.class;
+			return ZFloatArray.class;
 		}
 		if(zParamType.IsStringType()) {
-			return ZenStringArray.class;
+			return ZStringArray.class;
 		}
-		return ZenObjectArray.class;
+		return ZObjectArray.class;
 	}
 
 	static Class<?> AsElementClass(ZType zType) {

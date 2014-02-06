@@ -1,10 +1,10 @@
 package libzen.grammar;
 
 import zen.deps.Var;
-import zen.deps.ZenTokenFunction;
+import zen.deps.ZTokenFunction;
 import zen.parser.ZSourceContext;
 
-public class BlockComment extends ZenTokenFunction {
+public class BlockComment extends ZTokenFunction {
 
 	@Override
 	public boolean Invoke(ZSourceContext SourceContext) {

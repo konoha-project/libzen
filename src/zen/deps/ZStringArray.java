@@ -1,17 +1,17 @@
 package zen.deps;
 
-public final class ZenObjectArray extends ZenObject {
+public class ZStringArray extends ZObject {
 	@Field private int    Size;
-	@Field private Object[] Values;
+	@Field private String[] Values;
 
-	public ZenObjectArray(int TypeId, Object[] Values) {
+	public ZStringArray(int TypeId, String[] Values) {
 		super(TypeId);
 		if(Values != null) {
 			this.Values = Values;
 			this.Size = Values.length;
 		}
 		else {
-			this.Values = new Object[1];
+			this.Values = new String[1];
 			this.Size = 0;
 		}
 	}
@@ -20,11 +20,10 @@ public final class ZenObjectArray extends ZenObject {
 		@Var String s = "[";
 		@Var int i = 0;
 		while(i < this.Size) {
-			@Var Object Value = this.Values[i];
 			if(i > 0) {
 				s += ", ";
 			}
-			s += LibZen.Stringify(Value);
+			s += LibZen.QuoteString(this.Values[i]);
 			i = i + 1;
 		}
 		return s + "]";
@@ -34,24 +33,24 @@ public final class ZenObjectArray extends ZenObject {
 		return this.Size;
 	}
 
-	public final static Object GetIndex(ZenObjectArray a, long Index) {
+	public final static String GetIndex(ZStringArray a, long Index) {
 		if(Index < a.Size) {
 			return a.Values[(int)Index];
 		}
-		ZenObjectArray.ThrowOutOfArrayIndex(a.Size, Index);
+		ZObjectArray.ThrowOutOfArrayIndex(a.Size, Index);
 		return null;
 	}
 
-	public final static void SetIndex(ZenObjectArray a, long Index, Object Value) {
+	public final static void SetIndex(ZStringArray a, long Index, String Value) {
 		if(Index < a.Size) {
 			a.Values[(int)Index] = Value;
 		}
-		ZenObjectArray.ThrowOutOfArrayIndex(a.Size, Index);
+		ZObjectArray.ThrowOutOfArrayIndex(a.Size, Index);
 	}
 
-	public final void Add(Object Value) {
+	public final void Add(String Value) {
 		if(this.Size == this.Values.length) {
-			Object[] newValues = new Object[this.Values.length*2];
+			String[] newValues = new String[this.Values.length*2];
 			System.arraycopy(this.Values, 0, newValues, 0, this.Size);
 			this.Values = newValues;
 		}
@@ -60,8 +59,5 @@ public final class ZenObjectArray extends ZenObject {
 	}
 
 
-	public static void ThrowOutOfArrayIndex(int Size, long Index) {
-		throw new RuntimeException("out of array index " + Index + " < " + Size);
-	}
 
 }

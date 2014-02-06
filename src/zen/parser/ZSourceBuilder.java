@@ -29,7 +29,7 @@ import java.util.ArrayList;
 
 import zen.ast.ZListNode;
 import zen.deps.Field;
-import zen.deps.Init;
+
 import zen.deps.LibNative;
 import zen.deps.LibZen;
 import zen.deps.Var;
@@ -38,7 +38,7 @@ import zen.deps.Var;
 
 public final class ZSourceBuilder {
 	@Field public ArrayList<String> SourceList = new ArrayList<String>();
-	@Field @Init ZSourceGenerator Template;
+	@Field ZSourceGenerator Template;
 	@Field int IndentLevel = 0;
 	@Field String CurrentIndentString = "";
 	@Field String BufferedLineComment = "";

@@ -3,10 +3,10 @@ package libzen.grammar;
 import zen.ast.ZFieldNode;
 import zen.ast.ZNode;
 import zen.deps.Var;
-import zen.deps.ZenMatchFunction;
+import zen.deps.ZMatchFunction;
 import zen.parser.ZTokenContext;
 
-public class FieldPattern extends ZenMatchFunction {
+public class FieldPattern extends ZMatchFunction {
 
 	@Override public ZNode Invoke(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
 		@Var boolean Rememberd = TokenContext.SetParseFlag(false);

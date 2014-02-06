@@ -1,9 +1,9 @@
 package libzen.grammar;
 
-import zen.deps.ZenTokenFunction;
+import zen.deps.ZTokenFunction;
 import zen.parser.ZSourceContext;
 
-public class OperatorToken extends ZenTokenFunction {
+public class OperatorToken extends ZTokenFunction {
 
 	@Override public boolean Invoke(ZSourceContext SourceContext) {
 		SourceContext.TokenizeDefinedSymbol(SourceContext.GetPosition());

@@ -29,7 +29,7 @@ import java.util.Iterator;
 
 import zen.type.ZType;
 
-public final class ZenMap <T> implements ZenTypedObject {
+public final class ZenMap <T> implements ZTypedObject {
 	final ZType ElementType;
 	final HashMap<String, T>	Map;
 

@@ -1,17 +1,17 @@
 package zen.deps;
 
-public class ZenIntArray extends ZenObject {
+public final class ZObjectArray extends ZObject {
 	@Field private int    Size;
-	@Field private long[] Values;
+	@Field private Object[] Values;
 
-	public ZenIntArray(int TypeId, long[] Values) {
+	public ZObjectArray(int TypeId, Object[] Values) {
 		super(TypeId);
 		if(Values != null) {
 			this.Values = Values;
 			this.Size = Values.length;
 		}
 		else {
-			this.Values = new long[1];
+			this.Values = new Object[1];
 			this.Size = 0;
 		}
 	}
@@ -20,10 +20,11 @@ public class ZenIntArray extends ZenObject {
 		@Var String s = "[";
 		@Var int i = 0;
 		while(i < this.Size) {
+			@Var Object Value = this.Values[i];
 			if(i > 0) {
 				s += ", ";
 			}
-			s += String.valueOf(this.Values[i]);
+			s += LibZen.Stringify(Value);
 			i = i + 1;
 		}
 		return s + "]";
@@ -33,24 +34,24 @@ public class ZenIntArray extends ZenObject {
 		return this.Size;
 	}
 
-	public final static long GetIndex(ZenIntArray a, long Index) {
+	public final static Object GetIndex(ZObjectArray a, long Index) {
 		if(Index < a.Size) {
 			return a.Values[(int)Index];
 		}
-		ZenObjectArray.ThrowOutOfArrayIndex(a.Size, Index);
-		return 0;
+		ZObjectArray.ThrowOutOfArrayIndex(a.Size, Index);
+		return null;
 	}
 
-	public final static void SetIndex(ZenIntArray a, long Index, long Value) {
+	public final static void SetIndex(ZObjectArray a, long Index, Object Value) {
 		if(Index < a.Size) {
 			a.Values[(int)Index] = Value;
 		}
-		ZenObjectArray.ThrowOutOfArrayIndex(a.Size, Index);
+		ZObjectArray.ThrowOutOfArrayIndex(a.Size, Index);
 	}
 
-	public final void Add(long Value) {
+	public final void Add(Object Value) {
 		if(this.Size == this.Values.length) {
-			long[] newValues = new long[this.Values.length*2];
+			Object[] newValues = new Object[this.Values.length*2];
 			System.arraycopy(this.Values, 0, newValues, 0, this.Size);
 			this.Values = newValues;
 		}
@@ -59,5 +60,8 @@ public class ZenIntArray extends ZenObject {
 	}
 
 
+	public static void ThrowOutOfArrayIndex(int Size, long Index) {
+		throw new RuntimeException("out of array index " + Index + " < " + Size);
+	}
 
 }

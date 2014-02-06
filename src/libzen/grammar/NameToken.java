@@ -2,10 +2,10 @@ package libzen.grammar;
 
 import zen.deps.LibZen;
 import zen.deps.Var;
-import zen.deps.ZenTokenFunction;
+import zen.deps.ZTokenFunction;
 import zen.parser.ZSourceContext;
 
-public class NameToken extends ZenTokenFunction {
+public class NameToken extends ZTokenFunction {
 
 	@Override public boolean Invoke(ZSourceContext SourceContext) {
 		@Var int StartIndex = SourceContext.GetPosition();

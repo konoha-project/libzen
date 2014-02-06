@@ -29,12 +29,12 @@ package zen.main;
 
 import java.io.IOException;
 
-import libzen.grammar.ZenGrammar;
 
 import zen.deps.LibNative;
 import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.deps.ZenArray;
+import zen.deps.KonohaGrammar;
 import zen.lang.ZEmptyValue;
 import zen.lang.ZSystem;
 import zen.lang.ZenEngine;
@@ -167,7 +167,7 @@ public class ZenMain {
 			//			}
 			//			ZenMain.Usage(Argu + " is unknown");
 		}
-		@Var ZenEngine ScriptEngine = LibNative.LoadEngine(TargetCode, ZenGrammar.class.getName());
+		@Var ZenEngine ScriptEngine = LibNative.LoadEngine(TargetCode, KonohaGrammar.class.getName());
 		// @Var ZenSourceContext Context = new ZenSourceContext(new KonohaGrammar(), Generator);
 		// if(RequiredLibName != null) {
 		// if(!Context.TopLevelNameSpace.LoadRequiredLib(RequiredLibName)) {

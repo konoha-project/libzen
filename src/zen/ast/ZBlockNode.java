@@ -25,12 +25,12 @@
 package zen.ast;
 
 import zen.deps.Field;
-import zen.deps.Init;
+
 import zen.parser.ZNameSpace;
 import zen.parser.ZVisitor;
 
 public class ZBlockNode extends ZListNode {
-	@Field @Init public ZNameSpace NameSpace;
+	@Field public ZNameSpace NameSpace;
 	public ZBlockNode(ZNameSpace NameSpace) {
 		super(null, null, 0);
 		this.NameSpace = NameSpace;

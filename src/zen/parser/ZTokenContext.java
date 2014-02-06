@@ -30,7 +30,7 @@ import zen.ast.ZEmptyNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZNode;
 import zen.deps.Field;
-import zen.deps.Init;
+
 import zen.deps.LibNative;
 import zen.deps.LibZen;
 import zen.deps.Var;
@@ -43,8 +43,8 @@ public final class ZTokenContext {
 	public final static boolean     AllowNewLine   = true;
 	public final static boolean     MoveNext       = true;
 
-	@Field @Init public ZGenerator Generator;
-	@Field @Init public ZNameSpace NameSpace;
+	@Field public ZGenerator Generator;
+	@Field public ZNameSpace NameSpace;
 	@Field public ZSourceContext Source;
 	@Field public ArrayList<ZToken> TokenList = new ArrayList<ZToken>();
 

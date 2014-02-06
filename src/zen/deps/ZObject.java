@@ -21,11 +21,21 @@
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
+
+
 //ifdef JAVA
 package zen.deps;
-
 import zen.type.ZType;
+import zen.type.ZTypePool;
 
-public interface ZenTypedObject {
-	public ZType GetZenType();
+
+public class ZObject implements ZTypedObject {
+	public ZType ZenType;
+	protected ZObject(int TypeId) {
+		this.ZenType = ZTypePool.TypeOf(TypeId);
+	}
+	@Override public final ZType GetZenType() {
+		return this.ZenType;
+	}
+
 }

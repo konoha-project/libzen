@@ -1,10 +1,10 @@
 package libzen.grammar;
 
 import zen.ast.ZNode;
-import zen.deps.ZenMatchFunction;
+import zen.deps.ZMatchFunction;
 import zen.parser.ZTokenContext;
 
-public class SetterPattern extends ZenMatchFunction {
+public class SetterPattern extends ZMatchFunction {
 
 	@Override
 	public ZNode Invoke(ZNode ParentNode, ZTokenContext TokenContext,

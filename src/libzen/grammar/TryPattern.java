@@ -3,10 +3,10 @@ package libzen.grammar;
 import zen.ast.ZNode;
 import zen.ast.ZTryNode;
 import zen.deps.Var;
-import zen.deps.ZenMatchFunction;
+import zen.deps.ZMatchFunction;
 import zen.parser.ZTokenContext;
 
-public class TryPattern extends ZenMatchFunction {
+public class TryPattern extends ZMatchFunction {
 
 	@Override public ZNode Invoke(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
 		@Var ZNode TryNode = new ZTryNode(ParentNode);

@@ -25,7 +25,7 @@
 package zen.ast;
 
 import zen.deps.Field;
-import zen.deps.Init;
+
 import zen.parser.ZVisitor;
 
 //E.g., $Recv[$Index]
@@ -33,7 +33,7 @@ public final class ZGetIndexNode extends ZNode {
 	public final static int Recv = 0;
 	public final static int Index = 1;
 
-	@Field @Init public ZNode  RecvNode;
+	@Field public ZNode  RecvNode;
 
 	public ZGetIndexNode(ZNode ParentNode, ZNode RecvNode) {
 		super(ParentNode, null, 2);

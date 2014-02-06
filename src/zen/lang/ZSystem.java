@@ -30,7 +30,7 @@ import zen.deps.LibNative;
 import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.deps.ZenMap;
-import zen.deps.ZenTypedObject;
+import zen.deps.ZTypedObject;
 import zen.type.ZType;
 //import zen.obsolete.ZFuncSet;
 
@@ -86,8 +86,8 @@ public class ZSystem {
 		//		else if(Value instanceof ZFuncSet) {
 		//			return ZType.FuncType;
 		//		}
-		else if(Value instanceof ZenTypedObject) {
-			return ((ZenTypedObject)Value).GetZenType();
+		else if(Value instanceof ZTypedObject) {
+			return ((ZTypedObject)Value).GetZenType();
 		}
 		else {
 			return ZSystem.GetNativeTypeOfValue(Value);

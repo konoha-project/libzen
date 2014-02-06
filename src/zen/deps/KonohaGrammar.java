@@ -23,15 +23,69 @@
 // **************************************************************************
 
 //ifdef JAVA
-package libzen.grammar;
-import zen.deps.Var;
-import zen.deps.ZenMatchFunction;
+package zen.deps;
+import libzen.grammar.AndPattern;
+import libzen.grammar.AnnotationPattern;
+import libzen.grammar.ApplyPattern;
+import libzen.grammar.ArrayLiteralPattern;
+import libzen.grammar.BinaryPattern;
+import libzen.grammar.BlockComment;
+import libzen.grammar.BlockPattern;
+import libzen.grammar.BreakPattern;
+import libzen.grammar.CastPattern;
+import libzen.grammar.CatchPattern;
+import libzen.grammar.ClassPattern;
+import libzen.grammar.ComparatorPattern;
+import libzen.grammar.ExpressionPattern;
+import libzen.grammar.FalsePattern;
+import libzen.grammar.FieldPattern;
+import libzen.grammar.FloatLiteralPattern;
+import libzen.grammar.FunctionPattern;
+import libzen.grammar.GetterPattern;
+import libzen.grammar.GroupPattern;
+import libzen.grammar.IfPattern;
+import libzen.grammar.ImportPattern;
+import libzen.grammar.IndexerPattern;
+import libzen.grammar.InstanceOfPattern;
+import libzen.grammar.IntLiteralPattern;
+import libzen.grammar.LetPattern;
+import libzen.grammar.MapEntryPattern;
+import libzen.grammar.MapLiteralPattern;
+import libzen.grammar.NamePattern;
+import libzen.grammar.NameToken;
+import libzen.grammar.NewLineToken;
+import libzen.grammar.NewObjectPattern;
+import libzen.grammar.NotPattern;
+import libzen.grammar.NullPattern;
+import libzen.grammar.NumberLiteralToken;
+import libzen.grammar.OperatorToken;
+import libzen.grammar.OrPattern;
+import libzen.grammar.ParamPattern;
+import libzen.grammar.PathPattern;
+import libzen.grammar.ReturnPattern;
+import libzen.grammar.StatementEndPattern;
+import libzen.grammar.StatementPattern;
+import libzen.grammar.StringLiteralPattern;
+import libzen.grammar.StringLiteralToken;
+import libzen.grammar.SuffixExpressionPattern;
+import libzen.grammar.SymbolExpressionPattern;
+import libzen.grammar.SymbolStatementPattern;
+import libzen.grammar.ThrowPattern;
+import libzen.grammar.TruePattern;
+import libzen.grammar.TryPattern;
+import libzen.grammar.TypeAnnotationPattern;
+import libzen.grammar.TypePattern;
+import libzen.grammar.TypeSuffixPattern;
+import libzen.grammar.UnaryPattern;
+import libzen.grammar.VarPattern;
+import libzen.grammar.WhilePattern;
+import libzen.grammar.WhiteSpaceToken;
 import zen.lang.ZenPrecedence;
 import zen.parser.ZNameSpace;
 import zen.parser.ZParserConst;
 import zen.type.ZType;
 
-public class ZenGrammar {
+public class KonohaGrammar {
 	// Token
 	//	public static boolean WhiteSpaceToken(ZSourceContext SourceContext) {
 	//		SourceContext.SkipWhiteSpace();
@@ -362,12 +416,6 @@ public class ZenGrammar {
 	//			return new ZGetNameNode(ParentNode, NameToken, NameToken.GetText());
 	//		}
 	//	}
-
-	
-
-	
-
-
 	//	public static ZNode MatchExpression(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
 	//		return ZenGrammar.DispatchPattern(ParentNode, TokenContext, LeftNode, false, true);
 	//	}
@@ -655,9 +703,9 @@ public class ZenGrammar {
 		NameSpace.AppendTokenFunc("\"", new StringLiteralToken());
 		NameSpace.AppendTokenFunc("1",  new NumberLiteralToken());
 
-		@Var ZenMatchFunction MatchUnary     = new UnaryPattern();
-		@Var ZenMatchFunction MatchBinary    = new BinaryPattern();
-		@Var ZenMatchFunction MatchComparator    = new ComparatorPattern();
+		@Var ZMatchFunction MatchUnary     = new UnaryPattern();
+		@Var ZMatchFunction MatchBinary    = new BinaryPattern();
+		@Var ZMatchFunction MatchComparator    = new ComparatorPattern();
 
 		NameSpace.DefineSyntax("null", new NullPattern());
 		NameSpace.DefineSyntax("true", new TruePattern());

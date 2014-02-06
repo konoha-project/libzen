@@ -100,14 +100,14 @@ public class JavaMethodTable {
 		ZType FloatArrayType = ZTypePool.GetGenericType1(ZType.ArrayType, ZType.FloatType);
 		ZType StringArrayType = ZTypePool.GetGenericType1(ZType.ArrayType, ZType.StringType);
 
-		Import(ZType.ArrayType, "[]", ZType.IntType, zen.deps.ZenObjectArray.class, "GetIndex");
-		Import(ZType.ArrayType, "[]=", ZType.IntType, zen.deps.ZenObjectArray.class, "SetIndex", Object.class);
-		Import(IntArrayType, "[]", ZType.IntType, zen.deps.ZenIntArray.class, "GetIndex");
-		Import(IntArrayType, "[]=", ZType.IntType, zen.deps.ZenIntArray.class, "SetIndex", long.class);
-		Import(FloatArrayType, "[]", ZType.IntType, zen.deps.ZenFloatArray.class, "GetIndex");
-		Import(FloatArrayType, "[]=", ZType.IntType, zen.deps.ZenFloatArray.class, "SetIndex", double.class);
-		Import(StringArrayType, "[]", ZType.IntType, zen.deps.ZenStringArray.class, "GetIndex");
-		Import(StringArrayType, "[]=", ZType.IntType, zen.deps.ZenStringArray.class, "SetIndex", String.class);
+		Import(ZType.ArrayType, "[]", ZType.IntType, zen.deps.ZObjectArray.class, "GetIndex");
+		Import(ZType.ArrayType, "[]=", ZType.IntType, zen.deps.ZObjectArray.class, "SetIndex", Object.class);
+		Import(IntArrayType, "[]", ZType.IntType, zen.deps.ZIntArray.class, "GetIndex");
+		Import(IntArrayType, "[]=", ZType.IntType, zen.deps.ZIntArray.class, "SetIndex", long.class);
+		Import(FloatArrayType, "[]", ZType.IntType, zen.deps.ZFloatArray.class, "GetIndex");
+		Import(FloatArrayType, "[]=", ZType.IntType, zen.deps.ZFloatArray.class, "SetIndex", double.class);
+		Import(StringArrayType, "[]", ZType.IntType, zen.deps.ZStringArray.class, "GetIndex");
+		Import(StringArrayType, "[]=", ZType.IntType, zen.deps.ZStringArray.class, "SetIndex", String.class);
 
 		Import(boolean.class, CastApi.class, "toObject");
 		Import(byte.class, CastApi.class, "toObject");
