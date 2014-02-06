@@ -7,7 +7,7 @@ import zen.parser.ZTokenContext;
 public class SuffixExpressionPattern extends ZenMatchFunction {
 
 	@Override public ZNode Invoke(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
-		return ZenGrammar.DispatchPattern(ParentNode, TokenContext, LeftNode, false, false);
+		return ExpressionPattern.DispatchPattern(ParentNode, TokenContext, LeftNode, false, false);
 	}
 
 }
