@@ -76,7 +76,7 @@ class AsmClassBuilder {
 
 	void OutputClassFile() {  // This is used for debug
 		byte[] ba = this.GenerateBytecode();
-		System.out.println("*debug info*: generating" + this.ClassName + ".class");
+		System.out.println("*debug info*: generating " + this.ClassName + ".class");
 		System.out.println("*debug info*: check it out with javap -c " + this.ClassName + ".class");
 		File file = new File(this.ClassName + ".class");
 		try {
