@@ -120,7 +120,7 @@ public abstract class ZTypeChecker extends ZVisitor {
 			}
 			return Node;
 		}
-		if(Node.IsVarType() || ContextType.IsVarType() || ZUtils.IsFlag(TypeCheckPolicy, NoCheckPolicy)) {
+		if(Node.IsUntyped() || ContextType.IsVarType() || ZUtils.IsFlag(TypeCheckPolicy, NoCheckPolicy)) {
 			return Node;
 		}
 		if(Node.Type == ContextType || ContextType.Accept(Node.Type)) {
@@ -170,7 +170,7 @@ public abstract class ZTypeChecker extends ZVisitor {
 				ZNode SubNode = List.GetListAt(i);
 				SubNode = this.CheckType(SubNode, ZType.VarType);
 				List.SetListAt(i, SubNode);
-				if(SubNode.IsVarType()) {
+				if(SubNode.IsUntyped()) {
 					AllTyped = false;
 				}
 				i = i + 1;
@@ -198,54 +198,6 @@ public abstract class ZTypeChecker extends ZVisitor {
 		Node.Type = Type;
 		if(this.ReturnedNode != null) {
 			this.FIXME("previous returned node " + Node);
-		}
-		this.ReturnedNode = Node;
-	}
-
-	public final void TypedNodeIf(ZNode Node, ZType Type, int BeginIndex, int EndIndex) {
-		@Var int i = BeginIndex;
-		while(i < EndIndex) {
-			if(Node.AST[i].HasUntypedNode()) {
-				this.FIXME("untyped i = " + i + ", " + Node + "/" + Node.AST[i]);
-				Type = ZType.VarType;
-				break;
-			}
-			i = i + 1;
-		}
-		Node.Type = Type;
-		this.ReturnedNode = Node;
-	}
-
-	public final void TypedNodeIf(ZNode Node, ZType Type, int BeginIndex) {
-		this.TypedNodeIf(Node, Type, BeginIndex, BeginIndex+1);
-	}
-
-	public final void TypedNodeIf(ZNode Node, ZType Type, ZNode P1) {
-		if(P1.IsVarType()) {
-			Node.Type = ZType.VarType;
-		}
-		else {
-			Node.Type = Type;
-		}
-		this.ReturnedNode = Node;
-	}
-
-	public final void TypedNodeIf2(ZNode Node, ZType Type, ZNode P1, ZNode P2) {
-		if(P1.IsVarType() || P2.IsVarType()) {
-			Node.Type = ZType.VarType;
-		}
-		else {
-			Node.Type = Type;
-		}
-		this.ReturnedNode = Node;
-	}
-
-	public final void TypedNodeIf3(ZNode Node, ZType Type, ZNode P1, ZNode P2, ZNode P3) {
-		if(P1.IsVarType() || P2.IsVarType() || P3.IsVarType()) {
-			Node.Type = ZType.VarType;
-		}
-		else {
-			Node.Type = Type;
 		}
 		this.ReturnedNode = Node;
 	}

@@ -41,20 +41,6 @@ public final class ZNewObjectNode extends ZListNode {
 		Visitor.VisitNewObjectNode(this);
 	}
 
-	@Override public final boolean HasUntypedNode() {
-		if(!this.IsVarType()) {
-			@Var int i = 0;
-			while(i < this.size()) {
-				if(this.AST[i].HasUntypedNode()) {
-					return true;
-				}
-				i = i + 1;
-			}
-			return false;
-		}
-		return true;
-	}
-
 	public final ZFuncCallNode ToStaticFuncCall(ZFunc Func) {
 		ZGetNameNode Dummy = new ZGetNameNode(null, this.SourceToken, Func.FuncName);
 		ZFuncCallNode FuncNode = new ZFuncCallNode(this.ParentNode, Dummy);

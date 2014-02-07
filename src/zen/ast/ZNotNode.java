@@ -34,7 +34,4 @@ public class ZNotNode extends ZUnaryNode {
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitNotNode(this);
 	}
-	@Override public final boolean HasUntypedNode() {
-		return this.AST[ZUnaryNode.Recv].HasUntypedNode();
-	}
 }

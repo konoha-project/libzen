@@ -43,7 +43,4 @@ public final class ZInstanceOfNode extends ZNode {
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitInstanceOfNode(this);
 	}
-	@Override public final boolean HasUntypedNode() {
-		return this.AST[ZInstanceOfNode.Left].HasUntypedNode();
-	}
 }

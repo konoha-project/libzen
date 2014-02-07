@@ -35,8 +35,4 @@ public class ZComparatorNode extends ZBinaryNode {
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitComparatorNode(this);
 	}
-	@Override public final boolean HasUntypedNode() {
-		return this.AST[ZBinaryNode.Left].HasUntypedNode() || this.AST[ZBinaryNode.Right].HasUntypedNode();
-	}
-
 }

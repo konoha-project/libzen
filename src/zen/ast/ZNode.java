@@ -42,8 +42,9 @@ public abstract class ZNode {
 
 	@Field public ZNode ParentNode;
 	@Field public ZToken SourceToken;
-	@Field public ZType	Type = ZType.VarType;
 	@Field public ZNode  AST[];
+	@Field public ZType	Type = ZType.VarType;
+	@Field public boolean HasUntypedNode = true;
 
 	public ZNode(ZNode ParentNode, ZToken SourceToken, int Size) {
 		assert(this != ParentNode);
@@ -147,12 +148,32 @@ public abstract class ZNode {
 		LibNative.DispatchVisitNode(Visitor, this);
 	}
 
-	public final boolean IsVarType() {
+	public final boolean IsUntyped() {
 		return this.Type.IsVarType();
 	}
 
-	public boolean HasUntypedNode() {
-		return this.Type.IsVarType();
+	public final int GetAstSize() {
+		if(this.AST == null) {
+			return 0;
+		}
+		return this.AST.length;
+	}
+
+	public final boolean HasUntypedNode() {
+		if(this.HasUntypedNode) {
+			if(!this.IsUntyped()) {
+				@Var int i = 0;
+				while(i < this.GetAstSize()) {
+					if(this.AST[i] != null && this.AST[i].HasUntypedNode()) {
+						return true;
+					}
+					i = i + 1;
+				}
+				this.HasUntypedNode = false;
+				return false;
+			}
+		}
+		return this.HasUntypedNode;
 	}
 
 	public ZReturnNode ToReturnNode() {

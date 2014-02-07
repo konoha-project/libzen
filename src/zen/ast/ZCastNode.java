@@ -43,9 +43,4 @@ public class ZCastNode extends ZNode {
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitCastNode(this);
 	}
-
-	@Override public boolean HasUntypedNode() {
-		return this.AST[ZCastNode.Expr].HasUntypedNode();
-	}
-
 }

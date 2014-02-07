@@ -60,13 +60,6 @@ public class ZFunctionNode extends ZListNode {
 		Visitor.VisitFunctionNode(this);
 	}
 
-	@Override public final boolean HasUntypedNode() {
-		if(this.GlobalName != null) {
-			return false;
-		}
-		return this.IsVarType() || this.AST[ZFunctionNode.Block].IsVarType();
-	}
-
 	public final ZParamNode GetParamNode(int Index) {
 		@Var ZNode Node = this.GetListAt(Index);
 		if(Node instanceof ZParamNode) {

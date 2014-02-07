@@ -39,14 +39,14 @@ public final class ZVarScope {
 	}
 
 	public final void CheckVarNode(ZType ContextType, ZNode Node) {
-		if(Node.IsVarType()) {
+		if(Node.IsUntyped()) {
 			this.VarNodeCount = this.VarNodeCount + 1;
 		}
 		if(ContextType.IsInferrableType() && Node.Type instanceof ZVarType) {
 			((ZVarType)Node.Type).Infer(ContextType, Node.SourceToken);
 			Node.Type = ContextType;
 		}
-		if(ContextType instanceof ZVarType && !Node.IsVarType()) {
+		if(ContextType instanceof ZVarType && !Node.IsUntyped()) {
 			((ZVarType)ContextType).Infer(Node.Type, Node.SourceToken);
 		}
 	}
