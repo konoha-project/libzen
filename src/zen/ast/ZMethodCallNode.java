@@ -27,27 +27,29 @@ package zen.ast;
 import zen.deps.Field;
 import zen.deps.Var;
 import zen.lang.ZFunc;
-import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 
 public final class ZMethodCallNode extends ZListNode {
 	public final static int Recv = 0;
-	@Field public String MethodName;
-	public ZMethodCallNode(ZNode ParentNode, ZToken SourceToken, ZNode RecvNode, String MethodName) {
-		super(ParentNode, SourceToken, 1);
+	@Field public String MethodName = null;
+
+	public ZMethodCallNode(ZNode ParentNode, ZNode RecvNode) {
+		super(ParentNode, null, 1);
 		this.Set(ZMethodCallNode.Recv, RecvNode);
-		this.MethodName = MethodName;
+	}
+
+	@Override
+	public void SetName(String Name) {
+		this.MethodName = Name;
 	}
 
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitMethodCallNode(this);
 	}
-	//	public ZType[] GetParamType() {
-	//		return null;
-	//	}
 
 	public final ZFuncCallNode ToGetterFuncCall() {
-		ZGetterNode Getter = new ZGetterNode(null, this.SourceToken, this.AST[ZGetterNode.Recv], this.MethodName);
+		ZGetterNode Getter = new ZGetterNode(null, this.AST[ZGetterNode.Recv]);
+		this.SetName(this.MethodName);
 		ZFuncCallNode FuncNode = new ZFuncCallNode(this.ParentNode, Getter);
 		FuncNode.SourceToken = this.SourceToken;
 		@Var int i = 0;

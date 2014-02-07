@@ -32,12 +32,9 @@ public final class ZSetIndexNode extends ZNode {
 	public final static int Index = 1;
 	public final static int Expr  = 2;
 
-	public ZSetIndexNode(ZGetIndexNode Node) {
-		super(Node.ParentNode, Node.SourceToken, 3);
-		this.Type = Node.Type;
-		this.SourceToken = Node.SourceToken;
-		this.Set(ZSetIndexNode.Recv, Node.AST[ZGetIndexNode.Recv]);
-		this.Set(ZSetIndexNode.Index, Node.AST[ZGetIndexNode.Index]);
+	public ZSetIndexNode(ZNode ParentNode, ZNode LeftNode) {
+		super(ParentNode, null, 3);
+		this.Set(ZSetIndexNode.Recv, LeftNode);
 	}
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitSetIndexNode(this);

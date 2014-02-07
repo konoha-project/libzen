@@ -37,5 +37,4 @@ public class ZObject implements ZTypedObject {
 	@Override public final ZType GetZenType() {
 		return this.ZenType;
 	}
-
 }

@@ -150,24 +150,24 @@ public final class ZNameSpace {
 		}
 	}
 
-	public void DefineSyntax(String PatternName, ZMatchFunction MatchFunc) {
+	public void DefineExpression(String PatternName, ZMatchFunction MatchFunc) {
 		@Var int Alias = PatternName.indexOf(" ");
 		@Var String Name = (Alias == -1) ? PatternName : PatternName.substring(0, Alias);
 		@Var ZSyntaxPattern Pattern = new ZSyntaxPattern(this, Name, MatchFunc);
 		this.AppendSyntaxPattern(Name, Pattern);
 		if(Alias != -1) {
-			this.DefineSyntax(PatternName.substring(Alias+1), MatchFunc);
+			this.DefineExpression(PatternName.substring(Alias+1), MatchFunc);
 		}
 	}
 
-	public void DefineSuffixSyntax(String PatternName, int SyntaxFlag, ZMatchFunction MatchFunc) {
+	public void DefineRightExpression(String PatternName, int SyntaxFlag, ZMatchFunction MatchFunc) {
 		@Var int Alias = PatternName.indexOf(" ");
 		@Var String Name = (Alias == -1) ? PatternName : PatternName.substring(0, Alias);
 		@Var ZSyntaxPattern Pattern = new ZSyntaxPattern(this, Name, MatchFunc);
 		Pattern.SyntaxFlag = SyntaxFlag;
 		this.AppendSyntaxPattern(ZNameSpace.SuffixPatternSymbol(Name), Pattern);
 		if(Alias != -1) {
-			this.DefineSuffixSyntax(PatternName.substring(Alias+1), SyntaxFlag, MatchFunc);
+			this.DefineRightExpression(PatternName.substring(Alias+1), SyntaxFlag, MatchFunc);
 		}
 	}
 

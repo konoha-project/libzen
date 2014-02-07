@@ -41,16 +41,17 @@ import libzen.grammar.FalsePattern;
 import libzen.grammar.FieldPattern;
 import libzen.grammar.FloatLiteralPattern;
 import libzen.grammar.FunctionPattern;
+import libzen.grammar.GetIndexPattern;
 import libzen.grammar.GetterPattern;
 import libzen.grammar.GroupPattern;
 import libzen.grammar.IfPattern;
 import libzen.grammar.ImportPattern;
-import libzen.grammar.IndexerPattern;
 import libzen.grammar.InstanceOfPattern;
 import libzen.grammar.IntLiteralPattern;
 import libzen.grammar.LetPattern;
 import libzen.grammar.MapEntryPattern;
 import libzen.grammar.MapLiteralPattern;
+import libzen.grammar.MethodCallPattern;
 import libzen.grammar.NamePattern;
 import libzen.grammar.NameToken;
 import libzen.grammar.NewLineToken;
@@ -63,6 +64,8 @@ import libzen.grammar.OrPattern;
 import libzen.grammar.ParamPattern;
 import libzen.grammar.PathPattern;
 import libzen.grammar.ReturnPattern;
+import libzen.grammar.SetIndexPattern;
+import libzen.grammar.SetterPattern;
 import libzen.grammar.StatementEndPattern;
 import libzen.grammar.StatementPattern;
 import libzen.grammar.StringLiteralPattern;
@@ -683,7 +686,6 @@ public class KonohaGrammar {
 	//	}
 
 	public static void ImportGrammar(ZNameSpace NameSpace, Class<?> Grammar) {
-		// defined type system
 		NameSpace.SetTypeName(ZType.VoidType,  null);
 		NameSpace.SetTypeName(ZType.BooleanType, null);
 		NameSpace.SetTypeName(ZType.IntType, null);
@@ -707,89 +709,92 @@ public class KonohaGrammar {
 		@Var ZMatchFunction MatchBinary    = new BinaryPattern();
 		@Var ZMatchFunction MatchComparator    = new ComparatorPattern();
 
-		NameSpace.DefineSyntax("null", new NullPattern());
-		NameSpace.DefineSyntax("true", new TruePattern());
-		NameSpace.DefineSyntax("false", new FalsePattern());
+		NameSpace.DefineExpression("null", new NullPattern());
+		NameSpace.DefineExpression("true", new TruePattern());
+		NameSpace.DefineExpression("false", new FalsePattern());
 
-		NameSpace.DefineSyntax("+", MatchUnary);
-		NameSpace.DefineSyntax("-", MatchUnary);
-		NameSpace.DefineSyntax("~", MatchUnary);
-		NameSpace.DefineSyntax("!", new NotPattern());
+		NameSpace.DefineExpression("+", MatchUnary);
+		NameSpace.DefineExpression("-", MatchUnary);
+		NameSpace.DefineExpression("~", MatchUnary);
+		NameSpace.DefineExpression("!", new NotPattern());
 		//		NameSpace.AppendSyntax("++ --", new Incl"));
 
-		NameSpace.DefineSuffixSyntax("* / %", ZenPrecedence.CStyleMUL, MatchBinary);
-		NameSpace.DefineSuffixSyntax("+ -", ZenPrecedence.CStyleADD, MatchBinary);
+		NameSpace.DefineRightExpression("* / %", ZenPrecedence.CStyleMUL, MatchBinary);
+		NameSpace.DefineRightExpression("+ -", ZenPrecedence.CStyleADD, MatchBinary);
 
-		NameSpace.DefineSuffixSyntax("< <= > >=", ZenPrecedence.CStyleCOMPARE, MatchComparator);
-		NameSpace.DefineSuffixSyntax("== !=", ZenPrecedence.CStyleEquals, MatchComparator);
+		NameSpace.DefineRightExpression("< <= > >=", ZenPrecedence.CStyleCOMPARE, MatchComparator);
+		NameSpace.DefineRightExpression("== !=", ZenPrecedence.CStyleEquals, MatchComparator);
 
-		NameSpace.DefineSuffixSyntax("<< >>", ZenPrecedence.CStyleSHIFT, MatchBinary);
-		NameSpace.DefineSuffixSyntax("&", ZenPrecedence.CStyleBITAND, MatchBinary);
-		NameSpace.DefineSuffixSyntax("|", ZenPrecedence.CStyleBITOR, MatchBinary);
-		NameSpace.DefineSuffixSyntax("^", ZenPrecedence.CStyleBITXOR, MatchBinary);
+		NameSpace.DefineRightExpression("<< >>", ZenPrecedence.CStyleSHIFT, MatchBinary);
+		NameSpace.DefineRightExpression("&", ZenPrecedence.CStyleBITAND, MatchBinary);
+		NameSpace.DefineRightExpression("|", ZenPrecedence.CStyleBITOR, MatchBinary);
+		NameSpace.DefineRightExpression("^", ZenPrecedence.CStyleBITXOR, MatchBinary);
 
-		NameSpace.DefineSuffixSyntax("=", ZenPrecedence.CStyleAssign | ZParserConst.LeftJoin, MatchBinary);
+		NameSpace.DefineRightExpression("=", ZenPrecedence.CStyleAssign | ZParserConst.LeftJoin, MatchBinary);
 		//		NameSpace.AppendSuffixSyntax("+= -= *= /= %= <<= >>= &= |= ^=", ZenPrecedence.CStyleAssign, MatchBinary);
 		//		NameSpace.AppendExtendedSyntax("++ --", 0, new Incl"));
 
-		NameSpace.DefineSuffixSyntax("&&", ZenPrecedence.CStyleAND, new AndPattern());
-		NameSpace.DefineSuffixSyntax("||", ZenPrecedence.CStyleOR, new OrPattern());
+		NameSpace.DefineRightExpression("&&", ZenPrecedence.CStyleAND, new AndPattern());
+		NameSpace.DefineRightExpression("||", ZenPrecedence.CStyleOR, new OrPattern());
 
 		//		NameSpace.AppendExtendedSyntax("?", 0, new TrinaryPattern());
 
 		//		NameSpace.DefineSyntax("$Error$", new ErrorPattern());
-		NameSpace.DefineSyntax("$Type$",new TypePattern());
-		NameSpace.DefineSyntax("$TypeSuffix$", new TypeSuffixPattern());
-		NameSpace.DefineSyntax("$TypeAnnotation$", new TypeAnnotationPattern());
+		NameSpace.DefineExpression("$Type$",new TypePattern());
+		NameSpace.DefineExpression("$TypeSuffix$", new TypeSuffixPattern());
+		NameSpace.DefineExpression("$TypeAnnotation$", new TypeAnnotationPattern());
 
-		NameSpace.DefineSyntax("$StringLiteral$", new StringLiteralPattern());
-		NameSpace.DefineSyntax("$IntegerLiteral$", new IntLiteralPattern());
-		NameSpace.DefineSyntax("$FloatLiteral$", new FloatLiteralPattern());
+		NameSpace.DefineExpression("$StringLiteral$", new StringLiteralPattern());
+		NameSpace.DefineExpression("$IntegerLiteral$", new IntLiteralPattern());
+		NameSpace.DefineExpression("$FloatLiteral$", new FloatLiteralPattern());
 
-		NameSpace.DefineSuffixSyntax(".", 0, new GetterPattern());
+		NameSpace.DefineRightExpression(".", 0, new GetterPattern());
+		NameSpace.DefineRightExpression(".", 0, new SetterPattern());
+		NameSpace.DefineRightExpression(".", 0, new MethodCallPattern());
 
-		NameSpace.DefineSyntax("(", new GroupPattern());
-		NameSpace.DefineSyntax("(", new CastPattern());
-		NameSpace.DefineSuffixSyntax("(", 0, new ApplyPattern());
+		NameSpace.DefineExpression("(", new GroupPattern());
+		NameSpace.DefineExpression("(", new CastPattern());
+		NameSpace.DefineRightExpression("(", 0, new ApplyPattern());
 
-		NameSpace.DefineSuffixSyntax("[", 0, new IndexerPattern());
-		NameSpace.DefineSyntax("[", new ArrayLiteralPattern());
-		NameSpace.DefineSyntax("$MapEntry$", new MapEntryPattern());
-		NameSpace.DefineSyntax("{", new MapLiteralPattern());
-		NameSpace.DefineSyntax("new", new NewObjectPattern());
+		NameSpace.DefineRightExpression("[", 0, new GetIndexPattern());
+		NameSpace.DefineRightExpression("[", 0, new SetIndexPattern());
+		NameSpace.DefineExpression("[", new ArrayLiteralPattern());
+		NameSpace.DefineExpression("$MapEntry$", new MapEntryPattern());
+		NameSpace.DefineExpression("{", new MapLiteralPattern());
+		NameSpace.DefineExpression("new", new NewObjectPattern());
 
 		NameSpace.DefineStatement(";", new StatementEndPattern());
-		NameSpace.DefineSyntax("$Block$", new BlockPattern());
-		NameSpace.DefineSyntax("$Annotation$", new AnnotationPattern());
-		NameSpace.DefineSyntax("$SymbolExpression$", new SymbolExpressionPattern());
+		NameSpace.DefineExpression("$Block$", new BlockPattern());
+		NameSpace.DefineExpression("$Annotation$", new AnnotationPattern());
+		NameSpace.DefineExpression("$SymbolExpression$", new SymbolExpressionPattern());
 		// don't change DefineStatement for $SymbolStatement$
-		NameSpace.DefineSyntax("$SymbolStatement$", new SymbolStatementPattern());
-		NameSpace.DefineSyntax("$Statement$", new StatementPattern());
-		NameSpace.DefineSyntax("$Expression$", new ExpressionPattern());
-		NameSpace.DefineSyntax("$SuffixExpression$", new SuffixExpressionPattern());
+		NameSpace.DefineExpression("$SymbolStatement$", new SymbolStatementPattern());
+		NameSpace.DefineExpression("$Statement$", new StatementPattern());
+		NameSpace.DefineExpression("$Expression$", new ExpressionPattern());
+		NameSpace.DefineExpression("$SuffixExpression$", new SuffixExpressionPattern());
 
 		NameSpace.DefineStatement("if", new IfPattern());
 		NameSpace.DefineStatement("return", new ReturnPattern());
 		NameSpace.DefineStatement("while", new WhilePattern());
 		NameSpace.DefineStatement("break", new BreakPattern());
 
-		NameSpace.DefineSyntax("$Name$", new NamePattern());
+		NameSpace.DefineExpression("$Name$", new NamePattern());
 		NameSpace.DefineStatement("var",  new VarPattern());
-		NameSpace.DefineSyntax("$Param$", new ParamPattern());
-		NameSpace.DefineSyntax("function", new FunctionPattern());
+		NameSpace.DefineExpression("$Param$", new ParamPattern());
+		NameSpace.DefineExpression("function", new FunctionPattern());
 		NameSpace.DefineStatement("let", new LetPattern());
 		NameSpace.Generator.AppendGrammarInfo("zen-0.1");
 
 		NameSpace.DefineStatement("try", new TryPattern());
-		NameSpace.DefineSyntax("$Catch$", new CatchPattern());
+		NameSpace.DefineExpression("$Catch$", new CatchPattern());
 		NameSpace.DefineStatement("throw", new ThrowPattern());
 		NameSpace.Generator.AppendGrammarInfo("zen-trycatch-0.1");
 
-		NameSpace.DefineSuffixSyntax("instanceof", ZenPrecedence.Instanceof, new InstanceOfPattern());
+		NameSpace.DefineRightExpression("instanceof", ZenPrecedence.Instanceof, new InstanceOfPattern());
 		NameSpace.DefineStatement("class", new ClassPattern());
-		NameSpace.DefineSyntax("$FieldDecl$", new FieldPattern());
+		NameSpace.DefineExpression("$FieldDecl$", new FieldPattern());
 		NameSpace.DefineStatement("import", new ImportPattern());
-		NameSpace.DefineSyntax("$Path$", new PathPattern());
+		NameSpace.DefineExpression("$Path$", new PathPattern());
 
 		NameSpace.Generator.AppendGrammarInfo("zen-class-0.1");
 	}

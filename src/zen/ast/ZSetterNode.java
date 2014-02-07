@@ -25,21 +25,22 @@
 package zen.ast;
 
 import zen.deps.Field;
-import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 
 public final class ZSetterNode extends ZNode {
 	public final static int Recv = 0;
 	public final static int Expr = 1;
+	@Field public String  FieldName = null;
 
-	@Field public String  FieldName;
-	@Deprecated public ZNode  SetterValueNode = null;
-
-	public ZSetterNode(ZNode ParentNode, ZToken SourceToken, ZNode RecvNode, String FieldName) {
-		super(ParentNode, SourceToken, 2);
-		this.FieldName = FieldName;
+	public ZSetterNode(ZNode ParentNode, ZNode RecvNode) {
+		super(ParentNode, null, 2);
 		this.Set(ZSetterNode.Recv, RecvNode);
 	}
+
+	@Override public void SetName(String Name) {
+		this.FieldName = Name;
+	}
+
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitSetterNode(this);
 	}
