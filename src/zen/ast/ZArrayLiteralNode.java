@@ -24,6 +24,7 @@
 
 package zen.ast;
 
+import zen.deps.Var;
 import zen.parser.ZVisitor;
 
 public final class ZArrayLiteralNode extends ZListNode {
@@ -32,5 +33,18 @@ public final class ZArrayLiteralNode extends ZListNode {
 	}
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitArrayLiteralNode(this);
+	}
+	@Override public final boolean HasUntypedNode() {
+		if(!this.IsVarType()) {
+			@Var int i = 0;
+			while(i < this.size()) {
+				if(this.AST[i].HasUntypedNode()) {
+					return true;
+				}
+				i = i + 1;
+			}
+			return false;
+		}
+		return true;
 	}
 }

@@ -126,20 +126,17 @@ public class ZenTypeSafer extends ZTypeChecker {
 	}
 
 	@Override public void VisitArrayLiteralNode(ZArrayLiteralNode Node) {
-		//		@Var ZNameSpace NameSpace = Node.GetNameSpace();
 		@Var ZType ArrayType = this.GetContextType();
 		@Var ZType ElementType = ZType.VarType;
 		if(ArrayType.IsArrayType()) {
 			ElementType = ArrayType.GetParamType(0);
 		}
-		@Var boolean AllTyped = true;
 		@Var int i = 0;
 		while(i < Node.GetListSize()) {
 			ZNode SubNode = Node.GetListAt(i);
 			SubNode = this.CheckType(SubNode, ElementType);
 			Node.SetListAt(i, SubNode);
 			if(SubNode.IsVarType()) {
-				AllTyped = false;
 				ArrayType = ZType.VarType;
 			}
 			else {
@@ -149,7 +146,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 			}
 			i = i + 1;
 		}
-		if( AllTyped && !ElementType.IsVarType()) {
+		if(!ElementType.IsVarType()) {
 			ArrayType = ZTypePool.GetGenericType1(ZType.ArrayType, ElementType);
 		}
 		this.TypedNode(Node, ArrayType);

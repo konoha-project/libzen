@@ -24,11 +24,15 @@ public class ZListNode extends ZNode {
 		}
 	}
 
-	public final int GetListSize() {
+	public final int size() {
 		if(this.AST == null) {
 			return 0;
 		}
-		return this.AST.length - this.ListStartIndex;
+		return this.AST.length;
+	}
+
+	public final int GetListSize() {
+		return this.size() - this.ListStartIndex;
 	}
 
 	public final ZNode GetListAt(int Index) {
