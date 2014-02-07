@@ -419,7 +419,7 @@ public class ZenEngine extends ZVisitor {
 	//	}
 	//
 	//	public final boolean LoadRequiredLib(String LibName) {
-	//		@Var String Key = ZParserConst.NativeNameSuffix + "L" + LibName.toLowerCase();
+	//		@Var String Key = ZParserConst.NativeNameRight + "L" + LibName.toLowerCase();
 	//		if(!this.HasSymbol(Key)) {
 	//			@Var String Path = LibZen.GetLibPath(this.Generator.TargetCode, LibName);
 	//			@Var String Script = LibNative.LoadTextFile(Path);

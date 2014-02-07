@@ -197,7 +197,7 @@ public class ZType  {
 	}
 
 	public final String GetNativeName() {
-		return this.GetBaseType().ShortName + ZTypeFlag.NativeNameSuffix + this.TypeId;
+		return this.GetBaseType().ShortName + ZTypeFlag.NativeNameRight + this.TypeId;
 	}
 
 	public final boolean AcceptValue(Object Value) {

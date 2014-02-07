@@ -76,8 +76,8 @@ import parser.ast.ZenSetterNode;
 import parser.ast.ZenSliceNode;
 import parser.ast.ZenStatementNode;
 import parser.ast.ZenStringNode;
-import parser.ast.ZenSuffixDeclNode;
-import parser.ast.ZenSuffixInclNode;
+import parser.ast.ZenRightDeclNode;
+import parser.ast.ZenRightInclNode;
 import parser.ast.ZenSwitchNode;
 import parser.ast.ZenThrowNode;
 import parser.ast.ZenTrinaryNode;
@@ -327,13 +327,13 @@ public class CSourceGenerator extends ZenSourceGenerator {
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override public void VisitSuffixInclNode(ZenSuffixInclNode Node) {
+	@Override public void VisitRightInclNode(ZenRightInclNode Node) {
 		this.CurrentBuilder.Append("(");
 		Node.AST[ZGetterNode.Recv].Accept(this);
 		this.CurrentBuilder.Append("++)");
 	}
 
-	@Override public void VisitSuffixDeclNode(ZenSuffixDeclNode Node) {
+	@Override public void VisitRightDeclNode(ZenRightDeclNode Node) {
 		this.CurrentBuilder.Append("(");
 		Node.AST[ZGetterNode.Recv].Accept(this);
 		this.CurrentBuilder.Append("--)");

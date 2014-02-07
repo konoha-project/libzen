@@ -13,7 +13,7 @@ public class TypePattern extends ZMatchFunction {
 		@Var ZToken Token = TokenContext.GetToken(ZTokenContext.MoveNext);
 		@Var ZTypeNode TypeNode = ParentNode.GetNameSpace().GetTypeNode(Token.GetText(), Token);
 		if(TypeNode != null) {
-			return TokenContext.ParsePatternAfter(ParentNode, TypeNode, "$TypeSuffix$", ZTokenContext.Optional);
+			return TokenContext.ParsePatternAfter(ParentNode, TypeNode, "$TypeRight$", ZTokenContext.Optional);
 		}
 		return null; // Not Matched
 	}

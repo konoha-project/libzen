@@ -124,12 +124,12 @@ public final class ZNameSpace {
 		this.SyntaxTable.put(PatternName, Syntax);
 	}
 
-	public final static String SuffixPatternSymbol(String PatternName) {
+	public final static String RightPatternSymbol(String PatternName) {
 		return "\t" + PatternName;
 	}
 
-	public ZSyntaxPattern GetSuffixSyntaxPattern(String PatternName) {
-		return this.GetSyntaxPattern(ZNameSpace.SuffixPatternSymbol(PatternName));
+	public ZSyntaxPattern GetRightSyntaxPattern(String PatternName) {
+		return this.GetSyntaxPattern(ZNameSpace.RightPatternSymbol(PatternName));
 	}
 
 	private void AppendSyntaxPattern(String PatternName, ZSyntaxPattern NewPattern) {
@@ -165,7 +165,7 @@ public final class ZNameSpace {
 		@Var String Name = (Alias == -1) ? PatternName : PatternName.substring(0, Alias);
 		@Var ZSyntaxPattern Pattern = new ZSyntaxPattern(this, Name, MatchFunc);
 		Pattern.SyntaxFlag = SyntaxFlag;
-		this.AppendSyntaxPattern(ZNameSpace.SuffixPatternSymbol(Name), Pattern);
+		this.AppendSyntaxPattern(ZNameSpace.RightPatternSymbol(Name), Pattern);
 		if(Alias != -1) {
 			this.DefineRightExpression(PatternName.substring(Alias+1), SyntaxFlag, MatchFunc);
 		}

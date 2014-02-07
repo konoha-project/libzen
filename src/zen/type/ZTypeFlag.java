@@ -47,7 +47,7 @@ public abstract class ZTypeFlag {
 	//	public final static int     GenericVariable    = 1 << 15;
 	public final static int     UniqueType         = 1 << 16;
 
-	public static final String NativeNameSuffix = "__";
+	public static final String NativeNameRight = "__";
 
 
 }

@@ -51,6 +51,6 @@ public abstract class ZFuncFlag {
 	//	public final static int     StrongCoercionFunc  = 1 << 18;  //@StrongCoercion
 	//	public final static int     GenericFunc         = 1 << 15;
 	//	public final static int		LazyFunc		    = 1 << 16;
-	public final static String NativeNameSuffix = "__";
+	public final static String NativeNameRight = "__";
 
 }

@@ -83,7 +83,7 @@ public final class ZSourceContext extends ZSource {
 		if(EndIndex < this.SourceText.length()) {
 			@Var ZNameSpace NameSpace = this.TokenContext.NameSpace;
 			@Var String Token = this.SourceText.substring(StartIndex, EndIndex);
-			@Var ZSyntaxPattern Pattern = NameSpace.GetSuffixSyntaxPattern(Token);
+			@Var ZSyntaxPattern Pattern = NameSpace.GetRightSyntaxPattern(Token);
 			if(Pattern != null) {
 				return true;
 			}

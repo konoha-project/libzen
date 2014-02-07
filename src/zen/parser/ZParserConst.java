@@ -164,7 +164,7 @@ public abstract class ZParserConst {
 	public final static int LeftJoin						= 1 << 1;
 
 
-	public final static String NativeNameSuffix = "__";
+	public final static String NativeNameRight = "__";
 
 	public final static boolean UseLangStat = true;
 	/*ZenConst End*/

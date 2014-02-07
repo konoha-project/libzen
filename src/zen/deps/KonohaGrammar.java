@@ -70,7 +70,7 @@ import libzen.grammar.StatementEndPattern;
 import libzen.grammar.StatementPattern;
 import libzen.grammar.StringLiteralPattern;
 import libzen.grammar.StringLiteralToken;
-import libzen.grammar.SuffixExpressionPattern;
+import libzen.grammar.RightExpressionPattern;
 import libzen.grammar.SymbolExpressionPattern;
 import libzen.grammar.SymbolStatementPattern;
 import libzen.grammar.ThrowPattern;
@@ -78,7 +78,7 @@ import libzen.grammar.TruePattern;
 import libzen.grammar.TryPattern;
 import libzen.grammar.TypeAnnotationPattern;
 import libzen.grammar.TypePattern;
-import libzen.grammar.TypeSuffixPattern;
+import libzen.grammar.RightTypePattern;
 import libzen.grammar.UnaryPattern;
 import libzen.grammar.VarPattern;
 import libzen.grammar.WhilePattern;
@@ -268,12 +268,12 @@ public class KonohaGrammar {
 	//		@Var ZToken Token = TokenContext.GetToken(ZTokenContext.MoveNext);
 	//		@Var ZTypeNode TypeNode = ParentNode.GetNameSpace().GetTypeNode(Token.GetText(), Token);
 	//		if(TypeNode != null) {
-	//			return TokenContext.ParsePatternAfter(ParentNode, TypeNode, "$TypeSuffix$", ZTokenContext.Optional);
+	//			return TokenContext.ParsePatternAfter(ParentNode, TypeNode, "$TypeRight$", ZTokenContext.Optional);
 	//		}
 	//		return null; // Not Matched
 	//	}
 	//
-	//	public static ZNode MatchTypeSuffix(ZNode ParentNode, ZTokenContext TokenContext, ZNode TypeNode) {
+	//	public static ZNode MatchTypeRight(ZNode ParentNode, ZTokenContext TokenContext, ZNode TypeNode) {
 	//		@Var ZToken SourceToken = TokenContext.GetToken();
 	//		if(TypeNode.Type.GetParamSize() > 0) {
 	//			if(TokenContext.MatchToken("<")) {  // Generics
@@ -314,7 +314,7 @@ public class KonohaGrammar {
 	//		CastNode = TokenContext.MatchToken(CastNode, "(", ZTokenContext.Required);
 	//		CastNode = TokenContext.MatchPattern(CastNode, ZNode.TypeInfo, "$Type$", ZTokenContext.Required);
 	//		CastNode = TokenContext.MatchToken(CastNode, ")", ZTokenContext.Required);
-	//		CastNode = TokenContext.MatchPattern(CastNode, ZCastNode.Expr, "$SuffixExpression$", ZTokenContext.Required);
+	//		CastNode = TokenContext.MatchPattern(CastNode, ZCastNode.Expr, "$RightExpression$", ZTokenContext.Required);
 	//		return CastNode;
 	//	}
 	//
@@ -359,12 +359,12 @@ public class KonohaGrammar {
 	//
 	//	public static ZNode MatchUnary(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
 	//		@Var ZNode UnaryNode = new ZUnaryNode(ParentNode, TokenContext.GetToken(ZTokenContext.MoveNext));
-	//		return TokenContext.MatchPattern(UnaryNode, ZUnaryNode.Recv, "$SuffixExpression$", ZTokenContext.Required);
+	//		return TokenContext.MatchPattern(UnaryNode, ZUnaryNode.Recv, "$RightExpression$", ZTokenContext.Required);
 	//	}
 	//
 	//	public static ZNode MatchNot(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
 	//		@Var ZNode UnaryNode = new ZNotNode(ParentNode, TokenContext.GetToken(ZTokenContext.MoveNext));
-	//		UnaryNode = TokenContext.MatchPattern(UnaryNode, ZUnaryNode.Recv, "$SuffixExpression$", ZTokenContext.Required);
+	//		UnaryNode = TokenContext.MatchPattern(UnaryNode, ZUnaryNode.Recv, "$RightExpression$", ZTokenContext.Required);
 	//		return UnaryNode;
 	//	}
 	//
@@ -422,7 +422,7 @@ public class KonohaGrammar {
 	//		return ZenGrammar.DispatchPattern(ParentNode, TokenContext, LeftNode, false, true);
 	//	}
 	//
-	//	public static ZNode MatchSuffixExpression(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
+	//	public static ZNode MatchRightExpression(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
 	//		return ZenGrammar.DispatchPattern(ParentNode, TokenContext, LeftNode, false, false);
 	//	}
 	//
@@ -735,7 +735,7 @@ public class KonohaGrammar {
 		NameSpace.DefineRightExpression("||", ZenPrecedence.CStyleOR, new OrPattern());
 
 		NameSpace.DefineExpression("$Type$",new TypePattern());
-		NameSpace.DefineExpression("$TypeSuffix$", new TypeSuffixPattern());
+		NameSpace.DefineExpression("$TypeRight$", new RightTypePattern());
 		NameSpace.DefineExpression("$TypeAnnotation$", new TypeAnnotationPattern());
 
 		NameSpace.DefineExpression("$StringLiteral$", new StringLiteralPattern());
@@ -765,7 +765,7 @@ public class KonohaGrammar {
 		NameSpace.DefineExpression("$SymbolStatement$", new SymbolStatementPattern());
 		NameSpace.DefineExpression("$Statement$", new StatementPattern());
 		NameSpace.DefineExpression("$Expression$", new ExpressionPattern());
-		NameSpace.DefineExpression("$SuffixExpression$", new SuffixExpressionPattern());
+		NameSpace.DefineExpression("$RightExpression$", new RightExpressionPattern());
 
 		NameSpace.DefineStatement("if", new IfPattern());
 		NameSpace.DefineStatement("return", new ReturnPattern());

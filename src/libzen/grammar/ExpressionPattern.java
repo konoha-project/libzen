@@ -16,10 +16,10 @@ public class ExpressionPattern extends ZMatchFunction {
 		return ExpressionPattern.DispatchPattern(ParentNode, TokenContext, LeftNode, false, true);
 	}
 
-	static ZSyntaxPattern GetSuffixPattern(ZNameSpace NameSpace, ZTokenContext TokenContext) {
+	static ZSyntaxPattern GetRightPattern(ZNameSpace NameSpace, ZTokenContext TokenContext) {
 		@Var ZToken Token = TokenContext.GetToken();
 		if(Token != ZToken.NullToken) {
-			@Var ZSyntaxPattern Pattern = NameSpace.GetSuffixSyntaxPattern(Token.GetText());
+			@Var ZSyntaxPattern Pattern = NameSpace.GetRightSyntaxPattern(Token.GetText());
 			return Pattern;
 		}
 		return null;
@@ -63,14 +63,14 @@ public class ExpressionPattern extends ZMatchFunction {
 		}
 		if(!Pattern.IsStatement) {
 			while(LeftNode != null && !LeftNode.IsErrorNode()) {
-				@Var ZSyntaxPattern SuffixPattern = ExpressionPattern.GetSuffixPattern(NameSpace, TokenContext);
-				if(SuffixPattern == null) {
+				@Var ZSyntaxPattern RightPattern = ExpressionPattern.GetRightPattern(NameSpace, TokenContext);
+				if(RightPattern == null) {
 					break;
 				}
-				if(!AllowBinary && SuffixPattern.IsBinaryOperator()) {
+				if(!AllowBinary && RightPattern.IsBinaryOperator()) {
 					break;
 				}
-				LeftNode = TokenContext.ApplyMatchPattern(ParentNode, LeftNode, SuffixPattern, ZTokenContext.Required);
+				LeftNode = TokenContext.ApplyMatchPattern(ParentNode, LeftNode, RightPattern, ZTokenContext.Required);
 			}
 		}
 		return LeftNode;

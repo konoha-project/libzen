@@ -68,8 +68,8 @@ import parser.ast.ZenReturnNode;
 import parser.ast.ZenSetLocalNode;
 import parser.ast.ZenSetterNode;
 import parser.ast.ZenSliceNode;
-import parser.ast.ZenSuffixDeclNode;
-import parser.ast.ZenSuffixInclNode;
+import parser.ast.ZenRightDeclNode;
+import parser.ast.ZenRightInclNode;
 import parser.ast.ZenSwitchNode;
 import parser.ast.ZenThrowNode;
 import parser.ast.ZenTrinaryNode;
@@ -229,10 +229,10 @@ var CLASS = (function (_super) {
 	@Override public void VisitSliceNode(ZenSliceNode Node) {
 		this.DebugAppendNode(Node);
 	}
-	@Override public void VisitSuffixInclNode(ZenSuffixInclNode Node) {
+	@Override public void VisitRightInclNode(ZenRightInclNode Node) {
 		this.DebugAppendNode(Node);
 	}
-	@Override public void VisitSuffixDeclNode(ZenSuffixDeclNode Node) {
+	@Override public void VisitRightDeclNode(ZenRightDeclNode Node) {
 		this.DebugAppendNode(Node);
 	}
 	@Override public void VisitPrefixInclNode(ZenPrefixInclNode Node) {

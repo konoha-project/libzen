@@ -275,7 +275,7 @@ var CLASS = (function (_super) {
 	@Override public void VisitSliceNode(ZenSliceNode Node) {
 		this.DebugAppendNode(Node);
 	}
-//	@Override public void VisitSuffixNode(ZenSuffixNode Node) {
+//	@Override public void VisitRightNode(ZenRightNode Node) {
 //		this.DebugAppendNode(Node);
 //	}
 	@Override public void VisitUnaryNode(ZenUnaryNode Node) {

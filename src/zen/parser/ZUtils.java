@@ -54,6 +54,6 @@ public final class ZUtils {
 	}
 
 	public final static String NativeVariableName(String Name, int Index) {
-		return Name + ZParserConst.NativeNameSuffix + Index;
+		return Name + ZParserConst.NativeNameRight + Index;
 	}
 }

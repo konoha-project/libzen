@@ -11,11 +11,11 @@ import zen.parser.ZTokenContext;
 import zen.type.ZType;
 import zen.type.ZTypePool;
 
-public class TypeSuffixPattern extends ZMatchFunction {
+public class RightTypePattern extends ZMatchFunction {
 
-	@Override public ZNode Invoke(ZNode ParentNode, ZTokenContext TokenContext, ZNode TypeNode) {
+	@Override public ZNode Invoke(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftTypeNode) {
 		@Var ZToken SourceToken = TokenContext.GetToken();
-		if(TypeNode.Type.GetParamSize() > 0) {
+		if(LeftTypeNode.Type.GetParamSize() > 0) {
 			if(TokenContext.MatchToken("<")) {  // Generics
 				@Var ArrayList<ZType> TypeList = new ArrayList<ZType>();
 				while(!TokenContext.StartsWithToken(">")) {
@@ -24,20 +24,20 @@ public class TypeSuffixPattern extends ZMatchFunction {
 					}
 					@Var ZTypeNode ParamTypeNode = (ZTypeNode) TokenContext.ParsePattern(ParentNode, "$Type$", ZTokenContext.Optional);
 					if(ParamTypeNode == null) {
-						return TypeNode;
+						return LeftTypeNode;
 					}
 					TypeList.add(ParamTypeNode.Type);
 				}
-				TypeNode = new ZTypeNode(ParentNode, SourceToken, ZTypePool.GetGenericType(TypeNode.Type, 0, TypeList, true));
+				LeftTypeNode = new ZTypeNode(ParentNode, SourceToken, ZTypePool.GetGenericType(LeftTypeNode.Type, 0, TypeList, true));
 			}
 		}
 		while(TokenContext.MatchToken("[")) {  // Array
 			if(!TokenContext.MatchToken("]")) {
 				return null;
 			}
-			TypeNode = new ZTypeNode(ParentNode, SourceToken, ZTypePool.GetGenericType1(ZType.ArrayType, TypeNode.Type));
+			LeftTypeNode = new ZTypeNode(ParentNode, SourceToken, ZTypePool.GetGenericType1(ZType.ArrayType, LeftTypeNode.Type));
 		}
-		return TypeNode;
+		return LeftTypeNode;
 	}
 
 }

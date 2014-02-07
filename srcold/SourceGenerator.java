@@ -252,7 +252,7 @@ public class SourceGenerator extends ZenGenerator {
 		return JoinedCode + EndCode;
 	}
 
-	public final static String GenerateApplyFunc1(ZenFunc Func, String FuncName, boolean IsSuffixOp, String Arg1) {
+	public final static String GenerateApplyFunc1(ZenFunc Func, String FuncName, boolean IsRightOp, String Arg1) {
 		@Var String Macro = null;
 		if(Func != null) {
 			FuncName = Func.GetNativeFuncName();
@@ -261,7 +261,7 @@ public class SourceGenerator extends ZenGenerator {
 			}
 		}
 		if(Macro == null) {
-			if(IsSuffixOp) {
+			if(IsRightOp) {
 				Macro = "$1 " + FuncName;
 			}
 			else {
@@ -400,7 +400,7 @@ public class SourceGenerator extends ZenGenerator {
 		this.PushSourceCode(Program);
 	}
 
-//	@Override public void VisitSuffixNode(ZenSuffixNode Node) {
+//	@Override public void VisitRightNode(ZenRightNode Node) {
 //		@Var String FuncName = Node.SourceToken.GetText();
 //		@Var String Expr = this.VisitNode(Node.Expr);
 //		if(LibZen.EqualsString(FuncName, "++")) {

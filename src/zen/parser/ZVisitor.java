@@ -116,8 +116,8 @@ public abstract class ZVisitor {
 	//	public abstract void VisitTrinaryNode(ZenTrinaryNode Node);
 	//	public abstract void VisitPrefixInclNode(ZenPrefixInclNode Node);
 	//	public abstract void VisitPrefixDeclNode(ZenPrefixDeclNode Node);
-	//	public abstract void VisitSuffixInclNode(ZenSuffixInclNode Node);
-	//	public abstract void VisitSuffixDeclNode(ZenSuffixDeclNode Node);
+	//	public abstract void VisitRightInclNode(ZenRightInclNode Node);
+	//	public abstract void VisitRightDeclNode(ZenRightDeclNode Node);
 	//	public abstract void VisitRegexNode(ZenRegexNode Node);
 	//	public abstract void VisitApplyOverridedMethodNode(ZenApplyOverridedMethodNode Node);
 	//	public abstract void VisitSliceNode(ZenSliceNode Node);

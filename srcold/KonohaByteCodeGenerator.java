@@ -80,8 +80,8 @@ import parser.ast.ZenSetterNode;
 import parser.ast.ZenSliceNode;
 import parser.ast.ZenStatementNode;
 import parser.ast.ZenStringNode;
-import parser.ast.ZenSuffixDeclNode;
-import parser.ast.ZenSuffixInclNode;
+import parser.ast.ZenRightDeclNode;
+import parser.ast.ZenRightInclNode;
 import parser.ast.ZenSwitchNode;
 import parser.ast.ZenThrowNode;
 import parser.ast.ZenTrinaryNode;
@@ -475,11 +475,11 @@ public class KonohaByteCodeGenerator extends ZenSourceGenerator {
 		/*FIXME*/
 	}
 
-	@Override public void VisitSuffixInclNode(ZenSuffixInclNode Node) {
+	@Override public void VisitRightInclNode(ZenRightInclNode Node) {
 		/*FIXME*/
 	}
 
-	@Override public void VisitSuffixDeclNode(ZenSuffixDeclNode Node) {
+	@Override public void VisitRightDeclNode(ZenRightDeclNode Node) {
 		/*FIXME*/
 	}
 
