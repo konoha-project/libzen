@@ -27,7 +27,6 @@ package zen.ast;
 
 import zen.deps.Field;
 import zen.deps.LibNative;
-import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.parser.ZNameSpace;
 import zen.parser.ZToken;
@@ -67,6 +66,7 @@ public abstract class ZNode {
 	}
 
 	public void SetName(String Name) {
+		assert(Name == null);  // Set SetName in a sub class property
 	}
 
 	public void SetType(ZType Type) {
@@ -79,6 +79,7 @@ public abstract class ZNode {
 		}
 		else if(Index == ZNode.AppendIndex) {
 			@Var ZNode ListNode = this;
+			assert(ListNode instanceof ZListNode);
 			if(ListNode instanceof ZListNode) {
 				((ZListNode)ListNode).Append(Node);
 			}
@@ -92,7 +93,26 @@ public abstract class ZNode {
 	}
 
 	@Override public String toString() {
-		return "#" + this.getClass().getSimpleName() + LibZen.StringfyObject(this);
+		@Var String Self = "#" + this.getClass().getSimpleName();
+		if(this.AST != null) {
+			@Var int i = 0;
+			Self = Self + "[";
+			while(i < this.AST.length) {
+				if(i > 0) {
+					Self = Self + ",";
+				}
+				if(this.AST[i] == null) {
+					Self = Self + "null";
+				}
+				else {
+					Self = Self + this.AST[i].toString();
+				}
+				i = i + 1;
+			}
+			Self = Self + "]";
+		}
+		return Self;
+
 	}
 
 	public boolean IsErrorNode() {

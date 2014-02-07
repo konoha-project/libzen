@@ -37,17 +37,15 @@ public final class ZVarDeclNode extends ZBlockNode {
 	public final static int InitValue = 0;
 	@Field public ZType   DeclType = ZType.VarType;
 	@Field public String  NativeName = null;
-	@Deprecated public ZNode	VarDeclInitNode = null;
 
 	public ZVarDeclNode(ZNode ParentNode) {
 		super(ParentNode, 1);
 	}
-
-	@Override public void SetType(ZType Type) {
-		this.DeclType = Type;
-	}
 	@Override public void SetName(String Name) {
 		this.NativeName = Name;
+	}
+	@Override public void SetType(ZType Type) {
+		this.DeclType = Type;
 	}
 
 	@Override public void Accept(ZVisitor Visitor) {

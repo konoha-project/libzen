@@ -39,14 +39,17 @@ public class ZListNode extends ZNode {
 		this.Set(Index + this.ListStartIndex, Node);
 	}
 
-	public final void ClearList() {
-		if(this.ListStartIndex == 0) {
-			this.AST = null;
-		}
-		else {
-			@Var ZNode[] newAST = new ZNode[this.ListStartIndex];
-			System.arraycopy(this.AST, 0, newAST, 0, this.ListStartIndex);
-			this.AST = newAST;
+	public final void ClearList(int Size) {
+		if(Size < this.GetListSize()) {
+			@Var int newsize = this.ListStartIndex + Size;
+			if(newsize == 0) {
+				this.AST = null;
+			}
+			else {
+				@Var ZNode[] newAST = new ZNode[newsize];
+				System.arraycopy(this.AST, 0, newAST, 0, newsize);
+				this.AST = newAST;
+			}
 		}
 	}
 

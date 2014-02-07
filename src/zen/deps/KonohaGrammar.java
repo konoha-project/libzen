@@ -85,7 +85,6 @@ import libzen.grammar.WhilePattern;
 import libzen.grammar.WhiteSpaceToken;
 import zen.lang.ZenPrecedence;
 import zen.parser.ZNameSpace;
-import zen.parser.ZParserConst;
 import zen.type.ZType;
 
 public class KonohaGrammar {
@@ -730,16 +729,11 @@ public class KonohaGrammar {
 		NameSpace.DefineRightExpression("|", ZenPrecedence.CStyleBITOR, MatchBinary);
 		NameSpace.DefineRightExpression("^", ZenPrecedence.CStyleBITXOR, MatchBinary);
 
-		NameSpace.DefineRightExpression("=", ZenPrecedence.CStyleAssign | ZParserConst.LeftJoin, MatchBinary);
-		//		NameSpace.AppendSuffixSyntax("+= -= *= /= %= <<= >>= &= |= ^=", ZenPrecedence.CStyleAssign, MatchBinary);
-		//		NameSpace.AppendExtendedSyntax("++ --", 0, new Incl"));
+		//		NameSpace.DefineRightExpression("=", ZenPrecedence.CStyleAssign | ZParserConst.LeftJoin, MatchBinary);
 
 		NameSpace.DefineRightExpression("&&", ZenPrecedence.CStyleAND, new AndPattern());
 		NameSpace.DefineRightExpression("||", ZenPrecedence.CStyleOR, new OrPattern());
 
-		//		NameSpace.AppendExtendedSyntax("?", 0, new TrinaryPattern());
-
-		//		NameSpace.DefineSyntax("$Error$", new ErrorPattern());
 		NameSpace.DefineExpression("$Type$",new TypePattern());
 		NameSpace.DefineExpression("$TypeSuffix$", new TypeSuffixPattern());
 		NameSpace.DefineExpression("$TypeAnnotation$", new TypeAnnotationPattern());

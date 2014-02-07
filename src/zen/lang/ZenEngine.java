@@ -360,7 +360,7 @@ public class ZenEngine extends ZVisitor {
 		TokenContext.SkipEmptyStatement();
 		while(TokenContext.HasNext()) {
 			TokenContext.SetParseFlag(ZTokenContext.NotAllowSkipIndent); // init
-			TopBlockNode.ClearList();
+			TopBlockNode.ClearList(0);
 			@Var ZNode ParsedNode = TokenContext.ParsePattern(TopBlockNode, "$Statement$", ZTokenContext.Required);
 			ResultValue = this.Exec(ParsedNode, IsInteractive);
 			if(ResultValue == ZEmptyValue.FalseEmpty) {

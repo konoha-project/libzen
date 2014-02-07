@@ -580,6 +580,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 				BlockType = ZType.VarType;
 			}
 			if(SubNode.IsBreakingBlock()) {
+				Node.ClearList(i+1);
 				break;
 			}
 			i = i + 1;
@@ -588,13 +589,12 @@ public class ZenTypeSafer extends ZTypeChecker {
 	}
 
 	@Override public void VisitVarDeclNode(ZVarDeclNode Node) {
-		Node.AST[ZVarDeclNode.InitValue] = this.CheckType(Node.AST[ZVarDeclNode.InitValue], Node.DeclType);
+		this.CheckTypeAt(Node, ZVarDeclNode.InitValue, Node.DeclType);
 		if(!(Node.DeclType instanceof ZVarType)) {
 			Node.DeclType = this.VarScope.NewVarType(Node.DeclType, Node.NativeName, Node.SourceToken);
 			Node.NameSpace.SetLocalVariable(this.CurrentFunctionNode, Node.DeclType, Node.NativeName, Node.SourceToken);
 		}
 		this.VisitBlockNode(Node);
-		this.TypedNodeIf2(Node, ZType.VoidType, Node.AST[ZVarDeclNode.InitValue], Node);
 	}
 
 	@Override public void VisitIfNode(ZIfNode Node) {
