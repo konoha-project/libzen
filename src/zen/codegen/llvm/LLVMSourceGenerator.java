@@ -110,7 +110,7 @@ class LLVMSourceWriter {
 		this.HeaderCodeList.clear();
 		this.BodyCodeList.clear();
 	}
-	private String GetNowIndentString() {
+	private String GetCurrentIndentString() {
 		return this.GetIndentString(this.IndentLebel);
 	}
 	private String GetIndentString(int Level) {
@@ -186,7 +186,7 @@ class LLVMSourceWriter {
 		return null;
 	}
 	public void AppendLine(String Text) {
-		this.BodyCodeList.add(this.GetNowIndentString() + Text + "\n");
+		this.BodyCodeList.add(this.GetCurrentIndentString() + Text + "\n");
 	}
 	public void AppendBufferAsNewLine() {
 		this.AppendLine(this.PopCurrentBuffer());
@@ -196,7 +196,7 @@ class LLVMSourceWriter {
 	}
 	public void AppendBufferAsVarDeclLine() {
 		assert(this.BodyCodeList.size() > 2);
-		this.BodyCodeList.add(this.VarDeclCodeIndex++, this.GetNowIndentString() + this.PopCurrentBuffer() + "\n");
+		this.BodyCodeList.add(this.VarDeclCodeIndex++, this.GetCurrentIndentString() + this.PopCurrentBuffer() + "\n");
 	}
 	public void AppendLabel(String Label) {
 		this.BodyCodeList.add(Label + ": \n");
@@ -301,16 +301,16 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 			return "opaque";
 		}
 		else if(Type instanceof ZFuncType) {
-			ZType[] Types = ((ZFuncType)Type).TypeParams;
-			int Size = Types.length;
-			LibNative.Assert(Size > 0);
+			ZFuncType FuncType = (ZFuncType)Type;
+			int Size = FuncType.GetFuncParamSize();
+			LibNative.Assert(Size >= 0);
 
-			String FuncTypeString = this.GetTypeExpr(Types[0]) + " (";
-			for(int i = 1; i < Size; ++i) {
-				if(i > 1) {
+			String FuncTypeString = this.GetTypeExpr(FuncType.GetReturnType())+ " (";
+			for(int i = 0; i < Size; ++i) {
+				if(i > 0) {
 					FuncTypeString += ", ";
 				}
-				FuncTypeString += this.GetTypeExpr(Types[i]);
+				FuncTypeString += this.GetTypeExpr(FuncType.GetFuncParamType(i));
 			}
 			FuncTypeString += ")*";
 			return FuncTypeString;
