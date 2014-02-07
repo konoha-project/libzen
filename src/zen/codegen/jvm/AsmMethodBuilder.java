@@ -149,7 +149,7 @@ public class AsmMethodBuilder extends MethodNode {
 		return local;
 	}
 
-	@Deprecated void RemoveLocal(Class<?> JType, String Name) {
+	void RemoveLocal(Class<?> JType, String Name) {
 		for(int i = this.LocalVals.size() - 1; i >= 0; i--) {
 			JLocalVarStack Local = this.LocalVals.get(i);
 			if(Local.Name.equals(Name)) {

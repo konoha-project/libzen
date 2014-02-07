@@ -100,7 +100,6 @@ import zen.ast.ZWhileNode;
 import zen.deps.LibNative;
 import zen.deps.Var;
 import zen.deps.ZObject;
-import zen.lang.ZenClassType;
 import zen.type.ZFuncType;
 import zen.type.ZType;
 
@@ -120,9 +119,6 @@ public class AsmGenerator extends JavaSolution {
 	public final Class<?> GetJavaClass(ZType zType) {
 		if(zType instanceof ZFuncType) {
 			return this.ClassLoader.LoadFuncClass((ZFuncType)zType);
-		}
-		else if(zType instanceof ZenClassType) {
-			return null;
 		}
 		else {
 			return JavaTypeTable.GetJavaClass(zType, Object.class);
@@ -228,6 +224,7 @@ public class AsmGenerator extends JavaSolution {
 		this.CurrentBuilder.PushNode(DeclClass, Node.AST[ZVarDeclNode.InitValue]);
 		this.CurrentBuilder.StoreLocal(Node.NativeName);
 		this.VisitBlockNode(Node);
+		this.CurrentBuilder.RemoveLocal(DeclClass, Node.NativeName);
 	}
 
 	@Override public void VisitGetNameNode(ZGetNameNode Node) {
@@ -549,7 +546,7 @@ public class AsmGenerator extends JavaSolution {
 		this.CurrentBuilder.StoreLocal(Node.ExceptionName);
 		Node.AST[ZCatchNode.Block].Accept(this);
 		mv.visitJumpInsn(GOTO, Label.finallyLabel);
-		//FIXME: remove local
+
 		this.CurrentBuilder.RemoveLocal(this.GetJavaClass(Node.ExceptionType), Node.ExceptionName);
 	}
 
