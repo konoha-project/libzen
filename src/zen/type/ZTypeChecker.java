@@ -146,6 +146,10 @@ public abstract class ZTypeChecker extends ZVisitor {
 		return this.VisitTypeChecker(Node, ContextType, NoCheckPolicy);
 	}
 
+	public final void TryTypeAt(ZNode Node, int Index, ZType ContextType) {
+		Node.AST[Index] = this.VisitTypeChecker(Node.AST[Index], ContextType, NoCheckPolicy);
+	}
+
 	public final ZNode CheckType(ZNode Node, ZType ContextType) {
 		return this.VisitTypeChecker(Node, ContextType, DefaultTypeCheckPolicy);
 	}

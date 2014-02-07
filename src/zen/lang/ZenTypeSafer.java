@@ -414,10 +414,11 @@ public class ZenTypeSafer extends ZTypeChecker {
 	}
 
 	private boolean IsFuncName(ZFuncCallNode FuncCallNode, ZNameSpace NameSpace) {
-		if(FuncCallNode.AST[ZFuncCallNode.Func] instanceof ZGetNameNode && FuncCallNode.AST[ZFuncCallNode.Func].IsVarType()) {
-			@Var ZGetNameNode Node = (ZGetNameNode)FuncCallNode.AST[ZFuncCallNode.Func];
+		@Var ZNode FuncNode = FuncCallNode.AST[ZFuncCallNode.Func];
+		if(FuncNode instanceof ZGetNameNode && FuncNode.IsVarType()) {
+			@Var ZGetNameNode Node = (ZGetNameNode)FuncNode;
 			@Var ZVariable VarInfo = NameSpace.GetLocalVariable(Node.VarName);
-			if(VarInfo == null || !VarInfo.VarType.IsVarType() || !VarInfo.VarType.IsFuncType()) {
+			if(VarInfo == null || !(VarInfo.VarType.IsVarType() || VarInfo.VarType.IsFuncType())) {
 				FuncCallNode.ResolvedFuncName = Node.VarName;
 			}
 			if(FuncCallNode.ResolvedFuncName != null) {
@@ -465,7 +466,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 	}
 
 	@Override public void VisitUnaryNode(ZUnaryNode Node) {
-		Node.AST[ZGetterNode.Recv] = this.CheckType(Node.AST[ZGetterNode.Recv], ZType.VarType);
+		this.CheckTypeAt(Node, ZGetterNode.Recv, ZType.VarType);
 		this.TypedNode(Node, Node.AST[ZGetterNode.Recv].Type);
 	}
 
@@ -615,10 +616,10 @@ public class ZenTypeSafer extends ZTypeChecker {
 			return;
 		}
 		@Var ZType ReturnType = this.CurrentFunctionNode.ReturnType;
-		if(Node.AST[ZReturnNode.Expr] != null && ReturnType.IsVoidType()) {
+		if(Node.Has(ZReturnNode.Expr) && ReturnType.IsVoidType()) {
 			Node.AST[ZReturnNode.Expr] = null;
 		}
-		else if(Node.AST[ZReturnNode.Expr] == null && !ReturnType.IsVarType() && !ReturnType.IsVoidType()) {
+		else if(!Node.Has(ZReturnNode.Expr) && !ReturnType.IsVarType() && !ReturnType.IsVoidType()) {
 			this.Logger.ReportWarning(Node.SourceToken, "returning default value of " + ReturnType);
 			Node.Set(ZReturnNode.Expr, ZenGamma.CreateDefaultValueNode(Node, ReturnType, null));
 		}
@@ -636,8 +637,8 @@ public class ZenTypeSafer extends ZTypeChecker {
 
 
 	@Override public void VisitWhileNode(ZWhileNode Node) {
-		Node.AST[ZWhileNode.Cond] = this.CheckType(Node.AST[ZWhileNode.Cond], ZType.BooleanType);
-		Node.AST[ZWhileNode.Block] = this.CheckType(Node.AST[ZWhileNode.Block], ZType.VoidType);
+		this.CheckTypeAt(Node, ZWhileNode.Cond, ZType.BooleanType);
+		this.CheckTypeAt(Node, ZWhileNode.Block, ZType.VoidType);
 		this.TypedNodeIf2(Node, ZType.VoidType, Node.AST[ZWhileNode.Cond], Node.AST[ZWhileNode.Block]);
 	}
 
@@ -668,7 +669,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 
 	@Override public void VisitLetNode(ZLetNode Node) {
 		Node.GlobalName = this.Generator.GetGlobalName(Node.Symbol);
-		Node.AST[ZLetNode.InitValue] = this.CheckType(Node.AST[ZLetNode.InitValue], Node.SymbolType);
+		this.CheckTypeAt(Node, ZLetNode.InitValue, Node.SymbolType);
 		this.TypedNode(Node, ZType.VoidType);
 	}
 
@@ -691,7 +692,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 		}
 		if(Node instanceof ZIfNode) {
 			ZIfNode IfNode = (ZIfNode)Node;
-			if(IfNode.AST[ZIfNode.Else] != null) {
+			if(IfNode.Has(ZIfNode.Else)) {
 				return this.HasReturn(IfNode.AST[ZIfNode.Then]) && this.HasReturn(IfNode.AST[ZIfNode.Else]);
 			}
 			return false;
