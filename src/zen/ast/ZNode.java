@@ -97,8 +97,18 @@ public abstract class ZNode {
 		}
 	}
 
+	public final boolean Has(int Index) {
+		if(this.AST != null && Index < this.AST.length) {
+			return this.AST[Index] != null;
+		}
+		return false;
+	}
+
 	@Override public String toString() {
 		@Var String Self = "#" + this.getClass().getSimpleName();
+		if(!this.Type.IsVarType()) {
+			Self = Self + ":" + this.Type;
+		}
 		if(this.AST != null) {
 			@Var int i = 0;
 			Self = Self + "[";
@@ -141,7 +151,7 @@ public abstract class ZNode {
 		return this.Type.IsVarType();
 	}
 
-	public boolean IsUntyped() {
+	public boolean HasUntypedNode() {
 		return this.Type.IsVarType();
 	}
 

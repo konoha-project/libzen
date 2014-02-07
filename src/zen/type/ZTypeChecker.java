@@ -83,7 +83,7 @@ public abstract class ZTypeChecker extends ZVisitor {
 
 	private final ZNode VisitTypeChecker(ZNode Node, ZType ContextType, int TypeCheckPolicy) {
 		if(this.IsVisitable()) {
-			if(Node.IsUntyped()) {
+			if(Node.HasUntypedNode()) {
 				@Var ZNode ParentNode = Node.ParentNode;
 				this.StackedContextType = ContextType;
 				this.ReturnedNode = null;
@@ -198,14 +198,23 @@ public abstract class ZTypeChecker extends ZVisitor {
 		this.ReturnedNode = Node;
 	}
 
-	//	public final void TypedCastNode(ZNode Node, ZType ContextType, ZType NodeType) {
-	//		if(NodeType.IsVarType() && !ContextType.IsVarType() && !(Node.ParentNode instanceof ZCastNode)) {
-	//			this.TypedNode(new ZCastNode(ContextType, Node), ContextType);
-	//		}
-	//		else {
-	//			this.TypedNode(Node, NodeType);
-	//		}
-	//	}
+	public final void TypedNodeIf(ZNode Node, ZType Type, int BeginIndex, int EndIndex) {
+		@Var int i = BeginIndex;
+		while(i < EndIndex) {
+			if(Node.AST[i].HasUntypedNode()) {
+				this.FIXME("untyped i = " + i + ", " + Node + "/" + Node.AST[i]);
+				Type = ZType.VarType;
+				break;
+			}
+			i = i + 1;
+		}
+		Node.Type = Type;
+		this.ReturnedNode = Node;
+	}
+
+	public final void TypedNodeIf(ZNode Node, ZType Type, int BeginIndex) {
+		this.TypedNodeIf(Node, Type, BeginIndex, BeginIndex+1);
+	}
 
 	public final void TypedNodeIf(ZNode Node, ZType Type, ZNode P1) {
 		if(P1.IsVarType()) {

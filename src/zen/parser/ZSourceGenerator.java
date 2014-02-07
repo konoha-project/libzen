@@ -155,7 +155,7 @@ public class ZSourceGenerator extends ZGenerator {
 	}
 
 	@Override public boolean StartCodeGeneration(ZNode Node, boolean AllowLazy, boolean IsInteractive) {
-		if (AllowLazy && Node.IsUntyped()) {
+		if (AllowLazy && Node.HasUntypedNode()) {
 			if(IsInteractive) {
 				Node.Accept(this);
 				LibNative.println("---");

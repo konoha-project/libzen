@@ -60,7 +60,7 @@ public class ZFunctionNode extends ZListNode {
 		Visitor.VisitFunctionNode(this);
 	}
 
-	@Override public final boolean IsUntyped() {
+	@Override public final boolean HasUntypedNode() {
 		if(this.GlobalName != null) {
 			return false;
 		}

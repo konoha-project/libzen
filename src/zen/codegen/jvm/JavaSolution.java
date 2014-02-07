@@ -32,7 +32,7 @@ public abstract class JavaSolution extends ZGenerator {
 	}
 
 	@Override public boolean StartCodeGeneration(ZNode Node,  boolean AllowLazy, boolean IsInteractive) {
-		if (AllowLazy && Node.IsUntyped()) {
+		if (AllowLazy && Node.HasUntypedNode()) {
 			return false;
 		}
 		Node.Accept(this);

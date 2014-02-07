@@ -35,4 +35,7 @@ public final class ZOrNode extends ZBinaryNode {
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitOrNode(this);
 	}
+	@Override public final boolean HasUntypedNode() {
+		return this.AST[ZBinaryNode.Left].HasUntypedNode() || this.AST[ZBinaryNode.Right].HasUntypedNode();
+	}
 }

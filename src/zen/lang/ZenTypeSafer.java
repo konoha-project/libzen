@@ -333,7 +333,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 			@Var ZNode SubNode = FuncNode.GetListAt(i);
 			@Var ZType ParamType =  FuncType.GetParamType(i+1);
 			SubNode = this.TryType(SubNode, ParamType);
-			if(SubNode.IsUntyped()) {
+			if(SubNode.HasUntypedNode()) {
 				IsAllTyped = false;
 			}
 			if(!ParamType.AcceptValueType(SubNode.Type, false, Greek)) {
@@ -360,7 +360,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 				@Var ZNode SubNode = List.GetListAt(i);
 				SubNode = this.CheckType(SubNode, FuncType.GetParamType(i+StaticShift));
 				List.SetListAt(i, SubNode);
-				if(SubNode.IsUntyped()) {
+				if(SubNode.HasUntypedNode()) {
 					IsAllTyped = false;
 				}
 				i = i + 1;
@@ -473,18 +473,18 @@ public class ZenTypeSafer extends ZTypeChecker {
 	}
 
 	@Override public void VisitNotNode(ZNotNode Node) {
-		Node.AST[ZGetterNode.Recv] = this.CheckType(Node.AST[ZGetterNode.Recv], ZType.BooleanType);
-		this.TypedNodeIf(Node, ZType.BooleanType, Node.AST[ZGetterNode.Recv]);
+		this.CheckTypeAt(Node, ZGetterNode.Recv, ZType.BooleanType);
+		this.TypedNode(Node, ZType.BooleanType);
 	}
 
 	@Override public void VisitCastNode(ZCastNode Node) {
-		Node.AST[ZCastNode.Expr] = this.CheckType(Node.AST[ZCastNode.Expr], Node.Type);
+		this.CheckTypeAt(Node, ZCastNode.Expr, Node.Type);
 		this.TypedNode(Node, Node.Type);
 	}
 
 	@Override public void VisitInstanceOfNode(ZInstanceOfNode Node) {
-		Node.AST[ZBinaryNode.Left] = this.CheckType(Node.AST[ZBinaryNode.Left], ZType.VarType);
-		this.TypedNodeIf(Node, ZType.BooleanType, Node.AST[ZBinaryNode.Left]);
+		this.CheckTypeAt(Node, ZBinaryNode.Left, ZType.VarType);
+		this.TypedNode(Node, ZType.BooleanType);
 	}
 
 	private ZType GetBinaryLeftType(String Op, ZType ContextType) {
@@ -554,19 +554,19 @@ public class ZenTypeSafer extends ZTypeChecker {
 		Node.AST[ZBinaryNode.Right] = this.TryType(Node.AST[ZBinaryNode.Right], Node.AST[ZBinaryNode.Left].Type);
 		this.UnifyBinaryNodeType(Node, ZType.FloatType);
 		Node.AST[ZBinaryNode.Right] = this.CheckType(Node.AST[ZBinaryNode.Right], Node.AST[ZBinaryNode.Left].Type);
-		this.TypedNodeIf2(Node, ZType.BooleanType, Node.AST[ZBinaryNode.Left], Node.AST[ZBinaryNode.Right]);
+		this.TypedNode(Node, ZType.BooleanType);
 	}
 
 	@Override public void VisitAndNode(ZAndNode Node) {
-		Node.AST[ZBinaryNode.Left] = this.CheckType(Node.AST[ZBinaryNode.Left], ZType.BooleanType);
-		Node.AST[ZBinaryNode.Right] = this.CheckType(Node.AST[ZBinaryNode.Right], ZType.BooleanType);
-		this.TypedNodeIf2(Node, ZType.BooleanType, Node.AST[ZBinaryNode.Left], Node.AST[ZBinaryNode.Right]);
+		this.CheckTypeAt(Node, ZBinaryNode.Left, ZType.BooleanType);
+		this.CheckTypeAt(Node, ZBinaryNode.Right, ZType.BooleanType);
+		this.TypedNode(Node, ZType.BooleanType);
 	}
 
 	@Override public void VisitOrNode(ZOrNode Node) {
-		Node.AST[ZBinaryNode.Left] = this.CheckType(Node.AST[ZBinaryNode.Left], ZType.BooleanType);
-		Node.AST[ZBinaryNode.Right] = this.CheckType(Node.AST[ZBinaryNode.Right], ZType.BooleanType);
-		this.TypedNodeIf2(Node, ZType.BooleanType, Node.AST[ZBinaryNode.Left], Node.AST[ZBinaryNode.Right]);
+		this.CheckTypeAt(Node, ZBinaryNode.Left, ZType.BooleanType);
+		this.CheckTypeAt(Node, ZBinaryNode.Right, ZType.BooleanType);
+		this.TypedNode(Node, ZType.BooleanType);
 	}
 
 	@Override public void VisitBlockNode(ZBlockNode Node) {
@@ -623,11 +623,11 @@ public class ZenTypeSafer extends ZTypeChecker {
 		}
 		else if(Node.AST[ZReturnNode.Expr] == null && !ReturnType.IsVarType() && !ReturnType.IsVoidType()) {
 			this.Logger.ReportWarning(Node.SourceToken, "returning default value of " + ReturnType);
-			Node.AST[ZReturnNode.Expr] = ZenGamma.CreateDefaultValueNode(Node, ReturnType, null);
+			Node.Set(ZReturnNode.Expr, ZenGamma.CreateDefaultValueNode(Node, ReturnType, null));
 		}
-		if(Node.AST[ZReturnNode.Expr] != null) {
-			Node.AST[ZReturnNode.Expr] = this.CheckType(Node.AST[ZReturnNode.Expr], ReturnType);
-			this.TypedNodeIf(Node, ZType.VoidType, Node.AST[ZReturnNode.Expr]);
+		if(Node.Has(ZReturnNode.Expr)) {
+			this.CheckTypeAt(Node, ZReturnNode.Expr, ReturnType);
+			this.TypedNodeIf(Node, ZType.VoidType, ZReturnNode.Expr);
 		}
 		else {
 			if(ReturnType instanceof ZVarType) {

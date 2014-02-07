@@ -24,23 +24,26 @@
 
 package zen.ast;
 
-import zen.parser.ZSyntaxPattern;
+import zen.deps.Field;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
+import zen.type.ZType;
 
 //E.g., $ExprNode instanceof TypeInfo
-public final class ZInstanceOfNode extends ZBinaryNode {
-	public ZInstanceOfNode(ZNode ParentNode, ZToken Token, ZNode Left, ZSyntaxPattern Pattern) {
-		super(ParentNode, Token, Left, Pattern);
+public final class ZInstanceOfNode extends ZNode {
+	public final static int Left = 0;
+	@Field public ZType TargetType;
+	public ZInstanceOfNode(ZNode ParentNode, ZToken Token, ZNode LeftNode) {
+		super(ParentNode, Token, 1);
+		this.Set(ZInstanceOfNode.Left, LeftNode);
+	}
+	@Override public void SetType(ZType Type) {
+		this.TargetType = Type;
 	}
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitInstanceOfNode(this);
 	}
-	//	@Override public Object Eval(ZenNameSpace NameSpace, boolean EnforceConst)  {
-	//		@Var Object Value = this.ExprNode.Eval(NameSpace, EnforceConst) ;
-	//		if(Value != null) {
-	//			return LibZen.DynamicInstanceOf(Value, this.TypeInfo);
-	//		}
-	//		return Value;
-	//	}
+	@Override public final boolean HasUntypedNode() {
+		return this.AST[ZInstanceOfNode.Left].HasUntypedNode();
+	}
 }

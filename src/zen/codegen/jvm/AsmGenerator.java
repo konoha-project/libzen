@@ -251,7 +251,7 @@ public class AsmGenerator extends JavaSolution {
 	}
 
 	@Override public void VisitGetterNode(ZGetterNode Node) {
-		if(Node.IsUntyped()) {
+		if(Node.HasUntypedNode()) {
 			Method sMethod = JavaMethodTable.GetStaticMethod("GetField");
 			ZNode NameNode = new ZStringNode(Node, null, Node.FieldName);
 			this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.AST[ZGetterNode.Recv], NameNode});
@@ -273,7 +273,7 @@ public class AsmGenerator extends JavaSolution {
 	}
 
 	@Override public void VisitSetterNode(ZSetterNode Node) {
-		if(Node.IsUntyped()) {
+		if(Node.HasUntypedNode()) {
 			Method sMethod = JavaMethodTable.GetStaticMethod("SetField");
 			ZNode NameNode = new ZStringNode(Node, null, Node.FieldName);
 			this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.AST[ZGetterNode.Recv], NameNode, Node.AST[ZSetterNode.Expr]});
