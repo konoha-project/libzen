@@ -99,6 +99,7 @@ import zen.ast.ZVarDeclNode;
 import zen.ast.ZWhileNode;
 import zen.deps.LibNative;
 import zen.deps.Var;
+import zen.deps.ZObject;
 import zen.lang.ZenClassType;
 import zen.type.ZFuncType;
 import zen.type.ZType;
@@ -645,7 +646,14 @@ public class AsmGenerator extends JavaSolution {
 		this.CurrentBuilder = new AsmMethodBuilder(ACC_PUBLIC, "<init>", "(I)V", this, this.CurrentBuilder);
 		this.CurrentBuilder.visitVarInsn(Opcodes.ALOAD, 0);
 		this.CurrentBuilder.visitVarInsn(Opcodes.ILOAD, 1);
-		this.CurrentBuilder.visitMethodInsn(INVOKESPECIAL, Type.getInternalName(this.GetJavaClass(Node.SuperType)), "<init>", "(I)V");
+		@Var Class<?> SuperClass = null;
+		if(Node.SuperType != null) {
+			SuperClass = this.GetJavaClass(Node.SuperType);
+		}
+		else {
+			SuperClass = ZObject.class;
+		}
+		this.CurrentBuilder.visitMethodInsn(INVOKESPECIAL, Type.getInternalName(SuperClass), "<init>", "(I)V");
 		for(@Var int i = 0; i < Node.GetListSize(); i++) {
 			@Var ZFieldNode Field = Node.GetFieldNode(i);
 			if(Field.DeclType.IsFuncType()) {

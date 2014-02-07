@@ -26,6 +26,7 @@ import zen.ast.ZNode;
 import zen.deps.Var;
 import zen.deps.ZFunction;
 import zen.deps.ZMatchFunction;
+import zen.deps.ZObject;
 import zen.deps.ZTokenFunction;
 import zen.parser.ZTokenContext;
 import zen.type.ZFuncType;
@@ -139,11 +140,17 @@ class AsmClassLoader extends ClassLoader {
 
 	AsmClassBuilder NewClass(ZNode Node, String ClassName, ZType SuperType) {
 		@Var String SourceFile = Node.SourceToken.GetFileName();
-		@Var AsmClassBuilder cb = new AsmClassBuilder(ACC_PUBLIC, SourceFile, ClassName, "java/lang/Object" /*FIXME*/);
+		@Var Class<?> SuperClass = null;
+		if(SuperType != null) {
+			SuperClass = JavaTypeTable.GetJavaClass(SuperType, Object.class);
+		}
+		else {
+			SuperClass = ZObject.class;
+		}
+		@Var AsmClassBuilder cb = new AsmClassBuilder(ACC_PUBLIC, SourceFile, ClassName, Type.getInternalName(SuperClass));
 		this.AddClassBuilder(cb);
 		return cb;
 	}
-
 
 	@Override protected Class<?> findClass(String name) {
 		AsmClassBuilder cb = this.ByteCodeMap.get(name);
