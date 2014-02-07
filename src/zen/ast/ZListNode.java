@@ -39,6 +39,29 @@ public class ZListNode extends ZNode {
 		this.Set(Index + this.ListStartIndex, Node);
 	}
 
+	public final void InsertAt(int Index, ZNode Node) {
+		if(this.AST == null || Index < 0 || this.AST.length == Index) {
+			this.Append(Node);
+		} else {
+			@Var ZNode[] newAST = new ZNode[this.AST.length + 1];
+			Index = this.ListStartIndex + Index;
+			System.arraycopy(this.AST, 0, newAST, 0, Index);
+			this.Set(Index, Node);
+			System.arraycopy(this.AST, Index, newAST, Index + 1, this.AST.length - Index);
+			this.AST = newAST;
+		}
+	}
+
+	public final ZNode RemoveAt(int Index) {
+		@Var ZNode Removed = this.GetListAt(Index);
+		@Var ZNode[] newAST = new ZNode[this.AST.length - 1];
+		int RemovedIndex = this.ListStartIndex + Index;
+		System.arraycopy(this.AST, 0, newAST, 0, RemovedIndex);
+		System.arraycopy(this.AST, RemovedIndex + 1, newAST, RemovedIndex, this.AST.length - (RemovedIndex + 1));
+		this.AST = newAST;
+		return Removed;
+	}
+
 	public final void ClearList(int Size) {
 		if(Size < this.GetListSize()) {
 			@Var int newsize = this.ListStartIndex + Size;
