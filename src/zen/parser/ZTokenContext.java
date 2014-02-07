@@ -26,11 +26,11 @@
 package zen.parser;
 import java.util.ArrayList;
 
+import zen.ast.ZBlockNode;
 import zen.ast.ZEmptyNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZNode;
 import zen.deps.Field;
-
 import zen.deps.LibNative;
 import zen.deps.LibZen;
 import zen.deps.Var;
@@ -286,11 +286,21 @@ public final class ZTokenContext {
 			@Var ZNode ParsedNode = this.ParsePattern(ParentNode, PatternName, IsRequired);
 			this.SetParseFlag(Rememberd);
 			if(ParsedNode != null) {
+				if(Index == ZNode.NestedAppendIndex) {
+					if(!(ParsedNode instanceof ZEmptyNode)) {
+						ParentNode.Set(ZNode.AppendIndex, ParsedNode);
+					}
+					if(ParsedNode instanceof ZBlockNode || ParsedNode.IsErrorNode()) {
+						return ParsedNode;
+					}
+				}
 				if(ParsedNode.IsErrorNode()) {
 					return ParsedNode;
 				}
-				if(!(ParsedNode instanceof ZEmptyNode)) {
-					ParentNode.Set(Index, ParsedNode);
+				else {
+					if(!(ParsedNode instanceof ZEmptyNode)) {
+						ParentNode.Set(Index, ParsedNode);
+					}
 				}
 			}
 		}

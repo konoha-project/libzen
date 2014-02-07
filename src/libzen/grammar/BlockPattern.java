@@ -21,17 +21,11 @@ public class BlockPattern extends ZMatchFunction {
 				if(TokenContext.MatchToken("}")) {
 					break;
 				}
-				@Var ZNode StmtNode = TokenContext.MatchPattern(NestedBlockNode, ZNode.AppendIndex, "$Statement$", ZTokenContext.Required);
-				if(StmtNode.IsErrorNode()) {
-					NestedBlockNode.Set(ZNode.AppendIndex, StmtNode);
+				NestedBlockNode = TokenContext.MatchPattern(NestedBlockNode, ZNode.NestedAppendIndex, "$Statement$", ZTokenContext.Required);
+				if(NestedBlockNode.IsErrorNode()) {
 					TokenContext.SkipError(SkipToken);
 					TokenContext.MatchToken("}");
 					break;
-				}
-				/* VarDecl is defined as BlockNode to speficy its scope */
-				if(StmtNode instanceof ZBlockNode) {
-					//System.out.println("nesting scope " + ParsedNode);
-					NestedBlockNode = StmtNode;
 				}
 			}
 			TokenContext.SetParseFlag(Remembered);

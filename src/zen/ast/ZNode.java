@@ -34,10 +34,11 @@ import zen.parser.ZVisitor;
 import zen.type.ZType;
 
 public abstract class ZNode {
+	public final static int Nop =      -1;
 	public final static int NameInfo = -2;
 	public final static int TypeInfo = -3;
-	public final static int Nop = -4;
-	public final static int AppendIndex = -1;
+	public final static int AppendIndex = -4;
+	public final static int NestedAppendIndex = -5;
 
 	@Field public ZNode ParentNode;
 	@Field public ZToken SourceToken;
@@ -79,13 +80,17 @@ public abstract class ZNode {
 		}
 		else if(Index == ZNode.AppendIndex) {
 			@Var ZNode ListNode = this;
-			assert(ListNode instanceof ZListNode);
 			if(ListNode instanceof ZListNode) {
 				((ZListNode)ListNode).Append(Node);
+			}
+			else {
+				System.out.println("parent=" + ListNode + ", node=" + Node);
+				assert(ListNode instanceof ZListNode);
 			}
 		}
 		else if(Index == ZNode.NameInfo) {
 			this.SetName(Node.SourceToken.GetText());
+			this.SourceToken = Node.SourceToken;
 		}
 		else if(Index == ZNode.TypeInfo) {
 			this.SetType(Node.Type);

@@ -589,6 +589,9 @@ public class ZenTypeSafer extends ZTypeChecker {
 	}
 
 	@Override public void VisitVarDeclNode(ZVarDeclNode Node) {
+		if(Node.GetListSize() == 0) {
+			this.Logger.ReportWarning(Node.SourceToken, "unused variable: " + Node.NativeName);
+		}
 		this.CheckTypeAt(Node, ZVarDeclNode.InitValue, Node.DeclType);
 		if(!(Node.DeclType instanceof ZVarType)) {
 			Node.DeclType = this.VarScope.NewVarType(Node.DeclType, Node.NativeName, Node.SourceToken);

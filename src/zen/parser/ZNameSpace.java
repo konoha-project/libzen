@@ -32,9 +32,9 @@ import zen.deps.LibNative;
 import zen.deps.LibZen;
 import zen.deps.Nullable;
 import zen.deps.Var;
-import zen.deps.ZenMap;
 import zen.deps.ZMatchFunction;
 import zen.deps.ZTokenFunction;
+import zen.deps.ZenMap;
 import zen.lang.ZenClassType;
 import zen.type.ZType;
 
@@ -216,6 +216,7 @@ public final class ZNameSpace {
 
 	public ZVariable GetLocalVariable(String VarName) {
 		ZSymbol Entry = this.GetSymbol(VarName);
+		//System.out.println("var " + VarName + ", entry=" + Entry + ", NameSpace=" + this);
 		if(Entry instanceof ZVariable) {
 			return (ZVariable)Entry;
 		}
@@ -225,6 +226,7 @@ public final class ZNameSpace {
 	public void SetLocalVariable(ZFunctionNode FunctionNode, ZType VarType, String VarName, ZToken SourceToken) {
 		@Var ZSymbol Parent = this.GetSymbol(VarName);
 		@Var ZVariable VarInfo = new ZVariable(Parent, FunctionNode, 0, VarType, VarName, SourceToken);
+		//System.out.println("set var " + VarName + ", entry=" + VarInfo + ", NameSpace=" + this);
 		this.SetLocalSymbolEntry(VarName, VarInfo);
 	}
 
