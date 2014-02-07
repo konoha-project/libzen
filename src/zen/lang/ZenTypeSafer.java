@@ -90,7 +90,7 @@ import zen.type.ZVarType;
 
 public class ZenTypeSafer extends ZTypeChecker {
 
-	@Field private ZFunctionNode CurrentFunctionNode = null;
+	@Field protected ZFunctionNode CurrentFunctionNode = null;
 
 	public ZenTypeSafer(ZGenerator Generator) {
 		super(Generator);
