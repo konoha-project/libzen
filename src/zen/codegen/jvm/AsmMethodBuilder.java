@@ -25,7 +25,7 @@ import zen.lang.ZSystem;
 import zen.type.ZFuncType;
 import zen.type.ZType;
 
-public class AsmMethodBuilder extends MethodNode {
+class AsmMethodBuilder extends MethodNode {
 
 	final AsmMethodBuilder          Parent;
 	final AsmGenerator   Generator;

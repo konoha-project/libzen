@@ -34,7 +34,7 @@ import zen.deps.ZenArray;
 import zen.deps.ZenMap;
 import zen.type.ZType;
 
-public final class OpApi {
+public final class JavaOperatorApi {
 
 	private static String t(Object x) {
 		return JavaTypeTable.GetZenType(x.getClass()).toString();

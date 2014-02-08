@@ -113,10 +113,10 @@ public class AsmGenerator extends JavaSolution {
 		super("java", "1.6");
 		this.TryCatchLabel = new Stack<TryCatchLabel>();
 		this.ClassLoader = new AsmClassLoader(this);
+		JavaCommonApi.LoadCommonApi(this);
 	}
 
-	@Override
-	public final Class<?> GetJavaClass(ZType zType) {
+	@Override public final Class<?> GetJavaClass(ZType zType) {
 		if(zType instanceof ZFuncType) {
 			return this.ClassLoader.LoadFuncClass((ZFuncType)zType);
 		}

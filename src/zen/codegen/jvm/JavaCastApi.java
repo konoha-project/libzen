@@ -1,7 +1,7 @@
 
 package zen.codegen.jvm;
 
-public class CastApi {
+public class JavaCastApi {
 
 	public static Object toObject(boolean x)  { return x; }
 	public static Object toObject(byte x)  { return x; }
