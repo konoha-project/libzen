@@ -342,9 +342,9 @@ public class AsmGenerator extends JavaSolution {
 
 	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
 		this.CurrentBuilder.SetLineNumber(Node);
-		if(Node.ResolvedFuncName != null) {
+		if(Node.ResolvedFunc != null) {
 			ZNode[] Nodes = this.PackNodes(null, Node);
-			this.CurrentBuilder.ApplyFuncName(Node, Node.ResolvedFuncName, Node.ResolvedFuncType, Nodes);
+			this.CurrentBuilder.ApplyFuncName(Node, Node.ResolvedFunc, Nodes);
 		}
 		else {
 			if(Node.AST[ZFuncCallNode.Func].Type.IsFuncType()) {

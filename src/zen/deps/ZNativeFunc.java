@@ -24,36 +24,15 @@
 
 package zen.deps;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import zen.lang.ZFunc;
-import zen.parser.ZLogger;
 import zen.type.ZFuncType;
 
 public class ZNativeFunc extends ZFunc {
-	@Field public Object Recv;
-	@Field public Method JMethod;  // Abstract function if null
-
-	public ZNativeFunc(int FuncFlag, String FuncName, ZFuncType FuncType, Object Recv, Method JMethod) {
+	@Field public Method jMethod;  // Abstract function if null
+	public ZNativeFunc(int FuncFlag, String FuncName, ZFuncType FuncType, Method JMethod) {
 		super(FuncFlag, FuncName, FuncType);
-		this.Recv = Recv;
-		this.JMethod = JMethod;
-	}
-
-	@Override public final Object Invoke(Object[] Params) {
-		try {
-			return this.JMethod.invoke(this.Recv, Params);
-		}
-		catch (InvocationTargetException e) {
-			ZLogger.VerboseException(e);
-		}
-		catch (IllegalArgumentException e) {
-			ZLogger.VerboseException(e);
-		}
-		catch (IllegalAccessException e) {
-			ZLogger.VerboseException(e);
-		}
-		return null;
+		this.jMethod = JMethod;
 	}
 }

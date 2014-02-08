@@ -49,9 +49,7 @@ import zen.ast.ZStringNode;
 import zen.ast.ZUnaryNode;
 import zen.deps.LibNative;
 import zen.deps.Var;
-import zen.lang.ZFunc;
 import zen.lang.ZenEngine;
-import zen.lang.ZenGamma;
 import zen.type.ZTypeChecker;
 
 public class JavaEngine extends ZenEngine {
@@ -235,12 +233,11 @@ public class JavaEngine extends ZenEngine {
 
 	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
 		if(Node.ResolvedFuncName != null) {
-			if(Node.ResolvedFuncType == null) {
+			if(Node.ResolvedFunc == null) {
 				this.Logger.ReportWarning(Node.SourceToken, "function: " + Node.ResolvedFuncName + " is unresolved");
 			}
 			else {
-				ZFunc Func = ZenGamma.LookupFunc(this.Generator.RootNameSpace, Node.ResolvedFuncName, Node.ResolvedFuncType.GetRecvType(), Node.ResolvedFuncType.GetFuncParamSize());
-				Method sMethod = this.Solution.GetStaticFuncMethod(Func.GetSignature());
+				Method sMethod = this.Solution.GetStaticFuncMethod(Node.ResolvedFunc.GetSignature());
 				this.EvalStaticMethod(Node, sMethod, this.Solution.PackNodes(null, Node));
 			}
 		}

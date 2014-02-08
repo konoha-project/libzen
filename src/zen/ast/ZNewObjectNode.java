@@ -52,8 +52,8 @@ public final class ZNewObjectNode extends ZListNode {
 			i = i + 1;
 		}
 		this.ParamList.clear();
-		FuncNode.ResolvedFuncName = Func.FuncName;
-		FuncNode.ResolvedFuncType = Func.GetFuncType();
+		//		FuncNode.ResolvedFuncName = Func.FuncName;
+		FuncNode.ResolvedFunc = Func;
 		return FuncNode;
 	}
 

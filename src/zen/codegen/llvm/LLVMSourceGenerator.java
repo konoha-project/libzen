@@ -710,8 +710,9 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 
 	@Override
 	public void VisitFuncCallNode(ZFuncCallNode Node) {
-		if(Node.ResolvedFuncName != null && Node.ResolvedFuncType != null) {
-			ZType ReturnType = Node.ResolvedFuncType.TypeParams[0];
+		if(Node.ResolvedFuncName != null && Node.ResolvedFunc != null) {
+			@Var ZFuncType FuncType = Node.ResolvedFunc.GetFuncType();
+			ZType ReturnType = FuncType.TypeParams[0];
 			String TempVar = "";
 			this.Writer.PushNewBuffer("");
 			if(!ReturnType.IsVoidType()) {
@@ -720,7 +721,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 				this.Writer.AddCodeToCurrentBuffer(" = ");
 			}
 			this.Writer.AddCodeToCurrentBuffer("call ");
-			this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.ResolvedFuncType));
+			this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(FuncType));
 			this.Writer.AddCodeToCurrentBuffer(" " + this.GetIdentifierAttachedSymbol(Node.ResolvedFuncName));
 			//this.GenerateCode(Node.AST[ZFuncCallNode.Func]);
 			this.VisitListNode(" (", Node, ", ", ")");

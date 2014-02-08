@@ -19,6 +19,8 @@ import org.objectweb.asm.tree.MethodNode;
 
 import zen.ast.ZListNode;
 import zen.ast.ZNode;
+import zen.deps.ZNativeFunc;
+import zen.lang.ZFunc;
 import zen.lang.ZSystem;
 import zen.type.ZFuncType;
 import zen.type.ZType;
@@ -240,17 +242,21 @@ public class AsmMethodBuilder extends MethodNode {
 		this.CheckReturnCast(Node, sMethod.getReturnType());
 	}
 
-	void ApplyFuncName(ZNode Node, String FuncName, ZFuncType FuncType, ZNode[] Nodes) {
-		if(Nodes != null) {
-			//			Class<?>[] P = sMethod.getParameterTypes();
-			for(int i = 0; i < Nodes.length; i++) {
-				this.PushNode(null, Nodes[i]);
-			}
+	void ApplyFuncName(ZNode Node, ZFunc Func, ZNode[] Nodes) {
+		if(Func instanceof ZNativeFunc) {
+			this.ApplyStaticMethod(Node, ((ZNativeFunc)Func).jMethod, Nodes);
 		}
-		String owner = "C" + FuncType.StringfySignature(FuncName);
-		this.SetLineNumber(Node);
-		this.visitMethodInsn(INVOKESTATIC, owner, FuncName, this.Generator.GetMethodDescriptor(FuncType));
-		//this.CheckReturnCast(Node, FuncType.GetReturnType());
+		else {
+			ZFuncType FuncType = Func.GetFuncType();
+			if(Nodes != null) {
+				for(int i = 0; i < Nodes.length; i++) {
+					this.PushNode(null, Nodes[i]);
+				}
+			}
+			String owner = "C" + FuncType.StringfySignature(Func.FuncName);
+			this.SetLineNumber(Node);
+			this.visitMethodInsn(INVOKESTATIC, owner, Func.FuncName, this.Generator.GetMethodDescriptor(FuncType));
+		}
 	}
 
 	void ApplyFuncObject(ZNode Node, Class<?> FuncClass, ZNode FuncNode, ZFuncType FuncType, ZNode[] Nodes) {

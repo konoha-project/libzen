@@ -70,8 +70,7 @@ public final class ZMethodCallNode extends ZListNode {
 			FuncNode.Append(this.GetListAt(i));
 			i = i + 1;
 		}
-		FuncNode.ResolvedFuncName = Func.FuncName;
-		FuncNode.ResolvedFuncType = Func.GetFuncType();
+		FuncNode.ResolvedFunc = Func;
 		return FuncNode;
 	}
 

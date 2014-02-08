@@ -25,15 +25,16 @@
 package zen.ast;
 
 import zen.deps.Field;
+import zen.lang.ZFunc;
 import zen.parser.ZVisitor;
-import zen.type.ZFuncType;
 import zen.type.ZType;
 
 public final class ZFuncCallNode extends ZListNode {
 	public final static int Func = 0;
 
 	@Field public String ResolvedFuncName = null;
-	@Field public ZFuncType ResolvedFuncType = null;
+	@Field public ZFunc ResolvedFunc = null;
+	//	@Field public ZFuncType ResolvedFuncType = null;
 
 	public ZFuncCallNode(ZNode ParentNode, ZNode FuncNode) {
 		super(ParentNode, null, 1);

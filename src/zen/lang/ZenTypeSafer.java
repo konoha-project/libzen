@@ -409,12 +409,12 @@ public class ZenTypeSafer extends ZTypeChecker {
 				FuncCallNode.ResolvedFuncName = Node.VarName;
 			}
 			if(FuncCallNode.ResolvedFuncName != null) {
-				if(FuncCallNode.ResolvedFuncType == null) {
+				if(FuncCallNode.ResolvedFunc == null) {
 					@Var int FuncParamSize = FuncCallNode.GetListSize();
 					@Var ZType RecvType = FuncCallNode.GetRecvType();
 					@Var ZFunc Func = ZenGamma.LookupFunc(NameSpace, FuncCallNode.ResolvedFuncName, RecvType, FuncParamSize);
 					if(Func != null) {
-						FuncCallNode.ResolvedFuncType = Func.GetFuncType();
+						FuncCallNode.ResolvedFunc = Func;
 					}
 					else {
 						this.VarScope.FoundUnresolvedSymbol(FuncCallNode.ResolvedFuncName);
@@ -432,8 +432,8 @@ public class ZenTypeSafer extends ZTypeChecker {
 		this.TypeCheckNodeList(Node);
 		@Var ZFuncType PartialFuncType = this.GuessFuncTypeFromContext(ContextType, null, Node);
 		if(this.IsFuncName(Node, NameSpace)) {
-			if(Node.ResolvedFuncType != null) {
-				this.TypeCheckFuncCall(Node, Node.ResolvedFuncType);
+			if(Node.ResolvedFunc != null) {
+				this.TypeCheckFuncCall(Node, Node.ResolvedFunc.GetFuncType());
 				return;
 			}
 		}
@@ -647,7 +647,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 	}
 
 	@Override public void VisitLetNode(ZLetNode Node) {
-		Node.GlobalName = this.Generator.GetGlobalName(Node.Symbol);
+		Node.GlobalName = this.Generator.NameGlobalSymbol(Node.Symbol);
 		this.CheckTypeAt(Node, ZLetNode.InitValue, Node.SymbolType);
 		this.TypedNode(Node, ZType.VoidType);
 	}

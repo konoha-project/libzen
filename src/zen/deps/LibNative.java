@@ -232,7 +232,7 @@ public class LibNative {
 
 	public final static ZNativeFunc ConvertToNativeFunc(Method jMethod) {
 		@Var ZFuncType FuncType = JavaTypeTable.ConvertToFuncType(jMethod);
-		return new ZNativeFunc(0, jMethod.getName(), FuncType, null, jMethod);
+		return new ZNativeFunc(0, jMethod.getName(), FuncType, jMethod);
 	}
 
 

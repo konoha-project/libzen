@@ -46,6 +46,7 @@ public abstract class ZGenerator extends ZVisitor {
 	@Field private int UniqueNumber = 0;
 	@Field public String             OutputFile;
 	@Field public ZLogger            Logger;
+	private final ZenMap<ZFunc>      DefinedFuncMap = new ZenMap<ZFunc>(null);
 
 	@Field private boolean StoppedVisitor;
 
@@ -115,7 +116,25 @@ public abstract class ZGenerator extends ZVisitor {
 		return null;     // undefined
 	}
 
-	private final ZenMap<ZFunc> DefinedFuncMap = new ZenMap<ZFunc>(null);
+	public int GetUniqueNumber() {
+		@Var int UniqueNumber = this.UniqueNumber;
+		this.UniqueNumber = this.UniqueNumber + 1;
+		return UniqueNumber;
+	}
+
+	public String NameGlobalSymbol(String Symbol) {
+		return Symbol + "_Z" + this.GetUniqueNumber();
+	}
+
+	public ZNode SetGlobalValue(String GlobalName, Object Value) {
+		return null;
+	}
+
+	public Object GetGlobalValue(String GlobalName) {
+		return null;
+	}
+
+	//
 
 	public final void SetDefinedFunc(ZFunc Func) {
 		this.DefinedFuncMap.put(Func.GetSignature(), Func);
@@ -129,33 +148,36 @@ public abstract class ZGenerator extends ZVisitor {
 		return this.GetDefinedFunc(FuncType.StringfySignature(FuncName));
 	}
 
+	public String NameConverterFunc(ZType FromType, ZType ToType) {
+		return FromType.GetUniqueName() + "T" + ToType.GetUniqueName();
+	}
+
+	public void SetConverterFunc(ZType FromType, ZType ToType, ZFunc Func) {
+		this.DefinedFuncMap.put(this.NameConverterFunc(FromType, ToType), Func);
+	}
+
+	public ZFunc GetConverterFunc(ZType FromType, ZType ToType) {
+		while(FromType != null) {
+			ZFunc Func = this.DefinedFuncMap.GetOrNull(this.NameConverterFunc(FromType, ToType));
+			if(Func != null) {
+				return Func;
+			}
+			FromType = FromType.GetSuperType();
+		}
+		return null;
+	}
+
 	public ZFunc GetCoercionFunc(ZType FromType, ZType ToType) {
-		//		Object Func = this.GetClassSymbol(FromType, ToType.GetUniqueName(), true);
-		//		if(Func instanceof ZFunc && ((ZFunc)Func).IsCoercionFunc()) {
-		//			return (ZFunc)Func;
-		//		}
-		//		return null;
+		while(FromType != null) {
+			ZFunc Func = this.DefinedFuncMap.GetOrNull(this.NameConverterFunc(FromType, ToType));
+			if(Func != null && Func.IsCoercionFunc()) {
+				return Func;
+			}
+			FromType = FromType.GetSuperType();
+		}
 		return null;
 	}
 
-	public int GetUniqueNumber() {
-		@Var int UniqueNumber = this.UniqueNumber;
-		this.UniqueNumber = this.UniqueNumber + 1;
-		return UniqueNumber;
-	}
-
-	public String GetGlobalName(String Symbol) {
-		return Symbol + "_Z" + this.GetUniqueNumber();
-	}
-
-	//public abstract ZNode SetGlobalValue(String GlobalName, ZNode Node);
-	public ZNode SetGlobalValue(String GlobalName, Object Value) {
-		return null;
-	}
-
-	public Object GetGlobalValue(String GlobalName) {
-		return null;
-	}
 
 
 }
