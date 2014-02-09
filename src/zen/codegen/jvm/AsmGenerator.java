@@ -619,15 +619,28 @@ public class AsmGenerator extends JavaSolution {
 		this.CurrentBuilder = this.CurrentBuilder.Parent;
 	}
 
-	private final static String ClassMethodName(ZType ClassType, String FieldName) {
+	private Class<?> GetSuperClass(ZType SuperType) {
+		@Var Class<?> SuperClass = null;
+		if(SuperType != null) {
+			SuperClass = this.GetJavaClass(SuperType);
+		}
+		else {
+			SuperClass = ZObject.class;
+		}
+		return SuperClass;
+	}
+
+	private final static String NameClassMethod(ZType ClassType, String FieldName) {
 		return FieldName+ ClassType.TypeId;
 	}
 
 	@Override public void VisitClassDeclNode(ZClassDeclNode Node) {
-		@Var AsmClassBuilder ClassBuilder = this.ClassLoader.NewClass(Node, Node.ClassName, Node.SuperType);
+		@Var Class<?> SuperClass = this.GetSuperClass(Node.SuperType);
+		@Var AsmClassBuilder ClassBuilder = this.ClassLoader.NewClass(Node, Node.ClassName, SuperClass);
 		for(@Var int i = 0; i < Node.GetListSize(); i++) {
 			@Var ZFieldNode Field = Node.GetFieldNode(i);
 			if(Field.ClassType.Equals(Node.ClassType)) {
+				System.out.println("FieldName:" + Field.FieldName);
 				@Var FieldNode fn = new FieldNode(ACC_PUBLIC, Field.FieldName, this.GetTypeDesc(Field.DeclType), null, this.GetConstValue(Field.AST[ZFieldNode.InitValue]));
 				ClassBuilder.AddField(fn);
 			}
@@ -635,30 +648,31 @@ public class AsmGenerator extends JavaSolution {
 		for(@Var int i = 0; i < Node.GetListSize(); i++) {
 			@Var ZFieldNode Field = Node.GetFieldNode(i);
 			if(Field.DeclType.IsFuncType()) {
-				System.out.println("ClassMethodName(Node.ClassType, Field.FieldName)"+ClassMethodName(Node.ClassType, Field.FieldName));
-				@Var FieldNode fn = new FieldNode(ACC_PUBLIC|ACC_STATIC, ClassMethodName(Node.ClassType, Field.FieldName), this.GetTypeDesc(Field.DeclType), null, null);
+				System.out.println("ClassMethodName:" + NameClassMethod(Node.ClassType, Field.FieldName) + ", " + this.GetTypeDesc(Field.DeclType));
+				@Var FieldNode fn = new FieldNode(ACC_PUBLIC|ACC_STATIC, NameClassMethod(Node.ClassType, Field.FieldName), this.GetTypeDesc(Field.DeclType), null, null);
 				ClassBuilder.AddField(fn);
 			}
 		}
 		this.CurrentBuilder = new AsmMethodBuilder(ACC_PUBLIC, "<init>", "(I)V", this, this.CurrentBuilder);
 		this.CurrentBuilder.visitVarInsn(Opcodes.ALOAD, 0);
 		this.CurrentBuilder.visitVarInsn(Opcodes.ILOAD, 1);
-		@Var Class<?> SuperClass = null;
-		if(Node.SuperType != null) {
-			SuperClass = this.GetJavaClass(Node.SuperType);
-		}
-		else {
-			SuperClass = ZObject.class;
-		}
 		this.CurrentBuilder.visitMethodInsn(INVOKESPECIAL, Type.getInternalName(SuperClass), "<init>", "(I)V");
 		for(@Var int i = 0; i < Node.GetListSize(); i++) {
 			@Var ZFieldNode Field = Node.GetFieldNode(i);
+			System.out.println("FieldName:" + Field.ClassType + "." + Field.FieldName + ", init=" + Field.AST[ZFieldNode.InitValue]);
 			if(Field.DeclType.IsFuncType()) {
 				String FieldDesc = Type.getDescriptor(this.GetJavaClass(Field.DeclType));
-				this.CurrentBuilder.visitFieldInsn(Opcodes.GETSTATIC, Node.ClassName, ClassMethodName(Node.ClassType, Field.FieldName), FieldDesc);
+				Label JumpLabel = new Label();
+				this.CurrentBuilder.visitFieldInsn(Opcodes.GETSTATIC, Node.ClassName, NameClassMethod(Node.ClassType, Field.FieldName), FieldDesc);
+				this.CurrentBuilder.visitJumpInsn(Opcodes.IFNONNULL, JumpLabel);
+				this.CurrentBuilder.visitVarInsn(Opcodes.ALOAD, 0);
+				this.CurrentBuilder.visitFieldInsn(Opcodes.GETSTATIC, Node.ClassName, NameClassMethod(Node.ClassType, Field.FieldName), FieldDesc);
 				this.CurrentBuilder.visitFieldInsn(Opcodes.PUTFIELD, Type.getInternalName(this.GetJavaClass(Field.ClassType)), Field.FieldName, FieldDesc);
+				this.CurrentBuilder.visitLabel(JumpLabel);
 			}
-			else if(Field.ClassType.Equals(Node.ClassType) && !(Field.AST[ZFieldNode.InitValue] instanceof ZConstNode)) {
+			else if(Field.ClassType.Equals(Node.ClassType)) {
+				System.out.println("FieldName:" + Field.FieldName + ", init=" + Field.AST[ZFieldNode.InitValue]);
+				this.CurrentBuilder.visitVarInsn(Opcodes.ALOAD, 0);
 				this.CurrentBuilder.PushNode(this.GetJavaClass(Field.DeclType), Field.AST[ZFieldNode.InitValue]);
 				this.CurrentBuilder.visitFieldInsn(PUTFIELD, Node.ClassName, Field.FieldName, Type.getDescriptor(this.GetJavaClass(Field.DeclType)));
 			}

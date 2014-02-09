@@ -26,15 +26,15 @@ import zen.ast.ZNode;
 import zen.deps.Var;
 import zen.deps.ZFunction;
 import zen.deps.ZMatchFunction;
-import zen.deps.ZObject;
 import zen.deps.ZTokenFunction;
+import zen.parser.ZSourceContext;
 import zen.parser.ZTokenContext;
 import zen.type.ZFuncType;
 import zen.type.ZType;
 import zen.type.ZTypePool;
 
 class AsmClassLoader extends ClassLoader {
-	private final HashMap<String,AsmClassBuilder> ByteCodeMap = new HashMap<String, AsmClassBuilder>();
+	private final HashMap<String,AsmClassBuilder> ClassBuilderMap = new HashMap<String, AsmClassBuilder>();
 	private final HashMap<String, Class<?>> FuncClassMap = new HashMap<String, Class<?>>();
 	private final AsmGenerator Generator;
 
@@ -44,32 +44,30 @@ class AsmClassLoader extends ClassLoader {
 	}
 
 	void AddClassBuilder(AsmClassBuilder ClassBuilder) {
-		this.ByteCodeMap.put(ClassBuilder.ClassName, ClassBuilder);
+		this.ClassBuilderMap.put(ClassBuilder.ClassName, ClassBuilder);
 	}
 
-	private static String FuncClassName(ZFuncType FuncType) {
+	private static String NameFuncClass(ZFuncType FuncType) {
 		return "ZFunc"+ FuncType.TypeId;
 	}
 
 	private void InitFuncClass() {
 		ArrayList<ZType> TypeList = new ArrayList<ZType>();
-		TypeList.add(ZType.IntType);
-		TypeList.add(JavaTypeTable.GetZenType(ZTokenContext.class));
-		TypeList.add(ZType.StringType);
-		TypeList.add(ZType.IntType);
+		TypeList.add(ZType.BooleanType);
+		TypeList.add(JavaTypeTable.GetZenType(ZSourceContext.class));
 		ZFuncType FuncType = ZTypePool.LookupFuncType(TypeList);
-		this.FuncClassMap.put(FuncClassName(FuncType), ZTokenFunction.class);
+		this.FuncClassMap.put(NameFuncClass(FuncType), ZTokenFunction.class);
 		TypeList.clear();
 		TypeList.add(JavaTypeTable.GetZenType(ZNode.class));
 		TypeList.add(JavaTypeTable.GetZenType(ZNode.class));
 		TypeList.add(JavaTypeTable.GetZenType(ZTokenContext.class));
 		TypeList.add(JavaTypeTable.GetZenType(ZNode.class));
 		FuncType = ZTypePool.LookupFuncType(TypeList);
-		this.FuncClassMap.put(FuncClassName(FuncType), ZMatchFunction.class);
+		this.FuncClassMap.put(NameFuncClass(FuncType), ZMatchFunction.class);
 	}
 
-	public Class<?> LoadFuncClass(ZFuncType FuncType) {
-		String ClassName = FuncClassName(FuncType);
+	Class<?> LoadFuncClass(ZFuncType FuncType) {
+		String ClassName = NameFuncClass(FuncType);
 		Class<?> FuncClass = this.FuncClassMap.get(ClassName);
 		if(FuncClass == null) {
 			@Var String SuperClassName = Type.getInternalName(ZFunction.class);
@@ -138,32 +136,24 @@ class AsmClassLoader extends ClassLoader {
 		return cb;
 	}
 
-	AsmClassBuilder NewClass(ZNode Node, String ClassName, ZType SuperType) {
+	AsmClassBuilder NewClass(ZNode Node, String ClassName, Class<?> SuperClass) {
 		@Var String SourceFile = Node.SourceToken.GetFileName();
-		@Var Class<?> SuperClass = null;
-		if(SuperType != null) {
-			SuperClass = JavaTypeTable.GetJavaClass(SuperType, Object.class);
-		}
-		else {
-			SuperClass = ZObject.class;
-		}
 		@Var AsmClassBuilder cb = new AsmClassBuilder(ACC_PUBLIC, SourceFile, ClassName, Type.getInternalName(SuperClass));
 		this.AddClassBuilder(cb);
 		return cb;
 	}
 
 	@Override protected Class<?> findClass(String name) {
-		AsmClassBuilder cb = this.ByteCodeMap.get(name);
+		AsmClassBuilder cb = this.ClassBuilderMap.get(name);
 		if(cb != null) {
 			byte[] b = cb.GenerateBytecode();
 			cb.OutputClassFile();
-			this.ByteCodeMap.remove(name);
+			this.ClassBuilderMap.remove(name);
 			try {
 				return this.defineClass(name, b, 0, b.length);
 			}
 			catch(Error e) {
 				e.printStackTrace();
-				cb.OutputClassFile();
 				System.exit(1);
 			}
 		}

@@ -786,6 +786,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 				}
 			}
 			Node.ClassType.AppendField(FieldNode.DeclType, FieldNode.FieldName, FieldNode.SourceToken);
+			FieldNode.Type = ZType.VoidType;
 			i = i + 1;
 		}
 		Node.ClassType.TypeFlag = ZUtils.UnsetFlag(Node.ClassType.TypeFlag, ZTypeFlag.OpenType);
