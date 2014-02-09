@@ -28,14 +28,14 @@ import zen.type.ZType;
 class AsmMethodBuilder extends MethodNode {
 
 	final AsmMethodBuilder          Parent;
-	final AsmGenerator   Generator;
+	final JavaAsmGenerator   Generator;
 	ArrayList<JLocalVarStack>     LocalVals  = new ArrayList<JLocalVarStack>();
 	int UsedStack = 0;
 	Stack<Label>                  BreakLabelStack = new Stack<Label>();
 	Stack<Label>                  ContinueLabelStack = new Stack<Label>();
 	int PreviousLine = 0;
 
-	public AsmMethodBuilder(int acc, String Name, String Desc, AsmGenerator Generator, AsmMethodBuilder Parent) {
+	public AsmMethodBuilder(int acc, String Name, String Desc, JavaAsmGenerator Generator, AsmMethodBuilder Parent) {
 		super(acc, Name, Desc, null, null);
 		this.Parent = Parent;
 		this.Generator = Generator;

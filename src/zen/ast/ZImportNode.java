@@ -6,6 +6,7 @@ import zen.lang.ZenError;
 public class ZImportNode extends ZNode {
 	@Field public String ResourcePath = null;
 	@Field public String Alias = null;
+
 	public ZImportNode(ZNode ParentNode) {
 		super(ParentNode, null, 0);
 	}

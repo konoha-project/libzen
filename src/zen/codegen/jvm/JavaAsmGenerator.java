@@ -114,13 +114,13 @@ import zen.lang.ZenField;
 import zen.type.ZFuncType;
 import zen.type.ZType;
 
-public class AsmGenerator extends JavaSolution {
+public class JavaAsmGenerator extends JavaSolution {
 	AsmMethodBuilder AsmBuilder;
 	AsmClassLoader AsmLoader = null;
 	Stack<TryCatchLabel> TryCatchLabel;
 	private int LambdaMethodId = 0;
 
-	public AsmGenerator() {
+	public JavaAsmGenerator() {
 		super("java", "1.6");
 		this.TryCatchLabel = new Stack<TryCatchLabel>();
 		this.AsmLoader = new AsmClassLoader(this);

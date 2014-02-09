@@ -1,8 +1,8 @@
-package zen.deps;
+package zen.codegen.jvm;
 
 import zen.ast.ZImportNode;
 import zen.ast.ZNode;
-import zen.codegen.jvm.JavaTypeTable;
+import zen.deps.Var;
 import zen.lang.ZenError;
 import zen.type.ZType;
 

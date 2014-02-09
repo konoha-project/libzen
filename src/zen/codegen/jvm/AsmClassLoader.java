@@ -37,9 +37,9 @@ import zen.type.ZTypePool;
 class AsmClassLoader extends ClassLoader {
 	private final HashMap<String,AsmClassBuilder> ClassBuilderMap = new HashMap<String, AsmClassBuilder>();
 	private final HashMap<String, Class<?>> FuncClassMap = new HashMap<String, Class<?>>();
-	private final AsmGenerator Generator;
+	private final JavaAsmGenerator Generator;
 
-	public AsmClassLoader(AsmGenerator Generator) {
+	public AsmClassLoader(JavaAsmGenerator Generator) {
 		this.Generator = Generator;
 		this.InitFuncClass();
 	}

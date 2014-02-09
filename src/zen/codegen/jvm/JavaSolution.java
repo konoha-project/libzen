@@ -9,7 +9,6 @@ import zen.ast.ZConstNode;
 import zen.ast.ZImportNode;
 import zen.ast.ZListNode;
 import zen.ast.ZNode;
-import zen.deps.JavaImportNode;
 import zen.deps.LibNative;
 import zen.deps.Var;
 import zen.deps.ZenMap;
