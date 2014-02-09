@@ -15,6 +15,7 @@ import org.objectweb.asm.tree.MethodNode;
 
 import zen.deps.LibNative;
 import zen.deps.Var;
+import zen.type.ZFuncType;
 import zen.type.ZType;
 
 class AsmClassBuilder {
@@ -34,17 +35,6 @@ class AsmClassBuilder {
 		this.SuperClassName = SuperClass;
 	}
 
-	void AddMethod(MethodNode m) {
-		for(int i=0; i<this.MethodList.size(); i++) {
-			MethodNode node = this.MethodList.get(i);
-			if(node.name.equals(m.name) && node.desc.equals(m.desc)) {
-				this.MethodList.set(i, m);
-				return;
-			}
-		}
-		this.MethodList.add(m);
-	}
-
 	void AddField(int acc, String Name, ZType zType, Object Value) {
 		@Var FieldNode fn = new FieldNode(acc, Name, Type.getDescriptor(this.Generator.GetJavaClass(zType)), null, Value);
 		this.FieldList.add(fn);
@@ -54,6 +44,17 @@ class AsmClassBuilder {
 		@Var FieldNode fn = new FieldNode(acc, Name, Type.getDescriptor(FieldClass), null, Value);
 		this.FieldList.add(fn);
 	}
+
+	AsmMethodBuilder NewMethod(int acc, String Name, String Desc) {
+		AsmMethodBuilder MethodBuilder = new AsmMethodBuilder(acc, Name, Desc, this.Generator);
+		this.MethodList.add(MethodBuilder);
+		return MethodBuilder;
+	}
+
+	AsmMethodBuilder NewMethod(int acc, String Name, ZFuncType FuncType) {
+		return this.NewMethod(acc, Name, this.Generator.GetMethodDescriptor(FuncType));
+	}
+
 
 
 	byte[] GenerateBytecode() {
@@ -100,5 +101,6 @@ class AsmClassBuilder {
 			System.out.println(e);
 		}
 	}
+
 
 }

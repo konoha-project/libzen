@@ -6,7 +6,9 @@ import static org.objectweb.asm.Opcodes.DUP;
 import static org.objectweb.asm.Opcodes.ILOAD;
 import static org.objectweb.asm.Opcodes.INVOKESTATIC;
 import static org.objectweb.asm.Opcodes.INVOKEVIRTUAL;
+import static org.objectweb.asm.Opcodes.IRETURN;
 import static org.objectweb.asm.Opcodes.ISTORE;
+import static org.objectweb.asm.Opcodes.RETURN;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -35,10 +37,16 @@ class AsmMethodBuilder extends MethodNode {
 	Stack<Label>                  ContinueLabelStack = new Stack<Label>();
 	int PreviousLine = 0;
 
-	public AsmMethodBuilder(int acc, String Name, String Desc, JavaAsmGenerator Generator, AsmMethodBuilder Parent) {
+	public AsmMethodBuilder(int acc, String Name, String Desc, JavaAsmGenerator Generator) {
 		super(acc, Name, Desc, null, null);
-		this.Parent = Parent;
 		this.Generator = Generator;
+		this.Parent = Generator.AsmBuilder;
+		Generator.AsmBuilder = this;
+	}
+
+	public void Finish() {
+		assert(this.Generator.AsmBuilder == this);
+		this.Generator.AsmBuilder = this.Parent;
 	}
 
 	void SetLineNumber(long FileLine) {
@@ -53,7 +61,7 @@ class AsmMethodBuilder extends MethodNode {
 	}
 
 	void SetLineNumber(ZNode Node) {
-		if(Node.SourceToken != null) {
+		if(Node != null && Node.SourceToken != null) {
 			this.SetLineNumber(Node.SourceToken.GetLineNumber());
 		}
 	}
@@ -298,9 +306,28 @@ class AsmMethodBuilder extends MethodNode {
 		}
 	}
 
-	public void PopBuilder(AsmClassBuilder classBuilder) {
-		// TODO Auto-generated method stub
-
+	public void visitReturn(ZType ReturnType) {
+		if(ReturnType.IsVoidType()) {
+			this.visitInsn(RETURN);
+		}
+		else {
+			Type type = this.Generator.AsmType(ReturnType);
+			this.visitInsn(type.getOpcode(IRETURN));
+		}
 	}
+
+	public void visitMethodInsn(int acc, String ClassName, String FuncName, ZFuncType FuncType) {
+		this.visitMethodInsn(acc, ClassName, FuncName, this.Generator.GetMethodDescriptor(FuncType));
+	}
+
+	public void visitMethodInsn(int acc, Class<?> jClass, String FuncName, ZFuncType FuncType) {
+		this.visitMethodInsn(acc, Type.getInternalName(jClass), FuncName, this.Generator.GetMethodDescriptor(FuncType));
+	}
+
+	public void visitFieldInsn(int opcode, String ClassName, String Name, Class<?> jClass) {
+		this.visitFieldInsn(opcode, ClassName, Name, Type.getDescriptor(jClass));
+	}
+
+
 
 }
