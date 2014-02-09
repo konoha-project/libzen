@@ -233,9 +233,21 @@ public abstract class LibZen {
 		return s + "}";
 	}
 
+	public final static String AnotherName(String s) {
+		@Var char ch = s.charAt(0);
+		if(Character.isUpperCase(ch)) {
+			ch = Character.toLowerCase(ch);
+		}
+		else {
+			ch = Character.toLowerCase(ch);
+		}
+		return String.valueOf(ch) + s.substring(1);
+	}
+
 	public final static boolean EqualsString(String s, String s2) {
 		return s.equals(s2);
 	}
+
 
 	public final static long ParseInt(String Text) {
 		try {
@@ -546,7 +558,7 @@ public abstract class LibZen {
 				}
 			}
 		}
-		
+
 		return s + "}";
 	}
 

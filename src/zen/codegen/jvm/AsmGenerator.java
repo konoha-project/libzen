@@ -26,13 +26,19 @@
 
 package zen.codegen.jvm;
 
+import static org.objectweb.asm.Opcodes.ACC_FINAL;
+import static org.objectweb.asm.Opcodes.ACC_PRIVATE;
+import static org.objectweb.asm.Opcodes.ACC_PROTECTED;
 import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
 import static org.objectweb.asm.Opcodes.ACC_STATIC;
+import static org.objectweb.asm.Opcodes.ALOAD;
+import static org.objectweb.asm.Opcodes.CHECKCAST;
 import static org.objectweb.asm.Opcodes.DUP;
 import static org.objectweb.asm.Opcodes.GETFIELD;
 import static org.objectweb.asm.Opcodes.GOTO;
 import static org.objectweb.asm.Opcodes.IFEQ;
 import static org.objectweb.asm.Opcodes.IFNE;
+import static org.objectweb.asm.Opcodes.ILOAD;
 import static org.objectweb.asm.Opcodes.INVOKEINTERFACE;
 import static org.objectweb.asm.Opcodes.INVOKESPECIAL;
 import static org.objectweb.asm.Opcodes.INVOKESTATIC;
@@ -53,6 +59,7 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.FieldNode;
+import org.objectweb.asm.tree.MethodNode;
 
 import zen.ast.ZAndNode;
 import zen.ast.ZArrayLiteralNode;
@@ -98,27 +105,32 @@ import zen.ast.ZUnaryNode;
 import zen.ast.ZVarDeclNode;
 import zen.ast.ZWhileNode;
 import zen.deps.LibNative;
+import zen.deps.LibZen;
 import zen.deps.Var;
+import zen.deps.ZFunction;
 import zen.deps.ZObject;
+import zen.deps.ZenMap;
+import zen.lang.ZenClassType;
+import zen.lang.ZenField;
 import zen.type.ZFuncType;
 import zen.type.ZType;
 
 public class AsmGenerator extends JavaSolution {
-	AsmMethodBuilder CurrentBuilder;
-	AsmClassLoader ClassLoader = null;
+	AsmMethodBuilder AsmBuilder;
+	AsmClassLoader AsmLoader = null;
 	Stack<TryCatchLabel> TryCatchLabel;
 	private int LambdaMethodId = 0;
 
 	public AsmGenerator() {
 		super("java", "1.6");
 		this.TryCatchLabel = new Stack<TryCatchLabel>();
-		this.ClassLoader = new AsmClassLoader(this);
+		this.AsmLoader = new AsmClassLoader(this);
 		JavaCommonApi.LoadCommonApi(this);
 	}
 
 	@Override public final Class<?> GetJavaClass(ZType zType) {
 		if(zType instanceof ZFuncType) {
-			return this.ClassLoader.LoadFuncClass((ZFuncType)zType);
+			return this.AsmLoader.LoadFuncClass((ZFuncType)zType);
 		}
 		else {
 			return JavaTypeTable.GetJavaClass(zType, Object.class);
@@ -148,45 +160,45 @@ public class AsmGenerator extends JavaSolution {
 
 
 	@Override public void VisitNullNode(ZNullNode Node) {
-		this.CurrentBuilder.visitInsn(Opcodes.ACONST_NULL);
+		this.AsmBuilder.visitInsn(Opcodes.ACONST_NULL);
 	}
 
 	@Override public void VisitBooleanNode(ZBooleanNode Node) {
-		this.CurrentBuilder.PushBoolean(Node.BooleanValue);
+		this.AsmBuilder.PushBoolean(Node.BooleanValue);
 	}
 
 	@Override public void VisitIntNode(ZIntNode Node) {
-		this.CurrentBuilder.PushLong(Node.IntValue);
+		this.AsmBuilder.PushLong(Node.IntValue);
 	}
 
 	@Override public void VisitFloatNode(ZFloatNode Node) {
-		this.CurrentBuilder.PushDouble(Node.FloatValue);
+		this.AsmBuilder.PushDouble(Node.FloatValue);
 	}
 
 	@Override public void VisitStringNode(ZStringNode Node) {
-		this.CurrentBuilder.visitLdcInsn(Node.StringValue);
+		this.AsmBuilder.visitLdcInsn(Node.StringValue);
 	}
 
 	@Override public void VisitArrayLiteralNode(ZArrayLiteralNode Node) {
 		Class<?> ArrayClass = LibAsm.AsArrayClass(Node.Type);
 		String Owner = Type.getInternalName(ArrayClass);
-		this.CurrentBuilder.visitTypeInsn(NEW, Owner);
-		this.CurrentBuilder.visitInsn(DUP);
-		this.CurrentBuilder.PushInt(Node.Type.TypeId);
-		this.CurrentBuilder.PushNodeListAsArray(LibAsm.AsElementClass(Node.Type), 0, Node);
-		this.CurrentBuilder.SetLineNumber(Node);
-		this.CurrentBuilder.visitMethodInsn(INVOKESPECIAL, Owner, "<init>", LibAsm.NewArrayDescriptor(Node.Type));
+		this.AsmBuilder.visitTypeInsn(NEW, Owner);
+		this.AsmBuilder.visitInsn(DUP);
+		this.AsmBuilder.PushInt(Node.Type.TypeId);
+		this.AsmBuilder.PushNodeListAsArray(LibAsm.AsElementClass(Node.Type), 0, Node);
+		this.AsmBuilder.SetLineNumber(Node);
+		this.AsmBuilder.visitMethodInsn(INVOKESPECIAL, Owner, "<init>", LibAsm.NewArrayDescriptor(Node.Type));
 	}
 
 	@Override public void VisitMapLiteralNode(ZMapLiteralNode Node) {
 		this.Debug("TODO");
-		this.CurrentBuilder.visitInsn(Opcodes.ACONST_NULL);
+		this.AsmBuilder.visitInsn(Opcodes.ACONST_NULL);
 		// TODO Auto-generated method stub
 	}
 
 	@Override public void VisitNewArrayNode(ZNewArrayNode Node) {
 		this.Debug("TODO");
-		this.CurrentBuilder.visitInsn(Opcodes.ACONST_NULL);
+		this.AsmBuilder.visitInsn(Opcodes.ACONST_NULL);
 		//		this.CurrentBuilder.LoadConst(Node.Type);
 		//		this.CurrentBuilder.LoadNewArray(this, 0, Node.NodeList);
 		//		this.CurrentBuilder.InvokeMethodCall(Node.Type, JLib.NewArray);
@@ -195,46 +207,46 @@ public class AsmGenerator extends JavaSolution {
 	@Override public void VisitNewObjectNode(ZNewObjectNode Node) {
 		if(Node.Type.IsVarType()) {
 			this.Logger.ReportError(Node.SourceToken, "no class for new operator");
-			this.CurrentBuilder.visitInsn(Opcodes.ACONST_NULL);
+			this.AsmBuilder.visitInsn(Opcodes.ACONST_NULL);
 		}
 		else {
 			String ClassName = Type.getInternalName(this.GetJavaClass(Node.Type));
-			this.CurrentBuilder.visitTypeInsn(NEW, ClassName);
-			this.CurrentBuilder.visitInsn(DUP);
+			this.AsmBuilder.visitTypeInsn(NEW, ClassName);
+			this.AsmBuilder.visitInsn(DUP);
 			Constructor<?> jMethod = this.GetConstructor(Node.Type, Node);
 			if(jMethod != null) {
 				Class<?>[] P = jMethod.getParameterTypes();
 				for(int i = 0; i < P.length; i++) {
-					this.CurrentBuilder.PushNode(P[i], Node.GetListAt(i));
+					this.AsmBuilder.PushNode(P[i], Node.GetListAt(i));
 				}
-				this.CurrentBuilder.SetLineNumber(Node);
-				this.CurrentBuilder.visitMethodInsn(INVOKESPECIAL, ClassName, "<init>", Type.getConstructorDescriptor(jMethod));
+				this.AsmBuilder.SetLineNumber(Node);
+				this.AsmBuilder.visitMethodInsn(INVOKESPECIAL, ClassName, "<init>", Type.getConstructorDescriptor(jMethod));
 			}
 			else {
-				this.CurrentBuilder.PushInt(Node.Type.TypeId);
-				this.CurrentBuilder.SetLineNumber(Node);
-				this.CurrentBuilder.visitMethodInsn(INVOKESPECIAL, ClassName, "<init>", "(I)V");
+				this.AsmBuilder.PushInt(Node.Type.TypeId);
+				this.AsmBuilder.SetLineNumber(Node);
+				this.AsmBuilder.visitMethodInsn(INVOKESPECIAL, ClassName, "<init>", "(I)V");
 			}
 		}
 	}
 
 	@Override public void VisitVarDeclNode(ZVarDeclNode Node) {
 		Class<?> DeclClass = this.GetJavaClass(Node.DeclType);
-		this.CurrentBuilder.AddLocal(DeclClass, Node.NativeName);
-		this.CurrentBuilder.PushNode(DeclClass, Node.AST[ZVarDeclNode.InitValue]);
-		this.CurrentBuilder.StoreLocal(Node.NativeName);
+		this.AsmBuilder.AddLocal(DeclClass, Node.NativeName);
+		this.AsmBuilder.PushNode(DeclClass, Node.AST[ZVarDeclNode.InitValue]);
+		this.AsmBuilder.StoreLocal(Node.NativeName);
 		this.VisitBlockNode(Node);
-		this.CurrentBuilder.RemoveLocal(DeclClass, Node.NativeName);
+		this.AsmBuilder.RemoveLocal(DeclClass, Node.NativeName);
 	}
 
 	@Override public void VisitGetNameNode(ZGetNameNode Node) {
-		this.CurrentBuilder.LoadLocal(Node.VarName);
-		this.CurrentBuilder.CheckReturnCast(Node, this.CurrentBuilder.GetLocalType(Node.VarName));
+		this.AsmBuilder.LoadLocal(Node.VarName);
+		this.AsmBuilder.CheckReturnCast(Node, this.AsmBuilder.GetLocalType(Node.VarName));
 	}
 
 	@Override public void VisitSetNameNode(ZSetNameNode Node) {
-		this.CurrentBuilder.PushNode(this.CurrentBuilder.GetLocalType(Node.VarName), Node.AST[ZSetNameNode.Expr]);
-		this.CurrentBuilder.StoreLocal(Node.VarName);
+		this.AsmBuilder.PushNode(this.AsmBuilder.GetLocalType(Node.VarName), Node.AST[ZSetNameNode.Expr]);
+		this.AsmBuilder.StoreLocal(Node.VarName);
 	}
 
 	@Override public void VisitGroupNode(ZGroupNode Node) {
@@ -254,7 +266,7 @@ public class AsmGenerator extends JavaSolution {
 		if(Node.HasUntypedNode()) {
 			Method sMethod = JavaMethodTable.GetStaticMethod("GetField");
 			ZNode NameNode = new ZStringNode(Node, null, Node.FieldName);
-			this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.AST[ZGetterNode.Recv], NameNode});
+			this.AsmBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.AST[ZGetterNode.Recv], NameNode});
 		}
 		else {
 			Class<?> RecvClass = this.GetJavaClass(Node.AST[ZGetterNode.Recv].Type);
@@ -262,13 +274,13 @@ public class AsmGenerator extends JavaSolution {
 			String Owner = Type.getType(RecvClass).getInternalName();
 			String Desc = Type.getType(jField.getType()).getDescriptor();
 			if(Modifier.isStatic(jField.getModifiers())) {
-				this.CurrentBuilder.visitFieldInsn(Opcodes.GETSTATIC, Owner, Node.FieldName, Desc);
+				this.AsmBuilder.visitFieldInsn(Opcodes.GETSTATIC, Owner, Node.FieldName, Desc);
 			}
 			else {
-				this.CurrentBuilder.PushNode(null, Node.AST[ZGetterNode.Recv]);
-				this.CurrentBuilder.visitFieldInsn(GETFIELD, Owner, Node.FieldName, Desc);
+				this.AsmBuilder.PushNode(null, Node.AST[ZGetterNode.Recv]);
+				this.AsmBuilder.visitFieldInsn(GETFIELD, Owner, Node.FieldName, Desc);
 			}
-			this.CurrentBuilder.CheckReturnCast(Node, jField.getType());
+			this.AsmBuilder.CheckReturnCast(Node, jField.getType());
 		}
 	}
 
@@ -276,7 +288,7 @@ public class AsmGenerator extends JavaSolution {
 		if(Node.HasUntypedNode()) {
 			Method sMethod = JavaMethodTable.GetStaticMethod("SetField");
 			ZNode NameNode = new ZStringNode(Node, null, Node.FieldName);
-			this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.AST[ZGetterNode.Recv], NameNode, Node.AST[ZSetterNode.Expr]});
+			this.AsmBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.AST[ZGetterNode.Recv], NameNode, Node.AST[ZSetterNode.Expr]});
 		}
 		else {
 			Class<?> RecvClass = this.GetJavaClass(Node.AST[ZGetterNode.Recv].Type);
@@ -284,25 +296,25 @@ public class AsmGenerator extends JavaSolution {
 			String Owner = Type.getType(RecvClass).getInternalName();
 			String Desc = Type.getType(jField.getType()).getDescriptor();
 			if(Modifier.isStatic(jField.getModifiers())) {
-				this.CurrentBuilder.PushNode(jField.getType(), Node.AST[ZSetterNode.Expr]);
-				this.CurrentBuilder.visitFieldInsn(Opcodes.PUTSTATIC, Owner, Node.FieldName, Desc);
+				this.AsmBuilder.PushNode(jField.getType(), Node.AST[ZSetterNode.Expr]);
+				this.AsmBuilder.visitFieldInsn(Opcodes.PUTSTATIC, Owner, Node.FieldName, Desc);
 			}
 			else {
-				this.CurrentBuilder.PushNode(null, Node.AST[ZGetterNode.Recv]);
-				this.CurrentBuilder.PushNode(jField.getType(), Node.AST[ZSetterNode.Expr]);
-				this.CurrentBuilder.visitFieldInsn(PUTFIELD, Owner, Node.FieldName, Desc);
+				this.AsmBuilder.PushNode(null, Node.AST[ZGetterNode.Recv]);
+				this.AsmBuilder.PushNode(jField.getType(), Node.AST[ZSetterNode.Expr]);
+				this.AsmBuilder.visitFieldInsn(PUTFIELD, Owner, Node.FieldName, Desc);
 			}
 		}
 	}
 
 	@Override public void VisitGetIndexNode(ZGetIndexNode Node) {
 		Method sMethod = JavaMethodTable.GetBinaryStaticMethod(Node.AST[ZGetterNode.Recv].Type, "[]", Node.AST[ZGetIndexNode.Index].Type);
-		this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.AST[ZGetterNode.Recv], Node.AST[ZGetIndexNode.Index]});
+		this.AsmBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.AST[ZGetterNode.Recv], Node.AST[ZGetIndexNode.Index]});
 	}
 
 	@Override public void VisitSetIndexNode(ZSetIndexNode Node) {
 		Method sMethod = JavaMethodTable.GetBinaryStaticMethod(Node.AST[ZGetterNode.Recv].Type, "[]=", Node.AST[ZSetIndexNode.Index].Type);
-		this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.AST[ZGetterNode.Recv], Node.AST[ZSetIndexNode.Index], Node.AST[ZSetIndexNode.Expr]});
+		this.AsmBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.AST[ZGetterNode.Recv], Node.AST[ZSetIndexNode.Index], Node.AST[ZSetIndexNode.Expr]});
 	}
 
 	private int GetInvokeType(Method jMethod) {
@@ -316,42 +328,42 @@ public class AsmGenerator extends JavaSolution {
 	}
 
 	@Override public void VisitMethodCallNode(ZMethodCallNode Node) {
-		this.CurrentBuilder.SetLineNumber(Node);
+		this.AsmBuilder.SetLineNumber(Node);
 		Method jMethod = this.GetMethod(Node.AST[ZGetterNode.Recv].Type, Node.MethodName, Node);
 		if(jMethod != null) {
 			if(!Modifier.isStatic(jMethod.getModifiers())) {
-				this.CurrentBuilder.PushNode(null, Node.AST[ZGetterNode.Recv]);
+				this.AsmBuilder.PushNode(null, Node.AST[ZGetterNode.Recv]);
 			}
 			Class<?>[] P = jMethod.getParameterTypes();
 			for(int i = 0; i < P.length; i++) {
-				this.CurrentBuilder.PushNode(P[i], Node.GetListAt(i));
+				this.AsmBuilder.PushNode(P[i], Node.GetListAt(i));
 			}
 			int inst = this.GetInvokeType(jMethod);
 			String owner = Type.getInternalName(jMethod.getDeclaringClass());
-			this.CurrentBuilder.visitMethodInsn(inst, owner, jMethod.getName(), Type.getMethodDescriptor(jMethod));
-			this.CurrentBuilder.CheckReturnCast(Node, jMethod.getReturnType());
+			this.AsmBuilder.visitMethodInsn(inst, owner, jMethod.getName(), Type.getMethodDescriptor(jMethod));
+			this.AsmBuilder.CheckReturnCast(Node, jMethod.getReturnType());
 		}
 		else {
 			jMethod = JavaMethodTable.GetStaticMethod("InvokeUnresolvedMethod");
-			this.CurrentBuilder.PushNode(Object.class, Node.AST[ZGetterNode.Recv]);
-			this.CurrentBuilder.PushConst(Node.MethodName);
-			this.CurrentBuilder.PushNodeListAsArray(Object.class, 0, Node);
-			this.CurrentBuilder.ApplyStaticMethod(Node, jMethod, null);
+			this.AsmBuilder.PushNode(Object.class, Node.AST[ZGetterNode.Recv]);
+			this.AsmBuilder.PushConst(Node.MethodName);
+			this.AsmBuilder.PushNodeListAsArray(Object.class, 0, Node);
+			this.AsmBuilder.ApplyStaticMethod(Node, jMethod, null);
 		}
 	}
 
 	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
-		this.CurrentBuilder.SetLineNumber(Node);
+		this.AsmBuilder.SetLineNumber(Node);
 		if(Node.ResolvedFunc != null) {
 			ZNode[] Nodes = this.PackNodes(null, Node);
-			this.CurrentBuilder.ApplyFuncName(Node, Node.ResolvedFunc, Nodes);
+			this.AsmBuilder.ApplyFuncName(Node, Node.ResolvedFunc, Nodes);
 		}
 		else {
 			if(Node.AST[ZFuncCallNode.Func].Type.IsFuncType()) {
 				ZFuncType FuncType = (ZFuncType)Node.AST[ZFuncCallNode.Func].Type;
-				Class<?> FuncClass = this.ClassLoader.LoadFuncClass(FuncType);
+				Class<?> FuncClass = this.AsmLoader.LoadFuncClass(FuncType);
 				ZNode[] Nodes = this.PackNodes(null, Node);
-				this.CurrentBuilder.ApplyFuncObject(Node, FuncClass, Node.AST[ZFuncCallNode.Func], FuncType, Nodes);
+				this.AsmBuilder.ApplyFuncObject(Node, FuncClass, Node.AST[ZFuncCallNode.Func], FuncType, Nodes);
 			}
 			else {
 
@@ -361,28 +373,28 @@ public class AsmGenerator extends JavaSolution {
 
 	@Override public void VisitUnaryNode(ZUnaryNode Node) {
 		Method sMethod = JavaMethodTable.GetUnaryStaticMethod(Node.SourceToken.GetText(), Node.AST[ZGetterNode.Recv].Type);
-		this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.AST[ZGetterNode.Recv]});
+		this.AsmBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.AST[ZGetterNode.Recv]});
 	}
 
 	@Override public void VisitNotNode(ZNotNode Node) {
 		Method sMethod = JavaMethodTable.GetUnaryStaticMethod(Node.SourceToken.GetText(), Node.AST[ZGetterNode.Recv].Type);
-		this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.AST[ZGetterNode.Recv]});
+		this.AsmBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.AST[ZGetterNode.Recv]});
 	}
 
 	@Override public void VisitCastNode(ZCastNode Node) {
 		if(Node.Type.IsVoidType()) {
 			Node.AST[ZCastNode.Expr].Accept(this);
-			this.CurrentBuilder.Pop(Node.AST[ZCastNode.Expr].Type);
+			this.AsmBuilder.Pop(Node.AST[ZCastNode.Expr].Type);
 		}
 		else {
 			Class<?> C1 = this.GetJavaClass(Node.Type);
 			Class<?> C2 = this.GetJavaClass(Node.AST[ZCastNode.Expr].Type);
 			Method sMethod = JavaMethodTable.GetCastMethod(C1, C2);
 			if(sMethod != null) {
-				this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.AST[ZCastNode.Expr]});
+				this.AsmBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.AST[ZCastNode.Expr]});
 			}
 			else if(!C1.isAssignableFrom(C2)) {
-				this.CurrentBuilder.visitTypeInsn(Opcodes.CHECKCAST, Type.getInternalName(C1));
+				this.AsmBuilder.visitTypeInsn(Opcodes.CHECKCAST, Type.getInternalName(C1));
 			}
 		}
 	}
@@ -394,51 +406,51 @@ public class AsmGenerator extends JavaSolution {
 
 	@Override public void VisitBinaryNode(ZBinaryNode Node) {
 		Method sMethod = JavaMethodTable.GetBinaryStaticMethod(Node.AST[ZBinaryNode.Left].Type, Node.SourceToken.GetText(), Node.AST[ZBinaryNode.Right].Type);
-		this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.AST[ZBinaryNode.Left], Node.AST[ZBinaryNode.Right]});
+		this.AsmBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.AST[ZBinaryNode.Left], Node.AST[ZBinaryNode.Right]});
 	}
 
 	@Override public void VisitComparatorNode(ZComparatorNode Node) {
 		Method sMethod = JavaMethodTable.GetBinaryStaticMethod(Node.AST[ZBinaryNode.Left].Type, Node.SourceToken.GetText(), Node.AST[ZBinaryNode.Right].Type);
-		this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.AST[ZBinaryNode.Left], Node.AST[ZBinaryNode.Right]});
+		this.AsmBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.AST[ZBinaryNode.Left], Node.AST[ZBinaryNode.Right]});
 	}
 
 	@Override public void VisitAndNode(ZAndNode Node) {
 		Label elseLabel = new Label();
 		Label mergeLabel = new Label();
-		this.CurrentBuilder.PushNode(boolean.class, Node.AST[ZBinaryNode.Left]);
-		this.CurrentBuilder.visitJumpInsn(IFEQ, elseLabel);
+		this.AsmBuilder.PushNode(boolean.class, Node.AST[ZBinaryNode.Left]);
+		this.AsmBuilder.visitJumpInsn(IFEQ, elseLabel);
 
-		this.CurrentBuilder.PushNode(boolean.class, Node.AST[ZBinaryNode.Right]);
-		this.CurrentBuilder.visitJumpInsn(IFEQ, elseLabel);
+		this.AsmBuilder.PushNode(boolean.class, Node.AST[ZBinaryNode.Right]);
+		this.AsmBuilder.visitJumpInsn(IFEQ, elseLabel);
 
-		this.CurrentBuilder.visitLdcInsn(true);
-		this.CurrentBuilder.visitJumpInsn(GOTO, mergeLabel);
+		this.AsmBuilder.visitLdcInsn(true);
+		this.AsmBuilder.visitJumpInsn(GOTO, mergeLabel);
 
-		this.CurrentBuilder.visitLabel(elseLabel);
-		this.CurrentBuilder.visitLdcInsn(false);
-		this.CurrentBuilder.visitJumpInsn(GOTO, mergeLabel);
+		this.AsmBuilder.visitLabel(elseLabel);
+		this.AsmBuilder.visitLdcInsn(false);
+		this.AsmBuilder.visitJumpInsn(GOTO, mergeLabel);
 
-		this.CurrentBuilder.visitLabel(mergeLabel);
+		this.AsmBuilder.visitLabel(mergeLabel);
 	}
 
 	@Override public void VisitOrNode(ZOrNode Node) {
 		Label thenLabel = new Label();
 		Label mergeLabel = new Label();
-		this.CurrentBuilder.PushNode(boolean.class, Node.AST[ZBinaryNode.Left]);
-		this.CurrentBuilder.visitJumpInsn(IFNE, thenLabel);
+		this.AsmBuilder.PushNode(boolean.class, Node.AST[ZBinaryNode.Left]);
+		this.AsmBuilder.visitJumpInsn(IFNE, thenLabel);
 
-		this.CurrentBuilder.visitLdcInsn(true);
-		this.CurrentBuilder.PushNode(boolean.class, Node.AST[ZBinaryNode.Right]);
-		this.CurrentBuilder.visitJumpInsn(IFNE, thenLabel);
+		this.AsmBuilder.visitLdcInsn(true);
+		this.AsmBuilder.PushNode(boolean.class, Node.AST[ZBinaryNode.Right]);
+		this.AsmBuilder.visitJumpInsn(IFNE, thenLabel);
 
-		this.CurrentBuilder.visitLdcInsn(false);
-		this.CurrentBuilder.visitJumpInsn(GOTO, mergeLabel);
+		this.AsmBuilder.visitLdcInsn(false);
+		this.AsmBuilder.visitJumpInsn(GOTO, mergeLabel);
 
-		this.CurrentBuilder.visitLabel(thenLabel);
-		this.CurrentBuilder.visitLdcInsn(true);
-		this.CurrentBuilder.visitJumpInsn(GOTO, mergeLabel);
+		this.AsmBuilder.visitLabel(thenLabel);
+		this.AsmBuilder.visitLdcInsn(true);
+		this.AsmBuilder.visitJumpInsn(GOTO, mergeLabel);
 
-		this.CurrentBuilder.visitLabel(mergeLabel);
+		this.AsmBuilder.visitLabel(mergeLabel);
 	}
 
 	@Override public void VisitBlockNode(ZBlockNode Node) {
@@ -451,52 +463,52 @@ public class AsmGenerator extends JavaSolution {
 	@Override public void VisitIfNode(ZIfNode Node) {
 		Label ElseLabel = new Label();
 		Label EndLabel = new Label();
-		this.CurrentBuilder.PushNode(boolean.class, Node.AST[ZIfNode.Cond]);
-		this.CurrentBuilder.visitJumpInsn(IFEQ, ElseLabel);
+		this.AsmBuilder.PushNode(boolean.class, Node.AST[ZIfNode.Cond]);
+		this.AsmBuilder.visitJumpInsn(IFEQ, ElseLabel);
 		// Then
 		Node.AST[ZIfNode.Then].Accept(this);
-		this.CurrentBuilder.visitJumpInsn(GOTO, EndLabel);
+		this.AsmBuilder.visitJumpInsn(GOTO, EndLabel);
 		// Else
-		this.CurrentBuilder.visitLabel(ElseLabel);
+		this.AsmBuilder.visitLabel(ElseLabel);
 		if(Node.AST[ZIfNode.Else] != null) {
 			Node.AST[ZIfNode.Else].Accept(this);
-			this.CurrentBuilder.visitJumpInsn(GOTO, EndLabel);
+			this.AsmBuilder.visitJumpInsn(GOTO, EndLabel);
 		}
 		// End
-		this.CurrentBuilder.visitLabel(EndLabel);
+		this.AsmBuilder.visitLabel(EndLabel);
 	}
 
 	@Override public void VisitReturnNode(ZReturnNode Node) {
 		if(Node.AST[ZReturnNode.Expr] != null) {
 			Node.AST[ZReturnNode.Expr].Accept(this);
 			Type type = this.AsmType(Node.AST[ZReturnNode.Expr].Type);
-			this.CurrentBuilder.visitInsn(type.getOpcode(IRETURN));
+			this.AsmBuilder.visitInsn(type.getOpcode(IRETURN));
 		}
 		else {
-			this.CurrentBuilder.visitInsn(RETURN);
+			this.AsmBuilder.visitInsn(RETURN);
 		}
 	}
 
 	@Override public void VisitWhileNode(ZWhileNode Node) {
 		Label continueLabel = new Label();
 		Label breakLabel = new Label();
-		this.CurrentBuilder.BreakLabelStack.push(breakLabel);
-		this.CurrentBuilder.ContinueLabelStack.push(continueLabel);
+		this.AsmBuilder.BreakLabelStack.push(breakLabel);
+		this.AsmBuilder.ContinueLabelStack.push(continueLabel);
 
-		this.CurrentBuilder.visitLabel(continueLabel);
-		this.CurrentBuilder.PushNode(boolean.class, Node.AST[ZWhileNode.Cond]);
-		this.CurrentBuilder.visitJumpInsn(IFEQ, breakLabel); // condition
+		this.AsmBuilder.visitLabel(continueLabel);
+		this.AsmBuilder.PushNode(boolean.class, Node.AST[ZWhileNode.Cond]);
+		this.AsmBuilder.visitJumpInsn(IFEQ, breakLabel); // condition
 		Node.AST[ZWhileNode.Block].Accept(this);
-		this.CurrentBuilder.visitJumpInsn(GOTO, continueLabel);
-		this.CurrentBuilder.visitLabel(breakLabel);
+		this.AsmBuilder.visitJumpInsn(GOTO, continueLabel);
+		this.AsmBuilder.visitLabel(breakLabel);
 
-		this.CurrentBuilder.BreakLabelStack.pop();
-		this.CurrentBuilder.ContinueLabelStack.pop();
+		this.AsmBuilder.BreakLabelStack.pop();
+		this.AsmBuilder.ContinueLabelStack.pop();
 	}
 
 	@Override public void VisitBreakNode(ZBreakNode Node) {
-		Label l = this.CurrentBuilder.BreakLabelStack.peek();
-		this.CurrentBuilder.visitJumpInsn(GOTO, l);
+		Label l = this.AsmBuilder.BreakLabelStack.peek();
+		this.AsmBuilder.visitJumpInsn(GOTO, l);
 	}
 
 	@Override public void VisitThrowNode(ZThrowNode Node) {
@@ -512,7 +524,7 @@ public class AsmGenerator extends JavaSolution {
 	}
 
 	@Override public void VisitTryNode(ZTryNode Node) {
-		MethodVisitor mv = this.CurrentBuilder;
+		MethodVisitor mv = this.AsmBuilder;
 		TryCatchLabel Label = new TryCatchLabel();
 		this.TryCatchLabel.push(Label); // push
 
@@ -531,7 +543,7 @@ public class AsmGenerator extends JavaSolution {
 	}
 
 	@Override public void VisitCatchNode(ZCatchNode Node) {
-		MethodVisitor mv = this.CurrentBuilder;
+		MethodVisitor mv = this.AsmBuilder;
 		Label catchLabel = new Label();
 		TryCatchLabel Label = this.TryCatchLabel.peek();
 
@@ -541,18 +553,18 @@ public class AsmGenerator extends JavaSolution {
 		mv.visitTryCatchBlock(Label.beginTryLabel, Label.endTryLabel, catchLabel, throwType);
 
 		// catch block
-		this.CurrentBuilder.AddLocal(this.GetJavaClass(Node.ExceptionType), Node.ExceptionName);
+		this.AsmBuilder.AddLocal(this.GetJavaClass(Node.ExceptionType), Node.ExceptionName);
 		mv.visitLabel(catchLabel);
-		this.CurrentBuilder.StoreLocal(Node.ExceptionName);
+		this.AsmBuilder.StoreLocal(Node.ExceptionName);
 		Node.AST[ZCatchNode.Block].Accept(this);
 		mv.visitJumpInsn(GOTO, Label.finallyLabel);
 
-		this.CurrentBuilder.RemoveLocal(this.GetJavaClass(Node.ExceptionType), Node.ExceptionName);
+		this.AsmBuilder.RemoveLocal(this.GetJavaClass(Node.ExceptionType), Node.ExceptionName);
 	}
 
 	public void VisitStaticField(StaticFieldNode Node) {
 		String FieldDesc = Type.getDescriptor(this.GetJavaClass(Node.Type));
-		this.CurrentBuilder.visitFieldInsn(Opcodes.GETSTATIC, Type.getInternalName(Node.StaticClass), Node.FieldName, FieldDesc);
+		this.AsmBuilder.visitFieldInsn(Opcodes.GETSTATIC, Type.getInternalName(Node.StaticClass), Node.FieldName, FieldDesc);
 	}
 
 	@Override public void VisitLetNode(ZLetNode Node) {
@@ -560,18 +572,18 @@ public class AsmGenerator extends JavaSolution {
 			String ClassName = "Symbol" + Node.GlobalName;
 			@Var String SourceFile = Node.SourceToken.GetFileName();
 			@Var AsmClassBuilder cb = new AsmClassBuilder(ACC_PUBLIC|Opcodes.ACC_FINAL, SourceFile, ClassName, "java/lang/Object");
-			this.ClassLoader.AddClassBuilder(cb);
+			this.AsmLoader.AddClassBuilder(cb);
 			Class<?> ValueClass = this.GetJavaClass(Node.AST[ZLetNode.InitValue].Type);
 			@Var FieldNode fn = new FieldNode(ACC_PUBLIC|ACC_STATIC, "_", Type.getDescriptor(ValueClass), null, null);
 			cb.AddField(fn);
-			this.CurrentBuilder = new AsmMethodBuilder(ACC_PUBLIC | ACC_STATIC, "<clinit>", "()V", this, this.CurrentBuilder);
-			this.CurrentBuilder.PushNode(ValueClass, Node.AST[ZLetNode.InitValue]);
-			this.CurrentBuilder.visitFieldInsn(Opcodes.PUTSTATIC, ClassName, "_",  Type.getDescriptor(ValueClass));
-			this.CurrentBuilder.visitInsn(RETURN);
-			cb.AddMethod(this.CurrentBuilder);
-			this.CurrentBuilder = this.CurrentBuilder.Parent;
+			this.AsmBuilder = new AsmMethodBuilder(ACC_PUBLIC | ACC_STATIC, "<clinit>", "()V", this, this.AsmBuilder);
+			this.AsmBuilder.PushNode(ValueClass, Node.AST[ZLetNode.InitValue]);
+			this.AsmBuilder.visitFieldInsn(Opcodes.PUTSTATIC, ClassName, "_",  Type.getDescriptor(ValueClass));
+			this.AsmBuilder.visitInsn(RETURN);
+			cb.AddMethod(this.AsmBuilder);
+			this.AsmBuilder = this.AsmBuilder.Parent;
 			try {
-				Class<?> StaticClass = this.ClassLoader.loadClass(ClassName);
+				Class<?> StaticClass = this.AsmLoader.loadClass(ClassName);
 				Node.AST[ZLetNode.InitValue] = new StaticFieldNode(null, StaticClass, Node.AST[ZLetNode.InitValue].Type, "_");
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
@@ -581,7 +593,7 @@ public class AsmGenerator extends JavaSolution {
 	}
 
 	public void VisitJvmFuncNode(JvmFuncNode Node) {
-		this.CurrentBuilder.visitFieldInsn(Opcodes.GETSTATIC, Node.ClassName, "FUNCTION", Node.FieldDesc);
+		this.AsmBuilder.visitFieldInsn(Opcodes.GETSTATIC, Node.ClassName, "FUNCTION", Node.FieldDesc);
 	}
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
@@ -591,33 +603,134 @@ public class AsmGenerator extends JavaSolution {
 		}
 		@Var ZFuncType FuncType = Node.GetFuncType(null);
 		@Var JvmFuncNode FuncNode = new JvmFuncNode(Node, FuncType, Node.FuncName);
-		@Var AsmClassBuilder  HolderClass = this.ClassLoader.NewFunctionHolderClass(Node, FuncNode, FuncType);
+		@Var AsmClassBuilder  HolderClass = this.AsmLoader.NewFunctionHolderClass(Node, FuncNode, FuncType);
 		@Var String MethodDesc = this.GetMethodDescriptor(FuncType);
 		//System.out.println("*** " + MethodDesc);
-		this.CurrentBuilder = new AsmMethodBuilder(ACC_PUBLIC | ACC_STATIC, Node.FuncName, MethodDesc, this, this.CurrentBuilder);
-		HolderClass.AddMethod(this.CurrentBuilder);
+		this.AsmBuilder = new AsmMethodBuilder(ACC_PUBLIC | ACC_STATIC, Node.FuncName, MethodDesc, this, this.AsmBuilder);
+		HolderClass.AddMethod(this.AsmBuilder);
 		for(int i = 0; i < Node.GetListSize(); i++) {
 			ZParamNode ParamNode = Node.GetParamNode(i);
 			Class<?> DeclClass = this.GetJavaClass(ParamNode.Type);
-			this.CurrentBuilder.AddLocal(DeclClass, ParamNode.Name);
+			this.AsmBuilder.AddLocal(DeclClass, ParamNode.Name);
 		}
 		Node.AST[ZFunctionNode.Block].Accept(this);
-		//		if(Node.ReturnType.IsVoidType()) {
-		//			// JVM always needs return;
-		//			this.CurrentBuilder.visitInsn(RETURN);
-		//		}
 		try {
-			Method FuncMethod = HolderClass.GetDefinedMethod(this.ClassLoader, Node.FuncName);
+			Method FuncMethod = HolderClass.GetDefinedMethod(this.AsmLoader, Node.FuncName);
 			//this.Debug("InteranalName: " +Type.getInternalName(FuncMethod.getDeclaringClass()));
 			this.SetStaticFuncMethod(FuncType.StringfySignature(Node.FuncName), FuncMethod);
 			FuncNode.FuncClass = FuncMethod.getDeclaringClass();
+			this.SetMethod(Node.FuncName, FuncType, FuncMethod.getDeclaringClass());
 			Node.GetNameSpace().SetLocalSymbol(Node.FuncName, FuncNode);
 		}
 		catch(Error e) {
 			e.printStackTrace();
 		}
-		this.CurrentBuilder = this.CurrentBuilder.Parent;
+		this.AsmBuilder = this.AsmBuilder.Parent;
 	}
+
+
+	private ZFunction LoadFunction(Class<?> WrapperClass, Class<?> StaticMethodClass) {
+		try {
+			Field f = StaticMethodClass.getField("function");
+			Object func = f.get(null);
+			if(WrapperClass != null) {
+				Constructor<?> c = WrapperClass.getConstructor(func.getClass());
+				func = c.newInstance(func);
+			}
+			return (ZFunction)func;
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			LibNative.Exit(1, "failed: " + e);
+		}
+		return null;
+	}
+
+	private void SetMethod(String FuncName, ZFuncType FuncType, Class<?> FuncClass) {
+		ZType RecvType = FuncType.GetRecvType();
+		if(RecvType instanceof ZenClassType && FuncName != null) {
+			ZenClassType ClassType = (ZenClassType)RecvType;
+			ZType FieldType = ClassType.GetFieldType(FuncName, null);
+			if(FieldType == null || !FieldType.IsFuncType()) {
+				FuncName = LibZen.AnotherName(FuncName);
+				FieldType = ClassType.GetFieldType(FuncName, null);
+				if(FieldType == null || !FieldType.IsFuncType()) {
+					return;
+				}
+			}
+			if(FieldType.Equals(FuncType)) {
+				this.SetMethod(ClassType, FuncName, this.LoadFunction(null, FuncClass));
+			}
+			else if(this.IsMethodFuncType((ZFuncType)FieldType, FuncType)) {
+				Class<?> WrapperClass = this.MethodWrapperClass((ZFuncType)FieldType, FuncType);
+				this.SetMethod(ClassType, FuncName, this.LoadFunction(WrapperClass, FuncClass));
+			}
+		}
+	}
+
+	private boolean IsMethodFuncType(ZFuncType FieldType, ZFuncType FuncType) {
+		if(FuncType.GetFuncParamSize() == FieldType.GetFuncParamSize() && FuncType.GetReturnType().Equals(FieldType.GetReturnType())) {
+			for(int i = 1; i < FuncType.GetFuncParamSize(); i++) {
+				if(!FuncType.GetFuncParamType(i).Equals(FieldType.GetFuncParamType(i))) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	private final ZenMap<Class<?>> ClassMap = new ZenMap<Class<?>>(null);
+
+	private Class<?> MethodWrapperClass(ZFuncType FuncType, ZFuncType SourceFuncType) {
+		String ClassName = FuncType.GetUniqueName() + "W" + SourceFuncType.GetUniqueName();
+		Class<?> WrapperClass = this.ClassMap.GetOrNull(ClassName);
+		if(WrapperClass == null) {
+			Class<?> FuncClass = this.AsmLoader.LoadFuncClass(FuncType);
+			Class<?> SourceClass = this.AsmLoader.LoadFuncClass(FuncType);
+			@Var AsmClassBuilder cb = new AsmClassBuilder(ACC_PUBLIC|ACC_FINAL, null, ClassName, Type.getInternalName(FuncClass));
+			this.AsmLoader.AddClassBuilder(cb);
+			@Var FieldNode fn = new FieldNode(ACC_PUBLIC, "f", Type.getDescriptor(SourceClass), null, null);
+			cb.AddField(fn);
+			MethodNode InitMethod = new MethodNode(ACC_PRIVATE, "<init>", "(L"+Type.getInternalName(SourceClass)+")V", null, null);
+			InitMethod.visitVarInsn(ALOAD, 0);
+			InitMethod.visitLdcInsn(FuncType.TypeId);
+			InitMethod.visitLdcInsn(SourceFuncType.ShortName);
+			InitMethod.visitMethodInsn(INVOKESPECIAL, Type.getInternalName(FuncClass), "<init>", "(ILjava/lang/String;)V");
+			InitMethod.visitVarInsn(ALOAD, 0);
+			InitMethod.visitVarInsn(ALOAD, 1);
+			this.AsmBuilder.visitFieldInsn(PUTFIELD, ClassName, "f", Type.getDescriptor(SourceClass));
+			InitMethod.visitInsn(RETURN);
+			cb.AddMethod(InitMethod);
+			String FuncTypeDesc = this.GetMethodDescriptor(FuncType);
+			MethodNode InvokeMethod = new MethodNode(ACC_PUBLIC | ACC_FINAL, "Invoke", FuncTypeDesc, null, null);
+			InitMethod.visitVarInsn(ALOAD, 0);
+			this.AsmBuilder.visitFieldInsn(GETFIELD, ClassName, "f", Type.getDescriptor(SourceClass));
+			InitMethod.visitVarInsn(ALOAD, 1);
+			this.AsmBuilder.visitTypeInsn(CHECKCAST, Type.getInternalName(this.GetJavaClass(SourceFuncType.GetFuncParamType(0))));
+			int index = 2;
+			for(int i = 1; i < FuncType.GetFuncParamSize(); i++) {
+				Type AsmType = this.AsmType(FuncType.GetFuncParamType(i));
+				InvokeMethod.visitVarInsn(AsmType.getOpcode(ILOAD), index);
+				index += AsmType.getSize();
+			}
+			//String owner = "C" + FuncType.StringfySignature(FuncName);
+			InvokeMethod.visitMethodInsn(Opcodes.INVOKEVIRTUAL, ClassName, "Invoke", this.GetMethodDescriptor(SourceFuncType));
+			if(FuncType.GetReturnType().IsVoidType()) {
+				InvokeMethod.visitInsn(RETURN);
+			}
+			else {
+				Type type = this.AsmType(FuncType.GetReturnType());
+				InvokeMethod.visitInsn(type.getOpcode(IRETURN));
+			}
+			cb.AddMethod(InvokeMethod);
+			WrapperClass = this.AsmLoader.LoadGeneratedClass(ClassName);
+			this.ClassMap.put(ClassName, WrapperClass);
+		}
+		return null;
+	}
+
+
+	// -----------------------------------------------------------------------
 
 	private Class<?> GetSuperClass(ZType SuperType) {
 		@Var Class<?> SuperClass = null;
@@ -631,69 +744,89 @@ public class AsmGenerator extends JavaSolution {
 	}
 
 	private final static String NameClassMethod(ZType ClassType, String FieldName) {
-		return FieldName+ ClassType.TypeId;
+		return FieldName + ClassType.TypeId;
+	}
+
+	private void SetMethod(ZenClassType ClassType, String FuncName, ZFunction FuncObject) {
+		try {
+			System.out.println("Set Method " + NameClassMethod(ClassType, FuncName) + ", FuncObject=" + FuncObject);
+			Class<?> StaticClass = this.GetJavaClass(ClassType);
+			System.out.println("StaticClass " + StaticClass);
+			Field f = StaticClass.getField(NameClassMethod(ClassType, FuncName));
+			f.set(null, FuncObject);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			LibNative.Exit(1, "failed " + e);
+		}
 	}
 
 	@Override public void VisitClassDeclNode(ZClassDeclNode Node) {
 		@Var Class<?> SuperClass = this.GetSuperClass(Node.SuperType);
-		@Var AsmClassBuilder ClassBuilder = this.ClassLoader.NewClass(Node, Node.ClassName, SuperClass);
+		@Var AsmClassBuilder ClassBuilder = this.AsmLoader.NewClass(Node, Node.ClassName, SuperClass);
 		for(@Var int i = 0; i < Node.GetListSize(); i++) {
 			@Var ZFieldNode Field = Node.GetFieldNode(i);
 			if(Field.ClassType.Equals(Node.ClassType)) {
-				System.out.println("FieldName:" + Field.FieldName);
+				//System.out.println("FieldName: " + Field.FieldName);
 				@Var FieldNode fn = new FieldNode(ACC_PUBLIC, Field.FieldName, this.GetTypeDesc(Field.DeclType), null, this.GetConstValue(Field.AST[ZFieldNode.InitValue]));
 				ClassBuilder.AddField(fn);
 			}
 		}
-		for(@Var int i = 0; i < Node.GetListSize(); i++) {
-			@Var ZFieldNode Field = Node.GetFieldNode(i);
-			if(Field.DeclType.IsFuncType()) {
-				System.out.println("ClassMethodName:" + NameClassMethod(Node.ClassType, Field.FieldName) + ", " + this.GetTypeDesc(Field.DeclType));
-				@Var FieldNode fn = new FieldNode(ACC_PUBLIC|ACC_STATIC, NameClassMethod(Node.ClassType, Field.FieldName), this.GetTypeDesc(Field.DeclType), null, null);
+		for(@Var int i = 0; i < Node.ClassType.GetFieldSize(); i++) {
+			@Var ZenField Field = Node.ClassType.GetFieldAt(i);
+			if(Field.FieldType.IsFuncType()) {
+				// System.out.println("ClassMethodName:" + NameClassMethod(Node.ClassType, Field.FieldName) + ", " + this.GetTypeDesc(Field.FieldType));
+				@Var FieldNode fn = new FieldNode(ACC_PUBLIC|ACC_STATIC, NameClassMethod(Node.ClassType, Field.FieldName), this.GetTypeDesc(Field.FieldType), null, null);
 				ClassBuilder.AddField(fn);
 			}
 		}
-		this.CurrentBuilder = new AsmMethodBuilder(ACC_PUBLIC, "<init>", "(I)V", this, this.CurrentBuilder);
-		this.CurrentBuilder.visitVarInsn(Opcodes.ALOAD, 0);
-		this.CurrentBuilder.visitVarInsn(Opcodes.ILOAD, 1);
-		this.CurrentBuilder.visitMethodInsn(INVOKESPECIAL, Type.getInternalName(SuperClass), "<init>", "(I)V");
+		this.AsmBuilder = new AsmMethodBuilder(ACC_PUBLIC, "<init>", "()V", this, this.AsmBuilder);
+		this.AsmBuilder.visitVarInsn(Opcodes.ALOAD, 0);
+		this.AsmBuilder.PushInt(Node.ClassType.TypeId);
+		this.AsmBuilder.visitMethodInsn(INVOKESPECIAL, Node.ClassName, "<init>", "(I)V");
+		this.AsmBuilder.visitInsn(RETURN);
+		ClassBuilder.AddMethod(this.AsmBuilder);
+		this.AsmBuilder = this.AsmBuilder.Parent;
+
+		this.AsmBuilder = new AsmMethodBuilder(ACC_PROTECTED, "<init>", "(I)V", this, this.AsmBuilder);
+		this.AsmBuilder.visitVarInsn(Opcodes.ALOAD, 0);
+		this.AsmBuilder.visitVarInsn(Opcodes.ILOAD, 1);
+		this.AsmBuilder.visitMethodInsn(INVOKESPECIAL, Type.getInternalName(SuperClass), "<init>", "(I)V");
 		for(@Var int i = 0; i < Node.GetListSize(); i++) {
 			@Var ZFieldNode Field = Node.GetFieldNode(i);
-			System.out.println("FieldName:" + Field.ClassType + "." + Field.FieldName + ", init=" + Field.AST[ZFieldNode.InitValue]);
-			if(Field.DeclType.IsFuncType()) {
-				String FieldDesc = Type.getDescriptor(this.GetJavaClass(Field.DeclType));
+			if(!Field.DeclType.IsFuncType()) {
+				//			System.out.println("FieldName:" + Field.ClassType + "." + Field.FieldName + ", init=" + Field.AST[ZFieldNode.InitValue]);				System.out.println("FieldName:" + Field.FieldName + ", init=" + Field.AST[ZFieldNode.InitValue]);
+				this.AsmBuilder.visitVarInsn(Opcodes.ALOAD, 0);
+				this.AsmBuilder.PushNode(this.GetJavaClass(Field.DeclType), Field.AST[ZFieldNode.InitValue]);
+				this.AsmBuilder.visitFieldInsn(PUTFIELD, Node.ClassName, Field.FieldName, Type.getDescriptor(this.GetJavaClass(Field.DeclType)));
+			}
+		}
+		for(@Var int i = 0; i < Node.ClassType.GetFieldSize(); i++) {
+			@Var ZenField Field = Node.ClassType.GetFieldAt(i);
+			if(Field.FieldType.IsFuncType()) {
+				System.out.println("FieldName:" + Field.ClassType + "." + Field.FieldName + ", type=" + Field.FieldType);
+				String FieldDesc = Type.getDescriptor(this.GetJavaClass(Field.FieldType));
 				Label JumpLabel = new Label();
-				this.CurrentBuilder.visitFieldInsn(Opcodes.GETSTATIC, Node.ClassName, NameClassMethod(Node.ClassType, Field.FieldName), FieldDesc);
-				this.CurrentBuilder.visitJumpInsn(Opcodes.IFNONNULL, JumpLabel);
-				this.CurrentBuilder.visitVarInsn(Opcodes.ALOAD, 0);
-				this.CurrentBuilder.visitFieldInsn(Opcodes.GETSTATIC, Node.ClassName, NameClassMethod(Node.ClassType, Field.FieldName), FieldDesc);
-				this.CurrentBuilder.visitFieldInsn(Opcodes.PUTFIELD, Type.getInternalName(this.GetJavaClass(Field.ClassType)), Field.FieldName, FieldDesc);
-				this.CurrentBuilder.visitLabel(JumpLabel);
-			}
-			else if(Field.ClassType.Equals(Node.ClassType)) {
-				System.out.println("FieldName:" + Field.FieldName + ", init=" + Field.AST[ZFieldNode.InitValue]);
-				this.CurrentBuilder.visitVarInsn(Opcodes.ALOAD, 0);
-				this.CurrentBuilder.PushNode(this.GetJavaClass(Field.DeclType), Field.AST[ZFieldNode.InitValue]);
-				this.CurrentBuilder.visitFieldInsn(PUTFIELD, Node.ClassName, Field.FieldName, Type.getDescriptor(this.GetJavaClass(Field.DeclType)));
+				this.AsmBuilder.visitFieldInsn(Opcodes.GETSTATIC, Node.ClassName, NameClassMethod(Node.ClassType, Field.FieldName), FieldDesc);
+				this.AsmBuilder.visitJumpInsn(Opcodes.IFNONNULL, JumpLabel);
+				this.AsmBuilder.visitVarInsn(Opcodes.ALOAD, 0);
+				this.AsmBuilder.visitFieldInsn(Opcodes.GETSTATIC, Node.ClassName, NameClassMethod(Node.ClassType, Field.FieldName), FieldDesc);
+				//System.out.println("************" + Field.ClassType + ", " + Type.getInternalName(this.GetJavaClass(Field.ClassType)));
+				this.AsmBuilder.visitFieldInsn(Opcodes.PUTFIELD, Field.ClassType.ShortName, Field.FieldName, FieldDesc);
+				this.AsmBuilder.visitLabel(JumpLabel);
 			}
 		}
-		this.CurrentBuilder.visitInsn(RETURN);
-		ClassBuilder.AddMethod(this.CurrentBuilder);
-		this.CurrentBuilder = this.CurrentBuilder.Parent;
-		try {
-			Class<?> c = this.ClassLoader.loadClass(Node.ClassName);
-			JavaTypeTable.SetTypeTable(Node.ClassType, c);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-
+		this.AsmBuilder.visitInsn(RETURN);
+		ClassBuilder.AddMethod(this.AsmBuilder);
+		this.AsmBuilder = this.AsmBuilder.Parent;
+		JavaTypeTable.SetTypeTable(Node.ClassType, this.AsmLoader.LoadGeneratedClass(Node.ClassName));
 	}
 
 	@Override public void VisitErrorNode(ZErrorNode Node) {
 		String Message = this.Logger.ReportError(Node.SourceToken, Node.ErrorMessage);
-		this.CurrentBuilder.PushConst(Message);
+		this.AsmBuilder.PushConst(Message);
 		Method sMethod = JavaMethodTable.GetStaticMethod("ThrowError");
-		this.CurrentBuilder.ApplyStaticMethod(Node, sMethod, null);
+		this.AsmBuilder.ApplyStaticMethod(Node, sMethod, null);
 	}
 
 	@Override public void VisitExtendedNode(ZNode Node) {

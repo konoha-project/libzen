@@ -44,7 +44,7 @@ public class ZenClassType extends ZType {
 		}
 	}
 
-	public void ResetSuperType(ZenClassType SuperClass) {
+	public final void ResetSuperType(ZenClassType SuperClass) {
 		this.RefType = SuperClass;
 		if(SuperClass.FieldList != null) {
 			this.FieldList = new ArrayList<ZenField>();
@@ -55,6 +55,17 @@ public class ZenClassType extends ZType {
 				i = i + 1;
 			}
 		}
+	}
+
+	public final int GetFieldSize() {
+		if(this.FieldList != null) {
+			return this.FieldList.size();
+		}
+		return 0;
+	}
+
+	public final ZenField GetFieldAt(int Index) {
+		return this.FieldList.get(Index);
 	}
 
 	public boolean HasField(String FieldName) {
@@ -70,7 +81,7 @@ public class ZenClassType extends ZType {
 		return false;
 	}
 
-	public ZType GetFieldType(String FieldName, ZType Type) {
+	public ZType GetFieldType(String FieldName, ZType DefaultType) {
 		if(this.FieldList != null) {
 			@Var int i = 0;
 			while(i < this.FieldList.size()) {
@@ -81,7 +92,7 @@ public class ZenClassType extends ZType {
 				i = i + 1;
 			}
 		}
-		return Type;
+		return DefaultType;
 	}
 
 	public ZenField AppendField(ZType FieldType, String FieldName, ZToken SourceToken) {

@@ -23,6 +23,7 @@ import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.MethodNode;
 
 import zen.ast.ZNode;
+import zen.deps.LibNative;
 import zen.deps.Var;
 import zen.deps.ZFunction;
 import zen.deps.ZMatchFunction;
@@ -138,16 +139,17 @@ class AsmClassLoader extends ClassLoader {
 
 	AsmClassBuilder NewClass(ZNode Node, String ClassName, Class<?> SuperClass) {
 		@Var String SourceFile = Node.SourceToken.GetFileName();
-		@Var AsmClassBuilder cb = new AsmClassBuilder(ACC_PUBLIC, SourceFile, ClassName, Type.getInternalName(SuperClass));
-		this.AddClassBuilder(cb);
-		return cb;
+		@Var AsmClassBuilder ClassBuilder = new AsmClassBuilder(ACC_PUBLIC, SourceFile, ClassName, Type.getInternalName(SuperClass));
+		this.AddClassBuilder(ClassBuilder);
+		return ClassBuilder;
 	}
 
 	@Override protected Class<?> findClass(String name) {
-		AsmClassBuilder cb = this.ClassBuilderMap.get(name);
-		if(cb != null) {
-			byte[] b = cb.GenerateBytecode();
-			cb.OutputClassFile();
+		//System.err.println("loading .. " + name);
+		AsmClassBuilder ClassBuilder = this.ClassBuilderMap.get(name);
+		if(ClassBuilder != null) {
+			byte[] b = ClassBuilder.GenerateBytecode();
+			ClassBuilder.OutputClassFile();
 			this.ClassBuilderMap.remove(name);
 			try {
 				return this.defineClass(name, b, 0, b.length);
@@ -160,5 +162,14 @@ class AsmClassLoader extends ClassLoader {
 		return null;
 	}
 
+	public Class<?> LoadGeneratedClass(String ClassName) {
+		try {
+			return this.loadClass(ClassName);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			LibNative.Exit(1, "generation failed: " + ClassName);
+		}
+		return null;
+	}
 
 }
