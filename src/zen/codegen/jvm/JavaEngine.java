@@ -140,7 +140,7 @@ public class JavaEngine extends ZenEngine {
 		}
 	}
 
-	public void VisitStaticFieldNode(StaticFieldNode Node) {
+	public void VisitStaticFieldNode(JavaStaticFieldNode Node) {
 		try {
 			Field f = Node.StaticClass.getField(Node.FieldName);
 			this.EvaledValue = f.get(null);

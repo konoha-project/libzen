@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.MethodNode;
 
 import zen.ast.ZNode;
@@ -42,6 +41,18 @@ class AsmClassLoader extends ClassLoader {
 	public AsmClassLoader(JavaAsmGenerator Generator) {
 		this.Generator = Generator;
 		this.InitFuncClass();
+	}
+
+	AsmClassBuilder NewClassBuilder(int ClassQualifer, String SourceFile, String ClassName, String SuperClass) {
+		AsmClassBuilder ClassBuilder = new AsmClassBuilder(this.Generator, ClassQualifer, SourceFile, ClassName, SuperClass);
+		this.ClassBuilderMap.put(ClassName, ClassBuilder);
+		return ClassBuilder;
+	}
+
+	AsmClassBuilder NewClassBuilder(int ClassQualifer, String SourceFile, String ClassName, Class<?> SuperClass) {
+		AsmClassBuilder ClassBuilder = new AsmClassBuilder(this.Generator, ClassQualifer, SourceFile, ClassName, Type.getInternalName(SuperClass));
+		this.ClassBuilderMap.put(ClassName, ClassBuilder);
+		return ClassBuilder;
 	}
 
 	void AddClassBuilder(AsmClassBuilder ClassBuilder) {
@@ -72,7 +83,7 @@ class AsmClassLoader extends ClassLoader {
 		Class<?> FuncClass = this.FuncClassMap.get(ClassName);
 		if(FuncClass == null) {
 			@Var String SuperClassName = Type.getInternalName(ZFunction.class);
-			@Var AsmClassBuilder cb = new AsmClassBuilder(ACC_PUBLIC| ACC_ABSTRACT, null, ClassName, SuperClassName);
+			@Var AsmClassBuilder cb = new AsmClassBuilder(this.Generator, ACC_PUBLIC| ACC_ABSTRACT, null, ClassName, SuperClassName);
 			String Desc = this.Generator.GetMethodDescriptor(FuncType);
 			MethodNode InvokeMethod = new MethodNode(ACC_PUBLIC | ACC_ABSTRACT, "Invoke", Desc, null, null);
 			cb.AddMethod(InvokeMethod);
@@ -94,7 +105,7 @@ class AsmClassLoader extends ClassLoader {
 	AsmClassBuilder NewFunctionHolderClass(ZNode Node, JvmFuncNode FuncNode, ZFuncType FuncType) {
 		@Var String SourceFile = Node.SourceToken.GetFileName();
 		Class<?> FuncClass = this.LoadFuncClass(FuncType);
-		@Var AsmClassBuilder cb = new AsmClassBuilder(ACC_PUBLIC|ACC_FINAL, SourceFile, FuncNode.ClassName, Type.getInternalName(FuncClass));
+		@Var AsmClassBuilder cb = new AsmClassBuilder(this.Generator, ACC_PUBLIC|ACC_FINAL, SourceFile, FuncNode.ClassName, Type.getInternalName(FuncClass));
 		this.AddClassBuilder(cb);
 		String FuncTypeDesc = this.Generator.GetMethodDescriptor(FuncType);
 		MethodNode InvokeMethod = new MethodNode(ACC_PUBLIC | ACC_FINAL, "Invoke", FuncTypeDesc, null, null);
@@ -114,9 +125,7 @@ class AsmClassLoader extends ClassLoader {
 			InvokeMethod.visitInsn(type.getOpcode(IRETURN));
 		}
 		cb.AddMethod(InvokeMethod);
-		FuncNode.FieldDesc = Type.getDescriptor(FuncClass);
-		FieldNode StaticField = new FieldNode(ACC_PUBLIC | ACC_STATIC | ACC_FINAL, "function", FuncNode.FieldDesc, null, null);
-		cb.AddField(StaticField);
+		cb.AddField(ACC_PUBLIC | ACC_STATIC | ACC_FINAL, "function", FuncClass, null);
 
 		// static init
 		MethodNode StaticInitMethod = new MethodNode(ACC_PUBLIC | ACC_STATIC , "<clinit>", "()V", null, null);
@@ -139,7 +148,7 @@ class AsmClassLoader extends ClassLoader {
 
 	AsmClassBuilder NewClass(ZNode Node, String ClassName, Class<?> SuperClass) {
 		@Var String SourceFile = Node.SourceToken.GetFileName();
-		@Var AsmClassBuilder ClassBuilder = new AsmClassBuilder(ACC_PUBLIC, SourceFile, ClassName, Type.getInternalName(SuperClass));
+		@Var AsmClassBuilder ClassBuilder = new AsmClassBuilder(this.Generator, ACC_PUBLIC, SourceFile, ClassName, Type.getInternalName(SuperClass));
 		this.AddClassBuilder(ClassBuilder);
 		return ClassBuilder;
 	}

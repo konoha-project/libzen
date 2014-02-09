@@ -57,7 +57,6 @@ import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.MethodNode;
 
 import zen.ast.ZAndNode;
@@ -561,7 +560,7 @@ public class JavaAsmGenerator extends JavaSolution {
 		this.AsmBuilder.RemoveLocal(this.GetJavaClass(Node.ExceptionType), Node.ExceptionName);
 	}
 
-	public void VisitStaticField(StaticFieldNode Node) {
+	public void VisitStaticField(JavaStaticFieldNode Node) {
 		String FieldDesc = Type.getDescriptor(this.GetJavaClass(Node.Type));
 		this.AsmBuilder.visitFieldInsn(Opcodes.GETSTATIC, Type.getInternalName(Node.StaticClass), Node.FieldName, FieldDesc);
 	}
@@ -570,23 +569,19 @@ public class JavaAsmGenerator extends JavaSolution {
 		if(!(Node.AST[ZLetNode.InitValue] instanceof ZConstNode)) {
 			String ClassName = "Symbol" + Node.GlobalName;
 			@Var String SourceFile = Node.SourceToken.GetFileName();
-			@Var AsmClassBuilder cb = new AsmClassBuilder(ACC_PUBLIC|Opcodes.ACC_FINAL, SourceFile, ClassName, "java/lang/Object");
-			this.AsmLoader.AddClassBuilder(cb);
+			@Var AsmClassBuilder ClassBuilder = this.AsmLoader.NewClassBuilder(ACC_PUBLIC|ACC_FINAL, SourceFile, ClassName, "java/lang/Object");
 			Class<?> ValueClass = this.GetJavaClass(Node.AST[ZLetNode.InitValue].Type);
-			@Var FieldNode fn = new FieldNode(ACC_PUBLIC|ACC_STATIC, "_", Type.getDescriptor(ValueClass), null, null);
-			cb.AddField(fn);
+			ClassBuilder.AddField(ACC_PUBLIC|ACC_STATIC, "_", ValueClass, null);
+
 			this.AsmBuilder = new AsmMethodBuilder(ACC_PUBLIC | ACC_STATIC, "<clinit>", "()V", this, this.AsmBuilder);
 			this.AsmBuilder.PushNode(ValueClass, Node.AST[ZLetNode.InitValue]);
 			this.AsmBuilder.visitFieldInsn(Opcodes.PUTSTATIC, ClassName, "_",  Type.getDescriptor(ValueClass));
 			this.AsmBuilder.visitInsn(RETURN);
-			cb.AddMethod(this.AsmBuilder);
+			ClassBuilder.AddMethod(this.AsmBuilder);
 			this.AsmBuilder = this.AsmBuilder.Parent;
-			try {
-				Class<?> StaticClass = this.AsmLoader.loadClass(ClassName);
-				Node.AST[ZLetNode.InitValue] = new StaticFieldNode(null, StaticClass, Node.AST[ZLetNode.InitValue].Type, "_");
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}
+
+			Class<?> StaticClass = this.AsmLoader.LoadGeneratedClass(ClassName);
+			Node.Set(ZLetNode.InitValue, new JavaStaticFieldNode(null, StaticClass, Node.AST[ZLetNode.InitValue].Type, "_"));
 		}
 		Node.GetNameSpace().SetLocalSymbol(Node.Symbol, Node.AST[ZLetNode.InitValue]);
 	}
@@ -685,11 +680,9 @@ public class JavaAsmGenerator extends JavaSolution {
 		if(WrapperClass == null) {
 			Class<?> FuncClass = this.AsmLoader.LoadFuncClass(FuncType);
 			Class<?> SourceClass = this.AsmLoader.LoadFuncClass(SourceFuncType);
-			@Var AsmClassBuilder ClassBuilder = new AsmClassBuilder(ACC_PUBLIC|ACC_FINAL, null, ClassName, Type.getInternalName(FuncClass));
-			this.AsmLoader.AddClassBuilder(ClassBuilder);
+			@Var AsmClassBuilder ClassBuilder = this.AsmLoader.NewClassBuilder(ACC_PUBLIC|ACC_FINAL, null, ClassName, FuncClass);
 
-			@Var FieldNode fn = new FieldNode(ACC_PUBLIC, "f", Type.getDescriptor(SourceClass), null, null);
-			ClassBuilder.AddField(fn);
+			ClassBuilder.AddField(ACC_PUBLIC, "f", SourceClass, null);
 
 			MethodNode InitMethod = new MethodNode(ACC_PUBLIC, "<init>", "(L"+Type.getInternalName(SourceClass)+";)V", null, null);
 			InitMethod.visitVarInsn(Opcodes.ALOAD, 0);
@@ -768,17 +761,13 @@ public class JavaAsmGenerator extends JavaSolution {
 		for(@Var int i = 0; i < Node.GetListSize(); i++) {
 			@Var ZFieldNode Field = Node.GetFieldNode(i);
 			if(Field.ClassType.Equals(Node.ClassType)) {
-				//System.out.println("FieldName: " + Field.FieldName);
-				@Var FieldNode fn = new FieldNode(ACC_PUBLIC, Field.FieldName, this.GetTypeDesc(Field.DeclType), null, this.GetConstValue(Field.AST[ZFieldNode.InitValue]));
-				ClassBuilder.AddField(fn);
+				ClassBuilder.AddField(ACC_PUBLIC, Field.FieldName, Field.DeclType, this.GetConstValue(Field.AST[ZFieldNode.InitValue]));
 			}
 		}
 		for(@Var int i = 0; i < Node.ClassType.GetFieldSize(); i++) {
 			@Var ZenField Field = Node.ClassType.GetFieldAt(i);
 			if(Field.FieldType.IsFuncType()) {
-				// System.out.println("ClassMethodName:" + NameClassMethod(Node.ClassType, Field.FieldName) + ", " + this.GetTypeDesc(Field.FieldType));
-				@Var FieldNode fn = new FieldNode(ACC_PUBLIC|ACC_STATIC, NameClassMethod(Node.ClassType, Field.FieldName), this.GetTypeDesc(Field.FieldType), null, null);
-				ClassBuilder.AddField(fn);
+				ClassBuilder.AddField(ACC_PUBLIC|ACC_STATIC, NameClassMethod(Node.ClassType, Field.FieldName), Field.FieldType, null);
 			}
 		}
 		this.AsmBuilder = new AsmMethodBuilder(ACC_PUBLIC, "<init>", "()V", this, this.AsmBuilder);

@@ -9,12 +9,16 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.MethodNode;
 
 import zen.deps.LibNative;
+import zen.deps.Var;
+import zen.type.ZType;
 
 class AsmClassBuilder {
+	final JavaAsmGenerator Generator;
 	final int ClassQualifer;
 	final String SourceFile;
 	final String ClassName;
@@ -22,7 +26,8 @@ class AsmClassBuilder {
 	final ArrayList<MethodNode> MethodList = new ArrayList<MethodNode>();
 	final ArrayList<FieldNode> FieldList = new ArrayList<FieldNode>();
 
-	AsmClassBuilder(int ClassQualifer, String SourceFile, String ClassName, String SuperClass) {
+	AsmClassBuilder(JavaAsmGenerator Generator, int ClassQualifer, String SourceFile, String ClassName, String SuperClass) {
+		this.Generator = Generator;
 		this.ClassQualifer = ClassQualifer;
 		this.SourceFile = SourceFile;
 		this.ClassName = ClassName;
@@ -40,9 +45,16 @@ class AsmClassBuilder {
 		this.MethodList.add(m);
 	}
 
-	void AddField(FieldNode m) {
-		this.FieldList.add(m);
+	void AddField(int acc, String Name, ZType zType, Object Value) {
+		@Var FieldNode fn = new FieldNode(acc, Name, Type.getDescriptor(this.Generator.GetJavaClass(zType)), null, Value);
+		this.FieldList.add(fn);
 	}
+
+	void AddField(int acc, String Name, Class<?> FieldClass, Object Value) {
+		@Var FieldNode fn = new FieldNode(acc, Name, Type.getDescriptor(FieldClass), null, Value);
+		this.FieldList.add(fn);
+	}
+
 
 	byte[] GenerateBytecode() {
 		ClassWriter Visitor = new ClassWriter(ClassWriter.COMPUTE_FRAMES);

@@ -298,4 +298,9 @@ class AsmMethodBuilder extends MethodNode {
 		}
 	}
 
+	public void PopBuilder(AsmClassBuilder classBuilder) {
+		// TODO Auto-generated method stub
+
+	}
+
 }

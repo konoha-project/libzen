@@ -3,10 +3,10 @@ package zen.codegen.jvm;
 import zen.ast.ZNode;
 import zen.type.ZType;
 
-public class StaticFieldNode extends ZNode {
+public class JavaStaticFieldNode extends ZNode {
 	Class<?> StaticClass;
 	String FieldName;
-	StaticFieldNode(ZNode ParentNode, Class<?> StaticClass, ZType FieldType, String FieldName) {
+	JavaStaticFieldNode(ZNode ParentNode, Class<?> StaticClass, ZType FieldType, String FieldName) {
 		super(ParentNode, null, 0);
 		this.StaticClass = StaticClass;
 		this.Type = FieldType;
