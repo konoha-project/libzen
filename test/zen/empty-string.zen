@@ -1,0 +1,3 @@
+class X {
+    field x : String = "";
+}
