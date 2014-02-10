@@ -65,7 +65,7 @@ public final class ZSourceContext extends ZSource {
 
 	public void Tokenize(String PatternName, int StartIndex, int EndIndex) {
 		this.SourcePosition = EndIndex;
-		if(StartIndex < EndIndex && EndIndex <= this.SourceText.length()) {
+		if(StartIndex <= EndIndex && EndIndex <= this.SourceText.length()) {
 			ZSyntaxPattern Pattern = this.TokenContext.NameSpace.GetSyntaxPattern(PatternName);
 			if(Pattern == null) {
 				this.Panic(StartIndex, "unregistered token pattern: " + PatternName);
