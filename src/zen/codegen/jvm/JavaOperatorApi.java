@@ -313,6 +313,7 @@ public final class JavaOperatorApi {
 	}
 
 	public static Object GetField(Object x, String name) {
+		//System.out.println("name="+name+", x="+x);
 		try {
 			if(x instanceof ZType) {
 				Field f = JavaTypeTable.GetJavaClass((ZType)x, null).getField(name);
@@ -320,11 +321,12 @@ public final class JavaOperatorApi {
 			}
 			else {
 				Field f = x.getClass().getField(name);
+				//System.out.println("f="+f+", x="+x);
 				return f.get(x);
 			}
 		}
 		catch(Exception e) {
-			throw new SoftwareFaultException(e.toString());
+			throw new SoftwareFaultException("undefined field: " + name);
 		}
 	}
 
@@ -340,7 +342,7 @@ public final class JavaOperatorApi {
 			}
 		}
 		catch(Exception e) {
-			throw new SoftwareFaultException(e.toString());
+			throw new SoftwareFaultException("undefined field: " + name);
 		}
 	}
 

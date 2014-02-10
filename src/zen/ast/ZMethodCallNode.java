@@ -49,9 +49,10 @@ public final class ZMethodCallNode extends ZListNode {
 
 	public final ZFuncCallNode ToGetterFuncCall() {
 		ZGetterNode Getter = new ZGetterNode(null, this.AST[ZGetterNode.Recv]);
-		this.SetNameInfo(this.MethodName);
+		Getter.SetNameInfo(this.MethodName);
 		ZFuncCallNode FuncNode = new ZFuncCallNode(this.ParentNode, Getter);
 		FuncNode.SourceToken = this.SourceToken;
+		FuncNode.Append(this.AST[ZGetterNode.Recv]);
 		@Var int i = 0;
 		while(i < this.GetListSize()) {
 			FuncNode.Append(this.GetListAt(i));

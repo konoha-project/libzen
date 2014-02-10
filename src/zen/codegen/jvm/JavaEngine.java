@@ -51,6 +51,7 @@ import zen.deps.LibNative;
 import zen.deps.Var;
 import zen.lang.ZFunc;
 import zen.lang.ZenEngine;
+import zen.type.ZFuncType;
 import zen.type.ZTypeChecker;
 
 public class JavaEngine extends ZenEngine {
@@ -144,13 +145,45 @@ public class JavaEngine extends ZenEngine {
 		this.EvalMethod(Node, sMethod, null, Nodes);
 	}
 
+	Method GetInvokeMethod(Object Recv) {
+		Method[] m = Recv.getClass().getMethods();
+		for(int i=0; i < m.length;i++) {
+			if(m[i].getName().equals("Invoke")) {
+				return m[i];
+			}
+		}
+		return null;
+	}
+
+	void InvokeMethod(ZNode Node, Object Recv, ZListNode ListNode) {
+		try {
+			Method jMethod = this.GetInvokeMethod(Recv);
+			//System.out.println("Recv="+Recv.getClass() + ", jMethod="+jMethod + "params=" + ListNode.GetListSize());
+			Object Values[] = new Object[ListNode.GetListSize()];
+			Class<?> P[] = jMethod.getParameterTypes();
+			for(int i = 0; i < ListNode.GetListSize(); i++) {
+				Values[i] = this.Eval(ListNode.GetListAt(i));
+				if(Values[i] instanceof Number) {
+					Values[i] = this.NumberCast(P[i], (Number)Values[i]);
+				}
+			}
+			if(this.IsVisitable()) {
+				this.EvaledValue = jMethod.invoke(Recv, Values);
+			}
+		} catch (Exception e) {
+			this.Logger.ReportInfo(Node.SourceToken, "runtime error: " + e);
+			e.printStackTrace();
+			this.StopVisitor();
+		}
+	}
+
 	public void VisitStaticFieldNode(JavaStaticFieldNode Node) {
 		try {
 			Field f = Node.StaticClass.getField(Node.FieldName);
 			this.EvaledValue = f.get(null);
 		} catch (Exception e) {
 			LibNative.FixMe(e);
-			this.EvaledValue = null;
+			this.StopVisitor();
 		}
 	}
 
@@ -218,13 +251,20 @@ public class JavaEngine extends ZenEngine {
 				this.EvalStaticMethod(Node, ((JavaStaticFunc)Node.ResolvedFunc).StaticFunc, this.PackNodes(null, Node));
 				return;
 			}
+			else if(Node.ResolvedFunc != null) {
+				ZFuncType FuncType = Node.ResolvedFunc.GetFuncType();
+				Class<?> FunctionClass = ((JavaAsmGenerator)this.Solution).GetDefinedFunctionClass(Node.ResolvedFuncName, FuncType);
+				Node.Set(ZFuncCallNode.Func, new JavaStaticFieldNode(Node, FunctionClass, FuncType, "function"));
+			}
 			else {
-				this.Logger.ReportWarning(Node.SourceToken, "unresolved function: " + Node.ResolvedFuncName);
+				this.Logger.ReportError(Node.SourceToken, "unresolved function: " + Node.ResolvedFuncName);
+				this.StopVisitor();
+				return;
 			}
 		}
-		else {
-			Method sMethod = this.Solution.GetStaticFuncMethod(Node.ResolvedFunc.GetSignature());
-			this.EvalStaticMethod(Node, sMethod, this.PackNodes(null, Node));
+		Object Recv = this.Eval(Node.AST[ZFuncCallNode.Func]);
+		if(this.IsVisitable()) {
+			this.InvokeMethod(Node, Recv, Node);
 		}
 	}
 

@@ -134,17 +134,32 @@ public class JavaAsmGenerator extends JavaSolution {
 		JavaCommonApi.LoadCommonApi(this);
 	}
 
-	@Override public final Class<?> GetJavaClass(ZType zType) {
+	public final Class<?> GetJavaClass(ZType zType, Class<?> C) {
 		if(zType instanceof ZFuncType) {
 			return this.LoadFuncClass((ZFuncType)zType);
 		}
 		else {
-			return JavaTypeTable.GetJavaClass(zType, Object.class);
+			return JavaTypeTable.GetJavaClass(zType, C);
 		}
 	}
 
+	@Override public final Class<?> GetJavaClass(ZType zType) {
+		return this.GetJavaClass(zType, Object.class);
+	}
+
 	final Type AsmType(ZType zType) {
-		return Type.getType(this.GetJavaClass(zType));
+		Class<?> jClass = this.GetJavaClass(zType, Object.class);
+		return Type.getType(jClass);
+	}
+
+	final String AsmTypeD(ZType zType) {
+		Class<?> jClass = this.GetJavaClass(zType, null);
+		if(jClass != null) {
+			return Type.getType(jClass).toString();
+		}
+		else {
+			return "L" + zType + ";";
+		}
 	}
 
 	final String GetTypeDesc(ZType zType) {
@@ -153,6 +168,21 @@ public class JavaAsmGenerator extends JavaSolution {
 	}
 
 	final String GetMethodDescriptor(ZFuncType FuncType) {
+		StringBuffer sb = new StringBuffer();
+		sb.append("(");
+		for(int i = 0; i < FuncType.GetFuncParamSize(); i++) {
+			ZType ParamType = FuncType.GetFuncParamType(i);
+			sb.append(this.AsmTypeD(ParamType));
+		}
+		sb.append(")");
+		sb.append(this.AsmTypeD(FuncType.GetReturnType()));
+		String Desc = sb.toString();
+		//		String Desc2 = this.GetMethodDescriptor2(FuncType);
+		//		System.out.println(" ** Desc: " + Desc + ", " + Desc2 + ", FuncType: " + FuncType);
+		return Desc;
+	}
+
+	final String GetMethodDescriptor2(ZFuncType FuncType) {
 		@Var Type ReturnType = this.AsmType(FuncType.GetReturnType());
 		@Var Type[] ArgTypes = new Type[FuncType.GetFuncParamSize()];
 		for(int i = 0; i < ArgTypes.length; i++) {
@@ -160,10 +190,9 @@ public class JavaAsmGenerator extends JavaSolution {
 			ArgTypes[i] = this.AsmType(ParamType);
 		}
 		String Desc = Type.getMethodDescriptor(ReturnType, ArgTypes);
-		//System.out.println(" ** Desc: " + Desc + ", FuncType: " + FuncType);
+		System.out.println(" ** Desc: " + Desc + ", FuncType: " + FuncType);
 		return Desc;
 	}
-
 
 	@Override public void VisitNullNode(ZNullNode Node) {
 		this.AsmBuilder.visitInsn(Opcodes.ACONST_NULL);
@@ -862,7 +891,7 @@ public class JavaAsmGenerator extends JavaSolution {
 				String FieldDesc = Type.getDescriptor(this.GetJavaClass(Field.FieldType));
 				Label JumpLabel = new Label();
 				InitMethod.visitFieldInsn(Opcodes.GETSTATIC, Node.ClassName, NameClassMethod(Node.ClassType, Field.FieldName), FieldDesc);
-				InitMethod.visitJumpInsn(Opcodes.IFNONNULL, JumpLabel);
+				InitMethod.visitJumpInsn(Opcodes.IFNULL, JumpLabel);
 				InitMethod.visitVarInsn(Opcodes.ALOAD, 0);
 				InitMethod.visitFieldInsn(Opcodes.GETSTATIC, Node.ClassName, NameClassMethod(Node.ClassType, Field.FieldName), FieldDesc);
 				//System.out.println("************" + Field.ClassType + ", " + Type.getInternalName(this.GetJavaClass(Field.ClassType)));

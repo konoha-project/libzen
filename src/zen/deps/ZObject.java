@@ -25,6 +25,9 @@
 
 //ifdef JAVA
 package zen.deps;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+
 import zen.type.ZType;
 import zen.type.ZTypePool;
 
@@ -36,5 +39,44 @@ public class ZObject implements ZTypedObject {
 	}
 	@Override public final ZType GetZenType() {
 		return this.ZenType;
+	}
+
+	protected void Stringfy(StringBuilder sb) {
+		sb.append("{");
+		Field[] Fields = this.getClass().getFields();
+		for(int i = 0; i < Fields.length; i++) {
+			if(Modifier.isPublic(Fields[i].getModifiers())) {
+				if(i > 0) {
+					sb.append(", ");
+				}
+				try {
+					Object Value =  Fields[i].get(this);
+					if(ZFunction.class.isAssignableFrom(Fields[i].getType())) {
+						sb.append(Fields[i].getName());
+						sb.append(": ");
+						sb.append(Value);
+						continue;
+					}
+					sb.append("\"");
+					sb.append(Fields[i].getName());
+					sb.append("\": ");
+					if(Value instanceof ZObject) {
+						((ZObject)Value).Stringfy(sb);
+					}
+					else {
+						sb.append(Value);
+					}
+				} catch (Exception e) {
+					break;
+				}
+			}
+		}
+		sb.append("}");
+	}
+
+	@Override public String toString() {
+		@Var StringBuilder sb = new StringBuilder();
+		this.Stringfy(sb);
+		return sb.toString();
 	}
 }
