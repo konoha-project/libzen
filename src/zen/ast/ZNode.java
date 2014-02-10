@@ -67,11 +67,11 @@ public abstract class ZNode {
 		return Node;
 	}
 
-	public void SetName(String Name) {
+	public void SetNameInfo(String Name) {
 		assert(Name == null);  // Set SetName in a sub class property
 	}
 
-	public void SetType(ZType Type) {
+	public void SetTypeInfo(ZType Type) {
 		this.Type = Type;  // default behavior
 	}
 
@@ -90,15 +90,15 @@ public abstract class ZNode {
 			}
 		}
 		else if(Index == ZNode.NameInfo) {
-			this.SetName(Node.SourceToken.GetText());
+			this.SetNameInfo(Node.SourceToken.GetText());
 			this.SourceToken = Node.SourceToken;
 		}
 		else if(Index == ZNode.TypeInfo) {
-			this.SetType(Node.Type);
+			this.SetTypeInfo(Node.Type);
 		}
 	}
 
-	public final boolean Has(int Index) {
+	public final boolean HasAst(int Index) {
 		if(this.AST != null && Index < this.AST.length) {
 			return this.AST[Index] != null;
 		}
@@ -176,9 +176,10 @@ public abstract class ZNode {
 		return this.HasUntypedNode;
 	}
 
-	public ZReturnNode ToReturnNode() {
-		return null;
+	public final ZType GetAstType(int Index) {
+		return this.AST[Index].Type;
 	}
+
 
 	public final ZBlockNode GetScopeBlockNode() {
 		ZNode Node = this;
@@ -199,7 +200,12 @@ public abstract class ZNode {
 		return BlockNode.NameSpace;
 	}
 
-	public final ZNode GetPrevNode() {
+
+	@Deprecated public ZReturnNode ToReturnNode() {
+		return null;
+	}
+
+	@Deprecated public final ZNode GetPrevNode() {
 		if(this.ParentNode == null) {
 			return null;
 		}
@@ -214,7 +220,7 @@ public abstract class ZNode {
 		return null;
 	}
 
-	public ZNode GetNextNode() {
+	@Deprecated public ZNode GetNextNode() {
 		if(this.ParentNode == null) {
 			return null;
 		}

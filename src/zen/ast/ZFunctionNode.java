@@ -49,10 +49,10 @@ public class ZFunctionNode extends ZListNode {
 		super(ParentNode, null, 1);
 	}
 
-	@Override public void SetType(ZType Type) {
+	@Override public void SetTypeInfo(ZType Type) {
 		this.ReturnType = Type;
 	}
-	@Override public void SetName(String Name) {
+	@Override public void SetNameInfo(String Name) {
 		this.FuncName = Name;
 	}
 

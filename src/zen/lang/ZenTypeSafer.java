@@ -592,7 +592,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 	@Override public void VisitIfNode(ZIfNode Node) {
 		this.CheckTypeAt(Node, ZIfNode.Cond, ZType.BooleanType);
 		this.CheckTypeAt(Node, ZIfNode.Then, ZType.VoidType);
-		if(Node.Has(ZIfNode.Else)) {
+		if(Node.HasAst(ZIfNode.Else)) {
 			this.CheckTypeAt(Node, ZIfNode.Else, ZType.VoidType);
 		}
 		this.TypedNode(Node, ZType.VoidType);
@@ -604,14 +604,14 @@ public class ZenTypeSafer extends ZTypeChecker {
 			return;
 		}
 		@Var ZType ReturnType = this.CurrentFunctionNode.ReturnType;
-		if(Node.Has(ZReturnNode.Expr) && ReturnType.IsVoidType()) {
+		if(Node.HasAst(ZReturnNode.Expr) && ReturnType.IsVoidType()) {
 			Node.AST[ZReturnNode.Expr] = null;
 		}
-		else if(!Node.Has(ZReturnNode.Expr) && !ReturnType.IsVarType() && !ReturnType.IsVoidType()) {
+		else if(!Node.HasAst(ZReturnNode.Expr) && !ReturnType.IsVarType() && !ReturnType.IsVoidType()) {
 			this.Logger.ReportWarning(Node.SourceToken, "returning default value of " + ReturnType);
 			Node.Set(ZReturnNode.Expr, ZenGamma.CreateDefaultValueNode(Node, ReturnType, null));
 		}
-		if(Node.Has(ZReturnNode.Expr)) {
+		if(Node.HasAst(ZReturnNode.Expr)) {
 			this.CheckTypeAt(Node, ZReturnNode.Expr, ReturnType);
 		}
 		else {
@@ -640,10 +640,10 @@ public class ZenTypeSafer extends ZTypeChecker {
 
 	@Override public void VisitTryNode(ZTryNode Node) {
 		this.CheckTypeAt(Node, ZTryNode.Try, ZType.VoidType);
-		if(Node.Has(ZTryNode.Catch)) {
+		if(Node.HasAst(ZTryNode.Catch)) {
 			this.CheckTypeAt(Node, ZTryNode.Catch, ZType.VoidType);
 		}
-		if(Node.Has(ZTryNode.Finally)) {
+		if(Node.HasAst(ZTryNode.Finally)) {
 			this.CheckTypeAt(Node, ZTryNode.Finally, ZType.VoidType);
 		}
 		this.TypedNode(Node, ZType.VoidType);
@@ -679,7 +679,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 		}
 		if(Node instanceof ZIfNode) {
 			ZIfNode IfNode = (ZIfNode)Node;
-			if(IfNode.Has(ZIfNode.Else)) {
+			if(IfNode.HasAst(ZIfNode.Else)) {
 				return this.HasReturn(IfNode.AST[ZIfNode.Then]) && this.HasReturn(IfNode.AST[ZIfNode.Else]);
 			}
 			return false;

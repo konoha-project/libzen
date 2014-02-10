@@ -14,10 +14,10 @@ public class ZLetNode extends ZNode {
 	public ZLetNode(ZNode ParentNode) {
 		super(ParentNode, null, 1);
 	}
-	@Override public void SetName(String Name) {
+	@Override public void SetNameInfo(String Name) {
 		this.Symbol = Name;
 	}
-	@Override public void SetType(ZType Type) {
+	@Override public void SetTypeInfo(ZType Type) {
 		this.SymbolType = Type;
 	}
 	@Override public void Accept(ZVisitor Visitor) {

@@ -34,7 +34,7 @@ public final class ZGetterNode extends ZNode {
 		super(ParentNode, null, 1);
 		this.Set(ZGetterNode.Recv, RecvNode);
 	}
-	@Override public void SetName(String Name) {
+	@Override public void SetNameInfo(String Name) {
 		this.FieldName = Name;
 	}
 	@Override public void Accept(ZVisitor Visitor) {

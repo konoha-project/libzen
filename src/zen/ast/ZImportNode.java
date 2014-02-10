@@ -11,7 +11,7 @@ public class ZImportNode extends ZNode {
 		super(ParentNode, null, 0);
 	}
 
-	@Override public void SetName(String Name) {
+	@Override public void SetNameInfo(String Name) {
 		if(this.ResourcePath == null) {
 			this.ResourcePath = Name;
 		}

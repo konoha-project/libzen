@@ -38,10 +38,10 @@ public final class ZFieldNode extends ZNode {
 	public ZFieldNode(ZNode ParentNode) {
 		super(ParentNode, null, 1);
 	}
-	@Override public void SetType(ZType Type) {
+	@Override public void SetTypeInfo(ZType Type) {
 		this.DeclType = Type;
 	}
-	@Override public void SetName(String Name) {
+	@Override public void SetNameInfo(String Name) {
 		this.FieldName = Name;
 	}
 	@Override public String GetVisitName() {

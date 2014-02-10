@@ -39,7 +39,7 @@ public final class ZMethodCallNode extends ZListNode {
 	}
 
 	@Override
-	public void SetName(String Name) {
+	public void SetNameInfo(String Name) {
 		this.MethodName = Name;
 	}
 
@@ -49,7 +49,7 @@ public final class ZMethodCallNode extends ZListNode {
 
 	public final ZFuncCallNode ToGetterFuncCall() {
 		ZGetterNode Getter = new ZGetterNode(null, this.AST[ZGetterNode.Recv]);
-		this.SetName(this.MethodName);
+		this.SetNameInfo(this.MethodName);
 		ZFuncCallNode FuncNode = new ZFuncCallNode(this.ParentNode, Getter);
 		FuncNode.SourceToken = this.SourceToken;
 		@Var int i = 0;

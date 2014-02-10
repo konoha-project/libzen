@@ -37,7 +37,7 @@ public final class ZSetterNode extends ZNode {
 		this.Set(ZSetterNode.Recv, RecvNode);
 	}
 
-	@Override public void SetName(String Name) {
+	@Override public void SetNameInfo(String Name) {
 		this.FieldName = Name;
 	}
 

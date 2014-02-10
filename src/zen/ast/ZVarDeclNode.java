@@ -41,10 +41,10 @@ public final class ZVarDeclNode extends ZBlockNode {
 	public ZVarDeclNode(ZNode ParentNode) {
 		super(ParentNode, 1);
 	}
-	@Override public void SetName(String Name) {
+	@Override public void SetNameInfo(String Name) {
 		this.NativeName = Name;
 	}
-	@Override public void SetType(ZType Type) {
+	@Override public void SetTypeInfo(ZType Type) {
 		this.DeclType = Type;
 	}
 

@@ -37,7 +37,7 @@ public final class ZInstanceOfNode extends ZNode {
 		super(ParentNode, Token, 1);
 		this.Set(ZInstanceOfNode.Left, LeftNode);
 	}
-	@Override public void SetType(ZType Type) {
+	@Override public void SetTypeInfo(ZType Type) {
 		this.TargetType = Type;
 	}
 	@Override public void Accept(ZVisitor Visitor) {

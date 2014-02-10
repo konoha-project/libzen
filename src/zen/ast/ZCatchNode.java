@@ -37,10 +37,10 @@ public final class ZCatchNode extends ZNode {
 		super(ParentNode, null, 1);
 	}
 
-	@Override public void SetType(ZType Type) {
+	@Override public void SetTypeInfo(ZType Type) {
 		this.ExceptionType = Type;
 	}
-	@Override public void SetName(String Name) {
+	@Override public void SetNameInfo(String Name) {
 		this.ExceptionName = Name;
 	}
 
