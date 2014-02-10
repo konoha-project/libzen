@@ -49,7 +49,6 @@ import zen.ast.ZStringNode;
 import zen.ast.ZUnaryNode;
 import zen.deps.LibNative;
 import zen.deps.Var;
-import zen.deps.ZNativeFunc;
 import zen.lang.ZFunc;
 import zen.lang.ZenEngine;
 import zen.type.ZTypeChecker;
@@ -215,8 +214,8 @@ public class JavaEngine extends ZenEngine {
 
 	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
 		if(Node.ResolvedFuncName != null) {
-			if(Node.ResolvedFunc instanceof ZNativeFunc) {
-				this.EvalStaticMethod(Node, ((ZNativeFunc)Node.ResolvedFunc).jMethod, this.PackNodes(null, Node));
+			if(Node.ResolvedFunc instanceof JavaStaticFunc) {
+				this.EvalStaticMethod(Node, ((JavaStaticFunc)Node.ResolvedFunc).StaticFunc, this.PackNodes(null, Node));
 				return;
 			}
 			else {
@@ -245,8 +244,8 @@ public class JavaEngine extends ZenEngine {
 		}
 		else {
 			ZFunc Func = this.Generator.GetConverterFunc(Node.AST[ZCastNode.Expr].Type, Node.Type);
-			if(Func instanceof ZNativeFunc) {
-				this.EvalStaticMethod(Node, ((ZNativeFunc)Func).jMethod, new ZNode[] {Node.AST[ZCastNode.Expr]});
+			if(Func instanceof JavaStaticFunc) {
+				this.EvalStaticMethod(Node, ((JavaStaticFunc)Func).StaticFunc, new ZNode[] {Node.AST[ZCastNode.Expr]});
 				return;
 			}
 			this.EvaledValue = this.Eval(Node.AST[ZCastNode.Expr]);

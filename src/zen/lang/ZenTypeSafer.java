@@ -463,7 +463,15 @@ public class ZenTypeSafer extends ZTypeChecker {
 	}
 
 	@Override public void VisitCastNode(ZCastNode Node) {
-		this.CheckTypeAt(Node, ZCastNode.Expr, Node.Type);
+		this.TryTypeAt(Node, ZCastNode.Expr, Node.Type);
+		ZType ExprType = Node.AST[ZCastNode.Expr].Type;
+		if(ExprType.Equals(Node.Type)) {
+			this.Return(Node.AST[ZCastNode.Expr]);
+		}
+		ZFunc Func = this.Generator.GetCoercionFunc(ExprType, Node.Type);
+		if(Func != null) {
+			this.TypedNode(Node.ToStaticFuncCall(Func), Node.Type);
+		}
 		this.TypedNode(Node, Node.Type);
 	}
 

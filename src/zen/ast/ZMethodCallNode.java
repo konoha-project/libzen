@@ -61,16 +61,13 @@ public final class ZMethodCallNode extends ZListNode {
 	}
 
 	public final ZFuncCallNode ToStaticFuncCall(ZFunc Func) {
-		ZGetNameNode Dummy = new ZGetNameNode(null, this.SourceToken, Func.FuncName);
-		ZFuncCallNode FuncNode = new ZFuncCallNode(this.ParentNode, Dummy);
-		FuncNode.SourceToken = this.SourceToken;
+		ZFuncCallNode FuncNode = new ZFuncCallNode(this.ParentNode, this.SourceToken, Func);
 		FuncNode.Append(this.AST[ZGetterNode.Recv]);
 		@Var int i = 0;
 		while(i < this.GetListSize()) {
 			FuncNode.Append(this.GetListAt(i));
 			i = i + 1;
 		}
-		FuncNode.ResolvedFunc = Func;
 		return FuncNode;
 	}
 

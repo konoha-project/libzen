@@ -24,6 +24,7 @@
 
 package zen.ast;
 
+import zen.lang.ZFunc;
 import zen.parser.ZVisitor;
 import zen.type.ZType;
 
@@ -31,7 +32,6 @@ import zen.type.ZType;
 public class ZCastNode extends ZNode {
 	public final static int Expr = 0;
 
-	@Deprecated public ZNode	CastExprNode;
 	public ZCastNode(ZNode ParentNode, ZType CastType, ZNode Node) {
 		super(ParentNode, null, 1);
 		this.Type = CastType;
@@ -43,4 +43,11 @@ public class ZCastNode extends ZNode {
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitCastNode(this);
 	}
+
+	public final ZFuncCallNode ToStaticFuncCall(ZFunc Func) {
+		ZFuncCallNode FuncNode = new ZFuncCallNode(this.ParentNode, this.SourceToken, Func);
+		FuncNode.Append(this.AST[ZCastNode.Expr]);
+		return FuncNode;
+	}
+
 }

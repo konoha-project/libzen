@@ -37,6 +37,7 @@ import java.lang.reflect.Method;
 
 import zen.ast.ZNode;
 import zen.codegen.jvm.JavaTypeTable;
+import zen.codegen.jvm.JavaStaticFunc;
 import zen.lang.ZFunc;
 import zen.lang.ZenEngine;
 import zen.parser.ZGenerator;
@@ -230,9 +231,9 @@ public class LibNative {
 		return JavaTypeTable.GetZenType(NativeClass);
 	}
 
-	public final static ZNativeFunc ConvertToNativeFunc(Method jMethod) {
+	public final static JavaStaticFunc ConvertToNativeFunc(Method jMethod) {
 		@Var ZFuncType FuncType = JavaTypeTable.ConvertToFuncType(jMethod);
-		return new ZNativeFunc(0, jMethod.getName(), FuncType, jMethod);
+		return new JavaStaticFunc(0, jMethod.getName(), FuncType, jMethod);
 	}
 
 

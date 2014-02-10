@@ -4,7 +4,6 @@ import java.lang.reflect.Method;
 
 import zen.deps.LibNative;
 import zen.deps.Var;
-import zen.deps.ZNativeFunc;
 import zen.lang.ZFunc;
 import zen.parser.ZGenerator;
 import zen.type.ZFuncType;
@@ -45,9 +44,9 @@ public class JavaCommonApi {
 
 
 
-	public final static ZNativeFunc ConvertToNativeFunc(Method jMethod) {
+	public final static JavaStaticFunc ConvertToNativeFunc(Method jMethod) {
 		@Var ZFuncType FuncType = JavaTypeTable.ConvertToFuncType(jMethod);
-		return new ZNativeFunc(0, jMethod.getName(), FuncType, jMethod);
+		return new JavaStaticFunc(0, jMethod.getName(), FuncType, jMethod);
 	}
 
 	static ZFunc LoadFunc(String Name, Class<?> ... classes) {

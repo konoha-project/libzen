@@ -26,6 +26,7 @@ package zen.ast;
 
 import zen.deps.Field;
 import zen.lang.ZFunc;
+import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 import zen.type.ZType;
 
@@ -40,6 +41,12 @@ public final class ZFuncCallNode extends ZListNode {
 		super(ParentNode, null, 1);
 		this.Set(ZFuncCallNode.Func, FuncNode);
 	}
+
+	public ZFuncCallNode(ZNode ParentNode, ZToken SourceToken, ZFunc ResolvedFunc) {
+		super(ParentNode, SourceToken, 1);
+		this.ResolvedFunc = ResolvedFunc;
+	}
+
 
 	public final ZType GetRecvType() {
 		if(this.GetListSize() > 0) {

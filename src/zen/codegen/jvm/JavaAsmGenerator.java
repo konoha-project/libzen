@@ -748,7 +748,7 @@ public class JavaAsmGenerator extends JavaSolution {
 	private final ZenMap<Class<?>> GeneratedClassMap = new ZenMap<Class<?>>(null);
 
 	private Class<?> MethodWrapperClass(ZFuncType FuncType, ZFuncType SourceFuncType) {
-		String ClassName = "W" + FuncType.GetUniqueName() + "W" + SourceFuncType.GetUniqueName();
+		String ClassName = "W" + NameFuncClass(FuncType) + "W" + NameFuncClass(SourceFuncType);
 		Class<?> WrapperClass = this.GeneratedClassMap.GetOrNull(ClassName);
 		if(WrapperClass == null) {
 			Class<?> FuncClass = this.LoadFuncClass(FuncType);

@@ -21,7 +21,6 @@ import org.objectweb.asm.tree.MethodNode;
 
 import zen.ast.ZListNode;
 import zen.ast.ZNode;
-import zen.deps.ZNativeFunc;
 import zen.lang.ZFunc;
 import zen.lang.ZSystem;
 import zen.type.ZFuncType;
@@ -261,8 +260,8 @@ class AsmMethodBuilder extends MethodNode {
 	}
 
 	void ApplyFuncName(ZNode Node, ZFunc Func, ZListNode ListNode) {
-		if(Func instanceof ZNativeFunc) {
-			this.ApplyStaticMethod(Node, ((ZNativeFunc)Func).jMethod, ListNode);
+		if(Func instanceof JavaStaticFunc) {
+			this.ApplyStaticMethod(Node, ((JavaStaticFunc)Func).StaticFunc, ListNode);
 		}
 		else {
 			ZFuncType FuncType = Func.GetFuncType();
