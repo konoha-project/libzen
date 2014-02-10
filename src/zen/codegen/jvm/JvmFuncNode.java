@@ -1,14 +1,16 @@
 package zen.codegen.jvm;
 
 import zen.ast.ZNode;
+import zen.deps.Field;
 import zen.type.ZFuncType;
 
 class JvmFuncNode extends ZNode {
-	String FuncName;
-	String ReferenceName;
-	String ClassName;
-	String FieldDesc;
-	Class<?> FuncClass;
+	@Field String FuncName;
+	@Field String ReferenceName;
+	@Field String ClassName;
+	@Field String FieldDesc;
+	@Field Class<?> FuncClass;
+
 	JvmFuncNode(ZNode ParentNode, ZFuncType FuncType, String FuncName) {
 		super(ParentNode, null, 0);
 		this.Type = FuncType;
