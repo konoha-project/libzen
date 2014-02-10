@@ -29,6 +29,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import zen.deps.SoftwareFaultException;
 import zen.deps.Var;
 import zen.deps.ZenArray;
 import zen.deps.ZenMap;

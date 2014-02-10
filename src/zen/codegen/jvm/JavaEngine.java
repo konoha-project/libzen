@@ -130,16 +130,6 @@ public class JavaEngine extends ZenEngine {
 		this.EvalMethod(Node, sMethod, null, Nodes);
 	}
 
-	public void VisitJvmFuncNode(JvmFuncNode Node) {
-		try {
-			Field f = Node.FuncClass.getField("function");
-			this.EvaledValue = f.get(null);
-		} catch (Exception e) {
-			LibNative.FixMe(e);
-			this.EvaledValue = null;
-		}
-	}
-
 	public void VisitStaticFieldNode(JavaStaticFieldNode Node) {
 		try {
 			Field f = Node.StaticClass.getField(Node.FieldName);

@@ -122,10 +122,9 @@ import zen.type.ZType;
 import zen.type.ZTypePool;
 
 public class JavaAsmGenerator extends JavaSolution {
-	AsmMethodBuilder AsmBuilder;
 	AsmClassLoader AsmLoader = null;
 	Stack<TryCatchLabel> TryCatchLabel;
-	private int LambdaMethodId = 0;
+	AsmMethodBuilder AsmBuilder;
 
 	public JavaAsmGenerator() {
 		super("java", "1.6");
@@ -230,9 +229,8 @@ public class JavaAsmGenerator extends JavaSolution {
 				this.AsmBuilder.visitMethodInsn(INVOKESPECIAL, ClassName, "<init>", Type.getConstructorDescriptor(jMethod));
 			}
 			else {
-				this.AsmBuilder.PushInt(Node.Type.TypeId);
-				this.AsmBuilder.SetLineNumber(Node);
-				this.AsmBuilder.visitMethodInsn(INVOKESPECIAL, ClassName, "<init>", "(I)V");
+				this.Logger.ReportError(Node.SourceToken, "no constructor: " + Node.Type);
+				this.AsmBuilder.visitInsn(Opcodes.ACONST_NULL);
 			}
 		}
 	}
@@ -304,7 +302,7 @@ public class JavaAsmGenerator extends JavaSolution {
 			String Desc = Type.getType(jField.getType()).getDescriptor();
 			if(Modifier.isStatic(jField.getModifiers())) {
 				this.AsmBuilder.PushNode(jField.getType(), Node.AST[ZSetterNode.Expr]);
-				this.AsmBuilder.visitFieldInsn(Opcodes.PUTSTATIC, Owner, Node.FieldName, Desc);
+				this.AsmBuilder.visitFieldInsn(PUTSTATIC, Owner, Node.FieldName, Desc);
 			}
 			else {
 				this.AsmBuilder.PushNode(null, Node.AST[ZGetterNode.Recv]);
@@ -355,22 +353,20 @@ public class JavaAsmGenerator extends JavaSolution {
 			this.AsmBuilder.PushNode(Object.class, Node.AST[ZGetterNode.Recv]);
 			this.AsmBuilder.PushConst(Node.MethodName);
 			this.AsmBuilder.PushNodeListAsArray(Object.class, 0, Node);
-			this.AsmBuilder.ApplyStaticMethod(Node, jMethod, null);
+			this.AsmBuilder.ApplyStaticMethod(Node, jMethod);
 		}
 	}
 
 	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
 		this.AsmBuilder.SetLineNumber(Node);
 		if(Node.ResolvedFunc != null) {
-			ZNode[] Nodes = this.PackNodes(null, Node);
-			this.AsmBuilder.ApplyFuncName(Node, Node.ResolvedFunc, Nodes);
+			this.AsmBuilder.ApplyFuncName(Node, Node.ResolvedFunc, Node);
 		}
 		else {
 			if(Node.AST[ZFuncCallNode.Func].Type.IsFuncType()) {
 				ZFuncType FuncType = (ZFuncType)Node.AST[ZFuncCallNode.Func].Type;
 				Class<?> FuncClass = this.LoadFuncClass(FuncType);
-				ZNode[] Nodes = this.PackNodes(null, Node);
-				this.AsmBuilder.ApplyFuncObject(Node, FuncClass, Node.AST[ZFuncCallNode.Func], FuncType, Nodes);
+				this.AsmBuilder.ApplyFuncObject(Node, FuncClass, Node.AST[ZFuncCallNode.Func], FuncType, Node);
 			}
 			else {
 
@@ -401,7 +397,7 @@ public class JavaAsmGenerator extends JavaSolution {
 				this.AsmBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.AST[ZCastNode.Expr]});
 			}
 			else if(!C1.isAssignableFrom(C2)) {
-				this.AsmBuilder.visitTypeInsn(Opcodes.CHECKCAST, Type.getInternalName(C1));
+				this.AsmBuilder.visitTypeInsn(CHECKCAST, C1);
 			}
 		}
 	}
@@ -593,10 +589,6 @@ public class JavaAsmGenerator extends JavaSolution {
 		Node.GetNameSpace().SetLocalSymbol(Node.Symbol, Node.AST[ZLetNode.InitValue]);
 	}
 
-	public void VisitJvmFuncNode(JvmFuncNode Node) {
-		this.AsmBuilder.visitFieldInsn(Opcodes.GETSTATIC, Node.ClassName, "FUNCTION", Node.FieldDesc);
-	}
-
 	private static String NameFuncClass(ZFuncType FuncType) {
 		return "ZFunc"+ FuncType.TypeId;
 	}
@@ -606,19 +598,19 @@ public class JavaAsmGenerator extends JavaSolution {
 		TypeList.add(ZType.BooleanType);
 		TypeList.add(JavaTypeTable.GetZenType(ZSourceContext.class));
 		ZFuncType FuncType = ZTypePool.LookupFuncType(TypeList);
-		this.ClassMap.put(NameFuncClass(FuncType), ZTokenFunction.class);
+		this.GeneratedClassMap.put(NameFuncClass(FuncType), ZTokenFunction.class);
 		TypeList.clear();
 		TypeList.add(JavaTypeTable.GetZenType(ZNode.class));
 		TypeList.add(JavaTypeTable.GetZenType(ZNode.class));
 		TypeList.add(JavaTypeTable.GetZenType(ZTokenContext.class));
 		TypeList.add(JavaTypeTable.GetZenType(ZNode.class));
 		FuncType = ZTypePool.LookupFuncType(TypeList);
-		this.ClassMap.put(NameFuncClass(FuncType), ZMatchFunction.class);
+		this.GeneratedClassMap.put(NameFuncClass(FuncType), ZMatchFunction.class);
 	}
 
 	Class<?> LoadFuncClass(ZFuncType FuncType) {
 		String ClassName = NameFuncClass(FuncType);
-		Class<?> FuncClass = this.ClassMap.GetOrNull(ClassName);
+		Class<?> FuncClass = this.GeneratedClassMap.GetOrNull(ClassName);
 		if(FuncClass == null) {
 			@Var String SuperClassName = Type.getInternalName(ZFunction.class);
 			@Var AsmClassBuilder ClassBuilder = this.AsmLoader.NewClass(ACC_PUBLIC| ACC_ABSTRACT, null, ClassName, ZFunction.class);
@@ -634,7 +626,7 @@ public class JavaAsmGenerator extends JavaSolution {
 			InitMethod.Finish();
 
 			FuncClass = this.AsmLoader.LoadGeneratedClass(ClassName);
-			this.ClassMap.put(ClassName, FuncClass);
+			this.GeneratedClassMap.put(ClassName, FuncClass);
 		}
 		return FuncClass;
 	}
@@ -643,13 +635,15 @@ public class JavaAsmGenerator extends JavaSolution {
 		return "F" + FuncType.StringfySignature(FuncName);
 	}
 
+	public Class<?> GetDefinedFunctionClass(String FuncName, ZFuncType FuncType) {
+		return this.GeneratedClassMap.GetOrNull(this.NameFunctionClass(FuncName, FuncType));
+	}
+
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
 		if(Node.FuncName == null) {
-			Node.FuncName = "labmda" + this.LambdaMethodId;
-			this.LambdaMethodId += 1;
+			Node.FuncName = "f" + this.GetUniqueNumber();
 		}
 		@Var ZFuncType FuncType = Node.GetFuncType(null);
-		//		@Var JvmFuncNode FuncNode = new JvmFuncNode(Node, FuncType, Node.FuncName);
 
 		//
 		String ClassName = this.NameFunctionClass(Node.FuncName, FuncType);
@@ -697,6 +691,7 @@ public class JavaAsmGenerator extends JavaSolution {
 
 		FuncClass = this.AsmLoader.LoadGeneratedClass(ClassName);
 		this.SetMethod(Node.FuncName, FuncType, FuncClass);
+		this.GeneratedClassMap.put(ClassName, FuncClass);
 		Node.GetNameSpace().SetLocalSymbol(Node.FuncName, new JavaStaticFieldNode(null, FuncClass, FuncType, "function"));
 	}
 
@@ -750,11 +745,11 @@ public class JavaAsmGenerator extends JavaSolution {
 		return true;
 	}
 
-	private final ZenMap<Class<?>> ClassMap = new ZenMap<Class<?>>(null);
+	private final ZenMap<Class<?>> GeneratedClassMap = new ZenMap<Class<?>>(null);
 
 	private Class<?> MethodWrapperClass(ZFuncType FuncType, ZFuncType SourceFuncType) {
 		String ClassName = "W" + FuncType.GetUniqueName() + "W" + SourceFuncType.GetUniqueName();
-		Class<?> WrapperClass = this.ClassMap.GetOrNull(ClassName);
+		Class<?> WrapperClass = this.GeneratedClassMap.GetOrNull(ClassName);
 		if(WrapperClass == null) {
 			Class<?> FuncClass = this.LoadFuncClass(FuncType);
 			Class<?> SourceClass = this.LoadFuncClass(SourceFuncType);
@@ -778,7 +773,7 @@ public class JavaAsmGenerator extends JavaSolution {
 			InvokeMethod.visitFieldInsn(GETFIELD, ClassName, "f", Type.getDescriptor(SourceClass));
 			InvokeMethod.visitVarInsn(ALOAD, 1);
 			//			System.out.println("CAST: " + Type.getInternalName(this.GetJavaClass(SourceFuncType.GetFuncParamType(0))));
-			InvokeMethod.visitTypeInsn(CHECKCAST, Type.getInternalName(this.GetJavaClass(SourceFuncType.GetFuncParamType(0))));
+			InvokeMethod.visitTypeInsn(CHECKCAST, this.GetJavaClass(SourceFuncType.GetFuncParamType(0)));
 			int index = 2;
 			for(int i = 1; i < FuncType.GetFuncParamSize(); i++) {
 				Type AsmType = this.AsmType(FuncType.GetFuncParamType(i));
@@ -791,7 +786,7 @@ public class JavaAsmGenerator extends JavaSolution {
 			InvokeMethod.Finish();
 
 			WrapperClass = this.AsmLoader.LoadGeneratedClass(ClassName);
-			this.ClassMap.put(ClassName, WrapperClass);
+			this.GeneratedClassMap.put(ClassName, WrapperClass);
 		}
 		return WrapperClass;
 	}
@@ -886,11 +881,12 @@ public class JavaAsmGenerator extends JavaSolution {
 		String Message = this.Logger.ReportError(Node.SourceToken, Node.ErrorMessage);
 		this.AsmBuilder.PushConst(Message);
 		Method sMethod = JavaMethodTable.GetStaticMethod("ThrowError");
-		this.AsmBuilder.ApplyStaticMethod(Node, sMethod, null);
+		this.AsmBuilder.ApplyStaticMethod(Node, sMethod);
 	}
 
 	@Override public void VisitExtendedNode(ZNode Node) {
 	}
+
 
 }
 

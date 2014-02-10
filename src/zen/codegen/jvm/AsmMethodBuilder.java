@@ -237,46 +237,53 @@ class AsmMethodBuilder extends MethodNode {
 		}
 	}
 
-	void ApplyStaticMethod(ZNode Node, Method sMethod, ZNode[] Nodes) {
-		if(Nodes != null) {
-			Class<?>[] P = sMethod.getParameterTypes();
-			for(int i = 0; i < P.length; i++) {
-				this.PushNode(P[i], Nodes[i]);
-			}
-		}
+	void ApplyStaticMethod(ZNode Node, Method sMethod) {
 		String owner = Type.getInternalName(sMethod.getDeclaringClass());
 		this.SetLineNumber(Node);
 		this.visitMethodInsn(INVOKESTATIC, owner, sMethod.getName(), Type.getMethodDescriptor(sMethod));
 		this.CheckReturnCast(Node, sMethod.getReturnType());
 	}
 
-	void ApplyFuncName(ZNode Node, ZFunc Func, ZNode[] Nodes) {
+	void ApplyStaticMethod(ZNode Node, Method sMethod, ZNode[] Nodes) {
+		Class<?>[] P = sMethod.getParameterTypes();
+		for(int i = 0; i < P.length; i++) {
+			this.PushNode(P[i], Nodes[i]);
+		}
+		this.ApplyStaticMethod(Node, sMethod);
+	}
+
+	void ApplyStaticMethod(ZNode Node, Method sMethod, ZListNode ListNode) {
+		Class<?>[] P = sMethod.getParameterTypes();
+		for(int i = 0; i < P.length; i++) {
+			this.PushNode(P[i], ListNode.GetListAt(i));
+		}
+		this.ApplyStaticMethod(Node, sMethod);
+	}
+
+	void ApplyFuncName(ZNode Node, ZFunc Func, ZListNode ListNode) {
 		if(Func instanceof ZNativeFunc) {
-			this.ApplyStaticMethod(Node, ((ZNativeFunc)Func).jMethod, Nodes);
+			this.ApplyStaticMethod(Node, ((ZNativeFunc)Func).jMethod, ListNode);
 		}
 		else {
 			ZFuncType FuncType = Func.GetFuncType();
-			if(Nodes != null) {
-				for(int i = 0; i < Nodes.length; i++) {
-					this.PushNode(null, Nodes[i]);
+			if(ListNode != null) {
+				for(int i = 0; i < ListNode.GetListSize(); i++) {
+					this.PushNode(null, ListNode.GetListAt(i));
 				}
 			}
-			String owner = "C" + FuncType.StringfySignature(Func.FuncName);
+			Class<?> FuncClass = this.Generator.GetDefinedFunctionClass(Func.FuncName, FuncType);
 			this.SetLineNumber(Node);
-			this.visitMethodInsn(INVOKESTATIC, owner, Func.FuncName, this.Generator.GetMethodDescriptor(FuncType));
+			this.visitMethodInsn(INVOKESTATIC, FuncClass, "f", FuncType);
 		}
 	}
 
-	void ApplyFuncObject(ZNode Node, Class<?> FuncClass, ZNode FuncNode, ZFuncType FuncType, ZNode[] Nodes) {
+	void ApplyFuncObject(ZNode Node, Class<?> FuncClass, ZNode FuncNode, ZFuncType FuncType, ZListNode ListNode) {
 		this.PushNode(FuncClass, FuncNode);
-		if(Nodes != null) {
-			for(int i = 0; i < Nodes.length; i++) {
-				this.PushNode(null, Nodes[i]);
-			}
+		for(int i = 0; i < ListNode.GetListSize(); i++) {
+			this.PushNode(null, ListNode.GetListAt(i));
 		}
-		String owner = Type.getInternalName(FuncClass);
-		this.visitMethodInsn(INVOKEVIRTUAL, owner, "Invoke", this.Generator.GetMethodDescriptor(FuncType));
-		//this.CheckReturnCast(Node, FuncType.GetReturnType());
+		this.SetLineNumber(Node);
+		this.visitMethodInsn(INVOKEVIRTUAL, FuncClass, "Invoke", FuncType);
 	}
 
 	void PushNodeListAsArray(Class<?> T, int StartIdx, ZListNode NodeList) {
@@ -326,6 +333,10 @@ class AsmMethodBuilder extends MethodNode {
 
 	public void visitFieldInsn(int opcode, String ClassName, String Name, Class<?> jClass) {
 		this.visitFieldInsn(opcode, ClassName, Name, Type.getDescriptor(jClass));
+	}
+
+	public void visitTypeInsn(int opcode, Class<?> C) {
+		this.visitTypeInsn(opcode, Type.getInternalName(C));
 	}
 
 
