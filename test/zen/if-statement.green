@@ -1,2 +1,8 @@
-if (true) { if (true) { a = 1; } b = 1;} 
-
+function f() {
+    if (true) {
+        if (true) {
+            1;
+        }
+        2;
+    }
+}
