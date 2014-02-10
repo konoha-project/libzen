@@ -15,7 +15,7 @@ class JvmFuncNode extends ZNode {
 		this.FuncName = FuncName;
 		this.ReferenceName = FuncType.StringfySignature(FuncName);
 		this.ClassName = "C" + this.ReferenceName;
-		this.FieldDesc = null;
+		this.FieldDesc = "L" + this.ClassName + ";";
 		this.FuncClass = null;
 	}
 
