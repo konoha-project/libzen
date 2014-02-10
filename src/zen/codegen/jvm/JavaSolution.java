@@ -193,19 +193,6 @@ public abstract class JavaSolution extends ZGenerator {
 		return jMethod;
 	}
 
-	protected ZNode[] PackNodes(ZNode Node, ZListNode List) {
-		int Start = 0;
-		ZNode[] Nodes = new ZNode[List.GetListSize() + Start];
-		if(Node != null) {
-			Start = 1;
-			Nodes[0] = Node;
-		}
-		for(int i = 0; i < Nodes.length; i++) {
-			Nodes[i+Start] = List.GetListAt(i);
-		}
-		return Nodes;
-	}
-
 	public void Debug(String Message) {
 		LibNative.Debug(Message);
 	}

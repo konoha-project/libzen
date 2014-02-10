@@ -850,7 +850,6 @@ public class JavaAsmGenerator extends JavaSolution {
 		for(@Var int i = 0; i < Node.GetListSize(); i++) {
 			@Var ZFieldNode Field = Node.GetFieldNode(i);
 			if(!Field.DeclType.IsFuncType()) {
-				//			System.out.println("FieldName:" + Field.ClassType + "." + Field.FieldName + ", init=" + Field.AST[ZFieldNode.InitValue]);				System.out.println("FieldName:" + Field.FieldName + ", init=" + Field.AST[ZFieldNode.InitValue]);
 				InitMethod.visitVarInsn(Opcodes.ALOAD, 0);
 				InitMethod.PushNode(this.GetJavaClass(Field.DeclType), Field.AST[ZFieldNode.InitValue]);
 				InitMethod.visitFieldInsn(PUTFIELD, Node.ClassName, Field.FieldName, Type.getDescriptor(this.GetJavaClass(Field.DeclType)));
