@@ -1,0 +1,7 @@
+class A {
+	field Id: int = 0;
+}
+
+function test(a : A) : int {
+    return a.Id;
+}
