@@ -30,7 +30,7 @@ class AsmMethodBuilder extends MethodNode {
 
 	final AsmMethodBuilder          Parent;
 	final JavaAsmGenerator   Generator;
-	ArrayList<JLocalVarStack>     LocalVals  = new ArrayList<JLocalVarStack>();
+	ArrayList<JavaLocalStack>     LocalVals  = new ArrayList<JavaLocalStack>();
 	int UsedStack = 0;
 	Stack<Label>                  BreakLabelStack = new Stack<Label>();
 	Stack<Label>                  ContinueLabelStack = new Stack<Label>();
@@ -150,9 +150,9 @@ class AsmMethodBuilder extends MethodNode {
 		}
 	}
 
-	JLocalVarStack AddLocal(Class<?> jClass, String Name) {
+	JavaLocalStack AddLocal(Class<?> jClass, String Name) {
 		Type AsmType =  Type.getType(jClass);
-		JLocalVarStack local = new JLocalVarStack(this.UsedStack, jClass, AsmType, Name);
+		JavaLocalStack local = new JavaLocalStack(this.UsedStack, jClass, AsmType, Name);
 		this.UsedStack = this.UsedStack + AsmType.getSize();
 		this.LocalVals.add(local);
 		return local;
@@ -160,7 +160,7 @@ class AsmMethodBuilder extends MethodNode {
 
 	void RemoveLocal(Class<?> JType, String Name) {
 		for(int i = this.LocalVals.size() - 1; i >= 0; i--) {
-			JLocalVarStack Local = this.LocalVals.get(i);
+			JavaLocalStack Local = this.LocalVals.get(i);
 			if(Local.Name.equals(Name)) {
 				this.LocalVals.remove(i);
 				return;
@@ -168,9 +168,9 @@ class AsmMethodBuilder extends MethodNode {
 		}
 	}
 
-	JLocalVarStack FindLocalVariable(String Name) {
+	JavaLocalStack FindLocalVariable(String Name) {
 		for(int i = 0; i < this.LocalVals.size(); i++) {
-			JLocalVarStack l = this.LocalVals.get(i);
+			JavaLocalStack l = this.LocalVals.get(i);
 			if(l.Name.equals(Name)) {
 				return l;
 			}
@@ -179,18 +179,18 @@ class AsmMethodBuilder extends MethodNode {
 	}
 
 	Class<?> GetLocalType(String Name) {
-		JLocalVarStack local = this.FindLocalVariable(Name);
+		JavaLocalStack local = this.FindLocalVariable(Name);
 		return local.JavaType;
 	}
 
 	void LoadLocal(String Name) {
-		JLocalVarStack local = this.FindLocalVariable(Name);
+		JavaLocalStack local = this.FindLocalVariable(Name);
 		Type type = local.AsmType;
 		this.visitVarInsn(type.getOpcode(ILOAD), local.Index);
 	}
 
 	void StoreLocal(String Name) {
-		JLocalVarStack local = this.FindLocalVariable(Name);
+		JavaLocalStack local = this.FindLocalVariable(Name);
 		Type type = local.AsmType;
 		this.visitVarInsn(type.getOpcode(ISTORE), local.Index);
 	}
