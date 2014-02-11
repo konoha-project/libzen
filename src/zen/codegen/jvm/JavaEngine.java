@@ -171,8 +171,7 @@ public class JavaEngine extends ZenEngine {
 				this.EvaledValue = jMethod.invoke(Recv, Values);
 			}
 		} catch (Exception e) {
-			this.Logger.ReportInfo(Node.SourceToken, "runtime error: " + e);
-			e.printStackTrace();
+			this.Logger.ReportError(Node.SourceToken, "invocation error: " + e);
 			this.StopVisitor();
 		}
 	}

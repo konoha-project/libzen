@@ -782,15 +782,23 @@ public class ZenTypeSafer extends ZTypeChecker {
 		while(i < Node.GetListSize()) {
 			@Var ZFieldNode FieldNode = Node.GetFieldNode(i);
 			FieldNode.ClassType = Node.ClassType;
-			if(FieldNode.AST[ZFieldNode.InitValue] == null) {
-				FieldNode.AST[ZFieldNode.InitValue] = ZenGamma.CreateDefaultValueNode(FieldNode, FieldNode.DeclType, FieldNode.FieldName);
+			if(!FieldNode.HasAst(ZFieldNode.InitValue)) {
+				FieldNode.Set(ZFieldNode.InitValue, ZenGamma.CreateDefaultValueNode(FieldNode, FieldNode.DeclType, FieldNode.FieldName));
 			}
-			FieldNode.AST[ZFieldNode.InitValue] = this.CheckType(FieldNode.AST[ZFieldNode.InitValue], FieldNode.DeclType);
+			this.CheckTypeAt(FieldNode, ZFieldNode.InitValue, FieldNode.DeclType);
 			if(FieldNode.DeclType.IsVarType()) {
 				FieldNode.DeclType = FieldNode.AST[ZFieldNode.InitValue].Type;
 				if(FieldNode.DeclType.IsVarType()) {
 					this.Return(new ZErrorNode(FieldNode, "type of " + FieldNode.FieldName + " is unspecific"));
 					return;
+				}
+			}
+			if(FieldNode.DeclType.IsFuncType()) {
+				ZFuncType FuncType = (ZFuncType)FieldNode.DeclType;
+				if(!Node.ClassType.Equals(FuncType.GetRecvType())) {
+					FuncType = FuncType.NewMethodFuncType(Node.ClassType);
+					this.Logger.ReportWarning(FieldNode.SourceToken, FieldNode.FieldName + " " + FieldNode.DeclType + " -> " + FuncType);
+					FieldNode.DeclType = FuncType;
 				}
 			}
 			Node.ClassType.AppendField(FieldNode.DeclType, FieldNode.FieldName, FieldNode.SourceToken);

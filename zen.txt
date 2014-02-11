@@ -40,10 +40,8 @@ function(x : int ) {
 定数のこと
 
 let C = 1;
-let Math.sin: Func<float,float> = `sin(${1})`
 
 import java.lang.System
-# let System = import java.lang.System と同じ
 
 クラス定義
 ==========
@@ -51,9 +49,9 @@ import java.lang.System
 // フィールドのみ
 
 class Person {
-	field name : String;
-	field age : int;
-	field isChild : Func<boolean, This>;
+	var name : String;
+	var age : int;
+	var isChild : Func<boolean, Person>;
 }
 
 - フィールドの型定義は必須

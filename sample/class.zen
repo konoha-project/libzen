@@ -1,14 +1,8 @@
 class Person {
-	field name: String;
-	field age: int;
-	field isChild: Func<boolean, Person>;
+	var name: String;
+	var age: int;
+	var isChild: Func<boolean, Person>;
+	var isAdult: Func<boolean>;
 }
 
-class Student extends Person {
-	field SchoolName: String;
-	field hasSchalar = true;
-}
 
-function isChild(p: Person) {
-	return p.age <= 20;
-}

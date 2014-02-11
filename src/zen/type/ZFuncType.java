@@ -70,25 +70,6 @@ public final class ZFuncType extends ZType {
 		return false;
 	}
 
-
-	//	@Override public final boolean IsVarType(boolean IgnoreReturn) {
-	//		@Var int i = 0;
-	//		if(IgnoreReturn) {
-	//			i = 1;
-	//		}
-	//		while(i < this.TypeParams.length) {
-	//			if(this.TypeParams[i].IsVarType()) {
-	//				return false;
-	//			}
-	//			i = i + 1;
-	//		}
-	//		return true;
-	//	}
-	//
-	//	@Override public boolean HasCallableSignature() {
-	//		return !(this.GetRecvType().IsVarType());
-	//	}
-
 	@Override public String StringfySignature(String FuncName) {
 		return ZFunc.StringfySignature(FuncName, this.GetFuncParamSize(), this.GetRecvType());
 	}
@@ -124,20 +105,16 @@ public final class ZFuncType extends ZType {
 		return this.TypeParams[Index+1];
 	}
 
-	public boolean MatchFunc(ZFuncType ContextFuncType) {
+	public ZFuncType NewMethodFuncType(ZType RecvType) {
+		@Var ArrayList<ZType> TypeList = new ArrayList<ZType>();
+		TypeList.add(this.GetReturnType());
+		TypeList.add(RecvType);
 		@Var int i = 0;
-		if(this.TypeParams[0].IsVarType() && !ContextFuncType.TypeParams[0].IsVarType()) {
-			i = 1;
-		}
-		while(i < this.TypeParams.length) {
-			@Var ZType ParamType =  ContextFuncType.TypeParams[i];
-			if(this.TypeParams[i] != ParamType && !ParamType.IsVarType()) {
-				return false;
-			}
+		while(i < this.GetFuncParamSize()) {
+			TypeList.add(this.GetFuncParamType(i));
 			i = i + 1;
 		}
-		return true;
+		return ZTypePool.LookupFuncType(TypeList);
 	}
-
 
 }

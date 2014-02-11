@@ -387,6 +387,7 @@ public class ZenEngine extends ZVisitor {
 			return false;
 		}
 		Object ResultValue = this.Eval(ScriptText, FileName, 1, false);
+		this.Logger.ShowReportedErrors();
 		if(ResultValue == ZEmptyValue.FalseEmpty) {
 			LibNative.Exit(1, "abort loading: " + FileName);
 			return false;
