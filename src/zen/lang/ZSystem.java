@@ -24,59 +24,14 @@
 
 //ifdef JAVA
 package zen.lang;
-import java.util.ArrayList;
-
-import zen.deps.LibNative;
 import zen.deps.LibZen;
-import zen.deps.Var;
-import zen.deps.ZenMap;
 import zen.deps.ZTypedObject;
 import zen.type.ZType;
 //import zen.obsolete.ZFuncSet;
 
 public class ZSystem {
-	public final static ZenMap<Integer>     SourceMap = new ZenMap<Integer>(null);
-	public final static ArrayList<String>   SourceList = new ArrayList<String>();
-
-	public final static long GetFileLine(String FileName, int Line) {
-		@Var Object IdOrNull = ZSystem.SourceMap.GetOrNull(FileName);
-		@Var Integer Id = IdOrNull == null ? -1 : (Integer)IdOrNull;
-		if(IdOrNull == null) {
-			ZSystem.SourceList.add(FileName);
-			Id = ZSystem.SourceList.size();
-			ZSystem.SourceMap.put(FileName, Id);
-		}
-		return LibZen.JoinIntId(Id, Line);
-	}
-
-	public final static String GetSourceFileName(long FileLine) {
-		@Var int FileId = LibZen.UpperId(FileLine);
-		return (FileId == 0) ? null : ZSystem.SourceList.get(FileId - 1);
-	}
-
-	public final static int GetFileLineNumber(long FileLine) {
-		return LibZen.LowerId(FileLine);
-	}
-
-	public final static String FormatFileLineNumber(long FileLine) {
-		@Var int FileId = LibZen.UpperId(FileLine);
-		@Var int Line = LibZen.LowerId(FileLine);
-		@Var String FileName = (FileId == 0) ? "eval" : ZSystem.SourceList.get(FileId - 1);
-		return "(" + FileName + ":" + Line + ")";
-	}
-
-
-	//	public final static ZType LookupTypeTable(String Key) {
-	//		return ZTypePool.ClassNameMap.GetOrNull(Key);
-	//	}
-	//
-	//	public final static void SetTypeTable(String Key, ZType Type) {
-	//		ZTypePool.ClassNameMap.put(Key, Type);
-	//		ZLogger.VerboseLog(ZLogger.VerboseSymbol, "global type name: " + Key + ", " + Type);
-	//	}
-
 	public final static ZType GetNativeTypeOfValue(Object Value) {
-		return LibNative.GetNativeType(LibNative.GetClassOfValue(Value));
+		return LibZen.GetNativeType(LibZen.GetClassOfValue(Value));
 	}
 
 	public final static ZType GuessType (Object Value) {

@@ -3,11 +3,12 @@ package zen.parser;
 import zen.ast.ZNode;
 import zen.deps.Field;
 
-public class ZSymbol {
-	@Field public ZSymbol Parent;
+public class ZSymbolEntry {
+	@Field public ZSymbolEntry Parent;
 	@Field public ZNode Node;
 	@Field public boolean IsDisabled = false;
-	public ZSymbol(ZSymbol Parent, ZNode Node) {
+	
+	public ZSymbolEntry(ZSymbolEntry Parent, ZNode Node) {
 		this.Parent = Parent;
 		this.Node = Node;
 	}

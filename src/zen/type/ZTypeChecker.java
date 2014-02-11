@@ -29,23 +29,22 @@ import zen.ast.ZFunctionNode;
 import zen.ast.ZListNode;
 import zen.ast.ZNode;
 import zen.deps.Field;
-import zen.deps.LibNative;
+import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.lang.ZFunc;
 import zen.lang.ZenError;
 import zen.parser.ZGenerator;
 import zen.parser.ZLogger;
-import zen.parser.ZUtils;
 import zen.parser.ZVisitor;
 
 public abstract class ZTypeChecker extends ZVisitor {
 
 	protected void println(String string) {
-		LibNative.Debug("debug: " + string);
+		LibZen._PrintDebug("debug: " + string);
 	}
 
 	protected void FIXME(String string) {
-		LibNative.Debug("FIXME: " + string);
+		LibZen._PrintDebug("FIXME: " + string);
 	}
 
 	@Field private ZType      StackedContextType;
@@ -120,7 +119,7 @@ public abstract class ZTypeChecker extends ZVisitor {
 			}
 			return Node;
 		}
-		if(Node.IsUntyped() || ContextType.IsVarType() || ZUtils.IsFlag(TypeCheckPolicy, NoCheckPolicy)) {
+		if(Node.IsUntyped() || ContextType.IsVarType() || LibZen._IsFlag(TypeCheckPolicy, NoCheckPolicy)) {
 			return Node;
 		}
 		if(Node.Type == ContextType || ContextType.Accept(Node.Type)) {
@@ -136,7 +135,7 @@ public abstract class ZTypeChecker extends ZVisitor {
 		if(ContextType.IsFloatType() && Node.Type.IsIntType()) {
 			return new ZCastNode(Node.ParentNode, ContextType, Node);
 		}
-		if(ZUtils.IsFlag(TypeCheckPolicy, EnforceCoercion) && ContextType.IsStringType()) {
+		if(LibZen._IsFlag(TypeCheckPolicy, EnforceCoercion) && ContextType.IsStringType()) {
 			return new ZCastNode(Node.ParentNode, ContextType, Node);
 		}
 		return ZenError.CreateStupidCast(ContextType, Node);

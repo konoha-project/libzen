@@ -12,7 +12,7 @@ public class IntLiteralPattern extends ZMatchFunction {
 
 	@Override public ZNode Invoke(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
 		@Var ZToken Token = TokenContext.GetToken(ZTokenContext.MoveNext);
-		return new ZIntNode(ParentNode, Token, LibZen.ParseInt(Token.GetText()));
+		return new ZIntNode(ParentNode, Token, LibZen._ParseInt(Token.GetText()));
 	}
 
 }

@@ -8,7 +8,7 @@ public class ZNativeType extends ZType {
 	@Field public Class<?>          JClass;
 
 	public ZNativeType(Class<?> JType) {
-		super(ZTypeFlag.UniqueType, JType.getSimpleName(), null);
+		super(ZTypeFlag._UniqueType, JType.getSimpleName(), null);
 		this.JClass = JType;
 	}
 

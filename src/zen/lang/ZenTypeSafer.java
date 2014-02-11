@@ -77,7 +77,6 @@ import zen.deps.Nullable;
 import zen.deps.Var;
 import zen.parser.ZGenerator;
 import zen.parser.ZNameSpace;
-import zen.parser.ZUtils;
 import zen.parser.ZVariable;
 import zen.type.ZFuncType;
 import zen.type.ZGreekType;
@@ -481,10 +480,10 @@ public class ZenTypeSafer extends ZTypeChecker {
 	}
 
 	private ZType GetBinaryLeftType(String Op, ZType ContextType) {
-		if(LibZen.EqualsString(Op, "|") || LibZen.EqualsString(Op, "&") || LibZen.EqualsString(Op, "<<") || LibZen.EqualsString(Op, ">>") || LibZen.EqualsString(Op,  "^")) {
+		if(LibZen._EqualsString(Op, "|") || LibZen._EqualsString(Op, "&") || LibZen._EqualsString(Op, "<<") || LibZen._EqualsString(Op, ">>") || LibZen._EqualsString(Op,  "^")) {
 			return ZType.IntType;
 		}
-		if(LibZen.EqualsString(Op, "*") || LibZen.EqualsString(Op, "-") || LibZen.EqualsString(Op, "/") || LibZen.EqualsString(Op, "%")) {
+		if(LibZen._EqualsString(Op, "*") || LibZen._EqualsString(Op, "-") || LibZen._EqualsString(Op, "/") || LibZen._EqualsString(Op, "%")) {
 			if(ContextType.IsNumberType()) {
 				return ContextType;
 			}
@@ -493,10 +492,10 @@ public class ZenTypeSafer extends ZTypeChecker {
 	}
 
 	private ZType GetBinaryRightType(String Op, ZType ContextType) {
-		if(LibZen.EqualsString(Op, "|") || LibZen.EqualsString(Op, "&") || LibZen.EqualsString(Op, "<<") || LibZen.EqualsString(Op, ">>") || LibZen.EqualsString(Op,  "^")) {
+		if(LibZen._EqualsString(Op, "|") || LibZen._EqualsString(Op, "&") || LibZen._EqualsString(Op, "<<") || LibZen._EqualsString(Op, ">>") || LibZen._EqualsString(Op,  "^")) {
 			return ZType.IntType;
 		}
-		if(LibZen.EqualsString(Op, "*") || LibZen.EqualsString(Op, "-") || LibZen.EqualsString(Op, "/") || LibZen.EqualsString(Op, "%")) {
+		if(LibZen._EqualsString(Op, "*") || LibZen._EqualsString(Op, "-") || LibZen._EqualsString(Op, "/") || LibZen._EqualsString(Op, "%")) {
 			if(ContextType.IsNumberType()) {
 				return ContextType;
 			}
@@ -805,7 +804,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 			FieldNode.Type = ZType.VoidType;
 			i = i + 1;
 		}
-		Node.ClassType.TypeFlag = ZUtils.UnsetFlag(Node.ClassType.TypeFlag, ZTypeFlag.OpenType);
+		Node.ClassType.TypeFlag = LibZen._UnsetFlag(Node.ClassType.TypeFlag, ZTypeFlag._OpenType);
 		this.Return(Node.ClassType.CheckAllFields(NameSpace));
 		this.TypedNode(Node, ZType.VoidType);
 	}

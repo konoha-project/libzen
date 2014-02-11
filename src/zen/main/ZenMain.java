@@ -27,19 +27,21 @@ package zen.main;
 
 
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.util.ArrayList;
 
-
-import zen.deps.LibNative;
+import zen.deps.KonohaGrammar;
 import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.deps.ZenArray;
-import zen.deps.KonohaGrammar;
 import zen.lang.ZEmptyValue;
 import zen.lang.ZSystem;
 import zen.lang.ZenEngine;
-import zen.parser.ZLogger;
 import zen.parser.ZParserConst;
+import zen.parser.ZSourceBuilder;
 import zen.type.ZType;
 
 public class ZenMain {
@@ -67,7 +69,7 @@ public class ZenMain {
 		}
 		if(Prompt2 != null) {
 			int level = 0;
-			while((level = LibZen.CheckBraceLevel(Line)) > 0) {
+			while((level = ZenMain.CheckBraceLevel(Line)) > 0) {
 				String Line2;
 				try {
 					Line2 = ConsoleReader.readLine(Prompt2);
@@ -80,12 +82,14 @@ public class ZenMain {
 			}
 			if(level < 0) {
 				Line = "";
-				LibNative.println(" .. canceled");
+				LibZen._PrintLine(" .. canceled");
 			}
 		}
 		ConsoleReader.getHistory().addToHistory(Line);
 		return Line;
 	}
+
+
 
 	public final static void ExecCommand(String[] Args) {
 		@Var String TargetCode = null; // self executable
@@ -131,12 +135,12 @@ public class ZenMain {
 				ShellMode = true;
 				continue;
 			}
-			if (LibZen.EqualsString(Argu, "--verbose")) {
-				LibZen.DebugMode = true;
-				ZLogger.VerboseMask |= (ZLogger.VerboseFile
-						| ZLogger.VerboseSymbol | ZLogger.VerboseNative);
-				continue;
-			}
+			//			if (LibZen.EqualsString(Argu, "--verbose")) {
+			//				LibZen.DebugMode = true;
+			//				ZLogger.VerboseMask |= (ZLogger.VerboseFile
+			//						| ZLogger.VerboseSymbol | ZLogger.VerboseNative);
+			//				continue;
+			//			}
 			//			if (LibZen.EqualsString(Argu, "--verbose:token")) {
 			//				ZLogger.VerboseMask |= ZLogger.VerboseToken;
 			//				continue;
@@ -167,7 +171,7 @@ public class ZenMain {
 			//			}
 			//			ZenMain.Usage(Argu + " is unknown");
 		}
-		@Var ZenEngine ScriptEngine = LibNative.LoadEngine(TargetCode, KonohaGrammar.class.getName());
+		@Var ZenEngine ScriptEngine = LibZen.LoadEngine(TargetCode, KonohaGrammar.class.getName());
 		// @Var ZenSourceContext Context = new ZenSourceContext(new KonohaGrammar(), Generator);
 		// if(RequiredLibName != null) {
 		// if(!Context.TopLevelNameSpace.LoadRequiredLib(RequiredLibName)) {
@@ -192,36 +196,36 @@ public class ZenMain {
 			@Var String FileName = ARGV.get(0);
 			@Var boolean Success = ScriptEngine.Load(FileName);
 			if (!Success) {
-				LibNative.Exit(1, "abort loading: " + FileName);
+				LibZen._Exit(1, "abort loading: " + FileName);
 			}
 		}
 		if (ShellMode) {
-			LibNative.println(ZParserConst.ProgName + ZParserConst.Version + " (" + ZParserConst.CodeName + ") on " + LibZen.GetPlatform());
-			LibNative.println(ZParserConst.Copyright);
-			LibNative.println("Accept: " + ScriptEngine.Generator.GetGrammarInfo());
-			LibNative.println("Produce: " + ScriptEngine.Generator.GetTargetLangInfo());
-			ScriptEngine.Generator.Logger.ShowReportedErrors();
+			LibZen._PrintLine(ZParserConst.ProgName + ZParserConst.Version + " (" + ZParserConst.CodeName + ") on " + LibZen._GetPlatform());
+			LibZen._PrintLine(ZParserConst.Copyright);
+			LibZen._PrintLine("Accept: " + ScriptEngine.Generator.GetGrammarInfo());
+			LibZen._PrintLine("Produce: " + ScriptEngine.Generator.GetTargetLangInfo());
+			ScriptEngine.Generator.Logger.ShowErrors();
 			@Var int linenum = 1;
 			@Var String Line = null;
 			while ((Line = ZenMain.ReadLine2(">>> ", "    ")) != null) {
 				try {
 					@Var Object EvaledValue = ScriptEngine.Eval(Line, "(stdin)", linenum, true);
-					ScriptEngine.Generator.Logger.ShowReportedErrors();
+					ScriptEngine.Generator.Logger.ShowErrors();
 					if (!(EvaledValue instanceof ZEmptyValue)) {
 						if(EvaledValue == null) {
-							LibNative.println(" null");
+							LibZen._PrintLine(" null");
 						}
 						else {
-							LibNative.println(" (" + ZSystem.GuessType(EvaledValue) + ":" + LibNative.GetClassName(EvaledValue) + ") " + LibZen.Stringify(EvaledValue));
+							LibZen._PrintLine(" (" + ZSystem.GuessType(EvaledValue) + ":" + LibZen.GetClassName(EvaledValue) + ") " + LibZen._Stringify(EvaledValue));
 						}
 					}
 					linenum += 1;
 				} catch (Exception e) {
-					LibZen.PrintStackTrace(e, linenum);
+					ZenMain.PrintStackTrace(e, linenum);
 					linenum += 1;
 				}
 			}
-			LibNative.println("");
+			LibZen._PrintLine("");
 		}
 		/*
 		 * else if(TargetCode.equals("minikonoha")) { String SourceCode =
@@ -259,10 +263,121 @@ public class ZenMain {
 		System.out.println("     --verbose:native     adding native class info");
 		System.out.println("     --verbose:all        adding all info");
 		System.out.println("     --verbose:no         no log");
-		LibNative.Exit(0, Message);
+		LibZen._Exit(0, Message);
 	}
 
 	public final static void main(String[] Args) {
 		ZenMain.ExecCommand(Args);
 	}
+
+
+
+	public static void PrintStackTrace(Exception e, int linenum) {
+		@Var StackTraceElement[] elements = e.getStackTrace();
+		@Var int size = elements.length + 1;
+		@Var StackTraceElement[] newElements = new StackTraceElement[size];
+		for(@Var int i = 0; i < size; i++) {
+			if(i == size - 1) {
+				newElements[i] = new StackTraceElement("<TopLevel>", "TopLevelEval", "stdin", linenum);
+				break;
+			}
+			newElements[i] = elements[i];
+		}
+		e.setStackTrace(newElements);
+		e.printStackTrace();
+	}
+
+
+
+	public final static int CheckBraceLevel(String Text) {
+		@Var int level = 0;
+		@Var int i = 0;
+		while(i < Text.length()) {
+			@Var char ch = Text.charAt(i);
+			if(ch == '{' || ch == '[') {
+				level = level + 1;
+			}
+			if(ch == '}' || ch == ']') {
+				level = level - 1;
+			}
+			i = i + 1;
+		}
+		return level;
+	}
+
+
+
+	public final static void WriteSource(String OutputFile, ArrayList<ZSourceBuilder> SourceList) {
+		try {
+			PrintStream Stream = null;
+			if(OutputFile.equals("-")) {
+				Stream = System.out;
+				Stream.flush();
+			}
+			else {
+				Stream = new PrintStream(OutputFile);
+			}
+			for(ZSourceBuilder Builder : SourceList) {
+				for(String Source : Builder.SourceList) {
+					Stream.print(Source);
+				}
+				Stream.println();
+			}
+			Stream.flush();
+			if(Stream != System.out) {
+				Stream.close();
+			}
+		} catch (IOException e) {
+			System.err.println("Cannot write: " + OutputFile);
+			System.exit(1);
+		}
+	}
+
+	private static java.io.Console Console = null;
+	private static java.io.BufferedReader Reader = null;
+	private static boolean ConsoleInitialized = false;
+
+	static private String ReadLine(String format, Object... args) {
+		if(!ConsoleInitialized){
+			Console = System.console();
+			if (Console == null) {
+				Reader = new BufferedReader(new InputStreamReader(System.in));
+			}
+			ConsoleInitialized = true;
+		}
+		if (Console != null) {
+			return System.console().readLine(format, args);
+		}
+		System.out.print(String.format(format, args));
+		try {
+			return Reader.readLine();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+			return "";
+		}
+	}
+
+	public final static String ReadLine(String Prompt, String Prompt2) {
+		String Line = ReadLine(Prompt);
+		if(Line == null) {
+			System.exit(0);
+		}
+		if(Prompt2 != null) {
+			int level = 0;
+			while((level = ZenMain.CheckBraceLevel(Line)) > 0) {
+				String Line2 = ReadLine(Prompt2 + LibZen._JoinStrings("  ", level));
+				Line += "\n" + Line2;
+			}
+			if(level < 0) {
+				Line = "";
+				LibZen._PrintLine(" .. canceled");
+			}
+		}
+		return Line;
+	}
+
+
+
+
 }

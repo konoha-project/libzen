@@ -31,16 +31,18 @@ import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.deps.ZMatchFunction;
 
-public final class ZSyntaxPattern {
-	@Field public ZNameSpace	          PackageNameSpace;
-	@Field public String		          PatternName;
-	@Field public ZMatchFunction                 MatchFunc;
+public final class ZSyntax {
+	@Field public ZNameSpace	              PackageNameSpace;
+	@Field public String		              PatternName;
+	@Field public ZMatchFunction              MatchFunc;
 	@Field public int				          SyntaxFlag = 0;
-	@Field public ZSyntaxPattern              ParentPattern = null;
+	@Field public ZSyntax              ParentPattern = null;
 	@Field public boolean IsDisabled          = false;
 	@Field public boolean IsStatement         = false;
+	public final static int _LeftJoin						= 1 << 1;
+	public final static int _BinaryOperator					= 1;
 
-	public ZSyntaxPattern(ZNameSpace NameSpace, String PatternName, ZMatchFunction MatchFunc) {
+	public ZSyntax(ZNameSpace NameSpace, String PatternName, ZMatchFunction MatchFunc) {
 		this.PackageNameSpace = NameSpace;
 		this.PatternName = PatternName;
 		this.MatchFunc = MatchFunc;
@@ -51,24 +53,24 @@ public final class ZSyntaxPattern {
 	}
 
 	public boolean IsBinaryOperator() {
-		return ZUtils.IsFlag(this.SyntaxFlag, ZParserConst.BinaryOperator);
+		return LibZen._IsFlag(this.SyntaxFlag, ZSyntax._BinaryOperator);
 	}
 
-	public final boolean IsRightJoin(ZSyntaxPattern Right) {
+	public final boolean IsRightJoin(ZSyntax Right) {
 		@Var int left = this.SyntaxFlag;
 		@Var int right = Right.SyntaxFlag;
-		return (left < right || (left == right && !ZUtils.IsFlag(left, ZParserConst.LeftJoin) && !ZUtils.IsFlag(right, ZParserConst.LeftJoin)));
+		return (left < right || (left == right && !LibZen._IsFlag(left, ZSyntax._LeftJoin) && !LibZen._IsFlag(right, ZSyntax._LeftJoin)));
 	}
 
 	public final boolean EqualsName(String Name) {
-		return LibZen.EqualsString(this.PatternName, Name);
+		return LibZen._EqualsString(this.PatternName, Name);
 	}
 
-	public final static ZSyntaxPattern MergeSyntaxPattern(ZSyntaxPattern Pattern, ZSyntaxPattern Parent) {
+	public final static ZSyntax MergeSyntaxPattern(ZSyntax Pattern, ZSyntax Parent) {
 		if(Parent == null) {
 			return Pattern;
 		}
-		@Var ZSyntaxPattern MergedPattern = new ZSyntaxPattern(Pattern.PackageNameSpace, Pattern.PatternName, Pattern.MatchFunc);
+		@Var ZSyntax MergedPattern = new ZSyntax(Pattern.PackageNameSpace, Pattern.PatternName, Pattern.MatchFunc);
 		MergedPattern.ParentPattern = Parent;
 		return MergedPattern;
 	}

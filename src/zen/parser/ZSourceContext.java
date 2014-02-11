@@ -1,7 +1,6 @@
 package zen.parser;
 
 import zen.deps.Field;
-import zen.deps.LibNative;
 import zen.deps.LibZen;
 import zen.deps.Var;
 
@@ -13,7 +12,7 @@ public final class ZSourceContext extends ZSource {
 	}
 
 	public final int GetCharCode() {
-		return ZUtils.AsciiToTokenMatrixIndex(LibZen.CharAt(this.SourceText, this.SourcePosition));
+		return LibZen._GetTokenMatrixIndex(LibZen._GetChar(this.SourceText, this.SourcePosition));
 	}
 
 	public final int GetPosition() {
@@ -66,7 +65,7 @@ public final class ZSourceContext extends ZSource {
 	public void Tokenize(String PatternName, int StartIndex, int EndIndex) {
 		this.SourcePosition = EndIndex;
 		if(StartIndex <= EndIndex && EndIndex <= this.SourceText.length()) {
-			ZSyntaxPattern Pattern = this.TokenContext.NameSpace.GetSyntaxPattern(PatternName);
+			ZSyntax Pattern = this.TokenContext.NameSpace.GetSyntaxPattern(PatternName);
 			if(Pattern == null) {
 				this.Panic(StartIndex, "unregistered token pattern: " + PatternName);
 				@Var ZToken Token = new ZToken(this, StartIndex, EndIndex);
@@ -83,7 +82,7 @@ public final class ZSourceContext extends ZSource {
 		if(EndIndex < this.SourceText.length()) {
 			@Var ZNameSpace NameSpace = this.TokenContext.NameSpace;
 			@Var String Token = this.SourceText.substring(StartIndex, EndIndex);
-			@Var ZSyntaxPattern Pattern = NameSpace.GetRightSyntaxPattern(Token);
+			@Var ZSyntax Pattern = NameSpace.GetRightSyntaxPattern(Token);
 			if(Pattern != null) {
 				return true;
 			}
@@ -104,7 +103,7 @@ public final class ZSourceContext extends ZSource {
 		@Var int RollbackPosition = this.SourcePosition;
 		while(TokenFunc != null) {
 			this.SourcePosition = RollbackPosition;
-			if(LibNative.ApplyTokenFunc(TokenFunc.Func, this)) {
+			if(LibZen.ApplyTokenFunc(TokenFunc.Func, this)) {
 				return;
 			}
 			TokenFunc = TokenFunc.ParentFunc;
@@ -123,7 +122,7 @@ public final class ZSourceContext extends ZSource {
 				break;
 			}
 			if(this.SourcePosition == CheckPosition) {
-				LibNative.println("Buggy TokenFunc: " + TokenFunc);
+				LibZen._PrintLine("Buggy TokenFunc: " + TokenFunc);
 				this.MoveNext();
 			}
 		}

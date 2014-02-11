@@ -31,7 +31,6 @@ import zen.ast.ZEmptyNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZNode;
 import zen.deps.Field;
-import zen.deps.LibNative;
 import zen.deps.LibZen;
 import zen.deps.Var;
 
@@ -51,7 +50,7 @@ public final class ZTokenContext {
 	@Field private int CurrentPosition = 0;
 	@Field private boolean IsAllowSkipIndent = false;
 	@Field public ZToken LatestToken = null;
-	@Field private ZSyntaxPattern ApplyingPattern = null;
+	@Field private ZSyntax ApplyingPattern = null;
 
 	public ZTokenContext(ZGenerator Generator, ZNameSpace NameSpace, String FileName, int LineNumber, String SourceText) {
 		this.Generator = Generator;
@@ -236,13 +235,13 @@ public final class ZTokenContext {
 		return ParentNode;
 	}
 
-	public final ZSyntaxPattern GetApplyingSyntax() {
+	public final ZSyntax GetApplyingSyntax() {
 		return this.ApplyingPattern;
 	}
 
-	public final ZNode ApplyMatchPattern(ZNode ParentNode, ZNode LeftNode, ZSyntaxPattern Pattern, boolean IsRequired) {
+	public final ZNode ApplyMatchPattern(ZNode ParentNode, ZNode LeftNode, ZSyntax Pattern, boolean IsRequired) {
 		@Var int RollbackPosition = this.CurrentPosition;
-		@Var ZSyntaxPattern CurrentPattern = Pattern;
+		@Var ZSyntax CurrentPattern = Pattern;
 		@Var ZToken TopToken = this.GetToken();
 		@Var ZNode ParsedNode = null;
 		while(CurrentPattern != null) {
@@ -250,7 +249,7 @@ public final class ZTokenContext {
 			this.CurrentPosition = RollbackPosition;
 			this.ApplyingPattern  = CurrentPattern;
 			//			System.out.println("B "+Pattern + "," + ParentNode);
-			ParsedNode = LibNative.ApplyMatchFunc(CurrentPattern.MatchFunc, ParentNode, this, LeftNode);
+			ParsedNode = LibZen.ApplyMatchFunc(CurrentPattern.MatchFunc, ParentNode, this, LeftNode);
 			assert(ParsedNode != ParentNode);
 			//			System.out.println("E "+ ParsedNode);
 			this.ApplyingPattern  = null;
@@ -271,7 +270,7 @@ public final class ZTokenContext {
 	}
 
 	public final ZNode ParsePatternAfter(ZNode ParentNode, ZNode LeftNode, String PatternName, boolean IsRequired) {
-		@Var ZSyntaxPattern Pattern = this.NameSpace.GetSyntaxPattern(PatternName);
+		@Var ZSyntax Pattern = this.NameSpace.GetSyntaxPattern(PatternName);
 		@Var ZNode ParsedNode = this.ApplyMatchPattern(ParentNode, LeftNode, Pattern, IsRequired);
 		return ParsedNode;
 	}

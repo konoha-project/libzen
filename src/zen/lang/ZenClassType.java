@@ -38,7 +38,7 @@ import zen.type.ZTypeFlag;
 public class ZenClassType extends ZType {
 	@Field ArrayList<ZenField> FieldList = null;
 	public ZenClassType(String ShortName, ZType RefType) {
-		super(ZTypeFlag.OpenType|ZTypeFlag.UniqueType, ShortName, RefType);
+		super(ZTypeFlag._OpenType|ZTypeFlag._UniqueType, ShortName, RefType);
 		if(RefType instanceof ZenClassType) {
 			this.ResetSuperType((ZenClassType)RefType);
 		}
@@ -72,7 +72,7 @@ public class ZenClassType extends ZType {
 		if(this.FieldList != null) {
 			@Var int i = 0;
 			while(i < this.FieldList.size()) {
-				if(LibZen.EqualsString(FieldName, this.FieldList.get(i).FieldName)) {
+				if(LibZen._EqualsString(FieldName, this.FieldList.get(i).FieldName)) {
 					return true;
 				}
 				i = i + 1;
@@ -86,7 +86,7 @@ public class ZenClassType extends ZType {
 			@Var int i = 0;
 			while(i < this.FieldList.size()) {
 				@Var ZenField Field = this.FieldList.get(i);
-				if(LibZen.EqualsString(FieldName, Field.FieldName)) {
+				if(LibZen._EqualsString(FieldName, Field.FieldName)) {
 					return Field.FieldType;
 				}
 				i = i + 1;
@@ -102,7 +102,7 @@ public class ZenClassType extends ZType {
 		@Var int i = 0;
 		while(i < this.FieldList.size()) {
 			@Var ZenField Field = this.FieldList.get(i);
-			if(LibZen.EqualsString(FieldName, Field.FieldName)) {
+			if(LibZen._EqualsString(FieldName, Field.FieldName)) {
 				if(FieldType.Equals(Field.FieldType)) {
 					return null;
 				}

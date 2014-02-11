@@ -25,29 +25,11 @@
 package zen.type;
 
 public abstract class ZTypeFlag {
-	//	// ClassFlag
-	//	public final static int     ExportType         = 1 << 0;  // @Export
-	//	public final static int     PublicType         = 1 << 1;  // @Public
-	//	public final static int		NativeType	       = 1 << 2;
-	//	public final static int		VirtualType		   = 1 << 3;  // @Virtual
-	//	public final static int     EnumType           = 1 << 4;
-	//	public final static int     DeprecatedType     = 1 << 5;  // @Deprecated
-	//	public final static int     HiddenType         = 1 << 6;
-	//	// UnrevealedType is a type that must be hidden for users
-	//	// WeatType must be converted to non-UnrevealedType by StrongCoersion
-	//	// UnrevealedType is set only if StrongCoersion is defined
-	//	public final static int     UnrevealedType           = HiddenType;
-	//	public final static int     CommonType         = 1 << 7;  // @Common
-	//
-	//	public final static int		DynamicType	       = 1 << 8;  // @Dynamic
-	public final static int     OpenType           = 1 << 9;  // @Open for the future
+	public final static int     _OpenType           = 1 << 9;  // @Open for the future
 	@Deprecated
-	public final static int     UnboxType          = 1 << 10;
+	public final static int     _UnboxType          = 1 << 10;
 	//	public final static int     TypeVariable       = 1 << 14;
 	//	public final static int     GenericVariable    = 1 << 15;
-	public final static int     UniqueType         = 1 << 16;
-
-	public static final String NativeNameRight = "__";
-
+	public final static int     _UniqueType         = 1 << 16;
 
 }

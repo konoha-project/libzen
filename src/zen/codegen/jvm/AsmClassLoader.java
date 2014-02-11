@@ -5,7 +5,7 @@ import java.util.HashMap;
 import org.objectweb.asm.Type;
 
 import zen.ast.ZNode;
-import zen.deps.LibNative;
+import zen.deps.LibZen;
 import zen.deps.Var;
 
 class AsmClassLoader extends ClassLoader {
@@ -53,7 +53,7 @@ class AsmClassLoader extends ClassLoader {
 			return this.loadClass(ClassName);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
-			LibNative.Exit(1, "generation failed: " + ClassName);
+			LibZen._Exit(1, "generation failed: " + ClassName);
 		}
 		return null;
 	}

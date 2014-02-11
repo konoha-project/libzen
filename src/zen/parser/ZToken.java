@@ -5,7 +5,7 @@ import zen.deps.LibZen;
 import zen.deps.Var;
 
 public class ZToken {
-	@Field public final static ZToken NullToken = new ZToken(null, 0, 0);
+	public final static ZToken NullToken = new ZToken(null, 0, 0);
 
 	@Field public ZSource Source;
 	@Field public int  StartIndex;
@@ -23,6 +23,13 @@ public class ZToken {
 
 	public final int GetLineNumber() {
 		return this.Source.GetLineNumber(this.StartIndex);
+	}
+
+	public final char GetChar() {
+		if(this.Source != null) {
+			return this.Source.SourceText.charAt(this.StartIndex);
+		}
+		return '\0';
 	}
 
 	public final String GetText() {
@@ -97,7 +104,7 @@ public class ZToken {
 
 	public final boolean IsNameSymbol() {
 		char ch = this.Source.SourceAt(this.StartIndex);
-		return LibZen.IsSymbol(ch);
+		return LibZen._IsSymbol(ch);
 	}
 
 	public int GetIndentSize() {

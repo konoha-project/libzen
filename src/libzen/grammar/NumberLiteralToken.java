@@ -12,7 +12,7 @@ public class NumberLiteralToken extends ZTokenFunction {
 		@Var char ch = 0;
 		while(SourceContext.HasChar()) {
 			ch = SourceContext.ParseChar();
-			if(!LibZen.IsDigit(ch)) {
+			if(!LibZen._IsDigit(ch)) {
 				break;
 			}
 			SourceContext.MoveNext();
@@ -20,7 +20,7 @@ public class NumberLiteralToken extends ZTokenFunction {
 		if(ch == '.') {
 			while(SourceContext.HasChar()) {
 				ch = SourceContext.ParseChar();
-				if(!LibZen.IsDigit(ch)) {
+				if(!LibZen._IsDigit(ch)) {
 					break;
 				}
 				SourceContext.MoveNext();

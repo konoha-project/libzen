@@ -105,7 +105,6 @@ import zen.ast.ZTryNode;
 import zen.ast.ZUnaryNode;
 import zen.ast.ZVarDeclNode;
 import zen.ast.ZWhileNode;
-import zen.deps.LibNative;
 import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.deps.ZFunction;
@@ -291,7 +290,7 @@ public class JavaAsmGenerator extends JavaSolution {
 		try {
 			return RecvClass.getField(Name);
 		} catch (Exception e) {
-			LibNative.FixMe(e);
+			LibZen._FixMe(e);
 		}
 		return null;  // type checker guarantees field exists
 	}
@@ -736,7 +735,7 @@ public class JavaAsmGenerator extends JavaSolution {
 		}
 		catch(Exception e) {
 			e.printStackTrace();
-			LibNative.Exit(1, "failed: " + e);
+			LibZen._Exit(1, "failed: " + e);
 		}
 		return null;
 	}
@@ -747,7 +746,7 @@ public class JavaAsmGenerator extends JavaSolution {
 			ZenClassType ClassType = (ZenClassType)RecvType;
 			ZType FieldType = ClassType.GetFieldType(FuncName, null);
 			if(FieldType == null || !FieldType.IsFuncType()) {
-				FuncName = LibZen.AnotherName(FuncName);
+				FuncName = LibZen._AnotherName(FuncName);
 				FieldType = ClassType.GetFieldType(FuncName, null);
 				if(FieldType == null || !FieldType.IsFuncType()) {
 					return;
@@ -846,7 +845,7 @@ public class JavaAsmGenerator extends JavaSolution {
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			LibNative.Exit(1, "failed " + e);
+			LibZen._Exit(1, "failed " + e);
 		}
 	}
 

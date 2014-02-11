@@ -24,7 +24,7 @@ public final class ZObjectArray extends ZObject {
 			if(i > 0) {
 				s += ", ";
 			}
-			s += LibZen.Stringify(Value);
+			s += LibZen._Stringify(Value);
 			i = i + 1;
 		}
 		return s + "]";

@@ -24,12 +24,12 @@
 
 package zen.ast;
 
-import zen.parser.ZSyntaxPattern;
+import zen.parser.ZSyntax;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 
 public class ZComparatorNode extends ZBinaryNode {
-	public ZComparatorNode(ZNode ParentNode, ZToken SourceToken, ZNode Left, ZSyntaxPattern Pattern) {
+	public ZComparatorNode(ZNode ParentNode, ZToken SourceToken, ZNode Left, ZSyntax Pattern) {
 		super(ParentNode, SourceToken, Left, Pattern);
 	}
 	@Override public void Accept(ZVisitor Visitor) {

@@ -24,39 +24,25 @@
 
 package zen.parser;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import zen.deps.Field;
-
-import zen.deps.LibNative;
 import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.deps.ZenMap;
 
 public final class ZLogger {
-	public final static int	ErrorLevel						= 0;
-	public final static int TypeErrorLevel                  = 1;
-	public final static int	WarningLevel					= 2;
-	public final static int	InfoLevel					    = 3;
-	public final static int	DebugLevel					    = 4;
-
-	public final static int VerboseRuntime   = (1 << 9);
-	public final static int VerboseException = (1 << 8);
-	public final static int VerboseFile      = (1 << 7);
-	public final static int VerboseNative    = (1 << 6);
-	public final static int VerboseUndefined   = (1 << 5);
-	public final static int VerboseToken     = (1 << 4);
-	public final static int VerboseEval      = (1 << 3);
-	public final static int VerboseFunc      = (1 << 2);
-	public final static int VerboseType      = (1 << 1);
-	public final static int VerboseSymbol    = 1;
+	public final static int	_ErrorLevel						= 0;
+	public final static int _TypeErrorLevel                 = 1;
+	public final static int	_WarningLevel					= 2;
+	public final static int	_InfoLevel					    = 3;
+	public final static int	_DebugLevel					    = 4;
 
 	@Field public ArrayList<String>  ReportedErrorList = new ArrayList<String>();
 	@Field public ZenMap<ZCounter> StatMap;
 
 	public ZLogger() {
-		if(LibNative.GetEnv("ZENSTAT") != null) {
+		if(LibZen._GetEnv("ZENSTAT") != null) {
 			this.StatMap = new ZenMap<ZCounter>(null);
 		}
 		else {
@@ -70,16 +56,16 @@ public final class ZLogger {
 
 	public final String Report(int Level, ZToken Token, String Message) {
 		if(Token != null && !Token.IsNull()) {
-			if(Level == ZLogger.ErrorLevel) {
+			if(Level == ZLogger._ErrorLevel) {
 				Message = Token.Source.MakeBody("error", Token.StartIndex, Message);
 			}
-			else if(Level == ZLogger.TypeErrorLevel) {
+			else if(Level == ZLogger._TypeErrorLevel) {
 				Message = Token.Source.MakeBody("error", Token.StartIndex, Message);
 			}
-			else if(Level == ZLogger.WarningLevel) {
+			else if(Level == ZLogger._WarningLevel) {
 				Message = Token.Source.MakeBody("warning", Token.StartIndex, Message);
 			}
-			else if(Level == ZLogger.InfoLevel) {
+			else if(Level == ZLogger._InfoLevel) {
 				Message = Token.Source.MakeBody("info", Token.StartIndex, Message);
 			}
 			else {
@@ -94,19 +80,19 @@ public final class ZLogger {
 	}
 
 	public final String ReportError(ZToken Token, String Message) {
-		return this.Report(ErrorLevel, Token, Message);
+		return this.Report(ZLogger._ErrorLevel, Token, Message);
 	}
 
 	public final String ReportWarning(ZToken Token, String Message) {
-		return this.Report(WarningLevel, Token, Message);
+		return this.Report(ZLogger._WarningLevel, Token, Message);
 	}
 
 	public final String ReportInfo(ZToken Token, String Message) {
-		return this.Report(InfoLevel, Token, Message);
+		return this.Report(ZLogger._InfoLevel, Token, Message);
 	}
 
 	public final String ReportDebug(ZToken Token, String Message) {
-		return this.Report(DebugLevel, Token, Message);
+		return this.Report(ZLogger._DebugLevel, Token, Message);
 	}
 
 	public final String[] GetReportedErrors() {
@@ -115,10 +101,10 @@ public final class ZLogger {
 		return LibZen.CompactStringList(List);
 	}
 
-	public final void ShowReportedErrors() {
+	public final void ShowErrors() {
 		@Var String[] Messages = this.GetReportedErrors();
 		for(@Var int i = 0; i < Messages.length; i = i + 1) {
-			LibNative.println(Messages[i]);
+			LibZen._PrintLine(Messages[i]);
 		}
 	}
 
@@ -137,7 +123,7 @@ public final class ZLogger {
 
 	public final void CountCreation(Object CreatedObject) {
 		if(this.StatMap != null) {
-			@Var String EventName = "CreationOf" + LibNative.GetClassName(CreatedObject);
+			@Var String EventName = "CreationOf" + LibZen.GetClassName(CreatedObject);
 			@Var ZCounter Counter = this.StatMap.GetOrNull(EventName);
 			if(Counter == null) {
 				Counter = new ZCounter();
@@ -146,37 +132,6 @@ public final class ZLogger {
 			else {
 				Counter.count = Counter.count + 1;
 			}
-		}
-	}
-
-	public static int VerboseMask = ZLogger.VerboseUndefined | ZLogger.VerboseException;
-
-	public final static void TODO(String msg) {
-		LibNative.println("TODO" + LibZen.GetStackInfo(2) + ": " + msg);
-	}
-
-	public final static void VerboseException(Throwable e) {
-		if(e instanceof InvocationTargetException) {
-			Throwable cause = e.getCause();
-			e = cause;
-			if(cause instanceof RuntimeException) {
-				throw (RuntimeException)cause;
-			}
-			if(cause instanceof Error) {
-				throw (Error)cause;
-			}
-		}
-		VerboseLog(VerboseException, e.toString());
-		e.printStackTrace();
-		if(e instanceof IllegalArgumentException) {
-			LibNative.Exit(1, e.toString());
-		}
-
-	}
-
-	public final static void VerboseLog(int VerboseFlag, String Message) {
-		if((VerboseMask & VerboseFlag) == VerboseFlag) {
-			LibNative.println("LibZen: " + Message);
 		}
 	}
 

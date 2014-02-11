@@ -6,8 +6,7 @@ public final class ZIndentToken extends ZToken {
 		super(Source, StartIndex, EndIndex);
 	}
 
-	@Override
-	public final int GetIndentSize() {
+	@Override public final int GetIndentSize() {
 		return this.Source.CountIndentSize(this.StartIndex);
 	}
 

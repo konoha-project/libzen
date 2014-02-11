@@ -24,12 +24,12 @@
 
 package zen.ast;
 
-import zen.parser.ZSyntaxPattern;
+import zen.parser.ZSyntax;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 
 public final class ZOrNode extends ZBinaryNode {
-	public ZOrNode(ZNode ParentNode, ZToken Token, ZNode Left, ZSyntaxPattern Pattern) {
+	public ZOrNode(ZNode ParentNode, ZToken Token, ZNode Left, ZSyntax Pattern) {
 		super(ParentNode, Token, Left, Pattern);
 	}
 	@Override public void Accept(ZVisitor Visitor) {

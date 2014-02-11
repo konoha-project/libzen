@@ -12,7 +12,7 @@ public class FloatLiteralPattern extends ZMatchFunction {
 
 	@Override public ZNode Invoke(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
 		@Var ZToken Token = TokenContext.GetToken(ZTokenContext.MoveNext);
-		return new ZFloatNode(ParentNode, Token, LibZen.ParseFloat(Token.GetText()));
+		return new ZFloatNode(ParentNode, Token, LibZen._ParseFloat(Token.GetText()));
 	}
 
 }

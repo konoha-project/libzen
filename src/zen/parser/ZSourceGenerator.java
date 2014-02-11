@@ -71,7 +71,6 @@ import zen.ast.ZUnaryNode;
 import zen.ast.ZVarDeclNode;
 import zen.ast.ZWhileNode;
 import zen.deps.Field;
-import zen.deps.LibNative;
 import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.deps.ZenMap;
@@ -158,19 +157,19 @@ public class ZSourceGenerator extends ZGenerator {
 		if (AllowLazy && Node.HasUntypedNode()) {
 			if(IsInteractive) {
 				Node.Accept(this);
-				LibNative.println("---");
-				LibNative.println(this.CurrentBuilder.toString());
+				LibZen._PrintLine("---");
+				LibZen._PrintLine(this.CurrentBuilder.toString());
 				this.CurrentBuilder.Clear();
-				LibNative.println("---");
+				LibZen._PrintLine("---");
 			}
 			return false;
 		}
 		Node.Accept(this);
 		if(IsInteractive) {
-			LibNative.println("---");
-			LibNative.println(this.CurrentBuilder.toString());
+			LibZen._PrintLine("---");
+			LibZen._PrintLine(this.CurrentBuilder.toString());
 			this.CurrentBuilder.Clear();
-			LibNative.println("---");
+			LibZen._PrintLine("---");
 		}
 		return true;
 	}
@@ -261,7 +260,7 @@ public class ZSourceGenerator extends ZGenerator {
 	}
 
 	@Override public void VisitStringNode(ZStringNode Node) {
-		this.CurrentBuilder.Append(LibZen.QuoteString(Node.StringValue));
+		this.CurrentBuilder.Append(LibZen._QuoteString(Node.StringValue));
 	}
 
 	@Override public void VisitArrayLiteralNode(ZArrayLiteralNode Node) {
@@ -526,7 +525,7 @@ public class ZSourceGenerator extends ZGenerator {
 	@Override public void VisitErrorNode(ZErrorNode Node) {
 		this.Logger.ReportError(Node.SourceToken, Node.ErrorMessage);
 		this.CurrentBuilder.Append("ThrowError(");
-		this.CurrentBuilder.Append(LibZen.QuoteString(Node.ErrorMessage));
+		this.CurrentBuilder.Append(LibZen._QuoteString(Node.ErrorMessage));
 		this.CurrentBuilder.Append(")");
 	}
 

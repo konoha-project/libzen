@@ -2,7 +2,7 @@ package zen.codegen.jvm;
 
 import java.lang.reflect.Method;
 
-import zen.deps.LibNative;
+import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.lang.ZFunc;
 import zen.parser.ZGenerator;
@@ -54,7 +54,7 @@ public class JavaCommonApi {
 			return ConvertToNativeFunc(JavaCommonApi.class.getMethod(Name, classes));
 		} catch (Exception e) {
 			System.err.println(e);
-			LibNative.Exit(1, e.toString());
+			LibZen._Exit(1, e.toString());
 		}
 		return null;
 	}

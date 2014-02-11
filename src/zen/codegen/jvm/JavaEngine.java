@@ -47,7 +47,7 @@ import zen.ast.ZNotNode;
 import zen.ast.ZSetterNode;
 import zen.ast.ZStringNode;
 import zen.ast.ZUnaryNode;
-import zen.deps.LibNative;
+import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.lang.ZFunc;
 import zen.lang.ZenEngine;
@@ -181,7 +181,7 @@ public class JavaEngine extends ZenEngine {
 			Field f = Node.StaticClass.getField(Node.FieldName);
 			this.EvaledValue = f.get(null);
 		} catch (Exception e) {
-			LibNative.FixMe(e);
+			LibZen._FixMe(e);
 			this.StopVisitor();
 		}
 	}

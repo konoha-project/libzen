@@ -66,7 +66,7 @@ public class ZenArray<T> extends ArrayList<T> implements ZTypedObject {
 			if(i > 0) {
 				s += ", ";
 			}
-			s += LibZen.Stringify(Value);
+			s += LibZen._Stringify(Value);
 			i = i + 1;
 		}
 		return s + "]";

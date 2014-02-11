@@ -9,7 +9,7 @@ import zen.ast.ZConstNode;
 import zen.ast.ZImportNode;
 import zen.ast.ZListNode;
 import zen.ast.ZNode;
-import zen.deps.LibNative;
+import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.deps.ZenMap;
 import zen.lang.ZenEngine;
@@ -194,7 +194,7 @@ public abstract class JavaSolution extends ZGenerator {
 	}
 
 	public void Debug(String Message) {
-		LibNative.Debug(Message);
+		LibZen._PrintDebug(Message);
 	}
 
 }

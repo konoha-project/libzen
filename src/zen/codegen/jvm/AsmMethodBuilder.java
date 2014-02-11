@@ -22,7 +22,6 @@ import org.objectweb.asm.tree.MethodNode;
 import zen.ast.ZListNode;
 import zen.ast.ZNode;
 import zen.lang.ZFunc;
-import zen.lang.ZSystem;
 import zen.type.ZFuncType;
 import zen.type.ZType;
 
@@ -48,14 +47,11 @@ class AsmMethodBuilder extends MethodNode {
 		this.Generator.AsmBuilder = this.Parent;
 	}
 
-	void SetLineNumber(long FileLine) {
-		if(FileLine != 0) {
-			int Line = ZSystem.GetFileLineNumber(FileLine);
-			if(Line != this.PreviousLine) {
-				Label LineLabel = new Label();
-				this.visitLineNumber(Line, LineLabel);
-				this.PreviousLine = Line;
-			}
+	void SetLineNumber(int Line) {
+		if(Line != 0 && Line != this.PreviousLine) {
+			Label LineLabel = new Label();
+			this.visitLineNumber(Line, LineLabel);
+			this.PreviousLine = Line;
 		}
 	}
 

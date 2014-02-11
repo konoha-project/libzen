@@ -71,11 +71,10 @@ import zen.ast.ZTryNode;
 import zen.ast.ZUnaryNode;
 import zen.ast.ZVarDeclNode;
 import zen.ast.ZWhileNode;
-import zen.deps.LibNative;
+import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.lang.ZenClassType;
 import zen.parser.ZSourceGenerator;
-import zen.parser.ZUtils;
 import zen.type.ZFuncType;
 import zen.type.ZGeneric1Type;
 import zen.type.ZType;
@@ -114,7 +113,7 @@ class LLVMSourceWriter {
 		return this.GetIndentString(this.IndentLebel);
 	}
 	private String GetIndentString(int Level) {
-		return ZUtils.JoinStrings("\t", Level);
+		return LibZen._JoinStrings("\t", Level);
 	}
 	public void IncreaseIndent() {
 		++this.IndentLebel;
@@ -303,7 +302,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		else if(Type instanceof ZFuncType) {
 			ZFuncType FuncType = (ZFuncType)Type;
 			int Size = FuncType.GetFuncParamSize();
-			LibNative.Assert(Size >= 0);
+			LibZen._Assert(Size >= 0);
 
 			String FuncTypeString = this.GetTypeExpr(FuncType.GetReturnType())+ " (";
 			for(int i = 0; i < Size; ++i) {
@@ -501,7 +500,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 			//if(IsInteractive) {
 			Node.Accept(this);
 			//LibNative.println("---");
-			LibNative.println(this.Writer.Write());
+			LibZen._PrintLine(this.Writer.Write());
 			//LibNative.println("---");
 			//}
 			return false;
@@ -509,7 +508,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		Node.Accept(this);
 		//if(IsInteractive) {
 		//LibNative.println("---");
-		LibNative.println(this.Writer.Write());
+		LibZen._PrintLine(this.Writer.Write());
 		//LibNative.println("---");
 		//}
 		return true;
@@ -785,7 +784,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 
 		this.Writer.AppendLine("}");
 		if(Node.ParentFunctionNode != null) {
-			LibNative.println(this.Writer.Write());
+			LibZen._PrintLine(this.Writer.Write());
 			this.Writer = PushedWriter;
 			this.Writer.AddCodeToCurrentBuffer(FuncName);
 		}

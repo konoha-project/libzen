@@ -26,7 +26,7 @@
 package zen.ast;
 
 import zen.deps.Field;
-import zen.deps.LibNative;
+import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.parser.ZNameSpace;
 import zen.parser.ZToken;
@@ -145,7 +145,7 @@ public abstract class ZNode {
 
 	//	public abstract boolean Accept(ZenVisitor Visitor);
 	public void Accept(ZVisitor Visitor) {
-		LibNative.DispatchVisitNode(Visitor, this);
+		LibZen.DispatchVisitNode(Visitor, this);
 	}
 
 	public final boolean IsUntyped() {

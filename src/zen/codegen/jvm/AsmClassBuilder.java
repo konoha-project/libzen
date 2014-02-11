@@ -13,7 +13,7 @@ import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.MethodNode;
 
-import zen.deps.LibNative;
+import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.type.ZFuncType;
 import zen.type.ZType;
@@ -82,7 +82,7 @@ class AsmClassBuilder {
 				}
 			}
 		} catch(Exception e) {
-			LibNative.FixMe(e);
+			LibZen._FixMe(e);
 		}
 		return null;
 	}

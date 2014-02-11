@@ -1,10 +1,9 @@
 package zen.parser;
 
 import zen.deps.Field;
-
 import zen.deps.ZTokenFunction;
 
-final class ZTokenFunc {
+public final class ZTokenFunc {
 	@Field public ZTokenFunction      Func;
 	@Field public ZTokenFunc	ParentFunc;
 

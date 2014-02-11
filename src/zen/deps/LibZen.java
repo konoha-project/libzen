@@ -25,32 +25,44 @@
 // LangBase is a language-dependent code used in Zen.java
 
 package zen.deps;
+
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.PrintStream;
-import java.io.Writer;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import zen.ast.ZNode;
-import zen.parser.ZLogger;
+import zen.codegen.jvm.JavaStaticFunc;
+import zen.codegen.jvm.JavaTypeTable;
+import zen.lang.ZFunc;
+import zen.lang.ZenEngine;
+import zen.parser.ZGenerator;
+import zen.parser.ZNameSpace;
 import zen.parser.ZSourceBuilder;
-import zen.parser.ZUtils;
+import zen.parser.ZSourceContext;
+import zen.parser.ZSourceGenerator;
+import zen.parser.ZTokenContext;
+import zen.parser.ZTokenFunc;
+import zen.parser.ZVisitor;
+import zen.type.ZFuncType;
 import zen.type.ZType;
 
-public abstract class LibZen {
-	public final static String GetPlatform() {
-		return "Java JVM-" + System.getProperty("java.version");
+public class LibZen {
+
+	public final static void _Print(Object msg) {
+		System.out.print(msg);
 	}
 
-	public static boolean DebugMode = false;
+	public final static void _PrintLine(Object msg) {
+		System.out.println(msg);
+	}
 
-	public final static String GetStackInfo(int depth) {
+	private final static String _GetStackInfo(int depth) {
 		String LineNumber = " ";
 		Exception e =  new Exception();
 		StackTraceElement[] Elements = e.getStackTrace();
@@ -61,81 +73,182 @@ public abstract class LibZen {
 		return LineNumber;
 	}
 
+	public final static void _FixMe(Exception e) {
+		System.err.println("FIXME " + LibZen._GetStackInfo(3) + ": " + e);
+		e.printStackTrace();
+	}
+
+	public final static void _PrintDebug(String msg) {
+		LibZen._PrintLine("DEBUG " + LibZen._GetStackInfo(3) + ": " + msg);
+	}
+
+	public final static void _Assert(boolean TestResult) {
+		if (!TestResult) {
+			assert TestResult;
+			throw new RuntimeException("ASSERTION FAILED");
+		}
+	}
+
+	public final static void _Exit(int status, String Message) {
+		System.err.println(Message);
+		System.exit(1);
+	}
+
+	public final static String _GetPlatform() {
+		return "Java JVM-" + System.getProperty("java.version");
+	}
+
+	public final static String _GetEnv(String Name) {
+		return System.getenv(Name);
+	}
+
+	public static boolean DebugMode = false;
+
 	public final static void DebugP(String msg) {
 		//if(LibZen.DebugMode) {
-		LibNative.println("DEBUG " + LibZen.GetStackInfo(2) + ": " + msg);
+		_PrintLine("DEBUG " + LibZen._GetStackInfo(2) + ": " + msg);
 		//}
 	}
 
-	public final static boolean IsLetter(char ch) {
+	public final static boolean _IsFlag(int flag, int flag2) {
+		return ((flag & flag2) == flag2);
+	}
+
+	public final static int _UnsetFlag(int flag, int flag2) {
+		return (flag & (~flag2));
+	}
+
+	// String Handling
+
+	//	private final static int	NullChar				= 0;
+	//	private final static int	UndefinedChar			= 1;
+	private final static int	DigitChar				= 2;
+	private final static int	UpperAlphaChar			= 3;
+	private final static int	LowerAlphaChar			= 4;
+	private final static int	UnderBarChar			= 5;
+	private final static int	NewLineChar				= 6;
+	private final static int	TabChar					= 7;
+	private final static int	SpaceChar				= 8;
+	private final static int	OpenParChar				= 9;
+	private final static int	CloseParChar			= 10;
+	private final static int	OpenBracketChar			= 11;
+	private final static int	CloseBracketChar		= 12;
+	private final static int	OpenBraceChar			= 13;
+	private final static int	CloseBraceChar			= 14;
+	private final static int	LessThanChar			= 15;
+	private final static int	GreaterThanChar			= 16;
+	private final static int	QuoteChar				= 17;
+	private final static int	DoubleQuoteChar			= 18;
+	private final static int	BackQuoteChar			= 19;
+	private final static int	SurprisedChar			= 20;
+	private final static int	SharpChar				= 21;
+	private final static int	DollarChar				= 22;
+	private final static int	PercentChar				= 23;
+	private final static int	AndChar					= 24;
+	private final static int	StarChar				= 25;
+	private final static int	PlusChar				= 26;
+	private final static int	CommaChar				= 27;
+	private final static int	MinusChar				= 28;
+	private final static int	DotChar					= 29;
+	private final static int	SlashChar				= 30;
+	private final static int	ColonChar				= 31;
+	private final static int	SemiColonChar			= 32;
+	private final static int	EqualChar				= 33;
+	private final static int	QuestionChar			= 34;
+	private final static int	AtmarkChar				= 35;
+	private final static int	VarChar					= 36;
+	private final static int	ChilderChar				= 37;
+	private final static int	BackSlashChar			= 38;
+	private final static int	HatChar					= 39;
+	private final static int	UnicodeChar				= 40;
+	private final static int MaxSizeOfChars          = 41;
+
+	private final static int[]	CharMatrix = /*BeginArray*/{
+		/*nul soh stx etx eot enq ack bel*/
+		0, 1, 1, 1, 1, 1, 1, 1,
+		/*bs ht nl vt np cr so si  */
+		1, TabChar, NewLineChar, 1, 1, NewLineChar, 1, 1,
+		/*020 dle  021 dc1  022 dc2  023 dc3  024 dc4  025 nak  026 syn  027 etb */
+		1, 1, 1, 1, 1, 1, 1, 1,
+		/*030 can  031 em   032 sub  033 esc  034 fs   035 gs   036 rs   037 us */
+		1, 1, 1, 1, 1, 1, 1, 1,
+		/*040 sp   041  !   042  "   043  #   044  $   045  %   046  &   047  ' */
+		SpaceChar, SurprisedChar, DoubleQuoteChar, SharpChar, DollarChar, PercentChar, AndChar, QuoteChar,
+		/*050  (   051  )   052  *   053  +   054  ,   055  -   056  .   057  / */
+		OpenParChar, CloseParChar, StarChar, PlusChar, CommaChar, MinusChar, DotChar, SlashChar,
+		/*060  0   061  1   062  2   063  3   064  4   065  5   066  6   067  7 */
+		DigitChar, DigitChar, DigitChar, DigitChar, DigitChar, DigitChar, DigitChar, DigitChar,
+		/*070  8   071  9   072  :   073  ;   074  <   075  =   076  >   077  ? */
+		DigitChar, DigitChar, ColonChar, SemiColonChar, LessThanChar, EqualChar, GreaterThanChar, QuestionChar,
+		/*100  @   101  A   102  B   103  C   104  D   105  E   106  F   107  G */
+		AtmarkChar, UpperAlphaChar, UpperAlphaChar, UpperAlphaChar, UpperAlphaChar, UpperAlphaChar, UpperAlphaChar, UpperAlphaChar,
+		/*110  H   111  I   112  J   113  K   114  L   115  M   116  N   117  O */
+		UpperAlphaChar, UpperAlphaChar, UpperAlphaChar, UpperAlphaChar, UpperAlphaChar, UpperAlphaChar, UpperAlphaChar, UpperAlphaChar,
+		/*120  P   121  Q   122  R   123  S   124  T   125  U   126  V   127  W */
+		UpperAlphaChar, UpperAlphaChar, UpperAlphaChar, UpperAlphaChar, UpperAlphaChar, UpperAlphaChar, UpperAlphaChar, UpperAlphaChar,
+		/*130  X   131  Y   132  Z   133  [   134  \   135  ]   136  ^   137  _ */
+		UpperAlphaChar, UpperAlphaChar, UpperAlphaChar, OpenBracketChar, BackSlashChar, CloseBracketChar, HatChar, UnderBarChar,
+		/*140  `   141  a   142  b   143  c   144  d   145  e   146  f   147  g */
+		BackQuoteChar, LowerAlphaChar, LowerAlphaChar, LowerAlphaChar, LowerAlphaChar, LowerAlphaChar, LowerAlphaChar, LowerAlphaChar,
+		/*150  h   151  i   152  j   153  k   154  l   155  m   156  n   157  o */
+		LowerAlphaChar, LowerAlphaChar, LowerAlphaChar, LowerAlphaChar, LowerAlphaChar, LowerAlphaChar, LowerAlphaChar, LowerAlphaChar,
+		/*160  p   161  q   162  r   163  s   164  t   165  u   166  v   167  w */
+		LowerAlphaChar, LowerAlphaChar, LowerAlphaChar, LowerAlphaChar, LowerAlphaChar, LowerAlphaChar, LowerAlphaChar, LowerAlphaChar,
+		/*170  x   171  y   172  z   173  {   174  |   175  }   176  ~   177 del*/
+		LowerAlphaChar, LowerAlphaChar, LowerAlphaChar, OpenBraceChar, VarChar, CloseBraceChar, ChilderChar, 1,
+	/*EndArray*/};
+
+	public final static int _GetTokenMatrixIndex(char c) {
+		if(c < 128) {
+			return CharMatrix[c];
+		}
+		return UnicodeChar;
+	}
+
+	public final static ZTokenFunc[] _NewTokenMatrix() {
+		return new ZTokenFunc[MaxSizeOfChars];
+	}
+
+
+	public final static char _GetChar(String Text, int Pos) {
+		return Text.charAt(Pos);
+	}
+
+	public final static boolean _IsLetter(char ch) {
 		return Character.isLetter(ch);
 	}
 
-	public final static boolean IsDigit(char ch) {
+	public final static boolean _IsDigit(char ch) {
 		return Character.isDigit(ch);
 	}
 
-	public final static boolean IsSymbol(char ch) {
+	public final static boolean _IsSymbol(char ch) {
 		return Character.isLetter(ch) || ch == '_' || ch > 255;
 	}
 
 
-
-
-	public final static char CharAt(String Text, long Pos) {
-		if(Pos < Text.length()) {
-			return Text.charAt((int)Pos);
-		}
-		return 0;
+	public final static boolean _EqualsString(String s, String s2) {
+		return s.equals(s2);
 	}
 
-	public final static String SubString(String Text, long StartIdx, long EndIdx) {
+	public final static String _SubString(String Text, long StartIdx, long EndIdx) {
 		return Text.substring((int)StartIdx, (int)EndIdx);
 	}
 
-	public final static boolean IsWhitespace(String Text, long Pos) {
-		char ch = LibZen.CharAt(Text, Pos);
-		return Character.isWhitespace(ch);
-	}
 
-	public final static boolean IsLetter(String Text, long Pos) {
-		char ch = LibZen.CharAt(Text, Pos);
-		return Character.isLetter(ch);
-	}
-
-	public final static boolean IsDigit(String Text, long Pos) {
-		char ch = LibZen.CharAt(Text, Pos);
-		return Character.isDigit(ch);
-	}
-
-	public final static boolean IsVariableName(String Text, long Pos) {
-		char ch = LibZen.CharAt(Text, Pos);
-		return Character.isLetter(ch) || ch == '_' || ch > 255;
-	}
-
-	public final static int CheckBraceLevel(String Text) {
-		@Var int level = 0;
+	public final static String _JoinStrings(String Unit, int Times) {
+		@Var String s = "";
 		@Var int i = 0;
-		while(i < Text.length()) {
-			@Var char ch = Text.charAt(i);
-			if(ch == '{' || ch == '[') {
-				level = level + 1;
-			}
-			if(ch == '}' || ch == ']') {
-				level = level - 1;
-			}
+		while(i < Times) {
+			s = s + Unit;
 			i = i + 1;
 		}
-		return level;
+		return s;
 	}
 
-	public final static String CharToString(char code) {
-		return Character.toString(code);
-	}
-
-	public static final String UnquoteString(String Text) {
+	public static final String _UnquoteString(String Text) {
 		StringBuilder sb = new StringBuilder();
-		@Var char quote = LibZen.CharAt(Text, 0);
+		@Var char quote = _GetChar(Text, 0);
 		@Var int i = 0;
 		@Var int Length = Text.length();
 		if(quote == '"' || quote == '\'') {
@@ -146,10 +259,10 @@ public abstract class LibZen {
 			quote = '\0';
 		}
 		for(; i < Length; i += 1) {
-			@Var char ch = LibZen.CharAt(Text, i);
+			@Var char ch = _GetChar(Text, i);
 			if(ch == '\\') {
 				i = i + 1;
-				char next = LibZen.CharAt(Text, i);
+				char next = _GetChar(Text, i);
 				switch (next) {
 				case 't':
 					ch = '\t';
@@ -177,11 +290,11 @@ public abstract class LibZen {
 		return sb.toString();
 	}
 
-	public static final String QuoteString(String Text) {
+	public static final String _QuoteString(String Text) {
 		StringBuilder sb = new StringBuilder();
 		sb.append('"');
 		for(@Var int i = 0; i < Text.length(); i = i + 1) {
-			@Var char ch = LibZen.CharAt(Text, i);
+			@Var char ch = _GetChar(Text, i);
 			if(ch == '\n') {
 				sb.append("\\n");
 			}
@@ -202,38 +315,47 @@ public abstract class LibZen {
 		return sb.toString();
 	}
 
-	public final static String Stringify(Object Value) {
+	public final static long _ParseInt(String Text) {
+		try {
+			return Long.parseLong(Text);
+		}
+		catch(NumberFormatException e) {
+			//ZLogger.VerboseException(e);
+		}
+		return 0L;
+	}
+
+	public final static double _ParseFloat(String Text) {
+		try {
+			return Double.parseDouble(Text);
+		}
+		catch(NumberFormatException e) {
+			//ZLogger.VerboseException(e);
+		}
+		return 0.0;
+	}
+
+	public static String _SourceBuilderToString(ZSourceBuilder Builder) {
+		StringBuilder builder = new StringBuilder();
+		for(String s : Builder.SourceList){
+			builder.append(s);
+		}
+		return builder.toString();
+	}
+
+	public final static String _Stringify(Object Value) {
 		if(Value == null) {
 			return "null";
 		}
 		else if(Value instanceof String) {
-			return LibZen.QuoteString(Value.toString());
+			return _QuoteString(Value.toString());
 		}
 		else {
 			return Value.toString();
 		}
 	}
 
-	public final static String StringifyField(Object Value) {
-		@Var String s = "{";
-		Field[] Fields = Value.getClass().getFields();
-		for(int i = 0; i < Fields.length; i++) {
-			if(Modifier.isPublic(Fields[i].getModifiers())) {
-				if(i > 0) {
-					s += ", ";
-				}
-				try {
-					s += Fields[i].getName() + ": ";
-					s += LibZen.Stringify(Fields[i].get(Value));
-				} catch (IllegalArgumentException e) {
-				} catch (IllegalAccessException e) {
-				}
-			}
-		}
-		return s + "}";
-	}
-
-	public final static String AnotherName(String s) {
+	public final static String _AnotherName(String s) {
 		@Var char ch = s.charAt(0);
 		if(Character.isUpperCase(ch)) {
 			ch = Character.toLowerCase(ch);
@@ -244,96 +366,28 @@ public abstract class LibZen {
 		return String.valueOf(ch) + s.substring(1);
 	}
 
-	public final static boolean EqualsString(String s, String s2) {
-		return s.equals(s2);
+	private final static String[] StringMatrix = {
+		"q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "0", "4",
+		"a", "s", "d", "f", "g", "h", "j", "k", "l", "9", "1", "6",
+		"z", "x", "c", "v", "b", "n", "m", "7", "5", "3", "2", "8",
+	};
+
+	public final static String _Stringfy(int number) {
+		int d = number % StringMatrix.length;
+		number = number / StringMatrix.length;
+		int c = number % StringMatrix.length;
+		number = number / StringMatrix.length;
+		return StringMatrix[number] + StringMatrix[c] + StringMatrix[d];
 	}
 
-
-	public final static long ParseInt(String Text) {
-		try {
-			return Long.parseLong(Text);
+	public final static <T> int _Size(T[] List) {
+		if(List == null) {
+			return 0;
 		}
-		catch(NumberFormatException e) {
-			ZLogger.VerboseException(e);
-		}
-		return 0L;
+		return List.length;
 	}
 
-	public final static double ParseFloat(String Text) {
-		try {
-			return Double.parseDouble(Text);
-		}
-		catch(NumberFormatException e) {
-			ZLogger.VerboseException(e);
-		}
-		return 0.0;
-	}
-
-	public final static void ArrayCopy(Object src, int srcPos, Object dest, int destPos, int length) {
-		System.arraycopy(src, srcPos, dest, destPos, length);
-	}
-
-	//	public final static ZenFunc SetNativeMethod(ZenFunc NativeFunc, Method JavaMethod) {
-	//		@Var int FuncFlag = ZenUtils.NativeFunc;
-	//		if(!Modifier.isStatic(JavaMethod.getModifiers())) {
-	//			FuncFlag |= ZenUtils.NativeMethodFunc;
-	//		}
-	//		NativeFunc.SetNativeMethod(FuncFlag, JavaMethod);
-	//		return NativeFunc;
-	//	}
-	//
-
-	//	public final static void LoadNativeConstructors(ZenSourceContext Context, ZenType ClassType, ArrayList<ZenFunc> FuncList) {
-	//		LibNative.LoadNativeConstructors(Context, ClassType, FuncList);
-	//	}
-	//
-	//	public final static ZenFunc LoadNativeField(ZenSourceContext Context, ZenType ClassType, String FieldName, boolean GetSetter) {
-	//		return LibNative.LoadNativeField(Context, ClassType, FieldName, GetSetter);
-	//	}
-	//
-	//	public final static void LoadNativeMethods(ZenSourceContext Context, ZenType ClassType, String FuncName, ArrayList<ZenFunc> FuncList) {
-	//		LibNative.LoadNativeMethods(Context, ClassType, FuncName, FuncList);
-	//	}
-
-	//	public static Object NativeFieldGetter(Object ObjectValue, Field NativeField) {
-	//		try {
-	//			//			Class<?> NativeType = NativeField.getType();
-	//			return NativeField.get(ObjectValue);
-	//		} catch (IllegalAccessException e) {
-	//			ZLogger.VerboseException(e);
-	//		} catch (SecurityException e) {
-	//			ZLogger.VerboseException(e);
-	//		}
-	//		return null;
-	//	}
-	//
-	//	public static Object NativeFieldSetter(Object ObjectValue, Field NativeField, Object Value) {
-	//		try {
-	//			NativeField.set(ObjectValue, Value);
-	//		} catch (IllegalAccessException e) {
-	//			ZLogger.VerboseException(e);
-	//		} catch (SecurityException e) {
-	//			ZLogger.VerboseException(e);
-	//		}
-	//		return Value;
-	//	}
-	//
-	//
-	//	public final static Method LookupNativeMethod(Object Callee, String FuncName) {
-	//		if(FuncName != null) {
-	//			// LibZen.DebugP("looking up method : " + Callee.getClass().getSimpleName() + "." + FuncName);
-	//			Method[] methods = Callee.getClass().getMethods();
-	//			for(int i = 0; i < methods.length; i++) {
-	//				if(FuncName.equals(methods[i].getName())) {
-	//					return methods[i];
-	//				}
-	//			}
-	//			ZLogger.VerboseLog(ZLogger.VerboseUndefined, "undefined method: " + Callee.getClass().getSimpleName() + "." + FuncName);
-	//		}
-	//		return null;
-	//	}
-
-	public final static int ListSize(ArrayList<?> List) {
+	public final static int _Size(ArrayList<?> List) {
 		if(List == null) {
 			return 0;
 		}
@@ -359,110 +413,8 @@ public abstract class LibZen {
 		return Tuple;
 	}
 
-	public static void RetrieveMapKeys(ZenMap<?> Map, String Prefix, ArrayList<String> List) {
-		@Var Iterator<String> itr = Map.key_iterator();
-		@Var int i = 0;
-		while(itr.hasNext()) {
-			String Key = itr.next();
-			if(Prefix != null && !Key.startsWith(Prefix)) {
-				continue;
-			}
-			List.add(Key);
-			i = i + 1;
-		}
-	}
 
-	@Deprecated public final static void WriteCode(String OutputFile, String SourceCode) {
-		if(OutputFile == null) {
-			//LibZen.Eval(SourceCode);
-		}
-		if(OutputFile.equals("-")) {
-			System.out.println(SourceCode);
-			System.out.flush();
-		}
-		else {
-			Writer out = null;
-			try {
-				out = new FileWriter(OutputFile);
-				out.write(SourceCode);
-				out.flush();
-				out.close();
-			} catch (IOException e) {
-				System.err.println("Cannot write: " + OutputFile);
-				System.exit(1);
-			}
-		}
-	}
 
-	public final static void WriteSource(String OutputFile, ArrayList<ZSourceBuilder> SourceList) {
-		try {
-			PrintStream Stream = null;
-			if(OutputFile.equals("-")) {
-				Stream = System.out;
-				Stream.flush();
-			}
-			else {
-				Stream = new PrintStream(OutputFile);
-			}
-			for(ZSourceBuilder Builder : SourceList) {
-				for(String Source : Builder.SourceList) {
-					Stream.print(Source);
-				}
-				Stream.println();
-			}
-			Stream.flush();
-			if(Stream != System.out) {
-				Stream.close();
-			}
-		} catch (IOException e) {
-			System.err.println("Cannot write: " + OutputFile);
-			System.exit(1);
-		}
-	}
-
-	private static java.io.Console Console = null;
-	private static java.io.BufferedReader Reader = null;
-	private static boolean ConsoleInitialized = false;
-
-	static private String ReadLine(String format, Object... args) {
-		if(!ConsoleInitialized){
-			Console = System.console();
-			if (Console == null) {
-				Reader = new BufferedReader(new InputStreamReader(System.in));
-			}
-			ConsoleInitialized = true;
-		}
-		if (Console != null) {
-			return System.console().readLine(format, args);
-		}
-		System.out.print(String.format(format, args));
-		try {
-			return Reader.readLine();
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-			return "";
-		}
-	}
-
-	public final static String ReadLine(String Prompt, String Prompt2) {
-		String Line = LibZen.ReadLine(Prompt);
-		if(Line == null) {
-			System.exit(0);
-		}
-		if(Prompt2 != null) {
-			int level = 0;
-			while((level = LibZen.CheckBraceLevel(Line)) > 0) {
-				String Line2 = LibZen.ReadLine(Prompt2 + ZUtils.JoinStrings("  ", level));
-				Line += "\n" + Line2;
-			}
-			if(level < 0) {
-				Line = "";
-				LibNative.println(" .. canceled");
-			}
-		}
-		return Line;
-	}
 
 
 	public final static boolean HasFile(String Path) {
@@ -495,98 +447,158 @@ public abstract class LibZen {
 		return FileName;
 	}
 
-	public static long JoinIntId(int UpperId, int LowerId) {
-		long id = UpperId;
-		id = (id << 32) + LowerId;
-		return id;
-	}
-
-	public static int UpperId(long FileLine) {
-		return (int)(FileLine >> 32);
-	}
-
-	public static int LowerId(long FileLine) {
-		return (int)FileLine;
-	}
-
-	public static boolean booleanValue(Object Value) {
-		return ((Boolean)Value).booleanValue();
-	}
-
-	//	public static boolean ImportMethodToFunc(ZenFunc Func, String FullName) {
-	//		Method JavaMethod = LibNative.ImportMethod(Func.GetFuncType(), FullName, false);
-	//		if(JavaMethod != null) {
-	//			LibZen.SetNativeMethod(Func, JavaMethod);
-	//			if(Func.GetReturnType().IsVarType()) {
-	//				Func.SetReturnType(LibNative.GetNativeType(JavaMethod.getReturnType()));
-	//			}
-	//			int StartIdx = Func.Is(ZenUtils.NativeMethodFunc) ? 2 : 1;
-	//			Class<?>[] p = JavaMethod.getParameterTypes();
-	//			for(int i = 0; i < p.length; i++) {
-	//				if(Func.Types[StartIdx + i].IsVarType()) {
-	//					Func.Types[StartIdx + i] = LibNative.GetNativeType(p[i]);
-	//					Func.FuncType = null; // reset
-	//				}
-	//			}
-	//			return true;
-	//		}
-	//		return false;
-	//	}
-
-	public static String StringfyObject(Object This) {
-		@Var String s = "{";
-		Field[] Fields = This.getClass().getFields();
-		for(int i = 0; i < Fields.length; i++) {
-			if(Modifier.isPublic(Fields[i].getModifiers())) {
-				if(i > 0) {
-					s += ", ";
-				}
-				try {
-					Object Value =  Fields[i].get(This);
-					if(!(Value instanceof ZNode)) {
-						s += Fields[i].getName() + ": " + Fields[i].get(This);
-					}
-					else {
-						s += Fields[i].getName() + ": ...";
-					}
-				} catch (IllegalArgumentException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+	public final static String LoadTextFile(String FileName) {
+		//ZLogger.VerboseLog(ZLogger.VerboseFile, "loading " + FileName);
+		InputStream Stream = LibZen.class.getResourceAsStream("/" + FileName);
+		if (Stream == null) {
+			File f = new File(LibZen.FormatFilePath(FileName));
+			try {
+				Stream = new FileInputStream(f);
+			} catch (FileNotFoundException e) {
+				return null;
 			}
 		}
-
-		return s + "}";
-	}
-
-	public static void PrintStackTrace(Exception e, int linenum) {
-		@Var StackTraceElement[] elements = e.getStackTrace();
-		@Var int size = elements.length + 1;
-		@Var StackTraceElement[] newElements = new StackTraceElement[size];
-		for(@Var int i = 0; i < size; i++) {
-			if(i == size - 1) {
-				newElements[i] = new StackTraceElement("<TopLevel>", "TopLevelEval", "stdin", linenum);
-				break;
+		BufferedReader reader = new BufferedReader(new InputStreamReader(Stream));
+		String buffer = "";
+		try {
+			int buflen = 4096;
+			int readed = 0;
+			char[] buf = new char[buflen];
+			StringBuilder builder = new StringBuilder();
+			while ((readed = reader.read(buf, 0, buflen)) >= 0) {
+				builder.append(buf, 0, readed);
 			}
-			newElements[i] = elements[i];
+			buffer = builder.toString();
+		} catch (IOException e) {
+			return null;
 		}
-		e.setStackTrace(newElements);
-		e.printStackTrace();
+		return buffer;
 	}
 
-	public static String SourceBuilderToString(ZSourceBuilder Builder) {
-		StringBuilder builder = new StringBuilder();
-		for(String s : Builder.SourceList){
-			builder.append(s);
+	// HighLevel Library
+
+	public final static boolean ImportGrammar(ZNameSpace NameSpace, String ClassName) {
+		try {
+			@Var Class<?> NativeClass =  Class.forName(ClassName);
+			Method LoaderMethod = NativeClass.getMethod("ImportGrammar", ZNameSpace.class, Class.class);
+			LoaderMethod.invoke(null, NameSpace, NativeClass);
+			return true;
+		} catch (Exception e) { // naming
+			LibZen._FixMe(e);
 		}
-		return builder.toString();
+		return false;
 	}
-	//	public static Object EvalGetter(ZenType Type, Object Value, String FieldName) {
-	//		// TODO Auto-generated method stub
-	//		return null;
-	//	}
+
+	public final static ZFunc LoadTokenFunc(Class<?> GrammarClass, String FuncName) {
+		try {
+			Method JavaMethod = GrammarClass.getMethod(FuncName, ZSourceContext.class);
+			return LibZen.ConvertToNativeFunc(JavaMethod);
+		} catch (NoSuchMethodException e) {
+			LibZen._FixMe(e);
+		}
+		return null;
+	}
+
+	public final static ZFunc LoadMatchFunc(Class<?> GrammarClass, String FuncName) {
+		try {
+			Method JavaMethod = GrammarClass.getMethod(FuncName, ZNode.class, ZTokenContext.class, ZNode.class);
+			return LibZen.ConvertToNativeFunc(JavaMethod);
+		} catch (NoSuchMethodException e) {
+			LibZen._FixMe(e);
+		}
+		return null;
+	}
+
+	public final static boolean ApplyTokenFunc(ZTokenFunction TokenFunc, ZSourceContext SourceContext) {
+		return TokenFunc.Invoke(SourceContext);
+	}
+
+	public final static ZNode ApplyMatchFunc(ZMatchFunction MatchFunc, ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
+		return MatchFunc.Invoke(ParentNode, TokenContext, LeftNode);
+	}
+
+	// Visitor Reflection
+	public final static boolean IsSupportedNode(ZVisitor Visitor, ZNode Node) {
+		try {
+			Visitor.getClass().getMethod(Node.GetVisitName(), Node.getClass());
+			return true;
+		} catch (NoSuchMethodException e) {
+			LibZen._FixMe(e);
+		}
+		return false;
+	}
+
+	public final static void DispatchVisitNode(ZVisitor Visitor, ZNode Node) {
+		try {
+			Method JavaMethod = Visitor.getClass().getMethod(Node.GetVisitName(), Node.getClass());
+			JavaMethod.invoke(Visitor, Node);
+		} catch (NoSuchMethodException e) {
+			//System.err.println("Visitor:" + Visitor.getClass().getSimpleName() + " do not support for " + Node.getClass().getSimpleName());
+			Visitor.VisitExtendedNode(Node);
+		} catch (Exception e) {
+			LibZen._FixMe(e);
+		}
+	}
+
+	private final static ZenMap<Class<?>> GenMap = new ZenMap<Class<?>>(null);
+
+	static {
+		GenMap.put("python", zen.codegen.jython.PythonSourceGenerator.class);
+		GenMap.put("javascript", zen.codegen.javascript.JavaScriptSourceGenerator.class);
+		GenMap.put("ruby", zen.codegen.jruby.RubySourceGenerator.class);
+		GenMap.put("clisp", zen.codegen.clisp.CommonLispSourceGenerator.class);
+		//GenMap.put("c", zen.codegen.c.CSourceGenerator.class);
+		GenMap.put("jvm", zen.codegen.jvm.JavaAsmGenerator.class);
+		GenMap.put("llvm", zen.codegen.llvm.LLVMSourceGenerator.class);
+	}
+
+	public final static ZGenerator LoadGenerator(@Nullable String ClassName, String OutputFile) {
+		if(ClassName == null) {
+			ClassName = System.getenv("ZENCODE");
+		}
+		if (ClassName != null) {
+			try {
+				Class<?> GeneratorClass = GenMap.GetOrNull(ClassName);
+				if(GeneratorClass == null) {
+					GeneratorClass = Class.forName(ClassName);
+				}
+				return (ZGenerator) GeneratorClass.newInstance();
+			} catch (Exception e) {
+				LibZen._FixMe(e);
+			}
+		}
+		return new ZSourceGenerator("zen", "0.1");
+	}
+
+	public final static ZenEngine LoadEngine(@Nullable String ClassName, String GrammarClass) {
+		@Var ZGenerator Generator = LibZen.LoadGenerator(ClassName, null);
+		LibZen.ImportGrammar(Generator.RootNameSpace, GrammarClass);
+		Generator.ImportLocalGrammar(Generator.RootNameSpace);
+		return Generator.GetEngine();
+	}
+
+
+
+	//
+	public final static ZType GetNativeType(Class<?> NativeClass) {
+		return JavaTypeTable.GetZenType(NativeClass);
+	}
+
+	public final static JavaStaticFunc ConvertToNativeFunc(Method jMethod) {
+		@Var ZFuncType FuncType = JavaTypeTable.ConvertToFuncType(jMethod);
+		return new JavaStaticFunc(0, jMethod.getName(), FuncType, jMethod);
+	}
+
+
+
+	// Type
+	public final static String GetClassName(Object Value) {
+		return Value.getClass().getSimpleName();
+	}
+
+	public final static Class<?> GetClassOfValue(Object Value) {
+		return Value.getClass();
+	}
+
 
 }

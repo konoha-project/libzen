@@ -29,8 +29,6 @@ import java.util.ArrayList;
 
 import zen.ast.ZListNode;
 import zen.deps.Field;
-
-import zen.deps.LibNative;
 import zen.deps.LibZen;
 import zen.deps.Var;
 
@@ -109,12 +107,12 @@ public final class ZSourceBuilder {
 	public final void UnIndent() {
 		this.IndentLevel = this.IndentLevel - 1;
 		this.CurrentIndentString = null;
-		LibNative.Assert(this.IndentLevel >= 0);
+		LibZen._Assert(this.IndentLevel >= 0);
 	}
 
 	private final String GetIndentString() {
 		if (this.CurrentIndentString == null) {
-			this.CurrentIndentString = ZUtils.JoinStrings(this.Template.Tab,this.IndentLevel);
+			this.CurrentIndentString = LibZen._JoinStrings(this.Template.Tab, this.IndentLevel);
 		}
 		return this.CurrentIndentString;
 	}
@@ -140,7 +138,7 @@ public final class ZSourceBuilder {
 	}
 
 	@Override public String toString() {
-		return LibZen.SourceBuilderToString(this);
+		return LibZen._SourceBuilderToString(this);
 	}
 
 	@Deprecated public void AppendLine(String Text) {

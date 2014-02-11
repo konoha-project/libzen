@@ -25,9 +25,8 @@
 //ifdef JAVA
 package zen.lang;
 import zen.deps.Field;
-
 import zen.deps.LibZen;
-import zen.parser.ZUtils;
+
 import zen.type.ZFuncType;
 import zen.type.ZType;
 
@@ -57,14 +56,14 @@ public abstract class ZFunc {
 	}
 
 	public final boolean IsConverterFunc() {
-		return ZUtils.IsFlag(this.FuncFlag, ZFuncFlag.ConverterFunc);
+		return LibZen._IsFlag(this.FuncFlag, ZFuncFlag.ConverterFunc);
 	}
 	public final boolean IsCoercionFunc() {
-		return ZUtils.IsFlag(this.FuncFlag, ZFuncFlag.CoercionFunc);
+		return LibZen._IsFlag(this.FuncFlag, ZFuncFlag.CoercionFunc);
 	}
 
 	protected boolean Is(int Flag) {
-		return ZUtils.IsFlag(this.FuncFlag, Flag);
+		return LibZen._IsFlag(this.FuncFlag, Flag);
 	}
 
 	public Object Invoke(Object[] Params) {

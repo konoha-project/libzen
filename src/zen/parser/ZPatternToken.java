@@ -3,8 +3,8 @@ package zen.parser;
 import zen.deps.Field;
 
 public class ZPatternToken extends ZToken {
-	@Field public ZSyntaxPattern	PresetPattern;
-	public ZPatternToken(ZSource Source, int StartIndex, int EndIndex, ZSyntaxPattern	PresetPattern) {
+	@Field public ZSyntax	PresetPattern;
+	public ZPatternToken(ZSource Source, int StartIndex, int EndIndex, ZSyntax	PresetPattern) {
 		super(Source, StartIndex, EndIndex);
 		this.PresetPattern = PresetPattern;
 	}

@@ -28,7 +28,7 @@ import zen.ast.ZFunctionNode;
 import zen.deps.Field;
 import zen.type.ZType;
 
-public class ZVariable extends ZSymbol {
+public class ZVariable extends ZSymbolEntry {
 	@Field public int     VarFlag;
 	@Field public ZType	  VarType;
 	@Field public String  VarName;
@@ -37,7 +37,7 @@ public class ZVariable extends ZSymbol {
 	@Field public int     DefCount;
 	@Field public int     UsedCount;
 
-	ZVariable(ZSymbol Parent, ZFunctionNode FuncNode, int VarFlag, ZType VarType, String VarName, ZToken SourceToken) {
+	ZVariable(ZSymbolEntry Parent, ZFunctionNode FuncNode, int VarFlag, ZType VarType, String VarName, ZToken SourceToken) {
 		super(Parent, FuncNode);
 		this.VarFlag = VarFlag;
 		this.VarType = VarType;

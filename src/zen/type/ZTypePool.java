@@ -40,7 +40,7 @@ public class ZTypePool {
 
 	private final static String MangleTypes(int BaseIdx, ArrayList<ZType> TypeList) {
 		@Var String s = "";
-		for(@Var int i = BaseIdx; i < LibZen.ListSize(TypeList); i = i + 1) {
+		for(@Var int i = BaseIdx; i < LibZen._Size(TypeList); i = i + 1) {
 			@Var ZType Type = TypeList.get(i);
 			s = s + ":" + Type.TypeId;
 		}
@@ -65,7 +65,7 @@ public class ZTypePool {
 			if(BaseType.IsArrayType()) {
 				Name = BaseType.ShortName + "<" + ParamType + ">";
 			}
-			GenericType = new ZGeneric1Type(ZTypeFlag.UniqueType, Name, BaseType, ParamType);
+			GenericType = new ZGeneric1Type(ZTypeFlag._UniqueType, Name, BaseType, ParamType);
 			ZTypePool.ClassNameMap.put(MangleName, GenericType);
 		}
 		return GenericType;
@@ -80,9 +80,9 @@ public class ZTypePool {
 		@Var ZType GenericType = ZTypePool.ClassNameMap.GetOrNull(MangleName);
 		if((GenericType == null) && IsCreation) {
 			@Var String ShortName = BaseType.ShortName + "<";
-			for(@Var int i = BaseIdx; i < LibZen.ListSize(TypeList); i += 1) {
+			for(@Var int i = BaseIdx; i < LibZen._Size(TypeList); i += 1) {
 				ShortName = ShortName + TypeList.get(i).GetRealType().ShortName;
-				if(i + 1 == LibZen.ListSize(TypeList)) {
+				if(i + 1 == LibZen._Size(TypeList)) {
 					ShortName = ShortName + ">";
 				}
 				else {

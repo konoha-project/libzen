@@ -25,21 +25,21 @@
 //ifdef JAVA
 package zen.type;
 import zen.deps.Field;
+import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.lang.ZSystem;
 import zen.parser.ZToken;
-import zen.parser.ZUtils;
 
 public class ZType  {
-	public final static ZType		VarType = new ZType(ZTypeFlag.UniqueType, "var", null);
-	public final static ZType		VoidType = new ZType(ZTypeFlag.UniqueType, "void", null);
-	public final static ZType		BooleanType = new ZType(ZTypeFlag.UniqueType, "boolean", VarType);
-	public final static ZType		IntType = new ZType(ZTypeFlag.UniqueType, "int", VarType);
-	public final static ZType       FloatType = new ZType(ZTypeFlag.UniqueType, "float", VarType);
-	public final static ZType		StringType = new ZType(ZTypeFlag.UniqueType, "String", VarType);
-	public final static ZType       TypeType = new ZType(ZTypeFlag.UniqueType, "Type", VarType);
-	public final static ZType		ArrayType = new ZGeneric1Type(ZTypeFlag.UniqueType, "Array", null, VarType);
-	public final static ZType		MapType = new ZGeneric1Type(ZTypeFlag.UniqueType, "Map", null, VarType);
+	public final static ZType		VarType = new ZType(ZTypeFlag._UniqueType, "var", null);
+	public final static ZType		VoidType = new ZType(ZTypeFlag._UniqueType, "void", null);
+	public final static ZType		BooleanType = new ZType(ZTypeFlag._UniqueType, "boolean", VarType);
+	public final static ZType		IntType = new ZType(ZTypeFlag._UniqueType, "int", VarType);
+	public final static ZType       FloatType = new ZType(ZTypeFlag._UniqueType, "float", VarType);
+	public final static ZType		StringType = new ZType(ZTypeFlag._UniqueType, "String", VarType);
+	public final static ZType       TypeType = new ZType(ZTypeFlag._UniqueType, "Type", VarType);
+	public final static ZType		ArrayType = new ZGeneric1Type(ZTypeFlag._UniqueType, "Array", null, VarType);
+	public final static ZType		MapType = new ZGeneric1Type(ZTypeFlag._UniqueType, "Map", null, VarType);
 	public final static ZType		FuncType  = new ZFuncType("Func", null);
 
 	@Field public int		  TypeFlag = 0;
@@ -51,7 +51,7 @@ public class ZType  {
 		this.TypeFlag = TypeFlag;
 		this.ShortName = ShortName;
 		this.RefType = RefType;
-		if(ZUtils.IsFlag(TypeFlag, ZTypeFlag.UniqueType)) {
+		if(LibZen._IsFlag(TypeFlag, ZTypeFlag._UniqueType)) {
 			this.TypeId = ZTypePool.NewTypeId(this);
 		}
 	}
@@ -162,7 +162,7 @@ public class ZType  {
 	}
 
 	public boolean IsOpenType() {
-		return ZUtils.IsFlag(this.TypeFlag, ZTypeFlag.OpenType);
+		return LibZen._IsFlag(this.TypeFlag, ZTypeFlag._OpenType);
 	}
 
 	public boolean IsImmutableType() {
@@ -181,23 +181,8 @@ public class ZType  {
 		return Name + " of " + this.ShortName;
 	}
 
-	private final static String[] Matrix = {
-		"q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "0", "4",
-		"a", "s", "d", "f", "g", "h", "j", "k", "l", "9", "1", "6",
-		"z", "x", "c", "v", "b", "n", "m", "7", "5", "3", "2", "8",
-	};
-
 	public final String GetUniqueName() {
-		int number = this.TypeId;
-		int d = number % Matrix.length;
-		number = number / Matrix.length;
-		int c = number % Matrix.length;
-		number = number / Matrix.length;
-		return Matrix[number] + Matrix[c] + Matrix[d];
-	}
-
-	public final String GetNativeName() {
-		return this.GetBaseType().ShortName + ZTypeFlag.NativeNameRight + this.TypeId;
+		return LibZen._Stringfy(this.TypeId);
 	}
 
 	public final boolean AcceptValue(Object Value) {

@@ -11,6 +11,6 @@ import zen.parser.ZTokenContext;
 public class StringLiteralPattern extends ZMatchFunction {
 	@Override public ZNode Invoke(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
 		@Var ZToken Token = TokenContext.GetToken(ZTokenContext.MoveNext);
-		return new ZStringNode(ParentNode, Token, LibZen.UnquoteString(Token.GetText()));
+		return new ZStringNode(ParentNode, Token, LibZen._UnquoteString(Token.GetText()));
 	}
 }

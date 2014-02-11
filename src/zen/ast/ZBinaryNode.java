@@ -27,7 +27,7 @@ package zen.ast;
 import zen.deps.Field;
 
 import zen.deps.Var;
-import zen.parser.ZSyntaxPattern;
+import zen.parser.ZSyntax;
 import zen.parser.ZToken;
 import zen.parser.ZTokenContext;
 import zen.parser.ZVisitor;
@@ -35,9 +35,9 @@ import zen.parser.ZVisitor;
 public class ZBinaryNode extends ZNode {
 	public final static int Left = 0;
 	public final static int Right = 1;
-	@Field public ZSyntaxPattern Pattern;
+	@Field public ZSyntax Pattern;
 
-	public ZBinaryNode(ZNode ParentNode, ZToken SourceToken, ZNode Left, ZSyntaxPattern Pattern) {
+	public ZBinaryNode(ZNode ParentNode, ZToken SourceToken, ZNode Left, ZSyntax Pattern) {
 		super(ParentNode, SourceToken, 2);
 		this.Set(ZBinaryNode.Left, Left);
 		assert(Pattern != null);

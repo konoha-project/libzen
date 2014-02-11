@@ -5,7 +5,7 @@ import zen.ast.ZFloatNode;
 import zen.ast.ZIntNode;
 import zen.ast.ZNode;
 import zen.ast.ZNullNode;
-import zen.deps.LibNative;
+import zen.deps.LibZen;
 import zen.deps.Nullable;
 import zen.deps.Var;
 import zen.parser.ZNameSpace;
@@ -15,7 +15,7 @@ import zen.type.ZType;
 public class ZenGamma {
 
 	public static void Debug(String Message) {
-		LibNative.Debug(Message);
+		LibZen._PrintDebug(Message);
 	}
 
 	static ZFunc GetFunc(ZNameSpace NameSpace, String GlobalName, @Nullable ZFunc DefVal) {

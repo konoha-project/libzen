@@ -23,7 +23,7 @@ public class ZStringArray extends ZObject {
 			if(i > 0) {
 				s += ", ";
 			}
-			s += LibZen.QuoteString(this.Values[i]);
+			s += LibZen._QuoteString(this.Values[i]);
 			i = i + 1;
 		}
 		return s + "]";

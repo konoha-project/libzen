@@ -46,7 +46,7 @@ public abstract class ZGenerator extends ZVisitor {
 	@Field private int UniqueNumber = 0;
 	@Field public String             OutputFile;
 	@Field public ZLogger            Logger;
-	private final ZenMap<ZFunc>      DefinedFuncMap = new ZenMap<ZFunc>(null);
+	@Field private final ZenMap<ZFunc>      DefinedFuncMap = new ZenMap<ZFunc>(null);
 
 	@Field private boolean StoppedVisitor;
 

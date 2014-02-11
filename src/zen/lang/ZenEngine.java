@@ -69,7 +69,7 @@ import zen.ast.ZTypeNode;
 import zen.ast.ZUnaryNode;
 import zen.ast.ZVarDeclNode;
 import zen.ast.ZWhileNode;
-import zen.deps.LibNative;
+import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.parser.ZGenerator;
 import zen.parser.ZLogger;
@@ -381,15 +381,15 @@ public class ZenEngine extends ZVisitor {
 	}
 
 	public boolean Load(String FileName) {
-		@Var String ScriptText = LibNative.LoadTextFile(FileName);
+		@Var String ScriptText = LibZen.LoadTextFile(FileName);
 		if(ScriptText == null) {
-			LibNative.Exit(1, "file not found: " + FileName);
+			LibZen._Exit(1, "file not found: " + FileName);
 			return false;
 		}
 		Object ResultValue = this.Eval(ScriptText, FileName, 1, false);
-		this.Logger.ShowReportedErrors();
+		this.Logger.ShowErrors();
 		if(ResultValue == ZEmptyValue.FalseEmpty) {
-			LibNative.Exit(1, "abort loading: " + FileName);
+			LibZen._Exit(1, "abort loading: " + FileName);
 			return false;
 		}
 		return true;

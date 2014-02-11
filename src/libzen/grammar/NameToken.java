@@ -11,7 +11,7 @@ public class NameToken extends ZTokenFunction {
 		@Var int StartIndex = SourceContext.GetPosition();
 		while(SourceContext.HasChar()) {
 			@Var char ch = SourceContext.ParseChar();
-			if(!LibZen.IsSymbol(ch) && !LibZen.IsDigit(ch)) {
+			if(!LibZen._IsSymbol(ch) && !LibZen._IsDigit(ch)) {
 				break;
 			}
 			SourceContext.MoveNext();
