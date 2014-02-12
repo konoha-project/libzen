@@ -1,6 +1,6 @@
 class Person {
-    field name : String;
-    field age  : int;
+    var name : String;
+    var age  : int;
 }
 
 function f(): int {
