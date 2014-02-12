@@ -6,13 +6,13 @@ import zen.parser.ZSourceContext;
 
 public class StringLiteralToken extends ZTokenFunction {
 	@Override public boolean Invoke(ZSourceContext SourceContext) {
-		@Var int StartIndex = SourceContext.GetPosition() + 1;
+		@Var int StartIndex = SourceContext.GetPosition();
 		SourceContext.MoveNext();
 		while(SourceContext.HasChar()) {
 			@Var char ch = SourceContext.ParseChar();
 			if(ch == '\"') {
+				SourceContext.MoveNext(); // eat '"'
 				SourceContext.Tokenize("$StringLiteral$", StartIndex, SourceContext.GetPosition());
-				SourceContext.MoveNext();
 				return true;
 			}
 			if(ch == '\n') {
@@ -23,7 +23,7 @@ public class StringLiteralToken extends ZTokenFunction {
 			}
 			SourceContext.MoveNext();
 		}
-		SourceContext.Warning(StartIndex-1, "unclosed \"");
+		SourceContext.Warning(StartIndex, "unclosed \"");
 		SourceContext.Tokenize("$StringLiteral$", StartIndex, SourceContext.GetPosition());
 		return false;
 	}
