@@ -157,13 +157,11 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.AppendLineFeed();
 	}
 
-	@Override
-	public void VisitParamNode(ZParamNode Node) {
+	@Override public void VisitParamNode(ZParamNode Node) {
 		this.CurrentBuilder.Append(Node.Name);
 	}
 
-	@Override
-	public void VisitFunctionNode(ZFunctionNode Node) {
+	@Override public void VisitFunctionNode(ZFunctionNode Node) {
 		ZReturnNode ReturnNode = Node.AST[ZFunctionNode.Block].ToReturnNode();
 		if(ReturnNode != null && ReturnNode.AST[ZReturnNode.Expr] != null) {
 			this.CurrentBuilder.Append("\\");

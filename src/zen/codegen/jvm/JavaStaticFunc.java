@@ -27,7 +27,7 @@ package zen.codegen.jvm;
 import java.lang.reflect.Method;
 
 import zen.deps.Field;
-import zen.lang.ZFunc;
+import zen.type.ZFunc;
 import zen.type.ZFuncType;
 
 public class JavaStaticFunc extends ZFunc {

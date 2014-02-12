@@ -1,6 +1,7 @@
 package zen.lang;
 
 import zen.deps.Field;
+import zen.type.ZFunc;
 import zen.type.ZFuncType;
 
 public class ZMacro extends ZFunc {

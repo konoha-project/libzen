@@ -112,13 +112,13 @@ import zen.deps.ZMatchFunction;
 import zen.deps.ZObject;
 import zen.deps.ZTokenFunction;
 import zen.deps.ZenMap;
-import zen.lang.ZenClassType;
-import zen.lang.ZenField;
 import zen.parser.ZSourceContext;
 import zen.parser.ZTokenContext;
 import zen.type.ZFuncType;
 import zen.type.ZType;
 import zen.type.ZTypePool;
+import zen.type.ZClassType;
+import zen.type.ZClassField;
 
 public class JavaAsmGenerator extends JavaSolution {
 	AsmClassLoader AsmLoader = null;
@@ -742,8 +742,8 @@ public class JavaAsmGenerator extends JavaSolution {
 
 	private void SetMethod(String FuncName, ZFuncType FuncType, Class<?> FuncClass) {
 		ZType RecvType = FuncType.GetRecvType();
-		if(RecvType instanceof ZenClassType && FuncName != null) {
-			ZenClassType ClassType = (ZenClassType)RecvType;
+		if(RecvType instanceof ZClassType && FuncName != null) {
+			ZClassType ClassType = (ZClassType)RecvType;
 			ZType FieldType = ClassType.GetFieldType(FuncName, null);
 			if(FieldType == null || !FieldType.IsFuncType()) {
 				FuncName = LibZen._AnotherName(FuncName);
@@ -837,7 +837,7 @@ public class JavaAsmGenerator extends JavaSolution {
 		return FieldName + ClassType.TypeId;
 	}
 
-	private void SetMethod(ZenClassType ClassType, String FuncName, ZFunction FuncObject) {
+	private void SetMethod(ZClassType ClassType, String FuncName, ZFunction FuncObject) {
 		try {
 			Class<?> StaticClass = this.GetJavaClass(ClassType);
 			Field f = StaticClass.getField(NameClassMethod(ClassType, FuncName));
@@ -859,7 +859,7 @@ public class JavaAsmGenerator extends JavaSolution {
 			}
 		}
 		for(@Var int i = 0; i < Node.ClassType.GetFieldSize(); i++) {
-			@Var ZenField Field = Node.ClassType.GetFieldAt(i);
+			@Var ZClassField Field = Node.ClassType.GetFieldAt(i);
 			if(Field.FieldType.IsFuncType()) {
 				ClassBuilder.AddField(ACC_PUBLIC|ACC_STATIC, NameClassMethod(Node.ClassType, Field.FieldName), Field.FieldType, null);
 			}
@@ -884,7 +884,7 @@ public class JavaAsmGenerator extends JavaSolution {
 			}
 		}
 		for(@Var int i = 0; i < Node.ClassType.GetFieldSize(); i++) {
-			@Var ZenField Field = Node.ClassType.GetFieldAt(i);
+			@Var ZClassField Field = Node.ClassType.GetFieldAt(i);
 			if(Field.FieldType.IsFuncType()) {
 				//System.out.println("FieldName:" + Field.ClassType + "." + Field.FieldName + ", type=" + Field.FieldType);
 				String FieldDesc = Type.getDescriptor(this.GetJavaClass(Field.FieldType));

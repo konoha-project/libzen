@@ -21,7 +21,7 @@ import org.objectweb.asm.tree.MethodNode;
 
 import zen.ast.ZListNode;
 import zen.ast.ZNode;
-import zen.lang.ZFunc;
+import zen.type.ZFunc;
 import zen.type.ZFuncType;
 import zen.type.ZType;
 

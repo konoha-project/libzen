@@ -28,8 +28,8 @@ import java.util.ArrayList;
 
 import zen.deps.Field;
 import zen.deps.Var;
-import zen.lang.ZFunc;
 import zen.parser.ZVisitor;
+import zen.type.ZFunc;
 
 public final class ZNewObjectNode extends ZListNode {
 	@Field public ArrayList<ZNode>	ParamList = new ArrayList<ZNode>();

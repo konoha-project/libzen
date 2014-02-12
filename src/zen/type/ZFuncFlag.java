@@ -22,13 +22,13 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package zen.lang;
+package zen.type;
 
 public abstract class ZFuncFlag {
 
-	public final static int PhantomFunc = 1 << 10;
-	public final static int ConverterFunc       = 1 << 16;
-	public final static int CoercionFunc        = (1 << 17) | ConverterFunc;  //@Coercion
+	public final static int _PhantomFunc = 1 << 10;
+	public final static int _ConverterFunc       = 1 << 16;
+	public final static int _CoercionFunc        = (1 << 17) | _ConverterFunc;  //@Coercion
 
 	// FuncFlag
 	//	public final static int		ExportFunc		    = 1 << 0;  // @Export
@@ -51,6 +51,6 @@ public abstract class ZFuncFlag {
 	//	public final static int     StrongCoercionFunc  = 1 << 18;  //@StrongCoercion
 	//	public final static int     GenericFunc         = 1 << 15;
 	//	public final static int		LazyFunc		    = 1 << 16;
-	public final static String NativeNameRight = "__";
+	public final static String _NativeNameConnector = "__";
 
 }

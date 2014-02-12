@@ -1,8 +1,7 @@
-package zen.lang;
+package zen.type;
 
 import zen.deps.Field;
 import zen.parser.ZToken;
-import zen.type.ZFuncType;
 
 public class ZSignature extends ZFunc {
 	@Field public int DefinedCount = 0;

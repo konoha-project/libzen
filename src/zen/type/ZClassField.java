@@ -22,41 +22,24 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-//ifdef JAVA
-package zen.lang;
-import zen.deps.LibZen;
-import zen.deps.ZTypedObject;
-import zen.type.ZType;
-//import zen.obsolete.ZFuncSet;
+package zen.type;
 
-public class ZSystem {
-	public final static ZType GetNativeTypeOfValue(Object Value) {
-		return LibZen.GetNativeType(LibZen.GetClassOfValue(Value));
-	}
+import zen.deps.Field;
+import zen.parser.ZToken;
 
-	public final static ZType GuessType (Object Value) {
-		if(Value instanceof ZFunc) {
-			return ((ZFunc)Value).GetFuncType();
-		}
-		//		else if(Value instanceof ZFuncSet) {
-		//			return ZType.FuncType;
-		//		}
-		else if(Value instanceof ZTypedObject) {
-			return ((ZTypedObject)Value).GetZenType();
-		}
-		else {
-			return ZSystem.GetNativeTypeOfValue(Value);
-		}
-	}
+public class ZClassField {
+	@Field public int        FieldFlag = 0;
+	@Field public ZClassType ClassType = null;
+	@Field public ZType	     FieldType = null;
+	@Field public String	 FieldName = null;
+	@Field public int        FieldNativeIndex = 0;
+	@Field public ZToken   SourceToken = null;
 
-	public final static boolean CheckSubType(ZType SubType, ZType SuperType) {
-		// TODO: Structual Typing database
-		return false;
-	}
-
-	public static ZFunc GetConverterFunc(ZType ValueType, ZType CastType, boolean SearchRecursive) {
-		// TODO Auto-generated method stub
-		return null;
+	public ZClassField(ZClassType ClassType, String FieldName, ZType FieldType, ZToken SourceToken) {
+		this.ClassType = ClassType;
+		this.FieldType = FieldType;
+		this.FieldName = FieldName;
+		this.SourceToken = SourceToken;
 	}
 
 

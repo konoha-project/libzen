@@ -49,8 +49,8 @@ import zen.ast.ZStringNode;
 import zen.ast.ZUnaryNode;
 import zen.deps.LibZen;
 import zen.deps.Var;
-import zen.lang.ZFunc;
 import zen.lang.ZenEngine;
+import zen.type.ZFunc;
 import zen.type.ZFuncType;
 import zen.type.ZTypeChecker;
 

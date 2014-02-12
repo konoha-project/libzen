@@ -39,7 +39,6 @@ import java.util.ArrayList;
 import zen.ast.ZNode;
 import zen.codegen.jvm.JavaStaticFunc;
 import zen.codegen.jvm.JavaTypeTable;
-import zen.lang.ZFunc;
 import zen.lang.ZenEngine;
 import zen.parser.ZGenerator;
 import zen.parser.ZNameSpace;
@@ -49,6 +48,7 @@ import zen.parser.ZSourceGenerator;
 import zen.parser.ZTokenContext;
 import zen.parser.ZTokenFunc;
 import zen.parser.ZVisitor;
+import zen.type.ZFunc;
 import zen.type.ZFuncType;
 import zen.type.ZType;
 

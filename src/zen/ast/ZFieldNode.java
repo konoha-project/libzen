@@ -26,12 +26,12 @@ package zen.ast;
 
 import zen.deps.Field;
 
-import zen.lang.ZenClassType;
 import zen.type.ZType;
+import zen.type.ZClassType;
 
 public final class ZFieldNode extends ZNode {
 	public final static int InitValue = 0;
-	@Field public  ZenClassType  ClassType;
+	@Field public  ZClassType  ClassType;
 	@Field public ZType  DeclType = ZType.VarType;
 	@Field public String FieldName = null;
 	@Deprecated public ZNode  FieldInitNode = null;

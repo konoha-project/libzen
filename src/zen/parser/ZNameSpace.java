@@ -34,8 +34,8 @@ import zen.deps.Var;
 import zen.deps.ZMatchFunction;
 import zen.deps.ZTokenFunction;
 import zen.deps.ZenMap;
-import zen.lang.ZenClassType;
 import zen.type.ZType;
+import zen.type.ZClassType;
 
 public final class ZNameSpace {
 	private static int SerialNumber = 0;
@@ -245,7 +245,7 @@ public final class ZNameSpace {
 			return (ZTypeNode)Node;
 		}
 		if(Node == null && SourceToken != null) {
-			@Var ZType Type = new ZenClassType(TypeName, ZType.VarType);
+			@Var ZType Type = new ZClassType(TypeName, ZType.VarType);
 			this.GetRootNameSpace().SetTypeName(TypeName, Type, SourceToken);
 			return this.GetTypeNode(TypeName, null/*don't create again*/);
 		}

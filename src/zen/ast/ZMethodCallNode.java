@@ -26,8 +26,8 @@ package zen.ast;
 
 import zen.deps.Field;
 import zen.deps.Var;
-import zen.lang.ZFunc;
 import zen.parser.ZVisitor;
+import zen.type.ZFunc;
 
 public final class ZMethodCallNode extends ZListNode {
 	public final static int Recv = 0;

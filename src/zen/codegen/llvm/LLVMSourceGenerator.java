@@ -73,11 +73,11 @@ import zen.ast.ZVarDeclNode;
 import zen.ast.ZWhileNode;
 import zen.deps.LibZen;
 import zen.deps.Var;
-import zen.lang.ZenClassType;
 import zen.parser.ZSourceGenerator;
 import zen.type.ZFuncType;
 import zen.type.ZGeneric1Type;
 import zen.type.ZType;
+import zen.type.ZClassType;
 
 class LLVMSourceWriter {
 	private int IndentLebel;
@@ -317,7 +317,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		else if(Type.IsArrayType()) {
 			return this.GetNativeType(((ZGeneric1Type)Type).ParamType.GetRealType()) + "*";
 		}
-		else if(Type instanceof ZenClassType && this.IsUserDefinedClass(Type.ShortName)) {
+		else if(Type instanceof ZClassType && this.IsUserDefinedClass(Type.ShortName)) {
 			return "%Class." + Type.ShortName + "*";
 		}
 		else {
@@ -328,7 +328,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		if(Type.IsArrayType()) {
 			return this.GetNativeType(((ZGeneric1Type)Type).ParamType.GetRealType());
 		}
-		else if(Type instanceof ZenClassType && this.IsUserDefinedClass(Type.ShortName)) {
+		else if(Type instanceof ZClassType && this.IsUserDefinedClass(Type.ShortName)) {
 			return "%Class." + Type.ShortName;
 		}
 		else {
@@ -921,7 +921,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 
 	@Override
 	public void VisitNewObjectNode(ZNewObjectNode Node) {
-		if(Node.Type instanceof ZenClassType) {
+		if(Node.Type instanceof ZClassType) {
 			String TempVar = this.Writer.CreateTempLocalSymbol();
 			this.Writer.PushNewBuffer(TempVar);
 			this.Writer.AddCodeToCurrentBuffer(" = alloca ");

@@ -27,7 +27,6 @@ package zen.type;
 import zen.deps.Field;
 import zen.deps.LibZen;
 import zen.deps.Var;
-import zen.lang.ZSystem;
 import zen.parser.ZToken;
 
 public class ZType  {
@@ -92,7 +91,8 @@ public class ZType  {
 			}
 			SuperClass = SuperClass.GetSuperType();
 		}
-		return ZSystem.CheckSubType(Type, this);
+		return false;
+		//return ZSystem.CheckSubType(Type, this);
 	}
 
 	public boolean IsGreekType() {
@@ -185,9 +185,9 @@ public class ZType  {
 		return LibZen._Stringfy(this.TypeId);
 	}
 
-	public final boolean AcceptValue(Object Value) {
-		return (Value != null) ? this.Accept(ZSystem.GuessType(Value)) : true;
-	}
+	//	public final boolean AcceptValue(Object Value) {
+	//		return (Value != null) ? this.Accept(ZSystem.GuessType(Value)) : true;
+	//	}
 
 	public boolean IsFuncType() {
 		return false;

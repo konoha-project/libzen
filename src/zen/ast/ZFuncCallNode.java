@@ -25,9 +25,9 @@
 package zen.ast;
 
 import zen.deps.Field;
-import zen.lang.ZFunc;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
+import zen.type.ZFunc;
 import zen.type.ZType;
 
 public final class ZFuncCallNode extends ZListNode {

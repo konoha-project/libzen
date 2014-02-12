@@ -31,7 +31,6 @@ import zen.ast.ZNode;
 import zen.deps.Field;
 import zen.deps.LibZen;
 import zen.deps.Var;
-import zen.lang.ZFunc;
 import zen.lang.ZenError;
 import zen.parser.ZGenerator;
 import zen.parser.ZLogger;

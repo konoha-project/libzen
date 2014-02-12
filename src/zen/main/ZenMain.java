@@ -38,7 +38,6 @@ import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.deps.ZenArray;
 import zen.lang.ZEmptyValue;
-import zen.lang.ZSystem;
 import zen.lang.ZenEngine;
 import zen.parser.ZParserConst;
 import zen.parser.ZSourceBuilder;
@@ -216,7 +215,7 @@ public class ZenMain {
 							LibZen._PrintLine(" null");
 						}
 						else {
-							LibZen._PrintLine(" (" + ZSystem.GuessType(EvaledValue) + ":" + LibZen.GetClassName(EvaledValue) + ") " + LibZen._Stringify(EvaledValue));
+							LibZen._PrintLine(" (" +/* ZSystem.GuessType(EvaledValue) + ":" +*/ LibZen.GetClassName(EvaledValue) + ") " + LibZen._Stringify(EvaledValue));
 						}
 					}
 					linenum += 1;

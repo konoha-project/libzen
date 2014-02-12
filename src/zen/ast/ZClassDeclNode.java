@@ -26,13 +26,13 @@ package zen.ast;
 
 import zen.deps.Field;
 import zen.deps.Var;
-import zen.lang.ZenClassType;
 import zen.parser.ZVisitor;
 import zen.type.ZType;
+import zen.type.ZClassType;
 
 public final class ZClassDeclNode extends ZListNode {
 	@Field public String ClassName = null;
-	@Field public ZenClassType ClassType = null;
+	@Field public ZClassType ClassType = null;
 	@Field public ZType SuperType = null;
 	public ZClassDeclNode(ZNode ParentNode) {
 		super(ParentNode, null, 0);

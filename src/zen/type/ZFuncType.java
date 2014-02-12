@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import zen.deps.Field;
 import zen.deps.Var;
-import zen.lang.ZFunc;
 
 public final class ZFuncType extends ZType {
 	@Field public ZType[]  TypeParams;
@@ -71,7 +70,7 @@ public final class ZFuncType extends ZType {
 	}
 
 	@Override public String StringfySignature(String FuncName) {
-		return ZFunc.StringfySignature(FuncName, this.GetFuncParamSize(), this.GetRecvType());
+		return ZFunc._StringfySignature(FuncName, this.GetFuncParamSize(), this.GetRecvType());
 	}
 
 	@Override public ZType GetBaseType() {

@@ -22,26 +22,52 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package zen.lang;
-
+//ifdef JAVA
+package zen.type;
 import zen.deps.Field;
-import zen.parser.ZToken;
-import zen.type.ZType;
+import zen.deps.LibZen;
 
-public class ZenField {
-	@Field public int        FieldFlag = 0;
-	@Field public ZenClassType ClassType = null;
-	@Field public ZType	     FieldType = null;
-	@Field public String	 FieldName = null;
-	@Field public int        FieldNativeIndex = 0;
-	@Field public ZToken   SourceToken = null;
+public abstract class ZFunc {
+	@Field public int			  FuncFlag;
+	@Field public String		  FuncName;  // NativeReferenceNamr
+	@Field public ZFuncType     FuncType;
 
-	public ZenField(ZenClassType ClassType, String FieldName, ZType FieldType, ZToken SourceToken) {
-		this.ClassType = ClassType;
-		this.FieldType = FieldType;
-		this.FieldName = FieldName;
-		this.SourceToken = SourceToken;
+	public ZFunc(int FuncFlag, String FuncName, ZFuncType FuncType) {
+		this.FuncFlag = FuncFlag;
+		this.FuncName = FuncName;
+		this.FuncType = FuncType;
 	}
 
+	public final ZFuncType GetFuncType() {
+		return this.FuncType;
+	}
 
+	@Override public final String toString() {
+		return this.FuncName + ": " + this.FuncType;
+	}
+
+	public void Used() {
+	}
+
+	public void Defined() {
+	}
+
+	public final boolean IsConverterFunc() {
+		return LibZen._IsFlag(this.FuncFlag, ZFuncFlag._ConverterFunc);
+	}
+	public final boolean IsCoercionFunc() {
+		return LibZen._IsFlag(this.FuncFlag, ZFuncFlag._CoercionFunc);
+	}
+
+	protected final boolean Is(int Flag) {
+		return LibZen._IsFlag(this.FuncFlag, Flag);
+	}
+
+	public static String _StringfySignature(String FuncName, int FuncParamSize, ZType RecvType) {
+		return FuncName + "__" + FuncParamSize + RecvType.GetUniqueName();
+	}
+
+	public final String GetSignature() {
+		return this.FuncType.StringfySignature(this.FuncName);
+	}
 }

@@ -4,8 +4,8 @@ import java.lang.reflect.Method;
 
 import zen.deps.LibZen;
 import zen.deps.Var;
-import zen.lang.ZFunc;
 import zen.parser.ZGenerator;
+import zen.type.ZFunc;
 import zen.type.ZFuncType;
 import zen.type.ZType;
 

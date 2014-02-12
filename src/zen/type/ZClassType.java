@@ -22,7 +22,7 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package zen.lang;
+package zen.type;
 
 import java.util.ArrayList;
 
@@ -32,25 +32,23 @@ import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.parser.ZNameSpace;
 import zen.parser.ZToken;
-import zen.type.ZType;
-import zen.type.ZTypeFlag;
 
-public class ZenClassType extends ZType {
-	@Field ArrayList<ZenField> FieldList = null;
-	public ZenClassType(String ShortName, ZType RefType) {
+public class ZClassType extends ZType {
+	@Field ArrayList<ZClassField> FieldList = null;
+	public ZClassType(String ShortName, ZType RefType) {
 		super(ZTypeFlag._OpenType|ZTypeFlag._UniqueType, ShortName, RefType);
-		if(RefType instanceof ZenClassType) {
-			this.ResetSuperType((ZenClassType)RefType);
+		if(RefType instanceof ZClassType) {
+			this.ResetSuperType((ZClassType)RefType);
 		}
 	}
 
-	public final void ResetSuperType(ZenClassType SuperClass) {
+	public final void ResetSuperType(ZClassType SuperClass) {
 		this.RefType = SuperClass;
 		if(SuperClass.FieldList != null) {
-			this.FieldList = new ArrayList<ZenField>();
+			this.FieldList = new ArrayList<ZClassField>();
 			@Var int i = 0;
 			while(i < SuperClass.FieldList.size()) {
-				@Var ZenField Field = SuperClass.FieldList.get(i);
+				@Var ZClassField Field = SuperClass.FieldList.get(i);
 				this.FieldList.add(Field);
 				i = i + 1;
 			}
@@ -64,7 +62,7 @@ public class ZenClassType extends ZType {
 		return 0;
 	}
 
-	public final ZenField GetFieldAt(int Index) {
+	public final ZClassField GetFieldAt(int Index) {
 		return this.FieldList.get(Index);
 	}
 
@@ -85,7 +83,7 @@ public class ZenClassType extends ZType {
 		if(this.FieldList != null) {
 			@Var int i = 0;
 			while(i < this.FieldList.size()) {
-				@Var ZenField Field = this.FieldList.get(i);
+				@Var ZClassField Field = this.FieldList.get(i);
 				if(LibZen._EqualsString(FieldName, Field.FieldName)) {
 					return Field.FieldType;
 				}
@@ -95,13 +93,13 @@ public class ZenClassType extends ZType {
 		return DefaultType;
 	}
 
-	public ZenField AppendField(ZType FieldType, String FieldName, ZToken SourceToken) {
+	public ZClassField AppendField(ZType FieldType, String FieldName, ZToken SourceToken) {
 		if(this.FieldList == null) {
-			this.FieldList = new ArrayList<ZenField>();
+			this.FieldList = new ArrayList<ZClassField>();
 		}
 		@Var int i = 0;
 		while(i < this.FieldList.size()) {
-			@Var ZenField Field = this.FieldList.get(i);
+			@Var ZClassField Field = this.FieldList.get(i);
 			if(LibZen._EqualsString(FieldName, Field.FieldName)) {
 				if(FieldType.Equals(Field.FieldType)) {
 					return null;
@@ -110,7 +108,7 @@ public class ZenClassType extends ZType {
 			}
 			i = i + 1;
 		}
-		this.FieldList.add(new ZenField(this, FieldName, FieldType, SourceToken));
+		this.FieldList.add(new ZClassField(this, FieldName, FieldType, SourceToken));
 		return null;
 	}
 

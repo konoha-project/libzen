@@ -78,14 +78,17 @@ import zen.deps.Var;
 import zen.parser.ZGenerator;
 import zen.parser.ZNameSpace;
 import zen.parser.ZVariable;
+import zen.type.ZFunc;
 import zen.type.ZFuncType;
 import zen.type.ZGreekType;
+import zen.type.ZSignature;
 import zen.type.ZType;
 import zen.type.ZTypeChecker;
 import zen.type.ZTypeFlag;
 import zen.type.ZTypePool;
 import zen.type.ZVarScope;
 import zen.type.ZVarType;
+import zen.type.ZClassType;
 
 public class ZenTypeSafer extends ZTypeChecker {
 
@@ -757,20 +760,20 @@ public class ZenTypeSafer extends ZTypeChecker {
 	@Override public void VisitClassDeclNode(ZClassDeclNode Node) {
 		@Var ZNameSpace NameSpace = Node.GetNameSpace();
 		@Var ZType ClassType = NameSpace.GetType(Node.ClassName, Node.SourceToken);
-		if(ClassType instanceof ZenClassType) {
+		if(ClassType instanceof ZClassType) {
 			if(!ClassType.IsOpenType()) {
 				this.Return(new ZErrorNode(Node, Node.ClassName + " has been defined."));
 				return;
 			}
-			Node.ClassType = (ZenClassType)ClassType;
+			Node.ClassType = (ZClassType)ClassType;
 		}
 		else {
 			this.Return(new ZErrorNode(Node, Node.ClassName + " is not a Zen class."));
 			return;
 		}
 		if(Node.SuperType != null) {
-			if(Node.SuperType instanceof ZenClassType && !Node.SuperType.IsOpenType()) {
-				Node.ClassType.ResetSuperType((ZenClassType)Node.SuperType);
+			if(Node.SuperType instanceof ZClassType && !Node.SuperType.IsOpenType()) {
+				Node.ClassType.ResetSuperType((ZClassType)Node.SuperType);
 			}
 			else {
 				this.Return(new ZErrorNode(Node, "" + Node.SuperType + " cannot be extended."));

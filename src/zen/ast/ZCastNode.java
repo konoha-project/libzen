@@ -24,8 +24,8 @@
 
 package zen.ast;
 
-import zen.lang.ZFunc;
 import zen.parser.ZVisitor;
+import zen.type.ZFunc;
 import zen.type.ZType;
 
 //E.g., (T) $Expr
