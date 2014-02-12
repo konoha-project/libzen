@@ -1,28 +1,30 @@
-if(true) {
-    false;
-}
-
-if(10) {
-    return 10;
-} else {
-    return 20;
-}
-
-if(null == null) {
-    return 1000;
-} else if(false) {
-    return 4000;
-}
-
-if(null == null) {
-    return 100;
-    if (a == b) {
-        return 200;
+function f() {
+    if(true) {
+        false;
     }
-    return 300;
-} else if(false) {
-    return 400;
-}
-else {
-    return 500;
+
+    if(10) {
+        return 10;
+    } else {
+        return 20;
+    }
+
+    if(null == null) {
+        return 1000;
+    } else if(false) {
+        return 4000;
+    }
+
+    if(null == null) {
+        return 100;
+        if (a == b) {
+            return 200;
+        }
+        return 300;
+    } else if(false) {
+        return 400;
+    }
+    else {
+        return 500;
+    }
 }
