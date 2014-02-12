@@ -201,7 +201,7 @@ public abstract class ZNode {
 	}
 
 
-	@Deprecated public ZReturnNode ToReturnNode() {
+	public ZReturnNode ToReturnNode() {
 		return null;
 	}
 
