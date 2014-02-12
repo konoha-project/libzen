@@ -52,6 +52,7 @@ import zen.ast.ZInstanceOfNode;
 import zen.ast.ZIntNode;
 import zen.ast.ZLetNode;
 import zen.ast.ZListNode;
+import zen.ast.ZMapEntryNode;
 import zen.ast.ZMapLiteralNode;
 import zen.ast.ZMethodCallNode;
 import zen.ast.ZNewArrayNode;
@@ -155,59 +156,30 @@ public class ZenTypeSafer extends ZTypeChecker {
 	}
 
 	@Override public void VisitMapLiteralNode(ZMapLiteralNode Node) {
-		//		@Var ZNameSpace NameSpace = Node.GetNameSpace();
-		//		@Var ZType ContextType = this.GetContextType();
-		//		@Var int i = 0;
-		//		while(i < Node.NodeList.size()) {
-		//			@Var ZNode SubNode = Node.NodeList.get(i);
-		//			if(SubNode instanceof ZGetNameNode) {
-		//				SubNode = ((ZGetNameNode)SubNode).ToStringNode();
-		//			}
-		//			SubNode = this.CheckType(SubNode, NameSpace, ZType.StringType);
-		//			Node.NodeList.set(i, SubNode);
-		//			i = i + 2;
-		//		}
-		//		@Var boolean AllTyped = true;
-		//		if(ContextType instanceof ZenClassType) {
-		//			@Var ZenClassType ClassType = (ZenClassType)ContextType;
-		//			i = 0;
-		//			while(i < Node.NodeList.size()) {
-		//				@Var ZStringNode KeyNode = (ZStringNode)Node.NodeList.get(i);
-		//				@Var ZType FieldType = ClassType.GetFieldType(KeyNode.StringValue, null);
-		//				if(FieldType == null) {
-		//					this.Return(ZenError.UndefinedName(KeyNode, KeyNode.StringValue));
-		//				}
-		//				else {
-		//					@Var ZNode SubNode = Node.NodeList.get(i+1);
-		//					SubNode = this.CheckType(SubNode, NameSpace, FieldType);
-		//					Node.NodeList.set(i+1, SubNode);
-		//					if(SubNode.IsVarType()) {
-		//						AllTyped = false;
-		//						ContextType = ZType.VarType;
-		//					}
-		//				}
-		//				i = i + 2;
-		//			}
-		//		}
-		//		else if(ContextType.IsMapType()) {
-		//			@Var ZType ElementType = ContextType.GetParamType(0);
-		//			i = 1;
-		//			while(i < Node.NodeList.size()) {
-		//				@Var ZNode SubNode = Node.NodeList.get(i);
-		//				SubNode = this.CheckType(SubNode, NameSpace, ElementType);
-		//				Node.NodeList.set(i, SubNode);
-		//				if(SubNode.IsVarType()) {
-		//					AllTyped = false;
-		//					ContextType = ZType.VarType;
-		//				}
-		//				i = i + 2;
-		//			}
-		//		}
-		//		else {
-		//			ContextType = ZType.VarType;
-		//			AllTyped = false;
-		//		}
-		//		this.TypedNode(Node, ContextType);
+		@Var ZType ContextType = this.GetContextType();
+		@Var ZType EntryType = ZType.VarType;
+		if(ContextType.IsMapType()) {
+			EntryType = ContextType.GetParamType(0);
+		}
+		@Var int i = 0;
+		while(i < Node.GetListSize()) {
+			@Var ZMapEntryNode EntryNode = Node.GetMapEntryNode(i);
+			if(EntryNode.Name == null) {
+				EntryNode.Name = EntryNode.AST[ZMapEntryNode._Key].SourceToken.GetText();
+			}
+			if(EntryNode.IsUntyped()) {
+				this.CheckTypeAt(EntryNode, ZMapEntryNode._Value, EntryType);
+				if(EntryType.IsVarType()) {
+					EntryType = EntryNode.GetAstType(ZMapEntryNode._Value);
+				}
+			}
+			i = i + 1;
+		}
+		if(!EntryType.IsVarType()) {
+			this.TypedNode(Node, ZTypePool.GetGenericType1(ZType.MapType, EntryType));
+			return;
+		}
+		this.TypedNode(Node, ZType.VarType);
 	}
 
 	@Override public void VisitNewArrayNode(ZNewArrayNode Node) {
@@ -393,7 +365,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 			Node.Type = ContextType;
 		}
 		@Var int FuncParamSize = Node.GetListSize() + 1;
-		@Var ZFunc Func = ZenGamma.LookupFunc(NameSpace, Node.Type.GetUniqueName(), Node.Type, FuncParamSize);
+		@Var ZFunc Func = ZenGamma.LookupFunc(NameSpace, Node.Type.ShortName, Node.Type, FuncParamSize);
 		if(Func != null) {
 			ZFuncCallNode FuncCall = Node.ToStaticFuncCall(Func);
 			this.TypeCheckFuncCall(FuncCall, Func.GetFuncType());

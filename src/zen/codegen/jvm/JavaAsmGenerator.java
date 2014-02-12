@@ -33,6 +33,7 @@ import static org.objectweb.asm.Opcodes.ACC_PROTECTED;
 import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
 import static org.objectweb.asm.Opcodes.ACC_STATIC;
 import static org.objectweb.asm.Opcodes.ALOAD;
+import static org.objectweb.asm.Opcodes.ANEWARRAY;
 import static org.objectweb.asm.Opcodes.CHECKCAST;
 import static org.objectweb.asm.Opcodes.DUP;
 import static org.objectweb.asm.Opcodes.GETFIELD;
@@ -86,6 +87,7 @@ import zen.ast.ZIfNode;
 import zen.ast.ZInstanceOfNode;
 import zen.ast.ZIntNode;
 import zen.ast.ZLetNode;
+import zen.ast.ZMapEntryNode;
 import zen.ast.ZMapLiteralNode;
 import zen.ast.ZMethodCallNode;
 import zen.ast.ZNewArrayNode;
@@ -214,20 +216,50 @@ public class JavaAsmGenerator extends JavaSolution {
 	}
 
 	@Override public void VisitArrayLiteralNode(ZArrayLiteralNode Node) {
-		Class<?> ArrayClass = LibAsm.AsArrayClass(Node.Type);
-		String Owner = Type.getInternalName(ArrayClass);
-		this.AsmBuilder.visitTypeInsn(NEW, Owner);
-		this.AsmBuilder.visitInsn(DUP);
-		this.AsmBuilder.PushInt(Node.Type.TypeId);
-		this.AsmBuilder.PushNodeListAsArray(LibAsm.AsElementClass(Node.Type), 0, Node);
-		this.AsmBuilder.SetLineNumber(Node);
-		this.AsmBuilder.visitMethodInsn(INVOKESPECIAL, Owner, "<init>", LibAsm.NewArrayDescriptor(Node.Type));
+		if(Node.IsUntyped()) {
+			this.Logger.ReportError(Node.SourceToken, "ambigious array");
+			this.AsmBuilder.visitInsn(Opcodes.ACONST_NULL);
+		}
+		else {
+			Class<?> ArrayClass = LibAsm.AsArrayClass(Node.Type);
+			String Owner = Type.getInternalName(ArrayClass);
+			this.AsmBuilder.visitTypeInsn(NEW, Owner);
+			this.AsmBuilder.visitInsn(DUP);
+			this.AsmBuilder.PushInt(Node.Type.TypeId);
+			this.AsmBuilder.PushNodeListAsArray(LibAsm.AsElementClass(Node.Type), 0, Node);
+			this.AsmBuilder.SetLineNumber(Node);
+			this.AsmBuilder.visitMethodInsn(INVOKESPECIAL, Owner, "<init>", LibAsm.NewArrayDescriptor(Node.Type));
+		}
 	}
 
 	@Override public void VisitMapLiteralNode(ZMapLiteralNode Node) {
-		this.Debug("TODO");
-		this.AsmBuilder.visitInsn(Opcodes.ACONST_NULL);
-		// TODO Auto-generated method stub
+		if(Node.IsUntyped()) {
+			this.Logger.ReportError(Node.SourceToken, "ambigious map");
+			this.AsmBuilder.visitInsn(Opcodes.ACONST_NULL);
+		}
+		else {
+			String Owner = Type.getInternalName(ZenMap.class);
+			this.AsmBuilder.visitTypeInsn(NEW, Owner);
+			this.AsmBuilder.visitInsn(DUP);
+			this.AsmBuilder.PushInt(Node.Type.TypeId);
+			this.AsmBuilder.PushInt(Node.GetListSize());
+			this.AsmBuilder.visitTypeInsn(ANEWARRAY, Type.getInternalName(Object.class));
+			for(int i = 0; i < Node.GetListSize() ; i++) {
+				ZMapEntryNode EntryNode = Node.GetMapEntryNode(i);
+				this.AsmBuilder.visitInsn(DUP);
+				this.AsmBuilder.PushInt(i * 2);
+				this.AsmBuilder.PushNode(String.class, EntryNode.AST[ZMapEntryNode._Key]);
+				this.AsmBuilder.visitInsn(Opcodes.AASTORE);
+				this.AsmBuilder.visitInsn(DUP);
+				this.AsmBuilder.PushInt(i * 2 + 1);
+				this.AsmBuilder.PushNode(Object.class, EntryNode.AST[ZMapEntryNode._Value]);
+				this.AsmBuilder.visitInsn(Opcodes.AASTORE);
+				i = i + 1;
+			}
+			this.AsmBuilder.SetLineNumber(Node);
+			String Desc = Type.getMethodDescriptor(Type.getType(void.class), new Type[] { Type.getType(int.class),  Type.getType(Object[].class)});
+			this.AsmBuilder.visitMethodInsn(INVOKESPECIAL, Owner, "<init>", Desc);
+		}
 	}
 
 	@Override public void VisitNewArrayNode(ZNewArrayNode Node) {

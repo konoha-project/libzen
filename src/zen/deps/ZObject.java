@@ -33,12 +33,38 @@ import zen.type.ZTypePool;
 
 
 public class ZObject implements ZTypedObject {
-	public ZType ZenType;
+	protected ZType ZenType;
 	protected ZObject(int TypeId) {
 		this.ZenType = ZTypePool.TypeOf(TypeId);
 	}
 	@Override public final ZType GetZenType() {
 		return this.ZenType;
+	}
+
+	private void AppendStringBuffer(StringBuilder sb, String Name) {
+		if(Name != null) {
+			sb.append(LibZen._QuoteString(Name));
+			sb.append(": ");
+		}
+	}
+
+	public void AppendStringBuffer(StringBuilder sb, Object Value) {
+		this.AppendStringBuffer(sb, null, Value);
+	}
+
+	public void AppendStringBuffer(StringBuilder sb, String Key, Object Value) {
+		if(Value instanceof ZObject) {
+			this.AppendStringBuffer(sb, Key);
+			((ZObject)Value).Stringfy(sb);
+		}
+		else if(Value instanceof String) {
+			this.AppendStringBuffer(sb, Key);
+			sb.append(LibZen._QuoteString(Value.toString()));
+		}
+		else if(Value instanceof Number || Value instanceof Boolean || Value == null) {
+			this.AppendStringBuffer(sb, Key);
+			sb.append(Value);
+		}
 	}
 
 	protected void Stringfy(StringBuilder sb) {
@@ -52,20 +78,12 @@ public class ZObject implements ZTypedObject {
 				try {
 					Object Value =  Fields[i].get(this);
 					if(ZFunction.class.isAssignableFrom(Fields[i].getType())) {
-						sb.append(Fields[i].getName());
-						sb.append(": ");
-						sb.append(Value);
-						continue;
+						//						sb.append(Fields[i].getName());
+						//						sb.append(": ");
+						//						sb.append(Value);
+						//						continue;
 					}
-					sb.append("\"");
-					sb.append(Fields[i].getName());
-					sb.append("\": ");
-					if(Value instanceof ZObject) {
-						((ZObject)Value).Stringfy(sb);
-					}
-					else {
-						sb.append(Value);
-					}
+					this.AppendStringBuffer(sb, Fields[i].getName(), Value);
 				} catch (Exception e) {
 					break;
 				}
@@ -74,7 +92,7 @@ public class ZObject implements ZTypedObject {
 		sb.append("}");
 	}
 
-	@Override public String toString() {
+	@Override public final String toString() {
 		@Var StringBuilder sb = new StringBuilder();
 		this.Stringfy(sb);
 		return sb.toString();

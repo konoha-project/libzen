@@ -34,7 +34,7 @@ public class ZenEnum extends ZObject {
 		this.EnumValue = EnumValue;
 		this.EnumSymbol = EnumSymbol;
 	}
-	@Override public String toString() {
-		return ""+this.EnumValue;
-	}
+	//	@Override public String toString() {
+	//		return ""+this.EnumValue;
+	//	}
 }

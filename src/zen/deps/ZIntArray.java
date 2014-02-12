@@ -1,5 +1,6 @@
 package zen.deps;
 
+
 public class ZIntArray extends ZObject {
 	@Field private int    Size;
 	@Field private long[] Values;
@@ -16,17 +17,15 @@ public class ZIntArray extends ZObject {
 		}
 	}
 
-	@Override public String toString() {
-		@Var String s = "[";
-		@Var int i = 0;
-		while(i < this.Size) {
+	@Override protected void Stringfy(StringBuilder sb) {
+		sb.append("[");
+		for(int i = 0; i < this.Size; i++) {
 			if(i > 0) {
-				s += ", ";
+				sb.append(", ");
 			}
-			s += String.valueOf(this.Values[i]);
-			i = i + 1;
+			sb.append(this.Values[i]);
 		}
-		return s + "]";
+		sb.append("]");
 	}
 
 	public final long Size() {

@@ -25,18 +25,38 @@
 package zen.deps;
 
 import java.util.HashMap;
-import java.util.Iterator;
 
 import zen.type.ZType;
 
-public final class ZenMap <T> implements ZTypedObject {
-	final ZType ElementType;
+public final class ZenMap <T> extends ZObject {
 	final HashMap<String, T>	Map;
 
 	public ZenMap(ZType ElementType) {
+		super(0);
 		this.Map = new HashMap<String, T>();
-		//JavaTypeTable.GetZenType(T.class);
-		this.ElementType = ElementType;
+	}
+
+	public ZenMap(int TypeId, T[] Literal) {
+		super(TypeId);
+		this.Map = new HashMap<String, T>();
+		@Var int i = 0;
+		while(i < Literal.length) {
+			this.Map.put(Literal[i].toString(), Literal[i+1]);
+			i = i + 2;
+		}
+	}
+
+	@Override protected void Stringfy(StringBuilder sb) {
+		@Var int i = 0;
+		sb.append("{");
+		for(String Key : this.Map.keySet()) {
+			if(i > 0) {
+				sb.append(", ");
+			}
+			this.AppendStringBuffer(sb, Key, this.Map.get(Key));
+			i = i + 1;
+		}
+		sb.append("}");
 	}
 
 	public final void put(String Key, T Value) {
@@ -45,15 +65,6 @@ public final class ZenMap <T> implements ZTypedObject {
 
 	public final T GetOrNull(String Key) {
 		return this.Map.get(Key);
-	}
-
-	public Iterator<String> key_iterator() { // FIXME
-		return this.Map.keySet().iterator();
-	}
-
-	@Override public ZType GetZenType() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	public void AddMap(ZenMap<Object> aMap) {

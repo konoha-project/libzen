@@ -16,18 +16,15 @@ public final class ZObjectArray extends ZObject {
 		}
 	}
 
-	@Override public String toString() {
-		@Var String s = "[";
-		@Var int i = 0;
-		while(i < this.Size) {
-			@Var Object Value = this.Values[i];
+	@Override protected void Stringfy(StringBuilder sb) {
+		sb.append("[");
+		for(int i = 0; i < this.Size; i++) {
 			if(i > 0) {
-				s += ", ";
+				sb.append(", ");
 			}
-			s += LibZen._Stringify(Value);
-			i = i + 1;
+			this.AppendStringBuffer(sb, this.Values[i]);
 		}
-		return s + "]";
+		sb.append("]");
 	}
 
 	public final long Size() {
