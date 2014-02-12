@@ -223,7 +223,7 @@ public class ZScriptEngine extends ZVisitor {
 	}
 
 	@Override public void VisitInstanceOfNode(ZInstanceOfNode Node) {
-		this.Unsupported(Node, "<:");
+		this.Unsupported(Node, "instanceof");
 	}
 
 	@Override public void VisitBinaryNode(ZBinaryNode Node) {

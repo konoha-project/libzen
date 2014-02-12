@@ -55,7 +55,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 import java.util.Stack;
 
 import org.objectweb.asm.Label;
@@ -110,17 +109,12 @@ import zen.ast.ZWhileNode;
 import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.deps.ZFunction;
-import zen.deps.ZMatchFunction;
 import zen.deps.ZObject;
-import zen.deps.ZTokenFunction;
 import zen.deps.ZenMap;
-import zen.parser.ZSourceContext;
-import zen.parser.ZTokenContext;
 import zen.type.ZClassField;
 import zen.type.ZClassType;
 import zen.type.ZFuncType;
 import zen.type.ZType;
-import zen.type.ZTypePool;
 
 public class JavaAsmGenerator extends JavaGenerator {
 	AsmClassLoader AsmLoader = null;
@@ -131,8 +125,6 @@ public class JavaAsmGenerator extends JavaGenerator {
 		super("java", "1.6");
 		this.TryCatchLabel = new Stack<TryCatchLabel>();
 		this.AsmLoader = new AsmClassLoader(this);
-		this.InitFuncClass();
-		JavaCommonApi.LoadCommonApi(this);
 	}
 
 	public final Class<?> GetJavaClass(ZType zType, Class<?> C) {
@@ -649,28 +641,9 @@ public class JavaAsmGenerator extends JavaGenerator {
 		Node.GetNameSpace().SetLocalSymbol(Node.Symbol, Node.AST[ZLetNode._InitValue]);
 	}
 
-	private static String NameFuncClass(ZFuncType FuncType) {
-		return "ZFunc"+ FuncType.TypeId;
-	}
-
-	private void InitFuncClass() {
-		ArrayList<ZType> TypeList = new ArrayList<ZType>();
-		TypeList.add(ZType.BooleanType);
-		TypeList.add(JavaTypeTable.GetZenType(ZSourceContext.class));
-		ZFuncType FuncType = ZTypePool.LookupFuncType(TypeList);
-		this.GeneratedClassMap.put(NameFuncClass(FuncType), ZTokenFunction.class);
-		TypeList.clear();
-		TypeList.add(JavaTypeTable.GetZenType(ZNode.class));
-		TypeList.add(JavaTypeTable.GetZenType(ZNode.class));
-		TypeList.add(JavaTypeTable.GetZenType(ZTokenContext.class));
-		TypeList.add(JavaTypeTable.GetZenType(ZNode.class));
-		FuncType = ZTypePool.LookupFuncType(TypeList);
-		this.GeneratedClassMap.put(NameFuncClass(FuncType), ZMatchFunction.class);
-	}
-
 	Class<?> LoadFuncClass(ZFuncType FuncType) {
 		String ClassName = NameFuncClass(FuncType);
-		Class<?> FuncClass = this.GeneratedClassMap.GetOrNull(ClassName);
+		Class<?> FuncClass = this.GetGeneratedClass(ClassName, null);
 		if(FuncClass == null) {
 			@Var String SuperClassName = Type.getInternalName(ZFunction.class);
 			@Var AsmClassBuilder ClassBuilder = this.AsmLoader.NewClass(ACC_PUBLIC| ACC_ABSTRACT, null, ClassName, ZFunction.class);
@@ -686,18 +659,11 @@ public class JavaAsmGenerator extends JavaGenerator {
 			InitMethod.Finish();
 
 			FuncClass = this.AsmLoader.LoadGeneratedClass(ClassName);
-			this.GeneratedClassMap.put(ClassName, FuncClass);
+			this.SetGeneratedClass(ClassName, FuncClass);
 		}
 		return FuncClass;
 	}
 
-	String NameFunctionClass(String FuncName, ZFuncType FuncType) {
-		return "F" + FuncType.StringfySignature(FuncName);
-	}
-
-	public Class<?> GetDefinedFunctionClass(String FuncName, ZFuncType FuncType) {
-		return this.GeneratedClassMap.GetOrNull(this.NameFunctionClass(FuncName, FuncType));
-	}
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
 		if(Node.FuncName == null) {
@@ -751,7 +717,7 @@ public class JavaAsmGenerator extends JavaGenerator {
 
 		FuncClass = this.AsmLoader.LoadGeneratedClass(ClassName);
 		this.SetMethod(Node.FuncName, FuncType, FuncClass);
-		this.GeneratedClassMap.put(ClassName, FuncClass);
+		this.SetGeneratedClass(ClassName, FuncClass);
 		Node.GetNameSpace().SetLocalSymbol(Node.FuncName, new JavaStaticFieldNode(null, FuncClass, FuncType, "function"));
 	}
 
@@ -805,11 +771,10 @@ public class JavaAsmGenerator extends JavaGenerator {
 		return true;
 	}
 
-	private final ZenMap<Class<?>> GeneratedClassMap = new ZenMap<Class<?>>(null);
 
 	private Class<?> MethodWrapperClass(ZFuncType FuncType, ZFuncType SourceFuncType) {
 		String ClassName = "W" + NameFuncClass(FuncType) + "W" + NameFuncClass(SourceFuncType);
-		Class<?> WrapperClass = this.GeneratedClassMap.GetOrNull(ClassName);
+		Class<?> WrapperClass = this.GetGeneratedClass(ClassName, null);
 		if(WrapperClass == null) {
 			Class<?> FuncClass = this.LoadFuncClass(FuncType);
 			Class<?> SourceClass = this.LoadFuncClass(SourceFuncType);
@@ -846,7 +811,7 @@ public class JavaAsmGenerator extends JavaGenerator {
 			InvokeMethod.Finish();
 
 			WrapperClass = this.AsmLoader.LoadGeneratedClass(ClassName);
-			this.GeneratedClassMap.put(ClassName, WrapperClass);
+			this.SetGeneratedClass(ClassName, WrapperClass);
 		}
 		return WrapperClass;
 	}

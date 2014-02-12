@@ -30,13 +30,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import zen.deps.Var;
-import zen.deps.ZNativeType;
 import zen.deps.ZFloatArray;
 import zen.deps.ZFunction;
 import zen.deps.ZIntArray;
-import zen.deps.ZenMap;
+import zen.deps.ZNativeType;
 import zen.deps.ZObjectArray;
 import zen.deps.ZStringArray;
+import zen.deps.ZenMap;
 import zen.type.ZFuncType;
 import zen.type.ZType;
 import zen.type.ZTypePool;
@@ -118,6 +118,15 @@ public class JavaTypeTable {
 				TypeList.add(JavaTypeTable.GetZenType(ParamTypes[j]));
 				j = j + 1;
 			}
+		}
+		return ZTypePool.LookupFuncType(TypeList);
+	}
+
+	public final static ZFuncType FuncType(Class<?> ReturnT, Class<?> ... paramsT) {
+		@Var ArrayList<ZType> TypeList = new ArrayList<ZType>();
+		TypeList.add(JavaTypeTable.GetZenType(ReturnT));
+		for(Class<?> C : paramsT) {
+			TypeList.add(JavaTypeTable.GetZenType(C));
 		}
 		return ZTypePool.LookupFuncType(TypeList);
 	}
