@@ -225,7 +225,6 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 	private LLVMSourceWriter Writer;
 
 	private static final boolean WithInitValue = true;
-	private static final boolean WithoutInitValue = false;
 
 	//private final ScriptEngineManager EngineManager;
 	//private final ScriptEngine Engine;
@@ -663,7 +662,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		String ClassSymbol = "%Class." + Node.ClassName;
 		this.Writer.PushNewBuffer(ClassSymbol);
 		this.Writer.AddCodeToCurrentBuffer(" = type { ");
-		this.VisitFieldList("i8*", Node, WithoutInitValue);
+		this.VisitFieldList("i8*", Node, !WithInitValue);
 		this.Writer.AddCodeToCurrentBuffer(" }");
 		this.Writer.AppendBufferAsHeaderLine();
 
