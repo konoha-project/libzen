@@ -32,10 +32,8 @@ import zen.type.ZType;
 
 public final class ZFuncCallNode extends ZListNode {
 	public final static int Func = 0;
-
 	@Field public String ResolvedFuncName = null;
 	@Field public ZFunc ResolvedFunc = null;
-	//	@Field public ZFuncType ResolvedFuncType = null;
 
 	public ZFuncCallNode(ZNode ParentNode, ZNode FuncNode) {
 		super(ParentNode, null, 1);
