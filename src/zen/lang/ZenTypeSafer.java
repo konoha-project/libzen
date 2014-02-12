@@ -139,20 +139,15 @@ public class ZenTypeSafer extends ZTypeChecker {
 			ZNode SubNode = Node.GetListAt(i);
 			SubNode = this.CheckType(SubNode, ElementType);
 			Node.SetListAt(i, SubNode);
-			if(SubNode.IsUntyped()) {
-				ArrayType = ZType.VarType;
-			}
-			else {
-				if(ElementType.IsVarType()) {
-					ElementType = SubNode.Type;
-				}
+			if(ElementType.IsVarType()) {
+				ElementType = SubNode.Type;
 			}
 			i = i + 1;
 		}
 		if(!ElementType.IsVarType()) {
-			ArrayType = ZTypePool.GetGenericType1(ZType.ArrayType, ElementType);
+			this.TypedNode(Node,ZTypePool.GetGenericType1(ZType.ArrayType, ElementType));
 		}
-		this.TypedNode(Node, ArrayType);
+		this.TypedNode(Node, ZType.VarType);
 	}
 
 	@Override public void VisitMapLiteralNode(ZMapLiteralNode Node) {

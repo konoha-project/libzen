@@ -31,6 +31,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
+import zen.ast.ZArrayLiteralNode;
 import zen.ast.ZBinaryNode;
 import zen.ast.ZCastNode;
 import zen.ast.ZComparatorNode;
@@ -40,6 +41,8 @@ import zen.ast.ZGetNameNode;
 import zen.ast.ZGetterNode;
 import zen.ast.ZGroupNode;
 import zen.ast.ZListNode;
+import zen.ast.ZMapEntryNode;
+import zen.ast.ZMapLiteralNode;
 import zen.ast.ZMethodCallNode;
 import zen.ast.ZNewObjectNode;
 import zen.ast.ZNode;
@@ -49,6 +52,11 @@ import zen.ast.ZStringNode;
 import zen.ast.ZUnaryNode;
 import zen.deps.LibZen;
 import zen.deps.Var;
+import zen.deps.ZFloatArray;
+import zen.deps.ZIntArray;
+import zen.deps.ZObjectArray;
+import zen.deps.ZStringArray;
+import zen.deps.ZenMap;
 import zen.lang.ZenEngine;
 import zen.type.ZFunc;
 import zen.type.ZFuncType;
@@ -57,6 +65,7 @@ import zen.type.ZTypeChecker;
 public class JavaEngine extends ZenEngine {
 
 	private final JavaSolution Solution;
+
 	public JavaEngine(ZTypeChecker TypeChecker, JavaSolution Generator) {
 		super(TypeChecker, Generator);
 		this.Solution = Generator;
@@ -217,10 +226,79 @@ public class JavaEngine extends ZenEngine {
 		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.AST[ZGetIndexNode._Recv], Node.AST[ZGetIndexNode._Index]});
 	}
 
-	//
 	//	@Override public void VisitSetIndexNode(ZSetIndexNode Node) {
 	//		this.Unsupported(Node);
 	//	}
+
+	@Override public void VisitArrayLiteralNode(ZArrayLiteralNode Node) {
+		if(Node.IsUntyped()) {
+			this.Logger.ReportError2(Node, "ambigious array");
+			this.StopVisitor();
+		}
+		else if(Node.Type.GetParamType(0).IsIntType()) {
+			long Values[] = new long[Node.GetListSize()];
+			for(int i = 0; i < Node.GetListSize(); i++) {
+				Object Value = this.Eval(Node.GetListAt(i));
+				if(Value instanceof Number) {
+					Values[i] = ((Number)Value).longValue();
+				}
+			}
+			if(this.IsVisitable()) {
+				this.EvaledValue = new ZIntArray(Node.Type.TypeId, Values);
+			}
+		}
+		else if(Node.Type.GetParamType(0).IsFloatType()) {
+			double Values[] = new double[Node.GetListSize()];
+			for(int i = 0; i < Node.GetListSize(); i++) {
+				Object Value = this.Eval(Node.GetListAt(i));
+				if(Value instanceof Number) {
+					Values[i] = ((Number)Value).doubleValue();
+				}
+			}
+			if(this.IsVisitable()) {
+				this.EvaledValue = new ZFloatArray(Node.Type.TypeId, Values);
+			}
+		}
+		else if(Node.Type.GetParamType(0).IsIntType()) {
+			String Values[] = new String[Node.GetListSize()];
+			for(int i = 0; i < Node.GetListSize(); i++) {
+				Object Value = this.Eval(Node.GetListAt(i));
+				if(Value instanceof String) {
+					Values[i] = (String)Value;
+				}
+			}
+			if(this.IsVisitable()) {
+				this.EvaledValue = new ZStringArray(Node.Type.TypeId, Values);
+			}
+		}
+		else {
+			Object Values[] = new Object[Node.GetListSize()];
+			for(int i = 0; i < Node.GetListSize(); i++) {
+				Values[i] = this.Eval(Node.GetListAt(i));
+			}
+			if(this.IsVisitable()) {
+				this.EvaledValue = new ZObjectArray(Node.Type.TypeId, Values);
+			}
+		}
+	}
+
+	@Override public void VisitMapLiteralNode(ZMapLiteralNode Node) {
+		if(Node.IsUntyped()) {
+			this.Logger.ReportError2(Node, "ambigious map");
+			this.StopVisitor();
+		}
+		else {
+			Object Values[] = new Object[Node.GetListSize()*2];
+			for(int i = 0; i < Node.GetListSize(); i = i + 2) {
+				ZMapEntryNode EntryNode = Node.GetMapEntryNode(i);
+				Values[i*2] = EntryNode.Name;
+				Values[i*2+1] = this.Eval(EntryNode.AST[ZMapEntryNode._Value]);
+			}
+			if(this.IsVisitable()) {
+				this.EvaledValue = new ZenMap<Object>(Node.Type.TypeId, Values);
+			}
+		}
+	}
 
 	@Override public void VisitNewObjectNode(ZNewObjectNode Node) {
 		Constructor<?> jMethod = this.Solution.GetConstructor(Node.Type, Node);

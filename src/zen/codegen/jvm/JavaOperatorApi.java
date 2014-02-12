@@ -31,8 +31,8 @@ import java.util.List;
 
 import zen.deps.SoftwareFaultException;
 import zen.deps.Var;
-import zen.deps.ZenArray;
 import zen.deps.ZenMap;
+import zen.obsolete.ZenArray;
 import zen.type.ZType;
 
 public final class JavaOperatorApi {

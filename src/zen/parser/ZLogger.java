@@ -26,6 +26,7 @@ package zen.parser;
 
 import java.util.ArrayList;
 
+import zen.ast.ZNode;
 import zen.deps.Field;
 import zen.deps.LibZen;
 import zen.deps.Var;
@@ -82,6 +83,11 @@ public final class ZLogger {
 	public final String ReportError(ZToken Token, String Message) {
 		return this.Report(ZLogger._ErrorLevel, Token, Message);
 	}
+
+	public final String ReportError2(ZNode Node, String Message) {
+		return this.Report(ZLogger._ErrorLevel, Node.SourceToken, Message);
+	}
+
 
 	public final String ReportWarning(ZToken Token, String Message) {
 		return this.Report(ZLogger._WarningLevel, Token, Message);

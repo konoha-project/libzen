@@ -1,4 +1,4 @@
-package zen.lang;
+package zen.parser;
 
 import zen.deps.Field;
 import zen.type.ZFunc;
