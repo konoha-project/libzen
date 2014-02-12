@@ -14,7 +14,7 @@ public class SymbolStatementPattern extends ZMatchFunction {
 		@Var ZToken NameToken = TokenContext.GetToken(ZTokenContext.MoveNext);
 		if(TokenContext.MatchToken("=")) {
 			@Var ZNode AssignedNode = new ZSetNameNode(ParentNode, NameToken, NameToken.GetText());
-			AssignedNode = TokenContext.MatchPattern(AssignedNode, ZSetNameNode.Expr, "$Expression$", ZTokenContext.Required);
+			AssignedNode = TokenContext.MatchPattern(AssignedNode, ZSetNameNode._Expr, "$Expression$", ZTokenContext.Required);
 			return AssignedNode;
 		}
 		else {

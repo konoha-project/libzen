@@ -5,7 +5,7 @@ import zen.parser.ZVisitor;
 import zen.type.ZType;
 
 public class ZLetNode extends ZNode {
-	public final static int InitValue = 0;
+	public final static int _InitValue = 0;
 
 	@Field public String Symbol = null;
 	@Field public ZType  SymbolType = ZType.VarType;

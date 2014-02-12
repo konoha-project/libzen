@@ -14,7 +14,7 @@ public class FunctionPattern extends ZMatchFunction {
 		FuncNode = TokenContext.MatchPattern(FuncNode, ZNode.NameInfo, "$Name$", ZTokenContext.Optional);
 		FuncNode = TokenContext.MatchNtimes(FuncNode, "(", "$Param$", ",", ")");
 		FuncNode = TokenContext.MatchPattern(FuncNode, ZNode.TypeInfo, "$TypeAnnotation$", ZTokenContext.Optional);
-		FuncNode = TokenContext.MatchPattern(FuncNode, ZFunctionNode.Block, "$Block$", ZTokenContext.Required);
+		FuncNode = TokenContext.MatchPattern(FuncNode, ZFunctionNode._Block, "$Block$", ZTokenContext.Required);
 		return FuncNode;
 	}
 

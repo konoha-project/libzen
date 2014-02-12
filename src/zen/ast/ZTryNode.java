@@ -27,13 +27,10 @@ package zen.ast;
 import zen.parser.ZVisitor;
 
 public final class ZTryNode extends ZNode {
-	public final static int Try = 0;
-	public final static int Catch = 1;
-	public final static int Finally = 2;
+	public final static int _Try = 0;
+	public final static int _Catch = 1;
+	public final static int _Finally = 2;
 
-	//	@Field public ZNode	TryNode = null;
-	//	@Field public ZNode CatchNode = null;
-	//	@Field public ZNode	FinallyNode = null;
 	public ZTryNode(ZNode ParentNode) {
 		super(ParentNode, null, 3);
 	}

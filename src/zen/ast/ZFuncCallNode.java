@@ -31,13 +31,14 @@ import zen.type.ZFunc;
 import zen.type.ZType;
 
 public final class ZFuncCallNode extends ZListNode {
-	public final static int Func = 0;
+	public final static int _Func = 0;
+
 	@Field public String ResolvedFuncName = null;
 	@Field public ZFunc ResolvedFunc = null;
 
 	public ZFuncCallNode(ZNode ParentNode, ZNode FuncNode) {
 		super(ParentNode, null, 1);
-		this.Set(ZFuncCallNode.Func, FuncNode);
+		this.Set(ZFuncCallNode._Func, FuncNode);
 	}
 
 	public ZFuncCallNode(ZNode ParentNode, ZToken SourceToken, ZFunc ResolvedFunc) {

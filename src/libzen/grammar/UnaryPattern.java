@@ -10,7 +10,7 @@ public class UnaryPattern extends ZMatchFunction {
 
 	@Override public ZNode Invoke(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
 		@Var ZNode UnaryNode = new ZUnaryNode(ParentNode, TokenContext.GetToken(ZTokenContext.MoveNext));
-		return TokenContext.MatchPattern(UnaryNode, ZUnaryNode.Recv, "$RightExpression$", ZTokenContext.Required);
+		return TokenContext.MatchPattern(UnaryNode, ZUnaryNode._Recv, "$RightExpression$", ZTokenContext.Required);
 	}
 
 }

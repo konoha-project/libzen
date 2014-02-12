@@ -28,13 +28,13 @@ import zen.parser.ZVisitor;
 
 //E.g., $Recv[$Index] = $ValueNode
 public final class ZSetIndexNode extends ZNode {
-	public final static int Recv  = 0;
-	public final static int Index = 1;
-	public final static int Expr  = 2;
+	public final static int _Recv  = 0;
+	public final static int _Index = 1;
+	public final static int _Expr  = 2;
 
 	public ZSetIndexNode(ZNode ParentNode, ZNode LeftNode) {
 		super(ParentNode, null, 3);
-		this.Set(ZSetIndexNode.Recv, LeftNode);
+		this.Set(ZSetIndexNode._Recv, LeftNode);
 	}
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitSetIndexNode(this);

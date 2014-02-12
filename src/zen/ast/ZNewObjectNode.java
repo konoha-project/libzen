@@ -24,15 +24,11 @@
 
 package zen.ast;
 
-import java.util.ArrayList;
-
-import zen.deps.Field;
 import zen.deps.Var;
 import zen.parser.ZVisitor;
 import zen.type.ZFunc;
 
 public final class ZNewObjectNode extends ZListNode {
-	@Field public ArrayList<ZNode>	ParamList = new ArrayList<ZNode>();
 	public ZNewObjectNode(ZNode ParentNode) {
 		super(ParentNode, null, 0);
 	}
@@ -51,8 +47,6 @@ public final class ZNewObjectNode extends ZListNode {
 			FuncNode.Append(this.GetListAt(i));
 			i = i + 1;
 		}
-		this.ParamList.clear();
-		//		FuncNode.ResolvedFuncName = Func.FuncName;
 		FuncNode.ResolvedFunc = Func;
 		return FuncNode;
 	}

@@ -12,7 +12,7 @@ public class AssertPattern extends ZMatchFunction {
 		@Var ZNode AssertNode = new ZThrowNode(ParentNode);
 		AssertNode = TokenContext.MatchToken(AssertNode, "assert", ZTokenContext.Required);
 		AssertNode = TokenContext.MatchToken(AssertNode, "(", ZTokenContext.Required);
-		AssertNode = TokenContext.MatchPattern(AssertNode, ZThrowNode.Expr, "$Expression$", ZTokenContext.Required, ZTokenContext.AllowSkipIndent);
+		AssertNode = TokenContext.MatchPattern(AssertNode, ZThrowNode._Expr, "$Expression$", ZTokenContext.Required, ZTokenContext.AllowSkipIndent);
 		AssertNode = TokenContext.MatchToken(AssertNode, ")", ZTokenContext.Required);
 		return AssertNode;
 	}

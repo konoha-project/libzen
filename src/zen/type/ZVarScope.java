@@ -78,7 +78,7 @@ public final class ZVarScope {
 			this.VarNodeCount = 0;
 			this.UnresolvedSymbolCount = 0;
 			TypeSafer.DefineFunction(FunctionNode, false/*Enforced*/);
-			FunctionNode.AST[ZFunctionNode.Block] = (ZBlockNode)TypeSafer.CheckType(FunctionNode.AST[ZFunctionNode.Block], ZType.VoidType);
+			FunctionNode.AST[ZFunctionNode._Block] = (ZBlockNode)TypeSafer.CheckType(FunctionNode.AST[ZFunctionNode._Block], ZType.VoidType);
 			if(this.VarNodeCount == 0 || PrevCount == this.VarNodeCount) {
 				break;
 			}

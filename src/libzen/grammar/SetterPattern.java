@@ -12,7 +12,7 @@ public class SetterPattern extends ZMatchFunction {
 		SetterNode = TokenContext.MatchToken(SetterNode, ".", ZTokenContext.Required);
 		SetterNode = TokenContext.MatchPattern(SetterNode, ZNode.NameInfo, "$Name$", ZTokenContext.Required);
 		SetterNode = TokenContext.MatchToken(SetterNode, "=", ZTokenContext.Required);
-		SetterNode = TokenContext.MatchPattern(SetterNode, ZSetterNode.Expr, "$Expression$", ZTokenContext.Required);
+		SetterNode = TokenContext.MatchPattern(SetterNode, ZSetterNode._Expr, "$Expression$", ZTokenContext.Required);
 		return SetterNode;
 	}
 

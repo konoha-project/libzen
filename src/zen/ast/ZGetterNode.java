@@ -28,11 +28,11 @@ import zen.deps.Field;
 import zen.parser.ZVisitor;
 
 public final class ZGetterNode extends ZNode {
-	public final static int Recv = 0;
+	public final static int _Recv = 0;
 	@Field public String  FieldName;
 	public ZGetterNode(ZNode ParentNode, ZNode RecvNode) {
 		super(ParentNode, null, 1);
-		this.Set(ZGetterNode.Recv, RecvNode);
+		this.Set(ZGetterNode._Recv, RecvNode);
 	}
 	@Override public void SetNameInfo(String Name) {
 		this.FieldName = Name;
@@ -41,6 +41,6 @@ public final class ZGetterNode extends ZNode {
 		Visitor.VisitGetterNode(this);
 	}
 	public final boolean IsStaticField() {
-		return this.AST[ZGetterNode.Recv] instanceof ZTypeNode;
+		return this.AST[ZGetterNode._Recv] instanceof ZTypeNode;
 	}
 }

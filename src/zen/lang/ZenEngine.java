@@ -183,7 +183,7 @@ public class ZenEngine extends ZVisitor {
 	}
 
 	@Override public void VisitGroupNode(ZGroupNode Node) {
-		this.EvaledValue = this.Eval(Node.AST[ZGetterNode.Recv]);
+		this.EvaledValue = this.Eval(Node.AST[ZGroupNode._Expr]);
 	}
 
 	@Override public void VisitGetterNode(ZGetterNode Node) {
@@ -220,8 +220,8 @@ public class ZenEngine extends ZVisitor {
 
 	@Override public void VisitCastNode(ZCastNode Node) {
 		if(Node.Type.IsVoidType()) {
-			this.EvaledValue = this.Eval(Node.AST[ZCastNode.Expr]);
-			Node.Type = Node.AST[ZCastNode.Expr].Type;
+			this.EvaledValue = this.Eval(Node.AST[ZCastNode._Expr]);
+			Node.Type = Node.AST[ZCastNode._Expr].Type;
 		}
 		else {
 			this.Unsupported(Node, "cast");
@@ -241,10 +241,10 @@ public class ZenEngine extends ZVisitor {
 	}
 
 	@Override public void VisitAndNode(ZAndNode Node) {
-		@Var Object BooleanValue = this.Eval(Node.AST[ZBinaryNode.Left]);
+		@Var Object BooleanValue = this.Eval(Node.AST[ZBinaryNode._Left]);
 		if(BooleanValue instanceof Boolean) {
 			if((Boolean)BooleanValue) {
-				this.EvaledValue = this.Eval(Node.AST[ZBinaryNode.Right]);
+				this.EvaledValue = this.Eval(Node.AST[ZBinaryNode._Right]);
 			}
 			else {
 				this.EvaledValue = false;
@@ -253,10 +253,10 @@ public class ZenEngine extends ZVisitor {
 	}
 
 	@Override public void VisitOrNode(ZOrNode Node) {
-		@Var Object BooleanValue = this.Eval(Node.AST[ZBinaryNode.Left]);
+		@Var Object BooleanValue = this.Eval(Node.AST[ZBinaryNode._Left]);
 		if(BooleanValue instanceof Boolean) {
 			if(!(Boolean)BooleanValue) {
-				this.EvaledValue = this.Eval(Node.AST[ZBinaryNode.Right]);
+				this.EvaledValue = this.Eval(Node.AST[ZBinaryNode._Right]);
 			}
 			else {
 				this.EvaledValue = true;
@@ -281,13 +281,13 @@ public class ZenEngine extends ZVisitor {
 	}
 
 	@Override public void VisitIfNode(ZIfNode Node) {
-		Object BooleanValue = this.Eval(Node.AST[ZIfNode.Cond]);
+		Object BooleanValue = this.Eval(Node.AST[ZIfNode._Cond]);
 		if(BooleanValue instanceof Boolean) {
 			if((Boolean)BooleanValue) {
-				this.Eval(Node.AST[ZIfNode.Then]);
+				this.Eval(Node.AST[ZIfNode._Then]);
 			}
-			else if(Node.AST[ZIfNode.Else] != null) {
-				this.Eval(Node.AST[ZIfNode.Then]);
+			else if(Node.AST[ZIfNode._Else] != null) {
+				this.Eval(Node.AST[ZIfNode._Then]);
 			}
 		}
 		this.EvaledValue = null;

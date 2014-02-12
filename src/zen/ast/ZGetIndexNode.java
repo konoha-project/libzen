@@ -24,19 +24,16 @@
 
 package zen.ast;
 
-import zen.deps.Field;
 import zen.parser.ZVisitor;
 
 //E.g., $Recv[$Index]
 public final class ZGetIndexNode extends ZNode {
-	public final static int Recv = 0;
-	public final static int Index = 1;
-
-	@Field public ZNode  RecvNode;
+	public final static int _Recv = 0;
+	public final static int _Index = 1;
 
 	public ZGetIndexNode(ZNode ParentNode, ZNode RecvNode) {
 		super(ParentNode, null, 2);
-		this.AST[ZGetterNode.Recv] = this.SetChild(RecvNode);
+		this.AST[ZGetIndexNode._Recv] = this.SetChild(RecvNode);
 	}
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitGetIndexNode(this);

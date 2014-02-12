@@ -35,7 +35,7 @@ import zen.type.ZType;
 import zen.type.ZTypePool;
 
 public class ZFunctionNode extends ZListNode {
-	public final static int Block = 0;
+	public final static int _Block = 0;
 
 	@Field public ZType ReturnType = ZType.VarType;
 	@Field public String FuncName = null;

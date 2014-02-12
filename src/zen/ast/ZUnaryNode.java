@@ -29,7 +29,7 @@ import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 
 public class ZUnaryNode extends ZNode {
-	public final static int Recv = 0;
+	public final static int _Recv = 0;
 	public ZUnaryNode(ZNode ParentNode, ZToken Token) {
 		super(ParentNode, Token, 1);
 	}

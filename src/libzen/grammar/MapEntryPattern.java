@@ -10,9 +10,9 @@ public class MapEntryPattern extends ZMatchFunction {
 
 	@Override public ZNode Invoke(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
 		@Var ZNode LiteralNode = new ZMapEntryNode(ParentNode);
-		LiteralNode = TokenContext.MatchPattern(LiteralNode, ZMapEntryNode.Key, "$Expression$", ZTokenContext.Required);
+		LiteralNode = TokenContext.MatchPattern(LiteralNode, ZMapEntryNode._Key, "$Expression$", ZTokenContext.Required);
 		LiteralNode = TokenContext.MatchToken(LiteralNode, ":", ZTokenContext.Required);
-		LiteralNode = TokenContext.MatchPattern(LiteralNode, ZMapEntryNode.Value, "$Expression$", ZTokenContext.Required);
+		LiteralNode = TokenContext.MatchPattern(LiteralNode, ZMapEntryNode._Value, "$Expression$", ZTokenContext.Required);
 		return LiteralNode;
 	}
 

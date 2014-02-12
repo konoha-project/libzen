@@ -14,7 +14,7 @@ public class VarPattern extends ZMatchFunction {
 		VarNode = TokenContext.MatchPattern(VarNode, ZNode.NameInfo, "$Name$", ZTokenContext.Required);
 		VarNode = TokenContext.MatchPattern(VarNode, ZNode.TypeInfo, "$TypeAnnotation$", ZTokenContext.Optional);
 		VarNode = TokenContext.MatchToken(VarNode, "=", ZTokenContext.Required);
-		VarNode = TokenContext.MatchPattern(VarNode, ZVarDeclNode.InitValue, "$Expression$", ZTokenContext.Required);
+		VarNode = TokenContext.MatchPattern(VarNode, ZVarDeclNode._InitValue, "$Expression$", ZTokenContext.Required);
 		return VarNode;
 	}
 

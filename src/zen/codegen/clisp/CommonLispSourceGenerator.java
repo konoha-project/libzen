@@ -30,7 +30,6 @@ import zen.ast.ZBlockNode;
 import zen.ast.ZBooleanNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZGetNameNode;
-import zen.ast.ZGetterNode;
 import zen.ast.ZIfNode;
 import zen.ast.ZIntNode;
 import zen.ast.ZNullNode;
@@ -70,8 +69,8 @@ public class CommonLispSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitReturnNode(ZReturnNode Node) {
-		if (Node.AST[ZReturnNode.Expr] != null) {
-			Node.AST[ZReturnNode.Expr].Accept(this);
+		if (Node.AST[ZReturnNode._Expr] != null) {
+			Node.AST[ZReturnNode._Expr].Accept(this);
 		}
 	}
 
@@ -125,10 +124,10 @@ public class CommonLispSourceGenerator extends ZSourceGenerator {
 	@Override public void VisitWhileNode(ZWhileNode Node) {
 		this.CurrentBuilder.Append("(while ");
 
-		Node.AST[ZWhileNode.Cond].Accept(this);
+		Node.AST[ZWhileNode._Cond].Accept(this);
 
 		this.CurrentBuilder.AppendLineFeed();
-		Node.AST[ZWhileNode.Block].Accept(this);
+		Node.AST[ZWhileNode._Block].Accept(this);
 		this.CurrentBuilder.AppendIndent();
 		this.CurrentBuilder.Append(")");
 	}
@@ -186,8 +185,8 @@ public class CommonLispSourceGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Append(Node.NativeName);
 		this.CurrentBuilder.Append(" ");
 
-		if (Node.AST[ZVarDeclNode.InitValue] != null) {
-			Node.AST[ZVarDeclNode.InitValue].Accept(this);
+		if (Node.AST[ZVarDeclNode._InitValue] != null) {
+			Node.AST[ZVarDeclNode._InitValue].Accept(this);
 		} else {
 			this.CurrentBuilder.Append("nil");
 		}
@@ -207,23 +206,23 @@ public class CommonLispSourceGenerator extends ZSourceGenerator {
 
 	@Override public void VisitIfNode(ZIfNode Node) {
 		this.CurrentBuilder.Append("(if  ");
-		Node.AST[ZIfNode.Cond].Accept(this);
+		Node.AST[ZIfNode._Cond].Accept(this);
 		this.CurrentBuilder.Indent();
 		this.CurrentBuilder.AppendLineFeed();
 
 		this.CurrentBuilder.Append("(progn ");
 		this.CurrentBuilder.Indent();
 		this.CurrentBuilder.AppendLineFeed();
-		Node.AST[ZIfNode.Then].Accept(this);
+		Node.AST[ZIfNode._Then].Accept(this);
 		this.CurrentBuilder.UnIndent();
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.Append(")");
 
-		if(Node.AST[ZIfNode.Else] != null) {
+		if(Node.AST[ZIfNode._Else] != null) {
 			this.CurrentBuilder.Indent();
 			this.CurrentBuilder.AppendLineFeed();
 			this.CurrentBuilder.Append("(progn ");
-			Node.AST[ZIfNode.Else].Accept(this);
+			Node.AST[ZIfNode._Else].Accept(this);
 			this.CurrentBuilder.UnIndent();
 			this.CurrentBuilder.AppendLineFeed();
 			this.CurrentBuilder.Append(")");
@@ -275,38 +274,38 @@ public class CommonLispSourceGenerator extends ZSourceGenerator {
 
 	@Override public void VisitUnaryNode(ZUnaryNode Node) {
 		this.CurrentBuilder.Append(Node.SourceToken.GetText());
-		Node.AST[ZGetterNode.Recv].Accept(this);
+		Node.AST[ZUnaryNode._Recv].Accept(this);
 	}
 
 	@Override public void VisitBinaryNode(ZBinaryNode Node) {
 		this.CurrentBuilder.Append("(");
 		this.CurrentBuilder.Append(Node.SourceToken.GetText());
 		this.CurrentBuilder.Append(" ");
-		Node.AST[ZBinaryNode.Left].Accept(this);
+		Node.AST[ZBinaryNode._Left].Accept(this);
 		this.CurrentBuilder.Append(" ");
-		Node.AST[ZBinaryNode.Right].Accept(this);
+		Node.AST[ZBinaryNode._Right].Accept(this);
 		this.CurrentBuilder.Append(")");
 	}
 
 	@Override public void VisitAndNode(ZAndNode Node) {
 		this.CurrentBuilder.Append("(and ");
-		Node.AST[ZBinaryNode.Left].Accept(this);
+		Node.AST[ZBinaryNode._Left].Accept(this);
 		this.CurrentBuilder.Append(" ");
-		Node.AST[ZBinaryNode.Right].Accept(this);
+		Node.AST[ZBinaryNode._Right].Accept(this);
 		this.CurrentBuilder.Append(")");
 	}
 	@Override public void VisitOrNode(ZOrNode Node) {
 		this.CurrentBuilder.Append("(or ");
-		Node.AST[ZBinaryNode.Left].Accept(this);
+		Node.AST[ZBinaryNode._Left].Accept(this);
 		this.CurrentBuilder.Append(" ");
-		Node.AST[ZBinaryNode.Right].Accept(this);
+		Node.AST[ZBinaryNode._Right].Accept(this);
 		this.CurrentBuilder.Append(")");
 	}
 
 	@Override public void VisitSetNameNode(ZSetNameNode Node) {
 		this.CurrentBuilder.Append("(setq  " + Node.VarName);
 		this.CurrentBuilder.Append(" ");
-		Node.AST[ZSetNameNode.Expr].Accept(this);
+		Node.AST[ZSetNameNode._Expr].Accept(this);
 		this.CurrentBuilder.Append(")");
 	}
 

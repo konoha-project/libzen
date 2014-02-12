@@ -14,7 +14,7 @@ public class CastPattern extends ZMatchFunction {
 		CastNode = TokenContext.MatchToken(CastNode, "(", ZTokenContext.Required);
 		CastNode = TokenContext.MatchPattern(CastNode, ZNode.TypeInfo, "$Type$", ZTokenContext.Required);
 		CastNode = TokenContext.MatchToken(CastNode, ")", ZTokenContext.Required);
-		CastNode = TokenContext.MatchPattern(CastNode, ZCastNode.Expr, "$RightExpression$", ZTokenContext.Required);
+		CastNode = TokenContext.MatchPattern(CastNode, ZCastNode._Expr, "$RightExpression$", ZTokenContext.Required);
 		return CastNode;
 	}
 

@@ -14,7 +14,7 @@ public class CatchPattern extends ZMatchFunction {
 		CatchNode = TokenContext.MatchToken(CatchNode, "(", ZTokenContext.Required);
 		CatchNode = TokenContext.MatchPattern(CatchNode, ZNode.NameInfo, "$Name$", ZTokenContext.Required);
 		CatchNode = TokenContext.MatchToken(CatchNode, ")", ZTokenContext.Required);
-		CatchNode = TokenContext.MatchPattern(CatchNode, ZCatchNode.Block, "$Block$", ZTokenContext.Required);
+		CatchNode = TokenContext.MatchPattern(CatchNode, ZCatchNode._Block, "$Block$", ZTokenContext.Required);
 		return CatchNode;
 	}
 

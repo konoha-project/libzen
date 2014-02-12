@@ -30,7 +30,7 @@ import zen.parser.ZVisitor;
 
 // E.g., $NativeName = $ValueNode
 public class ZSetNameNode extends ZNode {
-	@Field public static int Expr = 0;
+	@Field public static int _Expr = 0;
 	@Field public String  VarName;
 	@Field public int    VarIndex = 0;
 	@Field public boolean IsCaptured = false;

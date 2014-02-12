@@ -30,13 +30,13 @@ import zen.type.ZType;
 
 //E.g., (T) $Expr
 public class ZCastNode extends ZNode {
-	public final static int Expr = 0;
+	public final static int _Expr = 0;
 
 	public ZCastNode(ZNode ParentNode, ZType CastType, ZNode Node) {
 		super(ParentNode, null, 1);
 		this.Type = CastType;
 		if(Node != null) {
-			this.Set(ZCastNode.Expr, Node);
+			this.Set(ZCastNode._Expr, Node);
 		}
 	}
 
@@ -46,7 +46,7 @@ public class ZCastNode extends ZNode {
 
 	public final ZFuncCallNode ToStaticFuncCall(ZFunc Func) {
 		ZFuncCallNode FuncNode = new ZFuncCallNode(this.ParentNode, this.SourceToken, Func);
-		FuncNode.Append(this.AST[ZCastNode.Expr]);
+		FuncNode.Append(this.AST[ZCastNode._Expr]);
 		return FuncNode;
 	}
 

@@ -25,16 +25,15 @@
 package zen.ast;
 
 import zen.deps.Field;
-
-import zen.type.ZType;
 import zen.type.ZClassType;
+import zen.type.ZType;
 
 public final class ZFieldNode extends ZNode {
-	public final static int InitValue = 0;
+	public final static int _InitValue = 0;
 	@Field public  ZClassType  ClassType;
 	@Field public ZType  DeclType = ZType.VarType;
 	@Field public String FieldName = null;
-	@Deprecated public ZNode  FieldInitNode = null;
+
 	public ZFieldNode(ZNode ParentNode) {
 		super(ParentNode, null, 1);
 	}

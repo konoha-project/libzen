@@ -60,14 +60,14 @@ public class CSourceGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Append("(");
 		this.VisitType(Node.Type);
 		this.CurrentBuilder.Append(") ");
-		this.GenerateCode(Node.AST[ZCastNode.Expr]);
+		this.GenerateCode(Node.AST[ZCastNode._Expr]);
 	}
 
 	@Override public void VisitInstanceOfNode(ZInstanceOfNode Node) {
 		this.CurrentBuilder.Append("isinstance(");
-		this.GenerateCode(Node.AST[ZBinaryNode.Left]);
+		this.GenerateCode(Node.AST[ZBinaryNode._Left]);
 		this.CurrentBuilder.Append(this.Camma);
-		this.VisitType(Node.AST[ZBinaryNode.Right].Type);
+		this.VisitType(Node.AST[ZBinaryNode._Right].Type);
 		this.CurrentBuilder.Append(")");
 	}
 
@@ -76,7 +76,7 @@ public class CSourceGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Append(" ");
 		this.CurrentBuilder.Append(Node.NativeName);
 		this.CurrentBuilder.AppendToken("=");
-		this.GenerateCode(Node.AST[ZVarDeclNode.InitValue]);
+		this.GenerateCode(Node.AST[ZVarDeclNode._InitValue]);
 		this.CurrentBuilder.Append(this.SemiColon);
 		this.VisitStmtList(Node);
 	}
@@ -95,7 +95,7 @@ public class CSourceGenerator extends ZSourceGenerator {
 		//		if (Node.BodyNode == null) {
 		//			this.CurrentBuilder.Append(this.SemiColon);
 		//		} else {
-		this.GenerateCode(Node.AST[ZFunctionNode.Block]);
+		this.GenerateCode(Node.AST[ZFunctionNode._Block]);
 		//		}
 	}
 
@@ -104,10 +104,10 @@ public class CSourceGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Append(" ");
 		this.CurrentBuilder.Append(Node.FuncName);
 		this.VisitListNode("(", Node, ")");
-		if (Node.AST[ZFunctionNode.Block] == null) {
+		if (Node.AST[ZFunctionNode._Block] == null) {
 			this.CurrentBuilder.Append(this.SemiColon);
 		} else {
-			this.GenerateCode(Node.AST[ZFunctionNode.Block]);
+			this.GenerateCode(Node.AST[ZFunctionNode._Block]);
 		}
 	}
 

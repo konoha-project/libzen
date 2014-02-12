@@ -129,31 +129,31 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 	@Override
 	public void VisitThrowNode(ZThrowNode Node) {
 		this.CurrentBuilder.Append("raise ");
-		this.GenerateCode(Node.AST[ZThrowNode.Expr]);
+		this.GenerateCode(Node.AST[ZThrowNode._Expr]);
 	}
 
 	@Override
 	public void VisitTryNode(ZTryNode Node) {
 		// See: http://d.hatena.ne.jp/kazu-yamamoto/20090819/1250660658
-		this.GenerateCode(Node.AST[ZTryNode.Try]);
+		this.GenerateCode(Node.AST[ZTryNode._Try]);
 		this.CurrentBuilder.Append(" `catch` ");
-		if (Node.AST[ZTryNode.Catch] != null) {
-			this.GenerateCode(Node.AST[ZTryNode.Catch]);
+		if (Node.AST[ZTryNode._Catch] != null) {
+			this.GenerateCode(Node.AST[ZTryNode._Catch]);
 		}
-		if (Node.AST[ZTryNode.Finally] != null) {
-			this.GenerateCode(Node.AST[ZTryNode.Finally]);
+		if (Node.AST[ZTryNode._Finally] != null) {
+			this.GenerateCode(Node.AST[ZTryNode._Finally]);
 		}
 	}
 
 	@Override public void VisitCatchNode(ZCatchNode Node) {
-		this.GenerateCode(Node.AST[ZCatchNode.Block]);
+		this.GenerateCode(Node.AST[ZCatchNode._Block]);
 	}
 
 	@Override
 	public void VisitVarDeclNode(ZVarDeclNode Node) {
 		this.CurrentBuilder.Append(Node.NativeName + " <- readIORef ");
 		this.CurrentBuilder.Append(Node.NativeName + "_ref");
-		this.GenerateCode(Node.AST[ZVarDeclNode.InitValue]);
+		this.GenerateCode(Node.AST[ZVarDeclNode._InitValue]);
 		this.CurrentBuilder.AppendLineFeed();
 	}
 
@@ -162,17 +162,17 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
-		ZReturnNode ReturnNode = Node.AST[ZFunctionNode.Block].ToReturnNode();
-		if(ReturnNode != null && ReturnNode.AST[ZReturnNode.Expr] != null) {
+		ZReturnNode ReturnNode = Node.AST[ZFunctionNode._Block].ToReturnNode();
+		if(ReturnNode != null && ReturnNode.AST[ZReturnNode._Expr] != null) {
 			this.CurrentBuilder.Append("\\");
 			this.VisitListNode(" ", Node, " ", " ");
 			this.CurrentBuilder.Append("");
-			this.GenerateCode(ReturnNode.AST[ZReturnNode.Expr]);
+			this.GenerateCode(ReturnNode.AST[ZReturnNode._Expr]);
 		}
 		else {
 			this.CurrentBuilder.Append("\\");
 			this.VisitListNode(" ", Node, " ", " -> ");
-			this.GenerateCode(Node.AST[ZFunctionNode.Block]);
+			this.GenerateCode(Node.AST[ZFunctionNode._Block]);
 		}
 	}
 
@@ -220,7 +220,7 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 	public void VisitSetNameNode(ZSetNameNode Node) {
 		this.CurrentBuilder.Append("writeIORef ");
 		this.CurrentBuilder.Append(Node.VarName + "_ref ");
-		this.GenerateCode(Node.AST[ZSetNameNode.Expr]);
+		this.GenerateCode(Node.AST[ZSetNameNode._Expr]);
 		this.CurrentBuilder.AppendLineFeed();
 
 		this.CurrentBuilder.AppendIndent();
@@ -232,7 +232,7 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 
 	@Override
 	public void VisitReturnNode(ZReturnNode Node) {
-		this.GenerateCode(Node.AST[ZReturnNode.Expr]);
+		this.GenerateCode(Node.AST[ZReturnNode._Expr]);
 	}
 
 	private String ZenOpToHaskellOp(String OpCode) {
@@ -250,9 +250,9 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 		String Op = this.ZenOpToHaskellOp(Node.SourceToken.GetText());
 
 		this.CurrentBuilder.Append("(");
-		Node.AST[ZBinaryNode.Left].Accept(this);
+		Node.AST[ZBinaryNode._Left].Accept(this);
 		this.CurrentBuilder.Append(" " + Op + " ");
-		Node.AST[ZBinaryNode.Right].Accept(this);
+		Node.AST[ZBinaryNode._Right].Accept(this);
 		this.CurrentBuilder.Append(")");
 	}
 
@@ -272,7 +272,7 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 
 		this.CurrentBuilder.AppendIndent();
 		this.CurrentBuilder.Append("if ");
-		Node.AST[ZWhileNode.Cond].Accept(this);
+		Node.AST[ZWhileNode._Cond].Accept(this);
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.AppendIndent();
 		this.CurrentBuilder.Append("then");
@@ -280,8 +280,8 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 
 		// XXX Is this correct node type ?
 		ZNode LoopNode = new ZGetNameNode(Node, null, "__loop");
-		Node.AST[ZWhileNode.Block].Set(ZNode.AppendIndex, LoopNode);
-		Node.AST[ZWhileNode.Block].Accept(this);
+		Node.AST[ZWhileNode._Block].Set(ZNode.AppendIndex, LoopNode);
+		Node.AST[ZWhileNode._Block].Accept(this);
 
 		this.CurrentBuilder.AppendIndent();
 		this.CurrentBuilder.Append("else");
@@ -308,7 +308,7 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
-		this.GenerateCode(Node.AST[ZFuncCallNode.Func]);
+		this.GenerateCode(Node.AST[ZFuncCallNode._Func]);
 		this.VisitListNode(" ", Node, " ");
 	}
 }

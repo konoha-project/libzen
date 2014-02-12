@@ -86,19 +86,19 @@ public class RubySourceGenerator extends ZSourceGenerator {
 	@Override
 	public void VisitThrowNode(ZThrowNode Node) {
 		this.CurrentBuilder.Append("raise ");
-		this.GenerateCode(Node.AST[ZThrowNode.Expr]);
+		this.GenerateCode(Node.AST[ZThrowNode._Expr]);
 	}
 
 	@Override
 	public void VisitTryNode(ZTryNode Node) {
 		this.CurrentBuilder.Append("begin");
-		this.GenerateCode(Node.AST[ZTryNode.Try]);
-		if (Node.AST[ZTryNode.Catch] != null) {
-			this.GenerateCode(Node.AST[ZTryNode.Catch]);
+		this.GenerateCode(Node.AST[ZTryNode._Try]);
+		if (Node.AST[ZTryNode._Catch] != null) {
+			this.GenerateCode(Node.AST[ZTryNode._Catch]);
 		}
-		if (Node.AST[ZTryNode.Finally] != null) {
+		if (Node.AST[ZTryNode._Finally] != null) {
 			this.CurrentBuilder.Append("ensure");
-			this.GenerateCode(Node.AST[ZTryNode.Finally]);
+			this.GenerateCode(Node.AST[ZTryNode._Finally]);
 		}
 	}
 
@@ -107,14 +107,14 @@ public class RubySourceGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Append("rescue => ");
 		//this.VisitType(Node.ExceptionType);
 		this.CurrentBuilder.Append(Node.ExceptionName);
-		this.GenerateCode(Node.AST[ZCatchNode.Block]);
+		this.GenerateCode(Node.AST[ZCatchNode._Block]);
 	}
 
 	@Override
 	public void VisitVarDeclNode(ZVarDeclNode Node) {
 		this.CurrentBuilder.Append(Node.NativeName);
 		this.CurrentBuilder.AppendToken("=");
-		this.GenerateCode(Node.AST[ZVarDeclNode.InitValue]);
+		this.GenerateCode(Node.AST[ZVarDeclNode._InitValue]);
 	}
 
 	@Override
@@ -124,18 +124,18 @@ public class RubySourceGenerator extends ZSourceGenerator {
 
 	@Override
 	public void VisitFunctionNode(ZFunctionNode Node) {
-		ZReturnNode ReturnNode = Node.AST[ZFunctionNode.Block].ToReturnNode();
+		ZReturnNode ReturnNode = Node.AST[ZFunctionNode._Block].ToReturnNode();
 		this.CurrentBuilder.Append("->");
 		this.VisitListNode("(", Node, ")");
-		this.GenerateCode(Node.AST[ZFunctionNode.Block]);
+		this.GenerateCode(Node.AST[ZFunctionNode._Block]);
 	}
 
 	public void VisitFuncDeclNode(ZFunctionNode/*Decl*/ Node) {
 		this.CurrentBuilder.Append("def ");
 		this.CurrentBuilder.Append(Node.FuncName);
 		this.VisitListNode("(", Node, ")");
-		if (Node.AST[ZFunctionNode.Block] != null) {
-			this.GenerateCode(Node.AST[ZFunctionNode.Block]);
+		if (Node.AST[ZFunctionNode._Block] != null) {
+			this.GenerateCode(Node.AST[ZFunctionNode._Block]);
 		}
 	}
 }

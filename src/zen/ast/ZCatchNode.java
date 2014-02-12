@@ -28,7 +28,7 @@ import zen.deps.Field;
 import zen.type.ZType;
 
 public final class ZCatchNode extends ZNode {
-	public final static int Block = 0;
+	public final static int _Block = 0;
 
 	@Field public ZType   ExceptionType = ZType.VarType;
 	@Field public String  ExceptionName = null;

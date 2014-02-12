@@ -30,12 +30,12 @@ import zen.parser.ZVisitor;
 import zen.type.ZFunc;
 
 public final class ZMethodCallNode extends ZListNode {
-	public final static int Recv = 0;
+	public final static int _Recv = 0;
 	@Field public String MethodName = null;
 
 	public ZMethodCallNode(ZNode ParentNode, ZNode RecvNode) {
 		super(ParentNode, null, 1);
-		this.Set(ZMethodCallNode.Recv, RecvNode);
+		this.Set(ZMethodCallNode._Recv, RecvNode);
 	}
 
 	@Override
@@ -48,11 +48,11 @@ public final class ZMethodCallNode extends ZListNode {
 	}
 
 	public final ZFuncCallNode ToGetterFuncCall() {
-		ZGetterNode Getter = new ZGetterNode(null, this.AST[ZGetterNode.Recv]);
+		ZGetterNode Getter = new ZGetterNode(null, this.AST[ZMethodCallNode._Recv]);
 		Getter.SetNameInfo(this.MethodName);
 		ZFuncCallNode FuncNode = new ZFuncCallNode(this.ParentNode, Getter);
 		FuncNode.SourceToken = this.SourceToken;
-		FuncNode.Append(this.AST[ZGetterNode.Recv]);
+		FuncNode.Append(this.AST[ZMethodCallNode._Recv]);
 		@Var int i = 0;
 		while(i < this.GetListSize()) {
 			FuncNode.Append(this.GetListAt(i));
@@ -63,7 +63,7 @@ public final class ZMethodCallNode extends ZListNode {
 
 	public final ZFuncCallNode ToStaticFuncCall(ZFunc Func) {
 		ZFuncCallNode FuncNode = new ZFuncCallNode(this.ParentNode, this.SourceToken, Func);
-		FuncNode.Append(this.AST[ZGetterNode.Recv]);
+		FuncNode.Append(this.AST[ZMethodCallNode._Recv]);
 		@Var int i = 0;
 		while(i < this.GetListSize()) {
 			FuncNode.Append(this.GetListAt(i));

@@ -17,7 +17,7 @@ public class LetPattern extends ZMatchFunction {
 		//		}
 		LetNode = TokenContext.MatchPattern(LetNode, ZNode.TypeInfo, "$TypeAnnotation$", ZTokenContext.Optional);
 		LetNode = TokenContext.MatchToken(LetNode, "=", ZTokenContext.Required);
-		LetNode = TokenContext.MatchPattern(LetNode, ZLetNode.InitValue, "$Expression$", ZTokenContext.Required);
+		LetNode = TokenContext.MatchPattern(LetNode, ZLetNode._InitValue, "$Expression$", ZTokenContext.Required);
 		return LetNode;
 	}
 

@@ -285,24 +285,24 @@ public class ZSourceGenerator extends ZGenerator {
 
 	@Override public void VisitGroupNode(ZGroupNode Node) {
 		this.CurrentBuilder.Append("(");
-		this.GenerateCode(Node.AST[ZGetterNode.Recv]);
+		this.GenerateCode(Node.AST[ZGroupNode._Expr]);
 		this.CurrentBuilder.Append(")");
 	}
 
 	@Override public void VisitGetIndexNode(ZGetIndexNode Node) {
-		this.GenerateCode(Node.AST[ZGetterNode.Recv]);
+		this.GenerateCode(Node.AST[ZGetIndexNode._Recv]);
 		this.CurrentBuilder.Append("[");
-		this.GenerateCode(Node.AST[ZGetIndexNode.Index]);
+		this.GenerateCode(Node.AST[ZGetIndexNode._Index]);
 		this.CurrentBuilder.Append("]");
 	}
 
 	@Override public void VisitSetIndexNode(ZSetIndexNode Node) {
-		this.GenerateCode(Node.AST[ZSetIndexNode.Recv]);
+		this.GenerateCode(Node.AST[ZSetIndexNode._Recv]);
 		this.CurrentBuilder.Append("[");
-		this.GenerateCode(Node.AST[ZSetIndexNode.Index]);
+		this.GenerateCode(Node.AST[ZSetIndexNode._Index]);
 		this.CurrentBuilder.Append("]");
 		this.CurrentBuilder.AppendToken("=");
-		this.GenerateCode(Node.AST[ZSetIndexNode.Expr]);
+		this.GenerateCode(Node.AST[ZSetIndexNode._Expr]);
 	}
 
 	@Override public void VisitGetNameNode(ZGetNameNode Node) {
@@ -312,113 +312,113 @@ public class ZSourceGenerator extends ZGenerator {
 	@Override public void VisitSetNameNode(ZSetNameNode Node) {
 		this.CurrentBuilder.Append(Node.VarName);
 		this.CurrentBuilder.AppendToken("=");
-		this.GenerateCode(Node.AST[ZSetNameNode.Expr]);
+		this.GenerateCode(Node.AST[ZSetNameNode._Expr]);
 	}
 
 
 	@Override public void VisitGetterNode(ZGetterNode Node) {
-		this.GenerateSurroundCode(Node.AST[ZGetterNode.Recv]);
+		this.GenerateSurroundCode(Node.AST[ZGetterNode._Recv]);
 		this.CurrentBuilder.Append(".");
 		this.CurrentBuilder.Append(Node.FieldName);
 	}
 
 	@Override public void VisitSetterNode(ZSetterNode Node) {
-		this.GenerateSurroundCode(Node.AST[ZSetterNode.Recv]);
+		this.GenerateSurroundCode(Node.AST[ZSetterNode._Recv]);
 		this.CurrentBuilder.Append(".");
 		this.CurrentBuilder.Append(Node.FieldName);
 		this.CurrentBuilder.AppendToken("=");
-		this.GenerateCode(Node.AST[ZSetterNode.Expr]);
+		this.GenerateCode(Node.AST[ZSetterNode._Expr]);
 	}
 
 	@Override public void VisitMethodCallNode(ZMethodCallNode Node) {
-		this.GenerateSurroundCode(Node.AST[ZGetterNode.Recv]);
+		this.GenerateSurroundCode(Node.AST[ZMethodCallNode._Recv]);
 		this.CurrentBuilder.Append(".");
 		this.CurrentBuilder.Append(Node.MethodName);
 		this.VisitListNode("(", Node, ")");
 	}
 
 	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
-		this.GenerateCode(Node.AST[ZFuncCallNode.Func]);
+		this.GenerateCode(Node.AST[ZFuncCallNode._Func]);
 		this.VisitListNode("(", Node, ")");
 	}
 
 	@Override public void VisitUnaryNode(ZUnaryNode Node) {
 		this.CurrentBuilder.Append(Node.SourceToken.GetText());
-		this.GenerateCode(Node.AST[ZUnaryNode.Recv]);
+		this.GenerateCode(Node.AST[ZUnaryNode._Recv]);
 	}
 
 	@Override public void VisitNotNode(ZNotNode Node) {
 		this.CurrentBuilder.Append(this.NotOperator);
-		this.GenerateSurroundCode(Node.AST[ZUnaryNode.Recv]);
+		this.GenerateSurroundCode(Node.AST[ZUnaryNode._Recv]);
 	}
 
 	@Override public void VisitCastNode(ZCastNode Node) {
 		this.CurrentBuilder.Append("(");
 		this.VisitType(Node.Type);
 		this.CurrentBuilder.Append(")");
-		this.GenerateSurroundCode(Node.AST[ZCastNode.Expr]);
+		this.GenerateSurroundCode(Node.AST[ZCastNode._Expr]);
 	}
 
 	@Override public void VisitInstanceOfNode(ZInstanceOfNode Node) {
-		this.GenerateCode(Node.AST[ZBinaryNode.Left]);
+		this.GenerateCode(Node.AST[ZBinaryNode._Left]);
 		this.CurrentBuilder.AppendToken("instanceof");
-		this.VisitType(Node.AST[ZBinaryNode.Right].Type);
+		this.VisitType(Node.AST[ZBinaryNode._Right].Type);
 	}
 
 	@Override public void VisitBinaryNode(ZBinaryNode Node) {
 		if (Node.ParentNode instanceof ZBinaryNode) {
 			this.CurrentBuilder.Append("(");
 		}
-		this.GenerateCode(Node.AST[ZBinaryNode.Left]);
+		this.GenerateCode(Node.AST[ZBinaryNode._Left]);
 		this.CurrentBuilder.AppendToken(Node.SourceToken.GetText());
-		this.GenerateCode(Node.AST[ZBinaryNode.Right]);
+		this.GenerateCode(Node.AST[ZBinaryNode._Right]);
 		if (Node.ParentNode instanceof ZBinaryNode) {
 			this.CurrentBuilder.Append(")");
 		}
 	}
 
 	@Override public void VisitComparatorNode(ZComparatorNode Node) {
-		this.GenerateCode(Node.AST[ZBinaryNode.Left]);
+		this.GenerateCode(Node.AST[ZBinaryNode._Left]);
 		this.CurrentBuilder.AppendToken(Node.SourceToken.GetText());
-		this.GenerateCode(Node.AST[ZBinaryNode.Right]);
+		this.GenerateCode(Node.AST[ZBinaryNode._Right]);
 	}
 
 	@Override public void VisitAndNode(ZAndNode Node) {
-		this.GenerateCode(Node.AST[ZBinaryNode.Left]);
+		this.GenerateCode(Node.AST[ZBinaryNode._Left]);
 		this.CurrentBuilder.AppendToken(this.AndOperator);
-		this.GenerateCode(Node.AST[ZBinaryNode.Right]);
+		this.GenerateCode(Node.AST[ZBinaryNode._Right]);
 	}
 
 	@Override public void VisitOrNode(ZOrNode Node) {
-		this.GenerateCode(Node.AST[ZBinaryNode.Left]);
+		this.GenerateCode(Node.AST[ZBinaryNode._Left]);
 		this.CurrentBuilder.AppendToken(this.OrOperator);
-		this.GenerateCode(Node.AST[ZBinaryNode.Right]);
+		this.GenerateCode(Node.AST[ZBinaryNode._Right]);
 	}
 
 	@Override public void VisitIfNode(ZIfNode Node) {
 		this.CurrentBuilder.Append("if (");
-		this.GenerateCode(Node.AST[ZIfNode.Cond]);
+		this.GenerateCode(Node.AST[ZIfNode._Cond]);
 		this.CurrentBuilder.Append(")");
-		this.GenerateCode(Node.AST[ZIfNode.Then]);
-		if (Node.AST[ZIfNode.Else] != null) {
+		this.GenerateCode(Node.AST[ZIfNode._Then]);
+		if (Node.AST[ZIfNode._Else] != null) {
 			this.CurrentBuilder.AppendToken("else");
-			this.GenerateCode(Node.AST[ZIfNode.Else]);
+			this.GenerateCode(Node.AST[ZIfNode._Else]);
 		}
 	}
 
 	@Override public void VisitReturnNode(ZReturnNode Node) {
 		this.CurrentBuilder.Append("return");
-		if (Node.AST[ZReturnNode.Expr] != null) {
+		if (Node.AST[ZReturnNode._Expr] != null) {
 			this.CurrentBuilder.AppendWhiteSpace();
-			this.GenerateCode(Node.AST[ZReturnNode.Expr]);
+			this.GenerateCode(Node.AST[ZReturnNode._Expr]);
 		}
 	}
 
 	@Override public void VisitWhileNode(ZWhileNode Node) {
 		this.CurrentBuilder.Append("while (");
-		this.GenerateCode(Node.AST[ZWhileNode.Cond]);
+		this.GenerateCode(Node.AST[ZWhileNode._Cond]);
 		this.CurrentBuilder.Append(")");
-		this.GenerateCode(Node.AST[ZWhileNode.Block]);
+		this.GenerateCode(Node.AST[ZWhileNode._Block]);
 	}
 
 	@Override public void VisitBreakNode(ZBreakNode Node) {
@@ -428,18 +428,18 @@ public class ZSourceGenerator extends ZGenerator {
 	@Override public void VisitThrowNode(ZThrowNode Node) {
 		this.CurrentBuilder.Append("throw");
 		this.CurrentBuilder.AppendWhiteSpace();
-		this.GenerateCode(Node.AST[ZThrowNode.Expr]);
+		this.GenerateCode(Node.AST[ZThrowNode._Expr]);
 	}
 
 	@Override public void VisitTryNode(ZTryNode Node) {
 		this.CurrentBuilder.Append("try");
-		this.GenerateCode(Node.AST[ZTryNode.Try]);
-		if(Node.AST[ZTryNode.Catch] != null) {
-			this.GenerateCode(Node.AST[ZTryNode.Catch]);
+		this.GenerateCode(Node.AST[ZTryNode._Try]);
+		if(Node.AST[ZTryNode._Catch] != null) {
+			this.GenerateCode(Node.AST[ZTryNode._Catch]);
 		}
-		if (Node.AST[ZTryNode.Finally] != null) {
+		if (Node.AST[ZTryNode._Finally] != null) {
 			this.CurrentBuilder.Append("finally");
-			this.GenerateCode(Node.AST[ZTryNode.Finally]);
+			this.GenerateCode(Node.AST[ZTryNode._Finally]);
 		}
 	}
 
@@ -448,7 +448,7 @@ public class ZSourceGenerator extends ZGenerator {
 		this.CurrentBuilder.Append(Node.ExceptionName);
 		this.VisitTypeAnnotation(Node.ExceptionType);
 		this.CurrentBuilder.Append(")");
-		this.GenerateCode(Node.AST[ZCatchNode.Block]);
+		this.GenerateCode(Node.AST[ZCatchNode._Block]);
 	}
 
 	@Override public void VisitVarDeclNode(ZVarDeclNode Node) {
@@ -457,7 +457,7 @@ public class ZSourceGenerator extends ZGenerator {
 		this.CurrentBuilder.Append(Node.NativeName);
 		this.VisitTypeAnnotation(Node.DeclType);
 		this.CurrentBuilder.AppendToken("=");
-		this.GenerateCode(Node.AST[ZVarDeclNode.InitValue]);
+		this.GenerateCode(Node.AST[ZVarDeclNode._InitValue]);
 		this.CurrentBuilder.Append(this.SemiColon);
 		this.VisitStmtList(Node);
 	}
@@ -472,7 +472,7 @@ public class ZSourceGenerator extends ZGenerator {
 		this.CurrentBuilder.AppendWhiteSpace();
 		this.CurrentBuilder.Append(Node.GlobalName);
 		this.CurrentBuilder.AppendToken("=");
-		this.GenerateCode(Node.AST[ZLetNode.InitValue]);
+		this.GenerateCode(Node.AST[ZLetNode._InitValue]);
 	}
 
 	public void VisitParamNode(ZParamNode Node) {
@@ -488,7 +488,7 @@ public class ZSourceGenerator extends ZGenerator {
 		}
 		this.VisitListNode("(", Node, ")");
 		this.VisitTypeAnnotation(Node.ReturnType);
-		this.GenerateCode(Node.AST[ZFunctionNode.Block]);
+		this.GenerateCode(Node.AST[ZFunctionNode._Block]);
 	}
 
 	@Override public void VisitClassDeclNode(ZClassDeclNode Node) {
@@ -512,7 +512,7 @@ public class ZSourceGenerator extends ZGenerator {
 			this.CurrentBuilder.Append(FieldNode.FieldName);
 			this.VisitTypeAnnotation(FieldNode.DeclType);
 			this.CurrentBuilder.AppendToken("=");
-			this.GenerateCode(FieldNode.AST[ZFieldNode.InitValue]);
+			this.GenerateCode(FieldNode.AST[ZFieldNode._InitValue]);
 			this.CurrentBuilder.Append(this.SemiColon);
 			i = i + 1;
 		}

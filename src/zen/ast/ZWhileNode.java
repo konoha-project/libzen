@@ -27,8 +27,8 @@ package zen.ast;
 import zen.parser.ZVisitor;
 
 public final class ZWhileNode extends ZNode {
-	public final static int Cond = 0;
-	public final static int Block = 1;
+	public final static int _Cond = 0;
+	public final static int _Block = 1;
 
 	public ZWhileNode(ZNode ParentNode) {
 		super(ParentNode, null, 2);

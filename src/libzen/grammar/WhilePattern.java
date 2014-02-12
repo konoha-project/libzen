@@ -12,9 +12,9 @@ public class WhilePattern extends ZMatchFunction {
 		@Var ZNode WhileNode = new ZWhileNode(ParentNode);
 		WhileNode = TokenContext.MatchToken(WhileNode, "while", ZTokenContext.Required);
 		WhileNode = TokenContext.MatchToken(WhileNode, "(", ZTokenContext.Required);
-		WhileNode = TokenContext.MatchPattern(WhileNode, ZWhileNode.Cond, "$Expression$", ZTokenContext.Required, ZTokenContext.AllowSkipIndent);
+		WhileNode = TokenContext.MatchPattern(WhileNode, ZWhileNode._Cond, "$Expression$", ZTokenContext.Required, ZTokenContext.AllowSkipIndent);
 		WhileNode = TokenContext.MatchToken(WhileNode, ")", ZTokenContext.Required);
-		WhileNode = TokenContext.MatchPattern(WhileNode, ZWhileNode.Block, "$Block$", ZTokenContext.Required);
+		WhileNode = TokenContext.MatchPattern(WhileNode, ZWhileNode._Block, "$Block$", ZTokenContext.Required);
 		return WhileNode;
 	}
 

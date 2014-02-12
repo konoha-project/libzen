@@ -31,11 +31,11 @@ import zen.type.ZType;
 
 //E.g., $ExprNode instanceof TypeInfo
 public final class ZInstanceOfNode extends ZNode {
-	public final static int Left = 0;
+	public final static int _Left = 0;
 	@Field public ZType TargetType;
 	public ZInstanceOfNode(ZNode ParentNode, ZToken Token, ZNode LeftNode) {
 		super(ParentNode, Token, 1);
-		this.Set(ZInstanceOfNode.Left, LeftNode);
+		this.Set(ZInstanceOfNode._Left, LeftNode);
 	}
 	@Override public void SetTypeInfo(ZType Type) {
 		this.TargetType = Type;

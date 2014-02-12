@@ -15,7 +15,7 @@ public class FieldPattern extends ZMatchFunction {
 		FieldNode = TokenContext.MatchPattern(FieldNode, ZNode.NameInfo, "$Name$", ZTokenContext.Required);
 		FieldNode = TokenContext.MatchPattern(FieldNode, ZNode.TypeInfo, "$TypeAnnotation$", ZTokenContext.Optional);
 		if(TokenContext.MatchToken("=")) {
-			FieldNode = TokenContext.MatchPattern(FieldNode, ZFieldNode.InitValue, "$Expression$", ZTokenContext.Required);
+			FieldNode = TokenContext.MatchPattern(FieldNode, ZFieldNode._InitValue, "$Expression$", ZTokenContext.Required);
 		}
 		FieldNode = TokenContext.MatchPattern(FieldNode, ZNode.Nop, ";", ZTokenContext.Required);
 		TokenContext.SetParseFlag(Rememberd);

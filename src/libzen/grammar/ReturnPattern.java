@@ -11,7 +11,7 @@ public class ReturnPattern extends ZMatchFunction {
 	@Override public ZNode Invoke(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
 		@Var ZNode ReturnNode = new ZReturnNode(ParentNode);
 		ReturnNode = TokenContext.MatchToken(ReturnNode, "return", ZTokenContext.Required);
-		ReturnNode = TokenContext.MatchPattern(ReturnNode, ZReturnNode.Expr, "$Expression$", ZTokenContext.Optional);
+		ReturnNode = TokenContext.MatchPattern(ReturnNode, ZReturnNode._Expr, "$Expression$", ZTokenContext.Optional);
 		return ReturnNode;
 	}
 
