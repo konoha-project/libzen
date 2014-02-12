@@ -32,6 +32,7 @@ import zen.parser.ZNameSpace;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 import zen.type.ZType;
+import zen.type.ZTypeChecker;
 
 public abstract class ZNode {
 	public final static int Nop =      -1;
@@ -98,11 +99,22 @@ public abstract class ZNode {
 		}
 	}
 
+	public final int GetAstSize() {
+		if(this.AST == null) {
+			return 0;
+		}
+		return this.AST.length;
+	}
+
 	public final boolean HasAst(int Index) {
 		if(this.AST != null && Index < this.AST.length) {
 			return this.AST[Index] != null;
 		}
 		return false;
+	}
+
+	public final ZType GetAstType(int Index) {
+		return this.AST[Index].Type;
 	}
 
 	@Override public String toString() {
@@ -131,6 +143,25 @@ public abstract class ZNode {
 
 	}
 
+	public final ZBlockNode GetScopeBlockNode() {
+		ZNode Node = this;
+		while(Node != null) {
+			if(Node instanceof ZBlockNode) {
+				return (ZBlockNode)Node;
+			}
+			if(Node == Node.ParentNode) {
+				throw new RuntimeException("serious error: parent node is same: " + Node);
+			}
+			Node = Node.ParentNode;
+		}
+		return null;
+	}
+
+	public final ZNameSpace GetNameSpace() {
+		ZBlockNode BlockNode = this.GetScopeBlockNode();
+		return BlockNode.NameSpace;
+	}
+
 	public boolean IsErrorNode() {
 		return (this instanceof ZErrorNode);
 	}
@@ -152,13 +183,6 @@ public abstract class ZNode {
 		return this.Type.IsVarType();
 	}
 
-	public final int GetAstSize() {
-		if(this.AST == null) {
-			return 0;
-		}
-		return this.AST.length;
-	}
-
 	public final boolean HasUntypedNode() {
 		if(this.HasUntypedNode) {
 			if(!this.IsUntyped()) {
@@ -176,28 +200,8 @@ public abstract class ZNode {
 		return this.HasUntypedNode;
 	}
 
-	public final ZType GetAstType(int Index) {
-		return this.AST[Index].Type;
-	}
-
-
-	public final ZBlockNode GetScopeBlockNode() {
-		ZNode Node = this;
-		while(Node != null) {
-			if(Node instanceof ZBlockNode) {
-				return (ZBlockNode)Node;
-			}
-			if(Node == Node.ParentNode) {
-				throw new RuntimeException("serious error: parent node is same: " + Node);
-			}
-			Node = Node.ParentNode;
-		}
-		return null;
-	}
-
-	public final ZNameSpace GetNameSpace() {
-		ZBlockNode BlockNode = this.GetScopeBlockNode();
-		return BlockNode.NameSpace;
+	public ZNode VisitTypeChecker(ZTypeChecker TypeChecker, ZType ContextType) {
+		return TypeChecker.VisitTypeChecker(this, ContextType);
 	}
 
 

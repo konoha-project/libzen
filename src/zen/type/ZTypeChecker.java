@@ -79,33 +79,64 @@ public abstract class ZTypeChecker extends ZVisitor {
 		return this.StackedContextType;
 	}
 
+	public final ZNode VisitTypeChecker(ZNode Node, ZType ContextType) {
+		@Var ZNode ParentNode = Node.ParentNode;
+		this.StackedContextType = ContextType;
+		this.ReturnedNode = null;
+		Node.Accept(this);
+		if(this.ReturnedNode == null) {
+			this.FIXME(Node.getClass().getSimpleName() + " returns no value");
+		}
+		else {
+			Node = this.ReturnedNode;
+		}
+		if(ParentNode != Node.ParentNode && ParentNode != null) {
+			ParentNode.SetChild(Node);
+		}
+		this.VarScope.CheckVarNode(ContextType, Node);
+		return Node;
+	}
+
 	private final ZNode VisitTypeChecker(ZNode Node, ZType ContextType, int TypeCheckPolicy) {
 		if(this.IsVisitable()) {
 			if(Node.HasUntypedNode()) {
-				@Var ZNode ParentNode = Node.ParentNode;
-				this.StackedContextType = ContextType;
-				this.ReturnedNode = null;
-				Node.Accept(this);
-				if(this.ReturnedNode == null) {
-					this.FIXME(Node.getClass().getSimpleName() + " returns no value");
-				}
-				else {
-					Node = this.ReturnedNode;
-				}
-				this.VarScope.CheckVarNode(ContextType, Node);
-				Node = this.TypeCheckImpl(Node, ContextType, TypeCheckPolicy);
-				if(ParentNode != Node.ParentNode && ParentNode != null) {
-					ParentNode.SetChild(Node);
-				}
+				Node = Node.VisitTypeChecker(this, ContextType);
 			}
-			else {
-				Node = this.TypeCheckImpl(Node, ContextType, TypeCheckPolicy);
-				this.VarScope.CheckVarNode(ContextType, Node);
-			}
+			Node = this.TypeCheckImpl(Node, ContextType, TypeCheckPolicy);
+			this.VarScope.CheckVarNode(ContextType, Node);
 		}
 		this.ReturnedNode = null;
 		return Node;
 	}
+
+	//	private final ZNode VisitTypeChecker2(ZNode Node, ZType ContextType, int TypeCheckPolicy) {
+	//		if(this.IsVisitable()) {
+	//			if(Node.HasUntypedNode()) {
+	//				@Var ZNode ParentNode = Node.ParentNode;
+	//				this.StackedContextType = ContextType;
+	//				this.ReturnedNode = null;
+	//				Node.Accept(this);
+	//				if(this.ReturnedNode == null) {
+	//					this.FIXME(Node.getClass().getSimpleName() + " returns no value");
+	//				}
+	//				else {
+	//					Node = this.ReturnedNode;
+	//				}
+	//				this.VarScope.CheckVarNode(ContextType, Node);
+	//
+	//				Node = this.TypeCheckImpl(Node, ContextType, TypeCheckPolicy);
+	//				if(ParentNode != Node.ParentNode && ParentNode != null) {
+	//					ParentNode.SetChild(Node);
+	//				}
+	//			}
+	//			else {
+	//				Node = this.TypeCheckImpl(Node, ContextType, TypeCheckPolicy);
+	//				this.VarScope.CheckVarNode(ContextType, Node);
+	//			}
+	//		}
+	//		this.ReturnedNode = null;
+	//		return Node;
+	//	}
 
 	public final static int DefaultTypeCheckPolicy			= 0;
 	public final static int NoCheckPolicy                   = 1;
