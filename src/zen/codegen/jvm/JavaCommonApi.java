@@ -3,6 +3,7 @@ package zen.codegen.jvm;
 import java.lang.reflect.Method;
 
 import zen.deps.LibZen;
+import zen.deps.SoftwareFaultException;
 import zen.deps.Var;
 import zen.parser.ZGenerator;
 import zen.type.ZFunc;
@@ -10,6 +11,12 @@ import zen.type.ZFuncType;
 import zen.type.ZType;
 
 public class JavaCommonApi {
+
+	public final static void Assert(boolean x) {
+		if(!x) {
+			throw new SoftwareFaultException("assertion failed");
+		}
+	}
 
 	public final static long FloatToInt(double x) {
 		return Math.round(x);
@@ -60,6 +67,7 @@ public class JavaCommonApi {
 	}
 
 	static void LoadCommonApi(ZGenerator Generator) {
+		Generator.SetDefinedFunc(LoadFunc("Assert", boolean.class));
 		ZFunc Func = LoadFunc("FloatToInt", double.class);
 		Generator.SetConverterFunc(ZType.FloatType, ZType.IntType, Func);
 		Func = LoadFunc("IntToFloat", long.class);
@@ -72,8 +80,6 @@ public class JavaCommonApi {
 		Generator.SetConverterFunc(ZType.IntType, ZType.StringType, Func);
 		Func = LoadFunc("ToString", double.class);
 		Generator.SetConverterFunc(ZType.FloatType, ZType.StringType, Func);
-
-		Func = LoadFunc("Size", String.class);
-		Generator.SetDefinedFunc(Func);
+		Generator.SetDefinedFunc(LoadFunc("Size", String.class));
 	}
 }
