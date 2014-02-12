@@ -28,6 +28,7 @@ package zen.ast;
 import zen.deps.Field;
 import zen.deps.LibZen;
 import zen.deps.Var;
+import zen.parser.ZGenerator;
 import zen.parser.ZNameSpace;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
@@ -174,6 +175,10 @@ public abstract class ZNode {
 		return "VisitExtendedNode"; // override this if you want to use additional node
 	}
 
+	public ZNode DeSugar(ZGenerator Generator) {
+		return this;
+	}
+
 	//	public abstract boolean Accept(ZenVisitor Visitor);
 	public void Accept(ZVisitor Visitor) {
 		LibZen.DispatchVisitNode(Visitor, this);
@@ -203,6 +208,7 @@ public abstract class ZNode {
 	public ZNode VisitTypeChecker(ZTypeChecker TypeChecker, ZType ContextType) {
 		return TypeChecker.VisitTypeChecker(this, ContextType);
 	}
+
 
 
 	public ZReturnNode ToReturnNode() {

@@ -148,6 +148,10 @@ public abstract class ZGenerator extends ZVisitor {
 		return this.GetDefinedFunc(FuncType.StringfySignature(FuncName));
 	}
 
+	public final ZFunc GetDefinedFunc(String FuncName, ZType RecvType, int FuncParamSize) {
+		return this.GetDefinedFunc(ZFunc._StringfySignature(FuncName, FuncParamSize, RecvType));
+	}
+
 	public String NameConverterFunc(ZType FromType, ZType ToType) {
 		return FromType.GetUniqueName() + "T" + ToType.GetUniqueName();
 	}
