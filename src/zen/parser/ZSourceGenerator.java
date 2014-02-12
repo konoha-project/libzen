@@ -74,7 +74,6 @@ import zen.deps.Field;
 import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.deps.ZenMap;
-import zen.lang.ZenEngine;
 import zen.lang.ZenTypeSafer;
 import zen.type.ZType;
 
@@ -126,8 +125,8 @@ public class ZSourceGenerator extends ZGenerator {
 		this.TopType = "var";
 	}
 
-	@Override public ZenEngine GetEngine() {
-		return new ZenEngine(new ZenTypeSafer(this), this);
+	@Override public ZScriptEngine GetEngine() {
+		return new ZScriptEngine(new ZenTypeSafer(this), this);
 	}
 
 	protected ZSourceBuilder NewSourceBuilder() {

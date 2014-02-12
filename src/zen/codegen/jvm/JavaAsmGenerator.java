@@ -122,7 +122,7 @@ import zen.type.ZFuncType;
 import zen.type.ZType;
 import zen.type.ZTypePool;
 
-public class JavaAsmGenerator extends JavaSolution {
+public class JavaAsmGenerator extends JavaGenerator {
 	AsmClassLoader AsmLoader = null;
 	Stack<TryCatchLabel> TryCatchLabel;
 	AsmMethodBuilder AsmBuilder;

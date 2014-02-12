@@ -31,7 +31,6 @@ import zen.ast.ZNode;
 import zen.deps.Field;
 import zen.deps.Var;
 import zen.deps.ZenMap;
-import zen.lang.ZenEngine;
 import zen.type.ZFunc;
 import zen.type.ZFuncType;
 import zen.type.ZType;
@@ -62,7 +61,7 @@ public abstract class ZGenerator extends ZVisitor {
 		this.StoppedVisitor = false;
 	}
 
-	public abstract ZenEngine GetEngine();
+	public abstract ZScriptEngine GetEngine();
 
 	public void ImportLocalGrammar(ZNameSpace NameSpace) {
 		// TODO Auto-generated method stub

@@ -1,4 +1,4 @@
-package zen.lang;
+package zen.parser;
 
 public class ZEmptyValue {
 	public final static ZEmptyValue TrueEmpty = new ZEmptyValue();

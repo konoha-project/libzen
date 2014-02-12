@@ -24,7 +24,7 @@
 
 //ifdef JAVA
 
-package zen.lang;
+package zen.parser;
 
 import java.util.ArrayList;
 
@@ -71,16 +71,10 @@ import zen.ast.ZVarDeclNode;
 import zen.ast.ZWhileNode;
 import zen.deps.LibZen;
 import zen.deps.Var;
-import zen.parser.ZGenerator;
-import zen.parser.ZLogger;
-import zen.parser.ZNameSpace;
-import zen.parser.ZToken;
-import zen.parser.ZTokenContext;
-import zen.parser.ZVisitor;
 import zen.type.ZType;
 import zen.type.ZTypeChecker;
 
-public class ZenEngine extends ZVisitor {
+public class ZScriptEngine extends ZVisitor {
 	private boolean IsVisitable = true;
 	protected Object EvaledValue = null;
 	protected ZTypeChecker TypeChecker;
@@ -90,7 +84,7 @@ public class ZenEngine extends ZVisitor {
 	public ZLogger Logger;
 	private boolean IsInteractive;
 
-	public ZenEngine(ZTypeChecker TypeChecker, ZGenerator Generator) {
+	public ZScriptEngine(ZTypeChecker TypeChecker, ZGenerator Generator) {
 		this.TypeChecker = TypeChecker;
 		this.Generator = Generator;
 		this.Logger = Generator.Logger;

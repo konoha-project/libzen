@@ -57,16 +57,16 @@ import zen.deps.ZIntArray;
 import zen.deps.ZObjectArray;
 import zen.deps.ZStringArray;
 import zen.deps.ZenMap;
-import zen.lang.ZenEngine;
+import zen.parser.ZScriptEngine;
 import zen.type.ZFunc;
 import zen.type.ZFuncType;
 import zen.type.ZTypeChecker;
 
-public class JavaEngine extends ZenEngine {
+public class JavaEngine extends ZScriptEngine {
 
-	private final JavaSolution Solution;
+	private final JavaGenerator Solution;
 
-	public JavaEngine(ZTypeChecker TypeChecker, JavaSolution Generator) {
+	public JavaEngine(ZTypeChecker TypeChecker, JavaGenerator Generator) {
 		super(TypeChecker, Generator);
 		this.Solution = Generator;
 	}

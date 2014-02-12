@@ -36,10 +36,10 @@ import java.util.ArrayList;
 import zen.deps.KonohaGrammar;
 import zen.deps.LibZen;
 import zen.deps.Var;
-import zen.lang.ZEmptyValue;
-import zen.lang.ZenEngine;
 import zen.obsolete.ZenArray;
+import zen.parser.ZEmptyValue;
 import zen.parser.ZParserConst;
+import zen.parser.ZScriptEngine;
 import zen.parser.ZSourceBuilder;
 import zen.type.ZType;
 
@@ -170,7 +170,7 @@ public class ZenMain {
 			//			}
 			//			ZenMain.Usage(Argu + " is unknown");
 		}
-		@Var ZenEngine ScriptEngine = LibZen.LoadEngine(TargetCode, KonohaGrammar.class.getName());
+		@Var ZScriptEngine ScriptEngine = LibZen.LoadEngine(TargetCode, KonohaGrammar.class.getName());
 		// @Var ZenSourceContext Context = new ZenSourceContext(new KonohaGrammar(), Generator);
 		// if(RequiredLibName != null) {
 		// if(!Context.TopLevelNameSpace.LoadRequiredLib(RequiredLibName)) {
