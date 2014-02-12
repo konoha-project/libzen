@@ -45,7 +45,7 @@ public abstract class JavaSolution extends ZGenerator {
 
 	protected Object GetConstValue(ZNode Node) {
 		if(Node instanceof ZNullNode) {
-			return ((ZBooleanNode)Node).BooleanValue;
+			return null;
 		}
 		if(Node instanceof ZBooleanNode) {
 			return ((ZBooleanNode)Node).BooleanValue;

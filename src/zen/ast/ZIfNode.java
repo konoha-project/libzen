@@ -24,16 +24,17 @@
 
 package zen.ast;
 
-import zen.deps.Field;
 import zen.parser.ZVisitor;
 
 public final class ZIfNode extends ZNode {
-	@Field public final static int _Cond = 0;
-	@Field public final static int _Then = 1;
-	@Field public final static int _Else = 2;
+	public final static int _Cond = 0;
+	public final static int _Then = 1;
+	public final static int _Else = 2;
+
 	public ZIfNode(ZNode ParentNode) {
 		super(ParentNode, null, 3);
 	}
+
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitIfNode(this);
 	}
