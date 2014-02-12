@@ -21,7 +21,7 @@ public class BlockPattern extends ZMatchFunction {
 				if(TokenContext.MatchToken("}")) {
 					break;
 				}
-				NestedBlockNode = TokenContext.MatchPattern(NestedBlockNode, ZNode.NestedAppendIndex, "$Statement$", ZTokenContext.Required);
+				NestedBlockNode = TokenContext.MatchPattern(NestedBlockNode, ZNode._NestedAppendIndex, "$Statement$", ZTokenContext.Required);
 				if(NestedBlockNode.IsErrorNode()) {
 					TokenContext.SkipError(SkipToken);
 					TokenContext.MatchToken("}");

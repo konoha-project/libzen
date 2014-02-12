@@ -38,9 +38,6 @@ public final class ZErrorNode extends ZConstNode {
 		super(Node.ParentNode, Node.SourceToken);
 		this.ErrorMessage = ErrorMessage;
 	}
-	@Override public final Object GetValue() {
-		return this.ErrorMessage;
-	}
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitErrorNode(this);
 	}

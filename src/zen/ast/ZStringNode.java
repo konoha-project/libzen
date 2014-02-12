@@ -36,9 +36,6 @@ public final class ZStringNode extends ZConstNode {
 		this.Type = ZType.StringType;
 		this.StringValue = Value;
 	}
-	@Override public final Object GetValue() {
-		return this.StringValue;
-	}
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitStringNode(this);
 	}

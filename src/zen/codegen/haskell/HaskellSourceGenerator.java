@@ -280,7 +280,7 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 
 		// XXX Is this correct node type ?
 		ZNode LoopNode = new ZGetNameNode(Node, null, "__loop");
-		Node.AST[ZWhileNode._Block].Set(ZNode.AppendIndex, LoopNode);
+		Node.AST[ZWhileNode._Block].Set(ZNode._AppendIndex, LoopNode);
 		Node.AST[ZWhileNode._Block].Accept(this);
 
 		this.CurrentBuilder.AppendIndent();

@@ -36,9 +36,6 @@ public final class ZFloatNode extends ZConstNode {
 		this.Type = ZType.FloatType;
 		this.FloatValue = Value;
 	}
-	@Override public final Object GetValue() {
-		return this.FloatValue;
-	}
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitFloatNode(this);
 	}

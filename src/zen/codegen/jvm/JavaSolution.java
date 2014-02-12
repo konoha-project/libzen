@@ -5,10 +5,15 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 
-import zen.ast.ZConstNode;
+import zen.ast.ZBooleanNode;
+import zen.ast.ZFloatNode;
 import zen.ast.ZImportNode;
+import zen.ast.ZIntNode;
 import zen.ast.ZListNode;
 import zen.ast.ZNode;
+import zen.ast.ZNullNode;
+import zen.ast.ZStringNode;
+import zen.ast.ZTypeNode;
 import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.deps.ZenMap;
@@ -39,8 +44,23 @@ public abstract class JavaSolution extends ZGenerator {
 	}
 
 	protected Object GetConstValue(ZNode Node) {
-		if(Node instanceof ZConstNode) {
-			return ((ZConstNode)Node).GetValue();
+		if(Node instanceof ZNullNode) {
+			return ((ZBooleanNode)Node).BooleanValue;
+		}
+		if(Node instanceof ZBooleanNode) {
+			return ((ZBooleanNode)Node).BooleanValue;
+		}
+		if(Node instanceof ZIntNode) {
+			return ((ZIntNode)Node).IntValue;
+		}
+		if(Node instanceof ZFloatNode) {
+			return ((ZFloatNode)Node).FloatValue;
+		}
+		if(Node instanceof ZStringNode) {
+			return ((ZStringNode)Node).StringValue;
+		}
+		if(Node instanceof ZTypeNode) {
+			return Node.Type;
 		}
 		return null;
 	}

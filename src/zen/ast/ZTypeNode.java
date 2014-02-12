@@ -32,9 +32,6 @@ public final class ZTypeNode extends ZConstNode {
 		super(ParentNode, SourceToken);
 		this.Type = ParsedType;
 	}
-	@Override public final Object GetValue() {
-		return this.Type;
-	}
 	@Override public String GetVisitName() {
 		return "VisitTypeNode";
 	}

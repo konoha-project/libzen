@@ -12,7 +12,7 @@ public class StatementPattern extends ZMatchFunction {
 		//		@Var ZAnnotationNode AnnotationNode = (ZAnnotationNode)TokenContext.ParsePattern(ParentNode, "$Annotation$", ZTokenContext.Optional2);
 		TokenContext.SetParseFlag(ZTokenContext.NotAllowSkipIndent);
 		@Var ZNode StmtNode = ExpressionPattern.DispatchPattern(ParentNode, TokenContext, null, true, true);
-		StmtNode = TokenContext.MatchPattern(StmtNode, ZNode.Nop, ";", ZTokenContext.Required);
+		StmtNode = TokenContext.MatchPattern(StmtNode, ZNode._Nop, ";", ZTokenContext.Required);
 		//		if(AnnotationNode != null) {
 		//			AnnotationNode.Append(StmtNode);
 		//			StmtNode = AnnotationNode;

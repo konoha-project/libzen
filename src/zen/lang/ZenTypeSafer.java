@@ -743,7 +743,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 		@Var ZNameSpace NameSpace = Node.AST[ZFunctionNode._Block].GetNameSpace();
 		@Var ZType ContextType = this.GetContextType();
 		if(!this.HasReturn(Node.AST[ZFunctionNode._Block])) {
-			Node.AST[ZFunctionNode._Block].Set(ZNode.AppendIndex, new ZReturnNode(Node));
+			Node.AST[ZFunctionNode._Block].Set(ZNode._AppendIndex, new ZReturnNode(Node));
 		}
 		this.PushFunctionNode(NameSpace, Node, ContextType);
 		this.VarScope.TypeCheckFuncBlock(this, Node);

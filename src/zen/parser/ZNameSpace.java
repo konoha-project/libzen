@@ -34,8 +34,8 @@ import zen.deps.Var;
 import zen.deps.ZMatchFunction;
 import zen.deps.ZTokenFunction;
 import zen.deps.ZenMap;
-import zen.type.ZType;
 import zen.type.ZClassType;
+import zen.type.ZType;
 
 public final class ZNameSpace {
 	private static int SerialNumber = 0;
@@ -44,7 +44,6 @@ public final class ZNameSpace {
 	@Field public final ZGenerator   Generator;
 	@Field private int SerialId = 0;
 	@Field ZTokenFunc[]   TokenMatrix = null;
-	@Field ZenMap<Object> SymbolPatternTable = null;
 	@Field ZenMap<ZSyntax> SyntaxTable = null;
 	@Field ZenMap<ZSymbolEntry> SymbolTable = null;
 	//	@Field private ZNode  FuncNode = null;

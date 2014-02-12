@@ -12,12 +12,12 @@ public class FieldPattern extends ZMatchFunction {
 		@Var boolean Rememberd = TokenContext.SetParseFlag(false);
 		@Var ZNode FieldNode = new ZFieldNode(ParentNode);
 		FieldNode = TokenContext.MatchToken(FieldNode, "var", ZTokenContext.Required);
-		FieldNode = TokenContext.MatchPattern(FieldNode, ZNode.NameInfo, "$Name$", ZTokenContext.Required);
-		FieldNode = TokenContext.MatchPattern(FieldNode, ZNode.TypeInfo, "$TypeAnnotation$", ZTokenContext.Optional);
+		FieldNode = TokenContext.MatchPattern(FieldNode, ZNode._NameInfo, "$Name$", ZTokenContext.Required);
+		FieldNode = TokenContext.MatchPattern(FieldNode, ZNode._TypeInfo, "$TypeAnnotation$", ZTokenContext.Optional);
 		if(TokenContext.MatchToken("=")) {
 			FieldNode = TokenContext.MatchPattern(FieldNode, ZFieldNode._InitValue, "$Expression$", ZTokenContext.Required);
 		}
-		FieldNode = TokenContext.MatchPattern(FieldNode, ZNode.Nop, ";", ZTokenContext.Required);
+		FieldNode = TokenContext.MatchPattern(FieldNode, ZNode._Nop, ";", ZTokenContext.Required);
 		TokenContext.SetParseFlag(Rememberd);
 		return FieldNode;
 	}

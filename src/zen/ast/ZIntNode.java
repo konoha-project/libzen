@@ -36,9 +36,6 @@ public final class ZIntNode extends ZConstNode {
 		this.Type = ZType.IntType;
 		this.IntValue = Value;
 	}
-	@Override public final Object GetValue() {
-		return this.IntValue;
-	}
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitIntNode(this);
 	}

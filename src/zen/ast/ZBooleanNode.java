@@ -25,7 +25,6 @@
 package zen.ast;
 
 import zen.deps.Field;
-
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 import zen.type.ZType;
@@ -39,8 +38,5 @@ public final class ZBooleanNode extends ZConstNode {
 	}
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitBooleanNode(this);
-	}
-	@Override public final Object GetValue() {
-		return this.BooleanValue;
 	}
 }

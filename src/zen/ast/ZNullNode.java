@@ -31,9 +31,6 @@ public final class ZNullNode extends ZConstNode {
 	public ZNullNode(ZNode ParentNode, ZToken SourceToken) {
 		super(ParentNode, SourceToken);
 	}
-	@Override public final Object GetValue() {
-		return null;
-	}
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitNullNode(this);
 	}

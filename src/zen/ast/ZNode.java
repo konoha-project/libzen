@@ -36,11 +36,11 @@ import zen.type.ZType;
 import zen.type.ZTypeChecker;
 
 public abstract class ZNode {
-	public final static int Nop =      -1;
-	public final static int NameInfo = -2;
-	public final static int TypeInfo = -3;
-	public final static int AppendIndex = -4;
-	public final static int NestedAppendIndex = -5;
+	public final static int _Nop =      -1;
+	public final static int _NameInfo = -2;
+	public final static int _TypeInfo = -3;
+	public final static int _AppendIndex = -4;
+	public final static int _NestedAppendIndex = -5;
 
 	@Field public ZNode ParentNode;
 	@Field public ZToken SourceToken;
@@ -81,7 +81,7 @@ public abstract class ZNode {
 		if(Index >= 0) {
 			this.AST[Index] = Node;
 		}
-		else if(Index == ZNode.AppendIndex) {
+		else if(Index == ZNode._AppendIndex) {
 			@Var ZNode ListNode = this;
 			if(ListNode instanceof ZListNode) {
 				((ZListNode)ListNode).Append(Node);
@@ -91,11 +91,11 @@ public abstract class ZNode {
 				assert(ListNode instanceof ZListNode);
 			}
 		}
-		else if(Index == ZNode.NameInfo) {
+		else if(Index == ZNode._NameInfo) {
 			this.SetNameInfo(Node.SourceToken.GetText());
 			this.SourceToken = Node.SourceToken;
 		}
-		else if(Index == ZNode.TypeInfo) {
+		else if(Index == ZNode._TypeInfo) {
 			this.SetTypeInfo(Node.Type);
 		}
 	}
