@@ -84,8 +84,8 @@ public abstract class ZTypeChecker extends ZVisitor {
 		this.StackedContextType = ContextType;
 		this.ReturnedNode = null;
 		Node.Accept(this);
-		if(this.ReturnedNode == null) {
-			this.FIXME(Node.getClass().getSimpleName() + " returns no value");
+		if(this.ReturnedNode == null) {  /* debug check */
+			this.FIXME("!! returns no value: " + Node);
 		}
 		else {
 			Node = this.ReturnedNode;

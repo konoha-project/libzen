@@ -34,7 +34,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 
 import zen.ast.ZNode;
 import zen.codegen.jvm.JavaStaticFunc;
@@ -337,8 +336,8 @@ public class LibZen {
 
 	public static String _SourceBuilderToString(ZSourceBuilder Builder) {
 		StringBuilder builder = new StringBuilder();
-		for(String s : Builder.SourceList.ArrayValues){
-			builder.append(s);
+		for(int i = 0; i < Builder.SourceList.size(); i = i + 1) {
+			builder.append(Builder.SourceList.ArrayValues[i]);
 		}
 		return builder.toString();
 	}
@@ -393,36 +392,6 @@ public class LibZen {
 		}
 		return List.size();
 	}
-
-	public final static int _Size(ArrayList<?> List) {
-		if(List == null) {
-			return 0;
-		}
-		return List.size();
-	}
-
-	public final static ZType[] CompactTypeList(int BaseIndex, ArrayList<ZType> TypeList) {
-		ZType[] Tuple = new ZType[TypeList.size() - BaseIndex];
-		for(int i = BaseIndex; i < TypeList.size(); i++) {
-			Tuple[i] = TypeList.get(i).GetRealType();
-		}
-		return Tuple;
-	}
-
-	public final static String[] CompactStringList(ArrayList<String> List) {
-		if(List == null) {
-			return null;
-		}
-		String[] Tuple = new String[List.size()];
-		for(int i = 0; i < List.size(); i++) {
-			Tuple[i] = List.get(i);
-		}
-		return Tuple;
-	}
-
-
-
-
 
 	public final static boolean HasFile(String Path) {
 		if(LibZen.class.getResource(Path) != null) {
