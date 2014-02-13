@@ -5,7 +5,7 @@ import zen.deps.Var;
 
 public class ZGreekType extends ZType {
 	private final static String[] GreekNames = {
-		"\u03B1", "\u03B2", "\u03B3",
+		"\u03B1", "\u03B2", "\u03B3"
 	};
 
 	@Field public final int GreekId;
