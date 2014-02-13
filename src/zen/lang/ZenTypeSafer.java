@@ -401,6 +401,8 @@ public class ZenTypeSafer extends ZTypeChecker {
 		@Var ZFuncType PartialFuncType = this.GuessFuncTypeFromContext(ContextType, null, Node);
 		if(this.IsFuncName(Node, NameSpace)) {
 			if(Node.ResolvedFunc != null) {
+				// XXX ad-hoc fix to typing Node.AST[ZFuncCallNode._Func] node.
+				Node.AST[ZFuncCallNode._Func].Type =  Node.ResolvedFunc.GetFuncType();
 				this.TypeCheckFuncCall(Node, Node.ResolvedFunc.GetFuncType());
 				return;
 			}
