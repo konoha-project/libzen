@@ -1,13 +1,16 @@
 package zen.codegen.jvm;
 
+import static org.objectweb.asm.Opcodes.AASTORE;
 import static org.objectweb.asm.Opcodes.ANEWARRAY;
 import static org.objectweb.asm.Opcodes.CHECKCAST;
+import static org.objectweb.asm.Opcodes.DASTORE;
 import static org.objectweb.asm.Opcodes.DUP;
 import static org.objectweb.asm.Opcodes.ILOAD;
 import static org.objectweb.asm.Opcodes.INVOKESTATIC;
 import static org.objectweb.asm.Opcodes.INVOKEVIRTUAL;
 import static org.objectweb.asm.Opcodes.IRETURN;
 import static org.objectweb.asm.Opcodes.ISTORE;
+import static org.objectweb.asm.Opcodes.LASTORE;
 import static org.objectweb.asm.Opcodes.RETURN;
 
 import java.lang.reflect.Method;
@@ -133,7 +136,6 @@ class AsmMethodBuilder extends MethodNode {
 		}
 		else {
 			this.visitLdcInsn(Value);
-			return;
 		}
 	}
 
@@ -283,28 +285,25 @@ class AsmMethodBuilder extends MethodNode {
 
 	void PushNodeListAsArray(Class<?> T, int StartIdx, ZListNode NodeList) {
 		this.PushInt(NodeList.GetListSize() - StartIdx);
+		int StoreOpcode = -1;
 		if(T == long.class) {
 			this.visitIntInsn(Opcodes.NEWARRAY, Opcodes.T_LONG);
+			StoreOpcode = LASTORE;
 		}
 		else if(T == double.class) {
 			this.visitIntInsn(Opcodes.NEWARRAY, Opcodes.T_DOUBLE);
+			StoreOpcode = DASTORE;
 		}
 		else {
 			this.visitTypeInsn(ANEWARRAY, Type.getInternalName(T));
+			StoreOpcode = AASTORE;
 		}
 		for(int i = StartIdx; i < NodeList.GetListSize() ; i++) {
 			this.visitInsn(DUP);
 			this.PushInt(i - StartIdx);
 			this.PushNode(T, NodeList.GetListAt(i));
-			if(T == long.class) {
-				this.visitInsn(Opcodes.LASTORE);
-			}
-			else if(T == double.class) {
-				this.visitInsn(Opcodes.DASTORE);
-			}
-			else {
-				this.visitInsn(Opcodes.AASTORE);
-			}
+
+			this.visitInsn(StoreOpcode);
 		}
 	}
 
