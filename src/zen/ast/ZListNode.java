@@ -36,7 +36,7 @@ public class ZListNode extends ZNode {
 		this.Set(Index + this.ListStartIndex, Node);
 	}
 
-	public final void InsertAt(int Index, ZNode Node) {
+	public final void InsertListAt(int Index, ZNode Node) {
 		if(this.AST == null || Index < 0 || this.AST.length == Index) {
 			this.Append(Node);
 		} else {
@@ -49,7 +49,7 @@ public class ZListNode extends ZNode {
 		}
 	}
 
-	public final ZNode RemoveAt(int Index) {
+	public final ZNode RemoveListAt(int Index) {
 		@Var ZNode Removed = this.GetListAt(Index);
 		@Var ZNode[] newAST = new ZNode[this.AST.length - 1];
 		int RemovedIndex = this.ListStartIndex + Index;
@@ -59,7 +59,7 @@ public class ZListNode extends ZNode {
 		return Removed;
 	}
 
-	public final void ClearList(int Size) {
+	public final void ClearListAfter(int Size) {
 		if(Size < this.GetListSize()) {
 			@Var int newsize = this.ListStartIndex + Size;
 			if(newsize == 0) {

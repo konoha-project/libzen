@@ -354,7 +354,7 @@ public class ZScriptEngine extends ZVisitor {
 		TokenContext.SkipEmptyStatement();
 		while(TokenContext.HasNext()) {
 			TokenContext.SetParseFlag(ZTokenContext.NotAllowSkipIndent); // init
-			TopBlockNode.ClearList(0);
+			TopBlockNode.ClearListAfter(0);
 			@Var ZNode ParsedNode = TokenContext.ParsePattern(TopBlockNode, "$Statement$", ZTokenContext.Required);
 			ResultValue = this.Exec(ParsedNode, IsInteractive);
 			if(ResultValue == ZEmptyValue.FalseEmpty) {

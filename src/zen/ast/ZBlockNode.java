@@ -25,7 +25,7 @@
 package zen.ast;
 
 import zen.deps.Field;
-
+import zen.deps.Var;
 import zen.parser.ZNameSpace;
 import zen.parser.ZVisitor;
 
@@ -50,5 +50,24 @@ public class ZBlockNode extends ZListNode {
 			return this.GetListAt(0).ToReturnNode();
 		}
 		return null;
+	}
+
+	public final int IndexOf(ZNode ChildNode) {
+		@Var int i = 0;
+		while(i < this.GetListSize()) {
+			if(this.GetListAt(i) == ChildNode) {
+				return i;
+			}
+			i = i + 1;
+		}
+		return -1;
+	}
+
+	public final void CopyTo(int Index, ZBlockNode BlockNode) {
+		@Var int i = Index;
+		while(i < this.GetListSize()) {
+			BlockNode.Append(this.GetListAt(i));
+			i = i + 1;
+		}
 	}
 }

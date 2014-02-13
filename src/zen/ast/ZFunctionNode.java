@@ -107,6 +107,10 @@ public class ZFunctionNode extends ZListNode {
 		return this.ParentFunctionNode;
 	}
 
+	public final boolean IsTopLevel() {
+		return this.ParentFunctionNode == null;
+	}
+
 	public final int GetVarIndex() {
 		@Var int Index = this.VarIndex;
 		this.VarIndex = this.VarIndex + 1;

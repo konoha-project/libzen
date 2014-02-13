@@ -538,7 +538,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 			SubNode = this.CheckType(SubNode, ZType.VoidType);
 			Node.SetListAt(i, SubNode);
 			if(SubNode.IsBreakingBlock()) {
-				Node.ClearList(i+1);
+				Node.ClearListAfter(i+1);
 				break;
 			}
 			i = i + 1;
@@ -707,19 +707,37 @@ public class ZenTypeSafer extends ZTypeChecker {
 	}
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
+		//LibZen._PrintDebug("name="+Node.FuncName+ ", Type=" + Node.Type + ", IsTopLevel=" + this.IsTopLevel());
 		@Var ZNameSpace NameSpace = Node.AST[ZFunctionNode._Block].GetNameSpace();
 		@Var ZType ContextType = this.GetContextType();
+		if(Node.IsUntyped()) {
+			this.TypedNode(Node, ContextType);  // funcdecl is requested with VoidType
+		}
+		if(Node.Type.IsVoidType()) {
+			if(Node.FuncName == null) {   // function() object
+				Node.Type = ZType.VarType;
+			}
+			if(!this.IsTopLevel()) {
+				/* function f() {} ==> var f = function() {} */
+				ZVarDeclNode VarNode = new ZVarDeclNode(Node.ParentNode);
+				VarNode.SetNameInfo(Node.FuncName);
+				VarNode.Set(ZVarDeclNode._InitValue, Node);
+				ZBlockNode Block = Node.GetScopeBlockNode();
+				int Index = Block.IndexOf(Node);
+				Block.CopyTo(Index+1, VarNode);
+				Block.ClearListAfter(Index+1);   // Block[Index] is set to VarNode
+				this.VisitVarDeclNode(VarNode);
+				return;
+			}
+		}
 		if(!this.HasReturn(Node.AST[ZFunctionNode._Block])) {
 			Node.AST[ZFunctionNode._Block].Set(ZNode._AppendIndex, new ZReturnNode(Node));
 		}
 		this.PushFunctionNode(NameSpace, Node, ContextType);
 		this.VarScope.TypeCheckFuncBlock(this, Node);
 		this.PopFunctionNode(NameSpace);
-		@Var ZFuncType FuncType = Node.GetFuncType(ContextType);
-		if(this.IsTopLevel()) {
-			this.TypedNode(Node, ZType.VoidType);
-		}
-		else {
+		if(!Node.Type.IsVoidType()) {
+			@Var ZFuncType FuncType = Node.GetFuncType(ContextType);
 			this.TypedNode(Node, FuncType);
 		}
 	}

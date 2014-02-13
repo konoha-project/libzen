@@ -88,9 +88,12 @@ public final class ZLogger {
 		return this.Report(ZLogger._ErrorLevel, Node.SourceToken, Message);
 	}
 
-
 	public final String ReportWarning(ZToken Token, String Message) {
 		return this.Report(ZLogger._WarningLevel, Token, Message);
+	}
+
+	public final String ReportWarning2(ZNode Node, String Message) {
+		return this.Report(ZLogger._WarningLevel, Node.SourceToken, Message);
 	}
 
 	public final String ReportInfo(ZToken Token, String Message) {
