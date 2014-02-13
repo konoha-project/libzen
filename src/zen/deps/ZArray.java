@@ -2,26 +2,26 @@ package zen.deps;
 
 import java.lang.reflect.Array;
 
-public class ZArray<T> extends ZObject {
+public class ZArray<T> {
 	@Field private int    Size;
 	@Field public T[] ArrayValues;
 
 	public ZArray(T[] Values) {
-		super(0);
+		//super(0);
 		this.ArrayValues = Values;
 		this.Size = 0;
 	}
 
-	@Override protected void Stringfy(StringBuilder sb) {
-		sb.append("[");
-		for(int i = 0; i < this.Size; i++) {
-			if(i > 0) {
-				sb.append(", ");
-			}
-			this.AppendStringBuffer(sb, this.ArrayValues[i]);
-		}
-		sb.append("]");
-	}
+	//	@Override protected void Stringfy(StringBuilder sb) {
+	//		sb.append("[");
+	//		for(int i = 0; i < this.Size; i++) {
+	//			if(i > 0) {
+	//				sb.append(", ");
+	//			}
+	//			this.AppendStringBuffer(sb, this.ArrayValues[i]);
+	//		}
+	//		sb.append("]");
+	//	}
 
 	public final int size() {
 		return this.Size;

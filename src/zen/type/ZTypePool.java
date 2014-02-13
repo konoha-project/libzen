@@ -17,6 +17,9 @@ public class ZTypePool {
 	}
 
 	public final static ZType TypeOf(int TypeId) {
+		if(TypeId == 0) {
+			return ZType.VarType;
+		}
 		if(TypeId < ZTypePool._TypeList.size()) {
 			return ZTypePool._TypeList.ArrayValues[TypeId];
 		}

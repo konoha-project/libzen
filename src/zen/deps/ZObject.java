@@ -34,6 +34,7 @@ import zen.type.ZTypePool;
 
 public class ZObject implements ZTypedObject {
 	protected ZType ZenType;
+
 	protected ZObject(int TypeId) {
 		this.ZenType = ZTypePool.TypeOf(TypeId);
 	}

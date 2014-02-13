@@ -270,7 +270,7 @@ public class ZenMain {
 
 
 
-	private static void PrintStackTrace(Exception e, int linenum) {
+	public static void PrintStackTrace(Exception e, int linenum) {
 		@Var StackTraceElement[] elements = e.getStackTrace();
 		@Var int size = elements.length + 1;
 		@Var StackTraceElement[] newElements = new StackTraceElement[size];
@@ -287,7 +287,7 @@ public class ZenMain {
 
 
 
-	private final static int CheckBraceLevel(String Text) {
+	public final static int CheckBraceLevel(String Text) {
 		@Var int level = 0;
 		@Var int i = 0;
 		while(i < Text.length()) {
