@@ -453,7 +453,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 		if(LibZen._EqualsString(Op, "|") || LibZen._EqualsString(Op, "&") || LibZen._EqualsString(Op, "<<") || LibZen._EqualsString(Op, ">>") || LibZen._EqualsString(Op,  "^")) {
 			return ZType.IntType;
 		}
-		if(LibZen._EqualsString(Op, "*") || LibZen._EqualsString(Op, "-") || LibZen._EqualsString(Op, "/") || LibZen._EqualsString(Op, "%")) {
+		if(LibZen._EqualsString(Op, "+") || LibZen._EqualsString(Op, "*") || LibZen._EqualsString(Op, "-") || LibZen._EqualsString(Op, "/") || LibZen._EqualsString(Op, "%")) {
 			if(ContextType.IsNumberType()) {
 				return ContextType;
 			}
@@ -465,7 +465,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 		if(LibZen._EqualsString(Op, "|") || LibZen._EqualsString(Op, "&") || LibZen._EqualsString(Op, "<<") || LibZen._EqualsString(Op, ">>") || LibZen._EqualsString(Op,  "^")) {
 			return ZType.IntType;
 		}
-		if(LibZen._EqualsString(Op, "*") || LibZen._EqualsString(Op, "-") || LibZen._EqualsString(Op, "/") || LibZen._EqualsString(Op, "%")) {
+		if(LibZen._EqualsString(Op, "+") || LibZen._EqualsString(Op, "*") || LibZen._EqualsString(Op, "-") || LibZen._EqualsString(Op, "/") || LibZen._EqualsString(Op, "%")) {
 			if(ContextType.IsNumberType()) {
 				return ContextType;
 			}
