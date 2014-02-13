@@ -308,7 +308,7 @@ public class JavaAsmGenerator extends JavaGenerator {
 	}
 
 	@Override public void VisitGetterNode(ZGetterNode Node) {
-		if(Node.HasUntypedNode()) {
+		if(Node.IsUntyped()) {
 			Method sMethod = JavaMethodTable.GetStaticMethod("GetField");
 			ZNode NameNode = new ZStringNode(Node, null, Node.FieldName);
 			this.AsmBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.AST[ZGetterNode._Recv], NameNode});
@@ -330,7 +330,7 @@ public class JavaAsmGenerator extends JavaGenerator {
 	}
 
 	@Override public void VisitSetterNode(ZSetterNode Node) {
-		if(Node.HasUntypedNode()) {
+		if(Node.IsUntyped()) {
 			Method sMethod = JavaMethodTable.GetStaticMethod("SetField");
 			ZNode NameNode = new ZStringNode(Node, null, Node.FieldName);
 			this.AsmBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.AST[ZGetterNode._Recv], NameNode, Node.AST[ZSetterNode._Expr]});
@@ -400,7 +400,7 @@ public class JavaAsmGenerator extends JavaGenerator {
 	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
 		this.AsmBuilder.SetLineNumber(Node);
 		if(Node.ResolvedFunc != null) {
-			this.AsmBuilder.ApplyFuncName(Node, Node.ResolvedFunc, Node);
+			this.AsmBuilder.ApplyFunc(Node, Node.ResolvedFunc, Node);
 		}
 		else {
 			if(Node.AST[ZFuncCallNode._Func].Type.IsFuncType()) {

@@ -34,42 +34,6 @@ public class ZenGamma {
 		return ZenGamma.GetFunc(NameSpace, FuncType.StringfySignature(FuncName), DefVal);
 	}
 
-	public static ZFunc LookupFunc(ZNameSpace NameSpace, String FuncName, ZType RecvType, int FuncParamSize) {
-		@Var String Signature = ZFunc._StringfySignature(FuncName, FuncParamSize, RecvType);
-		@Var ZFunc Func = NameSpace.Generator.GetDefinedFunc(Signature);
-		if(Func != null) {
-			return Func;
-		}
-		if(RecvType.IsIntType()) {
-			Signature = ZFunc._StringfySignature(FuncName, FuncParamSize, ZType.FloatType);
-			Func = NameSpace.Generator.GetDefinedFunc(Signature);
-			if(Func != null) {
-				return Func;
-			}
-		}
-		if(RecvType.IsFloatType()) {
-			Signature = ZFunc._StringfySignature(FuncName, FuncParamSize, ZType.IntType);
-			Func = NameSpace.Generator.GetDefinedFunc(Signature);
-			if(Func != null) {
-				return Func;
-			}
-		}
-		RecvType = RecvType.GetSuperType();
-		while(RecvType != null) {
-			Signature = ZFunc._StringfySignature(FuncName, FuncParamSize, RecvType);
-			Func = NameSpace.Generator.GetDefinedFunc(Signature);
-			if(Func != null) {
-				return Func;
-			}
-			if(RecvType.IsVarType()) {
-				break;
-			}
-			RecvType = RecvType.GetSuperType();
-		}
-		return null;
-	}
-
-
 	static void DefineFunc(ZNameSpace NameSpace, ZFunc Func) {
 		//Debug("def GlobalKey="+Func.GetSignature() + ", " + Func);
 		NameSpace.Generator.SetDefinedFunc(Func);
