@@ -1,0 +1,16 @@
+function even(n : int) : boolean {
+    if(n == 0) {
+        return true;
+    }
+    return odd(n - 1);
+}
+
+function odd(n : int) : boolean {
+    if(n == 0) {
+        return false;
+    }
+    return even(n - 1);
+}
+
+
+odd(1000);
