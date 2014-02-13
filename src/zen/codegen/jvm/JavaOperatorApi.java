@@ -32,7 +32,6 @@ import java.util.List;
 import zen.deps.SoftwareFaultException;
 import zen.deps.Var;
 import zen.deps.ZenMap;
-import zen.obsolete.ZenArray;
 import zen.type.ZType;
 
 public final class JavaOperatorApi {
@@ -267,13 +266,13 @@ public final class JavaOperatorApi {
 		throw new SoftwareFaultException("SoftwareFault: " + Message);
 	}
 
-	public static <T> T GetIndex(ZenArray<T> x, long y) {
-		return x.get((int)y);
-	}
-
-	public static <T> void SetIndex(ZenArray<T> x, long y, T z) {
-		x.set((int)y, z);
-	}
+	//	public static <T> T GetIndex(ZenArray<T> x, long y) {
+	//		return x.get((int)y);
+	//	}
+	//
+	//	public static <T> void SetIndex(ZenArray<T> x, long y, T z) {
+	//		x.set((int)y, z);
+	//	}
 
 	public static <T> T GetIndex(ArrayList<T> x, long y) {
 		return x.get((int)y);

@@ -36,12 +36,11 @@ import java.util.ArrayList;
 import zen.deps.KonohaGrammar;
 import zen.deps.LibZen;
 import zen.deps.Var;
-import zen.obsolete.ZenArray;
+import zen.deps.ZStringArray;
 import zen.parser.ZEmptyValue;
 import zen.parser.ZParserConst;
 import zen.parser.ZScriptEngine;
 import zen.parser.ZSourceBuilder;
-import zen.type.ZType;
 
 public class ZenMain {
 	private static jline.ConsoleReader ConsoleReader = null;
@@ -185,14 +184,14 @@ public class ZenMain {
 		if (!(Index < Args.length)) {
 			ShellMode = true;
 		}
-		@Var ZenArray<String> ARGV = ZenArray.NewZenArray(ZType.StringType);
+		@Var ZStringArray ARGV = new ZStringArray();
 		while (Index < Args.length) {
-			ARGV.add(Args[Index]);
+			ARGV.Add(Args[Index]);
 			Index += 1;
 		}
 		//ScriptEngine.SetSymbol("ARGV", ARGV, null);
-		if (ARGV.size() > 0) {
-			@Var String FileName = ARGV.get(0);
+		if (ARGV.Size() > 0) {
+			@Var String FileName = ARGV.ArrayValues[0];
 			@Var boolean Success = ScriptEngine.Load(FileName);
 			if (!Success) {
 				LibZen._Exit(1, "abort loading: " + FileName);

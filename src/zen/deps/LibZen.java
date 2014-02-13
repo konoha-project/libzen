@@ -549,6 +549,7 @@ public class LibZen {
 		GenMap.put("clisp", zen.codegen.clisp.CommonLispSourceGenerator.class);
 		//GenMap.put("c", zen.codegen.c.CSourceGenerator.class);
 		GenMap.put("jvm", zen.codegen.jvm.JavaAsmGenerator.class);
+		GenMap.put("debug-jvm", zen.codegen.jvm.DebugAsmGenerator.class);
 		GenMap.put("llvm", zen.codegen.llvm.LLVMSourceGenerator.class);
 	}
 

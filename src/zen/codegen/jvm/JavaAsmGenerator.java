@@ -654,7 +654,6 @@ public class JavaAsmGenerator extends JavaGenerator {
 	}
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
-		LibZen._PrintDebug("name="+Node.FuncName+ ", Type=" + Node.Type + ", IsTopLevel=" + Node.IsTopLevel());
 		if(Node.Type.IsVoidType()) {
 			assert(Node.FuncName != null);
 			assert(Node.IsTopLevel());  // otherwise, transformed to var f = function ()..

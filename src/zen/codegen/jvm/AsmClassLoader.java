@@ -35,7 +35,9 @@ class AsmClassLoader extends ClassLoader {
 		AsmClassBuilder ClassBuilder = this.ClassBuilderMap.get(name);
 		if(ClassBuilder != null) {
 			byte[] b = ClassBuilder.GenerateBytecode();
-			ClassBuilder.OutputClassFile();
+			if(LibZen.DebugMode) {
+				ClassBuilder.OutputClassFile();
+			}
 			this.ClassBuilderMap.remove(name);
 			try {
 				return this.defineClass(name, b, 0, b.length);
