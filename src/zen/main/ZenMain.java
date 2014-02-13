@@ -45,7 +45,7 @@ import zen.parser.ZSourceBuilder;
 public class ZenMain {
 	private static jline.ConsoleReader ConsoleReader = null;
 
-	public final static String ReadLine2(String Prompt, String Prompt2) {
+	private final static String ReadLine2(String Prompt, String Prompt2) {
 		if(ConsoleReader == null) {
 			try {
 				ConsoleReader = new jline.ConsoleReader();
@@ -270,7 +270,7 @@ public class ZenMain {
 
 
 
-	public static void PrintStackTrace(Exception e, int linenum) {
+	private static void PrintStackTrace(Exception e, int linenum) {
 		@Var StackTraceElement[] elements = e.getStackTrace();
 		@Var int size = elements.length + 1;
 		@Var StackTraceElement[] newElements = new StackTraceElement[size];
@@ -287,7 +287,7 @@ public class ZenMain {
 
 
 
-	public final static int CheckBraceLevel(String Text) {
+	private final static int CheckBraceLevel(String Text) {
 		@Var int level = 0;
 		@Var int i = 0;
 		while(i < Text.length()) {
@@ -305,7 +305,7 @@ public class ZenMain {
 
 
 
-	public final static void WriteSource(String OutputFile, ArrayList<ZSourceBuilder> SourceList) {
+	private final static void WriteSource(String OutputFile, ArrayList<ZSourceBuilder> SourceList) {
 		try {
 			PrintStream Stream = null;
 			if(OutputFile.equals("-")) {
@@ -356,7 +356,7 @@ public class ZenMain {
 		}
 	}
 
-	public final static String ReadLine(String Prompt, String Prompt2) {
+	private final static String ReadLine(String Prompt, String Prompt2) {
 		String Line = ReadLine(Prompt);
 		if(Line == null) {
 			System.exit(0);

@@ -1,13 +1,16 @@
 package zen.codegen.jvm;
 
+import static org.objectweb.asm.Opcodes.AASTORE;
 import static org.objectweb.asm.Opcodes.ANEWARRAY;
 import static org.objectweb.asm.Opcodes.CHECKCAST;
+import static org.objectweb.asm.Opcodes.DASTORE;
 import static org.objectweb.asm.Opcodes.DUP;
 import static org.objectweb.asm.Opcodes.ILOAD;
 import static org.objectweb.asm.Opcodes.INVOKESTATIC;
 import static org.objectweb.asm.Opcodes.INVOKEVIRTUAL;
 import static org.objectweb.asm.Opcodes.IRETURN;
 import static org.objectweb.asm.Opcodes.ISTORE;
+import static org.objectweb.asm.Opcodes.LASTORE;
 import static org.objectweb.asm.Opcodes.RETURN;
 
 import java.lang.reflect.Method;
@@ -133,7 +136,6 @@ class AsmMethodBuilder extends MethodNode {
 		}
 		else {
 			this.visitLdcInsn(Value);
-			return;
 		}
 	}
 
@@ -191,44 +193,44 @@ class AsmMethodBuilder extends MethodNode {
 		this.visitVarInsn(type.getOpcode(ISTORE), local.Index);
 	}
 
-	void CheckCast(Class<?> C1, Class<?> C2) {
-		if(C1.equals(C2)) {
+	void CheckCast(Class<?> TargetClass, Class<?> SourceClass) {
+		if(TargetClass.equals(SourceClass)) {
 			return;
 		}
-		Method sMethod = JavaMethodTable.GetCastMethod(C1, C2);
-		this.Generator.Debug("C1="+C1.getSimpleName()+ ", C2="+C2.getSimpleName()+", CastMethod="+sMethod);
+		Method sMethod = JavaMethodTable.GetCastMethod(TargetClass, SourceClass);
+		this.Generator.Debug("C1="+TargetClass.getSimpleName()+ ", C2="+SourceClass.getSimpleName()+", CastMethod="+sMethod);
 		if(sMethod != null) {
 			String owner = Type.getInternalName(sMethod.getDeclaringClass());
 			this.visitMethodInsn(INVOKESTATIC, owner, sMethod.getName(), Type.getMethodDescriptor(sMethod));
-			this.CheckCast(C1, sMethod.getReturnType());
+			this.CheckCast(TargetClass, sMethod.getReturnType());
 		}
-		else if (!C1.isAssignableFrom(C2)) {
+		else if (!TargetClass.isAssignableFrom(SourceClass)) {
 			// c1 instanceof C2  C2.
-			this.Generator.Debug("CHECKCAST C1="+C1.getSimpleName()+ ", given C2="+C2.getSimpleName());
-			this.visitTypeInsn(CHECKCAST, Type.getInternalName(C1));
+			this.Generator.Debug("CHECKCAST C1="+TargetClass.getSimpleName()+ ", given C2="+SourceClass.getSimpleName());
+			this.visitTypeInsn(CHECKCAST, Type.getInternalName(TargetClass));
 		}
 	}
 
-	void CheckParamCast(Class<?> C1, ZNode Node) {
-		Class<?> C2 = this.Generator.GetJavaClass(Node.Type);
-		if(C1 != C2) {
+	void CheckParamCast(Class<?> TaargetClass, ZNode Node) {
+		Class<?> SourceClass = this.Generator.GetJavaClass(Node.Type);
+		if(TaargetClass != SourceClass) {
 			this.Generator.Debug("C2="+Node + ": " + Node.Type);
-			this.CheckCast(C1, C2);
+			this.CheckCast(TaargetClass, SourceClass);
 		}
 	}
 
-	void CheckReturnCast(ZNode Node, Class<?> C2) {
-		Class<?> C1 = this.Generator.GetJavaClass(Node.Type);
-		if(C1 != C2) {
-			this.Generator.Debug("C1"+Node + ": " + Node.Type);
-			this.CheckCast(C1, C2);
+	void CheckReturnCast(ZNode Node, Class<?> SouceClass) {
+		Class<?> TargetClass = this.Generator.GetJavaClass(Node.Type);
+		if(TargetClass != SouceClass) {
+			this.Generator.Debug("C1 "+Node + ": " + Node.Type);
+			this.CheckCast(TargetClass, SouceClass);
 		}
 	}
 
-	void PushNode(Class<?> T, ZNode Node) {
+	void PushNode(Class<?> TagetClass, ZNode Node) {
 		Node.Accept(this.Generator);
-		if(T != null) {
-			this.CheckParamCast(T, Node);
+		if(TagetClass != null) {
+			this.CheckParamCast(TagetClass, Node);
 		}
 	}
 
@@ -283,28 +285,25 @@ class AsmMethodBuilder extends MethodNode {
 
 	void PushNodeListAsArray(Class<?> T, int StartIdx, ZListNode NodeList) {
 		this.PushInt(NodeList.GetListSize() - StartIdx);
+		int StoreOpcode = -1;
 		if(T == long.class) {
 			this.visitIntInsn(Opcodes.NEWARRAY, Opcodes.T_LONG);
+			StoreOpcode = LASTORE;
 		}
 		else if(T == double.class) {
 			this.visitIntInsn(Opcodes.NEWARRAY, Opcodes.T_DOUBLE);
+			StoreOpcode = DASTORE;
 		}
 		else {
 			this.visitTypeInsn(ANEWARRAY, Type.getInternalName(T));
+			StoreOpcode = AASTORE;
 		}
 		for(int i = StartIdx; i < NodeList.GetListSize() ; i++) {
 			this.visitInsn(DUP);
 			this.PushInt(i - StartIdx);
 			this.PushNode(T, NodeList.GetListAt(i));
-			if(T == long.class) {
-				this.visitInsn(Opcodes.LASTORE);
-			}
-			else if(T == double.class) {
-				this.visitInsn(Opcodes.DASTORE);
-			}
-			else {
-				this.visitInsn(Opcodes.AASTORE);
-			}
+
+			this.visitInsn(StoreOpcode);
 		}
 	}
 
