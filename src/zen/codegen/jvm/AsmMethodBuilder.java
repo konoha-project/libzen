@@ -266,9 +266,13 @@ class AsmMethodBuilder extends MethodNode {
 					this.PushNode(null, ListNode.GetListAt(i));
 				}
 			}
-			Class<?> FuncClass = this.Generator.GetDefinedFunctionClass(Func.FuncName, FuncType);
 			this.SetLineNumber(Node);
-			this.visitMethodInsn(INVOKESTATIC, FuncClass, "f", FuncType);
+			Class<?> FuncClass = this.Generator.GetDefinedFunctionClass(Func.FuncName, FuncType);
+			if(FuncClass != null) {
+				this.visitMethodInsn(INVOKESTATIC, FuncClass, "f", FuncType);
+			} else {
+				this.visitMethodInsn(INVOKESTATIC, "F" + FuncType.StringfySignature(Func.FuncName), "f", FuncType);
+			}
 		}
 	}
 
