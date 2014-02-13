@@ -404,6 +404,8 @@ public class ZenTypeSafer extends ZTypeChecker {
 		this.TypeCheckNodeList(Node);
 		if(this.IsStaticFuncName(Node, NameSpace)) {
 			if(Node.ResolvedFunc != null) {
+				// XXX ad-hoc fix to typing Node.AST[ZFuncCallNode._Func] node.
+				Node.AST[ZFuncCallNode._Func].Type =  Node.ResolvedFunc.GetFuncType();
 				this.TypeCheckFuncCall(Node, Node.ResolvedFunc.GetFuncType());
 				return;
 			}
@@ -551,6 +553,10 @@ public class ZenTypeSafer extends ZTypeChecker {
 	@Override public void VisitVarDeclNode(ZVarDeclNode Node) {
 		if(Node.GetListSize() == 0) {
 			this.Logger.ReportWarning(Node.SourceToken, "unused variable: " + Node.NativeName);
+		}
+		if(!this.InFunctionScope()) {
+			this.Return(ZenError.NeedFunctionScope(Node, "variable declaration"));
+			return;
 		}
 		this.CheckTypeAt(Node, ZVarDeclNode._InitValue, Node.DeclType);
 		if(!(Node.DeclType instanceof ZVarType)) {

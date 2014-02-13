@@ -73,12 +73,16 @@ public class LibZen {
 	}
 
 	public final static void _FixMe(Exception e) {
-		System.err.println("FIXME " + LibZen._GetStackInfo(3) + ": " + e);
-		e.printStackTrace();
+		if(DebugMode) {
+			System.err.println("FIXME " + LibZen._GetStackInfo(3) + ": " + e);
+			e.printStackTrace();
+		}
 	}
 
 	public final static void _PrintDebug(String msg) {
-		LibZen._PrintLine("DEBUG " + LibZen._GetStackInfo(3) + ": " + msg);
+		if(DebugMode) {
+			LibZen._PrintLine("DEBUG " + LibZen._GetStackInfo(3) + ": " + msg);
+		}
 	}
 
 	public final static void _Assert(boolean TestResult) {
