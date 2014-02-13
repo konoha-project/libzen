@@ -1,0 +1,9 @@
+class X {
+    var f : Func<boolean, X>;
+}
+
+function Equals(this: X, Type: X): boolean {
+    return this.f() == Type.f();
+}
+
+Equals(new X(), new X());
