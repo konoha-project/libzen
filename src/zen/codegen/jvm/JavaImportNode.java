@@ -12,13 +12,13 @@ public class JavaImportNode extends ZImportNode {
 		super(ParentNode);
 	}
 
-	private String ParsePath(String Path) {
-		@Var int loc = Path.lastIndexOf('.');
-		if(loc != -1) {
-			return Path.substring(0, loc);
-		}
-		return Path;
-	}
+	//	private String ParsePath(String Path) {
+	//		@Var int loc = Path.lastIndexOf('.');
+	//		if(loc != -1) {
+	//			return Path.substring(0, loc);
+	//		}
+	//		return Path;
+	//	}
 
 	private String ParseSymbol(String Path) {
 		@Var int loc = Path.lastIndexOf('.');

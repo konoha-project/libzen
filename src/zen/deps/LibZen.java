@@ -337,7 +337,7 @@ public class LibZen {
 
 	public static String _SourceBuilderToString(ZSourceBuilder Builder) {
 		StringBuilder builder = new StringBuilder();
-		for(String s : Builder.SourceList){
+		for(String s : Builder.SourceList.ArrayValues){
 			builder.append(s);
 		}
 		return builder.toString();
@@ -385,6 +385,13 @@ public class LibZen {
 			return 0;
 		}
 		return List.length;
+	}
+
+	public final static <T> int _Size(ZArray<?> List) {
+		if(List == null) {
+			return 0;
+		}
+		return List.size();
 	}
 
 	public final static int _Size(ArrayList<?> List) {

@@ -24,18 +24,17 @@
 
 package zen.type;
 
-import java.util.ArrayList;
-
 import zen.deps.Field;
+import zen.deps.ZArray;
 import zen.parser.ZToken;
 
 public class ZVarType extends ZType {
 
-	@Field public final ArrayList<ZVarType> VarList;
+	@Field public final ZArray<ZVarType> VarList;
 	@Field public ZToken SourceToken;
 	@Field public int GreekId;
 
-	public ZVarType(ArrayList<ZVarType> VarList, String Name, ZToken SourceToken) {
+	public ZVarType(ZArray<ZVarType> VarList, String Name, ZToken SourceToken) {
 		super(0, Name, ZType.VarType);
 		this.VarList = VarList;
 		this.SourceToken = SourceToken;
@@ -88,6 +87,7 @@ public class ZVarType extends ZType {
 		}
 	}
 
+	@Override
 	public void Maybe(ZType T, ZToken SourceToken) {
 		if(this.RefType.IsVarType()) {
 			if(T instanceof ZVarType && T.IsVarType()) {

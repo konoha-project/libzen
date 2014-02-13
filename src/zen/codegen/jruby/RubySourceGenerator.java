@@ -9,7 +9,6 @@ import zen.ast.ZCatchNode;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZInstanceOfNode;
 import zen.ast.ZParamNode;
-import zen.ast.ZReturnNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZVarDeclNode;
@@ -124,7 +123,6 @@ public class RubySourceGenerator extends ZSourceGenerator {
 
 	@Override
 	public void VisitFunctionNode(ZFunctionNode Node) {
-		ZReturnNode ReturnNode = Node.AST[ZFunctionNode._Block].ToReturnNode();
 		this.CurrentBuilder.Append("->");
 		this.VisitListNode("(", Node, ")");
 		this.GenerateCode(Node.AST[ZFunctionNode._Block]);

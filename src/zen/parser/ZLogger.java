@@ -24,12 +24,11 @@
 
 package zen.parser;
 
-import java.util.ArrayList;
-
 import zen.ast.ZNode;
 import zen.deps.Field;
 import zen.deps.LibZen;
 import zen.deps.Var;
+import zen.deps.ZArray;
 import zen.deps.ZenMap;
 
 public final class ZLogger {
@@ -39,7 +38,7 @@ public final class ZLogger {
 	public final static int	_InfoLevel					    = 3;
 	public final static int	_DebugLevel					    = 4;
 
-	@Field public ArrayList<String>  ReportedErrorList = new ArrayList<String>();
+	@Field public ZArray<String>  ReportedErrorList = new ZArray<String>(new String[10]);
 	@Field public ZenMap<ZCounter> StatMap;
 
 	public ZLogger() {
@@ -105,9 +104,9 @@ public final class ZLogger {
 	}
 
 	public final String[] GetReportedErrors() {
-		@Var ArrayList<String> List = this.ReportedErrorList;
-		this.ReportedErrorList = new ArrayList<String>();
-		return LibZen.CompactStringList(List);
+		@Var ZArray<String> List = this.ReportedErrorList;
+		this.ReportedErrorList = new ZArray<String>(new String[10]);
+		return List.CompactArray();
 	}
 
 	public final void ShowErrors() {

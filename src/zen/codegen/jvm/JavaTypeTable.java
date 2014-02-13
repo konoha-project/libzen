@@ -26,10 +26,11 @@ package zen.codegen.jvm;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 import java.util.HashMap;
 
+import zen.deps.LibZen;
 import zen.deps.Var;
+import zen.deps.ZArray;
 import zen.deps.ZFloatArray;
 import zen.deps.ZFunction;
 import zen.deps.ZIntArray;
@@ -106,12 +107,12 @@ public class JavaTypeTable {
 	}
 
 	public final static ZFuncType ConvertToFuncType(Method JMethod) {
-		@Var ArrayList<ZType> TypeList = new ArrayList<ZType>();
+		@Var Class<?>[] ParamTypes = JMethod.getParameterTypes();
+		@Var ZArray<ZType> TypeList = new ZArray<ZType>(new ZType[LibZen._Size(ParamTypes) + 2]);
 		TypeList.add(JavaTypeTable.GetZenType(JMethod.getReturnType()));
 		if (!Modifier.isStatic(JMethod.getModifiers())) {
 			TypeList.add(JavaTypeTable.GetZenType(JMethod.getDeclaringClass()));
 		}
-		@Var Class<?>[] ParamTypes = JMethod.getParameterTypes();
 		if (ParamTypes != null) {
 			@Var int j = 0;
 			while(j < ParamTypes.length) {
@@ -123,7 +124,7 @@ public class JavaTypeTable {
 	}
 
 	public final static ZFuncType FuncType(Class<?> ReturnT, Class<?> ... paramsT) {
-		@Var ArrayList<ZType> TypeList = new ArrayList<ZType>();
+		@Var ZArray<ZType> TypeList = new ZArray<ZType>(new ZType[10]);
 		TypeList.add(JavaTypeTable.GetZenType(ReturnT));
 		for(Class<?> C : paramsT) {
 			TypeList.add(JavaTypeTable.GetZenType(C));

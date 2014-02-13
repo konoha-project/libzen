@@ -1,10 +1,9 @@
 package libzen.grammar;
 
-import java.util.ArrayList;
-
 import zen.ast.ZNode;
 import zen.ast.ZTypeNode;
 import zen.deps.Var;
+import zen.deps.ZArray;
 import zen.deps.ZMatchFunction;
 import zen.parser.ZToken;
 import zen.parser.ZTokenContext;
@@ -17,7 +16,7 @@ public class RightTypePattern extends ZMatchFunction {
 		@Var ZToken SourceToken = TokenContext.GetToken();
 		if(LeftTypeNode.Type.GetParamSize() > 0) {
 			if(TokenContext.MatchToken("<")) {  // Generics
-				@Var ArrayList<ZType> TypeList = new ArrayList<ZType>();
+				@Var ZArray<ZType> TypeList = new ZArray<ZType>(new ZType[4]);
 				while(!TokenContext.StartsWithToken(">")) {
 					if(TypeList.size() > 0 && !TokenContext.MatchToken(",")) {
 						return null;
@@ -28,7 +27,7 @@ public class RightTypePattern extends ZMatchFunction {
 					}
 					TypeList.add(ParamTypeNode.Type);
 				}
-				LeftTypeNode = new ZTypeNode(ParentNode, SourceToken, ZTypePool.GetGenericType(LeftTypeNode.Type, 0, TypeList, true));
+				LeftTypeNode = new ZTypeNode(ParentNode, SourceToken, ZTypePool.GetGenericType(LeftTypeNode.Type, TypeList, true));
 			}
 		}
 		while(TokenContext.MatchToken("[")) {  // Array

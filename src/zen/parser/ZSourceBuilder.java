@@ -25,17 +25,16 @@
 //ifdef JAVA
 package zen.parser;
 
-import java.util.ArrayList;
-
 import zen.ast.ZListNode;
 import zen.deps.Field;
 import zen.deps.LibZen;
 import zen.deps.Var;
+import zen.deps.ZArray;
 
 
 
 public final class ZSourceBuilder {
-	@Field public ArrayList<String> SourceList = new ArrayList<String>();
+	@Field public ZArray<String> SourceList = new ZArray<String>(new String[128]);
 	@Field ZSourceGenerator Template;
 	@Field int IndentLevel = 0;
 	@Field String CurrentIndentString = "";
@@ -46,7 +45,7 @@ public final class ZSourceBuilder {
 	}
 
 	public void Clear() {
-		this.SourceList.clear();
+		this.SourceList.clear(0);
 	}
 
 	public void Append(String Text) {
@@ -63,7 +62,7 @@ public final class ZSourceBuilder {
 
 	public final void AppendWhiteSpace() {
 		if(this.SourceList.size() > 0) {
-			@Var String Last = this.SourceList.get(this.SourceList.size()-1);
+			@Var String Last = this.SourceList.ArrayValues[this.SourceList.size()-1];
 			if(Last.endsWith(" ") || Last.endsWith("\n") || Last.endsWith("\t")) {
 				return;
 			}

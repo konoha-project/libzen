@@ -26,8 +26,6 @@
 
 package zen.lang;
 
-import java.util.ArrayList;
-
 import zen.ast.ZAndNode;
 import zen.ast.ZArrayLiteralNode;
 import zen.ast.ZBinaryNode;
@@ -76,6 +74,7 @@ import zen.deps.Field;
 import zen.deps.LibZen;
 import zen.deps.Nullable;
 import zen.deps.Var;
+import zen.deps.ZArray;
 import zen.parser.ZGenerator;
 import zen.parser.ZNameSpace;
 import zen.parser.ZVariable;
@@ -276,7 +275,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 		if(ReturnType.IsVoidType()) {
 			ReturnType = ZType.VarType;
 		}
-		ArrayList<ZType> TypeList = new ArrayList<ZType>();
+		ZArray<ZType> TypeList = new ZArray<ZType>(new ZType[List.GetListSize()+1]);
 		TypeList.add(ReturnType.GetRealType());
 		if(RecvType != null) {
 			TypeList.add(RecvType.GetRealType());

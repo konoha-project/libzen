@@ -25,8 +25,6 @@
 //ifdef JAVA
 package zen.parser;
 
-import java.util.ArrayList;
-
 import zen.ast.ZAndNode;
 import zen.ast.ZArrayLiteralNode;
 import zen.ast.ZBinaryNode;
@@ -73,6 +71,7 @@ import zen.ast.ZWhileNode;
 import zen.deps.Field;
 import zen.deps.LibZen;
 import zen.deps.Var;
+import zen.deps.ZArray;
 import zen.deps.ZenMap;
 import zen.lang.ZenTypeSafer;
 import zen.type.ZType;
@@ -81,7 +80,7 @@ import zen.type.ZType;
 
 public class ZSourceGenerator extends ZGenerator {
 	@Field public ZenMap<String> NativeTypeMap;
-	@Field private final ArrayList<ZSourceBuilder> BuilderList;
+	@Field private final ZArray<ZSourceBuilder> BuilderList;
 	@Field protected ZSourceBuilder HeaderBuilder;
 	@Field protected ZSourceBuilder CurrentBuilder;
 
@@ -106,7 +105,7 @@ public class ZSourceGenerator extends ZGenerator {
 	public ZSourceGenerator(String TargetCode, String TargetVersion) {
 		super(TargetCode, TargetVersion);
 		this.NativeTypeMap = new ZenMap<String>(null);
-		this.BuilderList = new ArrayList<ZSourceBuilder>();
+		this.BuilderList = new ZArray<ZSourceBuilder>(new ZSourceBuilder[4]);
 		this.HeaderBuilder = this.NewSourceBuilder();
 		this.CurrentBuilder = this.HeaderBuilder;
 		this.LineFeed = "\n";

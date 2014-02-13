@@ -316,7 +316,7 @@ public class ZenMain {
 				Stream = new PrintStream(OutputFile);
 			}
 			for(ZSourceBuilder Builder : SourceList) {
-				for(String Source : Builder.SourceList) {
+				for(String Source : Builder.SourceList.ArrayValues) {
 					Stream.print(Source);
 				}
 				Stream.println();

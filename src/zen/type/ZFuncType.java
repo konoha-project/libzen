@@ -1,9 +1,8 @@
 package zen.type;
 
-import java.util.ArrayList;
-
 import zen.deps.Field;
 import zen.deps.Var;
+import zen.deps.ZArray;
 
 public final class ZFuncType extends ZType {
 	@Field public ZType[]  TypeParams;
@@ -45,7 +44,7 @@ public final class ZFuncType extends ZType {
 
 	@Override public final ZType GetRealType(ZType[] Greek) {
 		if(this.HasGreekType) {
-			@Var ArrayList<ZType> TypeList = new ArrayList<ZType>();
+			@Var ZArray<ZType> TypeList = new ZArray<ZType>(new ZType[this.TypeParams.length]);
 			@Var int i = 0;
 			while(i < this.TypeParams.length) {
 				TypeList.add(this.TypeParams[i].GetRealType(Greek));
@@ -105,7 +104,7 @@ public final class ZFuncType extends ZType {
 	}
 
 	public ZFuncType NewMethodFuncType(ZType RecvType) {
-		@Var ArrayList<ZType> TypeList = new ArrayList<ZType>();
+		@Var ZArray<ZType> TypeList = new ZArray<ZType>(new ZType[this.GetFuncParamSize()+2]);
 		TypeList.add(this.GetReturnType());
 		TypeList.add(RecvType);
 		@Var int i = 0;

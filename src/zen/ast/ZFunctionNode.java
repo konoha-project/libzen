@@ -24,11 +24,10 @@
 
 package zen.ast;
 
-import java.util.ArrayList;
-
 import zen.deps.Field;
 import zen.deps.Nullable;
 import zen.deps.Var;
+import zen.deps.ZArray;
 import zen.parser.ZVisitor;
 import zen.type.ZFuncType;
 import zen.type.ZType;
@@ -74,7 +73,7 @@ public class ZFunctionNode extends ZListNode {
 			if(ContextType instanceof ZFuncType) {
 				FuncType = (ZFuncType)ContextType;
 			}
-			@Var ArrayList<ZType> TypeList = new ArrayList<ZType>();
+			@Var ZArray<ZType> TypeList = new ZArray<ZType>(new ZType[this.GetListSize()+1]);
 			if(this.ReturnType.IsVarType() && FuncType != null) {
 				this.ReturnType = FuncType.GetParamType(0);
 			}

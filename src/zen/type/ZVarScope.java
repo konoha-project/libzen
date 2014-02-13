@@ -1,29 +1,27 @@
 package zen.type;
 
-import java.util.ArrayList;
-
-import zen.ast.ZBlockNode;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZNode;
 import zen.deps.Field;
 import zen.deps.Var;
+import zen.deps.ZArray;
 import zen.parser.ZLogger;
 import zen.parser.ZToken;
 
 public final class ZVarScope {
 	@Field public ZVarScope Parent;
 	@Field public ZLogger Logger;
-	@Field ArrayList<ZVarType> VarList;
+	@Field ZArray<ZVarType> VarList;
 	@Field int VarNodeCount = 0;
 	@Field int UnresolvedSymbolCount = 0;
 
 
-	public ZVarScope(ZVarScope Parent, ZLogger Logger, ArrayList<ZVarType> VarList) {
+	public ZVarScope(ZVarScope Parent, ZLogger Logger, ZArray<ZVarType> VarList) {
 		this.Parent = Parent;
 		this.Logger = Logger;
 		this.VarList = VarList;
 		if(this.VarList == null) {
-			this.VarList = new ArrayList<ZVarType>();
+			this.VarList = new ZArray<ZVarType>(new ZVarType[8]);
 		}
 	}
 
@@ -51,14 +49,14 @@ public final class ZVarScope {
 		}
 	}
 
-	public final boolean TypeCheckStmtList(ZTypeChecker TypeSafer, ArrayList<ZNode> StmtList) {
+	public final boolean TypeCheckStmtList(ZTypeChecker TypeSafer, ZArray<ZNode> StmtList) {
 		@Var int PrevCount = -1;
 		while(true) {
 			@Var int i = 0;
 			this.VarNodeCount = 0;
 			this.UnresolvedSymbolCount = 0;
 			while(i < StmtList.size()) {
-				StmtList.set(i, TypeSafer.CheckType(StmtList.get(i), ZType.VoidType));
+				StmtList.ArrayValues[i] = TypeSafer.CheckType(StmtList.ArrayValues[i], ZType.VoidType);
 				i = i + 1;
 			}
 			if(this.VarNodeCount == 0 || PrevCount == this.VarNodeCount) {
@@ -78,7 +76,7 @@ public final class ZVarScope {
 			this.VarNodeCount = 0;
 			this.UnresolvedSymbolCount = 0;
 			TypeSafer.DefineFunction(FunctionNode, false/*Enforced*/);
-			FunctionNode.AST[ZFunctionNode._Block] = (ZBlockNode)TypeSafer.CheckType(FunctionNode.AST[ZFunctionNode._Block], ZType.VoidType);
+			FunctionNode.AST[ZFunctionNode._Block] = TypeSafer.CheckType(FunctionNode.AST[ZFunctionNode._Block], ZType.VoidType);
 			if(this.VarNodeCount == 0 || PrevCount == this.VarNodeCount) {
 				break;
 			}

@@ -3,7 +3,6 @@ package zen.codegen.jvm;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 
 import zen.ast.ZBooleanNode;
 import zen.ast.ZFloatNode;
@@ -16,6 +15,7 @@ import zen.ast.ZStringNode;
 import zen.ast.ZTypeNode;
 import zen.deps.LibZen;
 import zen.deps.Var;
+import zen.deps.ZArray;
 import zen.deps.ZMatchFunction;
 import zen.deps.ZTokenFunction;
 import zen.deps.ZenMap;
@@ -183,12 +183,12 @@ public abstract class JavaGenerator extends ZGenerator {
 		if(MethodName == null) {
 			Constructor<?> jMethod = this.GetConstructor(RecvType, ParamList);
 			if(jMethod != null) {
-				@Var ArrayList<ZType> TypeList = new ArrayList<ZType>();
-				TypeList.add(RecvType);
 				@Var Class<?>[] ParamTypes = jMethod.getParameterTypes();
+				@Var ZArray<ZType> TypeList = new ZArray<ZType>(new ZType[LibZen._Size(ParamTypes) + 1]);
+				TypeList.add(RecvType);
 				if (ParamTypes != null) {
 					@Var int j = 0;
-					while(j < ParamTypes.length) {
+					while(j < LibZen._Size(ParamTypes)) {
 						TypeList.add(JavaTypeTable.GetZenType(ParamTypes[j]));
 						j = j + 1;
 					}

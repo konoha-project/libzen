@@ -24,17 +24,16 @@
 
 package zen.type;
 
-import java.util.ArrayList;
-
 import zen.ast.ZNode;
 import zen.deps.Field;
 import zen.deps.LibZen;
 import zen.deps.Var;
+import zen.deps.ZArray;
 import zen.parser.ZNameSpace;
 import zen.parser.ZToken;
 
 public class ZClassType extends ZType {
-	@Field ArrayList<ZClassField> FieldList = null;
+	@Field ZArray<ZClassField> FieldList = null;
 	public ZClassType(String ShortName, ZType RefType) {
 		super(ZTypeFlag._OpenType|ZTypeFlag._UniqueType, ShortName, RefType);
 		if(RefType instanceof ZClassType) {
@@ -45,10 +44,10 @@ public class ZClassType extends ZType {
 	public final void ResetSuperType(ZClassType SuperClass) {
 		this.RefType = SuperClass;
 		if(SuperClass.FieldList != null) {
-			this.FieldList = new ArrayList<ZClassField>();
+			this.FieldList = new ZArray<ZClassField>(new ZClassField[10]);
 			@Var int i = 0;
 			while(i < SuperClass.FieldList.size()) {
-				@Var ZClassField Field = SuperClass.FieldList.get(i);
+				@Var ZClassField Field = SuperClass.FieldList.ArrayValues[i];
 				this.FieldList.add(Field);
 				i = i + 1;
 			}
@@ -63,14 +62,14 @@ public class ZClassType extends ZType {
 	}
 
 	public final ZClassField GetFieldAt(int Index) {
-		return this.FieldList.get(Index);
+		return this.FieldList.ArrayValues[Index];
 	}
 
 	public boolean HasField(String FieldName) {
 		if(this.FieldList != null) {
 			@Var int i = 0;
 			while(i < this.FieldList.size()) {
-				if(LibZen._EqualsString(FieldName, this.FieldList.get(i).FieldName)) {
+				if(LibZen._EqualsString(FieldName, this.FieldList.ArrayValues[i].FieldName)) {
 					return true;
 				}
 				i = i + 1;
@@ -83,7 +82,7 @@ public class ZClassType extends ZType {
 		if(this.FieldList != null) {
 			@Var int i = 0;
 			while(i < this.FieldList.size()) {
-				@Var ZClassField Field = this.FieldList.get(i);
+				@Var ZClassField Field = this.FieldList.ArrayValues[i];
 				if(LibZen._EqualsString(FieldName, Field.FieldName)) {
 					return Field.FieldType;
 				}
@@ -95,11 +94,11 @@ public class ZClassType extends ZType {
 
 	public ZClassField AppendField(ZType FieldType, String FieldName, ZToken SourceToken) {
 		if(this.FieldList == null) {
-			this.FieldList = new ArrayList<ZClassField>();
+			this.FieldList = new ZArray<ZClassField>(new ZClassField[4]);
 		}
 		@Var int i = 0;
 		while(i < this.FieldList.size()) {
-			@Var ZClassField Field = this.FieldList.get(i);
+			@Var ZClassField Field = this.FieldList.ArrayValues[i];
 			if(LibZen._EqualsString(FieldName, Field.FieldName)) {
 				if(FieldType.Equals(Field.FieldType)) {
 					return null;

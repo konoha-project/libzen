@@ -26,8 +26,6 @@
 
 package zen.parser;
 
-import java.util.ArrayList;
-
 import zen.ast.ZAndNode;
 import zen.ast.ZArrayLiteralNode;
 import zen.ast.ZBinaryNode;
@@ -71,6 +69,7 @@ import zen.ast.ZVarDeclNode;
 import zen.ast.ZWhileNode;
 import zen.deps.LibZen;
 import zen.deps.Var;
+import zen.deps.ZArray;
 import zen.type.ZType;
 import zen.type.ZTypeChecker;
 
@@ -80,7 +79,7 @@ public class ZScriptEngine extends ZVisitor {
 	protected ZTypeChecker TypeChecker;
 	public final ZGenerator Generator;
 
-	private final ArrayList<ZNode> LazyNodeList = new ArrayList<ZNode>();
+	private final ZArray<ZNode> LazyNodeList = new ZArray<ZNode>(new ZNode[32]);
 	public ZLogger Logger;
 	private boolean IsInteractive;
 
@@ -97,7 +96,7 @@ public class ZScriptEngine extends ZVisitor {
 	public final void Sync() {
 		@Var int i = 0;
 		while(i < this.LazyNodeList.size()) {
-			@Var ZNode Node = this.LazyNodeList.get(i);
+			@Var ZNode Node = this.LazyNodeList.ArrayValues[i];
 			this.Generator.StartCodeGeneration(Node, false, this.IsInteractive);
 		}
 	}

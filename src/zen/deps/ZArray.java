@@ -23,7 +23,7 @@ public class ZArray<T> extends ZObject {
 		sb.append("]");
 	}
 
-	public final long size() {
+	public final int size() {
 		return this.Size;
 	}
 
@@ -42,19 +42,50 @@ public class ZArray<T> extends ZObject {
 		ZArray.ThrowOutOfArrayIndex(a.Size, Index);
 	}
 
+	private T[] NewArray(int CopySize, int NewSize) {
+		@SuppressWarnings("unchecked")
+		T[] newValues = (T[])Array.newInstance(this.ArrayValues.getClass().getComponentType(), NewSize);
+		System.arraycopy(this.ArrayValues, 0, newValues, 0, CopySize);
+		return newValues;
+	}
+
 	public final void add(T Value) {
 		if(this.Size == this.ArrayValues.length) {
-			@SuppressWarnings("unchecked")
-			T[] newValues = (T[])Array.newInstance(this.ArrayValues.getClass().getComponentType(), this.ArrayValues.length * 2);
-			System.arraycopy(this.ArrayValues, 0, newValues, 0, this.Size);
-			this.ArrayValues = newValues;
+			this.ArrayValues = this.NewArray(this.Size, this.ArrayValues.length * 2);
 		}
 		this.ArrayValues[this.Size] = Value;
 		this.Size = this.Size + 1;
 	}
 
+	public final void add(int Index, T Value) {
+		if(this.Size == this.ArrayValues.length) {
+			this.ArrayValues = this.NewArray(this.Size, this.ArrayValues.length * 2);
+		}
+		System.arraycopy(this.ArrayValues, Index, this.ArrayValues, Index+1, this.Size - Index);
+		this.ArrayValues[Index] = Value;
+		this.Size = this.Size + 1;
+	}
+
+	public void clear(int Index) {
+		this.Size = Index;
+	}
+
+	public T[] CompactArray() {
+		if(this.Size == this.ArrayValues.length) {
+			return this.ArrayValues;
+		}
+		else {
+			@SuppressWarnings("unchecked")
+			T[] newValues = (T[])Array.newInstance(this.ArrayValues.getClass().getComponentType(), this.Size);
+			System.arraycopy(this.ArrayValues, 0, newValues, 0, this.Size);
+			return newValues;
+		}
+	}
+
 	public static void ThrowOutOfArrayIndex(int Size, long Index) {
 		throw new RuntimeException("out of array index " + Index + " < " + Size);
 	}
+
+
 
 }

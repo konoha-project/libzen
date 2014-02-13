@@ -1,12 +1,11 @@
 package zen.type;
 
-import java.util.ArrayList;
-
 import zen.deps.Field;
+import zen.deps.ZArray;
 
 public class ZUnionType extends ZType {
 
-	@Field public final ArrayList<ZType> UnionList = null;
+	@Field public final ZArray<ZType> UnionList = null;
 
 	public ZUnionType() {
 		super(0, "union", ZType.VarType);

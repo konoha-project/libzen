@@ -24,8 +24,6 @@
 
 //ifdef JAVA
 package zen.parser;
-import java.util.ArrayList;
-
 import zen.ast.ZBlockNode;
 import zen.ast.ZEmptyNode;
 import zen.ast.ZErrorNode;
@@ -33,6 +31,7 @@ import zen.ast.ZNode;
 import zen.deps.Field;
 import zen.deps.LibZen;
 import zen.deps.Var;
+import zen.deps.ZArray;
 
 public final class ZTokenContext {
 	public final static boolean     Required          = true;
@@ -45,7 +44,7 @@ public final class ZTokenContext {
 	@Field public ZGenerator Generator;
 	@Field public ZNameSpace NameSpace;
 	@Field public ZSourceContext Source;
-	@Field public ArrayList<ZToken> TokenList = new ArrayList<ZToken>();
+	@Field public ZArray<ZToken> TokenList = new ZArray<ZToken>(new ZToken[128]);
 
 	@Field private int CurrentPosition = 0;
 	@Field private boolean IsAllowSkipIndent = false;
@@ -67,7 +66,7 @@ public final class ZTokenContext {
 	private ZToken GetBeforeToken() {
 		@Var int MovingPos = this.CurrentPosition - 1;
 		while(MovingPos >= 0 && MovingPos < this.TokenList.size()) {
-			@Var ZToken Token = this.TokenList.get(MovingPos);
+			@Var ZToken Token = this.TokenList.ArrayValues[MovingPos];
 			if(!Token.IsIndent()) {
 				return Token;
 			}
@@ -103,7 +102,7 @@ public final class ZTokenContext {
 					break;
 				}
 			}
-			@Var ZToken Token = this.TokenList.get(this.CurrentPosition);
+			@Var ZToken Token = this.TokenList.ArrayValues[this.CurrentPosition];
 			if((this.IsAllowSkipIndent) && Token.IsIndent()) {
 				this.CurrentPosition = this.CurrentPosition + 1;
 			}
@@ -384,7 +383,7 @@ public final class ZTokenContext {
 
 	public final void Dump() {
 		for(@Var int Position = this.CurrentPosition; Position < this.TokenList.size(); Position += 1) {
-			@Var ZToken Token = this.TokenList.get(Position);
+			@Var ZToken Token = this.TokenList.ArrayValues[Position];
 			@Var String DumpedToken = this.CurrentPosition == Position ? "*[" : "[";
 			DumpedToken = DumpedToken + Position+"] " + Token.toString();
 			LibZen.DebugP(DumpedToken);
