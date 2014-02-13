@@ -94,10 +94,13 @@ public abstract class ZNode {
 		else if(Index == ZNode._NameInfo) {
 			this.SetNameInfo(Node.SourceToken.GetText());
 			this.SourceToken = Node.SourceToken;
+			return;
 		}
 		else if(Index == ZNode._TypeInfo) {
 			this.SetTypeInfo(Node.Type);
+			return;
 		}
+		this.SetChild(Node);
 	}
 
 	public final int GetAstSize() {
