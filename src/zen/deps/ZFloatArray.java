@@ -3,16 +3,16 @@ package zen.deps;
 
 public class ZFloatArray extends ZObject {
 	@Field private int    Size;
-	@Field private double[] Values;
+	@Field public double[] ArrayValues;  // don't use .length
 
 	public ZFloatArray(int TypeId, double[] Values) {
 		super(TypeId);
 		if(Values != null) {
-			this.Values = Values;
+			this.ArrayValues = Values;
 			this.Size = Values.length;
 		}
 		else {
-			this.Values = new double[1];
+			this.ArrayValues = new double[1];
 			this.Size = 0;
 		}
 	}
@@ -23,7 +23,7 @@ public class ZFloatArray extends ZObject {
 			if(i > 0) {
 				sb.append(", ");
 			}
-			sb.append(this.Values[i]);
+			sb.append(this.ArrayValues[i]);
 		}
 		sb.append("]");
 	}
@@ -34,7 +34,7 @@ public class ZFloatArray extends ZObject {
 
 	public final static double GetIndex(ZFloatArray a, long Index) {
 		if(Index < a.Size) {
-			return a.Values[(int)Index];
+			return a.ArrayValues[(int)Index];
 		}
 		ZObjectArray.ThrowOutOfArrayIndex(a.Size, Index);
 		return 0;
@@ -42,18 +42,18 @@ public class ZFloatArray extends ZObject {
 
 	public final static void SetIndex(ZFloatArray a, long Index, double Value) {
 		if(Index < a.Size) {
-			a.Values[(int)Index] = Value;
+			a.ArrayValues[(int)Index] = Value;
 		}
 		ZObjectArray.ThrowOutOfArrayIndex(a.Size, Index);
 	}
 
 	public final void Add(double Value) {
-		if(this.Size == this.Values.length) {
-			double[] newValues = new double[this.Values.length*2];
-			System.arraycopy(this.Values, 0, newValues, 0, this.Size);
-			this.Values = newValues;
+		if(this.Size == this.ArrayValues.length) {
+			double[] newValues = new double[this.ArrayValues.length*2];
+			System.arraycopy(this.ArrayValues, 0, newValues, 0, this.Size);
+			this.ArrayValues = newValues;
 		}
-		this.Values[this.Size] = Value;
+		this.ArrayValues[this.Size] = Value;
 		this.Size = this.Size + 1;
 	}
 

@@ -56,7 +56,6 @@ public final class ZObjectArray extends ZObject {
 		this.Size = this.Size + 1;
 	}
 
-
 	public static void ThrowOutOfArrayIndex(int Size, long Index) {
 		throw new RuntimeException("out of array index " + Index + " < " + Size);
 	}
