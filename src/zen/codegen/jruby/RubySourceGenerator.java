@@ -11,7 +11,7 @@ import zen.ast.ZInstanceOfNode;
 import zen.ast.ZParamNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
-import zen.ast.ZVarDeclNode;
+import zen.ast.ZVarNode;
 import zen.parser.ZSourceGenerator;
 import zen.type.ZType;
 
@@ -110,10 +110,10 @@ public class RubySourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override
-	public void VisitVarDeclNode(ZVarDeclNode Node) {
+	public void VisitVarNode(ZVarNode Node) {
 		this.CurrentBuilder.Append(Node.NativeName);
 		this.CurrentBuilder.AppendToken("=");
-		this.GenerateCode(Node.AST[ZVarDeclNode._InitValue]);
+		this.GenerateCode(Node.AST[ZVarNode._InitValue]);
 	}
 
 	@Override

@@ -34,7 +34,7 @@ import zen.ast.ZBooleanNode;
 import zen.ast.ZBreakNode;
 import zen.ast.ZCastNode;
 import zen.ast.ZCatchNode;
-import zen.ast.ZClassDeclNode;
+import zen.ast.ZClassNode;
 import zen.ast.ZComparatorNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZFieldNode;
@@ -68,7 +68,7 @@ import zen.ast.ZStringNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZUnaryNode;
-import zen.ast.ZVarDeclNode;
+import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
 import zen.deps.Field;
 import zen.deps.LibZen;
@@ -550,7 +550,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 		this.TypedNode(Node, ZType.VoidType);
 	}
 
-	@Override public void VisitVarDeclNode(ZVarDeclNode Node) {
+	@Override public void VisitVarNode(ZVarNode Node) {
 		if(Node.GetListSize() == 0) {
 			this.Logger.ReportWarning(Node.SourceToken, "unused variable: " + Node.NativeName);
 		}
@@ -558,7 +558,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 			this.Return(ZenError.NeedFunctionScope(Node, "variable declaration"));
 			return;
 		}
-		this.CheckTypeAt(Node, ZVarDeclNode._InitValue, Node.DeclType);
+		this.CheckTypeAt(Node, ZVarNode._InitValue, Node.DeclType);
 		if(!(Node.DeclType instanceof ZVarType)) {
 			Node.DeclType = this.VarScope.NewVarType(Node.DeclType, Node.NativeName, Node.SourceToken);
 			Node.NameSpace.SetLocalVariable(this.CurrentFunctionNode, Node.DeclType, Node.NativeName, Node.SourceToken);
@@ -727,14 +727,14 @@ public class ZenTypeSafer extends ZTypeChecker {
 			}
 			if(!this.IsTopLevel()) {
 				/* function f() {} ==> var f = function() {} */
-				ZVarDeclNode VarNode = new ZVarDeclNode(Node.ParentNode);
+				ZVarNode VarNode = new ZVarNode(Node.ParentNode);
 				VarNode.SetNameInfo(Node.FuncName);
-				VarNode.Set(ZVarDeclNode._InitValue, Node);
+				VarNode.Set(ZVarNode._InitValue, Node);
 				ZBlockNode Block = Node.GetScopeBlockNode();
 				int Index = Block.IndexOf(Node);
 				Block.CopyTo(Index+1, VarNode);
 				Block.ClearListAfter(Index+1);   // Block[Index] is set to VarNode
-				this.VisitVarDeclNode(VarNode);
+				this.VisitVarNode(VarNode);
 				return;
 			}
 		}
@@ -750,7 +750,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 		}
 	}
 
-	@Override public void VisitClassDeclNode(ZClassDeclNode Node) {
+	@Override public void VisitClassNode(ZClassNode Node) {
 		@Var ZNameSpace NameSpace = Node.GetNameSpace();
 		@Var ZType ClassType = NameSpace.GetType(Node.ClassName, Node.SourceToken);
 		if(ClassType instanceof ZClassType) {

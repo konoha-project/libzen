@@ -66,7 +66,7 @@ import parser.ast.ZenThrowNode;
 import parser.ast.ZenTrinaryNode;
 import parser.ast.ZenTryNode;
 import parser.ast.ZenUnaryNode;
-import parser.ast.ZenVarDeclNode;
+import parser.ast.ZenVarNode;
 import parser.ast.ZenWhileNode;
 import parser.deps.LibZen;
 import parser.deps.LibNative;
@@ -337,7 +337,7 @@ public class JavaSourceGenerator extends ZenSourceGenerator {
 //		}
 //	}
 
-	@Override public void VisitVarDeclNode(ZenVarDeclNode Node) {
+	@Override public void VisitVarNode(ZenVarNode Node) {
 //		JLocalVarStack local = this.VisitingBuilder.AddLocal(Node.Type, Node.NativeName);
 //		Node.InitNode.Accept(this);
 //		this.VisitingBuilder.StoreLocal(local);

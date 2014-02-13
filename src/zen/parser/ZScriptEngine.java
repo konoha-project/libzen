@@ -34,7 +34,7 @@ import zen.ast.ZBooleanNode;
 import zen.ast.ZBreakNode;
 import zen.ast.ZCastNode;
 import zen.ast.ZCatchNode;
-import zen.ast.ZClassDeclNode;
+import zen.ast.ZClassNode;
 import zen.ast.ZComparatorNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZFloatNode;
@@ -65,7 +65,7 @@ import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZTypeNode;
 import zen.ast.ZUnaryNode;
-import zen.ast.ZVarDeclNode;
+import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
 import zen.deps.LibZen;
 import zen.deps.Var;
@@ -116,7 +116,7 @@ public class ZScriptEngine extends ZVisitor {
 	}
 
 	protected void Unsupported(ZNode Node, String Message) {
-		this.Logger.ReportError(Node.SourceToken, "unsupported " + Message + " (at the top level)");
+		this.Logger.ReportError(Node.SourceToken, "at the top level " + Message + " is unsupported");
 		this.StopVisitor();
 	}
 
@@ -269,7 +269,7 @@ public class ZScriptEngine extends ZVisitor {
 		this.EvaledValue = null;
 	}
 
-	@Override public void VisitVarDeclNode(ZVarDeclNode Node) {
+	@Override public void VisitVarNode(ZVarNode Node) {
 		this.Unsupported(Node, "variable declaration");
 	}
 
@@ -288,7 +288,6 @@ public class ZScriptEngine extends ZVisitor {
 
 	@Override public void VisitReturnNode(ZReturnNode Node) {
 		this.Unsupported(Node, "return");
-		throw new RuntimeException();
 	}
 
 	@Override public void VisitWhileNode(ZWhileNode Node) {
@@ -323,7 +322,7 @@ public class ZScriptEngine extends ZVisitor {
 		}
 	}
 
-	@Override public void VisitClassDeclNode(ZClassDeclNode Node) {
+	@Override public void VisitClassNode(ZClassNode Node) {
 		if(!this.Generator.StartCodeGeneration(Node, true, this.IsInteractive)) {
 			this.LazyNode(Node);
 		}
@@ -335,7 +334,7 @@ public class ZScriptEngine extends ZVisitor {
 	}
 
 	@Override public void VisitExtendedNode(ZNode Node) {
-
+		System.out.println("Exteded Node: " + Node);
 	}
 
 	public final Object Exec(ZNode Node, boolean IsInteractive) {

@@ -32,7 +32,7 @@ import zen.ast.ZBooleanNode;
 import zen.ast.ZBreakNode;
 import zen.ast.ZCastNode;
 import zen.ast.ZCatchNode;
-import zen.ast.ZClassDeclNode;
+import zen.ast.ZClassNode;
 import zen.ast.ZComparatorNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZFloatNode;
@@ -62,7 +62,7 @@ import zen.ast.ZStringNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZUnaryNode;
-import zen.ast.ZVarDeclNode;
+import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
 
 public abstract class ZVisitor {
@@ -94,7 +94,7 @@ public abstract class ZVisitor {
 	public abstract void VisitAndNode(ZAndNode Node);
 	public abstract void VisitOrNode(ZOrNode Node);
 	public abstract void VisitBlockNode(ZBlockNode Node);
-	public abstract void VisitVarDeclNode(ZVarDeclNode Node);
+	public abstract void VisitVarNode(ZVarNode Node);
 	public abstract void VisitIfNode(ZIfNode Node);
 	public abstract void VisitReturnNode(ZReturnNode Node);
 	public abstract void VisitWhileNode(ZWhileNode Node);
@@ -104,7 +104,7 @@ public abstract class ZVisitor {
 	public abstract void VisitCatchNode(ZCatchNode Node);
 	public abstract void VisitLetNode(ZLetNode Node);
 	public abstract void VisitFunctionNode(ZFunctionNode Node);
-	public abstract void VisitClassDeclNode(ZClassDeclNode Node);
+	public abstract void VisitClassNode(ZClassNode Node);
 	public abstract void VisitErrorNode(ZErrorNode Node);
 	public abstract void VisitExtendedNode(ZNode Node);
 
@@ -132,5 +132,5 @@ public abstract class ZVisitor {
 	//	public abstract void VisitSwitchNode(ZenSwitchNode Node);
 	//	public abstract void VisitCaseNode(ZenCaseNode Node);
 	//	public abstract void VisitCommandNode(ZenCommandNode Node);
-	//	public abstract void VisitClassDeclNode(ZenClassDeclNode ClassDeclNode);
+	//	public abstract void VisitClassNode(ZenClassNode ClassNode);
 }

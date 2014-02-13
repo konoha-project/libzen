@@ -30,7 +30,7 @@ import zen.ast.ZCastNode;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZInstanceOfNode;
 import zen.ast.ZParamNode;
-import zen.ast.ZVarDeclNode;
+import zen.ast.ZVarNode;
 import zen.parser.ZSourceGenerator;
 import zen.type.ZType;
 
@@ -71,12 +71,12 @@ public class CSourceGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override public void VisitVarDeclNode(ZVarDeclNode Node) {
+	@Override public void VisitVarNode(ZVarNode Node) {
 		this.VisitType(Node.Type);
 		this.CurrentBuilder.Append(" ");
 		this.CurrentBuilder.Append(Node.NativeName);
 		this.CurrentBuilder.AppendToken("=");
-		this.GenerateCode(Node.AST[ZVarDeclNode._InitValue]);
+		this.GenerateCode(Node.AST[ZVarNode._InitValue]);
 		this.CurrentBuilder.Append(this.SemiColon);
 		this.VisitStmtList(Node);
 	}

@@ -36,7 +36,7 @@ import zen.ast.ZBooleanNode;
 import zen.ast.ZBreakNode;
 import zen.ast.ZCastNode;
 import zen.ast.ZCatchNode;
-import zen.ast.ZClassDeclNode;
+import zen.ast.ZClassNode;
 import zen.ast.ZComparatorNode;
 import zen.ast.ZConstNode;
 import zen.ast.ZErrorNode;
@@ -69,7 +69,7 @@ import zen.ast.ZStringNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZUnaryNode;
-import zen.ast.ZVarDeclNode;
+import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
 import zen.deps.LibZen;
 import zen.deps.Var;
@@ -81,7 +81,7 @@ import zen.type.ZType;
 
 class LLVMSourceWriter {
 	private int IndentLebel;
-	private int VarDeclCodeIndex;
+	private int VarCodeIndex;
 	private int TempLocalSymbolNumber;
 	private boolean IsBlockTerminated;
 	private String CurrentLabel;
@@ -98,7 +98,7 @@ class LLVMSourceWriter {
 
 	private void clear() {
 		this.IndentLebel = 0;
-		this.VarDeclCodeIndex = 2;
+		this.VarCodeIndex = 2;
 		this.TempLocalSymbolNumber = 0;
 		this.IsBlockTerminated = false;
 		this.CurrentLabel = null;
@@ -193,9 +193,9 @@ class LLVMSourceWriter {
 	public void AppendBufferAsHeaderLine() {
 		this.HeaderCodeList.add(this.PopCurrentBuffer() + "\n");
 	}
-	public void AppendBufferAsVarDeclLine() {
+	public void AppendBufferAsVarLine() {
 		assert(this.BodyCodeList.size() > 2);
-		this.BodyCodeList.add(this.VarDeclCodeIndex++, this.GetCurrentIndentString() + this.PopCurrentBuffer() + "\n");
+		this.BodyCodeList.add(this.VarCodeIndex++, this.GetCurrentIndentString() + this.PopCurrentBuffer() + "\n");
 	}
 	public void AppendLabel(String Label) {
 		this.BodyCodeList.add(Label + ": \n");
@@ -221,7 +221,7 @@ class LLVMSourceWriter {
 public class LLVMSourceGenerator extends ZSourceGenerator {
 	private int TempGlobalSymbolNumber;
 	private final ArrayList<String> GlobalSymbolList;
-	private final HashMap<String, ZClassDeclNode> ClassFieldMap;
+	private final HashMap<String, ZClassNode> ClassFieldMap;
 	private LLVMSourceWriter Writer;
 
 	//private final ScriptEngineManager EngineManager;
@@ -249,7 +249,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 
 		this.TempGlobalSymbolNumber = 0;
 		this.GlobalSymbolList = new ArrayList<String>();
-		this.ClassFieldMap = new HashMap<String, ZClassDeclNode>();
+		this.ClassFieldMap = new HashMap<String, ZClassNode>();
 		this.Writer = new LLVMSourceWriter();
 		//this.EngineManager = new ScriptEngineManager();
 		//this.Engine = this.EngineManager.getEngineByName("js");
@@ -262,7 +262,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 	private void DefineGlobalSymbol(String Symbol) {
 		this.GlobalSymbolList.add(Symbol);
 	}
-	private void DefineClass(String ClassName, ZClassDeclNode Node) {
+	private void DefineClass(String ClassName, ZClassNode Node) {
 		this.ClassFieldMap.put(ClassName, Node);
 	}
 	private String GetIdentifierAttachedSymbol(String Symbol) {
@@ -645,7 +645,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override
-	public void VisitClassDeclNode(ZClassDeclNode Node) {
+	public void VisitClassNode(ZClassNode Node) {
 		this.DefineClass(Node.ClassName, Node);
 		String ClassSymbol = "%Class." + Node.ClassName;
 		this.Writer.PushNewBuffer(ClassSymbol);
@@ -1125,28 +1125,28 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override
-	public void VisitVarDeclNode(ZVarDeclNode Node) {
-		assert(Node.AST[ZVarDeclNode._InitValue] != null); //must be set initial value
+	public void VisitVarNode(ZVarNode Node) {
+		assert(Node.AST[ZVarNode._InitValue] != null); //must be set initial value
 		this.Writer.DefineLocalVar(Node.NativeName);
 		String VarSymbol = this.GetIdentifierAttachedSymbol(Node.NativeName);
 		this.Writer.PushNewBuffer(VarSymbol);
 		this.Writer.AddCodeToCurrentBuffer(" = alloca ");
 		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.DeclType));
-		this.Writer.AppendBufferAsVarDeclLine();
+		this.Writer.AppendBufferAsVarLine();
 		if(!this.IsPrimitiveType(Node.DeclType)) {
 			this.Writer.PushNewBuffer(";gcroot");
-			this.Writer.AppendBufferAsVarDeclLine();
+			this.Writer.AppendBufferAsVarLine();
 		}
 
 		this.Writer.PushNewBuffer("store ");
-		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.AST[ZVarDeclNode._InitValue].Type));
+		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.AST[ZVarNode._InitValue].Type));
 		this.Writer.AddCodeToCurrentBuffer(" ");
-		this.GenerateCode(Node.AST[ZVarDeclNode._InitValue]);
+		this.GenerateCode(Node.AST[ZVarNode._InitValue]);
 		this.Writer.AddCodeToCurrentBuffer(", ");
 		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.DeclType) + "*");
 		this.Writer.AddCodeToCurrentBuffer(" ");
 		this.Writer.AddCodeToCurrentBuffer(VarSymbol);
-		if(!this.IsPrimitiveType(Node.AST[ZVarDeclNode._InitValue].Type)) {
+		if(!this.IsPrimitiveType(Node.AST[ZVarNode._InitValue].Type)) {
 			this.Writer.AddCodeToCurrentBuffer(" ;gcwrite");
 		}
 		this.Writer.AppendBufferAsNewLine();
@@ -1204,20 +1204,20 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		}
 	}
 
-	private void VisitFieldList(String FirstElement, ZClassDeclNode ClassDeclNode) {
+	private void VisitFieldList(String FirstElement, ZClassNode ClassNode) {
 		this.Writer.AddCodeToCurrentBuffer("{ ");
-		if(ClassDeclNode.SuperType == null) {
+		if(ClassNode.SuperType == null) {
 			this.Writer.AddCodeToCurrentBuffer(FirstElement);
 		}
 		else {
-			ZClassDeclNode SuperClassNode = this.ClassFieldMap.get(ClassDeclNode.SuperType.ShortName);
-			this.Writer.AddCodeToCurrentBuffer("%Class." + ClassDeclNode.SuperType.ShortName);
+			ZClassNode SuperClassNode = this.ClassFieldMap.get(ClassNode.SuperType.ShortName);
+			this.Writer.AddCodeToCurrentBuffer("%Class." + ClassNode.SuperType.ShortName);
 			this.Writer.AddCodeToCurrentBuffer(" ");
 			this.VisitFieldList(FirstElement, SuperClassNode);
 		}
 		@Var int i = 0;
-		while(i < ClassDeclNode.GetListSize()) {
-			@Var ZFieldNode FieldNode = ClassDeclNode.GetFieldNode(i);
+		while(i < ClassNode.GetListSize()) {
+			@Var ZFieldNode FieldNode = ClassNode.GetFieldNode(i);
 			this.Writer.AddCodeToCurrentBuffer(", ");
 			this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(FieldNode.DeclType));
 			this.Writer.AddCodeToCurrentBuffer(" ");
@@ -1273,11 +1273,11 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 	}
 	private void GetObjectElementOffset(ZType Type, String FieldName) {
 		String ClassName = Type.ShortName;
-		ZClassDeclNode ClassDeclNode = this.ClassFieldMap.get(ClassName);
-		if(ClassDeclNode != null) {
-			int Size = ClassDeclNode.GetListSize();
+		ZClassNode ClassNode = this.ClassFieldMap.get(ClassName);
+		if(ClassNode != null) {
+			int Size = ClassNode.GetListSize();
 			for(int i = 0; i < Size; ++i) {
-				if(ClassDeclNode.GetFieldNode(i).FieldName.equals(FieldName)) {
+				if(ClassNode.GetFieldNode(i).FieldName.equals(FieldName)) {
 					this.Writer.AddCodeToCurrentBuffer("i32 " + (i+1));
 					return;
 				}

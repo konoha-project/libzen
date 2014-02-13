@@ -70,7 +70,7 @@ import zen.ast.ZBooleanNode;
 import zen.ast.ZBreakNode;
 import zen.ast.ZCastNode;
 import zen.ast.ZCatchNode;
-import zen.ast.ZClassDeclNode;
+import zen.ast.ZClassNode;
 import zen.ast.ZComparatorNode;
 import zen.ast.ZConstNode;
 import zen.ast.ZErrorNode;
@@ -104,7 +104,7 @@ import zen.ast.ZStringNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZUnaryNode;
-import zen.ast.ZVarDeclNode;
+import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
 import zen.deps.LibZen;
 import zen.deps.Var;
@@ -145,7 +145,7 @@ public class JavaAsmGenerator extends JavaGenerator {
 		return Type.getType(jClass);
 	}
 
-	final String AsmTypeD(ZType zType) {
+	final String GetDescripter(ZType zType) {
 		Class<?> jClass = this.GetJavaClass(zType, null);
 		if(jClass != null) {
 			return Type.getType(jClass).toString();
@@ -165,10 +165,10 @@ public class JavaAsmGenerator extends JavaGenerator {
 		sb.append("(");
 		for(int i = 0; i < FuncType.GetFuncParamSize(); i++) {
 			ZType ParamType = FuncType.GetFuncParamType(i);
-			sb.append(this.AsmTypeD(ParamType));
+			sb.append(this.GetDescripter(ParamType));
 		}
 		sb.append(")");
-		sb.append(this.AsmTypeD(FuncType.GetReturnType()));
+		sb.append(this.GetDescripter(FuncType.GetReturnType()));
 		String Desc = sb.toString();
 		//		String Desc2 = this.GetMethodDescriptor2(FuncType);
 		//		System.out.println(" ** Desc: " + Desc + ", " + Desc2 + ", FuncType: " + FuncType);
@@ -251,7 +251,7 @@ public class JavaAsmGenerator extends JavaGenerator {
 	}
 
 	@Override public void VisitNewObjectNode(ZNewObjectNode Node) {
-		if(Node.Type.IsVarType()) {
+		if(Node.IsUntyped()) {
 			this.Logger.ReportError(Node.SourceToken, "no class for new operator");
 			this.AsmBuilder.visitInsn(Opcodes.ACONST_NULL);
 		}
@@ -275,10 +275,10 @@ public class JavaAsmGenerator extends JavaGenerator {
 		}
 	}
 
-	@Override public void VisitVarDeclNode(ZVarDeclNode Node) {
+	@Override public void VisitVarNode(ZVarNode Node) {
 		Class<?> DeclClass = this.GetJavaClass(Node.DeclType);
 		this.AsmBuilder.AddLocal(DeclClass, Node.NativeName);
-		this.AsmBuilder.PushNode(DeclClass, Node.AST[ZVarDeclNode._InitValue]);
+		this.AsmBuilder.PushNode(DeclClass, Node.AST[ZVarNode._InitValue]);
 		this.AsmBuilder.StoreLocal(Node.NativeName);
 		this.VisitBlockNode(Node);
 		this.AsmBuilder.RemoveLocal(DeclClass, Node.NativeName);
@@ -854,7 +854,7 @@ public class JavaAsmGenerator extends JavaGenerator {
 		}
 	}
 
-	@Override public void VisitClassDeclNode(ZClassDeclNode Node) {
+	@Override public void VisitClassNode(ZClassNode Node) {
 		@Var Class<?> SuperClass = this.GetSuperClass(Node.SuperType);
 		@Var AsmClassBuilder ClassBuilder = this.AsmLoader.NewClass(ACC_PUBLIC, Node, Node.ClassName, SuperClass);
 		for(@Var int i = 0; i < Node.GetListSize(); i++) {

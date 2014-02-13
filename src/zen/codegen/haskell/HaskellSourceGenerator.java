@@ -40,7 +40,7 @@ import zen.ast.ZReturnNode;
 import zen.ast.ZSetNameNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
-import zen.ast.ZVarDeclNode;
+import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
 import zen.deps.LibZen;
 import zen.parser.ZSourceBuilder;
@@ -150,10 +150,10 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override
-	public void VisitVarDeclNode(ZVarDeclNode Node) {
+	public void VisitVarNode(ZVarNode Node) {
 		this.CurrentBuilder.Append(Node.NativeName + " <- readIORef ");
 		this.CurrentBuilder.Append(Node.NativeName + "_ref");
-		this.GenerateCode(Node.AST[ZVarDeclNode._InitValue]);
+		this.GenerateCode(Node.AST[ZVarNode._InitValue]);
 		this.CurrentBuilder.AppendLineFeed();
 	}
 

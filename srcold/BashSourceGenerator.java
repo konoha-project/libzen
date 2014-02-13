@@ -57,7 +57,7 @@ import parser.ast.ZenThrowNode;
 import parser.ast.ZenTrinaryNode;
 import parser.ast.ZenTryNode;
 import parser.ast.ZenUnaryNode;
-import parser.ast.ZenVarDeclNode;
+import parser.ast.ZenVarNode;
 import parser.ast.ZenWhileNode;
 import parser.deps.LibZen;
 
@@ -151,7 +151,7 @@ public class BashSourceGenerator extends SourceGenerator {
 
 		ZenNode.LinkNode(BodyNode.MoveTailNode(), Block);
 		@Var ZenNode NewWhileNode = this.CreateWhileNode(Type, ParsedTree, NewCond, BodyNode);
-		return this.CreateVarDeclNode(BoolType, ParsedTree, BoolType, VarName, TrueNode, NewWhileNode);
+		return this.CreateVarNode(BoolType, ParsedTree, BoolType, VarName, TrueNode, NewWhileNode);
 	}
 
 	private String ResolveCondition(ZenNode Node) {
@@ -314,7 +314,7 @@ public class BashSourceGenerator extends SourceGenerator {
 //		this.PushSourceCode(Macro.replace("$1", Left).replace("$2", Right));
 //	}
 
-	@Override public void VisitVarDeclNode(ZenVarDeclNode Node) {
+	@Override public void VisitVarNode(ZenVarNode Node) {
 		@Var String VarName = Node.NativeName;
 		@Var String Declare = "declare ";
 		@Var String Option = "";

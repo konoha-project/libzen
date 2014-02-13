@@ -124,20 +124,20 @@ public class CGrammar extends ZenUtils {
 	}
 	
 	public static ZenSyntaxTree ParseStructDecl2(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenSyntaxTree LeftTree, ZenSyntaxPattern Pattern) {
-		@Var ZenSyntaxTree ClassDeclTree = TokenContext.CreateMatchedSyntaxTree(NameSpace, Pattern, "struct");
-		ClassDeclTree.SetMatchedPatternAt(ClassDeclName, NameSpace, TokenContext, "$FuncName$", Required); //$ClassName$ is better
+		@Var ZenSyntaxTree ClassTree = TokenContext.CreateMatchedSyntaxTree(NameSpace, Pattern, "struct");
+		ClassTree.SetMatchedPatternAt(ClassName, NameSpace, TokenContext, "$FuncName$", Required); //$ClassName$ is better
 		//if(TokenContext.MatchToken("extends")) {
-		//	ClassDeclTree.SetMatchedPatternAt(ClassDeclSuperType, NameSpace, TokenContext, "$Type$", Required);
+		//	ClassTree.SetMatchedPatternAt(ClassSuperType, NameSpace, TokenContext, "$Type$", Required);
 		//}
-		if(ClassDeclTree.IsMismatchedOrError()) {
-			return ClassDeclTree;
+		if(ClassTree.IsMismatchedOrError()) {
+			return ClassTree;
 		}
 		// define new class
 		@Var ZenNameSpace ClassNameSpace = new ZenNameSpace(NameSpace.Context, NameSpace);
-		@Var ZenToken NameToken = ClassDeclTree.GetSyntaxTreeAt(ClassDeclName).KeyToken;
+		@Var ZenToken NameToken = ClassTree.GetSyntaxTreeAt(ClassName).KeyToken;
 		@Var ZenType SuperType = ZenSystem.TopType;
-		//if(ClassDeclTree.HasNodeAt(ClassDeclSuperType)) {
-		//	SuperType = ClassDeclTree.GetSyntaxTreeAt(ClassDeclSuperType).GetParsedType();
+		//if(ClassTree.HasNodeAt(ClassSuperType)) {
+		//	SuperType = ClassTree.GetSyntaxTreeAt(ClassSuperType).GetParsedType();
 		//}
 		@Var int ClassFlag = KonohaGrammar.ParseClassFlag(0, TokenContext.ParsingAnnotation);
 		@Var String ClassName = NameToken.GetText();
@@ -153,23 +153,23 @@ public class CGrammar extends ZenUtils {
 		}
 		//ClassNameSpace.SetSymbol("This", DefinedType, NameToken);
 
-		ClassDeclTree.SetMatchedPatternAt(ClassDeclBlock, ClassNameSpace, TokenContext, "$Block$", Optional);
-		if(ClassDeclTree.HasNodeAt(ClassDeclBlock)) {
+		ClassTree.SetMatchedPatternAt(ClassBlock, ClassNameSpace, TokenContext, "$Block$", Optional);
+		if(ClassTree.HasNodeAt(ClassBlock)) {
 			@Var ZenClassField ClassField = new ZenClassField(DefinedType, NameSpace);
 			@Var ZenTypeEnv Gamma = new ZenTypeEnv(ClassNameSpace);
-			@Var ZenSyntaxTree SubTree = ClassDeclTree.GetSyntaxTreeAt(ClassDeclBlock);
+			@Var ZenSyntaxTree SubTree = ClassTree.GetSyntaxTreeAt(ClassBlock);
 			while(SubTree != null) {
-				if(SubTree.Pattern.EqualsName("$VarDecl$")) {
+				if(SubTree.Pattern.EqualsName("$Var$")) {
 					CGrammar.TypeMemberDecl(Gamma, SubTree, ClassField);
 				}
 				SubTree = SubTree.NextTree;
 			}
-			ClassDeclTree.ParsedValue = ClassField;
+			ClassTree.ParsedValue = ClassField;
 		}
-		if(ClassDeclTree.IsValidSyntax()) {
+		if(ClassTree.IsValidSyntax()) {
 			NameSpace.AppendTypeName(DefinedType, NameToken);   /* (A) */
 		}
-		return ClassDeclTree;
+		return ClassTree;
 	}
 
 	public static ZenNode TypeStructDecl2(ZenTypeEnv Gamma, ZenSyntaxTree ParsedTree, ZenType ContextType) {
@@ -178,13 +178,13 @@ public class CGrammar extends ZenUtils {
 			@Var ZenType DefinedType = ClassField.DefinedType;
 			DefinedType.SetClassField(ClassField);
 			Gamma.Generator.OpenClassField(ParsedTree, DefinedType, ClassField);
-			@Var ZenSyntaxTree SubTree = ParsedTree.GetSyntaxTreeAt(ClassDeclBlock);
+			@Var ZenSyntaxTree SubTree = ParsedTree.GetSyntaxTreeAt(ClassBlock);
 			@Var ArrayList<ZenFunc> MemberList = new ArrayList<ZenFunc>();
 			while(SubTree != null) {
 				//if(SubTree.Pattern.EqualsName("$FuncDecl$") || SubTree.Pattern.EqualsName("$Constructor2$")) {
 				//	MemberList.add((ZenFunc)SubTree.ParsedValue);
 				//}
-				if(!SubTree.Pattern.EqualsName("$VarDecl$")) {
+				if(!SubTree.Pattern.EqualsName("$Var$")) {
 					SubTree.TypeCheck(Gamma, ZenSystem.VoidType, DefaultTypeCheckPolicy);
 				}
 				SubTree = SubTree.NextTree;
@@ -196,19 +196,19 @@ public class CGrammar extends ZenUtils {
 	
 	private static boolean TypeMemberDecl(ZenTypeEnv Gamma, ZenSyntaxTree ParsedTree, ZenClassField ClassField) {
 		@Var int    FieldFlag = KonohaGrammar.ParseVarFlag(0, ParsedTree.Annotation);
-		@Var ZenType DeclType = ParsedTree.GetSyntaxTreeAt(VarDeclType).GetParsedType();
-		@Var String FieldName = ParsedTree.GetSyntaxTreeAt(VarDeclName).KeyToken.GetText();
+		@Var ZenType DeclType = ParsedTree.GetSyntaxTreeAt(VarType).GetParsedType();
+		@Var String FieldName = ParsedTree.GetSyntaxTreeAt(VarName).KeyToken.GetText();
 		@Var ZenNode InitValueNode = null;
 		@Var Object InitValue = null;
-		if(ParsedTree.HasNodeAt(VarDeclValue)) {
-			InitValueNode = ParsedTree.TypeCheckAt(VarDeclValue, Gamma, DeclType, OnlyConstPolicy | NullablePolicy);
+		if(ParsedTree.HasNodeAt(VarValue)) {
+			InitValueNode = ParsedTree.TypeCheckAt(VarValue, Gamma, DeclType, OnlyConstPolicy | NullablePolicy);
 			if(InitValueNode.IsErrorNode()) {
 				return false;
 			}
 			InitValue = InitValueNode.ToConstValue(Gamma.Context, true);
 		}
 		if(ZenUtils.UseLangStat) {
-			Gamma.Context.Stat.VarDecl += 1;
+			Gamma.Context.Stat.Var += 1;
 		}/*EndOfStat*/
 		if(DeclType.IsVarType()) {
 			if(InitValueNode == null) {
@@ -219,21 +219,21 @@ public class CGrammar extends ZenUtils {
 			}
 			Gamma.ReportTypeInference(ParsedTree.KeyToken, FieldName, DeclType);
 			if(ZenUtils.UseLangStat) {
-				Gamma.Context.Stat.VarDeclInfer += 1;
+				Gamma.Context.Stat.VarInfer += 1;
 				if(DeclType.IsAnyType()) {
-					Gamma.Context.Stat.VarDeclInferAny += 1;
+					Gamma.Context.Stat.VarInferAny += 1;
 				}
 			}/*EndOfStat*/
 		}
 		if(ZenUtils.UseLangStat) {
 			if(DeclType.IsAnyType()) {
-				Gamma.Context.Stat.VarDeclAny += 1;
+				Gamma.Context.Stat.VarAny += 1;
 			}
 		}/*EndOfStat*/
 		if(InitValueNode == null) {
 			InitValue = DeclType.DefaultNullValue;
 		}
-		ClassField.CreateField(FieldFlag, DeclType, FieldName, ParsedTree.GetSyntaxTreeAt(VarDeclName).KeyToken, InitValue);
+		ClassField.CreateField(FieldFlag, DeclType, FieldName, ParsedTree.GetSyntaxTreeAt(VarName).KeyToken, InitValue);
 		return true;
 	}
 

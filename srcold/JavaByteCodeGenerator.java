@@ -91,7 +91,7 @@ import zen.ast.ZenSetLocalNode;
 import zen.ast.ZenSetterNode;
 import zen.ast.ZenStringNode;
 import zen.ast.ZenTrinaryNode;
-import zen.ast.ZenVarDeclNode;
+import zen.ast.ZenVarNode;
 import zen.ast2.ZenAllocateNode;
 import zen.ast2.ZenApplyOverridedMethodNode;
 import zen.ast2.ZenArrayLiteralNode;

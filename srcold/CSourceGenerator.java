@@ -84,7 +84,7 @@ import parser.ast.ZenTrinaryNode;
 import parser.ast.ZenTryNode;
 import parser.ast.ZenUnaryNode;
 import parser.ast.ZenUsingNode;
-import parser.ast.ZenVarDeclNode;
+import parser.ast.ZenVarNode;
 import parser.ast.ZenWhileNode;
 import parser.ast.ZenYieldNode;
 import parser.deps.LibZen;
@@ -400,7 +400,7 @@ public class CSourceGenerator extends ZenSourceGenerator {
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override public void VisitVarDeclNode(ZenVarDeclNode Node) {
+	@Override public void VisitVarNode(ZenVarNode Node) {
 		@Var String Type = this.LocalTypeName(Node.DeclType);
 		@Var String VarName = Node.NativeName;
 		@Var String Code = Type + " " + VarName;

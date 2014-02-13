@@ -38,7 +38,7 @@ import zen.ast.ZReturnNode;
 import zen.ast.ZSetNameNode;
 import zen.ast.ZStringNode;
 import zen.ast.ZUnaryNode;
-import zen.ast.ZVarDeclNode;
+import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
 import zen.parser.ZSourceGenerator;
 
@@ -180,13 +180,13 @@ public class CommonLispSourceGenerator extends ZSourceGenerator {
 	//		this.CurrentBuilder.Append(")");
 	//	}
 
-	@Override public void VisitVarDeclNode(ZVarDeclNode Node) {
+	@Override public void VisitVarNode(ZVarNode Node) {
 		this.CurrentBuilder.Append("(setq  ");
 		this.CurrentBuilder.Append(Node.NativeName);
 		this.CurrentBuilder.Append(" ");
 
-		if (Node.AST[ZVarDeclNode._InitValue] != null) {
-			Node.AST[ZVarDeclNode._InitValue].Accept(this);
+		if (Node.AST[ZVarNode._InitValue] != null) {
+			Node.AST[ZVarNode._InitValue].Accept(this);
 		} else {
 			this.CurrentBuilder.Append("nil");
 		}

@@ -553,14 +553,14 @@ public class DShellGrammar extends ZenUtils {
 
 		@Var String NewCheckPoint = "var " + CheckPointName + " = new CheckPoint(" + TargetPath + ");";
 		@Var ZenTokenContext CheckPointContext = new ZenTokenContext(NameSpace, NewCheckPoint, TokenContext.ParsingLine);
-		AtomicTree.SetMatchedPatternAt(DShellGrammar.AtomicTarget, NameSpace, CheckPointContext, "$VarDecl$", Required);
+		AtomicTree.SetMatchedPatternAt(DShellGrammar.AtomicTarget, NameSpace, CheckPointContext, "$Var$", Required);
 
 		TokenContext.SkipEmptyStatement();
 		AtomicTree.SetMatchedPatternAt(DShellGrammar.AtomicBody, NameSpace, TokenContext, "$Block$", Required);
 
 		@Var String NewExcept = "DShellException e";
 		@Var ZenTokenContext ExceptContext = new ZenTokenContext(NameSpace, NewExcept, TokenContext.ParsingLine);
-		AtomicTree.SetMatchedPatternAt(DShellGrammar.AtomicExcept , NameSpace, ExceptContext, "$VarDecl$", Required);
+		AtomicTree.SetMatchedPatternAt(DShellGrammar.AtomicExcept , NameSpace, ExceptContext, "$Var$", Required);
 
 		@Var String NewRollback = "{ " + CheckPointName + ".rollback(); }";
 		@Var ZenTokenContext RollbackContext = new ZenTokenContext(NameSpace, NewRollback, TokenContext.ParsingLine);
@@ -586,7 +586,7 @@ public class DShellGrammar extends ZenUtils {
 		TargetDeclTree.NextTree = TryTree;
 		TryTree.NextTree = ParsedTree.NextTree;
 		ParsedTree = TargetDeclTree;
-		return KonohaGrammar.TypeVarDecl(Gamma, ParsedTree, ContextType);
+		return KonohaGrammar.TypeVar(Gamma, ParsedTree, ContextType);
 	}
 
 	public static ZenSyntaxTree ParseShell(ZenNameSpace NameSpace, ZenTokenContext TokenContext, ZenSyntaxTree LeftTree, ZenSyntaxPattern Pattern) {

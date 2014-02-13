@@ -33,7 +33,7 @@ import zen.ast.ZBooleanNode;
 import zen.ast.ZBreakNode;
 import zen.ast.ZCastNode;
 import zen.ast.ZCatchNode;
-import zen.ast.ZClassDeclNode;
+import zen.ast.ZClassNode;
 import zen.ast.ZComparatorNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZFieldNode;
@@ -66,7 +66,7 @@ import zen.ast.ZStringNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZUnaryNode;
-import zen.ast.ZVarDeclNode;
+import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
 import zen.deps.Field;
 import zen.deps.LibZen;
@@ -449,13 +449,13 @@ public class ZSourceGenerator extends ZGenerator {
 		this.GenerateCode(Node.AST[ZCatchNode._Block]);
 	}
 
-	@Override public void VisitVarDeclNode(ZVarDeclNode Node) {
+	@Override public void VisitVarNode(ZVarNode Node) {
 		this.CurrentBuilder.Append("var");
 		this.CurrentBuilder.AppendWhiteSpace();
 		this.CurrentBuilder.Append(Node.NativeName);
 		this.VisitTypeAnnotation(Node.DeclType);
 		this.CurrentBuilder.AppendToken("=");
-		this.GenerateCode(Node.AST[ZVarDeclNode._InitValue]);
+		this.GenerateCode(Node.AST[ZVarNode._InitValue]);
 		this.CurrentBuilder.Append(this.SemiColon);
 		this.VisitStmtList(Node);
 	}
@@ -489,7 +489,7 @@ public class ZSourceGenerator extends ZGenerator {
 		this.GenerateCode(Node.AST[ZFunctionNode._Block]);
 	}
 
-	@Override public void VisitClassDeclNode(ZClassDeclNode Node) {
+	@Override public void VisitClassNode(ZClassNode Node) {
 		this.CurrentBuilder.Append("class");
 		this.CurrentBuilder.AppendWhiteSpace();
 		this.CurrentBuilder.Append(Node.ClassName);

@@ -68,7 +68,7 @@ import parser.ast.ZenThrowNode;
 import parser.ast.ZenTrinaryNode;
 import parser.ast.ZenTryNode;
 import parser.ast.ZenUnaryNode;
-import parser.ast.ZenVarDeclNode;
+import parser.ast.ZenVarNode;
 import parser.ast.ZenWhileNode;
 import parser.deps.LibZen;
 
@@ -415,7 +415,7 @@ var CLASS = (function (_super) {
 		this.CurrentBuilder.Append(";");
 		if(!this.IsInForExpr(Node)) this.CurrentBuilder.AppendLine("");
 	}
-	@Override public void VisitVarDeclNode(ZenVarDeclNode Node) {
+	@Override public void VisitVarNode(ZenVarNode Node) {
 		this.CurrentBuilder.Append(this.ConvertToNativeTypeName(Node.DeclType));
 		String VarName = Node.SourceToken.GetText();
 		this.CurrentBuilder.AppendToken(VarName);

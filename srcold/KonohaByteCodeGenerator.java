@@ -88,7 +88,7 @@ import parser.ast.ZenTrinaryNode;
 import parser.ast.ZenTryNode;
 import parser.ast.ZenUnaryNode;
 import parser.ast.ZenUsingNode;
-import parser.ast.ZenVarDeclNode;
+import parser.ast.ZenVarNode;
 import parser.ast.ZenWhileNode;
 import parser.ast.ZenYieldNode;
 import parser.deps.LibZen;
@@ -535,7 +535,7 @@ public class KonohaByteCodeGenerator extends ZenSourceGenerator {
 		/*FIXME*/
 	}
 
-	@Override public void VisitVarDeclNode(ZenVarDeclNode Node) {
+	@Override public void VisitVarNode(ZenVarNode Node) {
 		this.LocalVarMap.put(Node.NativeName, this.AllocRegister());
 		Node.InitNode.Accept(this);
 		this.CurrentBuilder.Append("NMOV " + "REG" + this.LocalVarMap.get(Node.NativeName) + ", REG" + this.PopRegister() + "\n");

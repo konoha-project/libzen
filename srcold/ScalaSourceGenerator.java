@@ -42,7 +42,7 @@
 //import parser.ast.ZenNode;
 //import parser.ast.ZenThrowNode;
 //import parser.ast.ZenTryNode;
-//import parser.ast.ZenVarDeclNode;
+//import parser.ast.ZenVarNode;
 //import parser.ast.ZenWhileNode;
 //
 ////Zen Generator should be written in each language.
@@ -135,7 +135,7 @@
 //		this.PushSourceCode(Program);
 //	}
 //
-//	@Override public void VisitVarDeclNode(ZenVarDeclNode Node) {
+//	@Override public void VisitVarNode(ZenVarNode Node) {
 //		@Var String Type = this.LocalTypeName(Node.DeclType);
 //		@Var String VarName = Node.NativeName;
 //		@Var String Code = "var " + VarName + " : " + Type + " ";
