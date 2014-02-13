@@ -123,71 +123,73 @@ let ZTypeFuncType = new ZFuncType("Func", null);
 let ZTypeFlag_OpenType = 1 << 9;  // @Open for the future
 let ZTypeFlag_UnboxType = 1 << 10;
 let ZTypeFlag_UniqueType = 1 << 16;
-let TypeList = [];
-let GreekTypes = ZGreekType.NewGreekTypes(null);
+let ZTypePool_TypeList = [];
+let ZTypePool_GreekTypes = ZGreekType.NewGreekTypes(null);
 function NewTypeId(T: ZType): int {
-	var TypeId: int = TypeList.size();
-	TypeList.add(T);
+	var TypeId: int = _TypeList.size();
+	_TypeList.add(T);
 	return TypeId;
 }
 function TypeOf(TypeId: int): ZType {
-	if(TypeId < ZTypePool.TypeList.size()) {
-		return ZTypePool.TypeList.get(TypeId);
+	if(TypeId < ZTypePool_TypeList.size()) {
+		return ZTypePool_TypeList[TypeId];
 	}
 	return ZTypeVarType;
 }
 function GetGreekType(GreekId: int): ZType {
-	if(ZTypePool.GreekTypes[GreekId] == null) {
-		ZTypePool.GreekTypes[GreekId] = new ZGreekType(GreekId);
+	if(ZTypePool_GreekTypes[GreekId] == null) {
+		ZTypePool_GreekTypes[GreekId] = new ZGreekType(GreekId);
 	}
-	return ZTypePool.GreekTypes[GreekId];
+	return ZTypePool_GreekTypes[GreekId];
 }
-function ClassNameMap(ClassNameMap: Map<ZType>): Map<ZType>ZenMap<ZType>     ClassNameMap = {};
-function UniqueTypeSetMap(UniqueTypeSetMap: Map<ZType[]>): Map<ZType[]>ZenMap<ZType[]>   UniqueTypeSetMap = {};
-function MangleType2(Type1: ZType, Type2: ZType): String {
+function ZTypePool_ClassNameMap(_ClassNameMap: Map<ZType>): Map<ZType>ZenMap<ZType>     _ClassNameMap = {};
+function ZTypePool_UniqueTypeSetMap(_UniqueTypeSetMap: Map<ZType[]>): Map<ZType[]>ZenMap<ZType[]>   _UniqueTypeSetMap = {};
+function ZTypePool_MangleType2(Type1: ZType, Type2: ZType): String {
 	return ":" + Type1.TypeId + ":" + Type2.TypeId;
 }
-function MangleTypes(BaseIdx: int, TypeList: ZType[]): String {
+function ZTypePool_MangleTypes(TypeList: ZType[]): String {
 	var s: String = "";
-	for(var i: int = BaseIdx; i < LibZen_Size(TypeList); i = i + 1) {
-		var Type: ZType = TypeList.get(i);
+	var i: int = 0;
+	while(i < TypeList.size()) {
+		var Type: ZType = TypeList[i];
 		s = s + ":" + Type.TypeId;
+		i = i + 1;
 	}
 	return s;
 }
-function UniqueTypes(BaseIdx: int, TypeList: ZType[]): ZType[] {
-	var MangleName: String = "[]" + MangleTypes(BaseIdx, TypeList);
-	var Types: ZType[] = ZTypePool.UniqueTypeSetMap.GetOrNull(MangleName);
+function ZTypePool_UniqueTypes(TypeList: ZType[]): ZType[] {
+	var MangleName: String = "[]" + _MangleTypes(TypeList);
+	var Types: ZType[] = ZTypePool_UniqueTypeSetMap.GetOrNull(MangleName);
 	if(Types == null) {
-		Types = LibZen.CompactTypeList(BaseIdx, TypeList);
-		ZTypePool.UniqueTypeSetMap.put(MangleName, Types);
+		Types = TypeList.CompactArray();
+		ZTypePool_UniqueTypeSetMap.put(MangleName, Types);
 	}
 	return Types;
 }
-function GetGenericType1(BaseType: ZType, ParamType: ZType): ZType {
-	var MangleName: String = ZTypePool.MangleType2(BaseType, ParamType);
-	var GenericType: ZType = ZTypePool.ClassNameMap.GetOrNull(MangleName);
+function ZTypePool_GetGenericType1(BaseType: ZType, ParamType: ZType): ZType {
+	var MangleName: String = ZTypePool_MangleType2(BaseType, ParamType);
+	var GenericType: ZType = ZTypePool_ClassNameMap.GetOrNull(MangleName);
 	if(GenericType == null) {
 		var Name: String = BaseType.ShortName + "<" + ParamType + ">";
 		if(BaseType.IsArrayType()) {
 			Name = BaseType.ShortName + "<" + ParamType + ">";
 		}
 		GenericType = new ZGeneric1Type(ZTypeFlag_UniqueType, Name, BaseType, ParamType);
-		ZTypePool.ClassNameMap.put(MangleName, GenericType);
+		ZTypePool_ClassNameMap.put(MangleName, GenericType);
 	}
 	return GenericType;
 }
-function GetGenericType(BaseType: ZType, BaseIdx: int, TypeList: ZType[], IsCreation: boolean): ZType {
+function ZTypePool_GetGenericType(BaseType: ZType, TypeList: ZType[], IsCreation: boolean): ZType {
 	assert(BaseType.GetParamSize() > 0);
-	if(TypeList.size() - BaseIdx == 1 && !BaseType.IsFuncType()) {
-		return ZTypePool.GetGenericType1(BaseType, TypeList.get(BaseIdx));
+	if(TypeList.size() == 1 && !BaseType.IsFuncType()) {
+		return ZTypePool_GetGenericType1(BaseType, TypeList[0]);
 	}
-	var MangleName: String = ":" + BaseType.TypeId + MangleTypes(BaseIdx, TypeList);
-	var GenericType: ZType = ZTypePool.ClassNameMap.GetOrNull(MangleName);
+	var MangleName: String = ":" + BaseType.TypeId + _MangleTypes(TypeList);
+	var GenericType: ZType = ZTypePool_ClassNameMap.GetOrNull(MangleName);
 	if((GenericType == null) && IsCreation) {
 		var ShortName: String = BaseType.ShortName + "<";
-		for(var i: int = BaseIdx; i < LibZen_Size(TypeList); i += 1) {
-			ShortName = ShortName + TypeList.get(i).GetRealType().ShortName;
+		for(var i: int = 0; i < LibZen_Size(TypeList); i += 1) {
+			ShortName = ShortName + TypeList[i].GetRealType().ShortName;
 			if(i + 1 == LibZen_Size(TypeList)) {
 				ShortName = ShortName + ">";
 			}
@@ -196,17 +198,20 @@ function GetGenericType(BaseType: ZType, BaseIdx: int, TypeList: ZType[], IsCrea
 			}
 		}
 		if(BaseType.IsFuncType()) {
-			GenericType = new ZFuncType(ShortName, UniqueTypes(BaseIdx, TypeList));
+			GenericType = new ZFuncType(ShortName, _UniqueTypes(TypeList));
 		}
 		else {
-			throw new RuntimeException("TODO: Make ZenGenericType");
 		}
-		ZTypePool.ClassNameMap.put(MangleName, GenericType);
+		ZTypePool_ClassNameMap.put(MangleName, GenericType);
 	}
 	return GenericType;
 }
-function LookupFuncType(TypeList: ZType[]): ZFuncType {
-	return (ZFuncType)GetGenericType(ZTypeFuncType, 0, TypeList, true);
+function ZTypePool_LookupFuncType(TypeList: ZType[]): ZFuncType {
+	ZType FuncType = _GetGenericType(ZTypeFuncType, TypeList, true);
+	if(FuncType instanceof ZFuncType) {
+		return (ZFuncType)FuncType;
+	}
+	return null;
 }
 function GreekNames(GreekNames: String[], };: "\u03B3",): String[]String[] GreekNames = {
 	"\u03B1", "\u03B2", "\u03B3",
@@ -594,7 +599,7 @@ function TypeCheckStmtList(this: ZVarScope, TypeSafer: ZTypeChecker, StmtList: Z
 		this.VarNodeCount = 0;
 		this.UnresolvedSymbolCount = 0;
 		while(i < StmtList.size()) {
-			StmtList.set(i, TypeSafer.CheckType(StmtList.get(i), ZTypeVoidType));
+			StmtList[i] = TypeSafer.CheckType(StmtList[i], ZTypeVoidType);
 			i = i + 1;
 		}
 		if(this.VarNodeCount == 0 || PrevCount == this.VarNodeCount) {
@@ -614,7 +619,7 @@ function TypeCheckFuncBlock(this: ZVarScope, TypeSafer: ZTypeChecker, FunctionNo
 		this.VarNodeCount = 0;
 		this.UnresolvedSymbolCount = 0;
 		TypeSafer.DefineFunction(FunctionNode, false/*Enforced*/);
-		FunctionNode.AST[ZFunctionNode_Block] = (ZBlockNode)TypeSafer.CheckType(FunctionNode.AST[ZFunctionNode_Block], ZTypeVoidType);
+		FunctionNode.AST[ZFunctionNode_Block] = TypeSafer.CheckType(FunctionNode.AST[ZFunctionNode_Block], ZTypeVoidType);
 		if(this.VarNodeCount == 0 || PrevCount == this.VarNodeCount) {
 			break;
 		}
@@ -717,7 +722,7 @@ function ResetSuperType(this: ZClassType, SuperClass: ZClassType): void {
 		this.FieldList = [];
 		var i: int = 0;
 		while(i < SuperClass.FieldList.size()) {
-			var Field: ZClassField = SuperClass.FieldList.get(i);
+			var Field: ZClassField = SuperClass.FieldList[i];
 			this.FieldList.add(Field);
 			i = i + 1;
 		}
@@ -732,14 +737,14 @@ function GetFieldSize(this: ZClassType): int {
 }
 
 function GetFieldAt(this: ZClassType, Index: int): ZClassField {
-	return this.FieldList.get(Index);
+	return this.FieldList[Index];
 }
 
 function HasField(this: ZClassType, FieldName: String): boolean {
 	if(this.FieldList != null) {
 		var i: int = 0;
 		while(i < this.FieldList.size()) {
-			if(LibZen_EqualsString(FieldName, this.FieldList.get(i).FieldName)) {
+			if(LibZen_EqualsString(FieldName, this.FieldList[i].FieldName)) {
 				return true;
 			}
 			i = i + 1;
@@ -752,7 +757,7 @@ function GetFieldType(this: ZClassType, FieldName: String, DefaultType: ZType): 
 	if(this.FieldList != null) {
 		var i: int = 0;
 		while(i < this.FieldList.size()) {
-			var Field: ZClassField = this.FieldList.get(i);
+			var Field: ZClassField = this.FieldList[i];
 			if(LibZen_EqualsString(FieldName, Field.FieldName)) {
 				return Field.FieldType;
 			}
@@ -768,7 +773,7 @@ function AppendField(this: ZClassType, FieldType: ZType, FieldName: String, Sour
 	}
 	var i: int = 0;
 	while(i < this.FieldList.size()) {
-		var Field: ZClassField = this.FieldList.get(i);
+		var Field: ZClassField = this.FieldList[i];
 		if(LibZen_EqualsString(FieldName, Field.FieldName)) {
 			if(FieldType.Equals(Field.FieldType)) {
 				return null;
@@ -825,7 +830,7 @@ function GetRealType(this: ZFuncType, Greek: ZType[]): ZType {
 		while(i < this.TypeParams.length) {
 			TypeList.add(this.TypeParams[i].GetRealType(Greek));
 		}
-		return ZTypePool.LookupFuncType(TypeList);
+		return ZTypePool_LookupFuncType(TypeList);
 	}
 	return this;
 }
@@ -888,7 +893,7 @@ function NewMethodFuncType(this: ZFuncType, RecvType: ZType): ZFuncType {
 		TypeList.add(this.GetFuncParamType(i));
 		i = i + 1;
 	}
-	return ZTypePool.LookupFuncType(TypeList);
+	return ZTypePool_LookupFuncType(TypeList);
 }
 
 function ZGeneric1Type(this: ZGeneric1Type, TypeFlag: int, ShortName: String, BaseType: ZType, ParamType: ZType): ZGeneric1Type {
@@ -925,7 +930,7 @@ function IsGreekType(this: ZGeneric1Type): boolean {
 
 function GetRealType(this: ZGeneric1Type, Greek: ZType[]): ZType {
 	if(this.ParamType.IsGreekType()) {
-		return ZTypePool.GetGenericType1(this.BaseType, this.ParamType.GetRealType(Greek));
+		return ZTypePool_GetGenericType1(this.BaseType, this.ParamType.GetRealType(Greek));
 	}
 	return this.GetRealType();
 }

@@ -96,9 +96,9 @@ public class JavaMethodTable {
 		Import(ZType.StringType, "!=", ZType.StringType, JavaOperatorApi.class, "NotEquals");
 		Import(ZType.StringType, "[]", ZType.IntType, JavaOperatorApi.class, "GetIndex");
 
-		ZType IntArrayType = ZTypePool.GetGenericType1(ZType.ArrayType, ZType.IntType);
-		ZType FloatArrayType = ZTypePool.GetGenericType1(ZType.ArrayType, ZType.FloatType);
-		ZType StringArrayType = ZTypePool.GetGenericType1(ZType.ArrayType, ZType.StringType);
+		ZType IntArrayType = ZTypePool._GetGenericType1(ZType.ArrayType, ZType.IntType);
+		ZType FloatArrayType = ZTypePool._GetGenericType1(ZType.ArrayType, ZType.FloatType);
+		ZType StringArrayType = ZTypePool._GetGenericType1(ZType.ArrayType, ZType.StringType);
 
 		Import(ZType.ArrayType, "[]", ZType.IntType, zen.deps.ZObjectArray.class, "GetIndex");
 		Import(ZType.ArrayType, "[]=", ZType.IntType, zen.deps.ZObjectArray.class, "SetIndex", Object.class);

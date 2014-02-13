@@ -1,6 +1,7 @@
 package zen.type;
 
 import zen.deps.Field;
+import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.deps.ZArray;
 
@@ -19,7 +20,7 @@ public final class ZFuncType extends ZType {
 			this.TypeParams = UniqueTypeParams;
 		}
 		@Var int i = 0;
-		while(i < this.TypeParams.length) {
+		while(i < LibZen._Size(this.TypeParams)) {
 			if(this.TypeParams[i].IsVarType()) {
 				this.HasUnknownType = true;
 			}
@@ -46,10 +47,11 @@ public final class ZFuncType extends ZType {
 		if(this.HasGreekType) {
 			@Var ZArray<ZType> TypeList = new ZArray<ZType>(new ZType[this.TypeParams.length]);
 			@Var int i = 0;
-			while(i < this.TypeParams.length) {
+			while(i < LibZen._Size(this.TypeParams)) {
 				TypeList.add(this.TypeParams[i].GetRealType(Greek));
+				i = i + 1;
 			}
-			return ZTypePool.LookupFuncType(TypeList);
+			return ZTypePool._LookupFuncType(TypeList);
 		}
 		return this;
 	}
@@ -57,7 +59,7 @@ public final class ZFuncType extends ZType {
 	@Override public final boolean AcceptValueType(ZType ValueType, boolean ExactMatch, ZType[] Greek) {
 		if(ValueType.IsFuncType() && ValueType.GetParamSize() == this.GetParamSize()) {
 			@Var int i = 0;
-			while(i < this.TypeParams.length) {
+			while(i < LibZen._Size(this.TypeParams)) {
 				if(!this.TypeParams[i].AcceptValueType(ValueType.GetParamType(i), true, Greek)) {
 					return false;
 				}
@@ -77,7 +79,7 @@ public final class ZFuncType extends ZType {
 	}
 
 	@Override public int GetParamSize() {
-		return this.TypeParams.length;
+		return LibZen._Size(this.TypeParams);
 	}
 
 	@Override public ZType GetParamType(int Index) {
@@ -89,11 +91,11 @@ public final class ZFuncType extends ZType {
 	}
 
 	public final int GetFuncParamSize() {
-		return this.TypeParams.length - 1;
+		return LibZen._Size(this.TypeParams) - 1;
 	}
 
 	public final ZType GetRecvType() {
-		if(this.TypeParams.length == 1) {
+		if(LibZen._Size(this.TypeParams) == 1) {
 			return ZType.VoidType;
 		}
 		return this.TypeParams[1];
@@ -112,7 +114,7 @@ public final class ZFuncType extends ZType {
 			TypeList.add(this.GetFuncParamType(i));
 			i = i + 1;
 		}
-		return ZTypePool.LookupFuncType(TypeList);
+		return ZTypePool._LookupFuncType(TypeList);
 	}
 
 }

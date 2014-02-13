@@ -33,7 +33,7 @@ public class ZClassField {
 	@Field public ZType	     FieldType = null;
 	@Field public String	 FieldName = null;
 	@Field public int        FieldNativeIndex = 0;
-	@Field public ZToken   SourceToken = null;
+	@Field public ZToken     SourceToken = null;
 
 	public ZClassField(ZClassType ClassType, String FieldName, ZType FieldType, ZToken SourceToken) {
 		this.ClassType = ClassType;

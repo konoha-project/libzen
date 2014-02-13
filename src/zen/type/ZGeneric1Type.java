@@ -40,32 +40,32 @@ public class ZGeneric1Type extends ZType {
 		this.ParamType = ParamType;
 	}
 
-	@Override public ZType GetSuperType() {
+	@Override public final ZType GetSuperType() {
 		return this.BaseType == this ? this.RefType : this.BaseType;
 	}
 
-	@Override public ZType GetBaseType() {
+	@Override public final ZType GetBaseType() {
 		return this.BaseType;
 	}
 
-	@Override public int GetParamSize() {
+	@Override public final int GetParamSize() {
 		return 1;
 	}
 
-	@Override public ZType GetParamType(int Index) {
+	@Override public final ZType GetParamType(int Index) {
 		if(Index == 0) {
 			return this.ParamType;
 		}
 		return null;
 	}
 
-	@Override public boolean IsGreekType() {
+	@Override public final boolean IsGreekType() {
 		return (this.ParamType.IsGreekType());
 	}
 
 	@Override public final ZType GetRealType(ZType[] Greek) {
 		if(this.ParamType.IsGreekType()) {
-			return ZTypePool.GetGenericType1(this.BaseType, this.ParamType.GetRealType(Greek));
+			return ZTypePool._GetGenericType1(this.BaseType, this.ParamType.GetRealType(Greek));
 		}
 		return this.GetRealType();
 	}

@@ -57,9 +57,9 @@ public class JavaTypeTable {
 		JavaTypeTable.SetTypeTable(ZType.ArrayType, ZObjectArray.class);
 		JavaTypeTable.SetTypeTable(ZType.MapType, ZenMap.class);
 
-		ZType IntArrayType = ZTypePool.GetGenericType1(ZType.ArrayType, ZType.IntType);
-		ZType FloatArrayType = ZTypePool.GetGenericType1(ZType.ArrayType, ZType.FloatType);
-		ZType StringArrayType = ZTypePool.GetGenericType1(ZType.ArrayType, ZType.StringType);
+		ZType IntArrayType = ZTypePool._GetGenericType1(ZType.ArrayType, ZType.IntType);
+		ZType FloatArrayType = ZTypePool._GetGenericType1(ZType.ArrayType, ZType.FloatType);
+		ZType StringArrayType = ZTypePool._GetGenericType1(ZType.ArrayType, ZType.StringType);
 		JavaTypeTable.SetTypeTable(IntArrayType, ZIntArray.class);
 		JavaTypeTable.SetTypeTable(FloatArrayType, ZFloatArray.class);
 		JavaTypeTable.SetTypeTable(StringArrayType, ZStringArray.class);
@@ -120,7 +120,7 @@ public class JavaTypeTable {
 				j = j + 1;
 			}
 		}
-		return ZTypePool.LookupFuncType(TypeList);
+		return ZTypePool._LookupFuncType(TypeList);
 	}
 
 	public final static ZFuncType FuncType(Class<?> ReturnT, Class<?> ... paramsT) {
@@ -129,7 +129,7 @@ public class JavaTypeTable {
 		for(Class<?> C : paramsT) {
 			TypeList.add(JavaTypeTable.GetZenType(C));
 		}
-		return ZTypePool.LookupFuncType(TypeList);
+		return ZTypePool._LookupFuncType(TypeList);
 	}
 
 }

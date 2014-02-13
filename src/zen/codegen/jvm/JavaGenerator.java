@@ -193,7 +193,7 @@ public abstract class JavaGenerator extends ZGenerator {
 						j = j + 1;
 					}
 				}
-				return ZTypePool.LookupFuncType(TypeList);
+				return ZTypePool._LookupFuncType(TypeList);
 			}
 		}
 		else {

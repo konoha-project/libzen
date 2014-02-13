@@ -51,7 +51,7 @@ public class ZType  {
 		this.ShortName = ShortName;
 		this.RefType = RefType;
 		if(LibZen._IsFlag(TypeFlag, ZTypeFlag._UniqueType)) {
-			this.TypeId = ZTypePool.NewTypeId(this);
+			this.TypeId = ZTypePool._NewTypeId(this);
 		}
 	}
 

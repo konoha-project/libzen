@@ -1,6 +1,7 @@
 package zen.type;
 
 import zen.deps.Field;
+import zen.deps.LibZen;
 import zen.deps.Var;
 
 public class ZGreekType extends ZType {
@@ -9,6 +10,7 @@ public class ZGreekType extends ZType {
 	};
 
 	@Field public final int GreekId;
+
 	public ZGreekType(int GreekId) {
 		super(ZTypeFlag._UniqueType, GreekNames[GreekId], ZType.VarType);
 		this.GreekId = GreekId;
@@ -16,11 +18,11 @@ public class ZGreekType extends ZType {
 
 	public final static ZType[] NewGreekTypes(ZType[] GreekTypes) {
 		if(GreekTypes == null) {
-			return new ZType[GreekNames.length];
+			return new ZType[LibZen._Size(GreekNames)];
 		}
 		else {
 			@Var int i = 0;
-			while(i < GreekTypes.length) {
+			while(i < LibZen._Size(GreekTypes)) {
 				GreekTypes[i] = null;
 				i = i + 1;
 			}

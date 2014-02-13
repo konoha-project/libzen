@@ -27,14 +27,14 @@ public class RightTypePattern extends ZMatchFunction {
 					}
 					TypeList.add(ParamTypeNode.Type);
 				}
-				LeftTypeNode = new ZTypeNode(ParentNode, SourceToken, ZTypePool.GetGenericType(LeftTypeNode.Type, TypeList, true));
+				LeftTypeNode = new ZTypeNode(ParentNode, SourceToken, ZTypePool._GetGenericType(LeftTypeNode.Type, TypeList, true));
 			}
 		}
 		while(TokenContext.MatchToken("[")) {  // Array
 			if(!TokenContext.MatchToken("]")) {
 				return null;
 			}
-			LeftTypeNode = new ZTypeNode(ParentNode, SourceToken, ZTypePool.GetGenericType1(ZType.ArrayType, LeftTypeNode.Type));
+			LeftTypeNode = new ZTypeNode(ParentNode, SourceToken, ZTypePool._GetGenericType1(ZType.ArrayType, LeftTypeNode.Type));
 		}
 		return LeftTypeNode;
 	}
