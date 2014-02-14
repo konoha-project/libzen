@@ -116,7 +116,7 @@ public class ZScriptEngine extends ZVisitor {
 	}
 
 	protected void Unsupported(ZNode Node, String Message) {
-		this.Logger.ReportError(Node.SourceToken, "at the top level " + Message + " is unsupported");
+		this.Logger.ReportError(Node.SourceToken, Message + " is unsupported at top level");
 		this.StopVisitor();
 	}
 
@@ -334,7 +334,14 @@ public class ZScriptEngine extends ZVisitor {
 	}
 
 	@Override public void VisitExtendedNode(ZNode Node) {
-		System.out.println("Exteded Node: " + Node);
+		LibZen._PrintDebug("Exteded Node: " + Node);
+		ZNode TransformedNode = Node.DeSugar(this.Generator);
+		if(TransformedNode == Node) {
+			this.Unsupported(Node, "'"+Node.SourceToken.GetText() + "'");
+		}
+		else {
+			this.Eval(TransformedNode);
+		}
 	}
 
 	public final Object Exec(ZNode Node, boolean IsInteractive) {
@@ -381,7 +388,6 @@ public class ZScriptEngine extends ZVisitor {
 		Object ResultValue = this.Eval(ScriptText, FileName, 1, false);
 		this.Logger.ShowErrors();
 		if(ResultValue == ZEmptyValue.FalseEmpty) {
-			LibZen._Exit(1, "abort loading: " + FileName);
 			return false;
 		}
 		return true;

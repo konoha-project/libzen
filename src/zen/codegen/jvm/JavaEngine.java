@@ -57,6 +57,7 @@ import zen.deps.ZIntArray;
 import zen.deps.ZObjectArray;
 import zen.deps.ZStringArray;
 import zen.deps.ZenMap;
+import zen.parser.ZEmptyValue;
 import zen.parser.ZScriptEngine;
 import zen.type.ZFunc;
 import zen.type.ZFuncType;
@@ -142,8 +143,18 @@ public class JavaEngine extends ZScriptEngine {
 			}
 			if(this.IsVisitable()) {
 				this.EvaledValue = jMethod.invoke(Recv, Values);
+				if(jMethod.getReturnType() == void.class) {
+					this.EvaledValue = ZEmptyValue.TrueEmpty;
+				}
 			}
-		} catch (Exception e) {
+		}
+		catch(java.lang.reflect.InvocationTargetException e) {
+			Throwable te = e.getCause();
+			this.Logger.ReportError2(Node, "runtime error: " + te);
+			te.printStackTrace();
+			this.StopVisitor();
+		}
+		catch (Exception e) {
 			this.Logger.ReportInfo(Node.SourceToken, "runtime error: " + e);
 			e.printStackTrace();
 			this.StopVisitor();
@@ -178,6 +189,9 @@ public class JavaEngine extends ZScriptEngine {
 			}
 			if(this.IsVisitable()) {
 				this.EvaledValue = jMethod.invoke(Recv, Values);
+				if(jMethod.getReturnType() == void.class) {
+					this.EvaledValue = ZEmptyValue.TrueEmpty;
+				}
 			}
 		} catch (Exception e) {
 			this.Logger.ReportError(Node.SourceToken, "invocation error: " + e);
@@ -323,21 +337,19 @@ public class JavaEngine extends ZScriptEngine {
 	}
 
 	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
-		if(Node.ResolvedFuncName != null) {
-			if(Node.ResolvedFunc instanceof JavaStaticFunc) {
-				this.EvalStaticMethod(Node, ((JavaStaticFunc)Node.ResolvedFunc).StaticFunc, this.PackNodes(null, Node));
-				return;
-			}
-			else if(Node.ResolvedFunc != null) {
-				ZFuncType FuncType = Node.ResolvedFunc.GetFuncType();
-				Class<?> FunctionClass = ((JavaAsmGenerator)this.Solution).GetDefinedFunctionClass(Node.ResolvedFuncName, FuncType);
-				Node.Set(ZFuncCallNode._Func, new JavaStaticFieldNode(Node, FunctionClass, FuncType, "function"));
-			}
-			else {
-				this.Logger.ReportError(Node.SourceToken, "unresolved function: " + Node.ResolvedFuncName);
-				this.StopVisitor();
-				return;
-			}
+		if(Node.ResolvedFunc instanceof JavaStaticFunc) {
+			this.EvalStaticMethod(Node, ((JavaStaticFunc)Node.ResolvedFunc).StaticFunc, this.PackNodes(null, Node));
+			return;
+		}
+		if(Node.ResolvedFuncName != null && Node.ResolvedFunc == null) {
+			this.Logger.ReportError(Node.SourceToken, "undefined function: " + Node.ResolvedFuncName);
+			this.StopVisitor();
+			return;
+		}
+		if(Node.ResolvedFunc != null) {
+			ZFuncType FuncType = Node.ResolvedFunc.GetFuncType();
+			Class<?> FunctionClass = this.Solution.GetDefinedFunctionClass(Node.ResolvedFuncName, FuncType);
+			Node.Set(ZFuncCallNode._Func, new JavaStaticFieldNode(Node, FunctionClass, FuncType, "function"));
 		}
 		Object Recv = this.Eval(Node.AST[ZFuncCallNode._Func]);
 		if(this.IsVisitable()) {

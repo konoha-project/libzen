@@ -93,8 +93,8 @@ public class LibZen {
 	}
 
 	public final static void _Exit(int status, String Message) {
-		System.err.println(Message);
-		System.exit(1);
+		System.err.println("EXIT " + LibZen._GetStackInfo(3) + Message);
+		System.exit(status);
 	}
 
 	public final static String _GetPlatform() {

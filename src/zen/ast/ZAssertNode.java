@@ -1,5 +1,6 @@
 package zen.ast;
 
+import zen.deps.Var;
 import zen.parser.ZGenerator;
 import zen.type.ZFunc;
 import zen.type.ZType;
@@ -23,8 +24,9 @@ public class ZAssertNode extends ZNode {
 	}
 
 	@Override public ZNode DeSugar(ZGenerator Generator) {
-		ZFunc Func = Generator.GetDefinedFunc("Assert", ZType.BooleanType, 1);
-		ZFuncCallNode FuncNode = new ZFuncCallNode(this.ParentNode, this.SourceToken, Func);
+		@Var ZFunc Func = Generator.GetDefinedFunc("Assert", ZType.BooleanType, 1);
+		assert(Func != null);
+		@Var ZFuncCallNode FuncNode = new ZFuncCallNode(this.ParentNode, this.SourceToken, Func);
 		FuncNode.Append(this.AST[ZAssertNode._Expr]);
 		return FuncNode;
 	}

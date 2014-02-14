@@ -14,7 +14,17 @@ public class JavaCommonApi {
 
 	public final static void Assert(boolean x) {
 		if(!x) {
-			throw new SoftwareFaultException("assertion failed");
+			Exception e = new SoftwareFaultException("assertion failed");
+			e.printStackTrace();
+			StackTraceElement[] Elements = e.getStackTrace();
+			String LineNumber = "";
+			int depth = 4;
+			if(depth < Elements.length) {
+				StackTraceElement elem = Elements[depth];
+				LineNumber += elem;
+			}
+			System.err.println("EXIT: " + LineNumber + " assertion failed");
+			System.exit(1);
 		}
 	}
 
@@ -48,8 +58,6 @@ public class JavaCommonApi {
 	public final static long Size(String x) {
 		return x.length();
 	}
-
-
 
 	public final static JavaStaticFunc ConvertToNativeFunc(Method jMethod) {
 		@Var ZFuncType FuncType = JavaTypeTable.ConvertToFuncType(jMethod);
