@@ -193,6 +193,11 @@ public class JavaEngine extends ZScriptEngine {
 					this.EvaledValue = ZEmptyValue.TrueEmpty;
 				}
 			}
+		} catch(java.lang.reflect.InvocationTargetException e) {
+			Throwable te = e.getCause();
+			this.Logger.ReportError(Node.SourceToken, "invocation error: " + te);
+			te.printStackTrace();
+			this.StopVisitor();
 		} catch (Exception e) {
 			this.Logger.ReportError(Node.SourceToken, "invocation error: " + e);
 			this.StopVisitor();
