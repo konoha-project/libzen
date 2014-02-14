@@ -28,6 +28,25 @@ public class JavaCommonApi {
 		}
 	}
 
+	public final static void Assert(boolean x, String Location) {
+		if(!x) {
+			Exception e = new SoftwareFaultException("failed: " + Location);
+			e.printStackTrace();
+			StackTraceElement[] Elements = e.getStackTrace();
+			String LineNumber = "";
+			int depth = 4;
+			if(depth < Elements.length) {
+				StackTraceElement elem = Elements[depth];
+				LineNumber += elem;
+			}
+			System.err.println("EXIT: " + LineNumber + " assertion failed: " + Location);
+			System.exit(1);
+		}
+		else {
+			System.err.println("passed: " + Location);
+		}
+	}
+
 	public final static long FloatToInt(double x) {
 		return Math.round(x);
 	}
@@ -68,14 +87,14 @@ public class JavaCommonApi {
 		try {
 			return ConvertToNativeFunc(JavaCommonApi.class.getMethod(Name, classes));
 		} catch (Exception e) {
-			System.err.println(e);
-			LibZen._Exit(1, e.toString());
+			LibZen._Exit(1, "FIXME: " + e);
 		}
 		return null;
 	}
 
 	static void LoadCommonApi(ZGenerator Generator) {
 		Generator.SetDefinedFunc(LoadFunc("Assert", boolean.class));
+		Generator.SetDefinedFunc(LoadFunc("Assert", boolean.class, String.class));
 		ZFunc Func = LoadFunc("FloatToInt", double.class);
 		Generator.SetConverterFunc(ZType.FloatType, ZType.IntType, Func);
 		Func = LoadFunc("IntToFloat", long.class);

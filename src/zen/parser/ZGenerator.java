@@ -136,6 +136,7 @@ public abstract class ZGenerator extends ZVisitor {
 	//
 
 	public final void SetDefinedFunc(ZFunc Func) {
+		System.out.println("setname=" + Func.GetSignature());
 		this.DefinedFuncMap.put(Func.GetSignature(), Func);
 	}
 

@@ -121,6 +121,13 @@ public abstract class ZNode {
 		return this.AST[Index].Type;
 	}
 
+	public final String GetSourceLocation() {
+		if(this.SourceToken != null) {
+			return "(" + this.SourceToken.GetFileName() + ":" + this.SourceToken.GetLineNumber() + ")";
+		}
+		return null;
+	}
+
 	@Override public String toString() {
 		@Var String Self = "#" + this.getClass().getSimpleName();
 		if(!this.Type.IsVarType()) {
