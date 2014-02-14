@@ -290,7 +290,6 @@ public class ZenTypeSafer extends ZTypeChecker {
 		return ZTypePool._LookupFuncType(TypeList);
 	}
 
-
 	private void TypeCheckNativeMethodCall(ZNode Node, ZType RecvType, String MethodName, ZListNode List) {
 		ZFuncType FuncType = this.Generator.GetMethodFuncType(RecvType, MethodName, List);
 		if(FuncType != null) {
@@ -377,7 +376,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 			@Var ZVariable VarInfo = NameSpace.GetLocalVariable(NameNode.VarName);
 			if(VarInfo == null || !(VarInfo.VarType.IsVarType() || VarInfo.VarType.IsFuncType())) {
 				@Var ZNode SymbolNode = NameSpace.GetSymbolNode(NameNode.VarName);
-				if(!SymbolNode.Type.IsFuncType()) {
+				if(SymbolNode != null && !SymbolNode.Type.IsFuncType()) {
 					FuncCallNode.ResolvedFuncName = NameNode.VarName;
 				}
 			}
