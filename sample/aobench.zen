@@ -1,0 +1,289 @@
+//import std.core.math;
+//import std.core.file;
+
+let WIDTH       : int = 256;
+let HEIGHT      : int = 256;
+let NSUBSAMPLES : int =   2;
+let NAO_SAMPLES : int =   8;
+
+class vec {
+  var x : double;
+  var y : double;
+  var z : double;
+}
+
+function constructor(this : vec, x : double, y : double, z : double) {
+    this.x = x;
+    this.y = y;
+    this.z = z;
+}
+
+function vdot(v0 : vec, v1 : vec) : double {
+    return v0.x * v1.x + v0.y * v1.y + v0.z * v1.z;
+}
+
+function vcross(v0 : vec, v1 : vec) : vec {
+    return new vec(
+            v0.y * v1.z - v0.z * v1.y,
+            v0.z * v1.x - v0.x * v1.z,
+            v0.x * v1.y - v0.y * v1.x);
+}
+
+function vnormalize(c : vec) : void {
+    var length : double = math.sqrt(vdot(c, c));
+    if(math.fabs(length) > 1.0e-17) {
+        c.x = c.x / length;
+        c.y = c.y / length;
+        c.z = c.z / length;
+    }
+}
+
+class Isect {
+    var p   : vec;
+    var n   : vec;
+    var t   : double;
+    var hit : boolean;
+}
+
+function constructor(this : Isect, t : double, hit : bool) {
+    this.p = new vec(0.0, 0.0, 0.0);
+    this.n = new vec(0.0, 0.0, 0.0);
+    this.t   = t;
+    this.hit = hit;
+}
+
+class Sphere {
+    var center : vec;
+    var radius : double;
+}
+
+function constructor(this : Sphere, center : vec, radius : double) {
+    this.center = center;
+    this.radius = radius;
+}
+
+class Plane {
+    var p : vec;
+    var n : vec;
+}
+
+function constructor(this : Plane, p : vec, p : vec) {
+    this.p = p;
+    this.n = n;
+}
+
+class Ray {
+    var org : vec;
+    var dir : vec;
+}
+
+function constructor(this : Ray, p : vec, dir : vec) {
+    this.org = p;
+    this.dir = dir;
+}
+
+class Global {
+    var spheres : Array<Sphere> = new Array<Sphere>();
+    var plane   : Plane = new Plane();
+}
+
+function ray_sphere_intersect(isect : Isect , ray : Ray, sphere : Sphere) : void {
+    var rs : vec = new vec(
+            ray.org.x - sphere.center.x,
+            ray.org.y - sphere.center.y,
+            ray.org.z - sphere.center.z);
+
+    var B : double = vdot(rs, ray.dir);
+    var C : double = vdot(rs, rs) - sphere.radius * sphere.radius;
+    var D : double = B * B - C;
+
+    if(D > 0.0) {
+        var t : double = -B - math.sqrt(D);
+        if((t > 0.0) && (t < isect.t)) {
+            isect.t   = t;
+            isect.hit = true;
+
+            isect.p.x = ray.org.x + ray.dir.x * t;
+            isect.p.y = ray.org.y + ray.dir.y * t;
+            isect.p.z = ray.org.z + ray.dir.z * t;
+
+            isect.n.x = isect.p.x - sphere.center.x;
+            isect.n.y = isect.p.y - sphere.center.y;
+            isect.n.z = isect.p.z - sphere.center.z;
+            vnormalize(isect.n);
+        }
+    }
+}
+
+function ray_plane_intersect(isect : Isect, ray : Ray, plane : Plane) : void {
+    var d : double = -vdot(plane.p, plane.n);
+    var v : double =  vdot(ray.dir, plane.n);
+
+    if(Math.abs(v) < 1.0e-17) {
+        return;
+    }
+
+    var t : double = -(vdot(ray.org, plane.n) + d) / v;
+
+    if((t > 0.0) && (t < isect.t)) {
+        isect.t = t;
+        isect.hit = true;
+
+        isect.p.x = ray.org.x + ray.dir.x * t;
+        isect.p.y = ray.org.y + ray.dir.y * t;
+        isect.p.z = ray.org.z + ray.dir.z * t;
+
+        isect.n = plane.n;
+    }
+}
+
+function orthoBasis(basis : Array<vec>, n : vec) : void {
+    basis[1] = new vec(0.0, 0.0, 0.0);
+    basis[2] = n;
+
+    if((n.x < 0.6) && (n.x > -0.6)) {
+        basis[1].x = 1.0;
+    } else if((n.y < 0.6) && (n.y > -0.6)) {
+        basis[1].y = 1.0;
+    } else if((n.z < 0.6) && (n.z > -0.6)) {
+        basis[1].z = 1.0;
+    } else {
+        basis[1].x = 1.0;
+    }
+
+    basis[0] = vcross(basis[1], basis[2]);
+    vnormalize(basis[0]);
+
+    basis[1] = vcross(basis[2], basis[0]);
+    vnormalize(basis[1]);
+}
+
+function ambient_occlusion(global : Global, col : vec, isect : Isect) : void {
+    var ntheta : int    = NAO_SAMPLES;
+    var nphi   : int    = NAO_SAMPLES;
+    var eps    : double = 0.0001;
+
+    var p : vec = new vec(
+            isect.p.x + eps * isect.n.x,
+            isect.p.y + eps * isect.n.y,
+            isect.p.z + eps * isect.n.z);
+
+    var occlusion : double = 0.0;
+    var basis : Array<vec> = new Array<vec>(3);
+    orthoBasis(basis, isect.n);
+
+    var j : int = 0;
+    while(j < ntheta) {
+        var i : int = 0;
+        while(i < nphi) {
+            var theta : double = math.sqrt(math.random());
+            var phi   : double = 2.0 * math.PI * math.random();
+
+            var x : double = math.cos(phi) * theta;
+            var y : double = math.sin(phi) * theta;
+            var z : double = math.sqrt(1.0 - theta * theta);
+
+            // local . global
+            var rx : double = x * basis[0].x + y * basis[1].x + z * basis[2].x;
+            var ry : double = x * basis[0].y + y * basis[1].y + z * basis[2].y;
+            var rz : double = x * basis[0].z + y * basis[1].z + z * basis[2].z;
+
+            var ray      : Ray   = new Ray(p, new vec(rx, ry, rz));
+            var occIsect : Isect = new Isect(1.0e+17, false);
+
+            ray_sphere_intersect(occIsect, ray, global.spheres[0]);
+            ray_sphere_intersect(occIsect, ray, global.spheres[1]);
+            ray_sphere_intersect(occIsect, ray, global.spheres[2]);
+            ray_plane_intersect (occIsect, ray, global.plane);
+
+            if(occIsect.hit) {
+                occlusion += 1.0;
+            }
+            i = i + 1;
+        }
+        j = j + 1;
+    }
+
+    occlusion = (ntheta * nphi - occlusion) / ((double)(ntheta * nphi));
+    col.x = occlusion;
+    col.y = occlusion;
+    col.z = occlusion;
+}
+
+function clamp(f : double) : byte {
+    var i : int = (int)(f * 255.5);
+
+    if(i < 0)   { i = 0; }
+    else if(i > 255) { i = 255; }
+    return (byte) i;
+}
+
+function render(global : Global, img : Array<byte>, w : int, h : int, nsubsamples : int) : void {
+    var fimg : Array<double> = new Array<double>(w * h * 3);
+    var y : int = 0;
+    while(y < h) {
+        var x : int = 0;
+        while(x < w) {
+            var v : int = 0;
+            while(v < nsubsamples) {
+                var u : int = 0;
+                while(u < nsubsamples) {
+                    var px : double =  (x + (u / (double)(nsubsamples)) - (w/2.0)) / (w/2.0);
+                    var py : double = -(y + (v / (double)(nsubsamples)) - (h/2.0)) / (h/2.0);
+                    var ray : Ray = new Ray(new vec(0.0, 0.0, 0.0), new vec(px, py, -1.0));
+                    vnormalize(ray.dir);
+
+                    var isect : Isect = new Isect(1.0e+17, 0);
+
+                    ray_sphere_intersect(isect, ray, global.spheres[0]);
+                    ray_sphere_intersect(isect, ray, global.spheres[1]);
+                    ray_sphere_intersect(isect, ray, global.spheres[2]);
+                    ray_plane_intersect (isect, ray, global.plane);
+
+                    if(isect.hit) {
+                        var col :  vec = new vec(0.0, 0.0, 0.0);
+                        ambient_occlusion(col, isect);
+                        fimg[3 * (y * w + x) + 0] += col.x;
+                        fimg[3 * (y * w + x) + 1] += col.y;
+                        fimg[3 * (y * w + x) + 2] += col.z;
+                    }
+                    u = u + 1;
+                }
+                v = v + 1;
+            }
+
+            fimg[3 * (y * w + x) + 0] /= (double)(nsubsamples * nsubsamples);
+            fimg[3 * (y * w + x) + 1] /= (double)(nsubsamples * nsubsamples);
+            fimg[3 * (y * w + x) + 2] /= (double)(nsubsamples * nsubsamples);
+            img[ 3 * (y * w + x) + 0] = clamp(fimg[3 *(y * w + x) + 0]);
+            img[ 3 * (y * w + x) + 1] = clamp(fimg[3 *(y * w + x) + 1]);
+            img[ 3 * (y * w + x) + 2] = clamp(fimg[3 *(y * w + x) + 2]);
+            x = x + 1;
+        }
+        y = y + 1;
+    }
+}
+
+function init_scene(global : Global) : void {
+    global.spheres.Add(new Sphere(new vec(-2.0, 0.0, -3.5), 0.5));
+    global.spheres.Add(new Sphere(new vec(-0.5, 0.0, -3.0), 0.5));
+    global.spheres.Add(new Sphere(new vec( 1.0, 0.0, -2.2), 0.5));
+    global.plane.p = new vec(0.0, -0.5, 0.0);
+    global.plane.n = new vec(0.0,  1.0, 0.0);
+}
+
+function saveppm(fname: String, w : int, h : int, img : Array<byte>) : void {
+    var fp : File = new File(fname, "wb");
+    fp.writeln("P6");
+    fp.writeln(format("%d %d", w, h));
+    fp.writeln("255");
+    fp.write(img);
+}
+
+function main() : void {
+    var img : Array<byte> = new Array<byte>(WIDTH * HEIGHT * 3);
+    var global : Global = new Global();
+    init_scene(global);
+    render(global, img, WIDTH, HEIGHT, NSUBSAMPLES);
+    saveppm("ao.ppm", WIDTH, HEIGHT, img);
+}
