@@ -57,18 +57,24 @@ def GenLetDecl(cname, line):
 			return 'let ' + sym + ' = ' + m.group(3) + '\n'
 	return '//let ' + cname + '.' + line
 
-def GenStaticFunc(cname, line):
+def GenStaticFunc(cname, line, IsProto=False):
 	line = RemoveQ(line)
 	line = line.replace('static ', '')
 	start = line.find('(')
 	end = line.find(')')
 	params = ParseParam(line[start+1:end], False, cname)
 	t = line[:start].split()
-	block = GenParam(params) + ": " + GenType(t[0]) + line[end+1:]
+	block = GenParam(params) + ": " + GenType(t[0])
+	if IsProto:
+		block = block + ";\n"
+	else:
+		block = block + line[end+1:]
 	if t[1].startswith("_"):
 		return "function " + cname + t[1] + block
 	else:
 		return "function " + t[1]  + block
+
+
 
 VarPattern = re.compile('(.*)\@Var\s+(\S*)\s+(\w*)(.*)')
 NewArrayPattern = re.compile('(.*)new ZArray\<\S*\>\(.*\)(.*)')
@@ -87,7 +93,7 @@ def GenVar(line):
 		line = m.group(1) + "[]" + m.group(2) + "\n";
 	m = NewMapPattern.match(line)
         if m:
-                line = m.group(1) + "{}" + m.group(2) + "\n";
+                line = m.group(1) + "[]" + m.group(2) + "\n";
 	return line;
 
 def ParseParam(s, IsMethod, cname):
@@ -205,10 +211,20 @@ class ClassBlock:
 			
 		f.write('}\n')
 
+	def writeproto(self, f):
+		for line in self.lines:
+			if line.find('@Field') >= 0:
+				continue
+			if line.find('{') >=0 :
+				if line.find('static') >= 0:
+					f.write(GenStaticFunc(self.ClassName, line, True))
+				else:
+					f.write(GenFunc(self.ClassName, line, True))
+	
 	def writesymbol(self, f):
 		for line in self.lines:
 			if line.find('static') >= 0:
-				if line.find('{') == -1:
+				if line.find('{') == -1 :
 					f.write(GenLetDecl(self.ClassName, line))
 				else:
 					f.write(GenStaticFunc(self.ClassName, line))
@@ -244,9 +260,9 @@ class Context:
 		for c in self.ClassList:
 			c.writefield(f)
 		for c in self.ClassList:
-			c.writesymbol(f)
+			c.writeproto(f)
 		for c in self.ClassList:
-			c.writefunc(f, True)
+			c.writesymbol(f)
 		for c in self.ClassList:
 			c.writefunc(f, False)
 		f.close()
