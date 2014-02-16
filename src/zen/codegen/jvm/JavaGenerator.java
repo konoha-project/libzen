@@ -6,7 +6,6 @@ import java.lang.reflect.Modifier;
 
 import zen.ast.ZBooleanNode;
 import zen.ast.ZFloatNode;
-import zen.ast.ZImportNode;
 import zen.ast.ZIntNode;
 import zen.ast.ZListNode;
 import zen.ast.ZNode;
@@ -21,6 +20,7 @@ import zen.deps.ZTokenFunction;
 import zen.deps.ZenMap;
 import zen.lang.ZenTypeSafer;
 import zen.parser.ZGenerator;
+import zen.parser.ZNameSpace;
 import zen.parser.ZScriptEngine;
 import zen.parser.ZSourceContext;
 import zen.parser.ZTokenContext;
@@ -40,6 +40,11 @@ public abstract class JavaGenerator extends ZGenerator {
 
 	@Override public ZScriptEngine GetEngine() {
 		return new JavaEngine(new ZenTypeSafer(this), this);
+	}
+
+	@Override public void ImportLocalGrammar(ZNameSpace NameSpace) {
+		NameSpace.DefineStatement("import", new JavaImportPattern());
+		NameSpace.DefineExpression("$JavaClassPath$", new JavaClassPathPattern());
 	}
 
 	@Override public boolean StartCodeGeneration(ZNode Node,  boolean AllowLazy, boolean IsInteractive) {
@@ -70,10 +75,6 @@ public abstract class JavaGenerator extends ZGenerator {
 			return Node.Type;
 		}
 		return null;
-	}
-
-	@Override public ZImportNode CreateImportNode(ZNode ParentNode) {
-		return new JavaImportNode(ParentNode);
 	}
 
 	public Class<?> GetJavaClass(ZType zType) {

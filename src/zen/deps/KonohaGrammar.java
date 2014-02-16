@@ -46,7 +46,6 @@ import libzen.grammar.GetIndexPattern;
 import libzen.grammar.GetterPattern;
 import libzen.grammar.GroupPattern;
 import libzen.grammar.IfPattern;
-import libzen.grammar.ImportPattern;
 import libzen.grammar.InstanceOfPattern;
 import libzen.grammar.IntLiteralPattern;
 import libzen.grammar.LetPattern;
@@ -63,7 +62,6 @@ import libzen.grammar.NumberLiteralToken;
 import libzen.grammar.OperatorToken;
 import libzen.grammar.OrPattern;
 import libzen.grammar.ParamPattern;
-import libzen.grammar.PathPattern;
 import libzen.grammar.ReturnPattern;
 import libzen.grammar.RightExpressionPattern;
 import libzen.grammar.RightTypePattern;
@@ -192,8 +190,6 @@ public class KonohaGrammar {
 		NameSpace.DefineRightExpression("instanceof", ZenPrecedence.Instanceof, new InstanceOfPattern());
 		NameSpace.DefineStatement("class", new ClassPattern());
 		NameSpace.DefineExpression("$FieldDecl$", new FieldPattern());
-		NameSpace.DefineStatement("import", new ImportPattern());
-		NameSpace.DefineExpression("$Path$", new PathPattern());
 
 		NameSpace.Generator.AppendGrammarInfo("zen-class-0.1");
 

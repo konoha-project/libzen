@@ -25,7 +25,6 @@
 //ifdef JAVA
 package zen.parser;
 
-import zen.ast.ZImportNode;
 import zen.ast.ZListNode;
 import zen.ast.ZNode;
 import zen.deps.Field;
@@ -33,6 +32,7 @@ import zen.deps.Var;
 import zen.deps.ZenMap;
 import zen.type.ZFunc;
 import zen.type.ZFuncType;
+import zen.type.ZPrototype;
 import zen.type.ZType;
 
 
@@ -65,9 +65,7 @@ public abstract class ZGenerator extends ZVisitor {
 
 	public void ImportLocalGrammar(ZNameSpace NameSpace) {
 		// TODO Auto-generated method stub
-
 	}
-
 
 	@Override public final void EnableVisitor() {
 		this.StoppedVisitor = false;
@@ -94,10 +92,6 @@ public abstract class ZGenerator extends ZVisitor {
 	}
 
 	public abstract boolean StartCodeGeneration(ZNode Node, boolean AllowLazy, boolean IsInteractive);
-
-	public ZImportNode CreateImportNode(ZNode ParentNode) {
-		return new ZImportNode(ParentNode);
-	}
 
 	public ZType GetFieldType(ZType BaseType, String Name) {
 		return ZType.VarType;     // undefined
@@ -134,9 +128,22 @@ public abstract class ZGenerator extends ZVisitor {
 	}
 
 	//
+	public final boolean SetPrototype(ZNode Node, String FuncName, ZFuncType FuncType) {
+		@Var ZFunc Func = this.GetDefinedFunc(FuncName, FuncType);
+		if(Func != null) {
+			if(!FuncType.Equals(Func.GetFuncType())) {
+				this.Logger.ReportError2(Node, "function has been defined diffrently: " + Func.GetFuncType());
+				return false;
+			}
+		}
+		else {
+			Func = new ZPrototype(0, FuncName, FuncType, Node.SourceToken);
+			this.DefinedFuncMap.put(Func.GetSignature(), Func);
+		}
+		return true;
+	}
 
 	public final void SetDefinedFunc(ZFunc Func) {
-		System.out.println("setname=" + Func.GetSignature());
 		this.DefinedFuncMap.put(Func.GetSignature(), Func);
 	}
 

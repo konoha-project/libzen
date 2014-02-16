@@ -45,6 +45,7 @@ import zen.ast.ZGetNameNode;
 import zen.ast.ZGetterNode;
 import zen.ast.ZGroupNode;
 import zen.ast.ZIfNode;
+import zen.ast.ZImportNode;
 import zen.ast.ZInstanceOfNode;
 import zen.ast.ZIntNode;
 import zen.ast.ZLetNode;
@@ -56,6 +57,7 @@ import zen.ast.ZNode;
 import zen.ast.ZNotNode;
 import zen.ast.ZNullNode;
 import zen.ast.ZOrNode;
+import zen.ast.ZPrototypeNode;
 import zen.ast.ZReturnNode;
 import zen.ast.ZSetIndexNode;
 import zen.ast.ZSetNameNode;
@@ -70,6 +72,7 @@ import zen.ast.ZWhileNode;
 import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.deps.ZArray;
+import zen.type.ZFuncType;
 import zen.type.ZType;
 import zen.type.ZTypeChecker;
 
@@ -333,14 +336,35 @@ public class ZScriptEngine extends ZVisitor {
 		this.StopVisitor();
 	}
 
-	@Override public void VisitExtendedNode(ZNode Node) {
+	public void VisitPrototypeNode(ZPrototypeNode Node) {
+		@Var ZFuncType FuncType = Node.GetFuncType();
+		this.Generator.SetPrototype(Node, Node.FuncName, FuncType);
+	}
+
+	public void VisitImportNode(ZImportNode Node) {
+		Node.Import();
+	}
+
+	protected void EvalSugarNode(ZNode Node) {
 		LibZen._PrintDebug("Exteded Node: " + Node);
 		ZNode TransformedNode = Node.DeSugar(this.Generator);
 		if(TransformedNode == Node) {
-			this.Unsupported(Node, "'"+Node.SourceToken.GetText() + "'");
+			this.Unsupported(Node, "'" + Node.SourceToken.GetText() + "'");
 		}
 		else {
 			this.Eval(TransformedNode);
+		}
+	}
+
+	@Override public void VisitExtendedNode(ZNode Node) {
+		if(Node instanceof ZPrototypeNode) {
+			this.VisitPrototypeNode((ZPrototypeNode)Node);
+		}
+		else if(Node instanceof ZPrototypeNode) {
+			this.VisitImportNode((ZImportNode)Node);
+		}
+		else {
+			this.EvalSugarNode(Node);
 		}
 	}
 

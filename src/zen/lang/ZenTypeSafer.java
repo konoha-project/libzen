@@ -82,7 +82,7 @@ import zen.type.ZClassType;
 import zen.type.ZFunc;
 import zen.type.ZFuncType;
 import zen.type.ZGreekType;
-import zen.type.ZSignature;
+import zen.type.ZPrototype;
 import zen.type.ZType;
 import zen.type.ZTypeChecker;
 import zen.type.ZTypeFlag;
@@ -678,7 +678,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 					this.Logger.ReportError(FunctionNode.SourceToken, "redefinition of function: " + Func);
 				}
 				else {
-					Func = new ZSignature(0, FunctionNode.FuncName, FuncType, FunctionNode.SourceToken);
+					Func = new ZPrototype(0, FunctionNode.FuncName, FuncType, FunctionNode.SourceToken);
 					ZenGamma.DefineFunc(NameSpace, Func);
 					FunctionNode.GlobalName = Func.GetSignature();
 				}

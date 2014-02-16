@@ -581,5 +581,9 @@ public class LibZen {
 		return Value.getClass();
 	}
 
+	public final static String[] _GreekNames = {
+		"\u03B1", "\u03B2", "\u03B3"
+	};
+
 
 }

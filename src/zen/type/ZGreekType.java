@@ -5,20 +5,16 @@ import zen.deps.LibZen;
 import zen.deps.Var;
 
 public class ZGreekType extends ZType {
-	private final static String[] GreekNames = {
-		"\u03B1", "\u03B2", "\u03B3"
-	};
-
 	@Field public final int GreekId;
 
 	public ZGreekType(int GreekId) {
-		super(ZTypeFlag._UniqueType, GreekNames[GreekId], ZType.VarType);
+		super(ZTypeFlag._UniqueType, LibZen._GreekNames[GreekId], ZType.VarType);
 		this.GreekId = GreekId;
 	}
 
 	public final static ZType[] NewGreekTypes(ZType[] GreekTypes) {
 		if(GreekTypes == null) {
-			return new ZType[LibZen._Size(GreekNames)];
+			return new ZType[LibZen._Size(LibZen._GreekNames)];
 		}
 		else {
 			@Var int i = 0;
