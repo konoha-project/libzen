@@ -360,7 +360,7 @@ public class ZScriptEngine extends ZVisitor {
 		if(Node instanceof ZPrototypeNode) {
 			this.VisitPrototypeNode((ZPrototypeNode)Node);
 		}
-		else if(Node instanceof ZPrototypeNode) {
+		else if(Node instanceof ZImportNode) {
 			this.VisitImportNode((ZImportNode)Node);
 		}
 		else {

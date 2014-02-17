@@ -1,0 +1,5 @@
+function f() {
+    return (String) 1;
+}
+
+f();
