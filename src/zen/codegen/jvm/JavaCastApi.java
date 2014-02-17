@@ -97,6 +97,22 @@ public class JavaCastApi {
 	public static String toString(char x)      { return String.valueOf(x); }
 	public static String toString(Character x) { return x.toString(); }
 
+	public static String toString(boolean x) { return Boolean.toString(x); }
+	//public static String toString(byte x)    { return Byte.toString(x); }
+	//public static String toString(short x)   { return Short.toString(x); }
+	//public static String toString(int x)     { return Integer.toString(x); }
+	public static String toString(long x)    { return Long.toString(x); }
+	//public static String toString(float x)   { return Float.toString(x); }
+	public static String toString(double x)  { return Double.toString(x); }
+
+	public static String toString(Boolean x) { return x.toString(); }
+	//public static String toString(Byte x)    { return x.toString(); }
+	//public static String toString(Short x)   { return x.toString(); }
+	//public static String toString(Integer x) { return x.toString(); }
+	public static String toString(Long x)    { return x.toString(); }
+	//public static String toString(Float x)   { return x.toString(); }
+	public static String toString(Double x)  { return x.toString(); }
+
 	public static char      tochar(String x)      { return x.charAt(0); }
 	public static Character toCharacter(String x) { return x.charAt(0); }
 

@@ -160,6 +160,13 @@ public class JavaMethodTable {
 		Import(Object.class, JavaCastApi.class, "toDouble");
 		Import(double.class, JavaCastApi.class, "toDouble");
 
+		Import(boolean.class, JavaCastApi.class, "toString");
+		Import(Boolean.class, JavaCastApi.class, "toString");
+		Import(long.class, JavaCastApi.class, "toString");
+		Import(Long.class, JavaCastApi.class, "toString");
+		Import(double.class, JavaCastApi.class, "toString");
+		Import(Double.class, JavaCastApi.class, "toString");
+
 		Import(JavaOperatorApi.class, "ThrowError", String.class);
 		Import(JavaOperatorApi.class, "GetField", Object.class, String.class);
 		Import(JavaOperatorApi.class, "SetField", Object.class, String.class, Object.class);
