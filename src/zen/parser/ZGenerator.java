@@ -189,6 +189,9 @@ public abstract class ZGenerator extends ZVisitor {
 		return null;
 	}
 
-
+	@Override public void VisitExtendedNode(ZNode Node) {
+		@Var ZNode DeNode = Node.DeSugar(this);
+		DeNode.Accept(this);
+	}
 
 }

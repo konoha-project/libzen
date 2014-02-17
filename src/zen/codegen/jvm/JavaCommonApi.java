@@ -32,13 +32,6 @@ public class JavaCommonApi {
 		if(!x) {
 			Exception e = new SoftwareFaultException("failed: " + Location);
 			e.printStackTrace();
-			//			StackTraceElement[] Elements = e.getStackTrace();
-			//			String LineNumber = "";
-			//			int depth = 4;
-			//			if(depth < Elements.length) {
-			//				StackTraceElement elem = Elements[depth];
-			//				LineNumber += elem;
-			//			}
 			System.err.println("REC assert 0 @" + Location);
 			System.exit(1);
 		}

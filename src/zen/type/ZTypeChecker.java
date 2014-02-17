@@ -25,6 +25,7 @@
 package zen.type;
 
 import zen.ast.ZCastNode;
+import zen.ast.ZErrorNode;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZListNode;
 import zen.ast.ZNode;
@@ -209,11 +210,6 @@ public abstract class ZTypeChecker extends ZVisitor {
 		return false;
 	}
 
-	@Override public void VisitExtendedNode(ZNode Node) {
-		this.Return(Node);
-	}
-
-
 	public final void Return(ZNode Node) {
 		if(Node != null) {
 			if(this.ReturnedNode != null) {
@@ -238,6 +234,27 @@ public abstract class ZTypeChecker extends ZVisitor {
 	}
 
 	public abstract void DefineFunction(ZFunctionNode FunctionNode, boolean Enforced);
+
+	@Override public void VisitErrorNode(ZErrorNode Node) {
+		@Var ZType ContextType = this.GetContextType();
+		if(!ContextType.IsVarType()) {
+			this.TypedNode(Node, ContextType);
+		}
+		else {
+			this.Return(Node);
+		}
+	}
+
+	@Override public void VisitExtendedNode(ZNode Node) {
+		@Var ZType ContextType = this.GetContextType();
+		@Var ZNode DeNode = Node.DeSugar(this.Generator);
+		if(!DeNode.IsErrorNode()) {
+			this.Return(this.CheckType(DeNode, ContextType));
+		}
+		else {
+			this.TypedNode(DeNode, ContextType);
+		}
+	}
 
 
 

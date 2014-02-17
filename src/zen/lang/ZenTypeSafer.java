@@ -808,10 +808,6 @@ public class ZenTypeSafer extends ZTypeChecker {
 		this.TypedNode(Node, ZType.VoidType);
 	}
 
-	@Override public void VisitErrorNode(ZErrorNode Node) {
-		this.Return(Node);
-	}
-
 	// utils
 
 	private ZFunc LookupFuncImpl(ZNameSpace NameSpace, String FuncName, ZType RecvType, int FuncParamSize) {
