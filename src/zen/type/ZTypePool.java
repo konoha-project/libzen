@@ -84,7 +84,8 @@ public class ZTypePool {
 		@Var ZType GenericType = ZTypePool._ClassNameMap.GetOrNull(MangleName);
 		if((GenericType == null) && IsCreation) {
 			@Var String ShortName = BaseType.ShortName + "<";
-			for(@Var int i = 0; i < LibZen._Size(TypeList); i += 1) {
+			@Var int i = 0;
+			for(; i < LibZen._Size(TypeList); i += 1) {
 				ShortName = ShortName + TypeList.ArrayValues[i].GetRealType().ShortName;
 				if(i + 1 == LibZen._Size(TypeList)) {
 					ShortName = ShortName + ">";

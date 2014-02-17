@@ -111,8 +111,10 @@ public final class ZLogger {
 
 	public final void ShowErrors() {
 		@Var String[] Messages = this.GetReportedErrors();
-		for(@Var int i = 0; i < Messages.length; i = i + 1) {
+		@Var int i = 0;
+		while(i < Messages.length) {
 			LibZen._PrintLine(Messages[i]);
+			i = i + 1;
 		}
 	}
 

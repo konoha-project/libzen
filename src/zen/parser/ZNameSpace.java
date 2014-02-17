@@ -91,12 +91,14 @@ public final class ZNameSpace {
 		if(this.TokenMatrix == null) {
 			this.TokenMatrix = LibZen._NewTokenMatrix();
 			if(this.ParentNameSpace != null) {
-				for(@Var int i = 0; i < this.TokenMatrix.length; i += 1) {
+				@Var int i = 0;
+				for(; i < this.TokenMatrix.length; i += 1) {
 					this.TokenMatrix[i] = this.ParentNameSpace.GetTokenFunc(i);
 				}
 			}
 		}
-		for(@Var int i = 0; i < keys.length(); i += 1) {
+		@Var int i = 0;
+		for(;i < keys.length(); i += 1) {
 			@Var int kchar = LibZen._GetTokenMatrixIndex(LibZen._GetChar(keys, i));
 			this.TokenMatrix[kchar] = this.JoinParentFunc(TokenFunc, this.TokenMatrix[kchar]);
 		}

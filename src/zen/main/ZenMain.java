@@ -274,7 +274,8 @@ public class ZenMain {
 		@Var StackTraceElement[] elements = e.getStackTrace();
 		@Var int size = elements.length + 1;
 		@Var StackTraceElement[] newElements = new StackTraceElement[size];
-		for(@Var int i = 0; i < size; i++) {
+		@Var int i = 0;
+		for(; i < size; i++) {
 			if(i == size - 1) {
 				newElements[i] = new StackTraceElement("<TopLevel>", "TopLevelEval", "stdin", linenum);
 				break;

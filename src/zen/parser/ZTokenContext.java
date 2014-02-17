@@ -382,7 +382,8 @@ public final class ZTokenContext {
 	}
 
 	public final void Dump() {
-		for(@Var int Position = this.CurrentPosition; Position < this.TokenList.size(); Position += 1) {
+		@Var int Position = this.CurrentPosition;
+		for(; Position < this.TokenList.size(); Position += 1) {
 			@Var ZToken Token = this.TokenList.ArrayValues[Position];
 			@Var String DumpedToken = this.CurrentPosition == Position ? "*[" : "[";
 			DumpedToken = DumpedToken + Position+"] " + Token.toString();

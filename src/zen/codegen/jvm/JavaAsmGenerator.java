@@ -864,17 +864,20 @@ public class JavaAsmGenerator extends JavaGenerator {
 	@Override public void VisitClassNode(ZClassNode Node) {
 		@Var Class<?> SuperClass = this.GetSuperClass(Node.SuperType);
 		@Var AsmClassBuilder ClassBuilder = this.AsmLoader.NewClass(ACC_PUBLIC, Node, Node.ClassName, SuperClass);
-		for(@Var int i = 0; i < Node.GetListSize(); i++) {
+		@Var int i = 0;
+		while(i < Node.GetListSize()) {
 			@Var ZFieldNode Field = Node.GetFieldNode(i);
 			if(Field.ClassType.Equals(Node.ClassType)) {
 				ClassBuilder.AddField(ACC_PUBLIC, Field.FieldName, Field.DeclType, this.GetConstValue(Field.AST[ZFieldNode._InitValue]));
 			}
+			i++;
 		}
-		for(@Var int i = 0; i < Node.ClassType.GetFieldSize(); i++) {
+		while(i < Node.ClassType.GetFieldSize()) {
 			@Var ZClassField Field = Node.ClassType.GetFieldAt(i);
 			if(Field.FieldType.IsFuncType()) {
 				ClassBuilder.AddField(ACC_PUBLIC|ACC_STATIC, NameClassMethod(Node.ClassType, Field.FieldName), Field.FieldType, null);
 			}
+			i++;
 		}
 		AsmMethodBuilder InitMethod = ClassBuilder.NewMethod(ACC_PUBLIC, "<init>", "()V");
 		InitMethod.visitVarInsn(Opcodes.ALOAD, 0);
@@ -887,15 +890,16 @@ public class JavaAsmGenerator extends JavaGenerator {
 		InitMethod.visitVarInsn(Opcodes.ALOAD, 0);
 		InitMethod.visitVarInsn(Opcodes.ILOAD, 1);
 		InitMethod.visitMethodInsn(INVOKESPECIAL, Type.getInternalName(SuperClass), "<init>", "(I)V");
-		for(@Var int i = 0; i < Node.GetListSize(); i++) {
+		while(i < Node.GetListSize()) {
 			@Var ZFieldNode Field = Node.GetFieldNode(i);
 			if(!Field.DeclType.IsFuncType()) {
 				InitMethod.visitVarInsn(Opcodes.ALOAD, 0);
 				InitMethod.PushNode(this.GetJavaClass(Field.DeclType), Field.AST[ZFieldNode._InitValue]);
 				InitMethod.visitFieldInsn(PUTFIELD, Node.ClassName, Field.FieldName, Type.getDescriptor(this.GetJavaClass(Field.DeclType)));
 			}
+			i++;
 		}
-		for(@Var int i = 0; i < Node.ClassType.GetFieldSize(); i++) {
+		while(i < Node.ClassType.GetFieldSize()) {
 			@Var ZClassField Field = Node.ClassType.GetFieldAt(i);
 			if(Field.FieldType.IsFuncType()) {
 				//System.out.println("FieldName:" + Field.ClassType + "." + Field.FieldName + ", type=" + Field.FieldType);
@@ -909,6 +913,7 @@ public class JavaAsmGenerator extends JavaGenerator {
 				InitMethod.visitFieldInsn(Opcodes.PUTFIELD, Field.ClassType.ShortName, Field.FieldName, FieldDesc);
 				InitMethod.visitLabel(JumpLabel);
 			}
+			i++;
 		}
 		InitMethod.visitInsn(RETURN);
 		InitMethod.Finish();

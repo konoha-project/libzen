@@ -296,7 +296,8 @@ public class LibZen {
 	public static final String _QuoteString(String Text) {
 		StringBuilder sb = new StringBuilder();
 		sb.append('"');
-		for(@Var int i = 0; i < Text.length(); i = i + 1) {
+		@Var int i = 0;
+		for(; i < Text.length(); i = i + 1) {
 			@Var char ch = _GetChar(Text, i);
 			if(ch == '\n') {
 				sb.append("\\n");
