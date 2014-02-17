@@ -32,18 +32,18 @@ public class JavaCommonApi {
 		if(!x) {
 			Exception e = new SoftwareFaultException("failed: " + Location);
 			e.printStackTrace();
-			StackTraceElement[] Elements = e.getStackTrace();
-			String LineNumber = "";
-			int depth = 4;
-			if(depth < Elements.length) {
-				StackTraceElement elem = Elements[depth];
-				LineNumber += elem;
-			}
-			System.err.println("EXIT: " + LineNumber + " assertion failed: " + Location);
+			//			StackTraceElement[] Elements = e.getStackTrace();
+			//			String LineNumber = "";
+			//			int depth = 4;
+			//			if(depth < Elements.length) {
+			//				StackTraceElement elem = Elements[depth];
+			//				LineNumber += elem;
+			//			}
+			System.err.println("REC assert 0 @" + Location);
 			System.exit(1);
 		}
 		else {
-			System.err.println("passed: " + Location);
+			System.err.println("REC assert 1 @" + Location);
 		}
 	}
 
