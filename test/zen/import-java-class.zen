@@ -1,0 +1,7 @@
+import java.lang.System;
+
+function f() : void {
+    System.out.println("hello");
+}
+
+f();
