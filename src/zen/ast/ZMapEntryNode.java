@@ -10,7 +10,4 @@ public class ZMapEntryNode extends ZNode {
 	public ZMapEntryNode(ZNode ParentNode) {
 		super(ParentNode, null, 2);
 	}
-	@Override public String GetVisitName() {
-		return "VisitMapEntryNode"; // override this if you want to use additional node
-	}
 }

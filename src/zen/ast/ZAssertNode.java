@@ -3,7 +3,6 @@ package zen.ast;
 import zen.parser.ZGenerator;
 import zen.type.ZFunc;
 import zen.type.ZType;
-import zen.type.ZTypeChecker;
 
 
 public class ZAssertNode extends ZNode {
@@ -12,22 +11,12 @@ public class ZAssertNode extends ZNode {
 		super(ParentNode, null, 1);
 	}
 
-	@Override public String GetVisitName() {
-		return "VisitAssertNode";
-	}
-
-	@Override public ZNode VisitTypeChecker(ZTypeChecker TypeChecker, ZType ContextType) {
-		TypeChecker.CheckTypeAt(this, ZAssertNode._Expr, ZType.BooleanType);
-		this.Type = ZType.VoidType;
-		return this;
-	}
-
-	@Override public ZNode DeSugar(ZGenerator Generator) {
+	@Override public ZSugarNode DeSugar(ZGenerator Generator) {
 		ZFunc Func = Generator.GetDefinedFunc("Assert", ZType.BooleanType, 2);
 		ZFuncCallNode FuncNode = new ZFuncCallNode(this.ParentNode, this.SourceToken, Func);
 		FuncNode.Append(this.AST[ZAssertNode._Expr]);
 		FuncNode.Append(new ZStringNode(FuncNode, null, this.GetSourceLocation()));
-		return FuncNode;
+		return new ZSugarNode(this, FuncNode);
 	}
 
 }

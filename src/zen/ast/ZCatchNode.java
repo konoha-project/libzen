@@ -43,8 +43,4 @@ public final class ZCatchNode extends ZNode {
 	@Override public void SetNameInfo(String Name) {
 		this.ExceptionName = Name;
 	}
-
-	@Override public final String GetVisitName() {
-		return "VisitCatchNode"; // override this if you want to use additional node
-	}
 }

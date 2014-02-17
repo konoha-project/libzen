@@ -26,7 +26,6 @@
 package zen.ast;
 
 import zen.deps.Field;
-import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.parser.ZGenerator;
 import zen.parser.ZNameSpace;
@@ -181,17 +180,17 @@ public abstract class ZNode {
 		return false;
 	}
 
-	public String GetVisitName() {
-		return "VisitExtendedNode"; // override this if you want to use additional node
-	}
+	//	public String GetVisitName() {
+	//		return "VisitExtendedNode"; // override this if you want to use additional node
+	//	}
 
-	public ZNode DeSugar(ZGenerator Generator) {
-		return new ZErrorNode(this.ParentNode, "undefined code generation");
+	public ZSugarNode DeSugar(ZGenerator Generator) {
+		return new ZSugarNode(this, new ZErrorNode(this.ParentNode, "undefined code generation"));
 	}
 
 	//	public abstract boolean Accept(ZenVisitor Visitor);
 	public void Accept(ZVisitor Visitor) {
-		LibZen.DispatchVisitNode(Visitor, this);
+		Visitor.VisitExtendedNode(this);
 	}
 
 	public final boolean IsUntyped() {

@@ -63,6 +63,7 @@ import zen.ast.ZSetIndexNode;
 import zen.ast.ZSetNameNode;
 import zen.ast.ZSetterNode;
 import zen.ast.ZStringNode;
+import zen.ast.ZSugarNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZTypeNode;
@@ -345,17 +346,6 @@ public class ZScriptEngine extends ZVisitor {
 		Node.Import();
 	}
 
-	protected void EvalSugarNode(ZNode Node) {
-		LibZen._PrintDebug("Exteded Node: " + Node);
-		ZNode TransformedNode = Node.DeSugar(this.Generator);
-		if(TransformedNode == Node) {
-			this.Unsupported(Node, "'" + Node.SourceToken.GetText() + "'");
-		}
-		else {
-			this.Eval(TransformedNode);
-		}
-	}
-
 	@Override public void VisitExtendedNode(ZNode Node) {
 		if(Node instanceof ZPrototypeNode) {
 			this.VisitPrototypeNode((ZPrototypeNode)Node);
@@ -364,8 +354,13 @@ public class ZScriptEngine extends ZVisitor {
 			this.VisitImportNode((ZImportNode)Node);
 		}
 		else {
-			this.EvalSugarNode(Node);
+			ZNode SugarNode = Node.DeSugar(this.Generator);
+			SugarNode.Accept(this);
 		}
+	}
+
+	@Override public void VisitSugarNode(ZSugarNode Node) {
+		Node.AST[ZSugarNode._DeSugar].Accept(this);
 	}
 
 	public final Object Exec(ZNode Node, boolean IsInteractive) {

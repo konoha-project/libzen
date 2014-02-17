@@ -30,7 +30,4 @@ public final class ZEmptyNode extends ZNode {
 	public ZEmptyNode(ZNode ParentNode, ZToken Token) {
 		super(ParentNode, Token, 0);
 	}
-	@Override public String GetVisitName() {
-		return "VisitEmptyNode";
-	}
 }

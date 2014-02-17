@@ -20,10 +20,6 @@ public class ZImportNode extends ZNode {
 		}
 	}
 
-	@Override public String GetVisitName() {
-		return "VisitImportNode"; // override this if you want to use additional node
-	}
-
 	public ZNode Import() {
 		return ZenError.UnfoundResource(this, this.ResourcePath);
 	}

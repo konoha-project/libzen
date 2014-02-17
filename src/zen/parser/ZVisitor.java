@@ -59,6 +59,7 @@ import zen.ast.ZSetIndexNode;
 import zen.ast.ZSetNameNode;
 import zen.ast.ZSetterNode;
 import zen.ast.ZStringNode;
+import zen.ast.ZSugarNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZUnaryNode;
@@ -107,6 +108,7 @@ public abstract class ZVisitor {
 	public abstract void VisitClassNode(ZClassNode Node);
 	public abstract void VisitErrorNode(ZErrorNode Node);
 	public abstract void VisitExtendedNode(ZNode Node);
+	public abstract void VisitSugarNode(ZSugarNode Node);
 
 
 	public abstract void EnableVisitor();

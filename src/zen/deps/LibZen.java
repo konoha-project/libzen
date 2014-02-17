@@ -46,7 +46,6 @@ import zen.parser.ZSourceContext;
 import zen.parser.ZSourceGenerator;
 import zen.parser.ZTokenContext;
 import zen.parser.ZTokenFunc;
-import zen.parser.ZVisitor;
 import zen.type.ZFunc;
 import zen.type.ZFuncType;
 import zen.type.ZType;
@@ -498,28 +497,28 @@ public class LibZen {
 		return MatchFunc.Invoke(ParentNode, TokenContext, LeftNode);
 	}
 
-	// Visitor Reflection
-	public final static boolean IsSupportedNode(ZVisitor Visitor, ZNode Node) {
-		try {
-			Visitor.getClass().getMethod(Node.GetVisitName(), Node.getClass());
-			return true;
-		} catch (NoSuchMethodException e) {
-			LibZen._FixMe(e);
-		}
-		return false;
-	}
-
-	public final static void DispatchVisitNode(ZVisitor Visitor, ZNode Node) {
-		try {
-			Method JavaMethod = Visitor.getClass().getMethod(Node.GetVisitName(), Node.getClass());
-			JavaMethod.invoke(Visitor, Node);
-		} catch (NoSuchMethodException e) {
-			//System.err.println("Visitor:" + Visitor.getClass().getSimpleName() + " do not support for " + Node.getClass().getSimpleName());
-			Visitor.VisitExtendedNode(Node);
-		} catch (Exception e) {
-			LibZen._FixMe(e);
-		}
-	}
+	//	// Visitor Reflection
+	//	public final static boolean IsSupportedNode(ZVisitor Visitor, ZNode Node) {
+	//		try {
+	//			Visitor.getClass().getMethod(Node.GetVisitName(), Node.getClass());
+	//			return true;
+	//		} catch (NoSuchMethodException e) {
+	//			LibZen._FixMe(e);
+	//		}
+	//		return false;
+	//	}
+	//
+	//	public final static void DispatchVisitNode(ZVisitor Visitor, ZNode Node) {
+	//		try {
+	//			Method JavaMethod = Visitor.getClass().getMethod(Node.GetVisitName(), Node.getClass());
+	//			JavaMethod.invoke(Visitor, Node);
+	//		} catch (NoSuchMethodException e) {
+	//			//System.err.println("Visitor:" + Visitor.getClass().getSimpleName() + " do not support for " + Node.getClass().getSimpleName());
+	//			Visitor.VisitExtendedNode(Node);
+	//		} catch (Exception e) {
+	//			LibZen._FixMe(e);
+	//		}
+	//	}
 
 	private final static ZenMap<Class<?>> GenMap = new ZenMap<Class<?>>(null);
 

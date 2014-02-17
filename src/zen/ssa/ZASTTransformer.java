@@ -36,6 +36,7 @@ import zen.ast.ZSetIndexNode;
 import zen.ast.ZSetNameNode;
 import zen.ast.ZSetterNode;
 import zen.ast.ZStringNode;
+import zen.ast.ZSugarNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZUnaryNode;
@@ -292,6 +293,12 @@ public class ZASTTransformer extends ZVisitor {
 			this.VisitListNode(List);
 		}
 	}
+
+	@Override
+	public void VisitSugarNode(ZSugarNode Node) {
+		/* do nothing */
+	}
+
 
 	@Override
 	public void EnableVisitor() {

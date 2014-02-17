@@ -12,8 +12,4 @@ public class JavaStaticFieldNode extends ZNode {
 		this.Type = FieldType;
 		this.FieldName = FieldName;
 	}
-
-	@Override public final String GetVisitName() {
-		return "VisitStaticFieldNode";
-	}
 }

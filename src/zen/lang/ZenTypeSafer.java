@@ -72,9 +72,7 @@ import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
 import zen.deps.Field;
 import zen.deps.LibZen;
-import zen.deps.Nullable;
 import zen.deps.Var;
-import zen.deps.ZArray;
 import zen.parser.ZGenerator;
 import zen.parser.ZNameSpace;
 import zen.parser.ZVariable;
@@ -146,7 +144,9 @@ public class ZenTypeSafer extends ZTypeChecker {
 		if(!ElementType.IsVarType()) {
 			this.TypedNode(Node,ZTypePool._GetGenericType1(ZType.ArrayType, ElementType));
 		}
-		this.TypedNode(Node, ZType.VarType);
+		else {
+			this.TypedNode(Node, ZType.VarType);
+		}
 	}
 
 	@Override public void VisitMapLiteralNode(ZMapLiteralNode Node) {
@@ -173,7 +173,9 @@ public class ZenTypeSafer extends ZTypeChecker {
 			this.TypedNode(Node, ZTypePool._GetGenericType1(ZType.MapType, EntryType));
 			return;
 		}
-		this.TypedNode(Node, ZType.VarType);
+		else {
+			this.TypedNode(Node, ZType.VarType);
+		}
 	}
 
 	@Override public void VisitNewArrayNode(ZNewArrayNode Node) {
@@ -190,9 +192,9 @@ public class ZenTypeSafer extends ZTypeChecker {
 			this.TypedNode(Node, VarInfo.VarType);
 		}
 		else {
-			@Var ZNode ConstNode = NameSpace.GetSymbolNode(Node.VarName);
-			if(ConstNode != null) {
-				this.Return(ConstNode);
+			@Var ZNode SymbolNode = NameSpace.GetSymbolNode(Node.VarName);
+			if(SymbolNode != null) {
+				this.Return(SymbolNode);
 			}
 			else {
 				//this.Logger.ReportWarning(Node.SourceToken, "undefined variable: " + Node.VarName);
@@ -271,24 +273,24 @@ public class ZenTypeSafer extends ZTypeChecker {
 		this.TypedNode(Node, ZType.VoidType);
 	}
 
-	private ZFuncType GuessFuncTypeFromContext(ZType ReturnType, @Nullable ZType RecvType, ZListNode List) {
-		if(ReturnType.IsVoidType()) {
-			ReturnType = ZType.VarType;
-		}
-		ZArray<ZType> TypeList = new ZArray<ZType>(new ZType[List.GetListSize()+1]);
-		TypeList.add(ReturnType.GetRealType());
-		if(RecvType != null) {
-			TypeList.add(RecvType.GetRealType());
-		}
-		@Var int i = 0;
-		while(i < List.GetListSize()) {
-			ZNode SubNode = List.GetListAt(i);
-			ZType ParamType = SubNode.Type.GetRealType();
-			TypeList.add(ParamType);
-			i = i + 1;
-		}
-		return ZTypePool._LookupFuncType(TypeList);
-	}
+	//	private ZFuncType GuessFuncTypeFromContext(ZType ReturnType, @Nullable ZType RecvType, ZListNode List) {
+	//		if(ReturnType.IsVoidType()) {
+	//			ReturnType = ZType.VarType;
+	//		}
+	//		ZArray<ZType> TypeList = new ZArray<ZType>(new ZType[List.GetListSize()+1]);
+	//		TypeList.add(ReturnType.GetRealType());
+	//		if(RecvType != null) {
+	//			TypeList.add(RecvType.GetRealType());
+	//		}
+	//		@Var int i = 0;
+	//		while(i < List.GetListSize()) {
+	//			ZNode SubNode = List.GetListAt(i);
+	//			ZType ParamType = SubNode.Type.GetRealType();
+	//			TypeList.add(ParamType);
+	//			i = i + 1;
+	//		}
+	//		return ZTypePool._LookupFuncType(TypeList);
+	//	}
 
 	private void TypeCheckNativeMethodCall(ZNode Node, ZType RecvType, String MethodName, ZListNode List) {
 		ZFuncType FuncType = this.Generator.GetMethodFuncType(RecvType, MethodName, List);
@@ -351,7 +353,6 @@ public class ZenTypeSafer extends ZTypeChecker {
 		}
 		this.TypeCheckNativeMethodCall(Node, Node.Type, null, Node);
 	}
-
 
 	private void TypeCheckFuncCall(ZFuncCallNode FuncNode, ZFuncType FuncType) {
 		@Var int i = 0;

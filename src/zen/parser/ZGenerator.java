@@ -27,6 +27,7 @@ package zen.parser;
 
 import zen.ast.ZListNode;
 import zen.ast.ZNode;
+import zen.ast.ZSugarNode;
 import zen.deps.Field;
 import zen.deps.Var;
 import zen.deps.ZenMap;
@@ -190,8 +191,14 @@ public abstract class ZGenerator extends ZVisitor {
 	}
 
 	@Override public void VisitExtendedNode(ZNode Node) {
-		@Var ZNode DeNode = Node.DeSugar(this);
+		@Var ZSugarNode DeNode = Node.DeSugar(this);
 		DeNode.Accept(this);
 	}
+
+	@Override public void VisitSugarNode(ZSugarNode Node) {
+		Node.AST[ZSugarNode._DeSugar].Accept(this);
+	}
+
+
 
 }

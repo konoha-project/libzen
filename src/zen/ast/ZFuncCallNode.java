@@ -44,9 +44,8 @@ public final class ZFuncCallNode extends ZListNode {
 	public ZFuncCallNode(ZNode ParentNode, ZToken SourceToken, ZFunc ResolvedFunc) {
 		super(ParentNode, SourceToken, 1);
 		this.ResolvedFunc = ResolvedFunc;
-		assert(ResolvedFunc != null);
+		this.Set(ZFuncCallNode._Func, new ZGetNameNode(this, ResolvedFunc));
 	}
-
 
 	public final ZType GetRecvType() {
 		if(this.GetListSize() > 0) {

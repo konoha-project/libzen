@@ -43,7 +43,4 @@ public final class ZFieldNode extends ZNode {
 	@Override public void SetNameInfo(String Name) {
 		this.FieldName = Name;
 	}
-	@Override public String GetVisitName() {
-		return "VisitFieldNode";
-	}
 }

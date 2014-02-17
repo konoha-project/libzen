@@ -32,10 +32,6 @@ public class ZParamNode extends ZNode {
 		super(ParentNode, null, 0);
 	}
 
-	@Override public String GetVisitName() {
-		return "VisitParamNode"; // override this if you want to use additional node
-	}
-
 	@Override public void SetNameInfo(String Name) {
 		this.Name = Name;
 	}
