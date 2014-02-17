@@ -74,4 +74,12 @@ public final class ZenMap <T> extends ZObject {
 	public void AddMap(ZenMap<Object> aMap) {
 		throw new RuntimeException("unimplemented !!");
 	}
+
+	public final static <T> T GetIndex(ZenMap<T> aMap, String Key) {
+		return aMap.Map.get(Key);
+	}
+
+	public final static <T> void SetIndex(ZenMap<T> aMap, String Key, T Value) {
+		aMap.Map.put(Key, Value);
+	}
 }

@@ -26,6 +26,7 @@ package zen.codegen.jvm;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 
+import zen.deps.LibZen;
 import zen.type.ZType;
 import zen.type.ZTypePool;
 
@@ -108,6 +109,10 @@ public class JavaMethodTable {
 		Import(FloatArrayType, "[]=", ZType.IntType, zen.deps.ZFloatArray.class, "SetIndex", double.class);
 		Import(StringArrayType, "[]", ZType.IntType, zen.deps.ZStringArray.class, "GetIndex");
 		Import(StringArrayType, "[]=", ZType.IntType, zen.deps.ZStringArray.class, "SetIndex", String.class);
+
+		Import(ZType.MapType, "[]", ZType.StringType, zen.deps.ZenMap.class, "GetIndex");
+		Import(ZType.MapType, "[]=", ZType.StringType, zen.deps.ZenMap.class, "SetIndex", Object.class);
+
 
 		Import(boolean.class, JavaCastApi.class, "toObject");
 		Import(byte.class, JavaCastApi.class, "toObject");
@@ -230,9 +235,14 @@ public class JavaMethodTable {
 
 	public static Method GetBinaryStaticMethod(ZType T1, String Op, ZType T2) {
 		Method sMethod = MethodMap.get(BinaryKey(T1, Op, T2));
-		if(sMethod == null) {
-			// if undefined Object "op" Object must be default
-			sMethod = MethodMap.get(BinaryKey(ZType.VarType, Op, ZType.VarType));
+		while(sMethod == null) {
+			LibZen._PrintDebug("unfound binary operator" + T1 + " " + Op + " " + T2);
+			if(T1.IsVarType()) {
+				sMethod = MethodMap.get(BinaryKey(ZType.VarType, Op, ZType.VarType));
+				break;
+			}
+			T1 = T1.GetSuperType();
+			sMethod = MethodMap.get(BinaryKey(T1, Op, T2));
 		}
 		return sMethod;
 	}

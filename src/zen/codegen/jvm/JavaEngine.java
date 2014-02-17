@@ -48,6 +48,7 @@ import zen.ast.ZMethodCallNode;
 import zen.ast.ZNewObjectNode;
 import zen.ast.ZNode;
 import zen.ast.ZNotNode;
+import zen.ast.ZSetIndexNode;
 import zen.ast.ZSetterNode;
 import zen.ast.ZStringNode;
 import zen.ast.ZUnaryNode;
@@ -232,13 +233,22 @@ public class JavaEngine extends ZScriptEngine {
 	}
 
 	@Override public void VisitGetIndexNode(ZGetIndexNode Node) {
-		Method sMethod = JavaMethodTable.GetBinaryStaticMethod(Node.AST[ZGetIndexNode._Recv].Type, "[]", Node.AST[ZGetIndexNode._Index].Type);
+		Method sMethod = JavaMethodTable.GetBinaryStaticMethod(Node.GetAstType(ZGetIndexNode._Recv), "[]", Node.GetAstType(ZGetIndexNode._Index));
+		if(sMethod == null) {
+			this.Logger.ReportError2(Node, "type error");
+			return ;
+		}
 		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.AST[ZGetIndexNode._Recv], Node.AST[ZGetIndexNode._Index]});
 	}
 
-	//	@Override public void VisitSetIndexNode(ZSetIndexNode Node) {
-	//		this.Unsupported(Node);
-	//	}
+	@Override public void VisitSetIndexNode(ZSetIndexNode Node) {
+		Method sMethod = JavaMethodTable.GetBinaryStaticMethod(Node.GetAstType(ZSetIndexNode._Recv), "[]", Node.GetAstType(ZSetIndexNode._Index));
+		if(sMethod == null) {
+			this.Logger.ReportError2(Node, "type error");
+			return ;
+		}
+		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.AST[ZSetIndexNode._Recv], Node.AST[ZSetIndexNode._Index], Node.AST[ZSetIndexNode._Expr]});
+	}
 
 	@Override public void VisitArrayLiteralNode(ZArrayLiteralNode Node) {
 		if(Node.IsUntyped()) {

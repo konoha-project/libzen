@@ -127,6 +127,11 @@ public class ZenTypeSafer extends ZTypeChecker {
 
 	@Override public void VisitArrayLiteralNode(ZArrayLiteralNode Node) {
 		@Var ZType ArrayType = this.GetContextType();
+		if(ArrayType.IsMapType() && Node.GetListSize() == 0) {
+			/* this is exceptional tratement for map literal */
+			this.TypedNode(new ZMapLiteralNode(Node.ParentNode), ArrayType);
+			return;
+		}
 		@Var ZType ElementType = ZType.VarType;
 		if(ArrayType.IsArrayType()) {
 			ElementType = ArrayType.GetParamType(0);
