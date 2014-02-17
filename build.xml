@@ -5,6 +5,7 @@
 	<property name="build_dir"  value="build" />
 	<property name="root_dir"   value="." />
 	<property name="jline_jar"  value="ext/jline-1.0.jar" />
+	<property name="lib.cobertura.dir" location="/opt/java/cobertura" />
 	<property name="lib.pmd.dir" location="/opt/java/pmd" />
 
 	<!-- ================================== -->
@@ -63,7 +64,7 @@
 		<delete file="cobertura.ser" />
 
 		<path id="cobertura.classpath">
-			<fileset dir="ext/cobertura">
+			<fileset dir="${lib.cobertura.dir}">
 				<include name="*.jar"/>
 			</fileset>
 		</path>
