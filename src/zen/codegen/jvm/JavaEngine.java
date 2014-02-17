@@ -22,8 +22,6 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-//ifdef JAVA
-
 package zen.codegen.jvm;
 
 import java.lang.reflect.Constructor;

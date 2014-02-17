@@ -607,13 +607,21 @@ public class JavaAsmGenerator extends JavaGenerator {
 
 	public void VisitStaticField(JavaStaticFieldNode Node) {
 		String FieldDesc = Type.getDescriptor(this.GetJavaClass(Node.Type));
-		System.out.println("Node.StaticClass="+Node.StaticClass+", FieldName="+Node.FieldName);
 		this.AsmBuilder.visitFieldInsn(Opcodes.GETSTATIC, Type.getInternalName(Node.StaticClass), Node.FieldName, FieldDesc);
 	}
 
 	@Override public void VisitLetNode(ZLetNode Node) {
+		if(Node.HasUntypedNode()) {
+			this.Logger.ReportError2(Node.AST[ZLetNode._InitValue], "ambigious type");
+			return;
+		}
+		if(Node.AST[ZLetNode._InitValue] instanceof ZErrorNode) {
+			this.VisitErrorNode((ZErrorNode)Node.AST[ZLetNode._InitValue]);
+			return;
+		}
 		if(!(Node.AST[ZLetNode._InitValue] instanceof ZConstNode)) {
 			String ClassName = "Symbol" + Node.GlobalName;
+			System.out.println("Node.AST" + Node);
 			@Var AsmClassBuilder ClassBuilder = this.AsmLoader.NewClass(ACC_PUBLIC|ACC_FINAL, Node, ClassName, "java/lang/Object");
 			Class<?> ValueClass = this.GetJavaClass(Node.GetAstType(ZLetNode._InitValue));
 			ClassBuilder.AddField(ACC_PUBLIC|ACC_STATIC, "_", ValueClass, null);
@@ -623,9 +631,8 @@ public class JavaAsmGenerator extends JavaGenerator {
 			StaticInitMethod.visitFieldInsn(Opcodes.PUTSTATIC, ClassName, "_",  Type.getDescriptor(ValueClass));
 			StaticInitMethod.visitInsn(RETURN);
 			StaticInitMethod.Finish();
-
 			Class<?> StaticClass = this.AsmLoader.LoadGeneratedClass(ClassName);
-			Node.Set(ZLetNode._InitValue, new JavaStaticFieldNode(null, StaticClass, Node.AST[ZLetNode._InitValue].Type, "_"));
+			Node.Set(ZLetNode._InitValue, new JavaStaticFieldNode(Node, StaticClass, Node.AST[ZLetNode._InitValue].Type, "_"));
 		}
 		Node.GetNameSpace().SetLocalSymbol(Node.Symbol, Node.AST[ZLetNode._InitValue]);
 	}

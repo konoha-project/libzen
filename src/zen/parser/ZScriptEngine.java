@@ -314,7 +314,7 @@ public class ZScriptEngine extends ZVisitor {
 	}
 
 	@Override public void VisitLetNode(ZLetNode Node) {
-		if(!this.Generator.StartCodeGeneration(Node, true, this.IsInteractive)) {
+		if(!this.Generator.StartCodeGeneration(Node, false, this.IsInteractive)) {
 			this.LazyNode(Node);
 		}
 	}
@@ -326,7 +326,7 @@ public class ZScriptEngine extends ZVisitor {
 	}
 
 	@Override public void VisitClassNode(ZClassNode Node) {
-		if(!this.Generator.StartCodeGeneration(Node, true, this.IsInteractive)) {
+		if(!this.Generator.StartCodeGeneration(Node, false, this.IsInteractive)) {
 			this.LazyNode(Node);
 		}
 	}
