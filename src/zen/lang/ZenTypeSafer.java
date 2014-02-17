@@ -680,6 +680,8 @@ public class ZenTypeSafer extends ZTypeChecker {
 					Func = new ZPrototype(0, FunctionNode.FuncName, FuncType, FunctionNode.SourceToken);
 					ZenGamma.DefineFunc(NameSpace, Func);
 					FunctionNode.GlobalName = Func.GetSignature();
+					// XXX (ide)
+					NameSpace.SetLocalSymbol(FunctionNode.FuncName, new ZGetNameNode(FunctionNode, FunctionNode.SourceToken, FunctionNode.FuncName));
 				}
 			}
 		}
@@ -711,6 +713,8 @@ public class ZenTypeSafer extends ZTypeChecker {
 	private void PopFunctionNode(ZNameSpace NameSpace) {
 		this.CurrentFunctionNode = this.CurrentFunctionNode.Pop();
 		this.VarScope = this.VarScope.Parent;
+		// FIXME (ide) pop local symbol of function name
+
 	}
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
