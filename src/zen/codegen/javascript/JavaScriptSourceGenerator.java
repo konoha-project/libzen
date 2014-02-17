@@ -29,16 +29,23 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 
 import zen.ast.ZBinaryNode;
-import zen.ast.ZBlockNode;
 import zen.ast.ZCastNode;
 import zen.ast.ZCatchNode;
+import zen.ast.ZClassNode;
+import zen.ast.ZErrorNode;
+import zen.ast.ZFieldNode;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZInstanceOfNode;
+import zen.ast.ZLetNode;
+import zen.ast.ZMapLiteralNode;
+import zen.ast.ZNewArrayNode;
+import zen.ast.ZNode;
 import zen.ast.ZParamNode;
-import zen.ast.ZReturnNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZVarNode;
+import zen.deps.LibZen;
+import zen.deps.Var;
 import zen.parser.ZSourceGenerator;
 import zen.type.ZType;
 
@@ -83,22 +90,22 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 	//		return null;
 	//	}
 
-	@Override
-	public void VisitBlockNode(ZBlockNode Node) {
-		this.CurrentBuilder.Append("{");
-		this.CurrentBuilder.Indent();
-		throw new RuntimeException("FIXME: Don't use for statement");
-		//		for (ZNode SubNode : Node.StmtList) {
-		//			this.CurrentBuilder.AppendLineFeed();
-		//			this.CurrentBuilder.AppendIndent();
-		//			this.GenerateCode(SubNode);
-		//			this.CurrentBuilder.Append(this.SemiColon);
-		//		}
-		//		this.CurrentBuilder.UnIndent();
-		//		this.CurrentBuilder.AppendLineFeed();
-		//		this.CurrentBuilder.AppendIndent();
-		//		this.CurrentBuilder.Append("}");
-	}
+	//@Override
+	//public void VisitBlockNode(ZBlockNode Node) {
+	//this.CurrentBuilder.Append("{");
+	//this.CurrentBuilder.Indent();
+	//throw new RuntimeException("FIXME: Don't use for statement");
+	//		for (ZNode SubNode : Node.StmtList) {
+	//			this.CurrentBuilder.AppendLineFeed();
+	//			this.CurrentBuilder.AppendIndent();
+	//			this.GenerateCode(SubNode);
+	//			this.CurrentBuilder.Append(this.SemiColon);
+	//		}
+	//		this.CurrentBuilder.UnIndent();
+	//		this.CurrentBuilder.AppendLineFeed();
+	//		this.CurrentBuilder.AppendIndent();
+	//		this.CurrentBuilder.Append("}");
+	//}
 
 	@Override public void VisitCastNode(ZCastNode Node) {
 		this.GenerateCode(Node.AST[ZCastNode._Expr]);
@@ -114,7 +121,8 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 
 	@Override
 	public void VisitThrowNode(ZThrowNode Node) {
-		this.CurrentBuilder.Append("throw ");
+		this.CurrentBuilder.Append("throw");
+		this.CurrentBuilder.AppendWhiteSpace();
 		this.GenerateCode(Node.AST[ZThrowNode._Expr]);
 	}
 
@@ -141,10 +149,13 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 
 	@Override
 	public void VisitVarNode(ZVarNode Node) {
-		this.CurrentBuilder.AppendToken("var ");
+		this.CurrentBuilder.AppendToken("var");
+		this.CurrentBuilder.AppendWhiteSpace();
 		this.CurrentBuilder.Append(Node.NativeName);
 		this.CurrentBuilder.AppendToken("=");
 		this.GenerateCode(Node.AST[ZVarNode._InitValue]);
+		this.CurrentBuilder.Append(this.SemiColon);
+		this.VisitStmtList(Node);
 	}
 
 	@Override public void VisitParamNode(ZParamNode Node) {
@@ -152,22 +163,26 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
-		ZReturnNode ReturnNode = Node.AST[ZFunctionNode._Block].ToReturnNode();
-		this.CurrentBuilder.Append("(function");
+		//ZReturnNode ReturnNode = Node.AST[ZFunctionNode._Block].ToReturnNode();
+		//this.CurrentBuilder.Append("(");
+		this.CurrentBuilder.Append("function");
+		this.CurrentBuilder.AppendWhiteSpace();
 		if(Node.FuncName != null) {
-			this.CurrentBuilder.Append(Node.GlobalName);
+			this.CurrentBuilder.Append(Node.FuncName);
 		}
 		this.VisitListNode("(", Node, ")");
-		if(ReturnNode != null && ReturnNode.AST[ZReturnNode._Expr] != null) {
-			this.CurrentBuilder.Append("{ return ");
-			this.GenerateCode(ReturnNode.AST[ZReturnNode._Expr]);
-			this.CurrentBuilder.Append("; }");
-		}
-		else {
-			this.GenerateCode(Node.AST[ZFunctionNode._Block]);
-		}
-		this.CurrentBuilder.Append(")");
+		this.GenerateCode(Node.AST[ZFunctionNode._Block]);
+		//		if(ReturnNode != null && ReturnNode.AST[ZReturnNode._Expr] != null) {
+		//			this.CurrentBuilder.Append("{ return ");
+		//			this.GenerateCode(ReturnNode.AST[ZReturnNode._Expr]);
+		//			this.CurrentBuilder.Append("; }");
+		//		}
+		//		else {
+		//			this.GenerateCode(Node.AST[ZFunctionNode._Block]);
+		//		}
+		//this.CurrentBuilder.Append(")");
 	}
+
 
 	//	@Override
 	//	public void VisitFuncDeclNode(ZFunctionNode/*Decl*/ Node) {
@@ -176,5 +191,97 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 	//		this.VisitListNode("(", Node.ParamList, ")");
 	//		this.GenerateCode(Node.BodyNode);
 	//	}
+
+	@Override public void VisitMapLiteralNode(ZMapLiteralNode Node) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override public void VisitNewArrayNode(ZNewArrayNode Node) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override public void VisitLetNode(ZLetNode Node) {
+		// TODO
+		//		this.CurrentBuilder.Append("let");
+		//		this.CurrentBuilder.AppendWhiteSpace();
+		//		this.CurrentBuilder.Append(Node.GlobalName);
+		//		this.CurrentBuilder.AppendToken("=");
+		//		this.GenerateCode(Node.AST[ZLetNode._InitValue]);
+	}
+
+	@Override public void VisitClassNode(ZClassNode Node) {
+		/* var ClassName = (function(_super) {
+		 *  __extends(ClassName, _super);
+		 * 	function ClassName(params) {
+		 * 		_super.call(this, params);
+		 * 	}
+		 * 	ClassName.prototype.MethodName = function(){ };
+		 * 	return ClassName;
+		 * })(_super);
+		 */
+		this.CurrentBuilder.Append("var");
+		this.CurrentBuilder.AppendWhiteSpace();
+		this.CurrentBuilder.Append(Node.ClassName);
+		this.CurrentBuilder.Append("=");
+		this.CurrentBuilder.AppendWhiteSpace();
+		this.CurrentBuilder.Append("(function(");
+		if(Node.SuperType != null) {
+			this.CurrentBuilder.Append("_super) {");
+			this.CurrentBuilder.AppendIndent();
+			this.CurrentBuilder.Append("__extends(");
+			this.CurrentBuilder.Append(Node.ClassName);
+			this.CurrentBuilder.Append(")");
+		} else {
+			this.CurrentBuilder.Append(") {");
+			this.CurrentBuilder.AppendIndent();
+		}
+		@Var int i = 0;
+		while (i < Node.GetListSize()) {
+			@Var ZFieldNode FieldNode = Node.GetFieldNode(i);
+			this.CurrentBuilder.AppendLineFeed();
+			this.CurrentBuilder.AppendIndent();
+			this.CurrentBuilder.Append("this.");
+			this.CurrentBuilder.Append(FieldNode.FieldName);
+			this.CurrentBuilder.AppendWhiteSpace();
+			this.CurrentBuilder.AppendToken("=");
+			this.CurrentBuilder.AppendWhiteSpace();
+			this.GenerateCode(FieldNode.AST[ZFieldNode._InitValue]);
+			this.CurrentBuilder.Append(this.SemiColon);
+			i = i + 1;
+		}
+		//this.CurrentBuilder.UnIndent();
+		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.AppendIndent();
+		this.CurrentBuilder.Append("}");
+
+		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.AppendIndent();
+		this.CurrentBuilder.Append("return");
+		this.CurrentBuilder.AppendWhiteSpace();
+		this.CurrentBuilder.Append(Node.ClassName);
+		this.CurrentBuilder.Append(this.SemiColon);
+		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.Append("})(");
+		if(Node.SuperType != null) {
+			this.CurrentBuilder.Append(Node.SuperType.ShortName);
+		}
+		this.CurrentBuilder.Append(")");
+		this.CurrentBuilder.Append(this.SemiColon);
+	}
+
+	@Override public void VisitErrorNode(ZErrorNode Node) {
+		this.Logger.ReportError(Node.SourceToken, Node.ErrorMessage);
+		this.CurrentBuilder.Append("new");
+		this.CurrentBuilder.AppendWhiteSpace();
+		this.CurrentBuilder.Append("Error");
+		this.CurrentBuilder.Append("(");
+		this.CurrentBuilder.Append(LibZen._QuoteString(Node.ErrorMessage));
+		this.CurrentBuilder.Append(")");
+	}
+
+	@Override public void VisitExtendedNode(ZNode Node) {
+		//TODO
+	}
+
 
 }
