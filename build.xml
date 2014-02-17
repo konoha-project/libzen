@@ -52,7 +52,7 @@
 	<!-- ================================== -->
 	<!--               TEST                 -->
 	<!-- ================================== -->
-	<target name="test" depends="build">
+	<target name="pre-test" depends="build">
 		<javac srcdir="${source_dir}" destdir="${build_dir}" target="1.7" source="1.7"
 			debug="yes" debuglevel="lines,vars,source" includeantruntime="false">
 			<classpath path="ext/asm-all-4.0.jar" />
@@ -60,9 +60,10 @@
 			<classpath path="${jline_jar}" />
 			<include name="**/*Test.java" />
 		</javac>
+	</target>
 
+	<target name="pre-coverage" depends="pre-test">
 		<delete file="cobertura.ser" />
-
 		<path id="cobertura.classpath">
 			<fileset dir="${lib.cobertura.dir}">
 				<include name="*.jar"/>
@@ -73,7 +74,9 @@
 		<cobertura-instrument todir="${build_dir}/instrumented">
 			<fileset dir="${build_dir}" includes="**/*.class" />
 		</cobertura-instrument>
+	</target>
 
+	<target name="run-test" depends="pre-coverage">
 		<junit fork="yes" forkmode="once">
 			<classpath location="${build_dir}/instrumented"/>
 			<classpath location="${build_dir}"/>
@@ -89,7 +92,9 @@
 			</batchtest>
 			<formatter type="brief" usefile="false"/>
 		</junit>
+	</target>
 
+	<target name="test" depends="run-test">
 		<cobertura-report destdir="build/coverage" format="xml">
 			<fileset dir="${source_dir}" includes="**/*.java"/>
 		</cobertura-report>

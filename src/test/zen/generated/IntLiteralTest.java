@@ -4,6 +4,6 @@ import zen.main.ZenMain;
 public class IntLiteralTest {
     @Test
     public void test() {
-        ZenMain.ExecCommand(new String[] {"-l", "jvm", "test/zen/Assign.zen"});
+        ZenMain.ExecCommand(new String[] {"-l", "jvm", "test/zen/IntLiteral.zen"});
     }
 }
