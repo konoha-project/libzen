@@ -202,16 +202,6 @@ public class JavaEngine extends ZScriptEngine {
 		}
 	}
 
-	public void VisitStaticFieldNode(JavaStaticFieldNode Node) {
-		try {
-			Field f = Node.StaticClass.getField(Node.FieldName);
-			this.EvaledValue = f.get(null);
-		} catch (Exception e) {
-			LibZen._FixMe(e);
-			this.StopVisitor();
-		}
-	}
-
 	@Override public void VisitGetNameNode(ZGetNameNode Node) {
 		@Var ZNode Node1 = Node.GetNameSpace().GetSymbolNode(Node.VarName);
 		if(Node1 != null) {
@@ -406,5 +396,25 @@ public class JavaEngine extends ZScriptEngine {
 		Method sMethod = JavaMethodTable.GetBinaryStaticMethod(Node.AST[ZBinaryNode._Left].Type, Node.SourceToken.GetText(), Node.AST[ZBinaryNode._Right].Type);
 		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.AST[ZBinaryNode._Left], Node.AST[ZBinaryNode._Right]});
 	}
+
+	private void VisitStaticFieldNode(JavaStaticFieldNode Node) {
+		try {
+			Field f = Node.StaticClass.getField(Node.FieldName);
+			this.EvaledValue = f.get(null);
+		} catch (Exception e) {
+			LibZen._FixMe(e);
+			this.StopVisitor();
+		}
+	}
+
+	@Override public void VisitExtendedNode(ZNode Node) {
+		if(Node instanceof JavaStaticFieldNode) {
+			this.VisitStaticFieldNode((JavaStaticFieldNode)Node);
+		}
+		else {
+			super.VisitExtendedNode(Node);
+		}
+	}
+
 
 }

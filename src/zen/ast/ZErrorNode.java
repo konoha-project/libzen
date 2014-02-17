@@ -31,7 +31,6 @@ public final class ZErrorNode extends ZConstNode {
 	public String ErrorMessage;
 	public ZErrorNode(ZNode ParentNode, ZToken SourceToken, String ErrorMessage) {
 		super(ParentNode, SourceToken);
-		//		LibZen.DebugP(ErrorMessage);
 		this.ErrorMessage = ErrorMessage;
 	}
 	public ZErrorNode(ZNode Node, String ErrorMessage) {

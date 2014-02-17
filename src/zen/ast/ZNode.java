@@ -185,7 +185,7 @@ public abstract class ZNode {
 	//	}
 
 	public ZSugarNode DeSugar(ZGenerator Generator) {
-		return new ZSugarNode(this, new ZErrorNode(this.ParentNode, "undefined code generation"));
+		return new ZSugarNode(this, new ZErrorNode(this.ParentNode, "undefined code generation: " + this));
 	}
 
 	//	public abstract boolean Accept(ZenVisitor Visitor);

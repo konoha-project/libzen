@@ -605,11 +605,6 @@ public class JavaAsmGenerator extends JavaGenerator {
 		this.AsmBuilder.RemoveLocal(this.GetJavaClass(Node.ExceptionType), Node.ExceptionName);
 	}
 
-	public void VisitStaticField(JavaStaticFieldNode Node) {
-		String FieldDesc = Type.getDescriptor(this.GetJavaClass(Node.Type));
-		this.AsmBuilder.visitFieldInsn(Opcodes.GETSTATIC, Type.getInternalName(Node.StaticClass), Node.FieldName, FieldDesc);
-	}
-
 	@Override public void VisitLetNode(ZLetNode Node) {
 		if(Node.HasUntypedNode()) {
 			this.Logger.ReportError2(Node.AST[ZLetNode._InitValue], "ambigious type");
@@ -677,7 +672,7 @@ public class JavaAsmGenerator extends JavaGenerator {
 			}
 			JavaStaticFieldNode FuncNode = this.GenerateFunctionAsSymbolField(Node);
 			if(this.AsmBuilder != null) {
-				this.VisitStaticField(FuncNode);
+				this.VisitStaticFieldNode(FuncNode);
 			}
 			else {  // ad hoc
 				Node.GetNameSpace().SetLocalSymbol("it", FuncNode);
@@ -928,7 +923,18 @@ public class JavaAsmGenerator extends JavaGenerator {
 		this.AsmBuilder.ApplyStaticMethod(Node, sMethod);
 	}
 
+	public void VisitStaticFieldNode(JavaStaticFieldNode Node) {
+		String FieldDesc = Type.getDescriptor(this.GetJavaClass(Node.Type));
+		this.AsmBuilder.visitFieldInsn(Opcodes.GETSTATIC, Type.getInternalName(Node.StaticClass), Node.FieldName, FieldDesc);
+	}
+
 	@Override public void VisitExtendedNode(ZNode Node) {
+		if(Node instanceof JavaStaticFieldNode) {
+			this.VisitStaticFieldNode((JavaStaticFieldNode)Node);
+		}
+		else {
+			super.VisitExtendedNode(Node);
+		}
 	}
 
 
