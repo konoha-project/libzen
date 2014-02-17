@@ -430,14 +430,14 @@ public class JavaAsmGenerator extends JavaGenerator {
 			this.AsmBuilder.Pop(Node.AST[ZCastNode._Expr].Type);
 		}
 		else {
-			Class<?> C1 = this.GetJavaClass(Node.Type);
-			Class<?> C2 = this.GetJavaClass(Node.AST[ZCastNode._Expr].Type);
-			Method sMethod = JavaMethodTable.GetCastMethod(C1, C2);
+			Class<?> TargetClass = this.GetJavaClass(Node.Type);
+			Class<?> SourceClass = this.GetJavaClass(Node.AST[ZCastNode._Expr].Type);
+			Method sMethod = JavaMethodTable.GetCastMethod(TargetClass, SourceClass);
 			if(sMethod != null) {
 				this.AsmBuilder.ApplyStaticMethod(Node, sMethod, new ZNode[] {Node.AST[ZCastNode._Expr]});
 			}
-			else if(!C1.isAssignableFrom(C2)) {
-				this.AsmBuilder.visitTypeInsn(CHECKCAST, C1);
+			else if(!TargetClass.isAssignableFrom(SourceClass)) {
+				this.AsmBuilder.visitTypeInsn(CHECKCAST, TargetClass);
 			}
 		}
 	}
