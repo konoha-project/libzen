@@ -3,7 +3,9 @@
 	<property name="BinaryName" value="libzen" />
 	<property name="source_dir" value="src" />
 	<property name="build_dir"  value="build" />
+	<property name="root_dir"   value="." />
 	<property name="jline_jar"  value="ext/jline-1.0.jar" />
+	<property name="lib.pmd.dir" location="/opt/java/pmd" />
 
 	<!-- ================================== -->
 	<!--                BUILD               -->
@@ -15,6 +17,7 @@
 			<classpath path="ext/asm-all-4.0.jar" />
 			<classpath path="${jline_jar}" />
 			<include name="**/*.java" />
+			<exclude name="**/*Test.java" />
 			<compilerarg value="-Xlint:deprecation" />
 			<compilerarg value="-Xlint:unchecked" />
 		</javac>
@@ -44,16 +47,56 @@
 		</delete>
 		<delete file="${BinaryName}.jar" />
 	</target>
+
 	<!-- ================================== -->
 	<!--               TEST                 -->
 	<!-- ================================== -->
-	<target name="test">
+	<target name="test" depends="build">
+		<javac srcdir="${source_dir}" destdir="${build_dir}" target="1.7" source="1.7"
+			debug="yes" debuglevel="lines,vars,source" includeantruntime="false">
+			<classpath path="ext/asm-all-4.0.jar" />
+			<classpath path="ext/junit-4.10.jar" />
+			<classpath path="${jline_jar}" />
+			<include name="**/*Test.java" />
+		</javac>
+
+		<delete file="cobertura.ser" />
+
+		<path id="cobertura.classpath">
+			<fileset dir="ext/cobertura">
+				<include name="*.jar"/>
+			</fileset>
+		</path>
+		<taskdef classpathref="cobertura.classpath" resource="tasks.properties"/>
+
+		<cobertura-instrument todir="${build_dir}/instrumented">
+			<fileset dir="${build_dir}" includes="**/*.class" />
+		</cobertura-instrument>
+
+		<junit fork="yes" forkmode="once">
+			<classpath location="${build_dir}/instrumented"/>
+			<classpath location="${build_dir}"/>
+			<classpath>
+				<fileset dir="ext">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+			<batchtest>
+				<fileset dir="${build_dir}/instrumented">
+					<include name="**/*Test*" />
+				</fileset>
+			</batchtest>
+			<formatter type="brief" usefile="false"/>
+		</junit>
+
+		<cobertura-report destdir="build/coverage" format="xml">
+			<fileset dir="${source_dir}" includes="**/*.java"/>
+		</cobertura-report>
 	</target>
 
 	<!-- ================================== -->
 	<!--                PMD                 -->
 	<!-- ================================== -->
-	<property name="lib.pmd.dir" location="/opt/java/pmd" />
 	<path id="pmd.classpath">
 		<fileset dir="${lib.pmd.dir}">
 			<include name="*.jar"/>
@@ -70,13 +113,11 @@
 			<formatter type="xml" toFile="${build_dir}/pmd.xml" />
 			<!--
 			<formatter type="text" toConsole="true" />
-			<formatter type="html" toFile="pmd_report.html">
-				<param name="linkPrefix" value="http://pmd.sourceforge.net/xref/"/>
-			</formatter>
 			//-->
 			<fileset dir="${source_dir}">
 				<include name="**/*.java" />
 			</fileset>
 		</pmd>
 	</target>
+
 </project>
