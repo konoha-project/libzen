@@ -77,10 +77,13 @@
 	</target>
 
 	<target name="run-test" depends="pre-coverage">
-		<junit fork="yes" forkmode="once">
+		<junit fork="yes" forkmode="once" showoutput="yes">
 			<classpath location="${build_dir}/instrumented"/>
 			<classpath location="${build_dir}"/>
 			<classpath>
+				<fileset dir="${lib.cobertura.dir}">
+					<include name="*.jar"/>
+				</fileset>
 				<fileset dir="ext">
 					<include name="**/*.jar" />
 				</fileset>
