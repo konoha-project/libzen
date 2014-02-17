@@ -32,12 +32,15 @@ import java.lang.reflect.Modifier;
 import zen.ast.ZArrayLiteralNode;
 import zen.ast.ZBinaryNode;
 import zen.ast.ZCastNode;
+import zen.ast.ZClassNode;
 import zen.ast.ZComparatorNode;
 import zen.ast.ZFuncCallNode;
+import zen.ast.ZFunctionNode;
 import zen.ast.ZGetIndexNode;
 import zen.ast.ZGetNameNode;
 import zen.ast.ZGetterNode;
 import zen.ast.ZGroupNode;
+import zen.ast.ZLetNode;
 import zen.ast.ZListNode;
 import zen.ast.ZMapEntryNode;
 import zen.ast.ZMapLiteralNode;
@@ -341,6 +344,7 @@ public class JavaEngine extends ZScriptEngine {
 		}
 		if(Node.ResolvedFunc != null) {
 			ZFuncType FuncType = Node.ResolvedFunc.GetFuncType();
+			this.Solution.LazyBuild(FuncType.StringfySignature(Node.ResolvedFuncName));
 			Class<?> FunctionClass = this.Solution.GetDefinedFunctionClass(Node.ResolvedFuncName, FuncType);
 			Node.Set(ZFuncCallNode._Func, new JavaStaticFieldNode(Node, FunctionClass, FuncType, "function"));
 		}
@@ -395,6 +399,26 @@ public class JavaEngine extends ZScriptEngine {
 	@Override public void VisitComparatorNode(ZComparatorNode Node) {
 		Method sMethod = JavaMethodTable.GetBinaryStaticMethod(Node.AST[ZBinaryNode._Left].Type, Node.SourceToken.GetText(), Node.AST[ZBinaryNode._Right].Type);
 		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.AST[ZBinaryNode._Left], Node.AST[ZBinaryNode._Right]});
+	}
+
+	@Override public void VisitLetNode(ZLetNode Node) {
+		LibZen._PrintDebug("HasUntypedNode: " + Node.HasUntypedNode());
+		this.Solution.StartCodeGeneration(Node, false, false);
+	}
+
+	@Override public void VisitFunctionNode(ZFunctionNode Node) {
+		LibZen._PrintDebug("HasUntypedNode: " + Node.HasUntypedNode());
+		if(Node.HasUntypedNode()) {
+			this.Solution.LazyBuild(Node);
+		}
+		else {
+			this.Solution.StartCodeGeneration(Node, false, false);
+		}
+	}
+
+	@Override public void VisitClassNode(ZClassNode Node) {
+		LibZen._PrintDebug("HasUntypedNode: " + Node.HasUntypedNode());
+		this.Solution.StartCodeGeneration(Node, false, false);
 	}
 
 	private void VisitStaticFieldNode(JavaStaticFieldNode Node) {

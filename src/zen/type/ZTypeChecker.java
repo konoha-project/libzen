@@ -234,7 +234,7 @@ public abstract class ZTypeChecker extends ZVisitor {
 	@Override public void VisitSugarNode(ZSugarNode Node) {
 		@Var ZType ContextType = this.GetContextType();
 		this.CheckTypeAt(Node, ZSugarNode._DeSugar, ContextType);
-		this.Return(Node);
+		this.TypedNode(Node, Node.GetAstType(ZSugarNode._DeSugar));
 	}
 
 

@@ -73,6 +73,7 @@ import zen.ast.ZWhileNode;
 import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.deps.ZArray;
+import zen.deps.ZenMap;
 import zen.type.ZFuncType;
 import zen.type.ZType;
 import zen.type.ZTypeChecker;
@@ -84,6 +85,8 @@ public class ZScriptEngine extends ZVisitor {
 	public final ZGenerator Generator;
 
 	private final ZArray<ZNode> LazyNodeList = new ZArray<ZNode>(new ZNode[32]);
+	private final ZenMap<ZFunctionNode> LazyFuncMap = new ZenMap<ZFunctionNode>(null);
+
 	public ZLogger Logger;
 	private boolean IsInteractive;
 
@@ -315,12 +318,14 @@ public class ZScriptEngine extends ZVisitor {
 	}
 
 	@Override public void VisitLetNode(ZLetNode Node) {
+		System.out.println("HasUntypedNode: " + Node.HasUntypedNode);
 		if(!this.Generator.StartCodeGeneration(Node, false, this.IsInteractive)) {
 			this.LazyNode(Node);
 		}
 	}
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
+		System.out.println("HasUntypedNode: " + Node.HasUntypedNode);
 		if(!this.Generator.StartCodeGeneration(Node, true, this.IsInteractive)) {
 			this.LazyNode(Node);
 		}

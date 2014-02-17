@@ -97,6 +97,11 @@ public class ZFunctionNode extends ZListNode {
 		return this.ResolvedFuncType;
 	}
 
+	public final String GetSignature() {
+		ZFuncType FuncType = this.GetFuncType(null);
+		return FuncType.StringfySignature(this.FuncName);
+	}
+
 	public final ZFunctionNode Push(ZFunctionNode Parent) {
 		this.ParentFunctionNode = Parent;
 		return this;

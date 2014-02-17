@@ -132,6 +132,9 @@ public abstract class ZNode {
 		if(!this.Type.IsVarType()) {
 			Self = Self + ":" + this.Type;
 		}
+		else {
+			Self = Self + ":?";
+		}
 		if(this.AST != null) {
 			@Var int i = 0;
 			Self = Self + "[";
@@ -179,10 +182,6 @@ public abstract class ZNode {
 	public boolean IsBreakingBlock() {
 		return false;
 	}
-
-	//	public String GetVisitName() {
-	//		return "VisitExtendedNode"; // override this if you want to use additional node
-	//	}
 
 	public ZSugarNode DeSugar(ZGenerator Generator) {
 		return new ZSugarNode(this, new ZErrorNode(this.ParentNode, "undefined code generation: " + this));

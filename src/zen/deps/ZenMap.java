@@ -67,6 +67,10 @@ public final class ZenMap <T> extends ZObject {
 		return this.Map.get(Key);
 	}
 
+	public final void remove(String Key) {
+		this.Map.remove(Key);
+	}
+
 	public void AddMap(ZenMap<Object> aMap) {
 		throw new RuntimeException("unimplemented !!");
 	}

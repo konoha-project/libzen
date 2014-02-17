@@ -22,8 +22,6 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-//ifdef JAVA
-
 package zen.codegen.jvm;
 
 import static org.objectweb.asm.Opcodes.ACC_ABSTRACT;

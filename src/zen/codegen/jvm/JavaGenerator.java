@@ -6,6 +6,7 @@ import java.lang.reflect.Modifier;
 
 import zen.ast.ZBooleanNode;
 import zen.ast.ZFloatNode;
+import zen.ast.ZFunctionNode;
 import zen.ast.ZIntNode;
 import zen.ast.ZListNode;
 import zen.ast.ZNode;
@@ -29,6 +30,7 @@ import zen.type.ZType;
 import zen.type.ZTypePool;
 
 public abstract class JavaGenerator extends ZGenerator {
+	private final ZenMap<ZNode> LazyNodeMap = new ZenMap<ZNode>(null);
 	private final ZenMap<Class<?>> GeneratedClassMap = new ZenMap<Class<?>>(null);
 	private final ZenMap<Method> FuncMap = new ZenMap<Method>(null);
 
@@ -45,6 +47,19 @@ public abstract class JavaGenerator extends ZGenerator {
 	@Override public void ImportLocalGrammar(ZNameSpace NameSpace) {
 		NameSpace.DefineStatement("import", new JavaImportPattern());
 		NameSpace.DefineExpression("$JavaClassPath$", new JavaClassPathPattern());
+	}
+
+	protected void LazyBuild(ZFunctionNode Node) {
+		this.LazyNodeMap.put(Node.GetSignature(), Node);
+	}
+
+	protected void LazyBuild(String Signature) {
+		ZNode Node = this.LazyNodeMap.GetOrNull(Signature);
+		if(Node != null) {
+			LibZen._PrintDebug("LazyBuilding: " + Signature);
+			this.LazyNodeMap.remove(Signature);
+			Node.Accept(this);
+		}
 	}
 
 	@Override public boolean StartCodeGeneration(ZNode Node,  boolean AllowLazy, boolean IsInteractive) {

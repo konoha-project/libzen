@@ -723,7 +723,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 		@Var ZNameSpace NameSpace = Node.AST[ZFunctionNode._Block].GetNameSpace();
 		@Var ZType ContextType = this.GetContextType();
 		if(Node.IsUntyped()) {
-			this.TypedNode(Node, ContextType);  // funcdecl is requested with VoidType
+			Node.Type = ContextType;  // funcdecl is requested with VoidType
 		}
 		if(Node.Type.IsVoidType()) {
 			if(Node.FuncName == null) {   // function() object
@@ -749,9 +749,9 @@ public class ZenTypeSafer extends ZTypeChecker {
 		this.VarScope.TypeCheckFuncBlock(this, Node);
 		this.PopFunctionNode(NameSpace);
 		if(!Node.Type.IsVoidType()) {
-			@Var ZFuncType FuncType = Node.GetFuncType(ContextType);
-			this.TypedNode(Node, FuncType);
+			Node.Type = Node.GetFuncType(ContextType);
 		}
+		this.Return(Node);
 	}
 
 	@Override public void VisitClassNode(ZClassNode Node) {

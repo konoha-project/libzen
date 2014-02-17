@@ -275,6 +275,7 @@ class AsmMethodBuilder extends MethodNode {
 			}
 			else {
 				// in some case, class has not been generated
+				this.Generator.LazyBuild(FuncType.StringfySignature(Func.FuncName));
 				this.visitMethodInsn(INVOKESTATIC, this.Generator.NameFunctionClass(Func.FuncName, FuncType), "f", FuncType);
 			}
 		}
