@@ -95,7 +95,7 @@ public class ZToken {
 	}
 
 	public final boolean IsNextWhiteSpace() {
-		char ch = this.Source.SourceAt(this.EndIndex+1);
+		char ch = this.Source.SourceAt(this.EndIndex);
 		if(ch == ' ' || ch == '\t' || ch == '\n') {
 			return true;
 		}
