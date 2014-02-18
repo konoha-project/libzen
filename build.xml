@@ -76,8 +76,9 @@
 		</cobertura-instrument>
 	</target>
 
+	<mkdir dir="${build_dir}/test-reports" />
 	<target name="run-test" depends="pre-coverage">
-		<junit fork="yes" forkmode="once" showoutput="yes">
+		<junit fork="yes" forkmode="once">
 			<classpath location="${build_dir}/instrumented"/>
 			<classpath location="${build_dir}"/>
 			<classpath>
@@ -88,12 +89,13 @@
 					<include name="**/*.jar" />
 				</fileset>
 			</classpath>
-			<batchtest>
+			<batchtest todir="${build_dir}/test-reports">
 				<fileset dir="${build_dir}/instrumented">
 					<include name="**/*Test*" />
 				</fileset>
 			</batchtest>
-			<formatter type="brief" usefile="false"/>
+			<!--<formatter type="brief" usefile="false"/>-->
+			<formatter type="xml" usefile="true" />
 		</junit>
 	</target>
 
