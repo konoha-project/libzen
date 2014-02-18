@@ -162,54 +162,51 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
+		this.Variables = new ArrayList<String>();
+
+		this.CurrentBuilder.Append(Node.FuncName);
+		this.VisitListNode(" ", Node, " ", " ");
+
+		this.CurrentBuilder.Append(" = do");
+		this.CurrentBuilder.AppendLineFeed();
+
+		this.Indent(this.CurrentBuilder);
+
+		for (int i = 0; i < Node.GetListSize(); i++) {
+			ZParamNode Param = Node.GetParamNode(i);
+			this.Variables.add(Param.Name);
+
+			this.CurrentBuilder.AppendIndent();
+			this.CurrentBuilder.Append(Param.Name
+						   + "_ref <- newIORef "
+						   + Param.Name);
+			this.CurrentBuilder.AppendLineFeed();
+		}
+
+		for (int i = 0; i < Node.GetListSize(); i++) {
+			ZParamNode node1 = Node.GetParamNode(i);
+
+			this.CurrentBuilder.AppendIndent();
+			this.CurrentBuilder.Append(node1.Name
+						   + " <- readIORef "
+						   + node1.Name + "_ref");
+			this.CurrentBuilder.AppendLineFeed();
+		}
+		this.UnIndent(this.CurrentBuilder);
+
 		ZReturnNode ReturnNode = Node.AST[ZFunctionNode._Block].ToReturnNode();
 		if(ReturnNode != null && ReturnNode.AST[ZReturnNode._Expr] != null) {
-			this.CurrentBuilder.Append("\\");
-			this.VisitListNode(" ", Node, " ", " ");
-			this.CurrentBuilder.Append("");
+			this.Indent(this.CurrentBuilder);
+
+			String Indentation = LibZen._JoinStrings("\t", IndentLevel);
+			this.CurrentBuilder.Append(Indentation);
+			this.CurrentBuilder.Append("return ");
 			this.GenerateCode(ReturnNode.AST[ZReturnNode._Expr]);
-		}
-		else {
-			this.CurrentBuilder.Append("\\");
-			this.VisitListNode(" ", Node, " ", " -> ");
+			this.UnIndent(this.CurrentBuilder);
+		} else {
 			this.GenerateCode(Node.AST[ZFunctionNode._Block]);
 		}
 	}
-
-	//	@Override
-	//	public void VisitFuncDeclNode(ZFunctionNode/*Decl*/ Node) {
-	//		this.Variables = new ArrayList<String>();
-	//
-	//		this.CurrentBuilder.Append(Node.FuncName);
-	//		this.VisitListNode(" ", Node.ParamList, " = do");
-	//		this.CurrentBuilder.AppendLineFeed();
-	//
-	//		this.Indent(this.CurrentBuilder);
-	//		// Argument variable declarations as IORef
-	//		for (ZNode node : Node.ParamList) {
-	//			ZParamNode node1 = (ZParamNode)node;
-	//
-	//			this.Variables.add(node1.Name);
-	//
-	//			this.CurrentBuilder.AppendIndent();
-	//			this.CurrentBuilder.Append(node1.Name + "_ref <- newIORef " + node1.Name);
-	//			this.CurrentBuilder.AppendLineFeed();
-	//		}
-	//
-	//		for (ZNode node : Node.ParamList) {
-	//			ZParamNode node1 = (ZParamNode)node;
-	//			this.CurrentBuilder.AppendIndent();
-	//			this.CurrentBuilder.Append(node1.Name + " <- readIORef " + node1.Name + "_ref");
-	//			this.CurrentBuilder.AppendLineFeed();
-	//		}
-	//		this.UnIndent(this.CurrentBuilder);
-	//
-	//		if (Node.BodyNode == null) {
-	//			// XXX Can we define empty function in Haskell ?
-	//		} else {
-	//			this.GenerateCode(Node.BodyNode);
-	//		}
-	//	}
 
 	@Override
 	public void VisitGetNameNode(ZGetNameNode Node) {
@@ -232,7 +229,9 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 
 	@Override
 	public void VisitReturnNode(ZReturnNode Node) {
-		this.GenerateCode(Node.AST[ZReturnNode._Expr]);
+		if (Node.AST[ZReturnNode._Expr] != null) {
+			this.GenerateCode(Node.AST[ZReturnNode._Expr]);
+		}
 	}
 
 	private String ZenOpToHaskellOp(String OpCode) {
