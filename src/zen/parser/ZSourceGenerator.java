@@ -151,17 +151,7 @@ public class ZSourceGenerator extends ZGenerator {
 		return TypeName;
 	}
 
-	@Override public boolean StartCodeGeneration(ZNode Node, boolean AllowLazy, boolean IsInteractive) {
-		if (AllowLazy && Node.HasUntypedNode()) {
-			if(IsInteractive) {
-				Node.Accept(this);
-				LibZen._PrintLine("---");
-				LibZen._PrintLine(this.CurrentBuilder.toString());
-				this.CurrentBuilder.Clear();
-				LibZen._PrintLine("---");
-			}
-			return false;
-		}
+	@Override public boolean StartCodeGeneration(ZNode Node, boolean IsInteractive) {
 		Node.Accept(this);
 		if(IsInteractive) {
 			LibZen._PrintLine("---");

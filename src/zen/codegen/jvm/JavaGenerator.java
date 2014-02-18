@@ -62,10 +62,7 @@ public abstract class JavaGenerator extends ZGenerator {
 		}
 	}
 
-	@Override public boolean StartCodeGeneration(ZNode Node,  boolean AllowLazy, boolean IsInteractive) {
-		if (AllowLazy && Node.HasUntypedNode()) {
-			return false;
-		}
+	@Override public boolean StartCodeGeneration(ZNode Node,  boolean IsInteractive) {
 		Node.Accept(this);
 		return true;
 	}

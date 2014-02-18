@@ -544,16 +544,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override
-	public boolean StartCodeGeneration(ZNode Node, boolean AllowLazy, boolean IsInteractive) {
-		if (AllowLazy && Node.IsUntyped()) {
-			//if(IsInteractive) {
-			Node.Accept(this);
-			//LibNative.println("---");
-			LibZen._PrintLine(this.Writer.Write());
-			//LibNative.println("---");
-			//}
-			return false;
-		}
+	public boolean StartCodeGeneration(ZNode Node, boolean IsInteractive) {
 		Node.Accept(this);
 		//if(IsInteractive) {
 		//LibNative.println("---");

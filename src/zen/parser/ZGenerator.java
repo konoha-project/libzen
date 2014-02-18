@@ -92,7 +92,7 @@ public abstract class ZGenerator extends ZVisitor {
 		return this.TargetCode + this.TargetVersion;
 	}
 
-	public abstract boolean StartCodeGeneration(ZNode Node, boolean AllowLazy, boolean IsInteractive);
+	public abstract boolean StartCodeGeneration(ZNode Node, boolean IsInteractive);
 
 	public ZType GetFieldType(ZType BaseType, String Name) {
 		return ZType.VarType;     // undefined

@@ -199,10 +199,10 @@ public class ZenTypeSafer extends ZTypeChecker {
 		else {
 			@Var ZNode SymbolNode = NameSpace.GetSymbolNode(Node.VarName);
 			if(SymbolNode != null) {
-				this.Return(SymbolNode);
+				this.TypedNode(SymbolNode, SymbolNode.Type);
 			}
 			else {
-				//this.Logger.ReportWarning(Node.SourceToken, "undefined variable: " + Node.VarName);
+				this.Logger.ReportWarning(Node.SourceToken, "undefined name: " + Node.VarName);
 				this.TypedNode(Node, ZType.VarType);
 			}
 		}
@@ -637,8 +637,11 @@ public class ZenTypeSafer extends ZTypeChecker {
 	}
 
 	@Override public void VisitLetNode(ZLetNode Node) {
-		Node.GlobalName = this.Generator.NameGlobalSymbol(Node.Symbol);
 		this.CheckTypeAt(Node, ZLetNode._InitValue, Node.SymbolType);
+		if(!Node.GetAstType(ZLetNode._InitValue).IsVarType()) {
+			Node.GlobalName = this.Generator.NameGlobalSymbol(Node.Symbol);
+			Node.GetNameSpace().SetLocalSymbol(Node.Symbol, Node.AST[ZLetNode._InitValue]);
+		}
 		this.TypedNode(Node, ZType.VoidType);
 	}
 

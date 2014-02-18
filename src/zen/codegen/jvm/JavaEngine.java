@@ -411,23 +411,27 @@ public class JavaEngine extends ZScriptEngine {
 	}
 
 	@Override public void VisitLetNode(ZLetNode Node) {
-		LibZen._PrintDebug("HasUntypedNode: " + Node.HasUntypedNode());
-		this.Solution.StartCodeGeneration(Node, false, false);
+		if(Node.HasUntypedNode()) {
+			LibZen._PrintDebug("HasUntypedNode: " + Node.HasUntypedNode() + "\n" + Node);
+		}
+		this.Solution.StartCodeGeneration(Node, false);
 	}
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
-		LibZen._PrintDebug("HasUntypedNode: " + Node.HasUntypedNode());
 		if(Node.HasUntypedNode()) {
+			LibZen._PrintDebug("HasUntypedNode: " + Node.HasUntypedNode() + "\nLAZY: " + Node);
 			this.Solution.LazyBuild(Node);
 		}
 		else {
-			this.Solution.StartCodeGeneration(Node, false, false);
+			this.Solution.StartCodeGeneration(Node, false);
 		}
 	}
 
 	@Override public void VisitClassNode(ZClassNode Node) {
-		LibZen._PrintDebug("HasUntypedNode: " + Node.HasUntypedNode());
-		this.Solution.StartCodeGeneration(Node, false, false);
+		if(Node.HasUntypedNode()) {
+			LibZen._PrintDebug("HasUntypedNode: " + Node.HasUntypedNode() + "\n" + Node);
+		}
+		this.Solution.StartCodeGeneration(Node, false);
 	}
 
 	private void VisitStaticFieldNode(JavaStaticFieldNode Node) {

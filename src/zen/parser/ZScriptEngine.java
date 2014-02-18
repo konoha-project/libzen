@@ -72,8 +72,6 @@ import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
 import zen.deps.LibZen;
 import zen.deps.Var;
-import zen.deps.ZArray;
-import zen.deps.ZenMap;
 import zen.type.ZFuncType;
 import zen.type.ZType;
 import zen.type.ZTypeChecker;
@@ -84,9 +82,6 @@ public class ZScriptEngine extends ZVisitor {
 	protected ZTypeChecker TypeChecker;
 	public final ZGenerator Generator;
 
-	private final ZArray<ZNode> LazyNodeList = new ZArray<ZNode>(new ZNode[32]);
-	private final ZenMap<ZFunctionNode> LazyFuncMap = new ZenMap<ZFunctionNode>(null);
-
 	public ZLogger Logger;
 	private boolean IsInteractive;
 
@@ -96,17 +91,6 @@ public class ZScriptEngine extends ZVisitor {
 		this.Logger = Generator.Logger;
 	}
 
-	public final void LazyNode(ZNode Node) {
-		this.LazyNodeList.add(Node);
-	}
-
-	public final void Sync() {
-		@Var int i = 0;
-		while(i < this.LazyNodeList.size()) {
-			@Var ZNode Node = this.LazyNodeList.ArrayValues[i];
-			this.Generator.StartCodeGeneration(Node, false, this.IsInteractive);
-		}
-	}
 
 	@Override public final boolean IsVisitable() {
 		return this.IsVisitable;
@@ -318,23 +302,24 @@ public class ZScriptEngine extends ZVisitor {
 	}
 
 	@Override public void VisitLetNode(ZLetNode Node) {
-		System.out.println("HasUntypedNode: " + Node.HasUntypedNode);
-		if(!this.Generator.StartCodeGeneration(Node, false, this.IsInteractive)) {
-			this.LazyNode(Node);
+		if(Node.HasUntypedNode()) {
+			LibZen._PrintDebug("HasUntypedNode: " + Node.HasUntypedNode() + "\n" + Node);
 		}
+		this.Generator.StartCodeGeneration(Node, this.IsInteractive);
 	}
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
-		System.out.println("HasUntypedNode: " + Node.HasUntypedNode);
-		if(!this.Generator.StartCodeGeneration(Node, true, this.IsInteractive)) {
-			this.LazyNode(Node);
+		if(Node.HasUntypedNode()) {
+			LibZen._PrintDebug("HasUntypedNode: " + Node.HasUntypedNode() + "\nLAZY: " + Node);
 		}
+		this.Generator.StartCodeGeneration(Node, this.IsInteractive);
 	}
 
 	@Override public void VisitClassNode(ZClassNode Node) {
-		if(!this.Generator.StartCodeGeneration(Node, false, this.IsInteractive)) {
-			this.LazyNode(Node);
+		if(Node.HasUntypedNode()) {
+			LibZen._PrintDebug("HasUntypedNode: " + Node.HasUntypedNode() + "\n" + Node);
 		}
+		this.Generator.StartCodeGeneration(Node, this.IsInteractive);
 	}
 
 	@Override public void VisitErrorNode(ZErrorNode Node) {
