@@ -29,7 +29,6 @@ import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 import zen.type.ZFunc;
 
-// E.g., $NativeName
 public class ZGetNameNode extends ZNode {
 	@Field public boolean IsCaptured = false;
 	@Field public String  VarName;
@@ -48,5 +47,9 @@ public class ZGetNameNode extends ZNode {
 
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitGetNameNode(this);
+	}
+
+	public final ZNode ToGlobalNameNode() {
+		return new ZGlobalNameNode(this.ParentNode, this.SourceToken, this.Type, this.VarName);
 	}
 }

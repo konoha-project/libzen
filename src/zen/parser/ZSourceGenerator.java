@@ -43,6 +43,7 @@ import zen.ast.ZFunctionNode;
 import zen.ast.ZGetIndexNode;
 import zen.ast.ZGetNameNode;
 import zen.ast.ZGetterNode;
+import zen.ast.ZGlobalNameNode;
 import zen.ast.ZGroupNode;
 import zen.ast.ZIfNode;
 import zen.ast.ZInstanceOfNode;
@@ -63,6 +64,7 @@ import zen.ast.ZSetIndexNode;
 import zen.ast.ZSetNameNode;
 import zen.ast.ZSetterNode;
 import zen.ast.ZStringNode;
+import zen.ast.ZSugarNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZUnaryNode;
@@ -272,14 +274,14 @@ public class ZSourceGenerator extends ZGenerator {
 		// TODO Auto-generated method stub
 	}
 
-	@Override public void VisitNewArrayNode(ZNewArrayNode Node) {
+	public void VisitNewArrayNode(ZNewArrayNode Node) {
 		// TODO Auto-generated method stub
 	}
 
 	@Override public void VisitNewObjectNode(ZNewObjectNode Node) {
 		this.CurrentBuilder.Append("new");
 		this.CurrentBuilder.AppendWhiteSpace();
-		this.VisitType(Node.Type);
+		this.GenerateTypeName(Node.Type);
 		this.VisitListNode("(", Node, ")");
 	}
 
@@ -303,6 +305,10 @@ public class ZSourceGenerator extends ZGenerator {
 		this.CurrentBuilder.Append("]");
 		this.CurrentBuilder.AppendToken("=");
 		this.GenerateCode(Node.AST[ZSetIndexNode._Expr]);
+	}
+
+	@Override public void VisitGlobalNameNode(ZGlobalNameNode Node) {
+		this.CurrentBuilder.Append(Node.GlobalName);
 	}
 
 	@Override public void VisitGetNameNode(ZGetNameNode Node) {
@@ -354,7 +360,7 @@ public class ZSourceGenerator extends ZGenerator {
 
 	@Override public void VisitCastNode(ZCastNode Node) {
 		this.CurrentBuilder.Append("(");
-		this.VisitType(Node.Type);
+		this.GenerateTypeName(Node.Type);
 		this.CurrentBuilder.Append(")");
 		this.GenerateSurroundCode(Node.AST[ZCastNode._Expr]);
 	}
@@ -362,7 +368,7 @@ public class ZSourceGenerator extends ZGenerator {
 	@Override public void VisitInstanceOfNode(ZInstanceOfNode Node) {
 		this.GenerateCode(Node.AST[ZBinaryNode._Left]);
 		this.CurrentBuilder.AppendToken("instanceof");
-		this.VisitType(Node.AST[ZBinaryNode._Right].Type);
+		this.GenerateTypeName(Node.AST[ZBinaryNode._Right].Type);
 	}
 
 	@Override public void VisitBinaryNode(ZBinaryNode Node) {
@@ -443,7 +449,7 @@ public class ZSourceGenerator extends ZGenerator {
 		}
 	}
 
-	@Override public void VisitCatchNode(ZCatchNode Node) {
+	public void VisitCatchNode(ZCatchNode Node) {
 		this.CurrentBuilder.Append("catch (");
 		this.CurrentBuilder.Append(Node.ExceptionName);
 		this.VisitTypeAnnotation(Node.ExceptionType);
@@ -464,7 +470,7 @@ public class ZSourceGenerator extends ZGenerator {
 
 	protected void VisitTypeAnnotation(ZType Type) {
 		this.CurrentBuilder.Append(": ");
-		this.VisitType(Type);
+		this.GenerateTypeName(Type);
 	}
 
 	@Override public void VisitLetNode(ZLetNode Node) {
@@ -497,7 +503,7 @@ public class ZSourceGenerator extends ZGenerator {
 		this.CurrentBuilder.Append(Node.ClassName);
 		if(Node.SuperType != null) {
 			this.CurrentBuilder.AppendToken("extends");
-			this.VisitType(Node.SuperType);
+			this.GenerateTypeName(Node.SuperType);
 		}
 		this.CurrentBuilder.AppendWhiteSpace();
 		this.CurrentBuilder.Append("{");
@@ -530,12 +536,21 @@ public class ZSourceGenerator extends ZGenerator {
 	}
 
 	@Override public void VisitExtendedNode(ZNode Node) {
-
+		if(Node instanceof ZParamNode) {
+			this.VisitParamNode((ZParamNode)Node);
+		}
+		else {
+			ZSugarNode SugarNode = Node.DeSugar(this);
+			this.VisitSugarNode(SugarNode);
+		}
 	}
 
+	@Override public void VisitSugarNode(ZSugarNode Node) {
+		this.GenerateCode(Node.AST[ZSugarNode._DeSugar]);
+	}
 
 	// Utils
-	protected void VisitType(ZType Type) {
+	protected void GenerateTypeName(ZType Type) {
 		this.CurrentBuilder.Append(this.GetNativeType(Type.GetRealType()));
 	}
 

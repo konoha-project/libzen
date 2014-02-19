@@ -25,6 +25,7 @@
 package zen.ast;
 
 import zen.deps.Field;
+import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 import zen.type.ZType;
 
@@ -36,10 +37,10 @@ public final class ZVarNode extends ZBlockNode {
 	public ZVarNode(ZNode ParentNode) {
 		super(ParentNode, 1);
 	}
-	@Override public void SetNameInfo(String Name) {
+	@Override public void SetNameInfo(ZToken NameToken, String Name) {
 		this.NativeName = Name;
 	}
-	@Override public void SetTypeInfo(ZType Type) {
+	@Override public void SetTypeInfo(ZToken TypeToken, ZType Type) {
 		this.DeclType = Type;
 	}
 

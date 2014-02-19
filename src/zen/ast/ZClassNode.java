@@ -26,6 +26,7 @@ package zen.ast;
 
 import zen.deps.Field;
 import zen.deps.Var;
+import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 import zen.type.ZType;
 import zen.type.ZClassType;
@@ -38,10 +39,10 @@ public final class ZClassNode extends ZListNode {
 		super(ParentNode, null, 0);
 	}
 
-	@Override public void SetTypeInfo(ZType Type) {
+	@Override public void SetTypeInfo(ZToken TypeToken, ZType Type) {
 		this.SuperType = Type;
 	}
-	@Override public void SetNameInfo(String Name) {
+	@Override public void SetNameInfo(ZToken NameToken, String Name) {
 		this.ClassName = Name;
 	}
 	public final ZFieldNode GetFieldNode(int Index) {

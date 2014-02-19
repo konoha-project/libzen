@@ -28,6 +28,7 @@ import zen.deps.Field;
 import zen.deps.Nullable;
 import zen.deps.Var;
 import zen.deps.ZArray;
+import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 import zen.type.ZFuncType;
 import zen.type.ZType;
@@ -48,10 +49,10 @@ public class ZFunctionNode extends ZListNode {
 		super(ParentNode, null, 1);
 	}
 
-	@Override public void SetTypeInfo(ZType Type) {
+	@Override public void SetTypeInfo(ZToken TypeToken, ZType Type) {
 		this.ReturnType = Type;
 	}
-	@Override public void SetNameInfo(String Name) {
+	@Override public void SetNameInfo(ZToken NameToken, String Name) {
 		this.FuncName = Name;
 	}
 

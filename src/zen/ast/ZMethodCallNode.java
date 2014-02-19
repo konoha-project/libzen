@@ -26,6 +26,7 @@ package zen.ast;
 
 import zen.deps.Field;
 import zen.deps.Var;
+import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 import zen.type.ZFunc;
 
@@ -39,7 +40,7 @@ public final class ZMethodCallNode extends ZListNode {
 	}
 
 	@Override
-	public void SetNameInfo(String Name) {
+	public void SetNameInfo(ZToken NameToken, String Name) {
 		this.MethodName = Name;
 	}
 
@@ -49,7 +50,7 @@ public final class ZMethodCallNode extends ZListNode {
 
 	public final ZFuncCallNode ToGetterFuncCall() {
 		ZGetterNode Getter = new ZGetterNode(null, this.AST[ZMethodCallNode._Recv]);
-		Getter.SetNameInfo(this.MethodName);
+		Getter.SetNameInfo(null, this.MethodName);
 		ZFuncCallNode FuncNode = new ZFuncCallNode(this.ParentNode, Getter);
 		FuncNode.SourceToken = this.SourceToken;
 		FuncNode.Append(this.AST[ZMethodCallNode._Recv]);

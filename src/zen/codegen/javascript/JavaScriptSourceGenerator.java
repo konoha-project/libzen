@@ -115,7 +115,7 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Append("isinstance(");
 		this.GenerateCode(Node.AST[ZBinaryNode._Left]);
 		this.CurrentBuilder.Append(this.Camma);
-		this.VisitType(Node.AST[ZBinaryNode._Right].Type);
+		this.GenerateTypeName(Node.AST[ZBinaryNode._Right].Type);
 		this.CurrentBuilder.Append(")");
 	}
 

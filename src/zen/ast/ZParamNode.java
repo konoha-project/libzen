@@ -25,6 +25,7 @@
 package zen.ast;
 
 import zen.deps.Field;
+import zen.parser.ZToken;
 
 public class ZParamNode extends ZNode {
 	@Field public String  Name;
@@ -32,7 +33,7 @@ public class ZParamNode extends ZNode {
 		super(ParentNode, null, 0);
 	}
 
-	@Override public void SetNameInfo(String Name) {
+	@Override public void SetNameInfo(ZToken NameToken, String Name) {
 		this.Name = Name;
 	}
 

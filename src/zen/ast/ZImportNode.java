@@ -2,6 +2,7 @@ package zen.ast;
 
 import zen.deps.Field;
 import zen.lang.ZenError;
+import zen.parser.ZToken;
 
 public class ZImportNode extends ZNode {
 	@Field public String ResourcePath = null;
@@ -11,7 +12,7 @@ public class ZImportNode extends ZNode {
 		super(ParentNode, null, 0);
 	}
 
-	@Override public void SetNameInfo(String Name) {
+	@Override public void SetNameInfo(ZToken NameToken, String Name) {
 		if(this.ResourcePath == null) {
 			this.ResourcePath = Name;
 		}

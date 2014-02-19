@@ -3,6 +3,7 @@ package zen.ast;
 import zen.deps.Field;
 import zen.deps.Var;
 import zen.deps.ZArray;
+import zen.parser.ZToken;
 import zen.type.ZFuncType;
 import zen.type.ZType;
 import zen.type.ZTypePool;
@@ -15,11 +16,11 @@ public class ZPrototypeNode extends ZListNode {
 		super(ParentNode, null, 0);
 	}
 
-	@Override public final void SetTypeInfo(ZType Type) {
+	@Override public final void SetTypeInfo(ZToken TypeToken, ZType Type) {
 		this.ReturnType = Type;
 	}
 
-	@Override public final void SetNameInfo(String Name) {
+	@Override public final void SetNameInfo(ZToken NameToken, String Name) {
 		this.FuncName = Name;
 	}
 

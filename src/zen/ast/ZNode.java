@@ -68,11 +68,11 @@ public abstract class ZNode {
 		return Node;
 	}
 
-	public void SetNameInfo(String Name) {
+	public void SetNameInfo(ZToken NameToken, String Name) {
 		assert(Name == null);  // Set SetName in a sub class property
 	}
 
-	public void SetTypeInfo(ZType Type) {
+	public void SetTypeInfo(ZToken TypeToken, ZType Type) {
 		this.Type = Type;  // default behavior
 	}
 
@@ -91,12 +91,12 @@ public abstract class ZNode {
 			}
 		}
 		else if(Index == ZNode._NameInfo) {
-			this.SetNameInfo(Node.SourceToken.GetText());
+			this.SetNameInfo(Node.SourceToken, Node.SourceToken.GetText());
 			this.SourceToken = Node.SourceToken;
 			return;
 		}
 		else if(Index == ZNode._TypeInfo) {
-			this.SetTypeInfo(Node.Type);
+			this.SetTypeInfo(Node.SourceToken, Node.Type);
 			return;
 		}
 		this.SetChild(Node);

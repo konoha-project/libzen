@@ -25,7 +25,7 @@
 package zen.ast;
 
 import zen.deps.Field;
-import zen.parser.ZVisitor;
+import zen.parser.ZToken;
 import zen.type.ZType;
 
 public final class ZCatchNode extends ZNode {
@@ -38,14 +38,11 @@ public final class ZCatchNode extends ZNode {
 		super(ParentNode, null, 1);
 	}
 
-	@Override public void SetTypeInfo(ZType Type) {
+	@Override public void SetTypeInfo(ZToken TypeToken, ZType Type) {
 		this.ExceptionType = Type;
 	}
-	@Override public void SetNameInfo(String Name) {
+	@Override public void SetNameInfo(ZToken NameToken, String Name) {
 		this.ExceptionName = Name;
 	}
 
-	@Override public void Accept(ZVisitor Visitor) {
-		Visitor.VisitCatchNode(this);
-	}
 }

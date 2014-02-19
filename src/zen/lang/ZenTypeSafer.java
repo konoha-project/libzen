@@ -33,7 +33,6 @@ import zen.ast.ZBlockNode;
 import zen.ast.ZBooleanNode;
 import zen.ast.ZBreakNode;
 import zen.ast.ZCastNode;
-import zen.ast.ZCatchNode;
 import zen.ast.ZClassNode;
 import zen.ast.ZComparatorNode;
 import zen.ast.ZErrorNode;
@@ -44,6 +43,7 @@ import zen.ast.ZFunctionNode;
 import zen.ast.ZGetIndexNode;
 import zen.ast.ZGetNameNode;
 import zen.ast.ZGetterNode;
+import zen.ast.ZGlobalNameNode;
 import zen.ast.ZGroupNode;
 import zen.ast.ZIfNode;
 import zen.ast.ZInstanceOfNode;
@@ -53,7 +53,6 @@ import zen.ast.ZListNode;
 import zen.ast.ZMapEntryNode;
 import zen.ast.ZMapLiteralNode;
 import zen.ast.ZMethodCallNode;
-import zen.ast.ZNewArrayNode;
 import zen.ast.ZNewObjectNode;
 import zen.ast.ZNode;
 import zen.ast.ZNotNode;
@@ -183,8 +182,12 @@ public class ZenTypeSafer extends ZTypeChecker {
 		}
 	}
 
-	@Override public void VisitNewArrayNode(ZNewArrayNode Node) {
-		this.Todo(Node);
+	//	@Override public void VisitNewArrayNode(ZNewArrayNode Node) {
+	//		this.Todo(Node);
+	//	}
+
+	@Override public void VisitGlobalNameNode(ZGlobalNameNode Node) {
+		this.Return(Node);
 	}
 
 	@Override public void VisitGetNameNode(ZGetNameNode Node) {
@@ -198,13 +201,10 @@ public class ZenTypeSafer extends ZTypeChecker {
 		}
 		else {
 			@Var ZNode SymbolNode = NameSpace.GetSymbolNode(Node.VarName);
-			if(SymbolNode != null) {
-				this.TypedNode(SymbolNode, SymbolNode.Type);
+			if(SymbolNode == null) {
+				SymbolNode = Node.ToGlobalNameNode();
 			}
-			else {
-				this.Logger.ReportWarning(Node.SourceToken, "undefined name: " + Node.VarName);
-				this.TypedNode(Node, ZType.VarType);
-			}
+			this.TypedNode(SymbolNode, SymbolNode.Type);
 		}
 	}
 
@@ -631,10 +631,6 @@ public class ZenTypeSafer extends ZTypeChecker {
 		this.TypedNode(Node, ZType.VoidType);
 	}
 
-	@Override public void VisitCatchNode(ZCatchNode Node) {
-		// TODO Auto-generated method stub
-		this.Todo(Node);
-	}
 
 	@Override public void VisitLetNode(ZLetNode Node) {
 		this.CheckTypeAt(Node, ZLetNode._InitValue, Node.SymbolType);
@@ -740,7 +736,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 			if(!this.IsTopLevel()) {
 				/* function f() {} ==> var f = function() {} */
 				ZVarNode VarNode = new ZVarNode(Node.ParentNode);
-				VarNode.SetNameInfo(Node.FuncName);
+				VarNode.SetNameInfo(null, Node.FuncName);
 				VarNode.Set(ZVarNode._InitValue, Node);
 				ZBlockNode Block = Node.GetScopeBlockNode();
 				int Index = Block.IndexOf(Node);

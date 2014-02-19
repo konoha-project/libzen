@@ -17,6 +17,7 @@ import zen.ast.ZFunctionNode;
 import zen.ast.ZGetIndexNode;
 import zen.ast.ZGetNameNode;
 import zen.ast.ZGetterNode;
+import zen.ast.ZGlobalNameNode;
 import zen.ast.ZGroupNode;
 import zen.ast.ZIfNode;
 import zen.ast.ZInstanceOfNode;
@@ -25,7 +26,6 @@ import zen.ast.ZLetNode;
 import zen.ast.ZListNode;
 import zen.ast.ZMapLiteralNode;
 import zen.ast.ZMethodCallNode;
-import zen.ast.ZNewArrayNode;
 import zen.ast.ZNewObjectNode;
 import zen.ast.ZNode;
 import zen.ast.ZNotNode;
@@ -110,14 +110,19 @@ public class ZASTTransformer extends ZVisitor {
 		this.VisitListNode(Node);
 	}
 
-	@Override
-	public void VisitNewArrayNode(ZNewArrayNode Node) {
-		this.VisitListNode(Node);
-	}
+	//	@Override
+	//	public void VisitNewArrayNode(ZNewArrayNode Node) {
+	//		this.VisitListNode(Node);
+	//	}
 
 	@Override
 	public void VisitNewObjectNode(ZNewObjectNode Node) {
 		this.VisitListNode(Node);
+	}
+
+	@Override
+	public void VisitGlobalNameNode(ZGlobalNameNode Node) {
+		/* do nothing */
 	}
 
 	@Override
@@ -261,7 +266,6 @@ public class ZASTTransformer extends ZVisitor {
 		this.Transform(Node, ZTryNode._Finally);
 	}
 
-	@Override
 	public void VisitCatchNode(ZCatchNode Node) {
 		this.Transform(Node, ZCatchNode._Block);
 	}

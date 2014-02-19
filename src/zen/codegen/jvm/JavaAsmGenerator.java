@@ -79,6 +79,7 @@ import zen.ast.ZFunctionNode;
 import zen.ast.ZGetIndexNode;
 import zen.ast.ZGetNameNode;
 import zen.ast.ZGetterNode;
+import zen.ast.ZGlobalNameNode;
 import zen.ast.ZGroupNode;
 import zen.ast.ZIfNode;
 import zen.ast.ZInstanceOfNode;
@@ -87,7 +88,6 @@ import zen.ast.ZLetNode;
 import zen.ast.ZMapEntryNode;
 import zen.ast.ZMapLiteralNode;
 import zen.ast.ZMethodCallNode;
-import zen.ast.ZNewArrayNode;
 import zen.ast.ZNewObjectNode;
 import zen.ast.ZNode;
 import zen.ast.ZNotNode;
@@ -240,13 +240,13 @@ public class JavaAsmGenerator extends JavaGenerator {
 		}
 	}
 
-	@Override public void VisitNewArrayNode(ZNewArrayNode Node) {
-		this.Debug("TODO");
-		this.AsmBuilder.visitInsn(Opcodes.ACONST_NULL);
-		//		this.CurrentBuilder.LoadConst(Node.Type);
-		//		this.CurrentBuilder.LoadNewArray(this, 0, Node.NodeList);
-		//		this.CurrentBuilder.InvokeMethodCall(Node.Type, JLib.NewArray);
-	}
+	//	@Override public void VisitNewArrayNode(ZNewArrayNode Node) {
+	//		this.Debug("TODO");
+	//		this.AsmBuilder.visitInsn(Opcodes.ACONST_NULL);
+	//		//		this.CurrentBuilder.LoadConst(Node.Type);
+	//		//		this.CurrentBuilder.LoadNewArray(this, 0, Node.NodeList);
+	//		//		this.CurrentBuilder.InvokeMethodCall(Node.Type, JLib.NewArray);
+	//	}
 
 	@Override public void VisitNewObjectNode(ZNewObjectNode Node) {
 		if(Node.IsUntyped()) {
@@ -280,6 +280,11 @@ public class JavaAsmGenerator extends JavaGenerator {
 		this.AsmBuilder.StoreLocal(Node.NativeName);
 		this.VisitBlockNode(Node);
 		this.AsmBuilder.RemoveLocal(DeclClass, Node.NativeName);
+	}
+
+	@Override public void VisitGlobalNameNode(ZGlobalNameNode Node) {
+		this.Logger.ReportError2(Node, "undefined symbol: " + Node.GlobalName);
+		this.AsmBuilder.visitInsn(Opcodes.ACONST_NULL);
 	}
 
 	@Override public void VisitGetNameNode(ZGetNameNode Node) {
@@ -583,7 +588,7 @@ public class JavaAsmGenerator extends JavaGenerator {
 		this.TryCatchLabel.pop();
 	}
 
-	@Override public void VisitCatchNode(ZCatchNode Node) {
+	public void VisitCatchNode(ZCatchNode Node) {
 		MethodVisitor mv = this.AsmBuilder;
 		Label catchLabel = new Label();
 		TryCatchLabel Label = this.TryCatchLabel.peek();
