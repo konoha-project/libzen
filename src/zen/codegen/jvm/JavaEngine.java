@@ -29,17 +29,23 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
+import zen.ast.ZAndNode;
 import zen.ast.ZArrayLiteralNode;
 import zen.ast.ZBinaryNode;
+import zen.ast.ZBlockNode;
+import zen.ast.ZBooleanNode;
 import zen.ast.ZCastNode;
 import zen.ast.ZClassNode;
 import zen.ast.ZComparatorNode;
+import zen.ast.ZFloatNode;
 import zen.ast.ZFuncCallNode;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZGetIndexNode;
 import zen.ast.ZGetNameNode;
 import zen.ast.ZGetterNode;
 import zen.ast.ZGroupNode;
+import zen.ast.ZIfNode;
+import zen.ast.ZIntNode;
 import zen.ast.ZLetNode;
 import zen.ast.ZListNode;
 import zen.ast.ZMapEntryNode;
@@ -48,9 +54,13 @@ import zen.ast.ZMethodCallNode;
 import zen.ast.ZNewObjectNode;
 import zen.ast.ZNode;
 import zen.ast.ZNotNode;
+import zen.ast.ZNullNode;
+import zen.ast.ZOrNode;
 import zen.ast.ZSetIndexNode;
 import zen.ast.ZSetterNode;
 import zen.ast.ZStringNode;
+import zen.ast.ZSugarNode;
+import zen.ast.ZTypeNode;
 import zen.ast.ZUnaryNode;
 import zen.deps.LibZen;
 import zen.deps.Var;
@@ -68,10 +78,28 @@ import zen.type.ZTypeChecker;
 public class JavaEngine extends ZSourceEngine {
 
 	private final JavaGenerator Solution;
+	protected Object EvaledValue = null;
 
 	public JavaEngine(ZTypeChecker TypeChecker, JavaGenerator Generator) {
 		super(TypeChecker, Generator);
 		this.Solution = Generator;
+	}
+
+	@Override public final void EnableVisitor() {
+		this.EvaledValue = ZEmptyValue.TrueEmpty;
+		super.EnableVisitor();
+	}
+
+	@Override public final void StopVisitor() {
+		this.EvaledValue = ZEmptyValue.FalseEmpty;
+		super.StopVisitor();
+	}
+
+	@Override protected final Object Eval(ZNode Node) {
+		if(this.IsVisitable()) {
+			Node.Accept(this);
+		}
+		return this.EvaledValue;
 	}
 
 	protected ZNode[] PackNodes(ZNode Node, ZListNode List) {
@@ -205,13 +233,40 @@ public class JavaEngine extends ZSourceEngine {
 		}
 	}
 
+
+
+	@Override public void VisitNullNode(ZNullNode Node) {
+		this.EvaledValue = null;
+	}
+
+	@Override public void VisitBooleanNode(ZBooleanNode Node) {
+		this.EvaledValue = Node.BooleanValue;
+	}
+
+	@Override public void VisitIntNode(ZIntNode Node) {
+		this.EvaledValue = Node.IntValue;
+	}
+
+	@Override public void VisitFloatNode(ZFloatNode Node) {
+		this.EvaledValue = Node.FloatValue;
+	}
+
+	@Override public void VisitStringNode(ZStringNode Node) {
+		this.EvaledValue = Node.StringValue;
+	}
+
+	@Override public void VisitTypeNode(ZTypeNode Node) {
+		this.EvaledValue = Node.Type;
+	}
+
 	@Override public void VisitGetNameNode(ZGetNameNode Node) {
 		@Var ZNode Node1 = Node.GetNameSpace().GetSymbolNode(Node.VarName);
 		if(Node1 != null) {
 			this.EvaledValue = this.Eval(Node1);
 		}
 		else {
-			this.Unsupported(Node, "undefined symbol: " + Node.VarName);
+			this.Logger.ReportError2(Node, "undefined symbol: " + Node.VarName);
+			this.StopVisitor();
 		}
 	}
 
@@ -410,6 +465,60 @@ public class JavaEngine extends ZSourceEngine {
 		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.AST[ZBinaryNode._Left], Node.AST[ZBinaryNode._Right]});
 	}
 
+	@Override public void VisitAndNode(ZAndNode Node) {
+		@Var Object BooleanValue = this.Eval(Node.AST[ZBinaryNode._Left]);
+		if(BooleanValue instanceof Boolean) {
+			if((Boolean)BooleanValue) {
+				this.EvaledValue = this.Eval(Node.AST[ZBinaryNode._Right]);
+			}
+			else {
+				this.EvaledValue = false;
+			}
+		}
+	}
+
+	@Override public void VisitOrNode(ZOrNode Node) {
+		@Var Object BooleanValue = this.Eval(Node.AST[ZBinaryNode._Left]);
+		if(BooleanValue instanceof Boolean) {
+			if(!(Boolean)BooleanValue) {
+				this.EvaledValue = this.Eval(Node.AST[ZBinaryNode._Right]);
+			}
+			else {
+				this.EvaledValue = true;
+			}
+		}
+	}
+
+	@Override public void VisitBlockNode(ZBlockNode Node) {
+		@Var int i = 1;
+		while(i < Node.GetListSize() && this.IsVisitable()) {
+			ZNode StmtNode = Node.GetListAt(i);
+			this.Eval(StmtNode);
+			if(StmtNode.IsBreakingBlock()) {
+				break;
+			}
+		}
+		if(this.IsVisitable()) {
+			this.EvaledValue = ZEmptyValue.TrueEmpty;
+		}
+	}
+
+	@Override public void VisitIfNode(ZIfNode Node) {
+		Object BooleanValue = this.Eval(Node.AST[ZIfNode._Cond]);
+		if(BooleanValue instanceof Boolean) {
+			if((Boolean)BooleanValue) {
+				this.Eval(Node.AST[ZIfNode._Then]);
+			}
+			else if(Node.AST[ZIfNode._Else] != null) {
+				this.Eval(Node.AST[ZIfNode._Then]);
+			}
+		}
+		if(this.IsVisitable()) {
+			this.EvaledValue = ZEmptyValue.TrueEmpty;
+		}
+	}
+
+
 	@Override public void VisitLetNode(ZLetNode Node) {
 		if(Node.HasUntypedNode()) {
 			LibZen._PrintDebug("HasUntypedNode: " + Node.HasUntypedNode() + "\n" + Node);
@@ -439,7 +548,7 @@ public class JavaEngine extends ZSourceEngine {
 			Field f = Node.StaticClass.getField(Node.FieldName);
 			this.EvaledValue = f.get(null);
 		} catch (Exception e) {
-			LibZen._FixMe(e);
+			this.Logger.ReportError2(Node, "unresolved symbol: " + e);
 			this.StopVisitor();
 		}
 	}
@@ -452,6 +561,11 @@ public class JavaEngine extends ZSourceEngine {
 			super.VisitExtendedNode(Node);
 		}
 	}
+
+	@Override public void VisitSugarNode(ZSugarNode Node) {
+		this.EvaledValue = this.Eval(Node.AST[ZSugarNode._DeSugar]);
+	}
+
 
 
 }
