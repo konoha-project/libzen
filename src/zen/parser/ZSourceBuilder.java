@@ -54,6 +54,14 @@ public final class ZSourceBuilder {
 		this.SourceList.clear(0);
 	}
 
+	public final int GetPosition() {
+		return this.SourceList.size();
+	}
+
+	public final String CopyString(int BeginIndex, int EndIndex) {
+		return LibZen._SourceBuilderToString(this, BeginIndex, EndIndex);
+	}
+
 	public final void Append(String Text) {
 		this.SourceList.add(Text);
 	}
@@ -171,4 +179,5 @@ public final class ZSourceBuilder {
 		this.Append(Text);
 		this.AppendLineFeed();
 	}
+
 }

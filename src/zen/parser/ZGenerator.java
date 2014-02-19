@@ -29,6 +29,7 @@ import zen.ast.ZListNode;
 import zen.ast.ZNode;
 import zen.ast.ZSugarNode;
 import zen.deps.Field;
+import zen.deps.Nullable;
 import zen.deps.Var;
 import zen.deps.ZenMap;
 import zen.type.ZFunc;
@@ -36,10 +37,9 @@ import zen.type.ZFuncType;
 import zen.type.ZPrototype;
 import zen.type.ZType;
 
-
 public abstract class ZGenerator extends ZVisitor {
 	@Field private String            GrammarInfo;
-	@Field public final String       TargetCode;
+	@Field public final String       LanguageExtention;
 	@Field public final String       TargetVersion;
 
 	@Field public final ZNameSpace   RootNameSpace;
@@ -50,11 +50,11 @@ public abstract class ZGenerator extends ZVisitor {
 
 	@Field private boolean StoppedVisitor;
 
-	protected ZGenerator(String TargetCode, String TargetVersion) {
+	protected ZGenerator(String LanguageExtension, String TargetVersion) {
 		super();
 		this.RootNameSpace = new ZNameSpace(this, null);
 		this.GrammarInfo = "";
-		this.TargetCode = TargetCode;
+		this.LanguageExtention = LanguageExtension;
 		this.TargetVersion = TargetVersion;
 
 		this.OutputFile = null;
@@ -66,6 +66,17 @@ public abstract class ZGenerator extends ZVisitor {
 
 	public void ImportLocalGrammar(ZNameSpace NameSpace) {
 		// TODO Auto-generated method stub
+	}
+
+	public void WriteTo(@Nullable String FileName) {
+		// TODO Stub
+	}
+
+	protected String NameOutputFile(String FileName) {
+		if(FileName != null) {
+			return FileName + "." + this.LanguageExtention;
+		}
+		return FileName;
 	}
 
 	@Override public final void EnableVisitor() {
@@ -89,7 +100,7 @@ public abstract class ZGenerator extends ZVisitor {
 	}
 
 	public String GetTargetLangInfo() {
-		return this.TargetCode + this.TargetVersion;
+		return this.LanguageExtention + this.TargetVersion;
 	}
 
 	public abstract boolean StartCodeGeneration(ZNode Node, boolean IsInteractive);

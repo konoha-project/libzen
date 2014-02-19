@@ -64,7 +64,7 @@ import zen.type.ZType;
 public class CSourceGenerator extends ZSourceGenerator {
 
 	public CSourceGenerator() {
-		super("C", "99");
+		super("c", "C99");
 		this.LineFeed = "\n";
 		this.Tab = "\t";
 		this.Camma = ", ";
@@ -74,7 +74,7 @@ public class CSourceGenerator extends ZSourceGenerator {
 		this.FalseLiteral = "0/*false*/";
 		this.NullLiteral  = "NULL";
 
-		this.TopType = "void*";
+		this.TopType = "void *";
 		this.SetNativeType(ZType.BooleanType, "int");
 		this.SetNativeType(ZType.IntType, "long long int");
 		this.SetNativeType(ZType.FloatType, "double");
@@ -86,6 +86,7 @@ public class CSourceGenerator extends ZSourceGenerator {
 	@Override public ZSourceEngine GetEngine() {
 		return new ZSourceEngine(new ZenTypeSafer(this), this);
 	}
+
 
 	@Override protected void GenerateCode(ZType ContextType, ZNode Node) {
 		if(Node.IsUntyped()) {
@@ -296,7 +297,7 @@ public class CSourceGenerator extends ZSourceGenerator {
 
 	protected void GenerateFuncTypeName(ZType Type, String FuncName) {
 		this.GenerateTypeName(Type.GetParamType(0));
-		this.CurrentBuilder.Append("(*" + FuncName + ")");
+		this.CurrentBuilder.Append(" (*" + FuncName + ")");
 		@Var int i = 1;
 		this.CurrentBuilder.Append("(");
 		while(i < Type.GetParamSize()) {
@@ -372,13 +373,18 @@ public class CSourceGenerator extends ZSourceGenerator {
 			this.CurrentBuilder.Append(FuncName);
 		}
 		else {
+			@Var int StartIndex = this.CurrentBuilder.GetPosition();
 			this.CurrentBuilder.Append("static ");
 			this.GenerateTypeName(Node.ReturnType);
 			this.CurrentBuilder.Append(" ");
 			this.CurrentBuilder.Append(Node.GetSignature(this));
 			this.VisitListNode("(", Node, ")");
+			@Var String Prototype = this.CurrentBuilder.CopyString(StartIndex, this.CurrentBuilder.GetPosition());
 			this.GenerateCode(null, Node.AST[ZFunctionNode._Block]);
 			this.CurrentBuilder.AppendLineFeed();
+			this.HeaderBuilder.Append(Prototype);
+			this.HeaderBuilder.Append(this.SemiColon);
+			this.HeaderBuilder.AppendLineFeed();
 			this.SetMethod(Node.FuncName, Node.GetFuncType(null));
 		}
 	}
@@ -543,6 +549,8 @@ public class CSourceGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.UnIndent();
 		this.CurrentBuilder.AppendLineFeedIndent();
 		this.CurrentBuilder.Append("}");
+		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.AppendLineFeed();
 	}
 
 	@Override public void VisitErrorNode(ZErrorNode Node) {

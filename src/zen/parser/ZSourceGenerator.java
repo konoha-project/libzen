@@ -73,6 +73,7 @@ import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
 import zen.deps.Field;
 import zen.deps.LibZen;
+import zen.deps.Nullable;
 import zen.deps.Var;
 import zen.deps.ZArray;
 import zen.deps.ZenMap;
@@ -126,12 +127,13 @@ public class ZSourceGenerator extends ZGenerator {
 		this.TopType = "var";
 	}
 
-	private void InitBuilderList() {
+	protected void InitBuilderList() {
 		this.CurrentBuilder = null;
 		this.BuilderList.clear(0);
 		this.HeaderBuilder = this.AppendNewSourceBuilder();
-		this.CurrentBuilder = this.HeaderBuilder;
+		this.CurrentBuilder = this.AppendNewSourceBuilder();
 	}
+
 	@Override public ZSourceEngine GetEngine() {
 		System.out.println("FIXME: Overide GetEngine in each generator!!");
 		return new ZSourceEngine(new ZenTypeSafer(this), this);
@@ -174,6 +176,11 @@ public class ZSourceGenerator extends ZGenerator {
 	public final void SetMacro(String FuncName, String Macro, ZType ReturnType, ZType P1, ZType P2) {
 		ZFuncType FuncType = ZTypePool._LookupFuncType(ReturnType, P1, P2);
 		this.SetDefinedFunc(new ZSourceMacro(FuncName, FuncType, Macro));
+	}
+
+	@Override public final void WriteTo(@Nullable String FileName) {
+		LibZen._WriteTo(this.NameOutputFile(FileName), this.BuilderList);
+		this.InitBuilderList();
 	}
 
 	@Override public boolean StartCodeGeneration(ZNode Node, boolean IsInteractive) {

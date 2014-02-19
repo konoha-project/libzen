@@ -39,8 +39,8 @@ import zen.deps.Var;
 import zen.deps.ZStringArray;
 import zen.parser.ZEmptyValue;
 import zen.parser.ZParserConst;
-import zen.parser.ZSourceEngine;
 import zen.parser.ZSourceBuilder;
+import zen.parser.ZSourceEngine;
 
 public class ZenMain {
 	private static jline.ConsoleReader ConsoleReader = null;
@@ -87,13 +87,10 @@ public class ZenMain {
 		return Line;
 	}
 
-
-
 	public final static void ExecCommand(String[] Args) {
 		@Var String TargetCode = null; // self executable
 		@Var String OneLiner = null;
-		@Var String RequiredLibName = null;
-		@Var String OutputFile = "-"; // stdout
+		@Var String OutputFile = null; // stdout
 		@Var int Index = 0;
 		@Var boolean ShellMode = false;
 		while (Index < Args.length) {
@@ -102,85 +99,31 @@ public class ZenMain {
 				break;
 			}
 			Index += 1;
-			if ((Argu.equals("-e") || Argu.equals("--eval"))
-					&& (Index < Args.length)) {
+			if ((Argu.equals("-e") || Argu.equals("--eval")) && (Index < Args.length)) {
 				OneLiner = Args[Index];
 				Index += 1;
 				continue;
 			}
-			if ((Argu.equals("-o") || Argu.equals("--out"))
-					&& (Index < Args.length)) {
+			if ((Argu.equals("-o") || Argu.equals("--out")) && (Index < Args.length)) {
 				if (!Args[Index].endsWith(".green")) { // for safety
 					OutputFile = Args[Index];
 					Index += 1;
 					continue;
 				}
 			}
-			if ((Argu.equals("-l") || Argu.equals("--lang"))
-					&& (Index < Args.length)) {
+			if ((Argu.equals("-l") || Argu.equals("--lang")) && (Index < Args.length)) {
 				if (!Args[Index].endsWith(".green")) { // for safety
 					TargetCode = Args[Index];
 					Index += 1;
 					continue;
 				}
 			}
-			if ((Argu.equals("-r") || Argu.equals("--require")) && (Index < Args.length)) {
-				RequiredLibName = Args[Index];
-				Index += 1;
-				continue;
-			}
 			if (Argu.equals("-i")) {
 				ShellMode = true;
 				continue;
 			}
-			//			if (LibZen.EqualsString(Argu, "--verbose")) {
-			//				LibZen.DebugMode = true;
-			//				ZLogger.VerboseMask |= (ZLogger.VerboseFile
-			//						| ZLogger.VerboseSymbol | ZLogger.VerboseNative);
-			//				continue;
-			//			}
-			//			if (LibZen.EqualsString(Argu, "--verbose:token")) {
-			//				ZLogger.VerboseMask |= ZLogger.VerboseToken;
-			//				continue;
-			//			}
-			//			if (LibZen.EqualsString(Argu, "--verbose:type")) {
-			//				ZLogger.VerboseMask |= ZLogger.VerboseType;
-			//				continue;
-			//			}
-			//			if (LibZen.EqualsString(Argu, "--verbose:symbol")) {
-			//				ZLogger.VerboseMask |= ZLogger.VerboseSymbol;
-			//				continue;
-			//			}
-			//			if (LibZen.EqualsString(Argu, "--verbose:native")) {
-			//				ZLogger.VerboseMask |= ZLogger.VerboseNative;
-			//				continue;
-			//			}
-			//			if (LibZen.EqualsString(Argu, "--verbose:func")) {
-			//				ZLogger.VerboseMask |= ZLogger.VerboseFunc;
-			//				continue;
-			//			}
-			//			if (LibZen.EqualsString(Argu, "--verbose:all")) {
-			//				ZLogger.VerboseMask = -1;
-			//				continue;
-			//			}
-			//			if (LibZen.EqualsString(Argu, "--verbose:no")) {
-			//				ZLogger.VerboseMask = 0;
-			//				continue;
-			//			}
-			//			ZenMain.Usage(Argu + " is unknown");
 		}
 		@Var ZSourceEngine ScriptEngine = LibZen.LoadEngine(TargetCode, KonohaGrammar.class.getName());
-		// @Var ZenSourceContext Context = new ZenSourceContext(new KonohaGrammar(), Generator);
-		// if(RequiredLibName != null) {
-		// if(!Context.TopLevelNameSpace.LoadRequiredLib(RequiredLibName)) {
-		// LibZen.Exit(1, "failed to load required library: " +
-		// RequiredLibName);
-		// }
-		// }
-		// if(OneLiner != null) {
-		// Context.TopLevelNameSpace.Eval(OneLiner, 1);
-		// }
-		// Generator.InitContext(TopLevelNameSpace);
 		if (!(Index < Args.length)) {
 			ShellMode = true;
 		}
@@ -225,11 +168,8 @@ public class ZenMain {
 			}
 			LibZen._PrintLine("");
 		}
-		/*
-		 * else if(TargetCode.equals("minikonoha")) { String SourceCode =
-		 * Generator.GetSourceCode(); MiniKonohaExcutor.Eval(SourceCode); }
-		 */
 		else {
+			ScriptEngine.WriteTo(OutputFile);
 			// Generator.FlushBuffer();
 		}
 	}

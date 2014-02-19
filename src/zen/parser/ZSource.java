@@ -141,7 +141,9 @@ public class ZSource {
 		if(Line.startsWith("\t") || Line.startsWith(" ")) {
 			Delim = "\n";
 		}
-		return this.MakeHeader(Error, Position, Message) + Delim + Line + Delim + this.GetLineMarker(Position);
+		@Var String Header = this.MakeHeader(Error, Position, Message);
+		@Var String Marker = this.GetLineMarker(Position);
+		return Header + Delim + Line + Delim + Marker;
 	}
 
 	public void Panic(int Position, String Message) {

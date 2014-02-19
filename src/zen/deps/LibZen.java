@@ -27,9 +27,11 @@
 package zen.deps;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -338,14 +340,6 @@ public class LibZen {
 		return 0.0;
 	}
 
-	public static String _SourceBuilderToString(ZSourceBuilder Builder) {
-		StringBuilder builder = new StringBuilder();
-		for(int i = 0; i < Builder.SourceList.size(); i = i + 1) {
-			builder.append(Builder.SourceList.ArrayValues[i]);
-		}
-		return builder.toString();
-	}
-
 	public final static String _Stringify(Object Value) {
 		if(Value == null) {
 			return "null";
@@ -455,6 +449,47 @@ public class LibZen {
 		return buffer;
 	}
 
+	public static String _SourceBuilderToString(ZSourceBuilder Builder) {
+		return LibZen._SourceBuilderToString(Builder, 0, Builder.SourceList.size());
+	}
+
+	public static String _SourceBuilderToString(ZSourceBuilder Builder, int BeginIndex, int EndIndex) {
+		StringBuilder builder = new StringBuilder();
+		for(int i = BeginIndex; i < EndIndex; i = i + 1) {
+			builder.append(Builder.SourceList.ArrayValues[i]);
+		}
+		return builder.toString();
+	}
+
+	public final static void _WriteTo(String FileName, ZArray<ZSourceBuilder> List) {
+		if(FileName == null) {
+			@Var int i = 0;
+			while(i < List.size()) {
+				@Var ZSourceBuilder Builder = List.ArrayValues[i];
+				System.out.println(Builder.toString());
+				Builder.Clear();
+				i = i + 1;
+			}
+		}
+		else {
+			try {
+				BufferedWriter w = new BufferedWriter(new FileWriter(FileName));
+				@Var int i = 0;
+				while(i < List.size()) {
+					@Var ZSourceBuilder Builder = List.ArrayValues[i];
+					w.write(Builder.toString());
+					w.write("\n\n");
+					Builder.Clear();
+					i = i + 1;
+				}
+				w.close();
+			}
+			catch(IOException e) {
+				LibZen._Exit(1, "cannot to write: " + e);
+			}
+		}
+	}
+
 	// HighLevel Library
 
 	public final static boolean ImportGrammar(ZNameSpace NameSpace, String ClassName) {
@@ -534,8 +569,6 @@ public class LibZen {
 		Generator.ImportLocalGrammar(Generator.RootNameSpace);
 		return Generator.GetEngine();
 	}
-
-
 
 	//
 	public final static ZType GetNativeType(Class<?> NativeClass) {

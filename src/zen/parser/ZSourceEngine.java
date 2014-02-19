@@ -437,4 +437,9 @@ public class ZSourceEngine extends ZVisitor {
 		this.Eval(Node.AST[ZSugarNode._DeSugar]);
 	}
 
+	public void WriteTo(String OutputFile) {
+		this.Generator.WriteTo(OutputFile);
+		this.Generator.Logger.ShowErrors();
+	}
+
 }
