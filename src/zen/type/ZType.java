@@ -177,6 +177,10 @@ public class ZType  {
 		return this.ShortName;
 	}
 
+	public String GetAsciiName() {
+		return this.ShortName;
+	}
+
 	public final String StringfyClassMember(String Name) {
 		return Name + " of " + this.ShortName;
 	}
@@ -199,5 +203,6 @@ public class ZType  {
 
 	public void Maybe(ZType T, ZToken SourceToken) {
 	}
+
 
 }

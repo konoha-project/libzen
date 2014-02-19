@@ -34,21 +34,27 @@ import zen.deps.ZArray;
 
 
 public final class ZSourceBuilder {
-	@Field public ZArray<String> SourceList = new ZArray<String>(new String[128]);
 	@Field ZSourceGenerator Template;
+	@Field public ZArray<String> SourceList = new ZArray<String>(new String[128]);
+	@Field ZSourceBuilder Parent;
 	@Field int IndentLevel = 0;
 	@Field String CurrentIndentString = "";
 	@Field String BufferedLineComment = "";
 
-	public ZSourceBuilder(ZSourceGenerator Template) {
+	public ZSourceBuilder(ZSourceGenerator Template, ZSourceBuilder Parent) {
 		this.Template = Template;
+		this.Parent = Parent;
 	}
 
-	public void Clear() {
+	public final ZSourceBuilder Pop() {
+		return this.Parent;
+	}
+
+	public final void Clear() {
 		this.SourceList.clear(0);
 	}
 
-	public void Append(String Text) {
+	public final void Append(String Text) {
 		this.SourceList.add(Text);
 	}
 
@@ -70,7 +76,7 @@ public final class ZSourceBuilder {
 		this.SourceList.add(" ");
 	}
 
-	public void AppendToken(String Text) {
+	public final void AppendToken(String Text) {
 		this.AppendWhiteSpace();
 		this.SourceList.add(Text);
 		this.AppendWhiteSpace();

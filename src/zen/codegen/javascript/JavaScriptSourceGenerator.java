@@ -185,7 +185,7 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 
 
 	//	@Override
-	//	public void VisitFuncDeclNode(ZFunctionNode/*Decl*/ Node) {
+	//	public void VisitFuncDeclNode(ZFunctionNode/ Node) {
 	//		this.CurrentBuilder.Append("function ");
 	//		this.CurrentBuilder.Append(Node.FuncName);
 	//		this.VisitListNode("(", Node.ParamList, ")");

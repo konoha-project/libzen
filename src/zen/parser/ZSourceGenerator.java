@@ -106,7 +106,7 @@ public class ZSourceGenerator extends ZGenerator {
 		super(TargetCode, TargetVersion);
 		this.NativeTypeMap = new ZenMap<String>(null);
 		this.BuilderList = new ZArray<ZSourceBuilder>(new ZSourceBuilder[4]);
-		this.HeaderBuilder = this.NewSourceBuilder();
+		this.HeaderBuilder = this.AppendNewSourceBuilder();
 		this.CurrentBuilder = this.HeaderBuilder;
 		this.LineFeed = "\n";
 		this.Tab = "   ";
@@ -128,23 +128,34 @@ public class ZSourceGenerator extends ZGenerator {
 		return new ZScriptEngine(new ZenTypeSafer(this), this);
 	}
 
-	protected ZSourceBuilder NewSourceBuilder() {
-		@Var ZSourceBuilder Builder = new ZSourceBuilder(this);
+	protected ZSourceBuilder AppendNewSourceBuilder() {
+		@Var ZSourceBuilder Builder = new ZSourceBuilder(this, this.CurrentBuilder);
+		this.BuilderList.add(Builder);
+		return Builder;
+	}
+
+	protected ZSourceBuilder InsertNewSourceBuilder() {
+		@Var ZSourceBuilder Builder = new ZSourceBuilder(this, this.CurrentBuilder);
+		@Var int i = 0;
+		while(i < this.BuilderList.size()) {
+			if(this.BuilderList.ArrayValues[i] == this.CurrentBuilder) {
+				this.BuilderList.add(i, Builder);
+				return Builder;
+			}
+			i = i + 1;
+		}
 		this.BuilderList.add(Builder);
 		return Builder;
 	}
 
 	protected void SetNativeType(ZType Type, String TypeName) {
-		String Key = "" + Type.TypeId;
+		@Var String Key = "" + Type.TypeId;
 		this.NativeTypeMap.put(Key, TypeName);
 	}
 
 	protected String GetNativeType(ZType Type) {
-		if (Type == null) {
-			return this.TopType;
-		}
-		String Key = "" + Type.TypeId;
-		String TypeName = this.NativeTypeMap.GetOrNull(Key);
+		@Var String Key = "" + Type.TypeId;
+		@Var String TypeName = this.NativeTypeMap.GetOrNull(Key);
 		if (TypeName == null) {
 			return Type.ShortName;
 		}
@@ -173,7 +184,7 @@ public class ZSourceGenerator extends ZGenerator {
 	//	}
 
 
-	protected final void GenerateCode(ZNode Node) {
+	protected void GenerateCode(ZNode Node) {
 		Node.Accept(this);
 	}
 

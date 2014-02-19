@@ -44,7 +44,7 @@ import zen.type.ZType;
 
 public class PythonSourceGenerator extends ZSourceGenerator {
 
-	public PythonSourceGenerator/* constructor */() {
+	public PythonSourceGenerator() {
 		super("Python", "2.0");
 		this.LineFeed = "\n";
 		this.Tab = "\t";
@@ -184,15 +184,15 @@ public class PythonSourceGenerator extends ZSourceGenerator {
 		}
 	}
 
-	public void VisitFuncDeclNode(ZFunctionNode/*Decl*/ Node) {
-		this.CurrentBuilder.Append("def ");
-		this.CurrentBuilder.Append(Node.FuncName);
-		this.VisitListNode("(", Node, ")");
-		if (Node.AST[ZFunctionNode._Block] == null) {
-			this.CurrentBuilder.Append(": pass");
-		} else {
-			this.GenerateCode(Node.AST[ZFunctionNode._Block]);
-		}
-	}
+	//	public void VisitFuncDeclNode(ZFunctionNode Node) {
+	//		this.CurrentBuilder.Append("def ");
+	//		this.CurrentBuilder.Append(Node.FuncName);
+	//		this.VisitListNode("(", Node, ")");
+	//		if (Node.AST[ZFunctionNode._Block] == null) {
+	//			this.CurrentBuilder.Append(": pass");
+	//		} else {
+	//			this.GenerateCode(Node.AST[ZFunctionNode._Block]);
+	//		}
+	//	}
 
 }

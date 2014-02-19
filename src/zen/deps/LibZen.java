@@ -497,29 +497,6 @@ public class LibZen {
 		return MatchFunc.Invoke(ParentNode, TokenContext, LeftNode);
 	}
 
-	//	// Visitor Reflection
-	//	public final static boolean IsSupportedNode(ZVisitor Visitor, ZNode Node) {
-	//		try {
-	//			Visitor.getClass().getMethod(Node.GetVisitName(), Node.getClass());
-	//			return true;
-	//		} catch (NoSuchMethodException e) {
-	//			LibZen._FixMe(e);
-	//		}
-	//		return false;
-	//	}
-	//
-	//	public final static void DispatchVisitNode(ZVisitor Visitor, ZNode Node) {
-	//		try {
-	//			Method JavaMethod = Visitor.getClass().getMethod(Node.GetVisitName(), Node.getClass());
-	//			JavaMethod.invoke(Visitor, Node);
-	//		} catch (NoSuchMethodException e) {
-	//			//System.err.println("Visitor:" + Visitor.getClass().getSimpleName() + " do not support for " + Node.getClass().getSimpleName());
-	//			Visitor.VisitExtendedNode(Node);
-	//		} catch (Exception e) {
-	//			LibZen._FixMe(e);
-	//		}
-	//	}
-
 	private final static ZenMap<Class<?>> GenMap = new ZenMap<Class<?>>(null);
 
 	static {
@@ -527,7 +504,7 @@ public class LibZen {
 		GenMap.put("javascript", zen.codegen.javascript.JavaScriptSourceGenerator.class);
 		GenMap.put("ruby", zen.codegen.jruby.RubySourceGenerator.class);
 		GenMap.put("clisp", zen.codegen.clisp.CommonLispSourceGenerator.class);
-		//GenMap.put("c", zen.codegen.c.CSourceGenerator.class);
+		GenMap.put("c", zen.codegen.c.CSourceGenerator.class);
 		GenMap.put("jvm", zen.codegen.jvm.JavaAsmGenerator.class);
 		GenMap.put("debug-jvm", zen.codegen.jvm.DebugAsmGenerator.class);
 		GenMap.put("llvm", zen.codegen.llvm.LLVMSourceGenerator.class);
@@ -539,7 +516,7 @@ public class LibZen {
 		}
 		if (ClassName != null) {
 			try {
-				Class<?> GeneratorClass = GenMap.GetOrNull(ClassName);
+				Class<?> GeneratorClass = GenMap.GetOrNull(ClassName.toLowerCase());
 				if(GeneratorClass == null) {
 					GeneratorClass = Class.forName(ClassName);
 				}

@@ -128,12 +128,12 @@ public class RubySourceGenerator extends ZSourceGenerator {
 		this.GenerateCode(Node.AST[ZFunctionNode._Block]);
 	}
 
-	public void VisitFuncDeclNode(ZFunctionNode/*Decl*/ Node) {
-		this.CurrentBuilder.Append("def ");
-		this.CurrentBuilder.Append(Node.FuncName);
-		this.VisitListNode("(", Node, ")");
-		if (Node.AST[ZFunctionNode._Block] != null) {
-			this.GenerateCode(Node.AST[ZFunctionNode._Block]);
-		}
-	}
+	//	public void VisitFuncDeclNode(ZFunctionNode/ Node) {
+	//		this.CurrentBuilder.Append("def ");
+	//		this.CurrentBuilder.Append(Node.FuncName);
+	//		this.VisitListNode("(", Node, ")");
+	//		if (Node.AST[ZFunctionNode._Block] != null) {
+	//			this.GenerateCode(Node.AST[ZFunctionNode._Block]);
+	//		}
+	//	}
 }
