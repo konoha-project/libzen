@@ -398,6 +398,7 @@ public class CSourceGenerator extends ZSourceGenerator {
 			if(FieldType instanceof ZFuncType) {
 				if(((ZFuncType)FieldType).AcceptAsFieldFunc(FuncType)) {
 					this.HeaderBuilder.Append("#define _" + this.NameClass(ClassType) + "_" + FuncName);
+					this.HeaderBuilder.AppendLineFeed();
 				}
 			}
 		}
@@ -428,6 +429,23 @@ public class CSourceGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Append(this.SemiColon);
 	}
 
+	private void GenerateFields(ZClassType ClassType, ZType ThisType) {
+		ZType SuperType = ThisType.GetSuperType();
+		if(!SuperType.IsVarType()) {
+			this.GenerateFields(ClassType, SuperType);
+		}
+		@Var int i = 0;
+		this.GenerateCField("int", "_classId" + ThisType.TypeId);
+		this.GenerateCField("int", "_delta" + ThisType.TypeId);
+		while (i < ClassType.GetFieldSize()) {
+			@Var ZClassField ClassField = ClassType.GetFieldAt(i);
+			if(ClassField.ClassType == ThisType) {
+				this.GenerateField(ClassField.FieldType, ClassField.FieldName);
+			}
+			i = i + 1;
+		}
+	}
+
 	@Override public void VisitClassNode(ZClassNode Node) {
 		this.CurrentBuilder.Append("struct");
 		this.CurrentBuilder.AppendWhiteSpace();
@@ -435,18 +453,7 @@ public class CSourceGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.AppendWhiteSpace();
 		this.CurrentBuilder.Append("{");
 		this.CurrentBuilder.Indent();
-		@Var ZType ThisType = null;
-		@Var int i = 0;
-		while (i < Node.ClassType.GetFieldSize()) {
-			@Var ZClassField ClassField = Node.ClassType.GetFieldAt(i);
-			if(ClassField.ClassType != ThisType) {
-				ThisType = ClassField.ClassType;
-				this.GenerateCField("int", "_classId" + ThisType.TypeId);
-				this.GenerateCField("int", "_delta" + ThisType.TypeId);
-			}
-			this.GenerateField(ClassField.FieldType, ClassField.FieldName);
-			i = i + 1;
-		}
+		this.GenerateFields(Node.ClassType, Node.ClassType);
 		this.GenerateCField("int", "_nextId");
 		this.CurrentBuilder.UnIndent();
 		this.CurrentBuilder.AppendLineFeed();
@@ -478,7 +485,7 @@ public class CSourceGenerator extends ZSourceGenerator {
 		else {
 			this.CurrentBuilder.Append("sizeof(struct " + this.NameClass(SuperType) + ");");
 		}
-		i = 0;
+		@Var int i = 0;
 		while (i < Node.GetListSize()) {
 			@Var ZFieldNode FieldNode = Node.GetFieldNode(i);
 			this.CurrentBuilder.AppendLineFeedIndent();
