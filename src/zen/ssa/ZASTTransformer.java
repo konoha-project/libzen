@@ -24,6 +24,7 @@ import zen.ast.ZInstanceOfNode;
 import zen.ast.ZIntNode;
 import zen.ast.ZLetNode;
 import zen.ast.ZListNode;
+import zen.ast.ZMacroNode;
 import zen.ast.ZMapLiteralNode;
 import zen.ast.ZMethodCallNode;
 import zen.ast.ZNewObjectNode;
@@ -317,6 +318,12 @@ public class ZASTTransformer extends ZVisitor {
 	@Override
 	public boolean IsVisitable() {
 		return false;
+	}
+
+	@Override
+	public void VisitMacroNode(ZMacroNode FuncNode) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

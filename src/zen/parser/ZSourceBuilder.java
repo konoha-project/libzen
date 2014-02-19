@@ -66,6 +66,17 @@ public final class ZSourceBuilder {
 		this.SourceList.add(this.Template.LineFeed);
 	}
 
+	public final void AppendLineFeed(boolean AppendIndent) {
+		if (this.BufferedLineComment.length() > 0) {
+			this.SourceList.add(this.BufferedLineComment);
+			this.BufferedLineComment = "";
+		}
+		this.SourceList.add(this.Template.LineFeed);
+		if(AppendIndent) {
+			this.AppendIndent();
+		}
+	}
+
 	public final void AppendWhiteSpace() {
 		if(this.SourceList.size() > 0) {
 			@Var String Last = this.SourceList.ArrayValues[this.SourceList.size()-1];
@@ -125,6 +136,12 @@ public final class ZSourceBuilder {
 	public final void AppendIndent() {
 		this.SourceList.add(this.GetIndentString());
 	}
+
+	public final void AppendLineFeedIndent() {
+		this.SourceList.add(this.Template.LineFeed);
+		this.SourceList.add(this.GetIndentString());
+	}
+
 
 	public final void IndentAndAppend(String Text) {
 		this.SourceList.add(this.GetIndentString());

@@ -1,7 +1,6 @@
 package zen.lang;
 
 import zen.ast.ZErrorNode;
-import zen.ast.ZFuncCallNode;
 import zen.ast.ZNode;
 import zen.type.ZType;
 
@@ -38,15 +37,6 @@ public class ZenError {
 
 	public static ZNode CreateStupidCast(ZType Requested, ZNode Node) {
 		return ZenError.TypeErrorMessage(Requested, Node, "type error: requested=" +  Requested + ", given=" + Node.Type);
-	}
-
-
-	public static ZNode FuncCallTypeError(ZType Requested, ZFuncCallNode FuncNode, int ArgumentIndex, ZType GivenType) {
-		String Fname = "function";
-		if(FuncNode.ResolvedFuncName != null) {
-			Fname = FuncNode.ResolvedFuncName;
-		}
-		return ZenError.TypeErrorMessage(Requested, FuncNode, "type error: " + Fname+"("+ArgumentIndex+") required=" + Requested + ", given=" + GivenType);
 	}
 
 	public static ZNode NeedFunctionScope(ZNode Node, String Statement) {

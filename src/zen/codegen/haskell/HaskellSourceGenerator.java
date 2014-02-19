@@ -105,7 +105,7 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 				this.CurrentBuilder.Append("return (");
 			}
 
-			this.GenerateCode(SubNode);
+			this.GenerateCode(null, SubNode);
 			this.CurrentBuilder.Append(this.SemiColon);
 
 			if (IndentLevel == 1 && i == limit - 1) {
@@ -129,31 +129,31 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 	@Override
 	public void VisitThrowNode(ZThrowNode Node) {
 		this.CurrentBuilder.Append("raise ");
-		this.GenerateCode(Node.AST[ZThrowNode._Expr]);
+		this.GenerateCode(null, Node.AST[ZThrowNode._Expr]);
 	}
 
 	@Override
 	public void VisitTryNode(ZTryNode Node) {
 		// See: http://d.hatena.ne.jp/kazu-yamamoto/20090819/1250660658
-		this.GenerateCode(Node.AST[ZTryNode._Try]);
+		this.GenerateCode(null, Node.AST[ZTryNode._Try]);
 		this.CurrentBuilder.Append(" `catch` ");
 		if (Node.AST[ZTryNode._Catch] != null) {
-			this.GenerateCode(Node.AST[ZTryNode._Catch]);
+			this.GenerateCode(null, Node.AST[ZTryNode._Catch]);
 		}
 		if (Node.AST[ZTryNode._Finally] != null) {
-			this.GenerateCode(Node.AST[ZTryNode._Finally]);
+			this.GenerateCode(null, Node.AST[ZTryNode._Finally]);
 		}
 	}
 
 	@Override public void VisitCatchNode(ZCatchNode Node) {
-		this.GenerateCode(Node.AST[ZCatchNode._Block]);
+		this.GenerateCode(null, Node.AST[ZCatchNode._Block]);
 	}
 
 	@Override
 	public void VisitVarNode(ZVarNode Node) {
 		this.CurrentBuilder.Append(Node.NativeName + " <- readIORef ");
 		this.CurrentBuilder.Append(Node.NativeName + "_ref");
-		this.GenerateCode(Node.AST[ZVarNode._InitValue]);
+		this.GenerateCode(null, Node.AST[ZVarNode._InitValue]);
 		this.CurrentBuilder.AppendLineFeed();
 	}
 
@@ -201,10 +201,10 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 			String Indentation = LibZen._JoinStrings("\t", IndentLevel);
 			this.CurrentBuilder.Append(Indentation);
 			this.CurrentBuilder.Append("return ");
-			this.GenerateCode(ReturnNode.AST[ZReturnNode._Expr]);
+			this.GenerateCode(null, ReturnNode.AST[ZReturnNode._Expr]);
 			this.UnIndent(this.CurrentBuilder);
 		} else {
-			this.GenerateCode(Node.AST[ZFunctionNode._Block]);
+			this.GenerateCode(null, Node.AST[ZFunctionNode._Block]);
 		}
 	}
 
@@ -217,7 +217,7 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 	public void VisitSetNameNode(ZSetNameNode Node) {
 		this.CurrentBuilder.Append("writeIORef ");
 		this.CurrentBuilder.Append(Node.VarName + "_ref ");
-		this.GenerateCode(Node.AST[ZSetNameNode._Expr]);
+		this.GenerateCode(null, Node.AST[ZSetNameNode._Expr]);
 		this.CurrentBuilder.AppendLineFeed();
 
 		this.CurrentBuilder.AppendIndent();
@@ -230,7 +230,7 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 	@Override
 	public void VisitReturnNode(ZReturnNode Node) {
 		if (Node.AST[ZReturnNode._Expr] != null) {
-			this.GenerateCode(Node.AST[ZReturnNode._Expr]);
+			this.GenerateCode(null, Node.AST[ZReturnNode._Expr]);
 		}
 	}
 
@@ -307,7 +307,7 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
-		this.GenerateCode(Node.AST[ZFuncCallNode._Func]);
+		this.GenerateCode(null, Node.AST[ZFuncCallNode._Func]);
 		this.VisitListNode(" ", Node, " ");
 	}
 }

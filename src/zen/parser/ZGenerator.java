@@ -110,6 +110,8 @@ public abstract class ZGenerator extends ZVisitor {
 		return null;     // undefined
 	}
 
+	// Naming
+
 	public int GetUniqueNumber() {
 		@Var int UniqueNumber = this.UniqueNumber;
 		this.UniqueNumber = this.UniqueNumber + 1;
@@ -120,15 +122,15 @@ public abstract class ZGenerator extends ZVisitor {
 		return Symbol + "_Z" + this.GetUniqueNumber();
 	}
 
-	public ZNode SetGlobalValue(String GlobalName, Object Value) {
-		return null;
-	}
-
-	public Object GetGlobalValue(String GlobalName) {
-		return null;
+	public String NameClass(ZType ClassType) {
+		return ClassType.ShortName + "" + ClassType.TypeId;
 	}
 
 	//
+	public final void SetDefinedFunc(ZFunc Func) {
+		this.DefinedFuncMap.put(Func.GetSignature(), Func);
+	}
+
 	public final boolean SetPrototype(ZNode Node, String FuncName, ZFuncType FuncType) {
 		@Var ZFunc Func = this.GetDefinedFunc(FuncName, FuncType);
 		if(Func != null) {
@@ -144,10 +146,6 @@ public abstract class ZGenerator extends ZVisitor {
 		return true;
 	}
 
-	public final void SetDefinedFunc(ZFunc Func) {
-		this.DefinedFuncMap.put(Func.GetSignature(), Func);
-	}
-
 	public final ZFunc GetDefinedFunc(String GlobalName) {
 		return this.DefinedFuncMap.GetOrNull(GlobalName);
 	}
@@ -159,6 +157,15 @@ public abstract class ZGenerator extends ZVisitor {
 	public final ZFunc GetDefinedFunc(String FuncName, ZType RecvType, int FuncParamSize) {
 		return this.GetDefinedFunc(ZFunc._StringfySignature(FuncName, FuncParamSize, RecvType));
 	}
+
+	public final ZMacroFunc GetMacroFunc(String FuncName, ZType RecvType, int FuncParamSize) {
+		ZFunc Func = this.GetDefinedFunc(ZFunc._StringfySignature(FuncName, FuncParamSize, RecvType));
+		if(Func instanceof ZMacroFunc) {
+			return ((ZMacroFunc)Func);
+		}
+		return null;
+	}
+
 
 	public String NameConverterFunc(ZType FromType, ZType ToType) {
 		return FromType.GetUniqueName() + "T" + ToType.GetUniqueName();

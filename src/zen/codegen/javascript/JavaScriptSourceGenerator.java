@@ -108,12 +108,12 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 	//}
 
 	@Override public void VisitCastNode(ZCastNode Node) {
-		this.GenerateCode(Node.AST[ZCastNode._Expr]);
+		this.GenerateCode(null, Node.AST[ZCastNode._Expr]);
 	}
 
 	@Override public void VisitInstanceOfNode(ZInstanceOfNode Node) {
 		this.CurrentBuilder.Append("isinstance(");
-		this.GenerateCode(Node.AST[ZBinaryNode._Left]);
+		this.GenerateCode(null, Node.AST[ZBinaryNode._Left]);
 		this.CurrentBuilder.Append(this.Camma);
 		this.GenerateTypeName(Node.AST[ZBinaryNode._Right].Type);
 		this.CurrentBuilder.Append(")");
@@ -123,20 +123,20 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 	public void VisitThrowNode(ZThrowNode Node) {
 		this.CurrentBuilder.Append("throw");
 		this.CurrentBuilder.AppendWhiteSpace();
-		this.GenerateCode(Node.AST[ZThrowNode._Expr]);
+		this.GenerateCode(null, Node.AST[ZThrowNode._Expr]);
 	}
 
 	@Override
 	public void VisitTryNode(ZTryNode Node) {
 		this.CurrentBuilder.Append("try");
-		this.GenerateCode(Node.AST[ZTryNode._Try]);
+		this.GenerateCode(null, Node.AST[ZTryNode._Try]);
 		//for (ZenNode CatchNode : Node.CatchList) {
 		//	this.GenerateCode(CatchNode);
 		//}
-		this.GenerateCode(Node.AST[ZTryNode._Catch]);
+		this.GenerateCode(null, Node.AST[ZTryNode._Catch]);
 		if (Node.AST[ZTryNode._Finally] != null) {
 			this.CurrentBuilder.Append("finally");
-			this.GenerateCode(Node.AST[ZTryNode._Finally]);
+			this.GenerateCode(null, Node.AST[ZTryNode._Finally]);
 		}
 	}
 
@@ -144,7 +144,7 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 	public void VisitCatchNode(ZCatchNode Node) {
 		this.CurrentBuilder.Append("catch ");
 		this.CurrentBuilder.Append(Node.ExceptionName);
-		this.GenerateCode(Node.AST[ZCatchNode._Block]);
+		this.GenerateCode(null, Node.AST[ZCatchNode._Block]);
 	}
 
 	@Override
@@ -153,7 +153,7 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.AppendWhiteSpace();
 		this.CurrentBuilder.Append(Node.NativeName);
 		this.CurrentBuilder.AppendToken("=");
-		this.GenerateCode(Node.AST[ZVarNode._InitValue]);
+		this.GenerateCode(null, Node.AST[ZVarNode._InitValue]);
 		this.CurrentBuilder.Append(this.SemiColon);
 		this.VisitStmtList(Node);
 	}
@@ -171,7 +171,7 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 			this.CurrentBuilder.Append(Node.FuncName);
 		}
 		this.VisitListNode("(", Node, ")");
-		this.GenerateCode(Node.AST[ZFunctionNode._Block]);
+		this.GenerateCode(null, Node.AST[ZFunctionNode._Block]);
 		//		if(ReturnNode != null && ReturnNode.AST[ZReturnNode._Expr] != null) {
 		//			this.CurrentBuilder.Append("{ return ");
 		//			this.GenerateCode(ReturnNode.AST[ZReturnNode._Expr]);
@@ -245,7 +245,7 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 			this.CurrentBuilder.AppendWhiteSpace();
 			this.CurrentBuilder.AppendToken("=");
 			this.CurrentBuilder.AppendWhiteSpace();
-			this.GenerateCode(FieldNode.AST[ZFieldNode._InitValue]);
+			this.GenerateCode(null, FieldNode.AST[ZFieldNode._InitValue]);
 			this.CurrentBuilder.Append(this.SemiColon);
 			i = i + 1;
 		}

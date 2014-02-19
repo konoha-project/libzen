@@ -73,7 +73,7 @@ public class JavaCommonApi {
 
 	public final static JavaStaticFunc ConvertToNativeFunc(Method jMethod) {
 		@Var ZFuncType FuncType = JavaTypeTable.ConvertToFuncType(jMethod);
-		return new JavaStaticFunc(0, jMethod.getName(), FuncType, jMethod);
+		return new JavaStaticFunc(jMethod.getName(), FuncType, jMethod);
 	}
 
 	static ZFunc LoadFunc(String Name, Class<?> ... classes) {

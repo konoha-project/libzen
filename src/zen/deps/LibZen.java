@@ -40,9 +40,9 @@ import zen.codegen.jvm.JavaStaticFunc;
 import zen.codegen.jvm.JavaTypeTable;
 import zen.parser.ZGenerator;
 import zen.parser.ZNameSpace;
-import zen.parser.ZSourceEngine;
 import zen.parser.ZSourceBuilder;
 import zen.parser.ZSourceContext;
+import zen.parser.ZSourceEngine;
 import zen.parser.ZSourceGenerator;
 import zen.parser.ZTokenContext;
 import zen.parser.ZTokenFunc;
@@ -544,7 +544,7 @@ public class LibZen {
 
 	public final static JavaStaticFunc ConvertToNativeFunc(Method jMethod) {
 		@Var ZFuncType FuncType = JavaTypeTable.ConvertToFuncType(jMethod);
-		return new JavaStaticFunc(0, jMethod.getName(), FuncType, jMethod);
+		return new JavaStaticFunc(jMethod.getName(), FuncType, jMethod);
 	}
 
 

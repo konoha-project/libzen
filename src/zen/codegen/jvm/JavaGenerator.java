@@ -22,8 +22,8 @@ import zen.deps.ZenMap;
 import zen.lang.ZenTypeSafer;
 import zen.parser.ZGenerator;
 import zen.parser.ZNameSpace;
-import zen.parser.ZSourceEngine;
 import zen.parser.ZSourceContext;
+import zen.parser.ZSourceEngine;
 import zen.parser.ZTokenContext;
 import zen.type.ZFuncType;
 import zen.type.ZType;
@@ -50,7 +50,7 @@ public abstract class JavaGenerator extends ZGenerator {
 	}
 
 	protected void LazyBuild(ZFunctionNode Node) {
-		this.LazyNodeMap.put(Node.GetSignature(), Node);
+		this.LazyNodeMap.put(Node.GetSignature(this), Node);
 	}
 
 	protected void LazyBuild(String Signature) {

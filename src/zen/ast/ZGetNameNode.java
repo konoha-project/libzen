@@ -50,6 +50,6 @@ public class ZGetNameNode extends ZNode {
 	}
 
 	public final ZNode ToGlobalNameNode() {
-		return new ZGlobalNameNode(this.ParentNode, this.SourceToken, this.Type, this.VarName);
+		return new ZGlobalNameNode(this.ParentNode, this.SourceToken, this.Type, this.VarName, false);
 	}
 }

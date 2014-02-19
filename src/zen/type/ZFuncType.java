@@ -105,7 +105,7 @@ public final class ZFuncType extends ZType {
 		return this.TypeParams[Index+1];
 	}
 
-	public ZFuncType NewMethodFuncType(ZType RecvType) {
+	public final ZFuncType NewMethodFuncType(ZType RecvType) {
 		@Var ZArray<ZType> TypeList = new ZArray<ZType>(new ZType[this.GetFuncParamSize()+2]);
 		TypeList.add(this.GetReturnType());
 		TypeList.add(RecvType);
@@ -116,5 +116,17 @@ public final class ZFuncType extends ZType {
 		}
 		return ZTypePool._LookupFuncType(TypeList);
 	}
+
+	public final boolean AcceptAsFieldFunc(ZFuncType FuncType) {
+		if(FuncType.GetFuncParamSize() == this.GetFuncParamSize() && FuncType.GetReturnType().Equals(this.GetReturnType())) {
+			for(int i = 1; i < FuncType.GetFuncParamSize(); i++) {
+				if(!FuncType.GetFuncParamType(i).Equals(this.GetFuncParamType(i))) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
 
 }

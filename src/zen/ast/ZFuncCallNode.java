@@ -24,27 +24,28 @@
 
 package zen.ast;
 
-import zen.deps.Field;
-import zen.parser.ZToken;
+import zen.deps.Var;
+import zen.parser.ZMacroFunc;
 import zen.parser.ZVisitor;
-import zen.type.ZFunc;
+import zen.type.ZFuncType;
 import zen.type.ZType;
 
 public final class ZFuncCallNode extends ZListNode {
 	public final static int _Func = 0;
-
-	@Field public String ResolvedFuncName = null;
-	@Field public ZFunc ResolvedFunc = null;
 
 	public ZFuncCallNode(ZNode ParentNode, ZNode FuncNode) {
 		super(ParentNode, null, 1);
 		this.Set(ZFuncCallNode._Func, FuncNode);
 	}
 
-	public ZFuncCallNode(ZNode ParentNode, ZToken SourceToken, ZFunc ResolvedFunc) {
-		super(ParentNode, SourceToken, 1);
-		this.ResolvedFunc = ResolvedFunc;
-		this.Set(ZFuncCallNode._Func, new ZGetNameNode(this, ResolvedFunc));
+	public ZFuncCallNode(ZNode ParentNode, String FuncName, ZFuncType FuncType) {
+		super(ParentNode, null, 1);
+		@Var ZGlobalNameNode FuncNode = new ZGlobalNameNode(this, null, FuncType, FuncName, true);
+		this.Set(ZFuncCallNode._Func, FuncNode);
+	}
+
+	@Override public void Accept(ZVisitor Visitor) {
+		Visitor.VisitFuncCallNode(this);
 	}
 
 	public final ZType GetRecvType() {
@@ -54,7 +55,34 @@ public final class ZFuncCallNode extends ZListNode {
 		return ZType.VoidType;
 	}
 
-	@Override public void Accept(ZVisitor Visitor) {
-		Visitor.VisitFuncCallNode(this);
+	public final String GetFuncName() {
+		ZNode FNode = this.AST[ZFuncCallNode._Func];
+		if(FNode instanceof ZGlobalNameNode) {
+			if (((ZGlobalNameNode)FNode).IsGivenName()) {
+				return ((ZGlobalNameNode)FNode).GlobalName;
+			}
+		}
+		return null;
 	}
+
+	public final ZFuncType GetFuncType() {
+		ZType FType = this.AST[ZFuncCallNode._Func].Type;
+		if(FType instanceof ZFuncType) {
+			return (ZFuncType)FType;
+		}
+		return null;
+	}
+
+
+	public ZMacroNode ToMacroNode(ZMacroFunc MacroFunc) {
+		ZMacroNode MacroNode = new ZMacroNode(this.ParentNode, this.AST[ZFuncCallNode._Func].SourceToken, MacroFunc);
+		@Var int i = 0;
+		while(i < this.GetListSize()) {
+			MacroNode.Append(this.GetListAt(i));
+			i = i + 1;
+		}
+		return MacroNode;
+	}
+
+
 }

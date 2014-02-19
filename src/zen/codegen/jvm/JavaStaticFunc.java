@@ -27,13 +27,14 @@ package zen.codegen.jvm;
 import java.lang.reflect.Method;
 
 import zen.deps.Field;
-import zen.type.ZFunc;
+import zen.parser.ZMacroFunc;
 import zen.type.ZFuncType;
 
-public class JavaStaticFunc extends ZFunc {
+public class JavaStaticFunc extends ZMacroFunc {
 	@Field public Method StaticFunc;  // Abstract function if null
-	public JavaStaticFunc(int FuncFlag, String FuncName, ZFuncType FuncType, Method jMethod) {
-		super(FuncFlag, FuncName, FuncType);
+	public JavaStaticFunc(String FuncName, ZFuncType FuncType, Method jMethod) {
+		super(FuncName, FuncType);
 		this.StaticFunc = jMethod;
+		assert(jMethod != null);
 	}
 }

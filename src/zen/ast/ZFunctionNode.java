@@ -28,6 +28,7 @@ import zen.deps.Field;
 import zen.deps.Nullable;
 import zen.deps.Var;
 import zen.deps.ZArray;
+import zen.parser.ZGenerator;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 import zen.type.ZFuncType;
@@ -98,8 +99,11 @@ public class ZFunctionNode extends ZListNode {
 		return this.ResolvedFuncType;
 	}
 
-	public final String GetSignature() {
+	public final String GetSignature(ZGenerator Generator) {
 		ZFuncType FuncType = this.GetFuncType(null);
+		if(this.FuncName == null) {
+			this.FuncName = "f_Z" + Generator.GetUniqueNumber();
+		}
 		return FuncType.StringfySignature(this.FuncName);
 	}
 

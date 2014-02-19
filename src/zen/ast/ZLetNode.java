@@ -28,7 +28,7 @@ public class ZLetNode extends ZNode {
 	}
 
 	public ZGlobalNameNode ToGlobalNameNode() {
-		return new ZGlobalNameNode(null, this.SymbolToken, this.GetAstType(ZLetNode._InitValue), this.GlobalName);
+		return new ZGlobalNameNode(null, this.SymbolToken, this.GetAstType(ZLetNode._InitValue), this.GlobalName, false);
 	}
 
 }

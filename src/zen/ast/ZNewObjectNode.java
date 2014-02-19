@@ -25,10 +25,12 @@
 package zen.ast;
 
 import zen.deps.Var;
+import zen.parser.ZMacroFunc;
 import zen.parser.ZVisitor;
 import zen.type.ZFunc;
 
 public final class ZNewObjectNode extends ZListNode {
+
 	public ZNewObjectNode(ZNode ParentNode) {
 		super(ParentNode, null, 0);
 	}
@@ -37,18 +39,22 @@ public final class ZNewObjectNode extends ZListNode {
 		Visitor.VisitNewObjectNode(this);
 	}
 
-	public final ZFuncCallNode ToStaticFuncCall(ZFunc Func) {
-		ZGetNameNode Dummy = new ZGetNameNode(null, this.SourceToken, Func.FuncName);
-		ZFuncCallNode FuncNode = new ZFuncCallNode(this.ParentNode, Dummy);
-		FuncNode.SourceToken = this.SourceToken;
+	public final ZListNode ToFuncCallNode(ZFunc Func) {
+		@Var ZListNode FuncNode;
+		if(Func instanceof ZMacroFunc) {
+			FuncNode = new ZMacroNode(this.ParentNode, this.SourceToken, (ZMacroFunc)Func);
+		}
+		else {
+			FuncNode = new ZFuncCallNode(this.ParentNode, Func.FuncName, Func.GetFuncType());
+			FuncNode.SourceToken = this.SourceToken;
+		}
 		FuncNode.Append(this);
 		@Var int i = 0;
 		while(i < this.GetListSize()) {
 			FuncNode.Append(this.GetListAt(i));
 			i = i + 1;
 		}
-		FuncNode.ResolvedFunc = Func;
+		this.ClearListAfter(0);
 		return FuncNode;
 	}
-
 }

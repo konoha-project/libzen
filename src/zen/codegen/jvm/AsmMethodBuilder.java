@@ -24,7 +24,6 @@ import org.objectweb.asm.tree.MethodNode;
 
 import zen.ast.ZListNode;
 import zen.ast.ZNode;
-import zen.type.ZFunc;
 import zen.type.ZFuncType;
 import zen.type.ZType;
 
@@ -257,27 +256,21 @@ class AsmMethodBuilder extends MethodNode {
 		this.ApplyStaticMethod(Node, sMethod);
 	}
 
-	void ApplyFunc(ZNode Node, ZFunc Func, ZListNode ListNode) {
-		if(Func instanceof JavaStaticFunc) {
-			this.ApplyStaticMethod(Node, ((JavaStaticFunc)Func).StaticFunc, ListNode);
+	void ApplyFuncName(ZNode Node, String FuncName, ZFuncType FuncType, ZListNode ListNode) {
+		if(ListNode != null) {
+			for(int i = 0; i < ListNode.GetListSize(); i++) {
+				this.PushNode(null, ListNode.GetListAt(i));
+			}
 		}
-		else if(Func != null) {
-			ZFuncType FuncType = Func.GetFuncType();
-			if(ListNode != null) {
-				for(int i = 0; i < ListNode.GetListSize(); i++) {
-					this.PushNode(null, ListNode.GetListAt(i));
-				}
-			}
-			this.SetLineNumber(Node);
-			Class<?> FuncClass = this.Generator.GetDefinedFunctionClass(Func.FuncName, FuncType);
-			if(FuncClass != null) {
-				this.visitMethodInsn(INVOKESTATIC, FuncClass, "f", FuncType);
-			}
-			else {
-				// in some case, class has not been generated
-				this.Generator.LazyBuild(FuncType.StringfySignature(Func.FuncName));
-				this.visitMethodInsn(INVOKESTATIC, this.Generator.NameFunctionClass(Func.FuncName, FuncType), "f", FuncType);
-			}
+		this.SetLineNumber(Node);
+		Class<?> FuncClass = this.Generator.GetDefinedFunctionClass(FuncName, FuncType);
+		if(FuncClass != null) {
+			this.visitMethodInsn(INVOKESTATIC, FuncClass, "f", FuncType);
+		}
+		else {
+			// in some case, class has not been generated
+			this.Generator.LazyBuild(FuncType.StringfySignature(FuncName));
+			this.visitMethodInsn(INVOKESTATIC, this.Generator.NameFunctionClass(FuncName, FuncType), "f", FuncType);
 		}
 	}
 

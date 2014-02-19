@@ -85,6 +85,7 @@ import zen.ast.ZIfNode;
 import zen.ast.ZInstanceOfNode;
 import zen.ast.ZIntNode;
 import zen.ast.ZLetNode;
+import zen.ast.ZMacroNode;
 import zen.ast.ZMapEntryNode;
 import zen.ast.ZMapLiteralNode;
 import zen.ast.ZMethodCallNode;
@@ -400,20 +401,25 @@ public class JavaAsmGenerator extends JavaGenerator {
 		}
 	}
 
+	@Override public void VisitMacroNode(ZMacroNode Node) {
+		this.AsmBuilder.ApplyStaticMethod(Node, ((JavaStaticFunc)Node.MacroFunc).StaticFunc, Node);
+	}
+
 	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
-		this.AsmBuilder.SetLineNumber(Node);
-		if(Node.ResolvedFunc != null) {
-			this.AsmBuilder.ApplyFunc(Node, Node.ResolvedFunc, Node);
-		}
-		else {
-			if(Node.AST[ZFuncCallNode._Func].Type.IsFuncType()) {
-				ZFuncType FuncType = (ZFuncType)Node.AST[ZFuncCallNode._Func].Type;
+		if(Node.GetAstType(ZFuncCallNode._Func).IsFuncType()) {
+			ZFuncType FuncType = (ZFuncType)Node.AST[ZFuncCallNode._Func].Type;
+			if(Node.AST[ZFuncCallNode._Func] instanceof ZGlobalNameNode) {
+				ZGlobalNameNode NameNode = (ZGlobalNameNode)Node.AST[ZFuncCallNode._Func];
+				this.AsmBuilder.ApplyFuncName(NameNode, NameNode.GlobalName, FuncType, Node);
+			}
+			else {
 				Class<?> FuncClass = this.LoadFuncClass(FuncType);
 				this.AsmBuilder.ApplyFuncObject(Node, FuncClass, Node.AST[ZFuncCallNode._Func], FuncType, Node);
 			}
-			else {
-
-			}
+		}
+		else {
+			this.Logger.ReportError2(Node, "not function");
+			this.AsmBuilder.visitInsn(Opcodes.ACONST_NULL);
 		}
 	}
 

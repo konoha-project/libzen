@@ -48,6 +48,7 @@ import zen.ast.ZIfNode;
 import zen.ast.ZIntNode;
 import zen.ast.ZLetNode;
 import zen.ast.ZListNode;
+import zen.ast.ZMacroNode;
 import zen.ast.ZMapEntryNode;
 import zen.ast.ZMapLiteralNode;
 import zen.ast.ZMethodCallNode;
@@ -396,21 +397,23 @@ public class JavaEngine extends ZSourceEngine {
 		}
 	}
 
+	@Override public void VisitMacroNode(ZMacroNode Node) {
+		this.EvalStaticMethod(Node, ((JavaStaticFunc)Node.MacroFunc).StaticFunc, this.PackNodes(null, Node));
+	}
+
 	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
-		if(Node.ResolvedFunc instanceof JavaStaticFunc) {
-			this.EvalStaticMethod(Node, ((JavaStaticFunc)Node.ResolvedFunc).StaticFunc, this.PackNodes(null, Node));
-			return;
-		}
-		if(Node.ResolvedFuncName != null && Node.ResolvedFunc == null) {
-			this.Logger.ReportError(Node.SourceToken, "undefined function: " + Node.ResolvedFuncName);
+		@Var ZFuncType FuncType = Node.GetFuncType();
+		if(FuncType == null) {
+			this.Logger.ReportError(Node.SourceToken, "not function");
 			this.StopVisitor();
-			return;
 		}
-		if(Node.ResolvedFunc != null) {
-			ZFuncType FuncType = Node.ResolvedFunc.GetFuncType();
-			this.Solution.LazyBuild(FuncType.StringfySignature(Node.ResolvedFuncName));
-			Class<?> FunctionClass = this.Solution.GetDefinedFunctionClass(Node.ResolvedFuncName, FuncType);
-			Node.Set(ZFuncCallNode._Func, new JavaStaticFieldNode(Node, FunctionClass, FuncType, "function"));
+		else {
+			@Var String FuncName = Node.GetFuncName();
+			if(FuncName != null) {
+				this.Solution.LazyBuild(FuncType.StringfySignature(FuncName));
+				Class<?> FunctionClass = this.Solution.GetDefinedFunctionClass(FuncName, FuncType);
+				Node.Set(ZFuncCallNode._Func, new JavaStaticFieldNode(Node, FunctionClass, FuncType, "function"));
+			}
 		}
 		Object Recv = this.Eval(Node.AST[ZFuncCallNode._Func]);
 		if(this.IsVisitable()) {
