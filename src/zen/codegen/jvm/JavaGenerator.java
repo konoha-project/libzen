@@ -22,7 +22,7 @@ import zen.deps.ZenMap;
 import zen.lang.ZenTypeSafer;
 import zen.parser.ZGenerator;
 import zen.parser.ZNameSpace;
-import zen.parser.ZScriptEngine;
+import zen.parser.ZSourceEngine;
 import zen.parser.ZSourceContext;
 import zen.parser.ZTokenContext;
 import zen.type.ZFuncType;
@@ -40,7 +40,7 @@ public abstract class JavaGenerator extends ZGenerator {
 		JavaCommonApi.LoadCommonApi(this);
 	}
 
-	@Override public ZScriptEngine GetEngine() {
+	@Override public ZSourceEngine GetEngine() {
 		return new JavaEngine(new ZenTypeSafer(this), this);
 	}
 

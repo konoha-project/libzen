@@ -124,8 +124,9 @@ public class ZSourceGenerator extends ZGenerator {
 		this.TopType = "var";
 	}
 
-	@Override public ZScriptEngine GetEngine() {
-		return new ZScriptEngine(new ZenTypeSafer(this), this);
+	@Override public ZSourceEngine GetEngine() {
+		System.out.println("FIXME: Overide GetEngine in each generator!!");
+		return new ZSourceEngine(new ZenTypeSafer(this), this);
 	}
 
 	protected ZSourceBuilder AppendNewSourceBuilder() {

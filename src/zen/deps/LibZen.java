@@ -40,7 +40,7 @@ import zen.codegen.jvm.JavaStaticFunc;
 import zen.codegen.jvm.JavaTypeTable;
 import zen.parser.ZGenerator;
 import zen.parser.ZNameSpace;
-import zen.parser.ZScriptEngine;
+import zen.parser.ZSourceEngine;
 import zen.parser.ZSourceBuilder;
 import zen.parser.ZSourceContext;
 import zen.parser.ZSourceGenerator;
@@ -528,7 +528,7 @@ public class LibZen {
 		return new ZSourceGenerator("zen", "0.1");
 	}
 
-	public final static ZScriptEngine LoadEngine(@Nullable String ClassName, String GrammarClass) {
+	public final static ZSourceEngine LoadEngine(@Nullable String ClassName, String GrammarClass) {
 		@Var ZGenerator Generator = LibZen.LoadGenerator(ClassName, null);
 		LibZen.ImportGrammar(Generator.RootNameSpace, GrammarClass);
 		Generator.ImportLocalGrammar(Generator.RootNameSpace);

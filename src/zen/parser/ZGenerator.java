@@ -62,7 +62,7 @@ public abstract class ZGenerator extends ZVisitor {
 		this.StoppedVisitor = false;
 	}
 
-	public abstract ZScriptEngine GetEngine();
+	public abstract ZSourceEngine GetEngine();
 
 	public void ImportLocalGrammar(ZNameSpace NameSpace) {
 		// TODO Auto-generated method stub

@@ -39,7 +39,7 @@ import zen.deps.Var;
 import zen.deps.ZStringArray;
 import zen.parser.ZEmptyValue;
 import zen.parser.ZParserConst;
-import zen.parser.ZScriptEngine;
+import zen.parser.ZSourceEngine;
 import zen.parser.ZSourceBuilder;
 
 public class ZenMain {
@@ -169,7 +169,7 @@ public class ZenMain {
 			//			}
 			//			ZenMain.Usage(Argu + " is unknown");
 		}
-		@Var ZScriptEngine ScriptEngine = LibZen.LoadEngine(TargetCode, KonohaGrammar.class.getName());
+		@Var ZSourceEngine ScriptEngine = LibZen.LoadEngine(TargetCode, KonohaGrammar.class.getName());
 		// @Var ZenSourceContext Context = new ZenSourceContext(new KonohaGrammar(), Generator);
 		// if(RequiredLibName != null) {
 		// if(!Context.TopLevelNameSpace.LoadRequiredLib(RequiredLibName)) {

@@ -53,6 +53,8 @@ import zen.ast.ZTryNode;
 import zen.ast.ZVarNode;
 import zen.deps.LibZen;
 import zen.deps.Var;
+import zen.lang.ZenTypeSafer;
+import zen.parser.ZSourceEngine;
 import zen.parser.ZSourceGenerator;
 import zen.type.ZType;
 
@@ -74,6 +76,10 @@ public class CSourceGenerator extends ZSourceGenerator {
 		this.SetNativeType(ZType.IntType, "long long int");
 		this.SetNativeType(ZType.FloatType, "double");
 		this.SetNativeType(ZType.StringType, "char*");
+	}
+
+	@Override public ZSourceEngine GetEngine() {
+		return new ZSourceEngine(new ZenTypeSafer(this), this);
 	}
 
 	@Override public void VisitArrayLiteralNode(ZArrayLiteralNode Node) {

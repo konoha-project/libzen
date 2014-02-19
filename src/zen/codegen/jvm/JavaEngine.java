@@ -60,12 +60,12 @@ import zen.deps.ZObjectArray;
 import zen.deps.ZStringArray;
 import zen.deps.ZenMap;
 import zen.parser.ZEmptyValue;
-import zen.parser.ZScriptEngine;
+import zen.parser.ZSourceEngine;
 import zen.type.ZFunc;
 import zen.type.ZFuncType;
 import zen.type.ZTypeChecker;
 
-public class JavaEngine extends ZScriptEngine {
+public class JavaEngine extends ZSourceEngine {
 
 	private final JavaGenerator Solution;
 
