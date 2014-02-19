@@ -105,7 +105,7 @@ public class ZTypePool {
 		return GenericType;
 	}
 
-	public static ZFuncType _LookupFuncType(ZArray<ZType> TypeList) {
+	public final static ZFuncType _LookupFuncType(ZArray<ZType> TypeList) {
 		ZType FuncType = _GetGenericType(ZType.FuncType, TypeList, true);
 		if(FuncType instanceof ZFuncType) {
 			return (ZFuncType)FuncType;
@@ -113,7 +113,14 @@ public class ZTypePool {
 		return null;
 	}
 
-	public static ZFuncType _LookupFuncType(ZType R, ZType P1, ZType P2) {
+	public final static ZFuncType _LookupFuncType(ZType R, ZType P1) {
+		ZArray<ZType> TypeList = new ZArray<ZType>(new ZType[2]);
+		TypeList.add(R);
+		TypeList.add(P1);
+		return ZTypePool._LookupFuncType(TypeList);
+	}
+
+	public final static ZFuncType _LookupFuncType(ZType R, ZType P1, ZType P2) {
 		ZArray<ZType> TypeList = new ZArray<ZType>(new ZType[3]);
 		TypeList.add(R);
 		TypeList.add(P1);

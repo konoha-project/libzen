@@ -173,6 +173,11 @@ public class ZSourceGenerator extends ZGenerator {
 		return TypeName;
 	}
 
+	public final void SetMacro(String FuncName, String Macro, ZType ReturnType, ZType P1) {
+		ZFuncType FuncType = ZTypePool._LookupFuncType(ReturnType, P1);
+		this.SetDefinedFunc(new ZSourceMacro(FuncName, FuncType, Macro));
+	}
+
 	public final void SetMacro(String FuncName, String Macro, ZType ReturnType, ZType P1, ZType P2) {
 		ZFuncType FuncType = ZTypePool._LookupFuncType(ReturnType, P1, P2);
 		this.SetDefinedFunc(new ZSourceMacro(FuncName, FuncType, Macro));

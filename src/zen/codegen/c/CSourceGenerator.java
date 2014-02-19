@@ -76,10 +76,12 @@ public class CSourceGenerator extends ZSourceGenerator {
 
 		this.TopType = "void *";
 		this.SetNativeType(ZType.BooleanType, "int");
-		this.SetNativeType(ZType.IntType, "long long int");
+		//		this.SetNativeType(ZType.IntType, "long long int");
+		this.SetNativeType(ZType.IntType, "long");
 		this.SetNativeType(ZType.FloatType, "double");
 		this.SetNativeType(ZType.StringType, "const char *");
 
+		this.SetMacro("print", "LibZen_Print($[0])", ZType.VoidType, ZType.StringType);
 		this.SetMacro("Assert", "LibZen_Assert($[0], $[1])", ZType.VoidType, ZType.BooleanType, ZType.StringType);
 	}
 
@@ -341,6 +343,7 @@ public class CSourceGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.AppendToken("=");
 		this.GenerateCode(null, Node.AST[ZLetNode._InitValue]);
 		this.CurrentBuilder.Append(this.SemiColon);
+		this.CurrentBuilder.AppendLineFeed();
 		Node.GetNameSpace().SetLocalSymbol(Node.Symbol, Node.ToGlobalNameNode());
 	}
 
