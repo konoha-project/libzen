@@ -315,19 +315,16 @@ public class ZenTypeSafer extends ZTypeChecker {
 			this.VisitListNodeAsFuncCall(Node, (ZFuncType)FuncNodeType);
 		}
 		else if(FuncNodeType.IsVarType()) {
-			@Var ZNode FuncNode = Node.AST[ZFuncCallNode._Func];
-			if(FuncNode instanceof ZGlobalNameNode) {
-				@Var ZGlobalNameNode NameNode = (ZGlobalNameNode)FuncNode;
-				@Var String FuncName = NameNode.GlobalName;
-				@Var int FuncParamSize = Node.GetListSize();
-				@Var ZType RecvType = Node.GetRecvType();
-				@Var ZFunc Func = this.LookupFunc(NameSpace, FuncName, RecvType, FuncParamSize);
+			@Var String FuncName = Node.GetFuncName();
+			if(FuncName != null) {
+				@Var ZFunc Func = this.LookupFunc(NameSpace, FuncName, Node.GetRecvType(), Node.GetListSize());
 				if(Func instanceof ZMacroFunc) {
 					@Var ZMacroNode MacroNode = Node.ToMacroNode((ZMacroFunc)Func);
 					this.VisitListNodeAsFuncCall(MacroNode, Func.GetFuncType());
 					return;
 				}
 				else if(Func != null) {
+					@Var ZGlobalNameNode NameNode = (ZGlobalNameNode)Node.AST[ZFuncCallNode._Func];
 					NameNode.Type = Func.GetFuncType();
 					NameNode.IsStaticFuncName = true;
 					this.VisitListNodeAsFuncCall(Node, Func.GetFuncType());
@@ -660,8 +657,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 					Func = new ZPrototype(0, FunctionNode.FuncName, FuncType, FunctionNode.SourceToken);
 					ZenGamma.DefineFunc(NameSpace, Func);
 					FunctionNode.GlobalName = Func.GetSignature();
-					// XXX (ide)
-					NameSpace.SetLocalSymbol(FunctionNode.FuncName, new ZGetNameNode(FunctionNode, FunctionNode.SourceToken, FunctionNode.FuncName));
+					//NameSpace.SetLocalSymbol(FunctionNode.FuncName, new ZGetNameNode(FunctionNode, FunctionNode.SourceToken, FunctionNode.FuncName));
 				}
 			}
 		}

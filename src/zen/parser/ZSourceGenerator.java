@@ -327,7 +327,12 @@ public class ZSourceGenerator extends ZGenerator {
 		if(Node.IsUntyped()) {
 			this.Logger.ReportError2(Node, "undefined symbol: " + Node.GlobalName);
 		}
-		this.CurrentBuilder.Append(Node.GlobalName);
+		if(Node.IsStaticFuncName) {
+			this.CurrentBuilder.Append(Node.Type.StringfySignature(Node.GlobalName));
+		}
+		else {
+			this.CurrentBuilder.Append(Node.GlobalName);
+		}
 	}
 
 	@Override public void VisitGetNameNode(ZGetNameNode Node) {

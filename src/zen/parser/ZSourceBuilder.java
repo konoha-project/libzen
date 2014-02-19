@@ -58,6 +58,10 @@ public final class ZSourceBuilder {
 		this.SourceList.add(Text);
 	}
 
+	public final void AppendInt(int Value) {
+		this.SourceList.add(String.valueOf(Value));
+	}
+
 	public final void AppendLineFeed() {
 		if (this.BufferedLineComment.length() > 0) {
 			this.SourceList.add(this.BufferedLineComment);

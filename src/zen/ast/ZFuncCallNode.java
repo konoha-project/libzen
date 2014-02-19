@@ -58,9 +58,7 @@ public final class ZFuncCallNode extends ZListNode {
 	public final String GetFuncName() {
 		ZNode FNode = this.AST[ZFuncCallNode._Func];
 		if(FNode instanceof ZGlobalNameNode) {
-			if (((ZGlobalNameNode)FNode).IsGivenName()) {
-				return ((ZGlobalNameNode)FNode).GlobalName;
-			}
+			return ((ZGlobalNameNode)FNode).GlobalName;
 		}
 		return null;
 	}
