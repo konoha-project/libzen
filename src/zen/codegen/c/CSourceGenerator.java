@@ -100,7 +100,7 @@ public class CSourceGenerator extends ZSourceGenerator {
 
 
 	@Override protected void GenerateCode(ZType ContextType, ZNode Node) {
-		if(Node.IsUntyped()) {
+		if(Node.IsUntyped() && !Node.IsErrorNode()) {
 			this.CurrentBuilder.Append("/*untyped*/" + this.NullLiteral);
 			this.Logger.ReportError2(Node, "untyped error");
 		}

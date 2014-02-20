@@ -38,6 +38,7 @@ import zen.deps.Var;
 import zen.parser.ZGenerator;
 import zen.parser.ZLogger;
 import zen.parser.ZMacroFunc;
+import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 
 public abstract class ZTypeChecker extends ZVisitor {
@@ -101,18 +102,6 @@ public abstract class ZTypeChecker extends ZVisitor {
 		return Node;
 	}
 
-	private final ZNode VisitTypeChecker(ZNode Node, ZType ContextType, int TypeCheckPolicy) {
-		if(this.IsVisitable() && Node != null) {
-			if(Node.HasUntypedNode()) {
-				Node = Node.VisitTypeChecker(this, ContextType);
-			}
-			Node = this.TypeCheckImpl(Node, ContextType, TypeCheckPolicy);
-			this.VarScope.CheckVarNode(ContextType, Node);
-		}
-		this.ReturnedNode = null;
-		return Node;
-	}
-
 	protected final ZNode CreateStupidCast(ZType Requested, ZNode Node) {
 		ZNode ErrorNode = new ZErrorNode(Node, "type error: requested = " +  Requested + ", given = " + Node.Type);
 		ErrorNode.Type = Requested;
@@ -136,6 +125,7 @@ public abstract class ZTypeChecker extends ZVisitor {
 		}
 		return this.CreateStupidCast(EnforceType, Node);
 	}
+
 
 	public final static int _DefaultTypeCheckPolicy			= 0;
 	public final static int _NoCheckPolicy                   = 1;
@@ -165,12 +155,29 @@ public abstract class ZTypeChecker extends ZVisitor {
 		return this.CreateStupidCast(ContextType, Node);
 	}
 
+	private final ZNode VisitTypeChecker(ZNode Node, ZType ContextType, int TypeCheckPolicy) {
+		if(this.IsVisitable() && Node != null) {
+			if(Node.HasUntypedNode()) {
+				Node = Node.VisitTypeChecker(this, ContextType);
+			}
+			Node = this.TypeCheckImpl(Node, ContextType, TypeCheckPolicy);
+			this.VarScope.CheckVarNode(ContextType, Node);
+		}
+		this.ReturnedNode = null;
+		return Node;
+	}
+
+
 	public final ZNode TryType(ZNode Node, ZType ContextType) {
 		return this.VisitTypeChecker(Node, ContextType, _NoCheckPolicy);
 	}
 
 	public final void TryTypeAt(ZNode Node, int Index, ZType ContextType) {
-		Node.AST[Index] = this.VisitTypeChecker(Node.AST[Index], ContextType, _NoCheckPolicy);
+		//		@Var ZNode N = Node.AST[Index];
+		Node.Set(Index, this.VisitTypeChecker(Node.AST[Index], ContextType, _NoCheckPolicy));
+		//		if(N != Node.AST[Index]) {
+		//			System.out.println("Node="+Node+"\n\tFrom="+N+"\n\tTo="+Node.AST[Index]);
+		//		}
 	}
 
 	public final ZNode CheckType(ZNode Node, ZType ContextType) {
@@ -178,7 +185,11 @@ public abstract class ZTypeChecker extends ZVisitor {
 	}
 
 	public final void CheckTypeAt(ZNode Node, int Index, ZType ContextType) {
-		Node.AST[Index] = this.VisitTypeChecker(Node.AST[Index], ContextType, _DefaultTypeCheckPolicy);
+		//		@Var ZNode N = Node.AST[Index];
+		Node.Set(Index, this.VisitTypeChecker(Node.AST[Index], ContextType, _DefaultTypeCheckPolicy));
+		//		if(N != Node.AST[Index]) {
+		//			System.out.println("Node="+Node+"\n\tFrom="+N+"\n\tTo="+Node.AST[Index]);
+		//		}
 	}
 
 	public final boolean TypeCheckNodeList(ZListNode List) {
@@ -200,20 +211,25 @@ public abstract class ZTypeChecker extends ZVisitor {
 	}
 
 	public final void Return(ZNode Node) {
-		if(Node != null) {
-			if(this.ReturnedNode != null) {
-				this.FIXME("previous returned node " + Node);
-			}
-			this.ReturnedNode = Node;
-		}
-	}
-
-	public final void TypedNode(ZNode Node, ZType Type) {
-		Node.Type = Type;
 		if(this.ReturnedNode != null) {
 			this.FIXME("previous returned node " + Node);
 		}
 		this.ReturnedNode = Node;
+	}
+
+	public final void TypedNode(ZNode Node, ZType Type) {
+		Node.Type = Type.GetRealType();
+		if(this.ReturnedNode != null) {
+			this.FIXME("previous returned node " + Node);
+		}
+		this.ReturnedNode = Node;
+	}
+
+	public final void ReturnErrorNode(ZNode Node, ZToken ErrorToken, String Message) {
+		if(ErrorToken == null) {
+			ErrorToken = Node.SourceToken;
+		}
+		this.Return(new ZErrorNode(Node.ParentNode, ErrorToken, Message));
 	}
 
 	public final void Todo(ZNode Node) {
@@ -223,9 +239,6 @@ public abstract class ZTypeChecker extends ZVisitor {
 	}
 
 	public abstract void DefineFunction(ZFunctionNode FunctionNode, boolean Enforced);
-
-
-
 
 	@Override public void VisitErrorNode(ZErrorNode Node) {
 		@Var ZType ContextType = this.GetContextType();

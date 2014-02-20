@@ -31,17 +31,26 @@ import zen.type.ZType;
 
 public final class ZVarNode extends ZBlockNode {
 	public final static int _InitValue = 0;
+
 	@Field public ZType   DeclType = ZType.VarType;
 	@Field public String  NativeName = null;
+
+	@Field public ZToken  TypeToken = null;
+	@Field public ZToken  NameToken = null;
+
 
 	public ZVarNode(ZNode ParentNode) {
 		super(ParentNode, 1);
 	}
+
 	@Override public void SetNameInfo(ZToken NameToken, String Name) {
 		this.NativeName = Name;
+		this.NameToken = NameToken;
 	}
+
 	@Override public void SetTypeInfo(ZToken TypeToken, ZType Type) {
-		this.DeclType = Type;
+		this.DeclType  = Type;
+		this.TypeToken = TypeToken;
 	}
 
 	@Override public void Accept(ZVisitor Visitor) {

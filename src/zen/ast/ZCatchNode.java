@@ -34,6 +34,8 @@ public final class ZCatchNode extends ZNode {
 	@Field public ZType   ExceptionType = ZType.VarType;
 	@Field public String  ExceptionName = null;
 
+	@Field public ZToken NameToken = null;
+
 	public ZCatchNode(ZNode ParentNode) {
 		super(ParentNode, null, 1);
 	}
@@ -43,6 +45,7 @@ public final class ZCatchNode extends ZNode {
 	}
 	@Override public void SetNameInfo(ZToken NameToken, String Name) {
 		this.ExceptionName = Name;
+		this.NameToken = NameToken;
 	}
 
 }

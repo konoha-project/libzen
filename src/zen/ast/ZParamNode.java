@@ -29,12 +29,15 @@ import zen.parser.ZToken;
 
 public class ZParamNode extends ZNode {
 	@Field public String  Name;
+	@Field public ZToken  NameToken = null;
+
 	public ZParamNode(ZNode ParentNode) {
 		super(ParentNode, null, 0);
 	}
 
 	@Override public void SetNameInfo(ZToken NameToken, String Name) {
 		this.Name = Name;
+		this.NameToken = NameToken;
 	}
 
 }

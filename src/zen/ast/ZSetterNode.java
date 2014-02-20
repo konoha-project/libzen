@@ -31,7 +31,9 @@ import zen.parser.ZVisitor;
 public final class ZSetterNode extends ZNode {
 	public final static int _Recv = 0;
 	public final static int _Expr = 1;
+
 	@Field public String  FieldName = null;
+	@Field public ZToken  NameToken = null;
 
 	public ZSetterNode(ZNode ParentNode, ZNode RecvNode) {
 		super(ParentNode, null, 2);
@@ -40,6 +42,7 @@ public final class ZSetterNode extends ZNode {
 
 	@Override public void SetNameInfo(ZToken NameToken, String Name) {
 		this.FieldName = Name;
+		this.NameToken = NameToken;
 	}
 
 	@Override public void Accept(ZVisitor Visitor) {

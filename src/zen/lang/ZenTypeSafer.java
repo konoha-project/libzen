@@ -251,7 +251,6 @@ public class ZenTypeSafer extends ZTypeChecker {
 		this.TypedNode(Node, Node.AST[ZGroupNode._Expr].Type);
 	}
 
-
 	private void VisitListNodeAsFuncCall(ZListNode FuncNode, ZFuncType FuncType) {
 		@Var int i = 0;
 		@Var ZType[] Greek = ZGreekType.NewGreekTypes(null);
@@ -304,25 +303,6 @@ public class ZenTypeSafer extends ZTypeChecker {
 		}
 	}
 
-	private void TypeCheckNativeMethodCall(ZNode Node, ZType RecvType, String MethodName, ZListNode List) {
-		ZFuncType FuncType = this.Generator.GetMethodFuncType(RecvType, MethodName, List);
-		if(FuncType != null) {
-			@Var int i = 0;
-			@Var int StaticShift = FuncType.GetParamSize() - List.GetListSize();
-			while(i < List.GetListSize()) {
-				@Var ZNode SubNode = List.GetListAt(i);
-				SubNode = this.CheckType(SubNode, FuncType.GetParamType(i+StaticShift));
-				List.SetListAt(i, SubNode);
-				if(SubNode.HasUntypedNode()) {
-				}
-				i = i + 1;
-			}
-			this.TypedNode(Node, FuncType.GetReturnType());
-			return;
-		}
-		this.Return(Node);
-	}
-
 	private ZType LookupFieldType(ZNameSpace NameSpace, ZType ClassType, String FieldName) {
 		ClassType = ClassType.GetRealType();
 		if(ClassType instanceof ZClassType) {
@@ -336,55 +316,97 @@ public class ZenTypeSafer extends ZTypeChecker {
 		if(ClassType instanceof ZClassType) {
 			return ((ZClassType)ClassType).GetFieldType(FieldName, ZType.VoidType);
 		}
+		System.out.println("hoge !!  " + ClassType);
 		return NameSpace.Generator.GetSetterType(ClassType, FieldName);
+	}
+
+	private ZNode UndefinedFieldNode(ZNode Node, String Name) {
+		return new ZErrorNode(Node, "undefined field: " + Name + " of " + Node.GetAstType(ZGetterNode._Recv));
 	}
 
 	@Override public void VisitGetterNode(ZGetterNode Node) {
 		@Var ZNameSpace NameSpace = Node.GetNameSpace();
 		this.CheckTypeAt(Node, ZGetterNode._Recv, ZType.VarType);
-		@Var ZType FieldType = this.LookupFieldType(NameSpace, Node.AST[ZGetterNode._Recv].Type, Node.FieldName);
-		if(FieldType.IsVoidType() && !Node.AST[ZGetterNode._Recv].IsUntyped()) {
-			this.Return(ZenError.UndefinedName(Node, Node.AST[ZGetterNode._Recv].Type.StringfyClassMember(Node.FieldName)));
-			return;
+		if(!Node.AST[ZSetterNode._Recv].IsUntyped()) {
+			@Var ZType FieldType = this.LookupFieldType(NameSpace, Node.GetAstType(ZGetterNode._Recv), Node.FieldName);
+			if(FieldType.IsVoidType()) {
+				this.Return(this.UndefinedFieldNode(Node, Node.FieldName));
+				return;
+			}
+			this.TypedNode(Node, FieldType);
 		}
-		this.TypedNode(Node, FieldType);
+		else {
+			this.TypedNode(Node, ZType.VarType);
+		}
 	}
 
 	@Override public void VisitSetterNode(ZSetterNode Node) {
 		@Var ZNameSpace NameSpace = Node.GetNameSpace();
 		this.CheckTypeAt(Node, ZSetterNode._Recv, ZType.VarType);
-		@Var ZType FieldType = this.LookupSetterType(NameSpace, Node.AST[ZSetterNode._Recv].Type, Node.FieldName);
-		if(FieldType.IsVoidType()) {
-			this.Return(ZenError.ReadOnlyName(Node, Node.AST[ZSetterNode._Recv].Type, Node.FieldName));
+		if(!Node.AST[ZSetterNode._Recv].IsUntyped()) {
+			@Var ZType FieldType = this.LookupSetterType(NameSpace, Node.GetAstType(ZSetterNode._Recv), Node.FieldName);
+			if(FieldType.IsVoidType()) {
+				this.Return(this.UndefinedFieldNode(Node, Node.FieldName));
+				return;
+			}
+			this.CheckTypeAt(Node, ZSetterNode._Expr, FieldType);
+			this.TypedNode(Node, ZType.VoidType);
+		}
+		else {
+			/* if Recv is Var, type should not be decided */
+			this.TypedNode(Node, ZType.VarType);
+		}
+	}
+
+	private void VisitListAsNativeMethod(ZNode Node, ZType RecvType, String MethodName, ZListNode List) {
+		ZFuncType FuncType = this.Generator.GetMethodFuncType(RecvType, MethodName, List);
+		//		System.out.println("Native Method FuncType: " + FuncType);
+		if(FuncType != null) {
+			@Var int i = 0;
+			@Var int StaticShift = FuncType.GetParamSize() - List.GetListSize();
+			while(i < List.GetListSize()) {
+				@Var ZNode SubNode = List.GetListAt(i);
+				SubNode = this.CheckType(SubNode, FuncType.GetParamType(i+StaticShift));
+				List.SetListAt(i, SubNode);
+				i = i + 1;
+			}
+			this.TypedNode(Node, FuncType.GetReturnType());
 			return;
 		}
-		this.CheckTypeAt(Node, ZSetterNode._Expr, FieldType);
-		this.TypedNode(Node, ZType.VoidType);
+		@Var String Message = null;
+		if(MethodName == null) {
+			Message = "undefined constructor: " + RecvType;
+		}
+		else {
+			Message = "undefined method: " + MethodName + " of " + RecvType;
+		}
+		this.ReturnErrorNode(Node, null, Message);
 	}
 
 	@Override public void VisitMethodCallNode(ZMethodCallNode Node) {
 		@Var ZNameSpace NameSpace = Node.GetNameSpace();
 		this.CheckTypeAt(Node, ZMethodCallNode._Recv, ZType.VarType);
-		System.out.println("1 Recv =" + Node.GetAstType(ZMethodCallNode._Recv) + ", " + Node.AST[ZMethodCallNode._Recv].IsUntyped() + ", name=" + Node.MethodName);;
 		if(!Node.AST[ZMethodCallNode._Recv].IsUntyped()) {
-			System.out.println("2 Recv =" + Node.GetAstType(ZMethodCallNode._Recv) + ", " + Node.MethodName);
 			@Var ZType FieldType = this.LookupFieldType(NameSpace, Node.GetAstType(ZMethodCallNode._Recv), Node.MethodName);
-			System.out.println("3 Recv =" + Node.GetAstType(ZMethodCallNode._Recv) + ", " + Node.MethodName + ", " + FieldType);
 			if(FieldType instanceof ZFuncType) {
 				@Var ZFuncCallNode FuncCall = Node.ToGetterFuncCall();
 				this.VisitListNodeAsFuncCall(FuncCall, (ZFuncType)FieldType);
 				return;
 			}
+			@Var int FuncParamSize = Node.GetListSize() + 1;
+			@Var ZFunc Func = this.LookupFunc(NameSpace, Node.MethodName, Node.GetAstType(ZMethodCallNode._Recv), FuncParamSize);
+			if(Func != null) {
+				@Var ZListNode FuncCall = Node.ToFuncCallNode(Func);
+				this.VisitListNodeAsFuncCall(FuncCall, Func.GetFuncType());
+			}
+			else {
+				this.VisitListAsNativeMethod(Node, Node.GetAstType(ZMethodCallNode._Recv), Node.MethodName, Node);
+			}
 		}
-		@Var int FuncParamSize = Node.GetListSize() + 1;
-		@Var ZFunc Func = this.LookupFunc(NameSpace, Node.MethodName, Node.GetAstType(ZMethodCallNode._Recv), FuncParamSize);
-		if(Func != null) {
-			@Var ZListNode FuncCall = Node.ToFuncCallNode(Func);
-			this.VisitListNodeAsFuncCall(FuncCall, Func.GetFuncType());
-			return;
+		else {
+			this.TypeCheckNodeList(Node);
+			this.TypedNode(Node, ZType.VarType);
 		}
-		this.TypeCheckNodeList(Node);
-		this.TypeCheckNativeMethodCall(Node, Node.GetAstType(ZMethodCallNode._Recv), Node.MethodName, Node);
 	}
 
 	@Override public void VisitNewObjectNode(ZNewObjectNode Node) {
@@ -405,7 +427,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 			this.VisitListNodeAsFuncCall(FuncCall, Func.GetFuncType());
 			return;
 		}
-		this.TypeCheckNativeMethodCall(Node, Node.Type, null, Node);
+		this.VisitListAsNativeMethod(Node, Node.Type, null, Node);
 	}
 
 
@@ -684,8 +706,6 @@ public class ZenTypeSafer extends ZTypeChecker {
 	private void PopFunctionNode(ZNameSpace NameSpace) {
 		this.CurrentFunctionNode = this.CurrentFunctionNode.Pop();
 		this.VarScope = this.VarScope.Parent;
-		// FIXME (ide) pop local symbol of function name
-
 	}
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
@@ -781,7 +801,6 @@ public class ZenTypeSafer extends ZTypeChecker {
 			i = i + 1;
 		}
 		Node.ClassType.TypeFlag = LibZen._UnsetFlag(Node.ClassType.TypeFlag, ZTypeFlag._OpenType);
-		this.Return(Node.ClassType.CheckAllFields(NameSpace));
 		this.TypedNode(Node, ZType.VoidType);
 	}
 

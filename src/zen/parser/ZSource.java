@@ -146,7 +146,6 @@ public class ZSource {
 		@Var String Marker = this.GetLineMarker(Position);
 		Message = Header + Delim + Line + Delim + Marker;
 		return Message;
-
 	}
 
 	public final void Panic(int Position, String Message) {

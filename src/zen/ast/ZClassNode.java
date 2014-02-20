@@ -28,22 +28,27 @@ import zen.deps.Field;
 import zen.deps.Var;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
-import zen.type.ZType;
 import zen.type.ZClassType;
+import zen.type.ZType;
 
 public final class ZClassNode extends ZListNode {
 	@Field public String ClassName = null;
 	@Field public ZClassType ClassType = null;
 	@Field public ZType SuperType = null;
+	@Field public ZToken NameToken = null;
+	@Field public ZToken SuperToken = null;
+
 	public ZClassNode(ZNode ParentNode) {
 		super(ParentNode, null, 0);
 	}
 
 	@Override public void SetTypeInfo(ZToken TypeToken, ZType Type) {
 		this.SuperType = Type;
+		this.SuperToken = TypeToken;
 	}
 	@Override public void SetNameInfo(ZToken NameToken, String Name) {
 		this.ClassName = Name;
+		this.NameToken = NameToken;
 	}
 	public final ZFieldNode GetFieldNode(int Index) {
 		@Var ZNode Node = this.GetListAt(Index);

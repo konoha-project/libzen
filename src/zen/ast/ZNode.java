@@ -215,41 +215,39 @@ public abstract class ZNode {
 		return TypeChecker.VisitTypeChecker(this, ContextType);
 	}
 
-
-
 	public ZReturnNode ToReturnNode() {
 		return null;
 	}
 
-	@Deprecated public final ZNode GetPrevNode() {
-		if(this.ParentNode == null) {
-			return null;
-		}
-		if(this.ParentNode instanceof ZBlockNode) {
-			ZBlockNode Block = (ZBlockNode) this.ParentNode;
-			for (int i = 1; i < Block.GetListSize(); i++) {
-				if(Block.GetListAt(i) == this) {
-					return Block.GetListAt(i-1);
-				}
-			}
-		}
-		return null;
-	}
-
-	@Deprecated public ZNode GetNextNode() {
-		if(this.ParentNode == null) {
-			return null;
-		}
-		if(this.ParentNode instanceof ZBlockNode) {
-			ZBlockNode Block = (ZBlockNode) this.ParentNode;
-			for (int i = 0; i < Block.GetListSize() - 1; i++) {
-				if(Block.GetListAt(i) == this) {
-					return Block.GetListAt(i+1);
-				}
-			}
-		}
-		return null;
-	}
+	//	@Deprecated public final ZNode GetPrevNode() {
+	//		if(this.ParentNode == null) {
+	//			return null;
+	//		}
+	//		if(this.ParentNode instanceof ZBlockNode) {
+	//			ZBlockNode Block = (ZBlockNode) this.ParentNode;
+	//			for (int i = 1; i < Block.GetListSize(); i++) {
+	//				if(Block.GetListAt(i) == this) {
+	//					return Block.GetListAt(i-1);
+	//				}
+	//			}
+	//		}
+	//		return null;
+	//	}
+	//
+	//	@Deprecated public ZNode GetNextNode() {
+	//		if(this.ParentNode == null) {
+	//			return null;
+	//		}
+	//		if(this.ParentNode instanceof ZBlockNode) {
+	//			ZBlockNode Block = (ZBlockNode) this.ParentNode;
+	//			for (int i = 0; i < Block.GetListSize() - 1; i++) {
+	//				if(Block.GetListAt(i) == this) {
+	//					return Block.GetListAt(i+1);
+	//				}
+	//			}
+	//		}
+	//		return null;
+	//	}
 
 }
 

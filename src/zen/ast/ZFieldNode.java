@@ -33,7 +33,9 @@ public final class ZFieldNode extends ZNode {
 	public final static int _InitValue = 0;
 	@Field public  ZClassType  ClassType;
 	@Field public ZType  DeclType = ZType.VarType;
+
 	@Field public String FieldName = null;
+	@Field public ZToken NameToken = null;
 
 	public ZFieldNode(ZNode ParentNode) {
 		super(ParentNode, null, 1);
@@ -43,5 +45,6 @@ public final class ZFieldNode extends ZNode {
 	}
 	@Override public void SetNameInfo(ZToken NameToken, String Name) {
 		this.FieldName = Name;
+		this.NameToken = NameToken;
 	}
 }
