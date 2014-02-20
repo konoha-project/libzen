@@ -125,7 +125,11 @@ public class ZSourceEngine extends ZVisitor {
 		while(TokenContext.HasNext()) {
 			TokenContext.SetParseFlag(ZTokenContext.NotAllowSkipIndent);
 			TopBlockNode.ClearListAfter(0);
+			@Var ZToken SkipToken = TokenContext.GetToken();
 			@Var ZNode ParsedNode = TokenContext.ParsePattern(TopBlockNode, "$Statement$", ZTokenContext.Required);
+			if(ParsedNode.IsErrorNode()) {
+				TokenContext.SkipError(SkipToken);
+			}
 			ResultValue = this.Exec(ParsedNode, IsInteractive);
 			if(ResultValue == ZEmptyValue.FalseEmpty) {
 				break;
@@ -428,7 +432,7 @@ public class ZSourceEngine extends ZVisitor {
 			this.VisitTypeNode((ZTypeNode)Node);
 		}
 		else {
-			ZNode SugarNode = Node.DeSugar(this.Generator);
+			@Var ZNode SugarNode = Node.DeSugar(this.Generator);
 			SugarNode.Accept(this);
 		}
 	}

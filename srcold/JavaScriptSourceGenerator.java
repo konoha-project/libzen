@@ -203,7 +203,7 @@ var CLASS = (function (_super) {
 	}
 
 	@Override public void VisitEmptyNode(ZenEmptyNode EmptyNode) {
-		LibZen.DebugP("empty node: " + EmptyNode.SourceToken.GetText());
+		LibZen._PrintDebug("empty node: " + EmptyNode.SourceToken.GetText());
 	}
 	@Override public void VisitInstanceOfNode(ZenInstanceOfNode Node) {
 		/*extention*/

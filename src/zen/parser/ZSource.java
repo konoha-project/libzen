@@ -1,6 +1,7 @@
 package zen.parser;
 
 import zen.deps.Field;
+import zen.deps.LibZen;
 import zen.deps.Var;
 
 public class ZSource {
@@ -131,32 +132,34 @@ public class ZSource {
 		return Line + "^";
 	}
 
-	public String MakeHeader(String Error, int Position, String Message) {
+	public final String FormatErrorHeader(String Error, int Position, String Message) {
 		return "(" + this.FileName + ":" + this.GetLineNumber(Position) + ") [" + Error +"] " + Message;
 	}
 
-	public String MakeBody(String Error, int Position, String Message) {
+	public final String FormatErrorMarker(String Error, int Position, String Message) {
 		@Var String Line = this.GetLineText(Position);
 		@Var String Delim = "\n\t";
 		if(Line.startsWith("\t") || Line.startsWith(" ")) {
 			Delim = "\n";
 		}
-		@Var String Header = this.MakeHeader(Error, Position, Message);
+		@Var String Header = this.FormatErrorHeader(Error, Position, Message);
 		@Var String Marker = this.GetLineMarker(Position);
-		return Header + Delim + Line + Delim + Marker;
+		Message = Header + Delim + Line + Delim + Marker;
+		return Message;
+
 	}
 
-	public void Panic(int Position, String Message) {
-		this.Logger.Report(this.MakeBody("panic", Position, Message));
+	public final void Panic(int Position, String Message) {
+		this.Logger.Report(this.FormatErrorMarker("panic", Position, Message));
 	}
 
-	public void Warning(int Position, String Message) {
-		this.Logger.Report(this.MakeBody("warning", Position, Message));
+	public final void Warning(int Position, String Message) {
+		this.Logger.Report(this.FormatErrorMarker("warning", Position, Message));
 	}
 
-	public final char SourceAt(int n) {
+	public final char GetCharAt(int n) {
 		if(0 <= n && n < this.SourceText.length()) {
-			return this.SourceText.charAt(n);
+			return LibZen._GetChar(this.SourceText, n);
 		}
 		return '\0';
 	}

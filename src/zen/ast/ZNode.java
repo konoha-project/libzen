@@ -115,7 +115,7 @@ public abstract class ZNode {
 	}
 
 	public final ZType GetAstType(int Index) {
-		return this.AST[Index].Type;
+		return this.AST[Index].Type.GetRealType();
 	}
 
 	public final String GetSourceLocation() {

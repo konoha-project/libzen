@@ -408,7 +408,7 @@ public class SourceGenerator extends ZenGenerator {
 //		else if(LibZen.EqualsString(FuncName, "--")) {
 //		}
 //		else {
-//			LibZen.DebugP(FuncName + " is not supported suffix operator!!");
+//			LibZen._PrintDebug(FuncName + " is not supported suffix operator!!");
 //		}
 //		this.PushSourceCode("(" + SourceGenerator.GenerateApplyFunc1(Node.Func, FuncName, true, Expr) + ")");
 //	}

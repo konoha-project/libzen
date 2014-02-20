@@ -40,7 +40,7 @@ public class ZToken {
 	}
 
 	@Override public String toString() {
-		char ch = this.Source.SourceAt(this.StartIndex-1);
+		char ch = this.Source.GetCharAt(this.StartIndex-1);
 		if(ch == '\"') {
 			return "\"" + this.GetText() + "\"";
 		}
@@ -95,7 +95,7 @@ public class ZToken {
 	}
 
 	public final boolean IsNextWhiteSpace() {
-		char ch = this.Source.SourceAt(this.EndIndex);
+		char ch = this.Source.GetCharAt(this.EndIndex);
 		if(ch == ' ' || ch == '\t' || ch == '\n') {
 			return true;
 		}
@@ -103,7 +103,7 @@ public class ZToken {
 	}
 
 	public final boolean IsNameSymbol() {
-		char ch = this.Source.SourceAt(this.StartIndex);
+		char ch = this.Source.GetCharAt(this.StartIndex);
 		return LibZen._IsSymbol(ch);
 	}
 

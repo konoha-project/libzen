@@ -57,24 +57,24 @@ public final class ZLogger {
 	public final String Report(int Level, ZToken Token, String Message) {
 		if(Token != null && !Token.IsNull()) {
 			if(Level == ZLogger._ErrorLevel) {
-				Message = Token.Source.MakeBody("error", Token.StartIndex, Message);
+				Message = Token.Source.FormatErrorMarker("error", Token.StartIndex, Message);
 			}
 			else if(Level == ZLogger._TypeErrorLevel) {
-				Message = Token.Source.MakeBody("error", Token.StartIndex, Message);
+				Message = Token.Source.FormatErrorMarker("error", Token.StartIndex, Message);
 			}
 			else if(Level == ZLogger._WarningLevel) {
-				Message = Token.Source.MakeBody("warning", Token.StartIndex, Message);
+				Message = Token.Source.FormatErrorMarker("warning", Token.StartIndex, Message);
 			}
 			else if(Level == ZLogger._InfoLevel) {
-				Message = Token.Source.MakeBody("info", Token.StartIndex, Message);
+				Message = Token.Source.FormatErrorMarker("info", Token.StartIndex, Message);
 			}
 			else {
-				Message = Token.Source.MakeBody("debug", Token.StartIndex, Message);
+				Message = Token.Source.FormatErrorMarker("debug", Token.StartIndex, Message);
 			}
 			this.ReportedErrorList.add(Message);
 		}
 		else {
-			LibZen.DebugP("unknown source error:" + Message);
+			LibZen._PrintDebug("unknown source error:" + Message);
 		}
 		return Message;
 	}

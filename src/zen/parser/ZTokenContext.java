@@ -149,8 +149,8 @@ public final class ZTokenContext {
 			}
 		}
 		if(StartIndex < EndIndex) {
-			LibZen.DebugP("StartIdx="+StartIndex+", EndIndex="+EndIndex);
-			LibZen.DebugP("skipped: \t" + ErrorToken.Source.SourceText.subSequence(StartIndex, EndIndex));
+			LibZen._PrintDebug("StartIdx="+StartIndex+", EndIndex="+EndIndex);
+			LibZen._PrintDebug("skipped: \t" + ErrorToken.Source.SourceText.subSequence(StartIndex, EndIndex));
 		}
 	}
 
@@ -261,6 +261,10 @@ public final class ZTokenContext {
 		if(!IsRequired) {
 			this.CurrentPosition = RollbackPosition;
 			return null;
+		}
+		if(this.CurrentPosition == RollbackPosition) {
+			System.out.println("infinite looping" + RollbackPosition + " Token=" + TopToken + " ParsedNode=" + ParsedNode);
+			assert(this.CurrentPosition != RollbackPosition);
 		}
 		if(ParsedNode == null) {
 			ParsedNode = this.CreateExpectedErrorNode(TopToken, Pattern.PatternName);
@@ -387,7 +391,7 @@ public final class ZTokenContext {
 			@Var ZToken Token = this.TokenList.ArrayValues[Position];
 			@Var String DumpedToken = this.CurrentPosition == Position ? "*[" : "[";
 			DumpedToken = DumpedToken + Position+"] " + Token.toString();
-			LibZen.DebugP(DumpedToken);
+			LibZen._PrintDebug(DumpedToken);
 			//			ZenLogger.VerboseLog(ZenLogger.VerboseToken,  DumpedToken);
 		}
 	}
