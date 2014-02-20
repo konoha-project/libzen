@@ -26,16 +26,18 @@ package zen.type;
 
 import zen.ast.ZCastNode;
 import zen.ast.ZErrorNode;
+import zen.ast.ZFuncCallNode;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZListNode;
+import zen.ast.ZMacroNode;
 import zen.ast.ZNode;
 import zen.ast.ZSugarNode;
 import zen.deps.Field;
 import zen.deps.LibZen;
 import zen.deps.Var;
-import zen.lang.ZenError;
 import zen.parser.ZGenerator;
 import zen.parser.ZLogger;
+import zen.parser.ZMacroFunc;
 import zen.parser.ZVisitor;
 
 public abstract class ZTypeChecker extends ZVisitor {
@@ -111,9 +113,32 @@ public abstract class ZTypeChecker extends ZVisitor {
 		return Node;
 	}
 
+	protected final ZNode CreateStupidCast(ZType Requested, ZNode Node) {
+		ZNode ErrorNode = new ZErrorNode(Node, "type error: requested = " +  Requested + ", given = " + Node.Type);
+		ErrorNode.Type = Requested;
+		return ErrorNode;
+	}
+
+	protected final ZNode EnforceNodeType(ZNode Node, ZType EnforceType) {
+		ZFunc Func = this.Generator.GetConverterFunc(Node.Type, ZType.StringType);
+		if(Func instanceof ZMacroFunc) {
+			@Var ZMacroNode MacroNode = new ZMacroNode(Node.ParentNode, null, (ZMacroFunc)Func);
+			MacroNode.Append(Node);
+			// this.VisitListNodeAsFuncCall(MacroNode, Func.GetFuncType()); FIXME
+			MacroNode.Type = EnforceType;
+			return MacroNode;
+		}
+		else if(Func != null) {
+			@Var ZFuncCallNode MacroNode = new ZFuncCallNode(Node.ParentNode, Func.FuncName, Func.GetFuncType());
+			MacroNode.Append(Node);
+			MacroNode.Type = EnforceType;
+			return MacroNode;
+		}
+		return this.CreateStupidCast(EnforceType, Node);
+	}
+
 	public final static int _DefaultTypeCheckPolicy			= 0;
 	public final static int _NoCheckPolicy                   = 1;
-	public final static int _EnforceCoercion                 = (1 << 1);
 
 	private final ZNode TypeCheckImpl(ZNode Node, ZType ContextType, int TypeCheckPolicy) {
 		if(Node.IsErrorNode()) {
@@ -131,17 +156,13 @@ public abstract class ZTypeChecker extends ZVisitor {
 		if(ContextType.IsVoidType() && !Node.Type.IsVoidType()) {
 			return new ZCastNode(Node.ParentNode, ZType.VoidType, Node);
 		}
-		@Var ZFunc CoercionFunc = this.Generator.GetCoercionFunc(Node.Type, ContextType);
-		if(CoercionFunc != null) {
-
-		}
 		if(ContextType.IsFloatType() && Node.Type.IsIntType()) {
-			return new ZCastNode(Node.ParentNode, ContextType, Node);
+			return this.EnforceNodeType(Node, ContextType);
 		}
-		if(LibZen._IsFlag(TypeCheckPolicy, _EnforceCoercion) && ContextType.IsStringType()) {
-			return new ZCastNode(Node.ParentNode, ContextType, Node);
+		if(ContextType.IsIntType() && Node.Type.IsFloatType()) {
+			return this.EnforceNodeType(Node, ContextType);
 		}
-		return ZenError.CreateStupidCast(ContextType, Node);
+		return this.CreateStupidCast(ContextType, Node);
 	}
 
 	public final ZNode TryType(ZNode Node, ZType ContextType) {
@@ -158,10 +179,6 @@ public abstract class ZTypeChecker extends ZVisitor {
 
 	public final void CheckTypeAt(ZNode Node, int Index, ZType ContextType) {
 		Node.AST[Index] = this.VisitTypeChecker(Node.AST[Index], ContextType, _DefaultTypeCheckPolicy);
-	}
-
-	public final ZNode EnforceType(ZNode Node, ZType ContextType) {
-		return this.VisitTypeChecker(Node, ContextType, _EnforceCoercion);
 	}
 
 	public final boolean TypeCheckNodeList(ZListNode List) {

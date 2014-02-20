@@ -76,6 +76,7 @@ import zen.deps.Var;
 import zen.parser.ZGenerator;
 import zen.parser.ZMacroFunc;
 import zen.parser.ZNameSpace;
+import zen.parser.ZToken;
 import zen.parser.ZVariable;
 import zen.type.ZClassType;
 import zen.type.ZFunc;
@@ -280,12 +281,6 @@ public class ZenTypeSafer extends ZTypeChecker {
 		this.TypedNode(Node, ZType.VoidType);
 	}
 
-	public final ZNode CreateStupidCast(ZType Requested, ZNode Node) {
-		ZNode ErrorNode = new ZErrorNode(Node, "type error: requested = " +  Requested + ", given= " + Node.Type);
-		ErrorNode.Type = Requested;
-		return ErrorNode;
-	}
-
 	private void VisitListNodeAsFuncCall(ZListNode FuncNode, ZFuncType FuncType) {
 		@Var int i = 0;
 		@Var ZType[] Greek = ZGreekType.NewGreekTypes(null);
@@ -430,11 +425,11 @@ public class ZenTypeSafer extends ZTypeChecker {
 		this.TypedNode(Node, ZType.BooleanType);
 	}
 
-	private ZType GetBinaryLeftType(String Op, ZType ContextType) {
-		if(LibZen._EqualsString(Op, "|") || LibZen._EqualsString(Op, "&") || LibZen._EqualsString(Op, "<<") || LibZen._EqualsString(Op, ">>") || LibZen._EqualsString(Op,  "^")) {
+	private ZType GuessBinaryLeftType(ZToken Op, ZType ContextType) {
+		if(Op.EqualsText('|') || Op.EqualsText('&') || Op.EqualsText("<<") || Op.EqualsText(">>") || Op.EqualsText('^')) {
 			return ZType.IntType;
 		}
-		if(LibZen._EqualsString(Op, "+") || LibZen._EqualsString(Op, "*") || LibZen._EqualsString(Op, "-") || LibZen._EqualsString(Op, "/") || LibZen._EqualsString(Op, "%")) {
+		if(Op.EqualsText('+') || Op.EqualsText('-') || Op.EqualsText('*') || Op.EqualsText('/') || Op.EqualsText('%')) {
 			if(ContextType.IsNumberType()) {
 				return ContextType;
 			}
@@ -442,7 +437,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 		return ZType.VarType;
 	}
 
-	private ZType GetBinaryRightType(String Op, ZType ContextType) {
+	private ZType GetBinaryLeftType(String Op, ZType ContextType) {
 		if(LibZen._EqualsString(Op, "|") || LibZen._EqualsString(Op, "&") || LibZen._EqualsString(Op, "<<") || LibZen._EqualsString(Op, ">>") || LibZen._EqualsString(Op,  "^")) {
 			return ZType.IntType;
 		}
@@ -466,19 +461,18 @@ public class ZenTypeSafer extends ZTypeChecker {
 
 	private void UnifyBinaryEnforcedType(ZBinaryNode Node, ZType Type) {
 		if(Node.AST[ZBinaryNode._Left].Type.Equals(Type)) {
-			Node.AST[ZBinaryNode._Right] = this.EnforceType(Node.AST[ZBinaryNode._Right], Type);
+			Node.Set(ZBinaryNode._Right, this.EnforceNodeType(Node.AST[ZBinaryNode._Right], Type));
 			return;
 		}
 		if(Node.AST[ZBinaryNode._Right].Type.Equals(Type)) {
-			Node.AST[ZBinaryNode._Left] = this.EnforceType(Node.AST[ZBinaryNode._Left], Type);
+			Node.Set(ZBinaryNode._Left, this.EnforceNodeType(Node.AST[ZBinaryNode._Left], Type));
 		}
 	}
 
 	@Override public void VisitBinaryNode(ZBinaryNode Node) {
-		ZType ContextType = this.GetContextType();
-		ZType LeftType = this.GetBinaryLeftType(Node.SourceToken.GetText(), ContextType);
-		ZType RightType = this.GetBinaryRightType(Node.SourceToken.GetText(), ContextType);
-		//System.err.println("debug left=" + LeftType + ", right=" + RightType);
+		@Var ZType ContextType = this.GetContextType();
+		@Var ZType LeftType = this.GuessBinaryLeftType(Node.SourceToken, ContextType);
+		@Var ZType RightType = this.GuessBinaryLeftType(Node.SourceToken, ContextType);
 		this.CheckTypeAt(Node, ZBinaryNode._Left, LeftType);
 		this.CheckTypeAt(Node, ZBinaryNode._Right, RightType);
 		//System.err.println("debug left=" + Node.AST[ZBinaryNode.Left].Type + ", right=" + Node.AST[ZBinaryNode.Right].Type);

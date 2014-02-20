@@ -78,7 +78,7 @@ public abstract class ZNode {
 
 	public final void Set(int Index, ZNode Node) {
 		if(Index >= 0) {
-			this.AST[Index] = Node;
+			this.AST[Index] = this.SetChild(Node);
 		}
 		else if(Index == ZNode._AppendIndex) {
 			@Var ZNode ListNode = this;
@@ -86,7 +86,6 @@ public abstract class ZNode {
 				((ZListNode)ListNode).Append(Node);
 			}
 			else {
-				System.out.println("parent=" + ListNode + ", node=" + Node);
 				assert(ListNode instanceof ZListNode);
 			}
 		}
@@ -99,7 +98,6 @@ public abstract class ZNode {
 			this.SetTypeInfo(Node.SourceToken, Node.Type);
 			return;
 		}
-		this.SetChild(Node);
 	}
 
 	public final int GetAstSize() {

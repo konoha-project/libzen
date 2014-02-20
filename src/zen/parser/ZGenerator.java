@@ -177,7 +177,6 @@ public abstract class ZGenerator extends ZVisitor {
 		return null;
 	}
 
-
 	public String NameConverterFunc(ZType FromType, ZType ToType) {
 		return FromType.GetUniqueName() + "T" + ToType.GetUniqueName();
 	}
@@ -188,7 +187,7 @@ public abstract class ZGenerator extends ZVisitor {
 
 	public ZFunc GetConverterFunc(ZType FromType, ZType ToType) {
 		while(FromType != null) {
-			ZFunc Func = this.DefinedFuncMap.GetOrNull(this.NameConverterFunc(FromType, ToType));
+			@Var ZFunc Func = this.DefinedFuncMap.GetOrNull(this.NameConverterFunc(FromType, ToType));
 			if(Func != null) {
 				return Func;
 			}
@@ -199,7 +198,7 @@ public abstract class ZGenerator extends ZVisitor {
 
 	public ZFunc GetCoercionFunc(ZType FromType, ZType ToType) {
 		while(FromType != null) {
-			ZFunc Func = this.DefinedFuncMap.GetOrNull(this.NameConverterFunc(FromType, ToType));
+			@Var ZFunc Func = this.DefinedFuncMap.GetOrNull(this.NameConverterFunc(FromType, ToType));
 			if(Func != null && Func.IsCoercionFunc()) {
 				return Func;
 			}
