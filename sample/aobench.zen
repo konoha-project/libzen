@@ -7,18 +7,19 @@ let NSUBSAMPLES : int =   2;
 let NAO_SAMPLES : int =   8;
 
 class vec {
-  var x : double;
-  var y : double;
-  var z : double;
+  var x : float;
+  var y : float;
+  var z : float;
 }
 
-function constructor(this : vec, x : double, y : double, z : double) {
+function vec(this : vec, x : float, y : float, z : float) {
     this.x = x;
     this.y = y;
     this.z = z;
+    return this;
 }
 
-function vdot(v0 : vec, v1 : vec) : double {
+function vdot(v0 : vec, v1 : vec) : float {
     return v0.x * v1.x + v0.y * v1.y + v0.z * v1.z;
 }
 
@@ -30,7 +31,7 @@ function vcross(v0 : vec, v1 : vec) : vec {
 }
 
 function vnormalize(c : vec) : void {
-    var length : double = math.sqrt(vdot(c, c));
+    var length : float = math.sqrt(vdot(c, c));
     if(math.fabs(length) > 1.0e-17) {
         c.x = c.x / length;
         c.y = c.y / length;
@@ -41,25 +42,27 @@ function vnormalize(c : vec) : void {
 class Isect {
     var p   : vec;
     var n   : vec;
-    var t   : double;
+    var t   : float;
     var hit : boolean;
 }
 
-function constructor(this : Isect, t : double, hit : bool) {
+function Isect(this : Isect, t : float, hit : boolean) {
     this.p = new vec(0.0, 0.0, 0.0);
     this.n = new vec(0.0, 0.0, 0.0);
     this.t   = t;
     this.hit = hit;
+    return this;
 }
 
 class Sphere {
     var center : vec;
-    var radius : double;
+    var radius : float;
 }
 
-function constructor(this : Sphere, center : vec, radius : double) {
+function Sphere(this : Sphere, center : vec, radius : float) {
     this.center = center;
     this.radius = radius;
+    return this;
 }
 
 class Plane {
@@ -67,9 +70,10 @@ class Plane {
     var n : vec;
 }
 
-function constructor(this : Plane, p : vec, p : vec) {
+function Plane(this : Plane, p : vec, p : vec) {
     this.p = p;
     this.n = n;
+    return this;
 }
 
 class Ray {
@@ -77,9 +81,10 @@ class Ray {
     var dir : vec;
 }
 
-function constructor(this : Ray, p : vec, dir : vec) {
+function Ray(this : Ray, p : vec, dir : vec) {
     this.org = p;
     this.dir = dir;
+    return this;
 }
 
 class Global {
@@ -93,12 +98,12 @@ function ray_sphere_intersect(isect : Isect , ray : Ray, sphere : Sphere) : void
             ray.org.y - sphere.center.y,
             ray.org.z - sphere.center.z);
 
-    var B : double = vdot(rs, ray.dir);
-    var C : double = vdot(rs, rs) - sphere.radius * sphere.radius;
-    var D : double = B * B - C;
+    var B : float = vdot(rs, ray.dir);
+    var C : float = vdot(rs, rs) - sphere.radius * sphere.radius;
+    var D : float = B * B - C;
 
     if(D > 0.0) {
-        var t : double = -B - math.sqrt(D);
+        var t : float = -B - math.sqrt(D);
         if((t > 0.0) && (t < isect.t)) {
             isect.t   = t;
             isect.hit = true;
@@ -116,14 +121,14 @@ function ray_sphere_intersect(isect : Isect , ray : Ray, sphere : Sphere) : void
 }
 
 function ray_plane_intersect(isect : Isect, ray : Ray, plane : Plane) : void {
-    var d : double = -vdot(plane.p, plane.n);
-    var v : double =  vdot(ray.dir, plane.n);
+    var d : float = -vdot(plane.p, plane.n);
+    var v : float =  vdot(ray.dir, plane.n);
 
     if(Math.abs(v) < 1.0e-17) {
         return;
     }
 
-    var t : double = -(vdot(ray.org, plane.n) + d) / v;
+    var t : float = -(vdot(ray.org, plane.n) + d) / v;
 
     if((t > 0.0) && (t < isect.t)) {
         isect.t = t;
@@ -161,14 +166,14 @@ function orthoBasis(basis : Array<vec>, n : vec) : void {
 function ambient_occlusion(global : Global, col : vec, isect : Isect) : void {
     var ntheta : int    = NAO_SAMPLES;
     var nphi   : int    = NAO_SAMPLES;
-    var eps    : double = 0.0001;
+    var eps    : float = 0.0001;
 
     var p : vec = new vec(
             isect.p.x + eps * isect.n.x,
             isect.p.y + eps * isect.n.y,
             isect.p.z + eps * isect.n.z);
 
-    var occlusion : double = 0.0;
+    var occlusion : float = 0.0;
     var basis : Array<vec> = new Array<vec>(3);
     orthoBasis(basis, isect.n);
 
@@ -176,17 +181,17 @@ function ambient_occlusion(global : Global, col : vec, isect : Isect) : void {
     while(j < ntheta) {
         var i : int = 0;
         while(i < nphi) {
-            var theta : double = math.sqrt(math.random());
-            var phi   : double = 2.0 * math.PI * math.random();
+            var theta : float = math.sqrt(math.random());
+            var phi   : float = 2.0 * math.PI * math.random();
 
-            var x : double = math.cos(phi) * theta;
-            var y : double = math.sin(phi) * theta;
-            var z : double = math.sqrt(1.0 - theta * theta);
+            var x : float = math.cos(phi) * theta;
+            var y : float = math.sin(phi) * theta;
+            var z : float = math.sqrt(1.0 - theta * theta);
 
             // local . global
-            var rx : double = x * basis[0].x + y * basis[1].x + z * basis[2].x;
-            var ry : double = x * basis[0].y + y * basis[1].y + z * basis[2].y;
-            var rz : double = x * basis[0].z + y * basis[1].z + z * basis[2].z;
+            var rx : float = x * basis[0].x + y * basis[1].x + z * basis[2].x;
+            var ry : float = x * basis[0].y + y * basis[1].y + z * basis[2].y;
+            var rz : float = x * basis[0].z + y * basis[1].z + z * basis[2].z;
 
             var ray      : Ray   = new Ray(p, new vec(rx, ry, rz));
             var occIsect : Isect = new Isect(1.0e+17, false);
@@ -204,13 +209,13 @@ function ambient_occlusion(global : Global, col : vec, isect : Isect) : void {
         j = j + 1;
     }
 
-    occlusion = (ntheta * nphi - occlusion) / ((double)(ntheta * nphi));
+    occlusion = (ntheta * nphi - occlusion) / ((float)(ntheta * nphi));
     col.x = occlusion;
     col.y = occlusion;
     col.z = occlusion;
 }
 
-function clamp(f : double) : byte {
+function clamp(f : float) : byte {
     var i : int = (int)(f * 255.5);
 
     if(i < 0)   { i = 0; }
@@ -219,7 +224,7 @@ function clamp(f : double) : byte {
 }
 
 function render(global : Global, img : Array<byte>, w : int, h : int, nsubsamples : int) : void {
-    var fimg : Array<double> = new Array<double>(w * h * 3);
+    var fimg : Array<float> = new Array<float>(w * h * 3);
     var y : int = 0;
     while(y < h) {
         var x : int = 0;
@@ -228,8 +233,8 @@ function render(global : Global, img : Array<byte>, w : int, h : int, nsubsample
             while(v < nsubsamples) {
                 var u : int = 0;
                 while(u < nsubsamples) {
-                    var px : double =  (x + (u / (double)(nsubsamples)) - (w/2.0)) / (w/2.0);
-                    var py : double = -(y + (v / (double)(nsubsamples)) - (h/2.0)) / (h/2.0);
+                    var px : float =  (x + (u / (float)(nsubsamples)) - (w/2.0)) / (w/2.0);
+                    var py : float = -(y + (v / (float)(nsubsamples)) - (h/2.0)) / (h/2.0);
                     var ray : Ray = new Ray(new vec(0.0, 0.0, 0.0), new vec(px, py, -1.0));
                     vnormalize(ray.dir);
 
@@ -252,9 +257,9 @@ function render(global : Global, img : Array<byte>, w : int, h : int, nsubsample
                 v = v + 1;
             }
 
-            fimg[3 * (y * w + x) + 0] /= (double)(nsubsamples * nsubsamples);
-            fimg[3 * (y * w + x) + 1] /= (double)(nsubsamples * nsubsamples);
-            fimg[3 * (y * w + x) + 2] /= (double)(nsubsamples * nsubsamples);
+            fimg[3 * (y * w + x) + 0] /= (float)(nsubsamples * nsubsamples);
+            fimg[3 * (y * w + x) + 1] /= (float)(nsubsamples * nsubsamples);
+            fimg[3 * (y * w + x) + 2] /= (float)(nsubsamples * nsubsamples);
             img[ 3 * (y * w + x) + 0] = clamp(fimg[3 *(y * w + x) + 0]);
             img[ 3 * (y * w + x) + 1] = clamp(fimg[3 *(y * w + x) + 1]);
             img[ 3 * (y * w + x) + 2] = clamp(fimg[3 *(y * w + x) + 2]);
