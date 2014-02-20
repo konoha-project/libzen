@@ -26,7 +26,6 @@
 package zen.codegen.c;
 
 import zen.ast.ZArrayLiteralNode;
-import zen.ast.ZCastNode;
 import zen.ast.ZCatchNode;
 import zen.ast.ZClassNode;
 import zen.ast.ZErrorNode;
@@ -253,13 +252,6 @@ public class CSourceGenerator extends ZSourceGenerator {
 		//		this.VisitTypeAnnotation(Node.ExceptionType);
 		//		this.CurrentBuilder.Append(")");
 		//		this.GenerateCode(Node.AST[ZCatchNode._Block]);
-	}
-
-	@Override public void VisitCastNode(ZCastNode Node) {
-		this.CurrentBuilder.Append("(");
-		this.GenerateTypeName(Node.Type);
-		this.CurrentBuilder.Append(") ");
-		this.GenerateCode(null, Node.AST[ZCastNode._Expr]);
 	}
 
 	private String ParamTypeName(ZType Type) {

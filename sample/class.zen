@@ -1,8 +1,30 @@
+
 class Person {
-	var name: String;
-	var age: int;
-	var isChild: Func<boolean, Person>;
-	var isAdult: Func<boolean>;
+  var name : String;
+  var age = 17;
+  var IsChild : Func<boolean, Person>;
 }
 
+function IsChild(p : Person) {
+  return p.age < 21;
+}
+
+class Neverland extends Person {
+  
+}
+
+function IsChild(n : Neverland) {
+  return true;
+}
+
+function GetAge(p : Person) {
+  return p.name;
+}
+
+function main() {
+  var p = new Neverland();
+  var f = p.IsChild;
+  var b = p.IsChild();
+  println(p.GetAge());
+}
 

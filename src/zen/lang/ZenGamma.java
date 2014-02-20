@@ -9,11 +9,8 @@ import zen.deps.LibZen;
 import zen.deps.Nullable;
 import zen.deps.Var;
 import zen.parser.ZNameSpace;
-import zen.parser.ZToken;
 import zen.type.ZFunc;
 import zen.type.ZType;
-import zen.type.ZClassType;
-import zen.type.ZClassField;
 
 public class ZenGamma {
 
@@ -59,57 +56,7 @@ public class ZenGamma {
 		return ZType.VarType;
 	}
 
-	static void SetClassField(ZNameSpace NameSpace, ZType ClassType, String FieldName, ZType FieldType, ZToken SourceToken) {
-		//		ZenField Field = new ZenField(FieldName, FieldType, SourceToken);
-		//		NameSpace.GetRootNameSpace().SetSymbol(ZNameSpace.StringfyClassSymbol(ClassType, FieldName), Field, SourceToken);
-	}
-
-	static protected final ZClassField GetField(ZNameSpace NameSpace, ZType ClassType, String FieldName) {
-		//		Object Field = NameSpace.GetRootNameSpace().GetClassSymbol(ClassType, FieldName, true);
-		//		if(Field instanceof ZenField) {
-		//			return (ZenField)Field;
-		//		}
-		return null;
-	}
-
-	static protected final ZType GetFieldType(ZNameSpace NameSpace, ZType ClassType, String FieldName) {
-		if(ClassType instanceof ZClassType) {
-			return ((ZClassType)ClassType).GetFieldType(FieldName, ZType.VoidType);
-		}
-		//		Object Field = NameSpace.GetRootNameSpace().GetClassSymbol(ClassType, FieldName, true);
-		//		if(Field instanceof ZenField) {
-		//			return ((ZenField)Field).FieldType;
-		//		}
-		return NameSpace.Generator.GetFieldType(ClassType, FieldName);
-	}
-
-	static protected final ZType GetSetterType(ZNameSpace NameSpace, ZType ClassType, String FieldName) {
-		if(ClassType instanceof ZClassType) {
-			return ((ZClassType)ClassType).GetFieldType(FieldName, ZType.VoidType);
-		}
-		//		Object Field = NameSpace.GetRootNameSpace().GetClassSymbol(ClassType, FieldName, true);
-		//		if(Field instanceof ZenField) {
-		//			return ((ZenField)Field).FieldType;
-		//		}
-		return NameSpace.Generator.GetSetterType(ClassType, FieldName);
-	}
-
-	//	static ZType InferFieldType(ZNameSpace NameSpace, ZType ClassType, String FieldName, ZType InferredType, ZToken SourceToken) {
-	//		this.Debug("field inferrence " + ClassType + "." + FieldName + ": " + InferredType);
-	//		if(ClassType.IsVarType() || !InferredType.IsInferrableType()) {
-	//			return ZSystem.VarType;
-	//		}
-	//		if(ClassType.IsOpenType()) {
-	//			this.Logger.ReportInfo(SourceToken, "field " + ClassType + "." + FieldName + ": " + InferredType);
-	//			this.SetClassField(NameSpace, ClassType, FieldName, InferredType, SourceToken);
-	//		}
-	//		return InferredType;
-	//	}
-
 	static protected ZNode CreateDefaultValueNode(ZNode ParentNode, ZType Type, String FieldName) {
-		//		if(FieldName != null && Type.IsFuncType()) {
-		//			return new ZSymbolNode(ParentNode, null, Type, FieldName, Type.StringfySignature(FieldName));
-		//		}
 		if(Type.IsIntType()) {
 			return new ZIntNode(ParentNode, null, 0);
 		}

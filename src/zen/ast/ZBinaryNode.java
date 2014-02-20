@@ -25,12 +25,14 @@
 package zen.ast;
 
 import zen.deps.Field;
-
 import zen.deps.Var;
+import zen.parser.ZGenerator;
+import zen.parser.ZMacroFunc;
 import zen.parser.ZSyntax;
 import zen.parser.ZToken;
 import zen.parser.ZTokenContext;
 import zen.parser.ZVisitor;
+import zen.type.ZFunc;
 
 public class ZBinaryNode extends ZNode {
 	public final static int _Left = 0;
@@ -75,7 +77,22 @@ public class ZBinaryNode extends ZNode {
 		return this;
 	}
 
+	public final ZNode TryMacroNode(ZGenerator Generator) {
+		if(!this.GetAstType(ZBinaryNode._Left).IsVarType() && !this.GetAstType(ZBinaryNode._Right).IsVarType()) {
+			@Var String Op = this.SourceToken.GetText();
+			@Var ZFunc Func = Generator.GetDefinedFunc(Op, this.GetAstType(ZBinaryNode._Left), 2);
+			if(Func instanceof ZMacroFunc) {
+				ZMacroNode MacroNode = new ZMacroNode(this.ParentNode, this.SourceToken, (ZMacroFunc)Func);
+				MacroNode.Append(this.AST[ZBinaryNode._Left]);
+				MacroNode.Append(this.AST[ZBinaryNode._Right]);
+				return MacroNode;
+			}
+		}
+		return this;
+	}
+
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitBinaryNode(this);
 	}
+
 }

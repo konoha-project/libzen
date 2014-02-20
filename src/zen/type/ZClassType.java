@@ -93,22 +93,13 @@ public class ZClassType extends ZType {
 	}
 
 	public ZClassField AppendField(ZType FieldType, String FieldName, ZToken SourceToken) {
+		assert(!FieldType.IsVarType());
 		if(this.FieldList == null) {
 			this.FieldList = new ZArray<ZClassField>(new ZClassField[4]);
 		}
-		@Var int i = 0;
-		while(i < this.FieldList.size()) {
-			@Var ZClassField Field = this.FieldList.ArrayValues[i];
-			if(LibZen._EqualsString(FieldName, Field.FieldName)) {
-				if(FieldType.Equals(Field.FieldType)) {
-					return null;
-				}
-				return Field; // failed
-			}
-			i = i + 1;
-		}
-		this.FieldList.add(new ZClassField(this, FieldName, FieldType, SourceToken));
-		return null;
+		@Var ZClassField ClassField = new ZClassField(this, FieldName, FieldType, SourceToken);
+		this.FieldList.add(ClassField);
+		return ClassField;
 	}
 
 	public ZNode CheckAllFields(ZNameSpace NameSpace) {

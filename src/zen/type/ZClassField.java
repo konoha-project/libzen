@@ -28,12 +28,12 @@ import zen.deps.Field;
 import zen.parser.ZToken;
 
 public class ZClassField {
-	@Field public int        FieldFlag = 0;
-	@Field public ZClassType ClassType = null;
-	@Field public ZType	     FieldType = null;
-	@Field public String	 FieldName = null;
-	@Field public int        FieldNativeIndex = 0;
-	@Field public ZToken     SourceToken = null;
+	@Field public final int        FieldFlag = 0;
+	@Field public final ZClassType ClassType;
+	@Field public final ZType	     FieldType;
+	@Field public final String	 FieldName;
+	@Field public final int        FieldNativeIndex = 0;
+	@Field public final ZToken     SourceToken;
 
 	public ZClassField(ZClassType ClassType, String FieldName, ZType FieldType, ZToken SourceToken) {
 		this.ClassType = ClassType;
