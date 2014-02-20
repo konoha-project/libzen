@@ -86,20 +86,14 @@ public class JavaCommonApi {
 	}
 
 	static void LoadCommonApi(ZGenerator Generator) {
-		Generator.SetDefinedFunc(LoadFunc("assert", boolean.class));
-		Generator.SetDefinedFunc(LoadFunc("assert", boolean.class, String.class));
-		ZFunc Func = LoadFunc("FloatToInt", double.class);
-		Generator.SetConverterFunc(ZType.FloatType, ZType.IntType, Func);
-		Func = LoadFunc("IntToFloat", long.class);
-		Generator.SetConverterFunc(ZType.IntType, ZType.FloatType, Func);
-		Func = LoadFunc("ToString", Object.class);
-		Generator.SetConverterFunc(ZType.VarType, ZType.StringType, Func);
-		Func = LoadFunc("ToString", boolean.class);
-		Generator.SetConverterFunc(ZType.BooleanType, ZType.StringType, Func);
-		Func = LoadFunc("ToString", long.class);
-		Generator.SetConverterFunc(ZType.IntType, ZType.StringType, Func);
-		Func = LoadFunc("ToString", double.class);
-		Generator.SetConverterFunc(ZType.FloatType, ZType.StringType, Func);
+		Generator.SetDefinedFunc(LoadFunc("Assert", boolean.class));
+		Generator.SetDefinedFunc(LoadFunc("Assert", boolean.class, String.class));
+		Generator.SetConverterFunc(ZType.FloatType, ZType.IntType, LoadFunc("FloatToInt", double.class));
+		Generator.SetConverterFunc(ZType.IntType, ZType.FloatType, LoadFunc("IntToFloat", long.class));
+		Generator.SetConverterFunc(ZType.VarType, ZType.StringType, LoadFunc("ToString", Object.class));
+		Generator.SetConverterFunc(ZType.BooleanType, ZType.StringType, LoadFunc("ToString", boolean.class));
+		Generator.SetConverterFunc(ZType.IntType, ZType.StringType, LoadFunc("ToString", long.class));
+		Generator.SetConverterFunc(ZType.FloatType, ZType.StringType, LoadFunc("ToString", double.class));
 		Generator.SetDefinedFunc(LoadFunc("Size", String.class));
 	}
 }

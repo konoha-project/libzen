@@ -358,7 +358,7 @@ public class LibZen {
 			ch = Character.toLowerCase(ch);
 		}
 		else {
-			ch = Character.toLowerCase(ch);
+			ch = Character.toUpperCase(ch);
 		}
 		return String.valueOf(ch) + s.substring(1);
 	}

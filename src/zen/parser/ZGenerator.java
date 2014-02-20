@@ -29,6 +29,7 @@ import zen.ast.ZListNode;
 import zen.ast.ZNode;
 import zen.ast.ZSugarNode;
 import zen.deps.Field;
+import zen.deps.LibZen;
 import zen.deps.Nullable;
 import zen.deps.Var;
 import zen.deps.ZenMap;
@@ -158,7 +159,12 @@ public abstract class ZGenerator extends ZVisitor {
 	}
 
 	public final ZFunc GetDefinedFunc(String GlobalName) {
-		return this.DefinedFuncMap.GetOrNull(GlobalName);
+		@Var ZFunc Func = this.DefinedFuncMap.GetOrNull(GlobalName);
+		if(Func == null && LibZen._IsLetter(LibZen._GetChar(GlobalName, 0))) {
+			//			System.out.println("AnotherName = " + GlobalName + ", " + LibZen._AnotherName(GlobalName));
+			Func = this.DefinedFuncMap.GetOrNull(LibZen._AnotherName(GlobalName));
+		}
+		return Func;
 	}
 
 	public final ZFunc GetDefinedFunc(String FuncName, ZFuncType FuncType) {

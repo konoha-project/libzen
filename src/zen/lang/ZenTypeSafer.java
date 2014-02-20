@@ -788,7 +788,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 
 	// utils
 
-	private ZFunc LookupFuncImpl(ZNameSpace NameSpace, String FuncName, ZType RecvType, int FuncParamSize) {
+	private ZFunc LookupFunc(ZNameSpace NameSpace, String FuncName, ZType RecvType, int FuncParamSize) {
 		@Var String Signature = ZFunc._StringfySignature(FuncName, FuncParamSize, RecvType);
 		@Var ZFunc Func = this.Generator.GetDefinedFunc(Signature);
 		if(Func != null) {
@@ -822,16 +822,6 @@ public class ZenTypeSafer extends ZTypeChecker {
 		}
 		return null;
 	}
-
-	private ZFunc LookupFunc(ZNameSpace NameSpace, String FuncName, ZType RecvType, int FuncParamSize) {
-		ZFunc Func = this.LookupFuncImpl(NameSpace, FuncName, RecvType, FuncParamSize);
-		if(Func == null && LibZen._IsLetter(LibZen._GetChar(FuncName, 0))) {
-			@Var String AnotherName = LibZen._AnotherName(FuncName);
-			return this.LookupFuncImpl(NameSpace, AnotherName, RecvType, FuncParamSize);
-		}
-		return Func;
-	}
-
 
 }
 
