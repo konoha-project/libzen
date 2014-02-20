@@ -81,10 +81,18 @@ public class CSourceGenerator extends ZSourceGenerator {
 		this.SetNativeType(ZType.FloatType, "double");
 		this.SetNativeType(ZType.StringType, "const char *");
 
-		this.SetMacro("Assert", "LibZen_Assert($[0], $[1])", ZType.VoidType, ZType.BooleanType, ZType.StringType);
+		this.SetMacro("assert", "LibZen_Assert($[0], $[1])", ZType.VoidType, ZType.BooleanType, ZType.StringType);
 		this.SetMacro("print", "LibZen_Print($[0])", ZType.VoidType, ZType.StringType);
 		this.SetMacro("println", "LibZen_PrintLine($[0])", ZType.VoidType, ZType.StringType);
+
+		this.SetConverterMacro("(double)($[0])", ZType.FloatType, ZType.IntType);
+		this.SetConverterMacro("(long)($[0])", ZType.IntType, ZType.FloatType);
 		this.SetConverterMacro("LibZen_IntToString($[0])", ZType.StringType, ZType.IntType);
+		this.SetConverterMacro("LibZen_FloatToString($[0])", ZType.StringType, ZType.FloatType);
+
+		this.SetMacro("+", "LibZen_StrCat($[0], $[1])", ZType.StringType, ZType.StringType, ZType.StringType);
+
+
 	}
 
 	@Override public ZSourceEngine GetEngine() {

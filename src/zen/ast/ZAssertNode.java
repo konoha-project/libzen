@@ -13,7 +13,7 @@ public class ZAssertNode extends ZNode {
 	}
 
 	@Override public ZSugarNode DeSugar(ZGenerator Generator) {
-		ZMacroFunc Func = Generator.GetMacroFunc("Assert", ZType.BooleanType, 2);
+		ZMacroFunc Func = Generator.GetMacroFunc("assert", ZType.BooleanType, 2);
 		ZMacroNode MacroNode = new ZMacroNode(this.ParentNode, this.SourceToken, Func);
 		MacroNode.Append(this.AST[ZAssertNode._Expr]);
 		MacroNode.Append(new ZStringNode(MacroNode, null, this.GetSourceLocation()));

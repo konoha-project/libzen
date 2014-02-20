@@ -86,8 +86,8 @@ public class JavaCommonApi {
 	}
 
 	static void LoadCommonApi(ZGenerator Generator) {
-		Generator.SetDefinedFunc(LoadFunc("Assert", boolean.class));
-		Generator.SetDefinedFunc(LoadFunc("Assert", boolean.class, String.class));
+		Generator.SetDefinedFunc(LoadFunc("assert", boolean.class));
+		Generator.SetDefinedFunc(LoadFunc("assert", boolean.class, String.class));
 		ZFunc Func = LoadFunc("FloatToInt", double.class);
 		Generator.SetConverterFunc(ZType.FloatType, ZType.IntType, Func);
 		Func = LoadFunc("IntToFloat", long.class);
