@@ -287,7 +287,6 @@ public class LibZen {
 					ch = next;
 					break;
 				}
-				i = i + 1;
 			}
 			sb.append(ch);
 		}
