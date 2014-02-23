@@ -18,6 +18,7 @@ def RemoveQ(s):
 	s = s.replace('final ', '')
 	s = s.replace('abstract ', '')
 	s = s.replace('@Deprecated ', '')
+	s = s.replace('@ZenMethod ', '')
 	return s
 
 ArrayPattern = re.compile('ZArray\<(.*)\>')
@@ -73,8 +74,6 @@ def GenStaticFunc(cname, line, IsProto=False):
 		return "function " + cname + t[1] + block
 	else:
 		return "function " + t[1]  + block
-
-
 
 VarPattern = re.compile('(.*)\@Var\s+(\S*)\s+(\w*)(.*)')
 NewArrayPattern = re.compile('(.*)new ZArray\<\S*\>\(.*\)(.*)')
@@ -157,7 +156,7 @@ def GenMethod(cname, line):
 	line = RemoveQ(line)
 	start = line.find('(')
 	end = line.find(')')
-	block = line[:start].replace('@Override ', '').replace('@Constructor ', '')
+	block = line[:start].replace('@Override ', '').replace('@ZenMethod ', '')
 	t = block.split()
 	if len(t)>1:
 		params = ParseFuncType(line[start+1:end], t[0], cname)
@@ -206,7 +205,7 @@ class ClassBlock:
 				continue
 			if self.IsFinal or line.find('static') != -1 or line.find('@Override') != -1 or line.find('final') != -1: 
 				continue
-			if line.find('abstract') != -1 or line.find(');') > 0 or line.find('{') > 0:
+			if line.find('abstract') != -1 or line.find('@ZenMethod') > 0 :
 				f.write(GenMethod(self.ClassName, line))
 			
 		f.write('}\n')
