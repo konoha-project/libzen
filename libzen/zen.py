@@ -19,6 +19,7 @@ def RemoveQ(s):
 	s = s.replace('abstract ', '')
 	s = s.replace('@Deprecated ', '')
 	s = s.replace('@ZenMethod ', '')
+	s = s.replace('@ZenIgnored ', '')
 	return s
 
 ArrayPattern = re.compile('ZArray\<(.*)\>')
@@ -156,7 +157,7 @@ def GenMethod(cname, line):
 	line = RemoveQ(line)
 	start = line.find('(')
 	end = line.find(')')
-	block = line[:start].replace('@Override ', '').replace('@ZenMethod ', '')
+	block = line[:start].replace('@Override ', '')
 	t = block.split()
 	if len(t)>1:
 		params = ParseFuncType(line[start+1:end], t[0], cname)
@@ -203,6 +204,8 @@ class ClassBlock:
 			if line.find('@Field') != -1:
 				f.write(GenField(line))
 				continue
+			if line.find('@ZenIgnored') >= 0:
+				continue
 			if self.IsFinal or line.find('static') != -1 or line.find('@Override') != -1 or line.find('final') != -1: 
 				continue
 			if line.find('abstract') != -1 or line.find('@ZenMethod') > 0 :
@@ -213,6 +216,8 @@ class ClassBlock:
 	def writeproto(self, f):
 		for line in self.lines:
 			if line.find('@Field') >= 0:
+				continue
+			if line.find('@ZenIgnored') >= 0:
 				continue
 			if line.find('{') >=0 :
 				if line.find('static') >= 0:
@@ -229,7 +234,7 @@ class ClassBlock:
 					f.write(GenStaticFunc(self.ClassName, line))
 	def writefunc(self, f, IsProto):
 		for line in self.lines:
-			if line.find('@Field') >= 0 or line.find('static') >0 :
+			if line.find('@Field') >= 0 or line.find('static') >0 or line.find('@ZenIgnored') >= 0 :
 				continue
 			if line.find('{') != -1:
 				f.write(GenFunc(self.ClassName, line, IsProto))
