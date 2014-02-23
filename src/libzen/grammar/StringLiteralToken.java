@@ -23,7 +23,7 @@ public class StringLiteralToken extends ZTokenFunction {
 			}
 			SourceContext.MoveNext();
 		}
-		SourceContext.Warning(StartIndex, "unclosed \"");
+		SourceContext.LogWarning(StartIndex, "unclosed \"");
 		SourceContext.Tokenize("$StringLiteral$", StartIndex, SourceContext.GetPosition());
 		return false;
 	}

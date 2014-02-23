@@ -148,14 +148,6 @@ public class ZSource {
 		return Message;
 	}
 
-	public final void Panic(int Position, String Message) {
-		this.Logger.Report(this.FormatErrorMarker("panic", Position, Message));
-	}
-
-	public final void Warning(int Position, String Message) {
-		this.Logger.Report(this.FormatErrorMarker("warning", Position, Message));
-	}
-
 	public final char GetCharAt(int n) {
 		if(0 <= n && n < this.SourceText.length()) {
 			return LibZen._GetChar(this.SourceText, n);

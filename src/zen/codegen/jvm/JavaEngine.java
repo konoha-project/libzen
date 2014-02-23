@@ -71,6 +71,7 @@ import zen.deps.ZObjectArray;
 import zen.deps.ZStringArray;
 import zen.deps.ZenMap;
 import zen.parser.ZEmptyValue;
+import zen.parser.ZLogger;
 import zen.parser.ZSourceEngine;
 import zen.type.ZFunc;
 import zen.type.ZFuncType;
@@ -152,7 +153,7 @@ public class JavaEngine extends ZSourceEngine {
 				this.EvaledValue = jMethod.newInstance(Values);
 			}
 		} catch (Exception e) {
-			this.Logger.ReportInfo(Node.SourceToken, "runtime error: " + e);
+			ZLogger._LogError(Node.SourceToken, "runtime error: " + e);
 			e.printStackTrace();
 			this.StopVisitor();
 		}
@@ -181,12 +182,12 @@ public class JavaEngine extends ZSourceEngine {
 		}
 		catch(java.lang.reflect.InvocationTargetException e) {
 			Throwable te = e.getCause();
-			this.Logger.ReportError2(Node, "runtime error: " + te);
+			ZLogger._LogError(Node.SourceToken, "runtime error: " + te);
 			te.printStackTrace();
 			this.StopVisitor();
 		}
 		catch (Exception e) {
-			this.Logger.ReportInfo(Node.SourceToken, "runtime error: " + e);
+			ZLogger._LogInfo(Node.SourceToken, "runtime error: " + e);
 			e.printStackTrace();
 			this.StopVisitor();
 		}
@@ -226,10 +227,10 @@ public class JavaEngine extends ZSourceEngine {
 			}
 		} catch(java.lang.reflect.InvocationTargetException e) {
 			Throwable te = e.getCause();
-			this.Logger.ReportError(Node.SourceToken, "invocation error: " + te);
+			ZLogger._LogError(Node.SourceToken, "invocation error: " + te);
 			this.StopVisitor();
 		} catch (Exception e) {
-			this.Logger.ReportError(Node.SourceToken, "invocation error: " + e);
+			ZLogger._LogError(Node.SourceToken, "invocation error: " + e);
 			this.StopVisitor();
 		}
 	}
@@ -266,7 +267,7 @@ public class JavaEngine extends ZSourceEngine {
 			this.EvaledValue = this.Eval(Node1);
 		}
 		else {
-			this.Logger.ReportError2(Node, "undefined symbol: " + Node.VarName);
+			ZLogger._LogError(Node.SourceToken, "undefined symbol: " + Node.VarName);
 			this.StopVisitor();
 		}
 	}
@@ -290,7 +291,7 @@ public class JavaEngine extends ZSourceEngine {
 	@Override public void VisitGetIndexNode(ZGetIndexNode Node) {
 		Method sMethod = JavaMethodTable.GetBinaryStaticMethod(Node.GetAstType(ZGetIndexNode._Recv), "[]", Node.GetAstType(ZGetIndexNode._Index));
 		if(sMethod == null) {
-			this.Logger.ReportError2(Node, "type error");
+			ZLogger._LogError(Node.SourceToken, "type error");
 			return ;
 		}
 		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.AST[ZGetIndexNode._Recv], Node.AST[ZGetIndexNode._Index]});
@@ -299,7 +300,7 @@ public class JavaEngine extends ZSourceEngine {
 	@Override public void VisitSetIndexNode(ZSetIndexNode Node) {
 		Method sMethod = JavaMethodTable.GetBinaryStaticMethod(Node.GetAstType(ZSetIndexNode._Recv), "[]", Node.GetAstType(ZSetIndexNode._Index));
 		if(sMethod == null) {
-			this.Logger.ReportError2(Node, "type error");
+			ZLogger._LogError(Node.SourceToken, "type error");
 			return ;
 		}
 		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.AST[ZSetIndexNode._Recv], Node.AST[ZSetIndexNode._Index], Node.AST[ZSetIndexNode._Expr]});
@@ -307,7 +308,7 @@ public class JavaEngine extends ZSourceEngine {
 
 	@Override public void VisitArrayLiteralNode(ZArrayLiteralNode Node) {
 		if(Node.IsUntyped()) {
-			this.Logger.ReportError2(Node, "ambigious array");
+			ZLogger._LogError(Node.SourceToken, "ambigious array");
 			this.StopVisitor();
 		}
 		else if(Node.Type.GetParamType(0).IsIntType()) {
@@ -359,7 +360,7 @@ public class JavaEngine extends ZSourceEngine {
 
 	@Override public void VisitMapLiteralNode(ZMapLiteralNode Node) {
 		if(Node.IsUntyped()) {
-			this.Logger.ReportError2(Node, "ambigious map");
+			ZLogger._LogError(Node.SourceToken, "ambigious map");
 			this.StopVisitor();
 		}
 		else {
@@ -381,7 +382,7 @@ public class JavaEngine extends ZSourceEngine {
 			this.EvalConstructor(Node, jMethod, Node);
 		}
 		else {
-			this.Logger.ReportError(Node.SourceToken, "no constructor: " + Node.Type);
+			ZLogger._LogError(Node.SourceToken, "no constructor: " + Node.Type);
 			this.StopVisitor();
 		}
 	}
@@ -392,7 +393,7 @@ public class JavaEngine extends ZSourceEngine {
 			this.EvalMethod(Node, jMethod, Node.AST[ZMethodCallNode._Recv], this.PackNodes(null, Node));
 		}
 		else {
-			this.Logger.ReportError(Node.SourceToken, "no method: " + Node.MethodName + " of " + Node.AST[ZMethodCallNode._Recv].Type);
+			ZLogger._LogError(Node.SourceToken, "no method: " + Node.MethodName + " of " + Node.AST[ZMethodCallNode._Recv].Type);
 			this.StopVisitor();
 		}
 	}
@@ -404,7 +405,7 @@ public class JavaEngine extends ZSourceEngine {
 	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
 		@Var ZFuncType FuncType = Node.GetFuncType();
 		if(FuncType == null) {
-			this.Logger.ReportError(Node.SourceToken, "not function");
+			ZLogger._LogError(Node.SourceToken, "not function");
 			this.StopVisitor();
 		}
 		else {
@@ -451,7 +452,7 @@ public class JavaEngine extends ZSourceEngine {
 					return ;
 				}
 				else {
-					this.Logger.ReportError(Node.SourceToken, "no type coercion: " + Node.AST[ZCastNode._Expr].Type + " to " + Node.Type);
+					ZLogger._LogError(Node.SourceToken, "no type coercion: " + Node.AST[ZCastNode._Expr].Type + " to " + Node.Type);
 					this.StopVisitor();
 				}
 			}
@@ -551,7 +552,7 @@ public class JavaEngine extends ZSourceEngine {
 			Field f = Node.StaticClass.getField(Node.FieldName);
 			this.EvaledValue = f.get(null);
 		} catch (Exception e) {
-			this.Logger.ReportError2(Node, "unresolved symbol: " + e);
+			ZLogger._LogError(Node.SourceToken, "unresolved symbol: " + e);
 			this.StopVisitor();
 		}
 	}

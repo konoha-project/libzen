@@ -67,8 +67,8 @@ public final class ZSourceContext extends ZSource {
 		if(StartIndex <= EndIndex && EndIndex <= this.SourceText.length()) {
 			ZSyntax Pattern = this.TokenContext.NameSpace.GetSyntaxPattern(PatternName);
 			if(Pattern == null) {
-				this.Panic(StartIndex, "unregistered token pattern: " + PatternName);
 				@Var ZToken Token = new ZToken(this, StartIndex, EndIndex);
+				ZLogger._LogInfo(Token, "unregistered token pattern: " + PatternName);
 				this.TokenContext.TokenList.add(Token);
 			}
 			else {
@@ -133,5 +133,8 @@ public final class ZSourceContext extends ZSource {
 		return false;
 	}
 
+	public final void LogWarning(int Position, String Message) {
+		this.Logger.Report(this.FormatErrorMarker("warning", Position, Message));
+	}
 
 }

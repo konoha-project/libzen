@@ -74,6 +74,7 @@ import zen.deps.Field;
 import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.parser.ZGenerator;
+import zen.parser.ZLogger;
 import zen.parser.ZMacroFunc;
 import zen.parser.ZNameSpace;
 import zen.parser.ZToken;
@@ -215,20 +216,18 @@ public class ZenTypeSafer extends ZTypeChecker {
 		ZNameSpace NameSpace = Node.GetNameSpace();
 		ZVariable VarInfo = NameSpace.GetLocalVariable(Node.VarName);
 		if(VarInfo == null) {
-			this.Return(ZenError.UndefinedName(Node, Node.VarName));
+			this.ReturnErrorNode(Node, Node.SourceToken, "undefined variable");
+			return;
 		}
-		else {
-			Node.VarName = VarInfo.VarName;
-			Node.VarIndex = VarInfo.VarUniqueIndex;
-			Node.IsCaptured = VarInfo.IsCaptured(this.CurrentFunctionNode);
-			if(Node.IsCaptured) {
-				this.Return(ZenError.ReadOnlyLocalVariable(Node, Node.VarName));
-			}
-			else {
-				this.CheckTypeAt(Node, ZSetNameNode._Expr, VarInfo.VarType);
-				this.TypedNode(Node, ZType.VoidType);
-			}
+		Node.VarName = VarInfo.VarName;
+		Node.VarIndex = VarInfo.VarUniqueIndex;
+		Node.IsCaptured = VarInfo.IsCaptured(this.CurrentFunctionNode);
+		if(Node.IsCaptured) {
+			this.ReturnErrorNode(Node, Node.SourceToken, "readonly variable");
+			return;
 		}
+		this.CheckTypeAt(Node, ZSetNameNode._Expr, VarInfo.VarType);
+		this.TypedNode(Node, ZType.VoidType);
 	}
 
 	@Override public void VisitGetIndexNode(ZGetIndexNode Node) {
@@ -545,17 +544,17 @@ public class ZenTypeSafer extends ZTypeChecker {
 	}
 
 	@Override public void VisitVarNode(ZVarNode Node) {
-		if(Node.GetListSize() == 0) {
-			this.Logger.ReportWarning(Node.SourceToken, "unused variable: " + Node.NativeName);
-		}
 		if(!this.InFunctionScope()) {
-			this.Return(ZenError.NeedFunctionScope(Node, "variable declaration"));
+			this.ReturnErrorNode(Node, Node.SourceToken, "only available inside function");
 			return;
 		}
 		this.CheckTypeAt(Node, ZVarNode._InitValue, Node.DeclType);
 		if(!(Node.DeclType instanceof ZVarType)) {
 			Node.DeclType = this.VarScope.NewVarType(Node.DeclType, Node.NativeName, Node.SourceToken);
 			Node.NameSpace.SetLocalVariable(this.CurrentFunctionNode, Node.DeclType, Node.NativeName, Node.SourceToken);
+		}
+		if(Node.GetListSize() == 0) {
+			ZLogger._LogWarning(Node.SourceToken, "unused variable: " + Node.NativeName);
 		}
 		this.VisitBlockNode(Node);
 	}
@@ -571,7 +570,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 
 	@Override public void VisitReturnNode(ZReturnNode Node) {
 		if(!this.InFunctionScope()) {
-			this.Return(ZenError.NeedFunctionScope(Node, "return"));
+			this.ReturnErrorNode(Node, Node.SourceToken, "only available inside function");
 			return;
 		}
 		@Var ZType ReturnType = this.CurrentFunctionNode.ReturnType;
@@ -579,7 +578,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 			Node.AST[ZReturnNode._Expr] = null;
 		}
 		else if(!Node.HasAst(ZReturnNode._Expr) && !ReturnType.IsVarType() && !ReturnType.IsVoidType()) {
-			this.Logger.ReportWarning(Node.SourceToken, "returning default value of " + ReturnType);
+			ZLogger._LogWarning(Node.SourceToken, "returning default value of " + ReturnType);
 			Node.Set(ZReturnNode._Expr, ZenGamma.CreateDefaultValueNode(Node, ReturnType, null));
 		}
 		if(Node.HasAst(ZReturnNode._Expr)) {
@@ -668,7 +667,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 				@Var ZNameSpace NameSpace = FunctionNode.GetNameSpace();
 				@Var ZFunc Func = ZenGamma.GetFunc(NameSpace, FunctionNode.FuncName, FuncType, null);
 				if(Func != null) {
-					this.Logger.ReportError(FunctionNode.SourceToken, "redefinition of function: " + Func);
+					ZLogger._LogError(FunctionNode.SourceToken, "redefinition of function: " + Func);
 				}
 				else {
 					Func = new ZPrototype(0, FunctionNode.FuncName, FuncType, FunctionNode.SourceToken);
@@ -787,7 +786,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 					ZFuncType FuncType = (ZFuncType)FieldNode.DeclType;
 					if(!Node.ClassType.Equals(FuncType.GetRecvType())) {
 						FuncType = FuncType.NewMethodFuncType(Node.ClassType);
-						this.Logger.ReportWarning(FieldNode.SourceToken, FieldNode.FieldName + " " + FieldNode.DeclType + " -> " + FuncType);
+						ZLogger._LogWarning(FieldNode.SourceToken, FieldNode.FieldName + " " + FieldNode.DeclType + " -> " + FuncType);
 						FieldNode.DeclType = FuncType;
 					}
 				}

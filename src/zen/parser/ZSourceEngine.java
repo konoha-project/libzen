@@ -122,10 +122,11 @@ public class ZSourceEngine extends ZVisitor {
 		@Var ZBlockNode TopBlockNode = new ZBlockNode(NameSpace);
 		@Var ZTokenContext TokenContext = new ZTokenContext(this.Generator, NameSpace, FileName, LineNumber, ScriptText);
 		TokenContext.SkipEmptyStatement();
+		@Var ZToken SkipToken = TokenContext.GetToken();
 		while(TokenContext.HasNext()) {
 			TokenContext.SetParseFlag(ZTokenContext.NotAllowSkipIndent);
 			TopBlockNode.ClearListAfter(0);
-			@Var ZToken SkipToken = TokenContext.GetToken();
+			SkipToken = TokenContext.GetToken();
 			@Var ZNode ParsedNode = TokenContext.ParsePattern(TopBlockNode, "$Statement$", ZTokenContext.Required);
 			if(ParsedNode.IsErrorNode()) {
 				TokenContext.SkipError(SkipToken);
@@ -138,8 +139,7 @@ public class ZSourceEngine extends ZVisitor {
 			TokenContext.Vacume();
 		}
 		if(TokenContext.HasNext() && !IsInteractive) {
-			@Var ZToken Token = TokenContext.GetToken();
-			this.Generator.Logger.ReportInfo(Token, "stopped script at this line");
+			ZLogger._LogInfo(SkipToken, "stopped script at this line");
 		}
 		return ResultValue;
 	}
@@ -208,7 +208,7 @@ public class ZSourceEngine extends ZVisitor {
 			this.Generator.StartCodeGeneration(Node, this.InteractiveContext);
 		}
 		else {
-			this.Logger.ReportError2(Node, "unsupported at top level");
+			ZLogger._LogError(Node.SourceToken, "unsupported at top level");
 			this.StopVisitor();
 		}
 	}
@@ -404,7 +404,7 @@ public class ZSourceEngine extends ZVisitor {
 	}
 
 	@Override public void VisitErrorNode(ZErrorNode Node) {
-		this.Logger.ReportError(Node.SourceToken, Node.ErrorMessage);
+		ZLogger._LogError(Node.SourceToken, Node.ErrorMessage);
 		this.StopVisitor();
 	}
 

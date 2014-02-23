@@ -100,7 +100,7 @@ public final class ZVarScope {
 	//		while(i < this.VarTypeList.size()) {
 	//			@Var ZVarType VarType = this.VarTypeList.get(i);
 	//			if(VarType.IsVarType()) {
-	//				this.Logger.ReportInfo(VarType.SourceToken, "ambigious type: " + VarType.ShortName);
+	//				ZLogger._LogInfo(VarType.SourceToken, "ambigious type: " + VarType.ShortName);
 	//			}
 	//			//			this.println("type inference: " + VarType.ShortName + ": " + VarType.GetRealType());
 	//			i = i + 1;

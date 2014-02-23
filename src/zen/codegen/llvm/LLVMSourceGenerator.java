@@ -74,6 +74,7 @@ import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
 import zen.deps.LibZen;
 import zen.deps.Var;
+import zen.parser.ZLogger;
 import zen.parser.ZSourceGenerator;
 import zen.type.ZClassType;
 import zen.type.ZFuncType;
@@ -346,7 +347,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 
 	private String GetBinaryOpcode(ZBinaryNode Node) {
 		if(Node.IsUntyped()) {
-			this.Logger.ReportError(Node.SourceToken, "Binary is untyped");
+			ZLogger._LogError(Node.SourceToken, "Binary is untyped");
 			return null;
 		}
 		String Binary = Node.SourceToken.GetText();
@@ -416,12 +417,12 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 				return "xor";
 			}
 		}
-		this.Logger.ReportError(Node.SourceToken, "Unknown binary \"" + Binary + "\" for this type");
+		ZLogger._LogError(Node.SourceToken, "Unknown binary \"" + Binary + "\" for this type");
 		return null;
 	}
 	private String GetCompareOpCodeAndCondition(ZComparatorNode Node) {
 		if(Node.IsUntyped()) {
-			this.Logger.ReportError(Node.SourceToken, "Comparator is untyped");
+			ZLogger._LogError(Node.SourceToken, "Comparator is untyped");
 			return null;
 		}
 		String Comparator = Node.SourceToken.GetText();
@@ -473,7 +474,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 				return "fcmp oge";
 			}
 		}
-		this.Logger.ReportError(Node.SourceToken, "Unknown comparator \"" + Comparator + "\" for this type");
+		ZLogger._LogError(Node.SourceToken, "Unknown comparator \"" + Comparator + "\" for this type");
 		return null;
 	}
 	private String GetCastOpCode(ZType BeforeType, ZType AfterType) {
@@ -779,12 +780,12 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		//			FuncType = (ZFuncType)Node.AST[ZFuncCallNode._Func].Type;
 		//		}
 		//		else {
-		//			this.Logger.ReportError(Node.SourceToken, "Can't interpret this function call");
+		//			ZLogger._LogError(Node.SourceToken, "Can't interpret this function call");
 		//			return;
 		//		}
 		@Var ZFuncType FuncType = Node.GetFuncType();
 		if(FuncType == null) {
-			this.Logger.ReportError(Node.SourceToken, "Can't interpret this function call");
+			ZLogger._LogError(Node.SourceToken, "Can't interpret this function call");
 			return;
 		}
 		ZType ReturnType = FuncType.GetReturnType();
@@ -1200,7 +1201,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 				this.Writer.PushNewBuffer(TempVar);
 				this.Writer.AddCodeToCurrentBuffer(" = ");
 				if(Node.AST[ZUnaryNode._Recv].IsUntyped()) {
-					this.Logger.ReportError(Node.SourceToken, "Unary \"-\" is untyped");
+					ZLogger._LogError(Node.SourceToken, "Unary \"-\" is untyped");
 				}
 				else if(Node.AST[ZUnaryNode._Recv].Type.IsIntType()) {
 					this.Writer.AddCodeToCurrentBuffer("sub");
@@ -1209,7 +1210,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 					this.Writer.AddCodeToCurrentBuffer("fsub");
 				}
 				else {
-					this.Logger.ReportError(Node.SourceToken, "Unknown unary \"-\" for this type");
+					ZLogger._LogError(Node.SourceToken, "Unknown unary \"-\" for this type");
 				}
 				this.Writer.AddCodeToCurrentBuffer(" ");
 				this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.AST[ZUnaryNode._Recv].Type));
@@ -1221,11 +1222,11 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		}
 		else if(Node.SourceToken.EqualsText('~')){
 			if(Node.AST[ZUnaryNode._Recv].IsUntyped()) {
-				this.Logger.ReportError(Node.SourceToken, "Unary \"~\" is untyped");
+				ZLogger._LogError(Node.SourceToken, "Unary \"~\" is untyped");
 				return;
 			}
 			else if(!Node.AST[ZUnaryNode._Recv].Type.IsIntType()){
-				this.Logger.ReportError(Node.SourceToken, "Unknown unary \"~\" for this type");
+				ZLogger._LogError(Node.SourceToken, "Unknown unary \"~\" for this type");
 				return;
 			}
 			String TempVar = this.Writer.CreateTempLocalSymbol();
@@ -1238,7 +1239,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 			this.Writer.AddCodeToCurrentBuffer(TempVar);
 		}
 		else {
-			this.Logger.ReportError(Node.SourceToken, "Unknown unary \"" + Node.SourceToken.GetText() + "\" for this type");
+			ZLogger._LogError(Node.SourceToken, "Unknown unary \"" + Node.SourceToken.GetText() + "\" for this type");
 		}
 	}
 

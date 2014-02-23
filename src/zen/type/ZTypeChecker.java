@@ -233,7 +233,7 @@ public abstract class ZTypeChecker extends ZVisitor {
 	}
 
 	public final void Todo(ZNode Node) {
-		this.Logger.ReportWarning(Node.SourceToken, "TODO: unimplemented type checker node: " + Node.getClass().getSimpleName());
+		ZLogger._LogWarning(Node.SourceToken, "TODO: unimplemented type checker node: " + Node.getClass().getSimpleName());
 		Node.Type = ZType.VarType;
 		this.ReturnedNode = Node;
 	}

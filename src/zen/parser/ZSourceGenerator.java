@@ -342,7 +342,7 @@ public class ZSourceGenerator extends ZGenerator {
 
 	@Override public void VisitGlobalNameNode(ZGlobalNameNode Node) {
 		if(Node.IsUntyped()) {
-			this.Logger.ReportError2(Node, "undefined symbol: " + Node.GlobalName);
+			ZLogger._LogError(Node.SourceToken, "undefined symbol: " + Node.GlobalName);
 		}
 		if(Node.IsStaticFuncName) {
 			this.CurrentBuilder.Append(Node.Type.StringfySignature(Node.GlobalName));
@@ -591,7 +591,7 @@ public class ZSourceGenerator extends ZGenerator {
 	}
 
 	@Override public void VisitErrorNode(ZErrorNode Node) {
-		this.Logger.ReportError(Node.SourceToken, Node.ErrorMessage);
+		ZLogger._LogError(Node.SourceToken, Node.ErrorMessage);
 		this.CurrentBuilder.Append("ThrowError(");
 		this.CurrentBuilder.Append(LibZen._QuoteString(Node.ErrorMessage));
 		this.CurrentBuilder.Append(")");

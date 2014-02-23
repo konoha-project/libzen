@@ -6,8 +6,7 @@ import zen.parser.ZSourceContext;
 
 public class BlockComment extends ZTokenFunction {
 
-	@Override
-	public boolean Invoke(ZSourceContext SourceContext) {
+	@Override public boolean Invoke(ZSourceContext SourceContext) {
 		@Var int StartIndex = SourceContext.GetPosition();
 		@Var char NextChar = SourceContext.ParseChar(+1);
 		if(NextChar != '/' && NextChar != '*') {
@@ -42,7 +41,7 @@ public class BlockComment extends ZTokenFunction {
 			SourceContext.MoveNext();
 			PrevChar = NextChar;
 		}
-		SourceContext.Warning(StartIndex, "unfound */");
+		SourceContext.LogWarning(StartIndex, "unfound */");
 		return true;
 	}
 

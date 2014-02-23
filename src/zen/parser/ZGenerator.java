@@ -147,7 +147,7 @@ public abstract class ZGenerator extends ZVisitor {
 		@Var ZFunc Func = this.GetDefinedFunc(FuncName, FuncType);
 		if(Func != null) {
 			if(!FuncType.Equals(Func.GetFuncType())) {
-				this.Logger.ReportError2(Node, "function has been defined diffrently: " + Func.GetFuncType());
+				ZLogger._LogError(Node.SourceToken, "function has been defined diffrently: " + Func.GetFuncType());
 				return false;
 			}
 		}

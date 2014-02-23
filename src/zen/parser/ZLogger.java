@@ -24,7 +24,6 @@
 
 package zen.parser;
 
-import zen.ast.ZNode;
 import zen.deps.Field;
 import zen.deps.LibZen;
 import zen.deps.Var;
@@ -32,11 +31,11 @@ import zen.deps.ZArray;
 import zen.deps.ZenMap;
 
 public final class ZLogger {
-	public final static int	_ErrorLevel						= 0;
-	public final static int _TypeErrorLevel                 = 1;
-	public final static int	_WarningLevel					= 2;
-	public final static int	_InfoLevel					    = 3;
-	public final static int	_DebugLevel					    = 4;
+	//	public final static int	_ErrorLevel						= 0;
+	//	public final static int _TypeErrorLevel                 = 1;
+	//	public final static int	_WarningLevel					= 2;
+	//	public final static int	_InfoLevel					    = 3;
+	//	public final static int	_DebugLevel					    = 4;
 
 	@Field public ZArray<String>  ReportedErrorList = new ZArray<String>(new String[10]);
 	@Field public ZenMap<ZCounter> StatMap;
@@ -50,58 +49,90 @@ public final class ZLogger {
 		}
 	}
 
-	public final void Report(String Message) {
+	final void Report(String Message) {
 		this.ReportedErrorList.add(Message);
 	}
 
-	public final String Report(int Level, ZToken Token, String Message) {
-		if(Token != null && !Token.IsNull()) {
-			if(Level == ZLogger._ErrorLevel) {
-				Message = Token.Source.FormatErrorMarker("error", Token.StartIndex, Message);
-			}
-			else if(Level == ZLogger._TypeErrorLevel) {
-				Message = Token.Source.FormatErrorMarker("error", Token.StartIndex, Message);
-			}
-			else if(Level == ZLogger._WarningLevel) {
-				Message = Token.Source.FormatErrorMarker("warning", Token.StartIndex, Message);
-			}
-			else if(Level == ZLogger._InfoLevel) {
-				Message = Token.Source.FormatErrorMarker("info", Token.StartIndex, Message);
-			}
-			else {
-				Message = Token.Source.FormatErrorMarker("debug", Token.StartIndex, Message);
-			}
-			this.ReportedErrorList.add(Message);
-		}
-		else {
-			LibZen._PrintDebug("unknown source error:" + Message);
+	public final static String _LogError(ZToken Token, String Message) {
+		if(Token != null && Token.Source != null) {
+			Message = Token.Source.FormatErrorMarker("error", Token.StartIndex, Message);
+			Token.Source.Logger.Report(Message);
 		}
 		return Message;
 	}
 
-	public final String ReportError(ZToken Token, String Message) {
-		return this.Report(ZLogger._ErrorLevel, Token, Message);
+	public final static void _LogWarning(ZToken Token, String Message) {
+		if(Token != null && Token.Source != null) {
+			Message = Token.Source.FormatErrorMarker("warning", Token.StartIndex, Message);
+			Token.Source.Logger.Report(Message);
+		}
 	}
 
-	public final String ReportError2(ZNode Node, String Message) {
-		return this.Report(ZLogger._ErrorLevel, Node.SourceToken, Message);
+	public final static void _LogInfo(ZToken Token, String Message) {
+		if(Token != null && Token.Source != null) {
+			Message = Token.Source.FormatErrorMarker("info", Token.StartIndex, Message);
+			Token.Source.Logger.Report(Message);
+		}
 	}
 
-	public final String ReportWarning(ZToken Token, String Message) {
-		return this.Report(ZLogger._WarningLevel, Token, Message);
+	public final static void _LogDebug(ZToken Token, String Message) {
+		if(Token != null && Token.Source != null) {
+			Message = Token.Source.FormatErrorMarker("debug", Token.StartIndex, Message);
+			Token.Source.Logger.Report(Message);
+		}
 	}
 
-	public final String ReportWarning2(ZNode Node, String Message) {
-		return this.Report(ZLogger._WarningLevel, Node.SourceToken, Message);
-	}
-
-	public final String ReportInfo(ZToken Token, String Message) {
-		return this.Report(ZLogger._InfoLevel, Token, Message);
-	}
-
-	public final String ReportDebug(ZToken Token, String Message) {
-		return this.Report(ZLogger._DebugLevel, Token, Message);
-	}
+	//	public final String Report(int Level, ZToken Token, String Message) {
+	//		if(Token != null && !Token.IsNull()) {
+	//			if(Level == ZLogger._ErrorLevel) {
+	//				Message = Token.Source.FormatErrorMarker("error", Token.StartIndex, Message);
+	//			}
+	//			else if(Level == ZLogger._TypeErrorLevel) {
+	//				Message = Token.Source.FormatErrorMarker("error", Token.StartIndex, Message);
+	//			}
+	//			else if(Level == ZLogger._WarningLevel) {
+	//				Message = Token.Source.FormatErrorMarker("warning", Token.StartIndex, Message);
+	//			}
+	//			else if(Level == ZLogger._InfoLevel) {
+	//				Message = Token.Source.FormatErrorMarker("info", Token.StartIndex, Message);
+	//			}
+	//			else {
+	//				Message = Token.Source.FormatErrorMarker("debug", Token.StartIndex, Message);
+	//			}
+	//			this.ReportedErrorList.add(Message);
+	//		}
+	//		else {
+	//			LibZen._PrintDebug("unknown source error:" + Message);
+	//		}
+	//		return Message;
+	//	}
+	//
+	//
+	//
+	//
+	//	public final String ReportError(ZToken Token, String Message) {
+	//		return this.Report(ZLogger._ErrorLevel, Token, Message);
+	//	}
+	//
+	//	public final String ReportError2(ZNode Node, String Message) {
+	//		return this.Report(ZLogger._ErrorLevel, Node.SourceToken, Message);
+	//	}
+	//
+	//	public final String ReportWarning(ZToken Token, String Message) {
+	//		return this.Report(ZLogger._WarningLevel, Token, Message);
+	//	}
+	//
+	//	public final String ReportWarning2(ZNode Node, String Message) {
+	//		return this.Report(ZLogger._WarningLevel, Node.SourceToken, Message);
+	//	}
+	//
+	//	public final String ReportInfo(ZToken Token, String Message) {
+	//		return this.Report(ZLogger._InfoLevel, Token, Message);
+	//	}
+	//
+	//	public final String ReportDebug(ZToken Token, String Message) {
+	//		return this.Report(ZLogger._DebugLevel, Token, Message);
+	//	}
 
 	public final String[] GetReportedErrors() {
 		@Var ZArray<String> List = this.ReportedErrorList;

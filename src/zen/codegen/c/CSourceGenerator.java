@@ -52,6 +52,7 @@ import zen.ast.ZVarNode;
 import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.lang.ZenTypeSafer;
+import zen.parser.ZLogger;
 import zen.parser.ZSourceEngine;
 import zen.parser.ZSourceGenerator;
 import zen.type.ZClassField;
@@ -102,7 +103,7 @@ public class CSourceGenerator extends ZSourceGenerator {
 	@Override protected void GenerateCode(ZType ContextType, ZNode Node) {
 		if(Node.IsUntyped() && !Node.IsErrorNode()) {
 			this.CurrentBuilder.Append("/*untyped*/" + this.NullLiteral);
-			this.Logger.ReportError2(Node, "untyped error");
+			ZLogger._LogError(Node.SourceToken, "untyped error");
 		}
 		else {
 			if(ContextType != null && Node.Type != ContextType) {
@@ -559,7 +560,7 @@ public class CSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitErrorNode(ZErrorNode Node) {
-		this.Logger.ReportError(Node.SourceToken, Node.ErrorMessage);
+		ZLogger._LogError(Node.SourceToken, Node.ErrorMessage);
 		this.CurrentBuilder.Append("ThrowError(");
 		this.CurrentBuilder.Append(LibZen._QuoteString(Node.ErrorMessage));
 		this.CurrentBuilder.Append(")");

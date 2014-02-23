@@ -46,6 +46,7 @@ import zen.ast.ZTryNode;
 import zen.ast.ZVarNode;
 import zen.deps.LibZen;
 import zen.deps.Var;
+import zen.parser.ZLogger;
 import zen.parser.ZSourceGenerator;
 import zen.type.ZType;
 
@@ -270,7 +271,7 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitErrorNode(ZErrorNode Node) {
-		this.Logger.ReportError(Node.SourceToken, Node.ErrorMessage);
+		ZLogger._LogError(Node.SourceToken, Node.ErrorMessage);
 		this.CurrentBuilder.Append("new");
 		this.CurrentBuilder.AppendWhiteSpace();
 		this.CurrentBuilder.Append("Error");

@@ -110,6 +110,7 @@ import zen.deps.Var;
 import zen.deps.ZFunction;
 import zen.deps.ZObject;
 import zen.deps.ZenMap;
+import zen.parser.ZLogger;
 import zen.type.ZClassField;
 import zen.type.ZClassType;
 import zen.type.ZFuncType;
@@ -196,7 +197,7 @@ public class JavaAsmGenerator extends JavaGenerator {
 
 	@Override public void VisitArrayLiteralNode(ZArrayLiteralNode Node) {
 		if(Node.IsUntyped()) {
-			this.Logger.ReportError(Node.SourceToken, "ambigious array");
+			ZLogger._LogError(Node.SourceToken, "ambigious array");
 			this.AsmBuilder.visitInsn(Opcodes.ACONST_NULL);
 		}
 		else {
@@ -213,7 +214,7 @@ public class JavaAsmGenerator extends JavaGenerator {
 
 	@Override public void VisitMapLiteralNode(ZMapLiteralNode Node) {
 		if(Node.IsUntyped()) {
-			this.Logger.ReportError(Node.SourceToken, "ambigious map");
+			ZLogger._LogError(Node.SourceToken, "ambigious map");
 			this.AsmBuilder.visitInsn(Opcodes.ACONST_NULL);
 		}
 		else {
@@ -251,7 +252,7 @@ public class JavaAsmGenerator extends JavaGenerator {
 
 	@Override public void VisitNewObjectNode(ZNewObjectNode Node) {
 		if(Node.IsUntyped()) {
-			this.Logger.ReportError(Node.SourceToken, "no class for new operator");
+			ZLogger._LogError(Node.SourceToken, "no class for new operator");
 			this.AsmBuilder.visitInsn(Opcodes.ACONST_NULL);
 		}
 		else {
@@ -268,7 +269,7 @@ public class JavaAsmGenerator extends JavaGenerator {
 				this.AsmBuilder.visitMethodInsn(INVOKESPECIAL, ClassName, "<init>", Type.getConstructorDescriptor(jMethod));
 			}
 			else {
-				this.Logger.ReportError(Node.SourceToken, "no constructor: " + Node.Type);
+				ZLogger._LogError(Node.SourceToken, "no constructor: " + Node.Type);
 				this.AsmBuilder.visitInsn(Opcodes.ACONST_NULL);
 			}
 		}
@@ -284,7 +285,7 @@ public class JavaAsmGenerator extends JavaGenerator {
 	}
 
 	@Override public void VisitGlobalNameNode(ZGlobalNameNode Node) {
-		this.Logger.ReportError2(Node, "undefined symbol: " + Node.GlobalName);
+		ZLogger._LogError(Node.SourceToken, "undefined symbol: " + Node.GlobalName);
 		this.AsmBuilder.visitInsn(Opcodes.ACONST_NULL);
 	}
 
@@ -418,7 +419,7 @@ public class JavaAsmGenerator extends JavaGenerator {
 			}
 		}
 		else {
-			this.Logger.ReportError2(Node, "not function");
+			ZLogger._LogError(Node.SourceToken, "not function");
 			this.AsmBuilder.visitInsn(Opcodes.ACONST_NULL);
 		}
 	}
@@ -616,7 +617,7 @@ public class JavaAsmGenerator extends JavaGenerator {
 
 	@Override public void VisitLetNode(ZLetNode Node) {
 		if(Node.HasUntypedNode()) {
-			this.Logger.ReportError2(Node.AST[ZLetNode._InitValue], "type is ambigious");
+			ZLogger._LogError(Node.AST[ZLetNode._InitValue].SourceToken, "type is ambigious");
 			return;
 		}
 		if(Node.AST[ZLetNode._InitValue] instanceof ZErrorNode) {
@@ -925,9 +926,9 @@ public class JavaAsmGenerator extends JavaGenerator {
 	}
 
 	@Override public void VisitErrorNode(ZErrorNode Node) {
-		String Message = this.Logger.ReportError(Node.SourceToken, Node.ErrorMessage);
+		@Var String Message = ZLogger._LogError(Node.SourceToken, Node.ErrorMessage);
 		this.AsmBuilder.PushConst(Message);
-		Method sMethod = JavaMethodTable.GetStaticMethod("ThrowError");
+		@Var Method sMethod = JavaMethodTable.GetStaticMethod("ThrowError");
 		this.AsmBuilder.ApplyStaticMethod(Node, sMethod);
 	}
 
