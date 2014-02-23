@@ -48,13 +48,13 @@ public final class ZSourceContext extends ZSource {
 		}
 	}
 
-	public void FoundIndent(int StartIndex, int EndIndex) {
+	public final void FoundIndent(int StartIndex, int EndIndex) {
 		@Var ZToken Token = new ZIndentToken(this, StartIndex, EndIndex);
 		this.SourcePosition = EndIndex;
 		this.TokenContext.TokenList.add(Token);
 	}
 
-	public void Tokenize(int StartIndex, int EndIndex) {
+	public final void Tokenize(int StartIndex, int EndIndex) {
 		this.SourcePosition = EndIndex;
 		if(StartIndex < EndIndex && EndIndex <= this.SourceText.length()) {
 			@Var ZToken Token = new ZToken(this, StartIndex, EndIndex);
@@ -62,7 +62,7 @@ public final class ZSourceContext extends ZSource {
 		}
 	}
 
-	public void Tokenize(String PatternName, int StartIndex, int EndIndex) {
+	public final void Tokenize(String PatternName, int StartIndex, int EndIndex) {
 		this.SourcePosition = EndIndex;
 		if(StartIndex <= EndIndex && EndIndex <= this.SourceText.length()) {
 			ZSyntax Pattern = this.TokenContext.NameSpace.GetSyntaxPattern(PatternName);
@@ -78,7 +78,7 @@ public final class ZSourceContext extends ZSource {
 		}
 	}
 
-	public boolean IsDefinedSyntax(int StartIndex, int EndIndex) {
+	public final boolean IsDefinedSyntax(int StartIndex, int EndIndex) {
 		if(EndIndex < this.SourceText.length()) {
 			@Var ZNameSpace NameSpace = this.TokenContext.NameSpace;
 			@Var String Token = this.SourceText.substring(StartIndex, EndIndex);
@@ -111,7 +111,7 @@ public final class ZSourceContext extends ZSource {
 		this.TokenizeDefinedSymbol(RollbackPosition);
 	}
 
-	public boolean DoTokenize() {
+	public final boolean DoTokenize() {
 		@Var int TokenSize = this.TokenContext.TokenList.size();
 		@Var int CheckPosition = this.SourcePosition;
 		while(this.HasChar()) {

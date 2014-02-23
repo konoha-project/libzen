@@ -27,6 +27,7 @@ package zen.ast;
 
 import zen.deps.Field;
 import zen.deps.Var;
+import zen.deps.ZenMethod;
 import zen.parser.ZGenerator;
 import zen.parser.ZNameSpace;
 import zen.parser.ZToken;
@@ -68,11 +69,11 @@ public abstract class ZNode {
 		return Node;
 	}
 
-	public void SetNameInfo(ZToken NameToken, String Name) {
+	@ZenMethod public void SetNameInfo(ZToken NameToken, String Name) {
 		assert(Name == null);  // Set SetName in a sub class property
 	}
 
-	public void SetTypeInfo(ZToken TypeToken, ZType Type) {
+	@ZenMethod public void SetTypeInfo(ZToken TypeToken, ZType Type) {
 		this.Type = Type;  // default behavior
 	}
 
@@ -151,7 +152,6 @@ public abstract class ZNode {
 			Self = Self + "]";
 		}
 		return Self;
-
 	}
 
 	public final ZBlockNode GetScopeBlockNode() {
@@ -173,20 +173,20 @@ public abstract class ZNode {
 		return BlockNode.NameSpace;
 	}
 
-	public boolean IsErrorNode() {
+	public final boolean IsErrorNode() {
 		return (this instanceof ZErrorNode);
 	}
 
-	public boolean IsBreakingBlock() {
+	@ZenMethod public boolean IsBreakingBlock() {
 		return false;
 	}
 
-	public ZSugarNode DeSugar(ZGenerator Generator) {
+	@ZenMethod public ZSugarNode DeSugar(ZGenerator Generator) {
 		return new ZSugarNode(this, new ZErrorNode(this.ParentNode, "undefined code generation: " + this));
 	}
 
 	//	public abstract boolean Accept(ZenVisitor Visitor);
-	public void Accept(ZVisitor Visitor) {
+	@ZenMethod public void Accept(ZVisitor Visitor) {
 		Visitor.VisitExtendedNode(this);
 	}
 

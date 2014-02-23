@@ -67,7 +67,6 @@ import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
 
 public abstract class ZVisitor {
-	//	public abstract void VisitEmptyNode(ZEmptyNode Node);
 	public abstract void VisitNullNode(ZNullNode Node);
 	public abstract void VisitBooleanNode(ZBooleanNode Node);
 	public abstract void VisitIntNode(ZIntNode Node);
@@ -104,7 +103,6 @@ public abstract class ZVisitor {
 	public abstract void VisitBreakNode(ZBreakNode Node);
 	public abstract void VisitThrowNode(ZThrowNode Node);
 	public abstract void VisitTryNode(ZTryNode Node);
-	//	public abstract void VisitCatchNode(ZCatchNode Node);
 	public abstract void VisitLetNode(ZLetNode Node);
 	public abstract void VisitFunctionNode(ZFunctionNode Node);
 	public abstract void VisitClassNode(ZClassNode Node);
@@ -115,25 +113,4 @@ public abstract class ZVisitor {
 	public abstract void EnableVisitor();
 	public abstract void StopVisitor();
 	public abstract boolean IsVisitable();
-
-	//	public abstract void VisitTrinaryNode(ZenTrinaryNode Node);
-	//	public abstract void VisitPrefixInclNode(ZenPrefixInclNode Node);
-	//	public abstract void VisitPrefixDeclNode(ZenPrefixDeclNode Node);
-	//	public abstract void VisitRightInclNode(ZenRightInclNode Node);
-	//	public abstract void VisitRightDeclNode(ZenRightDeclNode Node);
-	//	public abstract void VisitRegexNode(ZenRegexNode Node);
-	//	public abstract void VisitApplyOverridedMethodNode(ZenApplyOverridedMethodNode Node);
-	//	public abstract void VisitSliceNode(ZenSliceNode Node);
-	//	public abstract void VisitAllocateNode(ZenAllocateNode Node);
-	//	public abstract void VisitUsingNode(ZenUsingNode Node);
-	//	public abstract void VisitDoWhileNode(ZenDoWhileNode Node);
-	//	public abstract void VisitForNode(ZenForNode Node);
-	//	public abstract void VisitForEachNode(ZenForEachNode Node);
-	//	public abstract void VisitContinueNode(ZenContinueNode Node);
-	//	public abstract void VisitStatementNode(ZenStatementNode Node);
-	//	public abstract void VisitYieldNode(ZenYieldNode Node);
-	//	public abstract void VisitSwitchNode(ZenSwitchNode Node);
-	//	public abstract void VisitCaseNode(ZenCaseNode Node);
-	//	public abstract void VisitCommandNode(ZenCommandNode Node);
-	//	public abstract void VisitClassNode(ZenClassNode ClassNode);
 }

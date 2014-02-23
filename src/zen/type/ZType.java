@@ -27,6 +27,7 @@ package zen.type;
 import zen.deps.Field;
 import zen.deps.LibZen;
 import zen.deps.Var;
+import zen.deps.ZenMethod;
 import zen.parser.ZToken;
 
 public class ZType  {
@@ -55,23 +56,23 @@ public class ZType  {
 		}
 	}
 
-	public ZType GetRealType() {
+	@ZenMethod public ZType GetRealType() {
 		return this;
 	}
 
-	public ZType GetSuperType() {
+	@ZenMethod public ZType GetSuperType() {
 		return this.RefType;
 	}
 
-	public ZType GetBaseType() {
+	@ZenMethod public ZType GetBaseType() {
 		return this;
 	}
 
-	public int GetParamSize() {
+	@ZenMethod public int GetParamSize() {
 		return 0;
 	}
 
-	public ZType GetParamType(int Index) {
+	@ZenMethod public ZType GetParamType(int Index) {
 		return ZType.VarType;  // for safety, it is used in Array
 	}
 
@@ -95,15 +96,15 @@ public class ZType  {
 		//return ZSystem.CheckSubType(Type, this);
 	}
 
-	public boolean IsGreekType() {
+	@ZenMethod public boolean IsGreekType() {
 		return false;
 	}
 
-	public ZType GetRealType(ZType[] Greek) {
+	@ZenMethod public ZType GetRealType(ZType[] Greek) {
 		return this.GetRealType();
 	}
 
-	public boolean AcceptValueType(ZType ValueType, boolean ExactMatch, ZType[] Greek) {
+	@ZenMethod public boolean AcceptValueType(ZType ValueType, boolean ExactMatch, ZType[] Greek) {
 		if(this.GetRealType() != ValueType && !ValueType.IsVarType()) {
 			if(ExactMatch && !this.Accept(ValueType)) {
 				return false;
@@ -116,7 +117,7 @@ public class ZType  {
 		return (this.GetRealType() == ZType.VoidType);
 	}
 
-	public boolean IsVarType() {
+	@ZenMethod public boolean IsVarType() {
 		return (this.GetRealType() == ZType.VarType);
 	}
 
@@ -156,20 +157,20 @@ public class ZType  {
 		return (this.GetBaseType() == ZType.MapType);
 	}
 
-	public ZType CreateSubType(int ClassFlag, String ClassName) {
-		@Var ZType SubType = new ZType(ClassFlag, ClassName, this);
-		return SubType;
-	}
+	//	public ZType CreateSubType(int ClassFlag, String ClassName) {
+	//		@Var ZType SubType = new ZType(ClassFlag, ClassName, this);
+	//		return SubType;
+	//	}
 
-	public boolean IsOpenType() {
+	public final boolean IsOpenType() {
 		return LibZen._IsFlag(this.TypeFlag, ZTypeFlag._OpenType);
 	}
 
-	public boolean IsImmutableType() {
+	public final boolean IsImmutableType() {
 		return false;
 	}
 
-	public boolean IsNullableType() {
+	public final boolean IsNullableType() {
 		return true;
 	}
 
@@ -194,7 +195,7 @@ public class ZType  {
 	//	}
 
 	public boolean IsFuncType() {
-		return false;
+		return (this.GetRealType() instanceof ZFuncType);
 	}
 
 	public String StringfySignature(String FuncName) {

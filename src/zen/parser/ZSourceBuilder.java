@@ -171,11 +171,11 @@ public final class ZSourceBuilder {
 		}
 	}
 
-	@Override public String toString() {
+	@Override public final String toString() {
 		return LibZen._SourceBuilderToString(this);
 	}
 
-	@Deprecated public void AppendLine(String Text) {
+	@Deprecated public final void AppendLine(String Text) {
 		this.Append(Text);
 		this.AppendLineFeed();
 	}

@@ -26,7 +26,6 @@
 package zen.parser;
 
 import zen.deps.Field;
-
 import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.deps.ZMatchFunction;
@@ -52,7 +51,7 @@ public final class ZSyntax {
 		return this.PatternName + "{" + this.MatchFunc + "}";
 	}
 
-	public boolean IsBinaryOperator() {
+	public final boolean IsBinaryOperator() {
 		return LibZen._IsFlag(this.SyntaxFlag, ZSyntax._BinaryOperator);
 	}
 

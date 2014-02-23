@@ -12,7 +12,7 @@ public final class ZTokenFunc {
 		this.ParentFunc = Parent;
 	}
 
-	@Override public String toString() {
+	@Override public final String toString() {
 		return this.Func.toString();
 	}
 

@@ -46,6 +46,7 @@ public final class ZNameSpace {
 	@Field ZTokenFunc[]   TokenMatrix = null;
 	@Field ZenMap<ZSyntax> SyntaxTable = null;
 	@Field ZenMap<ZSymbolEntry> SymbolTable = null;
+
 	//	@Field private ZNode  FuncNode = null;
 
 	public ZNameSpace(ZGenerator Generator, ZNameSpace ParentNameSpace) {
@@ -64,11 +65,11 @@ public final class ZNameSpace {
 		return "NS["+this.SerialId+"]";
 	}
 
-	public ZNameSpace CreateSubNameSpace() {
+	public final ZNameSpace CreateSubNameSpace() {
 		return new ZNameSpace(null, this);
 	}
 
-	public ZNameSpace GetRootNameSpace() {
+	public final ZNameSpace GetRootNameSpace() {
 		return this.Generator.RootNameSpace;
 	}
 
@@ -127,7 +128,7 @@ public final class ZNameSpace {
 		return "\t" + PatternName;
 	}
 
-	public ZSyntax GetRightSyntaxPattern(String PatternName) {
+	public final ZSyntax GetRightSyntaxPattern(String PatternName) {
 		return this.GetSyntaxPattern(ZNameSpace.RightPatternSymbol(PatternName));
 	}
 
@@ -138,7 +139,7 @@ public final class ZNameSpace {
 		this.SetSyntaxPattern(PatternName, NewPattern);
 	}
 
-	public void DefineStatement(String PatternName, ZMatchFunction MatchFunc) {
+	public final void DefineStatement(String PatternName, ZMatchFunction MatchFunc) {
 		@Var int Alias = PatternName.indexOf(" ");
 		@Var String Name = (Alias == -1) ? PatternName : PatternName.substring(0, Alias);
 		@Var ZSyntax Pattern = new ZSyntax(this, Name, MatchFunc);
@@ -149,7 +150,7 @@ public final class ZNameSpace {
 		}
 	}
 
-	public void DefineExpression(String PatternName, ZMatchFunction MatchFunc) {
+	public final void DefineExpression(String PatternName, ZMatchFunction MatchFunc) {
 		@Var int Alias = PatternName.indexOf(" ");
 		@Var String Name = (Alias == -1) ? PatternName : PatternName.substring(0, Alias);
 		@Var ZSyntax Pattern = new ZSyntax(this, Name, MatchFunc);
@@ -159,7 +160,7 @@ public final class ZNameSpace {
 		}
 	}
 
-	public void DefineRightExpression(String PatternName, int SyntaxFlag, ZMatchFunction MatchFunc) {
+	public final void DefineRightExpression(String PatternName, int SyntaxFlag, ZMatchFunction MatchFunc) {
 		@Var int Alias = PatternName.indexOf(" ");
 		@Var String Name = (Alias == -1) ? PatternName : PatternName.substring(0, Alias);
 		@Var ZSyntax Pattern = new ZSyntax(this, Name, MatchFunc);
@@ -213,7 +214,7 @@ public final class ZNameSpace {
 		return this.GetRootNameSpace().SetLocalSymbol(Symbol, Node);
 	}
 
-	public ZVariable GetLocalVariable(String VarName) {
+	public final ZVariable GetLocalVariable(String VarName) {
 		ZSymbolEntry Entry = this.GetSymbol(VarName);
 		//System.out.println("var " + VarName + ", entry=" + Entry + ", NameSpace=" + this);
 		if(Entry instanceof ZVariable) {
@@ -222,7 +223,7 @@ public final class ZNameSpace {
 		return null;
 	}
 
-	public void SetLocalVariable(ZFunctionNode FunctionNode, ZType VarType, String VarName, ZToken SourceToken) {
+	public final void SetLocalVariable(ZFunctionNode FunctionNode, ZType VarType, String VarName, ZToken SourceToken) {
 		@Var ZSymbolEntry Parent = this.GetSymbol(VarName);
 		@Var ZVariable VarInfo = new ZVariable(Parent, FunctionNode, 0, VarType, VarName, SourceToken);
 		//System.out.println("set var " + VarName + ", entry=" + VarInfo + ", NameSpace=" + this);
@@ -240,7 +241,7 @@ public final class ZNameSpace {
 		this.SetTypeName(Type.ShortName, Type, SourceToken);
 	}
 
-	public ZTypeNode GetTypeNode(String TypeName, ZToken SourceToken) {
+	public final ZTypeNode GetTypeNode(String TypeName, ZToken SourceToken) {
 		@Var ZNode Node = this.GetSymbolNode(TypeName);
 		if(Node instanceof ZTypeNode) {
 			return (ZTypeNode)Node;
@@ -253,7 +254,7 @@ public final class ZNameSpace {
 		return null;
 	}
 
-	public ZType GetType(String TypeName, ZToken SourceToken) {
+	public final ZType GetType(String TypeName, ZToken SourceToken) {
 		@Var ZTypeNode TypeNode = this.GetTypeNode(TypeName, SourceToken);
 		if(TypeNode != null) {
 			return TypeNode.Type;

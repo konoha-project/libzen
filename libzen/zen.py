@@ -204,11 +204,9 @@ class ClassBlock:
 			if line.find('@Field') != -1:
 				f.write(GenField(line))
 				continue
-			if line.find('@ZenIgnored') >= 0:
-				continue
 			if self.IsFinal or line.find('static') != -1 or line.find('@Override') != -1 or line.find('final') != -1: 
 				continue
-			if line.find('abstract') != -1 or line.find('@ZenMethod') > 0 :
+			if line.find('abstract') != -1 or line.find('@ZenMethod') >= 0 :
 				f.write(GenMethod(self.ClassName, line))
 			
 		f.write('}\n')
@@ -262,9 +260,9 @@ class Context:
 	def write(self, filename):
 		f = open(filename, 'w')
 		for c in self.ClassList:
-			c.writefield(f)
-		for c in self.ClassList:
 			c.writeproto(f)
+		for c in self.ClassList:
+			c.writefield(f)
 		for c in self.ClassList:
 			c.writesymbol(f)
 		for c in self.ClassList:

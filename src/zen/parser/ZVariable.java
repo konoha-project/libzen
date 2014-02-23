@@ -28,7 +28,7 @@ import zen.ast.ZFunctionNode;
 import zen.deps.Field;
 import zen.type.ZType;
 
-public class ZVariable extends ZSymbolEntry {
+public final class ZVariable extends ZSymbolEntry {
 	@Field public int     VarFlag;
 	@Field public ZType	  VarType;
 	@Field public String  VarName;

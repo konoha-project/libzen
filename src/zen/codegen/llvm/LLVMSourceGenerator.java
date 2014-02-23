@@ -1301,8 +1301,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		this.Writer.AppendLabel(EndLabel);
 	}
 
-	@Override
-	protected void GenerateSurroundCode(ZNode Node) {
+	@Override protected void GenerateSurroundCode(ZNode Node) {
 		if(this.IsNeededSurroud(Node)) {
 			//this.Writer.AddCodeToCurrentBuffer("(");
 			this.GenerateCode(null, Node);

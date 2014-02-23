@@ -3,6 +3,7 @@ package zen.parser;
 import zen.deps.Field;
 import zen.deps.LibZen;
 import zen.deps.Var;
+import zen.deps.ZenIgnored;
 
 public class ZToken {
 	public final static ZToken NullToken = new ZToken(null, 0, 0);
@@ -39,7 +40,7 @@ public class ZToken {
 		return "";
 	}
 
-	@Override public String toString() {
+	@Override public final String toString() {
 		char ch = this.Source.GetCharAt(this.StartIndex-1);
 		if(ch == '\"') {
 			return "\"" + this.GetText() + "\"";
@@ -47,7 +48,7 @@ public class ZToken {
 		return this.GetText();
 	}
 
-	public final boolean EqualsText(char ch) {
+	@ZenIgnored public final boolean EqualsText(char ch) {
 		if(this.EndIndex - this.StartIndex == 1) {
 			if(this.Source.SourceText.charAt(this.StartIndex) == ch) {
 				return true;
@@ -107,11 +108,12 @@ public class ZToken {
 		return LibZen._IsSymbol(ch);
 	}
 
-	public int GetIndentSize() {
+	public final int GetIndentSize() {
 		if(this.Source != null) {
 			return this.Source.CountIndentSize(this.Source.GetLineHeadPosition(this.StartIndex));
 		}
 		return 0;
 	}
+
 
 }

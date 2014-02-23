@@ -33,6 +33,7 @@ import zen.deps.LibZen;
 import zen.deps.Nullable;
 import zen.deps.Var;
 import zen.deps.ZenMap;
+import zen.deps.ZenMethod;
 import zen.type.ZFunc;
 import zen.type.ZFuncType;
 import zen.type.ZPrototype;
@@ -65,15 +66,15 @@ public abstract class ZGenerator extends ZVisitor {
 
 	public abstract ZSourceEngine GetEngine();
 
-	public void ImportLocalGrammar(ZNameSpace NameSpace) {
+	@ZenMethod public void ImportLocalGrammar(ZNameSpace NameSpace) {
 		// TODO Auto-generated method stub
 	}
 
-	public void WriteTo(@Nullable String FileName) {
+	@ZenMethod public void WriteTo(@Nullable String FileName) {
 		// TODO Stub
 	}
 
-	protected String NameOutputFile(String FileName) {
+	@ZenMethod protected String NameOutputFile(String FileName) {
 		if(FileName != null) {
 			return FileName + "." + this.LanguageExtention;
 		}
@@ -92,49 +93,49 @@ public abstract class ZGenerator extends ZVisitor {
 		return !this.StoppedVisitor;
 	}
 
-	public String GetGrammarInfo() {
+	public final String GetGrammarInfo() {
 		return this.GrammarInfo.trim();
 	}
 
-	public void AppendGrammarInfo(String GrammarInfo) {
+	public final void AppendGrammarInfo(String GrammarInfo) {
 		this.GrammarInfo = this.GrammarInfo + GrammarInfo + " ";
 	}
 
-	public String GetTargetLangInfo() {
+	public final String GetTargetLangInfo() {
 		return this.LanguageExtention + this.TargetVersion;
 	}
 
 	public abstract boolean StartCodeGeneration(ZNode Node, boolean IsInteractive);
 
-	public ZType GetFieldType(ZType BaseType, String Name) {
+	@ZenMethod public ZType GetFieldType(ZType BaseType, String Name) {
 		return ZType.VarType;     // undefined
 	}
 
-	public ZType GetSetterType(ZType BaseType, String Name) {
+	@ZenMethod public ZType GetSetterType(ZType BaseType, String Name) {
 		return ZType.VarType;     // undefined
 	}
 
-	public ZFuncType GetConstructorFuncType(ZType ClassType, ZListNode List) {
+	@ZenMethod public ZFuncType GetConstructorFuncType(ZType ClassType, ZListNode List) {
 		return null;     // undefined
 	}
 
-	public ZFuncType GetMethodFuncType(ZType RecvType, String MethodName, ZListNode List) {
+	@ZenMethod public ZFuncType GetMethodFuncType(ZType RecvType, String MethodName, ZListNode List) {
 		return null;     // undefined
 	}
 
 	// Naming
 
-	public int GetUniqueNumber() {
+	public final int GetUniqueNumber() {
 		@Var int UniqueNumber = this.UniqueNumber;
 		this.UniqueNumber = this.UniqueNumber + 1;
 		return UniqueNumber;
 	}
 
-	public String NameGlobalSymbol(String Symbol) {
+	public final String NameGlobalSymbol(String Symbol) {
 		return Symbol + "_Z" + this.GetUniqueNumber();
 	}
 
-	public String NameClass(ZType ClassType) {
+	public final String NameClass(ZType ClassType) {
 		return ClassType.ShortName + "" + ClassType.TypeId;
 	}
 
@@ -183,15 +184,15 @@ public abstract class ZGenerator extends ZVisitor {
 		return null;
 	}
 
-	public String NameConverterFunc(ZType FromType, ZType ToType) {
+	public final String NameConverterFunc(ZType FromType, ZType ToType) {
 		return FromType.GetUniqueName() + "T" + ToType.GetUniqueName();
 	}
 
-	public void SetConverterFunc(ZType FromType, ZType ToType, ZFunc Func) {
+	public final void SetConverterFunc(ZType FromType, ZType ToType, ZFunc Func) {
 		this.DefinedFuncMap.put(this.NameConverterFunc(FromType, ToType), Func);
 	}
 
-	public ZFunc GetConverterFunc(ZType FromType, ZType ToType) {
+	public final ZFunc GetConverterFunc(ZType FromType, ZType ToType) {
 		while(FromType != null) {
 			@Var ZFunc Func = this.DefinedFuncMap.GetOrNull(this.NameConverterFunc(FromType, ToType));
 			if(Func != null) {
@@ -202,7 +203,7 @@ public abstract class ZGenerator extends ZVisitor {
 		return null;
 	}
 
-	public ZFunc GetCoercionFunc(ZType FromType, ZType ToType) {
+	public final ZFunc GetCoercionFunc(ZType FromType, ZType ToType) {
 		while(FromType != null) {
 			@Var ZFunc Func = this.DefinedFuncMap.GetOrNull(this.NameConverterFunc(FromType, ToType));
 			if(Func != null && Func.IsCoercionFunc()) {
@@ -221,7 +222,4 @@ public abstract class ZGenerator extends ZVisitor {
 	@Override public void VisitSugarNode(ZSugarNode Node) {
 		Node.AST[ZSugarNode._DeSugar].Accept(this);
 	}
-
-
-
 }

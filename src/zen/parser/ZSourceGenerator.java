@@ -77,6 +77,7 @@ import zen.deps.Nullable;
 import zen.deps.Var;
 import zen.deps.ZArray;
 import zen.deps.ZenMap;
+import zen.deps.ZenMethod;
 import zen.lang.ZenTypeSafer;
 import zen.type.ZFuncType;
 import zen.type.ZType;
@@ -127,7 +128,7 @@ public class ZSourceGenerator extends ZGenerator {
 		this.TopType = "var";
 	}
 
-	protected void InitBuilderList() {
+	@ZenMethod protected void InitBuilderList() {
 		this.CurrentBuilder = null;
 		this.BuilderList.clear(0);
 		this.HeaderBuilder = this.AppendNewSourceBuilder();
@@ -139,13 +140,13 @@ public class ZSourceGenerator extends ZGenerator {
 		return new ZSourceEngine(new ZenTypeSafer(this), this);
 	}
 
-	protected ZSourceBuilder AppendNewSourceBuilder() {
+	protected final ZSourceBuilder AppendNewSourceBuilder() {
 		@Var ZSourceBuilder Builder = new ZSourceBuilder(this, this.CurrentBuilder);
 		this.BuilderList.add(Builder);
 		return Builder;
 	}
 
-	protected ZSourceBuilder InsertNewSourceBuilder() {
+	protected final ZSourceBuilder InsertNewSourceBuilder() {
 		@Var ZSourceBuilder Builder = new ZSourceBuilder(this, this.CurrentBuilder);
 		@Var int i = 0;
 		while(i < this.BuilderList.size()) {
@@ -220,11 +221,11 @@ public class ZSourceGenerator extends ZGenerator {
 	//	}
 
 
-	protected void GenerateCode(ZType ContextType, ZNode Node) {
+	@ZenMethod protected void GenerateCode(ZType ContextType, ZNode Node) {
 		Node.Accept(this);
 	}
 
-	protected boolean IsNeededSurroud(ZNode Node) {
+	final protected boolean IsNeededSurroud(ZNode Node) {
 		if(Node instanceof ZBinaryNode) {
 			return true;
 		}
