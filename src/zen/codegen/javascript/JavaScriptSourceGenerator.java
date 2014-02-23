@@ -147,6 +147,10 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitParamNode(ZParamNode Node) {
+		//		@Var String Name = Node.Name;
+		//		if(Name.equals("this")) {
+		//			Name = "_this";
+		//		}
 		this.CurrentBuilder.Append(Node.Name);
 	}
 
@@ -180,12 +184,12 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitLetNode(ZLetNode Node) {
-		// TODO
-		//		this.CurrentBuilder.Append("let");
-		//		this.CurrentBuilder.AppendWhiteSpace();
-		//		this.CurrentBuilder.Append(Node.GlobalName);
-		//		this.CurrentBuilder.AppendToken("=");
-		//		this.GenerateCode(Node.AST[ZLetNode._InitValue]);
+		this.CurrentBuilder.Append("var");
+		this.CurrentBuilder.AppendWhiteSpace();
+		this.CurrentBuilder.Append(Node.GlobalName);
+		this.CurrentBuilder.Append("=");
+		this.GenerateCode(null, Node.AST[ZVarNode._InitValue]);
+		this.CurrentBuilder.Append(this.SemiColon);
 	}
 
 	@Override public void VisitClassNode(ZClassNode Node) {
