@@ -576,12 +576,14 @@ public class ZSourceGenerator extends ZGenerator {
 			@Var ZFieldNode FieldNode = Node.GetFieldNode(i);
 			this.CurrentBuilder.AppendLineFeed();
 			this.CurrentBuilder.AppendIndent();
-			this.CurrentBuilder.Append("field");
+			this.CurrentBuilder.Append("var");
 			this.CurrentBuilder.AppendWhiteSpace();
 			this.CurrentBuilder.Append(FieldNode.FieldName);
 			this.VisitTypeAnnotation(FieldNode.DeclType);
-			this.CurrentBuilder.AppendToken("=");
-			this.GenerateCode(null, FieldNode.AST[ZFieldNode._InitValue]);
+			if(FieldNode.HasAst(ZFieldNode._InitValue)) {
+				this.CurrentBuilder.AppendToken("=");
+				this.GenerateCode(null, FieldNode.AST[ZFieldNode._InitValue]);
+			}
 			this.CurrentBuilder.Append(this.SemiColon);
 			i = i + 1;
 		}

@@ -757,12 +757,13 @@ public class ZenTypeSafer extends ZTypeChecker {
 			this.Return(new ZErrorNode(Node, Node.ClassName + " is not a Zen class."));
 			return;
 		}
+		//System.out.println(" B NodeClass.ToOpen="+Node.ClassType+", IsOpenType="+Node.ClassType.IsOpenType());
 		if(Node.SuperType != null) {
 			if(Node.SuperType instanceof ZClassType && !Node.SuperType.IsOpenType()) {
 				Node.ClassType.ResetSuperType((ZClassType)Node.SuperType);
 			}
 			else {
-				this.Return(new ZErrorNode(Node, "" + Node.SuperType + " cannot be extended."));
+				this.Return(new ZErrorNode(Node.ParentNode, Node.SuperToken, "" + Node.SuperType + " cannot be extended."));
 				return;
 			}
 		}
@@ -777,10 +778,6 @@ public class ZenTypeSafer extends ZTypeChecker {
 				this.CheckTypeAt(FieldNode, ZFieldNode._InitValue, FieldNode.DeclType);
 				if(FieldNode.DeclType.IsVarType()) {
 					FieldNode.DeclType = FieldNode.AST[ZFieldNode._InitValue].Type;
-					if(FieldNode.DeclType.IsVarType()) {
-						this.Return(new ZErrorNode(FieldNode, "type of " + FieldNode.FieldName + " is unspecific"));
-						return;
-					}
 				}
 				if(FieldNode.DeclType.IsFuncType()) {
 					ZFuncType FuncType = (ZFuncType)FieldNode.DeclType;
@@ -790,16 +787,21 @@ public class ZenTypeSafer extends ZTypeChecker {
 						FieldNode.DeclType = FuncType;
 					}
 				}
-				Node.ClassType.AppendField(FieldNode.DeclType, FieldNode.FieldName, FieldNode.SourceToken);
+				if(FieldNode.DeclType.IsVarType()) {
+					ZLogger._LogError(FieldNode.SourceToken, "type of " + FieldNode.FieldName + " is unspecific");
+				}
+				else {
+					Node.ClassType.AppendField(FieldNode.DeclType, FieldNode.FieldName, FieldNode.SourceToken);
+				}
 			}
 			else {
-				this.Return(new ZErrorNode(Node.ParentNode, FieldNode.SourceToken, "duplicated field: " + FieldNode.FieldName));
-				return;
+				ZLogger._LogError(FieldNode.SourceToken, "duplicated field: " + FieldNode.FieldName);
 			}
 			FieldNode.Type = ZType.VoidType;
 			i = i + 1;
 		}
 		Node.ClassType.TypeFlag = LibZen._UnsetFlag(Node.ClassType.TypeFlag, ZTypeFlag._OpenType);
+		//System.out.println(" E NodeClass.ToOpen="+Node.ClassType+", IsOpenType="+Node.ClassType.IsOpenType());
 		this.TypedNode(Node, ZType.VoidType);
 	}
 

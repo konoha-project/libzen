@@ -9,7 +9,8 @@ import zen.parser.ZVisitor;
 import zen.type.ZFuncType;
 
 public class ZMacroNode extends ZListNode {
-	@Field public final ZMacroFunc MacroFunc ;
+	@Field public final ZMacroFunc MacroFunc;
+
 	public ZMacroNode(ZNode ParentNode, ZToken SourceToken, ZMacroFunc MacroFunc) {
 		super(ParentNode, SourceToken, 0);
 		this.MacroFunc = MacroFunc;

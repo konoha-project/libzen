@@ -90,9 +90,10 @@ public final class ZSourceBuilder {
 	}
 
 	public final void AppendWhiteSpace() {
-		if(this.SourceList.size() > 0) {
-			@Var String Last = this.SourceList.ArrayValues[this.SourceList.size()-1];
-			if(Last.endsWith(" ") || Last.endsWith("\n") || Last.endsWith("\t")) {
+		@Var int Size = this.SourceList.size();
+		if(Size > 0) {
+			@Var String Last = this.SourceList.ArrayValues[Size-1];
+			if(Last != null && (Last.endsWith(" ") || Last.endsWith("\n") || Last.endsWith("\t"))) {
 				return;
 			}
 		}
