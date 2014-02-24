@@ -673,7 +673,6 @@ public class ZenTypeSafer extends ZTypeChecker {
 					Func = new ZPrototype(0, FunctionNode.FuncName, FuncType, FunctionNode.SourceToken);
 					ZenGamma.DefineFunc(NameSpace, Func);
 					FunctionNode.GlobalName = Func.GetSignature();
-					//NameSpace.SetLocalSymbol(FunctionNode.FuncName, new ZGetNameNode(FunctionNode, FunctionNode.SourceToken, FunctionNode.FuncName));
 				}
 			}
 		}

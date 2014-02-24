@@ -127,13 +127,22 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
-		this.CurrentBuilder.Append("function");
-		this.CurrentBuilder.AppendWhiteSpace();
-		if(Node.GlobalName != null) {
-			this.CurrentBuilder.Append(Node.GlobalName);
+		if(!Node.Type.IsVoidType()) {
+			if(Node.FuncName == null) {
+				Node.FuncName = "f";
+			}
+			@Var String FuncName = Node.FuncName + this.GetUniqueNumber();
+			this.CurrentBuilder.Append("function ");
+			this.CurrentBuilder.Append(FuncName);
+			this.VisitListNode("(", Node, ")");
+			this.GenerateCode(null, Node.AST[ZFunctionNode._Block]);
 		}
-		this.VisitListNode("(", Node, ")");
-		this.GenerateCode(null, Node.AST[ZFunctionNode._Block]);
+		else {
+			this.CurrentBuilder.Append("function ");
+			this.CurrentBuilder.Append(Node.GetSignature(this));
+			this.VisitListNode("(", Node, ")");
+			this.GenerateCode(null, Node.AST[ZFunctionNode._Block]);
+		}
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.AppendLineFeed();
 	}
