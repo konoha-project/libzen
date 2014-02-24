@@ -117,9 +117,6 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 	public void VisitTryNode(ZTryNode Node) {
 		this.CurrentBuilder.Append("try");
 		this.GenerateCode(null, Node.AST[ZTryNode._Try]);
-		//for (ZenNode CatchNode : Node.CatchList) {
-		//	this.GenerateCode(CatchNode);
-		//}
 		this.GenerateCode(null, Node.AST[ZTryNode._Catch]);
 		if (Node.AST[ZTryNode._Finally] != null) {
 			this.CurrentBuilder.Append("finally");
@@ -190,6 +187,7 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Append("=");
 		this.GenerateCode(null, Node.AST[ZVarNode._InitValue]);
 		this.CurrentBuilder.Append(this.SemiColon);
+		this.CurrentBuilder.AppendLineFeed();
 	}
 
 	@Override public void VisitClassNode(ZClassNode Node) {
@@ -213,9 +211,11 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 			this.CurrentBuilder.Append("_super) {");
 			this.CurrentBuilder.AppendLineFeed();
 			this.CurrentBuilder.AppendIndent();
-			this.CurrentBuilder.Append("__extends(");
+			this.CurrentBuilder.Append("__extends(_super");
+			this.CurrentBuilder.Append(this.Camma);
 			this.CurrentBuilder.Append(Node.ClassName);
 			this.CurrentBuilder.Append(")");
+			this.CurrentBuilder.Append(this.SemiColon);
 		} else {
 			this.CurrentBuilder.Append(") {");
 		}
