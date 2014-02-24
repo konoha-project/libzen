@@ -343,7 +343,7 @@ public class CSourceGenerator extends ZSourceGenerator {
 		this.GenerateTypeName(Node.GetAstType(ZLetNode._InitValue));
 		this.CurrentBuilder.Append(" ");
 		this.CurrentBuilder.Append(Node.GlobalName);
-		this.CurrentBuilder.AppendToken("=");
+		this.CurrentBuilder.Append(" = ");
 		this.GenerateCode(null, Node.AST[ZLetNode._InitValue]);
 		this.CurrentBuilder.Append(this.SemiColon);
 		this.CurrentBuilder.AppendLineFeed();

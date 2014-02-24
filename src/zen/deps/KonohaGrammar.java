@@ -62,6 +62,7 @@ import libzen.grammar.NumberLiteralToken;
 import libzen.grammar.OperatorToken;
 import libzen.grammar.OrPattern;
 import libzen.grammar.ParamPattern;
+import libzen.grammar.PrototypePattern;
 import libzen.grammar.ReturnPattern;
 import libzen.grammar.RightExpressionPattern;
 import libzen.grammar.RightTypePattern;
@@ -178,7 +179,9 @@ public class KonohaGrammar {
 		NameSpace.DefineExpression("$Name$", new NamePattern());
 		NameSpace.DefineStatement("var",  new VarPattern());
 		NameSpace.DefineExpression("$Param$", new ParamPattern());
+		NameSpace.DefineExpression("function", new PrototypePattern());
 		NameSpace.DefineExpression("function", new FunctionPattern());
+
 		NameSpace.DefineStatement("let", new LetPattern());
 		NameSpace.Generator.AppendGrammarInfo("zen-0.1");
 

@@ -14,7 +14,6 @@ public class PrototypePattern extends ZMatchFunction {
 		FuncNode = TokenContext.MatchPattern(FuncNode, ZNode._NameInfo, "$Name$", ZTokenContext.Required);
 		FuncNode = TokenContext.MatchNtimes(FuncNode, "(", "$Param$", ",", ")");
 		FuncNode = TokenContext.MatchPattern(FuncNode, ZNode._TypeInfo, "$TypeAnnotation$", ZTokenContext.Required);
-		FuncNode = TokenContext.MatchPattern(FuncNode, ZNode._Nop, "$StatementEnd$", ZTokenContext.Required);
 		return FuncNode;
 	}
 }
