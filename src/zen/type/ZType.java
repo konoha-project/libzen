@@ -31,15 +31,19 @@ import zen.deps.ZenMethod;
 import zen.parser.ZToken;
 
 public class ZType  {
-	public final static ZType		VarType = new ZType(ZTypeFlag._UniqueType, "var", null);
-	public final static ZType		VoidType = new ZType(ZTypeFlag._UniqueType, "void", null);
-	public final static ZType		BooleanType = new ZType(ZTypeFlag._UniqueType, "boolean", VarType);
-	public final static ZType		IntType = new ZType(ZTypeFlag._UniqueType, "int", VarType);
-	public final static ZType       FloatType = new ZType(ZTypeFlag._UniqueType, "float", VarType);
-	public final static ZType		StringType = new ZType(ZTypeFlag._UniqueType, "String", VarType);
-	public final static ZType       TypeType = new ZType(ZTypeFlag._UniqueType, "Type", VarType);
-	public final static ZType		ArrayType = new ZGeneric1Type(ZTypeFlag._UniqueType, "Array", null, VarType);
-	public final static ZType		MapType = new ZGeneric1Type(ZTypeFlag._UniqueType, "Map", null, VarType);
+	public final static int     UniqueTypeFlag         = 1 << 16;
+	@Deprecated public final static int     UnboxTypeFlag          = 1 << 10;
+	public final static int     OpenTypeFlag           = 1 << 9;  // @Open for the future
+
+	public final static ZType		VarType = new ZType(ZType.UniqueTypeFlag, "var", null);
+	public final static ZType		VoidType = new ZType(ZType.UniqueTypeFlag, "void", null);
+	public final static ZType		BooleanType = new ZType(ZType.UniqueTypeFlag, "boolean", ZType.VarType);
+	public final static ZType		IntType = new ZType(ZType.UniqueTypeFlag, "int", ZType.VarType);
+	public final static ZType       FloatType = new ZType(ZType.UniqueTypeFlag, "float", ZType.VarType);
+	public final static ZType		StringType = new ZType(ZType.UniqueTypeFlag, "String", ZType.VarType);
+	public final static ZType       TypeType = new ZType(ZType.UniqueTypeFlag, "Type", ZType.VarType);
+	public final static ZType		ArrayType = new ZGeneric1Type(ZType.UniqueTypeFlag, "Array", null, ZType.VarType);
+	public final static ZType		MapType = new ZGeneric1Type(ZType.UniqueTypeFlag, "Map", null, ZType.VarType);
 	public final static ZType		FuncType  = new ZFuncType("Func", null);
 
 	@Field public int		  TypeFlag = 0;
@@ -51,7 +55,7 @@ public class ZType  {
 		this.TypeFlag = TypeFlag;
 		this.ShortName = ShortName;
 		this.RefType = RefType;
-		if(LibZen._IsFlag(TypeFlag, ZTypeFlag._UniqueType)) {
+		if(LibZen._IsFlag(TypeFlag, ZType.UniqueTypeFlag)) {
 			this.TypeId = ZTypePool._NewTypeId(this);
 		}
 	}
@@ -163,7 +167,7 @@ public class ZType  {
 	//	}
 
 	public final boolean IsOpenType() {
-		return LibZen._IsFlag(this.TypeFlag, ZTypeFlag._OpenType);
+		return LibZen._IsFlag(this.TypeFlag, ZType.OpenTypeFlag);
 	}
 
 	public final boolean IsImmutableType() {

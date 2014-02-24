@@ -86,7 +86,6 @@ import zen.type.ZGreekType;
 import zen.type.ZPrototype;
 import zen.type.ZType;
 import zen.type.ZTypeChecker;
-import zen.type.ZTypeFlag;
 import zen.type.ZTypePool;
 import zen.type.ZVarScope;
 import zen.type.ZVarType;
@@ -799,7 +798,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 			FieldNode.Type = ZType.VoidType;
 			i = i + 1;
 		}
-		Node.ClassType.TypeFlag = LibZen._UnsetFlag(Node.ClassType.TypeFlag, ZTypeFlag._OpenType);
+		Node.ClassType.TypeFlag = LibZen._UnsetFlag(Node.ClassType.TypeFlag, ZType.OpenTypeFlag);
 		//System.out.println(" E NodeClass.ToOpen="+Node.ClassType+", IsOpenType="+Node.ClassType.IsOpenType());
 		this.TypedNode(Node, ZType.VoidType);
 	}

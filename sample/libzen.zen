@@ -45,21 +45,24 @@ class ZType {
 	var AcceptValueType: Func<boolean,ZType,ZType,boolean,ZType[]>;
 	var IsVarType: Func<boolean,ZType>;
 }
-let ZTypeVarType = new ZType(ZTypeFlag_UniqueType, "var", null);
-let ZTypeVoidType = new ZType(ZTypeFlag_UniqueType, "void", null);
-let ZTypeBooleanType = new ZType(ZTypeFlag_UniqueType, "boolean", VarType);
-let ZTypeIntType = new ZType(ZTypeFlag_UniqueType, "int", VarType);
-let ZTypeFloatType = new ZType(ZTypeFlag_UniqueType, "float", VarType);
-let ZTypeStringType = new ZType(ZTypeFlag_UniqueType, "String", VarType);
-let ZTypeTypeType = new ZType(ZTypeFlag_UniqueType, "Type", VarType);
-let ZTypeArrayType = new ZGeneric1Type(ZTypeFlag_UniqueType, "Array", null, VarType);
-let ZTypeMapType = new ZGeneric1Type(ZTypeFlag_UniqueType, "Map", null, VarType);
+let ZTypeUniqueTypeFlag = 1 << 16;
+let ZTypeUnboxTypeFlag = 1 << 10;
+let ZTypeOpenTypeFlag = 1 << 9;  // @Open for the future
+let ZTypeVarType = new ZType(ZTypeUniqueTypeFlag, "var", null);
+let ZTypeVoidType = new ZType(ZTypeUniqueTypeFlag, "void", null);
+let ZTypeBooleanType = new ZType(ZTypeUniqueTypeFlag, "boolean", ZTypeVarType);
+let ZTypeIntType = new ZType(ZTypeUniqueTypeFlag, "int", ZTypeVarType);
+let ZTypeFloatType = new ZType(ZTypeUniqueTypeFlag, "float", ZTypeVarType);
+let ZTypeStringType = new ZType(ZTypeUniqueTypeFlag, "String", ZTypeVarType);
+let ZTypeTypeType = new ZType(ZTypeUniqueTypeFlag, "Type", ZTypeVarType);
+let ZTypeArrayType = new ZGeneric1Type(ZTypeUniqueTypeFlag, "Array", null, ZTypeVarType);
+let ZTypeMapType = new ZGeneric1Type(ZTypeUniqueTypeFlag, "Map", null, ZTypeVarType);
 let ZTypeFuncType = new ZFuncType("Func", null);
 function ZType(this: ZType, TypeFlag: int, ShortName: String, RefType: ZType): ZType {
 	this.TypeFlag = TypeFlag;
 	this.ShortName = ShortName;
 	this.RefType = RefType;
-	if(LibZen_IsFlag(TypeFlag, ZTypeFlag_UniqueType)) {
+	if(LibZen_IsFlag(TypeFlag, ZTypeUniqueTypeFlag)) {
 		this.TypeId = ZTypePool_NewTypeId(this);
 	}
 }
@@ -165,7 +168,7 @@ function IsMapType(this: ZType): boolean {
 }
 
 function IsOpenType(this: ZType): boolean {
-	return LibZen_IsFlag(this.TypeFlag, ZTypeFlag_OpenType);
+	return LibZen_IsFlag(this.TypeFlag, ZTypeOpenTypeFlag);
 }
 
 function IsImmutableType(this: ZType): boolean {

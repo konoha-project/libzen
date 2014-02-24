@@ -25,11 +25,5 @@
 package zen.type;
 
 public abstract class ZTypeFlag {
-	public final static int     _OpenType           = 1 << 9;  // @Open for the future
-	@Deprecated
-	public final static int     _UnboxType          = 1 << 10;
-	//	public final static int     TypeVariable       = 1 << 14;
-	//	public final static int     GenericVariable    = 1 << 15;
-	public final static int     _UniqueType         = 1 << 16;
 
 }

@@ -8,7 +8,7 @@ public class ZGreekType extends ZType {
 	@Field public final int GreekId;
 
 	public ZGreekType(int GreekId) {
-		super(ZTypeFlag._UniqueType, LibZen._GreekNames[GreekId], ZType.VarType);
+		super(ZType.UniqueTypeFlag, LibZen._GreekNames[GreekId], ZType.VarType);
 		this.GreekId = GreekId;
 	}
 

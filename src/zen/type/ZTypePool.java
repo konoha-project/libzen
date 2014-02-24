@@ -69,7 +69,7 @@ public class ZTypePool {
 			if(BaseType.IsArrayType()) {
 				Name = BaseType.ShortName + "<" + ParamType + ">";
 			}
-			GenericType = new ZGeneric1Type(ZTypeFlag._UniqueType, Name, BaseType, ParamType);
+			GenericType = new ZGeneric1Type(ZType.UniqueTypeFlag, Name, BaseType, ParamType);
 			ZTypePool._ClassNameMap.put(MangleName, GenericType);
 		}
 		return GenericType;

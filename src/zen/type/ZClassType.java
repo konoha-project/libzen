@@ -33,7 +33,7 @@ import zen.parser.ZToken;
 public class ZClassType extends ZType {
 	@Field ZArray<ZClassField> FieldList = null;
 	public ZClassType(String ShortName, ZType RefType) {
-		super(ZTypeFlag._OpenType|ZTypeFlag._UniqueType, ShortName, RefType);
+		super(ZType.OpenTypeFlag|ZType.UniqueTypeFlag, ShortName, RefType);
 		if(RefType instanceof ZClassType) {
 			this.ResetSuperType((ZClassType)RefType);
 		}
