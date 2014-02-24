@@ -387,11 +387,12 @@ public final class ZTokenContext {
 
 	public final void Dump() {
 		@Var int Position = this.CurrentPosition;
-		for(; Position < this.TokenList.size(); Position += 1) {
+		while(Position < this.TokenList.size()) {
 			@Var ZToken Token = this.TokenList.ArrayValues[Position];
 			@Var String DumpedToken = this.CurrentPosition == Position ? "*[" : "[";
 			DumpedToken = DumpedToken + Position+"] " + Token.toString();
 			LibZen._PrintDebug(DumpedToken);
+			Position = Position + 1;
 			//			ZenLogger.VerboseLog(ZenLogger.VerboseToken,  DumpedToken);
 		}
 	}

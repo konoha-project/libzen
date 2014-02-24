@@ -119,10 +119,12 @@ public final class ZFuncType extends ZType {
 
 	public final boolean AcceptAsFieldFunc(ZFuncType FuncType) {
 		if(FuncType.GetFuncParamSize() == this.GetFuncParamSize() && FuncType.GetReturnType().Equals(this.GetReturnType())) {
-			for(int i = 1; i < FuncType.GetFuncParamSize(); i++) {
+			@Var int i = 1;
+			while(i < FuncType.GetFuncParamSize()) {
 				if(!FuncType.GetFuncParamType(i).Equals(this.GetFuncParamType(i))) {
 					return false;
 				}
+				i = i + 1;
 			}
 		}
 		return true;

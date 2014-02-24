@@ -12,7 +12,7 @@ public class ZTypePool {
 
 	public final static int _NewTypeId(ZType T) {
 		@Var int TypeId = _TypeList.size();
-		_TypeList.add(T);
+		ZTypePool._TypeList.add(T);
 		return TypeId;
 	}
 
@@ -85,7 +85,7 @@ public class ZTypePool {
 		if((GenericType == null) && IsCreation) {
 			@Var String ShortName = BaseType.ShortName + "<";
 			@Var int i = 0;
-			for(; i < LibZen._Size(TypeList); i += 1) {
+			while(i < LibZen._Size(TypeList)) {
 				ShortName = ShortName + TypeList.ArrayValues[i].GetRealType().ShortName;
 				if(i + 1 == LibZen._Size(TypeList)) {
 					ShortName = ShortName + ">";
@@ -93,6 +93,7 @@ public class ZTypePool {
 				else {
 					ShortName = ShortName + ",";
 				}
+				i = i + 1;
 			}
 			if(BaseType.IsFuncType()) {
 				GenericType = new ZFuncType(ShortName, _UniqueTypes(TypeList));
@@ -106,7 +107,7 @@ public class ZTypePool {
 	}
 
 	public final static ZFuncType _LookupFuncType(ZArray<ZType> TypeList) {
-		ZType FuncType = _GetGenericType(ZType.FuncType, TypeList, true);
+		@Var ZType FuncType = ZTypePool._GetGenericType(ZType.FuncType, TypeList, true);
 		if(FuncType instanceof ZFuncType) {
 			return (ZFuncType)FuncType;
 		}
@@ -114,14 +115,14 @@ public class ZTypePool {
 	}
 
 	public final static ZFuncType _LookupFuncType(ZType R, ZType P1) {
-		ZArray<ZType> TypeList = new ZArray<ZType>(new ZType[2]);
+		@Var ZArray<ZType> TypeList = new ZArray<ZType>(new ZType[2]);
 		TypeList.add(R);
 		TypeList.add(P1);
 		return ZTypePool._LookupFuncType(TypeList);
 	}
 
 	public final static ZFuncType _LookupFuncType(ZType R, ZType P1, ZType P2) {
-		ZArray<ZType> TypeList = new ZArray<ZType>(new ZType[3]);
+		@Var ZArray<ZType> TypeList = new ZArray<ZType>(new ZType[3]);
 		TypeList.add(R);
 		TypeList.add(P1);
 		TypeList.add(P2);

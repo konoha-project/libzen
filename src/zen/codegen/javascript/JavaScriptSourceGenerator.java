@@ -50,16 +50,8 @@ import zen.type.ZType;
 
 public class JavaScriptSourceGenerator extends ZSourceGenerator {
 
-	//private final ScriptEngineManager EngineManager;
-	//private final ScriptEngine Engine;
-
 	public JavaScriptSourceGenerator() {
-		super("JavaScript", "1.8");
-		this.LineFeed = "\n";
-		this.Tab = "\t";
-		this.Camma = ", ";
-		this.SemiColon = ";";
-
+		super("js", "JavaScript-1.4");
 		this.TopType = "Object";
 		this.SetNativeType(ZType.BooleanType, "Boolean");
 		this.SetNativeType(ZType.IntType, "Number");
@@ -70,25 +62,12 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 		this.SetMacro("print", "console.log($[0])", ZType.VoidType, ZType.StringType);
 		this.SetMacro("println", "console.log($[0])", ZType.VoidType, ZType.StringType);
 
-		this.SetConverterMacro("$[0]", ZType.StringType, ZType.IntType);
-		this.SetConverterMacro("$[0]", ZType.StringType, ZType.FloatType);
+		this.SetConverterMacro("($[0])", ZType.FloatType, ZType.IntType);
+		this.SetConverterMacro("($[0])", ZType.IntType, ZType.FloatType);
+		this.SetConverterMacro("($[0]).toString()", ZType.StringType, ZType.IntType);
+		this.SetConverterMacro("($[0]).toString()", ZType.StringType, ZType.FloatType);
 
-		//this.EngineManager = new ScriptEngineManager();
-		//this.Engine = this.EngineManager.getEngineByName("js");
 	}
-
-	//	@Override
-	//	public Object EvalTopLevelNode(ZNode Node) {
-	//		String Code = this.CurrentBuilder.toString() + ";";
-	//		System.out.println(Code);
-	//		this.CurrentBuilder.Clear();
-	//		try {
-	//			return ((Compilable)this.Engine).compile(Code).eval();
-	//		} catch (ScriptException ex) {
-	//			ex.printStackTrace();
-	//		}
-	//		return null;
-	//	}
 
 	@Override public ZSourceEngine GetEngine() {
 		return new ZSourceEngine(new ZenTypeSafer(this), this);
@@ -102,19 +81,17 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Append("isinstance(");
 		this.GenerateCode(null, Node.AST[ZBinaryNode._Left]);
 		this.CurrentBuilder.Append(this.Camma);
-		this.GenerateTypeName(Node.AST[ZBinaryNode._Right].Type);
+		this.CurrentBuilder.AppendInt(Node.TargetType.TypeId);
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override
-	public void VisitThrowNode(ZThrowNode Node) {
-		this.CurrentBuilder.Append("throw");
+	@Override public void VisitThrowNode(ZThrowNode Node) {
+		this.CurrentBuilder.Append("throw ");
 		this.CurrentBuilder.AppendWhiteSpace();
 		this.GenerateCode(null, Node.AST[ZThrowNode._Expr]);
 	}
 
-	@Override
-	public void VisitTryNode(ZTryNode Node) {
+	@Override public void VisitTryNode(ZTryNode Node) {
 		this.CurrentBuilder.Append("try");
 		this.GenerateCode(null, Node.AST[ZTryNode._Try]);
 		this.GenerateCode(null, Node.AST[ZTryNode._Catch]);
@@ -124,16 +101,14 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 		}
 	}
 
-	@Override
-	public void VisitCatchNode(ZCatchNode Node) {
+	@Override public void VisitCatchNode(ZCatchNode Node) {
 		this.CurrentBuilder.Append("catch");
 		this.CurrentBuilder.AppendWhiteSpace();
 		this.CurrentBuilder.Append(Node.ExceptionName);
 		this.GenerateCode(null, Node.AST[ZCatchNode._Block]);
 	}
 
-	@Override
-	public void VisitVarNode(ZVarNode Node) {
+	@Override public void VisitVarNode(ZVarNode Node) {
 		this.CurrentBuilder.AppendToken("var");
 		this.CurrentBuilder.AppendWhiteSpace();
 		this.CurrentBuilder.Append(Node.NativeName);
@@ -162,15 +137,6 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.AppendLineFeed();
 	}
-
-
-	//	@Override
-	//	public void VisitFuncDeclNode(ZFunctionNode/ Node) {
-	//		this.CurrentBuilder.Append("function ");
-	//		this.CurrentBuilder.Append(Node.FuncName);
-	//		this.VisitListNode("(", Node.ParamList, ")");
-	//		this.GenerateCode(Node.BodyNode);
-	//	}
 
 	@Override public void VisitMapLiteralNode(ZMapLiteralNode Node) {
 		// TODO Auto-generated method stub
@@ -262,12 +228,19 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 
 	@Override public void VisitErrorNode(ZErrorNode Node) {
 		ZLogger._LogError(Node.SourceToken, Node.ErrorMessage);
-		this.CurrentBuilder.Append("new");
 		this.CurrentBuilder.AppendWhiteSpace();
-		this.CurrentBuilder.Append("Error");
+		this.CurrentBuilder.Append("LibZen.ThrowError");
 		this.CurrentBuilder.Append("(");
 		this.CurrentBuilder.Append(LibZen._QuoteString(Node.ErrorMessage));
 		this.CurrentBuilder.Append(")");
 	}
+
+	//	@Override public ZFuncType GetConstructorFuncType(ZType ClassType, ZListNode List) {
+	//		return ZType.VarType;
+	//	}
+	//
+	//	@Override public ZFuncType GetMethodFuncType(ZType RecvType, String MethodName, ZListNode List) {
+	//		return ZType.VarType;
+	//	}
 
 }

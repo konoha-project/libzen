@@ -414,7 +414,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 		this.TypeCheckNodeList(Node);
 		if(Node.Type.IsVarType()) {
 			if(ContextType.IsVarType()) {
-				this.Return(Node);
+				this.TypedNode(Node, ZType.VarType);
 				return;
 			}
 			Node.Type = ContextType;
@@ -770,11 +770,11 @@ public class ZenTypeSafer extends ZTypeChecker {
 		@Var int i = 0;
 		while(i < Node.GetListSize()) {
 			@Var ZFieldNode FieldNode = Node.GetFieldNode(i);
+			if(!FieldNode.HasAst(ZFieldNode._InitValue)) {
+				FieldNode.Set(ZFieldNode._InitValue, ZenGamma.CreateDefaultValueNode(FieldNode, FieldNode.DeclType, FieldNode.FieldName));
+			}
 			if(!Node.ClassType.HasField(FieldNode.FieldName)) {
 				FieldNode.ClassType = Node.ClassType;
-				if(!FieldNode.HasAst(ZFieldNode._InitValue)) {
-					FieldNode.Set(ZFieldNode._InitValue, ZenGamma.CreateDefaultValueNode(FieldNode, FieldNode.DeclType, FieldNode.FieldName));
-				}
 				this.CheckTypeAt(FieldNode, ZFieldNode._InitValue, FieldNode.DeclType);
 				if(FieldNode.DeclType.IsVarType()) {
 					FieldNode.DeclType = FieldNode.AST[ZFieldNode._InitValue].Type;

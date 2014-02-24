@@ -31,6 +31,7 @@ import zen.ast.ZFunctionNode;
 import zen.ast.ZListNode;
 import zen.ast.ZMacroNode;
 import zen.ast.ZNode;
+import zen.ast.ZPrototypeNode;
 import zen.ast.ZSugarNode;
 import zen.deps.Field;
 import zen.deps.LibZen;
@@ -248,6 +249,11 @@ public abstract class ZTypeChecker extends ZVisitor {
 		else {
 			this.Return(Node);
 		}
+	}
+
+	private void VisitPrototypeNode(ZPrototypeNode Node) {
+		@Var ZFuncType FuncType = Node.GetFuncType();
+		this.Generator.SetPrototype(Node, Node.FuncName, FuncType);
 	}
 
 	@Override public void VisitExtendedNode(ZNode Node) {

@@ -109,12 +109,31 @@ public class ZSourceEngine extends ZVisitor {
 		return ZEmptyValue.TrueEmpty;
 	}
 
+	private void VisitPrototypeNode(ZPrototypeNode Node) {
+		@Var ZFuncType FuncType = Node.GetFuncType();
+		this.Generator.SetPrototype(Node, Node.FuncName, FuncType);
+	}
+
+	private void VisitImportNode(ZImportNode Node) {
+		Node.Import();
+	}
+
 	public final Object Exec(ZNode Node, boolean IsInteractive) {
 		this.InteractiveContext = IsInteractive;
 		this.EnableVisitor();
-		Node = this.TypeChecker.CheckType(Node, ZType.VoidType);
-		@Var Object ResultValue = this.Eval(Node);
-		return ResultValue;
+		if(Node instanceof ZPrototypeNode) {
+			this.VisitPrototypeNode((ZPrototypeNode)Node);
+			return ZEmptyValue.TrueEmpty;
+		}
+		else if(Node instanceof ZImportNode) {
+			this.VisitImportNode((ZImportNode)Node);
+			return ZEmptyValue.TrueEmpty;
+		}
+		else {
+			Node = this.TypeChecker.CheckType(Node, ZType.VoidType);
+			@Var Object ResultValue = this.Eval(Node);
+			return ResultValue;
+		}
 	}
 
 	public final Object Eval(ZNameSpace NameSpace, String ScriptText, String FileName, int LineNumber, boolean IsInteractive) {
@@ -408,27 +427,12 @@ public class ZSourceEngine extends ZVisitor {
 		this.StopVisitor();
 	}
 
-	public void VisitPrototypeNode(ZPrototypeNode Node) {
-		@Var ZFuncType FuncType = Node.GetFuncType();
-		this.Generator.SetPrototype(Node, Node.FuncName, FuncType);
-	}
-
-	public void VisitImportNode(ZImportNode Node) {
-		Node.Import();
-	}
-
 	public void VisitTypeNode(ZTypeNode Node) {
 		this.Unsupported(Node);
 	}
 
 	@Override public void VisitExtendedNode(ZNode Node) {
-		if(Node instanceof ZPrototypeNode) {
-			this.VisitPrototypeNode((ZPrototypeNode)Node);
-		}
-		else if(Node instanceof ZImportNode) {
-			this.VisitImportNode((ZImportNode)Node);
-		}
-		else if(Node instanceof ZTypeNode) {
+		if(Node instanceof ZTypeNode) {
 			this.VisitTypeNode((ZTypeNode)Node);
 		}
 		else {
