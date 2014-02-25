@@ -8,7 +8,7 @@ public class TypeAnnotationPattern extends ZMatchFunction {
 
 	@Override public ZNode Invoke(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
 		if(TokenContext.MatchToken(":")) {
-			return TokenContext.ParsePattern(ParentNode, "$Type$", ZTokenContext.Required);
+			return TokenContext.ParsePattern(ParentNode, "$Type$", ZTokenContext._Required);
 		}
 		return null;
 	}

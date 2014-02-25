@@ -55,11 +55,11 @@ import zen.type.ZType;
 public class LibZen {
 
 	public final static void _Print(Object msg) {
-		System.out.print(msg);
+		System.err.print(msg);
 	}
 
 	public final static void _PrintLine(Object msg) {
-		System.out.println(msg);
+		System.err.println(msg);
 	}
 
 	private final static String _GetStackInfo(int depth) {

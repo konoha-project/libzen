@@ -8,11 +8,11 @@ import zen.parser.ZTokenContext;
 public class StatementPattern extends ZMatchFunction {
 
 	@Override public ZNode Invoke(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
-		@Var boolean Rememberd = TokenContext.SetParseFlag(ZTokenContext.AllowSkipIndent);
+		@Var boolean Rememberd = TokenContext.SetParseFlag(ZTokenContext._AllowSkipIndent);
 		//		@Var ZAnnotationNode AnnotationNode = (ZAnnotationNode)TokenContext.ParsePattern(ParentNode, "$Annotation$", ZTokenContext.Optional2);
-		TokenContext.SetParseFlag(ZTokenContext.NotAllowSkipIndent);
+		TokenContext.SetParseFlag(ZTokenContext._NotAllowSkipIndent);
 		@Var ZNode StmtNode = ExpressionPattern.DispatchPattern(ParentNode, TokenContext, null, true, true);
-		StmtNode = TokenContext.MatchPattern(StmtNode, ZNode._Nop, ";", ZTokenContext.Required);
+		StmtNode = TokenContext.MatchPattern(StmtNode, ZNode._Nop, ";", ZTokenContext._Required);
 		//		if(AnnotationNode != null) {
 		//			AnnotationNode.Append(StmtNode);
 		//			StmtNode = AnnotationNode;

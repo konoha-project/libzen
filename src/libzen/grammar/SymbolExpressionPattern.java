@@ -11,7 +11,7 @@ import zen.parser.ZTokenContext;
 public class SymbolExpressionPattern extends ZMatchFunction {
 
 	@Override public ZNode Invoke(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
-		@Var ZToken NameToken = TokenContext.GetToken(ZTokenContext.MoveNext);
+		@Var ZToken NameToken = TokenContext.GetToken(ZTokenContext._MoveNext);
 		if(TokenContext.IsToken("=")) {
 			return new ZErrorNode(ParentNode, TokenContext.GetToken(), "assignment is not en expression");
 		}

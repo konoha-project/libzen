@@ -41,7 +41,10 @@ public class ZGeneric1Type extends ZType {
 	}
 
 	@Override public final ZType GetSuperType() {
-		return this.BaseType == this ? this.RefType : this.BaseType;
+		if(this.BaseType == this) {
+			return this.RefType;
+		}
+		return this.BaseType;
 	}
 
 	@Override public final ZType GetBaseType() {

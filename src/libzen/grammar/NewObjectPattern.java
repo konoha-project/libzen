@@ -10,8 +10,8 @@ public class NewObjectPattern extends ZMatchFunction {
 
 	@Override public ZNode Invoke(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
 		@Var ZNode LiteralNode = new ZNewObjectNode(ParentNode);
-		LiteralNode = TokenContext.MatchToken(LiteralNode, "new", ZTokenContext.Required);
-		LiteralNode = TokenContext.MatchPattern(LiteralNode, ZNode._TypeInfo, "$Type$", ZTokenContext.Optional);
+		LiteralNode = TokenContext.MatchToken(LiteralNode, "new", ZTokenContext._Required);
+		LiteralNode = TokenContext.MatchPattern(LiteralNode, ZNode._TypeInfo, "$Type$", ZTokenContext._Optional);
 		LiteralNode = TokenContext.MatchNtimes(LiteralNode, "(", "$Expression$", ",", ")");
 		return LiteralNode;
 	}

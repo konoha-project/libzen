@@ -12,16 +12,16 @@ public class BlockPattern extends ZMatchFunction {
 	@Override public ZNode Invoke(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
 		@Var ZNode BlockNode = new ZBlockNode(ParentNode, 0);
 		@Var ZToken SkipToken = TokenContext.GetToken();
-		BlockNode = TokenContext.MatchToken(BlockNode, "{", ZTokenContext.Required);
+		BlockNode = TokenContext.MatchToken(BlockNode, "{", ZTokenContext._Required);
 		if(!BlockNode.IsErrorNode()) {
-			@Var boolean Remembered = TokenContext.SetParseFlag(ZTokenContext.AllowSkipIndent); // init
+			@Var boolean Remembered = TokenContext.SetParseFlag(ZTokenContext._AllowSkipIndent); // init
 			@Var ZNode NestedBlockNode = BlockNode;
 			while(TokenContext.HasNext()) {
 				//System.out.println("Token :" + TokenContext.GetToken());
 				if(TokenContext.MatchToken("}")) {
 					break;
 				}
-				NestedBlockNode = TokenContext.MatchPattern(NestedBlockNode, ZNode._NestedAppendIndex, "$Statement$", ZTokenContext.Required);
+				NestedBlockNode = TokenContext.MatchPattern(NestedBlockNode, ZNode._NestedAppendIndex, "$Statement$", ZTokenContext._Required);
 				if(NestedBlockNode.IsErrorNode()) {
 					TokenContext.SkipError(SkipToken);
 					TokenContext.MatchToken("}");

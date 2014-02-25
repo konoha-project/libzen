@@ -12,7 +12,7 @@ import zen.parser.ZTokenContext;
 public class NamePattern extends ZMatchFunction {
 
 	@Override public ZNode Invoke(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
-		@Var ZToken Token = TokenContext.GetToken(ZTokenContext.MoveNext);
+		@Var ZToken Token = TokenContext.GetToken(ZTokenContext._MoveNext);
 		if(LibZen._IsSymbol(Token.GetChar())) {
 			return new ZGetNameNode(ParentNode, Token, Token.GetText());
 		}

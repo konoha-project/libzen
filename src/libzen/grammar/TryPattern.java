@@ -10,15 +10,15 @@ public class TryPattern extends ZMatchFunction {
 
 	@Override public ZNode Invoke(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
 		@Var ZNode TryNode = new ZTryNode(ParentNode);
-		TryNode = TokenContext.MatchToken(TryNode, "try", ZTokenContext.Required);
-		TryNode = TokenContext.MatchPattern(TryNode, ZTryNode._Try, "$Block$", ZTokenContext.Required);
+		TryNode = TokenContext.MatchToken(TryNode, "try", ZTokenContext._Required);
+		TryNode = TokenContext.MatchPattern(TryNode, ZTryNode._Try, "$Block$", ZTokenContext._Required);
 		@Var int count = 0;
 		if(TokenContext.IsNewLineToken("catch")) {
-			TryNode = TokenContext.MatchPattern(TryNode, ZTryNode._Catch, "$Catch$", ZTokenContext.Required);
+			TryNode = TokenContext.MatchPattern(TryNode, ZTryNode._Catch, "$Catch$", ZTokenContext._Required);
 			count = count + 1;
 		}
 		if(TokenContext.MatchNewLineToken("finally")) {
-			TryNode = TokenContext.MatchPattern(TryNode, ZTryNode._Finally, "$Block$", ZTokenContext.Required);
+			TryNode = TokenContext.MatchPattern(TryNode, ZTryNode._Finally, "$Block$", ZTokenContext._Required);
 			count = count + 1;
 		}
 		if(count == 0 && !TryNode.IsErrorNode()) {

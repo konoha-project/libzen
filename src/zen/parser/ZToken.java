@@ -6,7 +6,7 @@ import zen.deps.Var;
 import zen.deps.ZenIgnored;
 
 public class ZToken {
-	public final static ZToken NullToken = new ZToken(null, 0, 0);
+	public final static ZToken _NullToken = new ZToken(null, 0, 0);
 
 	@Field public ZSource Source;
 	@Field public int  StartIndex;
@@ -88,7 +88,7 @@ public class ZToken {
 	}
 
 	public final boolean IsNull() {
-		return (this == ZToken.NullToken);
+		return (this == ZToken._NullToken);
 	}
 
 	public final boolean IsIndent() {

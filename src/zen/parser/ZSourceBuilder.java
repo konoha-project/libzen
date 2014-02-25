@@ -67,7 +67,7 @@ public final class ZSourceBuilder {
 	}
 
 	public final void AppendInt(int Value) {
-		this.SourceList.add(String.valueOf(Value));
+		this.SourceList.add(""+Value);
 	}
 
 	public final void AppendLineFeed() {

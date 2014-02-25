@@ -11,7 +11,7 @@ import zen.parser.ZTokenContext;
 public class ComparatorPattern extends ZMatchFunction {
 
 	@Override public ZNode Invoke(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
-		@Var ZToken Token = TokenContext.GetToken(ZTokenContext.MoveNext);
+		@Var ZToken Token = TokenContext.GetToken(ZTokenContext._MoveNext);
 		@Var ZBinaryNode BinaryNode = new ZComparatorNode(ParentNode, Token, LeftNode, TokenContext.GetApplyingSyntax());
 		return BinaryNode.AppendParsedRightNode(ParentNode, TokenContext);
 	}

@@ -10,7 +10,7 @@ public class BreakPattern extends ZMatchFunction {
 
 	@Override public ZNode Invoke(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
 		@Var ZNode BreakNode = new ZBreakNode(ParentNode);
-		BreakNode = TokenContext.MatchToken(BreakNode, "break", ZTokenContext.Required);
+		BreakNode = TokenContext.MatchToken(BreakNode, "break", ZTokenContext._Required);
 		return BreakNode;
 	}
 

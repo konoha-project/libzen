@@ -142,10 +142,10 @@ public class ZSourceEngine extends ZVisitor {
 		TokenContext.SkipEmptyStatement();
 		@Var ZToken SkipToken = TokenContext.GetToken();
 		while(TokenContext.HasNext()) {
-			TokenContext.SetParseFlag(ZTokenContext.NotAllowSkipIndent);
+			TokenContext.SetParseFlag(ZTokenContext._NotAllowSkipIndent);
 			TopBlockNode.ClearListAfter(0);
 			SkipToken = TokenContext.GetToken();
-			@Var ZNode ParsedNode = TokenContext.ParsePattern(TopBlockNode, "$Statement$", ZTokenContext.Required);
+			@Var ZNode ParsedNode = TokenContext.ParsePattern(TopBlockNode, "$Statement$", ZTokenContext._Required);
 			if(ParsedNode.IsErrorNode()) {
 				TokenContext.SkipError(SkipToken);
 			}

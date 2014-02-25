@@ -10,10 +10,10 @@ import zen.parser.ZTokenContext;
 public class TypePattern extends ZMatchFunction {
 
 	@Override public ZNode Invoke(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
-		@Var ZToken Token = TokenContext.GetToken(ZTokenContext.MoveNext);
+		@Var ZToken Token = TokenContext.GetToken(ZTokenContext._MoveNext);
 		@Var ZTypeNode TypeNode = ParentNode.GetNameSpace().GetTypeNode(Token.GetText(), Token);
 		if(TypeNode != null) {
-			return TokenContext.ParsePatternAfter(ParentNode, TypeNode, "$TypeRight$", ZTokenContext.Optional);
+			return TokenContext.ParsePatternAfter(ParentNode, TypeNode, "$TypeRight$", ZTokenContext._Optional);
 		}
 		return null; // Not Matched
 	}

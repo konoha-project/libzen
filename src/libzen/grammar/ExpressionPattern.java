@@ -18,7 +18,7 @@ public class ExpressionPattern extends ZMatchFunction {
 
 	static ZSyntax GetRightPattern(ZNameSpace NameSpace, ZTokenContext TokenContext) {
 		@Var ZToken Token = TokenContext.GetToken();
-		if(Token != ZToken.NullToken) {
+		if(Token != ZToken._NullToken) {
 			@Var ZSyntax Pattern = NameSpace.GetRightSyntaxPattern(Token.GetText());
 			return Pattern;
 		}
@@ -40,7 +40,7 @@ public class ExpressionPattern extends ZMatchFunction {
 			if(Pattern.IsStatement && !AllowStatement) {
 				return new ZErrorNode(ParentNode, Token, Token.GetText() + " statement is not here");
 			}
-			LeftNode = TokenContext.ApplyMatchPattern(ParentNode, LeftNode, Pattern, ZTokenContext.Required);
+			LeftNode = TokenContext.ApplyMatchPattern(ParentNode, LeftNode, Pattern, ZTokenContext._Required);
 		}
 		else {
 			if(Token.IsNameSymbol()) {
@@ -50,7 +50,7 @@ public class ExpressionPattern extends ZMatchFunction {
 				else {
 					Pattern = NameSpace.GetSyntaxPattern("$SymbolExpression$");
 				}
-				LeftNode = TokenContext.ApplyMatchPattern(ParentNode, LeftNode, Pattern, ZTokenContext.Required);
+				LeftNode = TokenContext.ApplyMatchPattern(ParentNode, LeftNode, Pattern, ZTokenContext._Required);
 			}
 			else {
 				if(AllowStatement) {
@@ -70,7 +70,7 @@ public class ExpressionPattern extends ZMatchFunction {
 				if(!AllowBinary && RightPattern.IsBinaryOperator()) {
 					break;
 				}
-				LeftNode = TokenContext.ApplyMatchPattern(ParentNode, LeftNode, RightPattern, ZTokenContext.Required);
+				LeftNode = TokenContext.ApplyMatchPattern(ParentNode, LeftNode, RightPattern, ZTokenContext._Required);
 			}
 		}
 		return LeftNode;

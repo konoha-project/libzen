@@ -11,7 +11,7 @@ import zen.parser.ZTokenContext;
 public class IntLiteralPattern extends ZMatchFunction {
 
 	@Override public ZNode Invoke(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
-		@Var ZToken Token = TokenContext.GetToken(ZTokenContext.MoveNext);
+		@Var ZToken Token = TokenContext.GetToken(ZTokenContext._MoveNext);
 		return new ZIntNode(ParentNode, Token, LibZen._ParseInt(Token.GetText()));
 	}
 

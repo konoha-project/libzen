@@ -10,9 +10,9 @@ public class GetIndexPattern extends ZMatchFunction {
 
 	@Override public ZNode Invoke(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
 		@Var ZNode IndexerNode = new ZGetIndexNode(ParentNode, LeftNode);
-		IndexerNode = TokenContext.MatchToken(IndexerNode, "[", ZTokenContext.Required);
-		IndexerNode = TokenContext.MatchPattern(IndexerNode, ZGetIndexNode._Index, "$Expression$", ZTokenContext.Required, ZTokenContext.AllowSkipIndent);
-		IndexerNode = TokenContext.MatchToken(IndexerNode, "]", ZTokenContext.Required);
+		IndexerNode = TokenContext.MatchToken(IndexerNode, "[", ZTokenContext._Required);
+		IndexerNode = TokenContext.MatchPattern(IndexerNode, ZGetIndexNode._Index, "$Expression$", ZTokenContext._Required, ZTokenContext._AllowSkipIndent);
+		IndexerNode = TokenContext.MatchToken(IndexerNode, "]", ZTokenContext._Required);
 		return IndexerNode;
 	}
 

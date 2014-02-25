@@ -10,9 +10,9 @@ public class GroupPattern extends ZMatchFunction {
 
 	@Override public ZNode Invoke(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
 		@Var ZNode GroupNode = new ZGroupNode(ParentNode);
-		GroupNode = TokenContext.MatchToken(GroupNode, "(", ZTokenContext.Required);
-		GroupNode = TokenContext.MatchPattern(GroupNode, ZGroupNode._Expr, "$Expression$", ZTokenContext.Required, ZTokenContext.AllowSkipIndent);
-		GroupNode = TokenContext.MatchToken(GroupNode, ")", ZTokenContext.Required);
+		GroupNode = TokenContext.MatchToken(GroupNode, "(", ZTokenContext._Required);
+		GroupNode = TokenContext.MatchPattern(GroupNode, ZGroupNode._Expr, "$Expression$", ZTokenContext._Required, ZTokenContext._AllowSkipIndent);
+		GroupNode = TokenContext.MatchToken(GroupNode, ")", ZTokenContext._Required);
 		return GroupNode;
 	}
 

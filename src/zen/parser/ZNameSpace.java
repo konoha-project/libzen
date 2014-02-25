@@ -244,7 +244,7 @@ public final class ZNameSpace {
 	// Type
 
 	public final void SetTypeName(String Name, ZType Type, @Nullable ZToken SourceToken) {
-		ZTypeNode Node = new ZTypeNode(null, SourceToken, Type);
+		@Var ZTypeNode Node = new ZTypeNode(null, SourceToken, Type);
 		this.SetLocalSymbol(Name, Node);
 	}
 

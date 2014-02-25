@@ -8,7 +8,7 @@ import zen.parser.ZTokenContext;
 public class FalsePattern extends ZMatchFunction {
 
 	@Override public ZNode Invoke(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
-		return new ZBooleanNode(ParentNode, TokenContext.GetToken(ZTokenContext.MoveNext), false);
+		return new ZBooleanNode(ParentNode, TokenContext.GetToken(ZTokenContext._MoveNext), false);
 	}
 
 }
