@@ -9,7 +9,7 @@ public class NumberLiteralToken extends ZTokenFunction {
 	private char ParseDigit(ZSourceContext SourceContext) {
 		@Var char ch = 0;
 		while(SourceContext.HasChar()) {
-			ch = SourceContext.ParseChar();
+			ch = SourceContext.GetCurrentChar();
 			if(!LibZen._IsDigit(ch)) {
 				break;
 			}
@@ -27,7 +27,7 @@ public class NumberLiteralToken extends ZTokenFunction {
 			if(ch == 'e' || ch == 'E') {
 				SourceContext.MoveNext();
 				if(SourceContext.HasChar()) {
-					ch = SourceContext.ParseChar();
+					ch = SourceContext.GetCurrentChar();
 					if(ch == '+' || ch == '-') {
 						SourceContext.MoveNext();
 					}

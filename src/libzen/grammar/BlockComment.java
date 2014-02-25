@@ -8,13 +8,13 @@ public class BlockComment extends ZTokenFunction {
 
 	@Override public boolean Invoke(ZSourceContext SourceContext) {
 		@Var int StartIndex = SourceContext.GetPosition();
-		@Var char NextChar = SourceContext.ParseChar(+1);
+		@Var char NextChar = SourceContext.GetCharAtFromCurrentPosition(+1);
 		if(NextChar != '/' && NextChar != '*') {
 			return false;  // another tokenizer
 		}
 		if(NextChar == '/') { // SingleLineComment
 			while(SourceContext.HasChar()) {
-				@Var char ch = SourceContext.ParseChar();
+				@Var char ch = SourceContext.GetCurrentChar();
 				if(ch == '\n') {
 					break;
 				}
@@ -22,21 +22,20 @@ public class BlockComment extends ZTokenFunction {
 			}
 			return true;
 		}
-		@Var int Level = 1;
+		@Var int NestedLevel = 0;
 		@Var char PrevChar = '\0';
 		while(SourceContext.HasChar()) {
-			NextChar = SourceContext.ParseChar();
-			if(NextChar == '/' && PrevChar == '*') {
-				if(Level == 1) {
+			NextChar = SourceContext.GetCurrentChar();
+			//System.out.println("P,N"+PrevChar+","+NextChar);
+			if(PrevChar == '*' && NextChar == '/') {
+				NestedLevel = NestedLevel - 1;
+				if(NestedLevel == 0) {
 					SourceContext.MoveNext();
 					return true;
 				}
-				Level = Level - 1;
 			}
-			if(Level > 0) {
-				if(NextChar == '*' && PrevChar == '/') {
-					Level = Level + 1;
-				}
+			if(PrevChar == '/' && NextChar == '*') {
+				NestedLevel = NestedLevel + 1;
 			}
 			SourceContext.MoveNext();
 			PrevChar = NextChar;

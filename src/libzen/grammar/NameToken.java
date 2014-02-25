@@ -10,7 +10,7 @@ public class NameToken extends ZTokenFunction {
 	@Override public boolean Invoke(ZSourceContext SourceContext) {
 		@Var int StartIndex = SourceContext.GetPosition();
 		while(SourceContext.HasChar()) {
-			@Var char ch = SourceContext.ParseChar();
+			@Var char ch = SourceContext.GetCurrentChar();
 			if(!LibZen._IsSymbol(ch) && !LibZen._IsDigit(ch)) {
 				break;
 			}

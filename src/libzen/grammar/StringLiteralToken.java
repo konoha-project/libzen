@@ -9,7 +9,7 @@ public class StringLiteralToken extends ZTokenFunction {
 		@Var int StartIndex = SourceContext.GetPosition();
 		SourceContext.MoveNext();
 		while(SourceContext.HasChar()) {
-			@Var char ch = SourceContext.ParseChar();
+			@Var char ch = SourceContext.GetCurrentChar();
 			if(ch == '\"') {
 				SourceContext.MoveNext(); // eat '"'
 				SourceContext.Tokenize("$StringLiteral$", StartIndex, SourceContext.GetPosition());

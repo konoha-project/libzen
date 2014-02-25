@@ -23,11 +23,11 @@ public final class ZSourceContext extends ZSource {
 		return this.SourceText.length() - this.SourcePosition > 0;
 	}
 
-	public final char ParseChar() {
+	public final char GetCurrentChar() {
 		return this.SourceText.charAt(this.SourcePosition);
 	}
 
-	public final char ParseChar(int n) {
+	public final char GetCharAtFromCurrentPosition(int n) {
 		if(this.SourcePosition+n < this.SourceText.length()) {
 			return this.SourceText.charAt(this.SourcePosition+n);
 		}
@@ -40,7 +40,7 @@ public final class ZSourceContext extends ZSource {
 
 	public final void SkipWhiteSpace() {
 		while(this.HasChar()) {
-			@Var char ch = this.ParseChar();
+			@Var char ch = this.GetCurrentChar();
 			if(ch != ' ' && ch != '\t') {
 				break;
 			}
