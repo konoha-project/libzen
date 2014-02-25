@@ -234,11 +234,12 @@ public final class ZNameSpace {
 		return null;
 	}
 
-	public final void SetLocalVariable(ZFunctionNode FunctionNode, ZType VarType, String VarName, ZToken SourceToken) {
+	public final int SetLocalVariable(ZFunctionNode FunctionNode, ZType VarType, String VarName, ZToken SourceToken) {
 		@Var ZSymbolEntry Parent = this.GetSymbol(VarName);
 		@Var ZVariable VarInfo = new ZVariable(Parent, FunctionNode, 0, VarType, VarName, SourceToken);
 		//System.out.println("set var " + VarName + ", entry=" + VarInfo + ", NameSpace=" + this);
 		this.SetLocalSymbolEntry(VarName, VarInfo);
+		return VarInfo.VarUniqueIndex;
 	}
 
 	// Type

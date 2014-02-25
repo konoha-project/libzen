@@ -562,7 +562,7 @@ public class ZSourceGenerator extends ZGenerator {
 	@Override public void VisitVarNode(ZVarNode Node) {
 		this.CurrentBuilder.Append("var");
 		this.CurrentBuilder.AppendWhiteSpace();
-		this.CurrentBuilder.Append(Node.NativeName);
+		this.CurrentBuilder.Append(this.SafeName(Node.NativeName, Node.VarIndex));
 		this.VisitTypeAnnotation(Node.DeclType);
 		this.CurrentBuilder.AppendToken("=");
 		this.GenerateCode(null, Node.AST[ZVarNode._InitValue]);

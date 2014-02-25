@@ -200,11 +200,11 @@ public class CSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitGetNameNode(ZGetNameNode Node) {
-		this.CurrentBuilder.Append(Node.VarName);
+		this.CurrentBuilder.Append(this.SafeName(Node.VarName, Node.VarIndex));
 	}
 
 	@Override public void VisitSetNameNode(ZSetNameNode Node) {
-		this.CurrentBuilder.Append(Node.VarName);
+		this.CurrentBuilder.Append(this.SafeName(Node.VarName, Node.VarIndex));
 		this.CurrentBuilder.AppendToken("=");
 		this.GenerateCode(null, Node.AST[ZSetNameNode._Expr]);
 	}
@@ -340,7 +340,7 @@ public class CSourceGenerator extends ZSourceGenerator {
 	@Override public void VisitVarNode(ZVarNode Node) {
 		this.GenerateTypeName(Node.DeclType);
 		this.CurrentBuilder.Append(" ");
-		this.CurrentBuilder.Append(Node.NativeName);
+		this.CurrentBuilder.Append(this.SafeName(Node.NativeName, Node.VarIndex));
 		this.CurrentBuilder.AppendToken("=");
 		this.GenerateCode(null, Node.AST[ZVarNode._InitValue]);
 		this.CurrentBuilder.Append(this.SemiColon);

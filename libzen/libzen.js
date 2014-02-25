@@ -1060,11 +1060,11 @@ function Equals__2qwg(self, Type__1) {
 }
 
 function Accept__2qwg(self, Type__1) {
-   var ThisType = self.GetRealType(self);
+   var ThisType__2 = self.GetRealType(self);
    if (ThisType__2 == Type__1.GetRealType(Type__1)) {
       return true;
    };
-   var SuperClass = Type__1.GetSuperType(Type__1);
+   var SuperClass__3 = Type__1.GetSuperType(Type__1);
    while (SuperClass__3 != null) {
       if (SuperClass__3 == ThisType__2) {
          return true;
@@ -1195,9 +1195,9 @@ function ResetSuperType__2qeq(self, SuperClass__1) {
    self.RefType = SuperClass__1;
    if (SuperClass__1.FieldList != null) {
       self.FieldList = [];
-      var i = 0;
+      var i__2 = 0;
       while (i__2 < (SuperClass__1.FieldList).length) {
-         var Field = SuperClass__1.FieldList[i__2];
+         var Field__3 = SuperClass__1.FieldList[i__2];
          self.FieldList.add(Field__3);
          i__2 = i__2 + 1;
       };
@@ -1218,7 +1218,7 @@ function GetFieldAt__2qeq(self, Index__1) {
 
 function HasField__2qeq(self, FieldName__1) {
    if (self.FieldList != null) {
-      var i = 0;
+      var i__3 = 0;
       while (i__2 < (self.FieldList).length) {
          if (FieldName__1.equals(self.FieldList[i].FieldName)) {
             return true;
@@ -1231,9 +1231,9 @@ function HasField__2qeq(self, FieldName__1) {
 
 function GetFieldType__3qeq(self, FieldName__1, DefaultType__2) {
    if (self.FieldList != null) {
-      var i = 0;
+      var i__5 = 0;
       while (i__3 < (self.FieldList).length) {
-         var Field = self.FieldList[i__3];
+         var Field__6 = self.FieldList[i__3];
          if (FieldName__1.equals(Field.FieldName)) {
             return Field__4.FieldType;
          };
@@ -1248,7 +1248,7 @@ function AppendField__4qeq(self, FieldType__1, FieldName__2, SourceToken__3) {
    if (self.FieldList == null) {
       self.FieldList = [];
    };
-   var ClassField = ZClassField__5qw8(new ZClassField(), self, FieldName__2, FieldType__1, SourceToken__3);
+   var ClassField__4 = ZClassField__5qw8(new ZClassField(), self, FieldName__2, FieldType__1, SourceToken__3);
    self.FieldList.add(ClassField__4);
    return ClassField__4;
 }
@@ -1296,7 +1296,7 @@ function ZFuncType__3qe0(self, ShortName__1, UniqueTypeParams__2) {
    } else {
       self.TypeParams = UniqueTypeParams__2;
    };
-   var i = 0;
+   var i__4 = 0;
    while (i__3 < (self.TypeParams).length) {
       if (self.TypeParams[i__3].IsVarType(self.TypeParams[i__3])) {
          self.HasUnknownType = true;
@@ -1323,8 +1323,8 @@ function IsGreekType__1qe0(self) {
 
 function GetGreekRealType__2qe0(self, Greek__1) {
    if (self.HasGreekType) {
-      var TypeList = [];
-      var i = 0;
+      var TypeList__4 = [];
+      var i__5 = 0;
       while (i__3 < (self.TypeParams).length) {
          TypeList__2.add(self.TypeParams[i__3].GetGreekRealType(self.TypeParams[i__3], Greek__1));
          i__3 = i__3 + 1;
@@ -1336,7 +1336,7 @@ function GetGreekRealType__2qe0(self, Greek__1) {
 
 function AcceptValueType__4qe0(self, ValueType__1, ExactMatch__2, Greek__3) {
    if (IsFuncType__1qwg(ValueType__1) && ValueType__1.GetParamSize(ValueType__1) == self.GetParamSize(self)) {
-      var i = 0;
+      var i__4 = 0;
       while (i__4 < (self.TypeParams).length) {
          if (!self.TypeParams[i__4].AcceptValueType(self.TypeParams[i__4], ValueType__1.GetParamType(ValueType__1, i__4), true, Greek__3)) {
             return false;
@@ -1384,10 +1384,10 @@ function GetFuncParamType__2qe0(self, Index__1) {
 }
 
 function NewMethodFuncType__2qe0(self, RecvType__1) {
-   var TypeList = [];
+   var TypeList__2 = [];
    TypeList__2.add(GetReturnType__1qe0(self));
    TypeList__2.add(RecvType__1);
-   var i = 0;
+   var i__3 = 0;
    while (i__3 < GetFuncParamSize__1qe0(self)) {
       TypeList__2.add(GetFuncParamType__2qe0(self, i__3));
       i__3 = i__3 + 1;
@@ -1397,7 +1397,7 @@ function NewMethodFuncType__2qe0(self, RecvType__1) {
 
 function AcceptAsFieldFunc__2qe0(self, FuncType__1) {
    if (GetFuncParamSize__1qe0(FuncType__1) == GetFuncParamSize__1qe0(self) && Equals__2qwg(GetReturnType__1qe0(FuncType__1), GetReturnType__1qe0(self))) {
-      var i = 1;
+      var i__2 = 1;
       while (i__2 < GetFuncParamSize__1qe0(FuncType__1)) {
          if (!Equals__2qwg(GetFuncParamType__2qe0(FuncType__1, i__2), GetFuncParamType__2qe0(self, i__2))) {
             return false;
@@ -1462,7 +1462,7 @@ function ZGreekType_NewGreekTypes__1qwh(GreekTypes) {
    if (GreekTypes == null) {
       return LibZen_NewTypeArray__1qqr((["a", "b", "c"]).length);
    } else {
-      var i = 0;
+      var i__1 = 0;
       while (i__1 < (GreekTypes).length) {
          GreekTypes[i__1] = null;
          i__1 = i__1 + 1;
@@ -1518,7 +1518,7 @@ function Defined__1qry(self) {
 }
 
 function ZTypePool_NewTypeId__1qwg(T) {
-   var TypeId = ([]).length;
+   var TypeId__1 = ([]).length;
    [].add(T);
    return TypeId__1;
 }
@@ -1538,10 +1538,10 @@ function ZTypePool_MangleType2__2qwg(Type1, Type2__1) {
 }
 
 function ZTypePool_MangleTypes__1qwh(TypeList) {
-   var s = "";
-   var i = 0;
+   var s__1 = "";
+   var i__2 = 0;
    while (i__2 < (TypeList).length) {
-      var Type = TypeList[i__2];
+      var Type__3 = TypeList[i__2];
       s__1 = (s__1 + ":") + (Type__3.TypeId).toString();
       i__2 = i__2 + 1;
    };
@@ -1549,8 +1549,8 @@ function ZTypePool_MangleTypes__1qwh(TypeList) {
 }
 
 function ZTypePool_UniqueTypes__1qwh(TypeList) {
-   var MangleName = "[]" + ZTypePool_MangleTypes__1qwh(TypeList);
-   var Types = [MangleName__1];
+   var MangleName__1 = "[]" + ZTypePool_MangleTypes__1qwh(TypeList);
+   var Types__2 = [MangleName__1];
    if (Types__2 == null) {
       Types__2 = TypeList;
       [MangleName__1] = Types__2;
@@ -1559,10 +1559,10 @@ function ZTypePool_UniqueTypes__1qwh(TypeList) {
 }
 
 function ZTypePool_GetGenericType1__2qwg(BaseType, ParamType__1) {
-   var MangleName = ZTypePool_MangleType2__2qwg(BaseType, ParamType__1);
-   var GenericType = [MangleName__2];
+   var MangleName__2 = ZTypePool_MangleType2__2qwg(BaseType, ParamType__1);
+   var GenericType__3 = [MangleName__2];
    if (GenericType__3 == null) {
-      var Name = ((BaseType.ShortName + "<") + toString__1qwg(ParamType__1)) + ">";
+      var Name__4 = ((BaseType.ShortName + "<") + toString__1qwg(ParamType__1)) + ">";
       if (IsArrayType__1qwg(BaseType)) {
          Name__4 = ((BaseType.ShortName + "<") + toString__1qwg(ParamType__1)) + ">";
       };
@@ -1577,11 +1577,11 @@ function ZTypePool_GetGenericType__3qwg(BaseType, TypeList__1, IsCreation__2) {
    if ((TypeList__1).length == 1 && !IsFuncType__1qwg(BaseType)) {
       return ZTypePool_GetGenericType1__2qwg(BaseType, TypeList__1[0]);
    };
-   var MangleName = (":" + (BaseType.TypeId).toString()) + ZTypePool_MangleTypes__1qwh(TypeList__1);
-   var GenericType = [MangleName__3];
+   var MangleName__7 = (":" + (BaseType.TypeId).toString()) + ZTypePool_MangleTypes__1qwh(TypeList__1);
+   var GenericType__8 = [MangleName__3];
    if ((GenericType__4 == null) && IsCreation__2) {
-      var ShortName = BaseType.ShortName + "<";
-      var i = 0;
+      var ShortName__9 = BaseType.ShortName + "<";
+      var i__10 = 0;
       while (i__6 < (TypeList__1).length) {
          ShortName__9 = ShortName__5 + TypeList__1[i__6].GetRealType(TypeList__1[i__6]).ShortName;
          if ((i__6 + 1) == (TypeList__1).length) {
@@ -1601,7 +1601,7 @@ function ZTypePool_GetGenericType__3qwg(BaseType, TypeList__1, IsCreation__2) {
 }
 
 function ZTypePool_LookupFuncType__1qwh(TypeList) {
-   var FuncType = ZTypePool_GetGenericType__3qwg(ZFuncType__3qe0(new ZFuncType(), "Func", null), TypeList, true);
+   var FuncType__1 = ZTypePool_GetGenericType__3qwg(ZFuncType__3qe0(new ZFuncType(), "Func", null), TypeList, true);
    if (FuncType__1 instanceof ZFuncType) {
       return FuncType__1;
    };
@@ -1609,20 +1609,20 @@ function ZTypePool_LookupFuncType__1qwh(TypeList) {
 }
 
 function ZTypePool_LookupFuncType__1qwg(R) {
-   var TypeList = [];
+   var TypeList__1 = [];
    TypeList__1.add(R);
    return ZTypePool_LookupFuncType__1qwh(TypeList__1);
 }
 
 function ZTypePool_LookupFuncType__2qwg(R, P1__1) {
-   var TypeList = [];
+   var TypeList__2 = [];
    TypeList__2.add(R);
    TypeList__2.add(P1__1);
    return ZTypePool_LookupFuncType__1qwh(TypeList__2);
 }
 
 function ZTypePool_LookupFuncType__3qwg(R, P1__1, P2__2) {
-   var TypeList = [];
+   var TypeList__3 = [];
    TypeList__3.add(R);
    TypeList__3.add(P1__1);
    TypeList__3.add(P2__2);
@@ -1630,7 +1630,7 @@ function ZTypePool_LookupFuncType__3qwg(R, P1__1, P2__2) {
 }
 
 function ZTypePool_LookupFuncType__4qwg(R, P1__1, P2__2, P3__3) {
-   var TypeList = [];
+   var TypeList__4 = [];
    TypeList__4.add(R);
    TypeList__4.add(P1__1);
    TypeList__4.add(P2__2);
@@ -1675,9 +1675,9 @@ function CheckVarNode__3qrj(self, ContextType__1, Node__2) {
 }
 
 function TypeCheckStmtList__3qrj(self, TypeSafer__1, StmtList__2) {
-   var PrevCount = -1;
+   var PrevCount__3 = -1;
    while (true) {
-      var i = 0;
+      var i__4 = 0;
       self.VarNodeCount = 0;
       self.UnresolvedSymbolCount = 0;
       while (i__4 < (StmtList__2).length) {
@@ -1696,7 +1696,7 @@ function TypeCheckStmtList__3qrj(self, TypeSafer__1, StmtList__2) {
 }
 
 function TypeCheckFuncBlock__3qrj(self, TypeSafer__1, FunctionNode__2) {
-   var PrevCount = -1;
+   var PrevCount__3 = -1;
    while (true) {
       self.VarNodeCount = 0;
       self.UnresolvedSymbolCount = 0;
@@ -1751,7 +1751,7 @@ function IsVarType__1qrl(self) {
 function Infer__3qrl(self, ContextType__1, SourceToken__2) {
    if (self.RefType.IsVarType(self.RefType)) {
       if (ContextType__1 instanceof ZVarType && ContextType__1.IsVarType(ContextType__1)) {
-         var VarType = ContextType__1;
+         var VarType__3 = ContextType__1;
          if (self.GreekId < VarType__3.GreekId) {
             VarType__3.GreekId = self.GreekId;
          } else {
@@ -1770,7 +1770,7 @@ function Infer__3qrl(self, ContextType__1, SourceToken__2) {
 function Maybe__3qrl(self, T__1, SourceToken__2) {
    if (self.RefType.IsVarType(self.RefType)) {
       if (T__1 instanceof ZVarType && T__1.IsVarType(T__1)) {
-         var VarType = T__1;
+         var VarType__3 = T__1;
          if (self.GreekId < VarType__3.GreekId) {
             VarType__3.GreekId = self.GreekId;
          } else {
@@ -1821,7 +1821,7 @@ function Set__3qwo(self, Index__1, Node__2) {
    if (Index__1 >= 0) {
       self.AST[Index__1] = SetChild__2qwo(self, Node__2);
    } else if (Index__1 == -4) {
-      var ListNode = self;
+      var ListNode__3 = self;
       if (ListNode__3 instanceof ZListNode) {
          Append__2quv((ListNode__3), Node__2);
       } else {
@@ -1864,14 +1864,14 @@ function GetSourceLocation__1qwo(self) {
 }
 
 function toString__1qwo(self) {
-   var Self = "#" + LibZen_GetClassName__1qqq(self);
+   var Self__3 = "#" + LibZen_GetClassName__1qqq(self);
    if (!self.Type.IsVarType(self.Type)) {
       Self__1 = (Self__1 + ":") + toString__1qwg(self.Type);
    } else {
       Self__1 = Self__1 + ":?";
    };
    if (self.AST != null) {
-      var i = 0;
+      var i__2 = 0;
       Self__1 = Self__1 + "[";
       while (i__2 < (self.AST).length) {
          if (i__2 > 0) {
@@ -1890,7 +1890,7 @@ function toString__1qwo(self) {
 }
 
 function GetScopeBlockNode__1qwo(self) {
-   var Node = self;
+   var Node__1 = self;
    while (Node__1 != null) {
       if (Node__1 instanceof ZBlockNode) {
          return Node__1;
@@ -1902,7 +1902,7 @@ function GetScopeBlockNode__1qwo(self) {
 }
 
 function GetNameSpace__1qwo(self) {
-   var BlockNode = GetScopeBlockNode__1qwo(self);
+   var BlockNode__1 = GetScopeBlockNode__1qwo(self);
    return BlockNode__1.NameSpace;
 }
 
@@ -1930,7 +1930,7 @@ function IsUntyped__1qwo(self) {
 function HasUntypedNode__1qwo(self) {
    if (self.HasUntypedNode) {
       if (!IsUntyped__1qwo(self)) {
-         var i = 0;
+         var i__1 = 0;
          while (i__1 < GetAstSize__1qwo(self)) {
             if (self.AST[i__1] != null && HasUntypedNode__1qwo(self.AST[i__1])) {
                return true;
@@ -2116,14 +2116,14 @@ function Report__2qrk(self, Message__1) {
 }
 
 function GetReportedErrors__1qrk(self) {
-   var List = self.ReportedErrorList;
+   var List__1 = self.ReportedErrorList;
    self.ReportedErrorList = [];
    return List__1;
 }
 
 function ShowErrors__1qrk(self) {
-   var Messages = GetReportedErrors__1qrk(self);
-   var i = 0;
+   var Messages__1 = GetReportedErrors__1qrk(self);
+   var i__2 = 0;
    while (i__2 < (Messages__1).length) {
       LibZen_PrintLine__1qqy(Messages__1[i__2]);
       i__2 = i__2 + 1;
@@ -2181,16 +2181,16 @@ function AppendTokenFunc__3qwt(self, keys__1, TokenFunc__2) {
    if (self.TokenMatrix == null) {
       self.TokenMatrix = LibZen_NewTokenMatrix__0qqw();
       if (self.ParentNameSpace != null) {
-         var i = 0;
+         var i__3 = 0;
          while (i__3 < (self.TokenMatrix).length) {
             self.TokenMatrix[i__3] = GetTokenFunc__2qwt(self.ParentNameSpace, i__3);
             i__3 = i__3 + 1;
          };
       };
    };
-   var i = 0;
+   var i__7 = 0;
    while (i__4 < keys__1.size()) {
-      var kchar = LibZen_GetTokenMatrixIndex__1qqy(LibZen_GetChar__2qqy(keys__1, i__4));
+      var kchar__5 = LibZen_GetTokenMatrixIndex__1qqy(LibZen_GetChar__2qqy(keys__1, i__4));
       self.TokenMatrix[kchar__5] = JoinParentFunc__3qwt(self, TokenFunc__2, self.TokenMatrix[kchar__5]);
       i__4 = i__4 + 1;
    };
@@ -2198,7 +2198,7 @@ function AppendTokenFunc__3qwt(self, keys__1, TokenFunc__2) {
 }
 
 function GetSyntaxPattern__2qwt(self, PatternName__1) {
-   var NameSpace = self;
+   var NameSpace__2 = self;
    while (NameSpace__2 != null) {
       if (NameSpace__2.SyntaxTable != null) {
          return NameSpace__2.SyntaxTable[PatternName__1];
@@ -2222,19 +2222,19 @@ function GetRightSyntaxPattern__2qwt(self, PatternName__1) {
 
 function AppendSyntaxPattern__3qwt(self, PatternName__1, NewPattern__2) {
    LibZen_Assert__1qqe(NewPattern__2.ParentPattern == null);
-   var ParentPattern = GetSyntaxPattern__2qwt(self, PatternName__1);
+   var ParentPattern__3 = GetSyntaxPattern__2qwt(self, PatternName__1);
    NewPattern__2.ParentPattern = ParentPattern__3;
    SetSyntaxPattern__3qwt(self, PatternName__1, NewPattern__2);
    return;
 }
 
 function DefineStatement__3qwt(self, PatternName__1, MatchFunc__2) {
-   var Alias = PatternName__1.indexOf(" ");
-   var Name = PatternName__1;
+   var Alias__9 = PatternName__1.indexOf(" ");
+   var Name__10 = PatternName__1;
    if (Alias__3 != -1) {
       Name__10 = PatternName__1.substring(0, Alias);
    };
-   var Pattern = ZSyntax__4qy7(new ZSyntax(), self, Name__4, MatchFunc__2);
+   var Pattern__11 = ZSyntax__4qy7(new ZSyntax(), self, Name__4, MatchFunc__2);
    Pattern__5.IsStatement = true;
    AppendSyntaxPattern__3qwt(self, Name__4, Pattern__5);
    if (Alias__3 != -1) {
@@ -2244,12 +2244,12 @@ function DefineStatement__3qwt(self, PatternName__1, MatchFunc__2) {
 }
 
 function DefineExpression__3qwt(self, PatternName__1, MatchFunc__2) {
-   var Alias = PatternName__1.indexOf(" ");
-   var Name = PatternName__1;
+   var Alias__9 = PatternName__1.indexOf(" ");
+   var Name__10 = PatternName__1;
    if (Alias__3 != -1) {
       Name__10 = PatternName__1.substring(0, Alias);
    };
-   var Pattern = ZSyntax__4qy7(new ZSyntax(), self, Name__4, MatchFunc__2);
+   var Pattern__11 = ZSyntax__4qy7(new ZSyntax(), self, Name__4, MatchFunc__2);
    AppendSyntaxPattern__3qwt(self, Name__4, Pattern__5);
    if (Alias__3 != -1) {
       DefineExpression__3qwt(self, PatternName__1.substring(Alias + 1), MatchFunc__2);
@@ -2258,12 +2258,12 @@ function DefineExpression__3qwt(self, PatternName__1, MatchFunc__2) {
 }
 
 function DefineRightExpression__4qwt(self, PatternName__1, SyntaxFlag__2, MatchFunc__3) {
-   var Alias = PatternName__1.indexOf(" ");
-   var Name = PatternName__1;
+   var Alias__7 = PatternName__1.indexOf(" ");
+   var Name__8 = PatternName__1;
    if (Alias__4 != -1) {
       Name__8 = PatternName__1.substring(0, Alias);
    };
-   var Pattern = ZSyntax__4qy7(new ZSyntax(), self, Name__5, MatchFunc__3);
+   var Pattern__9 = ZSyntax__4qy7(new ZSyntax(), self, Name__5, MatchFunc__3);
    Pattern__6.SyntaxFlag = SyntaxFlag__2;
    AppendSyntaxPattern__3qwt(self, ZNameSpace_RightPatternSymbol__1qqy(Name__5), Pattern__6);
    if (Alias__4 != -1) {
@@ -2273,10 +2273,10 @@ function DefineRightExpression__4qwt(self, PatternName__1, SyntaxFlag__2, MatchF
 }
 
 function GetSymbol__2qwt(self, Symbol__1) {
-   var NameSpace = self;
+   var NameSpace__2 = self;
    while (NameSpace__2 != null) {
       if (NameSpace__2.SymbolTable != null) {
-         var Entry = NameSpace__2.SymbolTable[Symbol__1];
+         var Entry__3 = NameSpace__2.SymbolTable[Symbol__1];
          if (Entry__3 != null) {
             if (Entry__3.IsDisabled) {
                return null;
@@ -2290,7 +2290,7 @@ function GetSymbol__2qwt(self, Symbol__1) {
 }
 
 function GetSymbolNode__2qwt(self, Symbol__1) {
-   var Entry = GetSymbol__2qwt(self, Symbol__1);
+   var Entry__2 = GetSymbol__2qwt(self, Symbol__1);
    if (Entry__2 != null) {
       return Entry__2.Node;
    };
@@ -2306,7 +2306,7 @@ function SetLocalSymbolEntry__3qwt(self, Symbol__1, Entry__2) {
 }
 
 function SetLocalSymbol__3qwt(self, Symbol__1, Node__2) {
-   var Parent = GetSymbol__2qwt(self, Symbol__1);
+   var Parent__3 = GetSymbol__2qwt(self, Symbol__1);
    Node__2.ParentNode = null;
    SetLocalSymbolEntry__3qwt(self, Symbol__1, ZSymbolEntry__3quw(new ZSymbolEntry(), Parent__3, Node__2));
    return Parent__3;
@@ -2317,7 +2317,7 @@ function SetGlobalSymbol__3qwt(self, Symbol__1, Node__2) {
 }
 
 function GetLocalVariable__2qwt(self, VarName__1) {
-   var Entry = GetSymbol__2qwt(self, VarName__1);
+   var Entry__2 = GetSymbol__2qwt(self, VarName__1);
    if (Entry__2 instanceof ZVariable) {
       return Entry__2;
    };
@@ -2325,14 +2325,14 @@ function GetLocalVariable__2qwt(self, VarName__1) {
 }
 
 function SetLocalVariable__5qwt(self, FunctionNode__1, VarType__2, VarName__3, SourceToken__4) {
-   var Parent = GetSymbol__2qwt(self, VarName__3);
-   var VarInfo = ZVariable__7quu(new ZVariable(), Parent__5, FunctionNode__1, 0, VarType__2, VarName__3, SourceToken__4);
+   var Parent__5 = GetSymbol__2qwt(self, VarName__3);
+   var VarInfo__6 = ZVariable__7quu(new ZVariable(), Parent__5, FunctionNode__1, 0, VarType__2, VarName__3, SourceToken__4);
    SetLocalSymbolEntry__3qwt(self, VarName__3, VarInfo__6);
    return;
 }
 
 function SetTypeName__4qwt(self, Name__1, Type__2, SourceToken__3) {
-   var Node = ZTypeNode__4qu4(new ZTypeNode(), null, SourceToken__3, Type__2);
+   var Node__4 = ZTypeNode__4qu4(new ZTypeNode(), null, SourceToken__3, Type__2);
    SetLocalSymbol__3qwt(self, Name__1, Node__4);
    return;
 }
@@ -2343,12 +2343,12 @@ function SetTypeName__3qwt(self, Type__1, SourceToken__2) {
 }
 
 function GetTypeNode__3qwt(self, TypeName__1, SourceToken__2) {
-   var Node = GetSymbolNode__2qwt(self, TypeName__1);
+   var Node__3 = GetSymbolNode__2qwt(self, TypeName__1);
    if (Node__3 instanceof ZTypeNode) {
       return Node__3;
    };
    if (Node__3 == null && SourceToken__2 != null) {
-      var Type = ZClassType__3qeq(new ZClassType(), TypeName__1, ZType__4qwg(new ZType(), 1 << 16, "var", null));
+      var Type__4 = ZClassType__3qeq(new ZClassType(), TypeName__1, ZType__4qwg(new ZType(), 1 << 16, "var", null));
       SetTypeName__4qwt(GetRootNameSpace__1qwt(self), TypeName__1, Type__4, SourceToken__2);
       return GetTypeNode__3qwt(self, TypeName__1, null);
    };
@@ -2356,7 +2356,7 @@ function GetTypeNode__3qwt(self, TypeName__1, SourceToken__2) {
 }
 
 function GetType__3qwt(self, TypeName__1, SourceToken__2) {
-   var TypeNode = GetTypeNode__3qwt(self, TypeName__1, SourceToken__2);
+   var TypeNode__3 = GetTypeNode__3qwt(self, TypeName__1, SourceToken__2);
    if (TypeNode__3 != null) {
       return TypeNode__3.Type;
    };
@@ -2373,10 +2373,10 @@ function ZSource__5qud(self, FileName__1, LineNumber__2, Source__3, TokenContext
 }
 
 function GetLineNumber__2qud(self, Position__1) {
-   var LineNumber = self.LineNumber;
-   var i = 0;
+   var LineNumber__2 = self.LineNumber;
+   var i__3 = 0;
    while (i__3 < Position__1) {
-      var ch = LibZen_GetChar__2qqy(self.SourceText, i__3);
+      var ch__4 = LibZen_GetChar__2qqy(self.SourceText, i__3);
       if (ch__4 == "\n") {
          LineNumber__2 = LineNumber__2 + 1;
       };
@@ -2386,14 +2386,14 @@ function GetLineNumber__2qud(self, Position__1) {
 }
 
 function GetLineHeadPosition__2qud(self, Position__1) {
-   var s = self.SourceText;
-   var StartIndex = 0;
-   var i = Position__1;
+   var s__9 = self.SourceText;
+   var StartIndex__10 = 0;
+   var i__11 = Position__1;
    if (!(i__4 < s__2.size())) {
       i__11 = s__2.size() - 1;
    };
    while (i__4 >= 0) {
-      var ch = LibZen_GetChar__2qqy(s__2, i__4);
+      var ch__5 = LibZen_GetChar__2qqy(s__2, i__4);
       if (ch__5 == "\n") {
          StartIndex__3 = i__4 + 1;
          break;
@@ -2404,11 +2404,11 @@ function GetLineHeadPosition__2qud(self, Position__1) {
 }
 
 function CountIndentSize__2qud(self, Position__1) {
-   var s = self.SourceText;
-   var length = 0;
-   var i = Position__1;
+   var s__9 = self.SourceText;
+   var length__10 = 0;
+   var i__11 = Position__1;
    while (i__4 < s__2.size()) {
-      var ch = LibZen_GetChar__2qqy(s__2, i__4);
+      var ch__5 = LibZen_GetChar__2qqy(s__2, i__4);
       if (ch__5 == "\t") {
          length__3 = length__3 + 8;
       } else if (ch__5 == " ") {
@@ -2422,15 +2422,15 @@ function CountIndentSize__2qud(self, Position__1) {
 }
 
 function GetLineText__2qud(self, Position__1) {
-   var s = self.SourceText;
-   var StartIndex = 0;
-   var EndIndex = s__2.size();
-   var i = Position__1;
+   var s__12 = self.SourceText;
+   var StartIndex__13 = 0;
+   var EndIndex__14 = s__2.size();
+   var i__15 = Position__1;
    if (!(i__5 < s__2.size())) {
       i__15 = s__2.size() - 1;
    };
    while (i__5 >= 0) {
-      var ch = LibZen_GetChar__2qqy(s__2, i__5);
+      var ch__6 = LibZen_GetChar__2qqy(s__2, i__5);
       if (ch__6 == "\n") {
          StartIndex__3 = i__5 + 1;
          break;
@@ -2439,7 +2439,7 @@ function GetLineText__2qud(self, Position__1) {
    };
    i__5 = Position__1;
    while (i__5 < s__2.size()) {
-      var ch = LibZen_GetChar__2qqy(s__2, i__5);
+      var ch__7 = LibZen_GetChar__2qqy(s__2, i__5);
       if (ch__7 == "\n") {
          EndIndex__4 = i__5;
          break;
@@ -2450,24 +2450,24 @@ function GetLineText__2qud(self, Position__1) {
 }
 
 function GetLineMarker__2qud(self, Position__1) {
-   var s = self.SourceText;
-   var StartIndex = 0;
-   var i = Position__1;
+   var s__11 = self.SourceText;
+   var StartIndex__12 = 0;
+   var i__13 = Position__1;
    if (!(i__4 < s__2.size())) {
       i__13 = s__2.size() - 1;
    };
    while (i__4 >= 0) {
-      var ch = LibZen_GetChar__2qqy(s__2, i__4);
+      var ch__5 = LibZen_GetChar__2qqy(s__2, i__4);
       if (ch__5 == "\n") {
          StartIndex__3 = i__4 + 1;
          break;
       };
       i__4 = i__4 - 1;
    };
-   var Line = "";
+   var Line__6 = "";
    i__4 = StartIndex__3;
    while (i__4 < Position__1) {
-      var ch = LibZen_GetChar__2qqy(s__2, i__4);
+      var ch__7 = LibZen_GetChar__2qqy(s__2, i__4);
       if (ch__7 == "\n") {
          break;
       };
@@ -2486,13 +2486,13 @@ function FormatErrorHeader__4qud(self, Error__1, Position__2, Message__3) {
 }
 
 function FormatErrorMarker__4qud(self, Error__1, Position__2, Message__3) {
-   var Line = GetLineText__2qud(self, Position__2);
-   var Delim = "\n\t";
+   var Line__8 = GetLineText__2qud(self, Position__2);
+   var Delim__9 = "\n\t";
    if (Line__4.startsWith("\t") || Line__4.startsWith(" ")) {
       Delim__5 = "\n";
    };
-   var Header = FormatErrorHeader__4qud(self, Error__1, Position__2, Message__3);
-   var Marker = GetLineMarker__2qud(self, Position__2);
+   var Header__6 = FormatErrorHeader__4qud(self, Error__1, Position__2, Message__3);
+   var Marker__7 = GetLineMarker__2qud(self, Position__2);
    Message__3 = (((Header__6 + Delim__5) + Line__4) + Delim__5) + Marker__7;
    return Message__3;
 }
@@ -2559,9 +2559,9 @@ function AppendLineFeed__2qq2(self, AppendIndent__1) {
 }
 
 function AppendWhiteSpace__1qq2(self) {
-   var Size = (self.SourceList).length;
+   var Size__3 = (self.SourceList).length;
    if (Size__1 > 0) {
-      var Last = self.SourceList[Size__1 - 1];
+      var Last__4 = self.SourceList[Size__1 - 1];
       if (Last__2 != null && (Last__2.endsWith(" ") || Last__2.endsWith("\n") || Last__2.endsWith("\t"))) {
          return;
       };
@@ -2639,7 +2639,7 @@ function IndentAndAppend__2qq2(self, Text__1) {
 }
 
 function AppendParamList__4qq2(self, ParamList__1, BeginIdx__2, EndIdx__3) {
-   var i = BeginIdx__2;
+   var i__4 = BeginIdx__2;
    while (i__4 < EndIdx__3) {
       if (i__4 > BeginIdx__2) {
          Append__2qq2(self, self.Template.Camma);
@@ -2695,7 +2695,7 @@ function MoveNext__1qwu(self) {
 
 function SkipWhiteSpace__1qwu(self) {
    while (HasChar__1qwu(self)) {
-      var ch = GetCurrentChar__1qwu(self);
+      var ch__1 = GetCurrentChar__1qwu(self);
       if (ch__1 != " " && ch__1 != "\t") {
          break;
       };
@@ -2705,7 +2705,7 @@ function SkipWhiteSpace__1qwu(self) {
 }
 
 function FoundIndent__3qwu(self, StartIndex__1, EndIndex__2) {
-   var Token = ZIndentToken__4qak(new ZIndentToken(), self, StartIndex__1, EndIndex__2);
+   var Token__3 = ZIndentToken__4qak(new ZIndentToken(), self, StartIndex__1, EndIndex__2);
    self.SourcePosition = EndIndex__2;
    self.TokenContext.TokenList.add(Token__3);
    return;
@@ -2714,7 +2714,7 @@ function FoundIndent__3qwu(self, StartIndex__1, EndIndex__2) {
 function Tokenize__3qwu(self, StartIndex__1, EndIndex__2) {
    self.SourcePosition = EndIndex__2;
    if (StartIndex__1 < EndIndex__2 && EndIndex__2 <= self.SourceText.size()) {
-      var Token = ZToken__4qw3(new ZToken(), self, StartIndex__1, EndIndex__2);
+      var Token__3 = ZToken__4qw3(new ZToken(), self, StartIndex__1, EndIndex__2);
       self.TokenContext.TokenList.add(Token__3);
    };
    return;
@@ -2723,13 +2723,13 @@ function Tokenize__3qwu(self, StartIndex__1, EndIndex__2) {
 function Tokenize__4qwu(self, PatternName__1, StartIndex__2, EndIndex__3) {
    self.SourcePosition = EndIndex__3;
    if (StartIndex__2 <= EndIndex__3 && EndIndex__3 <= self.SourceText.size()) {
-      var Pattern = GetSyntaxPattern__2qwt(self.TokenContext.NameSpace, PatternName__1);
+      var Pattern__4 = GetSyntaxPattern__2qwt(self.TokenContext.NameSpace, PatternName__1);
       if (Pattern__4 == null) {
-         var Token = ZToken__4qw3(new ZToken(), self, StartIndex__2, EndIndex__3);
+         var Token__5 = ZToken__4qw3(new ZToken(), self, StartIndex__2, EndIndex__3);
          ZLogger_LogInfo__2qw3(Token__5, "unregistered token pattern: " + PatternName__1);
          self.TokenContext.TokenList.add(Token__5);
       } else {
-         var Token = ZPatternToken__5qa9(new ZPatternToken(), self, StartIndex__2, EndIndex__3, Pattern__4);
+         var Token__6 = ZPatternToken__5qa9(new ZPatternToken(), self, StartIndex__2, EndIndex__3, Pattern__4);
          self.TokenContext.TokenList.add(Token__6);
       };
    };
@@ -2738,9 +2738,9 @@ function Tokenize__4qwu(self, PatternName__1, StartIndex__2, EndIndex__3) {
 
 function IsDefinedSyntax__3qwu(self, StartIndex__1, EndIndex__2) {
    if (EndIndex__2 < self.SourceText.size()) {
-      var NameSpace = self.TokenContext.NameSpace;
-      var Token = self.SourceText.substring(StartIndex, EndIndex);
-      var Pattern = GetRightSyntaxPattern__2qwt(NameSpace__3, Token__4);
+      var NameSpace__6 = self.TokenContext.NameSpace;
+      var Token__7 = self.SourceText.substring(StartIndex, EndIndex);
+      var Pattern__5 = GetRightSyntaxPattern__2qwt(NameSpace__3, Token__4);
       if (Pattern__5 != null) {
          return true;
       };
@@ -2749,7 +2749,7 @@ function IsDefinedSyntax__3qwu(self, StartIndex__1, EndIndex__2) {
 }
 
 function TokenizeDefinedSymbol__2qwu(self, StartIndex__1) {
-   var EndIndex = StartIndex__1 + 2;
+   var EndIndex__2 = StartIndex__1 + 2;
    while (IsDefinedSyntax__3qwu(self, StartIndex__1, EndIndex__2)) {
       EndIndex__2 = EndIndex__2 + 1;
    };
@@ -2758,7 +2758,7 @@ function TokenizeDefinedSymbol__2qwu(self, StartIndex__1) {
 }
 
 function ApplyTokenFunc__2qwu(self, TokenFunc__1) {
-   var RollbackPosition = self.SourcePosition;
+   var RollbackPosition__2 = self.SourcePosition;
    while (TokenFunc__1 != null) {
       self.SourcePosition = RollbackPosition__2;
       if (LibZen_ApplyTokenFunc__2qqq(TokenFunc__1.Func, self)) {
@@ -2771,11 +2771,11 @@ function ApplyTokenFunc__2qwu(self, TokenFunc__1) {
 }
 
 function DoTokenize__1qwu(self) {
-   var TokenSize = (self.TokenContext.TokenList).length;
-   var CheckPosition = self.SourcePosition;
+   var TokenSize__1 = (self.TokenContext.TokenList).length;
+   var CheckPosition__2 = self.SourcePosition;
    while (HasChar__1qwu(self)) {
-      var CharCode = GetCharCode__1qwu(self);
-      var TokenFunc = GetTokenFunc__2qwt(self.TokenContext.NameSpace, CharCode__3);
+      var CharCode__3 = GetCharCode__1qwu(self);
+      var TokenFunc__4 = GetTokenFunc__2qwt(self.TokenContext.NameSpace, CharCode__3);
       ApplyTokenFunc__2qwu(self, TokenFunc__4);
       if ((self.TokenContext.TokenList).length > TokenSize__1) {
          break;
@@ -2811,7 +2811,7 @@ function MergeSyntaxPattern__2qy7(Pattern, Parent__1) {
    if (Parent__1 == null) {
       return Pattern;
    };
-   var MergedPattern = ZSyntax__4qy7(new ZSyntax(), Pattern.PackageNameSpace, Pattern.PatternName, Pattern.MatchFunc);
+   var MergedPattern__2 = ZSyntax__4qy7(new ZSyntax(), Pattern.PackageNameSpace, Pattern.PatternName, Pattern.MatchFunc);
    MergedPattern__2.ParentPattern = Parent__1;
    return MergedPattern__2;
 }
@@ -2832,8 +2832,8 @@ function IsBinaryOperator__1qy7(self) {
 }
 
 function IsRightJoin__2qy7(self, Right__1) {
-   var left = self.SyntaxFlag;
-   var right = Right__1.SyntaxFlag;
+   var left__2 = self.SyntaxFlag;
+   var right__3 = Right__1.SyntaxFlag;
    return (left__2 < right__3 || (left__2 == right__3 && !LibZen_IsFlag__2qqr(left__2, 1 << 1) && !LibZen_IsFlag__2qqr(right__3, 1 << 1)));
 }
 
@@ -2867,7 +2867,7 @@ function GetText__1qw3(self) {
 }
 
 function toString__1qw3(self) {
-   var ch = GetCharAt__2qud(self.Source, self.StartIndex - 1);
+   var ch__1 = GetCharAt__2qud(self.Source, self.StartIndex - 1);
    if (ch__1 == "\"") {
       return ("\"" + GetText__1qw3(self)) + "\"";
    };
@@ -2876,8 +2876,8 @@ function toString__1qw3(self) {
 
 function EqualsText__2qw3(self, Text__1) {
    if (Text__1.size() == (self.EndIndex - self.StartIndex)) {
-      var s = self.Source.SourceText;
-      var i = 0;
+      var s__6 = self.Source.SourceText;
+      var i__7 = 0;
       while (i__3 < Text__1.size()) {
          if (LibZen_GetChar__2qqy(s__2, self.StartIndex + i__3) != LibZen_GetChar__2qqy(Text__1, i__3)) {
             return false;
@@ -2891,8 +2891,8 @@ function EqualsText__2qw3(self, Text__1) {
 
 function StartsWith__2qw3(self, Text__1) {
    if (Text__1.size() <= (self.EndIndex - self.StartIndex)) {
-      var s = self.Source.SourceText;
-      var i = 0;
+      var s__6 = self.Source.SourceText;
+      var i__7 = 0;
       while (i__3 < Text__1.size()) {
          if (LibZen_GetChar__2qqy(s__2, self.StartIndex + i__3) != LibZen_GetChar__2qqy(Text__1, i__3)) {
             return false;
@@ -2913,7 +2913,7 @@ function IsIndent__1qw3(self) {
 }
 
 function IsNextWhiteSpace__1qw3(self) {
-   var ch = GetCharAt__2qud(self.Source, self.EndIndex);
+   var ch__1 = GetCharAt__2qud(self.Source, self.EndIndex);
    if (ch__1 == " " || ch__1 == "\t" || ch__1 == "\n") {
       return true;
    };
@@ -2921,7 +2921,7 @@ function IsNextWhiteSpace__1qw3(self) {
 }
 
 function IsNameSymbol__1qw3(self) {
-   var ch = GetCharAt__2qud(self.Source, self.StartIndex);
+   var ch__1 = GetCharAt__2qud(self.Source, self.StartIndex);
    return LibZen_IsSymbol__1qqy(ch__1);
 }
 
@@ -2940,15 +2940,15 @@ function ZTokenContext__6qwp(self, Generator__1, NameSpace__2, FileName__3, Line
 }
 
 function SetParseFlag__2qwp(self, AllowSkipIndent__1) {
-   var OldFlag = self.IsAllowSkipIndent;
+   var OldFlag__2 = self.IsAllowSkipIndent;
    self.IsAllowSkipIndent = AllowSkipIndent__1;
    return OldFlag__2;
 }
 
 function GetBeforeToken__1qwp(self) {
-   var MovingPos = self.CurrentPosition - 1;
+   var MovingPos__1 = self.CurrentPosition - 1;
    while (MovingPos__1 >= 0 && MovingPos__1 < (self.TokenList).length) {
-      var Token = self.TokenList[MovingPos__1];
+      var Token__2 = self.TokenList[MovingPos__1];
       if (!IsIndent__1qw3(Token__2)) {
          return Token__2;
       };
@@ -2982,7 +2982,7 @@ function GetToken__2qwp(self, EnforceMoveNext__1) {
             break;
          };
       };
-      var Token = self.TokenList[self.CurrentPosition];
+      var Token__2 = self.TokenList[self.CurrentPosition];
       if ((self.IsAllowSkipIndent) && IsIndent__1qw3(Token__2)) {
          self.CurrentPosition = self.CurrentPosition + 1;
       } else {
@@ -3005,7 +3005,7 @@ function HasNext__1qwp(self) {
 }
 
 function SkipIndent__1qwp(self) {
-   var Token = GetToken__1qwp(self);
+   var Token__1 = GetToken__1qwp(self);
    while (IsIndent__1qw3(Token__1)) {
       self.CurrentPosition = self.CurrentPosition + 1;
       Token__1 = GetToken__1qwp(self);
@@ -3014,15 +3014,15 @@ function SkipIndent__1qwp(self) {
 }
 
 function SkipError__2qwp(self, ErrorToken__1) {
-   var StartIndex = ErrorToken__1.StartIndex;
-   var EndIndex = ErrorToken__1.EndIndex;
-   var length = GetIndentSize__1qw3(ErrorToken__1);
+   var StartIndex__2 = ErrorToken__1.StartIndex;
+   var EndIndex__3 = ErrorToken__1.EndIndex;
+   var length__4 = GetIndentSize__1qw3(ErrorToken__1);
    while (HasNext__1qwp(self)) {
-      var Token = GetToken__1qwp(self);
+      var Token__5 = GetToken__1qwp(self);
       EndIndex__3 = Token__5.EndIndex;
       self.CurrentPosition = self.CurrentPosition + 1;
       if (Token__5 instanceof ZIndentToken) {
-         var ilength = GetIndentSize__1qw3(Token__5);
+         var ilength__6 = GetIndentSize__1qw3(Token__5);
          if (ilength__6 <= length__4) {
             break;
          };
@@ -3036,7 +3036,7 @@ function SkipError__2qwp(self, ErrorToken__1) {
 }
 
 function IsToken__2qwp(self, TokenText__1) {
-   var Token = GetToken__1qwp(self);
+   var Token__2 = GetToken__1qwp(self);
    if (EqualsText__2qw3(Token__2, TokenText__1)) {
       return true;
    };
@@ -3044,9 +3044,9 @@ function IsToken__2qwp(self, TokenText__1) {
 }
 
 function IsNewLineToken__2qwp(self, TokenText__1) {
-   var RollbackPos = self.CurrentPosition;
+   var RollbackPos__2 = self.CurrentPosition;
    SkipIndent__1qwp(self);
-   var Token = GetToken__1qwp(self);
+   var Token__3 = GetToken__1qwp(self);
    if (EqualsText__2qw3(Token__3, TokenText__1)) {
       return true;
    };
@@ -3055,8 +3055,8 @@ function IsNewLineToken__2qwp(self, TokenText__1) {
 }
 
 function MatchToken__2qwp(self, TokenText__1) {
-   var RollbackPos = self.CurrentPosition;
-   var Token = GetToken__2qwp(self, true);
+   var RollbackPos__2 = self.CurrentPosition;
+   var Token__3 = GetToken__2qwp(self, true);
    if (EqualsText__2qw3(Token__3, TokenText__1)) {
       return true;
    };
@@ -3065,9 +3065,9 @@ function MatchToken__2qwp(self, TokenText__1) {
 }
 
 function MatchNewLineToken__2qwp(self, TokenText__1) {
-   var RollbackPos = self.CurrentPosition;
+   var RollbackPos__2 = self.CurrentPosition;
    SkipIndent__1qwp(self);
-   var Token = GetToken__2qwp(self, true);
+   var Token__3 = GetToken__2qwp(self, true);
    if (EqualsText__2qw3(Token__3, TokenText__1)) {
       return true;
    };
@@ -3076,14 +3076,14 @@ function MatchNewLineToken__2qwp(self, TokenText__1) {
 }
 
 function ParseLargeToken__1qwp(self) {
-   var Token = GetToken__2qwp(self, true);
+   var Token__1 = GetToken__2qwp(self, true);
    if (IsNextWhiteSpace__1qw3(Token__1)) {
       return Token__1;
    };
-   var StartIndex = Token__1.StartIndex;
-   var EndIndex = Token__1.EndIndex;
+   var StartIndex__2 = Token__1.StartIndex;
+   var EndIndex__3 = Token__1.EndIndex;
    while (HasNext__1qwp(self) && !IsNextWhiteSpace__1qw3(Token__1)) {
-      var RollbackPosition = self.CurrentPosition;
+      var RollbackPosition__4 = self.CurrentPosition;
       Token__1 = GetToken__2qwp(self, true);
       if (IsIndent__1qw3(Token__1) || EqualsText__2qw3(Token__1, ";") || EqualsText__2qw3(Token__1, ",")) {
          self.CurrentPosition = RollbackPosition__4;
@@ -3096,8 +3096,8 @@ function ParseLargeToken__1qwp(self) {
 
 function MatchToken__4qwp(self, ParentNode__1, TokenText__2, IsRequired__3) {
    if (!IsErrorNode__1qwo(ParentNode__1)) {
-      var RollbackPosition = self.CurrentPosition;
-      var Token = GetToken__2qwp(self, true);
+      var RollbackPosition__4 = self.CurrentPosition;
+      var Token__5 = GetToken__2qwp(self, true);
       if (EqualsText__2qw3(Token__5, TokenText__2)) {
          if (ParentNode__1.SourceToken == null) {
             ParentNode__1.SourceToken = Token__5;
@@ -3118,12 +3118,12 @@ function GetApplyingSyntax__1qwp(self) {
 }
 
 function ApplyMatchPattern__5qwp(self, ParentNode__1, LeftNode__2, Pattern__3, IsRequired__4) {
-   var RollbackPosition = self.CurrentPosition;
-   var CurrentPattern = Pattern__3;
-   var TopToken = GetToken__1qwp(self);
-   var ParsedNode = null;
+   var RollbackPosition__5 = self.CurrentPosition;
+   var CurrentPattern__6 = Pattern__3;
+   var TopToken__7 = GetToken__1qwp(self);
+   var ParsedNode__8 = null;
    while (CurrentPattern__6 != null) {
-      var Remembered = self.IsAllowSkipIndent;
+      var Remembered__9 = self.IsAllowSkipIndent;
       self.CurrentPosition = RollbackPosition__5;
       self.ApplyingPattern = CurrentPattern__6;
       ParsedNode__8 = LibZen_ApplyMatchFunc__4qqq(CurrentPattern__6.MatchFunc, ParentNode__1, self, LeftNode__2);
@@ -3150,8 +3150,8 @@ function ApplyMatchPattern__5qwp(self, ParentNode__1, LeftNode__2, Pattern__3, I
 }
 
 function ParsePatternAfter__5qwp(self, ParentNode__1, LeftNode__2, PatternName__3, IsRequired__4) {
-   var Pattern = GetSyntaxPattern__2qwt(self.NameSpace, PatternName__3);
-   var ParsedNode = ApplyMatchPattern__5qwp(self, ParentNode__1, LeftNode__2, Pattern__5, IsRequired__4);
+   var Pattern__5 = GetSyntaxPattern__2qwt(self.NameSpace, PatternName__3);
+   var ParsedNode__6 = ApplyMatchPattern__5qwp(self, ParentNode__1, LeftNode__2, Pattern__5, IsRequired__4);
    return ParsedNode__6;
 }
 
@@ -3161,8 +3161,8 @@ function ParsePattern__4qwp(self, ParentNode__1, PatternName__2, IsRequired__3) 
 
 function MatchPattern__6qwp(self, ParentNode__1, Index__2, PatternName__3, IsRequired__4, AllowSkipIndent__5) {
    if (!IsErrorNode__1qwo(ParentNode__1)) {
-      var Rememberd = SetParseFlag__2qwp(self, AllowSkipIndent__5);
-      var ParsedNode = ParsePattern__4qwp(self, ParentNode__1, PatternName__3, IsRequired__4);
+      var Rememberd__6 = SetParseFlag__2qwp(self, AllowSkipIndent__5);
+      var ParsedNode__7 = ParsePattern__4qwp(self, ParentNode__1, PatternName__3, IsRequired__4);
       SetParseFlag__2qwp(self, Rememberd__6);
       if (ParsedNode__7 != null) {
          if (Index__2 == -5) {
@@ -3199,20 +3199,20 @@ function MatchOptionaPattern__6qwp(self, ParentNode__1, Index__2, AllowNewLine__
 }
 
 function MatchNtimes__6qwp(self, ParentNode__1, StartToken__2, PatternName__3, DelimToken__4, StopToken__5) {
-   var Rememberd = SetParseFlag__2qwp(self, true);
-   var IsRequired = false;
+   var Rememberd__6 = SetParseFlag__2qwp(self, true);
+   var IsRequired__7 = false;
    if (StartToken__2 != null) {
       ParentNode__1 = MatchToken__4qwp(self, ParentNode__1, StartToken__2, true);
    };
    while (!IsErrorNode__1qwo(ParentNode__1)) {
       if (StopToken__5 != null) {
-         var Token = GetToken__1qwp(self);
+         var Token__8 = GetToken__1qwp(self);
          if (EqualsText__2qw3(Token__8, StopToken__5)) {
             break;
          };
          IsRequired__7 = true;
       };
-      var ParsedNode = ParsePattern__4qwp(self, ParentNode__1, PatternName__3, IsRequired__7);
+      var ParsedNode__9 = ParsePattern__4qwp(self, ParentNode__1, PatternName__3, IsRequired__7);
       if (ParsedNode__9 == null) {
          break;
       };
@@ -3236,7 +3236,7 @@ function MatchNtimes__6qwp(self, ParentNode__1, StartToken__2, PatternName__3, D
 }
 
 function StartsWithToken__2qwp(self, TokenText__1) {
-   var Token = GetToken__1qwp(self);
+   var Token__3 = GetToken__1qwp(self);
    if (EqualsText__2qw3(Token__2, TokenText__1)) {
       self.CurrentPosition = self.CurrentPosition + 1;
       return true;
@@ -3252,7 +3252,7 @@ function StartsWithToken__2qwp(self, TokenText__1) {
 
 function SkipEmptyStatement__1qwp(self) {
    while (HasNext__1qwp(self)) {
-      var Token = GetToken__1qwp(self);
+      var Token__1 = GetToken__1qwp(self);
       if (IsIndent__1qw3(Token__1) || EqualsText__2qw3(Token__1, ";")) {
          self.CurrentPosition = self.CurrentPosition + 1;
       } else {
@@ -3263,10 +3263,10 @@ function SkipEmptyStatement__1qwp(self) {
 }
 
 function Dump__1qwp(self) {
-   var Position = self.CurrentPosition;
+   var Position__1 = self.CurrentPosition;
    while (Position__1 < (self.TokenList).length) {
-      var Token = self.TokenList[Position__1];
-      var DumpedToken = "[";
+      var Token__2 = self.TokenList[Position__1];
+      var DumpedToken__3 = "[";
       DumpedToken__3 = ((DumpedToken__3 + (Position__1).toString()) + "] ") + toString__1qw3(Token__2);
       LibZen_PrintDebug__1qqy(DumpedToken__3);
       Position__1 = Position__1 + 1;
@@ -3334,14 +3334,14 @@ function ZAssertNode__2qo4(self, ParentNode__1) {
 }
 
 function DeSugar__2qo4(self, Generator__1) {
-   var Func = GetMacroFunc__4qw4(Generator__1, "assert", ZType__4qwg(new ZType(), 1 << 16, "boolean", ZType__4qwg(new ZType(), 1 << 16, "var", null)), 2);
+   var Func__2 = GetMacroFunc__4qw4(Generator__1, "assert", ZType__4qwg(new ZType(), 1 << 16, "boolean", ZType__4qwg(new ZType(), 1 << 16, "var", null)), 2);
    if (Func__2 != null) {
-      var MacroNode = ZMacroNode__4q06(new ZMacroNode(), self.ParentNode, self.SourceToken, Func__2);
+      var MacroNode__3 = ZMacroNode__4q06(new ZMacroNode(), self.ParentNode, self.SourceToken, Func__2);
       Append__2quv(MacroNode__3, self.AST[0]);
       Append__2quv(MacroNode__3, ZStringNode__4q4c(new ZStringNode(), MacroNode__3, null, GetSourceLocation__1qwo(self)));
       return ZSugarNode__3qts(new ZSugarNode(), self, MacroNode__3);
    } else {
-      var MacroNode = ZFuncCallNode__4q4e(new ZFuncCallNode(), self.ParentNode, "assert", ZType__4qwg(new ZType(), 1 << 16, "var", null));
+      var MacroNode__4 = ZFuncCallNode__4q4e(new ZFuncCallNode(), self.ParentNode, "assert", ZType__4qwg(new ZType(), 1 << 16, "var", null));
       Append__2quv(MacroNode__4, self.AST[0]);
       return ZSugarNode__3qts(new ZSugarNode(), self, MacroNode__4);
    };
@@ -3363,7 +3363,7 @@ function IsRightJoin__2qod(self, Node__1) {
 }
 
 function RightJoin__3qod(self, ParentNode__1, RightNode__2) {
-   var RightLeftNode = RightNode__2.AST[0];
+   var RightLeftNode__3 = RightNode__2.AST[0];
    if (IsRightJoin__2qod(self, RightLeftNode__3)) {
       Set__3qwo(RightNode__2, 0, RightJoin__3qod(self, ParentNode__1, RightLeftNode__3));
    } else {
@@ -3374,7 +3374,7 @@ function RightJoin__3qod(self, ParentNode__1, RightNode__2) {
 }
 
 function AppendParsedRightNode__3qod(self, ParentNode__1, TokenContext__2) {
-   var RightNode = ParsePattern__4qwp(TokenContext__2, ParentNode__1, "$Expression$", true);
+   var RightNode__3 = ParsePattern__4qwp(TokenContext__2, ParentNode__1, "$Expression$", true);
    if (IsErrorNode__1qwo(RightNode__3)) {
       return RightNode__3;
    };
@@ -3387,10 +3387,10 @@ function AppendParsedRightNode__3qod(self, ParentNode__1, TokenContext__2) {
 
 function TryMacroNode__2qod(self, Generator__1) {
    if (!GetAstType__2qwo(self, 0).IsVarType(GetAstType__2qwo(self, 0)) && !GetAstType__2qwo(self, 1).IsVarType(GetAstType__2qwo(self, 1))) {
-      var Op = GetText__1qw3(self.SourceToken);
-      var Func = GetDefinedFunc__4qw4(Generator__1, Op__2, GetAstType__2qwo(self, 0), 2);
+      var Op__2 = GetText__1qw3(self.SourceToken);
+      var Func__3 = GetDefinedFunc__4qw4(Generator__1, Op__2, GetAstType__2qwo(self, 0), 2);
       if (Func__3 instanceof ZMacroFunc) {
-         var MacroNode = ZMacroNode__4q06(new ZMacroNode(), self.ParentNode, self.SourceToken, Func__3);
+         var MacroNode__4 = ZMacroNode__4q06(new ZMacroNode(), self.ParentNode, self.SourceToken, Func__3);
          Append__2quv(MacroNode__4, self.AST[0]);
          Append__2quv(MacroNode__4, self.AST[1]);
          return MacroNode__4;
@@ -3430,11 +3430,11 @@ function Accept__2qoz(self, Visitor__1) {
 
 function ToFuncCallNode__2qoz(self, Func__1) {
    if (Func__1 instanceof ZMacroFunc) {
-      var FuncNode = ZMacroNode__4q06(new ZMacroNode(), self.ParentNode, self.SourceToken, Func__1);
+      var FuncNode__2 = ZMacroNode__4q06(new ZMacroNode(), self.ParentNode, self.SourceToken, Func__1);
       Append__2quv(FuncNode__2, self.AST[0]);
       return FuncNode__2;
    } else {
-      var FuncNode = ZFuncCallNode__4q4e(new ZFuncCallNode(), self.ParentNode, Func__1.FuncName, GetFuncType__1qep(Func__1));
+      var FuncNode__3 = ZFuncCallNode__4q4e(new ZFuncCallNode(), self.ParentNode, Func__1.FuncName, GetFuncType__1qep(Func__1));
       FuncNode__3.SourceToken = self.SourceToken;
       Append__2quv(FuncNode__3, self.AST[0]);
       return FuncNode__3;
@@ -3692,7 +3692,7 @@ function Append__2quv(self, Node__1) {
       self.AST = LibZen_NewNodeArray__1qqr(1);
       Set__3qwo(self, 0, Node__1);
    } else {
-      var newAST = LibZen_NewNodeArray__1qqr((self.AST).length + 1);
+      var newAST__2 = LibZen_NewNodeArray__1qqr((self.AST).length + 1);
       LibZen_ArrayCopy__5qqq(self.AST, 0, newAST__2, 0, (self.AST).length);
       self.AST = newAST__2;
       Set__3qwo(self, (self.AST).length - 1, Node__1);
@@ -3717,7 +3717,7 @@ function InsertListAt__3quv(self, Index__1, Node__2) {
    if (self.AST == null || Index__1 < 0 || (self.AST).length == Index__1) {
       Append__2quv(self, Node__2);
    } else {
-      var newAST = LibZen_NewNodeArray__1qqr((self.AST).length + 1);
+      var newAST__3 = LibZen_NewNodeArray__1qqr((self.AST).length + 1);
       Index__1 = self.ListStartIndex + Index__1;
       LibZen_ArrayCopy__5qqq(self.AST, 0, newAST__3, 0, Index__1);
       Set__3qwo(self, Index__1, Node__2);
@@ -3728,9 +3728,9 @@ function InsertListAt__3quv(self, Index__1, Node__2) {
 }
 
 function RemoveListAt__2quv(self, Index__1) {
-   var Removed = GetListAt__2quv(self, Index__1);
-   var newAST = LibZen_NewNodeArray__1qqr((self.AST).length - 1);
-   var RemovedIndex = self.ListStartIndex + Index__1;
+   var Removed__2 = GetListAt__2quv(self, Index__1);
+   var newAST__3 = LibZen_NewNodeArray__1qqr((self.AST).length - 1);
+   var RemovedIndex__4 = self.ListStartIndex + Index__1;
    LibZen_ArrayCopy__5qqq(self.AST, 0, newAST__3, 0, RemovedIndex__4);
    LibZen_ArrayCopy__5qqq(self.AST, RemovedIndex__4 + 1, newAST__3, RemovedIndex__4, (self.AST).length - (RemovedIndex__4 + 1));
    self.AST = newAST__3;
@@ -3739,11 +3739,11 @@ function RemoveListAt__2quv(self, Index__1) {
 
 function ClearListAfter__2quv(self, Size__1) {
    if (Size__1 < GetListSize__1quv(self)) {
-      var newsize = self.ListStartIndex + Size__1;
+      var newsize__2 = self.ListStartIndex + Size__1;
       if (newsize__2 == 0) {
          self.AST = null;
       } else {
-         var newAST = LibZen_NewNodeArray__1qqr(newsize__2);
+         var newAST__3 = LibZen_NewNodeArray__1qqr(newsize__2);
          LibZen_ArrayCopy__5qqq(self.AST, 0, newAST__3, 0, newsize__2);
          self.AST = newAST__3;
       };
@@ -3763,7 +3763,7 @@ function GetFuncType__1q06(self) {
 }
 
 function GetMacroText__1q06(self) {
-   var Func = self.MacroFunc;
+   var Func__1 = self.MacroFunc;
    if (Func__1 instanceof ZSourceMacro) {
       return (Func__1).Macro;
    };
@@ -3786,7 +3786,7 @@ function ZMapLiteralNode__2q0m(self, ParentNode__1) {
 }
 
 function GetMapEntryNode__2q0m(self, Index__1) {
-   var Node = GetListAt__2quv(self, Index__1);
+   var Node__2 = GetListAt__2quv(self, Index__1);
    if (Node__2 instanceof ZMapEntryNode) {
       return Node__2;
    };
@@ -3816,12 +3816,12 @@ function Accept__2q02(self, Visitor__1) {
 }
 
 function ToGetterFuncCall__1q02(self) {
-   var Getter = ZGetterNode__3qp1(new ZGetterNode(), null, self.AST[0]);
+   var Getter__4 = ZGetterNode__3qp1(new ZGetterNode(), null, self.AST[0]);
    Getter__1.SetNameInfo(Getter__1, self.MethodToken, self.MethodName);
-   var FuncNode = ZFuncCallNode__3q4e(new ZFuncCallNode(), self.ParentNode, Getter__1);
+   var FuncNode__2 = ZFuncCallNode__3q4e(new ZFuncCallNode(), self.ParentNode, Getter__1);
    FuncNode__2.SourceToken = self.SourceToken;
    Append__2quv(FuncNode__2, self.AST[0]);
-   var i = 0;
+   var i__3 = 0;
    while (i__3 < GetListSize__1quv(self)) {
       Append__2quv(FuncNode__2, GetListAt__2quv(self, i__3));
       i__3 = i__3 + 1;
@@ -3831,19 +3831,19 @@ function ToGetterFuncCall__1q02(self) {
 
 function ToFuncCallNode__2q02(self, Func__1) {
    if (Func__1 instanceof ZMacroFunc) {
-      var MacroNode = ZMacroNode__4q06(new ZMacroNode(), self.ParentNode, self.MethodToken, Func__1);
+      var MacroNode__2 = ZMacroNode__4q06(new ZMacroNode(), self.ParentNode, self.MethodToken, Func__1);
       Append__2quv(MacroNode__2, self.AST[0]);
-      var i = 0;
+      var i__3 = 0;
       while (i__3 < GetListSize__1quv(self)) {
          Append__2quv(MacroNode__2, GetListAt__2quv(self, i__3));
          i__3 = i__3 + 1;
       };
       return MacroNode__2;
    } else {
-      var FuncNode = ZFuncCallNode__4q4e(new ZFuncCallNode(), self.ParentNode, Func__1.FuncName, GetFuncType__1qep(Func__1));
+      var FuncNode__4 = ZFuncCallNode__4q4e(new ZFuncCallNode(), self.ParentNode, Func__1.FuncName, GetFuncType__1qep(Func__1));
       FuncNode__4.SourceToken = self.MethodToken;
       Append__2quv(FuncNode__4, self.AST[0]);
-      var i = 0;
+      var i__5 = 0;
       while (i__5 < GetListSize__1quv(self)) {
          Append__2quv(FuncNode__4, GetListAt__2quv(self, i__5));
          i__5 = i__5 + 1;
@@ -3868,7 +3868,7 @@ function Accept__2q4i(self, Visitor__1) {
 }
 
 function ToFuncCallNode__2q4i(self, Func__1) {
-   var FuncNode = null;
+   var FuncNode__2 = null;
    if (Func__1 instanceof ZMacroFunc) {
       FuncNode__2 = ZMacroNode__4q06(new ZMacroNode(), self.ParentNode, self.SourceToken, Func__1);
    } else {
@@ -3876,7 +3876,7 @@ function ToFuncCallNode__2q4i(self, Func__1) {
       FuncNode__2.SourceToken = self.SourceToken;
    };
    Append__2quv(FuncNode__2, self);
-   var i = 0;
+   var i__3 = 0;
    while (i__3 < GetListSize__1quv(self)) {
       Append__2quv(FuncNode__2, GetListAt__2quv(self, i__3));
       i__3 = i__3 + 1;
@@ -3932,7 +3932,7 @@ function SetNameInfo__3q4l(self, NameToken__1, Name__2) {
 }
 
 function GetParamNode__2q4l(self, Index__1) {
-   var Node = GetListAt__2quv(self, Index__1);
+   var Node__2 = GetListAt__2quv(self, Index__1);
    if (Node__2 instanceof ZParamNode) {
       return Node__2;
    };
@@ -3940,12 +3940,12 @@ function GetParamNode__2q4l(self, Index__1) {
 }
 
 function GetFuncType__1q4l(self) {
-   var TypeList = [];
+   var TypeList__5 = [];
    TypeList__1.add(self.ReturnType.GetRealType(self.ReturnType));
-   var i = 0;
+   var i__6 = 0;
    while (i__2 < GetListSize__1quv(self)) {
-      var Node = GetParamNode__2q4l(self, i__2);
-      var ParamType = Node__3.Type.GetRealType(Node__3.Type);
+      var Node__7 = GetParamNode__2q4l(self, i__2);
+      var ParamType__8 = Node__3.Type.GetRealType(Node__3.Type);
       TypeList__1.add(ParamType__4);
       i__2 = i__2 + 1;
    };
@@ -4050,7 +4050,7 @@ function GetMethodFuncType__4qw4(self, RecvType__1, MethodName__2, List__3) {
 }
 
 function GetUniqueNumber__1qw4(self) {
-   var UniqueNumber = self.UniqueNumber;
+   var UniqueNumber__1 = self.UniqueNumber;
    self.UniqueNumber = self.UniqueNumber + 1;
    return UniqueNumber__1;
 }
@@ -4069,7 +4069,7 @@ function SetDefinedFunc__2qw4(self, Func__1) {
 }
 
 function SetPrototype__4qw4(self, Node__1, FuncName__2, FuncType__3) {
-   var Func = GetDefinedFunc__3qw4(self, FuncName__2, FuncType__3);
+   var Func__4 = GetDefinedFunc__3qw4(self, FuncName__2, FuncType__3);
    if (Func__4 != null) {
       if (!Equals__2qwg(FuncType__3, GetFuncType__1qep(Func__4))) {
          ZLogger_LogError__2qw3(Node__1.SourceToken, "function has been defined diffrently: " + toString__1qwg(GetFuncType__1qep(Func__4)));
@@ -4081,13 +4081,13 @@ function SetPrototype__4qw4(self, Node__1, FuncName__2, FuncType__3) {
       ZLogger_LogError__2qw3(Node__1.SourceToken, "function has been defined as macro" + toString__1qep(Func__4));
       return null;
    };
-   var Proto = ZPrototype__5qry(new ZPrototype(), 0, FuncName__2, FuncType__3, Node__1.SourceToken);
+   var Proto__5 = ZPrototype__5qry(new ZPrototype(), 0, FuncName__2, FuncType__3, Node__1.SourceToken);
    self.DefinedFuncMap[GetSignature__1qep(Proto__5)] = Proto__5;
    return Proto__5;
 }
 
 function GetDefinedFunc__2qw4(self, GlobalName__1) {
-   var Func = self.DefinedFuncMap[GlobalName__1];
+   var Func__2 = self.DefinedFuncMap[GlobalName__1];
    if (Func__2 == null && LibZen_IsLetter__1qqy(LibZen_GetChar__2qqy(GlobalName__1, 0))) {
       Func__2 = self.DefinedFuncMap[LibZen_AnotherName__1qqy(GlobalName__1)];
    };
@@ -4103,7 +4103,7 @@ function GetDefinedFunc__4qw4(self, FuncName__1, RecvType__2, FuncParamSize__3) 
 }
 
 function LookupFunc__4qw4(self, FuncName__1, RecvType__2, FuncParamSize__3) {
-   var Func = GetDefinedFunc__2qw4(self, ZFunc_StringfySignature__3qqy(FuncName__1, FuncParamSize__3, RecvType__2));
+   var Func__5 = GetDefinedFunc__2qw4(self, ZFunc_StringfySignature__3qqy(FuncName__1, FuncParamSize__3, RecvType__2));
    while (Func__4 == null) {
       RecvType__2 = RecvType__2.GetSuperType(RecvType__2);
       if (RecvType__2 == null) {
@@ -4115,7 +4115,7 @@ function LookupFunc__4qw4(self, FuncName__1, RecvType__2, FuncParamSize__3) {
 }
 
 function GetMacroFunc__4qw4(self, FuncName__1, RecvType__2, FuncParamSize__3) {
-   var Func = GetDefinedFunc__2qw4(self, ZFunc_StringfySignature__3qqy(FuncName__1, FuncParamSize__3, RecvType__2));
+   var Func__4 = GetDefinedFunc__2qw4(self, ZFunc_StringfySignature__3qqy(FuncName__1, FuncParamSize__3, RecvType__2));
    if (Func__4 instanceof ZMacroFunc) {
       return (Func__4);
    };
@@ -4133,7 +4133,7 @@ function SetConverterFunc__4qw4(self, FromType__1, ToType__2, Func__3) {
 
 function LookupConverterFunc__3qw4(self, FromType__1, ToType__2) {
    while (FromType__1 != null) {
-      var Func = self.DefinedFuncMap[NameConverterFunc__3qw4(self, FromType__1, ToType__2)];
+      var Func__3 = self.DefinedFuncMap[NameConverterFunc__3qw4(self, FromType__1, ToType__2)];
       if (Func__3 != null) {
          return Func__3;
       };
@@ -4144,7 +4144,7 @@ function LookupConverterFunc__3qw4(self, FromType__1, ToType__2) {
 
 function GetCoercionFunc__3qw4(self, FromType__1, ToType__2) {
    while (FromType__1 != null) {
-      var Func = self.DefinedFuncMap[NameConverterFunc__3qw4(self, FromType__1, ToType__2)];
+      var Func__3 = self.DefinedFuncMap[NameConverterFunc__3qw4(self, FromType__1, ToType__2)];
       if (Func__3 != null && IsCoercionFunc__1qep(Func__3)) {
          return Func__3;
       };
@@ -4154,7 +4154,7 @@ function GetCoercionFunc__3qw4(self, FromType__1, ToType__2) {
 }
 
 function VisitExtendedNode__2qw4(self, Node__1) {
-   var DeNode = Node__1.DeSugar(Node__1, self);
+   var DeNode__2 = Node__1.DeSugar(Node__1, self);
    DeNode__2.Accept(DeNode__2, self);
    return;
 }
@@ -4204,7 +4204,7 @@ function Eval2__2qws(self, Node__1) {
 }
 
 function VisitPrototypeNode__2qws(self, Node__1) {
-   var FuncType = GetFuncType__1q4l(Node__1);
+   var FuncType__2 = GetFuncType__1q4l(Node__1);
    SetPrototype__4qw4(self.Generator, Node__1, Node__1.FuncName, FuncType__2);
    return;
 }
@@ -4229,15 +4229,15 @@ function Exec2__3qws(self, Node__1, IsInteractive__2) {
 }
 
 function Translate__4qws(self, ScriptText__1, FileName__2, LineNumber__3) {
-   var TopBlockNode = ZBlockNode__2qtp(new ZBlockNode(), self.Generator.RootNameSpace);
-   var TokenContext = ZTokenContext__6qwp(new ZTokenContext(), self.Generator, self.Generator.RootNameSpace, FileName__2, LineNumber__3, ScriptText__1);
+   var TopBlockNode__4 = ZBlockNode__2qtp(new ZBlockNode(), self.Generator.RootNameSpace);
+   var TokenContext__5 = ZTokenContext__6qwp(new ZTokenContext(), self.Generator, self.Generator.RootNameSpace, FileName__2, LineNumber__3, ScriptText__1);
    SkipEmptyStatement__1qwp(TokenContext__5);
-   var SkipToken = GetToken__1qwp(TokenContext__5);
+   var SkipToken__6 = GetToken__1qwp(TokenContext__5);
    while (HasNext__1qwp(TokenContext__5)) {
       SetParseFlag__2qwp(TokenContext__5, false);
       ClearListAfter__2quv(TopBlockNode__4, 0);
       SkipToken__6 = GetToken__1qwp(TokenContext__5);
-      var ParsedNode = ParsePattern__4qwp(TokenContext__5, TopBlockNode__4, "$Statement$", true);
+      var ParsedNode__7 = ParsePattern__4qwp(TokenContext__5, TopBlockNode__4, "$Statement$", true);
       if (IsErrorNode__1qwo(ParsedNode__7)) {
          SkipError__2qwp(TokenContext__5, SkipToken__6);
       };
@@ -4399,9 +4399,9 @@ function VisitOrNode__2qws(self, Node__1) {
 }
 
 function VisitBlockNode__2qws(self, Node__1) {
-   var i = 1;
+   var i__2 = 1;
    while (i__2 < GetListSize__1quv(Node__1) && self.IsVisitable(self)) {
-      var StmtNode = GetListAt__2quv(Node__1, i__2);
+      var StmtNode__3 = GetListAt__2quv(Node__1, i__2);
       Eval2__2qws(self, StmtNode__3);
       if (StmtNode__3.IsBreakingBlock(StmtNode__3)) {
          break;
@@ -4484,7 +4484,7 @@ function VisitExtendedNode__2qws(self, Node__1) {
    if (Node__1 instanceof ZTypeNode) {
       VisitTypeNode__2qws(self, Node__1);
    } else {
-      var SugarNode = Node__1.DeSugar(Node__1, self.Generator);
+      var SugarNode__2 = Node__1.DeSugar(Node__1, self.Generator);
       SugarNode__2.Accept(SugarNode__2, self);
    };
    return;
@@ -4535,14 +4535,14 @@ function GetEngine__1quk(self) {
 }
 
 function AppendNewSourceBuilder__1quk(self) {
-   var Builder = ZSourceBuilder__3qq2(new ZSourceBuilder(), self, self.CurrentBuilder);
+   var Builder__1 = ZSourceBuilder__3qq2(new ZSourceBuilder(), self, self.CurrentBuilder);
    self.BuilderList.add(Builder__1);
    return Builder__1;
 }
 
 function InsertNewSourceBuilder__1quk(self) {
-   var Builder = ZSourceBuilder__3qq2(new ZSourceBuilder(), self, self.CurrentBuilder);
-   var i = 0;
+   var Builder__3 = ZSourceBuilder__3qq2(new ZSourceBuilder(), self, self.CurrentBuilder);
+   var i__4 = 0;
    while (i__2 < (self.BuilderList).length) {
       if (self.BuilderList[i__2] == self.CurrentBuilder) {
          self.BuilderList.add(i, Builder);
@@ -4555,14 +4555,14 @@ function InsertNewSourceBuilder__1quk(self) {
 }
 
 function SetNativeType__3quk(self, Type__1, TypeName__2) {
-   var Key = "" + (Type__1.TypeId).toString();
+   var Key__3 = "" + (Type__1.TypeId).toString();
    self.NativeTypeMap[Key__3] = TypeName__2;
    return;
 }
 
 function GetNativeTypeName__2quk(self, Type__1) {
-   var Key = "" + (Type__1.TypeId).toString();
-   var TypeName = self.NativeTypeMap[Key__2];
+   var Key__2 = "" + (Type__1.TypeId).toString();
+   var TypeName__3 = self.NativeTypeMap[Key__2];
    if (TypeName__3 == null) {
       return Type__1.ShortName;
    };
@@ -4579,7 +4579,7 @@ function SetReservedName__3quk(self, Keyword__1, AnotherName__2) {
 
 function SafeName__3quk(self, Name__1, Index__2) {
    if (Index__2 == 0) {
-      var SafeName = self.ReservedNameMap[Name__1];
+      var SafeName__3 = self.ReservedNameMap[Name__1];
       if (SafeName__3 == null) {
          SafeName__3 = Name__1;
       };
@@ -4589,31 +4589,31 @@ function SafeName__3quk(self, Name__1, Index__2) {
 }
 
 function SetMacro__4quk(self, FuncName__1, Macro__2, ReturnType__3) {
-   var FuncType = ZTypePool_LookupFuncType__1qwg(ReturnType__3);
+   var FuncType__4 = ZTypePool_LookupFuncType__1qwg(ReturnType__3);
    SetDefinedFunc__2qw4(self, ZSourceMacro__4qiy(new ZSourceMacro(), FuncName__1, FuncType__4, Macro__2));
    return;
 }
 
 function SetMacro__5quk(self, FuncName__1, Macro__2, ReturnType__3, P1__4) {
-   var FuncType = ZTypePool_LookupFuncType__2qwg(ReturnType__3, P1__4);
+   var FuncType__5 = ZTypePool_LookupFuncType__2qwg(ReturnType__3, P1__4);
    SetDefinedFunc__2qw4(self, ZSourceMacro__4qiy(new ZSourceMacro(), FuncName__1, FuncType__5, Macro__2));
    return;
 }
 
 function SetMacro__6quk(self, FuncName__1, Macro__2, ReturnType__3, P1__4, P2__5) {
-   var FuncType = ZTypePool_LookupFuncType__3qwg(ReturnType__3, P1__4, P2__5);
+   var FuncType__6 = ZTypePool_LookupFuncType__3qwg(ReturnType__3, P1__4, P2__5);
    SetDefinedFunc__2qw4(self, ZSourceMacro__4qiy(new ZSourceMacro(), FuncName__1, FuncType__6, Macro__2));
    return;
 }
 
 function SetMacro__7quk(self, FuncName__1, Macro__2, ReturnType__3, P1__4, P2__5, P3__6) {
-   var FuncType = ZTypePool_LookupFuncType__4qwg(ReturnType__3, P1__4, P2__5, P3__6);
+   var FuncType__7 = ZTypePool_LookupFuncType__4qwg(ReturnType__3, P1__4, P2__5, P3__6);
    SetDefinedFunc__2qw4(self, ZSourceMacro__4qiy(new ZSourceMacro(), FuncName__1, FuncType__7, Macro__2));
    return;
 }
 
 function SetConverterMacro__4quk(self, Macro__1, ReturnType__2, P1__3) {
-   var FuncType = ZTypePool_LookupFuncType__2qwg(ReturnType__2, P1__3);
+   var FuncType__4 = ZTypePool_LookupFuncType__2qwg(ReturnType__2, P1__3);
    SetConverterFunc__4qw4(self, P1__3, ReturnType__2, ZSourceMacro__4qiy(new ZSourceMacro(), "to" + NameClass__2qw4(self, ReturnType__2), FuncType__4, Macro__1));
    return;
 }
@@ -4625,10 +4625,10 @@ function WriteTo__2quk(self, FileName__1) {
 }
 
 function GetSourceText__1quk(self) {
-   var sb = ZSourceBuilder__3qq2(new ZSourceBuilder(), self, null);
-   var i = 0;
+   var sb__4 = ZSourceBuilder__3qq2(new ZSourceBuilder(), self, null);
+   var i__5 = 0;
    while (i__2 < (self.BuilderList).length) {
-      var Builder = self.BuilderList[i__2];
+      var Builder__3 = self.BuilderList[i__2];
       Append__2qq2(sb__1, toString__1qq2(Builder__3));
       Clear__1qq2(Builder__3);
       AppendLineFeed__1qq2(sb__1);
@@ -4642,10 +4642,10 @@ function GetSourceText__1quk(self) {
 function StartCodeGeneration__3quk(self, Node__1, IsInteractive__2) {
    Node__1.Accept(Node__1, self);
    if (IsInteractive__2) {
-      var i = 0;
+      var i__5 = 0;
       LibZen_PrintLine__1qqy("---");
       while (i__3 < (self.BuilderList).length) {
-         var Builder = self.BuilderList[i__3];
+         var Builder__4 = self.BuilderList[i__3];
          LibZen_PrintLine__1qqy(toString__1qq2(Builder__4));
          Clear__1qq2(Builder__4);
          i__3 = i__3 + 1;
@@ -4684,9 +4684,9 @@ function AppendCode__2quk(self, RawSource__1) {
 }
 
 function VisitStmtList__2quk(self, BlockNode__1) {
-   var i = 0;
+   var i__2 = 0;
    while (i__2 < GetListSize__1quv(BlockNode__1)) {
-      var SubNode = GetListAt__2quv(BlockNode__1, i__2);
+      var SubNode__3 = GetListAt__2quv(BlockNode__1, i__2);
       AppendLineFeed__1qq2(self.CurrentBuilder);
       AppendIndent__1qq2(self.CurrentBuilder);
       self.GenerateCode(self, null, SubNode__3);
@@ -4833,17 +4833,17 @@ function VisitMethodCallNode__2quk(self, Node__1) {
 }
 
 function VisitMacroNode__2quk(self, Node__1) {
-   var Macro = GetMacroText__1q06(Node__1);
-   var FuncType = GetFuncType__1q06(Node__1);
-   var fromIndex = 0;
-   var BeginNum = Macro__2.indexOf("$[", fromIndex);
+   var Macro__14 = GetMacroText__1q06(Node__1);
+   var FuncType__15 = GetFuncType__1q06(Node__1);
+   var fromIndex__16 = 0;
+   var BeginNum__17 = Macro__2.indexOf("$[", fromIndex);
    while (BeginNum__5 != -1) {
-      var EndNum = Macro__2.indexOf("]", BeginNum + 2);
+      var EndNum__18 = Macro__2.indexOf("]", BeginNum + 2);
       if (EndNum__6 == -1) {
          break;
       };
       Append__2qq2(self.CurrentBuilder, Macro__2.substring(fromIndex, BeginNum));
-      var Index = LibZen_ParseInt(Macro__2.substring(BeginNum + 2, EndNum));
+      var Index__19 = LibZen_ParseInt(Macro__2.substring(BeginNum + 2, EndNum));
       if (HasAst__2qwo(Node__1, Index__7)) {
          self.GenerateCode(self, GetFuncParamType__2qe0(FuncType__3, Index__7), Node__1.AST[Index__7]);
       };
@@ -5040,9 +5040,9 @@ function VisitClassNode__2quk(self, Node__1) {
    AppendWhiteSpace__1qq2(self.CurrentBuilder);
    Append__2qq2(self.CurrentBuilder, "{");
    Indent__1qq2(self.CurrentBuilder);
-   var i = 0;
+   var i__2 = 0;
    while (i__2 < GetListSize__1quv(Node__1)) {
-      var FieldNode = GetFieldNode__2qdq(Node__1, i__2);
+      var FieldNode__3 = GetFieldNode__2qdq(Node__1, i__2);
       AppendLineFeed__1qq2(self.CurrentBuilder);
       AppendIndent__1qq2(self.CurrentBuilder);
       Append__2qq2(self.CurrentBuilder, "var");
@@ -5075,7 +5075,7 @@ function VisitExtendedNode__2quk(self, Node__1) {
    if (Node__1 instanceof ZParamNode) {
       VisitParamNode__2quk(self, Node__1);
    } else {
-      var SugarNode = Node__1.DeSugar(Node__1, self);
+      var SugarNode__2 = Node__1.DeSugar(Node__1, self);
       self.VisitSugarNode(self, SugarNode__2);
    };
    return;
@@ -5093,9 +5093,9 @@ function GenerateTypeName__2quk(self, Type__1) {
 
 function VisitListNode__5quk(self, OpenToken__1, VargNode__2, DelimToken__3, CloseToken__4) {
    Append__2qq2(self.CurrentBuilder, OpenToken__1);
-   var i = 0;
+   var i__5 = 0;
    while (i__5 < GetListSize__1quv(VargNode__2)) {
-      var ParamNode = GetListAt__2quv(VargNode__2, i__5);
+      var ParamNode__6 = GetListAt__2quv(VargNode__2, i__5);
       if (i__5 > 0) {
          Append__2qq2(self.CurrentBuilder, DelimToken__3);
       };
@@ -5140,7 +5140,7 @@ function GetContextType__1qrc(self) {
 }
 
 function VisitTypeChecker__3qrc(self, Node__1, ContextType__2) {
-   var ParentNode = Node__1.ParentNode;
+   var ParentNode__4 = Node__1.ParentNode;
    self.StackedContextType = ContextType__2;
    self.ReturnedNode = null;
    Node__1.Accept(Node__1, self);
@@ -5157,23 +5157,23 @@ function VisitTypeChecker__3qrc(self, Node__1, ContextType__2) {
 }
 
 function CreateStupidCastNode__3qrc(self, Requested__1, Node__2) {
-   var ErrorNode = ZStupidCastErrorNode__3q4n(new ZStupidCastErrorNode(), Node__2, (("type error: requested=" + toString__1qwg(Requested__1)) + ", given=") + toString__1qwg(Node__2.Type));
+   var ErrorNode__3 = ZStupidCastErrorNode__3q4n(new ZStupidCastErrorNode(), Node__2, (("type error: requested=" + toString__1qwg(Requested__1)) + ", given=") + toString__1qwg(Node__2.Type));
    ErrorNode__3.Type = Requested__1;
    return ErrorNode__3;
 }
 
 function EnforceNodeType__3qrc(self, Node__1, EnforcedType__2) {
-   var Func = LookupConverterFunc__3qw4(self.Generator, Node__1.Type, EnforcedType__2);
+   var Func__3 = LookupConverterFunc__3qw4(self.Generator, Node__1.Type, EnforcedType__2);
    if (Func__3 == null && IsStringType__1qwg(EnforcedType__2)) {
       Func__3 = LookupFunc__4qw4(self.Generator, "toString", Node__1.Type, 1);
    };
    if (Func__3 instanceof ZMacroFunc) {
-      var MacroNode = ZMacroNode__4q06(new ZMacroNode(), Node__1.ParentNode, null, Func__3);
+      var MacroNode__4 = ZMacroNode__4q06(new ZMacroNode(), Node__1.ParentNode, null, Func__3);
       Append__2quv(MacroNode__4, Node__1);
       MacroNode__4.Type = EnforcedType__2;
       return MacroNode__4;
    } else if (Func__3 != null) {
-      var MacroNode = ZFuncCallNode__4q4e(new ZFuncCallNode(), Node__1.ParentNode, Func__3.FuncName, GetFuncType__1qep(Func__3));
+      var MacroNode__5 = ZFuncCallNode__4q4e(new ZFuncCallNode(), Node__1.ParentNode, Func__3.FuncName, GetFuncType__1qep(Func__3));
       Append__2quv(MacroNode__5, Node__1);
       MacroNode__5.Type = EnforcedType__2;
       return MacroNode__5;
@@ -5238,10 +5238,10 @@ function CheckTypeAt__4qrc(self, Node__1, Index__2, ContextType__3) {
 
 function TypeCheckNodeList__2qrc(self, List__1) {
    if (self.IsVisitable(self)) {
-      var AllTyped = true;
-      var i = 0;
+      var AllTyped__2 = true;
+      var i__3 = 0;
       while (i__3 < GetListSize__1quv(List__1)) {
-         var SubNode = GetListAt__2quv(List__1, i__3);
+         var SubNode__4 = GetListAt__2quv(List__1, i__3);
          SubNode__4 = CheckType__3qrc(self, SubNode__4, ZType__4qwg(new ZType(), 1 << 16, "var", null));
          SetListAt__3quv(List__1, i__3, SubNode__4);
          if (IsUntyped__1qwo(SubNode__4)) {
@@ -5280,7 +5280,7 @@ function ReturnErrorNode__4qrc(self, Node__1, ErrorToken__2, Message__3) {
 }
 
 function VisitErrorNode__2qrc(self, Node__1) {
-   var ContextType = GetContextType__1qrc(self);
+   var ContextType__2 = GetContextType__1qrc(self);
    if (!ContextType__2.IsVarType(ContextType__2)) {
       TypedNode__3qrc(self, Node__1, ContextType__2);
    } else {
@@ -5290,8 +5290,8 @@ function VisitErrorNode__2qrc(self, Node__1) {
 }
 
 function VisitExtendedNode__2qrc(self, Node__1) {
-   var ContextType = GetContextType__1qrc(self);
-   var DeNode = Node__1.DeSugar(Node__1, self.Generator);
+   var ContextType__2 = GetContextType__1qrc(self);
+   var DeNode__3 = Node__1.DeSugar(Node__1, self.Generator);
    if (!IsErrorNode__1qwo(DeNode__3)) {
       Return__2qrc(self, CheckType__3qrc(self, DeNode__3, ContextType__2));
    } else {
@@ -5301,7 +5301,7 @@ function VisitExtendedNode__2qrc(self, Node__1) {
 }
 
 function VisitSugarNode__2qrc(self, Node__1) {
-   var ContextType = GetContextType__1qrc(self);
+   var ContextType__2 = GetContextType__1qrc(self);
    CheckTypeAt__4qrc(self, Node__1, 0, ContextType__2);
    TypedNode__3qrc(self, Node__1, GetAstType__2qwo(Node__1, 0));
    return;
@@ -5365,7 +5365,7 @@ function GenerateCode__3qga(self, ContextType__1, Node__2) {
 }
 
 function VisitArrayLiteralNode__2qga(self, Node__1) {
-   var ParamType = Node__1.Type.GetParamType(Node__1.Type, 0);
+   var ParamType__2 = Node__1.Type.GetParamType(Node__1.Type, 0);
    if (IsIntType__1qwg(ParamType__2) || IsBooleanType__1qwg(ParamType__2)) {
       Append__2qq2(self.CurrentBuilder, "LibZen_NewIntArray(");
    } else if (IsFloatType__1qwg(ParamType__2)) {
@@ -5384,7 +5384,7 @@ function VisitArrayLiteralNode__2qga(self, Node__1) {
 }
 
 function VisitMapLiteralNode__2qga(self, Node__1) {
-   var ParamType = Node__1.Type.GetParamType(Node__1.Type, 0);
+   var ParamType__2 = Node__1.Type.GetParamType(Node__1.Type, 0);
    if (IsIntType__1qwg(ParamType__2) || IsBooleanType__1qwg(ParamType__2)) {
       Append__2qq2(self.CurrentBuilder, "LibZen_NewIntMap(");
    } else if (IsFloatType__1qwg(ParamType__2)) {
@@ -5491,8 +5491,8 @@ function ParamTypeName__2qga(self, Type__1) {
       return "MapOf" + ParamTypeName__2qga(self, Type__1.GetParamType(Type__1, 0));
    };
    if (IsFuncType__1qwg(Type__1)) {
-      var s = ("FuncOf" + ParamTypeName__2qga(self, Type__1.GetParamType(Type__1, 0))) + "Of";
-      var i = 0;
+      var s__2 = ("FuncOf" + ParamTypeName__2qga(self, Type__1.GetParamType(Type__1, 0))) + "Of";
+      var i__3 = 0;
       while (i__3 < Type__1.GetParamSize(Type__1)) {
          s__2 = s__2 + ParamTypeName__2qga(self, Type__1.GetParamType(Type__1, i__3));
          i__3 = i__3 + 1;
@@ -5515,7 +5515,7 @@ function ParamTypeName__2qga(self, Type__1) {
 }
 
 function GetCTypeName__2qga(self, Type__1) {
-   var TypeName = null;
+   var TypeName__2 = null;
    if (IsArrayType__1qwg(Type__1) || IsMapType__1qwg(Type__1)) {
       TypeName__2 = ParamTypeName__2qga(self, Type__1) + " *";
    };
@@ -5531,7 +5531,7 @@ function GetCTypeName__2qga(self, Type__1) {
 function GenerateFuncTypeName__3qga(self, Type__1, FuncName__2) {
    GenerateTypeName__2qga(self, Type__1.GetParamType(Type__1, 0));
    Append__2qq2(self.CurrentBuilder, (" (*" + FuncName__2) + ")");
-   var i = 1;
+   var i__3 = 1;
    Append__2qq2(self.CurrentBuilder, "(");
    while (i__3 < Type__1.GetParamSize(Type__1)) {
       if (i__3 > 1) {
@@ -5576,10 +5576,10 @@ function VisitParamNode__2qga(self, Node__1) {
 }
 
 function SetMethod__3qga(self, FuncName__1, FuncType__2) {
-   var RecvType = GetRecvType__1qe0(FuncType__2);
+   var RecvType__3 = GetRecvType__1qe0(FuncType__2);
    if (RecvType__3 instanceof ZClassType && FuncName__1 != null) {
-      var ClassType = RecvType__3;
-      var FieldType = GetFieldType__3qeq(ClassType__4, FuncName__1, null);
+      var ClassType__4 = RecvType__3;
+      var FieldType__5 = GetFieldType__3qeq(ClassType__4, FuncName__1, null);
       if (FieldType__5 == null || !IsFuncType__1qwg(FieldType__5)) {
          FuncName__1 = LibZen_AnotherName__1qqy(FuncName__1);
          FieldType__5 = GetFieldType__3qeq(ClassType__4, FuncName__1, null);
@@ -5626,15 +5626,15 @@ function GenerateField__3qga(self, DeclType__1, FieldName__2) {
 }
 
 function GenerateFields__3qga(self, ClassType__1, ThisType__2) {
-   var SuperType = ThisType__2.GetSuperType(ThisType__2);
+   var SuperType__3 = ThisType__2.GetSuperType(ThisType__2);
    if (!SuperType__3.IsVarType(SuperType__3)) {
       GenerateFields__3qga(self, ClassType__1, SuperType__3);
    };
-   var i = 0;
+   var i__4 = 0;
    GenerateCField__3qga(self, "int", "_classId" + (ThisType__2.TypeId).toString());
    GenerateCField__3qga(self, "int", "_delta" + (ThisType__2.TypeId).toString());
    while (i__4 < GetFieldSize__1qeq(ClassType__1)) {
-      var ClassField = GetFieldAt__2qeq(ClassType__1, i__4);
+      var ClassField__5 = GetFieldAt__2qeq(ClassType__1, i__4);
       if (ClassField__5.ClassType == ThisType__2) {
          GenerateField__3qga(self, ClassField__5.FieldType, ClassField__5.FieldName);
       };
@@ -5696,7 +5696,7 @@ function ToReturnNode__1qtp(self) {
 }
 
 function IndexOf__2qtp(self, ChildNode__1) {
-   var i = 0;
+   var i__2 = 0;
    while (i__2 < GetListSize__1quv(self)) {
       if (GetListAt__2quv(self, i__2) == ChildNode__1) {
          return i__2;
@@ -5707,7 +5707,7 @@ function IndexOf__2qtp(self, ChildNode__1) {
 }
 
 function CopyTo__3qtp(self, Index__1, BlockNode__2) {
-   var i = Index__1;
+   var i__3 = Index__1;
    while (i__3 < GetListSize__1quv(self)) {
       Append__2quv(BlockNode__2, GetListAt__2quv(self, i__3));
       i__3 = i__3 + 1;
@@ -5745,7 +5745,7 @@ function SetNameInfo__3qdq(self, NameToken__1, Name__2) {
 }
 
 function GetFieldNode__2qdq(self, Index__1) {
-   var Node = GetListAt__2quv(self, Index__1);
+   var Node__2 = GetListAt__2quv(self, Index__1);
    if (Node__2 instanceof ZFieldNode) {
       return Node__2;
    };
@@ -5765,7 +5765,7 @@ function ZFuncCallNode__3q4e(self, ParentNode__1, FuncNode__2) {
 
 function ZFuncCallNode__4q4e(self, ParentNode__1, FuncName__2, FuncType__3) {
    ZListNode__4quv(self, ParentNode__1, null, 1);
-   var FuncNode = ZGlobalNameNode__6qpv(new ZGlobalNameNode(), self, null, FuncType__3, FuncName__2, true);
+   var FuncNode__4 = ZGlobalNameNode__6qpv(new ZGlobalNameNode(), self, null, FuncType__3, FuncName__2, true);
    Set__3qwo(self, 0, FuncNode__4);
    return null;
 }
@@ -5783,7 +5783,7 @@ function GetRecvType__1q4e(self) {
 }
 
 function GetFuncName__1q4e(self) {
-   var FNode = self.AST[0];
+   var FNode__1 = self.AST[0];
    if (FNode__1 instanceof ZGlobalNameNode) {
       return (FNode__1).GlobalName;
    };
@@ -5791,7 +5791,7 @@ function GetFuncName__1q4e(self) {
 }
 
 function GetFuncType__1q4e(self) {
-   var FType = self.AST[0].Type;
+   var FType__1 = self.AST[0].Type;
    if (FType__1 instanceof ZFuncType) {
       return FType__1;
    };
@@ -5799,8 +5799,8 @@ function GetFuncType__1q4e(self) {
 }
 
 function ToMacroNode__2q4e(self, MacroFunc__1) {
-   var MacroNode = ZMacroNode__4q06(new ZMacroNode(), self.ParentNode, self.AST[0].SourceToken, MacroFunc__1);
-   var i = 0;
+   var MacroNode__2 = ZMacroNode__4q06(new ZMacroNode(), self.ParentNode, self.AST[0].SourceToken, MacroFunc__1);
+   var i__3 = 0;
    while (i__3 < GetListSize__1quv(self)) {
       Append__2quv(MacroNode__2, GetListAt__2quv(self, i__3));
       i__3 = i__3 + 1;
@@ -5830,7 +5830,7 @@ function Accept__2qrb(self, Visitor__1) {
 }
 
 function GetParamNode__2qrb(self, Index__1) {
-   var Node = GetListAt__2quv(self, Index__1);
+   var Node__2 = GetListAt__2quv(self, Index__1);
    if (Node__2 instanceof ZParamNode) {
       return Node__2;
    };
@@ -5839,19 +5839,19 @@ function GetParamNode__2qrb(self, Index__1) {
 
 function GetFuncType__2qrb(self, ContextType__1) {
    if (self.ResolvedFuncType == null) {
-      var FuncType = null;
+      var FuncType__7 = null;
       if (ContextType__1 instanceof ZFuncType) {
          FuncType__2 = ContextType__1;
       };
-      var TypeList = [];
+      var TypeList__8 = [];
       if (self.ReturnType.IsVarType(self.ReturnType) && FuncType__2 != null) {
          self.ReturnType = FuncType__2.GetParamType(FuncType__2, 0);
       };
       TypeList__3.add(self.ReturnType.GetRealType(self.ReturnType));
-      var i = 0;
+      var i__9 = 0;
       while (i__4 < GetListSize__1quv(self)) {
-         var Node = GetParamNode__2qrb(self, i__4);
-         var ParamType = Node__5.Type.GetRealType(Node__5.Type);
+         var Node__10 = GetParamNode__2qrb(self, i__4);
+         var ParamType__11 = Node__5.Type.GetRealType(Node__5.Type);
          if (ParamType__6.IsVarType(ParamType__6) && FuncType__2 != null) {
             ParamType__11 = FuncType__2.GetParamType(FuncType__2, i__4 + 1);
          };
@@ -5868,7 +5868,7 @@ function GetFuncType__2qrb(self, ContextType__1) {
 }
 
 function GetSignature__2qrb(self, Generator__1) {
-   var FuncType = GetFuncType__2qrb(self, null);
+   var FuncType__2 = GetFuncType__2qrb(self, null);
    if (self.FuncName == null) {
       self.FuncName = "f_Z" + (GetUniqueNumber__1qw4(Generator__1)).toString();
    };
@@ -5889,7 +5889,7 @@ function IsTopLevel__1qrb(self) {
 }
 
 function GetVarIndex__1qrb(self) {
-   var Index = self.VarIndex;
+   var Index__1 = self.VarIndex;
    self.VarIndex = self.VarIndex + 1;
    return Index__1;
 }
@@ -5917,7 +5917,7 @@ function Accept__2qsc(self, Visitor__1) {
 }
 
 function AndPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var BinaryNode = ZAndNode__5qs1(new ZAndNode(), ParentNode, GetToken__2qwp(TokenContext__1, true), LeftNode__2, GetApplyingSyntax__1qwp(TokenContext__1));
+   var BinaryNode__3 = ZAndNode__5qs1(new ZAndNode(), ParentNode, GetToken__2qwp(TokenContext__1, true), LeftNode__2, GetApplyingSyntax__1qwp(TokenContext__1));
    return AppendParsedRightNode__3qod(BinaryNode__3, ParentNode, TokenContext__1);
 }
 
@@ -5926,19 +5926,19 @@ function AnnotationPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
 }
 
 function ApplyPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var ApplyNode = ZFuncCallNode__3q4e(new ZFuncCallNode(), ParentNode, LeftNode__2);
+   var ApplyNode__3 = ZFuncCallNode__3q4e(new ZFuncCallNode(), ParentNode, LeftNode__2);
    ApplyNode__3 = MatchNtimes__6qwp(TokenContext__1, ApplyNode__3, "(", "$Expression$", ",", ")");
    return ApplyNode__3;
 }
 
 function ArrayLiteralPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var LiteralNode = ZArrayLiteralNode__2qsw(new ZArrayLiteralNode(), ParentNode);
+   var LiteralNode__3 = ZArrayLiteralNode__2qsw(new ZArrayLiteralNode(), ParentNode);
    LiteralNode__3 = MatchNtimes__6qwp(TokenContext__1, LiteralNode__3, "[", "$Expression$", ",", "]");
    return LiteralNode__3;
 }
 
 function AssertPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var AssertNode = ZAssertNode__2qo4(new ZAssertNode(), ParentNode);
+   var AssertNode__3 = ZAssertNode__2qo4(new ZAssertNode(), ParentNode);
    AssertNode__3 = MatchToken__4qwp(TokenContext__1, AssertNode__3, "assert", true);
    AssertNode__3 = MatchToken__4qwp(TokenContext__1, AssertNode__3, "(", true);
    AssertNode__3 = MatchPattern__6qwp(TokenContext__1, AssertNode__3, 0, "$Expression$", true, true);
@@ -5951,20 +5951,20 @@ function AssignPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
 }
 
 function BinaryPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var Token = GetToken__2qwp(TokenContext__1, true);
-   var BinaryNode = ZBinaryNode__5qod(new ZBinaryNode(), ParentNode, Token__3, LeftNode__2, GetApplyingSyntax__1qwp(TokenContext__1));
+   var Token__3 = GetToken__2qwp(TokenContext__1, true);
+   var BinaryNode__4 = ZBinaryNode__5qod(new ZBinaryNode(), ParentNode, Token__3, LeftNode__2, GetApplyingSyntax__1qwp(TokenContext__1));
    return AppendParsedRightNode__3qod(BinaryNode__4, ParentNode, TokenContext__1);
 }
 
 function BlockComment__1qwu(SourceContext) {
-   var StartIndex = GetPosition__1qwu(SourceContext);
-   var NextChar = GetCharAtFromCurrentPosition__2qwu(SourceContext, +1);
+   var StartIndex__1 = GetPosition__1qwu(SourceContext);
+   var NextChar__2 = GetCharAtFromCurrentPosition__2qwu(SourceContext, +1);
    if (NextChar__2 != "/" && NextChar__2 != "*") {
       return false;
    };
    if (NextChar__2 == "/") {
       while (HasChar__1qwu(SourceContext)) {
-         var ch = GetCurrentChar__1qwu(SourceContext);
+         var ch__3 = GetCurrentChar__1qwu(SourceContext);
          if (ch__3 == "\n") {
             break;
          };
@@ -5972,8 +5972,8 @@ function BlockComment__1qwu(SourceContext) {
       };
       return true;
    };
-   var NestedLevel = 0;
-   var PrevChar = "0";
+   var NestedLevel__4 = 0;
+   var PrevChar__5 = "0";
    while (HasChar__1qwu(SourceContext)) {
       NextChar__2 = GetCurrentChar__1qwu(SourceContext);
       if (PrevChar__5 == "*" && NextChar__2 == "/") {
@@ -5994,12 +5994,12 @@ function BlockComment__1qwu(SourceContext) {
 }
 
 function BlockPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var BlockNode = ZBlockNode__3qtp(new ZBlockNode(), ParentNode, 0);
-   var SkipToken = GetToken__1qwp(TokenContext__1);
+   var BlockNode__3 = ZBlockNode__3qtp(new ZBlockNode(), ParentNode, 0);
+   var SkipToken__4 = GetToken__1qwp(TokenContext__1);
    BlockNode__3 = MatchToken__4qwp(TokenContext__1, BlockNode__3, "{", true);
    if (!IsErrorNode__1qwo(BlockNode__3)) {
-      var Remembered = SetParseFlag__2qwp(TokenContext__1, true);
-      var NestedBlockNode = BlockNode__3;
+      var Remembered__5 = SetParseFlag__2qwp(TokenContext__1, true);
+      var NestedBlockNode__6 = BlockNode__3;
       while (HasNext__1qwp(TokenContext__1)) {
          if (MatchToken__2qwp(TokenContext__1, "}")) {
             break;
@@ -6017,7 +6017,7 @@ function BlockPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
 }
 
 function BreakPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var BreakNode = ZBreakNode__2qo9(new ZBreakNode(), ParentNode);
+   var BreakNode__3 = ZBreakNode__2qo9(new ZBreakNode(), ParentNode);
    BreakNode__3 = MatchToken__4qwp(TokenContext__1, BreakNode__3, "break", true);
    return BreakNode__3;
 }
@@ -6027,7 +6027,7 @@ function CLineComment__1qwu(SourceContext) {
 }
 
 function CastPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var CastNode = ZCastNode__4qoz(new ZCastNode(), ParentNode, ZType__4qwg(new ZType(), 1 << 16, "var", null), null);
+   var CastNode__3 = ZCastNode__4qoz(new ZCastNode(), ParentNode, ZType__4qwg(new ZType(), 1 << 16, "var", null), null);
    CastNode__3 = MatchToken__4qwp(TokenContext__1, CastNode__3, "(", true);
    CastNode__3 = MatchPattern__5qwp(TokenContext__1, CastNode__3, -3, "$Type$", true);
    CastNode__3 = MatchToken__4qwp(TokenContext__1, CastNode__3, ")", true);
@@ -6036,7 +6036,7 @@ function CastPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
 }
 
 function CatchPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var CatchNode = ZCatchNode__2qob(new ZCatchNode(), ParentNode);
+   var CatchNode__3 = ZCatchNode__2qob(new ZCatchNode(), ParentNode);
    CatchNode__3 = MatchToken__4qwp(TokenContext__1, CatchNode__3, "catch", true);
    CatchNode__3 = MatchToken__4qwp(TokenContext__1, CatchNode__3, "(", true);
    CatchNode__3 = MatchPattern__5qwp(TokenContext__1, CatchNode__3, -2, "$Name$", true);
@@ -6046,7 +6046,7 @@ function CatchPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
 }
 
 function ClassPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var ClassNode = ZClassNode__2qdq(new ZClassNode(), ParentNode);
+   var ClassNode__3 = ZClassNode__2qdq(new ZClassNode(), ParentNode);
    ClassNode__3 = MatchToken__4qwp(TokenContext__1, ClassNode__3, "class", true);
    ClassNode__3 = MatchPattern__5qwp(TokenContext__1, ClassNode__3, -2, "$Name$", true);
    if (MatchNewLineToken__2qwp(TokenContext__1, "extends")) {
@@ -6057,24 +6057,24 @@ function ClassPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
 }
 
 function ComparatorPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var Token = GetToken__2qwp(TokenContext__1, true);
-   var BinaryNode = ZComparatorNode__5qo5(new ZComparatorNode(), ParentNode, Token__3, LeftNode__2, GetApplyingSyntax__1qwp(TokenContext__1));
+   var Token__3 = GetToken__2qwp(TokenContext__1, true);
+   var BinaryNode__4 = ZComparatorNode__5qo5(new ZComparatorNode(), ParentNode, Token__3, LeftNode__2, GetApplyingSyntax__1qwp(TokenContext__1));
    return AppendParsedRightNode__3qod(BinaryNode__4, ParentNode, TokenContext__1);
 }
 
 function ExpressionPattern_GetRightPattern__2qwt(NameSpace, TokenContext__1) {
-   var Token = GetToken__1qwp(TokenContext__1);
+   var Token__2 = GetToken__1qwp(TokenContext__1);
    if (Token__2 != ZToken__4qw3(new ZToken(), null, 0, 0)) {
-      var Pattern = GetRightSyntaxPattern__2qwt(NameSpace, GetText__1qw3(Token__2));
+      var Pattern__3 = GetRightSyntaxPattern__2qwt(NameSpace, GetText__1qw3(Token__2));
       return Pattern__3;
    };
    return null;
 }
 
 function ExpressionPattern_DispatchPattern__5qwo(ParentNode, TokenContext__1, LeftNode__2, AllowStatement__3, AllowBinary__4) {
-   var Token = GetToken__1qwp(TokenContext__1);
-   var Pattern = null;
-   var NameSpace = GetNameSpace__1qwo(ParentNode);
+   var Token__5 = GetToken__1qwp(TokenContext__1);
+   var Pattern__6 = null;
+   var NameSpace__7 = GetNameSpace__1qwo(ParentNode);
    if (Token__5 instanceof ZPatternToken) {
       Pattern__6 = (Token__5).PresetPattern;
    } else {
@@ -6103,7 +6103,7 @@ function ExpressionPattern_DispatchPattern__5qwo(ParentNode, TokenContext__1, Le
    };
    if (!Pattern__6.IsStatement) {
       while (LeftNode__2 != null && !IsErrorNode__1qwo(LeftNode__2)) {
-         var RightPattern = ExpressionPattern_GetRightPattern__2qwt(NameSpace__7, TokenContext__1);
+         var RightPattern__8 = ExpressionPattern_GetRightPattern__2qwt(NameSpace__7, TokenContext__1);
          if (RightPattern__8 == null) {
             break;
          };
@@ -6125,8 +6125,8 @@ function FalsePattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
 }
 
 function FieldPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var Rememberd = SetParseFlag__2qwp(TokenContext__1, false);
-   var FieldNode = ZFieldNode__2qpi(new ZFieldNode(), ParentNode);
+   var Rememberd__3 = SetParseFlag__2qwp(TokenContext__1, false);
+   var FieldNode__4 = ZFieldNode__2qpi(new ZFieldNode(), ParentNode);
    FieldNode__4 = MatchToken__4qwp(TokenContext__1, FieldNode__4, "var", true);
    FieldNode__4 = MatchPattern__5qwp(TokenContext__1, FieldNode__4, -2, "$Name$", true);
    FieldNode__4 = MatchPattern__5qwp(TokenContext__1, FieldNode__4, -3, "$TypeAnnotation$", false);
@@ -6139,12 +6139,12 @@ function FieldPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
 }
 
 function FloatLiteralPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var Token = GetToken__2qwp(TokenContext__1, true);
+   var Token__3 = GetToken__2qwp(TokenContext__1, true);
    return ZFloatNode__4qp4(new ZFloatNode(), ParentNode, Token__3, LibZen_ParseFloat__1qqy(GetText__1qw3(Token__3)));
 }
 
 function FunctionPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var FuncNode = ZFunctionNode__2qrb(new ZFunctionNode(), ParentNode);
+   var FuncNode__3 = ZFunctionNode__2qrb(new ZFunctionNode(), ParentNode);
    FuncNode__3 = MatchToken__4qwp(TokenContext__1, FuncNode__3, "function", true);
    FuncNode__3 = MatchPattern__5qwp(TokenContext__1, FuncNode__3, -2, "$Name$", false);
    FuncNode__3 = MatchNtimes__6qwp(TokenContext__1, FuncNode__3, "(", "$Param$", ",", ")");
@@ -6154,7 +6154,7 @@ function FunctionPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
 }
 
 function GetIndexPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var IndexerNode = ZGetIndexNode__3qpd(new ZGetIndexNode(), ParentNode, LeftNode__2);
+   var IndexerNode__3 = ZGetIndexNode__3qpd(new ZGetIndexNode(), ParentNode, LeftNode__2);
    IndexerNode__3 = MatchToken__4qwp(TokenContext__1, IndexerNode__3, "[", true);
    IndexerNode__3 = MatchPattern__6qwp(TokenContext__1, IndexerNode__3, 1, "$Expression$", true, true);
    IndexerNode__3 = MatchToken__4qwp(TokenContext__1, IndexerNode__3, "]", true);
@@ -6162,14 +6162,14 @@ function GetIndexPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
 }
 
 function GetterPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var GetterNode = ZGetterNode__3qp1(new ZGetterNode(), ParentNode, LeftNode__2);
+   var GetterNode__3 = ZGetterNode__3qp1(new ZGetterNode(), ParentNode, LeftNode__2);
    GetterNode__3 = MatchToken__4qwp(TokenContext__1, GetterNode__3, ".", true);
    GetterNode__3 = MatchPattern__5qwp(TokenContext__1, GetterNode__3, -2, "$Name$", true);
    return GetterNode__3;
 }
 
 function GroupPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var GroupNode = ZGroupNode__2qp7(new ZGroupNode(), ParentNode);
+   var GroupNode__3 = ZGroupNode__2qp7(new ZGroupNode(), ParentNode);
    GroupNode__3 = MatchToken__4qwp(TokenContext__1, GroupNode__3, "(", true);
    GroupNode__3 = MatchPattern__6qwp(TokenContext__1, GroupNode__3, 0, "$Expression$", true, true);
    GroupNode__3 = MatchToken__4qwp(TokenContext__1, GroupNode__3, ")", true);
@@ -6177,14 +6177,14 @@ function GroupPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
 }
 
 function IfPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var IfNode = ZIfNode__2qp2(new ZIfNode(), ParentNode);
+   var IfNode__3 = ZIfNode__2qp2(new ZIfNode(), ParentNode);
    IfNode__3 = MatchToken__4qwp(TokenContext__1, IfNode__3, "if", true);
    IfNode__3 = MatchToken__4qwp(TokenContext__1, IfNode__3, "(", true);
    IfNode__3 = MatchPattern__6qwp(TokenContext__1, IfNode__3, 0, "$Expression$", true, true);
    IfNode__3 = MatchToken__4qwp(TokenContext__1, IfNode__3, ")", true);
    IfNode__3 = MatchPattern__5qwp(TokenContext__1, IfNode__3, 1, "$Block$", true);
    if (MatchNewLineToken__2qwp(TokenContext__1, "else")) {
-      var PatternName = "$Block$";
+      var PatternName__4 = "$Block$";
       if (IsNewLineToken__2qwp(TokenContext__1, "if")) {
          PatternName__4 = "if";
       };
@@ -6194,18 +6194,18 @@ function IfPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
 }
 
 function InstanceOfPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var BinaryNode = ZInstanceOfNode__4q0t(new ZInstanceOfNode(), ParentNode, GetToken__2qwp(TokenContext__1, true), LeftNode__2);
+   var BinaryNode__3 = ZInstanceOfNode__4q0t(new ZInstanceOfNode(), ParentNode, GetToken__2qwp(TokenContext__1, true), LeftNode__2);
    BinaryNode__3 = MatchPattern__5qwp(TokenContext__1, BinaryNode__3, -3, "$Type$", true);
    return BinaryNode__3;
 }
 
 function IntLiteralPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var Token = GetToken__2qwp(TokenContext__1, true);
+   var Token__3 = GetToken__2qwp(TokenContext__1, true);
    return ZIntNode__4q0o(new ZIntNode(), ParentNode, Token__3, LibZen_ParseInt__1qqy(GetText__1qw3(Token__3)));
 }
 
 function LetPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var LetNode = ZLetNode__2q04(new ZLetNode(), ParentNode);
+   var LetNode__3 = ZLetNode__2q04(new ZLetNode(), ParentNode);
    LetNode__3 = MatchToken__4qwp(TokenContext__1, LetNode__3, "let", true);
    LetNode__3 = MatchPattern__5qwp(TokenContext__1, LetNode__3, -2, "$Name$", true);
    LetNode__3 = MatchPattern__5qwp(TokenContext__1, LetNode__3, -3, "$TypeAnnotation$", false);
@@ -6215,7 +6215,7 @@ function LetPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
 }
 
 function MapEntryPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var LiteralNode = ZMapEntryNode__2q0b(new ZMapEntryNode(), ParentNode);
+   var LiteralNode__3 = ZMapEntryNode__2q0b(new ZMapEntryNode(), ParentNode);
    LiteralNode__3 = MatchPattern__5qwp(TokenContext__1, LiteralNode__3, 0, "$Expression$", true);
    LiteralNode__3 = MatchToken__4qwp(TokenContext__1, LiteralNode__3, ":", true);
    LiteralNode__3 = MatchPattern__5qwp(TokenContext__1, LiteralNode__3, 1, "$Expression$", true);
@@ -6223,13 +6223,13 @@ function MapEntryPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
 }
 
 function MapLiteralPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var LiteralNode = ZMapLiteralNode__2q0m(new ZMapLiteralNode(), ParentNode);
+   var LiteralNode__3 = ZMapLiteralNode__2q0m(new ZMapLiteralNode(), ParentNode);
    LiteralNode__3 = MatchNtimes__6qwp(TokenContext__1, LiteralNode__3, "{", "$MapEntry$", ",", "}");
    return LiteralNode__3;
 }
 
 function MethodCallPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var MethodCallNode = ZMethodCallNode__3q02(new ZMethodCallNode(), ParentNode, LeftNode__2);
+   var MethodCallNode__3 = ZMethodCallNode__3q02(new ZMethodCallNode(), ParentNode, LeftNode__2);
    MethodCallNode__3 = MatchToken__4qwp(TokenContext__1, MethodCallNode__3, ".", true);
    MethodCallNode__3 = MatchPattern__5qwp(TokenContext__1, MethodCallNode__3, -2, "$Name$", true);
    MethodCallNode__3 = MatchNtimes__6qwp(TokenContext__1, MethodCallNode__3, "(", "$Expression$", ",", ")");
@@ -6237,7 +6237,7 @@ function MethodCallPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
 }
 
 function NamePattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var Token = GetToken__2qwp(TokenContext__1, true);
+   var Token__3 = GetToken__2qwp(TokenContext__1, true);
    if (LibZen_IsSymbol__1qqy(GetChar__1qw3(Token__3))) {
       return ZGetNameNode__4qph(new ZGetNameNode(), ParentNode, Token__3, GetText__1qw3(Token__3));
    };
@@ -6245,9 +6245,9 @@ function NamePattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
 }
 
 function NameToken__1qwu(SourceContext) {
-   var StartIndex = GetPosition__1qwu(SourceContext);
+   var StartIndex__1 = GetPosition__1qwu(SourceContext);
    while (HasChar__1qwu(SourceContext)) {
-      var ch = GetCurrentChar__1qwu(SourceContext);
+      var ch__2 = GetCurrentChar__1qwu(SourceContext);
       if (!LibZen_IsSymbol__1qqy(ch__2) && !LibZen_IsDigit__1qqy(ch__2)) {
          break;
       };
@@ -6258,7 +6258,7 @@ function NameToken__1qwu(SourceContext) {
 }
 
 function NewLineToken__1qwu(SourceContext) {
-   var StartIndex = GetPosition__1qwu(SourceContext) + 1;
+   var StartIndex__1 = GetPosition__1qwu(SourceContext) + 1;
    MoveNext__1qwu(SourceContext);
    SkipWhiteSpace__1qwu(SourceContext);
    FoundIndent__3qwu(SourceContext, StartIndex__1, GetPosition__1qwu(SourceContext));
@@ -6266,7 +6266,7 @@ function NewLineToken__1qwu(SourceContext) {
 }
 
 function NewObjectPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var LiteralNode = ZNewObjectNode__2q4i(new ZNewObjectNode(), ParentNode);
+   var LiteralNode__3 = ZNewObjectNode__2q4i(new ZNewObjectNode(), ParentNode);
    LiteralNode__3 = MatchToken__4qwp(TokenContext__1, LiteralNode__3, "new", true);
    LiteralNode__3 = MatchPattern__5qwp(TokenContext__1, LiteralNode__3, -3, "$Type$", false);
    LiteralNode__3 = MatchNtimes__6qwp(TokenContext__1, LiteralNode__3, "(", "$Expression$", ",", ")");
@@ -6274,7 +6274,7 @@ function NewObjectPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
 }
 
 function NotPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var UnaryNode = ZNotNode__3q44(new ZNotNode(), ParentNode, GetToken__2qwp(TokenContext__1, true));
+   var UnaryNode__3 = ZNotNode__3q44(new ZNotNode(), ParentNode, GetToken__2qwp(TokenContext__1, true));
    UnaryNode__3 = MatchPattern__5qwp(TokenContext__1, UnaryNode__3, 0, "$RightExpression$", true);
    return UnaryNode__3;
 }
@@ -6284,7 +6284,7 @@ function NullPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
 }
 
 function NumberLiteralToken_ParseDigit__1qwu(SourceContext) {
-   var ch = "0";
+   var ch__1 = "0";
    while (HasChar__1qwu(SourceContext)) {
       ch__1 = GetCurrentChar__1qwu(SourceContext);
       if (!LibZen_IsDigit__1qqy(ch__1)) {
@@ -6296,8 +6296,8 @@ function NumberLiteralToken_ParseDigit__1qwu(SourceContext) {
 }
 
 function NumberLiteralToken__1qwu(SourceContext) {
-   var StartIndex = GetPosition__1qwu(SourceContext);
-   var ch = NumberLiteralToken_ParseDigit__1qwu(SourceContext);
+   var StartIndex__1 = GetPosition__1qwu(SourceContext);
+   var ch__2 = NumberLiteralToken_ParseDigit__1qwu(SourceContext);
    if (ch__2 == ".") {
       MoveNext__1qwu(SourceContext);
       ch__2 = NumberLiteralToken_ParseDigit__1qwu(SourceContext);
@@ -6324,19 +6324,19 @@ function OperatorToken__1qwu(SourceContext) {
 }
 
 function OrPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var BinaryNode = ZOrNode__5q4h(new ZOrNode(), ParentNode, GetToken__2qwp(TokenContext__1, true), LeftNode__2, GetApplyingSyntax__1qwp(TokenContext__1));
+   var BinaryNode__3 = ZOrNode__5q4h(new ZOrNode(), ParentNode, GetToken__2qwp(TokenContext__1, true), LeftNode__2, GetApplyingSyntax__1qwp(TokenContext__1));
    return AppendParsedRightNode__3qod(BinaryNode__3, ParentNode, TokenContext__1);
 }
 
 function ParamPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var ParamNode = ZParamNode__2qtl(new ZParamNode(), ParentNode);
+   var ParamNode__3 = ZParamNode__2qtl(new ZParamNode(), ParentNode);
    ParamNode__3 = MatchPattern__5qwp(TokenContext__1, ParamNode__3, -2, "$Name$", true);
    ParamNode__3 = MatchPattern__5qwp(TokenContext__1, ParamNode__3, -3, "$TypeAnnotation$", false);
    return ParamNode__3;
 }
 
 function PrototypePattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var FuncNode = ZPrototypeNode__2q4l(new ZPrototypeNode(), ParentNode);
+   var FuncNode__3 = ZPrototypeNode__2q4l(new ZPrototypeNode(), ParentNode);
    FuncNode__3 = MatchToken__4qwp(TokenContext__1, FuncNode__3, "function", true);
    FuncNode__3 = MatchPattern__5qwp(TokenContext__1, FuncNode__3, -2, "$Name$", true);
    FuncNode__3 = MatchNtimes__6qwp(TokenContext__1, FuncNode__3, "(", "$Param$", ",", ")");
@@ -6345,7 +6345,7 @@ function PrototypePattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
 }
 
 function ReturnPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var ReturnNode = ZReturnNode__2qtj(new ZReturnNode(), ParentNode);
+   var ReturnNode__3 = ZReturnNode__2qtj(new ZReturnNode(), ParentNode);
    ReturnNode__3 = MatchToken__4qwp(TokenContext__1, ReturnNode__3, "return", true);
    ReturnNode__3 = MatchPattern__5qwp(TokenContext__1, ReturnNode__3, 0, "$Expression$", false);
    return ReturnNode__3;
@@ -6356,15 +6356,15 @@ function RightExpressionPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) 
 }
 
 function RightTypePattern__3qwo(ParentNode, TokenContext__1, LeftTypeNode__2) {
-   var SourceToken = GetToken__1qwp(TokenContext__1);
+   var SourceToken__6 = GetToken__1qwp(TokenContext__1);
    if (LeftTypeNode__2.Type.GetParamSize(LeftTypeNode__2.Type) > 0) {
       if (MatchToken__2qwp(TokenContext__1, "<")) {
-         var TypeList = [];
+         var TypeList__4 = [];
          while (!StartsWithToken__2qwp(TokenContext__1, ">")) {
             if ((TypeList__4).length > 0 && !MatchToken__2qwp(TokenContext__1, ",")) {
                return null;
             };
-            var ParamTypeNode = ParsePattern__4qwp(TokenContext__1, ParentNode, "$Type$", false);
+            var ParamTypeNode__5 = ParsePattern__4qwp(TokenContext__1, ParentNode, "$Type$", false);
             if (ParamTypeNode__5 == null) {
                return LeftTypeNode__2;
             };
@@ -6383,7 +6383,7 @@ function RightTypePattern__3qwo(ParentNode, TokenContext__1, LeftTypeNode__2) {
 }
 
 function SetIndexPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var IndexerNode = ZSetIndexNode__3qtc(new ZSetIndexNode(), ParentNode, LeftNode__2);
+   var IndexerNode__3 = ZSetIndexNode__3qtc(new ZSetIndexNode(), ParentNode, LeftNode__2);
    IndexerNode__3 = MatchToken__4qwp(TokenContext__1, IndexerNode__3, "[", true);
    IndexerNode__3 = MatchPattern__6qwp(TokenContext__1, IndexerNode__3, 1, "$Expression$", true, true);
    IndexerNode__3 = MatchToken__4qwp(TokenContext__1, IndexerNode__3, "]", true);
@@ -6393,7 +6393,7 @@ function SetIndexPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
 }
 
 function SetterPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var SetterNode = ZSetterNode__3qt5(new ZSetterNode(), ParentNode, LeftNode__2);
+   var SetterNode__3 = ZSetterNode__3qt5(new ZSetterNode(), ParentNode, LeftNode__2);
    SetterNode__3 = MatchToken__4qwp(TokenContext__1, SetterNode__3, ".", true);
    SetterNode__3 = MatchPattern__5qwp(TokenContext__1, SetterNode__3, -2, "$Name$", true);
    SetterNode__3 = MatchToken__4qwp(TokenContext__1, SetterNode__3, "=", true);
@@ -6402,8 +6402,8 @@ function SetterPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
 }
 
 function StatementEndPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var ContextAllowance = SetParseFlag__2qwp(TokenContext__1, false);
-   var Token = null;
+   var ContextAllowance__3 = SetParseFlag__2qwp(TokenContext__1, false);
+   var Token__4 = null;
    if (HasNext__1qwp(TokenContext__1)) {
       Token__4 = GetToken__1qwp(TokenContext__1);
       if (!EqualsText__2qw3(Token__4, ";") && !IsIndent__1qw3(Token__4)) {
@@ -6424,24 +6424,24 @@ function StatementEndPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
 }
 
 function StatementPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var Rememberd = SetParseFlag__2qwp(TokenContext__1, true);
+   var Rememberd__3 = SetParseFlag__2qwp(TokenContext__1, true);
    SetParseFlag__2qwp(TokenContext__1, false);
-   var StmtNode = ExpressionPattern_DispatchPattern__5qwo(ParentNode, TokenContext__1, null, true, true);
+   var StmtNode__4 = ExpressionPattern_DispatchPattern__5qwo(ParentNode, TokenContext__1, null, true, true);
    StmtNode__4 = MatchPattern__5qwp(TokenContext__1, StmtNode__4, -1, ";", true);
    SetParseFlag__2qwp(TokenContext__1, Rememberd__3);
    return StmtNode__4;
 }
 
 function StringLiteralPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var Token = GetToken__2qwp(TokenContext__1, true);
+   var Token__3 = GetToken__2qwp(TokenContext__1, true);
    return ZStringNode__4q4c(new ZStringNode(), ParentNode, Token__3, LibZen_UnquoteString__1qqy(GetText__1qw3(Token__3)));
 }
 
 function StringLiteralToken__1qwu(SourceContext) {
-   var StartIndex = GetPosition__1qwu(SourceContext);
+   var StartIndex__1 = GetPosition__1qwu(SourceContext);
    MoveNext__1qwu(SourceContext);
    while (HasChar__1qwu(SourceContext)) {
-      var ch = GetCurrentChar__1qwu(SourceContext);
+      var ch__2 = GetCurrentChar__1qwu(SourceContext);
       if (ch__2 == "\"") {
          MoveNext__1qwu(SourceContext);
          Tokenize__4qwu(SourceContext, "$StringLiteral$", StartIndex__1, GetPosition__1qwu(SourceContext));
@@ -6461,7 +6461,7 @@ function StringLiteralToken__1qwu(SourceContext) {
 }
 
 function SymbolExpressionPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var NameToken = GetToken__2qwp(TokenContext__1, true);
+   var NameToken__3 = GetToken__2qwp(TokenContext__1, true);
    if (IsToken__2qwp(TokenContext__1, "=")) {
       return ZErrorNode__4qpr(new ZErrorNode(), ParentNode, GetToken__1qwp(TokenContext__1), "assignment is not en expression");
    } else {
@@ -6470,9 +6470,9 @@ function SymbolExpressionPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2)
 }
 
 function SymbolStatementPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var NameToken = GetToken__2qwp(TokenContext__1, true);
+   var NameToken__3 = GetToken__2qwp(TokenContext__1, true);
    if (MatchToken__2qwp(TokenContext__1, "=")) {
-      var AssignedNode = ZSetNameNode__4qtn(new ZSetNameNode(), ParentNode, NameToken__3, GetText__1qw3(NameToken__3));
+      var AssignedNode__4 = ZSetNameNode__4qtn(new ZSetNameNode(), ParentNode, NameToken__3, GetText__1qw3(NameToken__3));
       AssignedNode__4 = MatchPattern__5qwp(TokenContext__1, AssignedNode__4, 0, "$Expression$", true);
       return AssignedNode__4;
    } else {
@@ -6481,7 +6481,7 @@ function SymbolStatementPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) 
 }
 
 function ThrowPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var ThrowNode = ZThrowNode__2qyr(new ZThrowNode(), ParentNode);
+   var ThrowNode__3 = ZThrowNode__2qyr(new ZThrowNode(), ParentNode);
    ThrowNode__3 = MatchToken__4qwp(TokenContext__1, ThrowNode__3, "throw", true);
    ThrowNode__3 = MatchPattern__5qwp(TokenContext__1, ThrowNode__3, 0, "$Expression$", true);
    return ThrowNode__3;
@@ -6492,10 +6492,10 @@ function TruePattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
 }
 
 function TryPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var TryNode = ZTryNode__2qyu(new ZTryNode(), ParentNode);
+   var TryNode__3 = ZTryNode__2qyu(new ZTryNode(), ParentNode);
    TryNode__3 = MatchToken__4qwp(TokenContext__1, TryNode__3, "try", true);
    TryNode__3 = MatchPattern__5qwp(TokenContext__1, TryNode__3, 0, "$Block$", true);
-   var count = 0;
+   var count__4 = 0;
    if (IsNewLineToken__2qwp(TokenContext__1, "catch")) {
       TryNode__3 = MatchPattern__5qwp(TokenContext__1, TryNode__3, 1, "$Catch$", true);
       count__4 = count__4 + 1;
@@ -6518,8 +6518,8 @@ function TypeAnnotationPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
 }
 
 function TypePattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var Token = GetToken__2qwp(TokenContext__1, true);
-   var TypeNode = GetTypeNode__3qwt(GetNameSpace__1qwo(ParentNode), GetText__1qw3(Token__3), Token__3);
+   var Token__3 = GetToken__2qwp(TokenContext__1, true);
+   var TypeNode__4 = GetTypeNode__3qwt(GetNameSpace__1qwo(ParentNode), GetText__1qw3(Token__3), Token__3);
    if (TypeNode__4 != null) {
       return ParsePatternAfter__5qwp(TokenContext__1, ParentNode, TypeNode__4, "$TypeRight$", false);
    };
@@ -6527,12 +6527,12 @@ function TypePattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
 }
 
 function UnaryPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var UnaryNode = ZUnaryNode__3qyp(new ZUnaryNode(), ParentNode, GetToken__2qwp(TokenContext__1, true));
+   var UnaryNode__3 = ZUnaryNode__3qyp(new ZUnaryNode(), ParentNode, GetToken__2qwp(TokenContext__1, true));
    return MatchPattern__5qwp(TokenContext__1, UnaryNode__3, 0, "$RightExpression$", true);
 }
 
 function VarPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var VarNode = ZVarNode__2qsc(new ZVarNode(), ParentNode);
+   var VarNode__3 = ZVarNode__2qsc(new ZVarNode(), ParentNode);
    VarNode__3 = MatchToken__4qwp(TokenContext__1, VarNode__3, "var", true);
    VarNode__3 = MatchPattern__5qwp(TokenContext__1, VarNode__3, -2, "$Name$", true);
    VarNode__3 = MatchPattern__5qwp(TokenContext__1, VarNode__3, -3, "$TypeAnnotation$", false);
@@ -6542,7 +6542,7 @@ function VarPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
 }
 
 function WhilePattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
-   var WhileNode = ZWhileNode__2qya(new ZWhileNode(), ParentNode);
+   var WhileNode__3 = ZWhileNode__2qya(new ZWhileNode(), ParentNode);
    WhileNode__3 = MatchToken__4qwp(TokenContext__1, WhileNode__3, "while", true);
    WhileNode__3 = MatchToken__4qwp(TokenContext__1, WhileNode__3, "(", true);
    WhileNode__3 = MatchPattern__6qwp(TokenContext__1, WhileNode__3, 0, "$Expression$", true, true);
