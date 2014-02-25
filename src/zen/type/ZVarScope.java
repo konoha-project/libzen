@@ -94,20 +94,4 @@ public final class ZVarScope {
 		}
 	}
 
-	//	public void Dump() {
-	//		@Var int i = 0;
-	//		//		this.println("returning type: " + this.FuncNode.ReturnType);
-	//		while(i < this.VarTypeList.size()) {
-	//			@Var ZVarType VarType = this.VarTypeList.get(i);
-	//			if(VarType.IsVarType()) {
-	//				ZLogger._LogInfo(VarType.SourceToken, "ambigious type: " + VarType.ShortName);
-	//			}
-	//			//			this.println("type inference: " + VarType.ShortName + ": " + VarType.GetRealType());
-	//			i = i + 1;
-	//		}
-	//		//		this.println("unknown type count = " + this.CountOfUnknownTypeNode);
-	//		this.VarTypeList.clear();
-	//	}
-	//
-
 }

@@ -659,19 +659,17 @@ public class ZenTypeSafer extends ZTypeChecker {
 	}
 
 	@Override public void DefineFunction(ZFunctionNode FunctionNode, boolean Enforced) {
-		if(FunctionNode.FuncName != null && FunctionNode.GlobalName == null) {
+		if(FunctionNode.FuncName != null && FunctionNode.ResolvedFuncType == null) {
 			@Var ZFuncType FuncType = FunctionNode.GetFuncType(null);
 			//System.out.println("debug guessing " + FuncType);
 			if(Enforced || !FuncType.IsVarType()) {
 				@Var ZNameSpace NameSpace = FunctionNode.GetNameSpace();
-				@Var ZFunc Func = ZenGamma.GetFunc(NameSpace, FunctionNode.FuncName, FuncType, null);
+				@Var ZPrototype Func = NameSpace.Generator.SetPrototype(FunctionNode, FunctionNode.FuncName, FuncType);
 				if(Func != null) {
-					ZLogger._LogError(FunctionNode.SourceToken, "redefinition of function: " + Func);
-				}
-				else {
-					Func = new ZPrototype(0, FunctionNode.FuncName, FuncType, FunctionNode.SourceToken);
-					ZenGamma.DefineFunc(NameSpace, Func);
-					FunctionNode.GlobalName = Func.GetSignature();
+					Func.Defined();
+					if(Func.DefinedCount > 1) {
+						ZLogger._LogError(FunctionNode.SourceToken, "redefinition of function: " + Func);
+					}
 				}
 			}
 		}

@@ -144,19 +144,22 @@ public abstract class ZGenerator extends ZVisitor {
 		this.DefinedFuncMap.put(Func.GetSignature(), Func);
 	}
 
-	public final boolean SetPrototype(ZNode Node, String FuncName, ZFuncType FuncType) {
+	public final ZPrototype SetPrototype(ZNode Node, String FuncName, ZFuncType FuncType) {
 		@Var ZFunc Func = this.GetDefinedFunc(FuncName, FuncType);
 		if(Func != null) {
 			if(!FuncType.Equals(Func.GetFuncType())) {
 				ZLogger._LogError(Node.SourceToken, "function has been defined diffrently: " + Func.GetFuncType());
-				return false;
+				return null;
 			}
+			if(Func instanceof ZPrototype) {
+				return (ZPrototype)Func;
+			}
+			ZLogger._LogError(Node.SourceToken, "function has been defined as macro" + Func);
+			return null;
 		}
-		else {
-			Func = new ZPrototype(0, FuncName, FuncType, Node.SourceToken);
-			this.DefinedFuncMap.put(Func.GetSignature(), Func);
-		}
-		return true;
+		@Var ZPrototype	Proto= new ZPrototype(0, FuncName, FuncType, Node.SourceToken);
+		this.DefinedFuncMap.put(Proto.GetSignature(), Proto);
+		return Proto;
 	}
 
 	public final ZFunc GetDefinedFunc(String GlobalName) {
