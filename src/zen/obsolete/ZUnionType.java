@@ -1,7 +1,8 @@
-package zen.type;
+package zen.obsolete;
 
 import zen.deps.Field;
 import zen.deps.ZArray;
+import zen.type.ZType;
 
 public class ZUnionType extends ZType {
 

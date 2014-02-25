@@ -22,50 +22,8 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-//ifdef JAVA
-package zen.type;
-import zen.deps.Field;
-import zen.deps.LibZen;
+package zen.obsolete;
 
-public abstract class ZFunc {
-	public final static String _NativeNameConnector = "__";
-	public final static int _CoercionFunc        = (1 << 17) | ZFunc._ConverterFunc;  //@Coercion
-	public final static int _ConverterFunc       = 1 << 16;
+public abstract class ZTypeFlag {
 
-	@Field public int			  FuncFlag;
-	@Field public String		  FuncName;  // NativeReferenceNamr
-	@Field public ZFuncType     FuncType;
-
-	public ZFunc(int FuncFlag, String FuncName, ZFuncType FuncType) {
-		this.FuncFlag = FuncFlag;
-		this.FuncName = FuncName;
-		this.FuncType = FuncType;
-	}
-
-	public final ZFuncType GetFuncType() {
-		return this.FuncType;
-	}
-
-	@Override public final String toString() {
-		return this.FuncName + ": " + this.FuncType;
-	}
-
-	public final boolean IsConverterFunc() {
-		return LibZen._IsFlag(this.FuncFlag, ZFunc._ConverterFunc);
-	}
-	public final boolean IsCoercionFunc() {
-		return LibZen._IsFlag(this.FuncFlag, ZFunc._CoercionFunc);
-	}
-
-	protected final boolean Is(int Flag) {
-		return LibZen._IsFlag(this.FuncFlag, Flag);
-	}
-
-	public static String _StringfySignature(String FuncName, int FuncParamSize, ZType RecvType) {
-		return FuncName + "__" + FuncParamSize + RecvType.GetUniqueName();
-	}
-
-	public final String GetSignature() {
-		return this.FuncType.StringfySignature(this.FuncName);
-	}
 }

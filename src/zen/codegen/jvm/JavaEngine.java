@@ -73,9 +73,9 @@ import zen.deps.ZenMap;
 import zen.parser.ZEmptyValue;
 import zen.parser.ZLogger;
 import zen.parser.ZSourceEngine;
+import zen.parser.ZTypeChecker;
 import zen.type.ZFunc;
 import zen.type.ZFuncType;
-import zen.type.ZTypeChecker;
 
 public class JavaEngine extends ZSourceEngine {
 

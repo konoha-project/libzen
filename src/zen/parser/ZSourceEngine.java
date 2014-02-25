@@ -74,7 +74,6 @@ import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.type.ZFuncType;
 import zen.type.ZType;
-import zen.type.ZTypeChecker;
 
 public class ZSourceEngine extends ZVisitor {
 	protected final ZTypeChecker TypeChecker;

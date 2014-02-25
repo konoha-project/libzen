@@ -22,7 +22,7 @@
 //ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //**************************************************************************
 
-package zen.type;
+package zen.parser;
 
 import zen.ast.ZCastNode;
 import zen.ast.ZErrorNode;
@@ -36,11 +36,10 @@ import zen.ast.ZSugarNode;
 import zen.deps.Field;
 import zen.deps.LibZen;
 import zen.deps.Var;
-import zen.parser.ZGenerator;
-import zen.parser.ZLogger;
-import zen.parser.ZMacroFunc;
-import zen.parser.ZToken;
-import zen.parser.ZVisitor;
+import zen.type.ZFunc;
+import zen.type.ZFuncType;
+import zen.type.ZType;
+import zen.type.ZVarScope;
 
 public abstract class ZTypeChecker extends ZVisitor {
 

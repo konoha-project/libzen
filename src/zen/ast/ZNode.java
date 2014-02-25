@@ -31,9 +31,9 @@ import zen.deps.ZenMethod;
 import zen.parser.ZGenerator;
 import zen.parser.ZNameSpace;
 import zen.parser.ZToken;
+import zen.parser.ZTypeChecker;
 import zen.parser.ZVisitor;
 import zen.type.ZType;
-import zen.type.ZTypeChecker;
 
 public abstract class ZNode {
 	public final static int _Nop =      -1;

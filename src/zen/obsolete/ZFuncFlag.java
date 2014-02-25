@@ -22,8 +22,8 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package zen.type;
+package zen.obsolete;
 
-public abstract class ZTypeFlag {
+public abstract class ZFuncFlag {
 
 }

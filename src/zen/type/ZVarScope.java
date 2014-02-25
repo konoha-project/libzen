@@ -7,6 +7,7 @@ import zen.deps.Var;
 import zen.deps.ZArray;
 import zen.parser.ZLogger;
 import zen.parser.ZToken;
+import zen.parser.ZTypeChecker;
 
 public final class ZVarScope {
 	@Field public ZVarScope Parent;
