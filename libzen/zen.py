@@ -86,6 +86,7 @@ def GenVar(line):
 	line = line.replace("._", "_")
 	line = line.replace(".ArrayValues[", "[")
 	line = line.replace("ZType.", "ZType")
+	line = line.replace(".length()", ".size()")
 	m = VarPattern.match(line)
 	if m:
 		line = m.group(1) + 'var ' + m.group(3) + ": " + GenType(m.group(2)) + m.group(4) + '\n'
@@ -130,7 +131,6 @@ def GenFunc(cname, line, IsProto):
 	end = line.find(')')
 	params = ParseParam(line[start+1:end], True, cname)
 	block = line[:start].replace('@Override ', '')
-	
 	findex = block.find(' ')
 	if findex > 0:
 		ReturnType = block[:findex]
@@ -141,12 +141,12 @@ def GenFunc(cname, line, IsProto):
 	if funcname == "Invoke" :
 		funcname = params[0][0]
 		params = params[1:]
-	block = funcname + GenParam(params) + ": " + GenType(ReturnType)
+	
+	sig = funcname + GenParam(params) + ": " + GenType(ReturnType)
 	if IsProto:
-		block = block + ";"
-	else:
-		block = block + line[end+1:]
-	return "function " + block + "\n"
+		return "function " + sig + ";\n"
+	return "function " + sig + line[end+1:] + "\n"
+	
 
 def ParseFuncType(s, rtype, cname):
         param = [rtype, cname]
@@ -240,14 +240,15 @@ class ClassBlock:
 			if line.find('@ZenIgnored') >= 0:
 				continue
 			if line.find('{') >=0 :
-				if line.find('static') >= 0:
+				if line.find('static ') >= 0 and line.find('@Override') == -1:
 					f.write(GenStaticFunc(self.ClassName, line, True))
 				else:
-					f.write(GenFunc(self.ClassName, line, True))
+					s = GenFunc(self.ClassName, line, True)
+					f.write(s)
 	
 	def writesymbol(self, f):
 		for line in self.lines:
-			if line.find('static') >= 0:
+			if line.find(' static') >= 0 :
 				if line.find('{') == -1 :
 					f.write(GenLetDecl(self.ClassName, line))
 				else:
@@ -293,13 +294,20 @@ class Context:
 			c.writefunc(f, False)
 		f.close()
 
+ReadFiles = {}
+
 def readfile(file, c):
+	global ReadFiles;
+	if ReadFiles.has_key(file):
+		return
+	ReadFiles[file] = file
 	f = open(file, 'r')
 	line = f.readline()
 	while line:
 		c.read(line)
 		line = f.readline()
 	f.close()
+	
 
 def ClassSort(list, m):
 	if len(list) == 0: return []
@@ -373,7 +381,7 @@ def main(files) :
 	for file in files[1:]:
 		readfile(file, c)
 	c.ClassList = ClassSort(c.ClassList, {})
-	c.write('sample/libzen.zen')
+	c.write('libzen/libzen.zen')
 
 
 main(sys.argv)

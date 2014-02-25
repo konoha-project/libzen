@@ -135,4 +135,13 @@ public class ZTypePool {
 		return ZTypePool._LookupFuncType(TypeList);
 	}
 
+	public final static ZFuncType _LookupFuncType(ZType R, ZType P1, ZType P2, ZType P3) {
+		@Var ZArray<ZType> TypeList = new ZArray<ZType>(new ZType[3]);
+		TypeList.add(R);
+		TypeList.add(P1);
+		TypeList.add(P2);
+		TypeList.add(P3);
+		return ZTypePool._LookupFuncType(TypeList);
+	}
+
 }

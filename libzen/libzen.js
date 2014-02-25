@@ -1,3 +1,12 @@
+infinite looping9812 Token=Override ParsedNode=ErrorNode '; is expected'
+infinite looping9839 Token=Override ParsedNode=ErrorNode '; is expected'
+infinite looping9942 Token=Override ParsedNode=ErrorNode '; is expected'
+infinite looping16814 Token=Override ParsedNode=ErrorNode '; is expected'
+infinite looping16962 Token=} ParsedNode=ErrorNode 'statement is expected'
+infinite looping16973 Token=Override ParsedNode=ErrorNode '; is expected'
+infinite looping17307 Token=} ParsedNode=ErrorNode 'statement is expected'
+infinite looping17318 Token=Override ParsedNode=ErrorNode '; is expected'
+infinite looping18303 Token=} ParsedNode=ErrorNode 'statement is expected'
 
 var ZClassField = (function() {
    function ZClassField(){
@@ -783,6 +792,13 @@ var ZTypeChecker = (function(_super) {
    return ZTypeChecker;
 })(ZVisitor);
 
+var CSourceGenerator = (function(_super) {
+   __extends(_super, CSourceGenerator);
+   function CSourceGenerator(){
+}
+   return CSourceGenerator;
+})(ZSourceGenerator);
+
 var ZArrayType = (function(_super) {
    __extends(_super, ZArrayType);
    function ZArrayType(){
@@ -950,7 +966,7 @@ function ZTypePool_GetGenericType1__2qwz(BaseType, ParamType__1) {
 }
 
 function ZTypePool_GetGenericType__3qwz(BaseType, TypeList__1, IsCreation__2) {
-   console.assert(BaseType.GetParamSize(BaseType) > 0, "(sample/libzen.zen:1228)");
+   console.assert(BaseType.GetParamSize(BaseType) > 0, "(sample/libzen.zen:1263)");
    if ((TypeList__1).length == 1 && !IsFuncType__1qwz(BaseType)) {
       return ZTypePool_GetGenericType1__2qwz(BaseType, TypeList__1[0]);
    };
@@ -1548,7 +1564,7 @@ function Maybe__3qen(self, T__1, SourceToken__2) {
 }
 
 function ZNode__4qwd(self, ParentNode__1, SourceToken__2, Size__3) {
-   console.assert(self != ParentNode__1, "(sample/libzen.zen:1807)");
+   console.assert(self != ParentNode__1, "(sample/libzen.zen:1985)");
    self.ParentNode = ParentNode__1;
    self.SourceToken = SourceToken__2;
    if (Size__3 > 0) {
@@ -1560,16 +1576,16 @@ function ZNode__4qwd(self, ParentNode__1, SourceToken__2, Size__3) {
 }
 
 function SetChild__2qwd(self, Node__1) {
-   console.assert(Node__1 != null, "(sample/libzen.zen:1819)");
+   console.assert(Node__1 != null, "(sample/libzen.zen:1997)");
    if (Node__1 != null) {
-      console.assert(self != Node__1, "(sample/libzen.zen:1821)");
+      console.assert(self != Node__1, "(sample/libzen.zen:1999)");
       Node__1.ParentNode = self;
    };
    return Node__1;
 }
 
 function SetNameInfo__3qwd(self, NameToken__1, Name__2) {
-   console.assert(Name__2 == null, "(sample/libzen.zen:1828)");
+   console.assert(Name__2 == null, "(sample/libzen.zen:2006)");
    return;
 }
 
@@ -1586,7 +1602,7 @@ function Set__3qwd(self, Index__1, Node__2) {
       if (ListNode__3 instanceof ZListNode) {
          Append__2quq((ListNode__3), Node__2);
       } else {
-         console.assert(ListNode__3 instanceof ZListNode, "(sample/libzen.zen:1845)");
+         console.assert(ListNode__3 instanceof ZListNode, "(sample/libzen.zen:2023)");
       };
    } else if (Index__1 == -2) {
       self.SetNameInfo(self, Node__2.SourceToken, GetText__1qwn(Node__2.SourceToken));
@@ -2850,7 +2866,7 @@ function ApplyMatchPattern__5qwf(self, ParentNode__1, LeftNode__2, Pattern__3, I
       self.CurrentPosition = RollbackPosition__5;
       self.ApplyingPattern = CurrentPattern__6;
       ParsedNode__13 = LibZen.ApplyMatchFunc(CurrentPattern__6.MatchFunc, ParentNode__1, self, LeftNode__2);
-      console.assert(ParsedNode__8 != ParentNode__1, "(sample/libzen.zen:3046)");
+      console.assert(ParsedNode__8 != ParentNode__1, "(sample/libzen.zen:3224)");
       self.ApplyingPattern = null;
       self.IsAllowSkipIndent = Remembered__9;
       if (ParsedNode__8 != null && !IsErrorNode__1qwd(ParsedNode__8)) {
@@ -2864,7 +2880,7 @@ function ApplyMatchPattern__5qwf(self, ParentNode__1, LeftNode__2, Pattern__3, I
    };
    if (self.CurrentPosition == RollbackPosition__5) {
       System.out.println((((("infinite looping" + (RollbackPosition__5).toString()) + " Token=") + TopToken__7) + " ParsedNode=") + ParsedNode__8);
-      console.assert(self.CurrentPosition != RollbackPosition__5, "(sample/libzen.zen:3060)");
+      console.assert(self.CurrentPosition != RollbackPosition__5, "(sample/libzen.zen:3238)");
    };
    if (ParsedNode__8 == null) {
       ParsedNode__8 = CreateExpectedErrorNode__3qwf(self, TopToken__7, Pattern__3.PatternName);
@@ -3097,7 +3113,7 @@ function GetFieldType__3qwb(self, FieldName__1, DefaultType__2) {
 }
 
 function AppendField__4qwb(self, FieldType__1, FieldName__2, SourceToken__3) {
-   console.assert(!FieldType__1.IsVarType(FieldType__1), "(sample/libzen.zen:3286)");
+   console.assert(!FieldType__1.IsVarType(FieldType__1), "(sample/libzen.zen:3464)");
    if (self.FieldList == null) {
       self.FieldList = [];
    };
@@ -3341,7 +3357,7 @@ function DeSugar__2qod(self, Generator__1) {
 function ZBinaryNode__5qoh(self, ParentNode__1, SourceToken__2, Left__3, Pattern__4) {
    ZNode__4qwd(self, ParentNode__1, SourceToken__2, 2);
    Set__3qwd(self, 0, Left__3);
-   console.assert(Pattern__4 != null, "(sample/libzen.zen:3527)");
+   console.assert(Pattern__4 != null, "(sample/libzen.zen:3705)");
    self.Pattern = Pattern__4;
    return null;
 }
@@ -3745,7 +3761,7 @@ function ClearListAfter__2quq(self, Size__1) {
 function ZMacroNode__4q0c(self, ParentNode__1, SourceToken__2, MacroFunc__3) {
    ZListNode__4quq(self, ParentNode__1, SourceToken__2, 0);
    self.MacroFunc = MacroFunc__3;
-   console.assert(MacroFunc__3 != null, "(sample/libzen.zen:3885)");
+   console.assert(MacroFunc__3 != null, "(sample/libzen.zen:4063)");
    return null;
 }
 
@@ -5293,7 +5309,338 @@ function VisitSugarNode__2qe8(self, Node__1) {
    return;
 }
 
-function ZArrayType__3qgg(self, TypeFlag__1, ParamType__2) {
+function CSourceGenerator__1qgg(self) {
+   ZSourceGenerator__3qyb(self, "c", "C99");
+   self.LineFeed = "\n";
+   self.Tab = "\t";
+   self.Camma = ", ";
+   self.SemiColon = ";";
+   self.TrueLiteral = "1/*true*/";
+   self.FalseLiteral = "0/*false*/";
+   self.NullLiteral = "NULL";
+   self.TopType = "void *";
+   SetNativeType__3qyb(self, ZType__4qwz(new ZType(), 1 << 16, "boolean", ZType__4qwz(new ZType(), 1 << 16, "var", null)), "int");
+   SetNativeType__3qyb(self, ZType__4qwz(new ZType(), 1 << 16, "int", ZType__4qwz(new ZType(), 1 << 16, "var", null)), "long");
+   SetNativeType__3qyb(self, ZType__4qwz(new ZType(), 1 << 16, "float", ZType__4qwz(new ZType(), 1 << 16, "var", null)), "double");
+   SetNativeType__3qyb(self, ZType__4qwz(new ZType(), 1 << 16, "String", ZType__4qwz(new ZType(), 1 << 16, "var", null)), "const char *");
+   SetMacro__6qyb(self, "assert", "LibZen_Assert($[0], $[1])", ZType__4qwz(new ZType(), 1 << 16, "void", null), ZType__4qwz(new ZType(), 1 << 16, "boolean", ZType__4qwz(new ZType(), 1 << 16, "var", null)), ZType__4qwz(new ZType(), 1 << 16, "String", ZType__4qwz(new ZType(), 1 << 16, "var", null)));
+   SetMacro__5qyb(self, "print", "LibZen_Print($[0])", ZType__4qwz(new ZType(), 1 << 16, "void", null), ZType__4qwz(new ZType(), 1 << 16, "String", ZType__4qwz(new ZType(), 1 << 16, "var", null)));
+   SetMacro__5qyb(self, "println", "LibZen_PrintLine($[0])", ZType__4qwz(new ZType(), 1 << 16, "void", null), ZType__4qwz(new ZType(), 1 << 16, "String", ZType__4qwz(new ZType(), 1 << 16, "var", null)));
+   SetConverterMacro__4qyb(self, "(double)($[0])", ZType__4qwz(new ZType(), 1 << 16, "float", ZType__4qwz(new ZType(), 1 << 16, "var", null)), ZType__4qwz(new ZType(), 1 << 16, "int", ZType__4qwz(new ZType(), 1 << 16, "var", null)));
+   SetConverterMacro__4qyb(self, "(long)($[0])", ZType__4qwz(new ZType(), 1 << 16, "int", ZType__4qwz(new ZType(), 1 << 16, "var", null)), ZType__4qwz(new ZType(), 1 << 16, "float", ZType__4qwz(new ZType(), 1 << 16, "var", null)));
+   SetConverterMacro__4qyb(self, "LibZen_IntToString($[0])", ZType__4qwz(new ZType(), 1 << 16, "String", ZType__4qwz(new ZType(), 1 << 16, "var", null)), ZType__4qwz(new ZType(), 1 << 16, "int", ZType__4qwz(new ZType(), 1 << 16, "var", null)));
+   SetConverterMacro__4qyb(self, "LibZen_FloatToString($[0])", ZType__4qwz(new ZType(), 1 << 16, "String", ZType__4qwz(new ZType(), 1 << 16, "var", null)), ZType__4qwz(new ZType(), 1 << 16, "float", ZType__4qwz(new ZType(), 1 << 16, "var", null)));
+   SetMacro__6qyb(self, "+", "LibZen_StrCat($[0], $[1])", ZType__4qwz(new ZType(), 1 << 16, "String", ZType__4qwz(new ZType(), 1 << 16, "var", null)), ZType__4qwz(new ZType(), 1 << 16, "String", ZType__4qwz(new ZType(), 1 << 16, "var", null)), ZType__4qwz(new ZType(), 1 << 16, "String", ZType__4qwz(new ZType(), 1 << 16, "var", null)));
+   return null;
+}
+
+function GetEngine__1qgg(self) {
+   return ZSourceEngine__3qwk(new ZSourceEngine(), ZTypeChecker__2qe8(new ZTypeChecker(), self), self);
+}
+
+function GenerateCode__3qgg(self, ContextType__1, Node__2) {
+   if (IsUntyped__1qwd(Node__2) && !IsErrorNode__1qwd(Node__2)) {
+      Append__2qwe(self.CurrentBuilder, "/*untyped*/" + self.NullLiteral);
+      ZLogger_LogError__2qwn(Node__2.SourceToken, "untyped error");
+   } else {
+      if (ContextType__1 != null && Node__2.Type != ContextType__1) {
+         Append__2qwe(self.CurrentBuilder, "(");
+         GenerateTypeName__2qgg(self, ContextType__1);
+         Append__2qwe(self.CurrentBuilder, ")");
+      };
+      Node__2.Accept(Node__2, self);
+   };
+   return;
+}
+
+function VisitArrayLiteralNode__2qgg(self, Node__1) {
+   var ParamType = Node__1.Type.GetParamType(Node__1.Type, 0);
+   if (IsIntType__1qwz(ParamType__2) || IsBooleanType__1qwz(ParamType__2)) {
+      Append__2qwe(self.CurrentBuilder, "LibZen_NewIntArray(");
+   } else if (IsFloatType__1qwz(ParamType__2)) {
+      Append__2qwe(self.CurrentBuilder, "LibZen_NewFloatArray(");
+   } else if (IsStringType__1qwz(ParamType__2)) {
+      Append__2qwe(self.CurrentBuilder, "LibZen_NewStringArray(");
+   } else {
+      Append__2qwe(self.CurrentBuilder, "LibZen_NewArray(");
+   };
+   Append__2qwe(self.CurrentBuilder, LibZen.ThrowError("undefined code generation: #ZTypeNode:String").valueOf(Node.GetListSize()));
+   if (GetListSize__1quq(Node__1) > 0) {
+      Append__2qwe(self.CurrentBuilder, self.Camma);
+   };
+   VisitListNode__4qyb(self, "", Node__1, ")");
+   return;
+}
+
+function VisitMapLiteralNode__2qgg(self, Node__1) {
+   var ParamType = Node__1.Type.GetParamType(Node__1.Type, 0);
+   if (IsIntType__1qwz(ParamType__2) || IsBooleanType__1qwz(ParamType__2)) {
+      Append__2qwe(self.CurrentBuilder, "LibZen_NewIntMap(");
+   } else if (IsFloatType__1qwz(ParamType__2)) {
+      Append__2qwe(self.CurrentBuilder, "LibZen_NewFloatMap(");
+   } else if (IsStringType__1qwz(ParamType__2)) {
+      Append__2qwe(self.CurrentBuilder, "LibZen_NewStringMap(");
+   } else {
+      Append__2qwe(self.CurrentBuilder, "LibZen_NewMap(");
+   };
+   Append__2qwe(self.CurrentBuilder, LibZen.ThrowError("undefined code generation: #ZTypeNode:String").valueOf(Node.GetListSize()));
+   if (GetListSize__1quq(Node__1) > 0) {
+      Append__2qwe(self.CurrentBuilder, self.Camma);
+   };
+   VisitListNode__4qyb(self, "", Node__1, ")");
+   return;
+}
+
+function VisitNewObjectNode__2qgg(self, Node__1) {
+   Append__2qwe(self.CurrentBuilder, "_New" + NameClass__2qwh(self, Node__1.Type));
+   VisitListNode__4qyb(self, "(", Node__1, ")");
+   return;
+}
+
+function BaseName__2qgg(self, RecvType__1) {
+   return GetAsciiName__1qwz(RecvType__1);
+}
+
+function VisitGetIndexNode__2qgg(self, Node__1) {
+   Append__2qwe(self.CurrentBuilder, BaseName__2qgg(self, GetAstType__2qwd(Node__1, 0)) + "GetIndex");
+   Append__2qwe(self.CurrentBuilder, "(");
+   self.GenerateCode(self, null, Node__1.AST[1]);
+   Append__2qwe(self.CurrentBuilder, ")");
+   return;
+}
+
+function VisitSetIndexNode__2qgg(self, Node__1) {
+   Append__2qwe(self.CurrentBuilder, BaseName__2qgg(self, GetAstType__2qwd(Node__1, 0)) + "SetIndex");
+   Append__2qwe(self.CurrentBuilder, "(");
+   self.GenerateCode(self, null, Node__1.AST[1]);
+   Append__2qwe(self.CurrentBuilder, self.Camma);
+   self.GenerateCode(self, null, Node__1.AST[2]);
+   Append__2qwe(self.CurrentBuilder, ")");
+   return;
+}
+
+function VisitGetNameNode__2qgg(self, Node__1) {
+   Append__2qwe(self.CurrentBuilder, Node__1.VarName);
+   return;
+}
+
+function VisitSetNameNode__2qgg(self, Node__1) {
+   Append__2qwe(self.CurrentBuilder, Node__1.VarName);
+   AppendToken__2qwe(self.CurrentBuilder, "=");
+   self.GenerateCode(self, null, Node__1.AST[0]);
+   return;
+}
+
+function VisitGetterNode__2qgg(self, Node__1) {
+   GenerateSurroundCode__2qyb(self, Node__1.AST[0]);
+   Append__2qwe(self.CurrentBuilder, "->");
+   Append__2qwe(self.CurrentBuilder, Node__1.FieldName);
+   return;
+}
+
+function VisitSetterNode__2qgg(self, Node__1) {
+   GenerateSurroundCode__2qyb(self, Node__1.AST[0]);
+   Append__2qwe(self.CurrentBuilder, "->");
+   Append__2qwe(self.CurrentBuilder, Node__1.FieldName);
+   AppendToken__2qwe(self.CurrentBuilder, "=");
+   self.GenerateCode(self, null, Node__1.AST[1]);
+   return;
+}
+
+function VisitMethodCallNode__2qgg(self, Node__1) {
+   return;
+}
+
+function VisitFuncCallNode__2qgg(self, Node__1) {
+   self.GenerateCode(self, null, Node__1.AST[0]);
+   VisitListNode__4qyb(self, "(", Node__1, ")");
+   return;
+}
+
+function VisitThrowNode__2qgg(self, Node__1) {
+   self.GenerateCode(self, null, Node__1.AST[0]);
+   Append__2qwe(self.CurrentBuilder, "longjump(1)");
+   AppendWhiteSpace__1qwe(self.CurrentBuilder);
+   return;
+}
+
+function VisitTryNode__2qgg(self, Node__1) {
+   return;
+}
+
+function VisitCatchNode__2qgg(self, Node__1) {
+   return;
+}
+
+function ParamTypeName__2qgg(self, Type__1) {
+   if (IsArrayType__1qwz(Type__1)) {
+      return "ArrayOf" + ParamTypeName__2qgg(self, Type__1.GetParamType(Type__1, 0));
+   };
+   if (IsMapType__1qwz(Type__1)) {
+      return "MapOf" + ParamTypeName__2qgg(self, Type__1.GetParamType(Type__1, 0));
+   };
+   if (IsFuncType__1qwz(Type__1)) {
+      var s = ("FuncOf" + ParamTypeName__2qgg(self, Type__1.GetParamType(Type__1, 0))) + "Of";
+      var i = 0;
+      while (i__3 < Type__1.GetParamSize(Type__1)) {
+         s__2 = s__2 + ParamTypeName__2qgg(self, Type__1.GetParamType(Type__1, i__3));
+         i__3 = i__3 + 1;
+      };
+      return s__2;
+   };
+   if (IsIntType__1qwz(Type__1)) {
+      return "Int";
+   };
+   if (IsFloatType__1qwz(Type__1)) {
+      return "Float";
+   };
+   if (IsVoidType__1qwz(Type__1)) {
+      return "Void";
+   };
+   if (Type__1.IsVarType(Type__1)) {
+      return "Var";
+   };
+   return Type__1.ShortName;
+}
+
+function GetNativeType__2qgg(self, Type__1) {
+   var TypeName = null;
+   if (IsArrayType__1qwz(Type__1) || IsMapType__1qwz(Type__1)) {
+      TypeName__2 = ParamTypeName__2qgg(self, Type__1) + " *";
+   };
+   if (Type__1 instanceof ZClassType) {
+      TypeName__2 = ("struct " + NameClass__2qwh(self, Type__1)) + " *";
+   };
+   if (TypeName__2 == null) {
+      TypeName__3 = super.GetNativeType(Type__1);
+   };
+   return TypeName__2;
+}
+
+function GenerateFuncTypeName__3qgg(self, Type__1, FuncName__2) {
+   GenerateTypeName__2qgg(self, Type__1.GetParamType(Type__1, 0));
+   Append__2qwe(self.CurrentBuilder, (" (*" + FuncName__2) + ")");
+   var i = 1;
+   Append__2qwe(self.CurrentBuilder, "(");
+   while (i__3 < Type__1.GetParamSize(Type__1)) {
+      if (i__3 > 1) {
+         Append__2qwe(self.CurrentBuilder, ",");
+      };
+      GenerateTypeName__2qgg(self, Type__1.GetParamType(Type__1, i__3));
+      i__3 = i__3 + 1;
+   };
+   Append__2qwe(self.CurrentBuilder, ")");
+   return;
+}
+
+function GenerateTypeName__2qgg(self, Type__1) {
+   if (IsFuncType__1qwz(Type__1)) {
+      GenerateFuncTypeName__3qgg(self, Type__1, "");
+   } else {
+      Append__2qwe(self.CurrentBuilder, GetNativeType__2qgg(self, Type__1.GetRealType(Type__1)));
+   };
+   return;
+}
+
+function VisitVarNode__2qgg(self, Node__1) {
+   GenerateTypeName__2qgg(self, Node__1.DeclType);
+   Append__2qwe(self.CurrentBuilder, " ");
+   Append__2qwe(self.CurrentBuilder, Node__1.NativeName);
+   AppendToken__2qwe(self.CurrentBuilder, "=");
+   self.GenerateCode(self, null, Node__1.AST[0]);
+   Append__2qwe(self.CurrentBuilder, self.SemiColon);
+   VisitStmtList__2qyb(self, Node__1);
+   return;
+}
+
+function VisitParamNode__2qgg(self, Node__1) {
+   if (IsFuncType__1qwz(Node__1.Type)) {
+      GenerateFuncTypeName__3qgg(self, Node__1.Type, Node__1.Name);
+   } else {
+      GenerateTypeName__2qgg(self, Node__1.Type);
+      Append__2qwe(self.CurrentBuilder, " ");
+      Append__2qwe(self.CurrentBuilder, SafeName__3qyb(self, Node__1.Name, Node__1.ParamIndex));
+   };
+   return;
+}
+
+function SetMethod__3qgg(self, FuncName__1, FuncType__2) {
+   var RecvType = GetRecvType__1qw5(FuncType__2);
+   if (RecvType__3 instanceof ZClassType && FuncName__1 != null) {
+      var ClassType = RecvType__3;
+      var FieldType = GetFieldType__3qwb(ClassType__4, FuncName__1, null);
+      if (FieldType__5 == null || !IsFuncType__1qwz(FieldType__5)) {
+         FuncName__1 = LibZen_AnotherName__1qqy(FuncName__1);
+         FieldType__5 = GetFieldType__3qwb(ClassType__4, FuncName__1, null);
+         if (FieldType__5 == null || !IsFuncType__1qwz(FieldType__5)) {
+            return;
+         };
+      };
+      if (FieldType__5 instanceof ZFuncType) {
+         if (AcceptAsFieldFunc__2qw5((FieldType__5), FuncType__2)) {
+            Append__2qwe(self.HeaderBuilder, (("#define _" + NameClass__2qwh(self, ClassType__4)) + "_") + FuncName__1);
+            AppendLineFeed__1qwe(self.HeaderBuilder);
+         };
+      };
+   };
+   return;
+}
+
+function VisitInstanceOfNode__2qgg(self, Node__1) {
+   Append__2qwe(self.CurrentBuilder, "LibZen_Is(");
+   self.GenerateCode(self, null, Node__1.AST[0]);
+   Append__2qwe(self.CurrentBuilder, self.Camma);
+   AppendInt__2qwe(self.CurrentBuilder, Node__1.TargetType.TypeId);
+   Append__2qwe(self.CurrentBuilder, ")");
+   return;
+}
+
+function GenerateCField__3qgg(self, CType__1, FieldName__2) {
+   AppendLineFeed__1qwe(self.CurrentBuilder);
+   AppendIndent__1qwe(self.CurrentBuilder);
+   Append__2qwe(self.CurrentBuilder, CType__1);
+   AppendWhiteSpace__1qwe(self.CurrentBuilder);
+   Append__2qwe(self.CurrentBuilder, FieldName__2);
+   Append__2qwe(self.CurrentBuilder, self.SemiColon);
+   return;
+}
+
+function GenerateField__3qgg(self, DeclType__1, FieldName__2) {
+   AppendLineFeedIndent__1qwe(self.CurrentBuilder);
+   GenerateTypeName__2qgg(self, DeclType__1);
+   AppendWhiteSpace__1qwe(self.CurrentBuilder);
+   Append__2qwe(self.CurrentBuilder, FieldName__2);
+   Append__2qwe(self.CurrentBuilder, self.SemiColon);
+   return;
+}
+
+function GenerateFields__3qgg(self, ClassType__1, ThisType__2) {
+   var SuperType = ThisType__2.GetSuperType(ThisType__2);
+   if (!SuperType__3.IsVarType(SuperType__3)) {
+      GenerateFields__3qgg(self, ClassType__1, SuperType__3);
+   };
+   var i = 0;
+   GenerateCField__3qgg(self, "int", "_classId" + (ThisType__2.TypeId).toString());
+   GenerateCField__3qgg(self, "int", "_delta" + (ThisType__2.TypeId).toString());
+   while (i__4 < GetFieldSize__1qwb(ClassType__1)) {
+      var ClassField = GetFieldAt__2qwb(ClassType__1, i__4);
+      if (ClassField__5.ClassType == ThisType__2) {
+         GenerateField__3qgg(self, ClassField__5.FieldType, ClassField__5.FieldName);
+      };
+      i__4 = i__4 + 1;
+   };
+   return;
+}
+
+function VisitErrorNode__2qgg(self, Node__1) {
+   ZLogger_LogError__2qwn(Node__1.SourceToken, Node__1.ErrorMessage);
+   Append__2qwe(self.CurrentBuilder, "ThrowError(");
+   Append__2qwe(self.CurrentBuilder, LibZen_QuoteString__1qqy(Node__1.ErrorMessage));
+   Append__2qwe(self.CurrentBuilder, ")");
+   return;
+}
+
+function ZArrayType__3qhp(self, TypeFlag__1, ParamType__2) {
    ZGeneric1Type__5qi7(self, TypeFlag__1, ParamType__2 + "[]", ZGeneric1Type__5qi7(new ZGeneric1Type(), 1 << 16, "Array", null, ZType__4qwz(new ZType(), 1 << 16, "var", null)), ParamType__2);
    return null;
 }

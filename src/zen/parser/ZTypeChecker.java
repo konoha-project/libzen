@@ -128,7 +128,7 @@ public abstract class ZTypeChecker extends ZVisitor {
 			}
 			return Node;
 		}
-		if(Node.IsUntyped() || ContextType.IsVarType() || LibZen._IsFlag(TypeCheckPolicy, _NoCheckPolicy)) {
+		if(Node.IsUntyped() || ContextType.IsVarType() || LibZen._IsFlag(TypeCheckPolicy, ZTypeChecker._NoCheckPolicy)) {
 			return Node;
 		}
 		if(Node.Type == ContextType || ContextType.Accept(Node.Type)) {
@@ -160,24 +160,24 @@ public abstract class ZTypeChecker extends ZVisitor {
 
 
 	public final ZNode TryType(ZNode Node, ZType ContextType) {
-		return this.VisitTypeChecker(Node, ContextType, _NoCheckPolicy);
+		return this.VisitTypeChecker(Node, ContextType, ZTypeChecker._NoCheckPolicy);
 	}
 
 	public final void TryTypeAt(ZNode Node, int Index, ZType ContextType) {
 		//		@Var ZNode N = Node.AST[Index];
-		Node.Set(Index, this.VisitTypeChecker(Node.AST[Index], ContextType, _NoCheckPolicy));
+		Node.Set(Index, this.VisitTypeChecker(Node.AST[Index], ContextType, ZTypeChecker._NoCheckPolicy));
 		//		if(N != Node.AST[Index]) {
 		//			System.out.println("Node="+Node+"\n\tFrom="+N+"\n\tTo="+Node.AST[Index]);
 		//		}
 	}
 
 	public final ZNode CheckType(ZNode Node, ZType ContextType) {
-		return this.VisitTypeChecker(Node, ContextType, _DefaultTypeCheckPolicy);
+		return this.VisitTypeChecker(Node, ContextType, ZTypeChecker._DefaultTypeCheckPolicy);
 	}
 
 	public final void CheckTypeAt(ZNode Node, int Index, ZType ContextType) {
 		//		@Var ZNode N = Node.AST[Index];
-		Node.Set(Index, this.VisitTypeChecker(Node.AST[Index], ContextType, _DefaultTypeCheckPolicy));
+		Node.Set(Index, this.VisitTypeChecker(Node.AST[Index], ContextType, ZTypeChecker._DefaultTypeCheckPolicy));
 		//		if(N != Node.AST[Index]) {
 		//			System.out.println("Node="+Node+"\n\tFrom="+N+"\n\tTo="+Node.AST[Index]);
 		//		}

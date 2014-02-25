@@ -84,13 +84,25 @@ public class CSourceGenerator extends ZSourceGenerator {
 		this.SetMacro("print", "LibZen_Print($[0])", ZType.VoidType, ZType.StringType);
 		this.SetMacro("println", "LibZen_PrintLine($[0])", ZType.VoidType, ZType.StringType);
 
+		// Converter
 		this.SetConverterMacro("(double)($[0])", ZType.FloatType, ZType.IntType);
 		this.SetConverterMacro("(long)($[0])", ZType.IntType, ZType.FloatType);
 		this.SetConverterMacro("LibZen_IntToString($[0])", ZType.StringType, ZType.IntType);
 		this.SetConverterMacro("LibZen_FloatToString($[0])", ZType.StringType, ZType.FloatType);
 
+		// String
 		this.SetMacro("+", "LibZen_StrCat($[0], $[1])", ZType.StringType, ZType.StringType, ZType.StringType);
+		this.SetMacro("size", "LibZen_StringSize($[0])", ZType.IntType, ZType.StringType);
+		this.SetMacro("substring", "LibZen_SubString($[0], $[1])", ZType.StringType, ZType.StringType, ZType.IntType);
+		this.SetMacro("substring", "LibZen_SubString2($[0], $[1])", ZType.StringType, ZType.StringType, ZType.IntType, ZType.IntType);
+		this.SetMacro("indexOf", "LibZen_IndexOf($[0], $[1])", ZType.IntType, ZType.StringType, ZType.StringType);
+		this.SetMacro("indexOf", "LibZen_IndexOf2($[0], $[1], $[2])", ZType.IntType, ZType.StringType, ZType.StringType, ZType.IntType);
 
+		// Array
+		this.SetMacro("size", "LibZen_ArraySize($[0])", ZType.IntType, ZType.ArrayType);
+		this.SetMacro("clear", "LibZen_ArrayClear($[0])", ZType.VoidType, ZType.ArrayType, ZType.IntType);
+		this.SetMacro("add", "LibZen_ArrayAdd($[0], $[1])", ZType.VoidType, ZType.ArrayType, ZType.VarType);
+		this.SetMacro("add", "LibZen_ArrayAdd2($[0], $[1], $[2])", ZType.VoidType, ZType.ArrayType, ZType.IntType, ZType.VarType);
 
 	}
 
