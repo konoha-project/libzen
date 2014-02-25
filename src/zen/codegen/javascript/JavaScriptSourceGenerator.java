@@ -31,6 +31,7 @@ import zen.ast.ZCatchNode;
 import zen.ast.ZClassNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZFieldNode;
+import zen.ast.ZFuncCallNode;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZGlobalNameNode;
 import zen.ast.ZInstanceOfNode;
@@ -70,8 +71,8 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 		this.SetMacro("size", "($[0]).length", ZType.IntType, ZGenericType._ArrayType);
 		this.SetMacro("add", "$[0].add($[1])", ZType.VoidType, ZGenericType._ArrayType, ZType.VarType);
 
-		this.SetConverterMacro("($[0])", ZType.FloatType, ZType.IntType);
-		this.SetConverterMacro("($[0])", ZType.IntType, ZType.FloatType);
+		this.SetConverterMacro("$[0]", ZType.FloatType, ZType.IntType);
+		this.SetConverterMacro("($[0] | 0)", ZType.IntType, ZType.FloatType);
 		this.SetConverterMacro("($[0]).toString()", ZType.StringType, ZType.IntType);
 		this.SetConverterMacro("($[0]).toString()", ZType.StringType, ZType.FloatType);
 
@@ -81,6 +82,10 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 		return new ZSourceEngine(new ZenTypeSafer(this), this);
 	}
 
+	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
+		this.GenerateCode(null, Node.AST[ZFuncCallNode._Func]);
+		this.VisitListNode("(", Node, ")");
+	}
 
 	@Override public void VisitGlobalNameNode(ZGlobalNameNode Node) {
 		//		if(Node.IsUntyped()) {
@@ -163,7 +168,13 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitMapLiteralNode(ZMapLiteralNode Node) {
-		// TODO Auto-generated method stub
+		@Var ZType ParamType = Node.Type.GetParamType(0);
+		this.CurrentBuilder.Append("LibZen.NewMap(");
+		this.CurrentBuilder.Append(String.valueOf(Node.GetListSize()));
+		if(Node.GetListSize() > 0) {
+			this.CurrentBuilder.Append(this.Camma);
+		}
+		this.VisitListNode("", Node, ")");
 	}
 
 	@Override public void VisitLetNode(ZLetNode Node) {
