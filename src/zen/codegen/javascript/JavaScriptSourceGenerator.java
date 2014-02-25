@@ -194,10 +194,10 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 			this.CurrentBuilder.Indent();
 			this.CurrentBuilder.AppendLineFeed();
 			this.CurrentBuilder.AppendIndent();
-			this.CurrentBuilder.Append("__extends(_super");
-			this.CurrentBuilder.Append(this.Camma);
+			this.CurrentBuilder.Append("__extends(");
 			this.CurrentBuilder.Append(Node.ClassName);
-			this.CurrentBuilder.Append(")");
+			this.CurrentBuilder.Append(this.Camma);
+			this.CurrentBuilder.Append("_super)");
 			this.CurrentBuilder.Append(this.SemiColon);
 		} else {
 			this.CurrentBuilder.Append(") {");
@@ -211,6 +211,11 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Append("(){");
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.Indent();
+		if(Node.SuperType != null) {
+			this.CurrentBuilder.Append("_super.call(this)");
+			this.CurrentBuilder.Append(this.SemiColon);
+			this.CurrentBuilder.AppendLineFeed();
+		}
 
 		@Var int i = 0;
 		while (i < Node.GetListSize()) {
