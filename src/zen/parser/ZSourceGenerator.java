@@ -53,7 +53,6 @@ import zen.ast.ZListNode;
 import zen.ast.ZMacroNode;
 import zen.ast.ZMapLiteralNode;
 import zen.ast.ZMethodCallNode;
-import zen.ast.ZNewArrayNode;
 import zen.ast.ZNewObjectNode;
 import zen.ast.ZNode;
 import zen.ast.ZNotNode;
@@ -84,8 +83,11 @@ import zen.type.ZType;
 import zen.type.ZTypePool;
 
 public class ZSourceGenerator extends ZGenerator {
-	@Field public ZenMap<String> NativeTypeMap;
-	@Field private final ZArray<ZSourceBuilder> BuilderList;
+
+	@Field public ZenMap<String> NativeTypeMap = new ZenMap<String>(null);
+	@Field public ZenMap<String> ReservedNameMap = new ZenMap<String>(null);
+
+	@Field private final ZArray<ZSourceBuilder> BuilderList = new ZArray<ZSourceBuilder>(new ZSourceBuilder[4]);
 	@Field protected ZSourceBuilder HeaderBuilder;
 	@Field protected ZSourceBuilder CurrentBuilder;
 
@@ -109,8 +111,6 @@ public class ZSourceGenerator extends ZGenerator {
 
 	public ZSourceGenerator(String TargetCode, String TargetVersion) {
 		super(TargetCode, TargetVersion);
-		this.NativeTypeMap = new ZenMap<String>(null);
-		this.BuilderList = new ZArray<ZSourceBuilder>(new ZSourceBuilder[4]);
 		this.InitBuilderList();
 		this.LineFeed = "\n";
 		this.Tab = "   ";
@@ -136,7 +136,7 @@ public class ZSourceGenerator extends ZGenerator {
 	}
 
 	@Override public ZSourceEngine GetEngine() {
-		System.out.println("FIXME: Overide GetEngine in each generator!!");
+		LibZen._PrintLine("FIXME: Overide GetEngine in each generator!!");
 		return new ZSourceEngine(new ZenTypeSafer(this), this);
 	}
 
@@ -172,6 +172,24 @@ public class ZSourceGenerator extends ZGenerator {
 			return Type.ShortName;
 		}
 		return TypeName;
+	}
+
+	public final void SetReservedName(String Keyword, @Nullable String AnotherName) {
+		if(AnotherName == null) {
+			AnotherName = "_" + Keyword;
+		}
+		this.ReservedNameMap.put(Keyword, AnotherName);
+	}
+
+	public final String SafeName(String Name, int Index) {
+		if(Index == 0) {
+			@Var String SafeName = this.ReservedNameMap.GetOrNull(Name);
+			if(SafeName == null) {
+				SafeName = Name;
+			}
+			return SafeName;
+		}
+		return Name + "__" + Index;
 	}
 
 	public final void SetMacro(String FuncName, String Macro, ZType ReturnType) {
@@ -313,10 +331,6 @@ public class ZSourceGenerator extends ZGenerator {
 		// TODO Auto-generated method stub
 	}
 
-	public void VisitNewArrayNode(ZNewArrayNode Node) {
-		// TODO Auto-generated method stub
-	}
-
 	@Override public void VisitNewObjectNode(ZNewObjectNode Node) {
 		this.CurrentBuilder.Append("new");
 		this.CurrentBuilder.AppendWhiteSpace();
@@ -359,11 +373,11 @@ public class ZSourceGenerator extends ZGenerator {
 	}
 
 	@Override public void VisitGetNameNode(ZGetNameNode Node) {
-		this.CurrentBuilder.Append(Node.VarName);
+		this.CurrentBuilder.Append(this.SafeName(Node.VarName, Node.VarIndex));
 	}
 
 	@Override public void VisitSetNameNode(ZSetNameNode Node) {
-		this.CurrentBuilder.Append(Node.VarName);
+		this.CurrentBuilder.Append(this.SafeName(Node.VarName, Node.VarIndex));
 		this.CurrentBuilder.AppendToken("=");
 		this.GenerateCode(null, Node.AST[ZSetNameNode._Expr]);
 	}
@@ -550,7 +564,7 @@ public class ZSourceGenerator extends ZGenerator {
 	}
 
 	public void VisitParamNode(ZParamNode Node) {
-		this.CurrentBuilder.Append(Node.Name);
+		this.CurrentBuilder.Append(this.SafeName(Node.Name, Node.ParamIndex));
 		this.VisitTypeAnnotation(Node.Type);
 	}
 

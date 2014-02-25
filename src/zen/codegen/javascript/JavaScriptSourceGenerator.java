@@ -36,7 +36,6 @@ import zen.ast.ZGlobalNameNode;
 import zen.ast.ZInstanceOfNode;
 import zen.ast.ZLetNode;
 import zen.ast.ZMapLiteralNode;
-import zen.ast.ZNewArrayNode;
 import zen.ast.ZParamNode;
 import zen.ast.ZStupidCastErrorNode;
 import zen.ast.ZThrowNode;
@@ -59,6 +58,9 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 		//		this.SetNativeType(ZType.IntType, "Number");
 		//		this.SetNativeType(ZType.FloatType, "Number");
 		//		this.SetNativeType(ZType.StringType, "String");
+
+
+		this.SetReservedName("this", "self");
 
 		this.SetMacro("assert", "console.assert($[0], $[1])", ZType.VoidType, ZType.BooleanType, ZType.StringType);
 		this.SetMacro("print", "console.log($[0])", ZType.VoidType, ZType.StringType);
@@ -135,11 +137,7 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitParamNode(ZParamNode Node) {
-		//		@Var String Name = Node.Name;
-		//		if(Name.equals("this")) {
-		//			Name = "_this";
-		//		}
-		this.CurrentBuilder.Append(Node.Name);
+		this.CurrentBuilder.Append(this.SafeName(Node.Name, Node.ParamIndex));
 	}
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
@@ -164,10 +162,6 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitMapLiteralNode(ZMapLiteralNode Node) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override public void VisitNewArrayNode(ZNewArrayNode Node) {
 		// TODO Auto-generated method stub
 	}
 

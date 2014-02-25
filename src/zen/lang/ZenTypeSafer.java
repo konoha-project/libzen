@@ -686,6 +686,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 		@Var int i = 0;
 		while(i < FunctionNode.GetListSize()) {
 			@Var ZParamNode ParamNode = FunctionNode.GetParamNode(i);
+			ParamNode.ParamIndex = i;
 			ParamNode.Type = this.VarScope.NewVarType(ParamNode.Type, ParamNode.Name, ParamNode.SourceToken);
 			if(FuncType != null) {
 				ParamNode.Type.Maybe(FuncType.GetParamType(i+1), null);

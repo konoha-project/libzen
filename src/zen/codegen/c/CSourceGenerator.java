@@ -39,7 +39,6 @@ import zen.ast.ZInstanceOfNode;
 import zen.ast.ZLetNode;
 import zen.ast.ZMapLiteralNode;
 import zen.ast.ZMethodCallNode;
-import zen.ast.ZNewArrayNode;
 import zen.ast.ZNewObjectNode;
 import zen.ast.ZNode;
 import zen.ast.ZParamNode;
@@ -155,10 +154,6 @@ public class CSourceGenerator extends ZSourceGenerator {
 			this.CurrentBuilder.Append(this.Camma);
 		}
 		this.VisitListNode("", Node, ")");
-	}
-
-	@Override public void VisitNewArrayNode(ZNewArrayNode Node) {
-		// TODO Auto-generated method stub
 	}
 
 	@Override public void VisitNewObjectNode(ZNewObjectNode Node) {
@@ -357,7 +352,7 @@ public class CSourceGenerator extends ZSourceGenerator {
 		else {
 			this.GenerateTypeName(Node.Type);
 			this.CurrentBuilder.Append(" ");
-			this.CurrentBuilder.Append(Node.Name);
+			this.CurrentBuilder.Append(this.SafeName(Node.Name, Node.ParamIndex));
 		}
 	}
 

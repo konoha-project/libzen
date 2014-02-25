@@ -53,6 +53,7 @@ public class ZFunctionNode extends ZListNode {
 	@Override public void SetTypeInfo(ZToken TypeToken, ZType Type) {
 		this.ReturnType = Type;
 	}
+
 	@Override public void SetNameInfo(ZToken NameToken, String Name) {
 		this.FuncName = Name;
 		this.NameToken = NameToken;

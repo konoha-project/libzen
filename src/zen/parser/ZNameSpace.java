@@ -38,7 +38,7 @@ import zen.type.ZClassType;
 import zen.type.ZType;
 
 public final class ZNameSpace {
-	private static int SerialNumber = 0;
+	//	private static int SerialNumber = 0;
 
 	@Field public final ZNameSpace   ParentNameSpace;
 	@Field public final ZGenerator   Generator;
@@ -57,8 +57,8 @@ public final class ZNameSpace {
 		else {
 			this.Generator = ParentNameSpace.Generator;
 		}
-		this.SerialId = SerialNumber;
-		SerialNumber = SerialNumber + 1;
+		this.SerialId = 0;//SerialNumber;
+		//		SerialNumber = SerialNumber + 1;
 	}
 
 	@Override public String toString() {
@@ -143,7 +143,10 @@ public final class ZNameSpace {
 
 	public final void DefineStatement(String PatternName, ZMatchFunction MatchFunc) {
 		@Var int Alias = PatternName.indexOf(" ");
-		@Var String Name = (Alias == -1) ? PatternName : PatternName.substring(0, Alias);
+		@Var String Name = PatternName;
+		if(Alias != -1) {
+			Name = PatternName.substring(0, Alias);
+		}
 		@Var ZSyntax Pattern = new ZSyntax(this, Name, MatchFunc);
 		Pattern.IsStatement = true;
 		this.AppendSyntaxPattern(Name, Pattern);
@@ -154,7 +157,10 @@ public final class ZNameSpace {
 
 	public final void DefineExpression(String PatternName, ZMatchFunction MatchFunc) {
 		@Var int Alias = PatternName.indexOf(" ");
-		@Var String Name = (Alias == -1) ? PatternName : PatternName.substring(0, Alias);
+		@Var String Name = PatternName;
+		if(Alias != -1) {
+			Name = PatternName.substring(0, Alias);
+		}
 		@Var ZSyntax Pattern = new ZSyntax(this, Name, MatchFunc);
 		this.AppendSyntaxPattern(Name, Pattern);
 		if(Alias != -1) {
@@ -164,7 +170,10 @@ public final class ZNameSpace {
 
 	public final void DefineRightExpression(String PatternName, int SyntaxFlag, ZMatchFunction MatchFunc) {
 		@Var int Alias = PatternName.indexOf(" ");
-		@Var String Name = (Alias == -1) ? PatternName : PatternName.substring(0, Alias);
+		@Var String Name = PatternName;
+		if(Alias != -1) {
+			Name = PatternName.substring(0, Alias);
+		}
 		@Var ZSyntax Pattern = new ZSyntax(this, Name, MatchFunc);
 		Pattern.SyntaxFlag = SyntaxFlag;
 		this.AppendSyntaxPattern(ZNameSpace.RightPatternSymbol(Name), Pattern);

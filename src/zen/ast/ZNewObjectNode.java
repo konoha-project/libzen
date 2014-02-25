@@ -40,7 +40,7 @@ public final class ZNewObjectNode extends ZListNode {
 	}
 
 	public final ZListNode ToFuncCallNode(ZFunc Func) {
-		@Var ZListNode FuncNode;
+		@Var ZListNode FuncNode = null;
 		if(Func instanceof ZMacroFunc) {
 			FuncNode = new ZMacroNode(this.ParentNode, this.SourceToken, (ZMacroFunc)Func);
 		}

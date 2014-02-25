@@ -30,6 +30,7 @@ import zen.parser.ZToken;
 public class ZParamNode extends ZNode {
 	@Field public String  Name;
 	@Field public ZToken  NameToken = null;
+	@Field public int     ParamIndex = 0;
 
 	public ZParamNode(ZNode ParentNode) {
 		super(ParentNode, null, 0);

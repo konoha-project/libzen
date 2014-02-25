@@ -55,7 +55,6 @@ import zen.ast.ZLetNode;
 import zen.ast.ZListNode;
 import zen.ast.ZMapLiteralNode;
 import zen.ast.ZMethodCallNode;
-import zen.ast.ZNewArrayNode;
 import zen.ast.ZNewObjectNode;
 import zen.ast.ZNode;
 import zen.ast.ZNotNode;
@@ -987,11 +986,6 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 
 	@Override
 	public void VisitMethodCallNode(ZMethodCallNode Node) {
-		// TODO
-	}
-
-	@Override
-	public void VisitNewArrayNode(ZNewArrayNode Node) {
 		// TODO
 	}
 

@@ -51,7 +51,6 @@ public class ZCastNode extends ZNode {
 			@Var ZMacroNode FuncNode = new ZMacroNode(this.ParentNode, this.SourceToken, (ZMacroFunc)Func);
 			FuncNode.Append(this.AST[ZCastNode._Expr]);
 			return FuncNode;
-
 		}
 		else {
 			@Var ZFuncCallNode FuncNode = new ZFuncCallNode(this.ParentNode, Func.FuncName, Func.GetFuncType());
