@@ -492,7 +492,6 @@ public class JavaAsmGenerator extends JavaGenerator {
 		this.AsmBuilder.PushNode(boolean.class, Node.AST[ZBinaryNode._Left]);
 		this.AsmBuilder.visitJumpInsn(IFNE, thenLabel);
 
-		this.AsmBuilder.visitLdcInsn(true);
 		this.AsmBuilder.PushNode(boolean.class, Node.AST[ZBinaryNode._Right]);
 		this.AsmBuilder.visitJumpInsn(IFNE, thenLabel);
 
