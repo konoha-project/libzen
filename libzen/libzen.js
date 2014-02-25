@@ -1180,6 +1180,18 @@ function ExpressionPattern_DispatchPattern__5qwd(ParentNode, TokenContext__1, Le
    return LeftNode__2;
 }
 
+function NumberLiteralToken_ParseDigit__1qw4(SourceContext) {
+   var ch = 0;
+   while (HasChar__1qw4(SourceContext)) {
+      ch__1 = GetCurrentChar__1qw4(SourceContext);
+      if (!LibZen_IsDigit__1qqy(ch__1)) {
+         break;
+      };
+      MoveNext__1qw4(SourceContext);
+   };
+   return ch__1;
+}
+
 function ZClassField__5qwv(self, ClassType__1, FieldName__2, FieldType__3, SourceToken__4) {
    self.ClassType = ClassType__1;
    self.FieldType = FieldType__3;
@@ -1220,7 +1232,7 @@ function GetSignature__1qw7(self) {
 }
 
 function ZPrototype__5qer(self, FuncFlag__1, FuncName__2, FuncType__3, SourceToken__4) {
-   super(FuncFlag__1, FuncName__2, FuncType__3);
+   ZFunc__4qw7(self, FuncFlag__1, FuncName__2, FuncType__3);
    self.DefinedCount = 0;
    self.UsedCount = 0;
    return null;
@@ -1468,7 +1480,7 @@ function TypeCheckFuncBlock__3qev(self, TypeSafer__1, FunctionNode__2) {
 }
 
 function ZVarType__4qen(self, VarList__1, Name__2, SourceToken__3) {
-   super(0, Name__2, ZType__4qwz(new ZType(), 1 << 16, "var", null));
+   ZType__4qwz(self, 0, Name__2, ZType__4qwz(new ZType(), 1 << 16, "var", null));
    self.VarList = VarList__1;
    self.SourceToken = SourceToken__3;
    self.GreekId = (VarList__1).length;
@@ -1536,7 +1548,7 @@ function Maybe__3qen(self, T__1, SourceToken__2) {
 }
 
 function ZNode__4qwd(self, ParentNode__1, SourceToken__2, Size__3) {
-   console.assert(self != ParentNode__1, "(sample/libzen.zen:1796)");
+   console.assert(self != ParentNode__1, "(sample/libzen.zen:1807)");
    self.ParentNode = ParentNode__1;
    self.SourceToken = SourceToken__2;
    if (Size__3 > 0) {
@@ -1548,16 +1560,16 @@ function ZNode__4qwd(self, ParentNode__1, SourceToken__2, Size__3) {
 }
 
 function SetChild__2qwd(self, Node__1) {
-   console.assert(Node__1 != null, "(sample/libzen.zen:1808)");
+   console.assert(Node__1 != null, "(sample/libzen.zen:1819)");
    if (Node__1 != null) {
-      console.assert(self != Node__1, "(sample/libzen.zen:1810)");
+      console.assert(self != Node__1, "(sample/libzen.zen:1821)");
       Node__1.ParentNode = self;
    };
    return Node__1;
 }
 
 function SetNameInfo__3qwd(self, NameToken__1, Name__2) {
-   console.assert(Name__2 == null, "(sample/libzen.zen:1817)");
+   console.assert(Name__2 == null, "(sample/libzen.zen:1828)");
    return;
 }
 
@@ -1574,7 +1586,7 @@ function Set__3qwd(self, Index__1, Node__2) {
       if (ListNode__3 instanceof ZListNode) {
          Append__2quq((ListNode__3), Node__2);
       } else {
-         console.assert(ListNode__3 instanceof ZListNode, "(sample/libzen.zen:1834)");
+         console.assert(ListNode__3 instanceof ZListNode, "(sample/libzen.zen:1845)");
       };
    } else if (Index__1 == -2) {
       self.SetNameInfo(self, Node__2.SourceToken, GetText__1qwn(Node__2.SourceToken));
@@ -1704,7 +1716,7 @@ function ToReturnNode__1qwd(self) {
 }
 
 function ZParamNode__2qrm(self, ParentNode__1) {
-   super(ParentNode__1, null, 0);
+   ZNode__4qwd(self, ParentNode__1, null, 0);
    return null;
 }
 
@@ -1715,7 +1727,7 @@ function SetNameInfo__3qrm(self, NameToken__1, Name__2) {
 }
 
 function ZReturnNode__2qrb(self, ParentNode__1) {
-   super(ParentNode__1, null, 1);
+   ZNode__4qwd(self, ParentNode__1, null, 1);
    return null;
 }
 
@@ -1729,7 +1741,7 @@ function ToReturnNode__1qrb(self) {
 }
 
 function ZSetIndexNode__3qtq(self, ParentNode__1, LeftNode__2) {
-   super(ParentNode__1, null, 3);
+   ZNode__4qwd(self, ParentNode__1, null, 3);
    Set__3qwd(self, 0, LeftNode__2);
    return null;
 }
@@ -1740,7 +1752,7 @@ function Accept__2qtq(self, Visitor__1) {
 }
 
 function ZSetNameNode__4qtr(self, ParentNode__1, Token__2, VarName__3) {
-   super(ParentNode__1, Token__2, 1);
+   ZNode__4qwd(self, ParentNode__1, Token__2, 1);
    self.VarName = VarName__3;
    return null;
 }
@@ -1751,7 +1763,7 @@ function Accept__2qtr(self, Visitor__1) {
 }
 
 function ZSetterNode__3qtu(self, ParentNode__1, RecvNode__2) {
-   super(ParentNode__1, null, 2);
+   ZNode__4qwd(self, ParentNode__1, null, 2);
    Set__3qwd(self, 0, RecvNode__2);
    return null;
 }
@@ -1772,7 +1784,7 @@ function IsStaticField__1qtu(self) {
 }
 
 function ZSugarNode__3qr6(self, SugarNode__1, DeSugarNode__2) {
-   super(SugarNode__1.ParentNode, null, 1);
+   ZNode__4qwd(self, SugarNode__1.ParentNode, null, 1);
    self.SugarNode = SugarNode__1;
    SugarNode__1.ParentNode = self;
    Set__3qwd(self, 0, DeSugarNode__2);
@@ -1786,7 +1798,7 @@ function Accept__2qr6(self, Visitor__1) {
 }
 
 function ZThrowNode__2qts(self, ParentNode__1) {
-   super(ParentNode__1, null, 1);
+   ZNode__4qwd(self, ParentNode__1, null, 1);
    return null;
 }
 
@@ -1796,7 +1808,7 @@ function Accept__2qts(self, Visitor__1) {
 }
 
 function ZTryNode__2qtg(self, ParentNode__1) {
-   super(ParentNode__1, null, 3);
+   ZNode__4qwd(self, ParentNode__1, null, 3);
    return null;
 }
 
@@ -1806,7 +1818,7 @@ function Accept__2qtg(self, Visitor__1) {
 }
 
 function ZUnaryNode__3qtk(self, ParentNode__1, Token__2) {
-   super(ParentNode__1, Token__2, 1);
+   ZNode__4qwd(self, ParentNode__1, Token__2, 1);
    return null;
 }
 
@@ -1816,7 +1828,7 @@ function Accept__2qtk(self, Visitor__1) {
 }
 
 function ZWhileNode__2qt1(self, ParentNode__1) {
-   super(ParentNode__1, null, 2);
+   ZNode__4qwd(self, ParentNode__1, null, 2);
    return null;
 }
 
@@ -1851,7 +1863,7 @@ function ShowErrors__1qeb(self) {
 }
 
 function ZMacroFunc__3qt3(self, FuncName__1, FuncType__2) {
-   super(0, FuncName__1, FuncType__2);
+   ZFunc__4qw7(self, 0, FuncName__1, FuncType__2);
    return null;
 }
 
@@ -2376,7 +2388,7 @@ function AppendLine__2qwe(self, Text__1) {
 }
 
 function ZSourceContext__5qw4(self, FileName__1, LineNumber__2, Source__3, TokenContext__4) {
-   super(FileName__1, LineNumber__2, Source__3, TokenContext__4);
+   ZSource__5qy6(self, FileName__1, LineNumber__2, Source__3, TokenContext__4);
    return null;
 }
 
@@ -2512,7 +2524,7 @@ function LogWarning__3qw4(self, Position__1, Message__2) {
 }
 
 function ZSourceMacro__4qud(self, FuncName__1, FuncType__2, Macro__3) {
-   super(FuncName__1, FuncType__2);
+   ZMacroFunc__3qt3(self, FuncName__1, FuncType__2);
    self.Macro = Macro__3;
    return null;
 }
@@ -2838,7 +2850,7 @@ function ApplyMatchPattern__5qwf(self, ParentNode__1, LeftNode__2, Pattern__3, I
       self.CurrentPosition = RollbackPosition__5;
       self.ApplyingPattern = CurrentPattern__6;
       ParsedNode__13 = LibZen.ApplyMatchFunc(CurrentPattern__6.MatchFunc, ParentNode__1, self, LeftNode__2);
-      console.assert(ParsedNode__8 != ParentNode__1, "(sample/libzen.zen:3035)");
+      console.assert(ParsedNode__8 != ParentNode__1, "(sample/libzen.zen:3046)");
       self.ApplyingPattern = null;
       self.IsAllowSkipIndent = Remembered__9;
       if (ParsedNode__8 != null && !IsErrorNode__1qwd(ParsedNode__8)) {
@@ -2852,7 +2864,7 @@ function ApplyMatchPattern__5qwf(self, ParentNode__1, LeftNode__2, Pattern__3, I
    };
    if (self.CurrentPosition == RollbackPosition__5) {
       System.out.println((((("infinite looping" + (RollbackPosition__5).toString()) + " Token=") + TopToken__7) + " ParsedNode=") + ParsedNode__8);
-      console.assert(self.CurrentPosition != RollbackPosition__5, "(sample/libzen.zen:3049)");
+      console.assert(self.CurrentPosition != RollbackPosition__5, "(sample/libzen.zen:3060)");
    };
    if (ParsedNode__8 == null) {
       ParsedNode__8 = CreateExpectedErrorNode__3qwf(self, TopToken__7, Pattern__3.PatternName);
@@ -2996,7 +3008,7 @@ function toString__1qqn(self) {
 }
 
 function ZVariable__7qyf(self, Parent__1, FuncNode__2, VarFlag__3, VarType__4, VarName__5, SourceToken__6) {
-   super(Parent__1, FuncNode__2);
+   ZSymbolEntry__3qy0(self, Parent__1, FuncNode__2);
    self.VarFlag = VarFlag__3;
    self.VarType = VarType__4;
    self.VarName = VarName__5;
@@ -3025,7 +3037,7 @@ function Used__1qyf(self) {
 }
 
 function ZClassType__3qwb(self, ShortName__1, RefType__2) {
-   super((1 << 9) | (1 << 16), ShortName__1, RefType__2);
+   ZType__4qwz(self, (1 << 9) | (1 << 16), ShortName__1, RefType__2);
    if (RefType__2 instanceof ZClassType) {
       ResetSuperType__2qwb(self, RefType__2);
    };
@@ -3085,7 +3097,7 @@ function GetFieldType__3qwb(self, FieldName__1, DefaultType__2) {
 }
 
 function AppendField__4qwb(self, FieldType__1, FieldName__2, SourceToken__3) {
-   console.assert(!FieldType__1.IsVarType(FieldType__1), "(sample/libzen.zen:3275)");
+   console.assert(!FieldType__1.IsVarType(FieldType__1), "(sample/libzen.zen:3286)");
    if (self.FieldList == null) {
       self.FieldList = [];
    };
@@ -3095,7 +3107,7 @@ function AppendField__4qwb(self, FieldType__1, FieldName__2, SourceToken__3) {
 }
 
 function ZFuncType__3qw5(self, ShortName__1, UniqueTypeParams__2) {
-   super(1 << 16, ShortName__1, ZType__4qwz(new ZType(), 1 << 16, "var", null));
+   ZType__4qwz(self, 1 << 16, ShortName__1, ZType__4qwz(new ZType(), 1 << 16, "var", null));
    if (UniqueTypeParams__2 == null) {
       self.TypeParams = LibZen_NewTypeArray(1);
       self.TypeParams[0] = ZType__4qwz(new ZType(), 1 << 16, "var", null);
@@ -3215,7 +3227,7 @@ function AcceptAsFieldFunc__2qw5(self, FuncType__1) {
 }
 
 function ZGeneric1Type__5qi7(self, TypeFlag__1, ShortName__2, BaseType__3, ParamType__4) {
-   super(TypeFlag__1, ShortName__2, ZType__4qwz(new ZType(), 1 << 16, "var", null));
+   ZType__4qwz(self, TypeFlag__1, ShortName__2, ZType__4qwz(new ZType(), 1 << 16, "var", null));
    self.BaseType = BaseType__3;
    if (self.BaseType == null) {
       self.BaseType = self;
@@ -3265,7 +3277,7 @@ function AcceptValueType__4qi7(self, ValueType__1, ExactMatch__2, Greek__3) {
 }
 
 function ZGreekType__2qor(self, GreekId__1) {
-   super(1 << 16, LibZen_GreekNames[GreekId__1], ZType__4qwz(new ZType(), 1 << 16, "var", null));
+   ZType__4qwz(self, 1 << 16, LibZen_GreekNames[GreekId__1], ZType__4qwz(new ZType(), 1 << 16, "var", null));
    self.GreekId = GreekId__1;
    return null;
 }
@@ -3294,7 +3306,7 @@ function AcceptValueType__4qor(self, ValueType__1, ExactMatch__2, Greek__3) {
 }
 
 function ZAnnotationNode__4qoo(self, ParentNode__1, Token__2, Anno__3) {
-   super(ParentNode__1, Token__2, 0);
+   ZNode__4qwd(self, ParentNode__1, Token__2, 0);
    return null;
 }
 
@@ -3308,7 +3320,7 @@ function Accept__2qoo(self, Visitor__1) {
 }
 
 function ZAssertNode__2qod(self, ParentNode__1) {
-   super(ParentNode__1, null, 1);
+   ZNode__4qwd(self, ParentNode__1, null, 1);
    return null;
 }
 
@@ -3327,9 +3339,9 @@ function DeSugar__2qod(self, Generator__1) {
 }
 
 function ZBinaryNode__5qoh(self, ParentNode__1, SourceToken__2, Left__3, Pattern__4) {
-   super(ParentNode__1, SourceToken__2, 2);
+   ZNode__4qwd(self, ParentNode__1, SourceToken__2, 2);
    Set__3qwd(self, 0, Left__3);
-   console.assert(Pattern__4 != null, "(sample/libzen.zen:3516)");
+   console.assert(Pattern__4 != null, "(sample/libzen.zen:3527)");
    self.Pattern = Pattern__4;
    return null;
 }
@@ -3384,7 +3396,7 @@ function Accept__2qoh(self, Visitor__1) {
 }
 
 function ZBreakNode__2qoz(self, ParentNode__1) {
-   super(ParentNode__1, null, 0);
+   ZNode__4qwd(self, ParentNode__1, null, 0);
    return null;
 }
 
@@ -3394,7 +3406,7 @@ function Accept__2qoz(self, Visitor__1) {
 }
 
 function ZCastNode__4qov(self, ParentNode__1, CastType__2, Node__3) {
-   super(ParentNode__1, null, 1);
+   ZNode__4qwd(self, ParentNode__1, null, 1);
    self.Type = CastType__2;
    if (Node__3 != null) {
       Set__3qwd(self, 0, Node__3);
@@ -3421,7 +3433,7 @@ function ToFuncCallNode__2qov(self, Func__1) {
 }
 
 function ZCatchNode__2qo7(self, ParentNode__1) {
-   super(ParentNode__1, null, 1);
+   ZNode__4qwd(self, ParentNode__1, null, 1);
    return null;
 }
 
@@ -3437,7 +3449,7 @@ function SetNameInfo__3qo7(self, NameToken__1, Name__2) {
 }
 
 function ZComparatorNode__5qo8(self, ParentNode__1, SourceToken__2, Left__3, Pattern__4) {
-   super(ParentNode__1, SourceToken__2, Left__3, Pattern__4);
+   ZBinaryNode__5qoh(self, ParentNode__1, SourceToken__2, Left__3, Pattern__4);
    return null;
 }
 
@@ -3447,23 +3459,23 @@ function Accept__2qo8(self, Visitor__1) {
 }
 
 function ZConstNode__3qpe(self, ParentNode__1, SourceToken__2) {
-   super(ParentNode__1, SourceToken__2, 0);
+   ZNode__4qwd(self, ParentNode__1, SourceToken__2, 0);
    return null;
 }
 
 function ZEmptyNode__3qpt(self, ParentNode__1, Token__2) {
-   super(ParentNode__1, Token__2, 0);
+   ZNode__4qwd(self, ParentNode__1, Token__2, 0);
    return null;
 }
 
 function ZErrorNode__4qpu(self, ParentNode__1, SourceToken__2, ErrorMessage__3) {
-   super(ParentNode__1, SourceToken__2);
+   ZConstNode__3qpe(self, ParentNode__1, SourceToken__2);
    self.ErrorMessage = ErrorMessage__3;
    return null;
 }
 
 function ZErrorNode__3qpu(self, Node__1, ErrorMessage__2) {
-   super(Node__1.ParentNode, Node__1.SourceToken);
+   ZConstNode__3qpe(self, Node__1.ParentNode, Node__1.SourceToken);
    self.ErrorMessage = ErrorMessage__2;
    return null;
 }
@@ -3474,7 +3486,7 @@ function Accept__2qpu(self, Visitor__1) {
 }
 
 function ZFieldNode__2qp0(self, ParentNode__1) {
-   super(ParentNode__1, null, 1);
+   ZNode__4qwd(self, ParentNode__1, null, 1);
    return null;
 }
 
@@ -3490,7 +3502,7 @@ function SetNameInfo__3qp0(self, NameToken__1, Name__2) {
 }
 
 function ZFloatNode__4qpd(self, ParentNode__1, Token__2, Value__3) {
-   super(ParentNode__1, Token__2);
+   ZConstNode__3qpe(self, ParentNode__1, Token__2);
    self.Type = ZType__4qwz(new ZType(), 1 << 16, "float", ZType__4qwz(new ZType(), 1 << 16, "var", null));
    self.FloatValue = Value__3;
    return null;
@@ -3502,7 +3514,7 @@ function Accept__2qpd(self, Visitor__1) {
 }
 
 function ZGetIndexNode__3qph(self, ParentNode__1, RecvNode__2) {
-   super(ParentNode__1, null, 2);
+   ZNode__4qwd(self, ParentNode__1, null, 2);
    self.AST[0] = SetChild__2qwd(self, RecvNode__2);
    return null;
 }
@@ -3513,13 +3525,13 @@ function Accept__2qph(self, Visitor__1) {
 }
 
 function ZGetNameNode__4qpl(self, ParentNode__1, Token__2, NativeName__3) {
-   super(ParentNode__1, Token__2, 0);
+   ZNode__4qwd(self, ParentNode__1, Token__2, 0);
    self.VarName = NativeName__3;
    return null;
 }
 
 function ZGetNameNode__3qpl(self, ParentNode__1, ResolvedFunc__2) {
-   super(ParentNode__1, null, 0);
+   ZNode__4qwd(self, ParentNode__1, null, 0);
    self.VarName = ResolvedFunc__2.FuncName;
    self.Type = GetFuncType__1qw7(ResolvedFunc__2);
    return null;
@@ -3535,7 +3547,7 @@ function ToGlobalNameNode__1qpl(self) {
 }
 
 function ZGetterNode__3qpx(self, ParentNode__1, RecvNode__2) {
-   super(ParentNode__1, null, 1);
+   ZNode__4qwd(self, ParentNode__1, null, 1);
    Set__3qwd(self, 0, RecvNode__2);
    return null;
 }
@@ -3556,7 +3568,7 @@ function IsStaticField__1qpx(self) {
 }
 
 function ZGlobalNameNode__6qpm(self, ParentNode__1, SourceToken__2, Type__3, GlobalName__4, IsStaticFuncName__5) {
-   super(ParentNode__1, SourceToken__2, 0);
+   ZNode__4qwd(self, ParentNode__1, SourceToken__2, 0);
    self.GlobalName = GlobalName__4;
    self.Type = Type__3;
    self.IsStaticFuncName = IsStaticFuncName__5;
@@ -3573,7 +3585,7 @@ function Accept__2qpm(self, Visitor__1) {
 }
 
 function ZGroupNode__2qp2(self, ParentNode__1) {
-   super(ParentNode__1, null, 1);
+   ZNode__4qwd(self, ParentNode__1, null, 1);
    return null;
 }
 
@@ -3583,7 +3595,7 @@ function Accept__2qp2(self, Visitor__1) {
 }
 
 function ZIfNode__2q0w(self, ParentNode__1) {
-   super(ParentNode__1, null, 3);
+   ZNode__4qwd(self, ParentNode__1, null, 3);
    return null;
 }
 
@@ -3593,7 +3605,7 @@ function Accept__2q0w(self, Visitor__1) {
 }
 
 function ZImportNode__2q0t(self, ParentNode__1) {
-   super(ParentNode__1, null, 0);
+   ZNode__4qwd(self, ParentNode__1, null, 0);
    return null;
 }
 
@@ -3608,7 +3620,7 @@ function SetNameInfo__3q0t(self, NameToken__1, Name__2) {
 }
 
 function ZInstanceOfNode__4q0i(self, ParentNode__1, Token__2, LeftNode__3) {
-   super(ParentNode__1, Token__2, 1);
+   ZNode__4qwd(self, ParentNode__1, Token__2, 1);
    Set__3qwd(self, 0, LeftNode__3);
    return null;
 }
@@ -3624,7 +3636,7 @@ function Accept__2q0i(self, Visitor__1) {
 }
 
 function ZIntNode__4q04(self, ParentNode__1, Token__2, Value__3) {
-   super(ParentNode__1, Token__2);
+   ZConstNode__3qpe(self, ParentNode__1, Token__2);
    self.Type = ZType__4qwz(new ZType(), 1 << 16, "int", ZType__4qwz(new ZType(), 1 << 16, "var", null));
    self.IntValue = Value__3;
    return null;
@@ -3636,7 +3648,7 @@ function Accept__2q04(self, Visitor__1) {
 }
 
 function ZLetNode__2q0d(self, ParentNode__1) {
-   super(ParentNode__1, null, 1);
+   ZNode__4qwd(self, ParentNode__1, null, 1);
    return null;
 }
 
@@ -3661,7 +3673,7 @@ function ToGlobalNameNode__1q0d(self) {
 }
 
 function ZListNode__4quq(self, ParentNode__1, SourceToken__2, Size__3) {
-   super(ParentNode__1, SourceToken__2, Size__3);
+   ZNode__4qwd(self, ParentNode__1, SourceToken__2, Size__3);
    self.ListStartIndex = Size__3;
    return null;
 }
@@ -3731,9 +3743,9 @@ function ClearListAfter__2quq(self, Size__1) {
 }
 
 function ZMacroNode__4q0c(self, ParentNode__1, SourceToken__2, MacroFunc__3) {
-   super(ParentNode__1, SourceToken__2, 0);
+   ZListNode__4quq(self, ParentNode__1, SourceToken__2, 0);
    self.MacroFunc = MacroFunc__3;
-   console.assert(MacroFunc__3 != null, "(sample/libzen.zen:3874)");
+   console.assert(MacroFunc__3 != null, "(sample/libzen.zen:3885)");
    return null;
 }
 
@@ -3755,12 +3767,12 @@ function Accept__2q0c(self, Visitor__1) {
 }
 
 function ZMapEntryNode__2q07(self, ParentNode__1) {
-   super(ParentNode__1, null, 2);
+   ZNode__4qwd(self, ParentNode__1, null, 2);
    return null;
 }
 
 function ZMapLiteralNode__2q03(self, ParentNode__1) {
-   super(ParentNode__1, null, 0);
+   ZListNode__4quq(self, ParentNode__1, null, 0);
    return null;
 }
 
@@ -3778,7 +3790,7 @@ function Accept__2q03(self, Visitor__1) {
 }
 
 function ZMethodCallNode__3q4w(self, ParentNode__1, RecvNode__2) {
-   super(ParentNode__1, null, 1);
+   ZListNode__4quq(self, ParentNode__1, null, 1);
    Set__3qwd(self, 0, RecvNode__2);
    return null;
 }
@@ -3832,12 +3844,12 @@ function ToFuncCallNode__2q4w(self, Func__1) {
 }
 
 function ZNewArrayNode__4q4o(self, ParentNode__1, Type__2, Token__3) {
-   super(ParentNode__1, null, 0);
+   ZListNode__4quq(self, ParentNode__1, null, 0);
    return null;
 }
 
 function ZNewObjectNode__2q40(self, ParentNode__1) {
-   super(ParentNode__1, null, 0);
+   ZListNode__4quq(self, ParentNode__1, null, 0);
    return null;
 }
 
@@ -3865,7 +3877,7 @@ function ToFuncCallNode__2q40(self, Func__1) {
 }
 
 function ZNotNode__3q4d(self, ParentNode__1, Token__2) {
-   super(ParentNode__1, Token__2);
+   ZUnaryNode__3qtk(self, ParentNode__1, Token__2);
    return null;
 }
 
@@ -3875,7 +3887,7 @@ function Accept__2q4d(self, Visitor__1) {
 }
 
 function ZNullNode__3q4h(self, ParentNode__1, SourceToken__2) {
-   super(ParentNode__1, SourceToken__2);
+   ZConstNode__3qpe(self, ParentNode__1, SourceToken__2);
    return null;
 }
 
@@ -3885,7 +3897,7 @@ function Accept__2q4h(self, Visitor__1) {
 }
 
 function ZOrNode__5q4l(self, ParentNode__1, Token__2, Left__3, Pattern__4) {
-   super(ParentNode__1, Token__2, Left__3, Pattern__4);
+   ZBinaryNode__5qoh(self, ParentNode__1, Token__2, Left__3, Pattern__4);
    return null;
 }
 
@@ -3895,7 +3907,7 @@ function Accept__2q4l(self, Visitor__1) {
 }
 
 function ZPrototypeNode__2q46(self, ParentNode__1) {
-   super(ParentNode__1, null, 0);
+   ZListNode__4quq(self, ParentNode__1, null, 0);
    return null;
 }
 
@@ -3932,7 +3944,7 @@ function GetFuncType__1q46(self) {
 }
 
 function ZStringNode__4q4n(self, ParentNode__1, Token__2, Value__3) {
-   super(ParentNode__1, Token__2);
+   ZConstNode__3qpe(self, ParentNode__1, Token__2);
    self.Type = ZType__4qwz(new ZType(), 1 << 16, "String", ZType__4qwz(new ZType(), 1 << 16, "var", null));
    self.StringValue = Value__3;
    return null;
@@ -3944,19 +3956,19 @@ function Accept__2q4n(self, Visitor__1) {
 }
 
 function ZStupidCastErrorNode__3q45(self, Node__1, ErrorMessage__2) {
-   super(Node__1, ErrorMessage__2);
+   ZErrorNode__3qpu(self, Node__1, ErrorMessage__2);
    self.ErrorNode = Node__1;
    return null;
 }
 
 function ZTypeNode__4qyl(self, ParentNode__1, SourceToken__2, ParsedType__3) {
-   super(ParentNode__1, SourceToken__2);
+   ZConstNode__3qpe(self, ParentNode__1, SourceToken__2);
    self.Type = ParsedType__3;
    return null;
 }
 
 function ZGenerator__3qwh(self, LanguageExtension__1, TargetVersion__2) {
-   super();
+   LibZen.ThrowError("undefined code generation: #ZTypeNode:ZVisitor")(self);
    self.RootNameSpace = ZNameSpace__3qwo(new ZNameSpace(), self, null);
    self.GrammarInfo = "";
    self.LanguageExtention = LanguageExtension__1;
@@ -4129,12 +4141,12 @@ function VisitSugarNode__2qwh(self, Node__1) {
 }
 
 function ZIndentToken__4qa1(self, Source__1, StartIndex__2, EndIndex__3) {
-   super(Source__1, StartIndex__2, EndIndex__3);
+   ZToken__4qwn(self, Source__1, StartIndex__2, EndIndex__3);
    return null;
 }
 
 function ZPatternToken__5qaz(self, Source__1, StartIndex__2, EndIndex__3, PresetPattern__4) {
-   super(Source__1, StartIndex__2, EndIndex__3);
+   ZToken__4qwn(self, Source__1, StartIndex__2, EndIndex__3);
    self.PresetPattern = PresetPattern__4;
    return null;
 }
@@ -4500,7 +4512,7 @@ function WriteTo__2qwk(self, OutputFile__1) {
 }
 
 function ZSourceGenerator__3qyb(self, TargetCode__1, TargetVersion__2) {
-   super(TargetCode__1, TargetVersion__2);
+   ZGenerator__3qwh(self, TargetCode__1, TargetVersion__2);
    self.InitBuilderList(self);
    self.LineFeed = "\n";
    self.Tab = "   ";
@@ -5282,12 +5294,12 @@ function VisitSugarNode__2qe8(self, Node__1) {
 }
 
 function ZArrayType__3qgg(self, TypeFlag__1, ParamType__2) {
-   super(TypeFlag__1, ParamType__2 + "[]", ZGeneric1Type__5qi7(new ZGeneric1Type(), 1 << 16, "Array", null, ZType__4qwz(new ZType(), 1 << 16, "var", null)), ParamType__2);
+   ZGeneric1Type__5qi7(self, TypeFlag__1, ParamType__2 + "[]", ZGeneric1Type__5qi7(new ZGeneric1Type(), 1 << 16, "Array", null, ZType__4qwz(new ZType(), 1 << 16, "var", null)), ParamType__2);
    return null;
 }
 
 function ZAndNode__5qsb(self, ParentNode__1, Token__2, Left__3, Pattern__4) {
-   super(ParentNode__1, Token__2, Left__3, Pattern__4);
+   ZBinaryNode__5qoh(self, ParentNode__1, Token__2, Left__3, Pattern__4);
    return null;
 }
 
@@ -5297,7 +5309,7 @@ function Accept__2qsb(self, Visitor__1) {
 }
 
 function ZArrayLiteralNode__2qsi(self, ParentNode__1) {
-   super(ParentNode__1, null, 0);
+   ZListNode__4quq(self, ParentNode__1, null, 0);
    return null;
 }
 
@@ -5307,13 +5319,13 @@ function Accept__2qsi(self, Visitor__1) {
 }
 
 function ZBlockNode__2qrk(self, NameSpace__1) {
-   super(null, null, 0);
+   ZListNode__4quq(self, null, null, 0);
    self.NameSpace = NameSpace__1;
    return null;
 }
 
 function ZBlockNode__3qrk(self, ParentNode__1, Init__2) {
-   super(ParentNode__1, null, Init__2);
+   ZListNode__4quq(self, ParentNode__1, null, Init__2);
    self.NameSpace = CreateSubNameSpace__1qwo(GetNameSpace__1qwd(ParentNode__1));
    return null;
 }
@@ -5351,7 +5363,7 @@ function CopyTo__3qrk(self, Index__1, BlockNode__2) {
 }
 
 function ZBooleanNode__4qse(self, ParentNode__1, Token__2, Value__3) {
-   super(ParentNode__1, Token__2);
+   ZConstNode__3qpe(self, ParentNode__1, Token__2);
    self.Type = ZType__4qwz(new ZType(), 1 << 16, "boolean", ZType__4qwz(new ZType(), 1 << 16, "var", null));
    self.BooleanValue = Value__3;
    return null;
@@ -5363,7 +5375,7 @@ function Accept__2qse(self, Visitor__1) {
 }
 
 function ZClassNode__2qdu(self, ParentNode__1) {
-   super(ParentNode__1, null, 0);
+   ZListNode__4quq(self, ParentNode__1, null, 0);
    return null;
 }
 
@@ -5393,13 +5405,13 @@ function Accept__2qdu(self, Visitor__1) {
 }
 
 function ZFuncCallNode__3q4y(self, ParentNode__1, FuncNode__2) {
-   super(ParentNode__1, null, 1);
+   ZListNode__4quq(self, ParentNode__1, null, 1);
    Set__3qwd(self, 0, FuncNode__2);
    return null;
 }
 
 function ZFuncCallNode__4q4y(self, ParentNode__1, FuncName__2, FuncType__3) {
-   super(ParentNode__1, null, 1);
+   ZListNode__4quq(self, ParentNode__1, null, 1);
    var FuncNode = ZGlobalNameNode__6qpm(new ZGlobalNameNode(), self, null, FuncType__3, FuncName__2, true);
    Set__3qwd(self, 0, FuncNode__4);
    return null;
@@ -5444,7 +5456,7 @@ function ToMacroNode__2q4y(self, MacroFunc__1) {
 }
 
 function ZFunctionNode__2qre(self, ParentNode__1) {
-   super(ParentNode__1, null, 1);
+   ZListNode__4quq(self, ParentNode__1, null, 1);
    return null;
 }
 
@@ -5530,7 +5542,7 @@ function GetVarIndex__1qre(self) {
 }
 
 function ZVarNode__2qs5(self, ParentNode__1) {
-   super(ParentNode__1, 1);
+   ZBlockNode__3qrk(self, ParentNode__1, 1);
    return null;
 }
 
@@ -5864,24 +5876,12 @@ function NullPattern__3qwd(ParentNode, TokenContext__1, LeftNode__2) {
    return ZNullNode__3q4h(new ZNullNode(), ParentNode, GetToken__2qwf(TokenContext__1, true));
 }
 
-function ParseDigit__2qhz(self, SourceContext__1) {
-   var ch = 0;
-   while (HasChar__1qw4(SourceContext__1)) {
-      ch__2 = GetCurrentChar__1qw4(SourceContext__1);
-      if (!LibZen_IsDigit__1qqy(ch__2)) {
-         break;
-      };
-      MoveNext__1qw4(SourceContext__1);
-   };
-   return ch__2;
-}
-
 function NumberLiteralToken__1qw4(SourceContext) {
    var StartIndex = GetPosition__1qw4(SourceContext);
-   var ch = LibZen.ThrowError("undefined code generation: #ZTypeNode:this").ParseDigit(SourceContext);
+   var ch = NumberLiteralToken_ParseDigit__1qw4(SourceContext);
    if (ch__2 == ".") {
       MoveNext__1qw4(SourceContext);
-      ch__4 = LibZen.ThrowError("undefined code generation: #ZTypeNode:this").ParseDigit(SourceContext);
+      ch__2 = NumberLiteralToken_ParseDigit__1qw4(SourceContext);
       if (ch__2 == "e" || ch__2 == "E") {
          MoveNext__1qw4(SourceContext);
          if (HasChar__1qw4(SourceContext)) {
@@ -5890,7 +5890,7 @@ function NumberLiteralToken__1qw4(SourceContext) {
                MoveNext__1qw4(SourceContext);
             };
          };
-         LibZen.ThrowError("undefined code generation: #ZTypeNode:this").ParseDigit(SourceContext);
+         NumberLiteralToken_ParseDigit__1qw4(SourceContext);
       };
       Tokenize__4qw4(SourceContext, "$FloatLiteral$", StartIndex__1, GetPosition__1qw4(SourceContext));
    } else {

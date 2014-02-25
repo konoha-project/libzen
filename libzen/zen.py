@@ -175,6 +175,11 @@ def GenMethod(cname, line):
 		return "\tvar " + t[1] + ": " + params + ";\n"
 	return "\n"
 
+def rewriteSuper(line, superclass):
+	if superclass and line.find('super(') > 0:
+		line = line.replace('super(', superclass + '(this, ')
+	return line
+
 class ClassBlock:
 	def __init__(self, cname, sname, line):
 		self.ClassName = cname
@@ -248,6 +253,7 @@ class ClassBlock:
 			if line.find('@Field') >= 0 or line.find('static') >0 or line.find('@ZenIgnored') >= 0 :
 				continue
 			if line.find('{') != -1:
+				line = rewriteSuper(line, self.SuperName)
 				f.write(GenFunc(self.ClassName, line, IsProto))
 
 

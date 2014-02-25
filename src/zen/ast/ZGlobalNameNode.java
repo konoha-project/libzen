@@ -10,7 +10,7 @@ public class ZGlobalNameNode extends ZNode {
 	@Field public final String GlobalName;
 	@Field public  boolean IsStaticFuncName;
 
-	ZGlobalNameNode(ZNode ParentNode, ZToken SourceToken, ZType Type, String GlobalName, boolean IsStaticFuncName) {
+	public ZGlobalNameNode(ZNode ParentNode, ZToken SourceToken, ZType Type, String GlobalName, boolean IsStaticFuncName) {
 		super(ParentNode, SourceToken, 0);
 		this.GlobalName = GlobalName;
 		this.Type = Type;

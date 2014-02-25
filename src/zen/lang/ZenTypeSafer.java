@@ -67,6 +67,7 @@ import zen.ast.ZSetterNode;
 import zen.ast.ZStringNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
+import zen.ast.ZTypeNode;
 import zen.ast.ZUnaryNode;
 import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
@@ -273,9 +274,19 @@ public class ZenTypeSafer extends ZTypeChecker {
 		@Var ZNameSpace NameSpace = Node.GetNameSpace();
 		this.TypeCheckNodeList(Node);
 		this.CheckTypeAt(Node, ZFuncCallNode._Func, ZType.VarType);
+		@Var ZNode FuncNode = Node.AST[ZFuncCallNode._Func];
 		@Var ZType FuncNodeType = Node.GetAstType(ZFuncCallNode._Func);
 		if(FuncNodeType instanceof ZFuncType) {
 			this.VisitListNodeAsFuncCall(Node, (ZFuncType)FuncNodeType);
+		}
+		else if(FuncNode instanceof ZTypeNode) {
+			@Var String FuncName = FuncNode.Type.ShortName;
+			@Var ZFunc Func = this.LookupFunc(NameSpace, FuncName, FuncNode.Type, Node.GetListSize());
+			if(Func != null) {
+				Node.Set(ZFuncCallNode._Func, new ZGlobalNameNode(Node, FuncNode.SourceToken, Func.GetFuncType(), FuncName, true));
+				this.VisitListNodeAsFuncCall(Node, Func.GetFuncType());
+				return;
+			}
 		}
 		else if(FuncNodeType.IsVarType()) {
 			@Var String FuncName = Node.GetFuncName();
@@ -297,7 +308,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 			this.TypedNode(Node, ZType.VarType);
 		}
 		else {
-			this.Return(new ZErrorNode(Node, "not function: " + FuncNodeType));
+			this.Return(new ZErrorNode(Node, "not function: " + FuncNodeType + " of node " + Node.AST[ZFuncCallNode._Func]));
 		}
 	}
 
