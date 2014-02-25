@@ -583,7 +583,7 @@ public class LibZen {
 
 
 	// Type
-	public final static String GetClassName(Object Value) {
+	public final static String _GetClassName(Object Value) {
 		return Value.getClass().getSimpleName();
 	}
 
@@ -595,8 +595,12 @@ public class LibZen {
 		"\u03B1", "\u03B2", "\u03B3"
 	};
 
-	public final static ZType[] _NewZTypeArray(int Size) {
+	public final static ZType[] _NewTypeArray(int Size) {
 		return new ZType[Size];
+	}
+
+	public final static ZNode[] _NewNodeArray(int Size) {
+		return new ZNode[Size];
 	}
 
 }

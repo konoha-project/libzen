@@ -157,7 +157,7 @@ public class ZenMain {
 							LibZen._PrintLine(" null");
 						}
 						else {
-							LibZen._PrintLine(" (" +/* ZSystem.GuessType(EvaledValue) + ":" +*/ LibZen.GetClassName(EvaledValue) + ") " + LibZen._Stringify(EvaledValue));
+							LibZen._PrintLine(" (" +/* ZSystem.GuessType(EvaledValue) + ":" +*/ LibZen._GetClassName(EvaledValue) + ") " + LibZen._Stringify(EvaledValue));
 						}
 					}
 					linenum += 1;

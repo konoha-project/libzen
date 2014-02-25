@@ -14,7 +14,7 @@ public class ZGreekType extends ZType {
 
 	public final static ZType[] _NewGreekTypes(ZType[] GreekTypes) {
 		if(GreekTypes == null) {
-			return LibZen._NewZTypeArray(LibZen._Size(LibZen._GreekNames));
+			return LibZen._NewTypeArray(LibZen._Size(LibZen._GreekNames));
 		}
 		else {
 			@Var int i = 0;

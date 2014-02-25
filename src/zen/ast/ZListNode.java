@@ -1,6 +1,7 @@
 package zen.ast;
 
 import zen.deps.Field;
+import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.parser.ZToken;
 
@@ -13,11 +14,11 @@ public class ZListNode extends ZNode {
 
 	public final void Append(ZNode Node) {
 		if(this.AST == null) {
-			this.AST = new ZNode[1];
+			this.AST = LibZen._NewNodeArray(1);
 			this.Set(0, Node);
 		}
 		else {
-			@Var ZNode[] newAST = new ZNode[this.AST.length+1];
+			@Var ZNode[] newAST = LibZen._NewNodeArray(this.AST.length+1);
 			System.arraycopy(this.AST, 0, newAST, 0, this.AST.length);
 			this.AST = newAST;
 			this.Set(this.AST.length - 1, Node);
@@ -40,7 +41,7 @@ public class ZListNode extends ZNode {
 		if(this.AST == null || Index < 0 || this.AST.length == Index) {
 			this.Append(Node);
 		} else {
-			@Var ZNode[] newAST = new ZNode[this.AST.length + 1];
+			@Var ZNode[] newAST = LibZen._NewNodeArray(this.AST.length + 1);
 			Index = this.ListStartIndex + Index;
 			System.arraycopy(this.AST, 0, newAST, 0, Index);
 			this.Set(Index, Node);
@@ -66,7 +67,7 @@ public class ZListNode extends ZNode {
 				this.AST = null;
 			}
 			else {
-				@Var ZNode[] newAST = new ZNode[newsize];
+				@Var ZNode[] newAST = LibZen._NewNodeArray(newsize);
 				System.arraycopy(this.AST, 0, newAST, 0, newsize);
 				this.AST = newAST;
 			}

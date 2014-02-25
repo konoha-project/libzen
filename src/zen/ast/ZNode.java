@@ -26,6 +26,7 @@
 package zen.ast;
 
 import zen.deps.Field;
+import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.deps.ZenMethod;
 import zen.parser.ZGenerator;
@@ -53,7 +54,7 @@ public abstract class ZNode {
 		this.ParentNode = ParentNode;
 		this.SourceToken = SourceToken;
 		if(Size > 0) {
-			this.AST = new ZNode[Size];
+			this.AST = LibZen._NewNodeArray(Size);
 		}
 		else {
 			this.AST = null;
@@ -127,7 +128,7 @@ public abstract class ZNode {
 	}
 
 	@Override public String toString() {
-		@Var String Self = "#" + this.getClass().getSimpleName();
+		@Var String Self = "#" + LibZen._GetClassName(this);
 		if(!this.Type.IsVarType()) {
 			Self = Self + ":" + this.Type;
 		}
