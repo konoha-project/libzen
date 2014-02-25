@@ -52,15 +52,18 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 
 	public JavaScriptSourceGenerator() {
 		super("js", "JavaScript-1.4");
-		this.TopType = "Object";
-		this.SetNativeType(ZType.BooleanType, "Boolean");
-		this.SetNativeType(ZType.IntType, "Number");
-		this.SetNativeType(ZType.FloatType, "Number");
-		this.SetNativeType(ZType.StringType, "String");
+		//		this.TopType = "Object";
+		//		this.SetNativeType(ZType.BooleanType, "Boolean");
+		//		this.SetNativeType(ZType.IntType, "Number");
+		//		this.SetNativeType(ZType.FloatType, "Number");
+		//		this.SetNativeType(ZType.StringType, "String");
 
 		this.SetMacro("assert", "console.assert($[0], $[1])", ZType.VoidType, ZType.BooleanType, ZType.StringType);
 		this.SetMacro("print", "console.log($[0])", ZType.VoidType, ZType.StringType);
 		this.SetMacro("println", "console.log($[0])", ZType.VoidType, ZType.StringType);
+
+		this.SetMacro("size", "($[0]).length", ZType.IntType, ZType.ArrayType);
+		this.SetMacro("add", "$[0].add($[1])", ZType.VoidType, ZType.ArrayType, ZType.VarType);
 
 		this.SetConverterMacro("($[0])", ZType.FloatType, ZType.IntType);
 		this.SetConverterMacro("($[0])", ZType.IntType, ZType.FloatType);
@@ -175,12 +178,9 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 		 * 	return ClassName;
 		 * })(_super);
 		 */
-		this.CurrentBuilder.Append("var");
-		this.CurrentBuilder.AppendWhiteSpace();
+		this.CurrentBuilder.Append("var ");
 		this.CurrentBuilder.Append(Node.ClassName);
-		this.CurrentBuilder.AppendWhiteSpace();
-		this.CurrentBuilder.Append("v=v");
-		this.CurrentBuilder.AppendWhiteSpace();
+		this.CurrentBuilder.Append(" = ");
 		this.CurrentBuilder.Append("(function(");
 		if(Node.SuperType != null) {
 			this.CurrentBuilder.Append("_super) {");

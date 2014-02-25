@@ -86,7 +86,7 @@ public class ZType  {
 
 	public boolean Accept(ZType Type) {
 		@Var ZType ThisType = this.GetRealType();
-		if(ThisType == Type.GetRealType() /*|| ThisType == ZenSystem.AnyType*/) {
+		if(ThisType == Type.GetRealType()) {
 			return true;
 		}
 		@Var ZType SuperClass = Type.GetSuperType();
@@ -104,7 +104,7 @@ public class ZType  {
 		return false;
 	}
 
-	@ZenMethod public ZType GetRealType(ZType[] Greek) {
+	@ZenMethod public ZType GetGreekRealType(ZType[] Greek) {
 		return this.GetRealType();
 	}
 
@@ -160,11 +160,6 @@ public class ZType  {
 	public final boolean IsMapType() {
 		return (this.GetBaseType() == ZType.MapType);
 	}
-
-	//	public ZType CreateSubType(int ClassFlag, String ClassName) {
-	//		@Var ZType SubType = new ZType(ClassFlag, ClassName, this);
-	//		return SubType;
-	//	}
 
 	public final boolean IsOpenType() {
 		return LibZen._IsFlag(this.TypeFlag, ZType.OpenTypeFlag);

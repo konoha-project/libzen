@@ -63,9 +63,9 @@ public class ZGeneric1Type extends ZType {
 		return (this.ParamType.IsGreekType());
 	}
 
-	@Override public final ZType GetRealType(ZType[] Greek) {
+	@Override public final ZType GetGreekRealType(ZType[] Greek) {
 		if(this.ParamType.IsGreekType()) {
-			return ZTypePool._GetGenericType1(this.BaseType, this.ParamType.GetRealType(Greek));
+			return ZTypePool._GetGenericType1(this.BaseType, this.ParamType.GetGreekRealType(Greek));
 		}
 		return this.GetRealType();
 	}

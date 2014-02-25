@@ -54,9 +54,9 @@ def GenLetDecl(cname, line):
 	if m:
 		sym = m.group(2)
 		if sym.startswith("_") or cname == "ZType" :
-			return 'let ' + cname + sym + ' = ' + m.group(3) + '\n'
+			return 'let ' + cname + sym +  ': ' + GenType(m.group(1)) + ' = ' + m.group(3) + '\n'
 		else:
-			return 'let ' + sym + ' = ' + m.group(3) + '\n'
+			return 'let ' + sym + ': ' + GenType(m.group(1)) + ' = ' + m.group(3) + '\n'
 	return '//let ' + cname + '.' + line
 
 def GenStaticFunc(cname, line, IsProto=False):
@@ -79,6 +79,8 @@ def GenStaticFunc(cname, line, IsProto=False):
 VarPattern = re.compile('(.*)\@Var\s+(\S*)\s+(\w*)(.*)')
 NewArrayPattern = re.compile('(.*)new ZArray\<\S*\>\(.*\)(.*)')
 NewMapPattern = re.compile('(.*)new ZenMap\<\S*\>\(.*\)(.*)')
+MapPattern1 = re.compile('(.*)\.GetOrNull\((.*)\);')
+MapPattern2 = re.compile('(.*)\.put\((.*)\,(.*)\);')
 
 def GenVar(line):
 	line = line.replace("'", '"')
@@ -94,6 +96,12 @@ def GenVar(line):
 	m = NewMapPattern.match(line)
         if m:
                 line = m.group(1) + "[]" + m.group(2) + "\n";
+	m = MapPattern1.match(line)
+	if m:
+                line = m.group(1) + "[" + m.group(2) + "];";
+	m = MapPattern2.match(line)
+	if m :
+		line = m.group(1) + "[" + m.group(2) + "] = " + m.group(3) + ";";
 	return line;
 
 def ParseParam(s, IsMethod, cname):

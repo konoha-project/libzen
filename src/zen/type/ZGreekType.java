@@ -12,9 +12,9 @@ public class ZGreekType extends ZType {
 		this.GreekId = GreekId;
 	}
 
-	public final static ZType[] NewGreekTypes(ZType[] GreekTypes) {
+	public final static ZType[] _NewGreekTypes(ZType[] GreekTypes) {
 		if(GreekTypes == null) {
-			return new ZType[LibZen._Size(LibZen._GreekNames)];
+			return LibZen._NewZTypeArray(LibZen._Size(LibZen._GreekNames));
 		}
 		else {
 			@Var int i = 0;
@@ -30,7 +30,7 @@ public class ZGreekType extends ZType {
 		return true;
 	}
 
-	@Override public ZType GetRealType(ZType[] Greek) {
+	@Override public ZType GetGreekRealType(ZType[] Greek) {
 		if(Greek[this.GreekId] == null) {
 			return ZType.VarType;
 		}

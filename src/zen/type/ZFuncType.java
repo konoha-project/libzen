@@ -43,12 +43,12 @@ public final class ZFuncType extends ZType {
 		return this.HasGreekType;
 	}
 
-	@Override public final ZType GetRealType(ZType[] Greek) {
+	@Override public final ZType GetGreekRealType(ZType[] Greek) {
 		if(this.HasGreekType) {
 			@Var ZArray<ZType> TypeList = new ZArray<ZType>(new ZType[this.TypeParams.length]);
 			@Var int i = 0;
 			while(i < LibZen._Size(this.TypeParams)) {
-				TypeList.add(this.TypeParams[i].GetRealType(Greek));
+				TypeList.add(this.TypeParams[i].GetGreekRealType(Greek));
 				i = i + 1;
 			}
 			return ZTypePool._LookupFuncType(TypeList);

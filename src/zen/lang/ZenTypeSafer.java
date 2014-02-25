@@ -251,18 +251,18 @@ public class ZenTypeSafer extends ZTypeChecker {
 
 	private void VisitListNodeAsFuncCall(ZListNode FuncNode, ZFuncType FuncType) {
 		@Var int i = 0;
-		@Var ZType[] Greek = ZGreekType.NewGreekTypes(null);
+		@Var ZType[] Greek = ZGreekType._NewGreekTypes(null);
 		while(i < FuncNode.GetListSize()) {
 			@Var ZNode SubNode = FuncNode.GetListAt(i);
 			@Var ZType ParamType =  FuncType.GetParamType(i+1);
 			SubNode = this.TryType(SubNode, ParamType);
 			if(!ParamType.AcceptValueType(SubNode.Type, false, Greek)) {
-				SubNode = this.CreateStupidCast(ParamType.GetRealType(Greek), SubNode);
+				SubNode = this.CreateStupidCast(ParamType.GetGreekRealType(Greek), SubNode);
 			}
 			FuncNode.SetListAt(i, SubNode);
 			i = i + 1;
 		}
-		this.TypedNode(FuncNode, FuncType.GetReturnType().GetRealType(Greek));
+		this.TypedNode(FuncNode, FuncType.GetReturnType().GetGreekRealType(Greek));
 	}
 
 	@Override public void VisitMacroNode(ZMacroNode FuncNode) {

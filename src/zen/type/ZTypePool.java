@@ -8,10 +8,10 @@ import zen.deps.ZenMap;
 public class ZTypePool {
 
 	private final static ZArray<ZType> _TypeList = new ZArray<ZType>(new ZType[128]);
-	private final static ZType[] _GreekTypes = ZGreekType.NewGreekTypes(null);
+	private final static ZType[] _GreekTypes = ZGreekType._NewGreekTypes(null);
 
 	public final static int _NewTypeId(ZType T) {
-		@Var int TypeId = _TypeList.size();
+		@Var int TypeId = ZTypePool._TypeList.size();
 		ZTypePool._TypeList.add(T);
 		return TypeId;
 	}
@@ -52,7 +52,7 @@ public class ZTypePool {
 	}
 
 	private final static ZType[] _UniqueTypes(ZArray<ZType> TypeList) {
-		@Var String MangleName = "[]" + _MangleTypes(TypeList);
+		@Var String MangleName = "[]" + ZTypePool._MangleTypes(TypeList);
 		@Var ZType[] Types = ZTypePool._UniqueTypeSetMap.GetOrNull(MangleName);
 		if(Types == null) {
 			Types = TypeList.CompactArray();
@@ -112,6 +112,12 @@ public class ZTypePool {
 			return (ZFuncType)FuncType;
 		}
 		return null;
+	}
+
+	public final static ZFuncType _LookupFuncType(ZType R) {
+		@Var ZArray<ZType> TypeList = new ZArray<ZType>(new ZType[2]);
+		TypeList.add(R);
+		return ZTypePool._LookupFuncType(TypeList);
 	}
 
 	public final static ZFuncType _LookupFuncType(ZType R, ZType P1) {

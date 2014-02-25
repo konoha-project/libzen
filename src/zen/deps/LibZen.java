@@ -595,5 +595,8 @@ public class LibZen {
 		"\u03B1", "\u03B2", "\u03B3"
 	};
 
+	public final static ZType[] _NewZTypeArray(int Size) {
+		return new ZType[Size];
+	}
 
 }
