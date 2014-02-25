@@ -39,7 +39,7 @@ public final class ZAnnotationNode extends ZNode {
 
 	//	@Override public void Append(ZNode Node) {
 	//		if(Node instanceof ZAnnotationNode) {
-	//			ZAnnotationNode AnnoNode = (ZAnnotationNode)Node;
+	//			@Var ZAnnotationNode AnnoNode = (ZAnnotationNode)Node;
 	//			this.Annotation.AddMap(AnnoNode.Annotation);
 	//			Node = AnnoNode.AnnotatedNode;
 	//		}

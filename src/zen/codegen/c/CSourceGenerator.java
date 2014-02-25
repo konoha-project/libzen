@@ -116,7 +116,7 @@ public class CSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitArrayLiteralNode(ZArrayLiteralNode Node) {
-		ZType ParamType = Node.Type.GetParamType(0);
+		@Var ZType ParamType = Node.Type.GetParamType(0);
 		if(ParamType.IsIntType() || ParamType.IsBooleanType()) {
 			this.CurrentBuilder.Append("LibZen_NewIntArray(");
 		}
@@ -137,7 +137,7 @@ public class CSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitMapLiteralNode(ZMapLiteralNode Node) {
-		ZType ParamType = Node.Type.GetParamType(0);
+		@Var ZType ParamType = Node.Type.GetParamType(0);
 		if(ParamType.IsIntType() || ParamType.IsBooleanType()) {
 			this.CurrentBuilder.Append("LibZen_NewIntMap(");
 		}
@@ -396,10 +396,10 @@ public class CSourceGenerator extends ZSourceGenerator {
 	}
 
 	private void SetMethod(String FuncName, ZFuncType FuncType) {
-		ZType RecvType = FuncType.GetRecvType();
+		@Var ZType RecvType = FuncType.GetRecvType();
 		if(RecvType instanceof ZClassType && FuncName != null) {
-			ZClassType ClassType = (ZClassType)RecvType;
-			ZType FieldType = ClassType.GetFieldType(FuncName, null);
+			@Var ZClassType ClassType = (ZClassType)RecvType;
+			@Var ZType FieldType = ClassType.GetFieldType(FuncName, null);
 			if(FieldType == null || !FieldType.IsFuncType()) {
 				FuncName = LibZen._AnotherName(FuncName);
 				FieldType = ClassType.GetFieldType(FuncName, null);
@@ -442,7 +442,7 @@ public class CSourceGenerator extends ZSourceGenerator {
 	}
 
 	private void GenerateFields(ZClassType ClassType, ZType ThisType) {
-		ZType SuperType = ThisType.GetSuperType();
+		@Var ZType SuperType = ThisType.GetSuperType();
 		if(!SuperType.IsVarType()) {
 			this.GenerateFields(ClassType, SuperType);
 		}

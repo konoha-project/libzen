@@ -94,13 +94,13 @@ public abstract class ZTypeChecker extends ZVisitor {
 	}
 
 	protected final ZNode CreateStupidCastNode(ZType Requested, ZNode Node) {
-		ZNode ErrorNode = new ZStupidCastErrorNode(Node, "type error: requested = " +  Requested + ", given = " + Node.Type);
+		@Var ZNode ErrorNode = new ZStupidCastErrorNode(Node, "type error: requested = " +  Requested + ", given = " + Node.Type);
 		ErrorNode.Type = Requested;
 		return ErrorNode;
 	}
 
 	protected final ZNode EnforceNodeType(ZNode Node, ZType EnforceType) {
-		ZFunc Func = this.Generator.GetConverterFunc(Node.Type, ZType.StringType);
+		@Var ZFunc Func = this.Generator.GetConverterFunc(Node.Type, ZType.StringType);
 		if(Func instanceof ZMacroFunc) {
 			@Var ZMacroNode MacroNode = new ZMacroNode(Node.ParentNode, null, (ZMacroFunc)Func);
 			MacroNode.Append(Node);
@@ -188,7 +188,7 @@ public abstract class ZTypeChecker extends ZVisitor {
 			@Var boolean AllTyped = true;
 			@Var int i = 0;
 			while(i < List.GetListSize()) {
-				ZNode SubNode = List.GetListAt(i);
+				@Var ZNode SubNode = List.GetListAt(i);
 				SubNode = this.CheckType(SubNode, ZType.VarType);
 				List.SetListAt(i, SubNode);
 				if(SubNode.IsUntyped()) {

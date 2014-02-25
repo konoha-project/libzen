@@ -101,7 +101,7 @@ public class ZFunctionNode extends ZListNode {
 	}
 
 	public final String GetSignature(ZGenerator Generator) {
-		ZFuncType FuncType = this.GetFuncType(null);
+		@Var ZFuncType FuncType = this.GetFuncType(null);
 		if(this.FuncName == null) {
 			this.FuncName = "f_Z" + Generator.GetUniqueNumber();
 		}

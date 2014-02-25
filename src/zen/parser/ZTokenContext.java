@@ -58,7 +58,7 @@ public final class ZTokenContext {
 	}
 
 	public boolean SetParseFlag(boolean AllowSkipIndent) {
-		boolean OldFlag = this.IsAllowSkipIndent;
+		@Var boolean OldFlag = this.IsAllowSkipIndent;
 		this.IsAllowSkipIndent = AllowSkipIndent;
 		return OldFlag;
 	}

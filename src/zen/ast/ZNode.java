@@ -156,7 +156,7 @@ public abstract class ZNode {
 	}
 
 	public final ZBlockNode GetScopeBlockNode() {
-		ZNode Node = this;
+		@Var ZNode Node = this;
 		while(Node != null) {
 			if(Node instanceof ZBlockNode) {
 				return (ZBlockNode)Node;
@@ -170,7 +170,7 @@ public abstract class ZNode {
 	}
 
 	public final ZNameSpace GetNameSpace() {
-		ZBlockNode BlockNode = this.GetScopeBlockNode();
+		@Var ZBlockNode BlockNode = this.GetScopeBlockNode();
 		return BlockNode.NameSpace;
 	}
 
@@ -225,7 +225,7 @@ public abstract class ZNode {
 	//			return null;
 	//		}
 	//		if(this.ParentNode instanceof ZBlockNode) {
-	//			ZBlockNode Block = (ZBlockNode) this.ParentNode;
+	//			@Var ZBlockNode Block = (ZBlockNode) this.ParentNode;
 	//			for (int i = 1; i < Block.GetListSize(); i++) {
 	//				if(Block.GetListAt(i) == this) {
 	//					return Block.GetListAt(i-1);
@@ -240,7 +240,7 @@ public abstract class ZNode {
 	//			return null;
 	//		}
 	//		if(this.ParentNode instanceof ZBlockNode) {
-	//			ZBlockNode Block = (ZBlockNode) this.ParentNode;
+	//			@Var ZBlockNode Block = (ZBlockNode) this.ParentNode;
 	//			for (int i = 0; i < Block.GetListSize() - 1; i++) {
 	//				if(Block.GetListAt(i) == this) {
 	//					return Block.GetListAt(i+1);

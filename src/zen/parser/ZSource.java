@@ -24,7 +24,7 @@ public class ZSource {
 		@Var int LineNumber = this.LineNumber;
 		@Var int i = 0;
 		while(i < Position) {
-			char ch = this.SourceText.charAt(i);
+			@Var char ch = this.SourceText.charAt(i);
 			if(ch == '\n') {
 				LineNumber = LineNumber + 1;
 			}
@@ -41,7 +41,7 @@ public class ZSource {
 			i = s.length() - 1;
 		}
 		while(i >= 0) {
-			char ch = s.charAt(i);
+			@Var char ch = s.charAt(i);
 			if(ch == '\n') {
 				StartIndex = i + 1;
 				break;
@@ -80,7 +80,7 @@ public class ZSource {
 			i = s.length() - 1;
 		}
 		while(i >= 0) {
-			char ch = s.charAt(i);
+			@Var char ch = s.charAt(i);
 			if(ch == '\n') {
 				StartIndex = i + 1;
 				break;
@@ -89,7 +89,7 @@ public class ZSource {
 		}
 		i = Position;
 		while(i < s.length()) {
-			char ch = s.charAt(i);
+			@Var char ch = s.charAt(i);
 			if(ch == '\n') {
 				EndIndex = i;
 				break;
@@ -107,7 +107,7 @@ public class ZSource {
 			i = s.length() - 1;
 		}
 		while(i >= 0) {
-			char ch = s.charAt(i);
+			@Var char ch = s.charAt(i);
 			if(ch == '\n') {
 				StartIndex = i + 1;
 				break;
@@ -117,7 +117,7 @@ public class ZSource {
 		@Var String Line = "";
 		i = StartIndex;
 		while(i < Position) {
-			char ch = s.charAt(i);
+			@Var char ch = s.charAt(i);
 			if(ch == '\n') {
 				break;
 			}

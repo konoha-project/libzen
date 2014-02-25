@@ -93,7 +93,7 @@ public final class ZLogger {
 
 	//	public final void Count(String EventName) {
 	//		if(this.StatMap != null) {
-	//			ZCounter Counter = this.StatMap.GetOrNull(EventName);
+	//			@Var ZCounter Counter = this.StatMap.GetOrNull(EventName);
 	//			if(Counter == null) {
 	//				Counter = new ZCounter();
 	//				this.StatMap.put(EventName, Counter);

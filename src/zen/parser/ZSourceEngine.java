@@ -172,7 +172,7 @@ public class ZSourceEngine extends ZVisitor {
 			LibZen._Exit(1, "file not found: " + FileName);
 			return false;
 		}
-		Object ResultValue = this.Eval(ScriptText, FileName, 1, false);
+		@Var Object ResultValue = this.Eval(ScriptText, FileName, 1, false);
 		this.Logger.ShowErrors();
 		if(ResultValue == ZEmptyValue.FalseEmpty) {
 			return false;
@@ -352,7 +352,7 @@ public class ZSourceEngine extends ZVisitor {
 	@Override public void VisitBlockNode(ZBlockNode Node) {
 		@Var int i = 1;
 		while(i < Node.GetListSize() && this.IsVisitable()) {
-			ZNode StmtNode = Node.GetListAt(i);
+			@Var ZNode StmtNode = Node.GetListAt(i);
 			this.Eval(StmtNode);
 			if(StmtNode.IsBreakingBlock()) {
 				break;
@@ -365,7 +365,7 @@ public class ZSourceEngine extends ZVisitor {
 	}
 
 	@Override public void VisitIfNode(ZIfNode Node) {
-		Object BooleanValue = this.Eval(Node.AST[ZIfNode._Cond]);
+		@Var Object BooleanValue = this.Eval(Node.AST[ZIfNode._Cond]);
 		if(BooleanValue instanceof Boolean) {
 			if((Boolean)BooleanValue) {
 				this.Eval(Node.AST[ZIfNode._Then]);

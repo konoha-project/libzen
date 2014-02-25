@@ -16,7 +16,7 @@ public class IfPattern extends ZMatchFunction {
 		IfNode = TokenContext.MatchToken(IfNode, ")", ZTokenContext.Required);
 		IfNode = TokenContext.MatchPattern(IfNode, ZIfNode._Then, "$Block$", ZTokenContext.Required);
 		if(TokenContext.MatchNewLineToken("else")) {
-			String PatternName = "$Block$";
+			@Var String PatternName = "$Block$";
 			if(TokenContext.IsNewLineToken("if")) {
 				PatternName = "if";
 			}

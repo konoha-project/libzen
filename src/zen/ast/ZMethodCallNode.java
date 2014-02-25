@@ -51,9 +51,9 @@ public final class ZMethodCallNode extends ZListNode {
 	}
 
 	public final ZFuncCallNode ToGetterFuncCall() {
-		ZGetterNode Getter = new ZGetterNode(null, this.AST[ZMethodCallNode._Recv]);
+		@Var ZGetterNode Getter = new ZGetterNode(null, this.AST[ZMethodCallNode._Recv]);
 		Getter.SetNameInfo(this.MethodToken, this.MethodName);
-		ZFuncCallNode FuncNode = new ZFuncCallNode(this.ParentNode, Getter);
+		@Var ZFuncCallNode FuncNode = new ZFuncCallNode(this.ParentNode, Getter);
 		FuncNode.SourceToken = this.SourceToken;
 		FuncNode.Append(this.AST[ZMethodCallNode._Recv]);
 		@Var int i = 0;
@@ -66,7 +66,7 @@ public final class ZMethodCallNode extends ZListNode {
 
 	public final ZListNode ToFuncCallNode(ZFunc Func) {
 		if(Func instanceof ZMacroFunc) {
-			ZMacroNode MacroNode = new ZMacroNode(this.ParentNode, this.MethodToken, (ZMacroFunc)Func);
+			@Var ZMacroNode MacroNode = new ZMacroNode(this.ParentNode, this.MethodToken, (ZMacroFunc)Func);
 			MacroNode.Append(this.AST[ZMethodCallNode._Recv]);
 			@Var int i = 0;
 			while(i < this.GetListSize()) {
@@ -76,7 +76,7 @@ public final class ZMethodCallNode extends ZListNode {
 			return MacroNode;
 		}
 		else {
-			ZFuncCallNode FuncNode = new ZFuncCallNode(this.ParentNode, Func.FuncName, Func.GetFuncType());
+			@Var ZFuncCallNode FuncNode = new ZFuncCallNode(this.ParentNode, Func.FuncName, Func.GetFuncType());
 			FuncNode.SourceToken = this.MethodToken;
 			FuncNode.Append(this.AST[ZMethodCallNode._Recv]);
 			@Var int i = 0;

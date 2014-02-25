@@ -175,22 +175,22 @@ public class ZSourceGenerator extends ZGenerator {
 	}
 
 	public final void SetMacro(String FuncName, String Macro, ZType ReturnType) {
-		ZFuncType FuncType = ZTypePool._LookupFuncType(ReturnType);
+		@Var ZFuncType FuncType = ZTypePool._LookupFuncType(ReturnType);
 		this.SetDefinedFunc(new ZSourceMacro(FuncName, FuncType, Macro));
 	}
 
 	public final void SetMacro(String FuncName, String Macro, ZType ReturnType, ZType P1) {
-		ZFuncType FuncType = ZTypePool._LookupFuncType(ReturnType, P1);
+		@Var ZFuncType FuncType = ZTypePool._LookupFuncType(ReturnType, P1);
 		this.SetDefinedFunc(new ZSourceMacro(FuncName, FuncType, Macro));
 	}
 
 	public final void SetMacro(String FuncName, String Macro, ZType ReturnType, ZType P1, ZType P2) {
-		ZFuncType FuncType = ZTypePool._LookupFuncType(ReturnType, P1, P2);
+		@Var ZFuncType FuncType = ZTypePool._LookupFuncType(ReturnType, P1, P2);
 		this.SetDefinedFunc(new ZSourceMacro(FuncName, FuncType, Macro));
 	}
 
 	public final void SetConverterMacro(String Macro, ZType ReturnType, ZType P1) {
-		ZFuncType FuncType = ZTypePool._LookupFuncType(ReturnType, P1);
+		@Var ZFuncType FuncType = ZTypePool._LookupFuncType(ReturnType, P1);
 		this.SetConverterFunc(P1, ReturnType, new ZSourceMacro("to" + this.NameClass(ReturnType), FuncType, Macro));
 	}
 
@@ -610,7 +610,7 @@ public class ZSourceGenerator extends ZGenerator {
 			this.VisitParamNode((ZParamNode)Node);
 		}
 		else {
-			ZSugarNode SugarNode = Node.DeSugar(this);
+			@Var ZSugarNode SugarNode = Node.DeSugar(this);
 			this.VisitSugarNode(SugarNode);
 		}
 	}

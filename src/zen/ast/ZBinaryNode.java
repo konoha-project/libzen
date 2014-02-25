@@ -82,7 +82,7 @@ public class ZBinaryNode extends ZNode {
 			@Var String Op = this.SourceToken.GetText();
 			@Var ZFunc Func = Generator.GetDefinedFunc(Op, this.GetAstType(ZBinaryNode._Left), 2);
 			if(Func instanceof ZMacroFunc) {
-				ZMacroNode MacroNode = new ZMacroNode(this.ParentNode, this.SourceToken, (ZMacroFunc)Func);
+				@Var ZMacroNode MacroNode = new ZMacroNode(this.ParentNode, this.SourceToken, (ZMacroFunc)Func);
 				MacroNode.Append(this.AST[ZBinaryNode._Left]);
 				MacroNode.Append(this.AST[ZBinaryNode._Right]);
 				return MacroNode;
