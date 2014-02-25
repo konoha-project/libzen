@@ -98,10 +98,10 @@ def GenVar(line):
                 line = m.group(1) + "[]" + m.group(2) + "\n";
 	m = MapPattern1.match(line)
 	if m:
-                line = m.group(1) + "[" + m.group(2) + "];";
+                line = m.group(1) + "[" + m.group(2) + "];\n";
 	m = MapPattern2.match(line)
 	if m :
-		line = m.group(1) + "[" + m.group(2) + "] = " + m.group(3) + ";";
+		line = m.group(1) + "[" + m.group(2) + "] = " + m.group(3) + ";\n";
 	return line;
 
 def ParseParam(s, IsMethod, cname):
