@@ -37,6 +37,7 @@ import zen.ast.ZLetNode;
 import zen.ast.ZMapLiteralNode;
 import zen.ast.ZNewArrayNode;
 import zen.ast.ZParamNode;
+import zen.ast.ZStupidCastErrorNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZVarNode;
@@ -238,12 +239,18 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitErrorNode(ZErrorNode Node) {
-		ZLogger._LogError(Node.SourceToken, Node.ErrorMessage);
-		this.CurrentBuilder.AppendWhiteSpace();
-		this.CurrentBuilder.Append("LibZen.ThrowError");
-		this.CurrentBuilder.Append("(");
-		this.CurrentBuilder.Append(LibZen._QuoteString(Node.ErrorMessage));
-		this.CurrentBuilder.Append(")");
+		if(Node instanceof ZStupidCastErrorNode) {
+			@Var ZStupidCastErrorNode ErrorNode = (ZStupidCastErrorNode)Node;
+			this.GenerateCode(null, ErrorNode.ErrorNode);
+		}
+		else {
+			ZLogger._LogError(Node.SourceToken, Node.ErrorMessage);
+			this.CurrentBuilder.AppendWhiteSpace();
+			this.CurrentBuilder.Append("LibZen.ThrowError");
+			this.CurrentBuilder.Append("(");
+			this.CurrentBuilder.Append(LibZen._QuoteString(Node.ErrorMessage));
+			this.CurrentBuilder.Append(")");
+		}
 	}
 
 	//	@Override public ZFuncType GetConstructorFuncType(ZType ClassType, ZListNode List) {
