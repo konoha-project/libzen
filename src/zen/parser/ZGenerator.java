@@ -116,11 +116,13 @@ public abstract class ZGenerator extends ZVisitor {
 	}
 
 	@ZenMethod public ZFuncType GetConstructorFuncType(ZType ClassType, ZListNode List) {
-		return null;     // undefined
+		//return null;              // undefined and undefined error
+		return ZType.FuncType;    // undefined and no error
 	}
 
 	@ZenMethod public ZFuncType GetMethodFuncType(ZType RecvType, String MethodName, ZListNode List) {
-		return null;     // undefined
+		//return null;              // undefined and undefined error
+		return ZType.FuncType;     // undefined and no error
 	}
 
 	// Naming

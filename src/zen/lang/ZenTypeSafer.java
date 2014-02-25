@@ -358,15 +358,16 @@ public class ZenTypeSafer extends ZTypeChecker {
 
 	private void VisitListAsNativeMethod(ZNode Node, ZType RecvType, String MethodName, ZListNode List) {
 		ZFuncType FuncType = this.Generator.GetMethodFuncType(RecvType, MethodName, List);
-		//		System.out.println("Native Method FuncType: " + FuncType);
 		if(FuncType != null) {
-			@Var int i = 0;
-			@Var int StaticShift = FuncType.GetParamSize() - List.GetListSize();
-			while(i < List.GetListSize()) {
-				@Var ZNode SubNode = List.GetListAt(i);
-				SubNode = this.CheckType(SubNode, FuncType.GetParamType(i+StaticShift));
-				List.SetListAt(i, SubNode);
-				i = i + 1;
+			if(!FuncType.IsVarType()) {
+				@Var int i = 0;
+				@Var int StaticShift = FuncType.GetParamSize() - List.GetListSize();
+				while(i < List.GetListSize()) {
+					@Var ZNode SubNode = List.GetListAt(i);
+					SubNode = this.CheckType(SubNode, FuncType.GetParamType(i+StaticShift));
+					List.SetListAt(i, SubNode);
+					i = i + 1;
+				}
 			}
 			this.TypedNode(Node, FuncType.GetReturnType());
 			return;

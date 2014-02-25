@@ -32,6 +32,7 @@ import zen.ast.ZClassNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZFieldNode;
 import zen.ast.ZFunctionNode;
+import zen.ast.ZGlobalNameNode;
 import zen.ast.ZInstanceOfNode;
 import zen.ast.ZLetNode;
 import zen.ast.ZMapLiteralNode;
@@ -77,16 +78,27 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 		return new ZSourceEngine(new ZenTypeSafer(this), this);
 	}
 
+
+	@Override public void VisitGlobalNameNode(ZGlobalNameNode Node) {
+		//		if(Node.IsUntyped()) {
+		//			this.CurrentBuilder.Append(Node.GlobalName);
+		//		}
+		if(Node.IsStaticFuncName) {
+			this.CurrentBuilder.Append(Node.Type.StringfySignature(Node.GlobalName));
+		}
+		else {
+			this.CurrentBuilder.Append(Node.GlobalName);
+		}
+	}
+
 	@Override public void VisitCastNode(ZCastNode Node) {
 		this.GenerateCode(null, Node.AST[ZCastNode._Expr]);
 	}
 
 	@Override public void VisitInstanceOfNode(ZInstanceOfNode Node) {
-		this.CurrentBuilder.Append("isinstance(");
 		this.GenerateCode(null, Node.AST[ZBinaryNode._Left]);
-		this.CurrentBuilder.Append(this.Camma);
-		this.CurrentBuilder.AppendInt(Node.TargetType.TypeId);
-		this.CurrentBuilder.Append(")");
+		this.CurrentBuilder.Append(" instanceof ");
+		this.GenerateTypeName(Node.TargetType);
 	}
 
 	@Override public void VisitThrowNode(ZThrowNode Node) {

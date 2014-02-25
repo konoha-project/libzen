@@ -44,7 +44,7 @@ public class ZType  {
 	public final static ZType       TypeType = new ZType(ZType.UniqueTypeFlag, "Type", ZType.VarType);
 	public final static ZType		ArrayType = new ZGeneric1Type(ZType.UniqueTypeFlag, "Array", null, ZType.VarType);
 	public final static ZType		MapType = new ZGeneric1Type(ZType.UniqueTypeFlag, "Map", null, ZType.VarType);
-	public final static ZType		FuncType  = new ZFuncType("Func", null);
+	public final static ZFuncType	FuncType  = new ZFuncType("Func", null);
 
 	@Field public int		  TypeFlag = 0;
 	@Field public int         TypeId = 0;

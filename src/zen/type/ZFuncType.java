@@ -13,7 +13,7 @@ public final class ZFuncType extends ZType {
 	public ZFuncType(String ShortName, ZType[] UniqueTypeParams) {
 		super(ZType.UniqueTypeFlag, ShortName, ZType.VarType);
 		if(UniqueTypeParams == null) {
-			this.TypeParams = new ZType[1];
+			this.TypeParams = LibZen._NewZTypeArray(1);
 			this.TypeParams[0] = ZType.VarType;
 		}
 		else {
@@ -129,6 +129,4 @@ public final class ZFuncType extends ZType {
 		}
 		return true;
 	}
-
-
 }
