@@ -126,12 +126,12 @@ public final class ZNameSpace {
 		this.SyntaxTable.put(PatternName, Syntax);
 	}
 
-	public final static String RightPatternSymbol(String PatternName) {
+	public final static String _RightPatternSymbol(String PatternName) {
 		return "\t" + PatternName;
 	}
 
 	public final ZSyntax GetRightSyntaxPattern(String PatternName) {
-		return this.GetSyntaxPattern(ZNameSpace.RightPatternSymbol(PatternName));
+		return this.GetSyntaxPattern(ZNameSpace._RightPatternSymbol(PatternName));
 	}
 
 	private void AppendSyntaxPattern(String PatternName, ZSyntax NewPattern) {
@@ -176,7 +176,7 @@ public final class ZNameSpace {
 		}
 		@Var ZSyntax Pattern = new ZSyntax(this, Name, MatchFunc);
 		Pattern.SyntaxFlag = SyntaxFlag;
-		this.AppendSyntaxPattern(ZNameSpace.RightPatternSymbol(Name), Pattern);
+		this.AppendSyntaxPattern(ZNameSpace._RightPatternSymbol(Name), Pattern);
 		if(Alias != -1) {
 			this.DefineRightExpression(PatternName.substring(Alias+1), SyntaxFlag, MatchFunc);
 		}

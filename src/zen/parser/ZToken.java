@@ -28,7 +28,7 @@ public class ZToken {
 
 	public final char GetChar() {
 		if(this.Source != null) {
-			return this.Source.SourceText.charAt(this.StartIndex);
+			return LibZen._GetChar(this.Source.SourceText, this.StartIndex);
 		}
 		return '\0';
 	}
@@ -50,7 +50,7 @@ public class ZToken {
 
 	@ZenIgnored public final boolean EqualsText(char ch) {
 		if(this.EndIndex - this.StartIndex == 1) {
-			if(this.Source.SourceText.charAt(this.StartIndex) == ch) {
+			if(LibZen._GetChar(this.Source.SourceText, this.StartIndex) == ch) {
 				return true;
 			}
 		}
@@ -62,7 +62,7 @@ public class ZToken {
 			@Var String s = this.Source.SourceText;
 			@Var int i = 0;
 			while(i < Text.length()) {
-				if(s.charAt(this.StartIndex+i) != Text.charAt(i)) {
+				if(LibZen._GetChar(s, this.StartIndex+i) != LibZen._GetChar(Text, i)) {
 					return false;
 				}
 				i = i + 1;
@@ -77,7 +77,7 @@ public class ZToken {
 			@Var String s = this.Source.SourceText;
 			@Var int i = 0;
 			while(i < Text.length()) {
-				if(s.charAt(this.StartIndex+i) != Text.charAt(i)) {
+				if(LibZen._GetChar(s, this.StartIndex+i) != LibZen._GetChar(Text, i)) {
 					return false;
 				}
 				i = i + 1;

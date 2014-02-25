@@ -24,7 +24,7 @@ public class ZSource {
 		@Var int LineNumber = this.LineNumber;
 		@Var int i = 0;
 		while(i < Position) {
-			@Var char ch = this.SourceText.charAt(i);
+			@Var char ch = LibZen._GetChar(this.SourceText, i);
 			if(ch == '\n') {
 				LineNumber = LineNumber + 1;
 			}
@@ -41,7 +41,7 @@ public class ZSource {
 			i = s.length() - 1;
 		}
 		while(i >= 0) {
-			@Var char ch = s.charAt(i);
+			@Var char ch = LibZen._GetChar(s, i);
 			if(ch == '\n') {
 				StartIndex = i + 1;
 				break;
@@ -56,7 +56,7 @@ public class ZSource {
 		@Var int length = 0;
 		@Var int i = Position;
 		while(i < s.length()) {
-			@Var char ch = s.charAt(i);
+			@Var char ch = LibZen._GetChar(s, i);
 			if(ch == '\t') {
 				length = length + 8;
 			}
@@ -80,7 +80,7 @@ public class ZSource {
 			i = s.length() - 1;
 		}
 		while(i >= 0) {
-			@Var char ch = s.charAt(i);
+			@Var char ch = LibZen._GetChar(s, i);
 			if(ch == '\n') {
 				StartIndex = i + 1;
 				break;
@@ -89,7 +89,7 @@ public class ZSource {
 		}
 		i = Position;
 		while(i < s.length()) {
-			@Var char ch = s.charAt(i);
+			@Var char ch = LibZen._GetChar(s, i);
 			if(ch == '\n') {
 				EndIndex = i;
 				break;
@@ -107,7 +107,7 @@ public class ZSource {
 			i = s.length() - 1;
 		}
 		while(i >= 0) {
-			@Var char ch = s.charAt(i);
+			@Var char ch = LibZen._GetChar(s, i);
 			if(ch == '\n') {
 				StartIndex = i + 1;
 				break;
@@ -117,7 +117,7 @@ public class ZSource {
 		@Var String Line = "";
 		i = StartIndex;
 		while(i < Position) {
-			@Var char ch = s.charAt(i);
+			@Var char ch = LibZen._GetChar(s, i);
 			if(ch == '\n') {
 				break;
 			}

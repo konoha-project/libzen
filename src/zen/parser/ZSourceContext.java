@@ -24,12 +24,12 @@ public final class ZSourceContext extends ZSource {
 	}
 
 	public final char GetCurrentChar() {
-		return this.SourceText.charAt(this.SourcePosition);
+		return LibZen._GetChar(this.SourceText, this.SourcePosition);
 	}
 
 	public final char GetCharAtFromCurrentPosition(int n) {
 		if(this.SourcePosition+n < this.SourceText.length()) {
-			return this.SourceText.charAt(this.SourcePosition+n);
+			return LibZen._GetChar(this.SourceText, this.SourcePosition+n);
 		}
 		return '\0';
 	}
