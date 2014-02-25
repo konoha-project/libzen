@@ -257,7 +257,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 			@Var ZType ParamType =  FuncType.GetParamType(i+1);
 			SubNode = this.TryType(SubNode, ParamType);
 			if(!ParamType.AcceptValueType(SubNode.Type, false, Greek)) {
-				SubNode = this.CreateStupidCast(ParamType.GetGreekRealType(Greek), SubNode);
+				SubNode = this.CreateStupidCastNode(ParamType.GetGreekRealType(Greek), SubNode);
 			}
 			FuncNode.SetListAt(i, SubNode);
 			i = i + 1;

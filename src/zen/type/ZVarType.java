@@ -25,7 +25,9 @@
 package zen.type;
 
 import zen.deps.Field;
+import zen.deps.Var;
 import zen.deps.ZArray;
+import zen.deps.ZenIgnored;
 import zen.parser.ZToken;
 
 public class ZVarType extends ZType {
@@ -63,14 +65,14 @@ public class ZVarType extends ZType {
 		return this.RefType.IsVarType();
 	}
 
-	@Override public String toString() {
+	@ZenIgnored @Override public String toString() {
 		return "typeof("+this.ShortName+"): " + this.RefType;
 	}
 
 	public void Infer(ZType ContextType, ZToken SourceToken) {
 		if(this.RefType.IsVarType()) {
 			if(ContextType instanceof ZVarType && ContextType.IsVarType()) {
-				ZVarType VarType = (ZVarType)ContextType;
+				@Var ZVarType VarType = (ZVarType)ContextType;
 				if(this.GreekId < VarType.GreekId) {
 					VarType.GreekId = this.GreekId;
 				}
@@ -87,11 +89,10 @@ public class ZVarType extends ZType {
 		}
 	}
 
-	@Override
-	public void Maybe(ZType T, ZToken SourceToken) {
+	@Override public void Maybe(ZType T, ZToken SourceToken) {
 		if(this.RefType.IsVarType()) {
 			if(T instanceof ZVarType && T.IsVarType()) {
-				ZVarType VarType = (ZVarType)T;
+				@Var ZVarType VarType = (ZVarType)T;
 				if(this.GreekId < VarType.GreekId) {
 					VarType.GreekId = this.GreekId;
 				}

@@ -31,25 +31,16 @@ import zen.ast.ZFunctionNode;
 import zen.ast.ZListNode;
 import zen.ast.ZMacroNode;
 import zen.ast.ZNode;
-import zen.ast.ZPrototypeNode;
+import zen.ast.ZStupidCastErrorNode;
 import zen.ast.ZSugarNode;
 import zen.deps.Field;
 import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.type.ZFunc;
-import zen.type.ZFuncType;
 import zen.type.ZType;
 import zen.type.ZVarScope;
 
 public abstract class ZTypeChecker extends ZVisitor {
-
-	protected void println(String string) {
-		LibZen._PrintDebug("debug: " + string);
-	}
-
-	protected void FIXME(String string) {
-		LibZen._PrintDebug("FIXME: " + string);
-	}
 
 	@Field private ZType      StackedContextType;
 	@Field private ZNode      ReturnedNode;
@@ -90,7 +81,7 @@ public abstract class ZTypeChecker extends ZVisitor {
 		this.ReturnedNode = null;
 		Node.Accept(this);
 		if(this.ReturnedNode == null) {  /* debug check */
-			this.FIXME("!! returns no value: " + Node);
+			LibZen._PrintDebug("!! returns no value: " + Node);
 		}
 		else {
 			Node = this.ReturnedNode;
@@ -102,8 +93,8 @@ public abstract class ZTypeChecker extends ZVisitor {
 		return Node;
 	}
 
-	protected final ZNode CreateStupidCast(ZType Requested, ZNode Node) {
-		ZNode ErrorNode = new ZErrorNode(Node, "type error: requested = " +  Requested + ", given = " + Node.Type);
+	protected final ZNode CreateStupidCastNode(ZType Requested, ZNode Node) {
+		ZNode ErrorNode = new ZStupidCastErrorNode(Node, "type error: requested = " +  Requested + ", given = " + Node.Type);
 		ErrorNode.Type = Requested;
 		return ErrorNode;
 	}
@@ -123,7 +114,7 @@ public abstract class ZTypeChecker extends ZVisitor {
 			MacroNode.Type = EnforceType;
 			return MacroNode;
 		}
-		return this.CreateStupidCast(EnforceType, Node);
+		return this.CreateStupidCastNode(EnforceType, Node);
 	}
 
 
@@ -152,7 +143,7 @@ public abstract class ZTypeChecker extends ZVisitor {
 		if(ContextType.IsIntType() && Node.Type.IsFloatType()) {
 			return this.EnforceNodeType(Node, ContextType);
 		}
-		return this.CreateStupidCast(ContextType, Node);
+		return this.CreateStupidCastNode(ContextType, Node);
 	}
 
 	private final ZNode VisitTypeChecker(ZNode Node, ZType ContextType, int TypeCheckPolicy) {
@@ -212,7 +203,7 @@ public abstract class ZTypeChecker extends ZVisitor {
 
 	public final void Return(ZNode Node) {
 		if(this.ReturnedNode != null) {
-			this.FIXME("previous returned node " + Node);
+			LibZen._PrintDebug("previous returned node " + Node);
 		}
 		this.ReturnedNode = Node;
 	}
@@ -220,7 +211,7 @@ public abstract class ZTypeChecker extends ZVisitor {
 	public final void TypedNode(ZNode Node, ZType Type) {
 		Node.Type = Type.GetRealType();
 		if(this.ReturnedNode != null) {
-			this.FIXME("previous returned node " + Node);
+			LibZen._PrintDebug("previous returned node " + Node);
 		}
 		this.ReturnedNode = Node;
 	}
@@ -232,11 +223,11 @@ public abstract class ZTypeChecker extends ZVisitor {
 		this.Return(new ZErrorNode(Node.ParentNode, ErrorToken, Message));
 	}
 
-	public final void Todo(ZNode Node) {
-		ZLogger._LogWarning(Node.SourceToken, "TODO: unimplemented type checker node: " + Node.getClass().getSimpleName());
-		Node.Type = ZType.VarType;
-		this.ReturnedNode = Node;
-	}
+	//	public final void Todo(ZNode Node) {
+	//		ZLogger._LogWarning(Node.SourceToken, "TODO: unimplemented type checker node: " + Node.getClass().getSimpleName());
+	//		Node.Type = ZType.VarType;
+	//		this.ReturnedNode = Node;
+	//	}
 
 	public abstract void DefineFunction(ZFunctionNode FunctionNode, boolean Enforced);
 
@@ -248,11 +239,6 @@ public abstract class ZTypeChecker extends ZVisitor {
 		else {
 			this.Return(Node);
 		}
-	}
-
-	private void VisitPrototypeNode(ZPrototypeNode Node) {
-		@Var ZFuncType FuncType = Node.GetFuncType();
-		this.Generator.SetPrototype(Node, Node.FuncName, FuncType);
 	}
 
 	@Override public void VisitExtendedNode(ZNode Node) {

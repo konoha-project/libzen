@@ -24,10 +24,11 @@
 
 package zen.ast;
 
+import zen.deps.ZenIgnored;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 
-public final class ZErrorNode extends ZConstNode {
+public class ZErrorNode extends ZConstNode {
 	public String ErrorMessage;
 	public ZErrorNode(ZNode ParentNode, ZToken SourceToken, String ErrorMessage) {
 		super(ParentNode, SourceToken);
@@ -38,11 +39,11 @@ public final class ZErrorNode extends ZConstNode {
 		this.ErrorMessage = ErrorMessage;
 	}
 
-	@Override public void Accept(ZVisitor Visitor) {
+	@Override public final void Accept(ZVisitor Visitor) {
 		Visitor.VisitErrorNode(this);
 	}
 
-	@Override public String toString() {
+	@ZenIgnored @Override public String toString() {
 		return "ErrorNode '" + this.ErrorMessage + "'";
 	}
 }

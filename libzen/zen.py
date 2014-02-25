@@ -267,6 +267,7 @@ class Context:
 
 	def write(self, filename):
 		f = open(filename, 'w')
+		writeLIBZEN(f)
 		for c in self.ClassList:
 			c.writeproto(f)
 		for c in self.ClassList:
@@ -300,6 +301,57 @@ def ClassSort(list, m):
 		return s + ClassSort(e, m)
 	else:
 		return list
+
+def writeLIBZEN(f):
+	LIBZEN='''
+function LibZen_Print(msg: any): void;
+function LibZen_PrintLine(msg: any): void;
+function LibZen_FixMe(e: Exception): void;
+function LibZen_PrintDebug(msg: String): void;
+function LibZen_Assert(TestResult: boolean): void;
+function LibZen_Exit(status: int, Message: String): void;
+function LibZen_GetPlatform(): String;
+function LibZen_GetEnv(Name: String): String;
+function LibZen_IsFlag(flag: int, flag2: int): boolean;
+function LibZen_UnsetFlag(flag: int, flag2: int): int;
+function LibZen_GetTokenMatrixIndex(c: String): int;
+function LibZen_NewTokenMatrix(): ZTokenFunc[];
+function LibZen_GetChar(Text: String, Pos: int): String;
+function LibZen_IsLetter(ch: String): boolean;
+function LibZen_IsDigit(ch: String): boolean;
+function LibZen_IsSymbol(ch: String): boolean;
+function LibZen_EqualsString(s: String, s2: String): boolean;
+function LibZen_SubString(Text: String, StartIdx: int, EndIdx: int): String;
+function LibZen_JoinStrings(Unit: String, Times: int): String;
+function LibZen_UnquoteString(Text: String): String;
+function LibZen_QuoteString(Text: String): String;
+function LibZen_ParseInt(Text: String): int;
+function LibZen_ParseFloat(Text: String): float;
+function LibZen_Stringify(Value: any): String;
+function LibZen_AnotherName(s: String): String;
+function LibZen_Stringfy(number: int): String;
+function LibZen_SourceBuilderToString(Builder: ZSourceBuilder): String;
+function LibZen_SourceBuilderToString(Builder: ZSourceBuilder, BeginIndex: int, EndIndex: int): String;
+function LibZen_WriteTo(FileName: String, List: ZSourceBuilder[]): void;
+function LibZen_Size(s: String) : int;
+function LibZen_Size(o) : int;
+
+function ImportGrammar(NameSpace: ZNameSpace, ClassName: String): boolean;
+//function LoadTokenFunc(GrammarClass: Class<?>, FuncName: String): ZFunc;
+//function LoadMatchFunc(GrammarClass: Class<?>, FuncName: String): ZFunc;
+function ApplyTokenFunc(TokenFunc: ZTokenFunction, SourceContext: ZSourceContext): boolean;
+function ApplyMatchFunc(MatchFunc: ZMatchFunction, ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
+function LoadGenerator(ClassName: String, OutputFile: String): ZGenerator;
+function LoadEngine(ClassName: String, GrammarClass: String): ZSourceEngine;
+//function GetNativeType(NativeClass: Class<?>): ZType;
+function ConvertToNativeFunc(jMethod: Method): JavaStaticFunc;
+function GetClassName(Value: any): String;
+//function GetClassOfValue(Value: any): Class<?>;
+function LibZen_NewZTypeArray(Size: int): ZType[];
+
+
+'''
+	f.write(LIBZEN)
 
 def main(files) :
 	c = Context()
