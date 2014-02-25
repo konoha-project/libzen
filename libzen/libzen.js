@@ -3968,7 +3968,7 @@ function ZTypeNode__4qyl(self, ParentNode__1, SourceToken__2, ParsedType__3) {
 }
 
 function ZGenerator__3qwh(self, LanguageExtension__1, TargetVersion__2) {
-   LibZen.ThrowError("undefined code generation: #ZTypeNode:ZVisitor")(self);
+   super();
    self.RootNameSpace = ZNameSpace__3qwo(new ZNameSpace(), self, null);
    self.GrammarInfo = "";
    self.LanguageExtention = LanguageExtension__1;

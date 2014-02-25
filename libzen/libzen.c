@@ -6191,7 +6191,7 @@ static const char * GetSignature__1qwm(struct ZFunc66 * this) {
 	return StringfySignature__2qw7(this->FuncType, this->FuncName);
 }
 static struct ZPrototype74 * ZPrototype__5qee(struct ZPrototype74 * this, long FuncFlag__1, const char * FuncName__2, struct ZFuncType67 * FuncType__3, struct ZToken64 * SourceToken__4) {
-	ThrowError("not function: ZFunc");
+	(void)ZFunc__4qwm(this, FuncFlag, FuncName, FuncType);
 	this->DefinedCount = 0;
 	this->UsedCount = 0;
 	return NULL;
@@ -6398,7 +6398,7 @@ static void TypeCheckFuncBlock__3qec(struct ZVarScope98 * this, struct ZTypeChec
 	return;
 }
 static struct ZVarType100 * ZVarType__4qeb(struct ZVarType100 * this, ArrayOfZVarType * VarList__1, const char * Name__2, struct ZToken64 * SourceToken__3) {
-	ThrowError("not function: ZType");
+	(void)ZType__4qw6(this, 0, Name, ZTypeVarType_Z6);
 	this->VarList = VarList;
 	this->SourceToken = SourceToken;
 	this->GreekId = /*untyped*/NULL;
@@ -6606,7 +6606,7 @@ static struct ZReturnNode135 * ToReturnNode__1qws(struct ZNode49 * this) {
 	return NULL;
 }
 static struct ZParamNode137 * ZParamNode__2qrn(struct ZParamNode137 * this, struct ZNode49 * ParentNode__1) {
-	ThrowError("not function: ZNode");
+	(void)ZNode__4qws(this, ParentNode, NULL, 0);
 	return NULL;
 }
 static void SetNameInfo__3qrn(struct ZParamNode137 * this, struct ZToken64 * NameToken__1, const char * Name__2) {
@@ -6615,7 +6615,7 @@ static void SetNameInfo__3qrn(struct ZParamNode137 * this, struct ZToken64 * Nam
 	return;
 }
 static struct ZReturnNode135 * ZReturnNode__2qrv(struct ZReturnNode135 * this, struct ZNode49 * ParentNode__1) {
-	ThrowError("not function: ZNode");
+	(void)ZNode__4qws(this, ParentNode, NULL, 1);
 	return NULL;
 }
 static void Accept__2qrv(struct ZReturnNode135 * this, struct ZVisitor132 * Visitor__1) {
@@ -6626,7 +6626,7 @@ static struct ZReturnNode135 * ToReturnNode__1qrv(struct ZReturnNode135 * this) 
 	return this;
 }
 static struct ZSetIndexNode143 * ZSetIndexNode__3qr8(struct ZSetIndexNode143 * this, struct ZNode49 * ParentNode__1, struct ZNode49 * LeftNode__2) {
-	ThrowError("not function: ZNode");
+	(void)ZNode__4qws(this, ParentNode, NULL, 3);
 	Set__3qws(this, ZSetIndexNode_Recv_Z25, LeftNode);
 	return NULL;
 }
@@ -6635,7 +6635,7 @@ static void Accept__2qr8(struct ZSetIndexNode143 * this, struct ZVisitor132 * Vi
 	return;
 }
 static struct ZSetNameNode146 * ZSetNameNode__4qte(struct ZSetNameNode146 * this, struct ZNode49 * ParentNode__1, struct ZToken64 * Token__2, const char * VarName__3) {
-	ThrowError("not function: ZNode");
+	(void)ZNode__4qws(this, ParentNode, Token, 1);
 	this->VarName = VarName;
 	return NULL;
 }
@@ -6644,7 +6644,7 @@ static void Accept__2qte(struct ZSetNameNode146 * this, struct ZVisitor132 * Vis
 	return;
 }
 static struct ZSetterNode149 * ZSetterNode__3qty(struct ZSetterNode149 * this, struct ZNode49 * ParentNode__1, struct ZNode49 * RecvNode__2) {
-	ThrowError("not function: ZNode");
+	(void)ZNode__4qws(this, ParentNode, NULL, 2);
 	Set__3qws(this, ZSetterNode_Recv_Z29, RecvNode);
 	return NULL;
 }
@@ -6661,7 +6661,7 @@ static int IsStaticField__1qty(struct ZSetterNode149 * this) {
 	return LibZen_Is(Array<ZNode>GetIndex(ZSetterNode_Recv_Z29), 199);
 }
 static struct ZSugarNode130 * ZSugarNode__3qr1(struct ZSugarNode130 * this, struct ZNode49 * SugarNode__1, struct ZNode49 * DeSugarNode__2) {
-	ThrowError("not function: ZNode");
+	(void)ZNode__4qws(this, SugarNode->ParentNode, NULL, 1);
 	this->SugarNode = SugarNode;
 	SugarNode->ParentNode = this;
 	Set__3qws(this, ZSugarNode_DeSugar_Z31, DeSugarNode);
@@ -6673,7 +6673,7 @@ static void Accept__2qr1(struct ZSugarNode130 * this, struct ZVisitor132 * Visit
 	return;
 }
 static struct ZThrowNode156 * ZThrowNode__2qta(struct ZThrowNode156 * this, struct ZNode49 * ParentNode__1) {
-	ThrowError("not function: ZNode");
+	(void)ZNode__4qws(this, ParentNode, NULL, 1);
 	return NULL;
 }
 static void Accept__2qta(struct ZThrowNode156 * this, struct ZVisitor132 * Visitor__1) {
@@ -6681,7 +6681,7 @@ static void Accept__2qta(struct ZThrowNode156 * this, struct ZVisitor132 * Visit
 	return;
 }
 static struct ZTryNode159 * ZTryNode__2qtf(struct ZTryNode159 * this, struct ZNode49 * ParentNode__1) {
-	ThrowError("not function: ZNode");
+	(void)ZNode__4qws(this, ParentNode, NULL, 3);
 	return NULL;
 }
 static void Accept__2qtf(struct ZTryNode159 * this, struct ZVisitor132 * Visitor__1) {
@@ -6689,7 +6689,7 @@ static void Accept__2qtf(struct ZTryNode159 * this, struct ZVisitor132 * Visitor
 	return;
 }
 static struct ZUnaryNode162 * ZUnaryNode__3qtj(struct ZUnaryNode162 * this, struct ZNode49 * ParentNode__1, struct ZToken64 * Token__2) {
-	ThrowError("not function: ZNode");
+	(void)ZNode__4qws(this, ParentNode, Token, 1);
 	return NULL;
 }
 static void Accept__2qtj(struct ZUnaryNode162 * this, struct ZVisitor132 * Visitor__1) {
@@ -6697,7 +6697,7 @@ static void Accept__2qtj(struct ZUnaryNode162 * this, struct ZVisitor132 * Visit
 	return;
 }
 static struct ZWhileNode165 * ZWhileNode__2qt9(struct ZWhileNode165 * this, struct ZNode49 * ParentNode__1) {
-	ThrowError("not function: ZNode");
+	(void)ZNode__4qws(this, ParentNode, NULL, 2);
 	return NULL;
 }
 static void Accept__2qt9(struct ZWhileNode165 * this, struct ZVisitor132 * Visitor__1) {
@@ -6726,7 +6726,7 @@ static void ShowErrors__1qev(struct ZLogger99 * this) {
 	return;
 }
 static struct ZMacroFunc176 * ZMacroFunc__3qt5(struct ZMacroFunc176 * this, const char * FuncName__1, struct ZFuncType67 * FuncType__2) {
-	ThrowError("not function: ZFunc");
+	(void)ZFunc__4qwm(this, 0, FuncName, FuncType);
 	return NULL;
 }
 static struct ZNameSpace43 * ZNameSpace__3qwi(struct ZNameSpace43 * this, struct ZGenerator52 * Generator__1, struct ZNameSpace43 * ParentNameSpace__2) {
@@ -7194,7 +7194,7 @@ static void AppendLine__2qww(struct ZSourceBuilder37 * this, const char * Text__
 	return;
 }
 static struct ZSourceContext46 * ZSourceContext__5qw0(struct ZSourceContext46 * this, const char * FileName__1, long LineNumber__2, const char * Source__3, struct ZTokenContext50 * TokenContext__4) {
-	ThrowError("not function: ZSource");
+	(void)ZSource__5qy1(this, FileName, LineNumber, Source, TokenContext);
 	return NULL;
 }
 static long GetCharCode__1qw0(struct ZSourceContext46 * this) {
@@ -7314,7 +7314,7 @@ static void LogWarning__3qw0(struct ZSourceContext46 * this, long Position__1, c
 	return;
 }
 static struct ZSourceMacro229 * ZSourceMacro__4qus(struct ZSourceMacro229 * this, const char * FuncName__1, struct ZFuncType67 * FuncType__2, const char * Macro__3) {
-	ThrowError("not function: ZMacroFunc");
+	(void)ZMacroFunc__3qt5(this, FuncName, FuncType);
 	this->Macro = Macro;
 	return NULL;
 }
@@ -7748,7 +7748,7 @@ static const char * toString__1qqb(struct ZTokenFunc28 * this) {
 	return /*untyped*/NULL;
 }
 static struct ZVariable194 * ZVariable__7qyd(struct ZVariable194 * this, struct ZSymbolEntry189 * Parent__1, struct ZFunctionNode109 * FuncNode__2, long VarFlag__3, struct ZType59 * VarType__4, const char * VarName__5, struct ZToken64 * SourceToken__6) {
-	ThrowError("not function: ZSymbolEntry");
+	(void)ZSymbolEntry__3qyp(this, Parent, FuncNode);
 	this->VarFlag = VarFlag;
 	this->VarType = VarType;
 	this->VarName = VarName;
@@ -7773,7 +7773,7 @@ static void Used__1qyd(struct ZVariable194 * this) {
 	return;
 }
 static struct ZClassType63 * ZClassType__3qwv(struct ZClassType63 * this, const char * ShortName__1, struct ZType59 * RefType__2) {
-	ThrowError("not function: ZType");
+	(void)ZType__4qw6(this, ZTypeOpenTypeFlag_Z5 | ZTypeUniqueTypeFlag_Z3, ShortName, RefType);
 	if (LibZen_Is(RefType, 63)) {
 		ResetSuperType__2qwv(this, (struct ZClassType63 *)RefType);
 	};
@@ -7836,7 +7836,7 @@ static struct ZClassField62 * AppendField__4qwv(struct ZClassType63 * this, stru
 	return ClassField;
 }
 static struct ZFuncType67 * ZFuncType__3qw7(struct ZFuncType67 * this, const char * ShortName__1, ArrayOfZType * UniqueTypeParams__2) {
-	ThrowError("not function: ZType");
+	(void)ZType__4qw6(this, ZTypeUniqueTypeFlag_Z3, ShortName, ZTypeVarType_Z6);
 	if (UniqueTypeParams == NULL) {
 		this->TypeParams = /*untyped*/NULL;
 		Array<ZType>SetIndex(0, ZTypeVarType_Z6);
@@ -7940,7 +7940,7 @@ static int AcceptAsFieldFunc__2qw7(struct ZFuncType67 * this, struct ZFuncType67
 	return 1/*true*/;
 }
 static struct ZGeneric1Type282 * ZGeneric1Type__5qim(struct ZGeneric1Type282 * this, long TypeFlag__1, const char * ShortName__2, struct ZType59 * BaseType__3, struct ZType59 * ParamType__4) {
-	ThrowError("not function: ZType");
+	(void)ZType__4qw6(this, TypeFlag, ShortName, ZTypeVarType_Z6);
 	this->BaseType = BaseType;
 	if (this->BaseType == NULL) {
 		this->BaseType = this;
@@ -7982,7 +7982,7 @@ static int AcceptValueType__4qim(struct ZGeneric1Type282 * this, struct ZType59 
 	return 0/*false*/;
 }
 static struct ZGreekType290 * ZGreekType__2qoe(struct ZGreekType290 * this, long GreekId__1) {
-	ThrowError("not function: ZType");
+	(void)ZType__4qw6(this, ZTypeUniqueTypeFlag_Z3, /*untyped*/NULL, ZTypeVarType_Z6);
 	this->GreekId = GreekId;
 	return NULL;
 }
@@ -8007,7 +8007,7 @@ static int AcceptValueType__4qoe(struct ZGreekType290 * this, struct ZType59 * V
 	};
 }
 static struct ZAnnotationNode295 * ZAnnotationNode__4qoi(struct ZAnnotationNode295 * this, struct ZNode49 * ParentNode__1, struct ZToken64 * Token__2, MapOfObject * Anno__3) {
-	ThrowError("not function: ZNode");
+	(void)ZNode__4qws(this, ParentNode, Token, 0);
 	return NULL;
 }
 static int IsBreakingBlock__1qoi(struct ZAnnotationNode295 * this) {
@@ -8018,7 +8018,7 @@ static void Accept__2qoi(struct ZAnnotationNode295 * this, struct ZVisitor132 * 
 	return;
 }
 static struct ZAssertNode301 * ZAssertNode__2qos(struct ZAssertNode301 * this, struct ZNode49 * ParentNode__1) {
-	ThrowError("not function: ZNode");
+	(void)ZNode__4qws(this, ParentNode, NULL, 1);
 	return NULL;
 }
 static struct ZSugarNode130 * DeSugar__2qos(struct ZAssertNode301 * this, struct ZGenerator52 * Generator__1) {
@@ -8035,7 +8035,7 @@ static struct ZSugarNode130 * DeSugar__2qos(struct ZAssertNode301 * this, struct
 	};
 }
 static struct ZBinaryNode304 * ZBinaryNode__5qog(struct ZBinaryNode304 * this, struct ZNode49 * ParentNode__1, struct ZToken64 * SourceToken__2, struct ZNode49 * Left__3, struct ZSyntax184 * Pattern__4) {
-	ThrowError("not function: ZNode");
+	(void)ZNode__4qws(this, ParentNode, SourceToken, 2);
 	Set__3qws(this, ZBinaryNode_Left_Z59, Left);
 	LibZen_Assert(Pattern != NULL, "(sample/libzen.zen:3527)");
 	this->Pattern = Pattern;
@@ -8086,7 +8086,7 @@ static void Accept__2qog(struct ZBinaryNode304 * this, struct ZVisitor132 * Visi
 	return;
 }
 static struct ZBreakNode311 * ZBreakNode__2qo6(struct ZBreakNode311 * this, struct ZNode49 * ParentNode__1) {
-	ThrowError("not function: ZNode");
+	(void)ZNode__4qws(this, ParentNode, NULL, 0);
 	return NULL;
 }
 static void Accept__2qo6(struct ZBreakNode311 * this, struct ZVisitor132 * Visitor__1) {
@@ -8094,7 +8094,7 @@ static void Accept__2qo6(struct ZBreakNode311 * this, struct ZVisitor132 * Visit
 	return;
 }
 static struct ZCastNode314 * ZCastNode__4qoc(struct ZCastNode314 * this, struct ZNode49 * ParentNode__1, struct ZType59 * CastType__2, struct ZNode49 * Node__3) {
-	ThrowError("not function: ZNode");
+	(void)ZNode__4qws(this, ParentNode, NULL, 1);
 	this->Type = CastType;
 	if (Node != NULL) {
 		Set__3qws(this, ZCastNode_Expr_Z61, Node);
@@ -8118,7 +8118,7 @@ static struct ZListNode215 * ToFuncCallNode__2qoc(struct ZCastNode314 * this, st
 	};
 }
 static struct ZCatchNode318 * ZCatchNode__2qom(struct ZCatchNode318 * this, struct ZNode49 * ParentNode__1) {
-	ThrowError("not function: ZNode");
+	(void)ZNode__4qws(this, ParentNode, NULL, 1);
 	return NULL;
 }
 static void SetTypeInfo__3qom(struct ZCatchNode318 * this, struct ZToken64 * TypeToken__1, struct ZType59 * Type__2) {
@@ -8131,7 +8131,7 @@ static void SetNameInfo__3qom(struct ZCatchNode318 * this, struct ZToken64 * Nam
 	return;
 }
 static struct ZComparatorNode322 * ZComparatorNode__5qo2(struct ZComparatorNode322 * this, struct ZNode49 * ParentNode__1, struct ZToken64 * SourceToken__2, struct ZNode49 * Left__3, struct ZSyntax184 * Pattern__4) {
-	ThrowError("not function: ZBinaryNode");
+	(void)ZBinaryNode__5qog(this, ParentNode, SourceToken, Left, Pattern);
 	return NULL;
 }
 static void Accept__2qo2(struct ZComparatorNode322 * this, struct ZVisitor132 * Visitor__1) {
@@ -8139,20 +8139,20 @@ static void Accept__2qo2(struct ZComparatorNode322 * this, struct ZVisitor132 * 
 	return;
 }
 static struct ZConstNode325 * ZConstNode__3qpw(struct ZConstNode325 * this, struct ZNode49 * ParentNode__1, struct ZToken64 * SourceToken__2) {
-	ThrowError("not function: ZNode");
+	(void)ZNode__4qws(this, ParentNode, SourceToken, 0);
 	return NULL;
 }
 static struct ZEmptyNode327 * ZEmptyNode__3qpr(struct ZEmptyNode327 * this, struct ZNode49 * ParentNode__1, struct ZToken64 * Token__2) {
-	ThrowError("not function: ZNode");
+	(void)ZNode__4qws(this, ParentNode, Token, 0);
 	return NULL;
 }
 static struct ZErrorNode329 * ZErrorNode__4qpy(struct ZErrorNode329 * this, struct ZNode49 * ParentNode__1, struct ZToken64 * SourceToken__2, const char * ErrorMessage__3) {
-	ThrowError("not function: ZConstNode");
+	(void)ZConstNode__3qpw(this, ParentNode, SourceToken);
 	this->ErrorMessage = ErrorMessage;
 	return NULL;
 }
 static struct ZErrorNode329 * ZErrorNode__3qpy(struct ZErrorNode329 * this, struct ZNode49 * Node__1, const char * ErrorMessage__2) {
-	ThrowError("not function: ZConstNode");
+	(void)ZConstNode__3qpw(this, Node->ParentNode, Node->SourceToken);
 	this->ErrorMessage = ErrorMessage;
 	return NULL;
 }
@@ -8161,7 +8161,7 @@ static void Accept__2qpy(struct ZErrorNode329 * this, struct ZVisitor132 * Visit
 	return;
 }
 static struct ZFieldNode333 * ZFieldNode__2qpp(struct ZFieldNode333 * this, struct ZNode49 * ParentNode__1) {
-	ThrowError("not function: ZNode");
+	(void)ZNode__4qws(this, ParentNode, NULL, 1);
 	return NULL;
 }
 static void SetTypeInfo__3qpp(struct ZFieldNode333 * this, struct ZToken64 * TypeToken__1, struct ZType59 * Type__2) {
@@ -8174,7 +8174,7 @@ static void SetNameInfo__3qpp(struct ZFieldNode333 * this, struct ZToken64 * Nam
 	return;
 }
 static struct ZFloatNode337 * ZFloatNode__4qps(struct ZFloatNode337 * this, struct ZNode49 * ParentNode__1, struct ZToken64 * Token__2, double Value__3) {
-	ThrowError("not function: ZConstNode");
+	(void)ZConstNode__3qpw(this, ParentNode, Token);
 	this->Type = ZTypeFloatType_Z10;
 	this->FloatValue = Value;
 	return NULL;
@@ -8184,7 +8184,7 @@ static void Accept__2qps(struct ZFloatNode337 * this, struct ZVisitor132 * Visit
 	return;
 }
 static struct ZGetIndexNode340 * ZGetIndexNode__3qpg(struct ZGetIndexNode340 * this, struct ZNode49 * ParentNode__1, struct ZNode49 * RecvNode__2) {
-	ThrowError("not function: ZNode");
+	(void)ZNode__4qws(this, ParentNode, NULL, 2);
 	Array<ZNode>SetIndex(ZGetIndexNode_Recv_Z64, SetChild__2qws(this, RecvNode));
 	return NULL;
 }
@@ -8193,12 +8193,12 @@ static void Accept__2qpg(struct ZGetIndexNode340 * this, struct ZVisitor132 * Vi
 	return;
 }
 static struct ZGetNameNode343 * ZGetNameNode__4qpk(struct ZGetNameNode343 * this, struct ZNode49 * ParentNode__1, struct ZToken64 * Token__2, const char * NativeName__3) {
-	ThrowError("not function: ZNode");
+	(void)ZNode__4qws(this, ParentNode, Token, 0);
 	this->VarName = NativeName;
 	return NULL;
 }
 static struct ZGetNameNode343 * ZGetNameNode__3qpk(struct ZGetNameNode343 * this, struct ZNode49 * ParentNode__1, struct ZFunc66 * ResolvedFunc__2) {
-	ThrowError("not function: ZNode");
+	(void)ZNode__4qws(this, ParentNode, NULL, 0);
 	this->VarName = ResolvedFunc->FuncName;
 	this->Type = GetFuncType__1qwm(ResolvedFunc);
 	return NULL;
@@ -8211,7 +8211,7 @@ static struct ZNode49 * ToGlobalNameNode__1qpk(struct ZGetNameNode343 * this) {
 	return ZGlobalNameNode__6qpn(_NewZGlobalNameNode353(), this->ParentNode, this->SourceToken, this->Type, this->VarName, 0/*false*/);
 }
 static struct ZGetterNode348 * ZGetterNode__3qpz(struct ZGetterNode348 * this, struct ZNode49 * ParentNode__1, struct ZNode49 * RecvNode__2) {
-	ThrowError("not function: ZNode");
+	(void)ZNode__4qws(this, ParentNode, NULL, 1);
 	Set__3qws(this, ZGetterNode_Recv_Z66, RecvNode);
 	return NULL;
 }
@@ -8228,7 +8228,7 @@ static int IsStaticField__1qpz(struct ZGetterNode348 * this) {
 	return LibZen_Is(Array<ZNode>GetIndex(ZGetterNode_Recv_Z66), 199);
 }
 static struct ZGlobalNameNode353 * ZGlobalNameNode__6qpn(struct ZGlobalNameNode353 * this, struct ZNode49 * ParentNode__1, struct ZToken64 * SourceToken__2, struct ZType59 * Type__3, const char * GlobalName__4, int IsStaticFuncName__5) {
-	ThrowError("not function: ZNode");
+	(void)ZNode__4qws(this, ParentNode, SourceToken, 0);
 	this->GlobalName = GlobalName;
 	this->Type = Type;
 	this->IsStaticFuncName = IsStaticFuncName;
@@ -8242,7 +8242,7 @@ static void Accept__2qpn(struct ZGlobalNameNode353 * this, struct ZVisitor132 * 
 	return;
 }
 static struct ZGroupNode357 * ZGroupNode__2qp3(struct ZGroupNode357 * this, struct ZNode49 * ParentNode__1) {
-	ThrowError("not function: ZNode");
+	(void)ZNode__4qws(this, ParentNode, NULL, 1);
 	return NULL;
 }
 static void Accept__2qp3(struct ZGroupNode357 * this, struct ZVisitor132 * Visitor__1) {
@@ -8250,7 +8250,7 @@ static void Accept__2qp3(struct ZGroupNode357 * this, struct ZVisitor132 * Visit
 	return;
 }
 static struct ZIfNode360 * ZIfNode__2q0q(struct ZIfNode360 * this, struct ZNode49 * ParentNode__1) {
-	ThrowError("not function: ZNode");
+	(void)ZNode__4qws(this, ParentNode, NULL, 3);
 	return NULL;
 }
 static void Accept__2q0q(struct ZIfNode360 * this, struct ZVisitor132 * Visitor__1) {
@@ -8258,7 +8258,7 @@ static void Accept__2q0q(struct ZIfNode360 * this, struct ZVisitor132 * Visitor_
 	return;
 }
 static struct ZImportNode363 * ZImportNode__2q0r(struct ZImportNode363 * this, struct ZNode49 * ParentNode__1) {
-	ThrowError("not function: ZNode");
+	(void)ZNode__4qws(this, ParentNode, NULL, 0);
 	return NULL;
 }
 static void SetNameInfo__3q0r(struct ZImportNode363 * this, struct ZToken64 * NameToken__1, const char * Name__2) {
@@ -8271,7 +8271,7 @@ static void SetNameInfo__3q0r(struct ZImportNode363 * this, struct ZToken64 * Na
 	return;
 }
 static struct ZInstanceOfNode366 * ZInstanceOfNode__4q0u(struct ZInstanceOfNode366 * this, struct ZNode49 * ParentNode__1, struct ZToken64 * Token__2, struct ZNode49 * LeftNode__3) {
-	ThrowError("not function: ZNode");
+	(void)ZNode__4qws(this, ParentNode, Token, 1);
 	Set__3qws(this, ZInstanceOfNode_Left_Z71, LeftNode);
 	return NULL;
 }
@@ -8284,7 +8284,7 @@ static void Accept__2q0u(struct ZInstanceOfNode366 * this, struct ZVisitor132 * 
 	return;
 }
 static struct ZIntNode370 * ZIntNode__4q00(struct ZIntNode370 * this, struct ZNode49 * ParentNode__1, struct ZToken64 * Token__2, long Value__3) {
-	ThrowError("not function: ZConstNode");
+	(void)ZConstNode__3qpw(this, ParentNode, Token);
 	this->Type = ZTypeIntType_Z9;
 	this->IntValue = Value;
 	return NULL;
@@ -8294,7 +8294,7 @@ static void Accept__2q00(struct ZIntNode370 * this, struct ZVisitor132 * Visitor
 	return;
 }
 static struct ZLetNode373 * ZLetNode__2q0s(struct ZLetNode373 * this, struct ZNode49 * ParentNode__1) {
-	ThrowError("not function: ZNode");
+	(void)ZNode__4qws(this, ParentNode, NULL, 1);
 	return NULL;
 }
 static void SetNameInfo__3q0s(struct ZLetNode373 * this, struct ZToken64 * NameToken__1, const char * Name__2) {
@@ -8314,7 +8314,7 @@ static struct ZGlobalNameNode353 * ToGlobalNameNode__1q0s(struct ZLetNode373 * t
 	return ZGlobalNameNode__6qpn(_NewZGlobalNameNode353(), NULL, this->SymbolToken, GetAstType__2qws(this, ZLetNode_InitValue_Z72), this->GlobalName, 0/*false*/);
 }
 static struct ZListNode215 * ZListNode__4qy8(struct ZListNode215 * this, struct ZNode49 * ParentNode__1, struct ZToken64 * SourceToken__2, long Size__3) {
-	ThrowError("not function: ZNode");
+	(void)ZNode__4qws(this, ParentNode, SourceToken, Size);
 	this->ListStartIndex = Size;
 	return NULL;
 }
@@ -8376,7 +8376,7 @@ static void ClearListAfter__2qy8(struct ZListNode215 * this, long Size__1) {
 	return;
 }
 static struct ZMacroNode385 * ZMacroNode__4q0x(struct ZMacroNode385 * this, struct ZNode49 * ParentNode__1, struct ZToken64 * SourceToken__2, struct ZMacroFunc176 * MacroFunc__3) {
-	ThrowError("not function: ZListNode");
+	(void)ZListNode__4qy8(this, ParentNode, SourceToken, 0);
 	this->MacroFunc = MacroFunc;
 	LibZen_Assert(MacroFunc != NULL, "(sample/libzen.zen:3885)");
 	return NULL;
@@ -8396,11 +8396,11 @@ static void Accept__2q0x(struct ZMacroNode385 * this, struct ZVisitor132 * Visit
 	return;
 }
 static struct ZMapEntryNode390 * ZMapEntryNode__2q0m(struct ZMapEntryNode390 * this, struct ZNode49 * ParentNode__1) {
-	ThrowError("not function: ZNode");
+	(void)ZNode__4qws(this, ParentNode, NULL, 2);
 	return NULL;
 }
 static struct ZMapLiteralNode392 * ZMapLiteralNode__2q05(struct ZMapLiteralNode392 * this, struct ZNode49 * ParentNode__1) {
-	ThrowError("not function: ZListNode");
+	(void)ZListNode__4qy8(this, ParentNode, NULL, 0);
 	return NULL;
 }
 static struct ZMapEntryNode390 * GetMapEntryNode__2q05(struct ZMapLiteralNode392 * this, long Index__1) {
@@ -8415,7 +8415,7 @@ static void Accept__2q05(struct ZMapLiteralNode392 * this, struct ZVisitor132 * 
 	return;
 }
 static struct ZMethodCallNode396 * ZMethodCallNode__3q4q(struct ZMethodCallNode396 * this, struct ZNode49 * ParentNode__1, struct ZNode49 * RecvNode__2) {
-	ThrowError("not function: ZListNode");
+	(void)ZListNode__4qy8(this, ParentNode, NULL, 1);
 	Set__3qws(this, ZMethodCallNode_Recv_Z75, RecvNode);
 	return NULL;
 }
@@ -8464,11 +8464,11 @@ static struct ZListNode215 * ToFuncCallNode__2q4q(struct ZMethodCallNode396 * th
 	};
 }
 static struct ZNewArrayNode403 * ZNewArrayNode__4q4i(struct ZNewArrayNode403 * this, struct ZNode49 * ParentNode__1, struct ZType59 * Type__2, struct ZToken64 * Token__3) {
-	ThrowError("not function: ZListNode");
+	(void)ZListNode__4qy8(this, ParentNode, NULL, 0);
 	return NULL;
 }
 static struct ZNewObjectNode405 * ZNewObjectNode__2q4p(struct ZNewObjectNode405 * this, struct ZNode49 * ParentNode__1) {
-	ThrowError("not function: ZListNode");
+	(void)ZListNode__4qy8(this, ParentNode, NULL, 0);
 	return NULL;
 }
 static void Accept__2q4p(struct ZNewObjectNode405 * this, struct ZVisitor132 * Visitor__1) {
@@ -8493,7 +8493,7 @@ static struct ZListNode215 * ToFuncCallNode__2q4p(struct ZNewObjectNode405 * thi
 	return FuncNode;
 }
 static struct ZNotNode409 * ZNotNode__3q4s(struct ZNotNode409 * this, struct ZNode49 * ParentNode__1, struct ZToken64 * Token__2) {
-	ThrowError("not function: ZUnaryNode");
+	(void)ZUnaryNode__3qtj(this, ParentNode, Token);
 	return NULL;
 }
 static void Accept__2q4s(struct ZNotNode409 * this, struct ZVisitor132 * Visitor__1) {
@@ -8501,7 +8501,7 @@ static void Accept__2q4s(struct ZNotNode409 * this, struct ZVisitor132 * Visitor
 	return;
 }
 static struct ZNullNode412 * ZNullNode__3q4g(struct ZNullNode412 * this, struct ZNode49 * ParentNode__1, struct ZToken64 * SourceToken__2) {
-	ThrowError("not function: ZConstNode");
+	(void)ZConstNode__3qpw(this, ParentNode, SourceToken);
 	return NULL;
 }
 static void Accept__2q4g(struct ZNullNode412 * this, struct ZVisitor132 * Visitor__1) {
@@ -8509,7 +8509,7 @@ static void Accept__2q4g(struct ZNullNode412 * this, struct ZVisitor132 * Visito
 	return;
 }
 static struct ZOrNode415 * ZOrNode__5q4k(struct ZOrNode415 * this, struct ZNode49 * ParentNode__1, struct ZToken64 * Token__2, struct ZNode49 * Left__3, struct ZSyntax184 * Pattern__4) {
-	ThrowError("not function: ZBinaryNode");
+	(void)ZBinaryNode__5qog(this, ParentNode, Token, Left, Pattern);
 	return NULL;
 }
 static void Accept__2q4k(struct ZOrNode415 * this, struct ZVisitor132 * Visitor__1) {
@@ -8517,7 +8517,7 @@ static void Accept__2q4k(struct ZOrNode415 * this, struct ZVisitor132 * Visitor_
 	return;
 }
 static struct ZPrototypeNode418 * ZPrototypeNode__2q41(struct ZPrototypeNode418 * this, struct ZNode49 * ParentNode__1) {
-	ThrowError("not function: ZListNode");
+	(void)ZListNode__4qy8(this, ParentNode, NULL, 0);
 	return NULL;
 }
 static void SetTypeInfo__3q41(struct ZPrototypeNode418 * this, struct ZToken64 * TypeToken__1, struct ZType59 * Type__2) {
@@ -8549,7 +8549,7 @@ static struct ZFuncType67 * GetFuncType__1q41(struct ZPrototypeNode418 * this) {
 	return ZTypePool_LookupFuncType__1qwz(TypeList);
 }
 static struct ZStringNode424 * ZStringNode__4q4b(struct ZStringNode424 * this, struct ZNode49 * ParentNode__1, struct ZToken64 * Token__2, const char * Value__3) {
-	ThrowError("not function: ZConstNode");
+	(void)ZConstNode__3qpw(this, ParentNode, Token);
 	this->Type = ZTypeStringType_Z11;
 	this->StringValue = Value;
 	return NULL;
@@ -8559,17 +8559,17 @@ static void Accept__2q4b(struct ZStringNode424 * this, struct ZVisitor132 * Visi
 	return;
 }
 static struct ZStupidCastErrorNode427 * ZStupidCastErrorNode__3q47(struct ZStupidCastErrorNode427 * this, struct ZNode49 * Node__1, const char * ErrorMessage__2) {
-	ThrowError("not function: ZErrorNode");
+	(void)ZErrorNode__3qpy(this, Node, ErrorMessage);
 	this->ErrorNode = Node;
 	return NULL;
 }
 static struct ZTypeNode199 * ZTypeNode__4qyk(struct ZTypeNode199 * this, struct ZNode49 * ParentNode__1, struct ZToken64 * SourceToken__2, struct ZType59 * ParsedType__3) {
-	ThrowError("not function: ZConstNode");
+	(void)ZConstNode__3qpw(this, ParentNode, SourceToken);
 	this->Type = ParsedType;
 	return NULL;
 }
 static struct ZGenerator52 * ZGenerator__3qwg(struct ZGenerator52 * this, const char * LanguageExtension__1, const char * TargetVersion__2) {
-	ThrowError("not function: ZVisitor");
+	/*untyped*/NULL;
 	this->RootNameSpace = ZNameSpace__3qwi(_NewZNameSpace43(), this, NULL);
 	this->GrammarInfo = "";
 	this->LanguageExtention = LanguageExtension;
@@ -8713,11 +8713,11 @@ static void VisitSugarNode__2qwg(struct ZGenerator52 * this, struct ZSugarNode13
 	return;
 }
 static struct ZIndentToken453 * ZIndentToken__4qa9(struct ZIndentToken453 * this, struct ZSource202 * Source__1, long StartIndex__2, long EndIndex__3) {
-	ThrowError("not function: ZToken");
+	(void)ZToken__4qwb(this, Source, StartIndex, EndIndex);
 	return NULL;
 }
 static struct ZPatternToken455 * ZPatternToken__5qa6(struct ZPatternToken455 * this, struct ZSource202 * Source__1, long StartIndex__2, long EndIndex__3, struct ZSyntax184 * PresetPattern__4) {
-	ThrowError("not function: ZToken");
+	(void)ZToken__4qwb(this, Source, StartIndex, EndIndex);
 	this->PresetPattern = PresetPattern;
 	return NULL;
 }
@@ -9027,8 +9027,8 @@ static void WriteTo__2qwj(struct ZSourceEngine54 * this, const char * OutputFile
 	return;
 }
 static struct ZSourceGenerator207 * ZSourceGenerator__3qyv(struct ZSourceGenerator207 * this, const char * TargetCode__1, const char * TargetVersion__2) {
-	ThrowError("not function: ZGenerator");
-	this->InitBuilderList(this);
+	(void)ZGenerator__3qwg(this, TargetCode, TargetVersion);
+	/*untyped*/NULL(this);
 	this->LineFeed = "\n";
 	this->Tab = "   ";
 	this->LineComment = "//";
@@ -9721,11 +9721,11 @@ static void VisitSugarNode__2qe2(struct ZTypeChecker106 * this, struct ZSugarNod
 	return;
 }
 static struct ZArrayType591 * ZArrayType__3qgf(struct ZArrayType591 * this, long TypeFlag__1, struct ZType59 * ParamType__2) {
-	ThrowError("not function: ZGeneric1Type");
+	(void)ZGeneric1Type__5qim(this, TypeFlag, LibZen_StrCat(ThrowError("type error: requested = String, given = ZType"), "[]"), ZTypeArrayType_Z13, ParamType);
 	return NULL;
 }
 static struct ZAndNode495 * ZAndNode__5qsv(struct ZAndNode495 * this, struct ZNode49 * ParentNode__1, struct ZToken64 * Token__2, struct ZNode49 * Left__3, struct ZSyntax184 * Pattern__4) {
-	ThrowError("not function: ZBinaryNode");
+	(void)ZBinaryNode__5qog(this, ParentNode, Token, Left, Pattern);
 	return NULL;
 }
 static void Accept__2qsv(struct ZAndNode495 * this, struct ZVisitor132 * Visitor__1) {
@@ -9733,7 +9733,7 @@ static void Accept__2qsv(struct ZAndNode495 * this, struct ZVisitor132 * Visitor
 	return;
 }
 static struct ZArrayLiteralNode474 * ZArrayLiteralNode__2qsu(struct ZArrayLiteralNode474 * this, struct ZNode49 * ParentNode__1) {
-	ThrowError("not function: ZListNode");
+	(void)ZListNode__4qy8(this, ParentNode, NULL, 0);
 	return NULL;
 }
 static void Accept__2qsu(struct ZArrayLiteralNode474 * this, struct ZVisitor132 * Visitor__1) {
@@ -9741,12 +9741,12 @@ static void Accept__2qsu(struct ZArrayLiteralNode474 * this, struct ZVisitor132 
 	return;
 }
 static struct ZBlockNode126 * ZBlockNode__2qrj(struct ZBlockNode126 * this, struct ZNameSpace43 * NameSpace__1) {
-	ThrowError("not function: ZListNode");
+	(void)ZListNode__4qy8(this, NULL, NULL, 0);
 	this->NameSpace = NameSpace;
 	return NULL;
 }
 static struct ZBlockNode126 * ZBlockNode__3qrj(struct ZBlockNode126 * this, struct ZNode49 * ParentNode__1, long Init__2) {
-	ThrowError("not function: ZListNode");
+	(void)ZListNode__4qy8(this, ParentNode, NULL, Init);
 	this->NameSpace = CreateSubNameSpace__1qwi(GetNameSpace__1qws(ParentNode));
 	return NULL;
 }
@@ -9779,7 +9779,7 @@ static void CopyTo__3qrj(struct ZBlockNode126 * this, long Index__1, struct ZBlo
 	return;
 }
 static struct ZBooleanNode469 * ZBooleanNode__4qsw(struct ZBooleanNode469 * this, struct ZNode49 * ParentNode__1, struct ZToken64 * Token__2, int Value__3) {
-	ThrowError("not function: ZConstNode");
+	(void)ZConstNode__3qpw(this, ParentNode, Token);
 	this->Type = ZTypeBooleanType_Z8;
 	this->BooleanValue = Value;
 	return NULL;
@@ -9789,7 +9789,7 @@ static void Accept__2qsw(struct ZBooleanNode469 * this, struct ZVisitor132 * Vis
 	return;
 }
 static struct ZClassNode509 * ZClassNode__2qdy(struct ZClassNode509 * this, struct ZNode49 * ParentNode__1) {
-	ThrowError("not function: ZListNode");
+	(void)ZListNode__4qy8(this, ParentNode, NULL, 0);
 	return NULL;
 }
 static void SetTypeInfo__3qdy(struct ZClassNode509 * this, struct ZToken64 * TypeToken__1, struct ZType59 * Type__2) {
@@ -9814,12 +9814,12 @@ static void Accept__2qdy(struct ZClassNode509 * this, struct ZVisitor132 * Visit
 	return;
 }
 static struct ZFuncCallNode400 * ZFuncCallNode__3q4t(struct ZFuncCallNode400 * this, struct ZNode49 * ParentNode__1, struct ZNode49 * FuncNode__2) {
-	ThrowError("not function: ZListNode");
+	(void)ZListNode__4qy8(this, ParentNode, NULL, 1);
 	Set__3qws(this, ZFuncCallNode_Func_Z78, FuncNode);
 	return NULL;
 }
 static struct ZFuncCallNode400 * ZFuncCallNode__4q4t(struct ZFuncCallNode400 * this, struct ZNode49 * ParentNode__1, const char * FuncName__2, struct ZType59 * FuncType__3) {
-	ThrowError("not function: ZListNode");
+	(void)ZListNode__4qy8(this, ParentNode, NULL, 1);
 	struct ZGlobalNameNode353 * FuncNode = ZGlobalNameNode__6qpn(_NewZGlobalNameNode353(), this, NULL, FuncType, FuncName, 1/*true*/);
 	Set__3qws(this, ZFuncCallNode_Func_Z78, FuncNode);
 	return NULL;
@@ -9858,7 +9858,7 @@ static struct ZMacroNode385 * ToMacroNode__2q4t(struct ZFuncCallNode400 * this, 
 	return MacroNode;
 }
 static struct ZFunctionNode109 * ZFunctionNode__2qrw(struct ZFunctionNode109 * this, struct ZNode49 * ParentNode__1) {
-	ThrowError("not function: ZListNode");
+	(void)ZListNode__4qy8(this, ParentNode, NULL, 1);
 	return NULL;
 }
 static void SetTypeInfo__3qrw(struct ZFunctionNode109 * this, struct ZToken64 * TypeToken__1, struct ZType59 * Type__2) {
@@ -9933,7 +9933,7 @@ static long GetVarIndex__1qrw(struct ZFunctionNode109 * this) {
 	return Index;
 }
 static struct ZVarNode499 * ZVarNode__2qs7(struct ZVarNode499 * this, struct ZNode49 * ParentNode__1) {
-	ThrowError("not function: ZBlockNode");
+	(void)ZBlockNode__3qrj(this, ParentNode, 1);
 	return NULL;
 }
 static void SetNameInfo__3qs7(struct ZVarNode499 * this, struct ZToken64 * NameToken__1, const char * Name__2) {

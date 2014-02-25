@@ -176,8 +176,12 @@ def GenMethod(cname, line):
 	return "\n"
 
 def rewriteSuper(line, superclass):
-	if superclass and line.find('super(') > 0:
-		line = line.replace('super(', superclass + '(this, ')
+	if superclass :
+		if line.find('super()') > 0:
+			line.replace('super()', superclass+'(this)')
+			return line
+		if line.find('super(') > 0:
+			line = line.replace('super(', superclass + '(this, ')
 	return line
 
 class ClassBlock:
