@@ -603,4 +603,8 @@ public class LibZen {
 		return new ZNode[Size];
 	}
 
+	public final static void _ArrayCopy(Object src, int sIndex, Object dst, int dIndex, int length) {
+		System.arraycopy(src, sIndex, dst, dIndex, length);
+	}
+
 }

@@ -19,7 +19,7 @@ public class ZListNode extends ZNode {
 		}
 		else {
 			@Var ZNode[] newAST = LibZen._NewNodeArray(this.AST.length+1);
-			System.arraycopy(this.AST, 0, newAST, 0, this.AST.length);
+			LibZen._ArrayCopy(this.AST, 0, newAST, 0, this.AST.length);
 			this.AST = newAST;
 			this.Set(this.AST.length - 1, Node);
 		}
@@ -43,9 +43,9 @@ public class ZListNode extends ZNode {
 		} else {
 			@Var ZNode[] newAST = LibZen._NewNodeArray(this.AST.length + 1);
 			Index = this.ListStartIndex + Index;
-			System.arraycopy(this.AST, 0, newAST, 0, Index);
+			LibZen._ArrayCopy(this.AST, 0, newAST, 0, Index);
 			this.Set(Index, Node);
-			System.arraycopy(this.AST, Index, newAST, Index + 1, this.AST.length - Index);
+			LibZen._ArrayCopy(this.AST, Index, newAST, Index + 1, this.AST.length - Index);
 			this.AST = newAST;
 		}
 	}
@@ -53,9 +53,9 @@ public class ZListNode extends ZNode {
 	public final ZNode RemoveListAt(int Index) {
 		@Var ZNode Removed = this.GetListAt(Index);
 		@Var ZNode[] newAST = new ZNode[this.AST.length - 1];
-		int RemovedIndex = this.ListStartIndex + Index;
-		System.arraycopy(this.AST, 0, newAST, 0, RemovedIndex);
-		System.arraycopy(this.AST, RemovedIndex + 1, newAST, RemovedIndex, this.AST.length - (RemovedIndex + 1));
+		@Var int RemovedIndex = this.ListStartIndex + Index;
+		LibZen._ArrayCopy(this.AST, 0, newAST, 0, RemovedIndex);
+		LibZen._ArrayCopy(this.AST, RemovedIndex + 1, newAST, RemovedIndex, this.AST.length - (RemovedIndex + 1));
 		this.AST = newAST;
 		return Removed;
 	}
@@ -68,7 +68,7 @@ public class ZListNode extends ZNode {
 			}
 			else {
 				@Var ZNode[] newAST = LibZen._NewNodeArray(newsize);
-				System.arraycopy(this.AST, 0, newAST, 0, newsize);
+				LibZen._ArrayCopy(this.AST, 0, newAST, 0, newsize);
 				this.AST = newAST;
 			}
 		}
