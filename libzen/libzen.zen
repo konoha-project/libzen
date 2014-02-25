@@ -112,14 +112,14 @@ function GetRecvType(this: ZFuncType): ZType;
 function GetFuncParamType(this: ZFuncType, Index: int): ZType;
 function NewMethodFuncType(this: ZFuncType, RecvType: ZType): ZFuncType;
 function AcceptAsFieldFunc(this: ZFuncType, FuncType: ZFuncType): boolean;
-function ZGeneric1Type(this: ZGeneric1Type, TypeFlag: int, ShortName: String, BaseType: ZType, ParamType: ZType): ZGeneric1Type;
-function GetSuperType(this: ZGeneric1Type): ZType;
-function GetBaseType(this: ZGeneric1Type): ZType;
-function GetParamSize(this: ZGeneric1Type): int;
-function GetParamType(this: ZGeneric1Type, Index: int): ZType;
-function IsGreekType(this: ZGeneric1Type): boolean;
-function GetGreekRealType(this: ZGeneric1Type, Greek: ZType[]): ZType;
-function AcceptValueType(this: ZGeneric1Type, ValueType: ZType, ExactMatch: boolean, Greek: ZType[]): boolean;
+function ZGenericType(this: ZGenericType, TypeFlag: int, ShortName: String, BaseType: ZType, ParamType: ZType): ZGenericType;
+function GetSuperType(this: ZGenericType): ZType;
+function GetBaseType(this: ZGenericType): ZType;
+function GetParamSize(this: ZGenericType): int;
+function GetParamType(this: ZGenericType, Index: int): ZType;
+function IsGreekType(this: ZGenericType): boolean;
+function GetGreekRealType(this: ZGenericType, Greek: ZType[]): ZType;
+function AcceptValueType(this: ZGenericType, ValueType: ZType, ExactMatch: boolean, Greek: ZType[]): boolean;
 function ZGreekType(this: ZGreekType, GreekId: int): ZGreekType;
 function ZGreekType_NewGreekTypes(GreekTypes: ZType[]): ZType[];
 function IsGreekType(this: ZGreekType): boolean;
@@ -771,9 +771,6 @@ let ZTypeIntType: ZType = new ZType(ZTypeUniqueTypeFlag, "int", ZTypeVarType);
 let ZTypeFloatType: ZType = new ZType(ZTypeUniqueTypeFlag, "float", ZTypeVarType);
 let ZTypeStringType: ZType = new ZType(ZTypeUniqueTypeFlag, "String", ZTypeVarType);
 let ZTypeTypeType: ZType = new ZType(ZTypeUniqueTypeFlag, "Type", ZTypeVarType);
-let ZTypeArrayType: ZType = new ZGeneric1Type(ZTypeUniqueTypeFlag, "Array", null, ZTypeVarType);
-let ZTypeMapType: ZType = new ZGeneric1Type(ZTypeUniqueTypeFlag, "Map", null, ZTypeVarType);
-let ZTypeFuncType: ZFuncType = new ZFuncType("Func", null);
 class ZClassField {
 	var FieldFlag: int = 0;
 	var ClassType: ZClassType;
@@ -798,10 +795,13 @@ class ZFuncType extends ZType {
 	var HasUnknownType: boolean = false;
 	var HasGreekType: boolean = false;
 }
-class ZGeneric1Type extends ZType {
+let ZFuncType_FuncType: ZFuncType = new ZFuncType("Func", null);
+class ZGenericType extends ZType {
 	var BaseType: ZType;
 	var ParamType: ZType;
 }
+let ZGenericType_ArrayType: ZGenericType = new ZGenericType(ZTypeUniqueTypeFlag, "Array", null, ZTypeVarType);
+let ZGenericType_MapType: ZGenericType = new ZGenericType(ZTypeUniqueTypeFlag, "Map", null, ZTypeVarType);
 class ZGreekType extends ZType {
 	var GreekId: int;
 }
@@ -1032,7 +1032,7 @@ class ZVisitor {
 	var StopVisitor: Func<void,ZVisitor>;
 	var IsVisitable: Func<boolean,ZVisitor>;
 }
-class ZArrayType extends ZGeneric1Type {
+class ZArrayType extends ZGenericType {
 }
 class ZAnnotationNode extends ZNode {
 	var AnnotatedNode: ZNode = null;
@@ -1368,11 +1368,11 @@ function IsStringType(this: ZType): boolean {
 }
 
 function IsArrayType(this: ZType): boolean {
-	return (this.GetBaseType() == ZTypeArrayType);
+	return (this.GetBaseType() == ZGenericType_ArrayType);
 }
 
 function IsMapType(this: ZType): boolean {
-	return (this.GetBaseType() == ZTypeMapType);
+	return (this.GetBaseType() == ZGenericType_MapType);
 }
 
 function IsOpenType(this: ZType): boolean {
@@ -1587,7 +1587,7 @@ function StringfySignature(this: ZFuncType, FuncName: String): String {
 }
 
 function GetBaseType(this: ZFuncType): ZType {
-	return ZTypeFuncType;
+	return ZFuncType_FuncType;
 }
 
 function GetParamSize(this: ZFuncType): int {
@@ -1642,7 +1642,7 @@ function AcceptAsFieldFunc(this: ZFuncType, FuncType: ZFuncType): boolean {
 	return true;
 }
 
-function ZGeneric1Type(this: ZGeneric1Type, TypeFlag: int, ShortName: String, BaseType: ZType, ParamType: ZType): ZGeneric1Type {
+function ZGenericType(this: ZGenericType, TypeFlag: int, ShortName: String, BaseType: ZType, ParamType: ZType): ZGenericType {
 	ZType(this, TypeFlag, ShortName, ZTypeVarType);
 	this.BaseType = BaseType;
 	if(this.BaseType == null) {
@@ -1651,40 +1651,40 @@ function ZGeneric1Type(this: ZGeneric1Type, TypeFlag: int, ShortName: String, Ba
 	this.ParamType = ParamType;
 }
 
-function GetSuperType(this: ZGeneric1Type): ZType {
+function GetSuperType(this: ZGenericType): ZType {
 	if(this.BaseType == this) {
 		return this.RefType;
 	}
 	return this.BaseType;
 }
 
-function GetBaseType(this: ZGeneric1Type): ZType {
+function GetBaseType(this: ZGenericType): ZType {
 	return this.BaseType;
 }
 
-function GetParamSize(this: ZGeneric1Type): int {
+function GetParamSize(this: ZGenericType): int {
 	return 1;
 }
 
-function GetParamType(this: ZGeneric1Type, Index: int): ZType {
+function GetParamType(this: ZGenericType, Index: int): ZType {
 	if(Index == 0) {
 		return this.ParamType;
 	}
 	return null;
 }
 
-function IsGreekType(this: ZGeneric1Type): boolean {
+function IsGreekType(this: ZGenericType): boolean {
 	return (this.ParamType.IsGreekType());
 }
 
-function GetGreekRealType(this: ZGeneric1Type, Greek: ZType[]): ZType {
+function GetGreekRealType(this: ZGenericType, Greek: ZType[]): ZType {
 	if(this.ParamType.IsGreekType()) {
 		return ZTypePool_GetGenericType1(this.BaseType, this.ParamType.GetGreekRealType(Greek));
 	}
 	return this.GetRealType();
 }
 
-function AcceptValueType(this: ZGeneric1Type, ValueType: ZType, ExactMatch: boolean, Greek: ZType[]): boolean {
+function AcceptValueType(this: ZGenericType, ValueType: ZType, ExactMatch: boolean, Greek: ZType[]): boolean {
 	if(this.BaseType == ValueType.GetBaseType() && ValueType.GetParamSize() == 1) {
 		return this.ParamType.AcceptValueType(ValueType.GetParamType(0), true, Greek);
 	}
@@ -1791,7 +1791,7 @@ function ZTypePool_GetGenericType1(BaseType: ZType, ParamType: ZType): ZType {
 		if(BaseType.IsArrayType()) {
 			Name = BaseType.ShortName + "<" + ParamType + ">";
 		}
-		GenericType = new ZGeneric1Type(ZTypeUniqueTypeFlag, Name, BaseType, ParamType);
+		GenericType = new ZGenericType(ZTypeUniqueTypeFlag, Name, BaseType, ParamType);
 		ZTypePool_ClassNameMap[MangleName] =  GenericType;
 	}
 	return GenericType;
@@ -1826,7 +1826,7 @@ function ZTypePool_GetGenericType(BaseType: ZType, TypeList: ZType[], IsCreation
 	return GenericType;
 }
 function ZTypePool_LookupFuncType(TypeList: ZType[]): ZFuncType {
-	var FuncType: ZType = ZTypePool_GetGenericType(ZTypeFuncType, TypeList, true);
+	var FuncType: ZType = ZTypePool_GetGenericType(ZFuncType_FuncType, TypeList, true);
 	if(FuncType instanceof ZFuncType) {
 		return (ZFuncType)FuncType;
 	}
@@ -3405,9 +3405,10 @@ function SkipEmptyStatement(this: ZTokenContext): void {
 		var Token: ZToken = this.GetToken();
 		if(Token.IsIndent() || Token.EqualsText(";")) {
 			this.CurrentPosition = this.CurrentPosition + 1;
-			continue;
 		}
-		break;
+		else {
+			break;
+		}
 	}
 }
 
@@ -3428,7 +3429,7 @@ function ZTokenFunc(this: ZTokenFunc, Func: ZTokenFunction, Parent: ZTokenFunc):
 }
 
 function toString(this: ZTokenFunc): String {
-	return this.Func.toString();
+	return ""+(this.Func);
 }
 
 function ZVariable(this: ZVariable, Parent: ZSymbolEntry, FuncNode: ZFunctionNode, VarFlag: int, VarType: ZType, VarName: String, SourceToken: ZToken): ZVariable {
@@ -3458,7 +3459,7 @@ function Used(this: ZVariable): void {
 }
 
 function ZArrayType(this: ZArrayType, TypeFlag: int, ParamType: ZType): ZArrayType {
-	ZGeneric1Type(this, TypeFlag, ParamType+"[]", ZTypeArrayType, ParamType);
+	ZGenericType(this, TypeFlag, ParamType+"[]", ZGenericType_ArrayType, ParamType);
 }
 
 function ZAnnotationNode(this: ZAnnotationNode, ParentNode: ZNode, Token: ZToken, Anno: Map<Object>): ZAnnotationNode {
@@ -4054,7 +4055,6 @@ function ZTypeNode(this: ZTypeNode, ParentNode: ZNode, SourceToken: ZToken, Pars
 }
 
 function ZGenerator(this: ZGenerator, LanguageExtension: String, TargetVersion: String): ZGenerator {
-	super();
 	this.RootNameSpace = new ZNameSpace(this, null);
 	this.GrammarInfo = "";
 	this.LanguageExtention = LanguageExtension;
@@ -4110,11 +4110,11 @@ function GetSetterType(this: ZGenerator, BaseType: ZType, Name: String): ZType {
 }
 
 function GetConstructorFuncType(this: ZGenerator, ClassType: ZType, List: ZListNode): ZFuncType {
-	return ZTypeFuncType;    // undefined and no error
+	return ZFuncType_FuncType;    // undefined and no error
 }
 
 function GetMethodFuncType(this: ZGenerator, RecvType: ZType, MethodName: String, List: ZListNode): ZFuncType {
-	return ZTypeFuncType;     // undefined and no error
+	return ZFuncType_FuncType;     // undefined and no error
 }
 
 function GetUniqueNumber(this: ZGenerator): int {
@@ -5314,10 +5314,10 @@ function CSourceGenerator(this: CSourceGenerator): CSourceGenerator {
 	this.SetMacro("equals", "LibZen_EqualsString($[0], $[1])", ZTypeBooleanType, ZTypeStringType, ZTypeStringType);
 	this.SetMacro("startsWith", "LibZen_StartsWith($[0], $[1])", ZTypeBooleanType, ZTypeStringType, ZTypeStringType);
 	this.SetMacro("endsWith", "LibZen_EndWidth($[0], $[1])", ZTypeBooleanType, ZTypeStringType, ZTypeStringType);
-	this.SetMacro("size", "LibZen_ArraySize($[0])", ZTypeIntType, ZTypeArrayType);
-	this.SetMacro("clear", "LibZen_ArrayClear($[0])", ZTypeVoidType, ZTypeArrayType, ZTypeIntType);
-	this.SetMacro("add", "LibZen_ArrayAdd($[0], $[1])", ZTypeVoidType, ZTypeArrayType, ZTypeVarType);
-	this.SetMacro("add", "LibZen_ArrayAdd2($[0], $[1], $[2])", ZTypeVoidType, ZTypeArrayType, ZTypeIntType, ZTypeVarType);
+	this.SetMacro("size", "LibZen_ArraySize($[0])", ZTypeIntType, ZGenericType_ArrayType);
+	this.SetMacro("clear", "LibZen_ArrayClear($[0])", ZTypeVoidType, ZGenericType_ArrayType, ZTypeIntType);
+	this.SetMacro("add", "LibZen_ArrayAdd($[0], $[1])", ZTypeVoidType, ZGenericType_ArrayType, ZTypeVarType);
+	this.SetMacro("add", "LibZen_ArrayAdd2($[0], $[1], $[2])", ZTypeVoidType, ZGenericType_ArrayType, ZTypeIntType, ZTypeVarType);
 }
 
 function GetEngine(this: CSourceGenerator): ZSourceEngine {
@@ -6314,7 +6314,7 @@ function RightTypePattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftTy
 		if(!TokenContext.MatchToken("]")) {
 			return null;
 		}
-		LeftTypeNode = new ZTypeNode(ParentNode, SourceToken, ZTypePool_GetGenericType1(ZTypeArrayType, LeftTypeNode.Type));
+		LeftTypeNode = new ZTypeNode(ParentNode, SourceToken, ZTypePool_GetGenericType1(ZGenericType_ArrayType, LeftTypeNode.Type));
 	}
 	return LeftTypeNode;
 }

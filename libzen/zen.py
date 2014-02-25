@@ -85,7 +85,7 @@ def GenVar(line):
 	line = line.replace("'", '"')
 	line = line.replace("._", "_")
 	line = line.replace(".ArrayValues[", "[")
-	line = line.replace("Type.", "Type")
+	line = line.replace("ZType.", "ZType")
 	line = line.replace(".length()", ".size()")
 	line = line.replace(".length", ".size()")
 	line = line.replace("String.valueOf", '""+')

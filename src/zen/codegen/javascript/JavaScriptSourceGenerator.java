@@ -67,8 +67,8 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 		this.SetMacro("print", "console.log($[0])", ZType.VoidType, ZType.StringType);
 		this.SetMacro("println", "console.log($[0])", ZType.VoidType, ZType.StringType);
 
-		this.SetMacro("size", "($[0]).length", ZType.IntType, ZGenericType.ArrayType);
-		this.SetMacro("add", "$[0].add($[1])", ZType.VoidType, ZGenericType.ArrayType, ZType.VarType);
+		this.SetMacro("size", "($[0]).length", ZType.IntType, ZGenericType._ArrayType);
+		this.SetMacro("add", "$[0].add($[1])", ZType.VoidType, ZGenericType._ArrayType, ZType.VarType);
 
 		this.SetConverterMacro("($[0])", ZType.FloatType, ZType.IntType);
 		this.SetConverterMacro("($[0])", ZType.IntType, ZType.FloatType);

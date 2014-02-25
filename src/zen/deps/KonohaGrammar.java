@@ -97,9 +97,9 @@ public class KonohaGrammar {
 		NameSpace.SetTypeName(ZType.FloatType, null);
 		NameSpace.SetTypeName(ZType.StringType, null);
 		NameSpace.SetTypeName(ZType.TypeType, null);
-		NameSpace.SetTypeName(ZGenericType.ArrayType, null);
-		NameSpace.SetTypeName(ZGenericType.MapType, null);
-		NameSpace.SetTypeName(ZFuncType.FuncType, null);
+		NameSpace.SetTypeName(ZGenericType._ArrayType, null);
+		NameSpace.SetTypeName(ZGenericType._MapType, null);
+		NameSpace.SetTypeName(ZFuncType._FuncType, null);
 
 		NameSpace.AppendTokenFunc(" \t", new WhiteSpaceToken());
 		NameSpace.AppendTokenFunc("\n",  new NewLineToken());

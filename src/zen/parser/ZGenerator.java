@@ -53,7 +53,6 @@ public abstract class ZGenerator extends ZVisitor {
 	@Field private boolean StoppedVisitor;
 
 	protected ZGenerator(String LanguageExtension, String TargetVersion) {
-		super();
 		this.RootNameSpace = new ZNameSpace(this, null);
 		this.GrammarInfo = "";
 		this.LanguageExtention = LanguageExtension;
@@ -117,12 +116,12 @@ public abstract class ZGenerator extends ZVisitor {
 
 	@ZenMethod public ZFuncType GetConstructorFuncType(ZType ClassType, ZListNode List) {
 		//return null;              // undefined and undefined error
-		return ZFuncType.FuncType;    // undefined and no error
+		return ZFuncType._FuncType;    // undefined and no error
 	}
 
 	@ZenMethod public ZFuncType GetMethodFuncType(ZType RecvType, String MethodName, ZListNode List) {
 		//return null;              // undefined and undefined error
-		return ZFuncType.FuncType;     // undefined and no error
+		return ZFuncType._FuncType;     // undefined and no error
 	}
 
 	// Naming

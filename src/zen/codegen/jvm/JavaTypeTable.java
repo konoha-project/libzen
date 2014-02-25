@@ -54,13 +54,13 @@ public class JavaTypeTable {
 		JavaTypeTable.SetTypeTable(ZType.IntType, long.class);
 		JavaTypeTable.SetTypeTable(ZType.FloatType, double.class);
 		JavaTypeTable.SetTypeTable(ZType.StringType, String.class);
-		JavaTypeTable.SetTypeTable(ZFuncType.FuncType, ZFunction.class);
-		JavaTypeTable.SetTypeTable(ZGenericType.ArrayType, ZObjectArray.class);
-		JavaTypeTable.SetTypeTable(ZGenericType.MapType, ZenMap.class);
+		JavaTypeTable.SetTypeTable(ZFuncType._FuncType, ZFunction.class);
+		JavaTypeTable.SetTypeTable(ZGenericType._ArrayType, ZObjectArray.class);
+		JavaTypeTable.SetTypeTable(ZGenericType._MapType, ZenMap.class);
 
-		ZType IntArrayType = ZTypePool._GetGenericType1(ZGenericType.ArrayType, ZType.IntType);
-		ZType FloatArrayType = ZTypePool._GetGenericType1(ZGenericType.ArrayType, ZType.FloatType);
-		ZType StringArrayType = ZTypePool._GetGenericType1(ZGenericType.ArrayType, ZType.StringType);
+		ZType IntArrayType = ZTypePool._GetGenericType1(ZGenericType._ArrayType, ZType.IntType);
+		ZType FloatArrayType = ZTypePool._GetGenericType1(ZGenericType._ArrayType, ZType.FloatType);
+		ZType StringArrayType = ZTypePool._GetGenericType1(ZGenericType._ArrayType, ZType.StringType);
 		JavaTypeTable.SetTypeTable(IntArrayType, ZIntArray.class);
 		JavaTypeTable.SetTypeTable(FloatArrayType, ZFloatArray.class);
 		JavaTypeTable.SetTypeTable(StringArrayType, ZStringArray.class);

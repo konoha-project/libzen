@@ -28,8 +28,8 @@ import zen.deps.Field;
 import zen.deps.Nullable;
 
 public class ZGenericType extends ZType {
-	public final static ZType		ArrayType = new ZGenericType(ZType.UniqueTypeFlag, "Array", null, ZType.VarType);
-	public final static ZType		MapType = new ZGenericType(ZType.UniqueTypeFlag, "Map", null, ZType.VarType);
+	public final static ZGenericType _ArrayType = new ZGenericType(ZType.UniqueTypeFlag, "Array", null, ZType.VarType);
+	public final static ZGenericType _MapType = new ZGenericType(ZType.UniqueTypeFlag, "Map", null, ZType.VarType);
 
 	@Field public ZType			BaseType;
 	@Field public ZType         ParamType;

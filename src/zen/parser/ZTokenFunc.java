@@ -13,7 +13,7 @@ public final class ZTokenFunc {
 	}
 
 	@Override public final String toString() {
-		return this.Func.toString();
+		return String.valueOf(this.Func);
 	}
 
 }

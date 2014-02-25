@@ -35,7 +35,7 @@ public class RightTypePattern extends ZMatchFunction {
 			if(!TokenContext.MatchToken("]")) {
 				return null;
 			}
-			LeftTypeNode = new ZTypeNode(ParentNode, SourceToken, ZTypePool._GetGenericType1(ZGenericType.ArrayType, LeftTypeNode.Type));
+			LeftTypeNode = new ZTypeNode(ParentNode, SourceToken, ZTypePool._GetGenericType1(ZGenericType._ArrayType, LeftTypeNode.Type));
 		}
 		return LeftTypeNode;
 	}

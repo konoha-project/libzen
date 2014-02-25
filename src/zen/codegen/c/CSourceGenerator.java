@@ -104,10 +104,10 @@ public class CSourceGenerator extends ZSourceGenerator {
 		this.SetMacro("endsWith", "LibZen_EndWidth($[0], $[1])", ZType.BooleanType, ZType.StringType, ZType.StringType);
 
 		// Array
-		this.SetMacro("size", "LibZen_ArraySize($[0])", ZType.IntType, ZGenericType.ArrayType);
-		this.SetMacro("clear", "LibZen_ArrayClear($[0])", ZType.VoidType, ZGenericType.ArrayType, ZType.IntType);
-		this.SetMacro("add", "LibZen_ArrayAdd($[0], $[1])", ZType.VoidType, ZGenericType.ArrayType, ZType.VarType);
-		this.SetMacro("add", "LibZen_ArrayAdd2($[0], $[1], $[2])", ZType.VoidType, ZGenericType.ArrayType, ZType.IntType, ZType.VarType);
+		this.SetMacro("size", "LibZen_ArraySize($[0])", ZType.IntType, ZGenericType._ArrayType);
+		this.SetMacro("clear", "LibZen_ArrayClear($[0])", ZType.VoidType, ZGenericType._ArrayType, ZType.IntType);
+		this.SetMacro("add", "LibZen_ArrayAdd($[0], $[1])", ZType.VoidType, ZGenericType._ArrayType, ZType.VarType);
+		this.SetMacro("add", "LibZen_ArrayAdd2($[0], $[1], $[2])", ZType.VoidType, ZGenericType._ArrayType, ZType.IntType, ZType.VarType);
 
 	}
 

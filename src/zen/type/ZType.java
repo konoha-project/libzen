@@ -151,11 +151,11 @@ public class ZType  {
 	}
 
 	public final boolean IsArrayType() {
-		return (this.GetBaseType() == ZGenericType.ArrayType);
+		return (this.GetBaseType() == ZGenericType._ArrayType);
 	}
 
 	public final boolean IsMapType() {
-		return (this.GetBaseType() == ZGenericType.MapType);
+		return (this.GetBaseType() == ZGenericType._MapType);
 	}
 
 	public final boolean IsOpenType() {

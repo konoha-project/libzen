@@ -151,7 +151,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 			i = i + 1;
 		}
 		if(!ElementType.IsVarType()) {
-			this.TypedNode(Node,ZTypePool._GetGenericType1(ZGenericType.ArrayType, ElementType));
+			this.TypedNode(Node,ZTypePool._GetGenericType1(ZGenericType._ArrayType, ElementType));
 		}
 		else {
 			this.TypedNode(Node, ZType.VarType);
@@ -179,7 +179,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 			i = i + 1;
 		}
 		if(!EntryType.IsVarType()) {
-			this.TypedNode(Node, ZTypePool._GetGenericType1(ZGenericType.MapType, EntryType));
+			this.TypedNode(Node, ZTypePool._GetGenericType1(ZGenericType._MapType, EntryType));
 			return;
 		}
 		else {

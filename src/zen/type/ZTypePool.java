@@ -98,7 +98,7 @@ public class ZTypePool {
 	}
 
 	public final static ZFuncType _LookupFuncType(ZArray<ZType> TypeList) {
-		@Var ZType FuncType = ZTypePool._GetGenericType(ZFuncType.FuncType, TypeList, true);
+		@Var ZType FuncType = ZTypePool._GetGenericType(ZFuncType._FuncType, TypeList, true);
 		if(FuncType instanceof ZFuncType) {
 			return (ZFuncType)FuncType;
 		}

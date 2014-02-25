@@ -6,7 +6,7 @@ import zen.deps.Var;
 import zen.deps.ZArray;
 
 public final class ZFuncType extends ZType {
-	public final static ZFuncType	FuncType  = new ZFuncType("Func", null);
+	public final static ZFuncType _FuncType  = new ZFuncType("Func", null);
 
 	@Field public ZType[]  TypeParams;
 	@Field private boolean HasUnknownType = false;
@@ -77,7 +77,7 @@ public final class ZFuncType extends ZType {
 	}
 
 	@Override public ZType GetBaseType() {
-		return ZFuncType.FuncType;
+		return ZFuncType._FuncType;
 	}
 
 	@Override public int GetParamSize() {

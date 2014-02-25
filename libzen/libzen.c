@@ -78,21 +78,21 @@ static struct ZType60 * GetRecvType__1qej(struct ZFuncType90 * this);
 static struct ZType60 * GetFuncParamType__2qej(struct ZFuncType90 * this, long Index__1);
 static struct ZFuncType90 * NewMethodFuncType__2qej(struct ZFuncType90 * this, struct ZType60 * RecvType__1);
 static int AcceptAsFieldFunc__2qej(struct ZFuncType90 * this, struct ZFuncType90 * FuncType__1);
-static struct ZGeneric1Type107 * ZGeneric1Type__5qe8(struct ZGeneric1Type107 * this, long TypeFlag__1, const char * ShortName__2, struct ZType60 * BaseType__3, struct ZType60 * ParamType__4);
-static struct ZType60 * GetSuperType__1qe8(struct ZGeneric1Type107 * this);
-#define _ZGeneric1Type107_GetSuperType
-static struct ZType60 * GetBaseType__1qe8(struct ZGeneric1Type107 * this);
-#define _ZGeneric1Type107_GetBaseType
-static long GetParamSize__1qe8(struct ZGeneric1Type107 * this);
-#define _ZGeneric1Type107_GetParamSize
-static struct ZType60 * GetParamType__2qe8(struct ZGeneric1Type107 * this, long Index__1);
-#define _ZGeneric1Type107_GetParamType
-static int IsGreekType__1qe8(struct ZGeneric1Type107 * this);
-#define _ZGeneric1Type107_IsGreekType
-static struct ZType60 * GetGreekRealType__2qe8(struct ZGeneric1Type107 * this, ArrayOfZType * Greek__1);
-#define _ZGeneric1Type107_GetGreekRealType
-static int AcceptValueType__4qe8(struct ZGeneric1Type107 * this, struct ZType60 * ValueType__1, int ExactMatch__2, ArrayOfZType * Greek__3);
-#define _ZGeneric1Type107_AcceptValueType
+static struct ZGenericType107 * ZGenericType__5qe8(struct ZGenericType107 * this, long TypeFlag__1, const char * ShortName__2, struct ZType60 * BaseType__3, struct ZType60 * ParamType__4);
+static struct ZType60 * GetSuperType__1qe8(struct ZGenericType107 * this);
+#define _ZGenericType107_GetSuperType
+static struct ZType60 * GetBaseType__1qe8(struct ZGenericType107 * this);
+#define _ZGenericType107_GetBaseType
+static long GetParamSize__1qe8(struct ZGenericType107 * this);
+#define _ZGenericType107_GetParamSize
+static struct ZType60 * GetParamType__2qe8(struct ZGenericType107 * this, long Index__1);
+#define _ZGenericType107_GetParamType
+static int IsGreekType__1qe8(struct ZGenericType107 * this);
+#define _ZGenericType107_IsGreekType
+static struct ZType60 * GetGreekRealType__2qe8(struct ZGenericType107 * this, ArrayOfZType * Greek__1);
+#define _ZGenericType107_GetGreekRealType
+static int AcceptValueType__4qe8(struct ZGenericType107 * this, struct ZType60 * ValueType__1, int ExactMatch__2, ArrayOfZType * Greek__3);
+#define _ZGenericType107_AcceptValueType
 static ArrayOfZType * ZGreekType_NewGreekTypes__1qwx(ArrayOfZType * GreekTypes);
 static struct ZGreekType115 * ZGreekType__2qri(struct ZGreekType115 * this, long GreekId__1);
 static int IsGreekType__1qri(struct ZGreekType115 * this);
@@ -1000,7 +1000,6 @@ static struct ZType60 * ZTypeIntType_Z7 = ZType__4qwz(_NewZType60(), ZTypeUnique
 static struct ZType60 * ZTypeFloatType_Z8 = ZType__4qwz(_NewZType60(), ZTypeUniqueTypeFlag_Z1, "float", ZTypeVarType_Z4);
 static struct ZType60 * ZTypeStringType_Z9 = ZType__4qwz(_NewZType60(), ZTypeUniqueTypeFlag_Z1, "String", ZTypeVarType_Z4);
 static struct ZType60 * ZTypeTypeType_Z10 = ZType__4qwz(_NewZType60(), ZTypeUniqueTypeFlag_Z1, "Type", ZTypeVarType_Z4);
-ThrowError("type error: requested = ZType, given = ZGeneric1Type")ThrowError("type error: requested = ZType, given = ZGeneric1Type")static struct ZFuncType90 * ZTypeFuncType_Z13 = ZFuncType__3qej(_NewZFuncType90(), "Func", NULL);
 struct ZClassField79 {
 	int _classId79;
 	int _delta79;
@@ -1118,9 +1117,9 @@ static struct ZFunc89 * _NewZFunc89(void) {
 	return o;
 }
 
-static const char * ZFunc_NativeNameConnector_Z14 = "__";
-static long ZFunc_ConverterFunc_Z15 = 1 << 16;
-static long ZFunc_CoercionFunc_Z16 = (1 << 17) | ZFunc_ConverterFunc_Z15;
+static const char * ZFunc_NativeNameConnector_Z11 = "__";
+static long ZFunc_ConverterFunc_Z12 = 1 << 16;
+static long ZFunc_CoercionFunc_Z13 = (1 << 17) | ZFunc_ConverterFunc_Z12;
 struct ZFuncType90 {
 	int _classId60;
 	int _delta60;
@@ -1188,7 +1187,8 @@ static struct ZFuncType90 * _NewZFuncType90(void) {
 	return o;
 }
 
-struct ZGeneric1Type107 {
+static struct ZFuncType90 * ZFuncType_FuncType_Z14 = ZFuncType__3qej(_NewZFuncType90(), "Func", NULL);
+struct ZGenericType107 {
 	int _classId60;
 	int _delta60;
 	long TypeFlag;
@@ -1211,48 +1211,50 @@ struct ZGeneric1Type107 {
 	int _nextId;
 };
 
-static void _InitZGeneric1Type107(struct ZGeneric1Type107 * o) {
+static void _InitZGenericType107(struct ZGenericType107 * o) {
 	_InitZType60((struct ZType60 *)o);
 	o->_classId107 = 107;
-	o->_delta107 = sizeof(struct ZGeneric1Type107) - sizeof(struct ZType60);
+	o->_delta107 = sizeof(struct ZGenericType107) - sizeof(struct ZType60);
 	o->BaseType = NULL;
 	o->ParamType = NULL;
-#ifdef _ZGeneric1Type107_GetRealType
+#ifdef _ZGenericType107_GetRealType
 	o->GetRealType = GetRealType__1qe8
 #endif
-#ifdef _ZGeneric1Type107_GetSuperType
+#ifdef _ZGenericType107_GetSuperType
 	o->GetSuperType = GetSuperType__1qe8
 #endif
-#ifdef _ZGeneric1Type107_GetBaseType
+#ifdef _ZGenericType107_GetBaseType
 	o->GetBaseType = GetBaseType__1qe8
 #endif
-#ifdef _ZGeneric1Type107_GetParamSize
+#ifdef _ZGenericType107_GetParamSize
 	o->GetParamSize = GetParamSize__1qe8
 #endif
-#ifdef _ZGeneric1Type107_GetParamType
+#ifdef _ZGenericType107_GetParamType
 	o->GetParamType = GetParamType__2qe8
 #endif
-#ifdef _ZGeneric1Type107_IsGreekType
+#ifdef _ZGenericType107_IsGreekType
 	o->IsGreekType = IsGreekType__1qe8
 #endif
-#ifdef _ZGeneric1Type107_GetGreekRealType
+#ifdef _ZGenericType107_GetGreekRealType
 	o->GetGreekRealType = GetGreekRealType__2qe8
 #endif
-#ifdef _ZGeneric1Type107_AcceptValueType
+#ifdef _ZGenericType107_AcceptValueType
 	o->AcceptValueType = AcceptValueType__4qe8
 #endif
-#ifdef _ZGeneric1Type107_IsVarType
+#ifdef _ZGenericType107_IsVarType
 	o->IsVarType = IsVarType__1qe8
 #endif
 	o->_nextId = 0;
 }
 
-static struct ZGeneric1Type107 * _NewZGeneric1Type107(void) {
-	struct ZGeneric1Type107 *o = LibZen_Malloc(sizeof(struct ZGeneric1Type107));
-	_InitZGeneric1Type107(o);
+static struct ZGenericType107 * _NewZGenericType107(void) {
+	struct ZGenericType107 *o = LibZen_Malloc(sizeof(struct ZGenericType107));
+	_InitZGenericType107(o);
 	return o;
 }
 
+static struct ZGenericType107 * ZGenericType_ArrayType_Z15 = ZGenericType__5qe8(_NewZGenericType107(), ZTypeUniqueTypeFlag_Z1, "Array", NULL, ZTypeVarType_Z4);
+static struct ZGenericType107 * ZGenericType_MapType_Z16 = ZGenericType__5qe8(_NewZGenericType107(), ZTypeUniqueTypeFlag_Z1, "Map", NULL, ZTypeVarType_Z4);
 struct ZGreekType115 {
 	int _classId60;
 	int _delta60;
@@ -2692,9 +2694,9 @@ struct ZArrayType300 {
 };
 
 static void _InitZArrayType300(struct ZArrayType300 * o) {
-	_InitZGeneric1Type107((struct ZGeneric1Type107 *)o);
+	_InitZGenericType107((struct ZGenericType107 *)o);
 	o->_classId300 = 300;
-	o->_delta300 = sizeof(struct ZArrayType300) - sizeof(struct ZGeneric1Type107);
+	o->_delta300 = sizeof(struct ZArrayType300) - sizeof(struct ZGenericType107);
 #ifdef _ZArrayType300_GetRealType
 	o->GetRealType = GetRealType__1qoa
 #endif
@@ -6339,10 +6341,10 @@ static int IsStringType__1qwz(struct ZType60 * this) {
 	return (/*untyped*/NULL(this) == ZTypeStringType_Z9);
 }
 static int IsArrayType__1qwz(struct ZType60 * this) {
-	return (/*untyped*/NULL(this) == ThrowError("type error: requested = ZType, given = ZGeneric1Type"));
+	return (/*untyped*/NULL(this) == ZGenericType_ArrayType_Z15);
 }
 static int IsMapType__1qwz(struct ZType60 * this) {
-	return (/*untyped*/NULL(this) == ThrowError("type error: requested = ZType, given = ZGeneric1Type"));
+	return (/*untyped*/NULL(this) == ZGenericType_MapType_Z16);
 }
 static int IsOpenType__1qwz(struct ZType60 * this) {
 	return LibZen_IsFlag__2qqr(this->TypeFlag, ZTypeOpenTypeFlag_Z3);
@@ -6460,10 +6462,10 @@ static const char * toString__1qeh(struct ZFunc89 * this) {
 	return LibZen_StrCat(LibZen_StrCat(this->FuncName, ": "), toString__1qwz(this->FuncType));
 }
 static int IsConverterFunc__1qeh(struct ZFunc89 * this) {
-	return LibZen_IsFlag__2qqr(this->FuncFlag, ZFunc_ConverterFunc_Z15);
+	return LibZen_IsFlag__2qqr(this->FuncFlag, ZFunc_ConverterFunc_Z12);
 }
 static int IsCoercionFunc__1qeh(struct ZFunc89 * this) {
-	return LibZen_IsFlag__2qqr(this->FuncFlag, ZFunc_CoercionFunc_Z16);
+	return LibZen_IsFlag__2qqr(this->FuncFlag, ZFunc_CoercionFunc_Z13);
 }
 static int Is__2qeh(struct ZFunc89 * this, long Flag__1) {
 	return LibZen_IsFlag__2qqr(this->FuncFlag, Flag);
@@ -6529,7 +6531,7 @@ static const char * StringfySignature__2qej(struct ZFuncType90 * this, const cha
 	return ZFunc_StringfySignature__3qqy(FuncName, GetFuncParamSize__1qej(this), GetRecvType__1qej(this));
 }
 static struct ZType60 * GetBaseType__1qej(struct ZFuncType90 * this) {
-	return ZTypeFuncType_Z13;
+	return ZFuncType_FuncType_Z14;
 }
 static long GetParamSize__1qej(struct ZFuncType90 * this) {
 	return LibZen_ArraySize((ArrayOfVar *)this->TypeParams);
@@ -6575,7 +6577,7 @@ static int AcceptAsFieldFunc__2qej(struct ZFuncType90 * this, struct ZFuncType90
 	};
 	return 1/*true*/;
 }
-static struct ZGeneric1Type107 * ZGeneric1Type__5qe8(struct ZGeneric1Type107 * this, long TypeFlag__1, const char * ShortName__2, struct ZType60 * BaseType__3, struct ZType60 * ParamType__4) {
+static struct ZGenericType107 * ZGenericType__5qe8(struct ZGenericType107 * this, long TypeFlag__1, const char * ShortName__2, struct ZType60 * BaseType__3, struct ZType60 * ParamType__4) {
 	(void)ZType__4qwz(this, TypeFlag, ShortName, ZTypeVarType_Z4);
 	this->BaseType = BaseType;
 	if (this->BaseType == NULL) {
@@ -6584,34 +6586,34 @@ static struct ZGeneric1Type107 * ZGeneric1Type__5qe8(struct ZGeneric1Type107 * t
 	this->ParamType = ParamType;
 	return NULL;
 }
-static struct ZType60 * GetSuperType__1qe8(struct ZGeneric1Type107 * this) {
+static struct ZType60 * GetSuperType__1qe8(struct ZGenericType107 * this) {
 	if (this->BaseType == this) {
 		return this->RefType;
 	};
 	return this->BaseType;
 }
-static struct ZType60 * GetBaseType__1qe8(struct ZGeneric1Type107 * this) {
+static struct ZType60 * GetBaseType__1qe8(struct ZGenericType107 * this) {
 	return this->BaseType;
 }
-static long GetParamSize__1qe8(struct ZGeneric1Type107 * this) {
+static long GetParamSize__1qe8(struct ZGenericType107 * this) {
 	return 1;
 }
-static struct ZType60 * GetParamType__2qe8(struct ZGeneric1Type107 * this, long Index__1) {
+static struct ZType60 * GetParamType__2qe8(struct ZGenericType107 * this, long Index__1) {
 	if (Index == 0) {
 		return this->ParamType;
 	};
 	return NULL;
 }
-static int IsGreekType__1qe8(struct ZGeneric1Type107 * this) {
+static int IsGreekType__1qe8(struct ZGenericType107 * this) {
 	return /*untyped*/NULL;
 }
-static struct ZType60 * GetGreekRealType__2qe8(struct ZGeneric1Type107 * this, ArrayOfZType * Greek__1) {
+static struct ZType60 * GetGreekRealType__2qe8(struct ZGenericType107 * this, ArrayOfZType * Greek__1) {
 	if (this->ParamType->IsGreekType(this->ParamType)) {
 		return ZTypePool_GetGenericType1__2qwz(this->BaseType, this->ParamType->GetGreekRealType(this->ParamType, Greek));
 	};
 	return this->GetRealType(this);
 }
-static int AcceptValueType__4qe8(struct ZGeneric1Type107 * this, struct ZType60 * ValueType__1, int ExactMatch__2, ArrayOfZType * Greek__3) {
+static int AcceptValueType__4qe8(struct ZGenericType107 * this, struct ZType60 * ValueType__1, int ExactMatch__2, ArrayOfZType * Greek__3) {
 	if (this->BaseType == /*untyped*/NULL(ValueType) && /*untyped*/NULL(ValueType) == 1) {
 		return /*untyped*/NULL(this->ParamType, /*untyped*/NULL(ValueType, 0), 1/*true*/, Greek);
 	};
@@ -6712,7 +6714,7 @@ static struct ZType60 * ZTypePool_GetGenericType1__2qwz(struct ZType60 * BaseTyp
 		if (IsArrayType__1qwz(BaseType)) {
 			Name = LibZen_StrCat(LibZen_StrCat(LibZen_StrCat(BaseType->ShortName, "<"), toString__1qwz(ParamType)), ">");
 		};
-		GenericType = ZGeneric1Type__5qe8(_NewZGeneric1Type107(), ZTypeUniqueTypeFlag_Z1, Name, BaseType, ParamType);
+		GenericType = ZGenericType__5qe8(_NewZGenericType107(), ZTypeUniqueTypeFlag_Z1, Name, BaseType, ParamType);
 		Map<ZType>SetIndex(MangleName, GenericType);
 	};
 	return GenericType;
@@ -6745,7 +6747,7 @@ static struct ZType60 * ZTypePool_GetGenericType__3qwz(struct ZType60 * BaseType
 	return GenericType;
 }
 static struct ZFuncType90 * ZTypePool_LookupFuncType__1qwx(ArrayOfZType * TypeList) {
-	struct ZType60 * FuncType = ZTypePool_GetGenericType__3qwz(ZTypeFuncType_Z13, TypeList, 1/*true*/);
+	struct ZType60 * FuncType = ZTypePool_GetGenericType__3qwz(ZFuncType_FuncType_Z14, TypeList, 1/*true*/);
 	if (LibZen_Is(FuncType, 90)) {
 		return (struct ZFuncType90 *)FuncType;
 	};
@@ -8212,9 +8214,9 @@ static void SkipEmptyStatement__1qwh(struct ZTokenContext53 * this) {
 		struct ZToken77 * Token = GetToken__1qwh(this);
 		if (IsIndent__1qey(Token) || EqualsText__2qey(Token, ";")) {
 			this->CurrentPosition = this->CurrentPosition + 1;
-			/*untyped*/NULL;
+		} else {
+			break;
 		};
-		break;
 	};
 	return;
 }
@@ -8235,7 +8237,7 @@ static struct ZTokenFunc35 * ZTokenFunc__3qq8(struct ZTokenFunc35 * this, struct
 	return NULL;
 }
 static const char * toString__1qq8(struct ZTokenFunc35 * this) {
-	return /*untyped*/NULL;
+	return LibZen_StrCat("", ThrowError("type error: requested = String, given = ZTokenFunction"));
 }
 static struct ZVariable230 * ZVariable__7qud(struct ZVariable230 * this, struct ZSymbolEntry225 * Parent__1, struct ZFunctionNode144 * FuncNode__2, long VarFlag__3, struct ZType60 * VarType__4, const char * VarName__5, struct ZToken77 * SourceToken__6) {
 	(void)ZSymbolEntry__3qup(this, Parent, FuncNode);
@@ -8263,7 +8265,7 @@ static void Used__1qud(struct ZVariable230 * this) {
 	return;
 }
 static struct ZArrayType300 * ZArrayType__3qoa(struct ZArrayType300 * this, long TypeFlag__1, struct ZType60 * ParamType__2) {
-	(void)ZGeneric1Type__5qe8(this, TypeFlag, LibZen_StrCat(toString__1qwz(ParamType), "[]"), ThrowError("type error: requested = ZType, given = ZGeneric1Type"), ParamType);
+	(void)ZGenericType__5qe8(this, TypeFlag, LibZen_StrCat(toString__1qwz(ParamType), "[]"), ZGenericType_ArrayType_Z15, ParamType);
 	return NULL;
 }
 static struct ZAnnotationNode302 * ZAnnotationNode__4qod(struct ZAnnotationNode302 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2, MapOfObject * Anno__3) {
@@ -8297,7 +8299,7 @@ static struct ZSugarNode165 * DeSugar__2qol(struct ZAssertNode308 * this, struct
 static struct ZBinaryNode311 * ZBinaryNode__5qo6(struct ZBinaryNode311 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * SourceToken__2, struct ZNode52 * Left__3, struct ZSyntax219 * Pattern__4) {
 	(void)ZNode__4qwg(this, ParentNode, SourceToken, 2);
 	Set__3qwg(this, ZBinaryNode_Left_Z60, Left);
-	LibZen_Assert(Pattern != NULL, "(libzen/libzen.zen:3498)");
+	LibZen_Assert(Pattern != NULL, "(libzen/libzen.zen:3499)");
 	this->Pattern = Pattern;
 	return NULL;
 }
@@ -8638,7 +8640,7 @@ static void ClearListAfter__2qu8(struct ZListNode251 * this, long Size__1) {
 static struct ZMacroNode392 * ZMacroNode__4q05(struct ZMacroNode392 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * SourceToken__2, struct ZMacroFunc210 * MacroFunc__3) {
 	(void)ZListNode__4qu8(this, ParentNode, SourceToken, 0);
 	this->MacroFunc = MacroFunc;
-	LibZen_Assert(MacroFunc != NULL, "(libzen/libzen.zen:3856)");
+	LibZen_Assert(MacroFunc != NULL, "(libzen/libzen.zen:3857)");
 	return NULL;
 }
 static struct ZFuncType90 * GetFuncType__1q05(struct ZMacroNode392 * this) {
@@ -8829,7 +8831,6 @@ static struct ZTypeNode235 * ZTypeNode__4quk(struct ZTypeNode235 * this, struct 
 	return NULL;
 }
 static struct ZGenerator55 * ZGenerator__3qwk(struct ZGenerator55 * this, const char * LanguageExtension__1, const char * TargetVersion__2) {
-	/*untyped*/NULL;
 	this->RootNameSpace = ZNameSpace__3qwa(_NewZNameSpace48(), this, NULL);
 	this->GrammarInfo = "";
 	this->LanguageExtention = LanguageExtension;
@@ -8879,10 +8880,10 @@ static struct ZType60 * GetSetterType__3qwk(struct ZGenerator55 * this, struct Z
 	return ZTypeVarType_Z4;
 }
 static struct ZFuncType90 * GetConstructorFuncType__3qwk(struct ZGenerator55 * this, struct ZType60 * ClassType__1, struct ZListNode251 * List__2) {
-	return ZTypeFuncType_Z13;
+	return ZFuncType_FuncType_Z14;
 }
 static struct ZFuncType90 * GetMethodFuncType__4qwk(struct ZGenerator55 * this, struct ZType60 * RecvType__1, const char * MethodName__2, struct ZListNode251 * List__3) {
-	return ZTypeFuncType_Z13;
+	return ZFuncType_FuncType_Z14;
 }
 static long GetUniqueNumber__1qwk(struct ZGenerator55 * this) {
 	long UniqueNumber = this->UniqueNumber;
@@ -10033,10 +10034,10 @@ static struct CSourceGenerator599 * CSourceGenerator__1qg6(struct CSourceGenerat
 	SetMacro__6quv(this, "equals", "LibZen_EqualsString($[0], $[1])", ZTypeBooleanType_Z6, ZTypeStringType_Z9, ZTypeStringType_Z9);
 	SetMacro__6quv(this, "startsWith", "LibZen_StartsWith($[0], $[1])", ZTypeBooleanType_Z6, ZTypeStringType_Z9, ZTypeStringType_Z9);
 	SetMacro__6quv(this, "endsWith", "LibZen_EndWidth($[0], $[1])", ZTypeBooleanType_Z6, ZTypeStringType_Z9, ZTypeStringType_Z9);
-	SetMacro__5quv(this, "size", "LibZen_ArraySize($[0])", ZTypeIntType_Z7, ThrowError("type error: requested = ZType, given = ZGeneric1Type"));
-	SetMacro__6quv(this, "clear", "LibZen_ArrayClear($[0])", ZTypeVoidType_Z5, ThrowError("type error: requested = ZType, given = ZGeneric1Type"), ZTypeIntType_Z7);
-	SetMacro__6quv(this, "add", "LibZen_ArrayAdd($[0], $[1])", ZTypeVoidType_Z5, ThrowError("type error: requested = ZType, given = ZGeneric1Type"), ZTypeVarType_Z4);
-	SetMacro__7quv(this, "add", "LibZen_ArrayAdd2($[0], $[1], $[2])", ZTypeVoidType_Z5, ThrowError("type error: requested = ZType, given = ZGeneric1Type"), ZTypeIntType_Z7, ZTypeVarType_Z4);
+	SetMacro__5quv(this, "size", "LibZen_ArraySize($[0])", ZTypeIntType_Z7, ZGenericType_ArrayType_Z15);
+	SetMacro__6quv(this, "clear", "LibZen_ArrayClear($[0])", ZTypeVoidType_Z5, ZGenericType_ArrayType_Z15, ZTypeIntType_Z7);
+	SetMacro__6quv(this, "add", "LibZen_ArrayAdd($[0], $[1])", ZTypeVoidType_Z5, ZGenericType_ArrayType_Z15, ZTypeVarType_Z4);
+	SetMacro__7quv(this, "add", "LibZen_ArrayAdd2($[0], $[1], $[2])", ZTypeVoidType_Z5, ZGenericType_ArrayType_Z15, ZTypeIntType_Z7, ZTypeVarType_Z4);
 	return NULL;
 }
 static struct ZSourceEngine57 * GetEngine__1qg6(struct CSourceGenerator599 * this) {
@@ -10957,7 +10958,7 @@ static struct ZNode52 * RightTypePattern__3qwg(struct ZNode52 * ParentNode, stru
 		if (!MatchToken__2qwh(TokenContext, "]")) {
 			return NULL;
 		};
-		LeftTypeNode = ZTypeNode__4quk(_NewZTypeNode235(), ParentNode, SourceToken, ZTypePool_GetGenericType1__2qwz(ThrowError("type error: requested = ZType, given = ZGeneric1Type"), LeftTypeNode->Type));
+		LeftTypeNode = ZTypeNode__4quk(_NewZTypeNode235(), ParentNode, SourceToken, ZTypePool_GetGenericType1__2qwz(ZGenericType_ArrayType_Z15, LeftTypeNode->Type));
 	};
 	return LeftTypeNode;
 }
