@@ -180,7 +180,7 @@ public abstract class ZGenerator extends ZVisitor {
 	}
 
 	public final ZMacroFunc GetMacroFunc(String FuncName, ZType RecvType, int FuncParamSize) {
-		ZFunc Func = this.GetDefinedFunc(ZFunc._StringfySignature(FuncName, FuncParamSize, RecvType));
+		@Var ZFunc Func = this.GetDefinedFunc(ZFunc._StringfySignature(FuncName, FuncParamSize, RecvType));
 		if(Func instanceof ZMacroFunc) {
 			return ((ZMacroFunc)Func);
 		}

@@ -24,11 +24,12 @@
 
 package zen.ast;
 
+import zen.deps.Field;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 
 public final class ZErrorNode extends ZConstNode {
-	public String ErrorMessage;
+	@Field public String ErrorMessage;
 	public ZErrorNode(ZNode ParentNode, ZToken SourceToken, String ErrorMessage) {
 		super(ParentNode, SourceToken);
 		this.ErrorMessage = ErrorMessage;

@@ -24,6 +24,7 @@
 
 package zen.ast;
 
+import zen.deps.Var;
 import zen.parser.ZMacroFunc;
 import zen.parser.ZVisitor;
 import zen.type.ZFunc;
@@ -47,7 +48,7 @@ public class ZCastNode extends ZNode {
 
 	public final ZListNode ToFuncCallNode(ZFunc Func) {
 		if(Func instanceof ZMacroFunc) {
-			ZMacroNode FuncNode = new ZMacroNode(this.ParentNode, this.SourceToken, (ZMacroFunc)Func);
+			@Var ZMacroNode FuncNode = new ZMacroNode(this.ParentNode, this.SourceToken, (ZMacroFunc)Func);
 			FuncNode.Append(this.AST[ZCastNode._Expr]);
 			return FuncNode;
 

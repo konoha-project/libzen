@@ -55,7 +55,7 @@ public class ZenMain {
 				throw new RuntimeException(e);
 			}
 		}
-		String Line;
+		@Var String Line;
 		try {
 			Line = ConsoleReader.readLine(Prompt);
 		}
@@ -66,7 +66,7 @@ public class ZenMain {
 			System.exit(0);
 		}
 		if(Prompt2 != null) {
-			int level = 0;
+			@Var int level = 0;
 			while((level = ZenMain.CheckBraceLevel(Line)) > 0) {
 				String Line2;
 				try {
@@ -160,10 +160,10 @@ public class ZenMain {
 							LibZen._PrintLine(" (" +/* ZSystem.GuessType(EvaledValue) + ":" +*/ LibZen.GetClassName(EvaledValue) + ") " + LibZen._Stringify(EvaledValue));
 						}
 					}
-					linenum += 1;
+					linenum = linenum + 1;
 				} catch (Exception e) {
 					ZenMain.PrintStackTrace(e, linenum);
-					linenum += 1;
+					linenum = linenum + 1;
 				}
 			}
 			LibZen._PrintLine("");
@@ -248,7 +248,7 @@ public class ZenMain {
 
 	private final static void WriteSource(String OutputFile, ArrayList<ZSourceBuilder> SourceList) {
 		try {
-			PrintStream Stream = null;
+			@Var PrintStream Stream = null;
 			if(OutputFile.equals("-")) {
 				Stream = System.out;
 				Stream.flush();
@@ -298,14 +298,14 @@ public class ZenMain {
 	}
 
 	private final static String ReadLine(String Prompt, String Prompt2) {
-		String Line = ReadLine(Prompt);
+		@Var String Line = ReadLine(Prompt);
 		if(Line == null) {
 			System.exit(0);
 		}
 		if(Prompt2 != null) {
-			int level = 0;
+			@Var int level = 0;
 			while((level = ZenMain.CheckBraceLevel(Line)) > 0) {
-				String Line2 = ReadLine(Prompt2 + LibZen._JoinStrings("  ", level));
+				@Var String Line2 = ReadLine(Prompt2 + LibZen._JoinStrings("  ", level));
 				Line += "\n" + Line2;
 			}
 			if(level < 0) {

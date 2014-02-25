@@ -52,7 +52,7 @@ public class ZListNode extends ZNode {
 	public final ZNode RemoveListAt(int Index) {
 		@Var ZNode Removed = this.GetListAt(Index);
 		@Var ZNode[] newAST = new ZNode[this.AST.length - 1];
-		int RemovedIndex = this.ListStartIndex + Index;
+		@Var int RemovedIndex = this.ListStartIndex + Index;
 		System.arraycopy(this.AST, 0, newAST, 0, RemovedIndex);
 		System.arraycopy(this.AST, RemovedIndex + 1, newAST, RemovedIndex, this.AST.length - (RemovedIndex + 1));
 		this.AST = newAST;

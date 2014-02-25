@@ -155,7 +155,7 @@ public abstract class ZNode {
 	}
 
 	public final ZBlockNode GetScopeBlockNode() {
-		ZNode Node = this;
+		@Var ZNode Node = this;
 		while(Node != null) {
 			if(Node instanceof ZBlockNode) {
 				return (ZBlockNode)Node;
@@ -169,7 +169,7 @@ public abstract class ZNode {
 	}
 
 	public final ZNameSpace GetNameSpace() {
-		ZBlockNode BlockNode = this.GetScopeBlockNode();
+		@Var ZBlockNode BlockNode = this.GetScopeBlockNode();
 		return BlockNode.NameSpace;
 	}
 

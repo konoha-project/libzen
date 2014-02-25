@@ -140,7 +140,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 		}
 		@Var int i = 0;
 		while(i < Node.GetListSize()) {
-			ZNode SubNode = Node.GetListAt(i);
+			@Var ZNode SubNode = Node.GetListAt(i);
 			SubNode = this.CheckType(SubNode, ElementType);
 			Node.SetListAt(i, SubNode);
 			if(ElementType.IsVarType()) {
@@ -212,8 +212,8 @@ public class ZenTypeSafer extends ZTypeChecker {
 	}
 
 	@Override public void VisitSetNameNode(ZSetNameNode Node) {
-		ZNameSpace NameSpace = Node.GetNameSpace();
-		ZVariable VarInfo = NameSpace.GetLocalVariable(Node.VarName);
+		@Var ZNameSpace NameSpace = Node.GetNameSpace();
+		@Var ZVariable VarInfo = NameSpace.GetLocalVariable(Node.VarName);
 		if(VarInfo == null) {
 			this.ReturnErrorNode(Node, Node.SourceToken, "undefined variable");
 			return;
@@ -230,14 +230,14 @@ public class ZenTypeSafer extends ZTypeChecker {
 	}
 
 	@Override public void VisitGetIndexNode(ZGetIndexNode Node) {
-		ZNameSpace NameSpace = Node.GetNameSpace();
+		@Var ZNameSpace NameSpace = Node.GetNameSpace();
 		this.CheckTypeAt(Node, ZGetIndexNode._Recv, ZType.VarType);
 		this.CheckTypeAt(Node, ZGetIndexNode._Index, ZenGamma.GetIndexType(NameSpace, Node.AST[ZGetIndexNode._Recv].Type));
 		this.TypedNode(Node, ZenGamma.GetElementType(NameSpace, Node.AST[ZGetIndexNode._Recv].Type));
 	}
 
 	@Override public void VisitSetIndexNode(ZSetIndexNode Node) {
-		ZNameSpace NameSpace = Node.GetNameSpace();
+		@Var ZNameSpace NameSpace = Node.GetNameSpace();
 		this.CheckTypeAt(Node, ZSetIndexNode._Recv, ZType.VarType);
 		this.CheckTypeAt(Node, ZSetIndexNode._Index, ZenGamma.GetIndexType(NameSpace, Node.AST[ZSetIndexNode._Recv].Type));
 		this.CheckTypeAt(Node, ZSetIndexNode._Expr, ZenGamma.GetElementType(NameSpace, Node.AST[ZSetIndexNode._Recv].Type));
@@ -357,7 +357,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 	}
 
 	private void VisitListAsNativeMethod(ZNode Node, ZType RecvType, String MethodName, ZListNode List) {
-		ZFuncType FuncType = this.Generator.GetMethodFuncType(RecvType, MethodName, List);
+		@Var ZFuncType FuncType = this.Generator.GetMethodFuncType(RecvType, MethodName, List);
 		//		System.out.println("Native Method FuncType: " + FuncType);
 		if(FuncType != null) {
 			@Var int i = 0;
@@ -442,11 +442,11 @@ public class ZenTypeSafer extends ZTypeChecker {
 
 	@Override public void VisitCastNode(ZCastNode Node) {
 		this.TryTypeAt(Node, ZCastNode._Expr, Node.Type);
-		ZType ExprType = Node.AST[ZCastNode._Expr].Type;
+		@Var ZType ExprType = Node.AST[ZCastNode._Expr].Type;
 		if(ExprType.Equals(Node.Type)) {
 			this.Return(Node.AST[ZCastNode._Expr]);
 		}
-		ZFunc Func = this.Generator.GetCoercionFunc(ExprType, Node.Type);
+		@Var ZFunc Func = this.Generator.GetCoercionFunc(ExprType, Node.Type);
 		if(Func != null) {
 			this.TypedNode(Node.ToFuncCallNode(Func), Node.Type);
 		}
@@ -716,11 +716,11 @@ public class ZenTypeSafer extends ZTypeChecker {
 			}
 			if(!this.IsTopLevel()) {
 				/* function f() {} ==> var f = function() {} */
-				ZVarNode VarNode = new ZVarNode(Node.ParentNode);
+				@Var ZVarNode VarNode = new ZVarNode(Node.ParentNode);
 				VarNode.SetNameInfo(null, Node.FuncName);
 				VarNode.Set(ZVarNode._InitValue, Node);
 				ZBlockNode Block = Node.GetScopeBlockNode();
-				int Index = Block.IndexOf(Node);
+				@Var int Index = Block.IndexOf(Node);
 				Block.CopyTo(Index+1, VarNode);
 				Block.ClearListAfter(Index+1);   // Block[Index] is set to VarNode
 				this.VisitVarNode(VarNode);

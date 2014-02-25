@@ -191,7 +191,7 @@ public final class ZNameSpace {
 	}
 
 	public final ZNode GetSymbolNode(String Symbol) {
-		ZSymbolEntry Entry = this.GetSymbol(Symbol);
+		@Var ZSymbolEntry Entry = this.GetSymbol(Symbol);
 		if(Entry != null) {
 			return Entry.Node;
 		}
@@ -217,7 +217,7 @@ public final class ZNameSpace {
 	}
 
 	public final ZVariable GetLocalVariable(String VarName) {
-		ZSymbolEntry Entry = this.GetSymbol(VarName);
+		@Var ZSymbolEntry Entry = this.GetSymbol(VarName);
 		//System.out.println("var " + VarName + ", entry=" + Entry + ", NameSpace=" + this);
 		if(Entry instanceof ZVariable) {
 			return (ZVariable)Entry;
@@ -235,7 +235,7 @@ public final class ZNameSpace {
 	// Type
 
 	public final void SetTypeName(String Name, ZType Type, @Nullable ZToken SourceToken) {
-		ZTypeNode Node = new ZTypeNode(null, SourceToken, Type);
+		@Var ZTypeNode Node = new ZTypeNode(null, SourceToken, Type);
 		this.SetLocalSymbol(Name, Node);
 	}
 
