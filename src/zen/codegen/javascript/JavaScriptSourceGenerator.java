@@ -31,7 +31,6 @@ import zen.ast.ZCatchNode;
 import zen.ast.ZClassNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZFieldNode;
-import zen.ast.ZFuncCallNode;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZGlobalNameNode;
 import zen.ast.ZInstanceOfNode;
@@ -82,19 +81,17 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 		return new ZSourceEngine(new ZenTypeSafer(this), this);
 	}
 
-	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
-		this.GenerateCode(null, Node.AST[ZFuncCallNode._Func]);
-		this.VisitListNode("(", Node, ")");
-	}
-
 	@Override public void VisitGlobalNameNode(ZGlobalNameNode Node) {
 		//		if(Node.IsUntyped()) {
 		//			this.CurrentBuilder.Append(Node.GlobalName);
 		//		}
 		if(Node.IsStaticFuncName) {
-			this.CurrentBuilder.Append(Node.Type.StringfySignature(Node.GlobalName));
-		}
-		else {
+			if(Node.GlobalName.startsWith("LibZen")){
+				this.CurrentBuilder.Append(Node.GlobalName.replace('_', '.'));
+			}else{
+				this.CurrentBuilder.Append(Node.Type.StringfySignature(Node.GlobalName));
+			}
+		}else{
 			this.CurrentBuilder.Append(Node.GlobalName);
 		}
 	}
