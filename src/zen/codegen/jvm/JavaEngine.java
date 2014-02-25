@@ -88,12 +88,12 @@ public class JavaEngine extends ZSourceEngine {
 	}
 
 	@Override public final void EnableVisitor() {
-		this.EvaledValue = ZEmptyValue.TrueEmpty;
+		this.EvaledValue = ZEmptyValue._TrueEmpty;
 		super.EnableVisitor();
 	}
 
 	@Override public final void StopVisitor() {
-		this.EvaledValue = ZEmptyValue.FalseEmpty;
+		this.EvaledValue = ZEmptyValue._FalseEmpty;
 		super.StopVisitor();
 	}
 
@@ -176,7 +176,7 @@ public class JavaEngine extends ZSourceEngine {
 			if(this.IsVisitable()) {
 				this.EvaledValue = jMethod.invoke(Recv, Values);
 				if(jMethod.getReturnType() == void.class) {
-					this.EvaledValue = ZEmptyValue.TrueEmpty;
+					this.EvaledValue = ZEmptyValue._TrueEmpty;
 				}
 			}
 		}
@@ -222,7 +222,7 @@ public class JavaEngine extends ZSourceEngine {
 			if(this.IsVisitable()) {
 				this.EvaledValue = jMethod.invoke(Recv, Values);
 				if(jMethod.getReturnType() == void.class) {
-					this.EvaledValue = ZEmptyValue.TrueEmpty;
+					this.EvaledValue = ZEmptyValue._TrueEmpty;
 				}
 			}
 		} catch(java.lang.reflect.InvocationTargetException e) {
@@ -503,7 +503,7 @@ public class JavaEngine extends ZSourceEngine {
 			}
 		}
 		if(this.IsVisitable()) {
-			this.EvaledValue = ZEmptyValue.TrueEmpty;
+			this.EvaledValue = ZEmptyValue._TrueEmpty;
 		}
 	}
 
@@ -518,7 +518,7 @@ public class JavaEngine extends ZSourceEngine {
 			}
 		}
 		if(this.IsVisitable()) {
-			this.EvaledValue = ZEmptyValue.TrueEmpty;
+			this.EvaledValue = ZEmptyValue._TrueEmpty;
 		}
 	}
 

@@ -25,7 +25,6 @@ def RemoveQ(s):
 ArrayPattern = re.compile('ZArray\<(.*)\>')
 
 def GenType(s):
-	s = s.replace("Object", "any")
 	s = s.replace("ZenMap", "Map")
 	s = s.replace("char", "String")
 	s = s.replace("long", "int")
@@ -130,15 +129,19 @@ def GenFunc(cname, line, IsProto):
 	start = line.find('(')
 	end = line.find(')')
 	params = ParseParam(line[start+1:end], True, cname)
-	block = line[:start].replace('@Override ', '').replace('@Constructor ', '')
+	block = line[:start].replace('@Override ', '')
+	
 	findex = block.find(' ')
 	if findex > 0:
 		ReturnType = block[:findex]
-		block = block[findex+1:]
+		funcname = block[findex+1:]
 	else:
 		ReturnType = cname
-		block = block
-	block = block + GenParam(params) + ": " + GenType(ReturnType)
+		funcname = block
+	if funcname == "Invoke" :
+		funcname = params[0][0]
+		params = params[1:]
+	block = funcname + GenParam(params) + ": " + GenType(ReturnType)
 	if IsProto:
 		block = block + ";"
 	else:
@@ -204,6 +207,8 @@ class ClassBlock:
 		return self
 
 	def writefield(self, f):
+		if self.SuperName and self.SuperName.find('Function') > 0: 
+			return
 		f.write('class ' + self.ClassName)
 		if self.SuperName:
 			f.write(' extends ' + self.SuperName)

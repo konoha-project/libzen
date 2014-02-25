@@ -70,18 +70,19 @@ import zen.ast.ZTypeNode;
 import zen.ast.ZUnaryNode;
 import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
+import zen.deps.Field;
 import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.type.ZFuncType;
 import zen.type.ZType;
 
 public class ZSourceEngine extends ZVisitor {
-	protected final ZTypeChecker TypeChecker;
-	public final ZGenerator Generator;
-	public final ZLogger Logger;
+	@Field protected final ZTypeChecker TypeChecker;
+	@Field public final ZGenerator Generator;
+	@Field public final ZLogger Logger;
 
-	private boolean InteractiveContext = false;
-	private boolean IsVisitable = true;
+	@Field private boolean InteractiveContext = false;
+	@Field private boolean IsVisitable = true;
 
 	public ZSourceEngine(ZTypeChecker TypeChecker, ZGenerator Generator) {
 		this.TypeChecker = TypeChecker;
@@ -105,7 +106,7 @@ public class ZSourceEngine extends ZVisitor {
 		if(this.IsVisitable()) {
 			Node.Accept(this);
 		}
-		return ZEmptyValue.TrueEmpty;
+		return ZEmptyValue._TrueEmpty;
 	}
 
 	private void VisitPrototypeNode(ZPrototypeNode Node) {
@@ -122,11 +123,11 @@ public class ZSourceEngine extends ZVisitor {
 		this.EnableVisitor();
 		if(Node instanceof ZPrototypeNode) {
 			this.VisitPrototypeNode((ZPrototypeNode)Node);
-			return ZEmptyValue.TrueEmpty;
+			return ZEmptyValue._TrueEmpty;
 		}
 		else if(Node instanceof ZImportNode) {
 			this.VisitImportNode((ZImportNode)Node);
-			return ZEmptyValue.TrueEmpty;
+			return ZEmptyValue._TrueEmpty;
 		}
 		else {
 			Node = this.TypeChecker.CheckType(Node, ZType.VoidType);
@@ -136,7 +137,7 @@ public class ZSourceEngine extends ZVisitor {
 	}
 
 	public final Object Eval(ZNameSpace NameSpace, String ScriptText, String FileName, int LineNumber, boolean IsInteractive) {
-		@Var Object ResultValue = ZEmptyValue.TrueEmpty;
+		@Var Object ResultValue = ZEmptyValue._TrueEmpty;
 		@Var ZBlockNode TopBlockNode = new ZBlockNode(NameSpace);
 		@Var ZTokenContext TokenContext = new ZTokenContext(this.Generator, NameSpace, FileName, LineNumber, ScriptText);
 		TokenContext.SkipEmptyStatement();
@@ -150,7 +151,7 @@ public class ZSourceEngine extends ZVisitor {
 				TokenContext.SkipError(SkipToken);
 			}
 			ResultValue = this.Exec(ParsedNode, IsInteractive);
-			if(ResultValue == ZEmptyValue.FalseEmpty) {
+			if(ResultValue == ZEmptyValue._FalseEmpty) {
 				break;
 			}
 			TokenContext.SkipEmptyStatement();
@@ -174,7 +175,7 @@ public class ZSourceEngine extends ZVisitor {
 		}
 		@Var Object ResultValue = this.Eval(ScriptText, FileName, 1, false);
 		this.Logger.ShowErrors();
-		if(ResultValue == ZEmptyValue.FalseEmpty) {
+		if(ResultValue == ZEmptyValue._FalseEmpty) {
 			return false;
 		}
 		return true;
