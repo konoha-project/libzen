@@ -1,7 +1,7 @@
 
-function LibZen_Print(msg: any): void;
-function LibZen_PrintLine(msg: any): void;
-function LibZen_FixMe(e: Exception): void;
+function LibZen_Print(msg: String): void;
+function LibZen_PrintLine(msg: String): void;
+function LibZen_FixMe(e): void;
 function LibZen_PrintDebug(msg: String): void;
 function LibZen_Assert(TestResult: boolean): void;
 function LibZen_Exit(status: int, Message: String): void;
@@ -15,8 +15,6 @@ function LibZen_GetChar(Text: String, Pos: int): String;
 function LibZen_IsLetter(ch: String): boolean;
 function LibZen_IsDigit(ch: String): boolean;
 function LibZen_IsSymbol(ch: String): boolean;
-function LibZen_EqualsString(s: String, s2: String): boolean;
-function LibZen_SubString(Text: String, StartIdx: int, EndIdx: int): String;
 function LibZen_JoinStrings(Unit: String, Times: int): String;
 function LibZen_UnquoteString(Text: String): String;
 function LibZen_QuoteString(Text: String): String;
@@ -27,24 +25,29 @@ function LibZen_AnotherName(s: String): String;
 function LibZen_Stringfy(number: int): String;
 function LibZen_SourceBuilderToString(Builder: ZSourceBuilder): String;
 function LibZen_SourceBuilderToString(Builder: ZSourceBuilder, BeginIndex: int, EndIndex: int): String;
+function LibZen_LoadTextFile(FileName: String): String;
 function LibZen_WriteTo(FileName: String, List: ZSourceBuilder[]): void;
-function LibZen_Size(s: String) : int;
 function LibZen_Size(o) : int;
 
-function ImportGrammar(NameSpace: ZNameSpace, ClassName: String): boolean;
+function LibZen_ImportGrammar(NameSpace: ZNameSpace, ClassName: String): boolean;
 //function LoadTokenFunc(GrammarClass: Class<?>, FuncName: String): ZFunc;
 //function LoadMatchFunc(GrammarClass: Class<?>, FuncName: String): ZFunc;
-function ApplyTokenFunc(TokenFunc: ZTokenFunction, SourceContext: ZSourceContext): boolean;
-function ApplyMatchFunc(MatchFunc: ZMatchFunction, ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function LoadGenerator(ClassName: String, OutputFile: String): ZGenerator;
-function LoadEngine(ClassName: String, GrammarClass: String): ZSourceEngine;
+function LibZen_ApplyTokenFunc(TokenFunc, SourceContext: ZSourceContext): boolean;
+function LibZen_ApplyMatchFunc(MatchFunc, ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
+function LibZen_LoadGenerator(ClassName: String, OutputFile: String): ZGenerator;
+function LibZen_LoadEngine(ClassName: String, GrammarClass: String): ZSourceEngine;
 //function GetNativeType(NativeClass: Class<?>): ZType;
-function ConvertToNativeFunc(jMethod: Method): JavaStaticFunc;
-function GetClassName(Value: any): String;
+//function ConvertToNativeFunc(jMethod: Method): JavaStaticFunc;
+
+function LibZen_GetClassName(Value): String;
+
 //function GetClassOfValue(Value: any): Class<?>;
-function LibZen_NewZTypeArray(Size: int): ZType[];
 
+function LibZen_NewTypeArray(Size: int): ZType[];
+function LibZen_NewNodeArray(Size: int): ZNode[];
+function LibZen_ArrayCopy(src, sindex: int, dst, dindex: int, len: int): void;
 
+let LibZen_GreekNames = ["a", "b", "c"];
 function ZType(this: ZType, TypeFlag: int, ShortName: String, RefType: ZType): ZType;
 function GetRealType(this: ZType): ZType;
 function GetSuperType(this: ZType): ZType;
@@ -283,7 +286,6 @@ function ZSyntax(this: ZSyntax, NameSpace: ZNameSpace, PatternName: String, Matc
 function toString(this: ZSyntax): String;
 function IsBinaryOperator(this: ZSyntax): boolean;
 function IsRightJoin(this: ZSyntax, Right: ZSyntax): boolean;
-function EqualsName(this: ZSyntax, Name: String): boolean;
 function MergeSyntaxPattern(Pattern: ZSyntax, Parent: ZSyntax): ZSyntax;
 function ZToken(this: ZToken, Source: ZSource, StartIndex: int, EndIndex: int): ZToken;
 function GetFileName(this: ZToken): String;
@@ -455,10 +457,11 @@ function SetPrototype(this: ZGenerator, Node: ZNode, FuncName: String, FuncType:
 function GetDefinedFunc(this: ZGenerator, GlobalName: String): ZFunc;
 function GetDefinedFunc(this: ZGenerator, FuncName: String, FuncType: ZFuncType): ZFunc;
 function GetDefinedFunc(this: ZGenerator, FuncName: String, RecvType: ZType, FuncParamSize: int): ZFunc;
+function LookupFunc(this: ZGenerator, FuncName: String, RecvType: ZType, FuncParamSize: int): ZFunc;
 function GetMacroFunc(this: ZGenerator, FuncName: String, RecvType: ZType, FuncParamSize: int): ZMacroFunc;
 function NameConverterFunc(this: ZGenerator, FromType: ZType, ToType: ZType): String;
 function SetConverterFunc(this: ZGenerator, FromType: ZType, ToType: ZType, Func: ZFunc): void;
-function GetConverterFunc(this: ZGenerator, FromType: ZType, ToType: ZType): ZFunc;
+function LookupConverterFunc(this: ZGenerator, FromType: ZType, ToType: ZType): ZFunc;
 function GetCoercionFunc(this: ZGenerator, FromType: ZType, ToType: ZType): ZFunc;
 function VisitExtendedNode(this: ZGenerator, Node: ZNode): void;
 function VisitSugarNode(this: ZGenerator, Node: ZSugarNode): void;
@@ -594,7 +597,7 @@ function IsVisitable(this: ZTypeChecker): boolean;
 function GetContextType(this: ZTypeChecker): ZType;
 function VisitTypeChecker(this: ZTypeChecker, Node: ZNode, ContextType: ZType): ZNode;
 function CreateStupidCastNode(this: ZTypeChecker, Requested: ZType, Node: ZNode): ZNode;
-function EnforceNodeType(this: ZTypeChecker, Node: ZNode, EnforceType: ZType): ZNode;
+function EnforceNodeType(this: ZTypeChecker, Node: ZNode, EnforcedType: ZType): ZNode;
 function TypeCheckImpl(this: ZTypeChecker, Node: ZNode, ContextType: ZType, TypeCheckPolicy: int): ZNode;
 function VisitTypeChecker(this: ZTypeChecker, Node: ZNode, ContextType: ZType, TypeCheckPolicy: int): ZNode;
 function TryType(this: ZTypeChecker, Node: ZNode, ContextType: ZType): ZNode;
@@ -1394,8 +1397,8 @@ let PatchLevel: int = 0;
 let Version: String = "0.1";
 let Copyright: String = "Copyright (c) 2013-2014, Konoha project authors";
 let License: String = "BSD-Style Open Source";
-let ZSyntax_LeftJoin: int = 1 << 1;
 let ZSyntax_BinaryOperator: int = 1;
+let ZSyntax_LeftJoin: int = 1 << 1;
 function MergeSyntaxPattern(Pattern: ZSyntax, Parent: ZSyntax): ZSyntax {
 	if(Parent == null) {
 		return Pattern;
@@ -1692,7 +1695,7 @@ function HasField(this: ZClassType, FieldName: String): boolean {
 	if(this.FieldList != null) {
 		var i: int = 0;
 		while(i < this.FieldList.size()) {
-			if(LibZen_EqualsString(FieldName, this.FieldList[i].FieldName)) {
+			if(FieldName.equals(this.FieldList[i].FieldName)) {
 				return true;
 			}
 			i = i + 1;
@@ -1706,7 +1709,7 @@ function GetFieldType(this: ZClassType, FieldName: String, DefaultType: ZType): 
 		var i: int = 0;
 		while(i < this.FieldList.size()) {
 			var Field: ZClassField = this.FieldList[i];
-			if(LibZen_EqualsString(FieldName, Field.FieldName)) {
+			if(FieldName.equals(Field.FieldName)) {
 				return Field.FieldType;
 			}
 			i = i + 1;
@@ -1984,7 +1987,6 @@ function NewVarType(this: ZVarScope, VarType: ZType, Name: String, SourceToken: 
 }
 
 function FoundUnresolvedSymbol(this: ZVarScope, FuncName: String): void {
-	System.out.println("unresolved name: " + FuncName);
 	this.UnresolvedSymbolCount = this.UnresolvedSymbolCount + 1;
 }
 
@@ -2171,11 +2173,11 @@ function GetAstSize(this: ZNode): int {
 	if(this.AST == null) {
 		return 0;
 	}
-	return this.AST.length;
+	return this.AST.size();
 }
 
 function HasAst(this: ZNode, Index: int): boolean {
-	if(this.AST != null && Index < this.AST.length) {
+	if(this.AST != null && Index < this.AST.size()) {
 		return this.AST[Index] != null;
 	}
 	return false;
@@ -2203,7 +2205,7 @@ function toString(this: ZNode): String {
 	if(this.AST != null) {
 		var i: int = 0;
 		Self = Self + "[";
-		while(i < this.AST.length) {
+		while(i < this.AST.size()) {
 			if(i > 0) {
 				Self = Self + ",";
 			}
@@ -2400,7 +2402,7 @@ function GetReportedErrors(this: ZLogger): String[] {
 function ShowErrors(this: ZLogger): void {
 	var Messages: String[] = this.GetReportedErrors();
 	var i: int = 0;
-	while(i < Messages.length) {
+	while(i < Messages.size()) {
 		LibZen_PrintLine(Messages[i]);
 		i = i + 1;
 	}
@@ -2452,7 +2454,7 @@ function AppendTokenFunc(this: ZNameSpace, keys: String, TokenFunc: ZTokenFuncti
 		this.TokenMatrix = LibZen_NewTokenMatrix();
 		if(this.ParentNameSpace != null) {
 			var i: int = 0;
-			while(i < this.TokenMatrix.length) {
+			while(i < this.TokenMatrix.size()) {
 				this.TokenMatrix[i] = this.ParentNameSpace.GetTokenFunc(i);
 				i = i + 1;
 			}
@@ -3000,7 +3002,7 @@ function ApplyTokenFunc(this: ZSourceContext, TokenFunc: ZTokenFunc): void {
 	var RollbackPosition: int = this.SourcePosition;
 	while(TokenFunc != null) {
 		this.SourcePosition = RollbackPosition;
-		if(LibZen.ApplyTokenFunc(TokenFunc.Func, this)) {
+		if(LibZen_ApplyTokenFunc(TokenFunc.Func, this)) {
 			return;
 		}
 		TokenFunc = TokenFunc.ParentFunc;
@@ -3050,7 +3052,7 @@ function ZSyntax(this: ZSyntax, NameSpace: ZNameSpace, PatternName: String, Matc
 }
 
 function toString(this: ZSyntax): String {
-	return this.PatternName + "{" + this.MatchFunc + "}";
+	return this.PatternName  /* + "{" + this.MatchFunc + "}"*/;
 }
 
 function IsBinaryOperator(this: ZSyntax): boolean {
@@ -3061,10 +3063,6 @@ function IsRightJoin(this: ZSyntax, Right: ZSyntax): boolean {
 	var left: int = this.SyntaxFlag;
 	var right: int = Right.SyntaxFlag;
 	return (left < right || (left == right && !LibZen_IsFlag(left, ZSyntax_LeftJoin) && !LibZen_IsFlag(right, ZSyntax_LeftJoin)));
-}
-
-function EqualsName(this: ZSyntax, Name: String): boolean {
-	return LibZen_EqualsString(this.PatternName, Name);
 }
 
 function ZToken(this: ZToken, Source: ZSource, StartIndex: int, EndIndex: int): ZToken {
@@ -3353,7 +3351,7 @@ function ApplyMatchPattern(this: ZTokenContext, ParentNode: ZNode, LeftNode: ZNo
 		var Remembered: boolean = this.IsAllowSkipIndent;
 		this.CurrentPosition = RollbackPosition;
 		this.ApplyingPattern  = CurrentPattern;
-		ParsedNode = LibZen.ApplyMatchFunc(CurrentPattern.MatchFunc, ParentNode, this, LeftNode);
+		ParsedNode = LibZen_ApplyMatchFunc(CurrentPattern.MatchFunc, ParentNode, this, LeftNode);
 		assert(ParsedNode != ParentNode);
 		this.ApplyingPattern  = null;
 		this.IsAllowSkipIndent = Remembered;
@@ -3367,7 +3365,7 @@ function ApplyMatchPattern(this: ZTokenContext, ParentNode: ZNode, LeftNode: ZNo
 		return null;
 	}
 	if(this.CurrentPosition == RollbackPosition) {
-		System.out.println("infinite looping" + RollbackPosition + " Token=" + TopToken + " ParsedNode=" + ParsedNode);
+		LibZen_PrintLine("DEBUG infinite looping" + RollbackPosition + " Token=" + TopToken + " ParsedNode=" + ParsedNode);
 		assert(this.CurrentPosition != RollbackPosition);
 	}
 	if(ParsedNode == null) {
@@ -3872,10 +3870,10 @@ function Append(this: ZListNode, Node: ZNode): void {
 		this.Set(0, Node);
 	}
 	else {
-		var newAST: ZNode[] = LibZen_NewNodeArray(this.AST.length+1);
-		LibZen_ArrayCopy(this.AST, 0, newAST, 0, this.AST.length);
+		var newAST: ZNode[] = LibZen_NewNodeArray(this.AST.size()+1);
+		LibZen_ArrayCopy(this.AST, 0, newAST, 0, this.AST.size());
 		this.AST = newAST;
-		this.Set(this.AST.length - 1, Node);
+		this.Set(this.AST.size() - 1, Node);
 	}
 }
 
@@ -3892,24 +3890,24 @@ function SetListAt(this: ZListNode, Index: int, Node: ZNode): void {
 }
 
 function InsertListAt(this: ZListNode, Index: int, Node: ZNode): void {
-	if(this.AST == null || Index < 0 || this.AST.length == Index) {
+	if(this.AST == null || Index < 0 || this.AST.size() == Index) {
 		this.Append(Node);
 	} else {
-		var newAST: ZNode[] = LibZen_NewNodeArray(this.AST.length + 1);
+		var newAST: ZNode[] = LibZen_NewNodeArray(this.AST.size() + 1);
 		Index = this.ListStartIndex + Index;
 		LibZen_ArrayCopy(this.AST, 0, newAST, 0, Index);
 		this.Set(Index, Node);
-		LibZen_ArrayCopy(this.AST, Index, newAST, Index + 1, this.AST.length - Index);
+		LibZen_ArrayCopy(this.AST, Index, newAST, Index + 1, this.AST.size() - Index);
 		this.AST = newAST;
 	}
 }
 
 function RemoveListAt(this: ZListNode, Index: int): ZNode {
 	var Removed: ZNode = this.GetListAt(Index);
-	var newAST: ZNode[] = LibZen_NewNodeArray(this.AST.length - 1);
+	var newAST: ZNode[] = LibZen_NewNodeArray(this.AST.size() - 1);
 	var RemovedIndex: int = this.ListStartIndex + Index;
 	LibZen_ArrayCopy(this.AST, 0, newAST, 0, RemovedIndex);
-	LibZen_ArrayCopy(this.AST, RemovedIndex + 1, newAST, RemovedIndex, this.AST.length - (RemovedIndex + 1));
+	LibZen_ArrayCopy(this.AST, RemovedIndex + 1, newAST, RemovedIndex, this.AST.size() - (RemovedIndex + 1));
 	this.AST = newAST;
 	return Removed;
 }
@@ -4247,6 +4245,21 @@ function GetDefinedFunc(this: ZGenerator, FuncName: String, RecvType: ZType, Fun
 	return this.GetDefinedFunc(ZFunc_StringfySignature(FuncName, FuncParamSize, RecvType));
 }
 
+function LookupFunc(this: ZGenerator, FuncName: String, RecvType: ZType, FuncParamSize: int): ZFunc {
+	var Func: ZFunc = this.GetDefinedFunc(ZFunc_StringfySignature(FuncName, FuncParamSize, RecvType));
+	while(Func == null) {
+		RecvType = RecvType.GetSuperType();
+		if(RecvType == null) {
+			break;
+		}
+		Func = this.GetDefinedFunc(ZFunc_StringfySignature(FuncName, FuncParamSize, RecvType));
+		if(RecvType.IsVarType()) {
+			break;
+		}
+	}
+	return Func;
+}
+
 function GetMacroFunc(this: ZGenerator, FuncName: String, RecvType: ZType, FuncParamSize: int): ZMacroFunc {
 	var Func: ZFunc = this.GetDefinedFunc(ZFunc_StringfySignature(FuncName, FuncParamSize, RecvType));
 	if(Func instanceof ZMacroFunc) {
@@ -4263,7 +4276,7 @@ function SetConverterFunc(this: ZGenerator, FromType: ZType, ToType: ZType, Func
 	this.DefinedFuncMap[this.NameConverterFunc(FromType, ToType)] =  Func;
 }
 
-function GetConverterFunc(this: ZGenerator, FromType: ZType, ToType: ZType): ZFunc {
+function LookupConverterFunc(this: ZGenerator, FromType: ZType, ToType: ZType): ZFunc {
 	while(FromType != null) {
 		var Func: ZFunc = this.DefinedFuncMap[this.NameConverterFunc(FromType, ToType)];
 		if(Func != null) {
@@ -4387,7 +4400,7 @@ function Eval(this: ZSourceEngine, ScriptText: String, FileName: String, LineNum
 }
 
 function Load(this: ZSourceEngine, FileName: String): boolean {
-	var ScriptText: String = LibZen.LoadTextFile(FileName);
+	var ScriptText: String = LibZen_LoadTextFile(FileName);
 	if(ScriptText == null) {
 		LibZen_Exit(1, "file not found: " + FileName);
 		return false;
@@ -5206,21 +5219,24 @@ function CreateStupidCastNode(this: ZTypeChecker, Requested: ZType, Node: ZNode)
 	return ErrorNode;
 }
 
-function EnforceNodeType(this: ZTypeChecker, Node: ZNode, EnforceType: ZType): ZNode {
-	var Func: ZFunc = this.Generator.GetConverterFunc(Node.Type, ZTypeStringType);
+function EnforceNodeType(this: ZTypeChecker, Node: ZNode, EnforcedType: ZType): ZNode {
+	var Func: ZFunc = this.Generator.LookupConverterFunc(Node.Type, EnforcedType);
+	if(Func == null && EnforcedType.IsStringType()) {
+		Func = this.Generator.LookupFunc("toString", Node.Type, 1);
+	}
 	if(Func instanceof ZMacroFunc) {
 		var MacroNode: ZMacroNode = new ZMacroNode(Node.ParentNode, null, (ZMacroFunc)Func);
 		MacroNode.Append(Node);
-		MacroNode.Type = EnforceType;
+		MacroNode.Type = EnforcedType;
 		return MacroNode;
 	}
 	else if(Func != null) {
 		var MacroNode: ZFuncCallNode = new ZFuncCallNode(Node.ParentNode, Func.FuncName, Func.GetFuncType());
 		MacroNode.Append(Node);
-		MacroNode.Type = EnforceType;
+		MacroNode.Type = EnforcedType;
 		return MacroNode;
 	}
-	return this.CreateStupidCastNode(EnforceType, Node);
+	return this.CreateStupidCastNode(EnforcedType, Node);
 }
 
 function TypeCheckImpl(this: ZTypeChecker, Node: ZNode, ContextType: ZType, TypeCheckPolicy: int): ZNode {
@@ -5362,6 +5378,7 @@ function CSourceGenerator(this: CSourceGenerator): CSourceGenerator {
 	this.SetMacro("println", "LibZen_PrintLine($[0])", ZTypeVoidType, ZTypeStringType);
 	this.SetConverterMacro("(double)($[0])", ZTypeFloatType, ZTypeIntType);
 	this.SetConverterMacro("(long)($[0])", ZTypeIntType, ZTypeFloatType);
+	this.SetConverterMacro("LibZen_BooleanToString($[0])", ZTypeStringType, ZTypeBooleanType);
 	this.SetConverterMacro("LibZen_IntToString($[0])", ZTypeStringType, ZTypeIntType);
 	this.SetConverterMacro("LibZen_FloatToString($[0])", ZTypeStringType, ZTypeFloatType);
 	this.SetMacro("+", "LibZen_StrCat($[0], $[1])", ZTypeStringType, ZTypeStringType, ZTypeStringType);
@@ -5370,6 +5387,9 @@ function CSourceGenerator(this: CSourceGenerator): CSourceGenerator {
 	this.SetMacro("substring", "LibZen_SubString2($[0], $[1])", ZTypeStringType, ZTypeStringType, ZTypeIntType, ZTypeIntType);
 	this.SetMacro("indexOf", "LibZen_IndexOf($[0], $[1])", ZTypeIntType, ZTypeStringType, ZTypeStringType);
 	this.SetMacro("indexOf", "LibZen_IndexOf2($[0], $[1], $[2])", ZTypeIntType, ZTypeStringType, ZTypeStringType, ZTypeIntType);
+	this.SetMacro("equals", "LibZen_EqualsString($[0], $[1])", ZTypeBooleanType, ZTypeStringType, ZTypeStringType);
+	this.SetMacro("startsWith", "LibZen_StartsWith($[0], $[1])", ZTypeBooleanType, ZTypeStringType, ZTypeStringType);
+	this.SetMacro("endsWith", "LibZen_EndWidth($[0], $[1])", ZTypeBooleanType, ZTypeStringType, ZTypeStringType);
 	this.SetMacro("size", "LibZen_ArraySize($[0])", ZTypeIntType, ZTypeArrayType);
 	this.SetMacro("clear", "LibZen_ArrayClear($[0])", ZTypeVoidType, ZTypeArrayType, ZTypeIntType);
 	this.SetMacro("add", "LibZen_ArrayAdd($[0], $[1])", ZTypeVoidType, ZTypeArrayType, ZTypeVarType);

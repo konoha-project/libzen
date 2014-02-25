@@ -87,6 +87,7 @@ public class CSourceGenerator extends ZSourceGenerator {
 		// Converter
 		this.SetConverterMacro("(double)($[0])", ZType.FloatType, ZType.IntType);
 		this.SetConverterMacro("(long)($[0])", ZType.IntType, ZType.FloatType);
+		this.SetConverterMacro("LibZen_BooleanToString($[0])", ZType.StringType, ZType.BooleanType);
 		this.SetConverterMacro("LibZen_IntToString($[0])", ZType.StringType, ZType.IntType);
 		this.SetConverterMacro("LibZen_FloatToString($[0])", ZType.StringType, ZType.FloatType);
 
@@ -97,6 +98,9 @@ public class CSourceGenerator extends ZSourceGenerator {
 		this.SetMacro("substring", "LibZen_SubString2($[0], $[1])", ZType.StringType, ZType.StringType, ZType.IntType, ZType.IntType);
 		this.SetMacro("indexOf", "LibZen_IndexOf($[0], $[1])", ZType.IntType, ZType.StringType, ZType.StringType);
 		this.SetMacro("indexOf", "LibZen_IndexOf2($[0], $[1], $[2])", ZType.IntType, ZType.StringType, ZType.StringType, ZType.IntType);
+		this.SetMacro("equals", "LibZen_EqualsString($[0], $[1])", ZType.BooleanType, ZType.StringType, ZType.StringType);
+		this.SetMacro("startsWith", "LibZen_StartsWith($[0], $[1])", ZType.BooleanType, ZType.StringType, ZType.StringType);
+		this.SetMacro("endsWith", "LibZen_EndWidth($[0], $[1])", ZType.BooleanType, ZType.StringType, ZType.StringType);
 
 		// Array
 		this.SetMacro("size", "LibZen_ArraySize($[0])", ZType.IntType, ZType.ArrayType);

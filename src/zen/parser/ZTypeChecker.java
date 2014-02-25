@@ -99,22 +99,25 @@ public abstract class ZTypeChecker extends ZVisitor {
 		return ErrorNode;
 	}
 
-	protected final ZNode EnforceNodeType(ZNode Node, ZType EnforceType) {
-		@Var ZFunc Func = this.Generator.GetConverterFunc(Node.Type, ZType.StringType);
+	protected final ZNode EnforceNodeType(ZNode Node, ZType EnforcedType) {
+		@Var ZFunc Func = this.Generator.LookupConverterFunc(Node.Type, EnforcedType);
+		if(Func == null && EnforcedType.IsStringType()) {
+			Func = this.Generator.LookupFunc("toString", Node.Type, 1);
+		}
 		if(Func instanceof ZMacroFunc) {
 			@Var ZMacroNode MacroNode = new ZMacroNode(Node.ParentNode, null, (ZMacroFunc)Func);
 			MacroNode.Append(Node);
 			// this.VisitListNodeAsFuncCall(MacroNode, Func.GetFuncType()); FIXME
-			MacroNode.Type = EnforceType;
+			MacroNode.Type = EnforcedType;
 			return MacroNode;
 		}
 		else if(Func != null) {
 			@Var ZFuncCallNode MacroNode = new ZFuncCallNode(Node.ParentNode, Func.FuncName, Func.GetFuncType());
 			MacroNode.Append(Node);
-			MacroNode.Type = EnforceType;
+			MacroNode.Type = EnforcedType;
 			return MacroNode;
 		}
-		return this.CreateStupidCastNode(EnforceType, Node);
+		return this.CreateStupidCastNode(EnforcedType, Node);
 	}
 
 

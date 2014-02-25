@@ -103,7 +103,7 @@ public final class ZSourceContext extends ZSource {
 		@Var int RollbackPosition = this.SourcePosition;
 		while(TokenFunc != null) {
 			this.SourcePosition = RollbackPosition;
-			if(LibZen.ApplyTokenFunc(TokenFunc.Func, this)) {
+			if(LibZen._ApplyTokenFunc(TokenFunc.Func, this)) {
 				return;
 			}
 			TokenFunc = TokenFunc.ParentFunc;

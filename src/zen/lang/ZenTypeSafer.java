@@ -325,7 +325,6 @@ public class ZenTypeSafer extends ZTypeChecker {
 		if(ClassType instanceof ZClassType) {
 			return ((ZClassType)ClassType).GetFieldType(FieldName, ZType.VoidType);
 		}
-		System.out.println("hoge !!  " + ClassType);
 		return NameSpace.Generator.GetSetterType(ClassType, FieldName);
 	}
 
@@ -523,7 +522,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 		this.CheckTypeAt(Node, ZBinaryNode._Left, ZType.VarType);
 		this.TryTypeAt(Node, ZBinaryNode._Right, Node.GetAstType(ZBinaryNode._Left));
 		this.UnifyBinaryNodeType(Node, ZType.FloatType);
-		this.CheckTypeAt(Node, ZBinaryNode._Right, Node.GetAstType(ZBinaryNode._Left));
+		//this.CheckTypeAt(Node, ZBinaryNode._Right, Node.GetAstType(ZBinaryNode._Left));
 		this.TypedNode(Node, ZType.BooleanType);
 	}
 

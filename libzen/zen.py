@@ -87,6 +87,7 @@ def GenVar(line):
 	line = line.replace(".ArrayValues[", "[")
 	line = line.replace("ZType.", "ZType")
 	line = line.replace(".length()", ".size()")
+	line = line.replace(".length", ".size()")
 	m = VarPattern.match(line)
 	if m:
 		line = m.group(1) + 'var ' + m.group(3) + ": " + GenType(m.group(2)) + m.group(4) + '\n'
@@ -327,9 +328,9 @@ def ClassSort(list, m):
 
 def writeLIBZEN(f):
 	LIBZEN='''
-function LibZen_Print(msg: any): void;
-function LibZen_PrintLine(msg: any): void;
-function LibZen_FixMe(e: Exception): void;
+function LibZen_Print(msg: String): void;
+function LibZen_PrintLine(msg: String): void;
+function LibZen_FixMe(e): void;
 function LibZen_PrintDebug(msg: String): void;
 function LibZen_Assert(TestResult: boolean): void;
 function LibZen_Exit(status: int, Message: String): void;
@@ -343,8 +344,6 @@ function LibZen_GetChar(Text: String, Pos: int): String;
 function LibZen_IsLetter(ch: String): boolean;
 function LibZen_IsDigit(ch: String): boolean;
 function LibZen_IsSymbol(ch: String): boolean;
-function LibZen_EqualsString(s: String, s2: String): boolean;
-function LibZen_SubString(Text: String, StartIdx: int, EndIdx: int): String;
 function LibZen_JoinStrings(Unit: String, Times: int): String;
 function LibZen_UnquoteString(Text: String): String;
 function LibZen_QuoteString(Text: String): String;
@@ -355,24 +354,29 @@ function LibZen_AnotherName(s: String): String;
 function LibZen_Stringfy(number: int): String;
 function LibZen_SourceBuilderToString(Builder: ZSourceBuilder): String;
 function LibZen_SourceBuilderToString(Builder: ZSourceBuilder, BeginIndex: int, EndIndex: int): String;
+function LibZen_LoadTextFile(FileName: String): String;
 function LibZen_WriteTo(FileName: String, List: ZSourceBuilder[]): void;
-function LibZen_Size(s: String) : int;
 function LibZen_Size(o) : int;
 
-function ImportGrammar(NameSpace: ZNameSpace, ClassName: String): boolean;
+function LibZen_ImportGrammar(NameSpace: ZNameSpace, ClassName: String): boolean;
 //function LoadTokenFunc(GrammarClass: Class<?>, FuncName: String): ZFunc;
 //function LoadMatchFunc(GrammarClass: Class<?>, FuncName: String): ZFunc;
-function ApplyTokenFunc(TokenFunc: ZTokenFunction, SourceContext: ZSourceContext): boolean;
-function ApplyMatchFunc(MatchFunc: ZMatchFunction, ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function LoadGenerator(ClassName: String, OutputFile: String): ZGenerator;
-function LoadEngine(ClassName: String, GrammarClass: String): ZSourceEngine;
+function LibZen_ApplyTokenFunc(TokenFunc, SourceContext: ZSourceContext): boolean;
+function LibZen_ApplyMatchFunc(MatchFunc, ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
+function LibZen_LoadGenerator(ClassName: String, OutputFile: String): ZGenerator;
+function LibZen_LoadEngine(ClassName: String, GrammarClass: String): ZSourceEngine;
 //function GetNativeType(NativeClass: Class<?>): ZType;
-function ConvertToNativeFunc(jMethod: Method): JavaStaticFunc;
-function GetClassName(Value: any): String;
+//function ConvertToNativeFunc(jMethod: Method): JavaStaticFunc;
+
+function LibZen_GetClassName(Value): String;
+
 //function GetClassOfValue(Value: any): Class<?>;
-function LibZen_NewZTypeArray(Size: int): ZType[];
 
+function LibZen_NewTypeArray(Size: int): ZType[];
+function LibZen_NewNodeArray(Size: int): ZNode[];
+function LibZen_ArrayCopy(src, sindex: int, dst, dindex: int, len: int): void;
 
+let LibZen_GreekNames = ["a", "b", "c"];
 '''
 	f.write(LIBZEN)
 

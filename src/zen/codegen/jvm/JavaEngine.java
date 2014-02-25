@@ -437,7 +437,7 @@ public class JavaEngine extends ZSourceEngine {
 			this.EvaledValue = this.Eval(Node.AST[ZCastNode._Expr]);
 		}
 		else {
-			ZFunc Func = this.Generator.GetConverterFunc(Node.AST[ZCastNode._Expr].Type, Node.Type);
+			ZFunc Func = this.Generator.LookupConverterFunc(Node.AST[ZCastNode._Expr].Type, Node.Type);
 			if(Func instanceof JavaStaticFunc) {
 				this.EvalStaticMethod(Node, ((JavaStaticFunc)Func).StaticFunc, new ZNode[] {Node.AST[ZCastNode._Expr]});
 				return;

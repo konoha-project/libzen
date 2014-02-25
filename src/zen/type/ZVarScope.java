@@ -34,7 +34,7 @@ public final class ZVarScope {
 	}
 
 	public final void FoundUnresolvedSymbol(String FuncName) {
-		System.out.println("unresolved name: " + FuncName);
+		//System.out.println("unresolved name: " + FuncName);
 		this.UnresolvedSymbolCount = this.UnresolvedSymbolCount + 1;
 	}
 

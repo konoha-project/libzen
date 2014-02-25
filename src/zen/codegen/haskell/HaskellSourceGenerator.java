@@ -237,10 +237,10 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 	}
 
 	private String ZenOpToHaskellOp(String OpCode) {
-		if(LibZen._EqualsString(OpCode, "/")) {
+		if(OpCode.equals("/")) {
 			return "`div`";
 		}
-		if(LibZen._EqualsString(OpCode, "%")) {
+		if(OpCode.equals("%")) {
 			return "`mod`";
 		}
 		return OpCode;

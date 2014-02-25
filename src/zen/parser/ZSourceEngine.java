@@ -168,7 +168,7 @@ public class ZSourceEngine extends ZVisitor {
 	}
 
 	public final boolean Load(String FileName) {
-		@Var String ScriptText = LibZen.LoadTextFile(FileName);
+		@Var String ScriptText = LibZen._LoadTextFile(FileName);
 		if(ScriptText == null) {
 			LibZen._Exit(1, "file not found: " + FileName);
 			return false;

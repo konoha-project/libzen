@@ -181,6 +181,23 @@ public abstract class ZGenerator extends ZVisitor {
 		return this.GetDefinedFunc(ZFunc._StringfySignature(FuncName, FuncParamSize, RecvType));
 	}
 
+	public final ZFunc LookupFunc(String FuncName, ZType RecvType, int FuncParamSize) {
+		@Var ZFunc Func = this.GetDefinedFunc(ZFunc._StringfySignature(FuncName, FuncParamSize, RecvType));
+		while(Func == null) {
+			RecvType = RecvType.GetSuperType();
+			if(RecvType == null) {
+				break;
+			}
+			Func = this.GetDefinedFunc(ZFunc._StringfySignature(FuncName, FuncParamSize, RecvType));
+			if(RecvType.IsVarType()) {
+				break;
+			}
+		}
+		return Func;
+	}
+
+
+
 	public final ZMacroFunc GetMacroFunc(String FuncName, ZType RecvType, int FuncParamSize) {
 		@Var ZFunc Func = this.GetDefinedFunc(ZFunc._StringfySignature(FuncName, FuncParamSize, RecvType));
 		if(Func instanceof ZMacroFunc) {
@@ -197,7 +214,7 @@ public abstract class ZGenerator extends ZVisitor {
 		this.DefinedFuncMap.put(this.NameConverterFunc(FromType, ToType), Func);
 	}
 
-	public final ZFunc GetConverterFunc(ZType FromType, ZType ToType) {
+	public final ZFunc LookupConverterFunc(ZType FromType, ZType ToType) {
 		while(FromType != null) {
 			@Var ZFunc Func = this.DefinedFuncMap.GetOrNull(this.NameConverterFunc(FromType, ToType));
 			if(Func != null) {

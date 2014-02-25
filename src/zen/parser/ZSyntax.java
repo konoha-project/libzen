@@ -31,6 +31,9 @@ import zen.deps.Var;
 import zen.deps.ZMatchFunction;
 
 public final class ZSyntax {
+	public final static int _BinaryOperator					= 1;
+	public final static int _LeftJoin						= 1 << 1;
+
 	@Field public ZNameSpace	              PackageNameSpace;
 	@Field public String		              PatternName;
 	@Field public ZMatchFunction              MatchFunc;
@@ -38,8 +41,6 @@ public final class ZSyntax {
 	@Field public ZSyntax              ParentPattern = null;
 	@Field public boolean IsDisabled          = false;
 	@Field public boolean IsStatement         = false;
-	public final static int _LeftJoin						= 1 << 1;
-	public final static int _BinaryOperator					= 1;
 
 	public ZSyntax(ZNameSpace NameSpace, String PatternName, ZMatchFunction MatchFunc) {
 		this.PackageNameSpace = NameSpace;
@@ -48,7 +49,7 @@ public final class ZSyntax {
 	}
 
 	@Override public String toString() {
-		return this.PatternName + "{" + this.MatchFunc + "}";
+		return this.PatternName  /* + "{" + this.MatchFunc + "}"*/;
 	}
 
 	public final boolean IsBinaryOperator() {
@@ -61,9 +62,9 @@ public final class ZSyntax {
 		return (left < right || (left == right && !LibZen._IsFlag(left, ZSyntax._LeftJoin) && !LibZen._IsFlag(right, ZSyntax._LeftJoin)));
 	}
 
-	public final boolean EqualsName(String Name) {
-		return LibZen._EqualsString(this.PatternName, Name);
-	}
+	//	public final boolean EqualsName(String Name) {
+	//		return this.PatternName.equals(Name);
+	//	}
 
 	public final static ZSyntax MergeSyntaxPattern(ZSyntax Pattern, ZSyntax Parent) {
 		if(Parent == null) {

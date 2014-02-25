@@ -248,7 +248,7 @@ public final class ZTokenContext {
 			this.CurrentPosition = RollbackPosition;
 			this.ApplyingPattern  = CurrentPattern;
 			//			System.out.println("B "+Pattern + "," + ParentNode);
-			ParsedNode = LibZen.ApplyMatchFunc(CurrentPattern.MatchFunc, ParentNode, this, LeftNode);
+			ParsedNode = LibZen._ApplyMatchFunc(CurrentPattern.MatchFunc, ParentNode, this, LeftNode);
 			assert(ParsedNode != ParentNode);
 			//			System.out.println("E "+ ParsedNode);
 			this.ApplyingPattern  = null;
@@ -263,7 +263,7 @@ public final class ZTokenContext {
 			return null;
 		}
 		if(this.CurrentPosition == RollbackPosition) {
-			System.out.println("infinite looping" + RollbackPosition + " Token=" + TopToken + " ParsedNode=" + ParsedNode);
+			LibZen._PrintLine("DEBUG infinite looping" + RollbackPosition + " Token=" + TopToken + " ParsedNode=" + ParsedNode);
 			assert(this.CurrentPosition != RollbackPosition);
 		}
 		if(ParsedNode == null) {

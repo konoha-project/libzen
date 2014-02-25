@@ -25,7 +25,6 @@
 package zen.type;
 
 import zen.deps.Field;
-import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.deps.ZArray;
 import zen.parser.ZToken;
@@ -67,7 +66,7 @@ public class ZClassType extends ZType {
 		if(this.FieldList != null) {
 			@Var int i = 0;
 			while(i < this.FieldList.size()) {
-				if(LibZen._EqualsString(FieldName, this.FieldList.ArrayValues[i].FieldName)) {
+				if(FieldName.equals(this.FieldList.ArrayValues[i].FieldName)) {
 					return true;
 				}
 				i = i + 1;
@@ -83,7 +82,7 @@ public class ZClassType extends ZType {
 			while(i < this.FieldList.size()) {
 				@Var ZClassField Field = this.FieldList.ArrayValues[i];
 				//System.out.println("Looking FieldName = " + Field.FieldName + ", " + Field.FieldType);
-				if(LibZen._EqualsString(FieldName, Field.FieldName)) {
+				if(FieldName.equals(Field.FieldName)) {
 					return Field.FieldType;
 				}
 				i = i + 1;

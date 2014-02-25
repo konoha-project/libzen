@@ -62,7 +62,7 @@ public class LibZen {
 		System.err.println(msg);
 	}
 
-	private final static String _GetStackInfo(int depth) {
+	@ZenIgnored private final static String _GetStackInfo(int depth) {
 		String LineNumber = " ";
 		Exception e =  new Exception();
 		StackTraceElement[] Elements = e.getStackTrace();
@@ -73,7 +73,7 @@ public class LibZen {
 		return LineNumber;
 	}
 
-	public final static void _FixMe(Exception e) {
+	@ZenIgnored public final static void _FixMe(Exception e) {
 		if(DebugMode) {
 			System.err.println("FIXME " + LibZen._GetStackInfo(3) + ": " + e);
 			e.printStackTrace();
@@ -230,15 +230,13 @@ public class LibZen {
 		return Character.isLetter(ch) || ch == '_' || ch > 255;
 	}
 
-
-	public final static boolean _EqualsString(String s, String s2) {
-		return s.equals(s2);
-	}
-
-	public final static String _SubString(String Text, long StartIdx, long EndIdx) {
-		return Text.substring((int)StartIdx, (int)EndIdx);
-	}
-
+	//	public final static boolean _EqualsString(String s, String s2) {
+	//		return s.equals(s2);
+	//	}
+	//
+	//	public final static String _SubString(String Text, long StartIdx, long EndIdx) {
+	//		return Text.substring((int)StartIdx, (int)EndIdx);
+	//	}
 
 	public final static String _JoinStrings(String Unit, int Times) {
 		@Var String s = "";
@@ -420,7 +418,7 @@ public class LibZen {
 		return FileName;
 	}
 
-	public final static String LoadTextFile(String FileName) {
+	public final static String _LoadTextFile(String FileName) {
 		//ZLogger.VerboseLog(ZLogger.VerboseFile, "loading " + FileName);
 		InputStream Stream = LibZen.class.getResourceAsStream("/" + FileName);
 		if (Stream == null) {
@@ -491,7 +489,7 @@ public class LibZen {
 
 	// HighLevel Library
 
-	public final static boolean ImportGrammar(ZNameSpace NameSpace, String ClassName) {
+	public final static boolean _ImportGrammar(ZNameSpace NameSpace, String ClassName) {
 		try {
 			@Var Class<?> NativeClass =  Class.forName(ClassName);
 			Method LoaderMethod = NativeClass.getMethod("ImportGrammar", ZNameSpace.class, Class.class);
@@ -523,11 +521,11 @@ public class LibZen {
 		return null;
 	}
 
-	public final static boolean ApplyTokenFunc(ZTokenFunction TokenFunc, ZSourceContext SourceContext) {
+	public final static boolean _ApplyTokenFunc(ZTokenFunction TokenFunc, ZSourceContext SourceContext) {
 		return TokenFunc.Invoke(SourceContext);
 	}
 
-	public final static ZNode ApplyMatchFunc(ZMatchFunction MatchFunc, ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
+	public final static ZNode _ApplyMatchFunc(ZMatchFunction MatchFunc, ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
 		return MatchFunc.Invoke(ParentNode, TokenContext, LeftNode);
 	}
 
@@ -545,7 +543,7 @@ public class LibZen {
 		GenMap.put("llvm", zen.codegen.llvm.LLVMSourceGenerator.class);
 	}
 
-	public final static ZGenerator LoadGenerator(@Nullable String ClassName, String OutputFile) {
+	public final static ZGenerator _LoadGenerator(@Nullable String ClassName, String OutputFile) {
 		if(ClassName == null) {
 			ClassName = System.getenv("ZENCODE");
 		}
@@ -563,9 +561,9 @@ public class LibZen {
 		return new ZSourceGenerator("zen", "0.1");
 	}
 
-	public final static ZSourceEngine LoadEngine(@Nullable String ClassName, String GrammarClass) {
-		@Var ZGenerator Generator = LibZen.LoadGenerator(ClassName, null);
-		LibZen.ImportGrammar(Generator.RootNameSpace, GrammarClass);
+	public final static ZSourceEngine _LoadEngine(@Nullable String ClassName, String GrammarClass) {
+		@Var ZGenerator Generator = LibZen._LoadGenerator(ClassName, null);
+		LibZen._ImportGrammar(Generator.RootNameSpace, GrammarClass);
 		Generator.ImportLocalGrammar(Generator.RootNameSpace);
 		return Generator.GetEngine();
 	}

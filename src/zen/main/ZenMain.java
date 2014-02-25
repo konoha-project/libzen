@@ -123,7 +123,7 @@ public class ZenMain {
 				continue;
 			}
 		}
-		@Var ZSourceEngine ScriptEngine = LibZen.LoadEngine(TargetCode, KonohaGrammar.class.getName());
+		@Var ZSourceEngine ScriptEngine = LibZen._LoadEngine(TargetCode, KonohaGrammar.class.getName());
 		if (!(Index < Args.length)) {
 			ShellMode = true;
 		}
