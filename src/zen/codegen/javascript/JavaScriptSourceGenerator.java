@@ -68,10 +68,10 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 		this.SetMacro("println", "console.log($[0])", ZType.VoidType, ZType.StringType);
 
 		this.SetMacro("size", "($[0]).length", ZType.IntType, ZGenericType._ArrayType);
-		this.SetMacro("add", "$[0].add($[1])", ZType.VoidType, ZGenericType._ArrayType, ZType.VarType);
+		this.SetMacro("add", "$[0].push($[1])", ZType.VoidType, ZGenericType._ArrayType, ZType.VarType);
 
-		this.SetConverterMacro("($[0])", ZType.FloatType, ZType.IntType);
-		this.SetConverterMacro("($[0])", ZType.IntType, ZType.FloatType);
+		this.SetConverterMacro("$[0]", ZType.FloatType, ZType.IntType);
+		this.SetConverterMacro("($[0] | 0)", ZType.IntType, ZType.FloatType);
 		this.SetConverterMacro("($[0]).toString()", ZType.StringType, ZType.IntType);
 		this.SetConverterMacro("($[0]).toString()", ZType.StringType, ZType.FloatType);
 
@@ -81,15 +81,17 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 		return new ZSourceEngine(new ZenTypeSafer(this), this);
 	}
 
-
 	@Override public void VisitGlobalNameNode(ZGlobalNameNode Node) {
 		//		if(Node.IsUntyped()) {
 		//			this.CurrentBuilder.Append(Node.GlobalName);
 		//		}
 		if(Node.IsStaticFuncName) {
-			this.CurrentBuilder.Append(Node.Type.StringfySignature(Node.GlobalName));
-		}
-		else {
+			if(Node.GlobalName.startsWith("LibZen")){
+				this.CurrentBuilder.Append(Node.GlobalName.replace('_', '.'));
+			}else{
+				this.CurrentBuilder.Append(Node.Type.StringfySignature(Node.GlobalName));
+			}
+		}else{
 			this.CurrentBuilder.Append(Node.GlobalName);
 		}
 	}
@@ -163,7 +165,13 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitMapLiteralNode(ZMapLiteralNode Node) {
-		// TODO Auto-generated method stub
+		@Var ZType ParamType = Node.Type.GetParamType(0);
+		this.CurrentBuilder.Append("LibZen.NewMap(");
+		this.CurrentBuilder.Append(String.valueOf(Node.GetListSize()));
+		if(Node.GetListSize() > 0) {
+			this.CurrentBuilder.Append(this.Camma);
+		}
+		this.VisitListNode("", Node, ")");
 	}
 
 	@Override public void VisitLetNode(ZLetNode Node) {
