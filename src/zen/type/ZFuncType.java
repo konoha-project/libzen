@@ -6,6 +6,8 @@ import zen.deps.Var;
 import zen.deps.ZArray;
 
 public final class ZFuncType extends ZType {
+	public final static ZFuncType	FuncType  = new ZFuncType("Func", null);
+
 	@Field public ZType[]  TypeParams;
 	@Field private boolean HasUnknownType = false;
 	@Field private boolean HasGreekType = false;
@@ -20,7 +22,7 @@ public final class ZFuncType extends ZType {
 			this.TypeParams = UniqueTypeParams;
 		}
 		@Var int i = 0;
-		while(i < LibZen._Size(this.TypeParams)) {
+		while(i < this.TypeParams.length) {
 			if(this.TypeParams[i].IsVarType()) {
 				this.HasUnknownType = true;
 			}
@@ -47,7 +49,7 @@ public final class ZFuncType extends ZType {
 		if(this.HasGreekType) {
 			@Var ZArray<ZType> TypeList = new ZArray<ZType>(new ZType[this.TypeParams.length]);
 			@Var int i = 0;
-			while(i < LibZen._Size(this.TypeParams)) {
+			while(i < this.TypeParams.length) {
 				TypeList.add(this.TypeParams[i].GetGreekRealType(Greek));
 				i = i + 1;
 			}
@@ -59,7 +61,7 @@ public final class ZFuncType extends ZType {
 	@Override public final boolean AcceptValueType(ZType ValueType, boolean ExactMatch, ZType[] Greek) {
 		if(ValueType.IsFuncType() && ValueType.GetParamSize() == this.GetParamSize()) {
 			@Var int i = 0;
-			while(i < LibZen._Size(this.TypeParams)) {
+			while(i < this.TypeParams.length) {
 				if(!this.TypeParams[i].AcceptValueType(ValueType.GetParamType(i), true, Greek)) {
 					return false;
 				}
@@ -75,11 +77,11 @@ public final class ZFuncType extends ZType {
 	}
 
 	@Override public ZType GetBaseType() {
-		return ZType.FuncType;
+		return ZFuncType.FuncType;
 	}
 
 	@Override public int GetParamSize() {
-		return LibZen._Size(this.TypeParams);
+		return this.TypeParams.length;
 	}
 
 	@Override public ZType GetParamType(int Index) {
@@ -91,11 +93,11 @@ public final class ZFuncType extends ZType {
 	}
 
 	public final int GetFuncParamSize() {
-		return LibZen._Size(this.TypeParams) - 1;
+		return this.TypeParams.length - 1;
 	}
 
 	public final ZType GetRecvType() {
-		if(LibZen._Size(this.TypeParams) == 1) {
+		if(this.TypeParams.length == 1) {
 			return ZType.VoidType;
 		}
 		return this.TypeParams[1];

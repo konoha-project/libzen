@@ -82,7 +82,7 @@ public class ZSourceEngine extends ZVisitor {
 	@Field public final ZLogger Logger;
 
 	@Field private boolean InteractiveContext = false;
-	@Field private boolean IsVisitable = true;
+	@Field private boolean IsVisitableFlag = true;
 
 	public ZSourceEngine(ZTypeChecker TypeChecker, ZGenerator Generator) {
 		this.TypeChecker = TypeChecker;
@@ -91,15 +91,15 @@ public class ZSourceEngine extends ZVisitor {
 	}
 
 	@Override public final boolean IsVisitable() {
-		return this.IsVisitable;
+		return this.IsVisitableFlag;
 	}
 
 	@Override public void EnableVisitor() {
-		this.IsVisitable = true;
+		this.IsVisitableFlag = true;
 	}
 
 	@Override public void StopVisitor() {
-		this.IsVisitable = false;
+		this.IsVisitableFlag = false;
 	}
 
 	protected Object Eval(ZNode Node) {

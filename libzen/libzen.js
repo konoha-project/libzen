@@ -32,8 +32,9 @@ var ZClassField = (function() {
 })();
 
 var ZClassType = (function(_super) {
-   __extends(_super, ZClassType);
+   __extends(ZClassType, _super);
    function ZClassType(){
+_super.call(this);
       this.FieldList = null;
 }
    return ZClassType;
@@ -49,8 +50,9 @@ var ZFunc = (function() {
 })();
 
 var ZFuncType = (function(_super) {
-   __extends(_super, ZFuncType);
+   __extends(ZFuncType, _super);
    function ZFuncType(){
+_super.call(this);
       this.TypeParams = null;
       this.HasUnknownType = false;
       this.HasGreekType = false;
@@ -59,8 +61,9 @@ var ZFuncType = (function(_super) {
 })(ZType);
 
 var ZGeneric1Type = (function(_super) {
-   __extends(_super, ZGeneric1Type);
+   __extends(ZGeneric1Type, _super);
    function ZGeneric1Type(){
+_super.call(this);
       this.BaseType = null;
       this.ParamType = null;
 }
@@ -68,16 +71,18 @@ var ZGeneric1Type = (function(_super) {
 })(ZType);
 
 var ZGreekType = (function(_super) {
-   __extends(_super, ZGreekType);
+   __extends(ZGreekType, _super);
    function ZGreekType(){
+_super.call(this);
       this.GreekId = 0;
 }
    return ZGreekType;
 })(ZType);
 
 var ZPrototype = (function(_super) {
-   __extends(_super, ZPrototype);
+   __extends(ZPrototype, _super);
    function ZPrototype(){
+_super.call(this);
       this.DefinedCount = 0;
       this.UsedCount = 0;
 }
@@ -102,8 +107,9 @@ var ZVarScope = (function() {
 })();
 
 var ZVarType = (function(_super) {
-   __extends(_super, ZVarType);
+   __extends(ZVarType, _super);
    function ZVarType(){
+_super.call(this);
       this.VarList = null;
       this.SourceToken = null;
       this.GreekId = 0;
@@ -128,8 +134,9 @@ var ZNode = (function() {
 })();
 
 var ZParamNode = (function(_super) {
-   __extends(_super, ZParamNode);
+   __extends(ZParamNode, _super);
    function ZParamNode(){
+_super.call(this);
       this.Name = null;
       this.NameToken = null;
       this.ParamIndex = 0;
@@ -138,22 +145,25 @@ var ZParamNode = (function(_super) {
 })(ZNode);
 
 var ZReturnNode = (function(_super) {
-   __extends(_super, ZReturnNode);
+   __extends(ZReturnNode, _super);
    function ZReturnNode(){
+_super.call(this);
 }
    return ZReturnNode;
 })(ZNode);
 
 var ZSetIndexNode = (function(_super) {
-   __extends(_super, ZSetIndexNode);
+   __extends(ZSetIndexNode, _super);
    function ZSetIndexNode(){
+_super.call(this);
 }
    return ZSetIndexNode;
 })(ZNode);
 
 var ZSetNameNode = (function(_super) {
-   __extends(_super, ZSetNameNode);
+   __extends(ZSetNameNode, _super);
    function ZSetNameNode(){
+_super.call(this);
       this.VarName = null;
       this.VarIndex = 0;
       this.IsCaptured = false;
@@ -162,8 +172,9 @@ var ZSetNameNode = (function(_super) {
 })(ZNode);
 
 var ZSetterNode = (function(_super) {
-   __extends(_super, ZSetterNode);
+   __extends(ZSetterNode, _super);
    function ZSetterNode(){
+_super.call(this);
       this.FieldName = null;
       this.NameToken = null;
 }
@@ -171,37 +182,42 @@ var ZSetterNode = (function(_super) {
 })(ZNode);
 
 var ZSugarNode = (function(_super) {
-   __extends(_super, ZSugarNode);
+   __extends(ZSugarNode, _super);
    function ZSugarNode(){
+_super.call(this);
       this.SugarNode = null;
 }
    return ZSugarNode;
 })(ZNode);
 
 var ZThrowNode = (function(_super) {
-   __extends(_super, ZThrowNode);
+   __extends(ZThrowNode, _super);
    function ZThrowNode(){
+_super.call(this);
 }
    return ZThrowNode;
 })(ZNode);
 
 var ZTryNode = (function(_super) {
-   __extends(_super, ZTryNode);
+   __extends(ZTryNode, _super);
    function ZTryNode(){
+_super.call(this);
 }
    return ZTryNode;
 })(ZNode);
 
 var ZUnaryNode = (function(_super) {
-   __extends(_super, ZUnaryNode);
+   __extends(ZUnaryNode, _super);
    function ZUnaryNode(){
+_super.call(this);
 }
    return ZUnaryNode;
 })(ZNode);
 
 var ZWhileNode = (function(_super) {
-   __extends(_super, ZWhileNode);
+   __extends(ZWhileNode, _super);
    function ZWhileNode(){
+_super.call(this);
 }
    return ZWhileNode;
 })(ZNode);
@@ -220,8 +236,9 @@ var ZLogger = (function() {
 })();
 
 var ZMacroFunc = (function(_super) {
-   __extends(_super, ZMacroFunc);
+   __extends(ZMacroFunc, _super);
    function ZMacroFunc(){
+_super.call(this);
 }
    return ZMacroFunc;
 })(ZFunc);
@@ -268,16 +285,18 @@ var ZSourceBuilder = (function() {
 })();
 
 var ZSourceContext = (function(_super) {
-   __extends(_super, ZSourceContext);
+   __extends(ZSourceContext, _super);
    function ZSourceContext(){
+_super.call(this);
       this.SourcePosition = 0;
 }
    return ZSourceContext;
 })(ZSource);
 
 var ZSourceMacro = (function(_super) {
-   __extends(_super, ZSourceMacro);
+   __extends(ZSourceMacro, _super);
    function ZSourceMacro(){
+_super.call(this);
       this.Macro = null;
 }
    return ZSourceMacro;
@@ -337,8 +356,9 @@ var ZTokenFunc = (function() {
 })();
 
 var ZVariable = (function(_super) {
-   __extends(_super, ZVariable);
+   __extends(ZVariable, _super);
    function ZVariable(){
+_super.call(this);
       this.VarFlag = 0;
       this.VarType = null;
       this.VarName = null;
@@ -401,52 +421,59 @@ var ZVisitor = (function() {
 })();
 
 var ZArrayType = (function(_super) {
-   __extends(_super, ZArrayType);
+   __extends(ZArrayType, _super);
    function ZArrayType(){
+_super.call(this);
 }
    return ZArrayType;
 })(ZGeneric1Type);
 
 var ZAnnotationNode = (function(_super) {
-   __extends(_super, ZAnnotationNode);
+   __extends(ZAnnotationNode, _super);
    function ZAnnotationNode(){
+_super.call(this);
       this.AnnotatedNode = null;
 }
    return ZAnnotationNode;
 })(ZNode);
 
 var ZAssertNode = (function(_super) {
-   __extends(_super, ZAssertNode);
+   __extends(ZAssertNode, _super);
    function ZAssertNode(){
+_super.call(this);
 }
    return ZAssertNode;
 })(ZNode);
 
 var ZBinaryNode = (function(_super) {
-   __extends(_super, ZBinaryNode);
+   __extends(ZBinaryNode, _super);
    function ZBinaryNode(){
+_super.call(this);
       this.Pattern = null;
 }
    return ZBinaryNode;
 })(ZNode);
 
 var ZBreakNode = (function(_super) {
-   __extends(_super, ZBreakNode);
+   __extends(ZBreakNode, _super);
    function ZBreakNode(){
+_super.call(this);
 }
    return ZBreakNode;
 })(ZNode);
 
 var ZCastNode = (function(_super) {
-   __extends(_super, ZCastNode);
+   __extends(ZCastNode, _super);
    function ZCastNode(){
+_super.call(this);
 }
    return ZCastNode;
 })(ZNode);
 
 var ZCatchNode = (function(_super) {
-   __extends(_super, ZCatchNode);
+   __extends(ZCatchNode, _super);
    function ZCatchNode(){
+_super.call(this);
       this.ExceptionType = ZTypeVarType;
       this.ExceptionName = null;
       this.NameToken = null;
@@ -455,37 +482,42 @@ var ZCatchNode = (function(_super) {
 })(ZNode);
 
 var ZComparatorNode = (function(_super) {
-   __extends(_super, ZComparatorNode);
+   __extends(ZComparatorNode, _super);
    function ZComparatorNode(){
+_super.call(this);
 }
    return ZComparatorNode;
 })(ZBinaryNode);
 
 var ZConstNode = (function(_super) {
-   __extends(_super, ZConstNode);
+   __extends(ZConstNode, _super);
    function ZConstNode(){
+_super.call(this);
 }
    return ZConstNode;
 })(ZNode);
 
 var ZEmptyNode = (function(_super) {
-   __extends(_super, ZEmptyNode);
+   __extends(ZEmptyNode, _super);
    function ZEmptyNode(){
+_super.call(this);
 }
    return ZEmptyNode;
 })(ZNode);
 
 var ZErrorNode = (function(_super) {
-   __extends(_super, ZErrorNode);
+   __extends(ZErrorNode, _super);
    function ZErrorNode(){
+_super.call(this);
       this.ErrorMessage = null;
 }
    return ZErrorNode;
 })(ZConstNode);
 
 var ZFieldNode = (function(_super) {
-   __extends(_super, ZFieldNode);
+   __extends(ZFieldNode, _super);
    function ZFieldNode(){
+_super.call(this);
       this.ClassType = null;
       this.DeclType = ZTypeVarType;
       this.FieldName = null;
@@ -495,23 +527,26 @@ var ZFieldNode = (function(_super) {
 })(ZNode);
 
 var ZFloatNode = (function(_super) {
-   __extends(_super, ZFloatNode);
+   __extends(ZFloatNode, _super);
    function ZFloatNode(){
+_super.call(this);
       this.FloatValue = 0.0;
 }
    return ZFloatNode;
 })(ZConstNode);
 
 var ZGetIndexNode = (function(_super) {
-   __extends(_super, ZGetIndexNode);
+   __extends(ZGetIndexNode, _super);
    function ZGetIndexNode(){
+_super.call(this);
 }
    return ZGetIndexNode;
 })(ZNode);
 
 var ZGetNameNode = (function(_super) {
-   __extends(_super, ZGetNameNode);
+   __extends(ZGetNameNode, _super);
    function ZGetNameNode(){
+_super.call(this);
       this.IsCaptured = false;
       this.VarName = null;
       this.VarIndex = 0;
@@ -520,8 +555,9 @@ var ZGetNameNode = (function(_super) {
 })(ZNode);
 
 var ZGetterNode = (function(_super) {
-   __extends(_super, ZGetterNode);
+   __extends(ZGetterNode, _super);
    function ZGetterNode(){
+_super.call(this);
       this.FieldName = null;
       this.NameToken = null;
 }
@@ -529,8 +565,9 @@ var ZGetterNode = (function(_super) {
 })(ZNode);
 
 var ZGlobalNameNode = (function(_super) {
-   __extends(_super, ZGlobalNameNode);
+   __extends(ZGlobalNameNode, _super);
    function ZGlobalNameNode(){
+_super.call(this);
       this.GlobalName = null;
       this.IsStaticFuncName = false;
 }
@@ -538,22 +575,25 @@ var ZGlobalNameNode = (function(_super) {
 })(ZNode);
 
 var ZGroupNode = (function(_super) {
-   __extends(_super, ZGroupNode);
+   __extends(ZGroupNode, _super);
    function ZGroupNode(){
+_super.call(this);
 }
    return ZGroupNode;
 })(ZNode);
 
 var ZIfNode = (function(_super) {
-   __extends(_super, ZIfNode);
+   __extends(ZIfNode, _super);
    function ZIfNode(){
+_super.call(this);
 }
    return ZIfNode;
 })(ZNode);
 
 var ZImportNode = (function(_super) {
-   __extends(_super, ZImportNode);
+   __extends(ZImportNode, _super);
    function ZImportNode(){
+_super.call(this);
       this.ResourcePath = null;
       this.Alias = null;
       this.ResourceToken = null;
@@ -563,24 +603,27 @@ var ZImportNode = (function(_super) {
 })(ZNode);
 
 var ZInstanceOfNode = (function(_super) {
-   __extends(_super, ZInstanceOfNode);
+   __extends(ZInstanceOfNode, _super);
    function ZInstanceOfNode(){
+_super.call(this);
       this.TargetType = null;
 }
    return ZInstanceOfNode;
 })(ZNode);
 
 var ZIntNode = (function(_super) {
-   __extends(_super, ZIntNode);
+   __extends(ZIntNode, _super);
    function ZIntNode(){
+_super.call(this);
       this.IntValue = 0;
 }
    return ZIntNode;
 })(ZConstNode);
 
 var ZLetNode = (function(_super) {
-   __extends(_super, ZLetNode);
+   __extends(ZLetNode, _super);
    function ZLetNode(){
+_super.call(this);
       this.Symbol = null;
       this.SymbolToken = null;
       this.SymbolType = ZTypeVarType;
@@ -590,39 +633,44 @@ var ZLetNode = (function(_super) {
 })(ZNode);
 
 var ZListNode = (function(_super) {
-   __extends(_super, ZListNode);
+   __extends(ZListNode, _super);
    function ZListNode(){
+_super.call(this);
       this.ListStartIndex = 0;
 }
    return ZListNode;
 })(ZNode);
 
 var ZMacroNode = (function(_super) {
-   __extends(_super, ZMacroNode);
+   __extends(ZMacroNode, _super);
    function ZMacroNode(){
+_super.call(this);
       this.MacroFunc = null;
 }
    return ZMacroNode;
 })(ZListNode);
 
 var ZMapEntryNode = (function(_super) {
-   __extends(_super, ZMapEntryNode);
+   __extends(ZMapEntryNode, _super);
    function ZMapEntryNode(){
+_super.call(this);
       this.Name = null;
 }
    return ZMapEntryNode;
 })(ZNode);
 
 var ZMapLiteralNode = (function(_super) {
-   __extends(_super, ZMapLiteralNode);
+   __extends(ZMapLiteralNode, _super);
    function ZMapLiteralNode(){
+_super.call(this);
 }
    return ZMapLiteralNode;
 })(ZListNode);
 
 var ZMethodCallNode = (function(_super) {
-   __extends(_super, ZMethodCallNode);
+   __extends(ZMethodCallNode, _super);
    function ZMethodCallNode(){
+_super.call(this);
       this.MethodName = null;
       this.MethodToken = null;
 }
@@ -630,43 +678,49 @@ var ZMethodCallNode = (function(_super) {
 })(ZListNode);
 
 var ZNewArrayNode = (function(_super) {
-   __extends(_super, ZNewArrayNode);
+   __extends(ZNewArrayNode, _super);
    function ZNewArrayNode(){
+_super.call(this);
 }
    return ZNewArrayNode;
 })(ZListNode);
 
 var ZNewObjectNode = (function(_super) {
-   __extends(_super, ZNewObjectNode);
+   __extends(ZNewObjectNode, _super);
    function ZNewObjectNode(){
+_super.call(this);
 }
    return ZNewObjectNode;
 })(ZListNode);
 
 var ZNotNode = (function(_super) {
-   __extends(_super, ZNotNode);
+   __extends(ZNotNode, _super);
    function ZNotNode(){
+_super.call(this);
 }
    return ZNotNode;
 })(ZUnaryNode);
 
 var ZNullNode = (function(_super) {
-   __extends(_super, ZNullNode);
+   __extends(ZNullNode, _super);
    function ZNullNode(){
+_super.call(this);
 }
    return ZNullNode;
 })(ZConstNode);
 
 var ZOrNode = (function(_super) {
-   __extends(_super, ZOrNode);
+   __extends(ZOrNode, _super);
    function ZOrNode(){
+_super.call(this);
 }
    return ZOrNode;
 })(ZBinaryNode);
 
 var ZPrototypeNode = (function(_super) {
-   __extends(_super, ZPrototypeNode);
+   __extends(ZPrototypeNode, _super);
    function ZPrototypeNode(){
+_super.call(this);
       this.ReturnType = ZTypeVarType;
       this.FuncName = null;
       this.NameToken = null;
@@ -675,31 +729,35 @@ var ZPrototypeNode = (function(_super) {
 })(ZListNode);
 
 var ZStringNode = (function(_super) {
-   __extends(_super, ZStringNode);
+   __extends(ZStringNode, _super);
    function ZStringNode(){
+_super.call(this);
       this.StringValue = null;
 }
    return ZStringNode;
 })(ZConstNode);
 
 var ZStupidCastErrorNode = (function(_super) {
-   __extends(_super, ZStupidCastErrorNode);
+   __extends(ZStupidCastErrorNode, _super);
    function ZStupidCastErrorNode(){
+_super.call(this);
       this.ErrorNode = null;
 }
    return ZStupidCastErrorNode;
 })(ZErrorNode);
 
 var ZTypeNode = (function(_super) {
-   __extends(_super, ZTypeNode);
+   __extends(ZTypeNode, _super);
    function ZTypeNode(){
+_super.call(this);
 }
    return ZTypeNode;
 })(ZConstNode);
 
 var ZGenerator = (function(_super) {
-   __extends(_super, ZGenerator);
+   __extends(ZGenerator, _super);
    function ZGenerator(){
+_super.call(this);
       this.GrammarInfo = null;
       this.LanguageExtention = null;
       this.TargetVersion = null;
@@ -723,35 +781,39 @@ var ZGenerator = (function(_super) {
 })(ZVisitor);
 
 var ZIndentToken = (function(_super) {
-   __extends(_super, ZIndentToken);
+   __extends(ZIndentToken, _super);
    function ZIndentToken(){
+_super.call(this);
 }
    return ZIndentToken;
 })(ZToken);
 
 var ZPatternToken = (function(_super) {
-   __extends(_super, ZPatternToken);
+   __extends(ZPatternToken, _super);
    function ZPatternToken(){
+_super.call(this);
       this.PresetPattern = null;
 }
    return ZPatternToken;
 })(ZToken);
 
 var ZSourceEngine = (function(_super) {
-   __extends(_super, ZSourceEngine);
+   __extends(ZSourceEngine, _super);
    function ZSourceEngine(){
+_super.call(this);
       this.TypeChecker = null;
       this.Generator = null;
       this.Logger = null;
       this.InteractiveContext = false;
-      this.IsVisitable = true;
+      this.IsVisitableFlag = true;
 }
    return ZSourceEngine;
 })(ZVisitor);
 
 var ZSourceGenerator = (function(_super) {
-   __extends(_super, ZSourceGenerator);
+   __extends(ZSourceGenerator, _super);
    function ZSourceGenerator(){
+_super.call(this);
       this.NativeTypeMap = ;
       this.ReservedNameMap = ;
       this.BuilderList = [];
@@ -778,8 +840,9 @@ var ZSourceGenerator = (function(_super) {
 })(ZGenerator);
 
 var ZTypeChecker = (function(_super) {
-   __extends(_super, ZTypeChecker);
+   __extends(ZTypeChecker, _super);
    function ZTypeChecker(){
+_super.call(this);
       this.StackedContextType = null;
       this.ReturnedNode = null;
       this.Generator = null;
@@ -792,45 +855,51 @@ var ZTypeChecker = (function(_super) {
 })(ZVisitor);
 
 var CSourceGenerator = (function(_super) {
-   __extends(_super, CSourceGenerator);
+   __extends(CSourceGenerator, _super);
    function CSourceGenerator(){
+_super.call(this);
 }
    return CSourceGenerator;
 })(ZSourceGenerator);
 
 var ZAndNode = (function(_super) {
-   __extends(_super, ZAndNode);
+   __extends(ZAndNode, _super);
    function ZAndNode(){
+_super.call(this);
 }
    return ZAndNode;
 })(ZBinaryNode);
 
 var ZArrayLiteralNode = (function(_super) {
-   __extends(_super, ZArrayLiteralNode);
+   __extends(ZArrayLiteralNode, _super);
    function ZArrayLiteralNode(){
+_super.call(this);
 }
    return ZArrayLiteralNode;
 })(ZListNode);
 
 var ZBlockNode = (function(_super) {
-   __extends(_super, ZBlockNode);
+   __extends(ZBlockNode, _super);
    function ZBlockNode(){
+_super.call(this);
       this.NameSpace = null;
 }
    return ZBlockNode;
 })(ZListNode);
 
 var ZBooleanNode = (function(_super) {
-   __extends(_super, ZBooleanNode);
+   __extends(ZBooleanNode, _super);
    function ZBooleanNode(){
+_super.call(this);
       this.BooleanValue = false;
 }
    return ZBooleanNode;
 })(ZConstNode);
 
 var ZClassNode = (function(_super) {
-   __extends(_super, ZClassNode);
+   __extends(ZClassNode, _super);
    function ZClassNode(){
+_super.call(this);
       this.ClassName = null;
       this.ClassType = null;
       this.SuperType = null;
@@ -841,15 +910,17 @@ var ZClassNode = (function(_super) {
 })(ZListNode);
 
 var ZFuncCallNode = (function(_super) {
-   __extends(_super, ZFuncCallNode);
+   __extends(ZFuncCallNode, _super);
    function ZFuncCallNode(){
+_super.call(this);
 }
    return ZFuncCallNode;
 })(ZListNode);
 
 var ZFunctionNode = (function(_super) {
-   __extends(_super, ZFunctionNode);
+   __extends(ZFunctionNode, _super);
    function ZFunctionNode(){
+_super.call(this);
       this.ReturnType = ZTypeVarType;
       this.FuncName = null;
       this.NameToken = null;
@@ -861,8 +932,9 @@ var ZFunctionNode = (function(_super) {
 })(ZListNode);
 
 var ZVarNode = (function(_super) {
-   __extends(_super, ZVarNode);
+   __extends(ZVarNode, _super);
    function ZVarNode(){
+_super.call(this);
       this.DeclType = ZTypeVarType;
       this.NativeName = null;
       this.TypeToken = null;
@@ -4191,16 +4263,16 @@ function ZSourceEngine__3qws(self, TypeChecker__1, Generator__2) {
 }
 
 function IsVisitable__1qws(self) {
-   return self.IsVisitable;
+   return self.IsVisitableFlag;
 }
 
 function EnableVisitor__1qws(self) {
-   self.IsVisitable = true;
+   self.IsVisitableFlag = true;
    return;
 }
 
 function StopVisitor__1qws(self) {
-   self.IsVisitable = false;
+   self.IsVisitableFlag = false;
    return;
 }
 
@@ -4755,12 +4827,12 @@ function VisitBooleanNode__2quk(self, Node__1) {
 }
 
 function VisitIntNode__2quk(self, Node__1) {
-   Append__2qq2(self.CurrentBuilder, LibZen.ThrowError("undefined code generation: #ZTypeNode:String").valueOf(Node.IntValue));
+   Append__2qq2(self.CurrentBuilder, "" + ((Node__1.IntValue)).toString());
    return;
 }
 
 function VisitFloatNode__2quk(self, Node__1) {
-   Append__2qq2(self.CurrentBuilder, LibZen.ThrowError("undefined code generation: #ZTypeNode:String").valueOf(Node.FloatValue));
+   Append__2qq2(self.CurrentBuilder, "" + ((Node__1.FloatValue)).toString());
    return;
 }
 
@@ -5402,7 +5474,7 @@ function VisitArrayLiteralNode__2qgf(self, Node__1) {
    } else {
       Append__2qq2(self.CurrentBuilder, "LibZen_NewArray(");
    };
-   Append__2qq2(self.CurrentBuilder, LibZen.ThrowError("undefined code generation: #ZTypeNode:String").valueOf(Node.GetListSize()));
+   Append__2qq2(self.CurrentBuilder, "" + (Node__1.GetListSize()));
    if (GetListSize__1quv(Node__1) > 0) {
       Append__2qq2(self.CurrentBuilder, self.Camma);
    };
@@ -5421,7 +5493,7 @@ function VisitMapLiteralNode__2qgf(self, Node__1) {
    } else {
       Append__2qq2(self.CurrentBuilder, "LibZen_NewMap(");
    };
-   Append__2qq2(self.CurrentBuilder, LibZen.ThrowError("undefined code generation: #ZTypeNode:String").valueOf(Node.GetListSize()));
+   Append__2qq2(self.CurrentBuilder, "" + (Node__1.GetListSize()));
    if (GetListSize__1quv(Node__1) > 0) {
       Append__2qq2(self.CurrentBuilder, self.Camma);
    };

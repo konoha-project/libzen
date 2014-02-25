@@ -82,7 +82,7 @@ import zen.parser.ZSourceGenerator;
 import zen.parser.ZVariable;
 import zen.type.ZClassType;
 import zen.type.ZFuncType;
-import zen.type.ZGeneric1Type;
+import zen.type.ZGenericType;
 import zen.type.ZType;
 
 class LLVMSourceWriter {
@@ -356,7 +356,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 			return this.GetTypeExpr(FuncType.GetReturnType())+ " " + this.GetFuncParamTypeExpr(FuncType) + "*";
 		}
 		else if(Type.IsArrayType()) {
-			return this.GetNativeType(((ZGeneric1Type)Type).ParamType.GetRealType()) + "*";
+			return this.GetNativeType(((ZGenericType)Type).ParamType.GetRealType()) + "*";
 		}
 		else if(Type instanceof ZClassType) {
 			return this.ToClassSymbol(Type.ShortName) + "*";
@@ -638,7 +638,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		this.Writer.PushNewBuffer(GlobalConst);
 		this.Writer.AddCodeToCurrentBuffer(" = private constant ");
 		int ArraySize = Node.GetListSize();
-		@Var String ElementType = this.GetTypeExpr(((ZGeneric1Type)Node.Type).ParamType);
+		@Var String ElementType = this.GetTypeExpr(((ZGenericType)Node.Type).ParamType);
 		@Var String ArrayType = "[" + ArraySize + " x " + ElementType + "]";
 		this.Writer.AddCodeToCurrentBuffer(ArrayType);
 

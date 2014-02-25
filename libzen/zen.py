@@ -85,9 +85,10 @@ def GenVar(line):
 	line = line.replace("'", '"')
 	line = line.replace("._", "_")
 	line = line.replace(".ArrayValues[", "[")
-	line = line.replace("ZType.", "ZType")
+	line = line.replace("Type.", "Type")
 	line = line.replace(".length()", ".size()")
 	line = line.replace(".length", ".size()")
+	line = line.replace("String.valueOf", '""+')
 	m = VarPattern.match(line)
 	if m:
 		line = m.group(1) + 'var ' + m.group(3) + ": " + GenType(m.group(2)) + m.group(4) + '\n'
@@ -252,9 +253,14 @@ class ClassBlock:
 			if line.find(' static') >= 0 :
 				if line.find('{') == -1 :
 					f.write(GenLetDecl(self.ClassName, line))
-				else:
-					f.write(GenStaticFunc(self.ClassName, line))
+				#else:
+				#f.write(GenStaticFunc(self.ClassName, line))
+	
 	def writefunc(self, f, IsProto):
+		if not IsProto:
+			for line in self.lines:
+				if line.find(' static') >= 0 and line.find('{') != -1 :
+					f.write(GenStaticFunc(self.ClassName, line))
 		for line in self.lines:
 			if line.find('@Field') >= 0 or line.find('static') >0 or line.find('@ZenIgnored') >= 0 :
 				continue
@@ -289,8 +295,10 @@ class Context:
 			c.writeproto(f)
 		for c in self.ClassList:
 			c.writefield(f)
-		for c in self.ClassList:
 			c.writesymbol(f)
+		for c in self.ClassList:
+			#c.writesymbol(f)
+			pass
 		for c in self.ClassList:
 			c.writefunc(f, False)
 		f.close()

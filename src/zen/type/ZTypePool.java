@@ -1,6 +1,5 @@
 package zen.type;
 
-import zen.deps.LibZen;
 import zen.deps.Var;
 import zen.deps.ZArray;
 import zen.deps.ZenMap;
@@ -8,7 +7,6 @@ import zen.deps.ZenMap;
 public class ZTypePool {
 
 	private final static ZArray<ZType> _TypeList = new ZArray<ZType>(new ZType[128]);
-	private final static ZType[] _GreekTypes = ZGreekType._NewGreekTypes(null);
 
 	public final static int _NewTypeId(ZType T) {
 		@Var int TypeId = ZTypePool._TypeList.size();
@@ -24,13 +22,6 @@ public class ZTypePool {
 			return ZTypePool._TypeList.ArrayValues[TypeId];
 		}
 		return ZType.VarType;
-	}
-
-	public final static ZType GetGreekType(int GreekId) {
-		if(ZTypePool._GreekTypes[GreekId] == null) {
-			ZTypePool._GreekTypes[GreekId] = new ZGreekType(GreekId);
-		}
-		return ZTypePool._GreekTypes[GreekId];
 	}
 
 	private final static ZenMap<ZType>     _ClassNameMap = new ZenMap<ZType>(null);
@@ -69,7 +60,7 @@ public class ZTypePool {
 			if(BaseType.IsArrayType()) {
 				Name = BaseType.ShortName + "<" + ParamType + ">";
 			}
-			GenericType = new ZGeneric1Type(ZType.UniqueTypeFlag, Name, BaseType, ParamType);
+			GenericType = new ZGenericType(ZType.UniqueTypeFlag, Name, BaseType, ParamType);
 			ZTypePool._ClassNameMap.put(MangleName, GenericType);
 		}
 		return GenericType;
@@ -85,9 +76,9 @@ public class ZTypePool {
 		if((GenericType == null) && IsCreation) {
 			@Var String ShortName = BaseType.ShortName + "<";
 			@Var int i = 0;
-			while(i < LibZen._Size(TypeList)) {
+			while(i < TypeList.size()) {
 				ShortName = ShortName + TypeList.ArrayValues[i].GetRealType().ShortName;
-				if(i + 1 == LibZen._Size(TypeList)) {
+				if(i + 1 == TypeList.size()) {
 					ShortName = ShortName + ">";
 				}
 				else {
@@ -107,7 +98,7 @@ public class ZTypePool {
 	}
 
 	public final static ZFuncType _LookupFuncType(ZArray<ZType> TypeList) {
-		@Var ZType FuncType = ZTypePool._GetGenericType(ZType.FuncType, TypeList, true);
+		@Var ZType FuncType = ZTypePool._GetGenericType(ZFuncType.FuncType, TypeList, true);
 		if(FuncType instanceof ZFuncType) {
 			return (ZFuncType)FuncType;
 		}

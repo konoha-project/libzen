@@ -379,9 +379,10 @@ public final class ZTokenContext {
 			@Var ZToken Token = this.GetToken();
 			if(Token.IsIndent() || Token.EqualsText(';')) {
 				this.CurrentPosition = this.CurrentPosition + 1;
-				continue;
 			}
-			break;
+			else {
+				break;
+			}
 		}
 	}
 

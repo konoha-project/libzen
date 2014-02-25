@@ -42,9 +42,6 @@ public class ZType  {
 	public final static ZType       FloatType = new ZType(ZType.UniqueTypeFlag, "float", ZType.VarType);
 	public final static ZType		StringType = new ZType(ZType.UniqueTypeFlag, "String", ZType.VarType);
 	public final static ZType       TypeType = new ZType(ZType.UniqueTypeFlag, "Type", ZType.VarType);
-	public final static ZType		ArrayType = new ZGeneric1Type(ZType.UniqueTypeFlag, "Array", null, ZType.VarType);
-	public final static ZType		MapType = new ZGeneric1Type(ZType.UniqueTypeFlag, "Map", null, ZType.VarType);
-	public final static ZFuncType	FuncType  = new ZFuncType("Func", null);
 
 	@Field public int		  TypeFlag = 0;
 	@Field public int         TypeId = 0;
@@ -84,7 +81,7 @@ public class ZType  {
 		return (this.GetRealType() == Type.GetRealType());
 	}
 
-	public boolean Accept(ZType Type) {
+	public final boolean Accept(ZType Type) {
 		@Var ZType ThisType = this.GetRealType();
 		if(ThisType == Type.GetRealType()) {
 			return true;
@@ -154,11 +151,11 @@ public class ZType  {
 	}
 
 	public final boolean IsArrayType() {
-		return (this.GetBaseType() == ZType.ArrayType);
+		return (this.GetBaseType() == ZGenericType.ArrayType);
 	}
 
 	public final boolean IsMapType() {
-		return (this.GetBaseType() == ZType.MapType);
+		return (this.GetBaseType() == ZGenericType.MapType);
 	}
 
 	public final boolean IsOpenType() {

@@ -130,7 +130,6 @@ function Used(this: ZPrototype): void;
 function Defined(this: ZPrototype): void;
 function ZTypePool_NewTypeId(T: ZType): int;
 function TypeOf(TypeId: int): ZType;
-function GetGreekType(GreekId: int): ZType;
 function ZTypePool_MangleType2(Type1: ZType, Type2: ZType): String;
 function ZTypePool_MangleTypes(TypeList: ZType[]): String;
 function ZTypePool_UniqueTypes(TypeList: ZType[]): ZType[];
@@ -762,6 +761,19 @@ class ZType {
 	var AcceptValueType: Func<boolean,ZType,ZType,boolean,ZType[]>;
 	var IsVarType: Func<boolean,ZType>;
 }
+let ZTypeUniqueTypeFlag: int = 1 << 16;
+let ZTypeUnboxTypeFlag: int = 1 << 10;
+let ZTypeOpenTypeFlag: int = 1 << 9;  // @Open for the future
+let ZTypeVarType: ZType = new ZType(ZTypeUniqueTypeFlag, "var", null);
+let ZTypeVoidType: ZType = new ZType(ZTypeUniqueTypeFlag, "void", null);
+let ZTypeBooleanType: ZType = new ZType(ZTypeUniqueTypeFlag, "boolean", ZTypeVarType);
+let ZTypeIntType: ZType = new ZType(ZTypeUniqueTypeFlag, "int", ZTypeVarType);
+let ZTypeFloatType: ZType = new ZType(ZTypeUniqueTypeFlag, "float", ZTypeVarType);
+let ZTypeStringType: ZType = new ZType(ZTypeUniqueTypeFlag, "String", ZTypeVarType);
+let ZTypeTypeType: ZType = new ZType(ZTypeUniqueTypeFlag, "Type", ZTypeVarType);
+let ZTypeArrayType: ZType = new ZGeneric1Type(ZTypeUniqueTypeFlag, "Array", null, ZTypeVarType);
+let ZTypeMapType: ZType = new ZGeneric1Type(ZTypeUniqueTypeFlag, "Map", null, ZTypeVarType);
+let ZTypeFuncType: ZFuncType = new ZFuncType("Func", null);
 class ZClassField {
 	var FieldFlag: int = 0;
 	var ClassType: ZClassType;
@@ -778,6 +790,9 @@ class ZFunc {
 	var FuncName: String;  // NativeReferenceNamr
 	var FuncType: ZFuncType;
 }
+let ZFunc_NativeNameConnector: String = "__";
+let ZFunc_ConverterFunc: int = 1 << 16;
+let ZFunc_CoercionFunc: int = (1 << 17) | ZFunc_ConverterFunc;  //@Coercion
 class ZFuncType extends ZType {
 	var TypeParams: ZType[];
 	var HasUnknownType: boolean = false;
@@ -796,6 +811,9 @@ class ZPrototype extends ZFunc {
 }
 class ZTypePool {
 }
+let ZTypePool_TypeList: ZType[] = [];
+let ZTypePool_ClassNameMap: Map<ZType> = [];
+let ZTypePool_UniqueTypeSetMap: Map<ZType[]> = [];
 class ZVarScope {
 	var Parent: ZVarScope;
 	var Logger: ZLogger;
@@ -820,6 +838,11 @@ class ZNode {
 	var DeSugar: Func<ZSugarNode,ZNode,ZGenerator>;
 	var Accept: Func<void,ZNode,ZVisitor>;
 }
+let ZNode_Nop: int = -1;
+let ZNode_NameInfo: int = -2;
+let ZNode_TypeInfo: int = -3;
+let ZNode_AppendIndex: int = -4;
+let ZNode_NestedAppendIndex: int = -5;
 class ZParamNode extends ZNode {
 	var Name: String;
 	var NameToken: ZToken = null;
@@ -827,30 +850,47 @@ class ZParamNode extends ZNode {
 }
 class ZReturnNode extends ZNode {
 }
+let ZReturnNode_Expr: int = 0;
 class ZSetIndexNode extends ZNode {
 }
+let ZSetIndexNode_Recv: int = 0;
+let ZSetIndexNode_Index: int = 1;
+let ZSetIndexNode_Expr: int = 2;
 class ZSetNameNode extends ZNode {
 	var VarName: String;
 	var VarIndex: int = 0;
 	var IsCaptured: boolean = false;
 }
+let ZSetNameNode_Expr: int = 0;
 class ZSetterNode extends ZNode {
 	var FieldName: String = null;
 	var NameToken: ZToken = null;
 }
+let ZSetterNode_Recv: int = 0;
+let ZSetterNode_Expr: int = 1;
 class ZSugarNode extends ZNode {
 	var SugarNode: ZNode;
 }
+let ZSugarNode_DeSugar: int = 0;
 class ZThrowNode extends ZNode {
 }
+let ZThrowNode_Expr: int = 0;
 class ZTryNode extends ZNode {
 }
+let ZTryNode_Try: int = 0;
+let ZTryNode_Catch: int = 1;
+let ZTryNode_Finally: int = 2;
 class ZUnaryNode extends ZNode {
 }
+let ZUnaryNode_Recv: int = 0;
 class ZWhileNode extends ZNode {
 }
+let ZWhileNode_Cond: int = 0;
+let ZWhileNode_Block: int = 1;
 class ZEmptyValue {
 }
+let ZEmptyValue_TrueEmpty: ZEmptyValue = new ZEmptyValue();
+let ZEmptyValue_FalseEmpty: ZEmptyValue = new ZEmptyValue();
 class ZLogger {
 	var ReportedErrorList: String[] = [];
 }
@@ -866,6 +906,14 @@ class ZNameSpace {
 }
 class ZParserConst {
 }
+let ProgName: String = "LibZen";
+let CodeName: String = "Reference Implementation of D-Script";
+let MajorVersion: int = 0;
+let MinerVersion: int = 1;
+let PatchLevel: int = 0;
+let Version: String = "0.1";
+let Copyright: String = "Copyright (c) 2013-2014, Konoha project authors";
+let License: String = "BSD-Style Open Source";
 class ZSource {
 	var TokenContext: ZTokenContext;
 	var Logger: ZLogger;
@@ -901,11 +949,14 @@ class ZSyntax {
 	var IsDisabled: boolean          = false;
 	var IsStatement: boolean         = false;
 }
+let ZSyntax_BinaryOperator: int = 1;
+let ZSyntax_LeftJoin: int = 1 << 1;
 class ZToken {
 	var Source: ZSource;
 	var StartIndex: int;
 	var EndIndex: int;
 }
+let ZToken_NullToken: ZToken = new ZToken(null, 0, 0);
 class ZTokenContext {
 	var Generator: ZGenerator;
 	var NameSpace: ZNameSpace;
@@ -916,6 +967,12 @@ class ZTokenContext {
 	var LatestToken: ZToken = null;
 	var ApplyingPattern: ZSyntax = null;
 }
+let ZTokenContext_Required: boolean = true;
+let ZTokenContext_Optional: boolean = false;
+let ZTokenContext_AllowSkipIndent: boolean = true;
+let ZTokenContext_NotAllowSkipIndent: boolean = false;
+let ZTokenContext_AllowNewLine: boolean = true;
+let ZTokenContext_MoveNext: boolean = true;
 class ZTokenFunc {
 	var Func: ZTokenFunction;
 	var ParentFunc: ZTokenFunc;
@@ -982,18 +1039,23 @@ class ZAnnotationNode extends ZNode {
 }
 class ZAssertNode extends ZNode {
 }
+let ZAssertNode_Expr: int = 0;
 class ZBinaryNode extends ZNode {
 	var Pattern: ZSyntax;
 }
+let ZBinaryNode_Left: int = 0;
+let ZBinaryNode_Right: int = 1;
 class ZBreakNode extends ZNode {
 }
 class ZCastNode extends ZNode {
 }
+let ZCastNode_Expr: int = 0;
 class ZCatchNode extends ZNode {
 	var ExceptionType: ZType = ZTypeVarType;
 	var ExceptionName: String = null;
 	var NameToken: ZToken = null;
 }
+let ZCatchNode_Block: int = 0;
 class ZComparatorNode extends ZBinaryNode {
 }
 class ZConstNode extends ZNode {
@@ -1009,11 +1071,14 @@ class ZFieldNode extends ZNode {
 	var FieldName: String = null;
 	var NameToken: ZToken = null;
 }
+let ZFieldNode_InitValue: int = 0;
 class ZFloatNode extends ZConstNode {
 	var FloatValue: float;
 }
 class ZGetIndexNode extends ZNode {
 }
+let ZGetIndexNode_Recv: int = 0;
+let ZGetIndexNode_Index: int = 1;
 class ZGetNameNode extends ZNode {
 	var IsCaptured: boolean = false;
 	var VarName: String;
@@ -1023,14 +1088,19 @@ class ZGetterNode extends ZNode {
 	var FieldName: String = null;
 	var NameToken: ZToken = null;
 }
+let ZGetterNode_Recv: int = 0;
 class ZGlobalNameNode extends ZNode {
 	var GlobalName: String;
 	var IsStaticFuncName: boolean;
 }
 class ZGroupNode extends ZNode {
 }
+let ZGroupNode_Expr: int = 0;
 class ZIfNode extends ZNode {
 }
+let ZIfNode_Cond: int = 0;
+let ZIfNode_Then: int = 1;
+let ZIfNode_Else: int = 2;
 class ZImportNode extends ZNode {
 	var ResourcePath: String = null;
 	var Alias: String = null;
@@ -1040,6 +1110,7 @@ class ZImportNode extends ZNode {
 class ZInstanceOfNode extends ZNode {
 	var TargetType: ZType;
 }
+let ZInstanceOfNode_Left: int = 0;
 class ZIntNode extends ZConstNode {
 	var IntValue: int;
 }
@@ -1049,6 +1120,7 @@ class ZLetNode extends ZNode {
 	var SymbolType: ZType = ZTypeVarType;
 	var GlobalName: String = null;
 }
+let ZLetNode_InitValue: int = 0;
 class ZListNode extends ZNode {
 	var ListStartIndex: int;
 }
@@ -1058,12 +1130,15 @@ class ZMacroNode extends ZListNode {
 class ZMapEntryNode extends ZNode {
 	var Name: String = null;
 }
+let ZMapEntryNode_Key: int = 0;
+let ZMapEntryNode_Value: int = 1;
 class ZMapLiteralNode extends ZListNode {
 }
 class ZMethodCallNode extends ZListNode {
 	var MethodName: String = null;
 	var MethodToken: ZToken = null;
 }
+let ZMethodCallNode_Recv: int = 0;
 class ZNewArrayNode extends ZListNode {
 }
 class ZNewObjectNode extends ZListNode {
@@ -1117,7 +1192,7 @@ class ZSourceEngine extends ZVisitor {
 	var Generator: ZGenerator;
 	var Logger: ZLogger;
 	var InteractiveContext: boolean = false;
-	var IsVisitable: boolean = true;
+	var IsVisitableFlag: boolean = true;
 }
 class ZSourceGenerator extends ZGenerator {
 	var NativeTypeMap: Map<String> = [];
@@ -1151,6 +1226,8 @@ class ZTypeChecker extends ZVisitor {
 	var VarScope: ZVarScope;
 	var DefineFunction: Func<void,ZTypeChecker,ZFunctionNode,boolean>;
 }
+let ZTypeChecker_DefaultTypeCheckPolicy: int = 0;
+let ZTypeChecker_NoCheckPolicy: int = 1;
 class CSourceGenerator extends ZSourceGenerator {
 }
 class ZAndNode extends ZBinaryNode {
@@ -1172,6 +1249,7 @@ class ZClassNode extends ZListNode {
 }
 class ZFuncCallNode extends ZListNode {
 }
+let ZFuncCallNode_Func: int = 0;
 class ZFunctionNode extends ZListNode {
 	var ReturnType: ZType = ZTypeVarType;
 	var FuncName: String = null;
@@ -1180,331 +1258,14 @@ class ZFunctionNode extends ZListNode {
 	var ResolvedFuncType: ZFuncType = null;
 	var VarIndex: int = 0;
 }
+let ZFunctionNode_Block: int = 0;
 class ZVarNode extends ZBlockNode {
 	var DeclType: ZType = ZTypeVarType;
 	var NativeName: String = null;
 	var TypeToken: ZToken = null;
 	var NameToken: ZToken = null;
 }
-let ZTypeUniqueTypeFlag: int = 1 << 16;
-let ZTypeUnboxTypeFlag: int = 1 << 10;
-let ZTypeOpenTypeFlag: int = 1 << 9;  // @Open for the future
-let ZTypeVarType: ZType = new ZType(ZTypeUniqueTypeFlag, "var", null);
-let ZTypeVoidType: ZType = new ZType(ZTypeUniqueTypeFlag, "void", null);
-let ZTypeBooleanType: ZType = new ZType(ZTypeUniqueTypeFlag, "boolean", ZTypeVarType);
-let ZTypeIntType: ZType = new ZType(ZTypeUniqueTypeFlag, "int", ZTypeVarType);
-let ZTypeFloatType: ZType = new ZType(ZTypeUniqueTypeFlag, "float", ZTypeVarType);
-let ZTypeStringType: ZType = new ZType(ZTypeUniqueTypeFlag, "String", ZTypeVarType);
-let ZTypeTypeType: ZType = new ZType(ZTypeUniqueTypeFlag, "Type", ZTypeVarType);
-let ZTypeArrayType: ZType = new ZGeneric1Type(ZTypeUniqueTypeFlag, "Array", null, ZTypeVarType);
-let ZTypeMapType: ZType = new ZGeneric1Type(ZTypeUniqueTypeFlag, "Map", null, ZTypeVarType);
-let ZTypeFuncType: ZFuncType = new ZFuncType("Func", null);
-let ZFunc_NativeNameConnector: String = "__";
-let ZFunc_CoercionFunc: int = (1 << 17) | ZFunc_ConverterFunc;  //@Coercion
-let ZFunc_ConverterFunc: int = 1 << 16;
-function ZFunc_StringfySignature(FuncName: String, FuncParamSize: int, RecvType: ZType): String {
-	return FuncName + "__" + FuncParamSize + RecvType.GetUniqueName();
-}
-function ZGreekType_NewGreekTypes(GreekTypes: ZType[]): ZType[] {
-	if(GreekTypes == null) {
-		return LibZen_NewTypeArray(LibZen_Size(LibZen_GreekNames));
-	}
-	else {
-		var i: int = 0;
-		while(i < LibZen_Size(GreekTypes)) {
-			GreekTypes[i] = null;
-			i = i + 1;
-		}
-		return GreekTypes;
-	}
-}
-let ZTypePool_TypeList: ZType[] = [];
-let ZTypePool_GreekTypes: ZType[] = ZGreekType_NewGreekTypes(null);
-function ZTypePool_NewTypeId(T: ZType): int {
-	var TypeId: int = ZTypePool_TypeList.size();
-	ZTypePool_TypeList.add(T);
-	return TypeId;
-}
-function TypeOf(TypeId: int): ZType {
-	if(TypeId == 0) {
-		return ZTypeVarType;
-	}
-	if(TypeId < ZTypePool_TypeList.size()) {
-		return ZTypePool_TypeList[TypeId];
-	}
-	return ZTypeVarType;
-}
-function GetGreekType(GreekId: int): ZType {
-	if(ZTypePool_GreekTypes[GreekId] == null) {
-		ZTypePool_GreekTypes[GreekId] = new ZGreekType(GreekId);
-	}
-	return ZTypePool_GreekTypes[GreekId];
-}
-let ZTypePool_ClassNameMap: Map<ZType> = [];
-let ZTypePool_UniqueTypeSetMap: Map<ZType[]> = [];
-function ZTypePool_MangleType2(Type1: ZType, Type2: ZType): String {
-	return ":" + Type1.TypeId + ":" + Type2.TypeId;
-}
-function ZTypePool_MangleTypes(TypeList: ZType[]): String {
-	var s: String = "";
-	var i: int = 0;
-	while(i < TypeList.size()) {
-		var Type: ZType = TypeList[i];
-		s = s + ":" + Type.TypeId;
-		i = i + 1;
-	}
-	return s;
-}
-function ZTypePool_UniqueTypes(TypeList: ZType[]): ZType[] {
-	var MangleName: String = "[]" + ZTypePool_MangleTypes(TypeList);
-	var Types: ZType[] = ZTypePool_UniqueTypeSetMap[MangleName];
-	if(Types == null) {
-		Types = TypeList.CompactArray();
-		ZTypePool_UniqueTypeSetMap[MangleName] =  Types;
-	}
-	return Types;
-}
-function ZTypePool_GetGenericType1(BaseType: ZType, ParamType: ZType): ZType {
-	var MangleName: String = ZTypePool_MangleType2(BaseType, ParamType);
-	var GenericType: ZType = ZTypePool_ClassNameMap[MangleName];
-	if(GenericType == null) {
-		var Name: String = BaseType.ShortName + "<" + ParamType + ">";
-		if(BaseType.IsArrayType()) {
-			Name = BaseType.ShortName + "<" + ParamType + ">";
-		}
-		GenericType = new ZGeneric1Type(ZTypeUniqueTypeFlag, Name, BaseType, ParamType);
-		ZTypePool_ClassNameMap[MangleName] =  GenericType;
-	}
-	return GenericType;
-}
-function ZTypePool_GetGenericType(BaseType: ZType, TypeList: ZType[], IsCreation: boolean): ZType {
-	assert(BaseType.GetParamSize() > 0);
-	if(TypeList.size() == 1 && !BaseType.IsFuncType()) {
-		return ZTypePool_GetGenericType1(BaseType, TypeList[0]);
-	}
-	var MangleName: String = ":" + BaseType.TypeId + ZTypePool_MangleTypes(TypeList);
-	var GenericType: ZType = ZTypePool_ClassNameMap[MangleName];
-	if((GenericType == null) && IsCreation) {
-		var ShortName: String = BaseType.ShortName + "<";
-		var i: int = 0;
-		while(i < LibZen_Size(TypeList)) {
-			ShortName = ShortName + TypeList[i].GetRealType().ShortName;
-			if(i + 1 == LibZen_Size(TypeList)) {
-				ShortName = ShortName + ">";
-			}
-			else {
-				ShortName = ShortName + ",";
-			}
-			i = i + 1;
-		}
-		if(BaseType.IsFuncType()) {
-			GenericType = new ZFuncType(ShortName, ZTypePool_UniqueTypes(TypeList));
-		}
-		else {
-		}
-		ZTypePool_ClassNameMap[MangleName] =  GenericType;
-	}
-	return GenericType;
-}
-function ZTypePool_LookupFuncType(TypeList: ZType[]): ZFuncType {
-	var FuncType: ZType = ZTypePool_GetGenericType(ZTypeFuncType, TypeList, true);
-	if(FuncType instanceof ZFuncType) {
-		return (ZFuncType)FuncType;
-	}
-	return null;
-}
-function ZTypePool_LookupFuncType(R: ZType): ZFuncType {
-	var TypeList: ZType[] = [];
-	TypeList.add(R);
-	return ZTypePool_LookupFuncType(TypeList);
-}
-function ZTypePool_LookupFuncType(R: ZType, P1: ZType): ZFuncType {
-	var TypeList: ZType[] = [];
-	TypeList.add(R);
-	TypeList.add(P1);
-	return ZTypePool_LookupFuncType(TypeList);
-}
-function ZTypePool_LookupFuncType(R: ZType, P1: ZType, P2: ZType): ZFuncType {
-	var TypeList: ZType[] = [];
-	TypeList.add(R);
-	TypeList.add(P1);
-	TypeList.add(P2);
-	return ZTypePool_LookupFuncType(TypeList);
-}
-function ZTypePool_LookupFuncType(R: ZType, P1: ZType, P2: ZType, P3: ZType): ZFuncType {
-	var TypeList: ZType[] = [];
-	TypeList.add(R);
-	TypeList.add(P1);
-	TypeList.add(P2);
-	TypeList.add(P3);
-	return ZTypePool_LookupFuncType(TypeList);
-}
-let ZNode_Nop: int = -1;
-let ZNode_NameInfo: int = -2;
-let ZNode_TypeInfo: int = -3;
-let ZNode_AppendIndex: int = -4;
-let ZNode_NestedAppendIndex: int = -5;
-let ZReturnNode_Expr: int = 0;
-let ZSetIndexNode_Recv: int = 0;
-let ZSetIndexNode_Index: int = 1;
-let ZSetIndexNode_Expr: int = 2;
-let ZSetNameNode_Expr: int = 0;
-let ZSetterNode_Recv: int = 0;
-let ZSetterNode_Expr: int = 1;
-let ZSugarNode_DeSugar: int = 0;
-let ZThrowNode_Expr: int = 0;
-let ZTryNode_Try: int = 0;
-let ZTryNode_Catch: int = 1;
-let ZTryNode_Finally: int = 2;
-let ZUnaryNode_Recv: int = 0;
-let ZWhileNode_Cond: int = 0;
-let ZWhileNode_Block: int = 1;
-let ZEmptyValue_TrueEmpty: ZEmptyValue = new ZEmptyValue();
-let ZEmptyValue_FalseEmpty: ZEmptyValue = new ZEmptyValue();
-function ZLogger_LogError(Token: ZToken, Message: String): String {
-	if(Token != null && Token.Source != null) {
-		Message = Token.Source.FormatErrorMarker("error", Token.StartIndex, Message);
-		Token.Source.Logger.Report(Message);
-	}
-	return Message;
-}
-function ZLogger_LogWarning(Token: ZToken, Message: String): void {
-	if(Token != null && Token.Source != null) {
-		Message = Token.Source.FormatErrorMarker("warning", Token.StartIndex, Message);
-		Token.Source.Logger.Report(Message);
-	}
-}
-function ZLogger_LogInfo(Token: ZToken, Message: String): void {
-	if(Token != null && Token.Source != null) {
-		Message = Token.Source.FormatErrorMarker("info", Token.StartIndex, Message);
-		Token.Source.Logger.Report(Message);
-	}
-}
-function ZLogger_LogDebug(Token: ZToken, Message: String): void {
-	if(Token != null && Token.Source != null) {
-		Message = Token.Source.FormatErrorMarker("debug", Token.StartIndex, Message);
-		Token.Source.Logger.Report(Message);
-	}
-}
-function ZNameSpace_RightPatternSymbol(PatternName: String): String {
-	return "\t" + PatternName;
-}
-let ProgName: String = "LibZen";
-let CodeName: String = "Reference Implementation of D-Script";
-let MajorVersion: int = 0;
-let MinerVersion: int = 1;
-let PatchLevel: int = 0;
-let Version: String = "0.1";
-let Copyright: String = "Copyright (c) 2013-2014, Konoha project authors";
-let License: String = "BSD-Style Open Source";
-let ZSyntax_BinaryOperator: int = 1;
-let ZSyntax_LeftJoin: int = 1 << 1;
-function MergeSyntaxPattern(Pattern: ZSyntax, Parent: ZSyntax): ZSyntax {
-	if(Parent == null) {
-		return Pattern;
-	}
-	var MergedPattern: ZSyntax = new ZSyntax(Pattern.PackageNameSpace, Pattern.PatternName, Pattern.MatchFunc);
-	MergedPattern.ParentPattern = Parent;
-	return MergedPattern;
-}
-let ZToken_NullToken: ZToken = new ZToken(null, 0, 0);
-let ZTokenContext_Required: boolean = true;
-let ZTokenContext_Optional: boolean = false;
-let ZTokenContext_AllowSkipIndent: boolean = true;
-let ZTokenContext_NotAllowSkipIndent: boolean = false;
-let ZTokenContext_AllowNewLine: boolean = true;
-let ZTokenContext_MoveNext: boolean = true;
-let ZAssertNode_Expr: int = 0;
-let ZBinaryNode_Left: int = 0;
-let ZBinaryNode_Right: int = 1;
-let ZCastNode_Expr: int = 0;
-let ZCatchNode_Block: int = 0;
-let ZFieldNode_InitValue: int = 0;
-let ZGetIndexNode_Recv: int = 0;
-let ZGetIndexNode_Index: int = 1;
-let ZGetterNode_Recv: int = 0;
-let ZGroupNode_Expr: int = 0;
-let ZIfNode_Cond: int = 0;
-let ZIfNode_Then: int = 1;
-let ZIfNode_Else: int = 2;
-let ZInstanceOfNode_Left: int = 0;
-let ZLetNode_InitValue: int = 0;
-let ZMapEntryNode_Key: int = 0;
-let ZMapEntryNode_Value: int = 1;
-let ZMethodCallNode_Recv: int = 0;
-let ZTypeChecker_DefaultTypeCheckPolicy: int = 0;
-let ZTypeChecker_NoCheckPolicy: int = 1;
-let ZFuncCallNode_Func: int = 0;
-let ZFunctionNode_Block: int = 0;
 let ZVarNode_InitValue: int = 0;
-function ExpressionPattern_GetRightPattern(NameSpace: ZNameSpace, TokenContext: ZTokenContext): ZSyntax {
-	var Token: ZToken = TokenContext.GetToken();
-	if(Token != ZToken_NullToken) {
-		var Pattern: ZSyntax = NameSpace.GetRightSyntaxPattern(Token.GetText());
-		return Pattern;
-	}
-	return null;
-}
-function ExpressionPattern_DispatchPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode, AllowStatement: boolean, AllowBinary: boolean): ZNode {
-	var Token: ZToken = TokenContext.GetToken();
-	var Pattern: ZSyntax = null;
-	var NameSpace: ZNameSpace = ParentNode.GetNameSpace();
-	if(Token instanceof ZPatternToken) {
-		Pattern = ((ZPatternToken)Token).PresetPattern;
-	}
-	else {
-		Pattern = NameSpace.GetSyntaxPattern(Token.GetText());
-	}
-	if(Pattern != null) {
-		if(Pattern.IsStatement && !AllowStatement) {
-			return new ZErrorNode(ParentNode, Token, Token.GetText() + " statement is not here");
-		}
-		LeftNode = TokenContext.ApplyMatchPattern(ParentNode, LeftNode, Pattern, ZTokenContext_Required);
-	}
-	else {
-		if(Token.IsNameSymbol()) {
-			if(AllowStatement) {
-				Pattern = NameSpace.GetSyntaxPattern("$SymbolStatement$");
-			}
-			else {
-				Pattern = NameSpace.GetSyntaxPattern("$SymbolExpression$");
-			}
-			LeftNode = TokenContext.ApplyMatchPattern(ParentNode, LeftNode, Pattern, ZTokenContext_Required);
-		}
-		else {
-			if(AllowStatement) {
-				return TokenContext.CreateExpectedErrorNode(Token, "statement");
-			}
-			else {
-				return TokenContext.CreateExpectedErrorNode(Token, "expression");
-			}
-		}
-	}
-	if(!Pattern.IsStatement) {
-		while(LeftNode != null && !LeftNode.IsErrorNode()) {
-			var RightPattern: ZSyntax = ExpressionPattern_GetRightPattern(NameSpace, TokenContext);
-			if(RightPattern == null) {
-				break;
-			}
-			if(!AllowBinary && RightPattern.IsBinaryOperator()) {
-				break;
-			}
-			LeftNode = TokenContext.ApplyMatchPattern(ParentNode, LeftNode, RightPattern, ZTokenContext_Required);
-		}
-	}
-	return LeftNode;
-}
-function NumberLiteralToken_ParseDigit(SourceContext: ZSourceContext): String {
-	var ch: String = 0;
-	while(SourceContext.HasChar()) {
-		ch = SourceContext.GetCurrentChar();
-		if(!LibZen_IsDigit(ch)) {
-			break;
-		}
-		SourceContext.MoveNext();
-	}
-	return ch;
-}
 function ZType(this: ZType, TypeFlag: int, ShortName: String, RefType: ZType): ZType {
 	this.TypeFlag = TypeFlag;
 	this.ShortName = ShortName;
@@ -1728,6 +1489,9 @@ function AppendField(this: ZClassType, FieldType: ZType, FieldName: String, Sour
 	return ClassField;
 }
 
+function ZFunc_StringfySignature(FuncName: String, FuncParamSize: int, RecvType: ZType): String {
+	return FuncName + "__" + FuncParamSize + RecvType.GetUniqueName();
+}
 function ZFunc(this: ZFunc, FuncFlag: int, FuncName: String, FuncType: ZFuncType): ZFunc {
 	this.FuncFlag = FuncFlag;
 	this.FuncName = FuncName;
@@ -1768,7 +1532,7 @@ function ZFuncType(this: ZFuncType, ShortName: String, UniqueTypeParams: ZType[]
 		this.TypeParams = UniqueTypeParams;
 	}
 	var i: int = 0;
-	while(i < LibZen_Size(this.TypeParams)) {
+	while(i < this.TypeParams.size()) {
 		if(this.TypeParams[i].IsVarType()) {
 			this.HasUnknownType = true;
 		}
@@ -1795,7 +1559,7 @@ function GetGreekRealType(this: ZFuncType, Greek: ZType[]): ZType {
 	if(this.HasGreekType) {
 		var TypeList: ZType[] = [];
 		var i: int = 0;
-		while(i < LibZen_Size(this.TypeParams)) {
+		while(i < this.TypeParams.size()) {
 			TypeList.add(this.TypeParams[i].GetGreekRealType(Greek));
 			i = i + 1;
 		}
@@ -1807,7 +1571,7 @@ function GetGreekRealType(this: ZFuncType, Greek: ZType[]): ZType {
 function AcceptValueType(this: ZFuncType, ValueType: ZType, ExactMatch: boolean, Greek: ZType[]): boolean {
 	if(ValueType.IsFuncType() && ValueType.GetParamSize() == this.GetParamSize()) {
 		var i: int = 0;
-		while(i < LibZen_Size(this.TypeParams)) {
+		while(i < this.TypeParams.size()) {
 			if(!this.TypeParams[i].AcceptValueType(ValueType.GetParamType(i), true, Greek)) {
 				return false;
 			}
@@ -1827,7 +1591,7 @@ function GetBaseType(this: ZFuncType): ZType {
 }
 
 function GetParamSize(this: ZFuncType): int {
-	return LibZen_Size(this.TypeParams);
+	return this.TypeParams.size();
 }
 
 function GetParamType(this: ZFuncType, Index: int): ZType {
@@ -1839,11 +1603,11 @@ function GetReturnType(this: ZFuncType): ZType {
 }
 
 function GetFuncParamSize(this: ZFuncType): int {
-	return LibZen_Size(this.TypeParams) - 1;
+	return this.TypeParams.size() - 1;
 }
 
 function GetRecvType(this: ZFuncType): ZType {
-	if(LibZen_Size(this.TypeParams) == 1) {
+	if(this.TypeParams.size() == 1) {
 		return ZTypeVoidType;
 	}
 	return this.TypeParams[1];
@@ -1927,6 +1691,19 @@ function AcceptValueType(this: ZGeneric1Type, ValueType: ZType, ExactMatch: bool
 	return false;
 }
 
+function ZGreekType_NewGreekTypes(GreekTypes: ZType[]): ZType[] {
+	if(GreekTypes == null) {
+		return LibZen_NewTypeArray(LibZen_GreekNames.size());
+	}
+	else {
+		var i: int = 0;
+		while(i < GreekTypes.size()) {
+			GreekTypes[i] = null;
+			i = i + 1;
+		}
+		return GreekTypes;
+	}
+}
 function ZGreekType(this: ZGreekType, GreekId: int): ZGreekType {
 	ZType(this, ZTypeUniqueTypeFlag, LibZen_GreekNames[GreekId], ZTypeVarType);
 	this.GreekId = GreekId;
@@ -1970,6 +1747,117 @@ function Defined(this: ZPrototype): void {
 	this.DefinedCount = this.DefinedCount + 1;
 }
 
+function ZTypePool_NewTypeId(T: ZType): int {
+	var TypeId: int = ZTypePool_TypeList.size();
+	ZTypePool_TypeList.add(T);
+	return TypeId;
+}
+function TypeOf(TypeId: int): ZType {
+	if(TypeId == 0) {
+		return ZTypeVarType;
+	}
+	if(TypeId < ZTypePool_TypeList.size()) {
+		return ZTypePool_TypeList[TypeId];
+	}
+	return ZTypeVarType;
+}
+function ZTypePool_MangleType2(Type1: ZType, Type2: ZType): String {
+	return ":" + Type1.TypeId + ":" + Type2.TypeId;
+}
+function ZTypePool_MangleTypes(TypeList: ZType[]): String {
+	var s: String = "";
+	var i: int = 0;
+	while(i < TypeList.size()) {
+		var Type: ZType = TypeList[i];
+		s = s + ":" + Type.TypeId;
+		i = i + 1;
+	}
+	return s;
+}
+function ZTypePool_UniqueTypes(TypeList: ZType[]): ZType[] {
+	var MangleName: String = "[]" + ZTypePool_MangleTypes(TypeList);
+	var Types: ZType[] = ZTypePool_UniqueTypeSetMap[MangleName];
+	if(Types == null) {
+		Types = TypeList.CompactArray();
+		ZTypePool_UniqueTypeSetMap[MangleName] =  Types;
+	}
+	return Types;
+}
+function ZTypePool_GetGenericType1(BaseType: ZType, ParamType: ZType): ZType {
+	var MangleName: String = ZTypePool_MangleType2(BaseType, ParamType);
+	var GenericType: ZType = ZTypePool_ClassNameMap[MangleName];
+	if(GenericType == null) {
+		var Name: String = BaseType.ShortName + "<" + ParamType + ">";
+		if(BaseType.IsArrayType()) {
+			Name = BaseType.ShortName + "<" + ParamType + ">";
+		}
+		GenericType = new ZGeneric1Type(ZTypeUniqueTypeFlag, Name, BaseType, ParamType);
+		ZTypePool_ClassNameMap[MangleName] =  GenericType;
+	}
+	return GenericType;
+}
+function ZTypePool_GetGenericType(BaseType: ZType, TypeList: ZType[], IsCreation: boolean): ZType {
+	assert(BaseType.GetParamSize() > 0);
+	if(TypeList.size() == 1 && !BaseType.IsFuncType()) {
+		return ZTypePool_GetGenericType1(BaseType, TypeList[0]);
+	}
+	var MangleName: String = ":" + BaseType.TypeId + ZTypePool_MangleTypes(TypeList);
+	var GenericType: ZType = ZTypePool_ClassNameMap[MangleName];
+	if((GenericType == null) && IsCreation) {
+		var ShortName: String = BaseType.ShortName + "<";
+		var i: int = 0;
+		while(i < TypeList.size()) {
+			ShortName = ShortName + TypeList[i].GetRealType().ShortName;
+			if(i + 1 == TypeList.size()) {
+				ShortName = ShortName + ">";
+			}
+			else {
+				ShortName = ShortName + ",";
+			}
+			i = i + 1;
+		}
+		if(BaseType.IsFuncType()) {
+			GenericType = new ZFuncType(ShortName, ZTypePool_UniqueTypes(TypeList));
+		}
+		else {
+		}
+		ZTypePool_ClassNameMap[MangleName] =  GenericType;
+	}
+	return GenericType;
+}
+function ZTypePool_LookupFuncType(TypeList: ZType[]): ZFuncType {
+	var FuncType: ZType = ZTypePool_GetGenericType(ZTypeFuncType, TypeList, true);
+	if(FuncType instanceof ZFuncType) {
+		return (ZFuncType)FuncType;
+	}
+	return null;
+}
+function ZTypePool_LookupFuncType(R: ZType): ZFuncType {
+	var TypeList: ZType[] = [];
+	TypeList.add(R);
+	return ZTypePool_LookupFuncType(TypeList);
+}
+function ZTypePool_LookupFuncType(R: ZType, P1: ZType): ZFuncType {
+	var TypeList: ZType[] = [];
+	TypeList.add(R);
+	TypeList.add(P1);
+	return ZTypePool_LookupFuncType(TypeList);
+}
+function ZTypePool_LookupFuncType(R: ZType, P1: ZType, P2: ZType): ZFuncType {
+	var TypeList: ZType[] = [];
+	TypeList.add(R);
+	TypeList.add(P1);
+	TypeList.add(P2);
+	return ZTypePool_LookupFuncType(TypeList);
+}
+function ZTypePool_LookupFuncType(R: ZType, P1: ZType, P2: ZType, P3: ZType): ZFuncType {
+	var TypeList: ZType[] = [];
+	TypeList.add(R);
+	TypeList.add(P1);
+	TypeList.add(P2);
+	TypeList.add(P3);
+	return ZTypePool_LookupFuncType(TypeList);
+}
 function ZVarScope(this: ZVarScope, Parent: ZVarScope, Logger: ZLogger, VarList: ZVarType[]): ZVarScope {
 	this.Parent = Parent;
 	this.Logger = Logger;
@@ -2389,6 +2277,31 @@ function Accept(this: ZWhileNode, Visitor: ZVisitor): void {
 
 function toString(this: ZEmptyValue): String { return ""; }
 
+function ZLogger_LogError(Token: ZToken, Message: String): String {
+	if(Token != null && Token.Source != null) {
+		Message = Token.Source.FormatErrorMarker("error", Token.StartIndex, Message);
+		Token.Source.Logger.Report(Message);
+	}
+	return Message;
+}
+function ZLogger_LogWarning(Token: ZToken, Message: String): void {
+	if(Token != null && Token.Source != null) {
+		Message = Token.Source.FormatErrorMarker("warning", Token.StartIndex, Message);
+		Token.Source.Logger.Report(Message);
+	}
+}
+function ZLogger_LogInfo(Token: ZToken, Message: String): void {
+	if(Token != null && Token.Source != null) {
+		Message = Token.Source.FormatErrorMarker("info", Token.StartIndex, Message);
+		Token.Source.Logger.Report(Message);
+	}
+}
+function ZLogger_LogDebug(Token: ZToken, Message: String): void {
+	if(Token != null && Token.Source != null) {
+		Message = Token.Source.FormatErrorMarker("debug", Token.StartIndex, Message);
+		Token.Source.Logger.Report(Message);
+	}
+}
 function Report(this: ZLogger, Message: String): void {
 	this.ReportedErrorList.add(Message);
 }
@@ -2412,6 +2325,9 @@ function ZMacroFunc(this: ZMacroFunc, FuncName: String, FuncType: ZFuncType): ZM
 	ZFunc(this, 0, FuncName, FuncType);
 }
 
+function ZNameSpace_RightPatternSymbol(PatternName: String): String {
+	return "\t" + PatternName;
+}
 function ZNameSpace(this: ZNameSpace, Generator: ZGenerator, ParentNameSpace: ZNameSpace): ZNameSpace {
 	this.ParentNameSpace = ParentNameSpace;
 	if(ParentNameSpace == null) {
@@ -3045,6 +2961,14 @@ function ZSymbolEntry(this: ZSymbolEntry, Parent: ZSymbolEntry, Node: ZNode): ZS
 	this.Node = Node;
 }
 
+function MergeSyntaxPattern(Pattern: ZSyntax, Parent: ZSyntax): ZSyntax {
+	if(Parent == null) {
+		return Pattern;
+	}
+	var MergedPattern: ZSyntax = new ZSyntax(Pattern.PackageNameSpace, Pattern.PatternName, Pattern.MatchFunc);
+	MergedPattern.ParentPattern = Parent;
+	return MergedPattern;
+}
 function ZSyntax(this: ZSyntax, NameSpace: ZNameSpace, PatternName: String, MatchFunc: ZMatchFunction): ZSyntax {
 	this.PackageNameSpace = NameSpace;
 	this.PatternName = PatternName;
@@ -4166,7 +4090,7 @@ function IsVisitable(this: ZGenerator): boolean {
 }
 
 function GetGrammarInfo(this: ZGenerator): String {
-	return this.GrammarInfo.trim();
+	return this.GrammarInfo;
 }
 
 function AppendGrammarInfo(this: ZGenerator, GrammarInfo: String): void {
@@ -4323,15 +4247,15 @@ function ZSourceEngine(this: ZSourceEngine, TypeChecker: ZTypeChecker, Generator
 }
 
 function IsVisitable(this: ZSourceEngine): boolean {
-	return this.IsVisitable;
+	return this.IsVisitableFlag;
 }
 
 function EnableVisitor(this: ZSourceEngine): void {
-	this.IsVisitable = true;
+	this.IsVisitableFlag = true;
 }
 
 function StopVisitor(this: ZSourceEngine): void {
-	this.IsVisitable = false;
+	this.IsVisitableFlag = false;
 }
 
 function Eval(this: ZSourceEngine, Node: ZNode): Object {
@@ -4829,11 +4753,11 @@ function VisitBooleanNode(this: ZSourceGenerator, Node: ZBooleanNode): void {
 }
 
 function VisitIntNode(this: ZSourceGenerator, Node: ZIntNode): void {
-	this.CurrentBuilder.Append(String.valueOf(Node.IntValue));
+	this.CurrentBuilder.Append(""+(Node.IntValue));
 }
 
 function VisitFloatNode(this: ZSourceGenerator, Node: ZFloatNode): void {
-	this.CurrentBuilder.Append(String.valueOf(Node.FloatValue));
+	this.CurrentBuilder.Append(""+(Node.FloatValue));
 }
 
 function VisitStringNode(this: ZSourceGenerator, Node: ZStringNode): void {
@@ -5429,7 +5353,7 @@ function VisitArrayLiteralNode(this: CSourceGenerator, Node: ZArrayLiteralNode):
 	else {
 		this.CurrentBuilder.Append("LibZen_NewArray(");
 	}
-	this.CurrentBuilder.Append(String.valueOf(Node.GetListSize()));
+	this.CurrentBuilder.Append(""+(Node.GetListSize()));
 	if(Node.GetListSize() > 0) {
 		this.CurrentBuilder.Append(this.Camma);
 	}
@@ -5450,7 +5374,7 @@ function VisitMapLiteralNode(this: CSourceGenerator, Node: ZMapLiteralNode): voi
 	else {
 		this.CurrentBuilder.Append("LibZen_NewMap(");
 	}
-	this.CurrentBuilder.Append(String.valueOf(Node.GetListSize()));
+	this.CurrentBuilder.Append(""+(Node.GetListSize()));
 	if(Node.GetListSize() > 0) {
 		this.CurrentBuilder.Append(this.Camma);
 	}
@@ -6072,6 +5996,63 @@ function ComparatorPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftN
 	return BinaryNode.AppendParsedRightNode(ParentNode, TokenContext);
 }
 
+function ExpressionPattern_GetRightPattern(NameSpace: ZNameSpace, TokenContext: ZTokenContext): ZSyntax {
+	var Token: ZToken = TokenContext.GetToken();
+	if(Token != ZToken_NullToken) {
+		var Pattern: ZSyntax = NameSpace.GetRightSyntaxPattern(Token.GetText());
+		return Pattern;
+	}
+	return null;
+}
+function ExpressionPattern_DispatchPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode, AllowStatement: boolean, AllowBinary: boolean): ZNode {
+	var Token: ZToken = TokenContext.GetToken();
+	var Pattern: ZSyntax = null;
+	var NameSpace: ZNameSpace = ParentNode.GetNameSpace();
+	if(Token instanceof ZPatternToken) {
+		Pattern = ((ZPatternToken)Token).PresetPattern;
+	}
+	else {
+		Pattern = NameSpace.GetSyntaxPattern(Token.GetText());
+	}
+	if(Pattern != null) {
+		if(Pattern.IsStatement && !AllowStatement) {
+			return new ZErrorNode(ParentNode, Token, Token.GetText() + " statement is not here");
+		}
+		LeftNode = TokenContext.ApplyMatchPattern(ParentNode, LeftNode, Pattern, ZTokenContext_Required);
+	}
+	else {
+		if(Token.IsNameSymbol()) {
+			if(AllowStatement) {
+				Pattern = NameSpace.GetSyntaxPattern("$SymbolStatement$");
+			}
+			else {
+				Pattern = NameSpace.GetSyntaxPattern("$SymbolExpression$");
+			}
+			LeftNode = TokenContext.ApplyMatchPattern(ParentNode, LeftNode, Pattern, ZTokenContext_Required);
+		}
+		else {
+			if(AllowStatement) {
+				return TokenContext.CreateExpectedErrorNode(Token, "statement");
+			}
+			else {
+				return TokenContext.CreateExpectedErrorNode(Token, "expression");
+			}
+		}
+	}
+	if(!Pattern.IsStatement) {
+		while(LeftNode != null && !LeftNode.IsErrorNode()) {
+			var RightPattern: ZSyntax = ExpressionPattern_GetRightPattern(NameSpace, TokenContext);
+			if(RightPattern == null) {
+				break;
+			}
+			if(!AllowBinary && RightPattern.IsBinaryOperator()) {
+				break;
+			}
+			LeftNode = TokenContext.ApplyMatchPattern(ParentNode, LeftNode, RightPattern, ZTokenContext_Required);
+		}
+	}
+	return LeftNode;
+}
 function ExpressionPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	return ExpressionPattern_DispatchPattern(ParentNode, TokenContext, LeftNode, false, true);
 }
@@ -6239,6 +6220,17 @@ function NullPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: Z
 	return new ZNullNode(ParentNode, TokenContext.GetToken(ZTokenContext_MoveNext));
 }
 
+function NumberLiteralToken_ParseDigit(SourceContext: ZSourceContext): String {
+	var ch: String = "\0";
+	while(SourceContext.HasChar()) {
+		ch = SourceContext.GetCurrentChar();
+		if(!LibZen_IsDigit(ch)) {
+			break;
+		}
+		SourceContext.MoveNext();
+	}
+	return ch;
+}
 function NumberLiteralToken(SourceContext: ZSourceContext): boolean {
 	var StartIndex: int = SourceContext.GetPosition();
 	var ch: String = NumberLiteralToken_ParseDigit(SourceContext);

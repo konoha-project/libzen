@@ -5,6 +5,8 @@ import zen.deps.LibZen;
 import zen.deps.Var;
 
 public class ZGreekType extends ZType {
+	//	private final static ZType[] _GreekTypes = ZGreekType._NewGreekTypes(null);
+
 	@Field public final int GreekId;
 
 	public ZGreekType(int GreekId) {
@@ -14,17 +16,24 @@ public class ZGreekType extends ZType {
 
 	public final static ZType[] _NewGreekTypes(ZType[] GreekTypes) {
 		if(GreekTypes == null) {
-			return LibZen._NewTypeArray(LibZen._Size(LibZen._GreekNames));
+			return LibZen._NewTypeArray(LibZen._GreekNames.length);
 		}
 		else {
 			@Var int i = 0;
-			while(i < LibZen._Size(GreekTypes)) {
+			while(i < GreekTypes.length) {
 				GreekTypes[i] = null;
 				i = i + 1;
 			}
 			return GreekTypes;
 		}
 	}
+
+	//	public final static ZType GetGreekType(int GreekId) {
+	//		if(ZGreekType._GreekTypes[GreekId] == null) {
+	//			ZGreekType._GreekTypes[GreekId] = new ZGreekType(GreekId);
+	//		}
+	//		return ZGreekType._GreekTypes[GreekId];
+	//	}
 
 	@Override public boolean IsGreekType() {
 		return true;

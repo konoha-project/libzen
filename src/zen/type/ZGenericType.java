@@ -27,11 +27,14 @@ package zen.type;
 import zen.deps.Field;
 import zen.deps.Nullable;
 
-public class ZGeneric1Type extends ZType {
+public class ZGenericType extends ZType {
+	public final static ZType		ArrayType = new ZGenericType(ZType.UniqueTypeFlag, "Array", null, ZType.VarType);
+	public final static ZType		MapType = new ZGenericType(ZType.UniqueTypeFlag, "Map", null, ZType.VarType);
+
 	@Field public ZType			BaseType;
 	@Field public ZType         ParamType;
 
-	public ZGeneric1Type(int TypeFlag, String ShortName, @Nullable ZType BaseType, ZType ParamType) {
+	public ZGenericType(int TypeFlag, String ShortName, @Nullable ZType BaseType, ZType ParamType) {
 		super(TypeFlag, ShortName, ZType.VarType);
 		this.BaseType = BaseType;
 		if(this.BaseType == null) {

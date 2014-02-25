@@ -29,8 +29,8 @@ import zen.deps.LibZen;
 
 public abstract class ZFunc {
 	public final static String _NativeNameConnector = "__";
-	public final static int _CoercionFunc        = (1 << 17) | ZFunc._ConverterFunc;  //@Coercion
 	public final static int _ConverterFunc       = 1 << 16;
+	public final static int _CoercionFunc        = (1 << 17) | ZFunc._ConverterFunc;  //@Coercion
 
 	@Field public int			  FuncFlag;
 	@Field public String		  FuncName;  // NativeReferenceNamr

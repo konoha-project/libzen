@@ -85,6 +85,8 @@ import zen.grammar.WhilePattern;
 import zen.grammar.WhiteSpaceToken;
 import zen.lang.ZenPrecedence;
 import zen.parser.ZNameSpace;
+import zen.type.ZFuncType;
+import zen.type.ZGenericType;
 import zen.type.ZType;
 
 public class KonohaGrammar {
@@ -95,9 +97,9 @@ public class KonohaGrammar {
 		NameSpace.SetTypeName(ZType.FloatType, null);
 		NameSpace.SetTypeName(ZType.StringType, null);
 		NameSpace.SetTypeName(ZType.TypeType, null);
-		NameSpace.SetTypeName(ZType.ArrayType, null);
-		NameSpace.SetTypeName(ZType.MapType, null);
-		NameSpace.SetTypeName(ZType.FuncType, null);
+		NameSpace.SetTypeName(ZGenericType.ArrayType, null);
+		NameSpace.SetTypeName(ZGenericType.MapType, null);
+		NameSpace.SetTypeName(ZFuncType.FuncType, null);
 
 		NameSpace.AppendTokenFunc(" \t", new WhiteSpaceToken());
 		NameSpace.AppendTokenFunc("\n",  new NewLineToken());

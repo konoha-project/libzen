@@ -94,7 +94,7 @@ public abstract class ZGenerator extends ZVisitor {
 	}
 
 	public final String GetGrammarInfo() {
-		return this.GrammarInfo.trim();
+		return this.GrammarInfo;
 	}
 
 	public final void AppendGrammarInfo(String GrammarInfo) {
@@ -117,12 +117,12 @@ public abstract class ZGenerator extends ZVisitor {
 
 	@ZenMethod public ZFuncType GetConstructorFuncType(ZType ClassType, ZListNode List) {
 		//return null;              // undefined and undefined error
-		return ZType.FuncType;    // undefined and no error
+		return ZFuncType.FuncType;    // undefined and no error
 	}
 
 	@ZenMethod public ZFuncType GetMethodFuncType(ZType RecvType, String MethodName, ZListNode List) {
 		//return null;              // undefined and undefined error
-		return ZType.FuncType;     // undefined and no error
+		return ZFuncType.FuncType;     // undefined and no error
 	}
 
 	// Naming

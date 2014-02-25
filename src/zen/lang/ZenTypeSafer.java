@@ -84,6 +84,7 @@ import zen.parser.ZVariable;
 import zen.type.ZClassType;
 import zen.type.ZFunc;
 import zen.type.ZFuncType;
+import zen.type.ZGenericType;
 import zen.type.ZGreekType;
 import zen.type.ZPrototype;
 import zen.type.ZType;
@@ -150,7 +151,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 			i = i + 1;
 		}
 		if(!ElementType.IsVarType()) {
-			this.TypedNode(Node,ZTypePool._GetGenericType1(ZType.ArrayType, ElementType));
+			this.TypedNode(Node,ZTypePool._GetGenericType1(ZGenericType.ArrayType, ElementType));
 		}
 		else {
 			this.TypedNode(Node, ZType.VarType);
@@ -178,7 +179,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 			i = i + 1;
 		}
 		if(!EntryType.IsVarType()) {
-			this.TypedNode(Node, ZTypePool._GetGenericType1(ZType.MapType, EntryType));
+			this.TypedNode(Node, ZTypePool._GetGenericType1(ZGenericType.MapType, EntryType));
 			return;
 		}
 		else {
