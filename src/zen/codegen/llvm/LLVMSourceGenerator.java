@@ -356,13 +356,13 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 			return this.GetTypeExpr(FuncType.GetReturnType())+ " " + this.GetFuncParamTypeExpr(FuncType) + "*";
 		}
 		else if(Type.IsArrayType()) {
-			return this.GetNativeType(((ZGenericType)Type).ParamType.GetRealType()) + "*";
+			return this.GetNativeTypeName(((ZGenericType)Type).ParamType.GetRealType()) + "*";
 		}
 		else if(Type instanceof ZClassType) {
 			return this.ToClassSymbol(Type.ShortName) + "*";
 		}
 		else {
-			return this.GetNativeType(Type.GetRealType());
+			return this.GetNativeTypeName(Type.GetRealType());
 		}
 	}
 	private String GetFuncParamTypeExpr(ZFuncType FuncType) {

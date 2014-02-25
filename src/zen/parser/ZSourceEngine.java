@@ -73,6 +73,7 @@ import zen.ast.ZWhileNode;
 import zen.deps.Field;
 import zen.deps.LibZen;
 import zen.deps.Var;
+import zen.deps.ZenIgnored;
 import zen.type.ZFuncType;
 import zen.type.ZType;
 
@@ -102,11 +103,17 @@ public class ZSourceEngine extends ZVisitor {
 		this.IsVisitableFlag = false;
 	}
 
-	protected Object Eval(ZNode Node) {
+	@ZenIgnored protected Object Eval(ZNode Node) {
 		if(this.IsVisitable()) {
 			Node.Accept(this);
 		}
 		return ZEmptyValue._TrueEmpty;
+	}
+
+	protected void Eval2(ZNode Node) {
+		if(this.IsVisitable()) {
+			Node.Accept(this);
+		}
 	}
 
 	private void VisitPrototypeNode(ZPrototypeNode Node) {
@@ -118,7 +125,7 @@ public class ZSourceEngine extends ZVisitor {
 		Node.Import();
 	}
 
-	public final Object Exec(ZNode Node, boolean IsInteractive) {
+	@ZenIgnored public final Object Exec(ZNode Node, boolean IsInteractive) {
 		this.InteractiveContext = IsInteractive;
 		this.EnableVisitor();
 		if(Node instanceof ZPrototypeNode) {
@@ -136,7 +143,22 @@ public class ZSourceEngine extends ZVisitor {
 		}
 	}
 
-	public final Object Eval(ZNameSpace NameSpace, String ScriptText, String FileName, int LineNumber, boolean IsInteractive) {
+	public final void Exec2(ZNode Node, boolean IsInteractive) {
+		this.InteractiveContext = IsInteractive;
+		this.EnableVisitor();
+		if(Node instanceof ZPrototypeNode) {
+			this.VisitPrototypeNode((ZPrototypeNode)Node);
+		}
+		else if(Node instanceof ZImportNode) {
+			this.VisitImportNode((ZImportNode)Node);
+		}
+		else {
+			Node = this.TypeChecker.CheckType(Node, ZType.VoidType);
+			this.Eval2(Node);
+		}
+	}
+
+	@ZenIgnored public final Object Eval(ZNameSpace NameSpace, String ScriptText, String FileName, int LineNumber, boolean IsInteractive) {
 		@Var Object ResultValue = ZEmptyValue._TrueEmpty;
 		@Var ZBlockNode TopBlockNode = new ZBlockNode(NameSpace);
 		@Var ZTokenContext TokenContext = new ZTokenContext(this.Generator, NameSpace, FileName, LineNumber, ScriptText);
@@ -163,11 +185,11 @@ public class ZSourceEngine extends ZVisitor {
 		return ResultValue;
 	}
 
-	public final Object Eval(String ScriptText, String FileName, int LineNumber, boolean IsInteractive) {
+	@ZenIgnored public final Object Eval(String ScriptText, String FileName, int LineNumber, boolean IsInteractive) {
 		return this.Eval(this.Generator.RootNameSpace, ScriptText, FileName, LineNumber, IsInteractive);
 	}
 
-	public final boolean Load(String FileName) {
+	@ZenIgnored public final boolean Load(String FileName) {
 		@Var String ScriptText = LibZen._LoadTextFile(FileName);
 		if(ScriptText == null) {
 			LibZen._Exit(1, "file not found: " + FileName);
@@ -179,6 +201,26 @@ public class ZSourceEngine extends ZVisitor {
 			return false;
 		}
 		return true;
+	}
+
+	public final String Translate(String ScriptText, String FileName, int LineNumber) {
+		@Var ZBlockNode TopBlockNode = new ZBlockNode(this.Generator.RootNameSpace);
+		@Var ZTokenContext TokenContext = new ZTokenContext(this.Generator, this.Generator.RootNameSpace, FileName, LineNumber, ScriptText);
+		TokenContext.SkipEmptyStatement();
+		@Var ZToken SkipToken = TokenContext.GetToken();
+		while(TokenContext.HasNext()) {
+			TokenContext.SetParseFlag(ZTokenContext._NotAllowSkipIndent);
+			TopBlockNode.ClearListAfter(0);
+			SkipToken = TokenContext.GetToken();
+			@Var ZNode ParsedNode = TokenContext.ParsePattern(TopBlockNode, "$Statement$", ZTokenContext._Required);
+			if(ParsedNode.IsErrorNode()) {
+				TokenContext.SkipError(SkipToken);
+			}
+			this.Exec2(ParsedNode, false);
+			TokenContext.SkipEmptyStatement();
+			TokenContext.Vacume();
+		}
+		return this.Generator.GetSourceText();
 	}
 
 	//	public final boolean Load(ZNameSpace NameSpace, String ScriptText, long FileLine) {
@@ -281,7 +323,7 @@ public class ZSourceEngine extends ZVisitor {
 	}
 
 	@Override public void VisitGroupNode(ZGroupNode Node) {
-		this.Eval(Node.AST[ZGroupNode._Expr]);
+		this.Eval2(Node.AST[ZGroupNode._Expr]);
 	}
 
 	@Override public void VisitGetterNode(ZGetterNode Node) {
@@ -322,7 +364,7 @@ public class ZSourceEngine extends ZVisitor {
 
 	@Override public void VisitCastNode(ZCastNode Node) {
 		if(Node.Type.IsVoidType()) {
-			this.Eval(Node.AST[ZCastNode._Expr]);
+			this.Eval2(Node.AST[ZCastNode._Expr]);
 			Node.Type = Node.AST[ZCastNode._Expr].Type;
 		}
 		else {
@@ -354,7 +396,7 @@ public class ZSourceEngine extends ZVisitor {
 		@Var int i = 1;
 		while(i < Node.GetListSize() && this.IsVisitable()) {
 			@Var ZNode StmtNode = Node.GetListAt(i);
-			this.Eval(StmtNode);
+			this.Eval2(StmtNode);
 			if(StmtNode.IsBreakingBlock()) {
 				break;
 			}
@@ -366,15 +408,16 @@ public class ZSourceEngine extends ZVisitor {
 	}
 
 	@Override public void VisitIfNode(ZIfNode Node) {
-		@Var Object BooleanValue = this.Eval(Node.AST[ZIfNode._Cond]);
-		if(BooleanValue instanceof Boolean) {
-			if((Boolean)BooleanValue) {
-				this.Eval(Node.AST[ZIfNode._Then]);
-			}
-			else if(Node.AST[ZIfNode._Else] != null) {
-				this.Eval(Node.AST[ZIfNode._Then]);
-			}
-		}
+		this.Unsupported(Node);
+		//		@Var Object BooleanValue = this.Eval2(Node.AST[ZIfNode._Cond]);
+		//		if(BooleanValue instanceof Boolean) {
+		//			if((Boolean)BooleanValue) {
+		//				this.Eval(Node.AST[ZIfNode._Then]);
+		//			}
+		//			else if(Node.AST[ZIfNode._Else] != null) {
+		//				this.Eval(Node.AST[ZIfNode._Then]);
+		//			}
+		//		}
 	}
 
 	@Override public void VisitReturnNode(ZReturnNode Node) {
@@ -442,7 +485,7 @@ public class ZSourceEngine extends ZVisitor {
 	}
 
 	@Override public void VisitSugarNode(ZSugarNode Node) {
-		this.Eval(Node.AST[ZSugarNode._DeSugar]);
+		this.Eval2(Node.AST[ZSugarNode._DeSugar]);
 	}
 
 	public void WriteTo(String OutputFile) {

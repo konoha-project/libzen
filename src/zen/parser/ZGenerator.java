@@ -73,6 +73,11 @@ public abstract class ZGenerator extends ZVisitor {
 		// TODO Stub
 	}
 
+	@ZenMethod public String GetSourceText() {
+		return null;
+	}
+
+
 	@ZenMethod protected String NameOutputFile(String FileName) {
 		if(FileName != null) {
 			return FileName + "." + this.LanguageExtention;
@@ -188,9 +193,9 @@ public abstract class ZGenerator extends ZVisitor {
 				break;
 			}
 			Func = this.GetDefinedFunc(ZFunc._StringfySignature(FuncName, FuncParamSize, RecvType));
-			if(RecvType.IsVarType()) {
-				break;
-			}
+			//			if(RecvType.IsVarType()) {
+			//				break;
+			//			}
 		}
 		return Func;
 	}

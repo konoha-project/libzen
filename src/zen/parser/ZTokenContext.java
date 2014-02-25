@@ -150,7 +150,7 @@ public final class ZTokenContext {
 		}
 		if(StartIndex < EndIndex) {
 			LibZen._PrintDebug("StartIdx="+StartIndex+", EndIndex="+EndIndex);
-			LibZen._PrintDebug("skipped: \t" + ErrorToken.Source.SourceText.subSequence(StartIndex, EndIndex));
+			LibZen._PrintDebug("skipped: \t" + ErrorToken.Source.SourceText.substring(StartIndex, EndIndex));
 		}
 	}
 

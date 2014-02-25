@@ -165,7 +165,7 @@ public class ZSourceGenerator extends ZGenerator {
 		this.NativeTypeMap.put(Key, TypeName);
 	}
 
-	protected String GetNativeType(ZType Type) {
+	protected String GetNativeTypeName(ZType Type) {
 		@Var String Key = "" + Type.TypeId;
 		@Var String TypeName = this.NativeTypeMap.GetOrNull(Key);
 		if (TypeName == null) {
@@ -220,6 +220,21 @@ public class ZSourceGenerator extends ZGenerator {
 	@Override public final void WriteTo(@Nullable String FileName) {
 		LibZen._WriteTo(this.NameOutputFile(FileName), this.BuilderList);
 		this.InitBuilderList();
+	}
+
+	@Override public final String GetSourceText() {
+		@Var ZSourceBuilder sb = new ZSourceBuilder(this, null);
+		@Var int i = 0;
+		while(i < this.BuilderList.size()) {
+			@Var ZSourceBuilder Builder = this.BuilderList.ArrayValues[i];
+			sb.Append(Builder.toString());
+			Builder.Clear();
+			sb.AppendLineFeed();
+			sb.AppendLineFeed();
+			i = i + 1;
+		}
+		this.InitBuilderList();
+		return LibZen._SourceBuilderToString(sb);
 	}
 
 	@Override public boolean StartCodeGeneration(ZNode Node, boolean IsInteractive) {
@@ -640,7 +655,7 @@ public class ZSourceGenerator extends ZGenerator {
 
 	// Utils
 	protected void GenerateTypeName(ZType Type) {
-		this.CurrentBuilder.Append(this.GetNativeType(Type.GetRealType()));
+		this.CurrentBuilder.Append(this.GetNativeTypeName(Type.GetRealType()));
 	}
 
 	protected void VisitListNode(String OpenToken, ZListNode VargNode, String DelimToken, String CloseToken) {

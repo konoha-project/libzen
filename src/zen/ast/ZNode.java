@@ -34,6 +34,7 @@ import zen.parser.ZNameSpace;
 import zen.parser.ZToken;
 import zen.parser.ZTypeChecker;
 import zen.parser.ZVisitor;
+import zen.type.ZFuncType;
 import zen.type.ZType;
 
 public abstract class ZNode {
@@ -161,9 +162,7 @@ public abstract class ZNode {
 			if(Node instanceof ZBlockNode) {
 				return (ZBlockNode)Node;
 			}
-			if(Node == Node.ParentNode) {
-				throw new RuntimeException("serious error: parent node is same: " + Node);
-			}
+			assert(!(Node == Node.ParentNode));
 			Node = Node.ParentNode;
 		}
 		return null;
@@ -192,7 +191,7 @@ public abstract class ZNode {
 	}
 
 	public final boolean IsUntyped() {
-		return this.Type.IsVarType();
+		return !(this.Type instanceof ZFuncType) && this.Type.IsVarType();
 	}
 
 	public final boolean HasUntypedNode() {

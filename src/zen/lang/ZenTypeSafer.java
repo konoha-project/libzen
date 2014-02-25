@@ -247,8 +247,9 @@ public class ZenTypeSafer extends ZTypeChecker {
 	}
 
 	@Override public void VisitGroupNode(ZGroupNode Node) {
-		Node.AST[ZGroupNode._Expr].Accept(this); // this is shortcut
-		this.TypedNode(Node, Node.AST[ZGroupNode._Expr].Type);
+		@Var ZType ContextType = this.GetContextType();
+		this.CheckTypeAt(Node, ZGroupNode._Expr, ContextType);
+		this.TypedNode(Node, Node.GetAstType(ZGroupNode._Expr));
 	}
 
 	private void VisitListNodeAsFuncCall(ZListNode FuncNode, ZFuncType FuncType) {
@@ -258,13 +259,18 @@ public class ZenTypeSafer extends ZTypeChecker {
 			@Var ZNode SubNode = FuncNode.GetListAt(i);
 			@Var ZType ParamType =  FuncType.GetParamType(i+1);
 			SubNode = this.TryType(SubNode, ParamType);
-			if(!ParamType.AcceptValueType(SubNode.Type, false, Greek)) {
-				SubNode = this.CreateStupidCastNode(ParamType.GetGreekRealType(Greek), SubNode);
+			if(!SubNode.IsUntyped() || !ParamType.IsVarType()) {
+				if(!ParamType.AcceptValueType(SubNode.Type, false, Greek)) {
+					SubNode = this.CreateStupidCastNode(ParamType.GetGreekRealType(Greek), SubNode);
+				}
 			}
 			FuncNode.SetListAt(i, SubNode);
 			i = i + 1;
 		}
 		this.TypedNode(FuncNode, FuncType.GetReturnType().GetGreekRealType(Greek));
+		//		//		if(FuncNode.IsUntyped()) {
+		//		System.err.println("untyped: " + FuncType + ", node=" + FuncNode);
+		//		//		}
 	}
 
 	@Override public void VisitMacroNode(ZMacroNode FuncNode) {
@@ -848,8 +854,25 @@ public class ZenTypeSafer extends ZTypeChecker {
 			}
 			RecvType = RecvType.GetSuperType();
 		}
+		//		if(Func == null) {
+		//			System.err.println("Unfound: " + FuncName + ", " + RecvType + ", " + FuncParamSize);
+		//		}
 		return null;
 	}
+
+	//	private ZFunc LookupFunc2(ZNameSpace NameSpace, String FuncName, ZType RecvType, int FuncParamSize) {
+	//		@Var ZFunc Func = this.Generator.LookupFunc(FuncName, RecvType, FuncParamSize);
+	//		if(Func == null && RecvType.IsIntType()) {
+	//			Func = this.Generator.GetDefinedFunc(FuncName, ZType.FloatType, FuncParamSize);
+	//		}
+	//		if(Func == null && RecvType.IsFloatType()) {
+	//			Func = this.Generator.GetDefinedFunc(FuncName, ZType.IntType, FuncParamSize);
+	//		}
+	//		if(Func == null) {
+	//			System.err.println("Unfound: " + FuncName + ", " + RecvType + ", " + FuncParamSize);
+	//		}
+	//		return null;
+	//	}
 
 }
 

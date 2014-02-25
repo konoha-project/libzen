@@ -35,6 +35,7 @@ import zen.ast.ZFunctionNode;
 import zen.ast.ZGetIndexNode;
 import zen.ast.ZGetNameNode;
 import zen.ast.ZGetterNode;
+import zen.ast.ZGlobalNameNode;
 import zen.ast.ZInstanceOfNode;
 import zen.ast.ZLetNode;
 import zen.ast.ZMapLiteralNode;
@@ -117,9 +118,9 @@ public class CSourceGenerator extends ZSourceGenerator {
 
 
 	@Override protected void GenerateCode(ZType ContextType, ZNode Node) {
-		if(Node.IsUntyped() && !Node.IsErrorNode()) {
+		if(Node.IsUntyped() && !Node.IsErrorNode() && !(Node instanceof ZGlobalNameNode)) {
 			this.CurrentBuilder.Append("/*untyped*/" + this.NullLiteral);
-			ZLogger._LogError(Node.SourceToken, "untyped error");
+			ZLogger._LogError(Node.SourceToken, "untyped error: " + Node);
 		}
 		else {
 			if(ContextType != null && Node.Type != ContextType) {
@@ -298,7 +299,7 @@ public class CSourceGenerator extends ZSourceGenerator {
 		return Type.ShortName;
 	}
 
-	@Override protected String GetNativeType(ZType Type) {
+	private String GetCTypeName(ZType Type) {
 		@Var String TypeName = null;
 		if(Type.IsArrayType() || Type.IsMapType()) {
 			TypeName = this.ParamTypeName(Type) + " *";
@@ -307,7 +308,7 @@ public class CSourceGenerator extends ZSourceGenerator {
 			TypeName = "struct " + this.NameClass(Type) + " *";
 		}
 		if(TypeName == null) {
-			TypeName = super.GetNativeType(Type);
+			TypeName = this.GetNativeTypeName(Type);
 		}
 		return TypeName;
 	}
@@ -332,7 +333,7 @@ public class CSourceGenerator extends ZSourceGenerator {
 			this.GenerateFuncTypeName(Type, "");
 		}
 		else {
-			this.CurrentBuilder.Append(this.GetNativeType(Type.GetRealType()));
+			this.CurrentBuilder.Append(this.GetCTypeName(Type.GetRealType()));
 		}
 	}
 

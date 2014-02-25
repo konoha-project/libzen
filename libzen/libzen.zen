@@ -328,7 +328,6 @@ function StartsWithToken(this: ZTokenContext, TokenText: String): boolean;
 function SkipEmptyStatement(this: ZTokenContext): void;
 function Dump(this: ZTokenContext): void;
 function ZTokenFunc(this: ZTokenFunc, Func: ZTokenFunction, Parent: ZTokenFunc): ZTokenFunc;
-function toString(this: ZTokenFunc): String;
 function ZVariable(this: ZVariable, Parent: ZSymbolEntry, FuncNode: ZFunctionNode, VarFlag: int, VarType: ZType, VarName: String, SourceToken: ZToken): ZVariable;
 function IsCaptured(this: ZVariable, CurrentFunctionNode: ZFunctionNode): boolean;
 function Defined(this: ZVariable): void;
@@ -437,6 +436,7 @@ function ZTypeNode(this: ZTypeNode, ParentNode: ZNode, SourceToken: ZToken, Pars
 function ZGenerator(this: ZGenerator, LanguageExtension: String, TargetVersion: String): ZGenerator;
 function ImportLocalGrammar(this: ZGenerator, NameSpace: ZNameSpace): void;
 function WriteTo(this: ZGenerator, FileName: String): void;
+function GetSourceText(this: ZGenerator): String;
 function NameOutputFile(this: ZGenerator, FileName: String): String;
 function EnableVisitor(this: ZGenerator): void;
 function StopVisitor(this: ZGenerator): void;
@@ -470,13 +470,11 @@ function ZSourceEngine(this: ZSourceEngine, TypeChecker: ZTypeChecker, Generator
 function IsVisitable(this: ZSourceEngine): boolean;
 function EnableVisitor(this: ZSourceEngine): void;
 function StopVisitor(this: ZSourceEngine): void;
-function Eval(this: ZSourceEngine, Node: ZNode): Object;
+function Eval2(this: ZSourceEngine, Node: ZNode): void;
 function VisitPrototypeNode(this: ZSourceEngine, Node: ZPrototypeNode): void;
 function VisitImportNode(this: ZSourceEngine, Node: ZImportNode): void;
-function Exec(this: ZSourceEngine, Node: ZNode, IsInteractive: boolean): Object;
-function Eval(this: ZSourceEngine, NameSpace: ZNameSpace, ScriptText: String, FileName: String, LineNumber: int, IsInteractive: boolean): Object;
-function Eval(this: ZSourceEngine, ScriptText: String, FileName: String, LineNumber: int, IsInteractive: boolean): Object;
-function Load(this: ZSourceEngine, FileName: String): boolean;
+function Exec2(this: ZSourceEngine, Node: ZNode, IsInteractive: boolean): void;
+function Translate(this: ZSourceEngine, ScriptText: String, FileName: String, LineNumber: int): String;
 function Unsupported(this: ZSourceEngine, Node: ZNode): void;
 function VisitNullNode(this: ZSourceEngine, Node: ZNullNode): void;
 function VisitBooleanNode(this: ZSourceEngine, Node: ZBooleanNode): void;
@@ -527,7 +525,7 @@ function GetEngine(this: ZSourceGenerator): ZSourceEngine;
 function AppendNewSourceBuilder(this: ZSourceGenerator): ZSourceBuilder;
 function InsertNewSourceBuilder(this: ZSourceGenerator): ZSourceBuilder;
 function SetNativeType(this: ZSourceGenerator, Type: ZType, TypeName: String): void;
-function GetNativeType(this: ZSourceGenerator, Type: ZType): String;
+function GetNativeTypeName(this: ZSourceGenerator, Type: ZType): String;
 function SetReservedName(this: ZSourceGenerator, Keyword: String, AnotherName: String): void;
 function SafeName(this: ZSourceGenerator, Name: String, Index: int): String;
 function SetMacro(this: ZSourceGenerator, FuncName: String, Macro: String, ReturnType: ZType): void;
@@ -536,6 +534,7 @@ function SetMacro(this: ZSourceGenerator, FuncName: String, Macro: String, Retur
 function SetMacro(this: ZSourceGenerator, FuncName: String, Macro: String, ReturnType: ZType, P1: ZType, P2: ZType, P3: ZType): void;
 function SetConverterMacro(this: ZSourceGenerator, Macro: String, ReturnType: ZType, P1: ZType): void;
 function WriteTo(this: ZSourceGenerator, FileName: String): void;
+function GetSourceText(this: ZSourceGenerator): String;
 function StartCodeGeneration(this: ZSourceGenerator, Node: ZNode, IsInteractive: boolean): boolean;
 function GenerateCode(this: ZSourceGenerator, ContextType: ZType, Node: ZNode): void;
 function IsNeededSurroud(this: ZSourceGenerator, Node: ZNode): boolean;
@@ -629,7 +628,7 @@ function VisitThrowNode(this: CSourceGenerator, Node: ZThrowNode): void;
 function VisitTryNode(this: CSourceGenerator, Node: ZTryNode): void;
 function VisitCatchNode(this: CSourceGenerator, Node: ZCatchNode): void;
 function ParamTypeName(this: CSourceGenerator, Type: ZType): String;
-function GetNativeType(this: CSourceGenerator, Type: ZType): String;
+function GetCTypeName(this: CSourceGenerator, Type: ZType): String;
 function GenerateFuncTypeName(this: CSourceGenerator, Type: ZType, FuncName: String): void;
 function GenerateTypeName(this: CSourceGenerator, Type: ZType): void;
 function VisitVarNode(this: CSourceGenerator, Node: ZVarNode): void;
@@ -1175,6 +1174,7 @@ class ZGenerator extends ZVisitor {
 	var GetEngine: Func<ZSourceEngine,ZGenerator>;
 	var ImportLocalGrammar: Func<void,ZGenerator,ZNameSpace>;
 	var WriteTo: Func<void,ZGenerator,String>;
+	var GetSourceText: Func<String,ZGenerator>;
 	var NameOutputFile: Func<String,ZGenerator,String>;
 	var StartCodeGeneration: Func<boolean,ZGenerator,ZNode,boolean>;
 	var GetFieldType: Func<ZType,ZGenerator,ZType,String>;
@@ -1778,7 +1778,7 @@ function ZTypePool_UniqueTypes(TypeList: ZType[]): ZType[] {
 	var MangleName: String = "[]" + ZTypePool_MangleTypes(TypeList);
 	var Types: ZType[] = ZTypePool_UniqueTypeSetMap[MangleName];
 	if(Types == null) {
-		Types = TypeList.CompactArray();
+		Types = TypeList;
 		ZTypePool_UniqueTypeSetMap[MangleName] =  Types;
 	}
 	return Types;
@@ -2116,9 +2116,7 @@ function GetScopeBlockNode(this: ZNode): ZBlockNode {
 		if(Node instanceof ZBlockNode) {
 			return (ZBlockNode)Node;
 		}
-		if(Node == Node.ParentNode) {
-			throw new RuntimeException("serious error: parent node is same: " + Node);
-		}
+		assert(!(Node == Node.ParentNode));
 		Node = Node.ParentNode;
 	}
 	return null;
@@ -2146,7 +2144,7 @@ function Accept(this: ZNode, Visitor: ZVisitor): void {
 }
 
 function IsUntyped(this: ZNode): boolean {
-	return this.Type.IsVarType();
+	return !(this.Type instanceof ZFuncType) && this.Type.IsVarType();
 }
 
 function HasUntypedNode(this: ZNode): boolean {
@@ -2309,7 +2307,7 @@ function Report(this: ZLogger, Message: String): void {
 function GetReportedErrors(this: ZLogger): String[] {
 	var List: String[] = this.ReportedErrorList;
 	this.ReportedErrorList = [];
-	return List.CompactArray();
+	return List;
 }
 
 function ShowErrors(this: ZLogger): void {
@@ -2937,7 +2935,6 @@ function DoTokenize(this: ZSourceContext): boolean {
 			break;
 		}
 		if(this.SourcePosition == CheckPosition) {
-			LibZen_PrintLine("Buggy TokenFunc: " + TokenFunc);
 			this.MoveNext();
 		}
 	}
@@ -3178,7 +3175,7 @@ function SkipError(this: ZTokenContext, ErrorToken: ZToken): void {
 	}
 	if(StartIndex < EndIndex) {
 		LibZen_PrintDebug("StartIdx="+StartIndex+", EndIndex="+EndIndex);
-		LibZen_PrintDebug("skipped: \t" + ErrorToken.Source.SourceText.subSequence(StartIndex, EndIndex));
+		LibZen_PrintDebug("skipped: \t" + ErrorToken.Source.SourceText.substring(StartIndex, EndIndex));
 	}
 }
 
@@ -3426,10 +3423,6 @@ function Dump(this: ZTokenContext): void {
 function ZTokenFunc(this: ZTokenFunc, Func: ZTokenFunction, Parent: ZTokenFunc): ZTokenFunc {
 	this.Func = Func;
 	this.ParentFunc = Parent;
-}
-
-function toString(this: ZTokenFunc): String {
-	return ""+(this.Func);
 }
 
 function ZVariable(this: ZVariable, Parent: ZSymbolEntry, FuncNode: ZFunctionNode, VarFlag: int, VarType: ZType, VarName: String, SourceToken: ZToken): ZVariable {
@@ -4070,6 +4063,10 @@ function ImportLocalGrammar(this: ZGenerator, NameSpace: ZNameSpace): void {
 function WriteTo(this: ZGenerator, FileName: String): void {
 }
 
+function GetSourceText(this: ZGenerator): String {
+	return null;
+}
+
 function NameOutputFile(this: ZGenerator, FileName: String): String {
 	if(FileName != null) {
 		return FileName + "." + this.LanguageExtention;
@@ -4177,9 +4174,6 @@ function LookupFunc(this: ZGenerator, FuncName: String, RecvType: ZType, FuncPar
 			break;
 		}
 		Func = this.GetDefinedFunc(ZFunc_StringfySignature(FuncName, FuncParamSize, RecvType));
-		if(RecvType.IsVarType()) {
-			break;
-		}
 	}
 	return Func;
 }
@@ -4258,11 +4252,10 @@ function StopVisitor(this: ZSourceEngine): void {
 	this.IsVisitableFlag = false;
 }
 
-function Eval(this: ZSourceEngine, Node: ZNode): Object {
+function Eval2(this: ZSourceEngine, Node: ZNode): void {
 	if(this.IsVisitable()) {
 		Node.Accept(this);
 	}
-	return ZEmptyValue_TrueEmpty;
 }
 
 function VisitPrototypeNode(this: ZSourceEngine, Node: ZPrototypeNode): void {
@@ -4274,28 +4267,24 @@ function VisitImportNode(this: ZSourceEngine, Node: ZImportNode): void {
 	Node.Import();
 }
 
-function Exec(this: ZSourceEngine, Node: ZNode, IsInteractive: boolean): Object {
+function Exec2(this: ZSourceEngine, Node: ZNode, IsInteractive: boolean): void {
 	this.InteractiveContext = IsInteractive;
 	this.EnableVisitor();
 	if(Node instanceof ZPrototypeNode) {
 		this.VisitPrototypeNode((ZPrototypeNode)Node);
-		return ZEmptyValue_TrueEmpty;
 	}
 	else if(Node instanceof ZImportNode) {
 		this.VisitImportNode((ZImportNode)Node);
-		return ZEmptyValue_TrueEmpty;
 	}
 	else {
 		Node = this.TypeChecker.CheckType(Node, ZTypeVoidType);
-		var ResultValue: Object = this.Eval(Node);
-		return ResultValue;
+		this.Eval2(Node);
 	}
 }
 
-function Eval(this: ZSourceEngine, NameSpace: ZNameSpace, ScriptText: String, FileName: String, LineNumber: int, IsInteractive: boolean): Object {
-	var ResultValue: Object = ZEmptyValue_TrueEmpty;
-	var TopBlockNode: ZBlockNode = new ZBlockNode(NameSpace);
-	var TokenContext: ZTokenContext = new ZTokenContext(this.Generator, NameSpace, FileName, LineNumber, ScriptText);
+function Translate(this: ZSourceEngine, ScriptText: String, FileName: String, LineNumber: int): String {
+	var TopBlockNode: ZBlockNode = new ZBlockNode(this.Generator.RootNameSpace);
+	var TokenContext: ZTokenContext = new ZTokenContext(this.Generator, this.Generator.RootNameSpace, FileName, LineNumber, ScriptText);
 	TokenContext.SkipEmptyStatement();
 	var SkipToken: ZToken = TokenContext.GetToken();
 	while(TokenContext.HasNext()) {
@@ -4306,35 +4295,11 @@ function Eval(this: ZSourceEngine, NameSpace: ZNameSpace, ScriptText: String, Fi
 		if(ParsedNode.IsErrorNode()) {
 			TokenContext.SkipError(SkipToken);
 		}
-		ResultValue = this.Exec(ParsedNode, IsInteractive);
-		if(ResultValue == ZEmptyValue_FalseEmpty) {
-			break;
-		}
+		this.Exec2(ParsedNode, false);
 		TokenContext.SkipEmptyStatement();
 		TokenContext.Vacume();
 	}
-	if(TokenContext.HasNext() && !IsInteractive) {
-		ZLogger_LogInfo(SkipToken, "stopped script at this line");
-	}
-	return ResultValue;
-}
-
-function Eval(this: ZSourceEngine, ScriptText: String, FileName: String, LineNumber: int, IsInteractive: boolean): Object {
-	return this.Eval(this.Generator.RootNameSpace, ScriptText, FileName, LineNumber, IsInteractive);
-}
-
-function Load(this: ZSourceEngine, FileName: String): boolean {
-	var ScriptText: String = LibZen_LoadTextFile(FileName);
-	if(ScriptText == null) {
-		LibZen_Exit(1, "file not found: " + FileName);
-		return false;
-	}
-	var ResultValue: Object = this.Eval(ScriptText, FileName, 1, false);
-	this.Logger.ShowErrors();
-	if(ResultValue == ZEmptyValue_FalseEmpty) {
-		return false;
-	}
-	return true;
+	return this.Generator.GetSourceText();
 }
 
 function Unsupported(this: ZSourceEngine, Node: ZNode): void {
@@ -4392,7 +4357,7 @@ function VisitSetNameNode(this: ZSourceEngine, Node: ZSetNameNode): void {
 }
 
 function VisitGroupNode(this: ZSourceEngine, Node: ZGroupNode): void {
-	this.Eval(Node.AST[ZGroupNode_Expr]);
+	this.Eval2(Node.AST[ZGroupNode_Expr]);
 }
 
 function VisitGetterNode(this: ZSourceEngine, Node: ZGetterNode): void {
@@ -4433,7 +4398,7 @@ function VisitNotNode(this: ZSourceEngine, Node: ZNotNode): void {
 
 function VisitCastNode(this: ZSourceEngine, Node: ZCastNode): void {
 	if(Node.Type.IsVoidType()) {
-		this.Eval(Node.AST[ZCastNode_Expr]);
+		this.Eval2(Node.AST[ZCastNode_Expr]);
 		Node.Type = Node.AST[ZCastNode_Expr].Type;
 	}
 	else {
@@ -4465,7 +4430,7 @@ function VisitBlockNode(this: ZSourceEngine, Node: ZBlockNode): void {
 	var i: int = 1;
 	while(i < Node.GetListSize() && this.IsVisitable()) {
 		var StmtNode: ZNode = Node.GetListAt(i);
-		this.Eval(StmtNode);
+		this.Eval2(StmtNode);
 		if(StmtNode.IsBreakingBlock()) {
 			break;
 		}
@@ -4477,15 +4442,7 @@ function VisitVarNode(this: ZSourceEngine, Node: ZVarNode): void {
 }
 
 function VisitIfNode(this: ZSourceEngine, Node: ZIfNode): void {
-	var BooleanValue: Object = this.Eval(Node.AST[ZIfNode_Cond]);
-	if(BooleanValue instanceof Boolean) {
-		if((Boolean)BooleanValue) {
-			this.Eval(Node.AST[ZIfNode_Then]);
-		}
-		else if(Node.AST[ZIfNode_Else] != null) {
-			this.Eval(Node.AST[ZIfNode_Then]);
-		}
-	}
+	this.Unsupported(Node);
 }
 
 function VisitReturnNode(this: ZSourceEngine, Node: ZReturnNode): void {
@@ -4549,7 +4506,7 @@ function VisitExtendedNode(this: ZSourceEngine, Node: ZNode): void {
 }
 
 function VisitSugarNode(this: ZSourceEngine, Node: ZSugarNode): void {
-	this.Eval(Node.AST[ZSugarNode_DeSugar]);
+	this.Eval2(Node.AST[ZSugarNode_DeSugar]);
 }
 
 function WriteTo(this: ZSourceEngine, OutputFile: String): void {
@@ -4613,7 +4570,7 @@ function SetNativeType(this: ZSourceGenerator, Type: ZType, TypeName: String): v
 	this.NativeTypeMap[Key] =  TypeName;
 }
 
-function GetNativeType(this: ZSourceGenerator, Type: ZType): String {
+function GetNativeTypeName(this: ZSourceGenerator, Type: ZType): String {
 	var Key: String = "" + Type.TypeId;
 	var TypeName: String = this.NativeTypeMap[Key];
 	if (TypeName == null) {
@@ -4668,6 +4625,21 @@ function SetConverterMacro(this: ZSourceGenerator, Macro: String, ReturnType: ZT
 function WriteTo(this: ZSourceGenerator, FileName: String): void {
 	LibZen_WriteTo(this.NameOutputFile(FileName), this.BuilderList);
 	this.InitBuilderList();
+}
+
+function GetSourceText(this: ZSourceGenerator): String {
+	var sb: ZSourceBuilder = new ZSourceBuilder(this, null);
+	var i: int = 0;
+	while(i < this.BuilderList.size()) {
+		var Builder: ZSourceBuilder = this.BuilderList[i];
+		sb.Append(Builder.toString());
+		Builder.Clear();
+		sb.AppendLineFeed();
+		sb.AppendLineFeed();
+		i = i + 1;
+	}
+	this.InitBuilderList();
+	return LibZen_SourceBuilderToString(sb);
 }
 
 function StartCodeGeneration(this: ZSourceGenerator, Node: ZNode, IsInteractive: boolean): boolean {
@@ -5073,7 +5045,7 @@ function VisitSugarNode(this: ZSourceGenerator, Node: ZSugarNode): void {
 }
 
 function GenerateTypeName(this: ZSourceGenerator, Type: ZType): void {
-	this.CurrentBuilder.Append(this.GetNativeType(Type.GetRealType()));
+	this.CurrentBuilder.Append(this.GetNativeTypeName(Type.GetRealType()));
 }
 
 function VisitListNode(this: ZSourceGenerator, OpenToken: String, VargNode: ZListNode, DelimToken: String, CloseToken: String): void {
@@ -5138,7 +5110,7 @@ function VisitTypeChecker(this: ZTypeChecker, Node: ZNode, ContextType: ZType): 
 }
 
 function CreateStupidCastNode(this: ZTypeChecker, Requested: ZType, Node: ZNode): ZNode {
-	var ErrorNode: ZNode = new ZStupidCastErrorNode(Node, "type error: requested = " +  Requested + ", given = " + Node.Type);
+	var ErrorNode: ZNode = new ZStupidCastErrorNode(Node, "type error: requested=" +  Requested + ", given=" + Node.Type/* + " of node " + Node*/);
 	ErrorNode.Type = Requested;
 	return ErrorNode;
 }
@@ -5325,9 +5297,9 @@ function GetEngine(this: CSourceGenerator): ZSourceEngine {
 }
 
 function GenerateCode(this: CSourceGenerator, ContextType: ZType, Node: ZNode): void {
-	if(Node.IsUntyped() && !Node.IsErrorNode()) {
+	if(Node.IsUntyped() && !Node.IsErrorNode() && !(Node instanceof ZGlobalNameNode)) {
 		this.CurrentBuilder.Append("/*untyped*/" + this.NullLiteral);
-		ZLogger_LogError(Node.SourceToken, "untyped error");
+		ZLogger_LogError(Node.SourceToken, "untyped error: " + Node);
 	}
 	else {
 		if(ContextType != null && Node.Type != ContextType) {
@@ -5481,7 +5453,7 @@ function ParamTypeName(this: CSourceGenerator, Type: ZType): String {
 	return Type.ShortName;
 }
 
-function GetNativeType(this: CSourceGenerator, Type: ZType): String {
+function GetCTypeName(this: CSourceGenerator, Type: ZType): String {
 	var TypeName: String = null;
 	if(Type.IsArrayType() || Type.IsMapType()) {
 		TypeName = this.ParamTypeName(Type) + " *";
@@ -5490,7 +5462,7 @@ function GetNativeType(this: CSourceGenerator, Type: ZType): String {
 		TypeName = "struct " + this.NameClass(Type) + " *";
 	}
 	if(TypeName == null) {
-		TypeName = super.GetNativeType(Type);
+		TypeName = this.GetNativeTypeName(Type);
 	}
 	return TypeName;
 }
@@ -5515,7 +5487,7 @@ function GenerateTypeName(this: CSourceGenerator, Type: ZType): void {
 		this.GenerateFuncTypeName(Type, "");
 	}
 	else {
-		this.CurrentBuilder.Append(this.GetNativeType(Type.GetRealType()));
+		this.CurrentBuilder.Append(this.GetCTypeName(Type.GetRealType()));
 	}
 }
 

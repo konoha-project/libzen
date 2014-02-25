@@ -122,7 +122,7 @@ public final class ZSourceContext extends ZSource {
 				break;
 			}
 			if(this.SourcePosition == CheckPosition) {
-				LibZen._PrintLine("Buggy TokenFunc: " + TokenFunc);
+				//LibZen._PrintLine("Buggy TokenFunc: " + TokenFunc);
 				this.MoveNext();
 			}
 		}

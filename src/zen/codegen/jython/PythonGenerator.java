@@ -99,7 +99,7 @@ public class PythonGenerator extends ZSourceGenerator {
 		// this.CurrentBuilder.Append("(");
 		// this.VisitType(Node.Type);
 		// this.CurrentBuilder.Append(") ");
-		this.CurrentBuilder.AppendBlockComment("as " + this.GetNativeType(Node.Type));
+		this.CurrentBuilder.AppendBlockComment("as " + this.GetNativeTypeName(Node.Type));
 		this.GenerateCode(null, Node.AST[ZCastNode._Expr]);
 	}
 

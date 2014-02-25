@@ -89,6 +89,7 @@ def GenVar(line):
 	line = line.replace(".length()", ".size()")
 	line = line.replace(".length", ".size()")
 	line = line.replace("String.valueOf", '""+')
+	line = line.replace(".CompactArray()", "")
 	m = VarPattern.match(line)
 	if m:
 		line = m.group(1) + 'var ' + m.group(3) + ": " + GenType(m.group(2)) + m.group(4) + '\n'

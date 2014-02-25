@@ -1,3 +1,133 @@
+Func=LibZen_IsFlag: Func<boolean,int,int>, FuncType.IsVarfalse
+Func=ZTypePool_NewTypeId: Func<int,ZType>, FuncType.IsVarfalse
+Func=LibZen_IsFlag: Func<boolean,int,int>, FuncType.IsVarfalse
+Func=LibZen_Stringfy: Func<String,int>, FuncType.IsVarfalse
+Func=LibZen_IsFlag: Func<boolean,int,int>, FuncType.IsVarfalse
+Func=LibZen_IsFlag: Func<boolean,int,int>, FuncType.IsVarfalse
+Func=LibZen_IsFlag: Func<boolean,int,int>, FuncType.IsVarfalse
+Func=LibZen_NewTypeArray: Func<Array<ZType>,int>, FuncType.IsVarfalse
+Func=ZTypePool_LookupFuncType: Func<ZFuncType,Array<ZType>>, FuncType.IsVarfalse
+Func=ZFunc_StringfySignature: Func<String,String,int,ZType>, FuncType.IsVarfalse
+Func=ZTypePool_LookupFuncType: Func<ZFuncType,Array<ZType>>, FuncType.IsVarfalse
+Func=ZTypePool_GetGenericType1: Func<ZType,ZType,ZType>, FuncType.IsVarfalse
+Func=LibZen_NewTypeArray: Func<Array<ZType>,int>, FuncType.IsVarfalse
+Func=ZTypePool_MangleTypes: Func<String,Array<ZType>>, FuncType.IsVarfalse
+Func=ZTypePool_MangleType2: Func<String,ZType,ZType>, FuncType.IsVarfalse
+Func=ZTypePool_GetGenericType1: Func<ZType,ZType,ZType>, FuncType.IsVarfalse
+Func=ZTypePool_MangleTypes: Func<String,Array<ZType>>, FuncType.IsVarfalse
+Func=ZTypePool_UniqueTypes: Func<Array<ZType>,Array<ZType>>, FuncType.IsVarfalse
+Func=ZTypePool_GetGenericType: Func<ZType,ZType,Array<ZType>,boolean>, FuncType.IsVarfalse
+Func=ZTypePool_LookupFuncType: Func<ZFuncType,Array<ZType>>, FuncType.IsVarfalse
+Func=ZTypePool_LookupFuncType: Func<ZFuncType,Array<ZType>>, FuncType.IsVarfalse
+Func=ZTypePool_LookupFuncType: Func<ZFuncType,Array<ZType>>, FuncType.IsVarfalse
+Func=ZTypePool_LookupFuncType: Func<ZFuncType,Array<ZType>>, FuncType.IsVarfalse
+Func=LibZen_NewNodeArray: Func<Array<ZNode>,int>, FuncType.IsVarfalse
+Func=LibZen_GetClassName: Func<String,var>, FuncType.IsVartrue
+Func=LibZen_PrintLine: Func<void,String>, FuncType.IsVarfalse
+Func=LibZen_NewTokenMatrix: Func<Array<ZTokenFunc>>, FuncType.IsVarfalse
+Func=LibZen_GetChar: Func<String,String,int>, FuncType.IsVarfalse
+Func=LibZen_GetTokenMatrixIndex: Func<int,String>, FuncType.IsVarfalse
+Func=ZNameSpace_RightPatternSymbol: Func<String,String>, FuncType.IsVarfalse
+Func=LibZen_Assert: Func<void,boolean>, FuncType.IsVarfalse
+Func=ZNameSpace_RightPatternSymbol: Func<String,String>, FuncType.IsVarfalse
+Func=LibZen_GetChar: Func<String,String,int>, FuncType.IsVarfalse
+Func=LibZen_GetChar: Func<String,String,int>, FuncType.IsVarfalse
+Func=LibZen_GetChar: Func<String,String,int>, FuncType.IsVarfalse
+Func=LibZen_GetChar: Func<String,String,int>, FuncType.IsVarfalse
+Func=LibZen_GetChar: Func<String,String,int>, FuncType.IsVarfalse
+Func=LibZen_GetChar: Func<String,String,int>, FuncType.IsVarfalse
+Func=LibZen_GetChar: Func<String,String,int>, FuncType.IsVarfalse
+Func=LibZen_GetChar: Func<String,String,int>, FuncType.IsVarfalse
+Func=LibZen_SourceBuilderToString: Func<String,ZSourceBuilder,int,int>, FuncType.IsVarfalse
+Func=LibZen_Assert: Func<void,boolean>, FuncType.IsVarfalse
+Func=LibZen_JoinStrings: Func<String,String,int>, FuncType.IsVarfalse
+Func=LibZen_SourceBuilderToString: Func<String,ZSourceBuilder>, FuncType.IsVarfalse
+Func=LibZen_GetChar: Func<String,String,int>, FuncType.IsVarfalse
+Func=LibZen_GetTokenMatrixIndex: Func<int,String>, FuncType.IsVarfalse
+Func=LibZen_GetChar: Func<String,String,int>, FuncType.IsVarfalse
+Func=LibZen_GetChar: Func<String,String,int>, FuncType.IsVarfalse
+Func=ZLogger_LogInfo: Func<void,ZToken,String>, FuncType.IsVarfalse
+Func=LibZen_ApplyTokenFunc: Func<boolean,var,ZSourceContext>, FuncType.IsVartrue
+Func=LibZen_IsFlag: Func<boolean,int,int>, FuncType.IsVarfalse
+Func=LibZen_IsFlag: Func<boolean,int,int>, FuncType.IsVarfalse
+Func=LibZen_IsFlag: Func<boolean,int,int>, FuncType.IsVarfalse
+Func=LibZen_GetChar: Func<String,String,int>, FuncType.IsVarfalse
+Func=LibZen_GetChar: Func<String,String,int>, FuncType.IsVarfalse
+Func=LibZen_GetChar: Func<String,String,int>, FuncType.IsVarfalse
+Func=LibZen_GetChar: Func<String,String,int>, FuncType.IsVarfalse
+Func=LibZen_GetChar: Func<String,String,int>, FuncType.IsVarfalse
+Func=LibZen_IsSymbol: Func<boolean,String>, FuncType.IsVarfalse
+Func=LibZen_PrintDebug: Func<void,String>, FuncType.IsVarfalse
+Func=LibZen_PrintDebug: Func<void,String>, FuncType.IsVarfalse
+Func=LibZen_ApplyMatchFunc: Func<ZNode,var,ZNode,ZTokenContext,ZNode>, FuncType.IsVartrue
+Func=LibZen_PrintLine: Func<void,String>, FuncType.IsVarfalse
+Func=LibZen_PrintDebug: Func<void,String>, FuncType.IsVarfalse
+Func=LibZen_NewNodeArray: Func<Array<ZNode>,int>, FuncType.IsVarfalse
+Func=LibZen_NewNodeArray: Func<Array<ZNode>,int>, FuncType.IsVarfalse
+Func=LibZen_ArrayCopy: Func<void,var,int,var,int,int>, FuncType.IsVartrue
+Func=LibZen_NewNodeArray: Func<Array<ZNode>,int>, FuncType.IsVarfalse
+Func=LibZen_ArrayCopy: Func<void,var,int,var,int,int>, FuncType.IsVartrue
+Func=LibZen_ArrayCopy: Func<void,var,int,var,int,int>, FuncType.IsVartrue
+Func=LibZen_NewNodeArray: Func<Array<ZNode>,int>, FuncType.IsVarfalse
+Func=LibZen_ArrayCopy: Func<void,var,int,var,int,int>, FuncType.IsVartrue
+Func=LibZen_ArrayCopy: Func<void,var,int,var,int,int>, FuncType.IsVartrue
+Func=LibZen_NewNodeArray: Func<Array<ZNode>,int>, FuncType.IsVarfalse
+Func=LibZen_ArrayCopy: Func<void,var,int,var,int,int>, FuncType.IsVartrue
+Func=ZTypePool_LookupFuncType: Func<ZFuncType,Array<ZType>>, FuncType.IsVarfalse
+Func=ZLogger_LogError: Func<String,ZToken,String>, FuncType.IsVarfalse
+Func=ZLogger_LogError: Func<String,ZToken,String>, FuncType.IsVarfalse
+Func=LibZen_GetChar: Func<String,String,int>, FuncType.IsVarfalse
+Func=LibZen_IsLetter: Func<boolean,String>, FuncType.IsVarfalse
+Func=LibZen_AnotherName: Func<String,String>, FuncType.IsVarfalse
+Func=ZFunc_StringfySignature: Func<String,String,int,ZType>, FuncType.IsVarfalse
+Func=ZFunc_StringfySignature: Func<String,String,int,ZType>, FuncType.IsVarfalse
+Func=ZFunc_StringfySignature: Func<String,String,int,ZType>, FuncType.IsVarfalse
+Func=ZFunc_StringfySignature: Func<String,String,int,ZType>, FuncType.IsVarfalse
+Func=ZLogger_LogError: Func<String,ZToken,String>, FuncType.IsVarfalse
+Func=LibZen_PrintDebug: Func<void,String>, FuncType.IsVarfalse
+Func=LibZen_PrintDebug: Func<void,String>, FuncType.IsVarfalse
+Func=LibZen_PrintDebug: Func<void,String>, FuncType.IsVarfalse
+Func=ZLogger_LogError: Func<String,ZToken,String>, FuncType.IsVarfalse
+Func=LibZen_PrintLine: Func<void,String>, FuncType.IsVarfalse
+Func=ZTypePool_LookupFuncType: Func<ZFuncType,ZType>, FuncType.IsVarfalse
+Func=ZTypePool_LookupFuncType: Func<ZFuncType,ZType,ZType>, FuncType.IsVarfalse
+Func=ZTypePool_LookupFuncType: Func<ZFuncType,ZType,ZType,ZType>, FuncType.IsVarfalse
+Func=ZTypePool_LookupFuncType: Func<ZFuncType,ZType,ZType,ZType,ZType>, FuncType.IsVarfalse
+Func=ZTypePool_LookupFuncType: Func<ZFuncType,ZType,ZType>, FuncType.IsVarfalse
+Func=LibZen_WriteTo: Func<void,String,Array<ZSourceBuilder>>, FuncType.IsVarfalse
+Func=LibZen_SourceBuilderToString: Func<String,ZSourceBuilder>, FuncType.IsVarfalse
+Func=LibZen_PrintLine: Func<void,String>, FuncType.IsVarfalse
+Func=LibZen_PrintLine: Func<void,String>, FuncType.IsVarfalse
+Func=LibZen_QuoteString: Func<String,String>, FuncType.IsVarfalse
+Func=ZLogger_LogError: Func<String,ZToken,String>, FuncType.IsVarfalse
+Func=LibZen_ParseInt: Func<int,String>, FuncType.IsVarfalse
+Func=ZLogger_LogError: Func<String,ZToken,String>, FuncType.IsVarfalse
+Func=LibZen_QuoteString: Func<String,String>, FuncType.IsVarfalse
+Func=LibZen_PrintDebug: Func<void,String>, FuncType.IsVarfalse
+Func=LibZen_IsFlag: Func<boolean,int,int>, FuncType.IsVarfalse
+Func=LibZen_PrintDebug: Func<void,String>, FuncType.IsVarfalse
+Func=LibZen_PrintDebug: Func<void,String>, FuncType.IsVarfalse
+Func=ZLogger_LogError: Func<String,ZToken,String>, FuncType.IsVarfalse
+Func=LibZen_AnotherName: Func<String,String>, FuncType.IsVarfalse
+Func=ZLogger_LogError: Func<String,ZToken,String>, FuncType.IsVarfalse
+Func=LibZen_QuoteString: Func<String,String>, FuncType.IsVarfalse
+Func=ZTypePool_LookupFuncType: Func<ZFuncType,Array<ZType>>, FuncType.IsVarfalse
+Func=ExpressionPattern_GetRightPattern: Func<ZSyntax,ZNameSpace,ZTokenContext>, FuncType.IsVarfalse
+Func=ExpressionPattern_DispatchPattern: Func<ZNode,ZNode,ZTokenContext,ZNode,boolean,boolean>, FuncType.IsVarfalse
+Func=LibZen_ParseFloat: Func<float,String>, FuncType.IsVarfalse
+Func=LibZen_ParseInt: Func<int,String>, FuncType.IsVarfalse
+Func=LibZen_IsSymbol: Func<boolean,String>, FuncType.IsVarfalse
+Func=LibZen_IsSymbol: Func<boolean,String>, FuncType.IsVarfalse
+Func=LibZen_IsDigit: Func<boolean,String>, FuncType.IsVarfalse
+Func=LibZen_IsDigit: Func<boolean,String>, FuncType.IsVarfalse
+Func=NumberLiteralToken_ParseDigit: Func<String,ZSourceContext>, FuncType.IsVarfalse
+Func=NumberLiteralToken_ParseDigit: Func<String,ZSourceContext>, FuncType.IsVarfalse
+Func=NumberLiteralToken_ParseDigit: Func<String,ZSourceContext>, FuncType.IsVarfalse
+Func=ExpressionPattern_DispatchPattern: Func<ZNode,ZNode,ZTokenContext,ZNode,boolean,boolean>, FuncType.IsVarfalse
+Func=ZTypePool_GetGenericType: Func<ZType,ZType,Array<ZType>,boolean>, FuncType.IsVarfalse
+Func=ZTypePool_GetGenericType1: Func<ZType,ZType,ZType>, FuncType.IsVarfalse
+Func=ExpressionPattern_DispatchPattern: Func<ZNode,ZNode,ZTokenContext,ZNode,boolean,boolean>, FuncType.IsVarfalse
+Func=LibZen_UnquoteString: Func<String,String>, FuncType.IsVarfalse
 static struct ZType60 * ZType__4qwz(struct ZType60 * this, long TypeFlag__1, const char * ShortName__2, struct ZType60 * RefType__3);
 static struct ZType60 * GetRealType__1qwz(struct ZType60 * this);
 #define _ZType60_GetRealType
@@ -324,99 +454,98 @@ static int StartsWithToken__2qwh(struct ZTokenContext53 * this, const char * Tok
 static void SkipEmptyStatement__1qwh(struct ZTokenContext53 * this);
 static void Dump__1qwh(struct ZTokenContext53 * this);
 static struct ZTokenFunc35 * ZTokenFunc__3qq8(struct ZTokenFunc35 * this, struct ZTokenFunction216 * Func__1, struct ZTokenFunc35 * Parent__2);
-static const char * toString__1qq8(struct ZTokenFunc35 * this);
 static struct ZVariable230 * ZVariable__7qud(struct ZVariable230 * this, struct ZSymbolEntry225 * Parent__1, struct ZFunctionNode144 * FuncNode__2, long VarFlag__3, struct ZType60 * VarType__4, const char * VarName__5, struct ZToken77 * SourceToken__6);
 static int IsCaptured__2qud(struct ZVariable230 * this, struct ZFunctionNode144 * CurrentFunctionNode__1);
 static void Defined__1qud(struct ZVariable230 * this);
 static void Used__1qud(struct ZVariable230 * this);
-static struct ZArrayType300 * ZArrayType__3qoa(struct ZArrayType300 * this, long TypeFlag__1, struct ZType60 * ParamType__2);
-static struct ZAnnotationNode302 * ZAnnotationNode__4qod(struct ZAnnotationNode302 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2, MapOfObject * Anno__3);
-static int IsBreakingBlock__1qod(struct ZAnnotationNode302 * this);
-#define _ZAnnotationNode302_IsBreakingBlock
-static void Accept__2qod(struct ZAnnotationNode302 * this, struct ZVisitor167 * Visitor__1);
-#define _ZAnnotationNode302_Accept
-static struct ZAssertNode308 * ZAssertNode__2qol(struct ZAssertNode308 * this, struct ZNode52 * ParentNode__1);
-static struct ZSugarNode165 * DeSugar__2qol(struct ZAssertNode308 * this, struct ZGenerator55 * Generator__1);
-#define _ZAssertNode308_DeSugar
-static struct ZBinaryNode311 * ZBinaryNode__5qo6(struct ZBinaryNode311 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * SourceToken__2, struct ZNode52 * Left__3, struct ZSyntax219 * Pattern__4);
-static int IsRightJoin__2qo6(struct ZBinaryNode311 * this, struct ZNode52 * Node__1);
-static struct ZNode52 * RightJoin__3qo6(struct ZBinaryNode311 * this, struct ZNode52 * ParentNode__1, struct ZBinaryNode311 * RightNode__2);
-static struct ZNode52 * AppendParsedRightNode__3qo6(struct ZBinaryNode311 * this, struct ZNode52 * ParentNode__1, struct ZTokenContext53 * TokenContext__2);
-static struct ZNode52 * TryMacroNode__2qo6(struct ZBinaryNode311 * this, struct ZGenerator55 * Generator__1);
-static void Accept__2qo6(struct ZBinaryNode311 * this, struct ZVisitor167 * Visitor__1);
-#define _ZBinaryNode311_Accept
-static struct ZBreakNode318 * ZBreakNode__2qom(struct ZBreakNode318 * this, struct ZNode52 * ParentNode__1);
-static void Accept__2qom(struct ZBreakNode318 * this, struct ZVisitor167 * Visitor__1);
-#define _ZBreakNode318_Accept
-static struct ZCastNode321 * ZCastNode__4qo3(struct ZCastNode321 * this, struct ZNode52 * ParentNode__1, struct ZType60 * CastType__2, struct ZNode52 * Node__3);
-static void Accept__2qo3(struct ZCastNode321 * this, struct ZVisitor167 * Visitor__1);
-#define _ZCastNode321_Accept
-static struct ZListNode251 * ToFuncCallNode__2qo3(struct ZCastNode321 * this, struct ZFunc89 * Func__1);
-static struct ZCatchNode325 * ZCatchNode__2qpw(struct ZCatchNode325 * this, struct ZNode52 * ParentNode__1);
-static void SetTypeInfo__3qpw(struct ZCatchNode325 * this, struct ZToken77 * TypeToken__1, struct ZType60 * Type__2);
-#define _ZCatchNode325_SetTypeInfo
-static void SetNameInfo__3qpw(struct ZCatchNode325 * this, struct ZToken77 * NameToken__1, const char * Name__2);
-#define _ZCatchNode325_SetNameInfo
-static struct ZComparatorNode329 * ZComparatorNode__5qpy(struct ZComparatorNode329 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * SourceToken__2, struct ZNode52 * Left__3, struct ZSyntax219 * Pattern__4);
-static void Accept__2qpy(struct ZComparatorNode329 * this, struct ZVisitor167 * Visitor__1);
-#define _ZComparatorNode329_Accept
-static struct ZConstNode332 * ZConstNode__3qpo(struct ZConstNode332 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * SourceToken__2);
-static struct ZEmptyNode334 * ZEmptyNode__3qp0(struct ZEmptyNode334 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2);
-static struct ZErrorNode336 * ZErrorNode__4qpa(struct ZErrorNode336 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * SourceToken__2, const char * ErrorMessage__3);
-static struct ZErrorNode336 * ZErrorNode__3qpa(struct ZErrorNode336 * this, struct ZNode52 * Node__1, const char * ErrorMessage__2);
-static void Accept__2qpa(struct ZErrorNode336 * this, struct ZVisitor167 * Visitor__1);
-#define _ZErrorNode336_Accept
-static struct ZFieldNode340 * ZFieldNode__2qpg(struct ZFieldNode340 * this, struct ZNode52 * ParentNode__1);
-static void SetTypeInfo__3qpg(struct ZFieldNode340 * this, struct ZToken77 * TypeToken__1, struct ZType60 * Type__2);
-#define _ZFieldNode340_SetTypeInfo
-static void SetNameInfo__3qpg(struct ZFieldNode340 * this, struct ZToken77 * NameToken__1, const char * Name__2);
-#define _ZFieldNode340_SetNameInfo
-static struct ZFloatNode344 * ZFloatNode__4qpl(struct ZFloatNode344 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2, double Value__3);
-static void Accept__2qpl(struct ZFloatNode344 * this, struct ZVisitor167 * Visitor__1);
-#define _ZFloatNode344_Accept
-static struct ZGetIndexNode347 * ZGetIndexNode__3qp6(struct ZGetIndexNode347 * this, struct ZNode52 * ParentNode__1, struct ZNode52 * RecvNode__2);
-static void Accept__2qp6(struct ZGetIndexNode347 * this, struct ZVisitor167 * Visitor__1);
-#define _ZGetIndexNode347_Accept
-static struct ZGetNameNode350 * ZGetNameNode__4qpc(struct ZGetNameNode350 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2, const char * NativeName__3);
-static struct ZGetNameNode350 * ZGetNameNode__3qpc(struct ZGetNameNode350 * this, struct ZNode52 * ParentNode__1, struct ZFunc89 * ResolvedFunc__2);
-static void Accept__2qpc(struct ZGetNameNode350 * this, struct ZVisitor167 * Visitor__1);
-#define _ZGetNameNode350_Accept
-static struct ZNode52 * ToGlobalNameNode__1qpc(struct ZGetNameNode350 * this);
-static struct ZGetterNode355 * ZGetterNode__3qp7(struct ZGetterNode355 * this, struct ZNode52 * ParentNode__1, struct ZNode52 * RecvNode__2);
-static void SetNameInfo__3qp7(struct ZGetterNode355 * this, struct ZToken77 * NameToken__1, const char * Name__2);
-#define _ZGetterNode355_SetNameInfo
-static void Accept__2qp7(struct ZGetterNode355 * this, struct ZVisitor167 * Visitor__1);
-#define _ZGetterNode355_Accept
-static int IsStaticField__1qp7(struct ZGetterNode355 * this);
-static struct ZGlobalNameNode360 * ZGlobalNameNode__6q0q(struct ZGlobalNameNode360 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * SourceToken__2, struct ZType60 * Type__3, const char * GlobalName__4, int IsStaticFuncName__5);
-static int IsGivenName__1q0q(struct ZGlobalNameNode360 * this);
-static void Accept__2q0q(struct ZGlobalNameNode360 * this, struct ZVisitor167 * Visitor__1);
-#define _ZGlobalNameNode360_Accept
-static struct ZGroupNode364 * ZGroupNode__2q0t(struct ZGroupNode364 * this, struct ZNode52 * ParentNode__1);
-static void Accept__2q0t(struct ZGroupNode364 * this, struct ZVisitor167 * Visitor__1);
-#define _ZGroupNode364_Accept
-static struct ZIfNode367 * ZIfNode__2q0i(struct ZIfNode367 * this, struct ZNode52 * ParentNode__1);
-static void Accept__2q0i(struct ZIfNode367 * this, struct ZVisitor167 * Visitor__1);
-#define _ZIfNode367_Accept
-static struct ZImportNode370 * ZImportNode__2q00(struct ZImportNode370 * this, struct ZNode52 * ParentNode__1);
-static void SetNameInfo__3q00(struct ZImportNode370 * this, struct ZToken77 * NameToken__1, const char * Name__2);
-#define _ZImportNode370_SetNameInfo
-static struct ZInstanceOfNode373 * ZInstanceOfNode__4q0s(struct ZInstanceOfNode373 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2, struct ZNode52 * LeftNode__3);
-static void SetTypeInfo__3q0s(struct ZInstanceOfNode373 * this, struct ZToken77 * TypeToken__1, struct ZType60 * Type__2);
-#define _ZInstanceOfNode373_SetTypeInfo
-static void Accept__2q0s(struct ZInstanceOfNode373 * this, struct ZVisitor167 * Visitor__1);
-#define _ZInstanceOfNode373_Accept
-static struct ZIntNode377 * ZIntNode__4q0h(struct ZIntNode377 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2, long Value__3);
-static void Accept__2q0h(struct ZIntNode377 * this, struct ZVisitor167 * Visitor__1);
-#define _ZIntNode377_Accept
-static struct ZLetNode380 * ZLetNode__2q0l(struct ZLetNode380 * this, struct ZNode52 * ParentNode__1);
-static void SetNameInfo__3q0l(struct ZLetNode380 * this, struct ZToken77 * NameToken__1, const char * Name__2);
-#define _ZLetNode380_SetNameInfo
-static void SetTypeInfo__3q0l(struct ZLetNode380 * this, struct ZToken77 * TypeToken__1, struct ZType60 * Type__2);
-#define _ZLetNode380_SetTypeInfo
-static void Accept__2q0l(struct ZLetNode380 * this, struct ZVisitor167 * Visitor__1);
-#define _ZLetNode380_Accept
-static struct ZGlobalNameNode360 * ToGlobalNameNode__1q0l(struct ZLetNode380 * this);
+static struct ZArrayType299 * ZArrayType__3qo4(struct ZArrayType299 * this, long TypeFlag__1, struct ZType60 * ParamType__2);
+static struct ZAnnotationNode301 * ZAnnotationNode__4qos(struct ZAnnotationNode301 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2, MapOfObject * Anno__3);
+static int IsBreakingBlock__1qos(struct ZAnnotationNode301 * this);
+#define _ZAnnotationNode301_IsBreakingBlock
+static void Accept__2qos(struct ZAnnotationNode301 * this, struct ZVisitor167 * Visitor__1);
+#define _ZAnnotationNode301_Accept
+static struct ZAssertNode307 * ZAssertNode__2qok(struct ZAssertNode307 * this, struct ZNode52 * ParentNode__1);
+static struct ZSugarNode165 * DeSugar__2qok(struct ZAssertNode307 * this, struct ZGenerator55 * Generator__1);
+#define _ZAssertNode307_DeSugar
+static struct ZBinaryNode310 * ZBinaryNode__5qo1(struct ZBinaryNode310 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * SourceToken__2, struct ZNode52 * Left__3, struct ZSyntax219 * Pattern__4);
+static int IsRightJoin__2qo1(struct ZBinaryNode310 * this, struct ZNode52 * Node__1);
+static struct ZNode52 * RightJoin__3qo1(struct ZBinaryNode310 * this, struct ZNode52 * ParentNode__1, struct ZBinaryNode310 * RightNode__2);
+static struct ZNode52 * AppendParsedRightNode__3qo1(struct ZBinaryNode310 * this, struct ZNode52 * ParentNode__1, struct ZTokenContext53 * TokenContext__2);
+static struct ZNode52 * TryMacroNode__2qo1(struct ZBinaryNode310 * this, struct ZGenerator55 * Generator__1);
+static void Accept__2qo1(struct ZBinaryNode310 * this, struct ZVisitor167 * Visitor__1);
+#define _ZBinaryNode310_Accept
+static struct ZBreakNode317 * ZBreakNode__2qon(struct ZBreakNode317 * this, struct ZNode52 * ParentNode__1);
+static void Accept__2qon(struct ZBreakNode317 * this, struct ZVisitor167 * Visitor__1);
+#define _ZBreakNode317_Accept
+static struct ZCastNode320 * ZCastNode__4qo5(struct ZCastNode320 * this, struct ZNode52 * ParentNode__1, struct ZType60 * CastType__2, struct ZNode52 * Node__3);
+static void Accept__2qo5(struct ZCastNode320 * this, struct ZVisitor167 * Visitor__1);
+#define _ZCastNode320_Accept
+static struct ZListNode251 * ToFuncCallNode__2qo5(struct ZCastNode320 * this, struct ZFunc89 * Func__1);
+static struct ZCatchNode324 * ZCatchNode__2qpq(struct ZCatchNode324 * this, struct ZNode52 * ParentNode__1);
+static void SetTypeInfo__3qpq(struct ZCatchNode324 * this, struct ZToken77 * TypeToken__1, struct ZType60 * Type__2);
+#define _ZCatchNode324_SetTypeInfo
+static void SetNameInfo__3qpq(struct ZCatchNode324 * this, struct ZToken77 * NameToken__1, const char * Name__2);
+#define _ZCatchNode324_SetNameInfo
+static struct ZComparatorNode328 * ZComparatorNode__5qpt(struct ZComparatorNode328 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * SourceToken__2, struct ZNode52 * Left__3, struct ZSyntax219 * Pattern__4);
+static void Accept__2qpt(struct ZComparatorNode328 * this, struct ZVisitor167 * Visitor__1);
+#define _ZComparatorNode328_Accept
+static struct ZConstNode331 * ZConstNode__3qpi(struct ZConstNode331 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * SourceToken__2);
+static struct ZEmptyNode333 * ZEmptyNode__3qpp(struct ZEmptyNode333 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2);
+static struct ZErrorNode335 * ZErrorNode__4qp4(struct ZErrorNode335 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * SourceToken__2, const char * ErrorMessage__3);
+static struct ZErrorNode335 * ZErrorNode__3qp4(struct ZErrorNode335 * this, struct ZNode52 * Node__1, const char * ErrorMessage__2);
+static void Accept__2qp4(struct ZErrorNode335 * this, struct ZVisitor167 * Visitor__1);
+#define _ZErrorNode335_Accept
+static struct ZFieldNode339 * ZFieldNode__2qpf(struct ZFieldNode339 * this, struct ZNode52 * ParentNode__1);
+static void SetTypeInfo__3qpf(struct ZFieldNode339 * this, struct ZToken77 * TypeToken__1, struct ZType60 * Type__2);
+#define _ZFieldNode339_SetTypeInfo
+static void SetNameInfo__3qpf(struct ZFieldNode339 * this, struct ZToken77 * NameToken__1, const char * Name__2);
+#define _ZFieldNode339_SetNameInfo
+static struct ZFloatNode343 * ZFloatNode__4qpk(struct ZFloatNode343 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2, double Value__3);
+static void Accept__2qpk(struct ZFloatNode343 * this, struct ZVisitor167 * Visitor__1);
+#define _ZFloatNode343_Accept
+static struct ZGetIndexNode346 * ZGetIndexNode__3qp1(struct ZGetIndexNode346 * this, struct ZNode52 * ParentNode__1, struct ZNode52 * RecvNode__2);
+static void Accept__2qp1(struct ZGetIndexNode346 * this, struct ZVisitor167 * Visitor__1);
+#define _ZGetIndexNode346_Accept
+static struct ZGetNameNode349 * ZGetNameNode__4qpx(struct ZGetNameNode349 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2, const char * NativeName__3);
+static struct ZGetNameNode349 * ZGetNameNode__3qpx(struct ZGetNameNode349 * this, struct ZNode52 * ParentNode__1, struct ZFunc89 * ResolvedFunc__2);
+static void Accept__2qpx(struct ZGetNameNode349 * this, struct ZVisitor167 * Visitor__1);
+#define _ZGetNameNode349_Accept
+static struct ZNode52 * ToGlobalNameNode__1qpx(struct ZGetNameNode349 * this);
+static struct ZGetterNode354 * ZGetterNode__3qpm(struct ZGetterNode354 * this, struct ZNode52 * ParentNode__1, struct ZNode52 * RecvNode__2);
+static void SetNameInfo__3qpm(struct ZGetterNode354 * this, struct ZToken77 * NameToken__1, const char * Name__2);
+#define _ZGetterNode354_SetNameInfo
+static void Accept__2qpm(struct ZGetterNode354 * this, struct ZVisitor167 * Visitor__1);
+#define _ZGetterNode354_Accept
+static int IsStaticField__1qpm(struct ZGetterNode354 * this);
+static struct ZGlobalNameNode359 * ZGlobalNameNode__6qp8(struct ZGlobalNameNode359 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * SourceToken__2, struct ZType60 * Type__3, const char * GlobalName__4, int IsStaticFuncName__5);
+static int IsGivenName__1qp8(struct ZGlobalNameNode359 * this);
+static void Accept__2qp8(struct ZGlobalNameNode359 * this, struct ZVisitor167 * Visitor__1);
+#define _ZGlobalNameNode359_Accept
+static struct ZGroupNode363 * ZGroupNode__2q0r(struct ZGroupNode363 * this, struct ZNode52 * ParentNode__1);
+static void Accept__2q0r(struct ZGroupNode363 * this, struct ZVisitor167 * Visitor__1);
+#define _ZGroupNode363_Accept
+static struct ZIfNode366 * ZIfNode__2q0u(struct ZIfNode366 * this, struct ZNode52 * ParentNode__1);
+static void Accept__2q0u(struct ZIfNode366 * this, struct ZVisitor167 * Visitor__1);
+#define _ZIfNode366_Accept
+static struct ZImportNode369 * ZImportNode__2q0p(struct ZImportNode369 * this, struct ZNode52 * ParentNode__1);
+static void SetNameInfo__3q0p(struct ZImportNode369 * this, struct ZToken77 * NameToken__1, const char * Name__2);
+#define _ZImportNode369_SetNameInfo
+static struct ZInstanceOfNode372 * ZInstanceOfNode__4q0a(struct ZInstanceOfNode372 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2, struct ZNode52 * LeftNode__3);
+static void SetTypeInfo__3q0a(struct ZInstanceOfNode372 * this, struct ZToken77 * TypeToken__1, struct ZType60 * Type__2);
+#define _ZInstanceOfNode372_SetTypeInfo
+static void Accept__2q0a(struct ZInstanceOfNode372 * this, struct ZVisitor167 * Visitor__1);
+#define _ZInstanceOfNode372_Accept
+static struct ZIntNode376 * ZIntNode__4q0g(struct ZIntNode376 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2, long Value__3);
+static void Accept__2q0g(struct ZIntNode376 * this, struct ZVisitor167 * Visitor__1);
+#define _ZIntNode376_Accept
+static struct ZLetNode379 * ZLetNode__2q0k(struct ZLetNode379 * this, struct ZNode52 * ParentNode__1);
+static void SetNameInfo__3q0k(struct ZLetNode379 * this, struct ZToken77 * NameToken__1, const char * Name__2);
+#define _ZLetNode379_SetNameInfo
+static void SetTypeInfo__3q0k(struct ZLetNode379 * this, struct ZToken77 * TypeToken__1, struct ZType60 * Type__2);
+#define _ZLetNode379_SetTypeInfo
+static void Accept__2q0k(struct ZLetNode379 * this, struct ZVisitor167 * Visitor__1);
+#define _ZLetNode379_Accept
+static struct ZGlobalNameNode359 * ToGlobalNameNode__1q0k(struct ZLetNode379 * this);
 static struct ZListNode251 * ZListNode__4qu8(struct ZListNode251 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * SourceToken__2, long Size__3);
 static void Append__2qu8(struct ZListNode251 * this, struct ZNode52 * Node__1);
 static long GetListSize__1qu8(struct ZListNode251 * this);
@@ -425,54 +554,56 @@ static void SetListAt__3qu8(struct ZListNode251 * this, long Index__1, struct ZN
 static void InsertListAt__3qu8(struct ZListNode251 * this, long Index__1, struct ZNode52 * Node__2);
 static struct ZNode52 * RemoveListAt__2qu8(struct ZListNode251 * this, long Index__1);
 static void ClearListAfter__2qu8(struct ZListNode251 * this, long Size__1);
-static struct ZMacroNode392 * ZMacroNode__4q05(struct ZMacroNode392 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * SourceToken__2, struct ZMacroFunc210 * MacroFunc__3);
-static struct ZFuncType90 * GetFuncType__1q05(struct ZMacroNode392 * this);
-static const char * GetMacroText__1q05(struct ZMacroNode392 * this);
-static void Accept__2q05(struct ZMacroNode392 * this, struct ZVisitor167 * Visitor__1);
-#define _ZMacroNode392_Accept
-static struct ZMapEntryNode397 * ZMapEntryNode__2q4w(struct ZMapEntryNode397 * this, struct ZNode52 * ParentNode__1);
-static struct ZMapLiteralNode399 * ZMapLiteralNode__2q4r(struct ZMapLiteralNode399 * this, struct ZNode52 * ParentNode__1);
-static struct ZMapEntryNode397 * GetMapEntryNode__2q4r(struct ZMapLiteralNode399 * this, long Index__1);
-static void Accept__2q4r(struct ZMapLiteralNode399 * this, struct ZVisitor167 * Visitor__1);
-#define _ZMapLiteralNode399_Accept
-static struct ZMethodCallNode403 * ZMethodCallNode__3q4i(struct ZMethodCallNode403 * this, struct ZNode52 * ParentNode__1, struct ZNode52 * RecvNode__2);
-static void SetNameInfo__3q4i(struct ZMethodCallNode403 * this, struct ZToken77 * NameToken__1, const char * Name__2);
-#define _ZMethodCallNode403_SetNameInfo
-static void Accept__2q4i(struct ZMethodCallNode403 * this, struct ZVisitor167 * Visitor__1);
-#define _ZMethodCallNode403_Accept
-static struct ZFuncCallNode407 * ToGetterFuncCall__1q4i(struct ZMethodCallNode403 * this);
-static struct ZListNode251 * ToFuncCallNode__2q4i(struct ZMethodCallNode403 * this, struct ZFunc89 * Func__1);
-static struct ZNewArrayNode410 * ZNewArrayNode__4q4d(struct ZNewArrayNode410 * this, struct ZNode52 * ParentNode__1, struct ZType60 * Type__2, struct ZToken77 * Token__3);
-static struct ZNewObjectNode412 * ZNewObjectNode__2q4g(struct ZNewObjectNode412 * this, struct ZNode52 * ParentNode__1);
-static void Accept__2q4g(struct ZNewObjectNode412 * this, struct ZVisitor167 * Visitor__1);
-#define _ZNewObjectNode412_Accept
-static struct ZListNode251 * ToFuncCallNode__2q4g(struct ZNewObjectNode412 * this, struct ZFunc89 * Func__1);
-static struct ZNotNode416 * ZNotNode__3q4l(struct ZNotNode416 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2);
-static void Accept__2q4l(struct ZNotNode416 * this, struct ZVisitor167 * Visitor__1);
-#define _ZNotNode416_Accept
-static struct ZNullNode419 * ZNullNode__3q46(struct ZNullNode419 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * SourceToken__2);
-static void Accept__2q46(struct ZNullNode419 * this, struct ZVisitor167 * Visitor__1);
-#define _ZNullNode419_Accept
-static struct ZOrNode422 * ZOrNode__5q4c(struct ZOrNode422 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2, struct ZNode52 * Left__3, struct ZSyntax219 * Pattern__4);
-static void Accept__2q4c(struct ZOrNode422 * this, struct ZVisitor167 * Visitor__1);
-#define _ZOrNode422_Accept
-static struct ZPrototypeNode425 * ZPrototypeNode__2q4n(struct ZPrototypeNode425 * this, struct ZNode52 * ParentNode__1);
-static void SetTypeInfo__3q4n(struct ZPrototypeNode425 * this, struct ZToken77 * TypeToken__1, struct ZType60 * Type__2);
-#define _ZPrototypeNode425_SetTypeInfo
-static void SetNameInfo__3q4n(struct ZPrototypeNode425 * this, struct ZToken77 * NameToken__1, const char * Name__2);
-#define _ZPrototypeNode425_SetNameInfo
-static struct ZParamNode172 * GetParamNode__2q4n(struct ZPrototypeNode425 * this, long Index__1);
-static struct ZFuncType90 * GetFuncType__1q4n(struct ZPrototypeNode425 * this);
-static struct ZStringNode431 * ZStringNode__4q48(struct ZStringNode431 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2, const char * Value__3);
-static void Accept__2q48(struct ZStringNode431 * this, struct ZVisitor167 * Visitor__1);
-#define _ZStringNode431_Accept
-static struct ZStupidCastErrorNode434 * ZStupidCastErrorNode__3qae(struct ZStupidCastErrorNode434 * this, struct ZNode52 * Node__1, const char * ErrorMessage__2);
+static struct ZMacroNode391 * ZMacroNode__4q07(struct ZMacroNode391 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * SourceToken__2, struct ZMacroFunc210 * MacroFunc__3);
+static struct ZFuncType90 * GetFuncType__1q07(struct ZMacroNode391 * this);
+static const char * GetMacroText__1q07(struct ZMacroNode391 * this);
+static void Accept__2q07(struct ZMacroNode391 * this, struct ZVisitor167 * Visitor__1);
+#define _ZMacroNode391_Accept
+static struct ZMapEntryNode396 * ZMapEntryNode__2q4q(struct ZMapEntryNode396 * this, struct ZNode52 * ParentNode__1);
+static struct ZMapLiteralNode398 * ZMapLiteralNode__2q4e(struct ZMapLiteralNode398 * this, struct ZNode52 * ParentNode__1);
+static struct ZMapEntryNode396 * GetMapEntryNode__2q4e(struct ZMapLiteralNode398 * this, long Index__1);
+static void Accept__2q4e(struct ZMapLiteralNode398 * this, struct ZVisitor167 * Visitor__1);
+#define _ZMapLiteralNode398_Accept
+static struct ZMethodCallNode402 * ZMethodCallNode__3q4u(struct ZMethodCallNode402 * this, struct ZNode52 * ParentNode__1, struct ZNode52 * RecvNode__2);
+static void SetNameInfo__3q4u(struct ZMethodCallNode402 * this, struct ZToken77 * NameToken__1, const char * Name__2);
+#define _ZMethodCallNode402_SetNameInfo
+static void Accept__2q4u(struct ZMethodCallNode402 * this, struct ZVisitor167 * Visitor__1);
+#define _ZMethodCallNode402_Accept
+static struct ZFuncCallNode406 * ToGetterFuncCall__1q4u(struct ZMethodCallNode402 * this);
+static struct ZListNode251 * ToFuncCallNode__2q4u(struct ZMethodCallNode402 * this, struct ZFunc89 * Func__1);
+static struct ZNewArrayNode409 * ZNewArrayNode__4q4s(struct ZNewArrayNode409 * this, struct ZNode52 * ParentNode__1, struct ZType60 * Type__2, struct ZToken77 * Token__3);
+static struct ZNewObjectNode411 * ZNewObjectNode__2q4f(struct ZNewObjectNode411 * this, struct ZNode52 * ParentNode__1);
+static void Accept__2q4f(struct ZNewObjectNode411 * this, struct ZVisitor167 * Visitor__1);
+#define _ZNewObjectNode411_Accept
+static struct ZListNode251 * ToFuncCallNode__2q4f(struct ZNewObjectNode411 * this, struct ZFunc89 * Func__1);
+static struct ZNotNode415 * ZNotNode__3q4k(struct ZNotNode415 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2);
+static void Accept__2q4k(struct ZNotNode415 * this, struct ZVisitor167 * Visitor__1);
+#define _ZNotNode415_Accept
+static struct ZNullNode418 * ZNullNode__3q41(struct ZNullNode418 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * SourceToken__2);
+static void Accept__2q41(struct ZNullNode418 * this, struct ZVisitor167 * Visitor__1);
+#define _ZNullNode418_Accept
+static struct ZOrNode421 * ZOrNode__5q4x(struct ZOrNode421 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2, struct ZNode52 * Left__3, struct ZSyntax219 * Pattern__4);
+static void Accept__2q4x(struct ZOrNode421 * this, struct ZVisitor167 * Visitor__1);
+#define _ZOrNode421_Accept
+static struct ZPrototypeNode424 * ZPrototypeNode__2q4b(struct ZPrototypeNode424 * this, struct ZNode52 * ParentNode__1);
+static void SetTypeInfo__3q4b(struct ZPrototypeNode424 * this, struct ZToken77 * TypeToken__1, struct ZType60 * Type__2);
+#define _ZPrototypeNode424_SetTypeInfo
+static void SetNameInfo__3q4b(struct ZPrototypeNode424 * this, struct ZToken77 * NameToken__1, const char * Name__2);
+#define _ZPrototypeNode424_SetNameInfo
+static struct ZParamNode172 * GetParamNode__2q4b(struct ZPrototypeNode424 * this, long Index__1);
+static struct ZFuncType90 * GetFuncType__1q4b(struct ZPrototypeNode424 * this);
+static struct ZStringNode430 * ZStringNode__4q42(struct ZStringNode430 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2, const char * Value__3);
+static void Accept__2q42(struct ZStringNode430 * this, struct ZVisitor167 * Visitor__1);
+#define _ZStringNode430_Accept
+static struct ZStupidCastErrorNode433 * ZStupidCastErrorNode__3qaw(struct ZStupidCastErrorNode433 * this, struct ZNode52 * Node__1, const char * ErrorMessage__2);
 static struct ZTypeNode235 * ZTypeNode__4quk(struct ZTypeNode235 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * SourceToken__2, struct ZType60 * ParsedType__3);
 static struct ZGenerator55 * ZGenerator__3qwk(struct ZGenerator55 * this, const char * LanguageExtension__1, const char * TargetVersion__2);
 static void ImportLocalGrammar__2qwk(struct ZGenerator55 * this, struct ZNameSpace48 * NameSpace__1);
 #define _ZGenerator55_ImportLocalGrammar
 static void WriteTo__2qwk(struct ZGenerator55 * this, const char * FileName__1);
 #define _ZGenerator55_WriteTo
+static const char * GetSourceText__1qwk(struct ZGenerator55 * this);
+#define _ZGenerator55_GetSourceText
 static const char * NameOutputFile__2qwk(struct ZGenerator55 * this, const char * FileName__1);
 #define _ZGenerator55_NameOutputFile
 static void EnableVisitor__1qwk(struct ZGenerator55 * this);
@@ -510,8 +641,8 @@ static void VisitExtendedNode__2qwk(struct ZGenerator55 * this, struct ZNode52 *
 #define _ZGenerator55_VisitExtendedNode
 static void VisitSugarNode__2qwk(struct ZGenerator55 * this, struct ZSugarNode165 * Node__1);
 #define _ZGenerator55_VisitSugarNode
-static struct ZIndentToken460 * ZIndentToken__4qab(struct ZIndentToken460 * this, struct ZSource238 * Source__1, long StartIndex__2, long EndIndex__3);
-static struct ZPatternToken462 * ZPatternToken__5qam(struct ZPatternToken462 * this, struct ZSource238 * Source__1, long StartIndex__2, long EndIndex__3, struct ZSyntax219 * PresetPattern__4);
+static struct ZIndentToken459 * ZIndentToken__4qav(struct ZIndentToken459 * this, struct ZSource238 * Source__1, long StartIndex__2, long EndIndex__3);
+static struct ZPatternToken461 * ZPatternToken__5qan(struct ZPatternToken461 * this, struct ZSource238 * Source__1, long StartIndex__2, long EndIndex__3, struct ZSyntax219 * PresetPattern__4);
 static struct ZSourceEngine57 * ZSourceEngine__3qw9(struct ZSourceEngine57 * this, struct ZTypeChecker142 * TypeChecker__1, struct ZGenerator55 * Generator__2);
 static int IsVisitable__1qw9(struct ZSourceEngine57 * this);
 #define _ZSourceEngine57_IsVisitable
@@ -519,91 +650,89 @@ static void EnableVisitor__1qw9(struct ZSourceEngine57 * this);
 #define _ZSourceEngine57_EnableVisitor
 static void StopVisitor__1qw9(struct ZSourceEngine57 * this);
 #define _ZSourceEngine57_StopVisitor
-static struct Object303 * Eval__2qw9(struct ZSourceEngine57 * this, struct ZNode52 * Node__1);
-static void VisitPrototypeNode__2qw9(struct ZSourceEngine57 * this, struct ZPrototypeNode425 * Node__1);
-static void VisitImportNode__2qw9(struct ZSourceEngine57 * this, struct ZImportNode370 * Node__1);
-static struct Object303 * Exec__3qw9(struct ZSourceEngine57 * this, struct ZNode52 * Node__1, int IsInteractive__2);
-static struct Object303 * Eval__6qw9(struct ZSourceEngine57 * this, struct ZNameSpace48 * NameSpace__1, const char * ScriptText__2, const char * FileName__3, long LineNumber__4, int IsInteractive__5);
-static struct Object303 * Eval__5qw9(struct ZSourceEngine57 * this, const char * ScriptText__1, const char * FileName__2, long LineNumber__3, int IsInteractive__4);
-static int Load__2qw9(struct ZSourceEngine57 * this, const char * FileName__1);
+static void Eval2__2qw9(struct ZSourceEngine57 * this, struct ZNode52 * Node__1);
+static void VisitPrototypeNode__2qw9(struct ZSourceEngine57 * this, struct ZPrototypeNode424 * Node__1);
+static void VisitImportNode__2qw9(struct ZSourceEngine57 * this, struct ZImportNode369 * Node__1);
+static void Exec2__3qw9(struct ZSourceEngine57 * this, struct ZNode52 * Node__1, int IsInteractive__2);
+static const char * Translate__4qw9(struct ZSourceEngine57 * this, const char * ScriptText__1, const char * FileName__2, long LineNumber__3);
 static void Unsupported__2qw9(struct ZSourceEngine57 * this, struct ZNode52 * Node__1);
-static void VisitNullNode__2qw9(struct ZSourceEngine57 * this, struct ZNullNode419 * Node__1);
+static void VisitNullNode__2qw9(struct ZSourceEngine57 * this, struct ZNullNode418 * Node__1);
 #define _ZSourceEngine57_VisitNullNode
-static void VisitBooleanNode__2qw9(struct ZSourceEngine57 * this, struct ZBooleanNode476 * Node__1);
+static void VisitBooleanNode__2qw9(struct ZSourceEngine57 * this, struct ZBooleanNode472 * Node__1);
 #define _ZSourceEngine57_VisitBooleanNode
-static void VisitIntNode__2qw9(struct ZSourceEngine57 * this, struct ZIntNode377 * Node__1);
+static void VisitIntNode__2qw9(struct ZSourceEngine57 * this, struct ZIntNode376 * Node__1);
 #define _ZSourceEngine57_VisitIntNode
-static void VisitFloatNode__2qw9(struct ZSourceEngine57 * this, struct ZFloatNode344 * Node__1);
+static void VisitFloatNode__2qw9(struct ZSourceEngine57 * this, struct ZFloatNode343 * Node__1);
 #define _ZSourceEngine57_VisitFloatNode
-static void VisitStringNode__2qw9(struct ZSourceEngine57 * this, struct ZStringNode431 * Node__1);
+static void VisitStringNode__2qw9(struct ZSourceEngine57 * this, struct ZStringNode430 * Node__1);
 #define _ZSourceEngine57_VisitStringNode
-static void VisitArrayLiteralNode__2qw9(struct ZSourceEngine57 * this, struct ZArrayLiteralNode481 * Node__1);
+static void VisitArrayLiteralNode__2qw9(struct ZSourceEngine57 * this, struct ZArrayLiteralNode477 * Node__1);
 #define _ZSourceEngine57_VisitArrayLiteralNode
-static void VisitMapLiteralNode__2qw9(struct ZSourceEngine57 * this, struct ZMapLiteralNode399 * Node__1);
+static void VisitMapLiteralNode__2qw9(struct ZSourceEngine57 * this, struct ZMapLiteralNode398 * Node__1);
 #define _ZSourceEngine57_VisitMapLiteralNode
-static void VisitNewObjectNode__2qw9(struct ZSourceEngine57 * this, struct ZNewObjectNode412 * Node__1);
+static void VisitNewObjectNode__2qw9(struct ZSourceEngine57 * this, struct ZNewObjectNode411 * Node__1);
 #define _ZSourceEngine57_VisitNewObjectNode
-static void VisitGlobalNameNode__2qw9(struct ZSourceEngine57 * this, struct ZGlobalNameNode360 * Node__1);
+static void VisitGlobalNameNode__2qw9(struct ZSourceEngine57 * this, struct ZGlobalNameNode359 * Node__1);
 #define _ZSourceEngine57_VisitGlobalNameNode
-static void VisitGetNameNode__2qw9(struct ZSourceEngine57 * this, struct ZGetNameNode350 * Node__1);
+static void VisitGetNameNode__2qw9(struct ZSourceEngine57 * this, struct ZGetNameNode349 * Node__1);
 #define _ZSourceEngine57_VisitGetNameNode
 static void VisitSetNameNode__2qw9(struct ZSourceEngine57 * this, struct ZSetNameNode181 * Node__1);
 #define _ZSourceEngine57_VisitSetNameNode
-static void VisitGroupNode__2qw9(struct ZSourceEngine57 * this, struct ZGroupNode364 * Node__1);
+static void VisitGroupNode__2qw9(struct ZSourceEngine57 * this, struct ZGroupNode363 * Node__1);
 #define _ZSourceEngine57_VisitGroupNode
-static void VisitGetterNode__2qw9(struct ZSourceEngine57 * this, struct ZGetterNode355 * Node__1);
+static void VisitGetterNode__2qw9(struct ZSourceEngine57 * this, struct ZGetterNode354 * Node__1);
 #define _ZSourceEngine57_VisitGetterNode
 static void VisitSetterNode__2qw9(struct ZSourceEngine57 * this, struct ZSetterNode184 * Node__1);
 #define _ZSourceEngine57_VisitSetterNode
-static void VisitGetIndexNode__2qw9(struct ZSourceEngine57 * this, struct ZGetIndexNode347 * Node__1);
+static void VisitGetIndexNode__2qw9(struct ZSourceEngine57 * this, struct ZGetIndexNode346 * Node__1);
 #define _ZSourceEngine57_VisitGetIndexNode
 static void VisitSetIndexNode__2qw9(struct ZSourceEngine57 * this, struct ZSetIndexNode178 * Node__1);
 #define _ZSourceEngine57_VisitSetIndexNode
-static void VisitMacroNode__2qw9(struct ZSourceEngine57 * this, struct ZMacroNode392 * Node__1);
+static void VisitMacroNode__2qw9(struct ZSourceEngine57 * this, struct ZMacroNode391 * Node__1);
 #define _ZSourceEngine57_VisitMacroNode
-static void VisitFuncCallNode__2qw9(struct ZSourceEngine57 * this, struct ZFuncCallNode407 * Node__1);
+static void VisitFuncCallNode__2qw9(struct ZSourceEngine57 * this, struct ZFuncCallNode406 * Node__1);
 #define _ZSourceEngine57_VisitFuncCallNode
-static void VisitMethodCallNode__2qw9(struct ZSourceEngine57 * this, struct ZMethodCallNode403 * Node__1);
+static void VisitMethodCallNode__2qw9(struct ZSourceEngine57 * this, struct ZMethodCallNode402 * Node__1);
 #define _ZSourceEngine57_VisitMethodCallNode
 static void VisitUnaryNode__2qw9(struct ZSourceEngine57 * this, struct ZUnaryNode197 * Node__1);
 #define _ZSourceEngine57_VisitUnaryNode
-static void VisitNotNode__2qw9(struct ZSourceEngine57 * this, struct ZNotNode416 * Node__1);
+static void VisitNotNode__2qw9(struct ZSourceEngine57 * this, struct ZNotNode415 * Node__1);
 #define _ZSourceEngine57_VisitNotNode
-static void VisitCastNode__2qw9(struct ZSourceEngine57 * this, struct ZCastNode321 * Node__1);
+static void VisitCastNode__2qw9(struct ZSourceEngine57 * this, struct ZCastNode320 * Node__1);
 #define _ZSourceEngine57_VisitCastNode
-static void VisitInstanceOfNode__2qw9(struct ZSourceEngine57 * this, struct ZInstanceOfNode373 * Node__1);
+static void VisitInstanceOfNode__2qw9(struct ZSourceEngine57 * this, struct ZInstanceOfNode372 * Node__1);
 #define _ZSourceEngine57_VisitInstanceOfNode
-static void VisitBinaryNode__2qw9(struct ZSourceEngine57 * this, struct ZBinaryNode311 * Node__1);
+static void VisitBinaryNode__2qw9(struct ZSourceEngine57 * this, struct ZBinaryNode310 * Node__1);
 #define _ZSourceEngine57_VisitBinaryNode
-static void VisitComparatorNode__2qw9(struct ZSourceEngine57 * this, struct ZComparatorNode329 * Node__1);
+static void VisitComparatorNode__2qw9(struct ZSourceEngine57 * this, struct ZComparatorNode328 * Node__1);
 #define _ZSourceEngine57_VisitComparatorNode
-static void VisitAndNode__2qw9(struct ZSourceEngine57 * this, struct ZAndNode502 * Node__1);
+static void VisitAndNode__2qw9(struct ZSourceEngine57 * this, struct ZAndNode498 * Node__1);
 #define _ZSourceEngine57_VisitAndNode
-static void VisitOrNode__2qw9(struct ZSourceEngine57 * this, struct ZOrNode422 * Node__1);
+static void VisitOrNode__2qw9(struct ZSourceEngine57 * this, struct ZOrNode421 * Node__1);
 #define _ZSourceEngine57_VisitOrNode
 static void VisitBlockNode__2qw9(struct ZSourceEngine57 * this, struct ZBlockNode161 * Node__1);
 #define _ZSourceEngine57_VisitBlockNode
-static void VisitVarNode__2qw9(struct ZSourceEngine57 * this, struct ZVarNode506 * Node__1);
+static void VisitVarNode__2qw9(struct ZSourceEngine57 * this, struct ZVarNode502 * Node__1);
 #define _ZSourceEngine57_VisitVarNode
-static void VisitIfNode__2qw9(struct ZSourceEngine57 * this, struct ZIfNode367 * Node__1);
+static void VisitIfNode__2qw9(struct ZSourceEngine57 * this, struct ZIfNode366 * Node__1);
 #define _ZSourceEngine57_VisitIfNode
 static void VisitReturnNode__2qw9(struct ZSourceEngine57 * this, struct ZReturnNode170 * Node__1);
 #define _ZSourceEngine57_VisitReturnNode
 static void VisitWhileNode__2qw9(struct ZSourceEngine57 * this, struct ZWhileNode200 * Node__1);
 #define _ZSourceEngine57_VisitWhileNode
-static void VisitBreakNode__2qw9(struct ZSourceEngine57 * this, struct ZBreakNode318 * Node__1);
+static void VisitBreakNode__2qw9(struct ZSourceEngine57 * this, struct ZBreakNode317 * Node__1);
 #define _ZSourceEngine57_VisitBreakNode
 static void VisitThrowNode__2qw9(struct ZSourceEngine57 * this, struct ZThrowNode191 * Node__1);
 #define _ZSourceEngine57_VisitThrowNode
 static void VisitTryNode__2qw9(struct ZSourceEngine57 * this, struct ZTryNode194 * Node__1);
 #define _ZSourceEngine57_VisitTryNode
-static void VisitLetNode__2qw9(struct ZSourceEngine57 * this, struct ZLetNode380 * Node__1);
+static void VisitLetNode__2qw9(struct ZSourceEngine57 * this, struct ZLetNode379 * Node__1);
 #define _ZSourceEngine57_VisitLetNode
 static void VisitFunctionNode__2qw9(struct ZSourceEngine57 * this, struct ZFunctionNode144 * Node__1);
 #define _ZSourceEngine57_VisitFunctionNode
-static void VisitClassNode__2qw9(struct ZSourceEngine57 * this, struct ZClassNode516 * Node__1);
+static void VisitClassNode__2qw9(struct ZSourceEngine57 * this, struct ZClassNode512 * Node__1);
 #define _ZSourceEngine57_VisitClassNode
-static void VisitErrorNode__2qw9(struct ZSourceEngine57 * this, struct ZErrorNode336 * Node__1);
+static void VisitErrorNode__2qw9(struct ZSourceEngine57 * this, struct ZErrorNode335 * Node__1);
 #define _ZSourceEngine57_VisitErrorNode
 static void VisitTypeNode__2qw9(struct ZSourceEngine57 * this, struct ZTypeNode235 * Node__1);
 static void VisitExtendedNode__2qw9(struct ZSourceEngine57 * this, struct ZNode52 * Node__1);
@@ -619,7 +748,7 @@ static struct ZSourceEngine57 * GetEngine__1quv(struct ZSourceGenerator243 * thi
 static struct ZSourceBuilder42 * AppendNewSourceBuilder__1quv(struct ZSourceGenerator243 * this);
 static struct ZSourceBuilder42 * InsertNewSourceBuilder__1quv(struct ZSourceGenerator243 * this);
 static void SetNativeType__3quv(struct ZSourceGenerator243 * this, struct ZType60 * Type__1, const char * TypeName__2);
-static const char * GetNativeType__2quv(struct ZSourceGenerator243 * this, struct ZType60 * Type__1);
+static const char * GetNativeTypeName__2quv(struct ZSourceGenerator243 * this, struct ZType60 * Type__1);
 static void SetReservedName__3quv(struct ZSourceGenerator243 * this, const char * Keyword__1, const char * AnotherName__2);
 static const char * SafeName__3quv(struct ZSourceGenerator243 * this, const char * Name__1, long Index__2);
 static void SetMacro__4quv(struct ZSourceGenerator243 * this, const char * FuncName__1, const char * Macro__2, struct ZType60 * ReturnType__3);
@@ -629,6 +758,8 @@ static void SetMacro__7quv(struct ZSourceGenerator243 * this, const char * FuncN
 static void SetConverterMacro__4quv(struct ZSourceGenerator243 * this, const char * Macro__1, struct ZType60 * ReturnType__2, struct ZType60 * P1__3);
 static void WriteTo__2quv(struct ZSourceGenerator243 * this, const char * FileName__1);
 #define _ZSourceGenerator243_WriteTo
+static const char * GetSourceText__1quv(struct ZSourceGenerator243 * this);
+#define _ZSourceGenerator243_GetSourceText
 static int StartCodeGeneration__3quv(struct ZSourceGenerator243 * this, struct ZNode52 * Node__1, int IsInteractive__2);
 #define _ZSourceGenerator243_StartCodeGeneration
 static void GenerateCode__3quv(struct ZSourceGenerator243 * this, struct ZType60 * ContextType__1, struct ZNode52 * Node__2);
@@ -639,84 +770,84 @@ static void AppendCode__2quv(struct ZSourceGenerator243 * this, const char * Raw
 static void VisitStmtList__2quv(struct ZSourceGenerator243 * this, struct ZBlockNode161 * BlockNode__1);
 static void VisitBlockNode__2quv(struct ZSourceGenerator243 * this, struct ZBlockNode161 * Node__1);
 #define _ZSourceGenerator243_VisitBlockNode
-static void VisitNullNode__2quv(struct ZSourceGenerator243 * this, struct ZNullNode419 * Node__1);
+static void VisitNullNode__2quv(struct ZSourceGenerator243 * this, struct ZNullNode418 * Node__1);
 #define _ZSourceGenerator243_VisitNullNode
-static void VisitBooleanNode__2quv(struct ZSourceGenerator243 * this, struct ZBooleanNode476 * Node__1);
+static void VisitBooleanNode__2quv(struct ZSourceGenerator243 * this, struct ZBooleanNode472 * Node__1);
 #define _ZSourceGenerator243_VisitBooleanNode
-static void VisitIntNode__2quv(struct ZSourceGenerator243 * this, struct ZIntNode377 * Node__1);
+static void VisitIntNode__2quv(struct ZSourceGenerator243 * this, struct ZIntNode376 * Node__1);
 #define _ZSourceGenerator243_VisitIntNode
-static void VisitFloatNode__2quv(struct ZSourceGenerator243 * this, struct ZFloatNode344 * Node__1);
+static void VisitFloatNode__2quv(struct ZSourceGenerator243 * this, struct ZFloatNode343 * Node__1);
 #define _ZSourceGenerator243_VisitFloatNode
-static void VisitStringNode__2quv(struct ZSourceGenerator243 * this, struct ZStringNode431 * Node__1);
+static void VisitStringNode__2quv(struct ZSourceGenerator243 * this, struct ZStringNode430 * Node__1);
 #define _ZSourceGenerator243_VisitStringNode
-static void VisitArrayLiteralNode__2quv(struct ZSourceGenerator243 * this, struct ZArrayLiteralNode481 * Node__1);
+static void VisitArrayLiteralNode__2quv(struct ZSourceGenerator243 * this, struct ZArrayLiteralNode477 * Node__1);
 #define _ZSourceGenerator243_VisitArrayLiteralNode
-static void VisitMapLiteralNode__2quv(struct ZSourceGenerator243 * this, struct ZMapLiteralNode399 * Node__1);
+static void VisitMapLiteralNode__2quv(struct ZSourceGenerator243 * this, struct ZMapLiteralNode398 * Node__1);
 #define _ZSourceGenerator243_VisitMapLiteralNode
-static void VisitNewObjectNode__2quv(struct ZSourceGenerator243 * this, struct ZNewObjectNode412 * Node__1);
+static void VisitNewObjectNode__2quv(struct ZSourceGenerator243 * this, struct ZNewObjectNode411 * Node__1);
 #define _ZSourceGenerator243_VisitNewObjectNode
-static void VisitGroupNode__2quv(struct ZSourceGenerator243 * this, struct ZGroupNode364 * Node__1);
+static void VisitGroupNode__2quv(struct ZSourceGenerator243 * this, struct ZGroupNode363 * Node__1);
 #define _ZSourceGenerator243_VisitGroupNode
-static void VisitGetIndexNode__2quv(struct ZSourceGenerator243 * this, struct ZGetIndexNode347 * Node__1);
+static void VisitGetIndexNode__2quv(struct ZSourceGenerator243 * this, struct ZGetIndexNode346 * Node__1);
 #define _ZSourceGenerator243_VisitGetIndexNode
 static void VisitSetIndexNode__2quv(struct ZSourceGenerator243 * this, struct ZSetIndexNode178 * Node__1);
 #define _ZSourceGenerator243_VisitSetIndexNode
-static void VisitGlobalNameNode__2quv(struct ZSourceGenerator243 * this, struct ZGlobalNameNode360 * Node__1);
+static void VisitGlobalNameNode__2quv(struct ZSourceGenerator243 * this, struct ZGlobalNameNode359 * Node__1);
 #define _ZSourceGenerator243_VisitGlobalNameNode
-static void VisitGetNameNode__2quv(struct ZSourceGenerator243 * this, struct ZGetNameNode350 * Node__1);
+static void VisitGetNameNode__2quv(struct ZSourceGenerator243 * this, struct ZGetNameNode349 * Node__1);
 #define _ZSourceGenerator243_VisitGetNameNode
 static void VisitSetNameNode__2quv(struct ZSourceGenerator243 * this, struct ZSetNameNode181 * Node__1);
 #define _ZSourceGenerator243_VisitSetNameNode
-static void VisitGetterNode__2quv(struct ZSourceGenerator243 * this, struct ZGetterNode355 * Node__1);
+static void VisitGetterNode__2quv(struct ZSourceGenerator243 * this, struct ZGetterNode354 * Node__1);
 #define _ZSourceGenerator243_VisitGetterNode
 static void VisitSetterNode__2quv(struct ZSourceGenerator243 * this, struct ZSetterNode184 * Node__1);
 #define _ZSourceGenerator243_VisitSetterNode
-static void VisitMethodCallNode__2quv(struct ZSourceGenerator243 * this, struct ZMethodCallNode403 * Node__1);
+static void VisitMethodCallNode__2quv(struct ZSourceGenerator243 * this, struct ZMethodCallNode402 * Node__1);
 #define _ZSourceGenerator243_VisitMethodCallNode
-static void VisitMacroNode__2quv(struct ZSourceGenerator243 * this, struct ZMacroNode392 * Node__1);
+static void VisitMacroNode__2quv(struct ZSourceGenerator243 * this, struct ZMacroNode391 * Node__1);
 #define _ZSourceGenerator243_VisitMacroNode
-static void VisitFuncCallNode__2quv(struct ZSourceGenerator243 * this, struct ZFuncCallNode407 * Node__1);
+static void VisitFuncCallNode__2quv(struct ZSourceGenerator243 * this, struct ZFuncCallNode406 * Node__1);
 #define _ZSourceGenerator243_VisitFuncCallNode
 static void VisitUnaryNode__2quv(struct ZSourceGenerator243 * this, struct ZUnaryNode197 * Node__1);
 #define _ZSourceGenerator243_VisitUnaryNode
-static void VisitNotNode__2quv(struct ZSourceGenerator243 * this, struct ZNotNode416 * Node__1);
+static void VisitNotNode__2quv(struct ZSourceGenerator243 * this, struct ZNotNode415 * Node__1);
 #define _ZSourceGenerator243_VisitNotNode
-static void VisitCastNode__2quv(struct ZSourceGenerator243 * this, struct ZCastNode321 * Node__1);
+static void VisitCastNode__2quv(struct ZSourceGenerator243 * this, struct ZCastNode320 * Node__1);
 #define _ZSourceGenerator243_VisitCastNode
-static void VisitInstanceOfNode__2quv(struct ZSourceGenerator243 * this, struct ZInstanceOfNode373 * Node__1);
+static void VisitInstanceOfNode__2quv(struct ZSourceGenerator243 * this, struct ZInstanceOfNode372 * Node__1);
 #define _ZSourceGenerator243_VisitInstanceOfNode
-static void VisitBinaryNode__2quv(struct ZSourceGenerator243 * this, struct ZBinaryNode311 * Node__1);
+static void VisitBinaryNode__2quv(struct ZSourceGenerator243 * this, struct ZBinaryNode310 * Node__1);
 #define _ZSourceGenerator243_VisitBinaryNode
-static void VisitComparatorNode__2quv(struct ZSourceGenerator243 * this, struct ZComparatorNode329 * Node__1);
+static void VisitComparatorNode__2quv(struct ZSourceGenerator243 * this, struct ZComparatorNode328 * Node__1);
 #define _ZSourceGenerator243_VisitComparatorNode
-static void VisitAndNode__2quv(struct ZSourceGenerator243 * this, struct ZAndNode502 * Node__1);
+static void VisitAndNode__2quv(struct ZSourceGenerator243 * this, struct ZAndNode498 * Node__1);
 #define _ZSourceGenerator243_VisitAndNode
-static void VisitOrNode__2quv(struct ZSourceGenerator243 * this, struct ZOrNode422 * Node__1);
+static void VisitOrNode__2quv(struct ZSourceGenerator243 * this, struct ZOrNode421 * Node__1);
 #define _ZSourceGenerator243_VisitOrNode
-static void VisitIfNode__2quv(struct ZSourceGenerator243 * this, struct ZIfNode367 * Node__1);
+static void VisitIfNode__2quv(struct ZSourceGenerator243 * this, struct ZIfNode366 * Node__1);
 #define _ZSourceGenerator243_VisitIfNode
 static void VisitReturnNode__2quv(struct ZSourceGenerator243 * this, struct ZReturnNode170 * Node__1);
 #define _ZSourceGenerator243_VisitReturnNode
 static void VisitWhileNode__2quv(struct ZSourceGenerator243 * this, struct ZWhileNode200 * Node__1);
 #define _ZSourceGenerator243_VisitWhileNode
-static void VisitBreakNode__2quv(struct ZSourceGenerator243 * this, struct ZBreakNode318 * Node__1);
+static void VisitBreakNode__2quv(struct ZSourceGenerator243 * this, struct ZBreakNode317 * Node__1);
 #define _ZSourceGenerator243_VisitBreakNode
 static void VisitThrowNode__2quv(struct ZSourceGenerator243 * this, struct ZThrowNode191 * Node__1);
 #define _ZSourceGenerator243_VisitThrowNode
 static void VisitTryNode__2quv(struct ZSourceGenerator243 * this, struct ZTryNode194 * Node__1);
 #define _ZSourceGenerator243_VisitTryNode
-static void VisitCatchNode__2quv(struct ZSourceGenerator243 * this, struct ZCatchNode325 * Node__1);
-static void VisitVarNode__2quv(struct ZSourceGenerator243 * this, struct ZVarNode506 * Node__1);
+static void VisitCatchNode__2quv(struct ZSourceGenerator243 * this, struct ZCatchNode324 * Node__1);
+static void VisitVarNode__2quv(struct ZSourceGenerator243 * this, struct ZVarNode502 * Node__1);
 #define _ZSourceGenerator243_VisitVarNode
 static void VisitTypeAnnotation__2quv(struct ZSourceGenerator243 * this, struct ZType60 * Type__1);
-static void VisitLetNode__2quv(struct ZSourceGenerator243 * this, struct ZLetNode380 * Node__1);
+static void VisitLetNode__2quv(struct ZSourceGenerator243 * this, struct ZLetNode379 * Node__1);
 #define _ZSourceGenerator243_VisitLetNode
 static void VisitParamNode__2quv(struct ZSourceGenerator243 * this, struct ZParamNode172 * Node__1);
 static void VisitFunctionNode__2quv(struct ZSourceGenerator243 * this, struct ZFunctionNode144 * Node__1);
 #define _ZSourceGenerator243_VisitFunctionNode
-static void VisitClassNode__2quv(struct ZSourceGenerator243 * this, struct ZClassNode516 * Node__1);
+static void VisitClassNode__2quv(struct ZSourceGenerator243 * this, struct ZClassNode512 * Node__1);
 #define _ZSourceGenerator243_VisitClassNode
-static void VisitErrorNode__2quv(struct ZSourceGenerator243 * this, struct ZErrorNode336 * Node__1);
+static void VisitErrorNode__2quv(struct ZSourceGenerator243 * this, struct ZErrorNode335 * Node__1);
 #define _ZSourceGenerator243_VisitErrorNode
 static void VisitExtendedNode__2quv(struct ZSourceGenerator243 * this, struct ZNode52 * Node__1);
 #define _ZSourceGenerator243_VisitExtendedNode
@@ -746,66 +877,66 @@ static int TypeCheckNodeList__2qr2(struct ZTypeChecker142 * this, struct ZListNo
 static void Return__2qr2(struct ZTypeChecker142 * this, struct ZNode52 * Node__1);
 static void TypedNode__3qr2(struct ZTypeChecker142 * this, struct ZNode52 * Node__1, struct ZType60 * Type__2);
 static void ReturnErrorNode__4qr2(struct ZTypeChecker142 * this, struct ZNode52 * Node__1, struct ZToken77 * ErrorToken__2, const char * Message__3);
-static void VisitErrorNode__2qr2(struct ZTypeChecker142 * this, struct ZErrorNode336 * Node__1);
+static void VisitErrorNode__2qr2(struct ZTypeChecker142 * this, struct ZErrorNode335 * Node__1);
 #define _ZTypeChecker142_VisitErrorNode
 static void VisitExtendedNode__2qr2(struct ZTypeChecker142 * this, struct ZNode52 * Node__1);
 #define _ZTypeChecker142_VisitExtendedNode
 static void VisitSugarNode__2qr2(struct ZTypeChecker142 * this, struct ZSugarNode165 * Node__1);
 #define _ZTypeChecker142_VisitSugarNode
-static struct CSourceGenerator599 * CSourceGenerator__1qg6(struct CSourceGenerator599 * this);
-static struct ZSourceEngine57 * GetEngine__1qg6(struct CSourceGenerator599 * this);
-#define _CSourceGenerator599_GetEngine
-static void GenerateCode__3qg6(struct CSourceGenerator599 * this, struct ZType60 * ContextType__1, struct ZNode52 * Node__2);
-#define _CSourceGenerator599_GenerateCode
-static void VisitArrayLiteralNode__2qg6(struct CSourceGenerator599 * this, struct ZArrayLiteralNode481 * Node__1);
-#define _CSourceGenerator599_VisitArrayLiteralNode
-static void VisitMapLiteralNode__2qg6(struct CSourceGenerator599 * this, struct ZMapLiteralNode399 * Node__1);
-#define _CSourceGenerator599_VisitMapLiteralNode
-static void VisitNewObjectNode__2qg6(struct CSourceGenerator599 * this, struct ZNewObjectNode412 * Node__1);
-#define _CSourceGenerator599_VisitNewObjectNode
-static const char * BaseName__2qg6(struct CSourceGenerator599 * this, struct ZType60 * RecvType__1);
-static void VisitGetIndexNode__2qg6(struct CSourceGenerator599 * this, struct ZGetIndexNode347 * Node__1);
-#define _CSourceGenerator599_VisitGetIndexNode
-static void VisitSetIndexNode__2qg6(struct CSourceGenerator599 * this, struct ZSetIndexNode178 * Node__1);
-#define _CSourceGenerator599_VisitSetIndexNode
-static void VisitGetNameNode__2qg6(struct CSourceGenerator599 * this, struct ZGetNameNode350 * Node__1);
-#define _CSourceGenerator599_VisitGetNameNode
-static void VisitSetNameNode__2qg6(struct CSourceGenerator599 * this, struct ZSetNameNode181 * Node__1);
-#define _CSourceGenerator599_VisitSetNameNode
-static void VisitGetterNode__2qg6(struct CSourceGenerator599 * this, struct ZGetterNode355 * Node__1);
-#define _CSourceGenerator599_VisitGetterNode
-static void VisitSetterNode__2qg6(struct CSourceGenerator599 * this, struct ZSetterNode184 * Node__1);
-#define _CSourceGenerator599_VisitSetterNode
-static void VisitMethodCallNode__2qg6(struct CSourceGenerator599 * this, struct ZMethodCallNode403 * Node__1);
-#define _CSourceGenerator599_VisitMethodCallNode
-static void VisitFuncCallNode__2qg6(struct CSourceGenerator599 * this, struct ZFuncCallNode407 * Node__1);
-#define _CSourceGenerator599_VisitFuncCallNode
-static void VisitThrowNode__2qg6(struct CSourceGenerator599 * this, struct ZThrowNode191 * Node__1);
-#define _CSourceGenerator599_VisitThrowNode
-static void VisitTryNode__2qg6(struct CSourceGenerator599 * this, struct ZTryNode194 * Node__1);
-#define _CSourceGenerator599_VisitTryNode
-static void VisitCatchNode__2qg6(struct CSourceGenerator599 * this, struct ZCatchNode325 * Node__1);
-static const char * ParamTypeName__2qg6(struct CSourceGenerator599 * this, struct ZType60 * Type__1);
-static const char * GetNativeType__2qg6(struct CSourceGenerator599 * this, struct ZType60 * Type__1);
-static void GenerateFuncTypeName__3qg6(struct CSourceGenerator599 * this, struct ZType60 * Type__1, const char * FuncName__2);
-static void GenerateTypeName__2qg6(struct CSourceGenerator599 * this, struct ZType60 * Type__1);
-static void VisitVarNode__2qg6(struct CSourceGenerator599 * this, struct ZVarNode506 * Node__1);
-#define _CSourceGenerator599_VisitVarNode
-static void VisitParamNode__2qg6(struct CSourceGenerator599 * this, struct ZParamNode172 * Node__1);
-static void SetMethod__3qg6(struct CSourceGenerator599 * this, const char * FuncName__1, struct ZFuncType90 * FuncType__2);
-static void VisitInstanceOfNode__2qg6(struct CSourceGenerator599 * this, struct ZInstanceOfNode373 * Node__1);
-#define _CSourceGenerator599_VisitInstanceOfNode
-static void GenerateCField__3qg6(struct CSourceGenerator599 * this, const char * CType__1, const char * FieldName__2);
-static void GenerateField__3qg6(struct CSourceGenerator599 * this, struct ZType60 * DeclType__1, const char * FieldName__2);
-static void GenerateFields__3qg6(struct CSourceGenerator599 * this, struct ZClassType80 * ClassType__1, struct ZType60 * ThisType__2);
-static void VisitErrorNode__2qg6(struct CSourceGenerator599 * this, struct ZErrorNode336 * Node__1);
-#define _CSourceGenerator599_VisitErrorNode
-static struct ZAndNode502 * ZAndNode__5qs2(struct ZAndNode502 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2, struct ZNode52 * Left__3, struct ZSyntax219 * Pattern__4);
-static void Accept__2qs2(struct ZAndNode502 * this, struct ZVisitor167 * Visitor__1);
-#define _ZAndNode502_Accept
-static struct ZArrayLiteralNode481 * ZArrayLiteralNode__2qss(struct ZArrayLiteralNode481 * this, struct ZNode52 * ParentNode__1);
-static void Accept__2qss(struct ZArrayLiteralNode481 * this, struct ZVisitor167 * Visitor__1);
-#define _ZArrayLiteralNode481_Accept
+static struct CSourceGenerator596 * CSourceGenerator__1qgl(struct CSourceGenerator596 * this);
+static struct ZSourceEngine57 * GetEngine__1qgl(struct CSourceGenerator596 * this);
+#define _CSourceGenerator596_GetEngine
+static void GenerateCode__3qgl(struct CSourceGenerator596 * this, struct ZType60 * ContextType__1, struct ZNode52 * Node__2);
+#define _CSourceGenerator596_GenerateCode
+static void VisitArrayLiteralNode__2qgl(struct CSourceGenerator596 * this, struct ZArrayLiteralNode477 * Node__1);
+#define _CSourceGenerator596_VisitArrayLiteralNode
+static void VisitMapLiteralNode__2qgl(struct CSourceGenerator596 * this, struct ZMapLiteralNode398 * Node__1);
+#define _CSourceGenerator596_VisitMapLiteralNode
+static void VisitNewObjectNode__2qgl(struct CSourceGenerator596 * this, struct ZNewObjectNode411 * Node__1);
+#define _CSourceGenerator596_VisitNewObjectNode
+static const char * BaseName__2qgl(struct CSourceGenerator596 * this, struct ZType60 * RecvType__1);
+static void VisitGetIndexNode__2qgl(struct CSourceGenerator596 * this, struct ZGetIndexNode346 * Node__1);
+#define _CSourceGenerator596_VisitGetIndexNode
+static void VisitSetIndexNode__2qgl(struct CSourceGenerator596 * this, struct ZSetIndexNode178 * Node__1);
+#define _CSourceGenerator596_VisitSetIndexNode
+static void VisitGetNameNode__2qgl(struct CSourceGenerator596 * this, struct ZGetNameNode349 * Node__1);
+#define _CSourceGenerator596_VisitGetNameNode
+static void VisitSetNameNode__2qgl(struct CSourceGenerator596 * this, struct ZSetNameNode181 * Node__1);
+#define _CSourceGenerator596_VisitSetNameNode
+static void VisitGetterNode__2qgl(struct CSourceGenerator596 * this, struct ZGetterNode354 * Node__1);
+#define _CSourceGenerator596_VisitGetterNode
+static void VisitSetterNode__2qgl(struct CSourceGenerator596 * this, struct ZSetterNode184 * Node__1);
+#define _CSourceGenerator596_VisitSetterNode
+static void VisitMethodCallNode__2qgl(struct CSourceGenerator596 * this, struct ZMethodCallNode402 * Node__1);
+#define _CSourceGenerator596_VisitMethodCallNode
+static void VisitFuncCallNode__2qgl(struct CSourceGenerator596 * this, struct ZFuncCallNode406 * Node__1);
+#define _CSourceGenerator596_VisitFuncCallNode
+static void VisitThrowNode__2qgl(struct CSourceGenerator596 * this, struct ZThrowNode191 * Node__1);
+#define _CSourceGenerator596_VisitThrowNode
+static void VisitTryNode__2qgl(struct CSourceGenerator596 * this, struct ZTryNode194 * Node__1);
+#define _CSourceGenerator596_VisitTryNode
+static void VisitCatchNode__2qgl(struct CSourceGenerator596 * this, struct ZCatchNode324 * Node__1);
+static const char * ParamTypeName__2qgl(struct CSourceGenerator596 * this, struct ZType60 * Type__1);
+static const char * GetCTypeName__2qgl(struct CSourceGenerator596 * this, struct ZType60 * Type__1);
+static void GenerateFuncTypeName__3qgl(struct CSourceGenerator596 * this, struct ZType60 * Type__1, const char * FuncName__2);
+static void GenerateTypeName__2qgl(struct CSourceGenerator596 * this, struct ZType60 * Type__1);
+static void VisitVarNode__2qgl(struct CSourceGenerator596 * this, struct ZVarNode502 * Node__1);
+#define _CSourceGenerator596_VisitVarNode
+static void VisitParamNode__2qgl(struct CSourceGenerator596 * this, struct ZParamNode172 * Node__1);
+static void SetMethod__3qgl(struct CSourceGenerator596 * this, const char * FuncName__1, struct ZFuncType90 * FuncType__2);
+static void VisitInstanceOfNode__2qgl(struct CSourceGenerator596 * this, struct ZInstanceOfNode372 * Node__1);
+#define _CSourceGenerator596_VisitInstanceOfNode
+static void GenerateCField__3qgl(struct CSourceGenerator596 * this, const char * CType__1, const char * FieldName__2);
+static void GenerateField__3qgl(struct CSourceGenerator596 * this, struct ZType60 * DeclType__1, const char * FieldName__2);
+static void GenerateFields__3qgl(struct CSourceGenerator596 * this, struct ZClassType80 * ClassType__1, struct ZType60 * ThisType__2);
+static void VisitErrorNode__2qgl(struct CSourceGenerator596 * this, struct ZErrorNode335 * Node__1);
+#define _CSourceGenerator596_VisitErrorNode
+static struct ZAndNode498 * ZAndNode__5qsm(struct ZAndNode498 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2, struct ZNode52 * Left__3, struct ZSyntax219 * Pattern__4);
+static void Accept__2qsm(struct ZAndNode498 * this, struct ZVisitor167 * Visitor__1);
+#define _ZAndNode498_Accept
+static struct ZArrayLiteralNode477 * ZArrayLiteralNode__2qsp(struct ZArrayLiteralNode477 * this, struct ZNode52 * ParentNode__1);
+static void Accept__2qsp(struct ZArrayLiteralNode477 * this, struct ZVisitor167 * Visitor__1);
+#define _ZArrayLiteralNode477_Accept
 static struct ZBlockNode161 * ZBlockNode__2qth(struct ZBlockNode161 * this, struct ZNameSpace48 * NameSpace__1);
 static struct ZBlockNode161 * ZBlockNode__3qth(struct ZBlockNode161 * this, struct ZNode52 * ParentNode__1, long Init__2);
 static void Accept__2qth(struct ZBlockNode161 * this, struct ZVisitor167 * Visitor__1);
@@ -813,25 +944,25 @@ static void Accept__2qth(struct ZBlockNode161 * this, struct ZVisitor167 * Visit
 static struct ZReturnNode170 * ToReturnNode__1qth(struct ZBlockNode161 * this);
 static long IndexOf__2qth(struct ZBlockNode161 * this, struct ZNode52 * ChildNode__1);
 static void CopyTo__3qth(struct ZBlockNode161 * this, long Index__1, struct ZBlockNode161 * BlockNode__2);
-static struct ZBooleanNode476 * ZBooleanNode__4qso(struct ZBooleanNode476 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2, int Value__3);
-static void Accept__2qso(struct ZBooleanNode476 * this, struct ZVisitor167 * Visitor__1);
-#define _ZBooleanNode476_Accept
-static struct ZClassNode516 * ZClassNode__2qda(struct ZClassNode516 * this, struct ZNode52 * ParentNode__1);
-static void SetTypeInfo__3qda(struct ZClassNode516 * this, struct ZToken77 * TypeToken__1, struct ZType60 * Type__2);
-#define _ZClassNode516_SetTypeInfo
-static void SetNameInfo__3qda(struct ZClassNode516 * this, struct ZToken77 * NameToken__1, const char * Name__2);
-#define _ZClassNode516_SetNameInfo
-static struct ZFieldNode340 * GetFieldNode__2qda(struct ZClassNode516 * this, long Index__1);
-static void Accept__2qda(struct ZClassNode516 * this, struct ZVisitor167 * Visitor__1);
-#define _ZClassNode516_Accept
-static struct ZFuncCallNode407 * ZFuncCallNode__3q44(struct ZFuncCallNode407 * this, struct ZNode52 * ParentNode__1, struct ZNode52 * FuncNode__2);
-static struct ZFuncCallNode407 * ZFuncCallNode__4q44(struct ZFuncCallNode407 * this, struct ZNode52 * ParentNode__1, const char * FuncName__2, struct ZType60 * FuncType__3);
-static void Accept__2q44(struct ZFuncCallNode407 * this, struct ZVisitor167 * Visitor__1);
-#define _ZFuncCallNode407_Accept
-static struct ZType60 * GetRecvType__1q44(struct ZFuncCallNode407 * this);
-static const char * GetFuncName__1q44(struct ZFuncCallNode407 * this);
-static struct ZFuncType90 * GetFuncType__1q44(struct ZFuncCallNode407 * this);
-static struct ZMacroNode392 * ToMacroNode__2q44(struct ZFuncCallNode407 * this, struct ZMacroFunc210 * MacroFunc__1);
+static struct ZBooleanNode472 * ZBooleanNode__4qst(struct ZBooleanNode472 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2, int Value__3);
+static void Accept__2qst(struct ZBooleanNode472 * this, struct ZVisitor167 * Visitor__1);
+#define _ZBooleanNode472_Accept
+static struct ZClassNode512 * ZClassNode__2qdo(struct ZClassNode512 * this, struct ZNode52 * ParentNode__1);
+static void SetTypeInfo__3qdo(struct ZClassNode512 * this, struct ZToken77 * TypeToken__1, struct ZType60 * Type__2);
+#define _ZClassNode512_SetTypeInfo
+static void SetNameInfo__3qdo(struct ZClassNode512 * this, struct ZToken77 * NameToken__1, const char * Name__2);
+#define _ZClassNode512_SetNameInfo
+static struct ZFieldNode339 * GetFieldNode__2qdo(struct ZClassNode512 * this, long Index__1);
+static void Accept__2qdo(struct ZClassNode512 * this, struct ZVisitor167 * Visitor__1);
+#define _ZClassNode512_Accept
+static struct ZFuncCallNode406 * ZFuncCallNode__3q40(struct ZFuncCallNode406 * this, struct ZNode52 * ParentNode__1, struct ZNode52 * FuncNode__2);
+static struct ZFuncCallNode406 * ZFuncCallNode__4q40(struct ZFuncCallNode406 * this, struct ZNode52 * ParentNode__1, const char * FuncName__2, struct ZType60 * FuncType__3);
+static void Accept__2q40(struct ZFuncCallNode406 * this, struct ZVisitor167 * Visitor__1);
+#define _ZFuncCallNode406_Accept
+static struct ZType60 * GetRecvType__1q40(struct ZFuncCallNode406 * this);
+static const char * GetFuncName__1q40(struct ZFuncCallNode406 * this);
+static struct ZFuncType90 * GetFuncType__1q40(struct ZFuncCallNode406 * this);
+static struct ZMacroNode391 * ToMacroNode__2q40(struct ZFuncCallNode406 * this, struct ZMacroFunc210 * MacroFunc__1);
 static struct ZFunctionNode144 * ZFunctionNode__2qtq(struct ZFunctionNode144 * this, struct ZNode52 * ParentNode__1);
 static void SetTypeInfo__3qtq(struct ZFunctionNode144 * this, struct ZToken77 * TypeToken__1, struct ZType60 * Type__2);
 #define _ZFunctionNode144_SetTypeInfo
@@ -846,13 +977,13 @@ static struct ZFunctionNode144 * Push__2qtq(struct ZFunctionNode144 * this, stru
 static struct ZFunctionNode144 * Pop__1qtq(struct ZFunctionNode144 * this);
 static int IsTopLevel__1qtq(struct ZFunctionNode144 * this);
 static long GetVarIndex__1qtq(struct ZFunctionNode144 * this);
-static struct ZVarNode506 * ZVarNode__2qde(struct ZVarNode506 * this, struct ZNode52 * ParentNode__1);
-static void SetNameInfo__3qde(struct ZVarNode506 * this, struct ZToken77 * NameToken__1, const char * Name__2);
-#define _ZVarNode506_SetNameInfo
-static void SetTypeInfo__3qde(struct ZVarNode506 * this, struct ZToken77 * TypeToken__1, struct ZType60 * Type__2);
-#define _ZVarNode506_SetTypeInfo
-static void Accept__2qde(struct ZVarNode506 * this, struct ZVisitor167 * Visitor__1);
-#define _ZVarNode506_Accept
+static struct ZVarNode502 * ZVarNode__2qs2(struct ZVarNode502 * this, struct ZNode52 * ParentNode__1);
+static void SetNameInfo__3qs2(struct ZVarNode502 * this, struct ZToken77 * NameToken__1, const char * Name__2);
+#define _ZVarNode502_SetNameInfo
+static void SetTypeInfo__3qs2(struct ZVarNode502 * this, struct ZToken77 * TypeToken__1, struct ZType60 * Type__2);
+#define _ZVarNode502_SetTypeInfo
+static void Accept__2qs2(struct ZVarNode502 * this, struct ZVisitor167 * Visitor__1);
+#define _ZVarNode502_Accept
 static struct ZNode52 * AndPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
 static struct ZNode52 * AnnotationPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
 static struct ZNode52 * ApplyPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
@@ -1346,21 +1477,21 @@ static struct ZPrototype121 * _NewZPrototype121(void) {
 	return o;
 }
 
-struct ZTypePool674 {
-	int _classId674;
-	int _delta674;
+struct ZTypePool671 {
+	int _classId671;
+	int _delta671;
 	int _nextId;
 };
 
-static void _InitZTypePool674(struct ZTypePool674 * o) {
-	o->_classId674 = 674;
-	o->_delta674 = sizeof(struct ZTypePool674) - sizeof(int);
+static void _InitZTypePool671(struct ZTypePool671 * o) {
+	o->_classId671 = 671;
+	o->_delta671 = sizeof(struct ZTypePool671) - sizeof(int);
 	o->_nextId = 0;
 }
 
-static struct ZTypePool674 * _NewZTypePool674(void) {
-	struct ZTypePool674 *o = LibZen_Malloc(sizeof(struct ZTypePool674));
-	_InitZTypePool674(o);
+static struct ZTypePool671 * _NewZTypePool671(void) {
+	struct ZTypePool671 *o = LibZen_Malloc(sizeof(struct ZTypePool671));
+	_InitZTypePool671(o);
 	return o;
 }
 
@@ -2107,21 +2238,21 @@ static struct ZNameSpace48 * _NewZNameSpace48(void) {
 	return o;
 }
 
-struct ZParserConst679 {
-	int _classId679;
-	int _delta679;
+struct ZParserConst676 {
+	int _classId676;
+	int _delta676;
 	int _nextId;
 };
 
-static void _InitZParserConst679(struct ZParserConst679 * o) {
-	o->_classId679 = 679;
-	o->_delta679 = sizeof(struct ZParserConst679) - sizeof(int);
+static void _InitZParserConst676(struct ZParserConst676 * o) {
+	o->_classId676 = 676;
+	o->_delta676 = sizeof(struct ZParserConst676) - sizeof(int);
 	o->_nextId = 0;
 }
 
-static struct ZParserConst679 * _NewZParserConst679(void) {
-	struct ZParserConst679 *o = LibZen_Malloc(sizeof(struct ZParserConst679));
-	_InitZParserConst679(o);
+static struct ZParserConst676 * _NewZParserConst676(void) {
+	struct ZParserConst676 *o = LibZen_Malloc(sizeof(struct ZParserConst676));
+	_InitZParserConst676(o);
 	return o;
 }
 
@@ -2433,45 +2564,45 @@ static struct ZVariable230 * _NewZVariable230(void) {
 struct ZVisitor167 {
 	int _classId167;
 	int _delta167;
-	void (*)(struct ZVisitor167 *,struct ZNullNode419 *) VisitNullNode;
-	void (*)(struct ZVisitor167 *,struct ZBooleanNode476 *) VisitBooleanNode;
-	void (*)(struct ZVisitor167 *,struct ZIntNode377 *) VisitIntNode;
-	void (*)(struct ZVisitor167 *,struct ZFloatNode344 *) VisitFloatNode;
-	void (*)(struct ZVisitor167 *,struct ZStringNode431 *) VisitStringNode;
-	void (*)(struct ZVisitor167 *,struct ZArrayLiteralNode481 *) VisitArrayLiteralNode;
-	void (*)(struct ZVisitor167 *,struct ZMapLiteralNode399 *) VisitMapLiteralNode;
-	void (*)(struct ZVisitor167 *,struct ZNewObjectNode412 *) VisitNewObjectNode;
-	void (*)(struct ZVisitor167 *,struct ZGlobalNameNode360 *) VisitGlobalNameNode;
-	void (*)(struct ZVisitor167 *,struct ZGetNameNode350 *) VisitGetNameNode;
+	void (*)(struct ZVisitor167 *,struct ZNullNode418 *) VisitNullNode;
+	void (*)(struct ZVisitor167 *,struct ZBooleanNode472 *) VisitBooleanNode;
+	void (*)(struct ZVisitor167 *,struct ZIntNode376 *) VisitIntNode;
+	void (*)(struct ZVisitor167 *,struct ZFloatNode343 *) VisitFloatNode;
+	void (*)(struct ZVisitor167 *,struct ZStringNode430 *) VisitStringNode;
+	void (*)(struct ZVisitor167 *,struct ZArrayLiteralNode477 *) VisitArrayLiteralNode;
+	void (*)(struct ZVisitor167 *,struct ZMapLiteralNode398 *) VisitMapLiteralNode;
+	void (*)(struct ZVisitor167 *,struct ZNewObjectNode411 *) VisitNewObjectNode;
+	void (*)(struct ZVisitor167 *,struct ZGlobalNameNode359 *) VisitGlobalNameNode;
+	void (*)(struct ZVisitor167 *,struct ZGetNameNode349 *) VisitGetNameNode;
 	void (*)(struct ZVisitor167 *,struct ZSetNameNode181 *) VisitSetNameNode;
-	void (*)(struct ZVisitor167 *,struct ZGroupNode364 *) VisitGroupNode;
-	void (*)(struct ZVisitor167 *,struct ZGetterNode355 *) VisitGetterNode;
+	void (*)(struct ZVisitor167 *,struct ZGroupNode363 *) VisitGroupNode;
+	void (*)(struct ZVisitor167 *,struct ZGetterNode354 *) VisitGetterNode;
 	void (*)(struct ZVisitor167 *,struct ZSetterNode184 *) VisitSetterNode;
-	void (*)(struct ZVisitor167 *,struct ZGetIndexNode347 *) VisitGetIndexNode;
+	void (*)(struct ZVisitor167 *,struct ZGetIndexNode346 *) VisitGetIndexNode;
 	void (*)(struct ZVisitor167 *,struct ZSetIndexNode178 *) VisitSetIndexNode;
-	void (*)(struct ZVisitor167 *,struct ZMethodCallNode403 *) VisitMethodCallNode;
-	void (*)(struct ZVisitor167 *,struct ZFuncCallNode407 *) VisitFuncCallNode;
-	void (*)(struct ZVisitor167 *,struct ZMacroNode392 *) VisitMacroNode;
+	void (*)(struct ZVisitor167 *,struct ZMethodCallNode402 *) VisitMethodCallNode;
+	void (*)(struct ZVisitor167 *,struct ZFuncCallNode406 *) VisitFuncCallNode;
+	void (*)(struct ZVisitor167 *,struct ZMacroNode391 *) VisitMacroNode;
 	void (*)(struct ZVisitor167 *,struct ZUnaryNode197 *) VisitUnaryNode;
-	void (*)(struct ZVisitor167 *,struct ZNotNode416 *) VisitNotNode;
-	void (*)(struct ZVisitor167 *,struct ZCastNode321 *) VisitCastNode;
-	void (*)(struct ZVisitor167 *,struct ZInstanceOfNode373 *) VisitInstanceOfNode;
-	void (*)(struct ZVisitor167 *,struct ZBinaryNode311 *) VisitBinaryNode;
-	void (*)(struct ZVisitor167 *,struct ZComparatorNode329 *) VisitComparatorNode;
-	void (*)(struct ZVisitor167 *,struct ZAndNode502 *) VisitAndNode;
-	void (*)(struct ZVisitor167 *,struct ZOrNode422 *) VisitOrNode;
+	void (*)(struct ZVisitor167 *,struct ZNotNode415 *) VisitNotNode;
+	void (*)(struct ZVisitor167 *,struct ZCastNode320 *) VisitCastNode;
+	void (*)(struct ZVisitor167 *,struct ZInstanceOfNode372 *) VisitInstanceOfNode;
+	void (*)(struct ZVisitor167 *,struct ZBinaryNode310 *) VisitBinaryNode;
+	void (*)(struct ZVisitor167 *,struct ZComparatorNode328 *) VisitComparatorNode;
+	void (*)(struct ZVisitor167 *,struct ZAndNode498 *) VisitAndNode;
+	void (*)(struct ZVisitor167 *,struct ZOrNode421 *) VisitOrNode;
 	void (*)(struct ZVisitor167 *,struct ZBlockNode161 *) VisitBlockNode;
-	void (*)(struct ZVisitor167 *,struct ZVarNode506 *) VisitVarNode;
-	void (*)(struct ZVisitor167 *,struct ZIfNode367 *) VisitIfNode;
+	void (*)(struct ZVisitor167 *,struct ZVarNode502 *) VisitVarNode;
+	void (*)(struct ZVisitor167 *,struct ZIfNode366 *) VisitIfNode;
 	void (*)(struct ZVisitor167 *,struct ZReturnNode170 *) VisitReturnNode;
 	void (*)(struct ZVisitor167 *,struct ZWhileNode200 *) VisitWhileNode;
-	void (*)(struct ZVisitor167 *,struct ZBreakNode318 *) VisitBreakNode;
+	void (*)(struct ZVisitor167 *,struct ZBreakNode317 *) VisitBreakNode;
 	void (*)(struct ZVisitor167 *,struct ZThrowNode191 *) VisitThrowNode;
 	void (*)(struct ZVisitor167 *,struct ZTryNode194 *) VisitTryNode;
-	void (*)(struct ZVisitor167 *,struct ZLetNode380 *) VisitLetNode;
+	void (*)(struct ZVisitor167 *,struct ZLetNode379 *) VisitLetNode;
 	void (*)(struct ZVisitor167 *,struct ZFunctionNode144 *) VisitFunctionNode;
-	void (*)(struct ZVisitor167 *,struct ZClassNode516 *) VisitClassNode;
-	void (*)(struct ZVisitor167 *,struct ZErrorNode336 *) VisitErrorNode;
+	void (*)(struct ZVisitor167 *,struct ZClassNode512 *) VisitClassNode;
+	void (*)(struct ZVisitor167 *,struct ZErrorNode335 *) VisitErrorNode;
 	void (*)(struct ZVisitor167 *,struct ZNode52 *) VisitExtendedNode;
 	void (*)(struct ZVisitor167 *,struct ZSugarNode165 *) VisitSugarNode;
 	void (*)(struct ZVisitor167 *) EnableVisitor;
@@ -2668,7 +2799,7 @@ static struct ZVisitor167 * _NewZVisitor167(void) {
 	return o;
 }
 
-struct ZArrayType300 {
+struct ZArrayType299 {
 	int _classId60;
 	int _delta60;
 	long TypeFlag;
@@ -2688,52 +2819,52 @@ struct ZArrayType300 {
 	int _delta107;
 	struct ZType60 * BaseType;
 	struct ZType60 * ParamType;
-	int _classId300;
-	int _delta300;
+	int _classId299;
+	int _delta299;
 	int _nextId;
 };
 
-static void _InitZArrayType300(struct ZArrayType300 * o) {
+static void _InitZArrayType299(struct ZArrayType299 * o) {
 	_InitZGenericType107((struct ZGenericType107 *)o);
-	o->_classId300 = 300;
-	o->_delta300 = sizeof(struct ZArrayType300) - sizeof(struct ZGenericType107);
-#ifdef _ZArrayType300_GetRealType
-	o->GetRealType = GetRealType__1qoa
+	o->_classId299 = 299;
+	o->_delta299 = sizeof(struct ZArrayType299) - sizeof(struct ZGenericType107);
+#ifdef _ZArrayType299_GetRealType
+	o->GetRealType = GetRealType__1qo4
 #endif
-#ifdef _ZArrayType300_GetSuperType
-	o->GetSuperType = GetSuperType__1qoa
+#ifdef _ZArrayType299_GetSuperType
+	o->GetSuperType = GetSuperType__1qo4
 #endif
-#ifdef _ZArrayType300_GetBaseType
-	o->GetBaseType = GetBaseType__1qoa
+#ifdef _ZArrayType299_GetBaseType
+	o->GetBaseType = GetBaseType__1qo4
 #endif
-#ifdef _ZArrayType300_GetParamSize
-	o->GetParamSize = GetParamSize__1qoa
+#ifdef _ZArrayType299_GetParamSize
+	o->GetParamSize = GetParamSize__1qo4
 #endif
-#ifdef _ZArrayType300_GetParamType
-	o->GetParamType = GetParamType__2qoa
+#ifdef _ZArrayType299_GetParamType
+	o->GetParamType = GetParamType__2qo4
 #endif
-#ifdef _ZArrayType300_IsGreekType
-	o->IsGreekType = IsGreekType__1qoa
+#ifdef _ZArrayType299_IsGreekType
+	o->IsGreekType = IsGreekType__1qo4
 #endif
-#ifdef _ZArrayType300_GetGreekRealType
-	o->GetGreekRealType = GetGreekRealType__2qoa
+#ifdef _ZArrayType299_GetGreekRealType
+	o->GetGreekRealType = GetGreekRealType__2qo4
 #endif
-#ifdef _ZArrayType300_AcceptValueType
-	o->AcceptValueType = AcceptValueType__4qoa
+#ifdef _ZArrayType299_AcceptValueType
+	o->AcceptValueType = AcceptValueType__4qo4
 #endif
-#ifdef _ZArrayType300_IsVarType
-	o->IsVarType = IsVarType__1qoa
+#ifdef _ZArrayType299_IsVarType
+	o->IsVarType = IsVarType__1qo4
 #endif
 	o->_nextId = 0;
 }
 
-static struct ZArrayType300 * _NewZArrayType300(void) {
-	struct ZArrayType300 *o = LibZen_Malloc(sizeof(struct ZArrayType300));
-	_InitZArrayType300(o);
+static struct ZArrayType299 * _NewZArrayType299(void) {
+	struct ZArrayType299 *o = LibZen_Malloc(sizeof(struct ZArrayType299));
+	_InitZArrayType299(o);
 	return o;
 }
 
-struct ZAnnotationNode302 {
+struct ZAnnotationNode301 {
 	int _classId52;
 	int _delta52;
 	struct ZNode52 * ParentNode;
@@ -2746,42 +2877,42 @@ struct ZAnnotationNode302 {
 	int (*)(struct ZNode52 *) IsBreakingBlock;
 	struct ZSugarNode165 * (*)(struct ZNode52 *,struct ZGenerator55 *) DeSugar;
 	void (*)(struct ZNode52 *,struct ZVisitor167 *) Accept;
-	int _classId302;
-	int _delta302;
+	int _classId301;
+	int _delta301;
 	struct ZNode52 * AnnotatedNode;
 	int _nextId;
 };
 
-static void _InitZAnnotationNode302(struct ZAnnotationNode302 * o) {
+static void _InitZAnnotationNode301(struct ZAnnotationNode301 * o) {
 	_InitZNode52((struct ZNode52 *)o);
-	o->_classId302 = 302;
-	o->_delta302 = sizeof(struct ZAnnotationNode302) - sizeof(struct ZNode52);
+	o->_classId301 = 301;
+	o->_delta301 = sizeof(struct ZAnnotationNode301) - sizeof(struct ZNode52);
 	o->AnnotatedNode = NULL;
-#ifdef _ZAnnotationNode302_SetNameInfo
-	o->SetNameInfo = SetNameInfo__3qod
+#ifdef _ZAnnotationNode301_SetNameInfo
+	o->SetNameInfo = SetNameInfo__3qos
 #endif
-#ifdef _ZAnnotationNode302_SetTypeInfo
-	o->SetTypeInfo = SetTypeInfo__3qod
+#ifdef _ZAnnotationNode301_SetTypeInfo
+	o->SetTypeInfo = SetTypeInfo__3qos
 #endif
-#ifdef _ZAnnotationNode302_IsBreakingBlock
-	o->IsBreakingBlock = IsBreakingBlock__1qod
+#ifdef _ZAnnotationNode301_IsBreakingBlock
+	o->IsBreakingBlock = IsBreakingBlock__1qos
 #endif
-#ifdef _ZAnnotationNode302_DeSugar
-	o->DeSugar = DeSugar__2qod
+#ifdef _ZAnnotationNode301_DeSugar
+	o->DeSugar = DeSugar__2qos
 #endif
-#ifdef _ZAnnotationNode302_Accept
-	o->Accept = Accept__2qod
+#ifdef _ZAnnotationNode301_Accept
+	o->Accept = Accept__2qos
 #endif
 	o->_nextId = 0;
 }
 
-static struct ZAnnotationNode302 * _NewZAnnotationNode302(void) {
-	struct ZAnnotationNode302 *o = LibZen_Malloc(sizeof(struct ZAnnotationNode302));
-	_InitZAnnotationNode302(o);
+static struct ZAnnotationNode301 * _NewZAnnotationNode301(void) {
+	struct ZAnnotationNode301 *o = LibZen_Malloc(sizeof(struct ZAnnotationNode301));
+	_InitZAnnotationNode301(o);
 	return o;
 }
 
-struct ZAssertNode308 {
+struct ZAssertNode307 {
 	int _classId52;
 	int _delta52;
 	struct ZNode52 * ParentNode;
@@ -2794,41 +2925,41 @@ struct ZAssertNode308 {
 	int (*)(struct ZNode52 *) IsBreakingBlock;
 	struct ZSugarNode165 * (*)(struct ZNode52 *,struct ZGenerator55 *) DeSugar;
 	void (*)(struct ZNode52 *,struct ZVisitor167 *) Accept;
-	int _classId308;
-	int _delta308;
+	int _classId307;
+	int _delta307;
 	int _nextId;
 };
 
-static void _InitZAssertNode308(struct ZAssertNode308 * o) {
+static void _InitZAssertNode307(struct ZAssertNode307 * o) {
 	_InitZNode52((struct ZNode52 *)o);
-	o->_classId308 = 308;
-	o->_delta308 = sizeof(struct ZAssertNode308) - sizeof(struct ZNode52);
-#ifdef _ZAssertNode308_SetNameInfo
-	o->SetNameInfo = SetNameInfo__3qol
+	o->_classId307 = 307;
+	o->_delta307 = sizeof(struct ZAssertNode307) - sizeof(struct ZNode52);
+#ifdef _ZAssertNode307_SetNameInfo
+	o->SetNameInfo = SetNameInfo__3qok
 #endif
-#ifdef _ZAssertNode308_SetTypeInfo
-	o->SetTypeInfo = SetTypeInfo__3qol
+#ifdef _ZAssertNode307_SetTypeInfo
+	o->SetTypeInfo = SetTypeInfo__3qok
 #endif
-#ifdef _ZAssertNode308_IsBreakingBlock
-	o->IsBreakingBlock = IsBreakingBlock__1qol
+#ifdef _ZAssertNode307_IsBreakingBlock
+	o->IsBreakingBlock = IsBreakingBlock__1qok
 #endif
-#ifdef _ZAssertNode308_DeSugar
-	o->DeSugar = DeSugar__2qol
+#ifdef _ZAssertNode307_DeSugar
+	o->DeSugar = DeSugar__2qok
 #endif
-#ifdef _ZAssertNode308_Accept
-	o->Accept = Accept__2qol
+#ifdef _ZAssertNode307_Accept
+	o->Accept = Accept__2qok
 #endif
 	o->_nextId = 0;
 }
 
-static struct ZAssertNode308 * _NewZAssertNode308(void) {
-	struct ZAssertNode308 *o = LibZen_Malloc(sizeof(struct ZAssertNode308));
-	_InitZAssertNode308(o);
+static struct ZAssertNode307 * _NewZAssertNode307(void) {
+	struct ZAssertNode307 *o = LibZen_Malloc(sizeof(struct ZAssertNode307));
+	_InitZAssertNode307(o);
 	return o;
 }
 
 static long ZAssertNode_Expr_Z59 = 0;
-struct ZBinaryNode311 {
+struct ZBinaryNode310 {
 	int _classId52;
 	int _delta52;
 	struct ZNode52 * ParentNode;
@@ -2841,44 +2972,44 @@ struct ZBinaryNode311 {
 	int (*)(struct ZNode52 *) IsBreakingBlock;
 	struct ZSugarNode165 * (*)(struct ZNode52 *,struct ZGenerator55 *) DeSugar;
 	void (*)(struct ZNode52 *,struct ZVisitor167 *) Accept;
-	int _classId311;
-	int _delta311;
+	int _classId310;
+	int _delta310;
 	struct ZSyntax219 * Pattern;
 	int _nextId;
 };
 
-static void _InitZBinaryNode311(struct ZBinaryNode311 * o) {
+static void _InitZBinaryNode310(struct ZBinaryNode310 * o) {
 	_InitZNode52((struct ZNode52 *)o);
-	o->_classId311 = 311;
-	o->_delta311 = sizeof(struct ZBinaryNode311) - sizeof(struct ZNode52);
+	o->_classId310 = 310;
+	o->_delta310 = sizeof(struct ZBinaryNode310) - sizeof(struct ZNode52);
 	o->Pattern = NULL;
-#ifdef _ZBinaryNode311_SetNameInfo
-	o->SetNameInfo = SetNameInfo__3qo6
+#ifdef _ZBinaryNode310_SetNameInfo
+	o->SetNameInfo = SetNameInfo__3qo1
 #endif
-#ifdef _ZBinaryNode311_SetTypeInfo
-	o->SetTypeInfo = SetTypeInfo__3qo6
+#ifdef _ZBinaryNode310_SetTypeInfo
+	o->SetTypeInfo = SetTypeInfo__3qo1
 #endif
-#ifdef _ZBinaryNode311_IsBreakingBlock
-	o->IsBreakingBlock = IsBreakingBlock__1qo6
+#ifdef _ZBinaryNode310_IsBreakingBlock
+	o->IsBreakingBlock = IsBreakingBlock__1qo1
 #endif
-#ifdef _ZBinaryNode311_DeSugar
-	o->DeSugar = DeSugar__2qo6
+#ifdef _ZBinaryNode310_DeSugar
+	o->DeSugar = DeSugar__2qo1
 #endif
-#ifdef _ZBinaryNode311_Accept
-	o->Accept = Accept__2qo6
+#ifdef _ZBinaryNode310_Accept
+	o->Accept = Accept__2qo1
 #endif
 	o->_nextId = 0;
 }
 
-static struct ZBinaryNode311 * _NewZBinaryNode311(void) {
-	struct ZBinaryNode311 *o = LibZen_Malloc(sizeof(struct ZBinaryNode311));
-	_InitZBinaryNode311(o);
+static struct ZBinaryNode310 * _NewZBinaryNode310(void) {
+	struct ZBinaryNode310 *o = LibZen_Malloc(sizeof(struct ZBinaryNode310));
+	_InitZBinaryNode310(o);
 	return o;
 }
 
 static long ZBinaryNode_Left_Z60 = 0;
 static long ZBinaryNode_Right_Z61 = 1;
-struct ZBreakNode318 {
+struct ZBreakNode317 {
 	int _classId52;
 	int _delta52;
 	struct ZNode52 * ParentNode;
@@ -2891,40 +3022,40 @@ struct ZBreakNode318 {
 	int (*)(struct ZNode52 *) IsBreakingBlock;
 	struct ZSugarNode165 * (*)(struct ZNode52 *,struct ZGenerator55 *) DeSugar;
 	void (*)(struct ZNode52 *,struct ZVisitor167 *) Accept;
-	int _classId318;
-	int _delta318;
+	int _classId317;
+	int _delta317;
 	int _nextId;
 };
 
-static void _InitZBreakNode318(struct ZBreakNode318 * o) {
+static void _InitZBreakNode317(struct ZBreakNode317 * o) {
 	_InitZNode52((struct ZNode52 *)o);
-	o->_classId318 = 318;
-	o->_delta318 = sizeof(struct ZBreakNode318) - sizeof(struct ZNode52);
-#ifdef _ZBreakNode318_SetNameInfo
-	o->SetNameInfo = SetNameInfo__3qom
+	o->_classId317 = 317;
+	o->_delta317 = sizeof(struct ZBreakNode317) - sizeof(struct ZNode52);
+#ifdef _ZBreakNode317_SetNameInfo
+	o->SetNameInfo = SetNameInfo__3qon
 #endif
-#ifdef _ZBreakNode318_SetTypeInfo
-	o->SetTypeInfo = SetTypeInfo__3qom
+#ifdef _ZBreakNode317_SetTypeInfo
+	o->SetTypeInfo = SetTypeInfo__3qon
 #endif
-#ifdef _ZBreakNode318_IsBreakingBlock
-	o->IsBreakingBlock = IsBreakingBlock__1qom
+#ifdef _ZBreakNode317_IsBreakingBlock
+	o->IsBreakingBlock = IsBreakingBlock__1qon
 #endif
-#ifdef _ZBreakNode318_DeSugar
-	o->DeSugar = DeSugar__2qom
+#ifdef _ZBreakNode317_DeSugar
+	o->DeSugar = DeSugar__2qon
 #endif
-#ifdef _ZBreakNode318_Accept
-	o->Accept = Accept__2qom
+#ifdef _ZBreakNode317_Accept
+	o->Accept = Accept__2qon
 #endif
 	o->_nextId = 0;
 }
 
-static struct ZBreakNode318 * _NewZBreakNode318(void) {
-	struct ZBreakNode318 *o = LibZen_Malloc(sizeof(struct ZBreakNode318));
-	_InitZBreakNode318(o);
+static struct ZBreakNode317 * _NewZBreakNode317(void) {
+	struct ZBreakNode317 *o = LibZen_Malloc(sizeof(struct ZBreakNode317));
+	_InitZBreakNode317(o);
 	return o;
 }
 
-struct ZCastNode321 {
+struct ZCastNode320 {
 	int _classId52;
 	int _delta52;
 	struct ZNode52 * ParentNode;
@@ -2937,41 +3068,41 @@ struct ZCastNode321 {
 	int (*)(struct ZNode52 *) IsBreakingBlock;
 	struct ZSugarNode165 * (*)(struct ZNode52 *,struct ZGenerator55 *) DeSugar;
 	void (*)(struct ZNode52 *,struct ZVisitor167 *) Accept;
-	int _classId321;
-	int _delta321;
+	int _classId320;
+	int _delta320;
 	int _nextId;
 };
 
-static void _InitZCastNode321(struct ZCastNode321 * o) {
+static void _InitZCastNode320(struct ZCastNode320 * o) {
 	_InitZNode52((struct ZNode52 *)o);
-	o->_classId321 = 321;
-	o->_delta321 = sizeof(struct ZCastNode321) - sizeof(struct ZNode52);
-#ifdef _ZCastNode321_SetNameInfo
-	o->SetNameInfo = SetNameInfo__3qo3
+	o->_classId320 = 320;
+	o->_delta320 = sizeof(struct ZCastNode320) - sizeof(struct ZNode52);
+#ifdef _ZCastNode320_SetNameInfo
+	o->SetNameInfo = SetNameInfo__3qo5
 #endif
-#ifdef _ZCastNode321_SetTypeInfo
-	o->SetTypeInfo = SetTypeInfo__3qo3
+#ifdef _ZCastNode320_SetTypeInfo
+	o->SetTypeInfo = SetTypeInfo__3qo5
 #endif
-#ifdef _ZCastNode321_IsBreakingBlock
-	o->IsBreakingBlock = IsBreakingBlock__1qo3
+#ifdef _ZCastNode320_IsBreakingBlock
+	o->IsBreakingBlock = IsBreakingBlock__1qo5
 #endif
-#ifdef _ZCastNode321_DeSugar
-	o->DeSugar = DeSugar__2qo3
+#ifdef _ZCastNode320_DeSugar
+	o->DeSugar = DeSugar__2qo5
 #endif
-#ifdef _ZCastNode321_Accept
-	o->Accept = Accept__2qo3
+#ifdef _ZCastNode320_Accept
+	o->Accept = Accept__2qo5
 #endif
 	o->_nextId = 0;
 }
 
-static struct ZCastNode321 * _NewZCastNode321(void) {
-	struct ZCastNode321 *o = LibZen_Malloc(sizeof(struct ZCastNode321));
-	_InitZCastNode321(o);
+static struct ZCastNode320 * _NewZCastNode320(void) {
+	struct ZCastNode320 *o = LibZen_Malloc(sizeof(struct ZCastNode320));
+	_InitZCastNode320(o);
 	return o;
 }
 
 static long ZCastNode_Expr_Z62 = 0;
-struct ZCatchNode325 {
+struct ZCatchNode324 {
 	int _classId52;
 	int _delta52;
 	struct ZNode52 * ParentNode;
@@ -2984,47 +3115,47 @@ struct ZCatchNode325 {
 	int (*)(struct ZNode52 *) IsBreakingBlock;
 	struct ZSugarNode165 * (*)(struct ZNode52 *,struct ZGenerator55 *) DeSugar;
 	void (*)(struct ZNode52 *,struct ZVisitor167 *) Accept;
-	int _classId325;
-	int _delta325;
+	int _classId324;
+	int _delta324;
 	struct ZType60 * ExceptionType;
 	const char * ExceptionName;
 	struct ZToken77 * NameToken;
 	int _nextId;
 };
 
-static void _InitZCatchNode325(struct ZCatchNode325 * o) {
+static void _InitZCatchNode324(struct ZCatchNode324 * o) {
 	_InitZNode52((struct ZNode52 *)o);
-	o->_classId325 = 325;
-	o->_delta325 = sizeof(struct ZCatchNode325) - sizeof(struct ZNode52);
+	o->_classId324 = 324;
+	o->_delta324 = sizeof(struct ZCatchNode324) - sizeof(struct ZNode52);
 	o->ExceptionType = ZTypeVarType_Z4;
 	o->ExceptionName = NULL;
 	o->NameToken = NULL;
-#ifdef _ZCatchNode325_SetNameInfo
-	o->SetNameInfo = SetNameInfo__3qpw
+#ifdef _ZCatchNode324_SetNameInfo
+	o->SetNameInfo = SetNameInfo__3qpq
 #endif
-#ifdef _ZCatchNode325_SetTypeInfo
-	o->SetTypeInfo = SetTypeInfo__3qpw
+#ifdef _ZCatchNode324_SetTypeInfo
+	o->SetTypeInfo = SetTypeInfo__3qpq
 #endif
-#ifdef _ZCatchNode325_IsBreakingBlock
-	o->IsBreakingBlock = IsBreakingBlock__1qpw
+#ifdef _ZCatchNode324_IsBreakingBlock
+	o->IsBreakingBlock = IsBreakingBlock__1qpq
 #endif
-#ifdef _ZCatchNode325_DeSugar
-	o->DeSugar = DeSugar__2qpw
+#ifdef _ZCatchNode324_DeSugar
+	o->DeSugar = DeSugar__2qpq
 #endif
-#ifdef _ZCatchNode325_Accept
-	o->Accept = Accept__2qpw
+#ifdef _ZCatchNode324_Accept
+	o->Accept = Accept__2qpq
 #endif
 	o->_nextId = 0;
 }
 
-static struct ZCatchNode325 * _NewZCatchNode325(void) {
-	struct ZCatchNode325 *o = LibZen_Malloc(sizeof(struct ZCatchNode325));
-	_InitZCatchNode325(o);
+static struct ZCatchNode324 * _NewZCatchNode324(void) {
+	struct ZCatchNode324 *o = LibZen_Malloc(sizeof(struct ZCatchNode324));
+	_InitZCatchNode324(o);
 	return o;
 }
 
 static long ZCatchNode_Block_Z63 = 0;
-struct ZComparatorNode329 {
+struct ZComparatorNode328 {
 	int _classId52;
 	int _delta52;
 	struct ZNode52 * ParentNode;
@@ -3037,43 +3168,43 @@ struct ZComparatorNode329 {
 	int (*)(struct ZNode52 *) IsBreakingBlock;
 	struct ZSugarNode165 * (*)(struct ZNode52 *,struct ZGenerator55 *) DeSugar;
 	void (*)(struct ZNode52 *,struct ZVisitor167 *) Accept;
-	int _classId311;
-	int _delta311;
+	int _classId310;
+	int _delta310;
 	struct ZSyntax219 * Pattern;
-	int _classId329;
-	int _delta329;
+	int _classId328;
+	int _delta328;
 	int _nextId;
 };
 
-static void _InitZComparatorNode329(struct ZComparatorNode329 * o) {
-	_InitZBinaryNode311((struct ZBinaryNode311 *)o);
-	o->_classId329 = 329;
-	o->_delta329 = sizeof(struct ZComparatorNode329) - sizeof(struct ZBinaryNode311);
-#ifdef _ZComparatorNode329_SetNameInfo
-	o->SetNameInfo = SetNameInfo__3qpy
+static void _InitZComparatorNode328(struct ZComparatorNode328 * o) {
+	_InitZBinaryNode310((struct ZBinaryNode310 *)o);
+	o->_classId328 = 328;
+	o->_delta328 = sizeof(struct ZComparatorNode328) - sizeof(struct ZBinaryNode310);
+#ifdef _ZComparatorNode328_SetNameInfo
+	o->SetNameInfo = SetNameInfo__3qpt
 #endif
-#ifdef _ZComparatorNode329_SetTypeInfo
-	o->SetTypeInfo = SetTypeInfo__3qpy
+#ifdef _ZComparatorNode328_SetTypeInfo
+	o->SetTypeInfo = SetTypeInfo__3qpt
 #endif
-#ifdef _ZComparatorNode329_IsBreakingBlock
-	o->IsBreakingBlock = IsBreakingBlock__1qpy
+#ifdef _ZComparatorNode328_IsBreakingBlock
+	o->IsBreakingBlock = IsBreakingBlock__1qpt
 #endif
-#ifdef _ZComparatorNode329_DeSugar
-	o->DeSugar = DeSugar__2qpy
+#ifdef _ZComparatorNode328_DeSugar
+	o->DeSugar = DeSugar__2qpt
 #endif
-#ifdef _ZComparatorNode329_Accept
-	o->Accept = Accept__2qpy
+#ifdef _ZComparatorNode328_Accept
+	o->Accept = Accept__2qpt
 #endif
 	o->_nextId = 0;
 }
 
-static struct ZComparatorNode329 * _NewZComparatorNode329(void) {
-	struct ZComparatorNode329 *o = LibZen_Malloc(sizeof(struct ZComparatorNode329));
-	_InitZComparatorNode329(o);
+static struct ZComparatorNode328 * _NewZComparatorNode328(void) {
+	struct ZComparatorNode328 *o = LibZen_Malloc(sizeof(struct ZComparatorNode328));
+	_InitZComparatorNode328(o);
 	return o;
 }
 
-struct ZConstNode332 {
+struct ZConstNode331 {
 	int _classId52;
 	int _delta52;
 	struct ZNode52 * ParentNode;
@@ -3086,40 +3217,40 @@ struct ZConstNode332 {
 	int (*)(struct ZNode52 *) IsBreakingBlock;
 	struct ZSugarNode165 * (*)(struct ZNode52 *,struct ZGenerator55 *) DeSugar;
 	void (*)(struct ZNode52 *,struct ZVisitor167 *) Accept;
-	int _classId332;
-	int _delta332;
+	int _classId331;
+	int _delta331;
 	int _nextId;
 };
 
-static void _InitZConstNode332(struct ZConstNode332 * o) {
+static void _InitZConstNode331(struct ZConstNode331 * o) {
 	_InitZNode52((struct ZNode52 *)o);
-	o->_classId332 = 332;
-	o->_delta332 = sizeof(struct ZConstNode332) - sizeof(struct ZNode52);
-#ifdef _ZConstNode332_SetNameInfo
-	o->SetNameInfo = SetNameInfo__3qpo
+	o->_classId331 = 331;
+	o->_delta331 = sizeof(struct ZConstNode331) - sizeof(struct ZNode52);
+#ifdef _ZConstNode331_SetNameInfo
+	o->SetNameInfo = SetNameInfo__3qpi
 #endif
-#ifdef _ZConstNode332_SetTypeInfo
-	o->SetTypeInfo = SetTypeInfo__3qpo
+#ifdef _ZConstNode331_SetTypeInfo
+	o->SetTypeInfo = SetTypeInfo__3qpi
 #endif
-#ifdef _ZConstNode332_IsBreakingBlock
-	o->IsBreakingBlock = IsBreakingBlock__1qpo
+#ifdef _ZConstNode331_IsBreakingBlock
+	o->IsBreakingBlock = IsBreakingBlock__1qpi
 #endif
-#ifdef _ZConstNode332_DeSugar
-	o->DeSugar = DeSugar__2qpo
+#ifdef _ZConstNode331_DeSugar
+	o->DeSugar = DeSugar__2qpi
 #endif
-#ifdef _ZConstNode332_Accept
-	o->Accept = Accept__2qpo
+#ifdef _ZConstNode331_Accept
+	o->Accept = Accept__2qpi
 #endif
 	o->_nextId = 0;
 }
 
-static struct ZConstNode332 * _NewZConstNode332(void) {
-	struct ZConstNode332 *o = LibZen_Malloc(sizeof(struct ZConstNode332));
-	_InitZConstNode332(o);
+static struct ZConstNode331 * _NewZConstNode331(void) {
+	struct ZConstNode331 *o = LibZen_Malloc(sizeof(struct ZConstNode331));
+	_InitZConstNode331(o);
 	return o;
 }
 
-struct ZEmptyNode334 {
+struct ZEmptyNode333 {
 	int _classId52;
 	int _delta52;
 	struct ZNode52 * ParentNode;
@@ -3132,40 +3263,40 @@ struct ZEmptyNode334 {
 	int (*)(struct ZNode52 *) IsBreakingBlock;
 	struct ZSugarNode165 * (*)(struct ZNode52 *,struct ZGenerator55 *) DeSugar;
 	void (*)(struct ZNode52 *,struct ZVisitor167 *) Accept;
-	int _classId334;
-	int _delta334;
+	int _classId333;
+	int _delta333;
 	int _nextId;
 };
 
-static void _InitZEmptyNode334(struct ZEmptyNode334 * o) {
+static void _InitZEmptyNode333(struct ZEmptyNode333 * o) {
 	_InitZNode52((struct ZNode52 *)o);
-	o->_classId334 = 334;
-	o->_delta334 = sizeof(struct ZEmptyNode334) - sizeof(struct ZNode52);
-#ifdef _ZEmptyNode334_SetNameInfo
-	o->SetNameInfo = SetNameInfo__3qp0
+	o->_classId333 = 333;
+	o->_delta333 = sizeof(struct ZEmptyNode333) - sizeof(struct ZNode52);
+#ifdef _ZEmptyNode333_SetNameInfo
+	o->SetNameInfo = SetNameInfo__3qpp
 #endif
-#ifdef _ZEmptyNode334_SetTypeInfo
-	o->SetTypeInfo = SetTypeInfo__3qp0
+#ifdef _ZEmptyNode333_SetTypeInfo
+	o->SetTypeInfo = SetTypeInfo__3qpp
 #endif
-#ifdef _ZEmptyNode334_IsBreakingBlock
-	o->IsBreakingBlock = IsBreakingBlock__1qp0
+#ifdef _ZEmptyNode333_IsBreakingBlock
+	o->IsBreakingBlock = IsBreakingBlock__1qpp
 #endif
-#ifdef _ZEmptyNode334_DeSugar
-	o->DeSugar = DeSugar__2qp0
+#ifdef _ZEmptyNode333_DeSugar
+	o->DeSugar = DeSugar__2qpp
 #endif
-#ifdef _ZEmptyNode334_Accept
-	o->Accept = Accept__2qp0
+#ifdef _ZEmptyNode333_Accept
+	o->Accept = Accept__2qpp
 #endif
 	o->_nextId = 0;
 }
 
-static struct ZEmptyNode334 * _NewZEmptyNode334(void) {
-	struct ZEmptyNode334 *o = LibZen_Malloc(sizeof(struct ZEmptyNode334));
-	_InitZEmptyNode334(o);
+static struct ZEmptyNode333 * _NewZEmptyNode333(void) {
+	struct ZEmptyNode333 *o = LibZen_Malloc(sizeof(struct ZEmptyNode333));
+	_InitZEmptyNode333(o);
 	return o;
 }
 
-struct ZErrorNode336 {
+struct ZErrorNode335 {
 	int _classId52;
 	int _delta52;
 	struct ZNode52 * ParentNode;
@@ -3178,44 +3309,44 @@ struct ZErrorNode336 {
 	int (*)(struct ZNode52 *) IsBreakingBlock;
 	struct ZSugarNode165 * (*)(struct ZNode52 *,struct ZGenerator55 *) DeSugar;
 	void (*)(struct ZNode52 *,struct ZVisitor167 *) Accept;
-	int _classId332;
-	int _delta332;
-	int _classId336;
-	int _delta336;
+	int _classId331;
+	int _delta331;
+	int _classId335;
+	int _delta335;
 	const char * ErrorMessage;
 	int _nextId;
 };
 
-static void _InitZErrorNode336(struct ZErrorNode336 * o) {
-	_InitZConstNode332((struct ZConstNode332 *)o);
-	o->_classId336 = 336;
-	o->_delta336 = sizeof(struct ZErrorNode336) - sizeof(struct ZConstNode332);
+static void _InitZErrorNode335(struct ZErrorNode335 * o) {
+	_InitZConstNode331((struct ZConstNode331 *)o);
+	o->_classId335 = 335;
+	o->_delta335 = sizeof(struct ZErrorNode335) - sizeof(struct ZConstNode331);
 	o->ErrorMessage = NULL;
-#ifdef _ZErrorNode336_SetNameInfo
-	o->SetNameInfo = SetNameInfo__3qpa
+#ifdef _ZErrorNode335_SetNameInfo
+	o->SetNameInfo = SetNameInfo__3qp4
 #endif
-#ifdef _ZErrorNode336_SetTypeInfo
-	o->SetTypeInfo = SetTypeInfo__3qpa
+#ifdef _ZErrorNode335_SetTypeInfo
+	o->SetTypeInfo = SetTypeInfo__3qp4
 #endif
-#ifdef _ZErrorNode336_IsBreakingBlock
-	o->IsBreakingBlock = IsBreakingBlock__1qpa
+#ifdef _ZErrorNode335_IsBreakingBlock
+	o->IsBreakingBlock = IsBreakingBlock__1qp4
 #endif
-#ifdef _ZErrorNode336_DeSugar
-	o->DeSugar = DeSugar__2qpa
+#ifdef _ZErrorNode335_DeSugar
+	o->DeSugar = DeSugar__2qp4
 #endif
-#ifdef _ZErrorNode336_Accept
-	o->Accept = Accept__2qpa
+#ifdef _ZErrorNode335_Accept
+	o->Accept = Accept__2qp4
 #endif
 	o->_nextId = 0;
 }
 
-static struct ZErrorNode336 * _NewZErrorNode336(void) {
-	struct ZErrorNode336 *o = LibZen_Malloc(sizeof(struct ZErrorNode336));
-	_InitZErrorNode336(o);
+static struct ZErrorNode335 * _NewZErrorNode335(void) {
+	struct ZErrorNode335 *o = LibZen_Malloc(sizeof(struct ZErrorNode335));
+	_InitZErrorNode335(o);
 	return o;
 }
 
-struct ZFieldNode340 {
+struct ZFieldNode339 {
 	int _classId52;
 	int _delta52;
 	struct ZNode52 * ParentNode;
@@ -3228,8 +3359,8 @@ struct ZFieldNode340 {
 	int (*)(struct ZNode52 *) IsBreakingBlock;
 	struct ZSugarNode165 * (*)(struct ZNode52 *,struct ZGenerator55 *) DeSugar;
 	void (*)(struct ZNode52 *,struct ZVisitor167 *) Accept;
-	int _classId340;
-	int _delta340;
+	int _classId339;
+	int _delta339;
 	struct ZClassType80 * ClassType;
 	struct ZType60 * DeclType;
 	const char * FieldName;
@@ -3237,40 +3368,40 @@ struct ZFieldNode340 {
 	int _nextId;
 };
 
-static void _InitZFieldNode340(struct ZFieldNode340 * o) {
+static void _InitZFieldNode339(struct ZFieldNode339 * o) {
 	_InitZNode52((struct ZNode52 *)o);
-	o->_classId340 = 340;
-	o->_delta340 = sizeof(struct ZFieldNode340) - sizeof(struct ZNode52);
+	o->_classId339 = 339;
+	o->_delta339 = sizeof(struct ZFieldNode339) - sizeof(struct ZNode52);
 	o->ClassType = NULL;
 	o->DeclType = ZTypeVarType_Z4;
 	o->FieldName = NULL;
 	o->NameToken = NULL;
-#ifdef _ZFieldNode340_SetNameInfo
-	o->SetNameInfo = SetNameInfo__3qpg
+#ifdef _ZFieldNode339_SetNameInfo
+	o->SetNameInfo = SetNameInfo__3qpf
 #endif
-#ifdef _ZFieldNode340_SetTypeInfo
-	o->SetTypeInfo = SetTypeInfo__3qpg
+#ifdef _ZFieldNode339_SetTypeInfo
+	o->SetTypeInfo = SetTypeInfo__3qpf
 #endif
-#ifdef _ZFieldNode340_IsBreakingBlock
-	o->IsBreakingBlock = IsBreakingBlock__1qpg
+#ifdef _ZFieldNode339_IsBreakingBlock
+	o->IsBreakingBlock = IsBreakingBlock__1qpf
 #endif
-#ifdef _ZFieldNode340_DeSugar
-	o->DeSugar = DeSugar__2qpg
+#ifdef _ZFieldNode339_DeSugar
+	o->DeSugar = DeSugar__2qpf
 #endif
-#ifdef _ZFieldNode340_Accept
-	o->Accept = Accept__2qpg
+#ifdef _ZFieldNode339_Accept
+	o->Accept = Accept__2qpf
 #endif
 	o->_nextId = 0;
 }
 
-static struct ZFieldNode340 * _NewZFieldNode340(void) {
-	struct ZFieldNode340 *o = LibZen_Malloc(sizeof(struct ZFieldNode340));
-	_InitZFieldNode340(o);
+static struct ZFieldNode339 * _NewZFieldNode339(void) {
+	struct ZFieldNode339 *o = LibZen_Malloc(sizeof(struct ZFieldNode339));
+	_InitZFieldNode339(o);
 	return o;
 }
 
 static long ZFieldNode_InitValue_Z64 = 0;
-struct ZFloatNode344 {
+struct ZFloatNode343 {
 	int _classId52;
 	int _delta52;
 	struct ZNode52 * ParentNode;
@@ -3283,44 +3414,44 @@ struct ZFloatNode344 {
 	int (*)(struct ZNode52 *) IsBreakingBlock;
 	struct ZSugarNode165 * (*)(struct ZNode52 *,struct ZGenerator55 *) DeSugar;
 	void (*)(struct ZNode52 *,struct ZVisitor167 *) Accept;
-	int _classId332;
-	int _delta332;
-	int _classId344;
-	int _delta344;
+	int _classId331;
+	int _delta331;
+	int _classId343;
+	int _delta343;
 	double FloatValue;
 	int _nextId;
 };
 
-static void _InitZFloatNode344(struct ZFloatNode344 * o) {
-	_InitZConstNode332((struct ZConstNode332 *)o);
-	o->_classId344 = 344;
-	o->_delta344 = sizeof(struct ZFloatNode344) - sizeof(struct ZConstNode332);
+static void _InitZFloatNode343(struct ZFloatNode343 * o) {
+	_InitZConstNode331((struct ZConstNode331 *)o);
+	o->_classId343 = 343;
+	o->_delta343 = sizeof(struct ZFloatNode343) - sizeof(struct ZConstNode331);
 	o->FloatValue = 0.0;
-#ifdef _ZFloatNode344_SetNameInfo
-	o->SetNameInfo = SetNameInfo__3qpl
+#ifdef _ZFloatNode343_SetNameInfo
+	o->SetNameInfo = SetNameInfo__3qpk
 #endif
-#ifdef _ZFloatNode344_SetTypeInfo
-	o->SetTypeInfo = SetTypeInfo__3qpl
+#ifdef _ZFloatNode343_SetTypeInfo
+	o->SetTypeInfo = SetTypeInfo__3qpk
 #endif
-#ifdef _ZFloatNode344_IsBreakingBlock
-	o->IsBreakingBlock = IsBreakingBlock__1qpl
+#ifdef _ZFloatNode343_IsBreakingBlock
+	o->IsBreakingBlock = IsBreakingBlock__1qpk
 #endif
-#ifdef _ZFloatNode344_DeSugar
-	o->DeSugar = DeSugar__2qpl
+#ifdef _ZFloatNode343_DeSugar
+	o->DeSugar = DeSugar__2qpk
 #endif
-#ifdef _ZFloatNode344_Accept
-	o->Accept = Accept__2qpl
+#ifdef _ZFloatNode343_Accept
+	o->Accept = Accept__2qpk
 #endif
 	o->_nextId = 0;
 }
 
-static struct ZFloatNode344 * _NewZFloatNode344(void) {
-	struct ZFloatNode344 *o = LibZen_Malloc(sizeof(struct ZFloatNode344));
-	_InitZFloatNode344(o);
+static struct ZFloatNode343 * _NewZFloatNode343(void) {
+	struct ZFloatNode343 *o = LibZen_Malloc(sizeof(struct ZFloatNode343));
+	_InitZFloatNode343(o);
 	return o;
 }
 
-struct ZGetIndexNode347 {
+struct ZGetIndexNode346 {
 	int _classId52;
 	int _delta52;
 	struct ZNode52 * ParentNode;
@@ -3333,42 +3464,42 @@ struct ZGetIndexNode347 {
 	int (*)(struct ZNode52 *) IsBreakingBlock;
 	struct ZSugarNode165 * (*)(struct ZNode52 *,struct ZGenerator55 *) DeSugar;
 	void (*)(struct ZNode52 *,struct ZVisitor167 *) Accept;
-	int _classId347;
-	int _delta347;
+	int _classId346;
+	int _delta346;
 	int _nextId;
 };
 
-static void _InitZGetIndexNode347(struct ZGetIndexNode347 * o) {
+static void _InitZGetIndexNode346(struct ZGetIndexNode346 * o) {
 	_InitZNode52((struct ZNode52 *)o);
-	o->_classId347 = 347;
-	o->_delta347 = sizeof(struct ZGetIndexNode347) - sizeof(struct ZNode52);
-#ifdef _ZGetIndexNode347_SetNameInfo
-	o->SetNameInfo = SetNameInfo__3qp6
+	o->_classId346 = 346;
+	o->_delta346 = sizeof(struct ZGetIndexNode346) - sizeof(struct ZNode52);
+#ifdef _ZGetIndexNode346_SetNameInfo
+	o->SetNameInfo = SetNameInfo__3qp1
 #endif
-#ifdef _ZGetIndexNode347_SetTypeInfo
-	o->SetTypeInfo = SetTypeInfo__3qp6
+#ifdef _ZGetIndexNode346_SetTypeInfo
+	o->SetTypeInfo = SetTypeInfo__3qp1
 #endif
-#ifdef _ZGetIndexNode347_IsBreakingBlock
-	o->IsBreakingBlock = IsBreakingBlock__1qp6
+#ifdef _ZGetIndexNode346_IsBreakingBlock
+	o->IsBreakingBlock = IsBreakingBlock__1qp1
 #endif
-#ifdef _ZGetIndexNode347_DeSugar
-	o->DeSugar = DeSugar__2qp6
+#ifdef _ZGetIndexNode346_DeSugar
+	o->DeSugar = DeSugar__2qp1
 #endif
-#ifdef _ZGetIndexNode347_Accept
-	o->Accept = Accept__2qp6
+#ifdef _ZGetIndexNode346_Accept
+	o->Accept = Accept__2qp1
 #endif
 	o->_nextId = 0;
 }
 
-static struct ZGetIndexNode347 * _NewZGetIndexNode347(void) {
-	struct ZGetIndexNode347 *o = LibZen_Malloc(sizeof(struct ZGetIndexNode347));
-	_InitZGetIndexNode347(o);
+static struct ZGetIndexNode346 * _NewZGetIndexNode346(void) {
+	struct ZGetIndexNode346 *o = LibZen_Malloc(sizeof(struct ZGetIndexNode346));
+	_InitZGetIndexNode346(o);
 	return o;
 }
 
 static long ZGetIndexNode_Recv_Z65 = 0;
 static long ZGetIndexNode_Index_Z66 = 1;
-struct ZGetNameNode350 {
+struct ZGetNameNode349 {
 	int _classId52;
 	int _delta52;
 	struct ZNode52 * ParentNode;
@@ -3381,46 +3512,46 @@ struct ZGetNameNode350 {
 	int (*)(struct ZNode52 *) IsBreakingBlock;
 	struct ZSugarNode165 * (*)(struct ZNode52 *,struct ZGenerator55 *) DeSugar;
 	void (*)(struct ZNode52 *,struct ZVisitor167 *) Accept;
-	int _classId350;
-	int _delta350;
+	int _classId349;
+	int _delta349;
 	int IsCaptured;
 	const char * VarName;
 	long VarIndex;
 	int _nextId;
 };
 
-static void _InitZGetNameNode350(struct ZGetNameNode350 * o) {
+static void _InitZGetNameNode349(struct ZGetNameNode349 * o) {
 	_InitZNode52((struct ZNode52 *)o);
-	o->_classId350 = 350;
-	o->_delta350 = sizeof(struct ZGetNameNode350) - sizeof(struct ZNode52);
+	o->_classId349 = 349;
+	o->_delta349 = sizeof(struct ZGetNameNode349) - sizeof(struct ZNode52);
 	o->IsCaptured = 0/*false*/;
 	o->VarName = NULL;
 	o->VarIndex = 0;
-#ifdef _ZGetNameNode350_SetNameInfo
-	o->SetNameInfo = SetNameInfo__3qpc
+#ifdef _ZGetNameNode349_SetNameInfo
+	o->SetNameInfo = SetNameInfo__3qpx
 #endif
-#ifdef _ZGetNameNode350_SetTypeInfo
-	o->SetTypeInfo = SetTypeInfo__3qpc
+#ifdef _ZGetNameNode349_SetTypeInfo
+	o->SetTypeInfo = SetTypeInfo__3qpx
 #endif
-#ifdef _ZGetNameNode350_IsBreakingBlock
-	o->IsBreakingBlock = IsBreakingBlock__1qpc
+#ifdef _ZGetNameNode349_IsBreakingBlock
+	o->IsBreakingBlock = IsBreakingBlock__1qpx
 #endif
-#ifdef _ZGetNameNode350_DeSugar
-	o->DeSugar = DeSugar__2qpc
+#ifdef _ZGetNameNode349_DeSugar
+	o->DeSugar = DeSugar__2qpx
 #endif
-#ifdef _ZGetNameNode350_Accept
-	o->Accept = Accept__2qpc
+#ifdef _ZGetNameNode349_Accept
+	o->Accept = Accept__2qpx
 #endif
 	o->_nextId = 0;
 }
 
-static struct ZGetNameNode350 * _NewZGetNameNode350(void) {
-	struct ZGetNameNode350 *o = LibZen_Malloc(sizeof(struct ZGetNameNode350));
-	_InitZGetNameNode350(o);
+static struct ZGetNameNode349 * _NewZGetNameNode349(void) {
+	struct ZGetNameNode349 *o = LibZen_Malloc(sizeof(struct ZGetNameNode349));
+	_InitZGetNameNode349(o);
 	return o;
 }
 
-struct ZGetterNode355 {
+struct ZGetterNode354 {
 	int _classId52;
 	int _delta52;
 	struct ZNode52 * ParentNode;
@@ -3433,45 +3564,45 @@ struct ZGetterNode355 {
 	int (*)(struct ZNode52 *) IsBreakingBlock;
 	struct ZSugarNode165 * (*)(struct ZNode52 *,struct ZGenerator55 *) DeSugar;
 	void (*)(struct ZNode52 *,struct ZVisitor167 *) Accept;
-	int _classId355;
-	int _delta355;
+	int _classId354;
+	int _delta354;
 	const char * FieldName;
 	struct ZToken77 * NameToken;
 	int _nextId;
 };
 
-static void _InitZGetterNode355(struct ZGetterNode355 * o) {
+static void _InitZGetterNode354(struct ZGetterNode354 * o) {
 	_InitZNode52((struct ZNode52 *)o);
-	o->_classId355 = 355;
-	o->_delta355 = sizeof(struct ZGetterNode355) - sizeof(struct ZNode52);
+	o->_classId354 = 354;
+	o->_delta354 = sizeof(struct ZGetterNode354) - sizeof(struct ZNode52);
 	o->FieldName = NULL;
 	o->NameToken = NULL;
-#ifdef _ZGetterNode355_SetNameInfo
-	o->SetNameInfo = SetNameInfo__3qp7
+#ifdef _ZGetterNode354_SetNameInfo
+	o->SetNameInfo = SetNameInfo__3qpm
 #endif
-#ifdef _ZGetterNode355_SetTypeInfo
-	o->SetTypeInfo = SetTypeInfo__3qp7
+#ifdef _ZGetterNode354_SetTypeInfo
+	o->SetTypeInfo = SetTypeInfo__3qpm
 #endif
-#ifdef _ZGetterNode355_IsBreakingBlock
-	o->IsBreakingBlock = IsBreakingBlock__1qp7
+#ifdef _ZGetterNode354_IsBreakingBlock
+	o->IsBreakingBlock = IsBreakingBlock__1qpm
 #endif
-#ifdef _ZGetterNode355_DeSugar
-	o->DeSugar = DeSugar__2qp7
+#ifdef _ZGetterNode354_DeSugar
+	o->DeSugar = DeSugar__2qpm
 #endif
-#ifdef _ZGetterNode355_Accept
-	o->Accept = Accept__2qp7
+#ifdef _ZGetterNode354_Accept
+	o->Accept = Accept__2qpm
 #endif
 	o->_nextId = 0;
 }
 
-static struct ZGetterNode355 * _NewZGetterNode355(void) {
-	struct ZGetterNode355 *o = LibZen_Malloc(sizeof(struct ZGetterNode355));
-	_InitZGetterNode355(o);
+static struct ZGetterNode354 * _NewZGetterNode354(void) {
+	struct ZGetterNode354 *o = LibZen_Malloc(sizeof(struct ZGetterNode354));
+	_InitZGetterNode354(o);
 	return o;
 }
 
 static long ZGetterNode_Recv_Z67 = 0;
-struct ZGlobalNameNode360 {
+struct ZGlobalNameNode359 {
 	int _classId52;
 	int _delta52;
 	struct ZNode52 * ParentNode;
@@ -3484,44 +3615,44 @@ struct ZGlobalNameNode360 {
 	int (*)(struct ZNode52 *) IsBreakingBlock;
 	struct ZSugarNode165 * (*)(struct ZNode52 *,struct ZGenerator55 *) DeSugar;
 	void (*)(struct ZNode52 *,struct ZVisitor167 *) Accept;
-	int _classId360;
-	int _delta360;
+	int _classId359;
+	int _delta359;
 	const char * GlobalName;
 	int IsStaticFuncName;
 	int _nextId;
 };
 
-static void _InitZGlobalNameNode360(struct ZGlobalNameNode360 * o) {
+static void _InitZGlobalNameNode359(struct ZGlobalNameNode359 * o) {
 	_InitZNode52((struct ZNode52 *)o);
-	o->_classId360 = 360;
-	o->_delta360 = sizeof(struct ZGlobalNameNode360) - sizeof(struct ZNode52);
+	o->_classId359 = 359;
+	o->_delta359 = sizeof(struct ZGlobalNameNode359) - sizeof(struct ZNode52);
 	o->GlobalName = NULL;
 	o->IsStaticFuncName = 0/*false*/;
-#ifdef _ZGlobalNameNode360_SetNameInfo
-	o->SetNameInfo = SetNameInfo__3q0q
+#ifdef _ZGlobalNameNode359_SetNameInfo
+	o->SetNameInfo = SetNameInfo__3qp8
 #endif
-#ifdef _ZGlobalNameNode360_SetTypeInfo
-	o->SetTypeInfo = SetTypeInfo__3q0q
+#ifdef _ZGlobalNameNode359_SetTypeInfo
+	o->SetTypeInfo = SetTypeInfo__3qp8
 #endif
-#ifdef _ZGlobalNameNode360_IsBreakingBlock
-	o->IsBreakingBlock = IsBreakingBlock__1q0q
+#ifdef _ZGlobalNameNode359_IsBreakingBlock
+	o->IsBreakingBlock = IsBreakingBlock__1qp8
 #endif
-#ifdef _ZGlobalNameNode360_DeSugar
-	o->DeSugar = DeSugar__2q0q
+#ifdef _ZGlobalNameNode359_DeSugar
+	o->DeSugar = DeSugar__2qp8
 #endif
-#ifdef _ZGlobalNameNode360_Accept
-	o->Accept = Accept__2q0q
+#ifdef _ZGlobalNameNode359_Accept
+	o->Accept = Accept__2qp8
 #endif
 	o->_nextId = 0;
 }
 
-static struct ZGlobalNameNode360 * _NewZGlobalNameNode360(void) {
-	struct ZGlobalNameNode360 *o = LibZen_Malloc(sizeof(struct ZGlobalNameNode360));
-	_InitZGlobalNameNode360(o);
+static struct ZGlobalNameNode359 * _NewZGlobalNameNode359(void) {
+	struct ZGlobalNameNode359 *o = LibZen_Malloc(sizeof(struct ZGlobalNameNode359));
+	_InitZGlobalNameNode359(o);
 	return o;
 }
 
-struct ZGroupNode364 {
+struct ZGroupNode363 {
 	int _classId52;
 	int _delta52;
 	struct ZNode52 * ParentNode;
@@ -3534,41 +3665,41 @@ struct ZGroupNode364 {
 	int (*)(struct ZNode52 *) IsBreakingBlock;
 	struct ZSugarNode165 * (*)(struct ZNode52 *,struct ZGenerator55 *) DeSugar;
 	void (*)(struct ZNode52 *,struct ZVisitor167 *) Accept;
-	int _classId364;
-	int _delta364;
+	int _classId363;
+	int _delta363;
 	int _nextId;
 };
 
-static void _InitZGroupNode364(struct ZGroupNode364 * o) {
+static void _InitZGroupNode363(struct ZGroupNode363 * o) {
 	_InitZNode52((struct ZNode52 *)o);
-	o->_classId364 = 364;
-	o->_delta364 = sizeof(struct ZGroupNode364) - sizeof(struct ZNode52);
-#ifdef _ZGroupNode364_SetNameInfo
-	o->SetNameInfo = SetNameInfo__3q0t
+	o->_classId363 = 363;
+	o->_delta363 = sizeof(struct ZGroupNode363) - sizeof(struct ZNode52);
+#ifdef _ZGroupNode363_SetNameInfo
+	o->SetNameInfo = SetNameInfo__3q0r
 #endif
-#ifdef _ZGroupNode364_SetTypeInfo
-	o->SetTypeInfo = SetTypeInfo__3q0t
+#ifdef _ZGroupNode363_SetTypeInfo
+	o->SetTypeInfo = SetTypeInfo__3q0r
 #endif
-#ifdef _ZGroupNode364_IsBreakingBlock
-	o->IsBreakingBlock = IsBreakingBlock__1q0t
+#ifdef _ZGroupNode363_IsBreakingBlock
+	o->IsBreakingBlock = IsBreakingBlock__1q0r
 #endif
-#ifdef _ZGroupNode364_DeSugar
-	o->DeSugar = DeSugar__2q0t
+#ifdef _ZGroupNode363_DeSugar
+	o->DeSugar = DeSugar__2q0r
 #endif
-#ifdef _ZGroupNode364_Accept
-	o->Accept = Accept__2q0t
+#ifdef _ZGroupNode363_Accept
+	o->Accept = Accept__2q0r
 #endif
 	o->_nextId = 0;
 }
 
-static struct ZGroupNode364 * _NewZGroupNode364(void) {
-	struct ZGroupNode364 *o = LibZen_Malloc(sizeof(struct ZGroupNode364));
-	_InitZGroupNode364(o);
+static struct ZGroupNode363 * _NewZGroupNode363(void) {
+	struct ZGroupNode363 *o = LibZen_Malloc(sizeof(struct ZGroupNode363));
+	_InitZGroupNode363(o);
 	return o;
 }
 
 static long ZGroupNode_Expr_Z68 = 0;
-struct ZIfNode367 {
+struct ZIfNode366 {
 	int _classId52;
 	int _delta52;
 	struct ZNode52 * ParentNode;
@@ -3581,43 +3712,43 @@ struct ZIfNode367 {
 	int (*)(struct ZNode52 *) IsBreakingBlock;
 	struct ZSugarNode165 * (*)(struct ZNode52 *,struct ZGenerator55 *) DeSugar;
 	void (*)(struct ZNode52 *,struct ZVisitor167 *) Accept;
-	int _classId367;
-	int _delta367;
+	int _classId366;
+	int _delta366;
 	int _nextId;
 };
 
-static void _InitZIfNode367(struct ZIfNode367 * o) {
+static void _InitZIfNode366(struct ZIfNode366 * o) {
 	_InitZNode52((struct ZNode52 *)o);
-	o->_classId367 = 367;
-	o->_delta367 = sizeof(struct ZIfNode367) - sizeof(struct ZNode52);
-#ifdef _ZIfNode367_SetNameInfo
-	o->SetNameInfo = SetNameInfo__3q0i
+	o->_classId366 = 366;
+	o->_delta366 = sizeof(struct ZIfNode366) - sizeof(struct ZNode52);
+#ifdef _ZIfNode366_SetNameInfo
+	o->SetNameInfo = SetNameInfo__3q0u
 #endif
-#ifdef _ZIfNode367_SetTypeInfo
-	o->SetTypeInfo = SetTypeInfo__3q0i
+#ifdef _ZIfNode366_SetTypeInfo
+	o->SetTypeInfo = SetTypeInfo__3q0u
 #endif
-#ifdef _ZIfNode367_IsBreakingBlock
-	o->IsBreakingBlock = IsBreakingBlock__1q0i
+#ifdef _ZIfNode366_IsBreakingBlock
+	o->IsBreakingBlock = IsBreakingBlock__1q0u
 #endif
-#ifdef _ZIfNode367_DeSugar
-	o->DeSugar = DeSugar__2q0i
+#ifdef _ZIfNode366_DeSugar
+	o->DeSugar = DeSugar__2q0u
 #endif
-#ifdef _ZIfNode367_Accept
-	o->Accept = Accept__2q0i
+#ifdef _ZIfNode366_Accept
+	o->Accept = Accept__2q0u
 #endif
 	o->_nextId = 0;
 }
 
-static struct ZIfNode367 * _NewZIfNode367(void) {
-	struct ZIfNode367 *o = LibZen_Malloc(sizeof(struct ZIfNode367));
-	_InitZIfNode367(o);
+static struct ZIfNode366 * _NewZIfNode366(void) {
+	struct ZIfNode366 *o = LibZen_Malloc(sizeof(struct ZIfNode366));
+	_InitZIfNode366(o);
 	return o;
 }
 
 static long ZIfNode_Cond_Z69 = 0;
 static long ZIfNode_Then_Z70 = 1;
 static long ZIfNode_Else_Z71 = 2;
-struct ZImportNode370 {
+struct ZImportNode369 {
 	int _classId52;
 	int _delta52;
 	struct ZNode52 * ParentNode;
@@ -3630,51 +3761,51 @@ struct ZImportNode370 {
 	int (*)(struct ZNode52 *) IsBreakingBlock;
 	struct ZSugarNode165 * (*)(struct ZNode52 *,struct ZGenerator55 *) DeSugar;
 	void (*)(struct ZNode52 *,struct ZVisitor167 *) Accept;
-	int _classId370;
-	int _delta370;
+	int _classId369;
+	int _delta369;
 	const char * ResourcePath;
 	const char * Alias;
 	struct ZToken77 * ResourceToken;
-	struct ZNode52 * (*)(struct ZImportNode370 *) Import;
+	struct ZNode52 * (*)(struct ZImportNode369 *) Import;
 	int _nextId;
 };
 
-static void _InitZImportNode370(struct ZImportNode370 * o) {
+static void _InitZImportNode369(struct ZImportNode369 * o) {
 	_InitZNode52((struct ZNode52 *)o);
-	o->_classId370 = 370;
-	o->_delta370 = sizeof(struct ZImportNode370) - sizeof(struct ZNode52);
+	o->_classId369 = 369;
+	o->_delta369 = sizeof(struct ZImportNode369) - sizeof(struct ZNode52);
 	o->ResourcePath = NULL;
 	o->Alias = NULL;
 	o->ResourceToken = NULL;
 	o->Import = NULL;
-#ifdef _ZImportNode370_SetNameInfo
-	o->SetNameInfo = SetNameInfo__3q00
+#ifdef _ZImportNode369_SetNameInfo
+	o->SetNameInfo = SetNameInfo__3q0p
 #endif
-#ifdef _ZImportNode370_SetTypeInfo
-	o->SetTypeInfo = SetTypeInfo__3q00
+#ifdef _ZImportNode369_SetTypeInfo
+	o->SetTypeInfo = SetTypeInfo__3q0p
 #endif
-#ifdef _ZImportNode370_IsBreakingBlock
-	o->IsBreakingBlock = IsBreakingBlock__1q00
+#ifdef _ZImportNode369_IsBreakingBlock
+	o->IsBreakingBlock = IsBreakingBlock__1q0p
 #endif
-#ifdef _ZImportNode370_DeSugar
-	o->DeSugar = DeSugar__2q00
+#ifdef _ZImportNode369_DeSugar
+	o->DeSugar = DeSugar__2q0p
 #endif
-#ifdef _ZImportNode370_Accept
-	o->Accept = Accept__2q00
+#ifdef _ZImportNode369_Accept
+	o->Accept = Accept__2q0p
 #endif
-#ifdef _ZImportNode370_Import
-	o->Import = Import__1q00
+#ifdef _ZImportNode369_Import
+	o->Import = Import__1q0p
 #endif
 	o->_nextId = 0;
 }
 
-static struct ZImportNode370 * _NewZImportNode370(void) {
-	struct ZImportNode370 *o = LibZen_Malloc(sizeof(struct ZImportNode370));
-	_InitZImportNode370(o);
+static struct ZImportNode369 * _NewZImportNode369(void) {
+	struct ZImportNode369 *o = LibZen_Malloc(sizeof(struct ZImportNode369));
+	_InitZImportNode369(o);
 	return o;
 }
 
-struct ZInstanceOfNode373 {
+struct ZInstanceOfNode372 {
 	int _classId52;
 	int _delta52;
 	struct ZNode52 * ParentNode;
@@ -3687,43 +3818,43 @@ struct ZInstanceOfNode373 {
 	int (*)(struct ZNode52 *) IsBreakingBlock;
 	struct ZSugarNode165 * (*)(struct ZNode52 *,struct ZGenerator55 *) DeSugar;
 	void (*)(struct ZNode52 *,struct ZVisitor167 *) Accept;
-	int _classId373;
-	int _delta373;
+	int _classId372;
+	int _delta372;
 	struct ZType60 * TargetType;
 	int _nextId;
 };
 
-static void _InitZInstanceOfNode373(struct ZInstanceOfNode373 * o) {
+static void _InitZInstanceOfNode372(struct ZInstanceOfNode372 * o) {
 	_InitZNode52((struct ZNode52 *)o);
-	o->_classId373 = 373;
-	o->_delta373 = sizeof(struct ZInstanceOfNode373) - sizeof(struct ZNode52);
+	o->_classId372 = 372;
+	o->_delta372 = sizeof(struct ZInstanceOfNode372) - sizeof(struct ZNode52);
 	o->TargetType = NULL;
-#ifdef _ZInstanceOfNode373_SetNameInfo
-	o->SetNameInfo = SetNameInfo__3q0s
+#ifdef _ZInstanceOfNode372_SetNameInfo
+	o->SetNameInfo = SetNameInfo__3q0a
 #endif
-#ifdef _ZInstanceOfNode373_SetTypeInfo
-	o->SetTypeInfo = SetTypeInfo__3q0s
+#ifdef _ZInstanceOfNode372_SetTypeInfo
+	o->SetTypeInfo = SetTypeInfo__3q0a
 #endif
-#ifdef _ZInstanceOfNode373_IsBreakingBlock
-	o->IsBreakingBlock = IsBreakingBlock__1q0s
+#ifdef _ZInstanceOfNode372_IsBreakingBlock
+	o->IsBreakingBlock = IsBreakingBlock__1q0a
 #endif
-#ifdef _ZInstanceOfNode373_DeSugar
-	o->DeSugar = DeSugar__2q0s
+#ifdef _ZInstanceOfNode372_DeSugar
+	o->DeSugar = DeSugar__2q0a
 #endif
-#ifdef _ZInstanceOfNode373_Accept
-	o->Accept = Accept__2q0s
+#ifdef _ZInstanceOfNode372_Accept
+	o->Accept = Accept__2q0a
 #endif
 	o->_nextId = 0;
 }
 
-static struct ZInstanceOfNode373 * _NewZInstanceOfNode373(void) {
-	struct ZInstanceOfNode373 *o = LibZen_Malloc(sizeof(struct ZInstanceOfNode373));
-	_InitZInstanceOfNode373(o);
+static struct ZInstanceOfNode372 * _NewZInstanceOfNode372(void) {
+	struct ZInstanceOfNode372 *o = LibZen_Malloc(sizeof(struct ZInstanceOfNode372));
+	_InitZInstanceOfNode372(o);
 	return o;
 }
 
 static long ZInstanceOfNode_Left_Z72 = 0;
-struct ZIntNode377 {
+struct ZIntNode376 {
 	int _classId52;
 	int _delta52;
 	struct ZNode52 * ParentNode;
@@ -3736,44 +3867,44 @@ struct ZIntNode377 {
 	int (*)(struct ZNode52 *) IsBreakingBlock;
 	struct ZSugarNode165 * (*)(struct ZNode52 *,struct ZGenerator55 *) DeSugar;
 	void (*)(struct ZNode52 *,struct ZVisitor167 *) Accept;
-	int _classId332;
-	int _delta332;
-	int _classId377;
-	int _delta377;
+	int _classId331;
+	int _delta331;
+	int _classId376;
+	int _delta376;
 	long IntValue;
 	int _nextId;
 };
 
-static void _InitZIntNode377(struct ZIntNode377 * o) {
-	_InitZConstNode332((struct ZConstNode332 *)o);
-	o->_classId377 = 377;
-	o->_delta377 = sizeof(struct ZIntNode377) - sizeof(struct ZConstNode332);
+static void _InitZIntNode376(struct ZIntNode376 * o) {
+	_InitZConstNode331((struct ZConstNode331 *)o);
+	o->_classId376 = 376;
+	o->_delta376 = sizeof(struct ZIntNode376) - sizeof(struct ZConstNode331);
 	o->IntValue = 0;
-#ifdef _ZIntNode377_SetNameInfo
-	o->SetNameInfo = SetNameInfo__3q0h
+#ifdef _ZIntNode376_SetNameInfo
+	o->SetNameInfo = SetNameInfo__3q0g
 #endif
-#ifdef _ZIntNode377_SetTypeInfo
-	o->SetTypeInfo = SetTypeInfo__3q0h
+#ifdef _ZIntNode376_SetTypeInfo
+	o->SetTypeInfo = SetTypeInfo__3q0g
 #endif
-#ifdef _ZIntNode377_IsBreakingBlock
-	o->IsBreakingBlock = IsBreakingBlock__1q0h
+#ifdef _ZIntNode376_IsBreakingBlock
+	o->IsBreakingBlock = IsBreakingBlock__1q0g
 #endif
-#ifdef _ZIntNode377_DeSugar
-	o->DeSugar = DeSugar__2q0h
+#ifdef _ZIntNode376_DeSugar
+	o->DeSugar = DeSugar__2q0g
 #endif
-#ifdef _ZIntNode377_Accept
-	o->Accept = Accept__2q0h
+#ifdef _ZIntNode376_Accept
+	o->Accept = Accept__2q0g
 #endif
 	o->_nextId = 0;
 }
 
-static struct ZIntNode377 * _NewZIntNode377(void) {
-	struct ZIntNode377 *o = LibZen_Malloc(sizeof(struct ZIntNode377));
-	_InitZIntNode377(o);
+static struct ZIntNode376 * _NewZIntNode376(void) {
+	struct ZIntNode376 *o = LibZen_Malloc(sizeof(struct ZIntNode376));
+	_InitZIntNode376(o);
 	return o;
 }
 
-struct ZLetNode380 {
+struct ZLetNode379 {
 	int _classId52;
 	int _delta52;
 	struct ZNode52 * ParentNode;
@@ -3786,8 +3917,8 @@ struct ZLetNode380 {
 	int (*)(struct ZNode52 *) IsBreakingBlock;
 	struct ZSugarNode165 * (*)(struct ZNode52 *,struct ZGenerator55 *) DeSugar;
 	void (*)(struct ZNode52 *,struct ZVisitor167 *) Accept;
-	int _classId380;
-	int _delta380;
+	int _classId379;
+	int _delta379;
 	const char * Symbol;
 	struct ZToken77 * SymbolToken;
 	struct ZType60 * SymbolType;
@@ -3795,35 +3926,35 @@ struct ZLetNode380 {
 	int _nextId;
 };
 
-static void _InitZLetNode380(struct ZLetNode380 * o) {
+static void _InitZLetNode379(struct ZLetNode379 * o) {
 	_InitZNode52((struct ZNode52 *)o);
-	o->_classId380 = 380;
-	o->_delta380 = sizeof(struct ZLetNode380) - sizeof(struct ZNode52);
+	o->_classId379 = 379;
+	o->_delta379 = sizeof(struct ZLetNode379) - sizeof(struct ZNode52);
 	o->Symbol = NULL;
 	o->SymbolToken = NULL;
 	o->SymbolType = ZTypeVarType_Z4;
 	o->GlobalName = NULL;
-#ifdef _ZLetNode380_SetNameInfo
-	o->SetNameInfo = SetNameInfo__3q0l
+#ifdef _ZLetNode379_SetNameInfo
+	o->SetNameInfo = SetNameInfo__3q0k
 #endif
-#ifdef _ZLetNode380_SetTypeInfo
-	o->SetTypeInfo = SetTypeInfo__3q0l
+#ifdef _ZLetNode379_SetTypeInfo
+	o->SetTypeInfo = SetTypeInfo__3q0k
 #endif
-#ifdef _ZLetNode380_IsBreakingBlock
-	o->IsBreakingBlock = IsBreakingBlock__1q0l
+#ifdef _ZLetNode379_IsBreakingBlock
+	o->IsBreakingBlock = IsBreakingBlock__1q0k
 #endif
-#ifdef _ZLetNode380_DeSugar
-	o->DeSugar = DeSugar__2q0l
+#ifdef _ZLetNode379_DeSugar
+	o->DeSugar = DeSugar__2q0k
 #endif
-#ifdef _ZLetNode380_Accept
-	o->Accept = Accept__2q0l
+#ifdef _ZLetNode379_Accept
+	o->Accept = Accept__2q0k
 #endif
 	o->_nextId = 0;
 }
 
-static struct ZLetNode380 * _NewZLetNode380(void) {
-	struct ZLetNode380 *o = LibZen_Malloc(sizeof(struct ZLetNode380));
-	_InitZLetNode380(o);
+static struct ZLetNode379 * _NewZLetNode379(void) {
+	struct ZLetNode379 *o = LibZen_Malloc(sizeof(struct ZLetNode379));
+	_InitZLetNode379(o);
 	return o;
 }
 
@@ -3876,7 +4007,7 @@ static struct ZListNode251 * _NewZListNode251(void) {
 	return o;
 }
 
-struct ZMacroNode392 {
+struct ZMacroNode391 {
 	int _classId52;
 	int _delta52;
 	struct ZNode52 * ParentNode;
@@ -3892,42 +4023,42 @@ struct ZMacroNode392 {
 	int _classId251;
 	int _delta251;
 	long ListStartIndex;
-	int _classId392;
-	int _delta392;
+	int _classId391;
+	int _delta391;
 	struct ZMacroFunc210 * MacroFunc;
 	int _nextId;
 };
 
-static void _InitZMacroNode392(struct ZMacroNode392 * o) {
+static void _InitZMacroNode391(struct ZMacroNode391 * o) {
 	_InitZListNode251((struct ZListNode251 *)o);
-	o->_classId392 = 392;
-	o->_delta392 = sizeof(struct ZMacroNode392) - sizeof(struct ZListNode251);
+	o->_classId391 = 391;
+	o->_delta391 = sizeof(struct ZMacroNode391) - sizeof(struct ZListNode251);
 	o->MacroFunc = NULL;
-#ifdef _ZMacroNode392_SetNameInfo
-	o->SetNameInfo = SetNameInfo__3q05
+#ifdef _ZMacroNode391_SetNameInfo
+	o->SetNameInfo = SetNameInfo__3q07
 #endif
-#ifdef _ZMacroNode392_SetTypeInfo
-	o->SetTypeInfo = SetTypeInfo__3q05
+#ifdef _ZMacroNode391_SetTypeInfo
+	o->SetTypeInfo = SetTypeInfo__3q07
 #endif
-#ifdef _ZMacroNode392_IsBreakingBlock
-	o->IsBreakingBlock = IsBreakingBlock__1q05
+#ifdef _ZMacroNode391_IsBreakingBlock
+	o->IsBreakingBlock = IsBreakingBlock__1q07
 #endif
-#ifdef _ZMacroNode392_DeSugar
-	o->DeSugar = DeSugar__2q05
+#ifdef _ZMacroNode391_DeSugar
+	o->DeSugar = DeSugar__2q07
 #endif
-#ifdef _ZMacroNode392_Accept
-	o->Accept = Accept__2q05
+#ifdef _ZMacroNode391_Accept
+	o->Accept = Accept__2q07
 #endif
 	o->_nextId = 0;
 }
 
-static struct ZMacroNode392 * _NewZMacroNode392(void) {
-	struct ZMacroNode392 *o = LibZen_Malloc(sizeof(struct ZMacroNode392));
-	_InitZMacroNode392(o);
+static struct ZMacroNode391 * _NewZMacroNode391(void) {
+	struct ZMacroNode391 *o = LibZen_Malloc(sizeof(struct ZMacroNode391));
+	_InitZMacroNode391(o);
 	return o;
 }
 
-struct ZMapEntryNode397 {
+struct ZMapEntryNode396 {
 	int _classId52;
 	int _delta52;
 	struct ZNode52 * ParentNode;
@@ -3940,44 +4071,44 @@ struct ZMapEntryNode397 {
 	int (*)(struct ZNode52 *) IsBreakingBlock;
 	struct ZSugarNode165 * (*)(struct ZNode52 *,struct ZGenerator55 *) DeSugar;
 	void (*)(struct ZNode52 *,struct ZVisitor167 *) Accept;
-	int _classId397;
-	int _delta397;
+	int _classId396;
+	int _delta396;
 	const char * Name;
 	int _nextId;
 };
 
-static void _InitZMapEntryNode397(struct ZMapEntryNode397 * o) {
+static void _InitZMapEntryNode396(struct ZMapEntryNode396 * o) {
 	_InitZNode52((struct ZNode52 *)o);
-	o->_classId397 = 397;
-	o->_delta397 = sizeof(struct ZMapEntryNode397) - sizeof(struct ZNode52);
+	o->_classId396 = 396;
+	o->_delta396 = sizeof(struct ZMapEntryNode396) - sizeof(struct ZNode52);
 	o->Name = NULL;
-#ifdef _ZMapEntryNode397_SetNameInfo
-	o->SetNameInfo = SetNameInfo__3q4w
+#ifdef _ZMapEntryNode396_SetNameInfo
+	o->SetNameInfo = SetNameInfo__3q4q
 #endif
-#ifdef _ZMapEntryNode397_SetTypeInfo
-	o->SetTypeInfo = SetTypeInfo__3q4w
+#ifdef _ZMapEntryNode396_SetTypeInfo
+	o->SetTypeInfo = SetTypeInfo__3q4q
 #endif
-#ifdef _ZMapEntryNode397_IsBreakingBlock
-	o->IsBreakingBlock = IsBreakingBlock__1q4w
+#ifdef _ZMapEntryNode396_IsBreakingBlock
+	o->IsBreakingBlock = IsBreakingBlock__1q4q
 #endif
-#ifdef _ZMapEntryNode397_DeSugar
-	o->DeSugar = DeSugar__2q4w
+#ifdef _ZMapEntryNode396_DeSugar
+	o->DeSugar = DeSugar__2q4q
 #endif
-#ifdef _ZMapEntryNode397_Accept
-	o->Accept = Accept__2q4w
+#ifdef _ZMapEntryNode396_Accept
+	o->Accept = Accept__2q4q
 #endif
 	o->_nextId = 0;
 }
 
-static struct ZMapEntryNode397 * _NewZMapEntryNode397(void) {
-	struct ZMapEntryNode397 *o = LibZen_Malloc(sizeof(struct ZMapEntryNode397));
-	_InitZMapEntryNode397(o);
+static struct ZMapEntryNode396 * _NewZMapEntryNode396(void) {
+	struct ZMapEntryNode396 *o = LibZen_Malloc(sizeof(struct ZMapEntryNode396));
+	_InitZMapEntryNode396(o);
 	return o;
 }
 
 static long ZMapEntryNode_Key_Z74 = 0;
 static long ZMapEntryNode_Value_Z75 = 1;
-struct ZMapLiteralNode399 {
+struct ZMapLiteralNode398 {
 	int _classId52;
 	int _delta52;
 	struct ZNode52 * ParentNode;
@@ -3993,40 +4124,40 @@ struct ZMapLiteralNode399 {
 	int _classId251;
 	int _delta251;
 	long ListStartIndex;
-	int _classId399;
-	int _delta399;
+	int _classId398;
+	int _delta398;
 	int _nextId;
 };
 
-static void _InitZMapLiteralNode399(struct ZMapLiteralNode399 * o) {
+static void _InitZMapLiteralNode398(struct ZMapLiteralNode398 * o) {
 	_InitZListNode251((struct ZListNode251 *)o);
-	o->_classId399 = 399;
-	o->_delta399 = sizeof(struct ZMapLiteralNode399) - sizeof(struct ZListNode251);
-#ifdef _ZMapLiteralNode399_SetNameInfo
-	o->SetNameInfo = SetNameInfo__3q4r
+	o->_classId398 = 398;
+	o->_delta398 = sizeof(struct ZMapLiteralNode398) - sizeof(struct ZListNode251);
+#ifdef _ZMapLiteralNode398_SetNameInfo
+	o->SetNameInfo = SetNameInfo__3q4e
 #endif
-#ifdef _ZMapLiteralNode399_SetTypeInfo
-	o->SetTypeInfo = SetTypeInfo__3q4r
+#ifdef _ZMapLiteralNode398_SetTypeInfo
+	o->SetTypeInfo = SetTypeInfo__3q4e
 #endif
-#ifdef _ZMapLiteralNode399_IsBreakingBlock
-	o->IsBreakingBlock = IsBreakingBlock__1q4r
+#ifdef _ZMapLiteralNode398_IsBreakingBlock
+	o->IsBreakingBlock = IsBreakingBlock__1q4e
 #endif
-#ifdef _ZMapLiteralNode399_DeSugar
-	o->DeSugar = DeSugar__2q4r
+#ifdef _ZMapLiteralNode398_DeSugar
+	o->DeSugar = DeSugar__2q4e
 #endif
-#ifdef _ZMapLiteralNode399_Accept
-	o->Accept = Accept__2q4r
+#ifdef _ZMapLiteralNode398_Accept
+	o->Accept = Accept__2q4e
 #endif
 	o->_nextId = 0;
 }
 
-static struct ZMapLiteralNode399 * _NewZMapLiteralNode399(void) {
-	struct ZMapLiteralNode399 *o = LibZen_Malloc(sizeof(struct ZMapLiteralNode399));
-	_InitZMapLiteralNode399(o);
+static struct ZMapLiteralNode398 * _NewZMapLiteralNode398(void) {
+	struct ZMapLiteralNode398 *o = LibZen_Malloc(sizeof(struct ZMapLiteralNode398));
+	_InitZMapLiteralNode398(o);
 	return o;
 }
 
-struct ZMethodCallNode403 {
+struct ZMethodCallNode402 {
 	int _classId52;
 	int _delta52;
 	struct ZNode52 * ParentNode;
@@ -4042,45 +4173,45 @@ struct ZMethodCallNode403 {
 	int _classId251;
 	int _delta251;
 	long ListStartIndex;
-	int _classId403;
-	int _delta403;
+	int _classId402;
+	int _delta402;
 	const char * MethodName;
 	struct ZToken77 * MethodToken;
 	int _nextId;
 };
 
-static void _InitZMethodCallNode403(struct ZMethodCallNode403 * o) {
+static void _InitZMethodCallNode402(struct ZMethodCallNode402 * o) {
 	_InitZListNode251((struct ZListNode251 *)o);
-	o->_classId403 = 403;
-	o->_delta403 = sizeof(struct ZMethodCallNode403) - sizeof(struct ZListNode251);
+	o->_classId402 = 402;
+	o->_delta402 = sizeof(struct ZMethodCallNode402) - sizeof(struct ZListNode251);
 	o->MethodName = NULL;
 	o->MethodToken = NULL;
-#ifdef _ZMethodCallNode403_SetNameInfo
-	o->SetNameInfo = SetNameInfo__3q4i
+#ifdef _ZMethodCallNode402_SetNameInfo
+	o->SetNameInfo = SetNameInfo__3q4u
 #endif
-#ifdef _ZMethodCallNode403_SetTypeInfo
-	o->SetTypeInfo = SetTypeInfo__3q4i
+#ifdef _ZMethodCallNode402_SetTypeInfo
+	o->SetTypeInfo = SetTypeInfo__3q4u
 #endif
-#ifdef _ZMethodCallNode403_IsBreakingBlock
-	o->IsBreakingBlock = IsBreakingBlock__1q4i
+#ifdef _ZMethodCallNode402_IsBreakingBlock
+	o->IsBreakingBlock = IsBreakingBlock__1q4u
 #endif
-#ifdef _ZMethodCallNode403_DeSugar
-	o->DeSugar = DeSugar__2q4i
+#ifdef _ZMethodCallNode402_DeSugar
+	o->DeSugar = DeSugar__2q4u
 #endif
-#ifdef _ZMethodCallNode403_Accept
-	o->Accept = Accept__2q4i
+#ifdef _ZMethodCallNode402_Accept
+	o->Accept = Accept__2q4u
 #endif
 	o->_nextId = 0;
 }
 
-static struct ZMethodCallNode403 * _NewZMethodCallNode403(void) {
-	struct ZMethodCallNode403 *o = LibZen_Malloc(sizeof(struct ZMethodCallNode403));
-	_InitZMethodCallNode403(o);
+static struct ZMethodCallNode402 * _NewZMethodCallNode402(void) {
+	struct ZMethodCallNode402 *o = LibZen_Malloc(sizeof(struct ZMethodCallNode402));
+	_InitZMethodCallNode402(o);
 	return o;
 }
 
 static long ZMethodCallNode_Recv_Z76 = 0;
-struct ZNewArrayNode410 {
+struct ZNewArrayNode409 {
 	int _classId52;
 	int _delta52;
 	struct ZNode52 * ParentNode;
@@ -4096,40 +4227,40 @@ struct ZNewArrayNode410 {
 	int _classId251;
 	int _delta251;
 	long ListStartIndex;
-	int _classId410;
-	int _delta410;
+	int _classId409;
+	int _delta409;
 	int _nextId;
 };
 
-static void _InitZNewArrayNode410(struct ZNewArrayNode410 * o) {
+static void _InitZNewArrayNode409(struct ZNewArrayNode409 * o) {
 	_InitZListNode251((struct ZListNode251 *)o);
-	o->_classId410 = 410;
-	o->_delta410 = sizeof(struct ZNewArrayNode410) - sizeof(struct ZListNode251);
-#ifdef _ZNewArrayNode410_SetNameInfo
-	o->SetNameInfo = SetNameInfo__3q4d
+	o->_classId409 = 409;
+	o->_delta409 = sizeof(struct ZNewArrayNode409) - sizeof(struct ZListNode251);
+#ifdef _ZNewArrayNode409_SetNameInfo
+	o->SetNameInfo = SetNameInfo__3q4s
 #endif
-#ifdef _ZNewArrayNode410_SetTypeInfo
-	o->SetTypeInfo = SetTypeInfo__3q4d
+#ifdef _ZNewArrayNode409_SetTypeInfo
+	o->SetTypeInfo = SetTypeInfo__3q4s
 #endif
-#ifdef _ZNewArrayNode410_IsBreakingBlock
-	o->IsBreakingBlock = IsBreakingBlock__1q4d
+#ifdef _ZNewArrayNode409_IsBreakingBlock
+	o->IsBreakingBlock = IsBreakingBlock__1q4s
 #endif
-#ifdef _ZNewArrayNode410_DeSugar
-	o->DeSugar = DeSugar__2q4d
+#ifdef _ZNewArrayNode409_DeSugar
+	o->DeSugar = DeSugar__2q4s
 #endif
-#ifdef _ZNewArrayNode410_Accept
-	o->Accept = Accept__2q4d
+#ifdef _ZNewArrayNode409_Accept
+	o->Accept = Accept__2q4s
 #endif
 	o->_nextId = 0;
 }
 
-static struct ZNewArrayNode410 * _NewZNewArrayNode410(void) {
-	struct ZNewArrayNode410 *o = LibZen_Malloc(sizeof(struct ZNewArrayNode410));
-	_InitZNewArrayNode410(o);
+static struct ZNewArrayNode409 * _NewZNewArrayNode409(void) {
+	struct ZNewArrayNode409 *o = LibZen_Malloc(sizeof(struct ZNewArrayNode409));
+	_InitZNewArrayNode409(o);
 	return o;
 }
 
-struct ZNewObjectNode412 {
+struct ZNewObjectNode411 {
 	int _classId52;
 	int _delta52;
 	struct ZNode52 * ParentNode;
@@ -4145,40 +4276,40 @@ struct ZNewObjectNode412 {
 	int _classId251;
 	int _delta251;
 	long ListStartIndex;
-	int _classId412;
-	int _delta412;
+	int _classId411;
+	int _delta411;
 	int _nextId;
 };
 
-static void _InitZNewObjectNode412(struct ZNewObjectNode412 * o) {
+static void _InitZNewObjectNode411(struct ZNewObjectNode411 * o) {
 	_InitZListNode251((struct ZListNode251 *)o);
-	o->_classId412 = 412;
-	o->_delta412 = sizeof(struct ZNewObjectNode412) - sizeof(struct ZListNode251);
-#ifdef _ZNewObjectNode412_SetNameInfo
-	o->SetNameInfo = SetNameInfo__3q4g
+	o->_classId411 = 411;
+	o->_delta411 = sizeof(struct ZNewObjectNode411) - sizeof(struct ZListNode251);
+#ifdef _ZNewObjectNode411_SetNameInfo
+	o->SetNameInfo = SetNameInfo__3q4f
 #endif
-#ifdef _ZNewObjectNode412_SetTypeInfo
-	o->SetTypeInfo = SetTypeInfo__3q4g
+#ifdef _ZNewObjectNode411_SetTypeInfo
+	o->SetTypeInfo = SetTypeInfo__3q4f
 #endif
-#ifdef _ZNewObjectNode412_IsBreakingBlock
-	o->IsBreakingBlock = IsBreakingBlock__1q4g
+#ifdef _ZNewObjectNode411_IsBreakingBlock
+	o->IsBreakingBlock = IsBreakingBlock__1q4f
 #endif
-#ifdef _ZNewObjectNode412_DeSugar
-	o->DeSugar = DeSugar__2q4g
+#ifdef _ZNewObjectNode411_DeSugar
+	o->DeSugar = DeSugar__2q4f
 #endif
-#ifdef _ZNewObjectNode412_Accept
-	o->Accept = Accept__2q4g
+#ifdef _ZNewObjectNode411_Accept
+	o->Accept = Accept__2q4f
 #endif
 	o->_nextId = 0;
 }
 
-static struct ZNewObjectNode412 * _NewZNewObjectNode412(void) {
-	struct ZNewObjectNode412 *o = LibZen_Malloc(sizeof(struct ZNewObjectNode412));
-	_InitZNewObjectNode412(o);
+static struct ZNewObjectNode411 * _NewZNewObjectNode411(void) {
+	struct ZNewObjectNode411 *o = LibZen_Malloc(sizeof(struct ZNewObjectNode411));
+	_InitZNewObjectNode411(o);
 	return o;
 }
 
-struct ZNotNode416 {
+struct ZNotNode415 {
 	int _classId52;
 	int _delta52;
 	struct ZNode52 * ParentNode;
@@ -4193,40 +4324,40 @@ struct ZNotNode416 {
 	void (*)(struct ZNode52 *,struct ZVisitor167 *) Accept;
 	int _classId197;
 	int _delta197;
-	int _classId416;
-	int _delta416;
+	int _classId415;
+	int _delta415;
 	int _nextId;
 };
 
-static void _InitZNotNode416(struct ZNotNode416 * o) {
+static void _InitZNotNode415(struct ZNotNode415 * o) {
 	_InitZUnaryNode197((struct ZUnaryNode197 *)o);
-	o->_classId416 = 416;
-	o->_delta416 = sizeof(struct ZNotNode416) - sizeof(struct ZUnaryNode197);
-#ifdef _ZNotNode416_SetNameInfo
-	o->SetNameInfo = SetNameInfo__3q4l
+	o->_classId415 = 415;
+	o->_delta415 = sizeof(struct ZNotNode415) - sizeof(struct ZUnaryNode197);
+#ifdef _ZNotNode415_SetNameInfo
+	o->SetNameInfo = SetNameInfo__3q4k
 #endif
-#ifdef _ZNotNode416_SetTypeInfo
-	o->SetTypeInfo = SetTypeInfo__3q4l
+#ifdef _ZNotNode415_SetTypeInfo
+	o->SetTypeInfo = SetTypeInfo__3q4k
 #endif
-#ifdef _ZNotNode416_IsBreakingBlock
-	o->IsBreakingBlock = IsBreakingBlock__1q4l
+#ifdef _ZNotNode415_IsBreakingBlock
+	o->IsBreakingBlock = IsBreakingBlock__1q4k
 #endif
-#ifdef _ZNotNode416_DeSugar
-	o->DeSugar = DeSugar__2q4l
+#ifdef _ZNotNode415_DeSugar
+	o->DeSugar = DeSugar__2q4k
 #endif
-#ifdef _ZNotNode416_Accept
-	o->Accept = Accept__2q4l
+#ifdef _ZNotNode415_Accept
+	o->Accept = Accept__2q4k
 #endif
 	o->_nextId = 0;
 }
 
-static struct ZNotNode416 * _NewZNotNode416(void) {
-	struct ZNotNode416 *o = LibZen_Malloc(sizeof(struct ZNotNode416));
-	_InitZNotNode416(o);
+static struct ZNotNode415 * _NewZNotNode415(void) {
+	struct ZNotNode415 *o = LibZen_Malloc(sizeof(struct ZNotNode415));
+	_InitZNotNode415(o);
 	return o;
 }
 
-struct ZNullNode419 {
+struct ZNullNode418 {
 	int _classId52;
 	int _delta52;
 	struct ZNode52 * ParentNode;
@@ -4239,42 +4370,42 @@ struct ZNullNode419 {
 	int (*)(struct ZNode52 *) IsBreakingBlock;
 	struct ZSugarNode165 * (*)(struct ZNode52 *,struct ZGenerator55 *) DeSugar;
 	void (*)(struct ZNode52 *,struct ZVisitor167 *) Accept;
-	int _classId332;
-	int _delta332;
-	int _classId419;
-	int _delta419;
+	int _classId331;
+	int _delta331;
+	int _classId418;
+	int _delta418;
 	int _nextId;
 };
 
-static void _InitZNullNode419(struct ZNullNode419 * o) {
-	_InitZConstNode332((struct ZConstNode332 *)o);
-	o->_classId419 = 419;
-	o->_delta419 = sizeof(struct ZNullNode419) - sizeof(struct ZConstNode332);
-#ifdef _ZNullNode419_SetNameInfo
-	o->SetNameInfo = SetNameInfo__3q46
+static void _InitZNullNode418(struct ZNullNode418 * o) {
+	_InitZConstNode331((struct ZConstNode331 *)o);
+	o->_classId418 = 418;
+	o->_delta418 = sizeof(struct ZNullNode418) - sizeof(struct ZConstNode331);
+#ifdef _ZNullNode418_SetNameInfo
+	o->SetNameInfo = SetNameInfo__3q41
 #endif
-#ifdef _ZNullNode419_SetTypeInfo
-	o->SetTypeInfo = SetTypeInfo__3q46
+#ifdef _ZNullNode418_SetTypeInfo
+	o->SetTypeInfo = SetTypeInfo__3q41
 #endif
-#ifdef _ZNullNode419_IsBreakingBlock
-	o->IsBreakingBlock = IsBreakingBlock__1q46
+#ifdef _ZNullNode418_IsBreakingBlock
+	o->IsBreakingBlock = IsBreakingBlock__1q41
 #endif
-#ifdef _ZNullNode419_DeSugar
-	o->DeSugar = DeSugar__2q46
+#ifdef _ZNullNode418_DeSugar
+	o->DeSugar = DeSugar__2q41
 #endif
-#ifdef _ZNullNode419_Accept
-	o->Accept = Accept__2q46
+#ifdef _ZNullNode418_Accept
+	o->Accept = Accept__2q41
 #endif
 	o->_nextId = 0;
 }
 
-static struct ZNullNode419 * _NewZNullNode419(void) {
-	struct ZNullNode419 *o = LibZen_Malloc(sizeof(struct ZNullNode419));
-	_InitZNullNode419(o);
+static struct ZNullNode418 * _NewZNullNode418(void) {
+	struct ZNullNode418 *o = LibZen_Malloc(sizeof(struct ZNullNode418));
+	_InitZNullNode418(o);
 	return o;
 }
 
-struct ZOrNode422 {
+struct ZOrNode421 {
 	int _classId52;
 	int _delta52;
 	struct ZNode52 * ParentNode;
@@ -4287,43 +4418,43 @@ struct ZOrNode422 {
 	int (*)(struct ZNode52 *) IsBreakingBlock;
 	struct ZSugarNode165 * (*)(struct ZNode52 *,struct ZGenerator55 *) DeSugar;
 	void (*)(struct ZNode52 *,struct ZVisitor167 *) Accept;
-	int _classId311;
-	int _delta311;
+	int _classId310;
+	int _delta310;
 	struct ZSyntax219 * Pattern;
-	int _classId422;
-	int _delta422;
+	int _classId421;
+	int _delta421;
 	int _nextId;
 };
 
-static void _InitZOrNode422(struct ZOrNode422 * o) {
-	_InitZBinaryNode311((struct ZBinaryNode311 *)o);
-	o->_classId422 = 422;
-	o->_delta422 = sizeof(struct ZOrNode422) - sizeof(struct ZBinaryNode311);
-#ifdef _ZOrNode422_SetNameInfo
-	o->SetNameInfo = SetNameInfo__3q4c
+static void _InitZOrNode421(struct ZOrNode421 * o) {
+	_InitZBinaryNode310((struct ZBinaryNode310 *)o);
+	o->_classId421 = 421;
+	o->_delta421 = sizeof(struct ZOrNode421) - sizeof(struct ZBinaryNode310);
+#ifdef _ZOrNode421_SetNameInfo
+	o->SetNameInfo = SetNameInfo__3q4x
 #endif
-#ifdef _ZOrNode422_SetTypeInfo
-	o->SetTypeInfo = SetTypeInfo__3q4c
+#ifdef _ZOrNode421_SetTypeInfo
+	o->SetTypeInfo = SetTypeInfo__3q4x
 #endif
-#ifdef _ZOrNode422_IsBreakingBlock
-	o->IsBreakingBlock = IsBreakingBlock__1q4c
+#ifdef _ZOrNode421_IsBreakingBlock
+	o->IsBreakingBlock = IsBreakingBlock__1q4x
 #endif
-#ifdef _ZOrNode422_DeSugar
-	o->DeSugar = DeSugar__2q4c
+#ifdef _ZOrNode421_DeSugar
+	o->DeSugar = DeSugar__2q4x
 #endif
-#ifdef _ZOrNode422_Accept
-	o->Accept = Accept__2q4c
+#ifdef _ZOrNode421_Accept
+	o->Accept = Accept__2q4x
 #endif
 	o->_nextId = 0;
 }
 
-static struct ZOrNode422 * _NewZOrNode422(void) {
-	struct ZOrNode422 *o = LibZen_Malloc(sizeof(struct ZOrNode422));
-	_InitZOrNode422(o);
+static struct ZOrNode421 * _NewZOrNode421(void) {
+	struct ZOrNode421 *o = LibZen_Malloc(sizeof(struct ZOrNode421));
+	_InitZOrNode421(o);
 	return o;
 }
 
-struct ZPrototypeNode425 {
+struct ZPrototypeNode424 {
 	int _classId52;
 	int _delta52;
 	struct ZNode52 * ParentNode;
@@ -4339,46 +4470,46 @@ struct ZPrototypeNode425 {
 	int _classId251;
 	int _delta251;
 	long ListStartIndex;
-	int _classId425;
-	int _delta425;
+	int _classId424;
+	int _delta424;
 	struct ZType60 * ReturnType;
 	const char * FuncName;
 	struct ZToken77 * NameToken;
 	int _nextId;
 };
 
-static void _InitZPrototypeNode425(struct ZPrototypeNode425 * o) {
+static void _InitZPrototypeNode424(struct ZPrototypeNode424 * o) {
 	_InitZListNode251((struct ZListNode251 *)o);
-	o->_classId425 = 425;
-	o->_delta425 = sizeof(struct ZPrototypeNode425) - sizeof(struct ZListNode251);
+	o->_classId424 = 424;
+	o->_delta424 = sizeof(struct ZPrototypeNode424) - sizeof(struct ZListNode251);
 	o->ReturnType = ZTypeVarType_Z4;
 	o->FuncName = NULL;
 	o->NameToken = NULL;
-#ifdef _ZPrototypeNode425_SetNameInfo
-	o->SetNameInfo = SetNameInfo__3q4n
+#ifdef _ZPrototypeNode424_SetNameInfo
+	o->SetNameInfo = SetNameInfo__3q4b
 #endif
-#ifdef _ZPrototypeNode425_SetTypeInfo
-	o->SetTypeInfo = SetTypeInfo__3q4n
+#ifdef _ZPrototypeNode424_SetTypeInfo
+	o->SetTypeInfo = SetTypeInfo__3q4b
 #endif
-#ifdef _ZPrototypeNode425_IsBreakingBlock
-	o->IsBreakingBlock = IsBreakingBlock__1q4n
+#ifdef _ZPrototypeNode424_IsBreakingBlock
+	o->IsBreakingBlock = IsBreakingBlock__1q4b
 #endif
-#ifdef _ZPrototypeNode425_DeSugar
-	o->DeSugar = DeSugar__2q4n
+#ifdef _ZPrototypeNode424_DeSugar
+	o->DeSugar = DeSugar__2q4b
 #endif
-#ifdef _ZPrototypeNode425_Accept
-	o->Accept = Accept__2q4n
+#ifdef _ZPrototypeNode424_Accept
+	o->Accept = Accept__2q4b
 #endif
 	o->_nextId = 0;
 }
 
-static struct ZPrototypeNode425 * _NewZPrototypeNode425(void) {
-	struct ZPrototypeNode425 *o = LibZen_Malloc(sizeof(struct ZPrototypeNode425));
-	_InitZPrototypeNode425(o);
+static struct ZPrototypeNode424 * _NewZPrototypeNode424(void) {
+	struct ZPrototypeNode424 *o = LibZen_Malloc(sizeof(struct ZPrototypeNode424));
+	_InitZPrototypeNode424(o);
 	return o;
 }
 
-struct ZStringNode431 {
+struct ZStringNode430 {
 	int _classId52;
 	int _delta52;
 	struct ZNode52 * ParentNode;
@@ -4391,44 +4522,44 @@ struct ZStringNode431 {
 	int (*)(struct ZNode52 *) IsBreakingBlock;
 	struct ZSugarNode165 * (*)(struct ZNode52 *,struct ZGenerator55 *) DeSugar;
 	void (*)(struct ZNode52 *,struct ZVisitor167 *) Accept;
-	int _classId332;
-	int _delta332;
-	int _classId431;
-	int _delta431;
+	int _classId331;
+	int _delta331;
+	int _classId430;
+	int _delta430;
 	const char * StringValue;
 	int _nextId;
 };
 
-static void _InitZStringNode431(struct ZStringNode431 * o) {
-	_InitZConstNode332((struct ZConstNode332 *)o);
-	o->_classId431 = 431;
-	o->_delta431 = sizeof(struct ZStringNode431) - sizeof(struct ZConstNode332);
+static void _InitZStringNode430(struct ZStringNode430 * o) {
+	_InitZConstNode331((struct ZConstNode331 *)o);
+	o->_classId430 = 430;
+	o->_delta430 = sizeof(struct ZStringNode430) - sizeof(struct ZConstNode331);
 	o->StringValue = NULL;
-#ifdef _ZStringNode431_SetNameInfo
-	o->SetNameInfo = SetNameInfo__3q48
+#ifdef _ZStringNode430_SetNameInfo
+	o->SetNameInfo = SetNameInfo__3q42
 #endif
-#ifdef _ZStringNode431_SetTypeInfo
-	o->SetTypeInfo = SetTypeInfo__3q48
+#ifdef _ZStringNode430_SetTypeInfo
+	o->SetTypeInfo = SetTypeInfo__3q42
 #endif
-#ifdef _ZStringNode431_IsBreakingBlock
-	o->IsBreakingBlock = IsBreakingBlock__1q48
+#ifdef _ZStringNode430_IsBreakingBlock
+	o->IsBreakingBlock = IsBreakingBlock__1q42
 #endif
-#ifdef _ZStringNode431_DeSugar
-	o->DeSugar = DeSugar__2q48
+#ifdef _ZStringNode430_DeSugar
+	o->DeSugar = DeSugar__2q42
 #endif
-#ifdef _ZStringNode431_Accept
-	o->Accept = Accept__2q48
+#ifdef _ZStringNode430_Accept
+	o->Accept = Accept__2q42
 #endif
 	o->_nextId = 0;
 }
 
-static struct ZStringNode431 * _NewZStringNode431(void) {
-	struct ZStringNode431 *o = LibZen_Malloc(sizeof(struct ZStringNode431));
-	_InitZStringNode431(o);
+static struct ZStringNode430 * _NewZStringNode430(void) {
+	struct ZStringNode430 *o = LibZen_Malloc(sizeof(struct ZStringNode430));
+	_InitZStringNode430(o);
 	return o;
 }
 
-struct ZStupidCastErrorNode434 {
+struct ZStupidCastErrorNode433 {
 	int _classId52;
 	int _delta52;
 	struct ZNode52 * ParentNode;
@@ -4441,43 +4572,43 @@ struct ZStupidCastErrorNode434 {
 	int (*)(struct ZNode52 *) IsBreakingBlock;
 	struct ZSugarNode165 * (*)(struct ZNode52 *,struct ZGenerator55 *) DeSugar;
 	void (*)(struct ZNode52 *,struct ZVisitor167 *) Accept;
-	int _classId332;
-	int _delta332;
-	int _classId336;
-	int _delta336;
+	int _classId331;
+	int _delta331;
+	int _classId335;
+	int _delta335;
 	const char * ErrorMessage;
-	int _classId434;
-	int _delta434;
+	int _classId433;
+	int _delta433;
 	struct ZNode52 * ErrorNode;
 	int _nextId;
 };
 
-static void _InitZStupidCastErrorNode434(struct ZStupidCastErrorNode434 * o) {
-	_InitZErrorNode336((struct ZErrorNode336 *)o);
-	o->_classId434 = 434;
-	o->_delta434 = sizeof(struct ZStupidCastErrorNode434) - sizeof(struct ZErrorNode336);
+static void _InitZStupidCastErrorNode433(struct ZStupidCastErrorNode433 * o) {
+	_InitZErrorNode335((struct ZErrorNode335 *)o);
+	o->_classId433 = 433;
+	o->_delta433 = sizeof(struct ZStupidCastErrorNode433) - sizeof(struct ZErrorNode335);
 	o->ErrorNode = NULL;
-#ifdef _ZStupidCastErrorNode434_SetNameInfo
-	o->SetNameInfo = SetNameInfo__3qae
+#ifdef _ZStupidCastErrorNode433_SetNameInfo
+	o->SetNameInfo = SetNameInfo__3qaw
 #endif
-#ifdef _ZStupidCastErrorNode434_SetTypeInfo
-	o->SetTypeInfo = SetTypeInfo__3qae
+#ifdef _ZStupidCastErrorNode433_SetTypeInfo
+	o->SetTypeInfo = SetTypeInfo__3qaw
 #endif
-#ifdef _ZStupidCastErrorNode434_IsBreakingBlock
-	o->IsBreakingBlock = IsBreakingBlock__1qae
+#ifdef _ZStupidCastErrorNode433_IsBreakingBlock
+	o->IsBreakingBlock = IsBreakingBlock__1qaw
 #endif
-#ifdef _ZStupidCastErrorNode434_DeSugar
-	o->DeSugar = DeSugar__2qae
+#ifdef _ZStupidCastErrorNode433_DeSugar
+	o->DeSugar = DeSugar__2qaw
 #endif
-#ifdef _ZStupidCastErrorNode434_Accept
-	o->Accept = Accept__2qae
+#ifdef _ZStupidCastErrorNode433_Accept
+	o->Accept = Accept__2qaw
 #endif
 	o->_nextId = 0;
 }
 
-static struct ZStupidCastErrorNode434 * _NewZStupidCastErrorNode434(void) {
-	struct ZStupidCastErrorNode434 *o = LibZen_Malloc(sizeof(struct ZStupidCastErrorNode434));
-	_InitZStupidCastErrorNode434(o);
+static struct ZStupidCastErrorNode433 * _NewZStupidCastErrorNode433(void) {
+	struct ZStupidCastErrorNode433 *o = LibZen_Malloc(sizeof(struct ZStupidCastErrorNode433));
+	_InitZStupidCastErrorNode433(o);
 	return o;
 }
 
@@ -4494,17 +4625,17 @@ struct ZTypeNode235 {
 	int (*)(struct ZNode52 *) IsBreakingBlock;
 	struct ZSugarNode165 * (*)(struct ZNode52 *,struct ZGenerator55 *) DeSugar;
 	void (*)(struct ZNode52 *,struct ZVisitor167 *) Accept;
-	int _classId332;
-	int _delta332;
+	int _classId331;
+	int _delta331;
 	int _classId235;
 	int _delta235;
 	int _nextId;
 };
 
 static void _InitZTypeNode235(struct ZTypeNode235 * o) {
-	_InitZConstNode332((struct ZConstNode332 *)o);
+	_InitZConstNode331((struct ZConstNode331 *)o);
 	o->_classId235 = 235;
-	o->_delta235 = sizeof(struct ZTypeNode235) - sizeof(struct ZConstNode332);
+	o->_delta235 = sizeof(struct ZTypeNode235) - sizeof(struct ZConstNode331);
 #ifdef _ZTypeNode235_SetNameInfo
 	o->SetNameInfo = SetNameInfo__3quk
 #endif
@@ -4532,45 +4663,45 @@ static struct ZTypeNode235 * _NewZTypeNode235(void) {
 struct ZGenerator55 {
 	int _classId167;
 	int _delta167;
-	void (*)(struct ZVisitor167 *,struct ZNullNode419 *) VisitNullNode;
-	void (*)(struct ZVisitor167 *,struct ZBooleanNode476 *) VisitBooleanNode;
-	void (*)(struct ZVisitor167 *,struct ZIntNode377 *) VisitIntNode;
-	void (*)(struct ZVisitor167 *,struct ZFloatNode344 *) VisitFloatNode;
-	void (*)(struct ZVisitor167 *,struct ZStringNode431 *) VisitStringNode;
-	void (*)(struct ZVisitor167 *,struct ZArrayLiteralNode481 *) VisitArrayLiteralNode;
-	void (*)(struct ZVisitor167 *,struct ZMapLiteralNode399 *) VisitMapLiteralNode;
-	void (*)(struct ZVisitor167 *,struct ZNewObjectNode412 *) VisitNewObjectNode;
-	void (*)(struct ZVisitor167 *,struct ZGlobalNameNode360 *) VisitGlobalNameNode;
-	void (*)(struct ZVisitor167 *,struct ZGetNameNode350 *) VisitGetNameNode;
+	void (*)(struct ZVisitor167 *,struct ZNullNode418 *) VisitNullNode;
+	void (*)(struct ZVisitor167 *,struct ZBooleanNode472 *) VisitBooleanNode;
+	void (*)(struct ZVisitor167 *,struct ZIntNode376 *) VisitIntNode;
+	void (*)(struct ZVisitor167 *,struct ZFloatNode343 *) VisitFloatNode;
+	void (*)(struct ZVisitor167 *,struct ZStringNode430 *) VisitStringNode;
+	void (*)(struct ZVisitor167 *,struct ZArrayLiteralNode477 *) VisitArrayLiteralNode;
+	void (*)(struct ZVisitor167 *,struct ZMapLiteralNode398 *) VisitMapLiteralNode;
+	void (*)(struct ZVisitor167 *,struct ZNewObjectNode411 *) VisitNewObjectNode;
+	void (*)(struct ZVisitor167 *,struct ZGlobalNameNode359 *) VisitGlobalNameNode;
+	void (*)(struct ZVisitor167 *,struct ZGetNameNode349 *) VisitGetNameNode;
 	void (*)(struct ZVisitor167 *,struct ZSetNameNode181 *) VisitSetNameNode;
-	void (*)(struct ZVisitor167 *,struct ZGroupNode364 *) VisitGroupNode;
-	void (*)(struct ZVisitor167 *,struct ZGetterNode355 *) VisitGetterNode;
+	void (*)(struct ZVisitor167 *,struct ZGroupNode363 *) VisitGroupNode;
+	void (*)(struct ZVisitor167 *,struct ZGetterNode354 *) VisitGetterNode;
 	void (*)(struct ZVisitor167 *,struct ZSetterNode184 *) VisitSetterNode;
-	void (*)(struct ZVisitor167 *,struct ZGetIndexNode347 *) VisitGetIndexNode;
+	void (*)(struct ZVisitor167 *,struct ZGetIndexNode346 *) VisitGetIndexNode;
 	void (*)(struct ZVisitor167 *,struct ZSetIndexNode178 *) VisitSetIndexNode;
-	void (*)(struct ZVisitor167 *,struct ZMethodCallNode403 *) VisitMethodCallNode;
-	void (*)(struct ZVisitor167 *,struct ZFuncCallNode407 *) VisitFuncCallNode;
-	void (*)(struct ZVisitor167 *,struct ZMacroNode392 *) VisitMacroNode;
+	void (*)(struct ZVisitor167 *,struct ZMethodCallNode402 *) VisitMethodCallNode;
+	void (*)(struct ZVisitor167 *,struct ZFuncCallNode406 *) VisitFuncCallNode;
+	void (*)(struct ZVisitor167 *,struct ZMacroNode391 *) VisitMacroNode;
 	void (*)(struct ZVisitor167 *,struct ZUnaryNode197 *) VisitUnaryNode;
-	void (*)(struct ZVisitor167 *,struct ZNotNode416 *) VisitNotNode;
-	void (*)(struct ZVisitor167 *,struct ZCastNode321 *) VisitCastNode;
-	void (*)(struct ZVisitor167 *,struct ZInstanceOfNode373 *) VisitInstanceOfNode;
-	void (*)(struct ZVisitor167 *,struct ZBinaryNode311 *) VisitBinaryNode;
-	void (*)(struct ZVisitor167 *,struct ZComparatorNode329 *) VisitComparatorNode;
-	void (*)(struct ZVisitor167 *,struct ZAndNode502 *) VisitAndNode;
-	void (*)(struct ZVisitor167 *,struct ZOrNode422 *) VisitOrNode;
+	void (*)(struct ZVisitor167 *,struct ZNotNode415 *) VisitNotNode;
+	void (*)(struct ZVisitor167 *,struct ZCastNode320 *) VisitCastNode;
+	void (*)(struct ZVisitor167 *,struct ZInstanceOfNode372 *) VisitInstanceOfNode;
+	void (*)(struct ZVisitor167 *,struct ZBinaryNode310 *) VisitBinaryNode;
+	void (*)(struct ZVisitor167 *,struct ZComparatorNode328 *) VisitComparatorNode;
+	void (*)(struct ZVisitor167 *,struct ZAndNode498 *) VisitAndNode;
+	void (*)(struct ZVisitor167 *,struct ZOrNode421 *) VisitOrNode;
 	void (*)(struct ZVisitor167 *,struct ZBlockNode161 *) VisitBlockNode;
-	void (*)(struct ZVisitor167 *,struct ZVarNode506 *) VisitVarNode;
-	void (*)(struct ZVisitor167 *,struct ZIfNode367 *) VisitIfNode;
+	void (*)(struct ZVisitor167 *,struct ZVarNode502 *) VisitVarNode;
+	void (*)(struct ZVisitor167 *,struct ZIfNode366 *) VisitIfNode;
 	void (*)(struct ZVisitor167 *,struct ZReturnNode170 *) VisitReturnNode;
 	void (*)(struct ZVisitor167 *,struct ZWhileNode200 *) VisitWhileNode;
-	void (*)(struct ZVisitor167 *,struct ZBreakNode318 *) VisitBreakNode;
+	void (*)(struct ZVisitor167 *,struct ZBreakNode317 *) VisitBreakNode;
 	void (*)(struct ZVisitor167 *,struct ZThrowNode191 *) VisitThrowNode;
 	void (*)(struct ZVisitor167 *,struct ZTryNode194 *) VisitTryNode;
-	void (*)(struct ZVisitor167 *,struct ZLetNode380 *) VisitLetNode;
+	void (*)(struct ZVisitor167 *,struct ZLetNode379 *) VisitLetNode;
 	void (*)(struct ZVisitor167 *,struct ZFunctionNode144 *) VisitFunctionNode;
-	void (*)(struct ZVisitor167 *,struct ZClassNode516 *) VisitClassNode;
-	void (*)(struct ZVisitor167 *,struct ZErrorNode336 *) VisitErrorNode;
+	void (*)(struct ZVisitor167 *,struct ZClassNode512 *) VisitClassNode;
+	void (*)(struct ZVisitor167 *,struct ZErrorNode335 *) VisitErrorNode;
 	void (*)(struct ZVisitor167 *,struct ZNode52 *) VisitExtendedNode;
 	void (*)(struct ZVisitor167 *,struct ZSugarNode165 *) VisitSugarNode;
 	void (*)(struct ZVisitor167 *) EnableVisitor;
@@ -4590,6 +4721,7 @@ struct ZGenerator55 {
 	struct ZSourceEngine57 * (*)(struct ZGenerator55 *) GetEngine;
 	void (*)(struct ZGenerator55 *,struct ZNameSpace48 *) ImportLocalGrammar;
 	void (*)(struct ZGenerator55 *,const char *) WriteTo;
+	const char * (*)(struct ZGenerator55 *) GetSourceText;
 	const char * (*)(struct ZGenerator55 *,const char *) NameOutputFile;
 	int (*)(struct ZGenerator55 *,struct ZNode52 *,int) StartCodeGeneration;
 	struct ZType60 * (*)(struct ZGenerator55 *,struct ZType60 *,const char *) GetFieldType;
@@ -4615,6 +4747,7 @@ static void _InitZGenerator55(struct ZGenerator55 * o) {
 	o->GetEngine = NULL;
 	o->ImportLocalGrammar = NULL;
 	o->WriteTo = NULL;
+	o->GetSourceText = NULL;
 	o->NameOutputFile = NULL;
 	o->StartCodeGeneration = NULL;
 	o->GetFieldType = NULL;
@@ -4762,6 +4895,9 @@ static void _InitZGenerator55(struct ZGenerator55 * o) {
 #ifdef _ZGenerator55_WriteTo
 	o->WriteTo = WriteTo__2qwk
 #endif
+#ifdef _ZGenerator55_GetSourceText
+	o->GetSourceText = GetSourceText__1qwk
+#endif
 #ifdef _ZGenerator55_NameOutputFile
 	o->NameOutputFile = NameOutputFile__2qwk
 #endif
@@ -4789,98 +4925,98 @@ static struct ZGenerator55 * _NewZGenerator55(void) {
 	return o;
 }
 
-struct ZIndentToken460 {
+struct ZIndentToken459 {
 	int _classId77;
 	int _delta77;
 	struct ZSource238 * Source;
 	long StartIndex;
 	long EndIndex;
-	int _classId460;
-	int _delta460;
+	int _classId459;
+	int _delta459;
 	int _nextId;
 };
 
-static void _InitZIndentToken460(struct ZIndentToken460 * o) {
+static void _InitZIndentToken459(struct ZIndentToken459 * o) {
 	_InitZToken77((struct ZToken77 *)o);
-	o->_classId460 = 460;
-	o->_delta460 = sizeof(struct ZIndentToken460) - sizeof(struct ZToken77);
+	o->_classId459 = 459;
+	o->_delta459 = sizeof(struct ZIndentToken459) - sizeof(struct ZToken77);
 	o->_nextId = 0;
 }
 
-static struct ZIndentToken460 * _NewZIndentToken460(void) {
-	struct ZIndentToken460 *o = LibZen_Malloc(sizeof(struct ZIndentToken460));
-	_InitZIndentToken460(o);
+static struct ZIndentToken459 * _NewZIndentToken459(void) {
+	struct ZIndentToken459 *o = LibZen_Malloc(sizeof(struct ZIndentToken459));
+	_InitZIndentToken459(o);
 	return o;
 }
 
-struct ZPatternToken462 {
+struct ZPatternToken461 {
 	int _classId77;
 	int _delta77;
 	struct ZSource238 * Source;
 	long StartIndex;
 	long EndIndex;
-	int _classId462;
-	int _delta462;
+	int _classId461;
+	int _delta461;
 	struct ZSyntax219 * PresetPattern;
 	int _nextId;
 };
 
-static void _InitZPatternToken462(struct ZPatternToken462 * o) {
+static void _InitZPatternToken461(struct ZPatternToken461 * o) {
 	_InitZToken77((struct ZToken77 *)o);
-	o->_classId462 = 462;
-	o->_delta462 = sizeof(struct ZPatternToken462) - sizeof(struct ZToken77);
+	o->_classId461 = 461;
+	o->_delta461 = sizeof(struct ZPatternToken461) - sizeof(struct ZToken77);
 	o->PresetPattern = NULL;
 	o->_nextId = 0;
 }
 
-static struct ZPatternToken462 * _NewZPatternToken462(void) {
-	struct ZPatternToken462 *o = LibZen_Malloc(sizeof(struct ZPatternToken462));
-	_InitZPatternToken462(o);
+static struct ZPatternToken461 * _NewZPatternToken461(void) {
+	struct ZPatternToken461 *o = LibZen_Malloc(sizeof(struct ZPatternToken461));
+	_InitZPatternToken461(o);
 	return o;
 }
 
 struct ZSourceEngine57 {
 	int _classId167;
 	int _delta167;
-	void (*)(struct ZVisitor167 *,struct ZNullNode419 *) VisitNullNode;
-	void (*)(struct ZVisitor167 *,struct ZBooleanNode476 *) VisitBooleanNode;
-	void (*)(struct ZVisitor167 *,struct ZIntNode377 *) VisitIntNode;
-	void (*)(struct ZVisitor167 *,struct ZFloatNode344 *) VisitFloatNode;
-	void (*)(struct ZVisitor167 *,struct ZStringNode431 *) VisitStringNode;
-	void (*)(struct ZVisitor167 *,struct ZArrayLiteralNode481 *) VisitArrayLiteralNode;
-	void (*)(struct ZVisitor167 *,struct ZMapLiteralNode399 *) VisitMapLiteralNode;
-	void (*)(struct ZVisitor167 *,struct ZNewObjectNode412 *) VisitNewObjectNode;
-	void (*)(struct ZVisitor167 *,struct ZGlobalNameNode360 *) VisitGlobalNameNode;
-	void (*)(struct ZVisitor167 *,struct ZGetNameNode350 *) VisitGetNameNode;
+	void (*)(struct ZVisitor167 *,struct ZNullNode418 *) VisitNullNode;
+	void (*)(struct ZVisitor167 *,struct ZBooleanNode472 *) VisitBooleanNode;
+	void (*)(struct ZVisitor167 *,struct ZIntNode376 *) VisitIntNode;
+	void (*)(struct ZVisitor167 *,struct ZFloatNode343 *) VisitFloatNode;
+	void (*)(struct ZVisitor167 *,struct ZStringNode430 *) VisitStringNode;
+	void (*)(struct ZVisitor167 *,struct ZArrayLiteralNode477 *) VisitArrayLiteralNode;
+	void (*)(struct ZVisitor167 *,struct ZMapLiteralNode398 *) VisitMapLiteralNode;
+	void (*)(struct ZVisitor167 *,struct ZNewObjectNode411 *) VisitNewObjectNode;
+	void (*)(struct ZVisitor167 *,struct ZGlobalNameNode359 *) VisitGlobalNameNode;
+	void (*)(struct ZVisitor167 *,struct ZGetNameNode349 *) VisitGetNameNode;
 	void (*)(struct ZVisitor167 *,struct ZSetNameNode181 *) VisitSetNameNode;
-	void (*)(struct ZVisitor167 *,struct ZGroupNode364 *) VisitGroupNode;
-	void (*)(struct ZVisitor167 *,struct ZGetterNode355 *) VisitGetterNode;
+	void (*)(struct ZVisitor167 *,struct ZGroupNode363 *) VisitGroupNode;
+	void (*)(struct ZVisitor167 *,struct ZGetterNode354 *) VisitGetterNode;
 	void (*)(struct ZVisitor167 *,struct ZSetterNode184 *) VisitSetterNode;
-	void (*)(struct ZVisitor167 *,struct ZGetIndexNode347 *) VisitGetIndexNode;
+	void (*)(struct ZVisitor167 *,struct ZGetIndexNode346 *) VisitGetIndexNode;
 	void (*)(struct ZVisitor167 *,struct ZSetIndexNode178 *) VisitSetIndexNode;
-	void (*)(struct ZVisitor167 *,struct ZMethodCallNode403 *) VisitMethodCallNode;
-	void (*)(struct ZVisitor167 *,struct ZFuncCallNode407 *) VisitFuncCallNode;
-	void (*)(struct ZVisitor167 *,struct ZMacroNode392 *) VisitMacroNode;
+	void (*)(struct ZVisitor167 *,struct ZMethodCallNode402 *) VisitMethodCallNode;
+	void (*)(struct ZVisitor167 *,struct ZFuncCallNode406 *) VisitFuncCallNode;
+	void (*)(struct ZVisitor167 *,struct ZMacroNode391 *) VisitMacroNode;
 	void (*)(struct ZVisitor167 *,struct ZUnaryNode197 *) VisitUnaryNode;
-	void (*)(struct ZVisitor167 *,struct ZNotNode416 *) VisitNotNode;
-	void (*)(struct ZVisitor167 *,struct ZCastNode321 *) VisitCastNode;
-	void (*)(struct ZVisitor167 *,struct ZInstanceOfNode373 *) VisitInstanceOfNode;
-	void (*)(struct ZVisitor167 *,struct ZBinaryNode311 *) VisitBinaryNode;
-	void (*)(struct ZVisitor167 *,struct ZComparatorNode329 *) VisitComparatorNode;
-	void (*)(struct ZVisitor167 *,struct ZAndNode502 *) VisitAndNode;
-	void (*)(struct ZVisitor167 *,struct ZOrNode422 *) VisitOrNode;
+	void (*)(struct ZVisitor167 *,struct ZNotNode415 *) VisitNotNode;
+	void (*)(struct ZVisitor167 *,struct ZCastNode320 *) VisitCastNode;
+	void (*)(struct ZVisitor167 *,struct ZInstanceOfNode372 *) VisitInstanceOfNode;
+	void (*)(struct ZVisitor167 *,struct ZBinaryNode310 *) VisitBinaryNode;
+	void (*)(struct ZVisitor167 *,struct ZComparatorNode328 *) VisitComparatorNode;
+	void (*)(struct ZVisitor167 *,struct ZAndNode498 *) VisitAndNode;
+	void (*)(struct ZVisitor167 *,struct ZOrNode421 *) VisitOrNode;
 	void (*)(struct ZVisitor167 *,struct ZBlockNode161 *) VisitBlockNode;
-	void (*)(struct ZVisitor167 *,struct ZVarNode506 *) VisitVarNode;
-	void (*)(struct ZVisitor167 *,struct ZIfNode367 *) VisitIfNode;
+	void (*)(struct ZVisitor167 *,struct ZVarNode502 *) VisitVarNode;
+	void (*)(struct ZVisitor167 *,struct ZIfNode366 *) VisitIfNode;
 	void (*)(struct ZVisitor167 *,struct ZReturnNode170 *) VisitReturnNode;
 	void (*)(struct ZVisitor167 *,struct ZWhileNode200 *) VisitWhileNode;
-	void (*)(struct ZVisitor167 *,struct ZBreakNode318 *) VisitBreakNode;
+	void (*)(struct ZVisitor167 *,struct ZBreakNode317 *) VisitBreakNode;
 	void (*)(struct ZVisitor167 *,struct ZThrowNode191 *) VisitThrowNode;
 	void (*)(struct ZVisitor167 *,struct ZTryNode194 *) VisitTryNode;
-	void (*)(struct ZVisitor167 *,struct ZLetNode380 *) VisitLetNode;
+	void (*)(struct ZVisitor167 *,struct ZLetNode379 *) VisitLetNode;
 	void (*)(struct ZVisitor167 *,struct ZFunctionNode144 *) VisitFunctionNode;
-	void (*)(struct ZVisitor167 *,struct ZClassNode516 *) VisitClassNode;
-	void (*)(struct ZVisitor167 *,struct ZErrorNode336 *) VisitErrorNode;
+	void (*)(struct ZVisitor167 *,struct ZClassNode512 *) VisitClassNode;
+	void (*)(struct ZVisitor167 *,struct ZErrorNode335 *) VisitErrorNode;
 	void (*)(struct ZVisitor167 *,struct ZNode52 *) VisitExtendedNode;
 	void (*)(struct ZVisitor167 *,struct ZSugarNode165 *) VisitSugarNode;
 	void (*)(struct ZVisitor167 *) EnableVisitor;
@@ -5049,45 +5185,45 @@ static struct ZSourceEngine57 * _NewZSourceEngine57(void) {
 struct ZSourceGenerator243 {
 	int _classId167;
 	int _delta167;
-	void (*)(struct ZVisitor167 *,struct ZNullNode419 *) VisitNullNode;
-	void (*)(struct ZVisitor167 *,struct ZBooleanNode476 *) VisitBooleanNode;
-	void (*)(struct ZVisitor167 *,struct ZIntNode377 *) VisitIntNode;
-	void (*)(struct ZVisitor167 *,struct ZFloatNode344 *) VisitFloatNode;
-	void (*)(struct ZVisitor167 *,struct ZStringNode431 *) VisitStringNode;
-	void (*)(struct ZVisitor167 *,struct ZArrayLiteralNode481 *) VisitArrayLiteralNode;
-	void (*)(struct ZVisitor167 *,struct ZMapLiteralNode399 *) VisitMapLiteralNode;
-	void (*)(struct ZVisitor167 *,struct ZNewObjectNode412 *) VisitNewObjectNode;
-	void (*)(struct ZVisitor167 *,struct ZGlobalNameNode360 *) VisitGlobalNameNode;
-	void (*)(struct ZVisitor167 *,struct ZGetNameNode350 *) VisitGetNameNode;
+	void (*)(struct ZVisitor167 *,struct ZNullNode418 *) VisitNullNode;
+	void (*)(struct ZVisitor167 *,struct ZBooleanNode472 *) VisitBooleanNode;
+	void (*)(struct ZVisitor167 *,struct ZIntNode376 *) VisitIntNode;
+	void (*)(struct ZVisitor167 *,struct ZFloatNode343 *) VisitFloatNode;
+	void (*)(struct ZVisitor167 *,struct ZStringNode430 *) VisitStringNode;
+	void (*)(struct ZVisitor167 *,struct ZArrayLiteralNode477 *) VisitArrayLiteralNode;
+	void (*)(struct ZVisitor167 *,struct ZMapLiteralNode398 *) VisitMapLiteralNode;
+	void (*)(struct ZVisitor167 *,struct ZNewObjectNode411 *) VisitNewObjectNode;
+	void (*)(struct ZVisitor167 *,struct ZGlobalNameNode359 *) VisitGlobalNameNode;
+	void (*)(struct ZVisitor167 *,struct ZGetNameNode349 *) VisitGetNameNode;
 	void (*)(struct ZVisitor167 *,struct ZSetNameNode181 *) VisitSetNameNode;
-	void (*)(struct ZVisitor167 *,struct ZGroupNode364 *) VisitGroupNode;
-	void (*)(struct ZVisitor167 *,struct ZGetterNode355 *) VisitGetterNode;
+	void (*)(struct ZVisitor167 *,struct ZGroupNode363 *) VisitGroupNode;
+	void (*)(struct ZVisitor167 *,struct ZGetterNode354 *) VisitGetterNode;
 	void (*)(struct ZVisitor167 *,struct ZSetterNode184 *) VisitSetterNode;
-	void (*)(struct ZVisitor167 *,struct ZGetIndexNode347 *) VisitGetIndexNode;
+	void (*)(struct ZVisitor167 *,struct ZGetIndexNode346 *) VisitGetIndexNode;
 	void (*)(struct ZVisitor167 *,struct ZSetIndexNode178 *) VisitSetIndexNode;
-	void (*)(struct ZVisitor167 *,struct ZMethodCallNode403 *) VisitMethodCallNode;
-	void (*)(struct ZVisitor167 *,struct ZFuncCallNode407 *) VisitFuncCallNode;
-	void (*)(struct ZVisitor167 *,struct ZMacroNode392 *) VisitMacroNode;
+	void (*)(struct ZVisitor167 *,struct ZMethodCallNode402 *) VisitMethodCallNode;
+	void (*)(struct ZVisitor167 *,struct ZFuncCallNode406 *) VisitFuncCallNode;
+	void (*)(struct ZVisitor167 *,struct ZMacroNode391 *) VisitMacroNode;
 	void (*)(struct ZVisitor167 *,struct ZUnaryNode197 *) VisitUnaryNode;
-	void (*)(struct ZVisitor167 *,struct ZNotNode416 *) VisitNotNode;
-	void (*)(struct ZVisitor167 *,struct ZCastNode321 *) VisitCastNode;
-	void (*)(struct ZVisitor167 *,struct ZInstanceOfNode373 *) VisitInstanceOfNode;
-	void (*)(struct ZVisitor167 *,struct ZBinaryNode311 *) VisitBinaryNode;
-	void (*)(struct ZVisitor167 *,struct ZComparatorNode329 *) VisitComparatorNode;
-	void (*)(struct ZVisitor167 *,struct ZAndNode502 *) VisitAndNode;
-	void (*)(struct ZVisitor167 *,struct ZOrNode422 *) VisitOrNode;
+	void (*)(struct ZVisitor167 *,struct ZNotNode415 *) VisitNotNode;
+	void (*)(struct ZVisitor167 *,struct ZCastNode320 *) VisitCastNode;
+	void (*)(struct ZVisitor167 *,struct ZInstanceOfNode372 *) VisitInstanceOfNode;
+	void (*)(struct ZVisitor167 *,struct ZBinaryNode310 *) VisitBinaryNode;
+	void (*)(struct ZVisitor167 *,struct ZComparatorNode328 *) VisitComparatorNode;
+	void (*)(struct ZVisitor167 *,struct ZAndNode498 *) VisitAndNode;
+	void (*)(struct ZVisitor167 *,struct ZOrNode421 *) VisitOrNode;
 	void (*)(struct ZVisitor167 *,struct ZBlockNode161 *) VisitBlockNode;
-	void (*)(struct ZVisitor167 *,struct ZVarNode506 *) VisitVarNode;
-	void (*)(struct ZVisitor167 *,struct ZIfNode367 *) VisitIfNode;
+	void (*)(struct ZVisitor167 *,struct ZVarNode502 *) VisitVarNode;
+	void (*)(struct ZVisitor167 *,struct ZIfNode366 *) VisitIfNode;
 	void (*)(struct ZVisitor167 *,struct ZReturnNode170 *) VisitReturnNode;
 	void (*)(struct ZVisitor167 *,struct ZWhileNode200 *) VisitWhileNode;
-	void (*)(struct ZVisitor167 *,struct ZBreakNode318 *) VisitBreakNode;
+	void (*)(struct ZVisitor167 *,struct ZBreakNode317 *) VisitBreakNode;
 	void (*)(struct ZVisitor167 *,struct ZThrowNode191 *) VisitThrowNode;
 	void (*)(struct ZVisitor167 *,struct ZTryNode194 *) VisitTryNode;
-	void (*)(struct ZVisitor167 *,struct ZLetNode380 *) VisitLetNode;
+	void (*)(struct ZVisitor167 *,struct ZLetNode379 *) VisitLetNode;
 	void (*)(struct ZVisitor167 *,struct ZFunctionNode144 *) VisitFunctionNode;
-	void (*)(struct ZVisitor167 *,struct ZClassNode516 *) VisitClassNode;
-	void (*)(struct ZVisitor167 *,struct ZErrorNode336 *) VisitErrorNode;
+	void (*)(struct ZVisitor167 *,struct ZClassNode512 *) VisitClassNode;
+	void (*)(struct ZVisitor167 *,struct ZErrorNode335 *) VisitErrorNode;
 	void (*)(struct ZVisitor167 *,struct ZNode52 *) VisitExtendedNode;
 	void (*)(struct ZVisitor167 *,struct ZSugarNode165 *) VisitSugarNode;
 	void (*)(struct ZVisitor167 *) EnableVisitor;
@@ -5107,6 +5243,7 @@ struct ZSourceGenerator243 {
 	struct ZSourceEngine57 * (*)(struct ZGenerator55 *) GetEngine;
 	void (*)(struct ZGenerator55 *,struct ZNameSpace48 *) ImportLocalGrammar;
 	void (*)(struct ZGenerator55 *,const char *) WriteTo;
+	const char * (*)(struct ZGenerator55 *) GetSourceText;
 	const char * (*)(struct ZGenerator55 *,const char *) NameOutputFile;
 	int (*)(struct ZGenerator55 *,struct ZNode52 *,int) StartCodeGeneration;
 	struct ZType60 * (*)(struct ZGenerator55 *,struct ZType60 *,const char *) GetFieldType;
@@ -5305,6 +5442,9 @@ static void _InitZSourceGenerator243(struct ZSourceGenerator243 * o) {
 #ifdef _ZSourceGenerator243_WriteTo
 	o->WriteTo = WriteTo__2quv
 #endif
+#ifdef _ZSourceGenerator243_GetSourceText
+	o->GetSourceText = GetSourceText__1quv
+#endif
 #ifdef _ZSourceGenerator243_NameOutputFile
 	o->NameOutputFile = NameOutputFile__2quv
 #endif
@@ -5341,45 +5481,45 @@ static struct ZSourceGenerator243 * _NewZSourceGenerator243(void) {
 struct ZTypeChecker142 {
 	int _classId167;
 	int _delta167;
-	void (*)(struct ZVisitor167 *,struct ZNullNode419 *) VisitNullNode;
-	void (*)(struct ZVisitor167 *,struct ZBooleanNode476 *) VisitBooleanNode;
-	void (*)(struct ZVisitor167 *,struct ZIntNode377 *) VisitIntNode;
-	void (*)(struct ZVisitor167 *,struct ZFloatNode344 *) VisitFloatNode;
-	void (*)(struct ZVisitor167 *,struct ZStringNode431 *) VisitStringNode;
-	void (*)(struct ZVisitor167 *,struct ZArrayLiteralNode481 *) VisitArrayLiteralNode;
-	void (*)(struct ZVisitor167 *,struct ZMapLiteralNode399 *) VisitMapLiteralNode;
-	void (*)(struct ZVisitor167 *,struct ZNewObjectNode412 *) VisitNewObjectNode;
-	void (*)(struct ZVisitor167 *,struct ZGlobalNameNode360 *) VisitGlobalNameNode;
-	void (*)(struct ZVisitor167 *,struct ZGetNameNode350 *) VisitGetNameNode;
+	void (*)(struct ZVisitor167 *,struct ZNullNode418 *) VisitNullNode;
+	void (*)(struct ZVisitor167 *,struct ZBooleanNode472 *) VisitBooleanNode;
+	void (*)(struct ZVisitor167 *,struct ZIntNode376 *) VisitIntNode;
+	void (*)(struct ZVisitor167 *,struct ZFloatNode343 *) VisitFloatNode;
+	void (*)(struct ZVisitor167 *,struct ZStringNode430 *) VisitStringNode;
+	void (*)(struct ZVisitor167 *,struct ZArrayLiteralNode477 *) VisitArrayLiteralNode;
+	void (*)(struct ZVisitor167 *,struct ZMapLiteralNode398 *) VisitMapLiteralNode;
+	void (*)(struct ZVisitor167 *,struct ZNewObjectNode411 *) VisitNewObjectNode;
+	void (*)(struct ZVisitor167 *,struct ZGlobalNameNode359 *) VisitGlobalNameNode;
+	void (*)(struct ZVisitor167 *,struct ZGetNameNode349 *) VisitGetNameNode;
 	void (*)(struct ZVisitor167 *,struct ZSetNameNode181 *) VisitSetNameNode;
-	void (*)(struct ZVisitor167 *,struct ZGroupNode364 *) VisitGroupNode;
-	void (*)(struct ZVisitor167 *,struct ZGetterNode355 *) VisitGetterNode;
+	void (*)(struct ZVisitor167 *,struct ZGroupNode363 *) VisitGroupNode;
+	void (*)(struct ZVisitor167 *,struct ZGetterNode354 *) VisitGetterNode;
 	void (*)(struct ZVisitor167 *,struct ZSetterNode184 *) VisitSetterNode;
-	void (*)(struct ZVisitor167 *,struct ZGetIndexNode347 *) VisitGetIndexNode;
+	void (*)(struct ZVisitor167 *,struct ZGetIndexNode346 *) VisitGetIndexNode;
 	void (*)(struct ZVisitor167 *,struct ZSetIndexNode178 *) VisitSetIndexNode;
-	void (*)(struct ZVisitor167 *,struct ZMethodCallNode403 *) VisitMethodCallNode;
-	void (*)(struct ZVisitor167 *,struct ZFuncCallNode407 *) VisitFuncCallNode;
-	void (*)(struct ZVisitor167 *,struct ZMacroNode392 *) VisitMacroNode;
+	void (*)(struct ZVisitor167 *,struct ZMethodCallNode402 *) VisitMethodCallNode;
+	void (*)(struct ZVisitor167 *,struct ZFuncCallNode406 *) VisitFuncCallNode;
+	void (*)(struct ZVisitor167 *,struct ZMacroNode391 *) VisitMacroNode;
 	void (*)(struct ZVisitor167 *,struct ZUnaryNode197 *) VisitUnaryNode;
-	void (*)(struct ZVisitor167 *,struct ZNotNode416 *) VisitNotNode;
-	void (*)(struct ZVisitor167 *,struct ZCastNode321 *) VisitCastNode;
-	void (*)(struct ZVisitor167 *,struct ZInstanceOfNode373 *) VisitInstanceOfNode;
-	void (*)(struct ZVisitor167 *,struct ZBinaryNode311 *) VisitBinaryNode;
-	void (*)(struct ZVisitor167 *,struct ZComparatorNode329 *) VisitComparatorNode;
-	void (*)(struct ZVisitor167 *,struct ZAndNode502 *) VisitAndNode;
-	void (*)(struct ZVisitor167 *,struct ZOrNode422 *) VisitOrNode;
+	void (*)(struct ZVisitor167 *,struct ZNotNode415 *) VisitNotNode;
+	void (*)(struct ZVisitor167 *,struct ZCastNode320 *) VisitCastNode;
+	void (*)(struct ZVisitor167 *,struct ZInstanceOfNode372 *) VisitInstanceOfNode;
+	void (*)(struct ZVisitor167 *,struct ZBinaryNode310 *) VisitBinaryNode;
+	void (*)(struct ZVisitor167 *,struct ZComparatorNode328 *) VisitComparatorNode;
+	void (*)(struct ZVisitor167 *,struct ZAndNode498 *) VisitAndNode;
+	void (*)(struct ZVisitor167 *,struct ZOrNode421 *) VisitOrNode;
 	void (*)(struct ZVisitor167 *,struct ZBlockNode161 *) VisitBlockNode;
-	void (*)(struct ZVisitor167 *,struct ZVarNode506 *) VisitVarNode;
-	void (*)(struct ZVisitor167 *,struct ZIfNode367 *) VisitIfNode;
+	void (*)(struct ZVisitor167 *,struct ZVarNode502 *) VisitVarNode;
+	void (*)(struct ZVisitor167 *,struct ZIfNode366 *) VisitIfNode;
 	void (*)(struct ZVisitor167 *,struct ZReturnNode170 *) VisitReturnNode;
 	void (*)(struct ZVisitor167 *,struct ZWhileNode200 *) VisitWhileNode;
-	void (*)(struct ZVisitor167 *,struct ZBreakNode318 *) VisitBreakNode;
+	void (*)(struct ZVisitor167 *,struct ZBreakNode317 *) VisitBreakNode;
 	void (*)(struct ZVisitor167 *,struct ZThrowNode191 *) VisitThrowNode;
 	void (*)(struct ZVisitor167 *,struct ZTryNode194 *) VisitTryNode;
-	void (*)(struct ZVisitor167 *,struct ZLetNode380 *) VisitLetNode;
+	void (*)(struct ZVisitor167 *,struct ZLetNode379 *) VisitLetNode;
 	void (*)(struct ZVisitor167 *,struct ZFunctionNode144 *) VisitFunctionNode;
-	void (*)(struct ZVisitor167 *,struct ZClassNode516 *) VisitClassNode;
-	void (*)(struct ZVisitor167 *,struct ZErrorNode336 *) VisitErrorNode;
+	void (*)(struct ZVisitor167 *,struct ZClassNode512 *) VisitClassNode;
+	void (*)(struct ZVisitor167 *,struct ZErrorNode335 *) VisitErrorNode;
 	void (*)(struct ZVisitor167 *,struct ZNode52 *) VisitExtendedNode;
 	void (*)(struct ZVisitor167 *,struct ZSugarNode165 *) VisitSugarNode;
 	void (*)(struct ZVisitor167 *) EnableVisitor;
@@ -5554,48 +5694,48 @@ static struct ZTypeChecker142 * _NewZTypeChecker142(void) {
 
 static long ZTypeChecker_DefaultTypeCheckPolicy_Z77 = 0;
 static long ZTypeChecker_NoCheckPolicy_Z78 = 1;
-struct CSourceGenerator599 {
+struct CSourceGenerator596 {
 	int _classId167;
 	int _delta167;
-	void (*)(struct ZVisitor167 *,struct ZNullNode419 *) VisitNullNode;
-	void (*)(struct ZVisitor167 *,struct ZBooleanNode476 *) VisitBooleanNode;
-	void (*)(struct ZVisitor167 *,struct ZIntNode377 *) VisitIntNode;
-	void (*)(struct ZVisitor167 *,struct ZFloatNode344 *) VisitFloatNode;
-	void (*)(struct ZVisitor167 *,struct ZStringNode431 *) VisitStringNode;
-	void (*)(struct ZVisitor167 *,struct ZArrayLiteralNode481 *) VisitArrayLiteralNode;
-	void (*)(struct ZVisitor167 *,struct ZMapLiteralNode399 *) VisitMapLiteralNode;
-	void (*)(struct ZVisitor167 *,struct ZNewObjectNode412 *) VisitNewObjectNode;
-	void (*)(struct ZVisitor167 *,struct ZGlobalNameNode360 *) VisitGlobalNameNode;
-	void (*)(struct ZVisitor167 *,struct ZGetNameNode350 *) VisitGetNameNode;
+	void (*)(struct ZVisitor167 *,struct ZNullNode418 *) VisitNullNode;
+	void (*)(struct ZVisitor167 *,struct ZBooleanNode472 *) VisitBooleanNode;
+	void (*)(struct ZVisitor167 *,struct ZIntNode376 *) VisitIntNode;
+	void (*)(struct ZVisitor167 *,struct ZFloatNode343 *) VisitFloatNode;
+	void (*)(struct ZVisitor167 *,struct ZStringNode430 *) VisitStringNode;
+	void (*)(struct ZVisitor167 *,struct ZArrayLiteralNode477 *) VisitArrayLiteralNode;
+	void (*)(struct ZVisitor167 *,struct ZMapLiteralNode398 *) VisitMapLiteralNode;
+	void (*)(struct ZVisitor167 *,struct ZNewObjectNode411 *) VisitNewObjectNode;
+	void (*)(struct ZVisitor167 *,struct ZGlobalNameNode359 *) VisitGlobalNameNode;
+	void (*)(struct ZVisitor167 *,struct ZGetNameNode349 *) VisitGetNameNode;
 	void (*)(struct ZVisitor167 *,struct ZSetNameNode181 *) VisitSetNameNode;
-	void (*)(struct ZVisitor167 *,struct ZGroupNode364 *) VisitGroupNode;
-	void (*)(struct ZVisitor167 *,struct ZGetterNode355 *) VisitGetterNode;
+	void (*)(struct ZVisitor167 *,struct ZGroupNode363 *) VisitGroupNode;
+	void (*)(struct ZVisitor167 *,struct ZGetterNode354 *) VisitGetterNode;
 	void (*)(struct ZVisitor167 *,struct ZSetterNode184 *) VisitSetterNode;
-	void (*)(struct ZVisitor167 *,struct ZGetIndexNode347 *) VisitGetIndexNode;
+	void (*)(struct ZVisitor167 *,struct ZGetIndexNode346 *) VisitGetIndexNode;
 	void (*)(struct ZVisitor167 *,struct ZSetIndexNode178 *) VisitSetIndexNode;
-	void (*)(struct ZVisitor167 *,struct ZMethodCallNode403 *) VisitMethodCallNode;
-	void (*)(struct ZVisitor167 *,struct ZFuncCallNode407 *) VisitFuncCallNode;
-	void (*)(struct ZVisitor167 *,struct ZMacroNode392 *) VisitMacroNode;
+	void (*)(struct ZVisitor167 *,struct ZMethodCallNode402 *) VisitMethodCallNode;
+	void (*)(struct ZVisitor167 *,struct ZFuncCallNode406 *) VisitFuncCallNode;
+	void (*)(struct ZVisitor167 *,struct ZMacroNode391 *) VisitMacroNode;
 	void (*)(struct ZVisitor167 *,struct ZUnaryNode197 *) VisitUnaryNode;
-	void (*)(struct ZVisitor167 *,struct ZNotNode416 *) VisitNotNode;
-	void (*)(struct ZVisitor167 *,struct ZCastNode321 *) VisitCastNode;
-	void (*)(struct ZVisitor167 *,struct ZInstanceOfNode373 *) VisitInstanceOfNode;
-	void (*)(struct ZVisitor167 *,struct ZBinaryNode311 *) VisitBinaryNode;
-	void (*)(struct ZVisitor167 *,struct ZComparatorNode329 *) VisitComparatorNode;
-	void (*)(struct ZVisitor167 *,struct ZAndNode502 *) VisitAndNode;
-	void (*)(struct ZVisitor167 *,struct ZOrNode422 *) VisitOrNode;
+	void (*)(struct ZVisitor167 *,struct ZNotNode415 *) VisitNotNode;
+	void (*)(struct ZVisitor167 *,struct ZCastNode320 *) VisitCastNode;
+	void (*)(struct ZVisitor167 *,struct ZInstanceOfNode372 *) VisitInstanceOfNode;
+	void (*)(struct ZVisitor167 *,struct ZBinaryNode310 *) VisitBinaryNode;
+	void (*)(struct ZVisitor167 *,struct ZComparatorNode328 *) VisitComparatorNode;
+	void (*)(struct ZVisitor167 *,struct ZAndNode498 *) VisitAndNode;
+	void (*)(struct ZVisitor167 *,struct ZOrNode421 *) VisitOrNode;
 	void (*)(struct ZVisitor167 *,struct ZBlockNode161 *) VisitBlockNode;
-	void (*)(struct ZVisitor167 *,struct ZVarNode506 *) VisitVarNode;
-	void (*)(struct ZVisitor167 *,struct ZIfNode367 *) VisitIfNode;
+	void (*)(struct ZVisitor167 *,struct ZVarNode502 *) VisitVarNode;
+	void (*)(struct ZVisitor167 *,struct ZIfNode366 *) VisitIfNode;
 	void (*)(struct ZVisitor167 *,struct ZReturnNode170 *) VisitReturnNode;
 	void (*)(struct ZVisitor167 *,struct ZWhileNode200 *) VisitWhileNode;
-	void (*)(struct ZVisitor167 *,struct ZBreakNode318 *) VisitBreakNode;
+	void (*)(struct ZVisitor167 *,struct ZBreakNode317 *) VisitBreakNode;
 	void (*)(struct ZVisitor167 *,struct ZThrowNode191 *) VisitThrowNode;
 	void (*)(struct ZVisitor167 *,struct ZTryNode194 *) VisitTryNode;
-	void (*)(struct ZVisitor167 *,struct ZLetNode380 *) VisitLetNode;
+	void (*)(struct ZVisitor167 *,struct ZLetNode379 *) VisitLetNode;
 	void (*)(struct ZVisitor167 *,struct ZFunctionNode144 *) VisitFunctionNode;
-	void (*)(struct ZVisitor167 *,struct ZClassNode516 *) VisitClassNode;
-	void (*)(struct ZVisitor167 *,struct ZErrorNode336 *) VisitErrorNode;
+	void (*)(struct ZVisitor167 *,struct ZClassNode512 *) VisitClassNode;
+	void (*)(struct ZVisitor167 *,struct ZErrorNode335 *) VisitErrorNode;
 	void (*)(struct ZVisitor167 *,struct ZNode52 *) VisitExtendedNode;
 	void (*)(struct ZVisitor167 *,struct ZSugarNode165 *) VisitSugarNode;
 	void (*)(struct ZVisitor167 *) EnableVisitor;
@@ -5615,6 +5755,7 @@ struct CSourceGenerator599 {
 	struct ZSourceEngine57 * (*)(struct ZGenerator55 *) GetEngine;
 	void (*)(struct ZGenerator55 *,struct ZNameSpace48 *) ImportLocalGrammar;
 	void (*)(struct ZGenerator55 *,const char *) WriteTo;
+	const char * (*)(struct ZGenerator55 *) GetSourceText;
 	const char * (*)(struct ZGenerator55 *,const char *) NameOutputFile;
 	int (*)(struct ZGenerator55 *,struct ZNode52 *,int) StartCodeGeneration;
 	struct ZType60 * (*)(struct ZGenerator55 *,struct ZType60 *,const char *) GetFieldType;
@@ -5644,190 +5785,193 @@ struct CSourceGenerator599 {
 	const char * TopType;
 	void (*)(struct ZSourceGenerator243 *) InitBuilderList;
 	void (*)(struct ZSourceGenerator243 *,struct ZType60 *,struct ZNode52 *) GenerateCode;
-	int _classId599;
-	int _delta599;
+	int _classId596;
+	int _delta596;
 	int _nextId;
 };
 
-static void _InitCSourceGenerator599(struct CSourceGenerator599 * o) {
+static void _InitCSourceGenerator596(struct CSourceGenerator596 * o) {
 	_InitZSourceGenerator243((struct ZSourceGenerator243 *)o);
-	o->_classId599 = 599;
-	o->_delta599 = sizeof(struct CSourceGenerator599) - sizeof(struct ZSourceGenerator243);
-#ifdef _CSourceGenerator599_VisitNullNode
-	o->VisitNullNode = VisitNullNode__2qg6
+	o->_classId596 = 596;
+	o->_delta596 = sizeof(struct CSourceGenerator596) - sizeof(struct ZSourceGenerator243);
+#ifdef _CSourceGenerator596_VisitNullNode
+	o->VisitNullNode = VisitNullNode__2qgl
 #endif
-#ifdef _CSourceGenerator599_VisitBooleanNode
-	o->VisitBooleanNode = VisitBooleanNode__2qg6
+#ifdef _CSourceGenerator596_VisitBooleanNode
+	o->VisitBooleanNode = VisitBooleanNode__2qgl
 #endif
-#ifdef _CSourceGenerator599_VisitIntNode
-	o->VisitIntNode = VisitIntNode__2qg6
+#ifdef _CSourceGenerator596_VisitIntNode
+	o->VisitIntNode = VisitIntNode__2qgl
 #endif
-#ifdef _CSourceGenerator599_VisitFloatNode
-	o->VisitFloatNode = VisitFloatNode__2qg6
+#ifdef _CSourceGenerator596_VisitFloatNode
+	o->VisitFloatNode = VisitFloatNode__2qgl
 #endif
-#ifdef _CSourceGenerator599_VisitStringNode
-	o->VisitStringNode = VisitStringNode__2qg6
+#ifdef _CSourceGenerator596_VisitStringNode
+	o->VisitStringNode = VisitStringNode__2qgl
 #endif
-#ifdef _CSourceGenerator599_VisitArrayLiteralNode
-	o->VisitArrayLiteralNode = VisitArrayLiteralNode__2qg6
+#ifdef _CSourceGenerator596_VisitArrayLiteralNode
+	o->VisitArrayLiteralNode = VisitArrayLiteralNode__2qgl
 #endif
-#ifdef _CSourceGenerator599_VisitMapLiteralNode
-	o->VisitMapLiteralNode = VisitMapLiteralNode__2qg6
+#ifdef _CSourceGenerator596_VisitMapLiteralNode
+	o->VisitMapLiteralNode = VisitMapLiteralNode__2qgl
 #endif
-#ifdef _CSourceGenerator599_VisitNewObjectNode
-	o->VisitNewObjectNode = VisitNewObjectNode__2qg6
+#ifdef _CSourceGenerator596_VisitNewObjectNode
+	o->VisitNewObjectNode = VisitNewObjectNode__2qgl
 #endif
-#ifdef _CSourceGenerator599_VisitGlobalNameNode
-	o->VisitGlobalNameNode = VisitGlobalNameNode__2qg6
+#ifdef _CSourceGenerator596_VisitGlobalNameNode
+	o->VisitGlobalNameNode = VisitGlobalNameNode__2qgl
 #endif
-#ifdef _CSourceGenerator599_VisitGetNameNode
-	o->VisitGetNameNode = VisitGetNameNode__2qg6
+#ifdef _CSourceGenerator596_VisitGetNameNode
+	o->VisitGetNameNode = VisitGetNameNode__2qgl
 #endif
-#ifdef _CSourceGenerator599_VisitSetNameNode
-	o->VisitSetNameNode = VisitSetNameNode__2qg6
+#ifdef _CSourceGenerator596_VisitSetNameNode
+	o->VisitSetNameNode = VisitSetNameNode__2qgl
 #endif
-#ifdef _CSourceGenerator599_VisitGroupNode
-	o->VisitGroupNode = VisitGroupNode__2qg6
+#ifdef _CSourceGenerator596_VisitGroupNode
+	o->VisitGroupNode = VisitGroupNode__2qgl
 #endif
-#ifdef _CSourceGenerator599_VisitGetterNode
-	o->VisitGetterNode = VisitGetterNode__2qg6
+#ifdef _CSourceGenerator596_VisitGetterNode
+	o->VisitGetterNode = VisitGetterNode__2qgl
 #endif
-#ifdef _CSourceGenerator599_VisitSetterNode
-	o->VisitSetterNode = VisitSetterNode__2qg6
+#ifdef _CSourceGenerator596_VisitSetterNode
+	o->VisitSetterNode = VisitSetterNode__2qgl
 #endif
-#ifdef _CSourceGenerator599_VisitGetIndexNode
-	o->VisitGetIndexNode = VisitGetIndexNode__2qg6
+#ifdef _CSourceGenerator596_VisitGetIndexNode
+	o->VisitGetIndexNode = VisitGetIndexNode__2qgl
 #endif
-#ifdef _CSourceGenerator599_VisitSetIndexNode
-	o->VisitSetIndexNode = VisitSetIndexNode__2qg6
+#ifdef _CSourceGenerator596_VisitSetIndexNode
+	o->VisitSetIndexNode = VisitSetIndexNode__2qgl
 #endif
-#ifdef _CSourceGenerator599_VisitMethodCallNode
-	o->VisitMethodCallNode = VisitMethodCallNode__2qg6
+#ifdef _CSourceGenerator596_VisitMethodCallNode
+	o->VisitMethodCallNode = VisitMethodCallNode__2qgl
 #endif
-#ifdef _CSourceGenerator599_VisitFuncCallNode
-	o->VisitFuncCallNode = VisitFuncCallNode__2qg6
+#ifdef _CSourceGenerator596_VisitFuncCallNode
+	o->VisitFuncCallNode = VisitFuncCallNode__2qgl
 #endif
-#ifdef _CSourceGenerator599_VisitMacroNode
-	o->VisitMacroNode = VisitMacroNode__2qg6
+#ifdef _CSourceGenerator596_VisitMacroNode
+	o->VisitMacroNode = VisitMacroNode__2qgl
 #endif
-#ifdef _CSourceGenerator599_VisitUnaryNode
-	o->VisitUnaryNode = VisitUnaryNode__2qg6
+#ifdef _CSourceGenerator596_VisitUnaryNode
+	o->VisitUnaryNode = VisitUnaryNode__2qgl
 #endif
-#ifdef _CSourceGenerator599_VisitNotNode
-	o->VisitNotNode = VisitNotNode__2qg6
+#ifdef _CSourceGenerator596_VisitNotNode
+	o->VisitNotNode = VisitNotNode__2qgl
 #endif
-#ifdef _CSourceGenerator599_VisitCastNode
-	o->VisitCastNode = VisitCastNode__2qg6
+#ifdef _CSourceGenerator596_VisitCastNode
+	o->VisitCastNode = VisitCastNode__2qgl
 #endif
-#ifdef _CSourceGenerator599_VisitInstanceOfNode
-	o->VisitInstanceOfNode = VisitInstanceOfNode__2qg6
+#ifdef _CSourceGenerator596_VisitInstanceOfNode
+	o->VisitInstanceOfNode = VisitInstanceOfNode__2qgl
 #endif
-#ifdef _CSourceGenerator599_VisitBinaryNode
-	o->VisitBinaryNode = VisitBinaryNode__2qg6
+#ifdef _CSourceGenerator596_VisitBinaryNode
+	o->VisitBinaryNode = VisitBinaryNode__2qgl
 #endif
-#ifdef _CSourceGenerator599_VisitComparatorNode
-	o->VisitComparatorNode = VisitComparatorNode__2qg6
+#ifdef _CSourceGenerator596_VisitComparatorNode
+	o->VisitComparatorNode = VisitComparatorNode__2qgl
 #endif
-#ifdef _CSourceGenerator599_VisitAndNode
-	o->VisitAndNode = VisitAndNode__2qg6
+#ifdef _CSourceGenerator596_VisitAndNode
+	o->VisitAndNode = VisitAndNode__2qgl
 #endif
-#ifdef _CSourceGenerator599_VisitOrNode
-	o->VisitOrNode = VisitOrNode__2qg6
+#ifdef _CSourceGenerator596_VisitOrNode
+	o->VisitOrNode = VisitOrNode__2qgl
 #endif
-#ifdef _CSourceGenerator599_VisitBlockNode
-	o->VisitBlockNode = VisitBlockNode__2qg6
+#ifdef _CSourceGenerator596_VisitBlockNode
+	o->VisitBlockNode = VisitBlockNode__2qgl
 #endif
-#ifdef _CSourceGenerator599_VisitVarNode
-	o->VisitVarNode = VisitVarNode__2qg6
+#ifdef _CSourceGenerator596_VisitVarNode
+	o->VisitVarNode = VisitVarNode__2qgl
 #endif
-#ifdef _CSourceGenerator599_VisitIfNode
-	o->VisitIfNode = VisitIfNode__2qg6
+#ifdef _CSourceGenerator596_VisitIfNode
+	o->VisitIfNode = VisitIfNode__2qgl
 #endif
-#ifdef _CSourceGenerator599_VisitReturnNode
-	o->VisitReturnNode = VisitReturnNode__2qg6
+#ifdef _CSourceGenerator596_VisitReturnNode
+	o->VisitReturnNode = VisitReturnNode__2qgl
 #endif
-#ifdef _CSourceGenerator599_VisitWhileNode
-	o->VisitWhileNode = VisitWhileNode__2qg6
+#ifdef _CSourceGenerator596_VisitWhileNode
+	o->VisitWhileNode = VisitWhileNode__2qgl
 #endif
-#ifdef _CSourceGenerator599_VisitBreakNode
-	o->VisitBreakNode = VisitBreakNode__2qg6
+#ifdef _CSourceGenerator596_VisitBreakNode
+	o->VisitBreakNode = VisitBreakNode__2qgl
 #endif
-#ifdef _CSourceGenerator599_VisitThrowNode
-	o->VisitThrowNode = VisitThrowNode__2qg6
+#ifdef _CSourceGenerator596_VisitThrowNode
+	o->VisitThrowNode = VisitThrowNode__2qgl
 #endif
-#ifdef _CSourceGenerator599_VisitTryNode
-	o->VisitTryNode = VisitTryNode__2qg6
+#ifdef _CSourceGenerator596_VisitTryNode
+	o->VisitTryNode = VisitTryNode__2qgl
 #endif
-#ifdef _CSourceGenerator599_VisitLetNode
-	o->VisitLetNode = VisitLetNode__2qg6
+#ifdef _CSourceGenerator596_VisitLetNode
+	o->VisitLetNode = VisitLetNode__2qgl
 #endif
-#ifdef _CSourceGenerator599_VisitFunctionNode
-	o->VisitFunctionNode = VisitFunctionNode__2qg6
+#ifdef _CSourceGenerator596_VisitFunctionNode
+	o->VisitFunctionNode = VisitFunctionNode__2qgl
 #endif
-#ifdef _CSourceGenerator599_VisitClassNode
-	o->VisitClassNode = VisitClassNode__2qg6
+#ifdef _CSourceGenerator596_VisitClassNode
+	o->VisitClassNode = VisitClassNode__2qgl
 #endif
-#ifdef _CSourceGenerator599_VisitErrorNode
-	o->VisitErrorNode = VisitErrorNode__2qg6
+#ifdef _CSourceGenerator596_VisitErrorNode
+	o->VisitErrorNode = VisitErrorNode__2qgl
 #endif
-#ifdef _CSourceGenerator599_VisitExtendedNode
-	o->VisitExtendedNode = VisitExtendedNode__2qg6
+#ifdef _CSourceGenerator596_VisitExtendedNode
+	o->VisitExtendedNode = VisitExtendedNode__2qgl
 #endif
-#ifdef _CSourceGenerator599_VisitSugarNode
-	o->VisitSugarNode = VisitSugarNode__2qg6
+#ifdef _CSourceGenerator596_VisitSugarNode
+	o->VisitSugarNode = VisitSugarNode__2qgl
 #endif
-#ifdef _CSourceGenerator599_EnableVisitor
-	o->EnableVisitor = EnableVisitor__1qg6
+#ifdef _CSourceGenerator596_EnableVisitor
+	o->EnableVisitor = EnableVisitor__1qgl
 #endif
-#ifdef _CSourceGenerator599_StopVisitor
-	o->StopVisitor = StopVisitor__1qg6
+#ifdef _CSourceGenerator596_StopVisitor
+	o->StopVisitor = StopVisitor__1qgl
 #endif
-#ifdef _CSourceGenerator599_IsVisitable
-	o->IsVisitable = IsVisitable__1qg6
+#ifdef _CSourceGenerator596_IsVisitable
+	o->IsVisitable = IsVisitable__1qgl
 #endif
-#ifdef _CSourceGenerator599_GetEngine
-	o->GetEngine = GetEngine__1qg6
+#ifdef _CSourceGenerator596_GetEngine
+	o->GetEngine = GetEngine__1qgl
 #endif
-#ifdef _CSourceGenerator599_ImportLocalGrammar
-	o->ImportLocalGrammar = ImportLocalGrammar__2qg6
+#ifdef _CSourceGenerator596_ImportLocalGrammar
+	o->ImportLocalGrammar = ImportLocalGrammar__2qgl
 #endif
-#ifdef _CSourceGenerator599_WriteTo
-	o->WriteTo = WriteTo__2qg6
+#ifdef _CSourceGenerator596_WriteTo
+	o->WriteTo = WriteTo__2qgl
 #endif
-#ifdef _CSourceGenerator599_NameOutputFile
-	o->NameOutputFile = NameOutputFile__2qg6
+#ifdef _CSourceGenerator596_GetSourceText
+	o->GetSourceText = GetSourceText__1qgl
 #endif
-#ifdef _CSourceGenerator599_StartCodeGeneration
-	o->StartCodeGeneration = StartCodeGeneration__3qg6
+#ifdef _CSourceGenerator596_NameOutputFile
+	o->NameOutputFile = NameOutputFile__2qgl
 #endif
-#ifdef _CSourceGenerator599_GetFieldType
-	o->GetFieldType = GetFieldType__3qg6
+#ifdef _CSourceGenerator596_StartCodeGeneration
+	o->StartCodeGeneration = StartCodeGeneration__3qgl
 #endif
-#ifdef _CSourceGenerator599_GetSetterType
-	o->GetSetterType = GetSetterType__3qg6
+#ifdef _CSourceGenerator596_GetFieldType
+	o->GetFieldType = GetFieldType__3qgl
 #endif
-#ifdef _CSourceGenerator599_GetConstructorFuncType
-	o->GetConstructorFuncType = GetConstructorFuncType__3qg6
+#ifdef _CSourceGenerator596_GetSetterType
+	o->GetSetterType = GetSetterType__3qgl
 #endif
-#ifdef _CSourceGenerator599_GetMethodFuncType
-	o->GetMethodFuncType = GetMethodFuncType__4qg6
+#ifdef _CSourceGenerator596_GetConstructorFuncType
+	o->GetConstructorFuncType = GetConstructorFuncType__3qgl
 #endif
-#ifdef _CSourceGenerator599_InitBuilderList
-	o->InitBuilderList = InitBuilderList__1qg6
+#ifdef _CSourceGenerator596_GetMethodFuncType
+	o->GetMethodFuncType = GetMethodFuncType__4qgl
 #endif
-#ifdef _CSourceGenerator599_GenerateCode
-	o->GenerateCode = GenerateCode__3qg6
+#ifdef _CSourceGenerator596_InitBuilderList
+	o->InitBuilderList = InitBuilderList__1qgl
+#endif
+#ifdef _CSourceGenerator596_GenerateCode
+	o->GenerateCode = GenerateCode__3qgl
 #endif
 	o->_nextId = 0;
 }
 
-static struct CSourceGenerator599 * _NewCSourceGenerator599(void) {
-	struct CSourceGenerator599 *o = LibZen_Malloc(sizeof(struct CSourceGenerator599));
-	_InitCSourceGenerator599(o);
+static struct CSourceGenerator596 * _NewCSourceGenerator596(void) {
+	struct CSourceGenerator596 *o = LibZen_Malloc(sizeof(struct CSourceGenerator596));
+	_InitCSourceGenerator596(o);
 	return o;
 }
 
-struct ZAndNode502 {
+struct ZAndNode498 {
 	int _classId52;
 	int _delta52;
 	struct ZNode52 * ParentNode;
@@ -5840,43 +5984,43 @@ struct ZAndNode502 {
 	int (*)(struct ZNode52 *) IsBreakingBlock;
 	struct ZSugarNode165 * (*)(struct ZNode52 *,struct ZGenerator55 *) DeSugar;
 	void (*)(struct ZNode52 *,struct ZVisitor167 *) Accept;
-	int _classId311;
-	int _delta311;
+	int _classId310;
+	int _delta310;
 	struct ZSyntax219 * Pattern;
-	int _classId502;
-	int _delta502;
+	int _classId498;
+	int _delta498;
 	int _nextId;
 };
 
-static void _InitZAndNode502(struct ZAndNode502 * o) {
-	_InitZBinaryNode311((struct ZBinaryNode311 *)o);
-	o->_classId502 = 502;
-	o->_delta502 = sizeof(struct ZAndNode502) - sizeof(struct ZBinaryNode311);
-#ifdef _ZAndNode502_SetNameInfo
-	o->SetNameInfo = SetNameInfo__3qs2
+static void _InitZAndNode498(struct ZAndNode498 * o) {
+	_InitZBinaryNode310((struct ZBinaryNode310 *)o);
+	o->_classId498 = 498;
+	o->_delta498 = sizeof(struct ZAndNode498) - sizeof(struct ZBinaryNode310);
+#ifdef _ZAndNode498_SetNameInfo
+	o->SetNameInfo = SetNameInfo__3qsm
 #endif
-#ifdef _ZAndNode502_SetTypeInfo
-	o->SetTypeInfo = SetTypeInfo__3qs2
+#ifdef _ZAndNode498_SetTypeInfo
+	o->SetTypeInfo = SetTypeInfo__3qsm
 #endif
-#ifdef _ZAndNode502_IsBreakingBlock
-	o->IsBreakingBlock = IsBreakingBlock__1qs2
+#ifdef _ZAndNode498_IsBreakingBlock
+	o->IsBreakingBlock = IsBreakingBlock__1qsm
 #endif
-#ifdef _ZAndNode502_DeSugar
-	o->DeSugar = DeSugar__2qs2
+#ifdef _ZAndNode498_DeSugar
+	o->DeSugar = DeSugar__2qsm
 #endif
-#ifdef _ZAndNode502_Accept
-	o->Accept = Accept__2qs2
+#ifdef _ZAndNode498_Accept
+	o->Accept = Accept__2qsm
 #endif
 	o->_nextId = 0;
 }
 
-static struct ZAndNode502 * _NewZAndNode502(void) {
-	struct ZAndNode502 *o = LibZen_Malloc(sizeof(struct ZAndNode502));
-	_InitZAndNode502(o);
+static struct ZAndNode498 * _NewZAndNode498(void) {
+	struct ZAndNode498 *o = LibZen_Malloc(sizeof(struct ZAndNode498));
+	_InitZAndNode498(o);
 	return o;
 }
 
-struct ZArrayLiteralNode481 {
+struct ZArrayLiteralNode477 {
 	int _classId52;
 	int _delta52;
 	struct ZNode52 * ParentNode;
@@ -5892,36 +6036,36 @@ struct ZArrayLiteralNode481 {
 	int _classId251;
 	int _delta251;
 	long ListStartIndex;
-	int _classId481;
-	int _delta481;
+	int _classId477;
+	int _delta477;
 	int _nextId;
 };
 
-static void _InitZArrayLiteralNode481(struct ZArrayLiteralNode481 * o) {
+static void _InitZArrayLiteralNode477(struct ZArrayLiteralNode477 * o) {
 	_InitZListNode251((struct ZListNode251 *)o);
-	o->_classId481 = 481;
-	o->_delta481 = sizeof(struct ZArrayLiteralNode481) - sizeof(struct ZListNode251);
-#ifdef _ZArrayLiteralNode481_SetNameInfo
-	o->SetNameInfo = SetNameInfo__3qss
+	o->_classId477 = 477;
+	o->_delta477 = sizeof(struct ZArrayLiteralNode477) - sizeof(struct ZListNode251);
+#ifdef _ZArrayLiteralNode477_SetNameInfo
+	o->SetNameInfo = SetNameInfo__3qsp
 #endif
-#ifdef _ZArrayLiteralNode481_SetTypeInfo
-	o->SetTypeInfo = SetTypeInfo__3qss
+#ifdef _ZArrayLiteralNode477_SetTypeInfo
+	o->SetTypeInfo = SetTypeInfo__3qsp
 #endif
-#ifdef _ZArrayLiteralNode481_IsBreakingBlock
-	o->IsBreakingBlock = IsBreakingBlock__1qss
+#ifdef _ZArrayLiteralNode477_IsBreakingBlock
+	o->IsBreakingBlock = IsBreakingBlock__1qsp
 #endif
-#ifdef _ZArrayLiteralNode481_DeSugar
-	o->DeSugar = DeSugar__2qss
+#ifdef _ZArrayLiteralNode477_DeSugar
+	o->DeSugar = DeSugar__2qsp
 #endif
-#ifdef _ZArrayLiteralNode481_Accept
-	o->Accept = Accept__2qss
+#ifdef _ZArrayLiteralNode477_Accept
+	o->Accept = Accept__2qsp
 #endif
 	o->_nextId = 0;
 }
 
-static struct ZArrayLiteralNode481 * _NewZArrayLiteralNode481(void) {
-	struct ZArrayLiteralNode481 *o = LibZen_Malloc(sizeof(struct ZArrayLiteralNode481));
-	_InitZArrayLiteralNode481(o);
+static struct ZArrayLiteralNode477 * _NewZArrayLiteralNode477(void) {
+	struct ZArrayLiteralNode477 *o = LibZen_Malloc(sizeof(struct ZArrayLiteralNode477));
+	_InitZArrayLiteralNode477(o);
 	return o;
 }
 
@@ -5976,7 +6120,7 @@ static struct ZBlockNode161 * _NewZBlockNode161(void) {
 	return o;
 }
 
-struct ZBooleanNode476 {
+struct ZBooleanNode472 {
 	int _classId52;
 	int _delta52;
 	struct ZNode52 * ParentNode;
@@ -5989,44 +6133,44 @@ struct ZBooleanNode476 {
 	int (*)(struct ZNode52 *) IsBreakingBlock;
 	struct ZSugarNode165 * (*)(struct ZNode52 *,struct ZGenerator55 *) DeSugar;
 	void (*)(struct ZNode52 *,struct ZVisitor167 *) Accept;
-	int _classId332;
-	int _delta332;
-	int _classId476;
-	int _delta476;
+	int _classId331;
+	int _delta331;
+	int _classId472;
+	int _delta472;
 	int BooleanValue;
 	int _nextId;
 };
 
-static void _InitZBooleanNode476(struct ZBooleanNode476 * o) {
-	_InitZConstNode332((struct ZConstNode332 *)o);
-	o->_classId476 = 476;
-	o->_delta476 = sizeof(struct ZBooleanNode476) - sizeof(struct ZConstNode332);
+static void _InitZBooleanNode472(struct ZBooleanNode472 * o) {
+	_InitZConstNode331((struct ZConstNode331 *)o);
+	o->_classId472 = 472;
+	o->_delta472 = sizeof(struct ZBooleanNode472) - sizeof(struct ZConstNode331);
 	o->BooleanValue = 0/*false*/;
-#ifdef _ZBooleanNode476_SetNameInfo
-	o->SetNameInfo = SetNameInfo__3qso
+#ifdef _ZBooleanNode472_SetNameInfo
+	o->SetNameInfo = SetNameInfo__3qst
 #endif
-#ifdef _ZBooleanNode476_SetTypeInfo
-	o->SetTypeInfo = SetTypeInfo__3qso
+#ifdef _ZBooleanNode472_SetTypeInfo
+	o->SetTypeInfo = SetTypeInfo__3qst
 #endif
-#ifdef _ZBooleanNode476_IsBreakingBlock
-	o->IsBreakingBlock = IsBreakingBlock__1qso
+#ifdef _ZBooleanNode472_IsBreakingBlock
+	o->IsBreakingBlock = IsBreakingBlock__1qst
 #endif
-#ifdef _ZBooleanNode476_DeSugar
-	o->DeSugar = DeSugar__2qso
+#ifdef _ZBooleanNode472_DeSugar
+	o->DeSugar = DeSugar__2qst
 #endif
-#ifdef _ZBooleanNode476_Accept
-	o->Accept = Accept__2qso
+#ifdef _ZBooleanNode472_Accept
+	o->Accept = Accept__2qst
 #endif
 	o->_nextId = 0;
 }
 
-static struct ZBooleanNode476 * _NewZBooleanNode476(void) {
-	struct ZBooleanNode476 *o = LibZen_Malloc(sizeof(struct ZBooleanNode476));
-	_InitZBooleanNode476(o);
+static struct ZBooleanNode472 * _NewZBooleanNode472(void) {
+	struct ZBooleanNode472 *o = LibZen_Malloc(sizeof(struct ZBooleanNode472));
+	_InitZBooleanNode472(o);
 	return o;
 }
 
-struct ZClassNode516 {
+struct ZClassNode512 {
 	int _classId52;
 	int _delta52;
 	struct ZNode52 * ParentNode;
@@ -6042,8 +6186,8 @@ struct ZClassNode516 {
 	int _classId251;
 	int _delta251;
 	long ListStartIndex;
-	int _classId516;
-	int _delta516;
+	int _classId512;
+	int _delta512;
 	const char * ClassName;
 	struct ZClassType80 * ClassType;
 	struct ZType60 * SuperType;
@@ -6052,40 +6196,40 @@ struct ZClassNode516 {
 	int _nextId;
 };
 
-static void _InitZClassNode516(struct ZClassNode516 * o) {
+static void _InitZClassNode512(struct ZClassNode512 * o) {
 	_InitZListNode251((struct ZListNode251 *)o);
-	o->_classId516 = 516;
-	o->_delta516 = sizeof(struct ZClassNode516) - sizeof(struct ZListNode251);
+	o->_classId512 = 512;
+	o->_delta512 = sizeof(struct ZClassNode512) - sizeof(struct ZListNode251);
 	o->ClassName = NULL;
 	o->ClassType = NULL;
 	o->SuperType = NULL;
 	o->NameToken = NULL;
 	o->SuperToken = NULL;
-#ifdef _ZClassNode516_SetNameInfo
-	o->SetNameInfo = SetNameInfo__3qda
+#ifdef _ZClassNode512_SetNameInfo
+	o->SetNameInfo = SetNameInfo__3qdo
 #endif
-#ifdef _ZClassNode516_SetTypeInfo
-	o->SetTypeInfo = SetTypeInfo__3qda
+#ifdef _ZClassNode512_SetTypeInfo
+	o->SetTypeInfo = SetTypeInfo__3qdo
 #endif
-#ifdef _ZClassNode516_IsBreakingBlock
-	o->IsBreakingBlock = IsBreakingBlock__1qda
+#ifdef _ZClassNode512_IsBreakingBlock
+	o->IsBreakingBlock = IsBreakingBlock__1qdo
 #endif
-#ifdef _ZClassNode516_DeSugar
-	o->DeSugar = DeSugar__2qda
+#ifdef _ZClassNode512_DeSugar
+	o->DeSugar = DeSugar__2qdo
 #endif
-#ifdef _ZClassNode516_Accept
-	o->Accept = Accept__2qda
+#ifdef _ZClassNode512_Accept
+	o->Accept = Accept__2qdo
 #endif
 	o->_nextId = 0;
 }
 
-static struct ZClassNode516 * _NewZClassNode516(void) {
-	struct ZClassNode516 *o = LibZen_Malloc(sizeof(struct ZClassNode516));
-	_InitZClassNode516(o);
+static struct ZClassNode512 * _NewZClassNode512(void) {
+	struct ZClassNode512 *o = LibZen_Malloc(sizeof(struct ZClassNode512));
+	_InitZClassNode512(o);
 	return o;
 }
 
-struct ZFuncCallNode407 {
+struct ZFuncCallNode406 {
 	int _classId52;
 	int _delta52;
 	struct ZNode52 * ParentNode;
@@ -6101,36 +6245,36 @@ struct ZFuncCallNode407 {
 	int _classId251;
 	int _delta251;
 	long ListStartIndex;
-	int _classId407;
-	int _delta407;
+	int _classId406;
+	int _delta406;
 	int _nextId;
 };
 
-static void _InitZFuncCallNode407(struct ZFuncCallNode407 * o) {
+static void _InitZFuncCallNode406(struct ZFuncCallNode406 * o) {
 	_InitZListNode251((struct ZListNode251 *)o);
-	o->_classId407 = 407;
-	o->_delta407 = sizeof(struct ZFuncCallNode407) - sizeof(struct ZListNode251);
-#ifdef _ZFuncCallNode407_SetNameInfo
-	o->SetNameInfo = SetNameInfo__3q44
+	o->_classId406 = 406;
+	o->_delta406 = sizeof(struct ZFuncCallNode406) - sizeof(struct ZListNode251);
+#ifdef _ZFuncCallNode406_SetNameInfo
+	o->SetNameInfo = SetNameInfo__3q40
 #endif
-#ifdef _ZFuncCallNode407_SetTypeInfo
-	o->SetTypeInfo = SetTypeInfo__3q44
+#ifdef _ZFuncCallNode406_SetTypeInfo
+	o->SetTypeInfo = SetTypeInfo__3q40
 #endif
-#ifdef _ZFuncCallNode407_IsBreakingBlock
-	o->IsBreakingBlock = IsBreakingBlock__1q44
+#ifdef _ZFuncCallNode406_IsBreakingBlock
+	o->IsBreakingBlock = IsBreakingBlock__1q40
 #endif
-#ifdef _ZFuncCallNode407_DeSugar
-	o->DeSugar = DeSugar__2q44
+#ifdef _ZFuncCallNode406_DeSugar
+	o->DeSugar = DeSugar__2q40
 #endif
-#ifdef _ZFuncCallNode407_Accept
-	o->Accept = Accept__2q44
+#ifdef _ZFuncCallNode406_Accept
+	o->Accept = Accept__2q40
 #endif
 	o->_nextId = 0;
 }
 
-static struct ZFuncCallNode407 * _NewZFuncCallNode407(void) {
-	struct ZFuncCallNode407 *o = LibZen_Malloc(sizeof(struct ZFuncCallNode407));
-	_InitZFuncCallNode407(o);
+static struct ZFuncCallNode406 * _NewZFuncCallNode406(void) {
+	struct ZFuncCallNode406 *o = LibZen_Malloc(sizeof(struct ZFuncCallNode406));
+	_InitZFuncCallNode406(o);
 	return o;
 }
 
@@ -6197,7 +6341,7 @@ static struct ZFunctionNode144 * _NewZFunctionNode144(void) {
 }
 
 static long ZFunctionNode_Block_Z80 = 0;
-struct ZVarNode506 {
+struct ZVarNode502 {
 	int _classId52;
 	int _delta52;
 	struct ZNode52 * ParentNode;
@@ -6216,8 +6360,8 @@ struct ZVarNode506 {
 	int _classId161;
 	int _delta161;
 	struct ZNameSpace48 * NameSpace;
-	int _classId506;
-	int _delta506;
+	int _classId502;
+	int _delta502;
 	struct ZType60 * DeclType;
 	const char * NativeName;
 	struct ZToken77 * TypeToken;
@@ -6225,35 +6369,35 @@ struct ZVarNode506 {
 	int _nextId;
 };
 
-static void _InitZVarNode506(struct ZVarNode506 * o) {
+static void _InitZVarNode502(struct ZVarNode502 * o) {
 	_InitZBlockNode161((struct ZBlockNode161 *)o);
-	o->_classId506 = 506;
-	o->_delta506 = sizeof(struct ZVarNode506) - sizeof(struct ZBlockNode161);
+	o->_classId502 = 502;
+	o->_delta502 = sizeof(struct ZVarNode502) - sizeof(struct ZBlockNode161);
 	o->DeclType = ZTypeVarType_Z4;
 	o->NativeName = NULL;
 	o->TypeToken = NULL;
 	o->NameToken = NULL;
-#ifdef _ZVarNode506_SetNameInfo
-	o->SetNameInfo = SetNameInfo__3qde
+#ifdef _ZVarNode502_SetNameInfo
+	o->SetNameInfo = SetNameInfo__3qs2
 #endif
-#ifdef _ZVarNode506_SetTypeInfo
-	o->SetTypeInfo = SetTypeInfo__3qde
+#ifdef _ZVarNode502_SetTypeInfo
+	o->SetTypeInfo = SetTypeInfo__3qs2
 #endif
-#ifdef _ZVarNode506_IsBreakingBlock
-	o->IsBreakingBlock = IsBreakingBlock__1qde
+#ifdef _ZVarNode502_IsBreakingBlock
+	o->IsBreakingBlock = IsBreakingBlock__1qs2
 #endif
-#ifdef _ZVarNode506_DeSugar
-	o->DeSugar = DeSugar__2qde
+#ifdef _ZVarNode502_DeSugar
+	o->DeSugar = DeSugar__2qs2
 #endif
-#ifdef _ZVarNode506_Accept
-	o->Accept = Accept__2qde
+#ifdef _ZVarNode502_Accept
+	o->Accept = Accept__2qs2
 #endif
 	o->_nextId = 0;
 }
 
-static struct ZVarNode506 * _NewZVarNode506(void) {
-	struct ZVarNode506 *o = LibZen_Malloc(sizeof(struct ZVarNode506));
-	_InitZVarNode506(o);
+static struct ZVarNode502 * _NewZVarNode502(void) {
+	struct ZVarNode502 *o = LibZen_Malloc(sizeof(struct ZVarNode502));
+	_InitZVarNode502(o);
 	return o;
 }
 
@@ -6605,7 +6749,7 @@ static struct ZType60 * GetParamType__2qe8(struct ZGenericType107 * this, long I
 	return NULL;
 }
 static int IsGreekType__1qe8(struct ZGenericType107 * this) {
-	return /*untyped*/NULL;
+	return (/*untyped*/NULL(this->ParamType));
 }
 static struct ZType60 * GetGreekRealType__2qe8(struct ZGenericType107 * this, ArrayOfZType * Greek__1) {
 	if (this->ParamType->IsGreekType(this->ParamType)) {
@@ -6701,7 +6845,7 @@ static ArrayOfZType * ZTypePool_UniqueTypes__1qwx(ArrayOfZType * TypeList) {
 	const char * MangleName = LibZen_StrCat("[]", ZTypePool_MangleTypes__1qwx(TypeList));
 	ArrayOfZType * Types = Map<Array<ZType>>GetIndex(MangleName);
 	if (Types == NULL) {
-		Types = /*untyped*/NULL;
+		Types = TypeList;
 		Map<Array<ZType>>SetIndex(MangleName, Types);
 	};
 	return Types;
@@ -6982,7 +7126,7 @@ static const char * GetSourceLocation__1qwg(struct ZNode52 * this) {
 	return NULL;
 }
 static const char * toString__1qwg(struct ZNode52 * this) {
-	const char * Self = LibZen_StrCat("#", /*untyped*/NULL(this));
+	const char * Self = LibZen_StrCat("#", LibZen_GetClassName__1qqq(this));
 	if (!this->Type->IsVarType(this->Type)) {
 		Self = LibZen_StrCat(LibZen_StrCat(Self, ":"), toString__1qwz(this->Type));
 	} else {
@@ -7012,9 +7156,7 @@ static struct ZBlockNode161 * GetScopeBlockNode__1qwg(struct ZNode52 * this) {
 		if (LibZen_Is(Node, 161)) {
 			return (struct ZBlockNode161 *)Node;
 		};
-		if (Node == Node->ParentNode) {
-			/*untyped*/NULLlongjump(1) ;
-		};
+		LibZen_Assert(!(Node == Node->ParentNode), "(libzen/libzen.zen:2119)");
 		Node = Node->ParentNode;
 	};
 	return NULL;
@@ -7024,20 +7166,20 @@ static struct ZNameSpace48 * GetNameSpace__1qwg(struct ZNode52 * this) {
 	return BlockNode->NameSpace;
 }
 static int IsErrorNode__1qwg(struct ZNode52 * this) {
-	return (LibZen_Is(this, 336));
+	return (LibZen_Is(this, 335));
 }
 static int IsBreakingBlock__1qwg(struct ZNode52 * this) {
 	return 0/*false*/;
 }
 static struct ZSugarNode165 * DeSugar__2qwg(struct ZNode52 * this, struct ZGenerator55 * Generator__1) {
-	return ZSugarNode__3qt9(_NewZSugarNode165(), this, ZErrorNode__3qpa(_NewZErrorNode336(), this->ParentNode, LibZen_StrCat("undefined code generation: ", toString__1qwg(this))));
+	return ZSugarNode__3qt9(_NewZSugarNode165(), this, ZErrorNode__3qp4(_NewZErrorNode335(), this->ParentNode, LibZen_StrCat("undefined code generation: ", toString__1qwg(this))));
 }
 static void Accept__2qwg(struct ZNode52 * this, struct ZVisitor167 * Visitor__1) {
 	/*untyped*/NULL(Visitor, this);
 	return;
 }
 static int IsUntyped__1qwg(struct ZNode52 * this) {
-	return /*untyped*/NULL(this->Type);
+	return !(LibZen_Is(this->Type, 90)) && /*untyped*/NULL(this->Type);
 }
 static int HasUntypedNode__1qwg(struct ZNode52 * this) {
 	if (this->HasUntypedNode) {
@@ -7198,7 +7340,7 @@ static void Report__2qrv(struct ZLogger135 * this, const char * Message__1) {
 static ArrayOfString * GetReportedErrors__1qrv(struct ZLogger135 * this) {
 	ArrayOfString * List = this->ReportedErrorList;
 	this->ReportedErrorList = LibZen_NewStringArray(0);
-	return /*untyped*/NULL;
+	return List;
 }
 static void ShowErrors__1qrv(struct ZLogger135 * this) {
 	ArrayOfString * Messages = GetReportedErrors__1qrv(this);
@@ -7717,7 +7859,7 @@ static void SkipWhiteSpace__1qwd(struct ZSourceContext50 * this) {
 	return;
 }
 static void FoundIndent__3qwd(struct ZSourceContext50 * this, long StartIndex__1, long EndIndex__2) {
-	struct ZToken77 * Token = ZIndentToken__4qab(_NewZIndentToken460(), this, StartIndex, EndIndex);
+	struct ZToken77 * Token = ZIndentToken__4qav(_NewZIndentToken459(), this, StartIndex, EndIndex);
 	this->SourcePosition = EndIndex;
 	LibZen_ArrayAdd((ArrayOfVar *)this->TokenContext->TokenList, (var)Token);
 	return;
@@ -7739,7 +7881,7 @@ static void Tokenize__4qwd(struct ZSourceContext50 * this, const char * PatternN
 			ZLogger_LogInfo__2qey(Token, LibZen_StrCat("unregistered token pattern: ", PatternName));
 			LibZen_ArrayAdd((ArrayOfVar *)this->TokenContext->TokenList, (var)Token);
 		} else {
-			struct ZToken77 * Token = ZPatternToken__5qam(_NewZPatternToken462(), this, StartIndex, EndIndex, Pattern);
+			struct ZToken77 * Token = ZPatternToken__5qan(_NewZPatternToken461(), this, StartIndex, EndIndex, Pattern);
 			LibZen_ArrayAdd((ArrayOfVar *)this->TokenContext->TokenList, (var)Token);
 		};
 	};
@@ -7768,7 +7910,7 @@ static void ApplyTokenFunc__2qwd(struct ZSourceContext50 * this, struct ZTokenFu
 	long RollbackPosition = this->SourcePosition;
 	while (TokenFunc != NULL) {
 		this->SourcePosition = RollbackPosition;
-		if (/*untyped*/NULL(TokenFunc->Func, this)) {
+		if (LibZen_ApplyTokenFunc__2qqq(TokenFunc->Func, this)) {
 			return;
 		};
 		TokenFunc = TokenFunc->ParentFunc;
@@ -7787,7 +7929,6 @@ static int DoTokenize__1qwd(struct ZSourceContext50 * this) {
 			break;
 		};
 		if (this->SourcePosition == CheckPosition) {
-			LibZen_PrintLine__1qqy(LibZen_StrCat("Buggy TokenFunc: ", toString__1qq8(TokenFunc)));
 			MoveNext__1qwd(this);
 		};
 	};
@@ -7898,7 +8039,7 @@ static int IsNull__1qey(struct ZToken77 * this) {
 	return (this == ZToken_NullToken_Z52);
 }
 static int IsIndent__1qey(struct ZToken77 * this) {
-	return LibZen_Is(this, 460);
+	return LibZen_Is(this, 459);
 }
 static int IsNextWhiteSpace__1qey(struct ZToken77 * this) {
 	const char * ch = GetCharAt__2qu1(this->Source, this->EndIndex);
@@ -7943,9 +8084,9 @@ static struct ZNode52 * CreateExpectedErrorNode__3qwh(struct ZTokenContext53 * t
 	if (SourceToken == NULL || IsNull__1qey(SourceToken)) {
 		SourceToken = GetBeforeToken__1qwh(this);
 		SourceToken = ZToken__4qey(_NewZToken77(), SourceToken->Source, SourceToken->EndIndex, SourceToken->EndIndex);
-		return ZErrorNode__4qpa(_NewZErrorNode336(), NULL, SourceToken, LibZen_StrCat(ExpectedTokenText, " is expected"));
+		return ZErrorNode__4qp4(_NewZErrorNode335(), NULL, SourceToken, LibZen_StrCat(ExpectedTokenText, " is expected"));
 	};
-	return ZErrorNode__4qpa(_NewZErrorNode336(), NULL, SourceToken, LibZen_StrCat(ExpectedTokenText, " is expected"));
+	return ZErrorNode__4qp4(_NewZErrorNode335(), NULL, SourceToken, LibZen_StrCat(ExpectedTokenText, " is expected"));
 }
 static void Vacume__1qwh(struct ZTokenContext53 * this) {
 	return;
@@ -7996,7 +8137,7 @@ static void SkipError__2qwh(struct ZTokenContext53 * this, struct ZToken77 * Err
 		struct ZToken77 * Token = GetToken__1qwh(this);
 		EndIndex = Token->EndIndex;
 		this->CurrentPosition = this->CurrentPosition + 1;
-		if (LibZen_Is(Token, 460)) {
+		if (LibZen_Is(Token, 459)) {
 			long ilength = GetIndentSize__1qey(Token);
 			if (ilength <= length) {
 				break;
@@ -8005,7 +8146,7 @@ static void SkipError__2qwh(struct ZTokenContext53 * this, struct ZToken77 * Err
 	};
 	if (StartIndex < EndIndex) {
 		LibZen_PrintDebug__1qqy(LibZen_StrCat(LibZen_StrCat(LibZen_StrCat("StartIdx=", LibZen_IntToString(StartIndex)), ", EndIndex="), LibZen_IntToString(EndIndex)));
-		LibZen_PrintDebug__1qqy(LibZen_StrCat("skipped: \t", ThrowError("type error: requested = String, given = var")));
+		LibZen_PrintDebug__1qqy(LibZen_StrCat("skipped: \t", LibZen_SubString2(ErrorToken->Source->SourceText, StartIndex)));
 	};
 	return;
 }
@@ -8093,8 +8234,8 @@ static struct ZNode52 * ApplyMatchPattern__5qwh(struct ZTokenContext53 * this, s
 		int Remembered = this->IsAllowSkipIndent;
 		this->CurrentPosition = RollbackPosition;
 		this->ApplyingPattern = CurrentPattern;
-		ParsedNode = /*untyped*/NULL(CurrentPattern->MatchFunc, ParentNode, this, LeftNode);
-		LibZen_Assert(ParsedNode != ParentNode, "(libzen/libzen.zen:3279)");
+		ParsedNode = LibZen_ApplyMatchFunc__4qqq(CurrentPattern->MatchFunc, ParentNode, this, LeftNode);
+		LibZen_Assert(ParsedNode != ParentNode, "(libzen/libzen.zen:3276)");
 		this->ApplyingPattern = NULL;
 		this->IsAllowSkipIndent = Remembered;
 		if (ParsedNode != NULL && !IsErrorNode__1qwg(ParsedNode)) {
@@ -8108,7 +8249,7 @@ static struct ZNode52 * ApplyMatchPattern__5qwh(struct ZTokenContext53 * this, s
 	};
 	if (this->CurrentPosition == RollbackPosition) {
 		LibZen_PrintLine__1qqy(LibZen_StrCat(LibZen_StrCat(LibZen_StrCat(LibZen_StrCat(LibZen_StrCat("DEBUG infinite looping", LibZen_IntToString(RollbackPosition)), " Token="), toString__1qey(TopToken)), " ParsedNode="), toString__1qwg(ParsedNode)));
-		LibZen_Assert(this->CurrentPosition != RollbackPosition, "(libzen/libzen.zen:3293)");
+		LibZen_Assert(this->CurrentPosition != RollbackPosition, "(libzen/libzen.zen:3290)");
 	};
 	if (ParsedNode == NULL) {
 		ParsedNode = CreateExpectedErrorNode__3qwh(this, TopToken, Pattern->PatternName);
@@ -8130,7 +8271,7 @@ static struct ZNode52 * MatchPattern__6qwh(struct ZTokenContext53 * this, struct
 		(void)SetParseFlag__2qwh(this, Rememberd);
 		if (ParsedNode != NULL) {
 			if (Index == ZNode_NestedAppendIndex_Z24) {
-				if (!(LibZen_Is(ParsedNode, 334))) {
+				if (!(LibZen_Is(ParsedNode, 333))) {
 					Set__3qwg(ParentNode, ZNode_AppendIndex_Z23, ParsedNode);
 				};
 				if (LibZen_Is(ParsedNode, 161) || IsErrorNode__1qwg(ParsedNode)) {
@@ -8140,7 +8281,7 @@ static struct ZNode52 * MatchPattern__6qwh(struct ZTokenContext53 * this, struct
 			if (IsErrorNode__1qwg(ParsedNode)) {
 				return ParsedNode;
 			} else {
-				if (!(LibZen_Is(ParsedNode, 334))) {
+				if (!(LibZen_Is(ParsedNode, 333))) {
 					Set__3qwg(ParentNode, Index, ParsedNode);
 				};
 			};
@@ -8180,7 +8321,7 @@ static struct ZNode52 * MatchNtimes__6qwh(struct ZTokenContext53 * this, struct 
 		if (IsErrorNode__1qwg(ParsedNode)) {
 			return ParsedNode;
 		};
-		if (!(LibZen_Is(ParsedNode, 334))) {
+		if (!(LibZen_Is(ParsedNode, 333))) {
 			Set__3qwg(ParentNode, ZNode_AppendIndex_Z23, ParsedNode);
 		};
 		if (DelimToken != NULL) {
@@ -8236,9 +8377,6 @@ static struct ZTokenFunc35 * ZTokenFunc__3qq8(struct ZTokenFunc35 * this, struct
 	this->ParentFunc = Parent;
 	return NULL;
 }
-static const char * toString__1qq8(struct ZTokenFunc35 * this) {
-	return LibZen_StrCat("", ThrowError("type error: requested = String, given = ZTokenFunction"));
-}
 static struct ZVariable230 * ZVariable__7qud(struct ZVariable230 * this, struct ZSymbolEntry225 * Parent__1, struct ZFunctionNode144 * FuncNode__2, long VarFlag__3, struct ZType60 * VarType__4, const char * VarName__5, struct ZToken77 * SourceToken__6) {
 	(void)ZSymbolEntry__3qup(this, Parent, FuncNode);
 	this->VarFlag = VarFlag;
@@ -8264,78 +8402,78 @@ static void Used__1qud(struct ZVariable230 * this) {
 	this->UsedCount = this->UsedCount + 1;
 	return;
 }
-static struct ZArrayType300 * ZArrayType__3qoa(struct ZArrayType300 * this, long TypeFlag__1, struct ZType60 * ParamType__2) {
+static struct ZArrayType299 * ZArrayType__3qo4(struct ZArrayType299 * this, long TypeFlag__1, struct ZType60 * ParamType__2) {
 	(void)ZGenericType__5qe8(this, TypeFlag, LibZen_StrCat(toString__1qwz(ParamType), "[]"), ZGenericType_ArrayType_Z15, ParamType);
 	return NULL;
 }
-static struct ZAnnotationNode302 * ZAnnotationNode__4qod(struct ZAnnotationNode302 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2, MapOfObject * Anno__3) {
+static struct ZAnnotationNode301 * ZAnnotationNode__4qos(struct ZAnnotationNode301 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2, MapOfObject * Anno__3) {
 	(void)ZNode__4qwg(this, ParentNode, Token, 0);
 	return NULL;
 }
-static int IsBreakingBlock__1qod(struct ZAnnotationNode302 * this) {
+static int IsBreakingBlock__1qos(struct ZAnnotationNode301 * this) {
 	return /*untyped*/NULL(this->AnnotatedNode);
 }
-static void Accept__2qod(struct ZAnnotationNode302 * this, struct ZVisitor167 * Visitor__1) {
+static void Accept__2qos(struct ZAnnotationNode301 * this, struct ZVisitor167 * Visitor__1) {
 	/*untyped*/NULL(this->AnnotatedNode, Visitor);
 	return;
 }
-static struct ZAssertNode308 * ZAssertNode__2qol(struct ZAssertNode308 * this, struct ZNode52 * ParentNode__1) {
+static struct ZAssertNode307 * ZAssertNode__2qok(struct ZAssertNode307 * this, struct ZNode52 * ParentNode__1) {
 	(void)ZNode__4qwg(this, ParentNode, NULL, 1);
 	return NULL;
 }
-static struct ZSugarNode165 * DeSugar__2qol(struct ZAssertNode308 * this, struct ZGenerator55 * Generator__1) {
+static struct ZSugarNode165 * DeSugar__2qok(struct ZAssertNode307 * this, struct ZGenerator55 * Generator__1) {
 	struct ZMacroFunc210 * Func = GetMacroFunc__4qwk(Generator, "assert", ZTypeBooleanType_Z6, 2);
 	if (Func != NULL) {
-		struct ZMacroNode392 * MacroNode = ZMacroNode__4q05(_NewZMacroNode392(), this->ParentNode, this->SourceToken, Func);
+		struct ZMacroNode391 * MacroNode = ZMacroNode__4q07(_NewZMacroNode391(), this->ParentNode, this->SourceToken, Func);
 		Append__2qu8(MacroNode, Array<ZNode>GetIndex(ZAssertNode_Expr_Z59));
-		Append__2qu8(MacroNode, ZStringNode__4q48(_NewZStringNode431(), MacroNode, NULL, GetSourceLocation__1qwg(this)));
+		Append__2qu8(MacroNode, ZStringNode__4q42(_NewZStringNode430(), MacroNode, NULL, GetSourceLocation__1qwg(this)));
 		return ZSugarNode__3qt9(_NewZSugarNode165(), this, MacroNode);
 	} else {
-		struct ZFuncCallNode407 * MacroNode = ZFuncCallNode__4q44(_NewZFuncCallNode407(), this->ParentNode, "assert", ZTypeVarType_Z4);
+		struct ZFuncCallNode406 * MacroNode = ZFuncCallNode__4q40(_NewZFuncCallNode406(), this->ParentNode, "assert", ZTypeVarType_Z4);
 		Append__2qu8(MacroNode, Array<ZNode>GetIndex(ZAssertNode_Expr_Z59));
 		return ZSugarNode__3qt9(_NewZSugarNode165(), this, MacroNode);
 	};
 }
-static struct ZBinaryNode311 * ZBinaryNode__5qo6(struct ZBinaryNode311 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * SourceToken__2, struct ZNode52 * Left__3, struct ZSyntax219 * Pattern__4) {
+static struct ZBinaryNode310 * ZBinaryNode__5qo1(struct ZBinaryNode310 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * SourceToken__2, struct ZNode52 * Left__3, struct ZSyntax219 * Pattern__4) {
 	(void)ZNode__4qwg(this, ParentNode, SourceToken, 2);
 	Set__3qwg(this, ZBinaryNode_Left_Z60, Left);
-	LibZen_Assert(Pattern != NULL, "(libzen/libzen.zen:3499)");
+	LibZen_Assert(Pattern != NULL, "(libzen/libzen.zen:3492)");
 	this->Pattern = Pattern;
 	return NULL;
 }
-static int IsRightJoin__2qo6(struct ZBinaryNode311 * this, struct ZNode52 * Node__1) {
-	if (LibZen_Is(Node, 311)) {
-		return IsRightJoin__2qur(this->Pattern, ((struct ZBinaryNode311 *)Node)->Pattern);
+static int IsRightJoin__2qo1(struct ZBinaryNode310 * this, struct ZNode52 * Node__1) {
+	if (LibZen_Is(Node, 310)) {
+		return IsRightJoin__2qur(this->Pattern, ((struct ZBinaryNode310 *)Node)->Pattern);
 	};
 	return 0/*false*/;
 }
-static struct ZNode52 * RightJoin__3qo6(struct ZBinaryNode311 * this, struct ZNode52 * ParentNode__1, struct ZBinaryNode311 * RightNode__2) {
+static struct ZNode52 * RightJoin__3qo1(struct ZBinaryNode310 * this, struct ZNode52 * ParentNode__1, struct ZBinaryNode310 * RightNode__2) {
 	struct ZNode52 * RightLeftNode = Array<ZNode>GetIndex(ZBinaryNode_Left_Z60);
-	if (IsRightJoin__2qo6(this, RightLeftNode)) {
-		Set__3qwg(RightNode, ZBinaryNode_Left_Z60, RightJoin__3qo6(this, ParentNode, (struct ZBinaryNode311 *)RightLeftNode));
+	if (IsRightJoin__2qo1(this, RightLeftNode)) {
+		Set__3qwg(RightNode, ZBinaryNode_Left_Z60, RightJoin__3qo1(this, ParentNode, (struct ZBinaryNode310 *)RightLeftNode));
 	} else {
 		Set__3qwg(RightNode, ZBinaryNode_Left_Z60, this);
 		Set__3qwg(this, ZBinaryNode_Right_Z61, RightLeftNode);
 	};
 	return RightNode;
 }
-static struct ZNode52 * AppendParsedRightNode__3qo6(struct ZBinaryNode311 * this, struct ZNode52 * ParentNode__1, struct ZTokenContext53 * TokenContext__2) {
+static struct ZNode52 * AppendParsedRightNode__3qo1(struct ZBinaryNode310 * this, struct ZNode52 * ParentNode__1, struct ZTokenContext53 * TokenContext__2) {
 	struct ZNode52 * RightNode = ParsePattern__4qwh(TokenContext, ParentNode, "$Expression$", ZTokenContext_Required_Z53);
 	if (IsErrorNode__1qwg(RightNode)) {
 		return RightNode;
 	};
-	if (IsRightJoin__2qo6(this, RightNode)) {
-		return RightJoin__3qo6(this, ParentNode, (struct ZBinaryNode311 *)RightNode);
+	if (IsRightJoin__2qo1(this, RightNode)) {
+		return RightJoin__3qo1(this, ParentNode, (struct ZBinaryNode310 *)RightNode);
 	};
 	Set__3qwg(this, ZBinaryNode_Right_Z61, RightNode);
 	return this;
 }
-static struct ZNode52 * TryMacroNode__2qo6(struct ZBinaryNode311 * this, struct ZGenerator55 * Generator__1) {
+static struct ZNode52 * TryMacroNode__2qo1(struct ZBinaryNode310 * this, struct ZGenerator55 * Generator__1) {
 	if (!/*untyped*/NULL(GetAstType__2qwg(this, ZBinaryNode_Left_Z60)) && !/*untyped*/NULL(GetAstType__2qwg(this, ZBinaryNode_Right_Z61))) {
 		const char * Op = GetText__1qey(this->SourceToken);
 		struct ZFunc89 * Func = GetDefinedFunc__4qwk(Generator, Op, GetAstType__2qwg(this, ZBinaryNode_Left_Z60), 2);
 		if (LibZen_Is(Func, 210)) {
-			struct ZMacroNode392 * MacroNode = ZMacroNode__4q05(_NewZMacroNode392(), this->ParentNode, this->SourceToken, (struct ZMacroFunc210 *)Func);
+			struct ZMacroNode391 * MacroNode = ZMacroNode__4q07(_NewZMacroNode391(), this->ParentNode, this->SourceToken, (struct ZMacroFunc210 *)Func);
 			Append__2qu8(MacroNode, Array<ZNode>GetIndex(ZBinaryNode_Left_Z60));
 			Append__2qu8(MacroNode, Array<ZNode>GetIndex(ZBinaryNode_Right_Z61));
 			return MacroNode;
@@ -8343,19 +8481,19 @@ static struct ZNode52 * TryMacroNode__2qo6(struct ZBinaryNode311 * this, struct 
 	};
 	return this;
 }
-static void Accept__2qo6(struct ZBinaryNode311 * this, struct ZVisitor167 * Visitor__1) {
+static void Accept__2qo1(struct ZBinaryNode310 * this, struct ZVisitor167 * Visitor__1) {
 	/*untyped*/NULL(Visitor, this);
 	return;
 }
-static struct ZBreakNode318 * ZBreakNode__2qom(struct ZBreakNode318 * this, struct ZNode52 * ParentNode__1) {
+static struct ZBreakNode317 * ZBreakNode__2qon(struct ZBreakNode317 * this, struct ZNode52 * ParentNode__1) {
 	(void)ZNode__4qwg(this, ParentNode, NULL, 0);
 	return NULL;
 }
-static void Accept__2qom(struct ZBreakNode318 * this, struct ZVisitor167 * Visitor__1) {
+static void Accept__2qon(struct ZBreakNode317 * this, struct ZVisitor167 * Visitor__1) {
 	/*untyped*/NULL(Visitor, this);
 	return;
 }
-static struct ZCastNode321 * ZCastNode__4qo3(struct ZCastNode321 * this, struct ZNode52 * ParentNode__1, struct ZType60 * CastType__2, struct ZNode52 * Node__3) {
+static struct ZCastNode320 * ZCastNode__4qo5(struct ZCastNode320 * this, struct ZNode52 * ParentNode__1, struct ZType60 * CastType__2, struct ZNode52 * Node__3) {
 	(void)ZNode__4qwg(this, ParentNode, NULL, 1);
 	this->Type = CastType;
 	if (Node != NULL) {
@@ -8363,167 +8501,167 @@ static struct ZCastNode321 * ZCastNode__4qo3(struct ZCastNode321 * this, struct 
 	};
 	return NULL;
 }
-static void Accept__2qo3(struct ZCastNode321 * this, struct ZVisitor167 * Visitor__1) {
+static void Accept__2qo5(struct ZCastNode320 * this, struct ZVisitor167 * Visitor__1) {
 	/*untyped*/NULL(Visitor, this);
 	return;
 }
-static struct ZListNode251 * ToFuncCallNode__2qo3(struct ZCastNode321 * this, struct ZFunc89 * Func__1) {
+static struct ZListNode251 * ToFuncCallNode__2qo5(struct ZCastNode320 * this, struct ZFunc89 * Func__1) {
 	if (LibZen_Is(Func, 210)) {
-		struct ZMacroNode392 * FuncNode = ZMacroNode__4q05(_NewZMacroNode392(), this->ParentNode, this->SourceToken, (struct ZMacroFunc210 *)Func);
+		struct ZMacroNode391 * FuncNode = ZMacroNode__4q07(_NewZMacroNode391(), this->ParentNode, this->SourceToken, (struct ZMacroFunc210 *)Func);
 		Append__2qu8(FuncNode, Array<ZNode>GetIndex(ZCastNode_Expr_Z62));
 		return FuncNode;
 	} else {
-		struct ZFuncCallNode407 * FuncNode = ZFuncCallNode__4q44(_NewZFuncCallNode407(), this->ParentNode, Func->FuncName, GetFuncType__1qeh(Func));
+		struct ZFuncCallNode406 * FuncNode = ZFuncCallNode__4q40(_NewZFuncCallNode406(), this->ParentNode, Func->FuncName, GetFuncType__1qeh(Func));
 		FuncNode->SourceToken = this->SourceToken;
 		Append__2qu8(FuncNode, Array<ZNode>GetIndex(ZCastNode_Expr_Z62));
 		return FuncNode;
 	};
 }
-static struct ZCatchNode325 * ZCatchNode__2qpw(struct ZCatchNode325 * this, struct ZNode52 * ParentNode__1) {
+static struct ZCatchNode324 * ZCatchNode__2qpq(struct ZCatchNode324 * this, struct ZNode52 * ParentNode__1) {
 	(void)ZNode__4qwg(this, ParentNode, NULL, 1);
 	return NULL;
 }
-static void SetTypeInfo__3qpw(struct ZCatchNode325 * this, struct ZToken77 * TypeToken__1, struct ZType60 * Type__2) {
+static void SetTypeInfo__3qpq(struct ZCatchNode324 * this, struct ZToken77 * TypeToken__1, struct ZType60 * Type__2) {
 	this->ExceptionType = Type;
 	return;
 }
-static void SetNameInfo__3qpw(struct ZCatchNode325 * this, struct ZToken77 * NameToken__1, const char * Name__2) {
+static void SetNameInfo__3qpq(struct ZCatchNode324 * this, struct ZToken77 * NameToken__1, const char * Name__2) {
 	this->ExceptionName = Name;
 	this->NameToken = NameToken;
 	return;
 }
-static struct ZComparatorNode329 * ZComparatorNode__5qpy(struct ZComparatorNode329 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * SourceToken__2, struct ZNode52 * Left__3, struct ZSyntax219 * Pattern__4) {
-	(void)ZBinaryNode__5qo6(this, ParentNode, SourceToken, Left, Pattern);
+static struct ZComparatorNode328 * ZComparatorNode__5qpt(struct ZComparatorNode328 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * SourceToken__2, struct ZNode52 * Left__3, struct ZSyntax219 * Pattern__4) {
+	(void)ZBinaryNode__5qo1(this, ParentNode, SourceToken, Left, Pattern);
 	return NULL;
 }
-static void Accept__2qpy(struct ZComparatorNode329 * this, struct ZVisitor167 * Visitor__1) {
+static void Accept__2qpt(struct ZComparatorNode328 * this, struct ZVisitor167 * Visitor__1) {
 	/*untyped*/NULL(Visitor, this);
 	return;
 }
-static struct ZConstNode332 * ZConstNode__3qpo(struct ZConstNode332 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * SourceToken__2) {
+static struct ZConstNode331 * ZConstNode__3qpi(struct ZConstNode331 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * SourceToken__2) {
 	(void)ZNode__4qwg(this, ParentNode, SourceToken, 0);
 	return NULL;
 }
-static struct ZEmptyNode334 * ZEmptyNode__3qp0(struct ZEmptyNode334 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2) {
+static struct ZEmptyNode333 * ZEmptyNode__3qpp(struct ZEmptyNode333 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2) {
 	(void)ZNode__4qwg(this, ParentNode, Token, 0);
 	return NULL;
 }
-static struct ZErrorNode336 * ZErrorNode__4qpa(struct ZErrorNode336 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * SourceToken__2, const char * ErrorMessage__3) {
-	(void)ZConstNode__3qpo(this, ParentNode, SourceToken);
+static struct ZErrorNode335 * ZErrorNode__4qp4(struct ZErrorNode335 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * SourceToken__2, const char * ErrorMessage__3) {
+	(void)ZConstNode__3qpi(this, ParentNode, SourceToken);
 	this->ErrorMessage = ErrorMessage;
 	return NULL;
 }
-static struct ZErrorNode336 * ZErrorNode__3qpa(struct ZErrorNode336 * this, struct ZNode52 * Node__1, const char * ErrorMessage__2) {
-	(void)ZConstNode__3qpo(this, Node->ParentNode, Node->SourceToken);
+static struct ZErrorNode335 * ZErrorNode__3qp4(struct ZErrorNode335 * this, struct ZNode52 * Node__1, const char * ErrorMessage__2) {
+	(void)ZConstNode__3qpi(this, Node->ParentNode, Node->SourceToken);
 	this->ErrorMessage = ErrorMessage;
 	return NULL;
 }
-static void Accept__2qpa(struct ZErrorNode336 * this, struct ZVisitor167 * Visitor__1) {
+static void Accept__2qp4(struct ZErrorNode335 * this, struct ZVisitor167 * Visitor__1) {
 	/*untyped*/NULL(Visitor, this);
 	return;
 }
-static struct ZFieldNode340 * ZFieldNode__2qpg(struct ZFieldNode340 * this, struct ZNode52 * ParentNode__1) {
+static struct ZFieldNode339 * ZFieldNode__2qpf(struct ZFieldNode339 * this, struct ZNode52 * ParentNode__1) {
 	(void)ZNode__4qwg(this, ParentNode, NULL, 1);
 	return NULL;
 }
-static void SetTypeInfo__3qpg(struct ZFieldNode340 * this, struct ZToken77 * TypeToken__1, struct ZType60 * Type__2) {
+static void SetTypeInfo__3qpf(struct ZFieldNode339 * this, struct ZToken77 * TypeToken__1, struct ZType60 * Type__2) {
 	this->DeclType = Type;
 	return;
 }
-static void SetNameInfo__3qpg(struct ZFieldNode340 * this, struct ZToken77 * NameToken__1, const char * Name__2) {
+static void SetNameInfo__3qpf(struct ZFieldNode339 * this, struct ZToken77 * NameToken__1, const char * Name__2) {
 	this->FieldName = Name;
 	this->NameToken = NameToken;
 	return;
 }
-static struct ZFloatNode344 * ZFloatNode__4qpl(struct ZFloatNode344 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2, double Value__3) {
-	(void)ZConstNode__3qpo(this, ParentNode, Token);
+static struct ZFloatNode343 * ZFloatNode__4qpk(struct ZFloatNode343 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2, double Value__3) {
+	(void)ZConstNode__3qpi(this, ParentNode, Token);
 	this->Type = ZTypeFloatType_Z8;
 	this->FloatValue = Value;
 	return NULL;
 }
-static void Accept__2qpl(struct ZFloatNode344 * this, struct ZVisitor167 * Visitor__1) {
+static void Accept__2qpk(struct ZFloatNode343 * this, struct ZVisitor167 * Visitor__1) {
 	/*untyped*/NULL(Visitor, this);
 	return;
 }
-static struct ZGetIndexNode347 * ZGetIndexNode__3qp6(struct ZGetIndexNode347 * this, struct ZNode52 * ParentNode__1, struct ZNode52 * RecvNode__2) {
+static struct ZGetIndexNode346 * ZGetIndexNode__3qp1(struct ZGetIndexNode346 * this, struct ZNode52 * ParentNode__1, struct ZNode52 * RecvNode__2) {
 	(void)ZNode__4qwg(this, ParentNode, NULL, 2);
 	Array<ZNode>SetIndex(ZGetIndexNode_Recv_Z65, SetChild__2qwg(this, RecvNode));
 	return NULL;
 }
-static void Accept__2qp6(struct ZGetIndexNode347 * this, struct ZVisitor167 * Visitor__1) {
+static void Accept__2qp1(struct ZGetIndexNode346 * this, struct ZVisitor167 * Visitor__1) {
 	/*untyped*/NULL(Visitor, this);
 	return;
 }
-static struct ZGetNameNode350 * ZGetNameNode__4qpc(struct ZGetNameNode350 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2, const char * NativeName__3) {
+static struct ZGetNameNode349 * ZGetNameNode__4qpx(struct ZGetNameNode349 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2, const char * NativeName__3) {
 	(void)ZNode__4qwg(this, ParentNode, Token, 0);
 	this->VarName = NativeName;
 	return NULL;
 }
-static struct ZGetNameNode350 * ZGetNameNode__3qpc(struct ZGetNameNode350 * this, struct ZNode52 * ParentNode__1, struct ZFunc89 * ResolvedFunc__2) {
+static struct ZGetNameNode349 * ZGetNameNode__3qpx(struct ZGetNameNode349 * this, struct ZNode52 * ParentNode__1, struct ZFunc89 * ResolvedFunc__2) {
 	(void)ZNode__4qwg(this, ParentNode, NULL, 0);
 	this->VarName = ResolvedFunc->FuncName;
 	this->Type = GetFuncType__1qeh(ResolvedFunc);
 	return NULL;
 }
-static void Accept__2qpc(struct ZGetNameNode350 * this, struct ZVisitor167 * Visitor__1) {
+static void Accept__2qpx(struct ZGetNameNode349 * this, struct ZVisitor167 * Visitor__1) {
 	/*untyped*/NULL(Visitor, this);
 	return;
 }
-static struct ZNode52 * ToGlobalNameNode__1qpc(struct ZGetNameNode350 * this) {
-	return ZGlobalNameNode__6q0q(_NewZGlobalNameNode360(), this->ParentNode, this->SourceToken, this->Type, this->VarName, 0/*false*/);
+static struct ZNode52 * ToGlobalNameNode__1qpx(struct ZGetNameNode349 * this) {
+	return ZGlobalNameNode__6qp8(_NewZGlobalNameNode359(), this->ParentNode, this->SourceToken, this->Type, this->VarName, 0/*false*/);
 }
-static struct ZGetterNode355 * ZGetterNode__3qp7(struct ZGetterNode355 * this, struct ZNode52 * ParentNode__1, struct ZNode52 * RecvNode__2) {
+static struct ZGetterNode354 * ZGetterNode__3qpm(struct ZGetterNode354 * this, struct ZNode52 * ParentNode__1, struct ZNode52 * RecvNode__2) {
 	(void)ZNode__4qwg(this, ParentNode, NULL, 1);
 	Set__3qwg(this, ZGetterNode_Recv_Z67, RecvNode);
 	return NULL;
 }
-static void SetNameInfo__3qp7(struct ZGetterNode355 * this, struct ZToken77 * NameToken__1, const char * Name__2) {
+static void SetNameInfo__3qpm(struct ZGetterNode354 * this, struct ZToken77 * NameToken__1, const char * Name__2) {
 	this->FieldName = Name;
 	this->NameToken = NameToken;
 	return;
 }
-static void Accept__2qp7(struct ZGetterNode355 * this, struct ZVisitor167 * Visitor__1) {
+static void Accept__2qpm(struct ZGetterNode354 * this, struct ZVisitor167 * Visitor__1) {
 	/*untyped*/NULL(Visitor, this);
 	return;
 }
-static int IsStaticField__1qp7(struct ZGetterNode355 * this) {
+static int IsStaticField__1qpm(struct ZGetterNode354 * this) {
 	return LibZen_Is(Array<ZNode>GetIndex(ZGetterNode_Recv_Z67), 235);
 }
-static struct ZGlobalNameNode360 * ZGlobalNameNode__6q0q(struct ZGlobalNameNode360 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * SourceToken__2, struct ZType60 * Type__3, const char * GlobalName__4, int IsStaticFuncName__5) {
+static struct ZGlobalNameNode359 * ZGlobalNameNode__6qp8(struct ZGlobalNameNode359 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * SourceToken__2, struct ZType60 * Type__3, const char * GlobalName__4, int IsStaticFuncName__5) {
 	(void)ZNode__4qwg(this, ParentNode, SourceToken, 0);
 	this->GlobalName = GlobalName;
 	this->Type = Type;
 	this->IsStaticFuncName = IsStaticFuncName;
 	return NULL;
 }
-static int IsGivenName__1q0q(struct ZGlobalNameNode360 * this) {
+static int IsGivenName__1qp8(struct ZGlobalNameNode359 * this) {
 	return (!this->IsStaticFuncName);
 }
-static void Accept__2q0q(struct ZGlobalNameNode360 * this, struct ZVisitor167 * Visitor__1) {
+static void Accept__2qp8(struct ZGlobalNameNode359 * this, struct ZVisitor167 * Visitor__1) {
 	/*untyped*/NULL(Visitor, this);
 	return;
 }
-static struct ZGroupNode364 * ZGroupNode__2q0t(struct ZGroupNode364 * this, struct ZNode52 * ParentNode__1) {
+static struct ZGroupNode363 * ZGroupNode__2q0r(struct ZGroupNode363 * this, struct ZNode52 * ParentNode__1) {
 	(void)ZNode__4qwg(this, ParentNode, NULL, 1);
 	return NULL;
 }
-static void Accept__2q0t(struct ZGroupNode364 * this, struct ZVisitor167 * Visitor__1) {
+static void Accept__2q0r(struct ZGroupNode363 * this, struct ZVisitor167 * Visitor__1) {
 	/*untyped*/NULL(Visitor, this);
 	return;
 }
-static struct ZIfNode367 * ZIfNode__2q0i(struct ZIfNode367 * this, struct ZNode52 * ParentNode__1) {
+static struct ZIfNode366 * ZIfNode__2q0u(struct ZIfNode366 * this, struct ZNode52 * ParentNode__1) {
 	(void)ZNode__4qwg(this, ParentNode, NULL, 3);
 	return NULL;
 }
-static void Accept__2q0i(struct ZIfNode367 * this, struct ZVisitor167 * Visitor__1) {
+static void Accept__2q0u(struct ZIfNode366 * this, struct ZVisitor167 * Visitor__1) {
 	/*untyped*/NULL(Visitor, this);
 	return;
 }
-static struct ZImportNode370 * ZImportNode__2q00(struct ZImportNode370 * this, struct ZNode52 * ParentNode__1) {
+static struct ZImportNode369 * ZImportNode__2q0p(struct ZImportNode369 * this, struct ZNode52 * ParentNode__1) {
 	(void)ZNode__4qwg(this, ParentNode, NULL, 0);
 	return NULL;
 }
-static void SetNameInfo__3q00(struct ZImportNode370 * this, struct ZToken77 * NameToken__1, const char * Name__2) {
+static void SetNameInfo__3q0p(struct ZImportNode369 * this, struct ZToken77 * NameToken__1, const char * Name__2) {
 	if (this->ResourcePath == NULL) {
 		this->ResourcePath = Name;
 		this->ResourceToken = NameToken;
@@ -8532,48 +8670,48 @@ static void SetNameInfo__3q00(struct ZImportNode370 * this, struct ZToken77 * Na
 	};
 	return;
 }
-static struct ZInstanceOfNode373 * ZInstanceOfNode__4q0s(struct ZInstanceOfNode373 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2, struct ZNode52 * LeftNode__3) {
+static struct ZInstanceOfNode372 * ZInstanceOfNode__4q0a(struct ZInstanceOfNode372 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2, struct ZNode52 * LeftNode__3) {
 	(void)ZNode__4qwg(this, ParentNode, Token, 1);
 	Set__3qwg(this, ZInstanceOfNode_Left_Z72, LeftNode);
 	return NULL;
 }
-static void SetTypeInfo__3q0s(struct ZInstanceOfNode373 * this, struct ZToken77 * TypeToken__1, struct ZType60 * Type__2) {
+static void SetTypeInfo__3q0a(struct ZInstanceOfNode372 * this, struct ZToken77 * TypeToken__1, struct ZType60 * Type__2) {
 	this->TargetType = Type;
 	return;
 }
-static void Accept__2q0s(struct ZInstanceOfNode373 * this, struct ZVisitor167 * Visitor__1) {
+static void Accept__2q0a(struct ZInstanceOfNode372 * this, struct ZVisitor167 * Visitor__1) {
 	/*untyped*/NULL(Visitor, this);
 	return;
 }
-static struct ZIntNode377 * ZIntNode__4q0h(struct ZIntNode377 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2, long Value__3) {
-	(void)ZConstNode__3qpo(this, ParentNode, Token);
+static struct ZIntNode376 * ZIntNode__4q0g(struct ZIntNode376 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2, long Value__3) {
+	(void)ZConstNode__3qpi(this, ParentNode, Token);
 	this->Type = ZTypeIntType_Z7;
 	this->IntValue = Value;
 	return NULL;
 }
-static void Accept__2q0h(struct ZIntNode377 * this, struct ZVisitor167 * Visitor__1) {
+static void Accept__2q0g(struct ZIntNode376 * this, struct ZVisitor167 * Visitor__1) {
 	/*untyped*/NULL(Visitor, this);
 	return;
 }
-static struct ZLetNode380 * ZLetNode__2q0l(struct ZLetNode380 * this, struct ZNode52 * ParentNode__1) {
+static struct ZLetNode379 * ZLetNode__2q0k(struct ZLetNode379 * this, struct ZNode52 * ParentNode__1) {
 	(void)ZNode__4qwg(this, ParentNode, NULL, 1);
 	return NULL;
 }
-static void SetNameInfo__3q0l(struct ZLetNode380 * this, struct ZToken77 * NameToken__1, const char * Name__2) {
+static void SetNameInfo__3q0k(struct ZLetNode379 * this, struct ZToken77 * NameToken__1, const char * Name__2) {
 	this->Symbol = Name;
 	this->SymbolToken = NameToken;
 	return;
 }
-static void SetTypeInfo__3q0l(struct ZLetNode380 * this, struct ZToken77 * TypeToken__1, struct ZType60 * Type__2) {
+static void SetTypeInfo__3q0k(struct ZLetNode379 * this, struct ZToken77 * TypeToken__1, struct ZType60 * Type__2) {
 	this->SymbolType = Type;
 	return;
 }
-static void Accept__2q0l(struct ZLetNode380 * this, struct ZVisitor167 * Visitor__1) {
+static void Accept__2q0k(struct ZLetNode379 * this, struct ZVisitor167 * Visitor__1) {
 	/*untyped*/NULL(Visitor, this);
 	return;
 }
-static struct ZGlobalNameNode360 * ToGlobalNameNode__1q0l(struct ZLetNode380 * this) {
-	return ZGlobalNameNode__6q0q(_NewZGlobalNameNode360(), NULL, this->SymbolToken, GetAstType__2qwg(this, ZLetNode_InitValue_Z73), this->GlobalName, 0/*false*/);
+static struct ZGlobalNameNode359 * ToGlobalNameNode__1q0k(struct ZLetNode379 * this) {
+	return ZGlobalNameNode__6qp8(_NewZGlobalNameNode359(), NULL, this->SymbolToken, GetAstType__2qwg(this, ZLetNode_InitValue_Z73), this->GlobalName, 0/*false*/);
 }
 static struct ZListNode251 * ZListNode__4qu8(struct ZListNode251 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * SourceToken__2, long Size__3) {
 	(void)ZNode__4qwg(this, ParentNode, SourceToken, Size);
@@ -8586,7 +8724,7 @@ static void Append__2qu8(struct ZListNode251 * this, struct ZNode52 * Node__1) {
 		Set__3qwg(this, 0, Node);
 	} else {
 		ArrayOfZNode * newAST = LibZen_NewNodeArray__1qqr(LibZen_ArraySize((ArrayOfVar *)this->AST) + 1);
-		/*untyped*/NULL(this->AST, 0, newAST, 0, LibZen_ArraySize((ArrayOfVar *)this->AST));
+		LibZen_ArrayCopy__5qqq(this->AST, 0, newAST, 0, LibZen_ArraySize((ArrayOfVar *)this->AST));
 		this->AST = newAST;
 		Set__3qwg(this, LibZen_ArraySize((ArrayOfVar *)this->AST) - 1, Node);
 	};
@@ -8608,9 +8746,9 @@ static void InsertListAt__3qu8(struct ZListNode251 * this, long Index__1, struct
 	} else {
 		ArrayOfZNode * newAST = LibZen_NewNodeArray__1qqr(LibZen_ArraySize((ArrayOfVar *)this->AST) + 1);
 		Index = this->ListStartIndex + Index;
-		/*untyped*/NULL(this->AST, 0, newAST, 0, Index);
+		LibZen_ArrayCopy__5qqq(this->AST, 0, newAST, 0, Index);
 		Set__3qwg(this, Index, Node);
-		/*untyped*/NULL(this->AST, Index, newAST, Index + 1, LibZen_ArraySize((ArrayOfVar *)this->AST) - Index);
+		LibZen_ArrayCopy__5qqq(this->AST, Index, newAST, Index + 1, LibZen_ArraySize((ArrayOfVar *)this->AST) - Index);
 		this->AST = newAST;
 	};
 	return;
@@ -8619,8 +8757,8 @@ static struct ZNode52 * RemoveListAt__2qu8(struct ZListNode251 * this, long Inde
 	struct ZNode52 * Removed = GetListAt__2qu8(this, Index);
 	ArrayOfZNode * newAST = LibZen_NewNodeArray__1qqr(LibZen_ArraySize((ArrayOfVar *)this->AST) - 1);
 	long RemovedIndex = this->ListStartIndex + Index;
-	/*untyped*/NULL(this->AST, 0, newAST, 0, RemovedIndex);
-	/*untyped*/NULL(this->AST, RemovedIndex + 1, newAST, RemovedIndex, LibZen_ArraySize((ArrayOfVar *)this->AST) - (RemovedIndex + 1));
+	LibZen_ArrayCopy__5qqq(this->AST, 0, newAST, 0, RemovedIndex);
+	LibZen_ArrayCopy__5qqq(this->AST, RemovedIndex + 1, newAST, RemovedIndex, LibZen_ArraySize((ArrayOfVar *)this->AST) - (RemovedIndex + 1));
 	this->AST = newAST;
 	return Removed;
 }
@@ -8631,69 +8769,69 @@ static void ClearListAfter__2qu8(struct ZListNode251 * this, long Size__1) {
 			this->AST = NULL;
 		} else {
 			ArrayOfZNode * newAST = LibZen_NewNodeArray__1qqr(newsize);
-			/*untyped*/NULL(this->AST, 0, newAST, 0, newsize);
+			LibZen_ArrayCopy__5qqq(this->AST, 0, newAST, 0, newsize);
 			this->AST = newAST;
 		};
 	};
 	return;
 }
-static struct ZMacroNode392 * ZMacroNode__4q05(struct ZMacroNode392 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * SourceToken__2, struct ZMacroFunc210 * MacroFunc__3) {
+static struct ZMacroNode391 * ZMacroNode__4q07(struct ZMacroNode391 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * SourceToken__2, struct ZMacroFunc210 * MacroFunc__3) {
 	(void)ZListNode__4qu8(this, ParentNode, SourceToken, 0);
 	this->MacroFunc = MacroFunc;
-	LibZen_Assert(MacroFunc != NULL, "(libzen/libzen.zen:3857)");
+	LibZen_Assert(MacroFunc != NULL, "(libzen/libzen.zen:3850)");
 	return NULL;
 }
-static struct ZFuncType90 * GetFuncType__1q05(struct ZMacroNode392 * this) {
+static struct ZFuncType90 * GetFuncType__1q07(struct ZMacroNode391 * this) {
 	return GetFuncType__1qeh(this->MacroFunc);
 }
-static const char * GetMacroText__1q05(struct ZMacroNode392 * this) {
+static const char * GetMacroText__1q07(struct ZMacroNode391 * this) {
 	struct ZMacroFunc210 * Func = this->MacroFunc;
 	if (LibZen_Is(Func, 265)) {
 		return ((struct ZSourceMacro265 *)Func)->Macro;
 	};
 	return "";
 }
-static void Accept__2q05(struct ZMacroNode392 * this, struct ZVisitor167 * Visitor__1) {
+static void Accept__2q07(struct ZMacroNode391 * this, struct ZVisitor167 * Visitor__1) {
 	/*untyped*/NULL(Visitor, this);
 	return;
 }
-static struct ZMapEntryNode397 * ZMapEntryNode__2q4w(struct ZMapEntryNode397 * this, struct ZNode52 * ParentNode__1) {
+static struct ZMapEntryNode396 * ZMapEntryNode__2q4q(struct ZMapEntryNode396 * this, struct ZNode52 * ParentNode__1) {
 	(void)ZNode__4qwg(this, ParentNode, NULL, 2);
 	return NULL;
 }
-static struct ZMapLiteralNode399 * ZMapLiteralNode__2q4r(struct ZMapLiteralNode399 * this, struct ZNode52 * ParentNode__1) {
+static struct ZMapLiteralNode398 * ZMapLiteralNode__2q4e(struct ZMapLiteralNode398 * this, struct ZNode52 * ParentNode__1) {
 	(void)ZListNode__4qu8(this, ParentNode, NULL, 0);
 	return NULL;
 }
-static struct ZMapEntryNode397 * GetMapEntryNode__2q4r(struct ZMapLiteralNode399 * this, long Index__1) {
+static struct ZMapEntryNode396 * GetMapEntryNode__2q4e(struct ZMapLiteralNode398 * this, long Index__1) {
 	struct ZNode52 * Node = GetListAt__2qu8(this, Index);
-	if (LibZen_Is(Node, 397)) {
-		return (struct ZMapEntryNode397 *)Node;
+	if (LibZen_Is(Node, 396)) {
+		return (struct ZMapEntryNode396 *)Node;
 	};
 	return NULL;
 }
-static void Accept__2q4r(struct ZMapLiteralNode399 * this, struct ZVisitor167 * Visitor__1) {
+static void Accept__2q4e(struct ZMapLiteralNode398 * this, struct ZVisitor167 * Visitor__1) {
 	/*untyped*/NULL(Visitor, this);
 	return;
 }
-static struct ZMethodCallNode403 * ZMethodCallNode__3q4i(struct ZMethodCallNode403 * this, struct ZNode52 * ParentNode__1, struct ZNode52 * RecvNode__2) {
+static struct ZMethodCallNode402 * ZMethodCallNode__3q4u(struct ZMethodCallNode402 * this, struct ZNode52 * ParentNode__1, struct ZNode52 * RecvNode__2) {
 	(void)ZListNode__4qu8(this, ParentNode, NULL, 1);
 	Set__3qwg(this, ZMethodCallNode_Recv_Z76, RecvNode);
 	return NULL;
 }
-static void SetNameInfo__3q4i(struct ZMethodCallNode403 * this, struct ZToken77 * NameToken__1, const char * Name__2) {
+static void SetNameInfo__3q4u(struct ZMethodCallNode402 * this, struct ZToken77 * NameToken__1, const char * Name__2) {
 	this->MethodName = Name;
 	this->MethodToken = NameToken;
 	return;
 }
-static void Accept__2q4i(struct ZMethodCallNode403 * this, struct ZVisitor167 * Visitor__1) {
+static void Accept__2q4u(struct ZMethodCallNode402 * this, struct ZVisitor167 * Visitor__1) {
 	/*untyped*/NULL(Visitor, this);
 	return;
 }
-static struct ZFuncCallNode407 * ToGetterFuncCall__1q4i(struct ZMethodCallNode403 * this) {
-	struct ZGetterNode355 * Getter = ZGetterNode__3qp7(_NewZGetterNode355(), NULL, Array<ZNode>GetIndex(ZMethodCallNode_Recv_Z76));
+static struct ZFuncCallNode406 * ToGetterFuncCall__1q4u(struct ZMethodCallNode402 * this) {
+	struct ZGetterNode354 * Getter = ZGetterNode__3qpm(_NewZGetterNode354(), NULL, Array<ZNode>GetIndex(ZMethodCallNode_Recv_Z76));
 	Getter->SetNameInfo(Getter, this->MethodToken, this->MethodName);
-	struct ZFuncCallNode407 * FuncNode = ZFuncCallNode__3q44(_NewZFuncCallNode407(), this->ParentNode, Getter);
+	struct ZFuncCallNode406 * FuncNode = ZFuncCallNode__3q40(_NewZFuncCallNode406(), this->ParentNode, Getter);
 	FuncNode->SourceToken = this->SourceToken;
 	Append__2qu8(FuncNode, Array<ZNode>GetIndex(ZMethodCallNode_Recv_Z76));
 	long i = 0;
@@ -8703,9 +8841,9 @@ static struct ZFuncCallNode407 * ToGetterFuncCall__1q4i(struct ZMethodCallNode40
 	};
 	return FuncNode;
 }
-static struct ZListNode251 * ToFuncCallNode__2q4i(struct ZMethodCallNode403 * this, struct ZFunc89 * Func__1) {
+static struct ZListNode251 * ToFuncCallNode__2q4u(struct ZMethodCallNode402 * this, struct ZFunc89 * Func__1) {
 	if (LibZen_Is(Func, 210)) {
-		struct ZMacroNode392 * MacroNode = ZMacroNode__4q05(_NewZMacroNode392(), this->ParentNode, this->MethodToken, (struct ZMacroFunc210 *)Func);
+		struct ZMacroNode391 * MacroNode = ZMacroNode__4q07(_NewZMacroNode391(), this->ParentNode, this->MethodToken, (struct ZMacroFunc210 *)Func);
 		Append__2qu8(MacroNode, Array<ZNode>GetIndex(ZMethodCallNode_Recv_Z76));
 		long i = 0;
 		while (i < GetListSize__1qu8(this)) {
@@ -8714,7 +8852,7 @@ static struct ZListNode251 * ToFuncCallNode__2q4i(struct ZMethodCallNode403 * th
 		};
 		return MacroNode;
 	} else {
-		struct ZFuncCallNode407 * FuncNode = ZFuncCallNode__4q44(_NewZFuncCallNode407(), this->ParentNode, Func->FuncName, GetFuncType__1qeh(Func));
+		struct ZFuncCallNode406 * FuncNode = ZFuncCallNode__4q40(_NewZFuncCallNode406(), this->ParentNode, Func->FuncName, GetFuncType__1qeh(Func));
 		FuncNode->SourceToken = this->MethodToken;
 		Append__2qu8(FuncNode, Array<ZNode>GetIndex(ZMethodCallNode_Recv_Z76));
 		long i = 0;
@@ -8725,24 +8863,24 @@ static struct ZListNode251 * ToFuncCallNode__2q4i(struct ZMethodCallNode403 * th
 		return FuncNode;
 	};
 }
-static struct ZNewArrayNode410 * ZNewArrayNode__4q4d(struct ZNewArrayNode410 * this, struct ZNode52 * ParentNode__1, struct ZType60 * Type__2, struct ZToken77 * Token__3) {
+static struct ZNewArrayNode409 * ZNewArrayNode__4q4s(struct ZNewArrayNode409 * this, struct ZNode52 * ParentNode__1, struct ZType60 * Type__2, struct ZToken77 * Token__3) {
 	(void)ZListNode__4qu8(this, ParentNode, NULL, 0);
 	return NULL;
 }
-static struct ZNewObjectNode412 * ZNewObjectNode__2q4g(struct ZNewObjectNode412 * this, struct ZNode52 * ParentNode__1) {
+static struct ZNewObjectNode411 * ZNewObjectNode__2q4f(struct ZNewObjectNode411 * this, struct ZNode52 * ParentNode__1) {
 	(void)ZListNode__4qu8(this, ParentNode, NULL, 0);
 	return NULL;
 }
-static void Accept__2q4g(struct ZNewObjectNode412 * this, struct ZVisitor167 * Visitor__1) {
+static void Accept__2q4f(struct ZNewObjectNode411 * this, struct ZVisitor167 * Visitor__1) {
 	/*untyped*/NULL(Visitor, this);
 	return;
 }
-static struct ZListNode251 * ToFuncCallNode__2q4g(struct ZNewObjectNode412 * this, struct ZFunc89 * Func__1) {
+static struct ZListNode251 * ToFuncCallNode__2q4f(struct ZNewObjectNode411 * this, struct ZFunc89 * Func__1) {
 	struct ZListNode251 * FuncNode = NULL;
 	if (LibZen_Is(Func, 210)) {
-		FuncNode = ZMacroNode__4q05(_NewZMacroNode392(), this->ParentNode, this->SourceToken, (struct ZMacroFunc210 *)Func);
+		FuncNode = ZMacroNode__4q07(_NewZMacroNode391(), this->ParentNode, this->SourceToken, (struct ZMacroFunc210 *)Func);
 	} else {
-		FuncNode = ZFuncCallNode__4q44(_NewZFuncCallNode407(), this->ParentNode, Func->FuncName, GetFuncType__1qeh(Func));
+		FuncNode = ZFuncCallNode__4q40(_NewZFuncCallNode406(), this->ParentNode, Func->FuncName, GetFuncType__1qeh(Func));
 		FuncNode->SourceToken = this->SourceToken;
 	};
 	Append__2qu8(FuncNode, this);
@@ -8754,79 +8892,79 @@ static struct ZListNode251 * ToFuncCallNode__2q4g(struct ZNewObjectNode412 * thi
 	ClearListAfter__2qu8(this, 0);
 	return FuncNode;
 }
-static struct ZNotNode416 * ZNotNode__3q4l(struct ZNotNode416 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2) {
+static struct ZNotNode415 * ZNotNode__3q4k(struct ZNotNode415 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2) {
 	(void)ZUnaryNode__3qyh(this, ParentNode, Token);
 	return NULL;
 }
-static void Accept__2q4l(struct ZNotNode416 * this, struct ZVisitor167 * Visitor__1) {
+static void Accept__2q4k(struct ZNotNode415 * this, struct ZVisitor167 * Visitor__1) {
 	/*untyped*/NULL(Visitor, this);
 	return;
 }
-static struct ZNullNode419 * ZNullNode__3q46(struct ZNullNode419 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * SourceToken__2) {
-	(void)ZConstNode__3qpo(this, ParentNode, SourceToken);
+static struct ZNullNode418 * ZNullNode__3q41(struct ZNullNode418 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * SourceToken__2) {
+	(void)ZConstNode__3qpi(this, ParentNode, SourceToken);
 	return NULL;
 }
-static void Accept__2q46(struct ZNullNode419 * this, struct ZVisitor167 * Visitor__1) {
+static void Accept__2q41(struct ZNullNode418 * this, struct ZVisitor167 * Visitor__1) {
 	/*untyped*/NULL(Visitor, this);
 	return;
 }
-static struct ZOrNode422 * ZOrNode__5q4c(struct ZOrNode422 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2, struct ZNode52 * Left__3, struct ZSyntax219 * Pattern__4) {
-	(void)ZBinaryNode__5qo6(this, ParentNode, Token, Left, Pattern);
+static struct ZOrNode421 * ZOrNode__5q4x(struct ZOrNode421 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2, struct ZNode52 * Left__3, struct ZSyntax219 * Pattern__4) {
+	(void)ZBinaryNode__5qo1(this, ParentNode, Token, Left, Pattern);
 	return NULL;
 }
-static void Accept__2q4c(struct ZOrNode422 * this, struct ZVisitor167 * Visitor__1) {
+static void Accept__2q4x(struct ZOrNode421 * this, struct ZVisitor167 * Visitor__1) {
 	/*untyped*/NULL(Visitor, this);
 	return;
 }
-static struct ZPrototypeNode425 * ZPrototypeNode__2q4n(struct ZPrototypeNode425 * this, struct ZNode52 * ParentNode__1) {
+static struct ZPrototypeNode424 * ZPrototypeNode__2q4b(struct ZPrototypeNode424 * this, struct ZNode52 * ParentNode__1) {
 	(void)ZListNode__4qu8(this, ParentNode, NULL, 0);
 	return NULL;
 }
-static void SetTypeInfo__3q4n(struct ZPrototypeNode425 * this, struct ZToken77 * TypeToken__1, struct ZType60 * Type__2) {
+static void SetTypeInfo__3q4b(struct ZPrototypeNode424 * this, struct ZToken77 * TypeToken__1, struct ZType60 * Type__2) {
 	this->ReturnType = Type;
 	return;
 }
-static void SetNameInfo__3q4n(struct ZPrototypeNode425 * this, struct ZToken77 * NameToken__1, const char * Name__2) {
+static void SetNameInfo__3q4b(struct ZPrototypeNode424 * this, struct ZToken77 * NameToken__1, const char * Name__2) {
 	this->FuncName = Name;
 	this->NameToken = NameToken;
 	return;
 }
-static struct ZParamNode172 * GetParamNode__2q4n(struct ZPrototypeNode425 * this, long Index__1) {
+static struct ZParamNode172 * GetParamNode__2q4b(struct ZPrototypeNode424 * this, long Index__1) {
 	struct ZNode52 * Node = GetListAt__2qu8(this, Index);
 	if (LibZen_Is(Node, 172)) {
 		return (struct ZParamNode172 *)Node;
 	};
 	return NULL;
 }
-static struct ZFuncType90 * GetFuncType__1q4n(struct ZPrototypeNode425 * this) {
+static struct ZFuncType90 * GetFuncType__1q4b(struct ZPrototypeNode424 * this) {
 	ArrayOfZType * TypeList = LibZen_NewArray(0);
 	LibZen_ArrayAdd((ArrayOfVar *)TypeList, (var)this->ReturnType->GetRealType(this->ReturnType));
 	long i = 0;
 	while (i < GetListSize__1qu8(this)) {
-		struct ZParamNode172 * Node = GetParamNode__2q4n(this, i);
+		struct ZParamNode172 * Node = GetParamNode__2q4b(this, i);
 		struct ZType60 * ParamType = Node->Type->GetRealType(Node->Type);
 		LibZen_ArrayAdd((ArrayOfVar *)TypeList, (var)ParamType);
 		i = i + 1;
 	};
 	return ZTypePool_LookupFuncType__1qwx(TypeList);
 }
-static struct ZStringNode431 * ZStringNode__4q48(struct ZStringNode431 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2, const char * Value__3) {
-	(void)ZConstNode__3qpo(this, ParentNode, Token);
+static struct ZStringNode430 * ZStringNode__4q42(struct ZStringNode430 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2, const char * Value__3) {
+	(void)ZConstNode__3qpi(this, ParentNode, Token);
 	this->Type = ZTypeStringType_Z9;
 	this->StringValue = Value;
 	return NULL;
 }
-static void Accept__2q48(struct ZStringNode431 * this, struct ZVisitor167 * Visitor__1) {
+static void Accept__2q42(struct ZStringNode430 * this, struct ZVisitor167 * Visitor__1) {
 	/*untyped*/NULL(Visitor, this);
 	return;
 }
-static struct ZStupidCastErrorNode434 * ZStupidCastErrorNode__3qae(struct ZStupidCastErrorNode434 * this, struct ZNode52 * Node__1, const char * ErrorMessage__2) {
-	(void)ZErrorNode__3qpa(this, Node, ErrorMessage);
+static struct ZStupidCastErrorNode433 * ZStupidCastErrorNode__3qaw(struct ZStupidCastErrorNode433 * this, struct ZNode52 * Node__1, const char * ErrorMessage__2) {
+	(void)ZErrorNode__3qp4(this, Node, ErrorMessage);
 	this->ErrorNode = Node;
 	return NULL;
 }
 static struct ZTypeNode235 * ZTypeNode__4quk(struct ZTypeNode235 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * SourceToken__2, struct ZType60 * ParsedType__3) {
-	(void)ZConstNode__3qpo(this, ParentNode, SourceToken);
+	(void)ZConstNode__3qpi(this, ParentNode, SourceToken);
 	this->Type = ParsedType;
 	return NULL;
 }
@@ -8845,6 +8983,9 @@ static void ImportLocalGrammar__2qwk(struct ZGenerator55 * this, struct ZNameSpa
 }
 static void WriteTo__2qwk(struct ZGenerator55 * this, const char * FileName__1) {
 	return;
+}
+static const char * GetSourceText__1qwk(struct ZGenerator55 * this) {
+	return NULL;
 }
 static const char * NameOutputFile__2qwk(struct ZGenerator55 * this, const char * FileName__1) {
 	if (FileName != NULL) {
@@ -8938,9 +9079,6 @@ static struct ZFunc89 * LookupFunc__4qwk(struct ZGenerator55 * this, const char 
 			break;
 		};
 		Func = GetDefinedFunc__2qwk(this, ZFunc_StringfySignature__3qqy(FuncName, FuncParamSize, RecvType));
-		if (RecvType->IsVarType(RecvType)) {
-			break;
-		};
 	};
 	return Func;
 }
@@ -8987,11 +9125,11 @@ static void VisitSugarNode__2qwk(struct ZGenerator55 * this, struct ZSugarNode16
 	/*untyped*/NULL(Array<ZNode>GetIndex(ZSugarNode_DeSugar_Z32), this);
 	return;
 }
-static struct ZIndentToken460 * ZIndentToken__4qab(struct ZIndentToken460 * this, struct ZSource238 * Source__1, long StartIndex__2, long EndIndex__3) {
+static struct ZIndentToken459 * ZIndentToken__4qav(struct ZIndentToken459 * this, struct ZSource238 * Source__1, long StartIndex__2, long EndIndex__3) {
 	(void)ZToken__4qey(this, Source, StartIndex, EndIndex);
 	return NULL;
 }
-static struct ZPatternToken462 * ZPatternToken__5qam(struct ZPatternToken462 * this, struct ZSource238 * Source__1, long StartIndex__2, long EndIndex__3, struct ZSyntax219 * PresetPattern__4) {
+static struct ZPatternToken461 * ZPatternToken__5qan(struct ZPatternToken461 * this, struct ZSource238 * Source__1, long StartIndex__2, long EndIndex__3, struct ZSyntax219 * PresetPattern__4) {
 	(void)ZToken__4qey(this, Source, StartIndex, EndIndex);
 	this->PresetPattern = PresetPattern;
 	return NULL;
@@ -9013,40 +9151,37 @@ static void StopVisitor__1qw9(struct ZSourceEngine57 * this) {
 	this->IsVisitableFlag = 0/*false*/;
 	return;
 }
-static struct Object303 * Eval__2qw9(struct ZSourceEngine57 * this, struct ZNode52 * Node__1) {
+static void Eval2__2qw9(struct ZSourceEngine57 * this, struct ZNode52 * Node__1) {
 	if (/*untyped*/NULL(this)) {
 		/*untyped*/NULL(Node, this);
 	};
-	return ThrowError("type error: requested = Object, given = ZEmptyValue");
+	return;
 }
-static void VisitPrototypeNode__2qw9(struct ZSourceEngine57 * this, struct ZPrototypeNode425 * Node__1) {
-	struct ZFuncType90 * FuncType = GetFuncType__1q4n(Node);
+static void VisitPrototypeNode__2qw9(struct ZSourceEngine57 * this, struct ZPrototypeNode424 * Node__1) {
+	struct ZFuncType90 * FuncType = GetFuncType__1q4b(Node);
 	(void)SetPrototype__4qwk(this->Generator, Node, Node->FuncName, FuncType);
 	return;
 }
-static void VisitImportNode__2qw9(struct ZSourceEngine57 * this, struct ZImportNode370 * Node__1) {
+static void VisitImportNode__2qw9(struct ZSourceEngine57 * this, struct ZImportNode369 * Node__1) {
 	(void)/*untyped*/NULL(Node);
 	return;
 }
-static struct Object303 * Exec__3qw9(struct ZSourceEngine57 * this, struct ZNode52 * Node__1, int IsInteractive__2) {
+static void Exec2__3qw9(struct ZSourceEngine57 * this, struct ZNode52 * Node__1, int IsInteractive__2) {
 	this->InteractiveContext = IsInteractive;
 	/*untyped*/NULL(this);
-	if (LibZen_Is(Node, 425)) {
-		VisitPrototypeNode__2qw9(this, (struct ZPrototypeNode425 *)Node);
-		return ThrowError("type error: requested = Object, given = ZEmptyValue");
-	} else if (LibZen_Is(Node, 370)) {
-		VisitImportNode__2qw9(this, (struct ZImportNode370 *)Node);
-		return ThrowError("type error: requested = Object, given = ZEmptyValue");
+	if (LibZen_Is(Node, 424)) {
+		VisitPrototypeNode__2qw9(this, (struct ZPrototypeNode424 *)Node);
+	} else if (LibZen_Is(Node, 369)) {
+		VisitImportNode__2qw9(this, (struct ZImportNode369 *)Node);
 	} else {
 		Node = CheckType__3qr2(this->TypeChecker, Node, ZTypeVoidType_Z5);
-		struct Object303 * ResultValue = Eval__2qw9(this, Node);
-		return ResultValue;
+		Eval2__2qw9(this, Node);
 	};
+	return;
 }
-static struct Object303 * Eval__6qw9(struct ZSourceEngine57 * this, struct ZNameSpace48 * NameSpace__1, const char * ScriptText__2, const char * FileName__3, long LineNumber__4, int IsInteractive__5) {
-	struct Object303 * ResultValue = ThrowError("type error: requested = Object, given = ZEmptyValue");
-	struct ZBlockNode161 * TopBlockNode = ZBlockNode__2qth(_NewZBlockNode161(), NameSpace);
-	struct ZTokenContext53 * TokenContext = ZTokenContext__6qwh(_NewZTokenContext53(), this->Generator, NameSpace, FileName, LineNumber, ScriptText);
+static const char * Translate__4qw9(struct ZSourceEngine57 * this, const char * ScriptText__1, const char * FileName__2, long LineNumber__3) {
+	struct ZBlockNode161 * TopBlockNode = ZBlockNode__2qth(_NewZBlockNode161(), this->Generator->RootNameSpace);
+	struct ZTokenContext53 * TokenContext = ZTokenContext__6qwh(_NewZTokenContext53(), this->Generator, this->Generator->RootNameSpace, FileName, LineNumber, ScriptText);
 	SkipEmptyStatement__1qwh(TokenContext);
 	struct ZToken77 * SkipToken = GetToken__1qwh(TokenContext);
 	while (HasNext__1qwh(TokenContext)) {
@@ -9057,33 +9192,11 @@ static struct Object303 * Eval__6qw9(struct ZSourceEngine57 * this, struct ZName
 		if (IsErrorNode__1qwg(ParsedNode)) {
 			SkipError__2qwh(TokenContext, SkipToken);
 		};
-		ResultValue = Exec__3qw9(this, ParsedNode, IsInteractive);
-		if (ResultValue == ZEmptyValue_FalseEmpty_Z41) {
-			break;
-		};
+		Exec2__3qw9(this, ParsedNode, 0/*false*/);
 		SkipEmptyStatement__1qwh(TokenContext);
 		Vacume__1qwh(TokenContext);
 	};
-	if (HasNext__1qwh(TokenContext) && !IsInteractive) {
-		ZLogger_LogInfo__2qey(SkipToken, "stopped script at this line");
-	};
-	return ResultValue;
-}
-static struct Object303 * Eval__5qw9(struct ZSourceEngine57 * this, const char * ScriptText__1, const char * FileName__2, long LineNumber__3, int IsInteractive__4) {
-	return Eval__6qw9(this, this->Generator->RootNameSpace, ScriptText, FileName, LineNumber, IsInteractive);
-}
-static int Load__2qw9(struct ZSourceEngine57 * this, const char * FileName__1) {
-	const char * ScriptText = LibZen_LoadTextFile__1qqy(FileName);
-	if (ScriptText == NULL) {
-		LibZen_Exit__2qqr(1, LibZen_StrCat("file not found: ", FileName));
-		return 0/*false*/;
-	};
-	struct Object303 * ResultValue = Eval__5qw9(this, ScriptText, FileName, 1, 0/*false*/);
-	ShowErrors__1qrv(this->Logger);
-	if (ResultValue == ZEmptyValue_FalseEmpty_Z41) {
-		return 0/*false*/;
-	};
-	return 1/*true*/;
+	return /*untyped*/NULL(this->Generator);
 }
 static void Unsupported__2qw9(struct ZSourceEngine57 * this, struct ZNode52 * Node__1) {
 	if (this->InteractiveContext) {
@@ -9094,43 +9207,43 @@ static void Unsupported__2qw9(struct ZSourceEngine57 * this, struct ZNode52 * No
 	};
 	return;
 }
-static void VisitNullNode__2qw9(struct ZSourceEngine57 * this, struct ZNullNode419 * Node__1) {
+static void VisitNullNode__2qw9(struct ZSourceEngine57 * this, struct ZNullNode418 * Node__1) {
 	Unsupported__2qw9(this, Node);
 	return;
 }
-static void VisitBooleanNode__2qw9(struct ZSourceEngine57 * this, struct ZBooleanNode476 * Node__1) {
+static void VisitBooleanNode__2qw9(struct ZSourceEngine57 * this, struct ZBooleanNode472 * Node__1) {
 	Unsupported__2qw9(this, Node);
 	return;
 }
-static void VisitIntNode__2qw9(struct ZSourceEngine57 * this, struct ZIntNode377 * Node__1) {
+static void VisitIntNode__2qw9(struct ZSourceEngine57 * this, struct ZIntNode376 * Node__1) {
 	Unsupported__2qw9(this, Node);
 	return;
 }
-static void VisitFloatNode__2qw9(struct ZSourceEngine57 * this, struct ZFloatNode344 * Node__1) {
+static void VisitFloatNode__2qw9(struct ZSourceEngine57 * this, struct ZFloatNode343 * Node__1) {
 	Unsupported__2qw9(this, Node);
 	return;
 }
-static void VisitStringNode__2qw9(struct ZSourceEngine57 * this, struct ZStringNode431 * Node__1) {
+static void VisitStringNode__2qw9(struct ZSourceEngine57 * this, struct ZStringNode430 * Node__1) {
 	Unsupported__2qw9(this, Node);
 	return;
 }
-static void VisitArrayLiteralNode__2qw9(struct ZSourceEngine57 * this, struct ZArrayLiteralNode481 * Node__1) {
+static void VisitArrayLiteralNode__2qw9(struct ZSourceEngine57 * this, struct ZArrayLiteralNode477 * Node__1) {
 	Unsupported__2qw9(this, Node);
 	return;
 }
-static void VisitMapLiteralNode__2qw9(struct ZSourceEngine57 * this, struct ZMapLiteralNode399 * Node__1) {
+static void VisitMapLiteralNode__2qw9(struct ZSourceEngine57 * this, struct ZMapLiteralNode398 * Node__1) {
 	Unsupported__2qw9(this, Node);
 	return;
 }
-static void VisitNewObjectNode__2qw9(struct ZSourceEngine57 * this, struct ZNewObjectNode412 * Node__1) {
+static void VisitNewObjectNode__2qw9(struct ZSourceEngine57 * this, struct ZNewObjectNode411 * Node__1) {
 	Unsupported__2qw9(this, Node);
 	return;
 }
-static void VisitGlobalNameNode__2qw9(struct ZSourceEngine57 * this, struct ZGlobalNameNode360 * Node__1) {
+static void VisitGlobalNameNode__2qw9(struct ZSourceEngine57 * this, struct ZGlobalNameNode359 * Node__1) {
 	Unsupported__2qw9(this, Node);
 	return;
 }
-static void VisitGetNameNode__2qw9(struct ZSourceEngine57 * this, struct ZGetNameNode350 * Node__1) {
+static void VisitGetNameNode__2qw9(struct ZSourceEngine57 * this, struct ZGetNameNode349 * Node__1) {
 	Unsupported__2qw9(this, Node);
 	return;
 }
@@ -9138,11 +9251,11 @@ static void VisitSetNameNode__2qw9(struct ZSourceEngine57 * this, struct ZSetNam
 	Unsupported__2qw9(this, Node);
 	return;
 }
-static void VisitGroupNode__2qw9(struct ZSourceEngine57 * this, struct ZGroupNode364 * Node__1) {
-	(void)Eval__2qw9(this, Array<ZNode>GetIndex(ZGroupNode_Expr_Z68));
+static void VisitGroupNode__2qw9(struct ZSourceEngine57 * this, struct ZGroupNode363 * Node__1) {
+	Eval2__2qw9(this, Array<ZNode>GetIndex(ZGroupNode_Expr_Z68));
 	return;
 }
-static void VisitGetterNode__2qw9(struct ZSourceEngine57 * this, struct ZGetterNode355 * Node__1) {
+static void VisitGetterNode__2qw9(struct ZSourceEngine57 * this, struct ZGetterNode354 * Node__1) {
 	Unsupported__2qw9(this, Node);
 	return;
 }
@@ -9150,7 +9263,7 @@ static void VisitSetterNode__2qw9(struct ZSourceEngine57 * this, struct ZSetterN
 	Unsupported__2qw9(this, Node);
 	return;
 }
-static void VisitGetIndexNode__2qw9(struct ZSourceEngine57 * this, struct ZGetIndexNode347 * Node__1) {
+static void VisitGetIndexNode__2qw9(struct ZSourceEngine57 * this, struct ZGetIndexNode346 * Node__1) {
 	Unsupported__2qw9(this, Node);
 	return;
 }
@@ -9158,15 +9271,15 @@ static void VisitSetIndexNode__2qw9(struct ZSourceEngine57 * this, struct ZSetIn
 	Unsupported__2qw9(this, Node);
 	return;
 }
-static void VisitMacroNode__2qw9(struct ZSourceEngine57 * this, struct ZMacroNode392 * Node__1) {
+static void VisitMacroNode__2qw9(struct ZSourceEngine57 * this, struct ZMacroNode391 * Node__1) {
 	Unsupported__2qw9(this, Node);
 	return;
 }
-static void VisitFuncCallNode__2qw9(struct ZSourceEngine57 * this, struct ZFuncCallNode407 * Node__1) {
+static void VisitFuncCallNode__2qw9(struct ZSourceEngine57 * this, struct ZFuncCallNode406 * Node__1) {
 	Unsupported__2qw9(this, Node);
 	return;
 }
-static void VisitMethodCallNode__2qw9(struct ZSourceEngine57 * this, struct ZMethodCallNode403 * Node__1) {
+static void VisitMethodCallNode__2qw9(struct ZSourceEngine57 * this, struct ZMethodCallNode402 * Node__1) {
 	Unsupported__2qw9(this, Node);
 	return;
 }
@@ -9174,36 +9287,36 @@ static void VisitUnaryNode__2qw9(struct ZSourceEngine57 * this, struct ZUnaryNod
 	Unsupported__2qw9(this, Node);
 	return;
 }
-static void VisitNotNode__2qw9(struct ZSourceEngine57 * this, struct ZNotNode416 * Node__1) {
+static void VisitNotNode__2qw9(struct ZSourceEngine57 * this, struct ZNotNode415 * Node__1) {
 	Unsupported__2qw9(this, Node);
 	return;
 }
-static void VisitCastNode__2qw9(struct ZSourceEngine57 * this, struct ZCastNode321 * Node__1) {
+static void VisitCastNode__2qw9(struct ZSourceEngine57 * this, struct ZCastNode320 * Node__1) {
 	if (IsVoidType__1qwz(Node->Type)) {
-		(void)Eval__2qw9(this, Array<ZNode>GetIndex(ZCastNode_Expr_Z62));
+		Eval2__2qw9(this, Array<ZNode>GetIndex(ZCastNode_Expr_Z62));
 		Node->Type = Array<ZNode>GetIndex(ZCastNode_Expr_Z62)->Type;
 	} else {
 		Unsupported__2qw9(this, Node);
 	};
 	return;
 }
-static void VisitInstanceOfNode__2qw9(struct ZSourceEngine57 * this, struct ZInstanceOfNode373 * Node__1) {
+static void VisitInstanceOfNode__2qw9(struct ZSourceEngine57 * this, struct ZInstanceOfNode372 * Node__1) {
 	Unsupported__2qw9(this, Node);
 	return;
 }
-static void VisitBinaryNode__2qw9(struct ZSourceEngine57 * this, struct ZBinaryNode311 * Node__1) {
+static void VisitBinaryNode__2qw9(struct ZSourceEngine57 * this, struct ZBinaryNode310 * Node__1) {
 	Unsupported__2qw9(this, Node);
 	return;
 }
-static void VisitComparatorNode__2qw9(struct ZSourceEngine57 * this, struct ZComparatorNode329 * Node__1) {
+static void VisitComparatorNode__2qw9(struct ZSourceEngine57 * this, struct ZComparatorNode328 * Node__1) {
 	Unsupported__2qw9(this, Node);
 	return;
 }
-static void VisitAndNode__2qw9(struct ZSourceEngine57 * this, struct ZAndNode502 * Node__1) {
+static void VisitAndNode__2qw9(struct ZSourceEngine57 * this, struct ZAndNode498 * Node__1) {
 	Unsupported__2qw9(this, Node);
 	return;
 }
-static void VisitOrNode__2qw9(struct ZSourceEngine57 * this, struct ZOrNode422 * Node__1) {
+static void VisitOrNode__2qw9(struct ZSourceEngine57 * this, struct ZOrNode421 * Node__1) {
 	Unsupported__2qw9(this, Node);
 	return;
 }
@@ -9211,26 +9324,19 @@ static void VisitBlockNode__2qw9(struct ZSourceEngine57 * this, struct ZBlockNod
 	long i = 1;
 	while (i < GetListSize__1qu8(Node) && /*untyped*/NULL(this)) {
 		struct ZNode52 * StmtNode = GetListAt__2qu8(Node, i);
-		(void)Eval__2qw9(this, StmtNode);
+		Eval2__2qw9(this, StmtNode);
 		if (/*untyped*/NULL(StmtNode)) {
 			break;
 		};
 	};
 	return;
 }
-static void VisitVarNode__2qw9(struct ZSourceEngine57 * this, struct ZVarNode506 * Node__1) {
+static void VisitVarNode__2qw9(struct ZSourceEngine57 * this, struct ZVarNode502 * Node__1) {
 	Unsupported__2qw9(this, Node);
 	return;
 }
-static void VisitIfNode__2qw9(struct ZSourceEngine57 * this, struct ZIfNode367 * Node__1) {
-	struct Object303 * BooleanValue = Eval__2qw9(this, Array<ZNode>GetIndex(ZIfNode_Cond_Z69));
-	if (LibZen_Is(BooleanValue, 741)) {
-		if (ThrowError("type error: requested = boolean, given = Boolean")) {
-			(void)Eval__2qw9(this, Array<ZNode>GetIndex(ZIfNode_Then_Z70));
-		} else if (Array<ZNode>GetIndex(ZIfNode_Else_Z71) != NULL) {
-			(void)Eval__2qw9(this, Array<ZNode>GetIndex(ZIfNode_Then_Z70));
-		};
-	};
+static void VisitIfNode__2qw9(struct ZSourceEngine57 * this, struct ZIfNode366 * Node__1) {
+	Unsupported__2qw9(this, Node);
 	return;
 }
 static void VisitReturnNode__2qw9(struct ZSourceEngine57 * this, struct ZReturnNode170 * Node__1) {
@@ -9241,7 +9347,7 @@ static void VisitWhileNode__2qw9(struct ZSourceEngine57 * this, struct ZWhileNod
 	Unsupported__2qw9(this, Node);
 	return;
 }
-static void VisitBreakNode__2qw9(struct ZSourceEngine57 * this, struct ZBreakNode318 * Node__1) {
+static void VisitBreakNode__2qw9(struct ZSourceEngine57 * this, struct ZBreakNode317 * Node__1) {
 	Unsupported__2qw9(this, Node);
 	return;
 }
@@ -9253,7 +9359,7 @@ static void VisitTryNode__2qw9(struct ZSourceEngine57 * this, struct ZTryNode194
 	Unsupported__2qw9(this, Node);
 	return;
 }
-static void VisitLetNode__2qw9(struct ZSourceEngine57 * this, struct ZLetNode380 * Node__1) {
+static void VisitLetNode__2qw9(struct ZSourceEngine57 * this, struct ZLetNode379 * Node__1) {
 	if (HasUntypedNode__1qwg(Node)) {
 		LibZen_PrintDebug__1qqy(LibZen_StrCat(LibZen_StrCat(LibZen_StrCat("HasUntypedNode: ", LibZen_BooleanToString(HasUntypedNode__1qwg(Node))), "\n"), toString__1qwg(Node)));
 	};
@@ -9267,14 +9373,14 @@ static void VisitFunctionNode__2qw9(struct ZSourceEngine57 * this, struct ZFunct
 	(void)this->Generator->StartCodeGeneration(this->Generator, Node, this->InteractiveContext);
 	return;
 }
-static void VisitClassNode__2qw9(struct ZSourceEngine57 * this, struct ZClassNode516 * Node__1) {
+static void VisitClassNode__2qw9(struct ZSourceEngine57 * this, struct ZClassNode512 * Node__1) {
 	if (HasUntypedNode__1qwg(Node)) {
 		LibZen_PrintDebug__1qqy(LibZen_StrCat(LibZen_StrCat(LibZen_StrCat("HasUntypedNode: ", LibZen_BooleanToString(HasUntypedNode__1qwg(Node))), "\n"), toString__1qwg(Node)));
 	};
 	(void)this->Generator->StartCodeGeneration(this->Generator, Node, this->InteractiveContext);
 	return;
 }
-static void VisitErrorNode__2qw9(struct ZSourceEngine57 * this, struct ZErrorNode336 * Node__1) {
+static void VisitErrorNode__2qw9(struct ZSourceEngine57 * this, struct ZErrorNode335 * Node__1) {
 	(void)ZLogger_LogError__2qey(Node->SourceToken, Node->ErrorMessage);
 	this->StopVisitor(this);
 	return;
@@ -9293,7 +9399,7 @@ static void VisitExtendedNode__2qw9(struct ZSourceEngine57 * this, struct ZNode5
 	return;
 }
 static void VisitSugarNode__2qw9(struct ZSourceEngine57 * this, struct ZSugarNode165 * Node__1) {
-	(void)Eval__2qw9(this, Array<ZNode>GetIndex(ZSugarNode_DeSugar_Z32));
+	Eval2__2qw9(this, Array<ZNode>GetIndex(ZSugarNode_DeSugar_Z32));
 	return;
 }
 static void WriteTo__2qw9(struct ZSourceEngine57 * this, const char * OutputFile__1) {
@@ -9354,7 +9460,7 @@ static void SetNativeType__3quv(struct ZSourceGenerator243 * this, struct ZType6
 	Map<String>SetIndex(Key, TypeName);
 	return;
 }
-static const char * GetNativeType__2quv(struct ZSourceGenerator243 * this, struct ZType60 * Type__1) {
+static const char * GetNativeTypeName__2quv(struct ZSourceGenerator243 * this, struct ZType60 * Type__1) {
 	const char * Key = LibZen_StrCat("", LibZen_IntToString(Type->TypeId));
 	const char * TypeName = Map<String>GetIndex(Key);
 	if (TypeName == NULL) {
@@ -9409,6 +9515,20 @@ static void WriteTo__2quv(struct ZSourceGenerator243 * this, const char * FileNa
 	this->InitBuilderList(this);
 	return;
 }
+static const char * GetSourceText__1quv(struct ZSourceGenerator243 * this) {
+	struct ZSourceBuilder42 * sb = ZSourceBuilder__3qwu(_NewZSourceBuilder42(), this, NULL);
+	long i = 0;
+	while (i < LibZen_ArraySize((ArrayOfVar *)this->BuilderList)) {
+		struct ZSourceBuilder42 * Builder = Array<ZSourceBuilder>GetIndex(i);
+		Append__2qwu(sb, toString__1qwu(Builder));
+		Clear__1qwu(Builder);
+		AppendLineFeed__1qwu(sb);
+		AppendLineFeed__1qwu(sb);
+		i = i + 1;
+	};
+	this->InitBuilderList(this);
+	return LibZen_SourceBuilderToString__1qwu(sb);
+}
 static int StartCodeGeneration__3quv(struct ZSourceGenerator243 * this, struct ZNode52 * Node__1, int IsInteractive__2) {
 	Node->Accept(Node, this);
 	if (IsInteractive) {
@@ -9429,7 +9549,7 @@ static void GenerateCode__3quv(struct ZSourceGenerator243 * this, struct ZType60
 	return;
 }
 static int IsNeededSurroud__2quv(struct ZSourceGenerator243 * this, struct ZNode52 * Node__1) {
-	if (LibZen_Is(Node, 311)) {
+	if (LibZen_Is(Node, 310)) {
 		return 1/*true*/;
 	};
 	return 0/*false*/;
@@ -9476,11 +9596,11 @@ static void VisitBlockNode__2quv(struct ZSourceGenerator243 * this, struct ZBloc
 	Append__2qwu(this->CurrentBuilder, "}");
 	return;
 }
-static void VisitNullNode__2quv(struct ZSourceGenerator243 * this, struct ZNullNode419 * Node__1) {
+static void VisitNullNode__2quv(struct ZSourceGenerator243 * this, struct ZNullNode418 * Node__1) {
 	Append__2qwu(this->CurrentBuilder, this->NullLiteral);
 	return;
 }
-static void VisitBooleanNode__2quv(struct ZSourceGenerator243 * this, struct ZBooleanNode476 * Node__1) {
+static void VisitBooleanNode__2quv(struct ZSourceGenerator243 * this, struct ZBooleanNode472 * Node__1) {
 	if (Node->BooleanValue) {
 		Append__2qwu(this->CurrentBuilder, this->TrueLiteral);
 	} else {
@@ -9488,39 +9608,39 @@ static void VisitBooleanNode__2quv(struct ZSourceGenerator243 * this, struct ZBo
 	};
 	return;
 }
-static void VisitIntNode__2quv(struct ZSourceGenerator243 * this, struct ZIntNode377 * Node__1) {
+static void VisitIntNode__2quv(struct ZSourceGenerator243 * this, struct ZIntNode376 * Node__1) {
 	Append__2qwu(this->CurrentBuilder, LibZen_StrCat("", LibZen_IntToString((Node->IntValue))));
 	return;
 }
-static void VisitFloatNode__2quv(struct ZSourceGenerator243 * this, struct ZFloatNode344 * Node__1) {
+static void VisitFloatNode__2quv(struct ZSourceGenerator243 * this, struct ZFloatNode343 * Node__1) {
 	Append__2qwu(this->CurrentBuilder, LibZen_StrCat("", LibZen_FloatToString((Node->FloatValue))));
 	return;
 }
-static void VisitStringNode__2quv(struct ZSourceGenerator243 * this, struct ZStringNode431 * Node__1) {
+static void VisitStringNode__2quv(struct ZSourceGenerator243 * this, struct ZStringNode430 * Node__1) {
 	Append__2qwu(this->CurrentBuilder, LibZen_QuoteString__1qqy(Node->StringValue));
 	return;
 }
-static void VisitArrayLiteralNode__2quv(struct ZSourceGenerator243 * this, struct ZArrayLiteralNode481 * Node__1) {
+static void VisitArrayLiteralNode__2quv(struct ZSourceGenerator243 * this, struct ZArrayLiteralNode477 * Node__1) {
 	VisitListNode__4quv(this, "[", Node, "]");
 	return;
 }
-static void VisitMapLiteralNode__2quv(struct ZSourceGenerator243 * this, struct ZMapLiteralNode399 * Node__1) {
+static void VisitMapLiteralNode__2quv(struct ZSourceGenerator243 * this, struct ZMapLiteralNode398 * Node__1) {
 	return;
 }
-static void VisitNewObjectNode__2quv(struct ZSourceGenerator243 * this, struct ZNewObjectNode412 * Node__1) {
+static void VisitNewObjectNode__2quv(struct ZSourceGenerator243 * this, struct ZNewObjectNode411 * Node__1) {
 	Append__2qwu(this->CurrentBuilder, "new");
 	AppendWhiteSpace__1qwu(this->CurrentBuilder);
 	GenerateTypeName__2quv(this, Node->Type);
 	VisitListNode__4quv(this, "(", Node, ")");
 	return;
 }
-static void VisitGroupNode__2quv(struct ZSourceGenerator243 * this, struct ZGroupNode364 * Node__1) {
+static void VisitGroupNode__2quv(struct ZSourceGenerator243 * this, struct ZGroupNode363 * Node__1) {
 	Append__2qwu(this->CurrentBuilder, "(");
 	/*untyped*/NULL(this, NULL, Array<ZNode>GetIndex(ZGroupNode_Expr_Z68));
 	Append__2qwu(this->CurrentBuilder, ")");
 	return;
 }
-static void VisitGetIndexNode__2quv(struct ZSourceGenerator243 * this, struct ZGetIndexNode347 * Node__1) {
+static void VisitGetIndexNode__2quv(struct ZSourceGenerator243 * this, struct ZGetIndexNode346 * Node__1) {
 	/*untyped*/NULL(this, NULL, Array<ZNode>GetIndex(ZGetIndexNode_Recv_Z65));
 	Append__2qwu(this->CurrentBuilder, "[");
 	/*untyped*/NULL(this, NULL, Array<ZNode>GetIndex(ZGetIndexNode_Index_Z66));
@@ -9536,7 +9656,7 @@ static void VisitSetIndexNode__2quv(struct ZSourceGenerator243 * this, struct ZS
 	/*untyped*/NULL(this, NULL, Array<ZNode>GetIndex(ZSetIndexNode_Expr_Z28));
 	return;
 }
-static void VisitGlobalNameNode__2quv(struct ZSourceGenerator243 * this, struct ZGlobalNameNode360 * Node__1) {
+static void VisitGlobalNameNode__2quv(struct ZSourceGenerator243 * this, struct ZGlobalNameNode359 * Node__1) {
 	if (IsUntyped__1qwg(Node)) {
 		(void)ZLogger_LogError__2qey(Node->SourceToken, LibZen_StrCat("undefined symbol: ", Node->GlobalName));
 	};
@@ -9547,7 +9667,7 @@ static void VisitGlobalNameNode__2quv(struct ZSourceGenerator243 * this, struct 
 	};
 	return;
 }
-static void VisitGetNameNode__2quv(struct ZSourceGenerator243 * this, struct ZGetNameNode350 * Node__1) {
+static void VisitGetNameNode__2quv(struct ZSourceGenerator243 * this, struct ZGetNameNode349 * Node__1) {
 	Append__2qwu(this->CurrentBuilder, SafeName__3quv(this, Node->VarName, Node->VarIndex));
 	return;
 }
@@ -9557,7 +9677,7 @@ static void VisitSetNameNode__2quv(struct ZSourceGenerator243 * this, struct ZSe
 	/*untyped*/NULL(this, NULL, Array<ZNode>GetIndex(ZSetNameNode_Expr_Z29));
 	return;
 }
-static void VisitGetterNode__2quv(struct ZSourceGenerator243 * this, struct ZGetterNode355 * Node__1) {
+static void VisitGetterNode__2quv(struct ZSourceGenerator243 * this, struct ZGetterNode354 * Node__1) {
 	GenerateSurroundCode__2quv(this, Array<ZNode>GetIndex(ZGetterNode_Recv_Z67));
 	Append__2qwu(this->CurrentBuilder, ".");
 	Append__2qwu(this->CurrentBuilder, Node->FieldName);
@@ -9571,16 +9691,16 @@ static void VisitSetterNode__2quv(struct ZSourceGenerator243 * this, struct ZSet
 	/*untyped*/NULL(this, NULL, Array<ZNode>GetIndex(ZSetterNode_Expr_Z31));
 	return;
 }
-static void VisitMethodCallNode__2quv(struct ZSourceGenerator243 * this, struct ZMethodCallNode403 * Node__1) {
+static void VisitMethodCallNode__2quv(struct ZSourceGenerator243 * this, struct ZMethodCallNode402 * Node__1) {
 	GenerateSurroundCode__2quv(this, Array<ZNode>GetIndex(ZMethodCallNode_Recv_Z76));
 	Append__2qwu(this->CurrentBuilder, ".");
 	Append__2qwu(this->CurrentBuilder, Node->MethodName);
 	VisitListNode__4quv(this, "(", Node, ")");
 	return;
 }
-static void VisitMacroNode__2quv(struct ZSourceGenerator243 * this, struct ZMacroNode392 * Node__1) {
-	const char * Macro = GetMacroText__1q05(Node);
-	struct ZFuncType90 * FuncType = GetFuncType__1q05(Node);
+static void VisitMacroNode__2quv(struct ZSourceGenerator243 * this, struct ZMacroNode391 * Node__1) {
+	const char * Macro = GetMacroText__1q07(Node);
+	struct ZFuncType90 * FuncType = GetFuncType__1q07(Node);
 	long fromIndex = 0;
 	long BeginNum = LibZen_IndexOf2(Macro, "$[", fromIndex);
 	while (BeginNum != -1) {
@@ -9599,7 +9719,7 @@ static void VisitMacroNode__2quv(struct ZSourceGenerator243 * this, struct ZMacr
 	Append__2qwu(this->CurrentBuilder, LibZen_SubString(Macro, fromIndex));
 	return;
 }
-static void VisitFuncCallNode__2quv(struct ZSourceGenerator243 * this, struct ZFuncCallNode407 * Node__1) {
+static void VisitFuncCallNode__2quv(struct ZSourceGenerator243 * this, struct ZFuncCallNode406 * Node__1) {
 	/*untyped*/NULL(this, NULL, Array<ZNode>GetIndex(ZFuncCallNode_Func_Z79));
 	VisitListNode__4quv(this, "(", Node, ")");
 	return;
@@ -9609,55 +9729,55 @@ static void VisitUnaryNode__2quv(struct ZSourceGenerator243 * this, struct ZUnar
 	/*untyped*/NULL(this, NULL, Array<ZNode>GetIndex(ZUnaryNode_Recv_Z37));
 	return;
 }
-static void VisitNotNode__2quv(struct ZSourceGenerator243 * this, struct ZNotNode416 * Node__1) {
+static void VisitNotNode__2quv(struct ZSourceGenerator243 * this, struct ZNotNode415 * Node__1) {
 	Append__2qwu(this->CurrentBuilder, this->NotOperator);
 	GenerateSurroundCode__2quv(this, Array<ZNode>GetIndex(ZUnaryNode_Recv_Z37));
 	return;
 }
-static void VisitCastNode__2quv(struct ZSourceGenerator243 * this, struct ZCastNode321 * Node__1) {
+static void VisitCastNode__2quv(struct ZSourceGenerator243 * this, struct ZCastNode320 * Node__1) {
 	Append__2qwu(this->CurrentBuilder, "(");
 	GenerateTypeName__2quv(this, Node->Type);
 	Append__2qwu(this->CurrentBuilder, ")");
 	GenerateSurroundCode__2quv(this, Array<ZNode>GetIndex(ZCastNode_Expr_Z62));
 	return;
 }
-static void VisitInstanceOfNode__2quv(struct ZSourceGenerator243 * this, struct ZInstanceOfNode373 * Node__1) {
+static void VisitInstanceOfNode__2quv(struct ZSourceGenerator243 * this, struct ZInstanceOfNode372 * Node__1) {
 	/*untyped*/NULL(this, NULL, Array<ZNode>GetIndex(ZBinaryNode_Left_Z60));
 	AppendToken__2qwu(this->CurrentBuilder, "instanceof");
 	GenerateTypeName__2quv(this, Array<ZNode>GetIndex(ZBinaryNode_Right_Z61)->Type);
 	return;
 }
-static void VisitBinaryNode__2quv(struct ZSourceGenerator243 * this, struct ZBinaryNode311 * Node__1) {
-	if (LibZen_Is(Node->ParentNode, 311)) {
+static void VisitBinaryNode__2quv(struct ZSourceGenerator243 * this, struct ZBinaryNode310 * Node__1) {
+	if (LibZen_Is(Node->ParentNode, 310)) {
 		Append__2qwu(this->CurrentBuilder, "(");
 	};
 	/*untyped*/NULL(this, NULL, Array<ZNode>GetIndex(ZBinaryNode_Left_Z60));
 	AppendToken__2qwu(this->CurrentBuilder, GetText__1qey(Node->SourceToken));
 	/*untyped*/NULL(this, NULL, Array<ZNode>GetIndex(ZBinaryNode_Right_Z61));
-	if (LibZen_Is(Node->ParentNode, 311)) {
+	if (LibZen_Is(Node->ParentNode, 310)) {
 		Append__2qwu(this->CurrentBuilder, ")");
 	};
 	return;
 }
-static void VisitComparatorNode__2quv(struct ZSourceGenerator243 * this, struct ZComparatorNode329 * Node__1) {
+static void VisitComparatorNode__2quv(struct ZSourceGenerator243 * this, struct ZComparatorNode328 * Node__1) {
 	/*untyped*/NULL(this, NULL, Array<ZNode>GetIndex(ZBinaryNode_Left_Z60));
 	AppendToken__2qwu(this->CurrentBuilder, GetText__1qey(Node->SourceToken));
 	/*untyped*/NULL(this, NULL, Array<ZNode>GetIndex(ZBinaryNode_Right_Z61));
 	return;
 }
-static void VisitAndNode__2quv(struct ZSourceGenerator243 * this, struct ZAndNode502 * Node__1) {
+static void VisitAndNode__2quv(struct ZSourceGenerator243 * this, struct ZAndNode498 * Node__1) {
 	/*untyped*/NULL(this, NULL, Array<ZNode>GetIndex(ZBinaryNode_Left_Z60));
 	AppendToken__2qwu(this->CurrentBuilder, this->AndOperator);
 	/*untyped*/NULL(this, NULL, Array<ZNode>GetIndex(ZBinaryNode_Right_Z61));
 	return;
 }
-static void VisitOrNode__2quv(struct ZSourceGenerator243 * this, struct ZOrNode422 * Node__1) {
+static void VisitOrNode__2quv(struct ZSourceGenerator243 * this, struct ZOrNode421 * Node__1) {
 	/*untyped*/NULL(this, NULL, Array<ZNode>GetIndex(ZBinaryNode_Left_Z60));
 	AppendToken__2qwu(this->CurrentBuilder, this->OrOperator);
 	/*untyped*/NULL(this, NULL, Array<ZNode>GetIndex(ZBinaryNode_Right_Z61));
 	return;
 }
-static void VisitIfNode__2quv(struct ZSourceGenerator243 * this, struct ZIfNode367 * Node__1) {
+static void VisitIfNode__2quv(struct ZSourceGenerator243 * this, struct ZIfNode366 * Node__1) {
 	Append__2qwu(this->CurrentBuilder, "if (");
 	/*untyped*/NULL(this, NULL, Array<ZNode>GetIndex(ZIfNode_Cond_Z69));
 	Append__2qwu(this->CurrentBuilder, ")");
@@ -9683,7 +9803,7 @@ static void VisitWhileNode__2quv(struct ZSourceGenerator243 * this, struct ZWhil
 	/*untyped*/NULL(this, NULL, Array<ZNode>GetIndex(ZWhileNode_Block_Z39));
 	return;
 }
-static void VisitBreakNode__2quv(struct ZSourceGenerator243 * this, struct ZBreakNode318 * Node__1) {
+static void VisitBreakNode__2quv(struct ZSourceGenerator243 * this, struct ZBreakNode317 * Node__1) {
 	Append__2qwu(this->CurrentBuilder, "break");
 	return;
 }
@@ -9705,7 +9825,7 @@ static void VisitTryNode__2quv(struct ZSourceGenerator243 * this, struct ZTryNod
 	};
 	return;
 }
-static void VisitCatchNode__2quv(struct ZSourceGenerator243 * this, struct ZCatchNode325 * Node__1) {
+static void VisitCatchNode__2quv(struct ZSourceGenerator243 * this, struct ZCatchNode324 * Node__1) {
 	Append__2qwu(this->CurrentBuilder, "catch (");
 	Append__2qwu(this->CurrentBuilder, Node->ExceptionName);
 	VisitTypeAnnotation__2quv(this, Node->ExceptionType);
@@ -9713,7 +9833,7 @@ static void VisitCatchNode__2quv(struct ZSourceGenerator243 * this, struct ZCatc
 	/*untyped*/NULL(this, NULL, Array<ZNode>GetIndex(ZCatchNode_Block_Z63));
 	return;
 }
-static void VisitVarNode__2quv(struct ZSourceGenerator243 * this, struct ZVarNode506 * Node__1) {
+static void VisitVarNode__2quv(struct ZSourceGenerator243 * this, struct ZVarNode502 * Node__1) {
 	Append__2qwu(this->CurrentBuilder, "var");
 	AppendWhiteSpace__1qwu(this->CurrentBuilder);
 	Append__2qwu(this->CurrentBuilder, Node->NativeName);
@@ -9729,7 +9849,7 @@ static void VisitTypeAnnotation__2quv(struct ZSourceGenerator243 * this, struct 
 	GenerateTypeName__2quv(this, Type);
 	return;
 }
-static void VisitLetNode__2quv(struct ZSourceGenerator243 * this, struct ZLetNode380 * Node__1) {
+static void VisitLetNode__2quv(struct ZSourceGenerator243 * this, struct ZLetNode379 * Node__1) {
 	Append__2qwu(this->CurrentBuilder, "let");
 	AppendWhiteSpace__1qwu(this->CurrentBuilder);
 	Append__2qwu(this->CurrentBuilder, Node->GlobalName);
@@ -9753,7 +9873,7 @@ static void VisitFunctionNode__2quv(struct ZSourceGenerator243 * this, struct ZF
 	/*untyped*/NULL(this, NULL, Array<ZNode>GetIndex(ZFunctionNode_Block_Z80));
 	return;
 }
-static void VisitClassNode__2quv(struct ZSourceGenerator243 * this, struct ZClassNode516 * Node__1) {
+static void VisitClassNode__2quv(struct ZSourceGenerator243 * this, struct ZClassNode512 * Node__1) {
 	Append__2qwu(this->CurrentBuilder, "class");
 	AppendWhiteSpace__1qwu(this->CurrentBuilder);
 	Append__2qwu(this->CurrentBuilder, Node->ClassName);
@@ -9766,7 +9886,7 @@ static void VisitClassNode__2quv(struct ZSourceGenerator243 * this, struct ZClas
 	Indent__1qwu(this->CurrentBuilder);
 	long i = 0;
 	while (i < GetListSize__1qu8(Node)) {
-		struct ZFieldNode340 * FieldNode = GetFieldNode__2qda(Node, i);
+		struct ZFieldNode339 * FieldNode = GetFieldNode__2qdo(Node, i);
 		AppendLineFeed__1qwu(this->CurrentBuilder);
 		AppendIndent__1qwu(this->CurrentBuilder);
 		Append__2qwu(this->CurrentBuilder, "var");
@@ -9786,7 +9906,7 @@ static void VisitClassNode__2quv(struct ZSourceGenerator243 * this, struct ZClas
 	Append__2qwu(this->CurrentBuilder, "}");
 	return;
 }
-static void VisitErrorNode__2quv(struct ZSourceGenerator243 * this, struct ZErrorNode336 * Node__1) {
+static void VisitErrorNode__2quv(struct ZSourceGenerator243 * this, struct ZErrorNode335 * Node__1) {
 	(void)ZLogger_LogError__2qey(Node->SourceToken, Node->ErrorMessage);
 	Append__2qwu(this->CurrentBuilder, "ThrowError(");
 	Append__2qwu(this->CurrentBuilder, LibZen_QuoteString__1qqy(Node->ErrorMessage));
@@ -9807,7 +9927,7 @@ static void VisitSugarNode__2quv(struct ZSourceGenerator243 * this, struct ZSuga
 	return;
 }
 static void GenerateTypeName__2quv(struct ZSourceGenerator243 * this, struct ZType60 * Type__1) {
-	Append__2qwu(this->CurrentBuilder, GetNativeType__2quv(this, /*untyped*/NULL(Type)));
+	Append__2qwu(this->CurrentBuilder, GetNativeTypeName__2quv(this, /*untyped*/NULL(Type)));
 	return;
 }
 static void VisitListNode__5quv(struct ZSourceGenerator243 * this, const char * OpenToken__1, struct ZListNode251 * VargNode__2, const char * DelimToken__3, const char * CloseToken__4) {
@@ -9868,7 +9988,7 @@ static struct ZNode52 * VisitTypeChecker__3qr2(struct ZTypeChecker142 * this, st
 	return Node;
 }
 static struct ZNode52 * CreateStupidCastNode__3qr2(struct ZTypeChecker142 * this, struct ZType60 * Requested__1, struct ZNode52 * Node__2) {
-	struct ZNode52 * ErrorNode = ZStupidCastErrorNode__3qae(_NewZStupidCastErrorNode434(), Node, LibZen_StrCat(LibZen_StrCat(LibZen_StrCat("type error: requested = ", toString__1qwz(Requested)), ", given = "), toString__1qwz(Node->Type)));
+	struct ZNode52 * ErrorNode = ZStupidCastErrorNode__3qaw(_NewZStupidCastErrorNode433(), Node, LibZen_StrCat(LibZen_StrCat(LibZen_StrCat("type error: requested=", toString__1qwz(Requested)), ", given="), toString__1qwz(Node->Type)));
 	ErrorNode->Type = Requested;
 	return ErrorNode;
 }
@@ -9878,12 +9998,12 @@ static struct ZNode52 * EnforceNodeType__3qr2(struct ZTypeChecker142 * this, str
 		Func = LookupFunc__4qwk(this->Generator, "toString", Node->Type, 1);
 	};
 	if (LibZen_Is(Func, 210)) {
-		struct ZMacroNode392 * MacroNode = ZMacroNode__4q05(_NewZMacroNode392(), Node->ParentNode, NULL, (struct ZMacroFunc210 *)Func);
+		struct ZMacroNode391 * MacroNode = ZMacroNode__4q07(_NewZMacroNode391(), Node->ParentNode, NULL, (struct ZMacroFunc210 *)Func);
 		Append__2qu8(MacroNode, Node);
 		MacroNode->Type = EnforcedType;
 		return MacroNode;
 	} else if (Func != NULL) {
-		struct ZFuncCallNode407 * MacroNode = ZFuncCallNode__4q44(_NewZFuncCallNode407(), Node->ParentNode, Func->FuncName, GetFuncType__1qeh(Func));
+		struct ZFuncCallNode406 * MacroNode = ZFuncCallNode__4q40(_NewZFuncCallNode406(), Node->ParentNode, Func->FuncName, GetFuncType__1qeh(Func));
 		Append__2qu8(MacroNode, Node);
 		MacroNode->Type = EnforcedType;
 		return MacroNode;
@@ -9904,7 +10024,7 @@ static struct ZNode52 * TypeCheckImpl__4qr2(struct ZTypeChecker142 * this, struc
 		return Node;
 	};
 	if (IsVoidType__1qwz(ContextType) && !IsVoidType__1qwz(Node->Type)) {
-		return ZCastNode__4qo3(_NewZCastNode321(), Node->ParentNode, ZTypeVoidType_Z5, Node);
+		return ZCastNode__4qo5(_NewZCastNode320(), Node->ParentNode, ZTypeVoidType_Z5, Node);
 	};
 	if (IsFloatType__1qwz(ContextType) && IsIntType__1qwz(Node->Type)) {
 		return EnforceNodeType__3qr2(this, Node, ContextType);
@@ -9975,10 +10095,10 @@ static void ReturnErrorNode__4qr2(struct ZTypeChecker142 * this, struct ZNode52 
 	if (ErrorToken == NULL) {
 		ErrorToken = Node->SourceToken;
 	};
-	Return__2qr2(this, ZErrorNode__4qpa(_NewZErrorNode336(), Node->ParentNode, ErrorToken, Message));
+	Return__2qr2(this, ZErrorNode__4qp4(_NewZErrorNode335(), Node->ParentNode, ErrorToken, Message));
 	return;
 }
-static void VisitErrorNode__2qr2(struct ZTypeChecker142 * this, struct ZErrorNode336 * Node__1) {
+static void VisitErrorNode__2qr2(struct ZTypeChecker142 * this, struct ZErrorNode335 * Node__1) {
 	struct ZType60 * ContextType = GetContextType__1qr2(this);
 	if (!/*untyped*/NULL(ContextType)) {
 		TypedNode__3qr2(this, Node, ContextType);
@@ -10003,7 +10123,7 @@ static void VisitSugarNode__2qr2(struct ZTypeChecker142 * this, struct ZSugarNod
 	TypedNode__3qr2(this, Node, GetAstType__2qwg(Node, ZSugarNode_DeSugar_Z32));
 	return;
 }
-static struct CSourceGenerator599 * CSourceGenerator__1qg6(struct CSourceGenerator599 * this) {
+static struct CSourceGenerator596 * CSourceGenerator__1qgl(struct CSourceGenerator596 * this) {
 	(void)ZSourceGenerator__3quv(this, "c", "C99");
 	this->LineFeed = "\n";
 	this->Tab = "\t";
@@ -10040,25 +10160,25 @@ static struct CSourceGenerator599 * CSourceGenerator__1qg6(struct CSourceGenerat
 	SetMacro__7quv(this, "add", "LibZen_ArrayAdd2($[0], $[1], $[2])", ZTypeVoidType_Z5, ZGenericType_ArrayType_Z15, ZTypeIntType_Z7, ZTypeVarType_Z4);
 	return NULL;
 }
-static struct ZSourceEngine57 * GetEngine__1qg6(struct CSourceGenerator599 * this) {
+static struct ZSourceEngine57 * GetEngine__1qgl(struct CSourceGenerator596 * this) {
 	return ZSourceEngine__3qw9(_NewZSourceEngine57(), ZTypeChecker__2qr2(_NewZTypeChecker142(), this), this);
 }
-static void GenerateCode__3qg6(struct CSourceGenerator599 * this, struct ZType60 * ContextType__1, struct ZNode52 * Node__2) {
-	if (IsUntyped__1qwg(Node) && !IsErrorNode__1qwg(Node)) {
+static void GenerateCode__3qgl(struct CSourceGenerator596 * this, struct ZType60 * ContextType__1, struct ZNode52 * Node__2) {
+	if (IsUntyped__1qwg(Node) && !IsErrorNode__1qwg(Node) && !(LibZen_Is(Node, 359))) {
 		Append__2qwu(this->CurrentBuilder, LibZen_StrCat("/*untyped*/", this->NullLiteral));
-		(void)ZLogger_LogError__2qey(Node->SourceToken, "untyped error");
+		(void)ZLogger_LogError__2qey(Node->SourceToken, LibZen_StrCat("untyped error: ", toString__1qwg(Node)));
 	} else {
 		if (ContextType != NULL && Node->Type != ContextType) {
 			Append__2qwu(this->CurrentBuilder, "(");
-			GenerateTypeName__2qg6(this, ContextType);
+			GenerateTypeName__2qgl(this, ContextType);
 			Append__2qwu(this->CurrentBuilder, ")");
 		};
 		Node->Accept(Node, this);
 	};
 	return;
 }
-static void VisitArrayLiteralNode__2qg6(struct CSourceGenerator599 * this, struct ZArrayLiteralNode481 * Node__1) {
-	struct ZType60 * ParamType = Node->Type->GetParamType(Node->Type, 0);
+static void VisitArrayLiteralNode__2qgl(struct CSourceGenerator596 * this, struct ZArrayLiteralNode477 * Node__1) {
+	struct ZType60 * ParamType = /*untyped*/NULL(Node->Type, 0);
 	if (IsIntType__1qwz(ParamType) || IsBooleanType__1qwz(ParamType)) {
 		Append__2qwu(this->CurrentBuilder, "LibZen_NewIntArray(");
 	} else if (IsFloatType__1qwz(ParamType)) {
@@ -10068,15 +10188,15 @@ static void VisitArrayLiteralNode__2qg6(struct CSourceGenerator599 * this, struc
 	} else {
 		Append__2qwu(this->CurrentBuilder, "LibZen_NewArray(");
 	};
-	Append__2qwu(this->CurrentBuilder, LibZen_StrCat("", ThrowError("type error: requested = String, given = var")));
+	Append__2qwu(this->CurrentBuilder, LibZen_StrCat("", LibZen_IntToString((GetListSize__1qu8(Node)))));
 	if (GetListSize__1qu8(Node) > 0) {
 		Append__2qwu(this->CurrentBuilder, this->Camma);
 	};
 	VisitListNode__4quv(this, "", Node, ")");
 	return;
 }
-static void VisitMapLiteralNode__2qg6(struct CSourceGenerator599 * this, struct ZMapLiteralNode399 * Node__1) {
-	struct ZType60 * ParamType = Node->Type->GetParamType(Node->Type, 0);
+static void VisitMapLiteralNode__2qgl(struct CSourceGenerator596 * this, struct ZMapLiteralNode398 * Node__1) {
+	struct ZType60 * ParamType = /*untyped*/NULL(Node->Type, 0);
 	if (IsIntType__1qwz(ParamType) || IsBooleanType__1qwz(ParamType)) {
 		Append__2qwu(this->CurrentBuilder, "LibZen_NewIntMap(");
 	} else if (IsFloatType__1qwz(ParamType)) {
@@ -10086,30 +10206,30 @@ static void VisitMapLiteralNode__2qg6(struct CSourceGenerator599 * this, struct 
 	} else {
 		Append__2qwu(this->CurrentBuilder, "LibZen_NewMap(");
 	};
-	Append__2qwu(this->CurrentBuilder, LibZen_StrCat("", ThrowError("type error: requested = String, given = var")));
+	Append__2qwu(this->CurrentBuilder, LibZen_StrCat("", LibZen_IntToString((GetListSize__1qu8(Node)))));
 	if (GetListSize__1qu8(Node) > 0) {
 		Append__2qwu(this->CurrentBuilder, this->Camma);
 	};
 	VisitListNode__4quv(this, "", Node, ")");
 	return;
 }
-static void VisitNewObjectNode__2qg6(struct CSourceGenerator599 * this, struct ZNewObjectNode412 * Node__1) {
+static void VisitNewObjectNode__2qgl(struct CSourceGenerator596 * this, struct ZNewObjectNode411 * Node__1) {
 	Append__2qwu(this->CurrentBuilder, LibZen_StrCat("_New", NameClass__2qwk(this, Node->Type)));
 	VisitListNode__4quv(this, "(", Node, ")");
 	return;
 }
-static const char * BaseName__2qg6(struct CSourceGenerator599 * this, struct ZType60 * RecvType__1) {
+static const char * BaseName__2qgl(struct CSourceGenerator596 * this, struct ZType60 * RecvType__1) {
 	return GetAsciiName__1qwz(RecvType);
 }
-static void VisitGetIndexNode__2qg6(struct CSourceGenerator599 * this, struct ZGetIndexNode347 * Node__1) {
-	Append__2qwu(this->CurrentBuilder, LibZen_StrCat(BaseName__2qg6(this, GetAstType__2qwg(Node, ZGetIndexNode_Recv_Z65)), "GetIndex"));
+static void VisitGetIndexNode__2qgl(struct CSourceGenerator596 * this, struct ZGetIndexNode346 * Node__1) {
+	Append__2qwu(this->CurrentBuilder, LibZen_StrCat(BaseName__2qgl(this, GetAstType__2qwg(Node, ZGetIndexNode_Recv_Z65)), "GetIndex"));
 	Append__2qwu(this->CurrentBuilder, "(");
 	/*untyped*/NULL(this, NULL, Array<ZNode>GetIndex(ZGetIndexNode_Index_Z66));
 	Append__2qwu(this->CurrentBuilder, ")");
 	return;
 }
-static void VisitSetIndexNode__2qg6(struct CSourceGenerator599 * this, struct ZSetIndexNode178 * Node__1) {
-	Append__2qwu(this->CurrentBuilder, LibZen_StrCat(BaseName__2qg6(this, GetAstType__2qwg(Node, ZGetIndexNode_Recv_Z65)), "SetIndex"));
+static void VisitSetIndexNode__2qgl(struct CSourceGenerator596 * this, struct ZSetIndexNode178 * Node__1) {
+	Append__2qwu(this->CurrentBuilder, LibZen_StrCat(BaseName__2qgl(this, GetAstType__2qwg(Node, ZGetIndexNode_Recv_Z65)), "SetIndex"));
 	Append__2qwu(this->CurrentBuilder, "(");
 	/*untyped*/NULL(this, NULL, Array<ZNode>GetIndex(ZSetIndexNode_Index_Z27));
 	Append__2qwu(this->CurrentBuilder, this->Camma);
@@ -10117,23 +10237,23 @@ static void VisitSetIndexNode__2qg6(struct CSourceGenerator599 * this, struct ZS
 	Append__2qwu(this->CurrentBuilder, ")");
 	return;
 }
-static void VisitGetNameNode__2qg6(struct CSourceGenerator599 * this, struct ZGetNameNode350 * Node__1) {
+static void VisitGetNameNode__2qgl(struct CSourceGenerator596 * this, struct ZGetNameNode349 * Node__1) {
 	Append__2qwu(this->CurrentBuilder, Node->VarName);
 	return;
 }
-static void VisitSetNameNode__2qg6(struct CSourceGenerator599 * this, struct ZSetNameNode181 * Node__1) {
+static void VisitSetNameNode__2qgl(struct CSourceGenerator596 * this, struct ZSetNameNode181 * Node__1) {
 	Append__2qwu(this->CurrentBuilder, Node->VarName);
 	AppendToken__2qwu(this->CurrentBuilder, "=");
 	/*untyped*/NULL(this, NULL, Array<ZNode>GetIndex(ZSetNameNode_Expr_Z29));
 	return;
 }
-static void VisitGetterNode__2qg6(struct CSourceGenerator599 * this, struct ZGetterNode355 * Node__1) {
+static void VisitGetterNode__2qgl(struct CSourceGenerator596 * this, struct ZGetterNode354 * Node__1) {
 	GenerateSurroundCode__2quv(this, Array<ZNode>GetIndex(ZGetterNode_Recv_Z67));
 	Append__2qwu(this->CurrentBuilder, "->");
 	Append__2qwu(this->CurrentBuilder, Node->FieldName);
 	return;
 }
-static void VisitSetterNode__2qg6(struct CSourceGenerator599 * this, struct ZSetterNode184 * Node__1) {
+static void VisitSetterNode__2qgl(struct CSourceGenerator596 * this, struct ZSetterNode184 * Node__1) {
 	GenerateSurroundCode__2quv(this, Array<ZNode>GetIndex(ZSetterNode_Recv_Z30));
 	Append__2qwu(this->CurrentBuilder, "->");
 	Append__2qwu(this->CurrentBuilder, Node->FieldName);
@@ -10141,38 +10261,38 @@ static void VisitSetterNode__2qg6(struct CSourceGenerator599 * this, struct ZSet
 	/*untyped*/NULL(this, NULL, Array<ZNode>GetIndex(ZSetterNode_Expr_Z31));
 	return;
 }
-static void VisitMethodCallNode__2qg6(struct CSourceGenerator599 * this, struct ZMethodCallNode403 * Node__1) {
+static void VisitMethodCallNode__2qgl(struct CSourceGenerator596 * this, struct ZMethodCallNode402 * Node__1) {
 	return;
 }
-static void VisitFuncCallNode__2qg6(struct CSourceGenerator599 * this, struct ZFuncCallNode407 * Node__1) {
+static void VisitFuncCallNode__2qgl(struct CSourceGenerator596 * this, struct ZFuncCallNode406 * Node__1) {
 	/*untyped*/NULL(this, NULL, Array<ZNode>GetIndex(ZFuncCallNode_Func_Z79));
 	VisitListNode__4quv(this, "(", Node, ")");
 	return;
 }
-static void VisitThrowNode__2qg6(struct CSourceGenerator599 * this, struct ZThrowNode191 * Node__1) {
+static void VisitThrowNode__2qgl(struct CSourceGenerator596 * this, struct ZThrowNode191 * Node__1) {
 	/*untyped*/NULL(this, NULL, Array<ZNode>GetIndex(ZThrowNode_Expr_Z33));
 	Append__2qwu(this->CurrentBuilder, "longjump(1)");
 	AppendWhiteSpace__1qwu(this->CurrentBuilder);
 	return;
 }
-static void VisitTryNode__2qg6(struct CSourceGenerator599 * this, struct ZTryNode194 * Node__1) {
+static void VisitTryNode__2qgl(struct CSourceGenerator596 * this, struct ZTryNode194 * Node__1) {
 	return;
 }
-static void VisitCatchNode__2qg6(struct CSourceGenerator599 * this, struct ZCatchNode325 * Node__1) {
+static void VisitCatchNode__2qgl(struct CSourceGenerator596 * this, struct ZCatchNode324 * Node__1) {
 	return;
 }
-static const char * ParamTypeName__2qg6(struct CSourceGenerator599 * this, struct ZType60 * Type__1) {
+static const char * ParamTypeName__2qgl(struct CSourceGenerator596 * this, struct ZType60 * Type__1) {
 	if (IsArrayType__1qwz(Type)) {
-		return LibZen_StrCat("ArrayOf", ParamTypeName__2qg6(this, /*untyped*/NULL(Type, 0)));
+		return LibZen_StrCat("ArrayOf", ParamTypeName__2qgl(this, /*untyped*/NULL(Type, 0)));
 	};
 	if (IsMapType__1qwz(Type)) {
-		return LibZen_StrCat("MapOf", ParamTypeName__2qg6(this, /*untyped*/NULL(Type, 0)));
+		return LibZen_StrCat("MapOf", ParamTypeName__2qgl(this, /*untyped*/NULL(Type, 0)));
 	};
 	if (IsFuncType__1qwz(Type)) {
-		const char * s = LibZen_StrCat(LibZen_StrCat("FuncOf", ParamTypeName__2qg6(this, /*untyped*/NULL(Type, 0))), "Of");
+		const char * s = LibZen_StrCat(LibZen_StrCat("FuncOf", ParamTypeName__2qgl(this, /*untyped*/NULL(Type, 0))), "Of");
 		long i = 0;
 		while (i < /*untyped*/NULL(Type)) {
-			s = LibZen_StrCat(s, ParamTypeName__2qg6(this, /*untyped*/NULL(Type, i)));
+			s = LibZen_StrCat(s, ParamTypeName__2qgl(this, /*untyped*/NULL(Type, i)));
 			i = i + 1;
 		};
 		return s;
@@ -10191,21 +10311,21 @@ static const char * ParamTypeName__2qg6(struct CSourceGenerator599 * this, struc
 	};
 	return Type->ShortName;
 }
-static const char * GetNativeType__2qg6(struct CSourceGenerator599 * this, struct ZType60 * Type__1) {
+static const char * GetCTypeName__2qgl(struct CSourceGenerator596 * this, struct ZType60 * Type__1) {
 	const char * TypeName = NULL;
 	if (IsArrayType__1qwz(Type) || IsMapType__1qwz(Type)) {
-		TypeName = LibZen_StrCat(ParamTypeName__2qg6(this, Type), " *");
+		TypeName = LibZen_StrCat(ParamTypeName__2qgl(this, Type), " *");
 	};
 	if (LibZen_Is(Type, 80)) {
 		TypeName = LibZen_StrCat(LibZen_StrCat("struct ", NameClass__2qwk(this, Type)), " *");
 	};
 	if (TypeName == NULL) {
-		TypeName = /*untyped*/NULL;
+		TypeName = GetNativeTypeName__2quv(this, Type);
 	};
 	return TypeName;
 }
-static void GenerateFuncTypeName__3qg6(struct CSourceGenerator599 * this, struct ZType60 * Type__1, const char * FuncName__2) {
-	GenerateTypeName__2qg6(this, /*untyped*/NULL(Type, 0));
+static void GenerateFuncTypeName__3qgl(struct CSourceGenerator596 * this, struct ZType60 * Type__1, const char * FuncName__2) {
+	GenerateTypeName__2qgl(this, /*untyped*/NULL(Type, 0));
 	Append__2qwu(this->CurrentBuilder, LibZen_StrCat(LibZen_StrCat(" (*", FuncName), ")"));
 	long i = 1;
 	Append__2qwu(this->CurrentBuilder, "(");
@@ -10213,22 +10333,22 @@ static void GenerateFuncTypeName__3qg6(struct CSourceGenerator599 * this, struct
 		if (i > 1) {
 			Append__2qwu(this->CurrentBuilder, ",");
 		};
-		GenerateTypeName__2qg6(this, /*untyped*/NULL(Type, i));
+		GenerateTypeName__2qgl(this, /*untyped*/NULL(Type, i));
 		i = i + 1;
 	};
 	Append__2qwu(this->CurrentBuilder, ")");
 	return;
 }
-static void GenerateTypeName__2qg6(struct CSourceGenerator599 * this, struct ZType60 * Type__1) {
+static void GenerateTypeName__2qgl(struct CSourceGenerator596 * this, struct ZType60 * Type__1) {
 	if (IsFuncType__1qwz(Type)) {
-		GenerateFuncTypeName__3qg6(this, Type, "");
+		GenerateFuncTypeName__3qgl(this, Type, "");
 	} else {
-		Append__2qwu(this->CurrentBuilder, GetNativeType__2qg6(this, /*untyped*/NULL(Type)));
+		Append__2qwu(this->CurrentBuilder, GetCTypeName__2qgl(this, /*untyped*/NULL(Type)));
 	};
 	return;
 }
-static void VisitVarNode__2qg6(struct CSourceGenerator599 * this, struct ZVarNode506 * Node__1) {
-	GenerateTypeName__2qg6(this, Node->DeclType);
+static void VisitVarNode__2qgl(struct CSourceGenerator596 * this, struct ZVarNode502 * Node__1) {
+	GenerateTypeName__2qgl(this, Node->DeclType);
 	Append__2qwu(this->CurrentBuilder, " ");
 	Append__2qwu(this->CurrentBuilder, Node->NativeName);
 	AppendToken__2qwu(this->CurrentBuilder, "=");
@@ -10237,17 +10357,17 @@ static void VisitVarNode__2qg6(struct CSourceGenerator599 * this, struct ZVarNod
 	VisitStmtList__2quv(this, Node);
 	return;
 }
-static void VisitParamNode__2qg6(struct CSourceGenerator599 * this, struct ZParamNode172 * Node__1) {
+static void VisitParamNode__2qgl(struct CSourceGenerator596 * this, struct ZParamNode172 * Node__1) {
 	if (IsFuncType__1qwz(Node->Type)) {
-		GenerateFuncTypeName__3qg6(this, Node->Type, Node->Name);
+		GenerateFuncTypeName__3qgl(this, Node->Type, Node->Name);
 	} else {
-		GenerateTypeName__2qg6(this, Node->Type);
+		GenerateTypeName__2qgl(this, Node->Type);
 		Append__2qwu(this->CurrentBuilder, " ");
 		Append__2qwu(this->CurrentBuilder, SafeName__3quv(this, Node->Name, Node->ParamIndex));
 	};
 	return;
 }
-static void SetMethod__3qg6(struct CSourceGenerator599 * this, const char * FuncName__1, struct ZFuncType90 * FuncType__2) {
+static void SetMethod__3qgl(struct CSourceGenerator596 * this, const char * FuncName__1, struct ZFuncType90 * FuncType__2) {
 	struct ZType60 * RecvType = GetRecvType__1qej(FuncType);
 	if (LibZen_Is(RecvType, 80) && FuncName != NULL) {
 		struct ZClassType80 * ClassType = (struct ZClassType80 *)RecvType;
@@ -10268,7 +10388,7 @@ static void SetMethod__3qg6(struct CSourceGenerator599 * this, const char * Func
 	};
 	return;
 }
-static void VisitInstanceOfNode__2qg6(struct CSourceGenerator599 * this, struct ZInstanceOfNode373 * Node__1) {
+static void VisitInstanceOfNode__2qgl(struct CSourceGenerator596 * this, struct ZInstanceOfNode372 * Node__1) {
 	Append__2qwu(this->CurrentBuilder, "LibZen_Is(");
 	/*untyped*/NULL(this, NULL, Array<ZNode>GetIndex(ZInstanceOfNode_Left_Z72));
 	Append__2qwu(this->CurrentBuilder, this->Camma);
@@ -10276,7 +10396,7 @@ static void VisitInstanceOfNode__2qg6(struct CSourceGenerator599 * this, struct 
 	Append__2qwu(this->CurrentBuilder, ")");
 	return;
 }
-static void GenerateCField__3qg6(struct CSourceGenerator599 * this, const char * CType__1, const char * FieldName__2) {
+static void GenerateCField__3qgl(struct CSourceGenerator596 * this, const char * CType__1, const char * FieldName__2) {
 	AppendLineFeed__1qwu(this->CurrentBuilder);
 	AppendIndent__1qwu(this->CurrentBuilder);
 	Append__2qwu(this->CurrentBuilder, CType);
@@ -10285,51 +10405,51 @@ static void GenerateCField__3qg6(struct CSourceGenerator599 * this, const char *
 	Append__2qwu(this->CurrentBuilder, this->SemiColon);
 	return;
 }
-static void GenerateField__3qg6(struct CSourceGenerator599 * this, struct ZType60 * DeclType__1, const char * FieldName__2) {
+static void GenerateField__3qgl(struct CSourceGenerator596 * this, struct ZType60 * DeclType__1, const char * FieldName__2) {
 	AppendLineFeedIndent__1qwu(this->CurrentBuilder);
-	GenerateTypeName__2qg6(this, DeclType);
+	GenerateTypeName__2qgl(this, DeclType);
 	AppendWhiteSpace__1qwu(this->CurrentBuilder);
 	Append__2qwu(this->CurrentBuilder, FieldName);
 	Append__2qwu(this->CurrentBuilder, this->SemiColon);
 	return;
 }
-static void GenerateFields__3qg6(struct CSourceGenerator599 * this, struct ZClassType80 * ClassType__1, struct ZType60 * ThisType__2) {
+static void GenerateFields__3qgl(struct CSourceGenerator596 * this, struct ZClassType80 * ClassType__1, struct ZType60 * ThisType__2) {
 	struct ZType60 * SuperType = /*untyped*/NULL(ThisType);
 	if (!/*untyped*/NULL(SuperType)) {
-		GenerateFields__3qg6(this, ClassType, SuperType);
+		GenerateFields__3qgl(this, ClassType, SuperType);
 	};
 	long i = 0;
-	GenerateCField__3qg6(this, "int", LibZen_StrCat("_classId", LibZen_IntToString(ThisType->TypeId)));
-	GenerateCField__3qg6(this, "int", LibZen_StrCat("_delta", LibZen_IntToString(ThisType->TypeId)));
+	GenerateCField__3qgl(this, "int", LibZen_StrCat("_classId", LibZen_IntToString(ThisType->TypeId)));
+	GenerateCField__3qgl(this, "int", LibZen_StrCat("_delta", LibZen_IntToString(ThisType->TypeId)));
 	while (i < GetFieldSize__1qeo(ClassType)) {
 		struct ZClassField79 * ClassField = GetFieldAt__2qeo(ClassType, i);
 		if (ClassField->ClassType == ThisType) {
-			GenerateField__3qg6(this, ClassField->FieldType, ClassField->FieldName);
+			GenerateField__3qgl(this, ClassField->FieldType, ClassField->FieldName);
 		};
 		i = i + 1;
 	};
 	return;
 }
-static void VisitErrorNode__2qg6(struct CSourceGenerator599 * this, struct ZErrorNode336 * Node__1) {
+static void VisitErrorNode__2qgl(struct CSourceGenerator596 * this, struct ZErrorNode335 * Node__1) {
 	(void)ZLogger_LogError__2qey(Node->SourceToken, Node->ErrorMessage);
 	Append__2qwu(this->CurrentBuilder, "ThrowError(");
 	Append__2qwu(this->CurrentBuilder, LibZen_QuoteString__1qqy(Node->ErrorMessage));
 	Append__2qwu(this->CurrentBuilder, ")");
 	return;
 }
-static struct ZAndNode502 * ZAndNode__5qs2(struct ZAndNode502 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2, struct ZNode52 * Left__3, struct ZSyntax219 * Pattern__4) {
-	(void)ZBinaryNode__5qo6(this, ParentNode, Token, Left, Pattern);
+static struct ZAndNode498 * ZAndNode__5qsm(struct ZAndNode498 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2, struct ZNode52 * Left__3, struct ZSyntax219 * Pattern__4) {
+	(void)ZBinaryNode__5qo1(this, ParentNode, Token, Left, Pattern);
 	return NULL;
 }
-static void Accept__2qs2(struct ZAndNode502 * this, struct ZVisitor167 * Visitor__1) {
+static void Accept__2qsm(struct ZAndNode498 * this, struct ZVisitor167 * Visitor__1) {
 	/*untyped*/NULL(Visitor, this);
 	return;
 }
-static struct ZArrayLiteralNode481 * ZArrayLiteralNode__2qss(struct ZArrayLiteralNode481 * this, struct ZNode52 * ParentNode__1) {
+static struct ZArrayLiteralNode477 * ZArrayLiteralNode__2qsp(struct ZArrayLiteralNode477 * this, struct ZNode52 * ParentNode__1) {
 	(void)ZListNode__4qu8(this, ParentNode, NULL, 0);
 	return NULL;
 }
-static void Accept__2qss(struct ZArrayLiteralNode481 * this, struct ZVisitor167 * Visitor__1) {
+static void Accept__2qsp(struct ZArrayLiteralNode477 * this, struct ZVisitor167 * Visitor__1) {
 	/*untyped*/NULL(Visitor, this);
 	return;
 }
@@ -10371,78 +10491,78 @@ static void CopyTo__3qth(struct ZBlockNode161 * this, long Index__1, struct ZBlo
 	};
 	return;
 }
-static struct ZBooleanNode476 * ZBooleanNode__4qso(struct ZBooleanNode476 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2, int Value__3) {
-	(void)ZConstNode__3qpo(this, ParentNode, Token);
+static struct ZBooleanNode472 * ZBooleanNode__4qst(struct ZBooleanNode472 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * Token__2, int Value__3) {
+	(void)ZConstNode__3qpi(this, ParentNode, Token);
 	this->Type = ZTypeBooleanType_Z6;
 	this->BooleanValue = Value;
 	return NULL;
 }
-static void Accept__2qso(struct ZBooleanNode476 * this, struct ZVisitor167 * Visitor__1) {
+static void Accept__2qst(struct ZBooleanNode472 * this, struct ZVisitor167 * Visitor__1) {
 	/*untyped*/NULL(Visitor, this);
 	return;
 }
-static struct ZClassNode516 * ZClassNode__2qda(struct ZClassNode516 * this, struct ZNode52 * ParentNode__1) {
+static struct ZClassNode512 * ZClassNode__2qdo(struct ZClassNode512 * this, struct ZNode52 * ParentNode__1) {
 	(void)ZListNode__4qu8(this, ParentNode, NULL, 0);
 	return NULL;
 }
-static void SetTypeInfo__3qda(struct ZClassNode516 * this, struct ZToken77 * TypeToken__1, struct ZType60 * Type__2) {
+static void SetTypeInfo__3qdo(struct ZClassNode512 * this, struct ZToken77 * TypeToken__1, struct ZType60 * Type__2) {
 	this->SuperType = Type;
 	this->SuperToken = TypeToken;
 	return;
 }
-static void SetNameInfo__3qda(struct ZClassNode516 * this, struct ZToken77 * NameToken__1, const char * Name__2) {
+static void SetNameInfo__3qdo(struct ZClassNode512 * this, struct ZToken77 * NameToken__1, const char * Name__2) {
 	this->ClassName = Name;
 	this->NameToken = NameToken;
 	return;
 }
-static struct ZFieldNode340 * GetFieldNode__2qda(struct ZClassNode516 * this, long Index__1) {
+static struct ZFieldNode339 * GetFieldNode__2qdo(struct ZClassNode512 * this, long Index__1) {
 	struct ZNode52 * Node = GetListAt__2qu8(this, Index);
-	if (LibZen_Is(Node, 340)) {
-		return (struct ZFieldNode340 *)Node;
+	if (LibZen_Is(Node, 339)) {
+		return (struct ZFieldNode339 *)Node;
 	};
 	return NULL;
 }
-static void Accept__2qda(struct ZClassNode516 * this, struct ZVisitor167 * Visitor__1) {
+static void Accept__2qdo(struct ZClassNode512 * this, struct ZVisitor167 * Visitor__1) {
 	/*untyped*/NULL(Visitor, this);
 	return;
 }
-static struct ZFuncCallNode407 * ZFuncCallNode__3q44(struct ZFuncCallNode407 * this, struct ZNode52 * ParentNode__1, struct ZNode52 * FuncNode__2) {
+static struct ZFuncCallNode406 * ZFuncCallNode__3q40(struct ZFuncCallNode406 * this, struct ZNode52 * ParentNode__1, struct ZNode52 * FuncNode__2) {
 	(void)ZListNode__4qu8(this, ParentNode, NULL, 1);
 	Set__3qwg(this, ZFuncCallNode_Func_Z79, FuncNode);
 	return NULL;
 }
-static struct ZFuncCallNode407 * ZFuncCallNode__4q44(struct ZFuncCallNode407 * this, struct ZNode52 * ParentNode__1, const char * FuncName__2, struct ZType60 * FuncType__3) {
+static struct ZFuncCallNode406 * ZFuncCallNode__4q40(struct ZFuncCallNode406 * this, struct ZNode52 * ParentNode__1, const char * FuncName__2, struct ZType60 * FuncType__3) {
 	(void)ZListNode__4qu8(this, ParentNode, NULL, 1);
-	struct ZGlobalNameNode360 * FuncNode = ZGlobalNameNode__6q0q(_NewZGlobalNameNode360(), this, NULL, FuncType, FuncName, 1/*true*/);
+	struct ZGlobalNameNode359 * FuncNode = ZGlobalNameNode__6qp8(_NewZGlobalNameNode359(), this, NULL, FuncType, FuncName, 1/*true*/);
 	Set__3qwg(this, ZFuncCallNode_Func_Z79, FuncNode);
 	return NULL;
 }
-static void Accept__2q44(struct ZFuncCallNode407 * this, struct ZVisitor167 * Visitor__1) {
+static void Accept__2q40(struct ZFuncCallNode406 * this, struct ZVisitor167 * Visitor__1) {
 	/*untyped*/NULL(Visitor, this);
 	return;
 }
-static struct ZType60 * GetRecvType__1q44(struct ZFuncCallNode407 * this) {
+static struct ZType60 * GetRecvType__1q40(struct ZFuncCallNode406 * this) {
 	if (GetListSize__1qu8(this) > 0) {
 		return /*untyped*/NULL(GetListAt__2qu8(this, 0)->Type);
 	};
 	return ZTypeVoidType_Z5;
 }
-static const char * GetFuncName__1q44(struct ZFuncCallNode407 * this) {
+static const char * GetFuncName__1q40(struct ZFuncCallNode406 * this) {
 	struct ZNode52 * FNode = Array<ZNode>GetIndex(ZFuncCallNode_Func_Z79);
-	if (LibZen_Is(FNode, 360)) {
-		return ((struct ZGlobalNameNode360 *)FNode)->GlobalName;
+	if (LibZen_Is(FNode, 359)) {
+		return ((struct ZGlobalNameNode359 *)FNode)->GlobalName;
 	};
 	return NULL;
 }
-static struct ZFuncType90 * GetFuncType__1q44(struct ZFuncCallNode407 * this) {
+static struct ZFuncType90 * GetFuncType__1q40(struct ZFuncCallNode406 * this) {
 	struct ZType60 * FType = Array<ZNode>GetIndex(ZFuncCallNode_Func_Z79)->Type;
 	if (LibZen_Is(FType, 90)) {
 		return (struct ZFuncType90 *)FType;
 	};
 	return NULL;
 }
-static struct ZMacroNode392 * ToMacroNode__2q44(struct ZFuncCallNode407 * this, struct ZMacroFunc210 * MacroFunc__1) {
-	struct ZMacroNode392 * MacroNode = ZMacroNode__4q05(_NewZMacroNode392(), this->ParentNode, Array<ZNode>GetIndex(ZFuncCallNode_Func_Z79)->SourceToken, MacroFunc);
+static struct ZMacroNode391 * ToMacroNode__2q40(struct ZFuncCallNode406 * this, struct ZMacroFunc210 * MacroFunc__1) {
+	struct ZMacroNode391 * MacroNode = ZMacroNode__4q07(_NewZMacroNode391(), this->ParentNode, Array<ZNode>GetIndex(ZFuncCallNode_Func_Z79)->SourceToken, MacroFunc);
 	long i = 0;
 	while (i < GetListSize__1qu8(this)) {
 		Append__2qu8(MacroNode, GetListAt__2qu8(this, i));
@@ -10525,43 +10645,43 @@ static long GetVarIndex__1qtq(struct ZFunctionNode144 * this) {
 	this->VarIndex = this->VarIndex + 1;
 	return Index;
 }
-static struct ZVarNode506 * ZVarNode__2qde(struct ZVarNode506 * this, struct ZNode52 * ParentNode__1) {
+static struct ZVarNode502 * ZVarNode__2qs2(struct ZVarNode502 * this, struct ZNode52 * ParentNode__1) {
 	(void)ZBlockNode__3qth(this, ParentNode, 1);
 	return NULL;
 }
-static void SetNameInfo__3qde(struct ZVarNode506 * this, struct ZToken77 * NameToken__1, const char * Name__2) {
+static void SetNameInfo__3qs2(struct ZVarNode502 * this, struct ZToken77 * NameToken__1, const char * Name__2) {
 	this->NativeName = Name;
 	this->NameToken = NameToken;
 	return;
 }
-static void SetTypeInfo__3qde(struct ZVarNode506 * this, struct ZToken77 * TypeToken__1, struct ZType60 * Type__2) {
+static void SetTypeInfo__3qs2(struct ZVarNode502 * this, struct ZToken77 * TypeToken__1, struct ZType60 * Type__2) {
 	this->DeclType = Type;
 	this->TypeToken = TypeToken;
 	return;
 }
-static void Accept__2qde(struct ZVarNode506 * this, struct ZVisitor167 * Visitor__1) {
+static void Accept__2qs2(struct ZVarNode502 * this, struct ZVisitor167 * Visitor__1) {
 	/*untyped*/NULL(Visitor, this);
 	return;
 }
 static struct ZNode52 * AndPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZBinaryNode311 * BinaryNode = ZAndNode__5qs2(_NewZAndNode502(), ParentNode, GetToken__2qwh(TokenContext, ZTokenContext_MoveNext_Z58), LeftNode, GetApplyingSyntax__1qwh(TokenContext));
-	return AppendParsedRightNode__3qo6(BinaryNode, ParentNode, TokenContext);
+	struct ZBinaryNode310 * BinaryNode = ZAndNode__5qsm(_NewZAndNode498(), ParentNode, GetToken__2qwh(TokenContext, ZTokenContext_MoveNext_Z58), LeftNode, GetApplyingSyntax__1qwh(TokenContext));
+	return AppendParsedRightNode__3qo1(BinaryNode, ParentNode, TokenContext);
 }
 static struct ZNode52 * AnnotationPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
 	return NULL;
 }
 static struct ZNode52 * ApplyPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * ApplyNode = ZFuncCallNode__3q44(_NewZFuncCallNode407(), ParentNode, LeftNode);
+	struct ZNode52 * ApplyNode = ZFuncCallNode__3q40(_NewZFuncCallNode406(), ParentNode, LeftNode);
 	ApplyNode = MatchNtimes__6qwh(TokenContext, ApplyNode, "(", "$Expression$", ",", ")");
 	return ApplyNode;
 }
 static struct ZNode52 * ArrayLiteralPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * LiteralNode = ZArrayLiteralNode__2qss(_NewZArrayLiteralNode481(), ParentNode);
+	struct ZNode52 * LiteralNode = ZArrayLiteralNode__2qsp(_NewZArrayLiteralNode477(), ParentNode);
 	LiteralNode = MatchNtimes__6qwh(TokenContext, LiteralNode, "[", "$Expression$", ",", "]");
 	return LiteralNode;
 }
 static struct ZNode52 * AssertPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * AssertNode = ZAssertNode__2qol(_NewZAssertNode308(), ParentNode);
+	struct ZNode52 * AssertNode = ZAssertNode__2qok(_NewZAssertNode307(), ParentNode);
 	AssertNode = MatchToken__4qwh(TokenContext, AssertNode, "assert", ZTokenContext_Required_Z53);
 	AssertNode = MatchToken__4qwh(TokenContext, AssertNode, "(", ZTokenContext_Required_Z53);
 	AssertNode = MatchPattern__6qwh(TokenContext, AssertNode, ZThrowNode_Expr_Z33, "$Expression$", ZTokenContext_Required_Z53, ZTokenContext_AllowSkipIndent_Z55);
@@ -10573,8 +10693,8 @@ static struct ZNode52 * AssignPattern__3qwg(struct ZNode52 * ParentNode, struct 
 }
 static struct ZNode52 * BinaryPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
 	struct ZToken77 * Token = GetToken__2qwh(TokenContext, ZTokenContext_MoveNext_Z58);
-	struct ZBinaryNode311 * BinaryNode = ZBinaryNode__5qo6(_NewZBinaryNode311(), ParentNode, Token, LeftNode, GetApplyingSyntax__1qwh(TokenContext));
-	return AppendParsedRightNode__3qo6(BinaryNode, ParentNode, TokenContext);
+	struct ZBinaryNode310 * BinaryNode = ZBinaryNode__5qo1(_NewZBinaryNode310(), ParentNode, Token, LeftNode, GetApplyingSyntax__1qwh(TokenContext));
+	return AppendParsedRightNode__3qo1(BinaryNode, ParentNode, TokenContext);
 }
 static int BlockComment__1qwd(struct ZSourceContext50 * SourceContext) {
 	long StartIndex = GetPosition__1qwd(SourceContext);
@@ -10635,7 +10755,7 @@ static struct ZNode52 * BlockPattern__3qwg(struct ZNode52 * ParentNode, struct Z
 	return BlockNode;
 }
 static struct ZNode52 * BreakPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * BreakNode = ZBreakNode__2qom(_NewZBreakNode318(), ParentNode);
+	struct ZNode52 * BreakNode = ZBreakNode__2qon(_NewZBreakNode317(), ParentNode);
 	BreakNode = MatchToken__4qwh(TokenContext, BreakNode, "break", ZTokenContext_Required_Z53);
 	return BreakNode;
 }
@@ -10643,7 +10763,7 @@ static int CLineComment__1qwd(struct ZSourceContext50 * SourceContext) {
 	return 0/*false*/;
 }
 static struct ZNode52 * CastPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * CastNode = ZCastNode__4qo3(_NewZCastNode321(), ParentNode, ZTypeVarType_Z4, NULL);
+	struct ZNode52 * CastNode = ZCastNode__4qo5(_NewZCastNode320(), ParentNode, ZTypeVarType_Z4, NULL);
 	CastNode = MatchToken__4qwh(TokenContext, CastNode, "(", ZTokenContext_Required_Z53);
 	CastNode = MatchPattern__5qwh(TokenContext, CastNode, ZNode_TypeInfo_Z22, "$Type$", ZTokenContext_Required_Z53);
 	CastNode = MatchToken__4qwh(TokenContext, CastNode, ")", ZTokenContext_Required_Z53);
@@ -10651,7 +10771,7 @@ static struct ZNode52 * CastPattern__3qwg(struct ZNode52 * ParentNode, struct ZT
 	return CastNode;
 }
 static struct ZNode52 * CatchPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * CatchNode = ZCatchNode__2qpw(_NewZCatchNode325(), ParentNode);
+	struct ZNode52 * CatchNode = ZCatchNode__2qpq(_NewZCatchNode324(), ParentNode);
 	CatchNode = MatchToken__4qwh(TokenContext, CatchNode, "catch", ZTokenContext_Required_Z53);
 	CatchNode = MatchToken__4qwh(TokenContext, CatchNode, "(", ZTokenContext_Required_Z53);
 	CatchNode = MatchPattern__5qwh(TokenContext, CatchNode, ZNode_NameInfo_Z21, "$Name$", ZTokenContext_Required_Z53);
@@ -10660,7 +10780,7 @@ static struct ZNode52 * CatchPattern__3qwg(struct ZNode52 * ParentNode, struct Z
 	return CatchNode;
 }
 static struct ZNode52 * ClassPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * ClassNode = ZClassNode__2qda(_NewZClassNode516(), ParentNode);
+	struct ZNode52 * ClassNode = ZClassNode__2qdo(_NewZClassNode512(), ParentNode);
 	ClassNode = MatchToken__4qwh(TokenContext, ClassNode, "class", ZTokenContext_Required_Z53);
 	ClassNode = MatchPattern__5qwh(TokenContext, ClassNode, ZNode_NameInfo_Z21, "$Name$", ZTokenContext_Required_Z53);
 	if (MatchNewLineToken__2qwh(TokenContext, "extends")) {
@@ -10671,8 +10791,8 @@ static struct ZNode52 * ClassPattern__3qwg(struct ZNode52 * ParentNode, struct Z
 }
 static struct ZNode52 * ComparatorPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
 	struct ZToken77 * Token = GetToken__2qwh(TokenContext, ZTokenContext_MoveNext_Z58);
-	struct ZBinaryNode311 * BinaryNode = ZComparatorNode__5qpy(_NewZComparatorNode329(), ParentNode, Token, LeftNode, GetApplyingSyntax__1qwh(TokenContext));
-	return AppendParsedRightNode__3qo6(BinaryNode, ParentNode, TokenContext);
+	struct ZBinaryNode310 * BinaryNode = ZComparatorNode__5qpt(_NewZComparatorNode328(), ParentNode, Token, LeftNode, GetApplyingSyntax__1qwh(TokenContext));
+	return AppendParsedRightNode__3qo1(BinaryNode, ParentNode, TokenContext);
 }
 static struct ZSyntax219 * ExpressionPattern_GetRightPattern__2qwa(struct ZNameSpace48 * NameSpace, struct ZTokenContext53 * TokenContext__1) {
 	struct ZToken77 * Token = GetToken__1qwh(TokenContext);
@@ -10686,14 +10806,14 @@ static struct ZNode52 * ExpressionPattern_DispatchPattern__5qwg(struct ZNode52 *
 	struct ZToken77 * Token = GetToken__1qwh(TokenContext);
 	struct ZSyntax219 * Pattern = NULL;
 	struct ZNameSpace48 * NameSpace = GetNameSpace__1qwg(ParentNode);
-	if (LibZen_Is(Token, 462)) {
-		Pattern = ((struct ZPatternToken462 *)Token)->PresetPattern;
+	if (LibZen_Is(Token, 461)) {
+		Pattern = ((struct ZPatternToken461 *)Token)->PresetPattern;
 	} else {
 		Pattern = GetSyntaxPattern__2qwa(NameSpace, GetText__1qey(Token));
 	};
 	if (Pattern != NULL) {
 		if (Pattern->IsStatement && !AllowStatement) {
-			return ZErrorNode__4qpa(_NewZErrorNode336(), ParentNode, Token, LibZen_StrCat(GetText__1qey(Token), " statement is not here"));
+			return ZErrorNode__4qp4(_NewZErrorNode335(), ParentNode, Token, LibZen_StrCat(GetText__1qey(Token), " statement is not here"));
 		};
 		LeftNode = ApplyMatchPattern__5qwh(TokenContext, ParentNode, LeftNode, Pattern, ZTokenContext_Required_Z53);
 	} else {
@@ -10730,11 +10850,11 @@ static struct ZNode52 * ExpressionPattern__3qwg(struct ZNode52 * ParentNode, str
 	return ExpressionPattern_DispatchPattern__5qwg(ParentNode, TokenContext, LeftNode, 0/*false*/, 1/*true*/);
 }
 static struct ZNode52 * FalsePattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	return ZBooleanNode__4qso(_NewZBooleanNode476(), ParentNode, GetToken__2qwh(TokenContext, ZTokenContext_MoveNext_Z58), 0/*false*/);
+	return ZBooleanNode__4qst(_NewZBooleanNode472(), ParentNode, GetToken__2qwh(TokenContext, ZTokenContext_MoveNext_Z58), 0/*false*/);
 }
 static struct ZNode52 * FieldPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
 	int Rememberd = SetParseFlag__2qwh(TokenContext, 0/*false*/);
-	struct ZNode52 * FieldNode = ZFieldNode__2qpg(_NewZFieldNode340(), ParentNode);
+	struct ZNode52 * FieldNode = ZFieldNode__2qpf(_NewZFieldNode339(), ParentNode);
 	FieldNode = MatchToken__4qwh(TokenContext, FieldNode, "var", ZTokenContext_Required_Z53);
 	FieldNode = MatchPattern__5qwh(TokenContext, FieldNode, ZNode_NameInfo_Z21, "$Name$", ZTokenContext_Required_Z53);
 	FieldNode = MatchPattern__5qwh(TokenContext, FieldNode, ZNode_TypeInfo_Z22, "$TypeAnnotation$", ZTokenContext_Optional_Z54);
@@ -10747,7 +10867,7 @@ static struct ZNode52 * FieldPattern__3qwg(struct ZNode52 * ParentNode, struct Z
 }
 static struct ZNode52 * FloatLiteralPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
 	struct ZToken77 * Token = GetToken__2qwh(TokenContext, ZTokenContext_MoveNext_Z58);
-	return ZFloatNode__4qpl(_NewZFloatNode344(), ParentNode, Token, LibZen_ParseFloat__1qqy(GetText__1qey(Token)));
+	return ZFloatNode__4qpk(_NewZFloatNode343(), ParentNode, Token, LibZen_ParseFloat__1qqy(GetText__1qey(Token)));
 }
 static struct ZNode52 * FunctionPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
 	struct ZNode52 * FuncNode = ZFunctionNode__2qtq(_NewZFunctionNode144(), ParentNode);
@@ -10759,27 +10879,27 @@ static struct ZNode52 * FunctionPattern__3qwg(struct ZNode52 * ParentNode, struc
 	return FuncNode;
 }
 static struct ZNode52 * GetIndexPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * IndexerNode = ZGetIndexNode__3qp6(_NewZGetIndexNode347(), ParentNode, LeftNode);
+	struct ZNode52 * IndexerNode = ZGetIndexNode__3qp1(_NewZGetIndexNode346(), ParentNode, LeftNode);
 	IndexerNode = MatchToken__4qwh(TokenContext, IndexerNode, "[", ZTokenContext_Required_Z53);
 	IndexerNode = MatchPattern__6qwh(TokenContext, IndexerNode, ZGetIndexNode_Index_Z66, "$Expression$", ZTokenContext_Required_Z53, ZTokenContext_AllowSkipIndent_Z55);
 	IndexerNode = MatchToken__4qwh(TokenContext, IndexerNode, "]", ZTokenContext_Required_Z53);
 	return IndexerNode;
 }
 static struct ZNode52 * GetterPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * GetterNode = ZGetterNode__3qp7(_NewZGetterNode355(), ParentNode, LeftNode);
+	struct ZNode52 * GetterNode = ZGetterNode__3qpm(_NewZGetterNode354(), ParentNode, LeftNode);
 	GetterNode = MatchToken__4qwh(TokenContext, GetterNode, ".", ZTokenContext_Required_Z53);
 	GetterNode = MatchPattern__5qwh(TokenContext, GetterNode, ZNode_NameInfo_Z21, "$Name$", ZTokenContext_Required_Z53);
 	return GetterNode;
 }
 static struct ZNode52 * GroupPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * GroupNode = ZGroupNode__2q0t(_NewZGroupNode364(), ParentNode);
+	struct ZNode52 * GroupNode = ZGroupNode__2q0r(_NewZGroupNode363(), ParentNode);
 	GroupNode = MatchToken__4qwh(TokenContext, GroupNode, "(", ZTokenContext_Required_Z53);
 	GroupNode = MatchPattern__6qwh(TokenContext, GroupNode, ZGroupNode_Expr_Z68, "$Expression$", ZTokenContext_Required_Z53, ZTokenContext_AllowSkipIndent_Z55);
 	GroupNode = MatchToken__4qwh(TokenContext, GroupNode, ")", ZTokenContext_Required_Z53);
 	return GroupNode;
 }
 static struct ZNode52 * IfPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * IfNode = ZIfNode__2q0i(_NewZIfNode367(), ParentNode);
+	struct ZNode52 * IfNode = ZIfNode__2q0u(_NewZIfNode366(), ParentNode);
 	IfNode = MatchToken__4qwh(TokenContext, IfNode, "if", ZTokenContext_Required_Z53);
 	IfNode = MatchToken__4qwh(TokenContext, IfNode, "(", ZTokenContext_Required_Z53);
 	IfNode = MatchPattern__6qwh(TokenContext, IfNode, ZIfNode_Cond_Z69, "$Expression$", ZTokenContext_Required_Z53, ZTokenContext_AllowNewLine_Z57);
@@ -10795,16 +10915,16 @@ static struct ZNode52 * IfPattern__3qwg(struct ZNode52 * ParentNode, struct ZTok
 	return IfNode;
 }
 static struct ZNode52 * InstanceOfPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * BinaryNode = ZInstanceOfNode__4q0s(_NewZInstanceOfNode373(), ParentNode, GetToken__2qwh(TokenContext, ZTokenContext_MoveNext_Z58), LeftNode);
+	struct ZNode52 * BinaryNode = ZInstanceOfNode__4q0a(_NewZInstanceOfNode372(), ParentNode, GetToken__2qwh(TokenContext, ZTokenContext_MoveNext_Z58), LeftNode);
 	BinaryNode = MatchPattern__5qwh(TokenContext, BinaryNode, ZNode_TypeInfo_Z22, "$Type$", ZTokenContext_Required_Z53);
 	return BinaryNode;
 }
 static struct ZNode52 * IntLiteralPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
 	struct ZToken77 * Token = GetToken__2qwh(TokenContext, ZTokenContext_MoveNext_Z58);
-	return ZIntNode__4q0h(_NewZIntNode377(), ParentNode, Token, LibZen_ParseInt__1qqy(GetText__1qey(Token)));
+	return ZIntNode__4q0g(_NewZIntNode376(), ParentNode, Token, LibZen_ParseInt__1qqy(GetText__1qey(Token)));
 }
 static struct ZNode52 * LetPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * LetNode = ZLetNode__2q0l(_NewZLetNode380(), ParentNode);
+	struct ZNode52 * LetNode = ZLetNode__2q0k(_NewZLetNode379(), ParentNode);
 	LetNode = MatchToken__4qwh(TokenContext, LetNode, "let", ZTokenContext_Required_Z53);
 	LetNode = MatchPattern__5qwh(TokenContext, LetNode, ZNode_NameInfo_Z21, "$Name$", ZTokenContext_Required_Z53);
 	LetNode = MatchPattern__5qwh(TokenContext, LetNode, ZNode_TypeInfo_Z22, "$TypeAnnotation$", ZTokenContext_Optional_Z54);
@@ -10813,19 +10933,19 @@ static struct ZNode52 * LetPattern__3qwg(struct ZNode52 * ParentNode, struct ZTo
 	return LetNode;
 }
 static struct ZNode52 * MapEntryPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * LiteralNode = ZMapEntryNode__2q4w(_NewZMapEntryNode397(), ParentNode);
+	struct ZNode52 * LiteralNode = ZMapEntryNode__2q4q(_NewZMapEntryNode396(), ParentNode);
 	LiteralNode = MatchPattern__5qwh(TokenContext, LiteralNode, ZMapEntryNode_Key_Z74, "$Expression$", ZTokenContext_Required_Z53);
 	LiteralNode = MatchToken__4qwh(TokenContext, LiteralNode, ":", ZTokenContext_Required_Z53);
 	LiteralNode = MatchPattern__5qwh(TokenContext, LiteralNode, ZMapEntryNode_Value_Z75, "$Expression$", ZTokenContext_Required_Z53);
 	return LiteralNode;
 }
 static struct ZNode52 * MapLiteralPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * LiteralNode = ZMapLiteralNode__2q4r(_NewZMapLiteralNode399(), ParentNode);
+	struct ZNode52 * LiteralNode = ZMapLiteralNode__2q4e(_NewZMapLiteralNode398(), ParentNode);
 	LiteralNode = MatchNtimes__6qwh(TokenContext, LiteralNode, "{", "$MapEntry$", ",", "}");
 	return LiteralNode;
 }
 static struct ZNode52 * MethodCallPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * MethodCallNode = ZMethodCallNode__3q4i(_NewZMethodCallNode403(), ParentNode, LeftNode);
+	struct ZNode52 * MethodCallNode = ZMethodCallNode__3q4u(_NewZMethodCallNode402(), ParentNode, LeftNode);
 	MethodCallNode = MatchToken__4qwh(TokenContext, MethodCallNode, ".", ZTokenContext_Required_Z53);
 	MethodCallNode = MatchPattern__5qwh(TokenContext, MethodCallNode, ZNode_NameInfo_Z21, "$Name$", ZTokenContext_Required_Z53);
 	MethodCallNode = MatchNtimes__6qwh(TokenContext, MethodCallNode, "(", "$Expression$", ",", ")");
@@ -10834,9 +10954,9 @@ static struct ZNode52 * MethodCallPattern__3qwg(struct ZNode52 * ParentNode, str
 static struct ZNode52 * NamePattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
 	struct ZToken77 * Token = GetToken__2qwh(TokenContext, ZTokenContext_MoveNext_Z58);
 	if (LibZen_IsSymbol__1qqy(GetChar__1qey(Token))) {
-		return ZGetNameNode__4qpc(_NewZGetNameNode350(), ParentNode, Token, GetText__1qey(Token));
+		return ZGetNameNode__4qpx(_NewZGetNameNode349(), ParentNode, Token, GetText__1qey(Token));
 	};
-	return ZErrorNode__4qpa(_NewZErrorNode336(), ParentNode, Token, LibZen_StrCat(LibZen_StrCat("illegal name: \"", GetText__1qey(Token)), "\""));
+	return ZErrorNode__4qp4(_NewZErrorNode335(), ParentNode, Token, LibZen_StrCat(LibZen_StrCat("illegal name: \"", GetText__1qey(Token)), "\""));
 }
 static int NameToken__1qwd(struct ZSourceContext50 * SourceContext) {
 	long StartIndex = GetPosition__1qwd(SourceContext);
@@ -10858,19 +10978,19 @@ static int NewLineToken__1qwd(struct ZSourceContext50 * SourceContext) {
 	return 1/*true*/;
 }
 static struct ZNode52 * NewObjectPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * LiteralNode = ZNewObjectNode__2q4g(_NewZNewObjectNode412(), ParentNode);
+	struct ZNode52 * LiteralNode = ZNewObjectNode__2q4f(_NewZNewObjectNode411(), ParentNode);
 	LiteralNode = MatchToken__4qwh(TokenContext, LiteralNode, "new", ZTokenContext_Required_Z53);
 	LiteralNode = MatchPattern__5qwh(TokenContext, LiteralNode, ZNode_TypeInfo_Z22, "$Type$", ZTokenContext_Optional_Z54);
 	LiteralNode = MatchNtimes__6qwh(TokenContext, LiteralNode, "(", "$Expression$", ",", ")");
 	return LiteralNode;
 }
 static struct ZNode52 * NotPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * UnaryNode = ZNotNode__3q4l(_NewZNotNode416(), ParentNode, GetToken__2qwh(TokenContext, ZTokenContext_MoveNext_Z58));
+	struct ZNode52 * UnaryNode = ZNotNode__3q4k(_NewZNotNode415(), ParentNode, GetToken__2qwh(TokenContext, ZTokenContext_MoveNext_Z58));
 	UnaryNode = MatchPattern__5qwh(TokenContext, UnaryNode, ZUnaryNode_Recv_Z37, "$RightExpression$", ZTokenContext_Required_Z53);
 	return UnaryNode;
 }
 static struct ZNode52 * NullPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	return ZNullNode__3q46(_NewZNullNode419(), ParentNode, GetToken__2qwh(TokenContext, ZTokenContext_MoveNext_Z58));
+	return ZNullNode__3q41(_NewZNullNode418(), ParentNode, GetToken__2qwh(TokenContext, ZTokenContext_MoveNext_Z58));
 }
 static const char * NumberLiteralToken_ParseDigit__1qwd(struct ZSourceContext50 * SourceContext) {
 	const char * ch = "0";
@@ -10910,8 +11030,8 @@ static int OperatorToken__1qwd(struct ZSourceContext50 * SourceContext) {
 	return 1/*true*/;
 }
 static struct ZNode52 * OrPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZBinaryNode311 * BinaryNode = ZOrNode__5q4c(_NewZOrNode422(), ParentNode, GetToken__2qwh(TokenContext, ZTokenContext_MoveNext_Z58), LeftNode, GetApplyingSyntax__1qwh(TokenContext));
-	return AppendParsedRightNode__3qo6(BinaryNode, ParentNode, TokenContext);
+	struct ZBinaryNode310 * BinaryNode = ZOrNode__5q4x(_NewZOrNode421(), ParentNode, GetToken__2qwh(TokenContext, ZTokenContext_MoveNext_Z58), LeftNode, GetApplyingSyntax__1qwh(TokenContext));
+	return AppendParsedRightNode__3qo1(BinaryNode, ParentNode, TokenContext);
 }
 static struct ZNode52 * ParamPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
 	struct ZNode52 * ParamNode = ZParamNode__2qtb(_NewZParamNode172(), ParentNode);
@@ -10920,7 +11040,7 @@ static struct ZNode52 * ParamPattern__3qwg(struct ZNode52 * ParentNode, struct Z
 	return ParamNode;
 }
 static struct ZNode52 * PrototypePattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * FuncNode = ZPrototypeNode__2q4n(_NewZPrototypeNode425(), ParentNode);
+	struct ZNode52 * FuncNode = ZPrototypeNode__2q4b(_NewZPrototypeNode424(), ParentNode);
 	FuncNode = MatchToken__4qwh(TokenContext, FuncNode, "function", ZTokenContext_Required_Z53);
 	FuncNode = MatchPattern__5qwh(TokenContext, FuncNode, ZNode_NameInfo_Z21, "$Name$", ZTokenContext_Required_Z53);
 	FuncNode = MatchNtimes__6qwh(TokenContext, FuncNode, "(", "$Param$", ",", ")");
@@ -10998,7 +11118,7 @@ static struct ZNode52 * StatementEndPattern__3qwg(struct ZNode52 * ParentNode, s
 		};
 	};
 	(void)SetParseFlag__2qwh(TokenContext, ContextAllowance);
-	return ZEmptyNode__3qp0(_NewZEmptyNode334(), ParentNode, Token);
+	return ZEmptyNode__3qpp(_NewZEmptyNode333(), ParentNode, Token);
 }
 static struct ZNode52 * StatementPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
 	int Rememberd = SetParseFlag__2qwh(TokenContext, ZTokenContext_AllowSkipIndent_Z55);
@@ -11010,7 +11130,7 @@ static struct ZNode52 * StatementPattern__3qwg(struct ZNode52 * ParentNode, stru
 }
 static struct ZNode52 * StringLiteralPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
 	struct ZToken77 * Token = GetToken__2qwh(TokenContext, ZTokenContext_MoveNext_Z58);
-	return ZStringNode__4q48(_NewZStringNode431(), ParentNode, Token, LibZen_UnquoteString__1qqy(GetText__1qey(Token)));
+	return ZStringNode__4q42(_NewZStringNode430(), ParentNode, Token, LibZen_UnquoteString__1qqy(GetText__1qey(Token)));
 }
 static int StringLiteralToken__1qwd(struct ZSourceContext50 * SourceContext) {
 	long StartIndex = GetPosition__1qwd(SourceContext);
@@ -11037,9 +11157,9 @@ static int StringLiteralToken__1qwd(struct ZSourceContext50 * SourceContext) {
 static struct ZNode52 * SymbolExpressionPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
 	struct ZToken77 * NameToken = GetToken__2qwh(TokenContext, ZTokenContext_MoveNext_Z58);
 	if (IsToken__2qwh(TokenContext, "=")) {
-		return ZErrorNode__4qpa(_NewZErrorNode336(), ParentNode, GetToken__1qwh(TokenContext), "assignment is not en expression");
+		return ZErrorNode__4qp4(_NewZErrorNode335(), ParentNode, GetToken__1qwh(TokenContext), "assignment is not en expression");
 	} else {
-		return ZGetNameNode__4qpc(_NewZGetNameNode350(), ParentNode, NameToken, GetText__1qey(NameToken));
+		return ZGetNameNode__4qpx(_NewZGetNameNode349(), ParentNode, NameToken, GetText__1qey(NameToken));
 	};
 }
 static struct ZNode52 * SymbolStatementPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
@@ -11049,7 +11169,7 @@ static struct ZNode52 * SymbolStatementPattern__3qwg(struct ZNode52 * ParentNode
 		AssignedNode = MatchPattern__5qwh(TokenContext, AssignedNode, ZSetNameNode_Expr_Z29, "$Expression$", ZTokenContext_Required_Z53);
 		return AssignedNode;
 	} else {
-		return ZGetNameNode__4qpc(_NewZGetNameNode350(), ParentNode, NameToken, GetText__1qey(NameToken));
+		return ZGetNameNode__4qpx(_NewZGetNameNode349(), ParentNode, NameToken, GetText__1qey(NameToken));
 	};
 }
 static struct ZNode52 * ThrowPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
@@ -11059,7 +11179,7 @@ static struct ZNode52 * ThrowPattern__3qwg(struct ZNode52 * ParentNode, struct Z
 	return ThrowNode;
 }
 static struct ZNode52 * TruePattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	return ZBooleanNode__4qso(_NewZBooleanNode476(), ParentNode, GetToken__2qwh(TokenContext, ZTokenContext_MoveNext_Z58), 1/*true*/);
+	return ZBooleanNode__4qst(_NewZBooleanNode472(), ParentNode, GetToken__2qwh(TokenContext, ZTokenContext_MoveNext_Z58), 1/*true*/);
 }
 static struct ZNode52 * TryPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
 	struct ZNode52 * TryNode = ZTryNode__2qyd(_NewZTryNode194(), ParentNode);
@@ -11098,7 +11218,7 @@ static struct ZNode52 * UnaryPattern__3qwg(struct ZNode52 * ParentNode, struct Z
 	return MatchPattern__5qwh(TokenContext, UnaryNode, ZUnaryNode_Recv_Z37, "$RightExpression$", ZTokenContext_Required_Z53);
 }
 static struct ZNode52 * VarPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * VarNode = ZVarNode__2qde(_NewZVarNode506(), ParentNode);
+	struct ZNode52 * VarNode = ZVarNode__2qs2(_NewZVarNode502(), ParentNode);
 	VarNode = MatchToken__4qwh(TokenContext, VarNode, "var", ZTokenContext_Required_Z53);
 	VarNode = MatchPattern__5qwh(TokenContext, VarNode, ZNode_NameInfo_Z21, "$Name$", ZTokenContext_Required_Z53);
 	VarNode = MatchPattern__5qwh(TokenContext, VarNode, ZNode_TypeInfo_Z22, "$TypeAnnotation$", ZTokenContext_Optional_Z54);
