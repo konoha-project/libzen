@@ -46,7 +46,7 @@ class AsmClassBuilder {
 	}
 
 	AsmMethodBuilder NewMethod(int acc, String Name, String Desc) {
-		AsmMethodBuilder MethodBuilder = new AsmMethodBuilder(acc, Name, Desc, this.Generator);
+		@Var AsmMethodBuilder MethodBuilder = new AsmMethodBuilder(acc, Name, Desc, this.Generator);
 		this.MethodList.add(MethodBuilder);
 		return MethodBuilder;
 	}
@@ -58,7 +58,7 @@ class AsmClassBuilder {
 
 
 	byte[] GenerateBytecode() {
-		ClassWriter Visitor = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
+		@Var ClassWriter Visitor = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
 		Visitor.visit(V1_6, this.ClassQualifer, this.ClassName, null, this.SuperClassName, null);
 		Visitor.visitSource(this.SourceFile, null);
 		for(FieldNode f : this.FieldList) {
@@ -74,8 +74,8 @@ class AsmClassBuilder {
 
 	Method GetDefinedMethod(ClassLoader ClassLoader, String FuncName) {
 		try {
-			Class<?> DefinedClass = ClassLoader.loadClass(this.ClassName);
-			Method[] DefinedMethods = DefinedClass.getMethods();
+			@Var Class<?> DefinedClass = ClassLoader.loadClass(this.ClassName);
+			@Var Method[] DefinedMethods = DefinedClass.getMethods();
 			for(Method m : DefinedMethods) {
 				if(m.getName().equals(FuncName)) {
 					return m;
@@ -88,10 +88,10 @@ class AsmClassBuilder {
 	}
 
 	void OutputClassFile() {  // This is used for debug
-		byte[] ba = this.GenerateBytecode();
+		@Var byte[] ba = this.GenerateBytecode();
 		System.err.println("*debug info*: generating " + this.ClassName + ".class");
 		System.err.println("*debug info*: check it out with javap -c " + this.ClassName + ".class");
-		File file = new File(this.ClassName + ".class");
+		@Var File file = new File(this.ClassName + ".class");
 		try {
 			FileOutputStream fos = new FileOutputStream(file);
 			fos.write(ba);

@@ -42,13 +42,15 @@ import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
+import zen.deps.Field;
 import zen.deps.LibZen;
+import zen.deps.Var;
 import zen.parser.ZSourceBuilder;
 import zen.parser.ZSourceGenerator;
 import zen.type.ZType;
 
 public class HaskellSourceGenerator extends ZSourceGenerator {
-	public ArrayList <String> Variables;
+	@Field public ArrayList <String> Variables;
 	private static int IndentLevel = 0;
 
 	public HaskellSourceGenerator() {
@@ -82,20 +84,20 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 	}
 
 	private void UnIndent(ZSourceBuilder builder) {
-		IndentLevel--;
+		IndentLevel = IndentLevel - 1;
 		builder.UnIndent();
 	}
 
 	@Override
 	public void VisitBlockNode(ZBlockNode Node) {
-		int count = 0;
+		@Var int count = 0;
 
 		this.Indent(this.CurrentBuilder);
 		this.CurrentBuilder.AppendIndent();
 		this.CurrentBuilder.Append("do ");
 
-		int limit = Node.GetListSize();
-		for (int i = 0; i < limit; i++) {
+		@Var int limit = Node.GetListSize();
+		for (@Var int i = 0; i < limit; i++) {
 			ZNode SubNode = Node.GetListAt(i);
 			this.CurrentBuilder.AppendLineFeed();
 			this.CurrentBuilder.AppendIndent();
@@ -178,8 +180,8 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 
 			this.CurrentBuilder.AppendIndent();
 			this.CurrentBuilder.Append(Param.Name
-						   + "_ref <- newIORef "
-						   + Param.Name);
+					+ "_ref <- newIORef "
+					+ Param.Name);
 			this.CurrentBuilder.AppendLineFeed();
 		}
 
@@ -188,8 +190,8 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 
 			this.CurrentBuilder.AppendIndent();
 			this.CurrentBuilder.Append(node1.Name
-						   + " <- readIORef "
-						   + node1.Name + "_ref");
+					+ " <- readIORef "
+					+ node1.Name + "_ref");
 			this.CurrentBuilder.AppendLineFeed();
 		}
 		this.UnIndent(this.CurrentBuilder);
