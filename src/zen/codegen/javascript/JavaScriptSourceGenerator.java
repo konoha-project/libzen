@@ -154,16 +154,29 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 				Node.FuncName = "f";
 			}
 			@Var String FuncName = Node.FuncName + this.GetUniqueNumber();
-			this.CurrentBuilder.Append("function ");
+			this.CurrentBuilder.Append("var ");
 			this.CurrentBuilder.Append(FuncName);
+			this.CurrentBuilder.Append(" = (function ");
 			this.VisitListNode("(", Node, ")");
 			this.GenerateCode(null, Node.AST[ZFunctionNode._Block]);
+			this.CurrentBuilder.Append(");");
 		}
 		else {
-			this.CurrentBuilder.Append("function ");
+			this.CurrentBuilder.Append("var ");
 			this.CurrentBuilder.Append(Node.GetSignature(this));
+			this.CurrentBuilder.Append(" = (function ");
 			this.VisitListNode("(", Node, ")");
 			this.GenerateCode(null, Node.AST[ZFunctionNode._Block]);
+			this.CurrentBuilder.Append(");");
+		}
+		if(Node.AST.length > 1 && Node.AST[1/*first param*/] instanceof ZParamNode) {
+			this.CurrentBuilder.AppendLineFeed();
+			this.CurrentBuilder.Append(Node.AST[1/*first param*/].Type.ShortName); //FIXME must use typing in param
+			this.CurrentBuilder.Append(".prototype.");
+			this.CurrentBuilder.Append(Node.FuncName);
+			this.CurrentBuilder.Append(" = ");
+			this.CurrentBuilder.Append(Node.GetSignature(this));
+			this.CurrentBuilder.Append(this.SemiColon);
 		}
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.AppendLineFeed();
