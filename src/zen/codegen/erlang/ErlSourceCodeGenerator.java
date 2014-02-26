@@ -80,7 +80,7 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitStmtList(ZBlockNode BlockNode) {
-		VisitStmtList(BlockNode, ".");
+		VisitStmtList(BlockNode, ",");
 	}
 	public void VisitStmtList(ZBlockNode BlockNode, String last) {
 		@Var int i = 0;
@@ -108,7 +108,7 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 	public void VisitBlockNode(ZBlockNode Node, String last) {
 		this.VarMgr.PushScope();
 		this.CurrentBuilder.Indent();
-		this.VisitStmtList(Node, last);
+		this.VisitStmtList(Node);
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.IndentAndAppend("__Arguments__ = " + this.VarMgr.GenVarTupleOnlyUsed(false));
 		this.CurrentBuilder.Append(last);
@@ -315,10 +315,15 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 		this.GenerateCode(null, Node.AST[ZIfNode._Cond]);
 		this.CurrentBuilder.Append(" ->");
 		this.VisitBlockNode((ZBlockNode)Node.AST[ZIfNode._Then], ";");
+		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.IndentAndAppend("true ->");
 		if (Node.AST[ZIfNode._Else] != null) {
-			this.CurrentBuilder.AppendLineFeed();
-			this.CurrentBuilder.IndentAndAppend("true ->");
 			this.VisitBlockNode((ZBlockNode)Node.AST[ZIfNode._Else], "");
+		} else {
+			this.CurrentBuilder.Indent();
+			this.CurrentBuilder.AppendLineFeed();
+			this.CurrentBuilder.IndentAndAppend(this.VarMgr.GenVarTupleOnlyUsedByChildScope(false));
+			this.CurrentBuilder.UnIndent();
 		}
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.IndentAndAppend("end");
