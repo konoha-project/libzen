@@ -15,7 +15,7 @@ var ZType = (function() {
       this.GetGreekRealType = null;
       this.AcceptValueType = null;
       this.IsVarType = null;
-}
+   }
    return ZType;
 })();
 
@@ -37,16 +37,16 @@ var ZClassField = (function() {
       this.FieldName = null;
       this.FieldNativeIndex = 0;
       this.SourceToken = null;
-}
+   }
    return ZClassField;
 })();
 
 var ZClassType = (function(_super) {
    __extends(ZClassType, _super);
    function ZClassType(){
-_super.call(this);
+      _super.call(this);
       this.FieldList = null;
-}
+   }
    return ZClassType;
 })(ZType);
 
@@ -55,7 +55,7 @@ var ZFunc = (function() {
       this.FuncFlag = 0;
       this.FuncName = null;
       this.FuncType = null;
-}
+   }
    return ZFunc;
 })();
 
@@ -65,11 +65,11 @@ var ZFunc_CoercionFunc_Z13 = (1 << 17) | (1 << 16);
 var ZFuncType = (function(_super) {
    __extends(ZFuncType, _super);
    function ZFuncType(){
-_super.call(this);
+      _super.call(this);
       this.TypeParams = null;
       this.HasUnknownType = false;
       this.HasGreekType = false;
-}
+   }
    return ZFuncType;
 })(ZType);
 
@@ -77,10 +77,10 @@ var ZFuncType_FuncType_Z14 = ZFuncType__3qe0(new ZFuncType(), "Func", null);
 var ZGenericType = (function(_super) {
    __extends(ZGenericType, _super);
    function ZGenericType(){
-_super.call(this);
+      _super.call(this);
       this.BaseType = null;
       this.ParamType = null;
-}
+   }
    return ZGenericType;
 })(ZType);
 
@@ -89,31 +89,31 @@ var ZGenericType_MapType_Z16 = ZGenericType__5qev(new ZGenericType(), 1 << 16, "
 var ZGreekType = (function(_super) {
    __extends(ZGreekType, _super);
    function ZGreekType(){
-_super.call(this);
+      _super.call(this);
       this.GreekId = 0;
-}
+   }
    return ZGreekType;
 })(ZType);
 
 var ZPrototype = (function(_super) {
    __extends(ZPrototype, _super);
    function ZPrototype(){
-_super.call(this);
+      _super.call(this);
       this.DefinedCount = 0;
       this.UsedCount = 0;
-}
+   }
    return ZPrototype;
 })(ZFunc);
 
 var ZTypePool = (function() {
    function ZTypePool(){
-}
+   }
    return ZTypePool;
 })();
 
 var ZTypePool_TypeList_Z17 = [];
-var ZTypePool_ClassNameMap_Z18 = ;
-var ZTypePool_UniqueTypeSetMap_Z19 = ;
+var ZTypePool_ClassNameMap_Z18 = LibZen.NewMap(0);
+var ZTypePool_UniqueTypeSetMap_Z19 = LibZen.NewMap(0);
 var ZVarScope = (function() {
    function ZVarScope(){
       this.Parent = null;
@@ -121,18 +121,18 @@ var ZVarScope = (function() {
       this.VarList = null;
       this.VarNodeCount = 0;
       this.UnresolvedSymbolCount = 0;
-}
+   }
    return ZVarScope;
 })();
 
 var ZVarType = (function(_super) {
    __extends(ZVarType, _super);
    function ZVarType(){
-_super.call(this);
+      _super.call(this);
       this.VarList = null;
       this.SourceToken = null;
       this.GreekId = 0;
-}
+   }
    return ZVarType;
 })(ZType);
 
@@ -148,7 +148,7 @@ var ZNode = (function() {
       this.IsBreakingBlock = null;
       this.DeSugar = null;
       this.Accept = null;
-}
+   }
    return ZNode;
 })();
 
@@ -160,19 +160,19 @@ var ZNode_NestedAppendIndex_Z24 = -5;
 var ZParamNode = (function(_super) {
    __extends(ZParamNode, _super);
    function ZParamNode(){
-_super.call(this);
+      _super.call(this);
       this.Name = null;
       this.NameToken = null;
       this.ParamIndex = 0;
-}
+   }
    return ZParamNode;
 })(ZNode);
 
 var ZReturnNode = (function(_super) {
    __extends(ZReturnNode, _super);
    function ZReturnNode(){
-_super.call(this);
-}
+      _super.call(this);
+   }
    return ZReturnNode;
 })(ZNode);
 
@@ -180,8 +180,8 @@ var ZReturnNode_Expr_Z25 = 0;
 var ZSetIndexNode = (function(_super) {
    __extends(ZSetIndexNode, _super);
    function ZSetIndexNode(){
-_super.call(this);
-}
+      _super.call(this);
+   }
    return ZSetIndexNode;
 })(ZNode);
 
@@ -191,11 +191,11 @@ var ZSetIndexNode_Expr_Z28 = 2;
 var ZSetNameNode = (function(_super) {
    __extends(ZSetNameNode, _super);
    function ZSetNameNode(){
-_super.call(this);
+      _super.call(this);
       this.VarName = null;
       this.VarIndex = 0;
       this.IsCaptured = false;
-}
+   }
    return ZSetNameNode;
 })(ZNode);
 
@@ -203,10 +203,10 @@ var ZSetNameNode_Expr_Z29 = 0;
 var ZSetterNode = (function(_super) {
    __extends(ZSetterNode, _super);
    function ZSetterNode(){
-_super.call(this);
+      _super.call(this);
       this.FieldName = null;
       this.NameToken = null;
-}
+   }
    return ZSetterNode;
 })(ZNode);
 
@@ -215,9 +215,9 @@ var ZSetterNode_Expr_Z31 = 1;
 var ZSugarNode = (function(_super) {
    __extends(ZSugarNode, _super);
    function ZSugarNode(){
-_super.call(this);
+      _super.call(this);
       this.SugarNode = null;
-}
+   }
    return ZSugarNode;
 })(ZNode);
 
@@ -225,8 +225,8 @@ var ZSugarNode_DeSugar_Z32 = 0;
 var ZThrowNode = (function(_super) {
    __extends(ZThrowNode, _super);
    function ZThrowNode(){
-_super.call(this);
-}
+      _super.call(this);
+   }
    return ZThrowNode;
 })(ZNode);
 
@@ -234,8 +234,8 @@ var ZThrowNode_Expr_Z33 = 0;
 var ZTryNode = (function(_super) {
    __extends(ZTryNode, _super);
    function ZTryNode(){
-_super.call(this);
-}
+      _super.call(this);
+   }
    return ZTryNode;
 })(ZNode);
 
@@ -245,8 +245,8 @@ var ZTryNode_Finally_Z36 = 2;
 var ZUnaryNode = (function(_super) {
    __extends(ZUnaryNode, _super);
    function ZUnaryNode(){
-_super.call(this);
-}
+      _super.call(this);
+   }
    return ZUnaryNode;
 })(ZNode);
 
@@ -254,8 +254,8 @@ var ZUnaryNode_Recv_Z37 = 0;
 var ZWhileNode = (function(_super) {
    __extends(ZWhileNode, _super);
    function ZWhileNode(){
-_super.call(this);
-}
+      _super.call(this);
+   }
    return ZWhileNode;
 })(ZNode);
 
@@ -263,7 +263,7 @@ var ZWhileNode_Cond_Z38 = 0;
 var ZWhileNode_Block_Z39 = 1;
 var ZEmptyValue = (function() {
    function ZEmptyValue(){
-}
+   }
    return ZEmptyValue;
 })();
 
@@ -272,15 +272,15 @@ var ZEmptyValue_FalseEmpty_Z41 = new ZEmptyValue();
 var ZLogger = (function() {
    function ZLogger(){
       this.ReportedErrorList = [];
-}
+   }
    return ZLogger;
 })();
 
 var ZMacroFunc = (function(_super) {
    __extends(ZMacroFunc, _super);
    function ZMacroFunc(){
-_super.call(this);
-}
+      _super.call(this);
+   }
    return ZMacroFunc;
 })(ZFunc);
 
@@ -292,13 +292,13 @@ var ZNameSpace = (function() {
       this.TokenMatrix = null;
       this.SyntaxTable = null;
       this.SymbolTable = null;
-}
+   }
    return ZNameSpace;
 })();
 
 var ZParserConst = (function() {
    function ZParserConst(){
-}
+   }
    return ZParserConst;
 })();
 
@@ -317,7 +317,7 @@ var ZSource = (function() {
       this.FileName = null;
       this.LineNumber = 0;
       this.SourceText = null;
-}
+   }
    return ZSource;
 })();
 
@@ -329,25 +329,25 @@ var ZSourceBuilder = (function() {
       this.IndentLevel = 0;
       this.CurrentIndentString = "";
       this.BufferedLineComment = "";
-}
+   }
    return ZSourceBuilder;
 })();
 
 var ZSourceContext = (function(_super) {
    __extends(ZSourceContext, _super);
    function ZSourceContext(){
-_super.call(this);
+      _super.call(this);
       this.SourcePosition = 0;
-}
+   }
    return ZSourceContext;
 })(ZSource);
 
 var ZSourceMacro = (function(_super) {
    __extends(ZSourceMacro, _super);
    function ZSourceMacro(){
-_super.call(this);
+      _super.call(this);
       this.Macro = null;
-}
+   }
    return ZSourceMacro;
 })(ZMacroFunc);
 
@@ -356,7 +356,7 @@ var ZSymbolEntry = (function() {
       this.Parent = null;
       this.Node = null;
       this.IsDisabled = false;
-}
+   }
    return ZSymbolEntry;
 })();
 
@@ -369,7 +369,7 @@ var ZSyntax = (function() {
       this.ParentPattern = null;
       this.IsDisabled = false;
       this.IsStatement = false;
-}
+   }
    return ZSyntax;
 })();
 
@@ -380,7 +380,7 @@ var ZToken = (function() {
       this.Source = null;
       this.StartIndex = 0;
       this.EndIndex = 0;
-}
+   }
    return ZToken;
 })();
 
@@ -395,7 +395,7 @@ var ZTokenContext = (function() {
       this.IsAllowSkipIndent = false;
       this.LatestToken = null;
       this.ApplyingPattern = null;
-}
+   }
    return ZTokenContext;
 })();
 
@@ -409,14 +409,14 @@ var ZTokenFunc = (function() {
    function ZTokenFunc(){
       this.Func = null;
       this.ParentFunc = null;
-}
+   }
    return ZTokenFunc;
 })();
 
 var ZVariable = (function(_super) {
    __extends(ZVariable, _super);
    function ZVariable(){
-_super.call(this);
+      _super.call(this);
       this.VarFlag = 0;
       this.VarType = null;
       this.VarName = null;
@@ -424,7 +424,7 @@ _super.call(this);
       this.SourceToken = null;
       this.DefCount = 0;
       this.UsedCount = 0;
-}
+   }
    return ZVariable;
 })(ZSymbolEntry);
 
@@ -474,32 +474,32 @@ var ZVisitor = (function() {
       this.EnableVisitor = null;
       this.StopVisitor = null;
       this.IsVisitable = null;
-}
+   }
    return ZVisitor;
 })();
 
 var ZArrayType = (function(_super) {
    __extends(ZArrayType, _super);
    function ZArrayType(){
-_super.call(this);
-}
+      _super.call(this);
+   }
    return ZArrayType;
 })(ZGenericType);
 
 var ZAnnotationNode = (function(_super) {
    __extends(ZAnnotationNode, _super);
    function ZAnnotationNode(){
-_super.call(this);
+      _super.call(this);
       this.AnnotatedNode = null;
-}
+   }
    return ZAnnotationNode;
 })(ZNode);
 
 var ZAssertNode = (function(_super) {
    __extends(ZAssertNode, _super);
    function ZAssertNode(){
-_super.call(this);
-}
+      _super.call(this);
+   }
    return ZAssertNode;
 })(ZNode);
 
@@ -507,9 +507,9 @@ var ZAssertNode_Expr_Z59 = 0;
 var ZBinaryNode = (function(_super) {
    __extends(ZBinaryNode, _super);
    function ZBinaryNode(){
-_super.call(this);
+      _super.call(this);
       this.Pattern = null;
-}
+   }
    return ZBinaryNode;
 })(ZNode);
 
@@ -518,16 +518,16 @@ var ZBinaryNode_Right_Z61 = 1;
 var ZBreakNode = (function(_super) {
    __extends(ZBreakNode, _super);
    function ZBreakNode(){
-_super.call(this);
-}
+      _super.call(this);
+   }
    return ZBreakNode;
 })(ZNode);
 
 var ZCastNode = (function(_super) {
    __extends(ZCastNode, _super);
    function ZCastNode(){
-_super.call(this);
-}
+      _super.call(this);
+   }
    return ZCastNode;
 })(ZNode);
 
@@ -535,11 +535,11 @@ var ZCastNode_Expr_Z62 = 0;
 var ZCatchNode = (function(_super) {
    __extends(ZCatchNode, _super);
    function ZCatchNode(){
-_super.call(this);
+      _super.call(this);
       this.ExceptionType = ZType__4qwg(new ZType(), 1 << 16, "var", null);
       this.ExceptionName = null;
       this.NameToken = null;
-}
+   }
    return ZCatchNode;
 })(ZNode);
 
@@ -547,45 +547,45 @@ var ZCatchNode_Block_Z63 = 0;
 var ZComparatorNode = (function(_super) {
    __extends(ZComparatorNode, _super);
    function ZComparatorNode(){
-_super.call(this);
-}
+      _super.call(this);
+   }
    return ZComparatorNode;
 })(ZBinaryNode);
 
 var ZConstNode = (function(_super) {
    __extends(ZConstNode, _super);
    function ZConstNode(){
-_super.call(this);
-}
+      _super.call(this);
+   }
    return ZConstNode;
 })(ZNode);
 
 var ZEmptyNode = (function(_super) {
    __extends(ZEmptyNode, _super);
    function ZEmptyNode(){
-_super.call(this);
-}
+      _super.call(this);
+   }
    return ZEmptyNode;
 })(ZNode);
 
 var ZErrorNode = (function(_super) {
    __extends(ZErrorNode, _super);
    function ZErrorNode(){
-_super.call(this);
+      _super.call(this);
       this.ErrorMessage = null;
-}
+   }
    return ZErrorNode;
 })(ZConstNode);
 
 var ZFieldNode = (function(_super) {
    __extends(ZFieldNode, _super);
    function ZFieldNode(){
-_super.call(this);
+      _super.call(this);
       this.ClassType = null;
       this.DeclType = ZType__4qwg(new ZType(), 1 << 16, "var", null);
       this.FieldName = null;
       this.NameToken = null;
-}
+   }
    return ZFieldNode;
 })(ZNode);
 
@@ -593,17 +593,17 @@ var ZFieldNode_InitValue_Z64 = 0;
 var ZFloatNode = (function(_super) {
    __extends(ZFloatNode, _super);
    function ZFloatNode(){
-_super.call(this);
+      _super.call(this);
       this.FloatValue = 0.0;
-}
+   }
    return ZFloatNode;
 })(ZConstNode);
 
 var ZGetIndexNode = (function(_super) {
    __extends(ZGetIndexNode, _super);
    function ZGetIndexNode(){
-_super.call(this);
-}
+      _super.call(this);
+   }
    return ZGetIndexNode;
 })(ZNode);
 
@@ -612,21 +612,21 @@ var ZGetIndexNode_Index_Z66 = 1;
 var ZGetNameNode = (function(_super) {
    __extends(ZGetNameNode, _super);
    function ZGetNameNode(){
-_super.call(this);
+      _super.call(this);
       this.IsCaptured = false;
       this.VarName = null;
       this.VarIndex = 0;
-}
+   }
    return ZGetNameNode;
 })(ZNode);
 
 var ZGetterNode = (function(_super) {
    __extends(ZGetterNode, _super);
    function ZGetterNode(){
-_super.call(this);
+      _super.call(this);
       this.FieldName = null;
       this.NameToken = null;
-}
+   }
    return ZGetterNode;
 })(ZNode);
 
@@ -634,18 +634,18 @@ var ZGetterNode_Recv_Z67 = 0;
 var ZGlobalNameNode = (function(_super) {
    __extends(ZGlobalNameNode, _super);
    function ZGlobalNameNode(){
-_super.call(this);
+      _super.call(this);
       this.GlobalName = null;
       this.IsStaticFuncName = false;
-}
+   }
    return ZGlobalNameNode;
 })(ZNode);
 
 var ZGroupNode = (function(_super) {
    __extends(ZGroupNode, _super);
    function ZGroupNode(){
-_super.call(this);
-}
+      _super.call(this);
+   }
    return ZGroupNode;
 })(ZNode);
 
@@ -653,8 +653,8 @@ var ZGroupNode_Expr_Z68 = 0;
 var ZIfNode = (function(_super) {
    __extends(ZIfNode, _super);
    function ZIfNode(){
-_super.call(this);
-}
+      _super.call(this);
+   }
    return ZIfNode;
 })(ZNode);
 
@@ -664,21 +664,21 @@ var ZIfNode_Else_Z71 = 2;
 var ZImportNode = (function(_super) {
    __extends(ZImportNode, _super);
    function ZImportNode(){
-_super.call(this);
+      _super.call(this);
       this.ResourcePath = null;
       this.Alias = null;
       this.ResourceToken = null;
       this.Import = null;
-}
+   }
    return ZImportNode;
 })(ZNode);
 
 var ZInstanceOfNode = (function(_super) {
    __extends(ZInstanceOfNode, _super);
    function ZInstanceOfNode(){
-_super.call(this);
+      _super.call(this);
       this.TargetType = null;
-}
+   }
    return ZInstanceOfNode;
 })(ZNode);
 
@@ -686,21 +686,21 @@ var ZInstanceOfNode_Left_Z72 = 0;
 var ZIntNode = (function(_super) {
    __extends(ZIntNode, _super);
    function ZIntNode(){
-_super.call(this);
+      _super.call(this);
       this.IntValue = 0;
-}
+   }
    return ZIntNode;
 })(ZConstNode);
 
 var ZLetNode = (function(_super) {
    __extends(ZLetNode, _super);
    function ZLetNode(){
-_super.call(this);
+      _super.call(this);
       this.Symbol = null;
       this.SymbolToken = null;
       this.SymbolType = ZType__4qwg(new ZType(), 1 << 16, "var", null);
       this.GlobalName = null;
-}
+   }
    return ZLetNode;
 })(ZNode);
 
@@ -708,27 +708,27 @@ var ZLetNode_InitValue_Z73 = 0;
 var ZListNode = (function(_super) {
    __extends(ZListNode, _super);
    function ZListNode(){
-_super.call(this);
+      _super.call(this);
       this.ListStartIndex = 0;
-}
+   }
    return ZListNode;
 })(ZNode);
 
 var ZMacroNode = (function(_super) {
    __extends(ZMacroNode, _super);
    function ZMacroNode(){
-_super.call(this);
+      _super.call(this);
       this.MacroFunc = null;
-}
+   }
    return ZMacroNode;
 })(ZListNode);
 
 var ZMapEntryNode = (function(_super) {
    __extends(ZMapEntryNode, _super);
    function ZMapEntryNode(){
-_super.call(this);
+      _super.call(this);
       this.Name = null;
-}
+   }
    return ZMapEntryNode;
 })(ZNode);
 
@@ -737,18 +737,18 @@ var ZMapEntryNode_Value_Z75 = 1;
 var ZMapLiteralNode = (function(_super) {
    __extends(ZMapLiteralNode, _super);
    function ZMapLiteralNode(){
-_super.call(this);
-}
+      _super.call(this);
+   }
    return ZMapLiteralNode;
 })(ZListNode);
 
 var ZMethodCallNode = (function(_super) {
    __extends(ZMethodCallNode, _super);
    function ZMethodCallNode(){
-_super.call(this);
+      _super.call(this);
       this.MethodName = null;
       this.MethodToken = null;
-}
+   }
    return ZMethodCallNode;
 })(ZListNode);
 
@@ -756,84 +756,84 @@ var ZMethodCallNode_Recv_Z76 = 0;
 var ZNewArrayNode = (function(_super) {
    __extends(ZNewArrayNode, _super);
    function ZNewArrayNode(){
-_super.call(this);
-}
+      _super.call(this);
+   }
    return ZNewArrayNode;
 })(ZListNode);
 
 var ZNewObjectNode = (function(_super) {
    __extends(ZNewObjectNode, _super);
    function ZNewObjectNode(){
-_super.call(this);
-}
+      _super.call(this);
+   }
    return ZNewObjectNode;
 })(ZListNode);
 
 var ZNotNode = (function(_super) {
    __extends(ZNotNode, _super);
    function ZNotNode(){
-_super.call(this);
-}
+      _super.call(this);
+   }
    return ZNotNode;
 })(ZUnaryNode);
 
 var ZNullNode = (function(_super) {
    __extends(ZNullNode, _super);
    function ZNullNode(){
-_super.call(this);
-}
+      _super.call(this);
+   }
    return ZNullNode;
 })(ZConstNode);
 
 var ZOrNode = (function(_super) {
    __extends(ZOrNode, _super);
    function ZOrNode(){
-_super.call(this);
-}
+      _super.call(this);
+   }
    return ZOrNode;
 })(ZBinaryNode);
 
 var ZPrototypeNode = (function(_super) {
    __extends(ZPrototypeNode, _super);
    function ZPrototypeNode(){
-_super.call(this);
+      _super.call(this);
       this.ReturnType = ZType__4qwg(new ZType(), 1 << 16, "var", null);
       this.FuncName = null;
       this.NameToken = null;
-}
+   }
    return ZPrototypeNode;
 })(ZListNode);
 
 var ZStringNode = (function(_super) {
    __extends(ZStringNode, _super);
    function ZStringNode(){
-_super.call(this);
+      _super.call(this);
       this.StringValue = null;
-}
+   }
    return ZStringNode;
 })(ZConstNode);
 
 var ZStupidCastErrorNode = (function(_super) {
    __extends(ZStupidCastErrorNode, _super);
    function ZStupidCastErrorNode(){
-_super.call(this);
+      _super.call(this);
       this.ErrorNode = null;
-}
+   }
    return ZStupidCastErrorNode;
 })(ZErrorNode);
 
 var ZTypeNode = (function(_super) {
    __extends(ZTypeNode, _super);
    function ZTypeNode(){
-_super.call(this);
-}
+      _super.call(this);
+   }
    return ZTypeNode;
 })(ZConstNode);
 
 var ZGenerator = (function(_super) {
    __extends(ZGenerator, _super);
    function ZGenerator(){
-_super.call(this);
+      _super.call(this);
       this.GrammarInfo = null;
       this.LanguageExtention = null;
       this.TargetVersion = null;
@@ -841,7 +841,7 @@ _super.call(this);
       this.UniqueNumber = 0;
       this.OutputFile = null;
       this.Logger = null;
-      this.DefinedFuncMap = ;
+      this.DefinedFuncMap = LibZen.NewMap(0);
       this.StoppedVisitor = false;
       this.GetEngine = null;
       this.ImportLocalGrammar = null;
@@ -853,46 +853,46 @@ _super.call(this);
       this.GetSetterType = null;
       this.GetConstructorFuncType = null;
       this.GetMethodFuncType = null;
-}
+   }
    return ZGenerator;
 })(ZVisitor);
 
 var ZIndentToken = (function(_super) {
    __extends(ZIndentToken, _super);
    function ZIndentToken(){
-_super.call(this);
-}
+      _super.call(this);
+   }
    return ZIndentToken;
 })(ZToken);
 
 var ZPatternToken = (function(_super) {
    __extends(ZPatternToken, _super);
    function ZPatternToken(){
-_super.call(this);
+      _super.call(this);
       this.PresetPattern = null;
-}
+   }
    return ZPatternToken;
 })(ZToken);
 
 var ZSourceEngine = (function(_super) {
    __extends(ZSourceEngine, _super);
    function ZSourceEngine(){
-_super.call(this);
+      _super.call(this);
       this.TypeChecker = null;
       this.Generator = null;
       this.Logger = null;
       this.InteractiveContext = false;
       this.IsVisitableFlag = true;
-}
+   }
    return ZSourceEngine;
 })(ZVisitor);
 
 var ZSourceGenerator = (function(_super) {
    __extends(ZSourceGenerator, _super);
    function ZSourceGenerator(){
-_super.call(this);
-      this.NativeTypeMap = ;
-      this.ReservedNameMap = ;
+      _super.call(this);
+      this.NativeTypeMap = LibZen.NewMap(0);
+      this.ReservedNameMap = LibZen.NewMap(0);
       this.BuilderList = [];
       this.HeaderBuilder = null;
       this.CurrentBuilder = null;
@@ -912,14 +912,14 @@ _super.call(this);
       this.TopType = null;
       this.InitBuilderList = null;
       this.GenerateCode = null;
-}
+   }
    return ZSourceGenerator;
 })(ZGenerator);
 
 var ZTypeChecker = (function(_super) {
    __extends(ZTypeChecker, _super);
    function ZTypeChecker(){
-_super.call(this);
+      _super.call(this);
       this.StackedContextType = null;
       this.ReturnedNode = null;
       this.Generator = null;
@@ -927,7 +927,7 @@ _super.call(this);
       this.StoppedVisitor = false;
       this.VarScope = null;
       this.DefineFunction = null;
-}
+   }
    return ZTypeChecker;
 })(ZVisitor);
 
@@ -936,63 +936,63 @@ var ZTypeChecker_NoCheckPolicy_Z78 = 1;
 var CSourceGenerator = (function(_super) {
    __extends(CSourceGenerator, _super);
    function CSourceGenerator(){
-_super.call(this);
-}
+      _super.call(this);
+   }
    return CSourceGenerator;
 })(ZSourceGenerator);
 
 var ZAndNode = (function(_super) {
    __extends(ZAndNode, _super);
    function ZAndNode(){
-_super.call(this);
-}
+      _super.call(this);
+   }
    return ZAndNode;
 })(ZBinaryNode);
 
 var ZArrayLiteralNode = (function(_super) {
    __extends(ZArrayLiteralNode, _super);
    function ZArrayLiteralNode(){
-_super.call(this);
-}
+      _super.call(this);
+   }
    return ZArrayLiteralNode;
 })(ZListNode);
 
 var ZBlockNode = (function(_super) {
    __extends(ZBlockNode, _super);
    function ZBlockNode(){
-_super.call(this);
+      _super.call(this);
       this.NameSpace = null;
-}
+   }
    return ZBlockNode;
 })(ZListNode);
 
 var ZBooleanNode = (function(_super) {
    __extends(ZBooleanNode, _super);
    function ZBooleanNode(){
-_super.call(this);
+      _super.call(this);
       this.BooleanValue = false;
-}
+   }
    return ZBooleanNode;
 })(ZConstNode);
 
 var ZClassNode = (function(_super) {
    __extends(ZClassNode, _super);
    function ZClassNode(){
-_super.call(this);
+      _super.call(this);
       this.ClassName = null;
       this.ClassType = null;
       this.SuperType = null;
       this.NameToken = null;
       this.SuperToken = null;
-}
+   }
    return ZClassNode;
 })(ZListNode);
 
 var ZFuncCallNode = (function(_super) {
    __extends(ZFuncCallNode, _super);
    function ZFuncCallNode(){
-_super.call(this);
-}
+      _super.call(this);
+   }
    return ZFuncCallNode;
 })(ZListNode);
 
@@ -1000,14 +1000,14 @@ var ZFuncCallNode_Func_Z79 = 0;
 var ZFunctionNode = (function(_super) {
    __extends(ZFunctionNode, _super);
    function ZFunctionNode(){
-_super.call(this);
+      _super.call(this);
       this.ReturnType = ZType__4qwg(new ZType(), 1 << 16, "var", null);
       this.FuncName = null;
       this.NameToken = null;
       this.ParentFunctionNode = null;
       this.ResolvedFuncType = null;
       this.VarIndex = 0;
-}
+   }
    return ZFunctionNode;
 })(ZListNode);
 
@@ -1015,12 +1015,12 @@ var ZFunctionNode_Block_Z80 = 0;
 var ZVarNode = (function(_super) {
    __extends(ZVarNode, _super);
    function ZVarNode(){
-_super.call(this);
+      _super.call(this);
       this.DeclType = ZType__4qwg(new ZType(), 1 << 16, "var", null);
       this.NativeName = null;
       this.TypeToken = null;
       this.NameToken = null;
-}
+   }
    return ZVarNode;
 })(ZBlockNode);
 
@@ -1029,7 +1029,7 @@ function ZType__4qwg(self, TypeFlag__1, ShortName__2, RefType__3) {
    self.TypeFlag = TypeFlag__1;
    self.ShortName = ShortName__2;
    self.RefType = RefType__3;
-   if (LibZen_IsFlag__2qqr(TypeFlag__1, 1 << 16)) {
+   if (LibZen.IsFlag(TypeFlag__1, 1 << 16)) {
       self.TypeId = ZTypePool_NewTypeId__1qwg(self);
    };
    return null;
@@ -1136,7 +1136,7 @@ function IsMapType__1qwg(self) {
 }
 
 function IsOpenType__1qwg(self) {
-   return LibZen_IsFlag__2qqr(self.TypeFlag, 1 << 9);
+   return LibZen.IsFlag(self.TypeFlag, 1 << 9);
 }
 
 function IsImmutableType__1qwg(self) {
@@ -1160,7 +1160,7 @@ function StringfyClassMember__2qwg(self, Name__1) {
 }
 
 function GetUniqueName__1qwg(self) {
-   return LibZen_Stringfy__1qqr(self.TypeId);
+   return LibZen.Stringfy(self.TypeId);
 }
 
 function IsFuncType__1qwg(self) {
@@ -1198,7 +1198,7 @@ function ResetSuperType__2qeq(self, SuperClass__1) {
       var i__2 = 0;
       while (i__2 < (SuperClass__1.FieldList).length) {
          var Field__3 = SuperClass__1.FieldList[i__2];
-         self.FieldList.add(Field__3);
+         self.FieldList.push(Field__3);
          i__2 = i__2 + 1;
       };
    };
@@ -1249,7 +1249,7 @@ function AppendField__4qeq(self, FieldType__1, FieldName__2, SourceToken__3) {
       self.FieldList = [];
    };
    var ClassField__4 = ZClassField__5qw8(new ZClassField(), self, FieldName__2, FieldType__1, SourceToken__3);
-   self.FieldList.add(ClassField__4);
+   self.FieldList.push(ClassField__4);
    return ClassField__4;
 }
 
@@ -1273,15 +1273,15 @@ function toString__1qep(self) {
 }
 
 function IsConverterFunc__1qep(self) {
-   return LibZen_IsFlag__2qqr(self.FuncFlag, 1 << 16);
+   return LibZen.IsFlag(self.FuncFlag, 1 << 16);
 }
 
 function IsCoercionFunc__1qep(self) {
-   return LibZen_IsFlag__2qqr(self.FuncFlag, (1 << 17) | 1 << 16);
+   return LibZen.IsFlag(self.FuncFlag, (1 << 17) | 1 << 16);
 }
 
 function Is__2qep(self, Flag__1) {
-   return LibZen_IsFlag__2qqr(self.FuncFlag, Flag__1);
+   return LibZen.IsFlag(self.FuncFlag, Flag__1);
 }
 
 function GetSignature__1qep(self) {
@@ -1291,7 +1291,7 @@ function GetSignature__1qep(self) {
 function ZFuncType__3qe0(self, ShortName__1, UniqueTypeParams__2) {
    ZType__4qwg(self, 1 << 16, ShortName__1, ZType__4qwg(new ZType(), 1 << 16, "var", null));
    if (UniqueTypeParams__2 == null) {
-      self.TypeParams = LibZen_NewTypeArray__1qqr(1);
+      self.TypeParams = LibZen.NewTypeArray(1);
       self.TypeParams[0] = ZType__4qwg(new ZType(), 1 << 16, "var", null);
    } else {
       self.TypeParams = UniqueTypeParams__2;
@@ -1326,7 +1326,7 @@ function GetGreekRealType__2qe0(self, Greek__1) {
       var TypeList__4 = [];
       var i__5 = 0;
       while (i__3 < (self.TypeParams).length) {
-         TypeList__2.add(self.TypeParams[i__3].GetGreekRealType(self.TypeParams[i__3], Greek__1));
+         TypeList__2.push(self.TypeParams[i__3].GetGreekRealType(self.TypeParams[i__3], Greek__1));
          i__3 = i__3 + 1;
       };
       return ZTypePool_LookupFuncType__1qwh(TypeList__2);
@@ -1385,11 +1385,11 @@ function GetFuncParamType__2qe0(self, Index__1) {
 
 function NewMethodFuncType__2qe0(self, RecvType__1) {
    var TypeList__2 = [];
-   TypeList__2.add(GetReturnType__1qe0(self));
-   TypeList__2.add(RecvType__1);
+   TypeList__2.push(GetReturnType__1qe0(self));
+   TypeList__2.push(RecvType__1);
    var i__3 = 0;
    while (i__3 < GetFuncParamSize__1qe0(self)) {
-      TypeList__2.add(GetFuncParamType__2qe0(self, i__3));
+      TypeList__2.push(GetFuncParamType__2qe0(self, i__3));
       i__3 = i__3 + 1;
    };
    return ZTypePool_LookupFuncType__1qwh(TypeList__2);
@@ -1460,7 +1460,7 @@ function AcceptValueType__4qev(self, ValueType__1, ExactMatch__2, Greek__3) {
 
 function ZGreekType_NewGreekTypes__1qwh(GreekTypes) {
    if (GreekTypes == null) {
-      return LibZen_NewTypeArray__1qqr((["a", "b", "c"]).length);
+      return LibZen.NewTypeArray((["a", "b", "c"]).length);
    } else {
       var i__1 = 0;
       while (i__1 < (GreekTypes).length) {
@@ -1519,7 +1519,7 @@ function Defined__1qry(self) {
 
 function ZTypePool_NewTypeId__1qwg(T) {
    var TypeId__1 = ([]).length;
-   [].add(T);
+   [].push(T);
    return TypeId__1;
 }
 
@@ -1550,24 +1550,24 @@ function ZTypePool_MangleTypes__1qwh(TypeList) {
 
 function ZTypePool_UniqueTypes__1qwh(TypeList) {
    var MangleName__1 = "[]" + ZTypePool_MangleTypes__1qwh(TypeList);
-   var Types__2 = [MangleName__1];
+   var Types__2 = LibZen.NewMap(0)[MangleName__1];
    if (Types__2 == null) {
       Types__2 = TypeList;
-      [MangleName__1] = Types__2;
+      LibZen.NewMap(0)[MangleName__1] = Types__2;
    };
    return Types__2;
 }
 
 function ZTypePool_GetGenericType1__2qwg(BaseType, ParamType__1) {
    var MangleName__2 = ZTypePool_MangleType2__2qwg(BaseType, ParamType__1);
-   var GenericType__3 = [MangleName__2];
+   var GenericType__3 = LibZen.NewMap(0)[MangleName__2];
    if (GenericType__3 == null) {
       var Name__4 = ((BaseType.ShortName + "<") + toString__1qwg(ParamType__1)) + ">";
       if (IsArrayType__1qwg(BaseType)) {
          Name__4 = ((BaseType.ShortName + "<") + toString__1qwg(ParamType__1)) + ">";
       };
       GenericType__3 = ZGenericType__5qev(new ZGenericType(), 1 << 16, Name__4, BaseType, ParamType__1);
-      [MangleName__2] = GenericType__3;
+      LibZen.NewMap(0)[MangleName__2] = GenericType__3;
    };
    return GenericType__3;
 }
@@ -1578,7 +1578,7 @@ function ZTypePool_GetGenericType__3qwg(BaseType, TypeList__1, IsCreation__2) {
       return ZTypePool_GetGenericType1__2qwg(BaseType, TypeList__1[0]);
    };
    var MangleName__7 = (":" + (BaseType.TypeId).toString()) + ZTypePool_MangleTypes__1qwh(TypeList__1);
-   var GenericType__8 = [MangleName__3];
+   var GenericType__8 = LibZen.NewMap(0)[MangleName__3];
    if ((GenericType__4 == null) && IsCreation__2) {
       var ShortName__9 = BaseType.ShortName + "<";
       var i__10 = 0;
@@ -1595,7 +1595,7 @@ function ZTypePool_GetGenericType__3qwg(BaseType, TypeList__1, IsCreation__2) {
          GenericType__4 = ZFuncType__3qe0(new ZFuncType(), ShortName__5, ZTypePool_UniqueTypes__1qwh(TypeList__1));
       } else {
       };
-      [MangleName__3] = GenericType__4;
+      LibZen.NewMap(0)[MangleName__3] = GenericType__4;
    };
    return GenericType__4;
 }
@@ -1610,31 +1610,31 @@ function ZTypePool_LookupFuncType__1qwh(TypeList) {
 
 function ZTypePool_LookupFuncType__1qwg(R) {
    var TypeList__1 = [];
-   TypeList__1.add(R);
+   TypeList__1.push(R);
    return ZTypePool_LookupFuncType__1qwh(TypeList__1);
 }
 
 function ZTypePool_LookupFuncType__2qwg(R, P1__1) {
    var TypeList__2 = [];
-   TypeList__2.add(R);
-   TypeList__2.add(P1__1);
+   TypeList__2.push(R);
+   TypeList__2.push(P1__1);
    return ZTypePool_LookupFuncType__1qwh(TypeList__2);
 }
 
 function ZTypePool_LookupFuncType__3qwg(R, P1__1, P2__2) {
    var TypeList__3 = [];
-   TypeList__3.add(R);
-   TypeList__3.add(P1__1);
-   TypeList__3.add(P2__2);
+   TypeList__3.push(R);
+   TypeList__3.push(P1__1);
+   TypeList__3.push(P2__2);
    return ZTypePool_LookupFuncType__1qwh(TypeList__3);
 }
 
 function ZTypePool_LookupFuncType__4qwg(R, P1__1, P2__2, P3__3) {
    var TypeList__4 = [];
-   TypeList__4.add(R);
-   TypeList__4.add(P1__1);
-   TypeList__4.add(P2__2);
-   TypeList__4.add(P3__3);
+   TypeList__4.push(R);
+   TypeList__4.push(P1__1);
+   TypeList__4.push(P2__2);
+   TypeList__4.push(P3__3);
    return ZTypePool_LookupFuncType__1qwh(TypeList__4);
 }
 
@@ -1723,7 +1723,7 @@ function ZVarType__4qrl(self, VarList__1, Name__2, SourceToken__3) {
    self.VarList = VarList__1;
    self.SourceToken = SourceToken__3;
    self.GreekId = (VarList__1).length;
-   VarList__1.add(self);
+   VarList__1.push(self);
    self.TypeId = self.RefType.TypeId;
    return null;
 }
@@ -1791,7 +1791,7 @@ function ZNode__4qwo(self, ParentNode__1, SourceToken__2, Size__3) {
    self.ParentNode = ParentNode__1;
    self.SourceToken = SourceToken__2;
    if (Size__3 > 0) {
-      self.AST = LibZen_NewNodeArray__1qqr(Size__3);
+      self.AST = LibZen.NewNodeArray(Size__3);
    } else {
       self.AST = null;
    };
@@ -1864,7 +1864,7 @@ function GetSourceLocation__1qwo(self) {
 }
 
 function toString__1qwo(self) {
-   var Self__3 = "#" + LibZen_GetClassName__1qqq(self);
+   var Self__3 = "#" + LibZen.GetClassName(self);
    if (!self.Type.IsVarType(self.Type)) {
       Self__1 = (Self__1 + ":") + toString__1qwg(self.Type);
    } else {
@@ -2111,7 +2111,7 @@ function ZLogger_LogDebug__2qw3(Token, Message__1) {
 }
 
 function Report__2qrk(self, Message__1) {
-   self.ReportedErrorList.add(Message__1);
+   self.ReportedErrorList.push(Message__1);
    return;
 }
 
@@ -2125,7 +2125,7 @@ function ShowErrors__1qrk(self) {
    var Messages__1 = GetReportedErrors__1qrk(self);
    var i__2 = 0;
    while (i__2 < (Messages__1).length) {
-      LibZen_PrintLine__1qqy(Messages__1[i__2]);
+      LibZen.PrintLine(Messages__1[i__2]);
       i__2 = i__2 + 1;
    };
    return;
@@ -2179,7 +2179,7 @@ function JoinParentFunc__3qwt(self, Func__1, Parent__2) {
 
 function AppendTokenFunc__3qwt(self, keys__1, TokenFunc__2) {
    if (self.TokenMatrix == null) {
-      self.TokenMatrix = LibZen_NewTokenMatrix__0qqw();
+      self.TokenMatrix = LibZen.NewTokenMatrix();
       if (self.ParentNameSpace != null) {
          var i__3 = 0;
          while (i__3 < (self.TokenMatrix).length) {
@@ -2190,7 +2190,7 @@ function AppendTokenFunc__3qwt(self, keys__1, TokenFunc__2) {
    };
    var i__7 = 0;
    while (i__4 < keys__1.size()) {
-      var kchar__5 = LibZen_GetTokenMatrixIndex__1qqy(LibZen_GetChar__2qqy(keys__1, i__4));
+      var kchar__5 = LibZen.GetTokenMatrixIndex(LibZen.GetChar(keys__1, i__4));
       self.TokenMatrix[kchar__5] = JoinParentFunc__3qwt(self, TokenFunc__2, self.TokenMatrix[kchar__5]);
       i__4 = i__4 + 1;
    };
@@ -2210,7 +2210,7 @@ function GetSyntaxPattern__2qwt(self, PatternName__1) {
 
 function SetSyntaxPattern__3qwt(self, PatternName__1, Syntax__2) {
    if (self.SyntaxTable == null) {
-      self.SyntaxTable = ;
+      self.SyntaxTable = LibZen.NewMap(0);
    };
    self.SyntaxTable[PatternName__1] = Syntax__2;
    return;
@@ -2221,7 +2221,7 @@ function GetRightSyntaxPattern__2qwt(self, PatternName__1) {
 }
 
 function AppendSyntaxPattern__3qwt(self, PatternName__1, NewPattern__2) {
-   LibZen_Assert__1qqe(NewPattern__2.ParentPattern == null);
+   LibZen.Assert(NewPattern__2.ParentPattern == null);
    var ParentPattern__3 = GetSyntaxPattern__2qwt(self, PatternName__1);
    NewPattern__2.ParentPattern = ParentPattern__3;
    SetSyntaxPattern__3qwt(self, PatternName__1, NewPattern__2);
@@ -2299,7 +2299,7 @@ function GetSymbolNode__2qwt(self, Symbol__1) {
 
 function SetLocalSymbolEntry__3qwt(self, Symbol__1, Entry__2) {
    if (self.SymbolTable == null) {
-      self.SymbolTable = ;
+      self.SymbolTable = LibZen.NewMap(0);
    };
    self.SymbolTable[Symbol__1] = Entry__2;
    return;
@@ -2376,7 +2376,7 @@ function GetLineNumber__2qud(self, Position__1) {
    var LineNumber__2 = self.LineNumber;
    var i__3 = 0;
    while (i__3 < Position__1) {
-      var ch__4 = LibZen_GetChar__2qqy(self.SourceText, i__3);
+      var ch__4 = LibZen.GetChar(self.SourceText, i__3);
       if (ch__4 == "\n") {
          LineNumber__2 = LineNumber__2 + 1;
       };
@@ -2393,7 +2393,7 @@ function GetLineHeadPosition__2qud(self, Position__1) {
       i__11 = s__2.size() - 1;
    };
    while (i__4 >= 0) {
-      var ch__5 = LibZen_GetChar__2qqy(s__2, i__4);
+      var ch__5 = LibZen.GetChar(s__2, i__4);
       if (ch__5 == "\n") {
          StartIndex__3 = i__4 + 1;
          break;
@@ -2408,7 +2408,7 @@ function CountIndentSize__2qud(self, Position__1) {
    var length__10 = 0;
    var i__11 = Position__1;
    while (i__4 < s__2.size()) {
-      var ch__5 = LibZen_GetChar__2qqy(s__2, i__4);
+      var ch__5 = LibZen.GetChar(s__2, i__4);
       if (ch__5 == "\t") {
          length__3 = length__3 + 8;
       } else if (ch__5 == " ") {
@@ -2430,7 +2430,7 @@ function GetLineText__2qud(self, Position__1) {
       i__15 = s__2.size() - 1;
    };
    while (i__5 >= 0) {
-      var ch__6 = LibZen_GetChar__2qqy(s__2, i__5);
+      var ch__6 = LibZen.GetChar(s__2, i__5);
       if (ch__6 == "\n") {
          StartIndex__3 = i__5 + 1;
          break;
@@ -2439,7 +2439,7 @@ function GetLineText__2qud(self, Position__1) {
    };
    i__5 = Position__1;
    while (i__5 < s__2.size()) {
-      var ch__7 = LibZen_GetChar__2qqy(s__2, i__5);
+      var ch__7 = LibZen.GetChar(s__2, i__5);
       if (ch__7 == "\n") {
          EndIndex__4 = i__5;
          break;
@@ -2457,7 +2457,7 @@ function GetLineMarker__2qud(self, Position__1) {
       i__13 = s__2.size() - 1;
    };
    while (i__4 >= 0) {
-      var ch__5 = LibZen_GetChar__2qqy(s__2, i__4);
+      var ch__5 = LibZen.GetChar(s__2, i__4);
       if (ch__5 == "\n") {
          StartIndex__3 = i__4 + 1;
          break;
@@ -2467,7 +2467,7 @@ function GetLineMarker__2qud(self, Position__1) {
    var Line__6 = "";
    i__4 = StartIndex__3;
    while (i__4 < Position__1) {
-      var ch__7 = LibZen_GetChar__2qqy(s__2, i__4);
+      var ch__7 = LibZen.GetChar(s__2, i__4);
       if (ch__7 == "\n") {
          break;
       };
@@ -2499,7 +2499,7 @@ function FormatErrorMarker__4qud(self, Error__1, Position__2, Message__3) {
 
 function GetCharAt__2qud(self, n__1) {
    if (0 <= n__1 && n__1 < self.SourceText.size()) {
-      return LibZen_GetChar__2qqy(self.SourceText, n__1);
+      return LibZen.GetChar(self.SourceText, n__1);
    };
    return "0";
 }
@@ -2524,34 +2524,34 @@ function GetPosition__1qq2(self) {
 }
 
 function CopyString__3qq2(self, BeginIndex__1, EndIndex__2) {
-   return LibZen_SourceBuilderToString__3qq2(self, BeginIndex__1, EndIndex__2);
+   return LibZen.SourceBuilderToString(self, BeginIndex__1, EndIndex__2);
 }
 
 function Append__2qq2(self, Text__1) {
-   self.SourceList.add(Text__1);
+   self.SourceList.push(Text__1);
    return;
 }
 
 function AppendInt__2qq2(self, Value__1) {
-   self.SourceList.add("" + (Value__1).toString());
+   self.SourceList.push("" + (Value__1).toString());
    return;
 }
 
 function AppendLineFeed__1qq2(self) {
    if (self.BufferedLineComment.size() > 0) {
-      self.SourceList.add(self.BufferedLineComment);
+      self.SourceList.push(self.BufferedLineComment);
       self.BufferedLineComment = "";
    };
-   self.SourceList.add(self.Template.LineFeed);
+   self.SourceList.push(self.Template.LineFeed);
    return;
 }
 
 function AppendLineFeed__2qq2(self, AppendIndent__1) {
    if (self.BufferedLineComment.size() > 0) {
-      self.SourceList.add(self.BufferedLineComment);
+      self.SourceList.push(self.BufferedLineComment);
       self.BufferedLineComment = "";
    };
-   self.SourceList.add(self.Template.LineFeed);
+   self.SourceList.push(self.Template.LineFeed);
    if (AppendIndent__1) {
       AppendIndent__1qq2(self);
    };
@@ -2566,22 +2566,22 @@ function AppendWhiteSpace__1qq2(self) {
          return;
       };
    };
-   self.SourceList.add(" ");
+   self.SourceList.push(" ");
    return;
 }
 
 function AppendToken__2qq2(self, Text__1) {
    AppendWhiteSpace__1qq2(self);
-   self.SourceList.add(Text__1);
+   self.SourceList.push(Text__1);
    AppendWhiteSpace__1qq2(self);
    return;
 }
 
 function AppendBlockComment__2qq2(self, Text__1) {
    if (self.Template.BeginComment != null) {
-      self.SourceList.add(self.Template.BeginComment);
-      self.SourceList.add(Text__1);
-      self.SourceList.add(self.Template.EndComment);
+      self.SourceList.push(self.Template.BeginComment);
+      self.SourceList.push(Text__1);
+      self.SourceList.push(self.Template.EndComment);
    } else if (self.Template.LineComment != null) {
       self.BufferedLineComment = (self.BufferedLineComment + self.Template.LineComment) + Text__1;
    };
@@ -2590,14 +2590,14 @@ function AppendBlockComment__2qq2(self, Text__1) {
 
 function AppendCommentLine__2qq2(self, Text__1) {
    if (self.Template.LineComment == null) {
-      self.SourceList.add(self.Template.BeginComment);
-      self.SourceList.add(Text__1);
-      self.SourceList.add(self.Template.EndComment);
+      self.SourceList.push(self.Template.BeginComment);
+      self.SourceList.push(Text__1);
+      self.SourceList.push(self.Template.EndComment);
    } else {
-      self.SourceList.add(self.Template.LineComment);
-      self.SourceList.add(Text__1);
+      self.SourceList.push(self.Template.LineComment);
+      self.SourceList.push(Text__1);
    };
-   self.SourceList.add(self.Template.LineFeed);
+   self.SourceList.push(self.Template.LineFeed);
    return;
 }
 
@@ -2610,31 +2610,31 @@ function Indent__1qq2(self) {
 function UnIndent__1qq2(self) {
    self.IndentLevel = self.IndentLevel - 1;
    self.CurrentIndentString = null;
-   LibZen_Assert__1qqe(self.IndentLevel >= 0);
+   LibZen.Assert(self.IndentLevel >= 0);
    return;
 }
 
 function GetIndentString__1qq2(self) {
    if (self.CurrentIndentString == null) {
-      self.CurrentIndentString = LibZen_JoinStrings__2qqy(self.Template.Tab, self.IndentLevel);
+      self.CurrentIndentString = LibZen.JoinStrings(self.Template.Tab, self.IndentLevel);
    };
    return self.CurrentIndentString;
 }
 
 function AppendIndent__1qq2(self) {
-   self.SourceList.add(GetIndentString__1qq2(self));
+   self.SourceList.push(GetIndentString__1qq2(self));
    return;
 }
 
 function AppendLineFeedIndent__1qq2(self) {
-   self.SourceList.add(self.Template.LineFeed);
-   self.SourceList.add(GetIndentString__1qq2(self));
+   self.SourceList.push(self.Template.LineFeed);
+   self.SourceList.push(GetIndentString__1qq2(self));
    return;
 }
 
 function IndentAndAppend__2qq2(self, Text__1) {
-   self.SourceList.add(GetIndentString__1qq2(self));
-   self.SourceList.add(Text__1);
+   self.SourceList.push(GetIndentString__1qq2(self));
+   self.SourceList.push(Text__1);
    return;
 }
 
@@ -2651,7 +2651,7 @@ function AppendParamList__4qq2(self, ParamList__1, BeginIdx__2, EndIdx__3) {
 }
 
 function toString__1qq2(self) {
-   return LibZen_SourceBuilderToString__1qq2(self);
+   return LibZen.SourceBuilderToString(self);
 }
 
 function AppendLine__2qq2(self, Text__1) {
@@ -2666,7 +2666,7 @@ function ZSourceContext__5qwu(self, FileName__1, LineNumber__2, Source__3, Token
 }
 
 function GetCharCode__1qwu(self) {
-   return LibZen_GetTokenMatrixIndex__1qqy(LibZen_GetChar__2qqy(self.SourceText, self.SourcePosition));
+   return LibZen.GetTokenMatrixIndex(LibZen.GetChar(self.SourceText, self.SourcePosition));
 }
 
 function GetPosition__1qwu(self) {
@@ -2678,12 +2678,12 @@ function HasChar__1qwu(self) {
 }
 
 function GetCurrentChar__1qwu(self) {
-   return LibZen_GetChar__2qqy(self.SourceText, self.SourcePosition);
+   return LibZen.GetChar(self.SourceText, self.SourcePosition);
 }
 
 function GetCharAtFromCurrentPosition__2qwu(self, n__1) {
    if ((self.SourcePosition + n__1) < self.SourceText.size()) {
-      return LibZen_GetChar__2qqy(self.SourceText, self.SourcePosition + n__1);
+      return LibZen.GetChar(self.SourceText, self.SourcePosition + n__1);
    };
    return "0";
 }
@@ -2707,7 +2707,7 @@ function SkipWhiteSpace__1qwu(self) {
 function FoundIndent__3qwu(self, StartIndex__1, EndIndex__2) {
    var Token__3 = ZIndentToken__4qak(new ZIndentToken(), self, StartIndex__1, EndIndex__2);
    self.SourcePosition = EndIndex__2;
-   self.TokenContext.TokenList.add(Token__3);
+   self.TokenContext.TokenList.push(Token__3);
    return;
 }
 
@@ -2715,7 +2715,7 @@ function Tokenize__3qwu(self, StartIndex__1, EndIndex__2) {
    self.SourcePosition = EndIndex__2;
    if (StartIndex__1 < EndIndex__2 && EndIndex__2 <= self.SourceText.size()) {
       var Token__3 = ZToken__4qw3(new ZToken(), self, StartIndex__1, EndIndex__2);
-      self.TokenContext.TokenList.add(Token__3);
+      self.TokenContext.TokenList.push(Token__3);
    };
    return;
 }
@@ -2727,10 +2727,10 @@ function Tokenize__4qwu(self, PatternName__1, StartIndex__2, EndIndex__3) {
       if (Pattern__4 == null) {
          var Token__5 = ZToken__4qw3(new ZToken(), self, StartIndex__2, EndIndex__3);
          ZLogger_LogInfo__2qw3(Token__5, "unregistered token pattern: " + PatternName__1);
-         self.TokenContext.TokenList.add(Token__5);
+         self.TokenContext.TokenList.push(Token__5);
       } else {
          var Token__6 = ZPatternToken__5qa9(new ZPatternToken(), self, StartIndex__2, EndIndex__3, Pattern__4);
-         self.TokenContext.TokenList.add(Token__6);
+         self.TokenContext.TokenList.push(Token__6);
       };
    };
    return;
@@ -2761,7 +2761,7 @@ function ApplyTokenFunc__2qwu(self, TokenFunc__1) {
    var RollbackPosition__2 = self.SourcePosition;
    while (TokenFunc__1 != null) {
       self.SourcePosition = RollbackPosition__2;
-      if (LibZen_ApplyTokenFunc__2qqq(TokenFunc__1.Func, self)) {
+      if (LibZen.ApplyTokenFunc(TokenFunc__1.Func, self)) {
          return;
       };
       TokenFunc__1 = TokenFunc__1.ParentFunc;
@@ -2828,13 +2828,13 @@ function toString__1qy7(self) {
 }
 
 function IsBinaryOperator__1qy7(self) {
-   return LibZen_IsFlag__2qqr(self.SyntaxFlag, 1);
+   return LibZen.IsFlag(self.SyntaxFlag, 1);
 }
 
 function IsRightJoin__2qy7(self, Right__1) {
    var left__2 = self.SyntaxFlag;
    var right__3 = Right__1.SyntaxFlag;
-   return (left__2 < right__3 || (left__2 == right__3 && !LibZen_IsFlag__2qqr(left__2, 1 << 1) && !LibZen_IsFlag__2qqr(right__3, 1 << 1)));
+   return (left__2 < right__3 || (left__2 == right__3 && !LibZen.IsFlag(left__2, 1 << 1) && !LibZen.IsFlag(right__3, 1 << 1)));
 }
 
 function ZToken__4qw3(self, Source__1, StartIndex__2, EndIndex__3) {
@@ -2854,7 +2854,7 @@ function GetLineNumber__1qw3(self) {
 
 function GetChar__1qw3(self) {
    if (self.Source != null) {
-      return LibZen_GetChar__2qqy(self.Source.SourceText, self.StartIndex);
+      return LibZen.GetChar(self.Source.SourceText, self.StartIndex);
    };
    return "0";
 }
@@ -2879,7 +2879,7 @@ function EqualsText__2qw3(self, Text__1) {
       var s__6 = self.Source.SourceText;
       var i__7 = 0;
       while (i__3 < Text__1.size()) {
-         if (LibZen_GetChar__2qqy(s__2, self.StartIndex + i__3) != LibZen_GetChar__2qqy(Text__1, i__3)) {
+         if (LibZen.GetChar(s__2, self.StartIndex + i__3) != LibZen.GetChar(Text__1, i__3)) {
             return false;
          };
          i__3 = i__3 + 1;
@@ -2894,7 +2894,7 @@ function StartsWith__2qw3(self, Text__1) {
       var s__6 = self.Source.SourceText;
       var i__7 = 0;
       while (i__3 < Text__1.size()) {
-         if (LibZen_GetChar__2qqy(s__2, self.StartIndex + i__3) != LibZen_GetChar__2qqy(Text__1, i__3)) {
+         if (LibZen.GetChar(s__2, self.StartIndex + i__3) != LibZen.GetChar(Text__1, i__3)) {
             return false;
          };
          i__3 = i__3 + 1;
@@ -2922,7 +2922,7 @@ function IsNextWhiteSpace__1qw3(self) {
 
 function IsNameSymbol__1qw3(self) {
    var ch__1 = GetCharAt__2qud(self.Source, self.StartIndex);
-   return LibZen_IsSymbol__1qqy(ch__1);
+   return LibZen.IsSymbol(ch__1);
 }
 
 function GetIndentSize__1qw3(self) {
@@ -3029,8 +3029,8 @@ function SkipError__2qwp(self, ErrorToken__1) {
       };
    };
    if (StartIndex__2 < EndIndex__3) {
-      LibZen_PrintDebug__1qqy((("StartIdx=" + (StartIndex__2).toString()) + ", EndIndex=") + (EndIndex__3).toString());
-      LibZen_PrintDebug__1qqy("skipped: \t" + ErrorToken__1.Source.SourceText.substring(StartIndex, EndIndex));
+      LibZen.PrintDebug((("StartIdx=" + (StartIndex__2).toString()) + ", EndIndex=") + (EndIndex__3).toString());
+      LibZen.PrintDebug("skipped: \t" + ErrorToken__1.Source.SourceText.substring(StartIndex, EndIndex));
    };
    return;
 }
@@ -3126,7 +3126,7 @@ function ApplyMatchPattern__5qwp(self, ParentNode__1, LeftNode__2, Pattern__3, I
       var Remembered__9 = self.IsAllowSkipIndent;
       self.CurrentPosition = RollbackPosition__5;
       self.ApplyingPattern = CurrentPattern__6;
-      ParsedNode__8 = LibZen_ApplyMatchFunc__4qqq(CurrentPattern__6.MatchFunc, ParentNode__1, self, LeftNode__2);
+      ParsedNode__8 = LibZen.ApplyMatchFunc(CurrentPattern__6.MatchFunc, ParentNode__1, self, LeftNode__2);
       console.assert(ParsedNode__8 != ParentNode__1, "(libzen/libzen.zen:3276)");
       self.ApplyingPattern = null;
       self.IsAllowSkipIndent = Remembered__9;
@@ -3140,7 +3140,7 @@ function ApplyMatchPattern__5qwp(self, ParentNode__1, LeftNode__2, Pattern__3, I
       return null;
    };
    if (self.CurrentPosition == RollbackPosition__5) {
-      LibZen_PrintLine__1qqy((((("DEBUG infinite looping" + (RollbackPosition__5).toString()) + " Token=") + toString__1qw3(TopToken__7)) + " ParsedNode=") + toString__1qwo(ParsedNode__8));
+      LibZen.PrintLine((((("DEBUG infinite looping" + (RollbackPosition__5).toString()) + " Token=") + toString__1qw3(TopToken__7)) + " ParsedNode=") + toString__1qwo(ParsedNode__8));
       console.assert(self.CurrentPosition != RollbackPosition__5, "(libzen/libzen.zen:3290)");
    };
    if (ParsedNode__8 == null) {
@@ -3268,7 +3268,7 @@ function Dump__1qwp(self) {
       var Token__2 = self.TokenList[Position__1];
       var DumpedToken__3 = "[";
       DumpedToken__3 = ((DumpedToken__3 + (Position__1).toString()) + "] ") + toString__1qw3(Token__2);
-      LibZen_PrintDebug__1qqy(DumpedToken__3);
+      LibZen.PrintDebug(DumpedToken__3);
       Position__1 = Position__1 + 1;
    };
    return;
@@ -3689,11 +3689,11 @@ function ZListNode__4quv(self, ParentNode__1, SourceToken__2, Size__3) {
 
 function Append__2quv(self, Node__1) {
    if (self.AST == null) {
-      self.AST = LibZen_NewNodeArray__1qqr(1);
+      self.AST = LibZen.NewNodeArray(1);
       Set__3qwo(self, 0, Node__1);
    } else {
-      var newAST__2 = LibZen_NewNodeArray__1qqr((self.AST).length + 1);
-      LibZen_ArrayCopy__5qqq(self.AST, 0, newAST__2, 0, (self.AST).length);
+      var newAST__2 = LibZen.NewNodeArray((self.AST).length + 1);
+      LibZen.ArrayCopy(self.AST, 0, newAST__2, 0, (self.AST).length);
       self.AST = newAST__2;
       Set__3qwo(self, (self.AST).length - 1, Node__1);
    };
@@ -3717,11 +3717,11 @@ function InsertListAt__3quv(self, Index__1, Node__2) {
    if (self.AST == null || Index__1 < 0 || (self.AST).length == Index__1) {
       Append__2quv(self, Node__2);
    } else {
-      var newAST__3 = LibZen_NewNodeArray__1qqr((self.AST).length + 1);
+      var newAST__3 = LibZen.NewNodeArray((self.AST).length + 1);
       Index__1 = self.ListStartIndex + Index__1;
-      LibZen_ArrayCopy__5qqq(self.AST, 0, newAST__3, 0, Index__1);
+      LibZen.ArrayCopy(self.AST, 0, newAST__3, 0, Index__1);
       Set__3qwo(self, Index__1, Node__2);
-      LibZen_ArrayCopy__5qqq(self.AST, Index__1, newAST__3, Index__1 + 1, (self.AST).length - Index__1);
+      LibZen.ArrayCopy(self.AST, Index__1, newAST__3, Index__1 + 1, (self.AST).length - Index__1);
       self.AST = newAST__3;
    };
    return;
@@ -3729,10 +3729,10 @@ function InsertListAt__3quv(self, Index__1, Node__2) {
 
 function RemoveListAt__2quv(self, Index__1) {
    var Removed__2 = GetListAt__2quv(self, Index__1);
-   var newAST__3 = LibZen_NewNodeArray__1qqr((self.AST).length - 1);
+   var newAST__3 = LibZen.NewNodeArray((self.AST).length - 1);
    var RemovedIndex__4 = self.ListStartIndex + Index__1;
-   LibZen_ArrayCopy__5qqq(self.AST, 0, newAST__3, 0, RemovedIndex__4);
-   LibZen_ArrayCopy__5qqq(self.AST, RemovedIndex__4 + 1, newAST__3, RemovedIndex__4, (self.AST).length - (RemovedIndex__4 + 1));
+   LibZen.ArrayCopy(self.AST, 0, newAST__3, 0, RemovedIndex__4);
+   LibZen.ArrayCopy(self.AST, RemovedIndex__4 + 1, newAST__3, RemovedIndex__4, (self.AST).length - (RemovedIndex__4 + 1));
    self.AST = newAST__3;
    return Removed__2;
 }
@@ -3743,8 +3743,8 @@ function ClearListAfter__2quv(self, Size__1) {
       if (newsize__2 == 0) {
          self.AST = null;
       } else {
-         var newAST__3 = LibZen_NewNodeArray__1qqr(newsize__2);
-         LibZen_ArrayCopy__5qqq(self.AST, 0, newAST__3, 0, newsize__2);
+         var newAST__3 = LibZen.NewNodeArray(newsize__2);
+         LibZen.ArrayCopy(self.AST, 0, newAST__3, 0, newsize__2);
          self.AST = newAST__3;
       };
    };
@@ -3941,12 +3941,12 @@ function GetParamNode__2q4l(self, Index__1) {
 
 function GetFuncType__1q4l(self) {
    var TypeList__5 = [];
-   TypeList__1.add(self.ReturnType.GetRealType(self.ReturnType));
+   TypeList__1.push(self.ReturnType.GetRealType(self.ReturnType));
    var i__6 = 0;
    while (i__2 < GetListSize__1quv(self)) {
       var Node__7 = GetParamNode__2q4l(self, i__2);
       var ParamType__8 = Node__3.Type.GetRealType(Node__3.Type);
-      TypeList__1.add(ParamType__4);
+      TypeList__1.push(ParamType__4);
       i__2 = i__2 + 1;
    };
    return ZTypePool_LookupFuncType__1qwh(TypeList__1);
@@ -4088,8 +4088,8 @@ function SetPrototype__4qw4(self, Node__1, FuncName__2, FuncType__3) {
 
 function GetDefinedFunc__2qw4(self, GlobalName__1) {
    var Func__2 = self.DefinedFuncMap[GlobalName__1];
-   if (Func__2 == null && LibZen_IsLetter__1qqy(LibZen_GetChar__2qqy(GlobalName__1, 0))) {
-      Func__2 = self.DefinedFuncMap[LibZen_AnotherName__1qqy(GlobalName__1)];
+   if (Func__2 == null && LibZen.IsLetter(LibZen.GetChar(GlobalName__1, 0))) {
+      Func__2 = self.DefinedFuncMap[LibZen.AnotherName(GlobalName__1)];
    };
    return Func__2;
 }
@@ -4447,7 +4447,7 @@ function VisitTryNode__2qws(self, Node__1) {
 
 function VisitLetNode__2qws(self, Node__1) {
    if (HasUntypedNode__1qwo(Node__1)) {
-      LibZen_PrintDebug__1qqy((("HasUntypedNode: " + HasUntypedNode__1qwo(Node__1)) + "\n") + toString__1qwo(Node__1));
+      LibZen.PrintDebug((("HasUntypedNode: " + HasUntypedNode__1qwo(Node__1)) + "\n") + toString__1qwo(Node__1));
    };
    self.Generator.StartCodeGeneration(self.Generator, Node__1, self.InteractiveContext);
    return;
@@ -4455,7 +4455,7 @@ function VisitLetNode__2qws(self, Node__1) {
 
 function VisitFunctionNode__2qws(self, Node__1) {
    if (HasUntypedNode__1qwo(Node__1)) {
-      LibZen_PrintDebug__1qqy((("HasUntypedNode: " + HasUntypedNode__1qwo(Node__1)) + "\nLAZY: ") + toString__1qwo(Node__1));
+      LibZen.PrintDebug((("HasUntypedNode: " + HasUntypedNode__1qwo(Node__1)) + "\nLAZY: ") + toString__1qwo(Node__1));
    };
    self.Generator.StartCodeGeneration(self.Generator, Node__1, self.InteractiveContext);
    return;
@@ -4463,7 +4463,7 @@ function VisitFunctionNode__2qws(self, Node__1) {
 
 function VisitClassNode__2qws(self, Node__1) {
    if (HasUntypedNode__1qwo(Node__1)) {
-      LibZen_PrintDebug__1qqy((("HasUntypedNode: " + HasUntypedNode__1qwo(Node__1)) + "\n") + toString__1qwo(Node__1));
+      LibZen.PrintDebug((("HasUntypedNode: " + HasUntypedNode__1qwo(Node__1)) + "\n") + toString__1qwo(Node__1));
    };
    self.Generator.StartCodeGeneration(self.Generator, Node__1, self.InteractiveContext);
    return;
@@ -4530,13 +4530,13 @@ function InitBuilderList__1quk(self) {
 }
 
 function GetEngine__1quk(self) {
-   LibZen_PrintLine__1qqy("FIXME: Overide GetEngine in each generator!!");
+   LibZen.PrintLine("FIXME: Overide GetEngine in each generator!!");
    return ZSourceEngine__3qws(new ZSourceEngine(), ZTypeChecker__2qrc(new ZTypeChecker(), self), self);
 }
 
 function AppendNewSourceBuilder__1quk(self) {
    var Builder__1 = ZSourceBuilder__3qq2(new ZSourceBuilder(), self, self.CurrentBuilder);
-   self.BuilderList.add(Builder__1);
+   self.BuilderList.push(Builder__1);
    return Builder__1;
 }
 
@@ -4550,7 +4550,7 @@ function InsertNewSourceBuilder__1quk(self) {
       };
       i__2 = i__2 + 1;
    };
-   self.BuilderList.add(Builder__1);
+   self.BuilderList.push(Builder__1);
    return Builder__1;
 }
 
@@ -4619,7 +4619,7 @@ function SetConverterMacro__4quk(self, Macro__1, ReturnType__2, P1__3) {
 }
 
 function WriteTo__2quk(self, FileName__1) {
-   LibZen_WriteTo__2qqy(self.NameOutputFile(self, FileName__1), self.BuilderList);
+   LibZen.WriteTo(self.NameOutputFile(self, FileName__1), self.BuilderList);
    self.InitBuilderList(self);
    return;
 }
@@ -4636,17 +4636,17 @@ function GetSourceText__1quk(self) {
       i__2 = i__2 + 1;
    };
    self.InitBuilderList(self);
-   return LibZen_SourceBuilderToString__1qq2(sb__1);
+   return LibZen.SourceBuilderToString(sb__1);
 }
 
 function StartCodeGeneration__3quk(self, Node__1, IsInteractive__2) {
    Node__1.Accept(Node__1, self);
    if (IsInteractive__2) {
       var i__5 = 0;
-      LibZen_PrintLine__1qqy("---");
+      LibZen.PrintLine("---");
       while (i__3 < (self.BuilderList).length) {
          var Builder__4 = self.BuilderList[i__3];
-         LibZen_PrintLine__1qqy(toString__1qq2(Builder__4));
+         LibZen.PrintLine(toString__1qq2(Builder__4));
          Clear__1qq2(Builder__4);
          i__3 = i__3 + 1;
       };
@@ -4738,7 +4738,7 @@ function VisitFloatNode__2quk(self, Node__1) {
 }
 
 function VisitStringNode__2quk(self, Node__1) {
-   Append__2qq2(self.CurrentBuilder, LibZen_QuoteString__1qqy(Node__1.StringValue));
+   Append__2qq2(self.CurrentBuilder, LibZen.QuoteString(Node__1.StringValue));
    return;
 }
 
@@ -5066,7 +5066,7 @@ function VisitClassNode__2quk(self, Node__1) {
 function VisitErrorNode__2quk(self, Node__1) {
    ZLogger_LogError__2qw3(Node__1.SourceToken, Node__1.ErrorMessage);
    Append__2qq2(self.CurrentBuilder, "ThrowError(");
-   Append__2qq2(self.CurrentBuilder, LibZen_QuoteString__1qqy(Node__1.ErrorMessage));
+   Append__2qq2(self.CurrentBuilder, LibZen.QuoteString(Node__1.ErrorMessage));
    Append__2qq2(self.CurrentBuilder, ")");
    return;
 }
@@ -5145,7 +5145,7 @@ function VisitTypeChecker__3qrc(self, Node__1, ContextType__2) {
    self.ReturnedNode = null;
    Node__1.Accept(Node__1, self);
    if (self.ReturnedNode == null) {
-      LibZen_PrintDebug__1qqy("!! returns no value: " + toString__1qwo(Node__1));
+      LibZen.PrintDebug("!! returns no value: " + toString__1qwo(Node__1));
    } else {
       Node__1 = self.ReturnedNode;
    };
@@ -5188,7 +5188,7 @@ function TypeCheckImpl__4qrc(self, Node__1, ContextType__2, TypeCheckPolicy__3) 
       };
       return Node__1;
    };
-   if (IsUntyped__1qwo(Node__1) || ContextType__2.IsVarType(ContextType__2) || LibZen_IsFlag__2qqr(TypeCheckPolicy__3, 1)) {
+   if (IsUntyped__1qwo(Node__1) || ContextType__2.IsVarType(ContextType__2) || LibZen.IsFlag(TypeCheckPolicy__3, 1)) {
       return Node__1;
    };
    if (Node__1.Type == ContextType__2 || Accept__2qwg(ContextType__2, Node__1.Type)) {
@@ -5256,7 +5256,7 @@ function TypeCheckNodeList__2qrc(self, List__1) {
 
 function Return__2qrc(self, Node__1) {
    if (self.ReturnedNode != null) {
-      LibZen_PrintDebug__1qqy("previous returned node " + toString__1qwo(Node__1));
+      LibZen.PrintDebug("previous returned node " + toString__1qwo(Node__1));
    };
    self.ReturnedNode = Node__1;
    return;
@@ -5265,7 +5265,7 @@ function Return__2qrc(self, Node__1) {
 function TypedNode__3qrc(self, Node__1, Type__2) {
    Node__1.Type = Type__2.GetRealType(Type__2);
    if (self.ReturnedNode != null) {
-      LibZen_PrintDebug__1qqy("previous returned node " + toString__1qwo(Node__1));
+      LibZen.PrintDebug("previous returned node " + toString__1qwo(Node__1));
    };
    self.ReturnedNode = Node__1;
    return;
@@ -5581,7 +5581,7 @@ function SetMethod__3qga(self, FuncName__1, FuncType__2) {
       var ClassType__4 = RecvType__3;
       var FieldType__5 = GetFieldType__3qeq(ClassType__4, FuncName__1, null);
       if (FieldType__5 == null || !IsFuncType__1qwg(FieldType__5)) {
-         FuncName__1 = LibZen_AnotherName__1qqy(FuncName__1);
+         FuncName__1 = LibZen.AnotherName(FuncName__1);
          FieldType__5 = GetFieldType__3qeq(ClassType__4, FuncName__1, null);
          if (FieldType__5 == null || !IsFuncType__1qwg(FieldType__5)) {
             return;
@@ -5646,7 +5646,7 @@ function GenerateFields__3qga(self, ClassType__1, ThisType__2) {
 function VisitErrorNode__2qga(self, Node__1) {
    ZLogger_LogError__2qw3(Node__1.SourceToken, Node__1.ErrorMessage);
    Append__2qq2(self.CurrentBuilder, "ThrowError(");
-   Append__2qq2(self.CurrentBuilder, LibZen_QuoteString__1qqy(Node__1.ErrorMessage));
+   Append__2qq2(self.CurrentBuilder, LibZen.QuoteString(Node__1.ErrorMessage));
    Append__2qq2(self.CurrentBuilder, ")");
    return;
 }
@@ -5847,7 +5847,7 @@ function GetFuncType__2qrb(self, ContextType__1) {
       if (self.ReturnType.IsVarType(self.ReturnType) && FuncType__2 != null) {
          self.ReturnType = FuncType__2.GetParamType(FuncType__2, 0);
       };
-      TypeList__3.add(self.ReturnType.GetRealType(self.ReturnType));
+      TypeList__3.push(self.ReturnType.GetRealType(self.ReturnType));
       var i__9 = 0;
       while (i__4 < GetListSize__1quv(self)) {
          var Node__10 = GetParamNode__2qrb(self, i__4);
@@ -5855,7 +5855,7 @@ function GetFuncType__2qrb(self, ContextType__1) {
          if (ParamType__6.IsVarType(ParamType__6) && FuncType__2 != null) {
             ParamType__11 = FuncType__2.GetParamType(FuncType__2, i__4 + 1);
          };
-         TypeList__3.add(ParamType__6);
+         TypeList__3.push(ParamType__6);
          i__4 = i__4 + 1;
       };
       FuncType__2 = ZTypePool_LookupFuncType__1qwh(TypeList__3);
@@ -6140,7 +6140,7 @@ function FieldPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
 
 function FloatLiteralPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
    var Token__3 = GetToken__2qwp(TokenContext__1, true);
-   return ZFloatNode__4qp4(new ZFloatNode(), ParentNode, Token__3, LibZen_ParseFloat__1qqy(GetText__1qw3(Token__3)));
+   return ZFloatNode__4qp4(new ZFloatNode(), ParentNode, Token__3, LibZen.ParseFloat(GetText__1qw3(Token__3)));
 }
 
 function FunctionPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
@@ -6201,7 +6201,7 @@ function InstanceOfPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
 
 function IntLiteralPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
    var Token__3 = GetToken__2qwp(TokenContext__1, true);
-   return ZIntNode__4q0o(new ZIntNode(), ParentNode, Token__3, LibZen_ParseInt__1qqy(GetText__1qw3(Token__3)));
+   return ZIntNode__4q0o(new ZIntNode(), ParentNode, Token__3, LibZen.ParseInt(GetText__1qw3(Token__3)));
 }
 
 function LetPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
@@ -6238,7 +6238,7 @@ function MethodCallPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
 
 function NamePattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
    var Token__3 = GetToken__2qwp(TokenContext__1, true);
-   if (LibZen_IsSymbol__1qqy(GetChar__1qw3(Token__3))) {
+   if (LibZen.IsSymbol(GetChar__1qw3(Token__3))) {
       return ZGetNameNode__4qph(new ZGetNameNode(), ParentNode, Token__3, GetText__1qw3(Token__3));
    };
    return ZErrorNode__4qpr(new ZErrorNode(), ParentNode, Token__3, ("illegal name: \"" + GetText__1qw3(Token__3)) + "\"");
@@ -6248,7 +6248,7 @@ function NameToken__1qwu(SourceContext) {
    var StartIndex__1 = GetPosition__1qwu(SourceContext);
    while (HasChar__1qwu(SourceContext)) {
       var ch__2 = GetCurrentChar__1qwu(SourceContext);
-      if (!LibZen_IsSymbol__1qqy(ch__2) && !LibZen_IsDigit__1qqy(ch__2)) {
+      if (!LibZen.IsSymbol(ch__2) && !LibZen.IsDigit(ch__2)) {
          break;
       };
       MoveNext__1qwu(SourceContext);
@@ -6287,7 +6287,7 @@ function NumberLiteralToken_ParseDigit__1qwu(SourceContext) {
    var ch__1 = "0";
    while (HasChar__1qwu(SourceContext)) {
       ch__1 = GetCurrentChar__1qwu(SourceContext);
-      if (!LibZen_IsDigit__1qqy(ch__1)) {
+      if (!LibZen.IsDigit(ch__1)) {
          break;
       };
       MoveNext__1qwu(SourceContext);
@@ -6368,7 +6368,7 @@ function RightTypePattern__3qwo(ParentNode, TokenContext__1, LeftTypeNode__2) {
             if (ParamTypeNode__5 == null) {
                return LeftTypeNode__2;
             };
-            TypeList__4.add(ParamTypeNode__5.Type);
+            TypeList__4.push(ParamTypeNode__5.Type);
          };
          LeftTypeNode__2 = ZTypeNode__4qu4(new ZTypeNode(), ParentNode, SourceToken__3, ZTypePool_GetGenericType__3qwg(LeftTypeNode__2.Type, TypeList__4, true));
       };
@@ -6434,7 +6434,7 @@ function StatementPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
 
 function StringLiteralPattern__3qwo(ParentNode, TokenContext__1, LeftNode__2) {
    var Token__3 = GetToken__2qwp(TokenContext__1, true);
-   return ZStringNode__4q4c(new ZStringNode(), ParentNode, Token__3, LibZen_UnquoteString__1qqy(GetText__1qw3(Token__3)));
+   return ZStringNode__4q4c(new ZStringNode(), ParentNode, Token__3, LibZen.UnquoteString(GetText__1qw3(Token__3)));
 }
 
 function StringLiteralToken__1qwu(SourceContext) {

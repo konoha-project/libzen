@@ -221,6 +221,7 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.Indent();
 		if(Node.SuperType != null) {
+			this.CurrentBuilder.AppendIndent();
 			this.CurrentBuilder.Append("_super.call(this)");
 			this.CurrentBuilder.Append(this.SemiColon);
 			this.CurrentBuilder.AppendLineFeed();
@@ -239,6 +240,7 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 			i = i + 1;
 		}
 		this.CurrentBuilder.UnIndent();
+		this.CurrentBuilder.AppendIndent();
 		this.CurrentBuilder.Append("}");
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.AppendIndent();
