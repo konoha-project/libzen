@@ -492,8 +492,8 @@ public class LibZen {
 	public final static boolean _ImportGrammar(ZNameSpace NameSpace, String ClassName) {
 		try {
 			@Var Class<?> NativeClass =  Class.forName(ClassName);
-			Method LoaderMethod = NativeClass.getMethod("ImportGrammar", ZNameSpace.class, Class.class);
-			LoaderMethod.invoke(null, NameSpace, NativeClass);
+			@Var Method LoaderMethod = NativeClass.getMethod("ImportGrammar", ZNameSpace.class);
+			LoaderMethod.invoke(null, NameSpace);
 			return true;
 		} catch (Exception e) { // naming
 			LibZen._FixMe(e);

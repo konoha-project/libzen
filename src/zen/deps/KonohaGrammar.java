@@ -90,7 +90,7 @@ import zen.type.ZGenericType;
 import zen.type.ZType;
 
 public class KonohaGrammar {
-	public static void ImportGrammar(ZNameSpace NameSpace/*, Class<?> Grammar*/) {
+	public static void ImportGrammar(ZNameSpace NameSpace) {
 		NameSpace.SetTypeName(ZType.VoidType,  null);
 		NameSpace.SetTypeName(ZType.BooleanType, null);
 		NameSpace.SetTypeName(ZType.IntType, null);
