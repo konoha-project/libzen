@@ -1,22 +1,22 @@
 package zen.lang;
 
 public abstract class ZenPrecedence {
-	public final static int BinaryOperator					= 1;
-	public final static int LeftJoin						= 1 << 1;
-	public final static int PrecedenceShift					= 3;
-	public final static int CStyleMUL			    = (100 << PrecedenceShift) | BinaryOperator;
-	public final static int CStyleADD			    = (200 << PrecedenceShift) | BinaryOperator;
-	public final static int CStyleSHIFT			= (300 << PrecedenceShift) | BinaryOperator;
-	public final static int CStyleCOMPARE		    = (400 << PrecedenceShift) | BinaryOperator;
-	public final static int Instanceof            = CStyleCOMPARE;
-	public final static int CStyleEquals			= (500 << PrecedenceShift) | BinaryOperator;
-	public final static int CStyleBITAND			= (600 << PrecedenceShift) | BinaryOperator;
-	public final static int CStyleBITXOR			= (700 << PrecedenceShift) | BinaryOperator;
-	public final static int CStyleBITOR			= (800 << PrecedenceShift) | BinaryOperator;
-	public final static int CStyleAND			    = (900 << PrecedenceShift) | BinaryOperator;
-	public final static int CStyleOR				= (1000 << PrecedenceShift) | BinaryOperator;
-	public final static int CStyleTRINARY		    = (1100 << PrecedenceShift) | BinaryOperator;				/* ? : */
-	public final static int CStyleAssign			= (1200 << PrecedenceShift) | BinaryOperator;
-	public final static int CStyleCOMMA			= (1300 << PrecedenceShift) | BinaryOperator;
+	public final static int _BinaryOperator					= 1;
+	public final static int _LeftJoin						= 1 << 1;
+	public final static int _PrecedenceShift					= 3;
+	public final static int _CStyleMUL			    = (100 << ZenPrecedence._PrecedenceShift) | ZenPrecedence._BinaryOperator;
+	public final static int _CStyleADD			    = (200 << ZenPrecedence._PrecedenceShift) | ZenPrecedence._BinaryOperator;
+	public final static int _CStyleSHIFT			= (300 << ZenPrecedence._PrecedenceShift) | ZenPrecedence._BinaryOperator;
+	public final static int _CStyleCOMPARE		    = (400 << ZenPrecedence._PrecedenceShift) | ZenPrecedence._BinaryOperator;
+	public final static int _Instanceof            = ZenPrecedence._CStyleCOMPARE;
+	public final static int _CStyleEquals			= (500 << ZenPrecedence._PrecedenceShift) | ZenPrecedence._BinaryOperator;
+	public final static int _CStyleBITAND			= (600 << ZenPrecedence._PrecedenceShift) | ZenPrecedence._BinaryOperator;
+	public final static int _CStyleBITXOR			= (700 << ZenPrecedence._PrecedenceShift) | ZenPrecedence._BinaryOperator;
+	public final static int _CStyleBITOR			= (800 << ZenPrecedence._PrecedenceShift) | ZenPrecedence._BinaryOperator;
+	public final static int _CStyleAND			    = (900 << ZenPrecedence._PrecedenceShift) | ZenPrecedence._BinaryOperator;
+	public final static int _CStyleOR				= (1000 << ZenPrecedence._PrecedenceShift) | ZenPrecedence._BinaryOperator;
+	public final static int _CStyleTRINARY		    = (1100 << ZenPrecedence._PrecedenceShift) | ZenPrecedence._BinaryOperator;				/* ? : */
+	public final static int _CStyleAssign			= (1200 << ZenPrecedence._PrecedenceShift) | ZenPrecedence._BinaryOperator;
+	public final static int _CStyleCOMMA			= (1300 << ZenPrecedence._PrecedenceShift) | ZenPrecedence._BinaryOperator;
 
 }
