@@ -36,6 +36,8 @@ import zen.ast.ZGlobalNameNode;
 import zen.ast.ZInstanceOfNode;
 import zen.ast.ZLetNode;
 import zen.ast.ZMapLiteralNode;
+import zen.ast.ZNode;
+import zen.ast.ZNullNode;
 import zen.ast.ZParamNode;
 import zen.ast.ZStupidCastErrorNode;
 import zen.ast.ZThrowNode;
@@ -51,14 +53,15 @@ import zen.type.ZGenericType;
 import zen.type.ZType;
 
 public class JavaScriptSourceGenerator extends ZSourceGenerator {
+	private static boolean UseExtend;
 
 	public JavaScriptSourceGenerator() {
 		super("js", "JavaScript-1.4");
-		//		this.TopType = "Object";
-		//		this.SetNativeType(ZType.BooleanType, "Boolean");
-		//		this.SetNativeType(ZType.IntType, "Number");
-		//		this.SetNativeType(ZType.FloatType, "Number");
-		//		this.SetNativeType(ZType.StringType, "String");
+		this.TopType = "Object";
+		this.SetNativeType(ZType.BooleanType, "Boolean");
+		this.SetNativeType(ZType.IntType, "Number");
+		this.SetNativeType(ZType.FloatType, "Number");
+		this.SetNativeType(ZType.StringType, "String");
 
 
 		this.SetReservedName("this", "self");
@@ -74,7 +77,7 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 		this.SetConverterMacro("($[0] | 0)", ZType.IntType, ZType.FloatType);
 		this.SetConverterMacro("($[0]).toString()", ZType.StringType, ZType.IntType);
 		this.SetConverterMacro("($[0]).toString()", ZType.StringType, ZType.FloatType);
-
+		JavaScriptSourceGenerator.UseExtend = false;
 	}
 
 	@Override public ZSourceEngine GetEngine() {
@@ -101,9 +104,11 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitInstanceOfNode(ZInstanceOfNode Node) {
+		this.CurrentBuilder.Append("(");
 		this.GenerateCode(null, Node.AST[ZBinaryNode._Left]);
-		this.CurrentBuilder.Append(" instanceof ");
+		this.CurrentBuilder.Append(").constructor.name == (");
 		this.GenerateTypeName(Node.TargetType);
+		this.CurrentBuilder.Append(").name");
 	}
 
 	@Override public void VisitThrowNode(ZThrowNode Node) {
@@ -149,16 +154,29 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 				Node.FuncName = "f";
 			}
 			@Var String FuncName = Node.FuncName + this.GetUniqueNumber();
-			this.CurrentBuilder.Append("function ");
+			this.CurrentBuilder.Append("var ");
 			this.CurrentBuilder.Append(FuncName);
+			this.CurrentBuilder.Append(" = (function ");
 			this.VisitListNode("(", Node, ")");
 			this.GenerateCode(null, Node.AST[ZFunctionNode._Block]);
+			this.CurrentBuilder.Append(");");
 		}
 		else {
-			this.CurrentBuilder.Append("function ");
+			this.CurrentBuilder.Append("var ");
 			this.CurrentBuilder.Append(Node.GetSignature(this));
+			this.CurrentBuilder.Append(" = (function ");
 			this.VisitListNode("(", Node, ")");
 			this.GenerateCode(null, Node.AST[ZFunctionNode._Block]);
+			this.CurrentBuilder.Append(");");
+		}
+		if(Node.AST.length > 1 && Node.AST[1/*first param*/] instanceof ZParamNode) {
+			this.CurrentBuilder.AppendLineFeed();
+			this.CurrentBuilder.Append(Node.AST[1/*first param*/].Type.ShortName); //FIXME must use typing in param
+			this.CurrentBuilder.Append(".prototype.");
+			this.CurrentBuilder.Append(Node.FuncName);
+			this.CurrentBuilder.Append(" = ");
+			this.CurrentBuilder.Append(Node.GetSignature(this));
+			this.CurrentBuilder.Append(this.SemiColon);
 		}
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.AppendLineFeed();
@@ -184,6 +202,27 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.AppendLineFeed();
 	}
 
+	private void GenerateExtendCode(ZClassNode Node) {
+		this.CurrentBuilder.Append("var __extends = this.__extends || function (d, b) {");
+		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.Indent();
+		this.CurrentBuilder.AppendIndent();
+		this.CurrentBuilder.Append("for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];");
+		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.AppendIndent();
+		this.CurrentBuilder.Append("function __() { this.constructor = d; }");
+		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.AppendIndent();
+		this.CurrentBuilder.Append("__.prototype = b.prototype;");
+		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.AppendIndent();
+		this.CurrentBuilder.Append("d.prototype = new __();");
+		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.Append("};");
+		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.UnIndent();
+	}
+
 	@Override public void VisitClassNode(ZClassNode Node) {
 		/* var ClassName = (function(_super) {
 		 *  __extends(ClassName, _super);
@@ -194,6 +233,10 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 		 * 	return ClassName;
 		 * })(_super);
 		 */
+		if(Node.SuperType != null && !JavaScriptSourceGenerator.UseExtend) {
+			JavaScriptSourceGenerator.UseExtend = true;
+			this.GenerateExtendCode(Node);
+		}
 		this.CurrentBuilder.Append("var ");
 		this.CurrentBuilder.Append(Node.ClassName);
 		this.CurrentBuilder.Append(" = ");
@@ -221,6 +264,7 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.Indent();
 		if(Node.SuperType != null) {
+			this.CurrentBuilder.AppendIndent();
 			this.CurrentBuilder.Append("_super.call(this)");
 			this.CurrentBuilder.Append(this.SemiColon);
 			this.CurrentBuilder.AppendLineFeed();
@@ -229,16 +273,21 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 		@Var int i = 0;
 		while (i < Node.GetListSize()) {
 			@Var ZFieldNode FieldNode = Node.GetFieldNode(i);
-			this.CurrentBuilder.AppendIndent();
-			this.CurrentBuilder.Append("this.");
-			this.CurrentBuilder.Append(FieldNode.FieldName);
-			this.CurrentBuilder.Append(" = ");
-			this.GenerateCode(null, FieldNode.AST[ZFieldNode._InitValue]);
-			this.CurrentBuilder.Append(this.SemiColon);
-			this.CurrentBuilder.AppendLineFeed();
+			@Var ZNode ValueNode = FieldNode.AST[ZFieldNode._InitValue];
+			if(!(ValueNode instanceof ZNullNode)) {
+				this.CurrentBuilder.AppendIndent();
+				this.CurrentBuilder.Append("this.");
+				this.CurrentBuilder.Append(FieldNode.FieldName);
+				this.CurrentBuilder.Append(" = ");
+
+				this.GenerateCode(null, FieldNode.AST[ZFieldNode._InitValue]);
+				this.CurrentBuilder.Append(this.SemiColon);
+				this.CurrentBuilder.AppendLineFeed();
+			}
 			i = i + 1;
 		}
 		this.CurrentBuilder.UnIndent();
+		this.CurrentBuilder.AppendIndent();
 		this.CurrentBuilder.Append("}");
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.AppendIndent();

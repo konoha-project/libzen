@@ -1,4 +1,6 @@
-LibZen = {};
+var JavaScriptGlobal = Function("return this")();
+
+var LibZen = {};
 LibZen.AnotherName = (function(s){
 	var ch = s.charAt(0);
 	var chAnother = ch.toLowerCase();
@@ -7,6 +9,49 @@ LibZen.AnotherName = (function(s){
 	}
 	return ch + s.substring(1);
 });
+
+LibZen.NullChar			= 0;
+LibZen.UndefinedChar	= 1;
+LibZen.DigitChar		= 2;
+LibZen.UpperAlphaChar	= 3;
+LibZen.LowerAlphaChar	= 4;
+LibZen.UnderBarChar		= 5;
+LibZen.NewLineChar		= 6;
+LibZen.TabChar			= 7;
+LibZen.SpaceChar		= 8;
+LibZen.OpenParChar		= 9;
+LibZen.CloseParChar		= 10;
+LibZen.OpenBracketChar	= 11;
+LibZen.CloseBracketChar	= 12;
+LibZen.OpenBraceChar	= 13;
+LibZen.CloseBraceChar	= 14;
+LibZen.LessThanChar		= 15;
+LibZen.GreaterThanChar	= 16;
+LibZen.QuoteChar		= 17;
+LibZen.DoubleQuoteChar	= 18;
+LibZen.BackQuoteChar	= 19;
+LibZen.SurprisedChar	= 20;
+LibZen.SharpChar		= 21;
+LibZen.DollarChar		= 22;
+LibZen.PercentChar		= 23;
+LibZen.AndChar			= 24;
+LibZen.StarChar			= 25;
+LibZen.PlusChar			= 26;
+LibZen.CommaChar		= 27;
+LibZen.MinusChar		= 28;
+LibZen.DotChar			= 29;
+LibZen.SlashChar		= 30;
+LibZen.ColonChar		= 31;
+LibZen.SemiColonChar	= 32;
+LibZen.EqualChar		= 33;
+LibZen.QuestionChar		= 34;
+LibZen.AtmarkChar		= 35;
+LibZen.VarChar			= 36;
+LibZen.ChilderChar		= 37;
+LibZen.BackSlashChar	= 38;
+LibZen.HatChar			= 39;
+LibZen.UnicodeChar		= 40;
+LibZen.MaxSizeOfChars	= 41;
 
 LibZen.ApplyMatchFunc = (function(MatchFunc, ParentNode, TokenContext, LeftNode){
 	return MatchFunc.call(ParentNode, TokenContext, LeftNode);
@@ -36,8 +81,11 @@ LibZen.GetClassName = (function(Value){
 	return Value.constructor.name;
 });
 
-LibZen.GetTokenMatrixIndex = (function(){
-	throw new Error("Not impremented");
+LibZen.GetTokenMatrixIndex = (function(c){
+	if(c < 128) {
+		return LibZen.CharMatrix[c];
+	}
+	return LibZen.UnicodeChar;
 });
 
 LibZen.IsDigit = (function(ch){
@@ -67,174 +115,145 @@ LibZen.JoinStrings = (function(Unit, Times){
 	return Builder.join("");
 });
 
-LibZen.NewMap = (function(){
-	throw new Error("Not impremented");
-});
-
-LibZen.NewNodeArray = (function(){
-	throw new Error("Not impremented");
+LibZen.NewNodeArray = (function(Size){
+	var a = [];
+	a[Size - 1] = null;
+	return a;
 });
 
 LibZen.NewTokenMatrix = (function(){
-	throw new Error("Not impremented");
+	var a = [];
+	a[LibZen.MaxSizeOfChars - 1] = null;
+	return a;
 });
 
-LibZen.NewTypeArray = (function(){
-	throw new Error("Not impremented");
+LibZen.NewTypeArray = (function(Size){
+	var a = [];
+	a[Size - 1] = null;
+	return a;
 });
 
-LibZen.ParseFloat = (function(){
-	throw new Error("Not impremented");
+LibZen.ParseFloat = (function(Text){
+	return parseFloat(Text);
 });
 
-LibZen.ParseInt = (function(){
-	throw new Error("Not impremented");
+LibZen.ParseInt = (function(Text){
+	return parseInt(Text);
 });
 
 LibZen.PrintDebug = (function(){
-	throw new Error("Not impremented");
+	console.log(msg);
 });
 
-LibZen.PrintLine = (function(){
-	throw new Error("Not impremented");
+LibZen.PrintLine = (function(msg){
+	console.log(msg);
 });
 
-LibZen.QuoteString = (function(){
-	throw new Error("Not impremented");
+LibZen.QuoteString = (function(Text){
+	var sb = [];
+	sb.push('"');
+	for(var i = 0; i < Text.length(); i = i + 1) {
+		var ch = Text.charAt(i);
+		if(ch == '\n') {
+			sb.push("\\n");
+		}
+		else if(ch == '\t') {
+			sb.push("\\t");
+		}
+		else if(ch == '"') {
+			sb.push("\\\"");
+		}
+		else if(ch == '\\') {
+			sb.push("\\\\");
+		}
+		else {
+			sb.push(ch);
+		}
+	}
+	sb.push('"');
+	return sb.join("");
 });
 
-LibZen.SourceBuilderToString = (function(){
-	throw new Error("Not impremented");
+LibZen.SourceBuilderToString = (function(Builder, BeginIndex, EndIndex){
+	var builder = [];
+	if(BeginIndex == undefined){
+		BeginIndex = 0;
+	}
+	if(EndIndex == undefined){
+		EndIndex = Builder.SourceList.length();
+	}
+	for(var i = BeginIndex; i < EndIndex; i = i + 1) {
+		builder.push(Builder.SourceList.ArrayValues[i]);
+	}
+	return builder.join("");
 });
 
-LibZen.Stringfy = (function(){
-	throw new Error("Not impremented");
+LibZen.StringMatrix = [
+		"q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "0", "4",
+		"a", "s", "d", "f", "g", "h", "j", "k", "l", "9", "1", "6",
+		"z", "x", "c", "v", "b", "n", "m", "7", "5", "3", "2", "8"
+	];
+
+LibZen.Stringfy = (function(number){
+	var l = LibZen.StringMatrix.length;
+	var d = number % l;
+	number = number / l;
+	var c = number % l;
+	number = number / l;
+	return LibZen.StringMatrix[number] + LibZen.StringMatrix[c] + LibZen.StringMatrix[d];
 });
 
-LibZen.UnquoteString = (function(){
-	throw new Error("Not impremented");
+LibZen.UnquoteString = (function(Text){
+	var sb = []
+	var quote = Text.charAt(0);
+	var i = 0;
+	var Length = Text.length;
+	if(quote == '"' || quote == '\'') {
+		i = 1;
+		Length -= 1;
+	}
+	else {
+		quote = '\0';
+	}
+	for(; i < Length; i += 1) {
+		var ch = Text.charAt(i);
+		if(ch == '\\') {
+			i++;
+			var next = Text.charAt(i);
+			switch (next) {
+			case 't':
+				ch = '\t';
+				break;
+			case 'n':
+				ch = '\n';
+				break;
+			case '"':
+				ch = '"';
+				break;
+			case '\'':
+				ch = '\'';
+				break;
+			case '\\':
+				ch = '\\';
+				break;
+			default:
+				ch = next;
+				break;
+			}
+		}
+		sb.push(ch);
+	}
+	return sb.join("");
 });
 
-LibZen.WriteTo = (function(){
-	throw new Error("Not impremented");
-});
-
-LibZen_ArrayAdd = (function(){
-	throw new Error("Not impremented");
-});
-
-LibZen_ArrayAdd2 = (function(){
-	throw new Error("Not impremented");
-});
-
-LibZen_ArrayClear = (function(){
-	throw new Error("Not impremented");
-});
-
-LibZen_ArraySize = (function(){
-	throw new Error("Not impremented");
-});
-
-LibZen_Assert = (function(){
-	throw new Error("Not impremented");
-});
-
-LibZen_BooleanToString = (function(){
-	throw new Error("Not impremented");
-});
-
-LibZen_EndWidth = (function(){
-	throw new Error("Not impremented");
-});
-
-LibZen_EqualsString = (function(){
-	throw new Error("Not impremented");
-});
-
-LibZen_FloatToString = (function(){
-	throw new Error("Not impremented");
-});
-
-LibZen_GreekNames_Z0 = (function(){
-	throw new Error("Not impremented");
-});
-
-LibZen_IndexOf = (function(){
-	throw new Error("Not impremented");
-});
-
-LibZen_IndexOf2 = (function(){
-	throw new Error("Not impremented");
-});
-
-LibZen_IntToString = (function(){
-	throw new Error("Not impremented");
-});
-
-LibZen_Is = (function(){
-	throw new Error("Not impremented");
-});
-
-LibZen_NewArray = (function(){
-	throw new Error("Not impremented");
-});
-
-LibZen_NewFloatArray = (function(){
-	throw new Error("Not impremented");
-});
-
-LibZen_NewFloatMap = (function(){
-	throw new Error("Not impremented");
-});
-
-LibZen_NewIntArray = (function(){
-	throw new Error("Not impremented");
-});
-
-LibZen_NewIntMap = (function(){
-	throw new Error("Not impremented");
-});
-
-LibZen_NewMap = (function(){
-	throw new Error("Not impremented");
-});
-
-LibZen_NewStringArray = (function(){
-	throw new Error("Not impremented");
-});
-
-LibZen_NewStringMap = (function(){
-	throw new Error("Not impremented");
-});
-
-LibZen_ParseInt = (function(){
-	throw new Error("Not impremented");
-});
-
-LibZen_Print = (function(){
-	throw new Error("Not impremented");
-});
-
-LibZen_PrintLine = (function(){
-	throw new Error("Not impremented");
-});
-
-LibZen_StartsWith = (function(){
-	throw new Error("Not impremented");
-});
-
-LibZen_StrCat = (function(){
-	throw new Error("Not impremented");
-});
-
-LibZen_StringSize = (function(){
-	throw new Error("Not impremented");
-});
-
-LibZen_SubString = (function(){
-	throw new Error("Not impremented");
-});
-
-LibZen_SubString2 = (function(){
-	throw new Error("Not impremented");
+LibZen.WriteTo = (function(FileName, List){
+	if(FileName == null) {
+		for(var i = 0; i < List.size(); i++) {
+			var Builder = List.ArrayValues[i];
+			console.log(Builder.toString());
+			Builder.Clear();
+		}
+	}else{
+		throw new Error("Not impremented");
+	}
 });
