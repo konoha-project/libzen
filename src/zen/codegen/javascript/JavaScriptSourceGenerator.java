@@ -51,6 +51,7 @@ import zen.type.ZGenericType;
 import zen.type.ZType;
 
 public class JavaScriptSourceGenerator extends ZSourceGenerator {
+	private static boolean UseExtend;
 
 	public JavaScriptSourceGenerator() {
 		super("js", "JavaScript-1.4");
@@ -74,7 +75,7 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 		this.SetConverterMacro("($[0] | 0)", ZType.IntType, ZType.FloatType);
 		this.SetConverterMacro("($[0]).toString()", ZType.StringType, ZType.IntType);
 		this.SetConverterMacro("($[0]).toString()", ZType.StringType, ZType.FloatType);
-
+		this.UseExtend = false;
 	}
 
 	@Override public ZSourceEngine GetEngine() {
@@ -186,6 +187,27 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.AppendLineFeed();
 	}
 
+	private void GenerateExtendCode(ZClassNode Node) {
+		this.CurrentBuilder.Append("var __extends = this.__extends || function (d, b) {");
+		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.Indent();
+		this.CurrentBuilder.AppendIndent();
+		this.CurrentBuilder.Append("for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];");
+		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.AppendIndent();
+		this.CurrentBuilder.Append("function __() { this.constructor = d; }");
+		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.AppendIndent();
+		this.CurrentBuilder.Append("__.prototype = b.prototype;");
+		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.AppendIndent();
+		this.CurrentBuilder.Append("d.prototype = new __();");
+		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.Append("};");
+		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.UnIndent();
+	}
+
 	@Override public void VisitClassNode(ZClassNode Node) {
 		/* var ClassName = (function(_super) {
 		 *  __extends(ClassName, _super);
@@ -196,6 +218,10 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 		 * 	return ClassName;
 		 * })(_super);
 		 */
+		if(Node.SuperType != null && !JavaScriptSourceGenerator.UseExtend) {
+			JavaScriptSourceGenerator.UseExtend = true;
+			this.GenerateExtendCode(Node);
+		}
 		this.CurrentBuilder.Append("var ");
 		this.CurrentBuilder.Append(Node.ClassName);
 		this.CurrentBuilder.Append(" = ");
