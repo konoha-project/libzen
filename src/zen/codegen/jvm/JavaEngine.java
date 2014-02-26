@@ -79,7 +79,7 @@ import zen.type.ZFuncType;
 
 public class JavaEngine extends ZSourceEngine {
 
-	private final JavaGenerator Solution;
+	protected final JavaGenerator Solution;
 	protected Object EvaledValue = null;
 
 	public JavaEngine(ZTypeChecker TypeChecker, JavaGenerator Generator) {
