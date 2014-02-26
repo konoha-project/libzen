@@ -29,15 +29,23 @@ import zen.ast.ZBinaryNode;
 import zen.ast.ZBlockNode;
 import zen.ast.ZCastNode;
 import zen.ast.ZCatchNode;
+import zen.ast.ZClassNode;
+import zen.ast.ZFieldNode;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZInstanceOfNode;
+import zen.ast.ZLetNode;
 import zen.ast.ZNode;
 import zen.ast.ZParamNode;
-import zen.ast.ZReturnNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZVarNode;
+import zen.deps.LibZen;
+import zen.deps.Var;
 import zen.parser.ZSourceGenerator;
+import zen.type.ZClassField;
+import zen.type.ZClassType;
+import zen.type.ZFuncType;
+import zen.type.ZGenericType;
 import zen.type.ZType;
 
 //Zen Generator should be written in each language.
@@ -65,10 +73,39 @@ public class PythonGenerator extends ZSourceGenerator {
 		this.SetNativeType(ZType.IntType, "int");
 		this.SetNativeType(ZType.FloatType, "float");
 		this.SetNativeType(ZType.StringType, "str");
+
+		this.SetMacro("assert", "LibZen_Assert($[0], $[1])", ZType.VoidType, ZType.BooleanType, ZType.StringType);
+		this.SetMacro("print", "print ($[0]),", ZType.VoidType, ZType.StringType);
+		this.SetMacro("println", "print ($[0])", ZType.VoidType, ZType.StringType);
+
+		// Converter
+		this.SetConverterMacro("float($[0])", ZType.FloatType, ZType.IntType);
+		this.SetConverterMacro("int($[0])", ZType.IntType, ZType.FloatType);
+		this.SetConverterMacro("('true' if $[0] else 'false')", ZType.StringType, ZType.BooleanType);
+		this.SetConverterMacro("str($[0])", ZType.StringType, ZType.IntType);
+		this.SetConverterMacro("str($[0])", ZType.StringType, ZType.FloatType);
+
+		// String
+		this.SetMacro("size", "len($[0])", ZType.IntType, ZType.StringType);
+		this.SetMacro("substring", "$[0][$[1]:]", ZType.StringType, ZType.StringType, ZType.IntType);
+		this.SetMacro("substring", "$[0][$[1]:$[2]]", ZType.StringType, ZType.StringType, ZType.IntType, ZType.IntType);
+		this.SetMacro("indexOf", "$[0].find($[1])", ZType.IntType, ZType.StringType, ZType.StringType);
+		this.SetMacro("indexOf", "$[0].find($[1], $[2])", ZType.IntType, ZType.StringType, ZType.StringType, ZType.IntType);
+		this.SetMacro("equals", "$[0] == $[1]", ZType.BooleanType, ZType.StringType, ZType.StringType);
+		this.SetMacro("startsWith", "$[0].startswith($[1])", ZType.BooleanType, ZType.StringType, ZType.StringType);
+		this.SetMacro("endsWith", "$[0].endswith($[1])", ZType.BooleanType, ZType.StringType, ZType.StringType);
+
+		// Array
+		this.SetMacro("size", "len($[0])", ZType.IntType, ZGenericType._ArrayType);
+		this.SetMacro("clear", "LibZen_ArrayClear($[0], $[1])", ZType.VoidType, ZGenericType._ArrayType, ZType.IntType);
+		this.SetMacro("add", "$[0].append($[1])", ZType.VoidType, ZGenericType._ArrayType, ZType.VarType);
+		this.SetMacro("add", "$[0].insert($[1], $[2])", ZType.VoidType, ZGenericType._ArrayType, ZType.IntType, ZType.VarType);
+
+
 	}
 
 	@Override public void VisitStmtList(ZBlockNode BlockNode) {
-		int i = 0;
+		@Var int i = 0;
 		while (i < BlockNode.GetListSize()) {
 			ZNode SubNode = BlockNode.GetListAt(i);
 			this.CurrentBuilder.AppendLineFeed();
@@ -84,8 +121,7 @@ public class PythonGenerator extends ZSourceGenerator {
 		}
 	}
 
-	@Override
-	public void VisitBlockNode(ZBlockNode Node) {
+	@Override public void VisitBlockNode(ZBlockNode Node) {
 		this.CurrentBuilder.Append(":");
 		this.CurrentBuilder.Indent();
 		this.VisitStmtList(Node);
@@ -107,18 +143,16 @@ public class PythonGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Append("isinstance(");
 		this.GenerateCode(null, Node.AST[ZBinaryNode._Left]);
 		this.CurrentBuilder.Append(this.Camma);
-		this.GenerateTypeName(Node.AST[ZBinaryNode._Right].Type);
+		this.GenerateTypeName(Node.TargetType);
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override
-	public void VisitThrowNode(ZThrowNode Node) {
+	@Override public void VisitThrowNode(ZThrowNode Node) {
 		this.CurrentBuilder.Append("raise ");
 		this.GenerateCode(null, Node.AST[ZThrowNode._Expr]);
 	}
 
-	@Override
-	public void VisitTryNode(ZTryNode Node) {
+	@Override public void VisitTryNode(ZTryNode Node) {
 		this.CurrentBuilder.Append("try");
 		this.GenerateCode(null, Node.AST[ZTryNode._Try]);
 		if (Node.AST[ZTryNode._Catch] != null) {
@@ -138,23 +172,31 @@ public class PythonGenerator extends ZSourceGenerator {
 		this.GenerateCode(null, Node.AST[ZCatchNode._Block]);
 	}
 
-	@Override
-	public void VisitVarNode(ZVarNode Node) {
-		this.CurrentBuilder.Append(Node.NativeName);
+	@Override public void VisitVarNode(ZVarNode Node) {
+		this.CurrentBuilder.Append(this.SafeName(Node.NativeName, Node.VarIndex));
 		this.CurrentBuilder.AppendToken("=");
 		this.GenerateCode(null, Node.AST[ZVarNode._InitValue]);
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.AppendIndent();
-
-		// copied from VisitBlock(ZenBlockNode)
 		this.VisitStmtList(Node);
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.AppendIndent();
 	}
 
-	@Override
-	public void VisitParamNode(ZParamNode Node) {
-		this.CurrentBuilder.Append(Node.Name);
+	@Override public void VisitLetNode(ZLetNode Node) {
+		//		this.CurrentBuilder.Append("static ");
+		//		this.GenerateTypeName(Node.GetAstType(ZLetNode._InitValue));
+		//		this.CurrentBuilder.Append(" ");
+		this.CurrentBuilder.Append(Node.GlobalName);
+		this.CurrentBuilder.Append(" = ");
+		this.GenerateCode(null, Node.AST[ZLetNode._InitValue]);
+		this.CurrentBuilder.Append(this.SemiColon);
+		this.CurrentBuilder.AppendLineFeed();
+		Node.GetNameSpace().SetLocalSymbol(Node.Symbol, Node.ToGlobalNameNode());
+	}
+
+	@Override public void VisitParamNode(ZParamNode Node) {
+		this.CurrentBuilder.Append(this.SafeName(Node.Name, Node.ParamIndex));
 	}
 
 	/**
@@ -166,31 +208,116 @@ public class PythonGenerator extends ZSourceGenerator {
 		>>> f(1)(3)
 		4
 	 **/
-	@Override
-	public void VisitFunctionNode(ZFunctionNode Node) {
-		ZReturnNode ReturnNode = Node.AST[ZFunctionNode._Block].ToReturnNode();
-		if(ReturnNode != null && ReturnNode.AST[ZReturnNode._Expr] != null) {
-			this.CurrentBuilder.Append("lambda");
-			this.VisitListNode(" ", Node, ": ");
-			this.GenerateCode(null, ReturnNode.AST[ZReturnNode._Expr]);
-		}
-		else {
-			this.CurrentBuilder.Append("def");
-			this.CurrentBuilder.AppendToken("lambda");
+
+	@Override public void VisitFunctionNode(ZFunctionNode Node) {
+		if(!Node.Type.IsVoidType()) {
+			if(Node.FuncName == null) {
+				Node.FuncName = "f";
+			}
+			@Var String FuncName = Node.FuncName + this.GetUniqueNumber();
+			this.CurrentBuilder = this.InsertNewSourceBuilder();
+			this.CurrentBuilder.Append("def ");
+			this.CurrentBuilder.Append(FuncName);
 			this.VisitListNode("(", Node, ")");
 			this.GenerateCode(null, Node.AST[ZFunctionNode._Block]);
+			this.CurrentBuilder.AppendLineFeed();
+			this.CurrentBuilder.AppendLineFeed();
+			this.CurrentBuilder = this.CurrentBuilder.Pop();
+			this.CurrentBuilder.Append(FuncName);
+		}
+		else {
+			this.CurrentBuilder.Append("def ");
+			this.CurrentBuilder.Append(Node.GetSignature(this));
+			this.VisitListNode("(", Node, ")");
+			this.GenerateCode(null, Node.AST[ZFunctionNode._Block]);
+			this.CurrentBuilder.AppendLineFeed();
+			this.SetMethod(Node.FuncName, Node.GetFuncType(null));
 		}
 	}
 
-	//	public void VisitFuncDeclNode(ZFunctionNode Node) {
-	//		this.CurrentBuilder.Append("def ");
-	//		this.CurrentBuilder.Append(Node.FuncName);
-	//		this.VisitListNode("(", Node, ")");
-	//		if (Node.AST[ZFunctionNode._Block] == null) {
-	//			this.CurrentBuilder.Append(": pass");
-	//		} else {
-	//			this.GenerateCode(Node.AST[ZFunctionNode._Block]);
-	//		}
-	//	}
+	private void SetMethod(String FuncName, ZFuncType FuncType) {
+		@Var ZType RecvType = FuncType.GetRecvType();
+		if(RecvType instanceof ZClassType && FuncName != null) {
+			@Var ZClassType ClassType = (ZClassType)RecvType;
+			@Var ZType FieldType = ClassType.GetFieldType(FuncName, null);
+			if(FieldType == null || !FieldType.IsFuncType()) {
+				FuncName = LibZen._AnotherName(FuncName);
+				FieldType = ClassType.GetFieldType(FuncName, null);
+				if(FieldType == null || !FieldType.IsFuncType()) {
+					return;
+				}
+			}
+			if(FieldType instanceof ZFuncType) {
+				if(((ZFuncType)FieldType).AcceptAsFieldFunc(FuncType)) {
+					this.CurrentBuilder.Append("_" + this.NameClass(ClassType) + "_" + FuncName + " = " + FuncType.StringfySignature(FuncName));
+					this.CurrentBuilder.AppendLineFeed();
+				}
+			}
+		}
+	}
+
+	public void GenerateMethodVariables(ZClassNode Node) {
+		@Var int i = 0;
+		while (i < Node.ClassType.GetFieldSize()) {
+			@Var ZClassField ClassField = Node.ClassType.GetFieldAt(i);
+			if(ClassField.FieldType.IsFuncType()) {
+				this.CurrentBuilder.AppendLineFeedIndent();
+				this.CurrentBuilder.Append("_" + this.NameClass(Node.ClassType) + "_" + ClassField.FieldName + " = ");
+				this.CurrentBuilder.Append(this.NullLiteral);
+			}
+			i = i + 1;
+		}
+		this.CurrentBuilder.AppendLineFeedIndent();
+	}
+
+	@Override public void VisitClassNode(ZClassNode Node) {
+		@Var ZType SuperType = Node.ClassType.GetSuperType();
+		this.GenerateMethodVariables(Node);
+		this.CurrentBuilder.Append("class ");
+		this.CurrentBuilder.Append(this.NameClass(Node.ClassType));
+		if(!SuperType.IsVarType()) {
+			this.CurrentBuilder.Append("(");
+			this.CurrentBuilder.Append(this.NameClass(SuperType));
+			this.CurrentBuilder.Append(")");
+		}
+		this.CurrentBuilder.Append(":");
+		this.CurrentBuilder.Indent();
+		this.CurrentBuilder.AppendLineFeedIndent();
+		this.CurrentBuilder.Append("def __init__(self):");
+		this.CurrentBuilder.Indent();
+		this.CurrentBuilder.AppendLineFeedIndent();
+		if(!SuperType.IsVarType()) {
+			this.CurrentBuilder.Append(this.NameClass(SuperType));
+			this.CurrentBuilder.Append(".__init__(self)");
+		}
+		@Var int i = 0;
+		while (i < Node.GetListSize()) {
+			@Var ZFieldNode FieldNode = Node.GetFieldNode(i);
+			if(!FieldNode.DeclType.IsFuncType()) {
+				this.CurrentBuilder.AppendLineFeedIndent();
+				this.CurrentBuilder.Append("self." + FieldNode.FieldName + " = ");
+				this.GenerateCode(null, FieldNode.AST[ZFieldNode._InitValue]);
+			}
+			this.CurrentBuilder.Append(this.SemiColon);
+			i = i + 1;
+		}
+
+		i = 0;
+		while (i < Node.ClassType.GetFieldSize()) {
+			@Var ZClassField ClassField = Node.ClassType.GetFieldAt(i);
+			if(ClassField.FieldType.IsFuncType()) {
+				this.CurrentBuilder.AppendLineFeedIndent();
+				this.CurrentBuilder.Append("self." + ClassField.FieldName);
+				this.CurrentBuilder.Append(" = _" + this.NameClass(Node.ClassType) + "_" + ClassField.FieldName);
+			}
+			i = i + 1;
+		}
+		this.CurrentBuilder.UnIndent();
+		this.CurrentBuilder.UnIndent();
+		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.AppendLineFeed();
+	}
+
+
 
 }

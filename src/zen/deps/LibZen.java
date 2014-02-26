@@ -532,7 +532,7 @@ public class LibZen {
 	private final static ZenMap<Class<?>> GenMap = new ZenMap<Class<?>>(null);
 
 	static {
-		GenMap.put("python", zen.codegen.jython.PythonGenerator.class);
+		GenMap.put("py", zen.codegen.jython.PythonGenerator.class);
 		GenMap.put("javascript", zen.codegen.javascript.JavaScriptSourceGenerator.class);
 		GenMap.put("js", zen.codegen.javascript.JavaScriptSourceGenerator.class);
 		GenMap.put("ruby", zen.codegen.jruby.RubySourceGenerator.class);
