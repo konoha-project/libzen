@@ -112,6 +112,11 @@ public class VariableManager {
 		}
 	}
 
+	String GenVarTupleAll(boolean DoIncrement) {
+		String VarTuple = "{";
+		return VarTuple;
+	}
+
 	String GenVarTupleOnlyUsed(boolean DoIncrement) {
 		String VarTuple = "{";
 		for (Map.Entry<String, Variable> KeyValue : this.CurrentMap.entrySet()) {

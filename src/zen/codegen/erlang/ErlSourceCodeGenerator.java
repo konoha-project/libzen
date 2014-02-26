@@ -65,10 +65,13 @@ import zen.parser.ZSourceGenerator;
 
 public class ErlSourceCodeGenerator extends ZSourceGenerator {
 	@Field private int LoopNodeNumber;
+	@Field private int BreakMark;
 	@Field private VariableManager VarMgr;
 
 	public ErlSourceCodeGenerator/*constructor*/() {
 		super("erlang", "5.10.4");
+		this.LoopNodeNumber = 0;
+		this.BreakMark = -1;
 		this.VarMgr = new VariableManager();
 
 		this.HeaderBuilder.Append("-module(generated).");
@@ -332,13 +335,13 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitReturnNode(ZReturnNode Node) {
-		this.CurrentBuilder.Append("throw(");
+		this.CurrentBuilder.Append("throw({return, ");
 		if (Node.AST[ZReturnNode._Expr] != null) {
 			this.GenerateCode(null, Node.AST[ZReturnNode._Expr]);
 		} else {
 			this.CurrentBuilder.Append("void");
 		}
-		this.CurrentBuilder.Append(")");
+		this.CurrentBuilder.Append("})");
 	}
 
 	@Override public void VisitWhileNode(ZWhileNode Node) {
@@ -388,9 +391,12 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 		this.AppendLazy(mark2, this.VarMgr.GenVarTupleOnlyUsedByChildScope(true));
 	}
 
-	// @Override public void VisitBreakNode(ZBreakNode Node) {
-	// 	this.CurrentBuilder.Append("break");
-	// }
+	@Override public void VisitBreakNode(ZBreakNode Node) {
+		this.CurrentBuilder.Append("throw({break, ");
+		//this.VarMgr.GenVarTupleOnlyUsed(false);
+		this.BreakMark = this.GetLazyMark();
+		this.CurrentBuilder.Append("})");
+	}
 
 	// @Override public void VisitThrowNode(ZThrowNode Node) {
 	// 	this.CurrentBuilder.Append("throw");
@@ -561,7 +567,9 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.IndentAndAppend("catch");
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.Indent();
-		this.CurrentBuilder.IndentAndAppend("throw:X -> X");
+		this.CurrentBuilder.IndentAndAppend("throw:{return, Ret} -> Ret;");
+		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.IndentAndAppend("throw:UnKnown -> throw(UnKnown)");
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.UnIndent();
 		this.CurrentBuilder.IndentAndAppend("end.");
