@@ -54,11 +54,11 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 
 	public JavaScriptSourceGenerator() {
 		super("js", "JavaScript-1.4");
-		//		this.TopType = "Object";
-		//		this.SetNativeType(ZType.BooleanType, "Boolean");
-		//		this.SetNativeType(ZType.IntType, "Number");
-		//		this.SetNativeType(ZType.FloatType, "Number");
-		//		this.SetNativeType(ZType.StringType, "String");
+		this.TopType = "Object";
+		this.SetNativeType(ZType.BooleanType, "Boolean");
+		this.SetNativeType(ZType.IntType, "Number");
+		this.SetNativeType(ZType.FloatType, "Number");
+		this.SetNativeType(ZType.StringType, "String");
 
 
 		this.SetReservedName("this", "self");
@@ -101,9 +101,11 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitInstanceOfNode(ZInstanceOfNode Node) {
+		this.CurrentBuilder.Append("(");
 		this.GenerateCode(null, Node.AST[ZBinaryNode._Left]);
-		this.CurrentBuilder.Append(" instanceof ");
+		this.CurrentBuilder.Append(").constructor.name == (");
 		this.GenerateTypeName(Node.TargetType);
+		this.CurrentBuilder.Append(").name");
 	}
 
 	@Override public void VisitThrowNode(ZThrowNode Node) {
