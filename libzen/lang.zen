@@ -46,7 +46,7 @@ function ImportGrammar(NameSpace: ZNameSpace): void {
 	NameSpace.DefineExpression("+", MatchUnary);
 	NameSpace.DefineExpression("-", MatchUnary);
 	NameSpace.DefineExpression("~", MatchUnary);
-	NameSpace.DefineExpression("!", new NotPattern());
+	NameSpace.DefineExpression("!", NotPattern);
 	NameSpace.DefineRightExpression("* / %", ZenPrecedence_CStyleMUL, MatchBinary);
 	NameSpace.DefineRightExpression("+ -", ZenPrecedence_CStyleADD, MatchBinary);
 	NameSpace.DefineRightExpression("< <= > >=", ZenPrecedence_CStyleCOMPARE, MatchComparator);

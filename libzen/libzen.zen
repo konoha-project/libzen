@@ -6254,7 +6254,7 @@ let AssertPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, Lef
 	return AssertNode;
 }
 
-let AssignPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let Assig = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	return null;
 }
 
@@ -6330,7 +6330,7 @@ let BreakPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, Left
 	return BreakNode;
 }
 
-let CLineComment = function(SourceContext: ZSourceContext): boolean {
+let CLin = function(SourceContext: ZSourceContext): boolean {
 	return false;
 }
 
@@ -6454,7 +6454,7 @@ let FloatLiteralPattern = function(ParentNode: ZNode, TokenContext: ZTokenContex
 	return new ZFloatNode(ParentNode, Token, LibZen_ParseFloat(Token.GetText()));
 }
 
-let Pattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let FunctionPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var FuncNode: ZNode = new ZFunctionNode(ParentNode);
 	FuncNode = TokenContext.MatchToken(FuncNode, "function", ZTokenContext_Required);
 	FuncNode = TokenContext.MatchPattern(FuncNode, ZNode_NameInfo, "$Name$", ZTokenContext_Optional);
@@ -6917,7 +6917,7 @@ function ImportGrammar(NameSpace: ZNameSpace): void {
 	NameSpace.DefineExpression("+", MatchUnary);
 	NameSpace.DefineExpression("-", MatchUnary);
 	NameSpace.DefineExpression("~", MatchUnary);
-	NameSpace.DefineExpression("!", new NotPattern());
+	NameSpace.DefineExpression("!", NotPattern);
 	NameSpace.DefineRightExpression("* / %", ZenPrecedence_CStyleMUL, MatchBinary);
 	NameSpace.DefineRightExpression("+ -", ZenPrecedence_CStyleADD, MatchBinary);
 	NameSpace.DefineRightExpression("< <= > >=", ZenPrecedence_CStyleCOMPARE, MatchComparator);

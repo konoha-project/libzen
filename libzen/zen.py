@@ -151,7 +151,7 @@ def GenFunc(cname, line, IsProto):
 		ReturnType = cname
 		funcname = block
 	if funcname == "Invoke" :
-		funcname = params[0][0].replace("Function", "")
+		funcname = params[0][0][0:-8]
 		params = params[1:]
 		if IsProto:
 			s = ""
