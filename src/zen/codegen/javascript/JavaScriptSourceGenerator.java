@@ -36,6 +36,8 @@ import zen.ast.ZGlobalNameNode;
 import zen.ast.ZInstanceOfNode;
 import zen.ast.ZLetNode;
 import zen.ast.ZMapLiteralNode;
+import zen.ast.ZNode;
+import zen.ast.ZNullNode;
 import zen.ast.ZParamNode;
 import zen.ast.ZStupidCastErrorNode;
 import zen.ast.ZThrowNode;
@@ -75,7 +77,7 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 		this.SetConverterMacro("($[0] | 0)", ZType.IntType, ZType.FloatType);
 		this.SetConverterMacro("($[0]).toString()", ZType.StringType, ZType.IntType);
 		this.SetConverterMacro("($[0]).toString()", ZType.StringType, ZType.FloatType);
-		this.UseExtend = false;
+		JavaScriptSourceGenerator.UseExtend = false;
 	}
 
 	@Override public ZSourceEngine GetEngine() {
@@ -258,13 +260,17 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 		@Var int i = 0;
 		while (i < Node.GetListSize()) {
 			@Var ZFieldNode FieldNode = Node.GetFieldNode(i);
-			this.CurrentBuilder.AppendIndent();
-			this.CurrentBuilder.Append("this.");
-			this.CurrentBuilder.Append(FieldNode.FieldName);
-			this.CurrentBuilder.Append(" = ");
-			this.GenerateCode(null, FieldNode.AST[ZFieldNode._InitValue]);
-			this.CurrentBuilder.Append(this.SemiColon);
-			this.CurrentBuilder.AppendLineFeed();
+			@Var ZNode ValueNode = FieldNode.AST[ZFieldNode._InitValue];
+			if(!(ValueNode instanceof ZNullNode)) {
+				this.CurrentBuilder.AppendIndent();
+				this.CurrentBuilder.Append("this.");
+				this.CurrentBuilder.Append(FieldNode.FieldName);
+				this.CurrentBuilder.Append(" = ");
+
+				this.GenerateCode(null, FieldNode.AST[ZFieldNode._InitValue]);
+				this.CurrentBuilder.Append(this.SemiColon);
+				this.CurrentBuilder.AppendLineFeed();
+			}
 			i = i + 1;
 		}
 		this.CurrentBuilder.UnIndent();
