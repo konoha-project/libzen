@@ -223,7 +223,7 @@ static void SetLocalSymbolEntry__3qwa(struct ZNameSpace48 * this, const char * S
 static struct ZSymbolEntry225 * SetLocalSymbol__3qwa(struct ZNameSpace48 * this, const char * Symbol__1, struct ZNode52 * Node__2);
 static struct ZSymbolEntry225 * SetGlobalSymbol__3qwa(struct ZNameSpace48 * this, const char * Symbol__1, struct ZNode52 * Node__2);
 static struct ZVariable230 * GetLocalVariable__2qwa(struct ZNameSpace48 * this, const char * VarName__1);
-static void SetLocalVariable__5qwa(struct ZNameSpace48 * this, struct ZFunctionNode144 * FunctionNode__1, struct ZType60 * VarType__2, const char * VarName__3, struct ZToken77 * SourceToken__4);
+static long SetLocalVariable__5qwa(struct ZNameSpace48 * this, struct ZFunctionNode144 * FunctionNode__1, struct ZType60 * VarType__2, const char * VarName__3, struct ZToken77 * SourceToken__4);
 static void SetTypeName__4qwa(struct ZNameSpace48 * this, const char * Name__1, struct ZType60 * Type__2, struct ZToken77 * SourceToken__3);
 static void SetTypeName__3qwa(struct ZNameSpace48 * this, struct ZType60 * Type__1, struct ZToken77 * SourceToken__2);
 static struct ZTypeNode235 * GetTypeNode__3qwa(struct ZNameSpace48 * this, const char * TypeName__1, struct ZToken77 * SourceToken__2);
@@ -854,70 +854,583 @@ static void SetTypeInfo__3qs2(struct ZVarNode502 * this, struct ZToken77 * TypeT
 #define _ZVarNode502_SetTypeInfo
 static void Accept__2qs2(struct ZVarNode502 * this, struct ZVisitor167 * Visitor__1);
 #define _ZVarNode502_Accept
-static struct ZNode52 * AndPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * AnnotationPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * ApplyPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * ArrayLiteralPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * AssertPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * AssignPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * BinaryPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static int BlockComment__1qwd(struct ZSourceContext50 * SourceContext);
-static struct ZNode52 * BlockPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * BreakPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static int CLineComment__1qwd(struct ZSourceContext50 * SourceContext);
-static struct ZNode52 * CastPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * CatchPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * ClassPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * ComparatorPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
 static struct ZSyntax219 * ExpressionPattern_GetRightPattern__2qwa(struct ZNameSpace48 * NameSpace, struct ZTokenContext53 * TokenContext__1);
 static struct ZNode52 * ExpressionPattern_DispatchPattern__5qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2, int AllowStatement__3, int AllowBinary__4);
-static struct ZNode52 * ExpressionPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * FalsePattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * FieldPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * FloatLiteralPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * FunctionPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * GetIndexPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * GetterPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * GroupPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * IfPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * InstanceOfPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * IntLiteralPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * LetPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * MapEntryPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * MapLiteralPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * MethodCallPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * NamePattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static int NameToken__1qwd(struct ZSourceContext50 * SourceContext);
-static int NewLineToken__1qwd(struct ZSourceContext50 * SourceContext);
-static struct ZNode52 * NewObjectPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * NotPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * NullPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
 static const char * NumberLiteralToken_ParseDigit__1qwd(struct ZSourceContext50 * SourceContext);
-static int NumberLiteralToken__1qwd(struct ZSourceContext50 * SourceContext);
-static int OperatorToken__1qwd(struct ZSourceContext50 * SourceContext);
-static struct ZNode52 * OrPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * ParamPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * PrototypePattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * ReturnPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * RightExpressionPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * RightTypePattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftTypeNode__2);
-static struct ZNode52 * SetIndexPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * SetterPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * StatementEndPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * StatementPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * StringLiteralPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static int StringLiteralToken__1qwd(struct ZSourceContext50 * SourceContext);
-static struct ZNode52 * SymbolExpressionPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * SymbolStatementPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * ThrowPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * TruePattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * TryPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * TypeAnnotationPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * TypePattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * UnaryPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * VarPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static struct ZNode52 * WhilePattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2);
-static int WhiteSpaceToken__1qwd(struct ZSourceContext50 * SourceContext);
+
+static struct ZNode52 * f83(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	struct ZBinaryNode310 * BinaryNode__3 = ZAndNode__5qsm(_NewZAndNode498(), ParentNode, GetToken__2qwh(TokenContext__1, ZTokenContext_MoveNext_Z58), LeftNode__2, GetApplyingSyntax__1qwh(TokenContext__1));
+	return AppendParsedRightNode__3qo1(BinaryNode__3, ParentNode, TokenContext__1);
+}
+
+static struct ZNode52 * f85(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	return NULL;
+}
+
+static struct ZNode52 * f87(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	struct ZNode52 * ApplyNode__3 = ZFuncCallNode__3q40(_NewZFuncCallNode406(), ParentNode, LeftNode__2);
+	ApplyNode__3 = MatchNtimes__6qwh(TokenContext__1, ApplyNode__3, "(", "$Expression$", ",", ")");
+	return ApplyNode__3;
+}
+
+static struct ZNode52 * f89(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	struct ZNode52 * LiteralNode__3 = ZArrayLiteralNode__2qsp(_NewZArrayLiteralNode477(), ParentNode);
+	LiteralNode__3 = MatchNtimes__6qwh(TokenContext__1, LiteralNode__3, "[", "$Expression$", ",", "]");
+	return LiteralNode__3;
+}
+
+static struct ZNode52 * f91(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	struct ZNode52 * AssertNode__3 = ZAssertNode__2qok(_NewZAssertNode307(), ParentNode);
+	AssertNode__3 = MatchToken__4qwh(TokenContext__1, AssertNode__3, "assert", ZTokenContext_Required_Z53);
+	AssertNode__3 = MatchToken__4qwh(TokenContext__1, AssertNode__3, "(", ZTokenContext_Required_Z53);
+	AssertNode__3 = MatchPattern__6qwh(TokenContext__1, AssertNode__3, ZThrowNode_Expr_Z33, "$Expression$", ZTokenContext_Required_Z53, ZTokenContext_AllowSkipIndent_Z55);
+	AssertNode__3 = MatchToken__4qwh(TokenContext__1, AssertNode__3, ")", ZTokenContext_Required_Z53);
+	return AssertNode__3;
+}
+
+static struct ZNode52 * f93(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	return NULL;
+}
+
+static struct ZNode52 * f95(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	struct ZToken77 * Token__3 = GetToken__2qwh(TokenContext__1, ZTokenContext_MoveNext_Z58);
+	struct ZBinaryNode310 * BinaryNode__4 = ZBinaryNode__5qo1(_NewZBinaryNode310(), ParentNode, Token__3, LeftNode__2, GetApplyingSyntax__1qwh(TokenContext__1));
+	return AppendParsedRightNode__3qo1(BinaryNode__4, ParentNode, TokenContext__1);
+}
+
+static int f97(struct ZSourceContext50 * SourceContext) {
+	long StartIndex__1 = GetPosition__1qwd(SourceContext);
+	const char * NextChar__2 = GetCharAtFromCurrentPosition__2qwd(SourceContext, +1);
+	if (NextChar__2 != "/" && NextChar__2 != "*") {
+		return 0/*false*/;
+	};
+	if (NextChar__2 == "/") {
+		while (HasChar__1qwd(SourceContext)) {
+			const char * ch__3 = GetCurrentChar__1qwd(SourceContext);
+			if (ch__3 == "\n") {
+				break;
+			};
+			MoveNext__1qwd(SourceContext);
+		};
+		return 1/*true*/;
+	};
+	long NestedLevel__4 = 0;
+	const char * PrevChar__5 = "0";
+	while (HasChar__1qwd(SourceContext)) {
+		NextChar__2 = GetCurrentChar__1qwd(SourceContext);
+		if (PrevChar__5 == "*" && NextChar__2 == "/") {
+			NestedLevel__4 = NestedLevel__4 - 1;
+			if (NestedLevel__4 == 0) {
+				MoveNext__1qwd(SourceContext);
+				return 1/*true*/;
+			};
+		};
+		if (PrevChar__5 == "/" && NextChar__2 == "*") {
+			NestedLevel__4 = NestedLevel__4 + 1;
+		};
+		MoveNext__1qwd(SourceContext);
+		PrevChar__5 = NextChar__2;
+	};
+	LogWarning__3qwd(SourceContext, StartIndex__1, "unfound */");
+	return 1/*true*/;
+}
+
+static struct ZNode52 * f99(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	struct ZNode52 * BlockNode__3 = ZBlockNode__3qth(_NewZBlockNode161(), ParentNode, 0);
+	struct ZToken77 * SkipToken__4 = GetToken__1qwh(TokenContext__1);
+	BlockNode__3 = MatchToken__4qwh(TokenContext__1, BlockNode__3, "{", ZTokenContext_Required_Z53);
+	if (!IsErrorNode__1qwg(BlockNode__3)) {
+		int Remembered__5 = SetParseFlag__2qwh(TokenContext__1, ZTokenContext_AllowSkipIndent_Z55);
+		struct ZNode52 * NestedBlockNode__6 = BlockNode__3;
+		while (HasNext__1qwh(TokenContext__1)) {
+			if (MatchToken__2qwh(TokenContext__1, "}")) {
+				break;
+			};
+			NestedBlockNode__6 = MatchPattern__5qwh(TokenContext__1, NestedBlockNode__6, ZNode_NestedAppendIndex_Z24, "$Statement$", ZTokenContext_Required_Z53);
+			if (IsErrorNode__1qwg(NestedBlockNode__6)) {
+				SkipError__2qwh(TokenContext__1, SkipToken__4);
+				(void)MatchToken__2qwh(TokenContext__1, "}");
+				break;
+			};
+		};
+		(void)SetParseFlag__2qwh(TokenContext__1, Remembered__5);
+	};
+	return BlockNode__3;
+}
+
+static struct ZNode52 * f101(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	struct ZNode52 * BreakNode__3 = ZBreakNode__2qon(_NewZBreakNode317(), ParentNode);
+	BreakNode__3 = MatchToken__4qwh(TokenContext__1, BreakNode__3, "break", ZTokenContext_Required_Z53);
+	return BreakNode__3;
+}
+
+static int f103(struct ZSourceContext50 * SourceContext) {
+	return 0/*false*/;
+}
+
+static struct ZNode52 * f105(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	struct ZNode52 * CastNode__3 = ZCastNode__4qo5(_NewZCastNode320(), ParentNode, ZTypeVarType_Z4, NULL);
+	CastNode__3 = MatchToken__4qwh(TokenContext__1, CastNode__3, "(", ZTokenContext_Required_Z53);
+	CastNode__3 = MatchPattern__5qwh(TokenContext__1, CastNode__3, ZNode_TypeInfo_Z22, "$Type$", ZTokenContext_Required_Z53);
+	CastNode__3 = MatchToken__4qwh(TokenContext__1, CastNode__3, ")", ZTokenContext_Required_Z53);
+	CastNode__3 = MatchPattern__5qwh(TokenContext__1, CastNode__3, ZCastNode_Expr_Z62, "$RightExpression$", ZTokenContext_Required_Z53);
+	return CastNode__3;
+}
+
+static struct ZNode52 * f107(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	struct ZNode52 * CatchNode__3 = ZCatchNode__2qpq(_NewZCatchNode324(), ParentNode);
+	CatchNode__3 = MatchToken__4qwh(TokenContext__1, CatchNode__3, "catch", ZTokenContext_Required_Z53);
+	CatchNode__3 = MatchToken__4qwh(TokenContext__1, CatchNode__3, "(", ZTokenContext_Required_Z53);
+	CatchNode__3 = MatchPattern__5qwh(TokenContext__1, CatchNode__3, ZNode_NameInfo_Z21, "$Name$", ZTokenContext_Required_Z53);
+	CatchNode__3 = MatchToken__4qwh(TokenContext__1, CatchNode__3, ")", ZTokenContext_Required_Z53);
+	CatchNode__3 = MatchPattern__5qwh(TokenContext__1, CatchNode__3, ZCatchNode_Block_Z63, "$Block$", ZTokenContext_Required_Z53);
+	return CatchNode__3;
+}
+
+static struct ZNode52 * f109(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	struct ZNode52 * ClassNode__3 = ZClassNode__2qdo(_NewZClassNode512(), ParentNode);
+	ClassNode__3 = MatchToken__4qwh(TokenContext__1, ClassNode__3, "class", ZTokenContext_Required_Z53);
+	ClassNode__3 = MatchPattern__5qwh(TokenContext__1, ClassNode__3, ZNode_NameInfo_Z21, "$Name$", ZTokenContext_Required_Z53);
+	if (MatchNewLineToken__2qwh(TokenContext__1, "extends")) {
+		ClassNode__3 = MatchPattern__5qwh(TokenContext__1, ClassNode__3, ZNode_TypeInfo_Z22, "$Type$", ZTokenContext_Required_Z53);
+	};
+	ClassNode__3 = MatchNtimes__6qwh(TokenContext__1, ClassNode__3, "{", "$FieldDecl$", NULL, "}");
+	return ClassNode__3;
+}
+
+static struct ZNode52 * f111(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	struct ZToken77 * Token__3 = GetToken__2qwh(TokenContext__1, ZTokenContext_MoveNext_Z58);
+	struct ZBinaryNode310 * BinaryNode__4 = ZComparatorNode__5qpt(_NewZComparatorNode328(), ParentNode, Token__3, LeftNode__2, GetApplyingSyntax__1qwh(TokenContext__1));
+	return AppendParsedRightNode__3qo1(BinaryNode__4, ParentNode, TokenContext__1);
+}
+
+static struct ZNode52 * f113(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	return ExpressionPattern_DispatchPattern__5qwg(ParentNode, TokenContext__1, LeftNode__2, 0/*false*/, 1/*true*/);
+}
+
+static struct ZNode52 * f115(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	return ZBooleanNode__4qst(_NewZBooleanNode472(), ParentNode, GetToken__2qwh(TokenContext__1, ZTokenContext_MoveNext_Z58), 0/*false*/);
+}
+
+static struct ZNode52 * f117(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	int Rememberd__3 = SetParseFlag__2qwh(TokenContext__1, 0/*false*/);
+	struct ZNode52 * FieldNode__4 = ZFieldNode__2qpf(_NewZFieldNode339(), ParentNode);
+	FieldNode__4 = MatchToken__4qwh(TokenContext__1, FieldNode__4, "var", ZTokenContext_Required_Z53);
+	FieldNode__4 = MatchPattern__5qwh(TokenContext__1, FieldNode__4, ZNode_NameInfo_Z21, "$Name$", ZTokenContext_Required_Z53);
+	FieldNode__4 = MatchPattern__5qwh(TokenContext__1, FieldNode__4, ZNode_TypeInfo_Z22, "$TypeAnnotation$", ZTokenContext_Optional_Z54);
+	if (MatchToken__2qwh(TokenContext__1, "=")) {
+		FieldNode__4 = MatchPattern__5qwh(TokenContext__1, FieldNode__4, ZFieldNode_InitValue_Z64, "$Expression$", ZTokenContext_Required_Z53);
+	};
+	FieldNode__4 = MatchPattern__5qwh(TokenContext__1, FieldNode__4, ZNode_Nop_Z20, ";", ZTokenContext_Required_Z53);
+	(void)SetParseFlag__2qwh(TokenContext__1, Rememberd__3);
+	return FieldNode__4;
+}
+
+static struct ZNode52 * f119(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	struct ZToken77 * Token__3 = GetToken__2qwh(TokenContext__1, ZTokenContext_MoveNext_Z58);
+	return ZFloatNode__4qpk(_NewZFloatNode343(), ParentNode, Token__3, LibZen_ParseFloat__1qqy(GetText__1qey(Token__3)));
+}
+
+static struct ZNode52 * f121(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	struct ZNode52 * FuncNode__3 = ZFunctionNode__2qtq(_NewZFunctionNode144(), ParentNode);
+	FuncNode__3 = MatchToken__4qwh(TokenContext__1, FuncNode__3, "function", ZTokenContext_Required_Z53);
+	FuncNode__3 = MatchPattern__5qwh(TokenContext__1, FuncNode__3, ZNode_NameInfo_Z21, "$Name$", ZTokenContext_Optional_Z54);
+	FuncNode__3 = MatchNtimes__6qwh(TokenContext__1, FuncNode__3, "(", "$Param$", ",", ")");
+	FuncNode__3 = MatchPattern__5qwh(TokenContext__1, FuncNode__3, ZNode_TypeInfo_Z22, "$TypeAnnotation$", ZTokenContext_Optional_Z54);
+	FuncNode__3 = MatchPattern__5qwh(TokenContext__1, FuncNode__3, ZFunctionNode_Block_Z80, "$Block$", ZTokenContext_Required_Z53);
+	return FuncNode__3;
+}
+
+static struct ZNode52 * f123(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	struct ZNode52 * IndexerNode__3 = ZGetIndexNode__3qp1(_NewZGetIndexNode346(), ParentNode, LeftNode__2);
+	IndexerNode__3 = MatchToken__4qwh(TokenContext__1, IndexerNode__3, "[", ZTokenContext_Required_Z53);
+	IndexerNode__3 = MatchPattern__6qwh(TokenContext__1, IndexerNode__3, ZGetIndexNode_Index_Z66, "$Expression$", ZTokenContext_Required_Z53, ZTokenContext_AllowSkipIndent_Z55);
+	IndexerNode__3 = MatchToken__4qwh(TokenContext__1, IndexerNode__3, "]", ZTokenContext_Required_Z53);
+	return IndexerNode__3;
+}
+
+static struct ZNode52 * f125(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	struct ZNode52 * GetterNode__3 = ZGetterNode__3qpm(_NewZGetterNode354(), ParentNode, LeftNode__2);
+	GetterNode__3 = MatchToken__4qwh(TokenContext__1, GetterNode__3, ".", ZTokenContext_Required_Z53);
+	GetterNode__3 = MatchPattern__5qwh(TokenContext__1, GetterNode__3, ZNode_NameInfo_Z21, "$Name$", ZTokenContext_Required_Z53);
+	return GetterNode__3;
+}
+
+static struct ZNode52 * f127(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	struct ZNode52 * GroupNode__3 = ZGroupNode__2q0r(_NewZGroupNode363(), ParentNode);
+	GroupNode__3 = MatchToken__4qwh(TokenContext__1, GroupNode__3, "(", ZTokenContext_Required_Z53);
+	GroupNode__3 = MatchPattern__6qwh(TokenContext__1, GroupNode__3, ZGroupNode_Expr_Z68, "$Expression$", ZTokenContext_Required_Z53, ZTokenContext_AllowSkipIndent_Z55);
+	GroupNode__3 = MatchToken__4qwh(TokenContext__1, GroupNode__3, ")", ZTokenContext_Required_Z53);
+	return GroupNode__3;
+}
+
+static struct ZNode52 * f129(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	struct ZNode52 * IfNode__3 = ZIfNode__2q0u(_NewZIfNode366(), ParentNode);
+	IfNode__3 = MatchToken__4qwh(TokenContext__1, IfNode__3, "if", ZTokenContext_Required_Z53);
+	IfNode__3 = MatchToken__4qwh(TokenContext__1, IfNode__3, "(", ZTokenContext_Required_Z53);
+	IfNode__3 = MatchPattern__6qwh(TokenContext__1, IfNode__3, ZIfNode_Cond_Z69, "$Expression$", ZTokenContext_Required_Z53, ZTokenContext_AllowNewLine_Z57);
+	IfNode__3 = MatchToken__4qwh(TokenContext__1, IfNode__3, ")", ZTokenContext_Required_Z53);
+	IfNode__3 = MatchPattern__5qwh(TokenContext__1, IfNode__3, ZIfNode_Then_Z70, "$Block$", ZTokenContext_Required_Z53);
+	if (MatchNewLineToken__2qwh(TokenContext__1, "else")) {
+		const char * PatternName__4 = "$Block$";
+		if (IsNewLineToken__2qwh(TokenContext__1, "if")) {
+			PatternName__4 = "if";
+		};
+		IfNode__3 = MatchPattern__5qwh(TokenContext__1, IfNode__3, ZIfNode_Else_Z71, PatternName__4, ZTokenContext_Required_Z53);
+	};
+	return IfNode__3;
+}
+
+static struct ZNode52 * f131(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	struct ZNode52 * BinaryNode__3 = ZInstanceOfNode__4q0a(_NewZInstanceOfNode372(), ParentNode, GetToken__2qwh(TokenContext__1, ZTokenContext_MoveNext_Z58), LeftNode__2);
+	BinaryNode__3 = MatchPattern__5qwh(TokenContext__1, BinaryNode__3, ZNode_TypeInfo_Z22, "$Type$", ZTokenContext_Required_Z53);
+	return BinaryNode__3;
+}
+
+static struct ZNode52 * f133(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	struct ZToken77 * Token__3 = GetToken__2qwh(TokenContext__1, ZTokenContext_MoveNext_Z58);
+	return ZIntNode__4q0g(_NewZIntNode376(), ParentNode, Token__3, LibZen_ParseInt__1qqy(GetText__1qey(Token__3)));
+}
+
+static struct ZNode52 * f135(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	struct ZNode52 * LetNode__3 = ZLetNode__2q0k(_NewZLetNode379(), ParentNode);
+	LetNode__3 = MatchToken__4qwh(TokenContext__1, LetNode__3, "let", ZTokenContext_Required_Z53);
+	LetNode__3 = MatchPattern__5qwh(TokenContext__1, LetNode__3, ZNode_NameInfo_Z21, "$Name$", ZTokenContext_Required_Z53);
+	LetNode__3 = MatchPattern__5qwh(TokenContext__1, LetNode__3, ZNode_TypeInfo_Z22, "$TypeAnnotation$", ZTokenContext_Optional_Z54);
+	LetNode__3 = MatchToken__4qwh(TokenContext__1, LetNode__3, "=", ZTokenContext_Required_Z53);
+	LetNode__3 = MatchPattern__5qwh(TokenContext__1, LetNode__3, ZLetNode_InitValue_Z73, "$Expression$", ZTokenContext_Required_Z53);
+	return LetNode__3;
+}
+
+static struct ZNode52 * f137(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	struct ZNode52 * LiteralNode__3 = ZMapEntryNode__2q4q(_NewZMapEntryNode396(), ParentNode);
+	LiteralNode__3 = MatchPattern__5qwh(TokenContext__1, LiteralNode__3, ZMapEntryNode_Key_Z74, "$Expression$", ZTokenContext_Required_Z53);
+	LiteralNode__3 = MatchToken__4qwh(TokenContext__1, LiteralNode__3, ":", ZTokenContext_Required_Z53);
+	LiteralNode__3 = MatchPattern__5qwh(TokenContext__1, LiteralNode__3, ZMapEntryNode_Value_Z75, "$Expression$", ZTokenContext_Required_Z53);
+	return LiteralNode__3;
+}
+
+static struct ZNode52 * f139(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	struct ZNode52 * LiteralNode__3 = ZMapLiteralNode__2q4e(_NewZMapLiteralNode398(), ParentNode);
+	LiteralNode__3 = MatchNtimes__6qwh(TokenContext__1, LiteralNode__3, "{", "$MapEntry$", ",", "}");
+	return LiteralNode__3;
+}
+
+static struct ZNode52 * f141(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	struct ZNode52 * MethodCallNode__3 = ZMethodCallNode__3q4u(_NewZMethodCallNode402(), ParentNode, LeftNode__2);
+	MethodCallNode__3 = MatchToken__4qwh(TokenContext__1, MethodCallNode__3, ".", ZTokenContext_Required_Z53);
+	MethodCallNode__3 = MatchPattern__5qwh(TokenContext__1, MethodCallNode__3, ZNode_NameInfo_Z21, "$Name$", ZTokenContext_Required_Z53);
+	MethodCallNode__3 = MatchNtimes__6qwh(TokenContext__1, MethodCallNode__3, "(", "$Expression$", ",", ")");
+	return MethodCallNode__3;
+}
+
+static struct ZNode52 * f143(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	struct ZToken77 * Token__3 = GetToken__2qwh(TokenContext__1, ZTokenContext_MoveNext_Z58);
+	if (LibZen_IsSymbol__1qqy(GetChar__1qey(Token__3))) {
+		return ZGetNameNode__4qpx(_NewZGetNameNode349(), ParentNode, Token__3, GetText__1qey(Token__3));
+	};
+	return ZErrorNode__4qp4(_NewZErrorNode335(), ParentNode, Token__3, LibZen_StrCat(LibZen_StrCat("illegal name: \"", GetText__1qey(Token__3)), "\""));
+}
+
+static int f145(struct ZSourceContext50 * SourceContext) {
+	long StartIndex__1 = GetPosition__1qwd(SourceContext);
+	while (HasChar__1qwd(SourceContext)) {
+		const char * ch__2 = GetCurrentChar__1qwd(SourceContext);
+		if (!LibZen_IsSymbol__1qqy(ch__2) && !LibZen_IsDigit__1qqy(ch__2)) {
+			break;
+		};
+		MoveNext__1qwd(SourceContext);
+	};
+	Tokenize__3qwd(SourceContext, StartIndex__1, GetPosition__1qwd(SourceContext));
+	return 1/*true*/;
+}
+
+static int f147(struct ZSourceContext50 * SourceContext) {
+	long StartIndex__1 = GetPosition__1qwd(SourceContext) + 1;
+	MoveNext__1qwd(SourceContext);
+	SkipWhiteSpace__1qwd(SourceContext);
+	FoundIndent__3qwd(SourceContext, StartIndex__1, GetPosition__1qwd(SourceContext));
+	return 1/*true*/;
+}
+
+static struct ZNode52 * f149(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	struct ZNode52 * LiteralNode__3 = ZNewObjectNode__2q4f(_NewZNewObjectNode411(), ParentNode);
+	LiteralNode__3 = MatchToken__4qwh(TokenContext__1, LiteralNode__3, "new", ZTokenContext_Required_Z53);
+	LiteralNode__3 = MatchPattern__5qwh(TokenContext__1, LiteralNode__3, ZNode_TypeInfo_Z22, "$Type$", ZTokenContext_Optional_Z54);
+	LiteralNode__3 = MatchNtimes__6qwh(TokenContext__1, LiteralNode__3, "(", "$Expression$", ",", ")");
+	return LiteralNode__3;
+}
+
+static struct ZNode52 * f151(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	struct ZNode52 * UnaryNode__3 = ZNotNode__3q4k(_NewZNotNode415(), ParentNode, GetToken__2qwh(TokenContext__1, ZTokenContext_MoveNext_Z58));
+	UnaryNode__3 = MatchPattern__5qwh(TokenContext__1, UnaryNode__3, ZUnaryNode_Recv_Z37, "$RightExpression$", ZTokenContext_Required_Z53);
+	return UnaryNode__3;
+}
+
+static struct ZNode52 * f153(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	return ZNullNode__3q41(_NewZNullNode418(), ParentNode, GetToken__2qwh(TokenContext__1, ZTokenContext_MoveNext_Z58));
+}
+
+static int f155(struct ZSourceContext50 * SourceContext) {
+	long StartIndex__1 = GetPosition__1qwd(SourceContext);
+	const char * ch__2 = NumberLiteralToken_ParseDigit__1qwd(SourceContext);
+	if (ch__2 == ".") {
+		MoveNext__1qwd(SourceContext);
+		ch__2 = NumberLiteralToken_ParseDigit__1qwd(SourceContext);
+		if (ch__2 == "e" || ch__2 == "E") {
+			MoveNext__1qwd(SourceContext);
+			if (HasChar__1qwd(SourceContext)) {
+				ch__2 = GetCurrentChar__1qwd(SourceContext);
+				if (ch__2 == "+" || ch__2 == "-") {
+					MoveNext__1qwd(SourceContext);
+				};
+			};
+			(void)NumberLiteralToken_ParseDigit__1qwd(SourceContext);
+		};
+		Tokenize__4qwd(SourceContext, "$FloatLiteral$", StartIndex__1, GetPosition__1qwd(SourceContext));
+	} else {
+		Tokenize__4qwd(SourceContext, "$IntegerLiteral$", StartIndex__1, GetPosition__1qwd(SourceContext));
+	};
+	return 1/*true*/;
+}
+
+static int f157(struct ZSourceContext50 * SourceContext) {
+	TokenizeDefinedSymbol__2qwd(SourceContext, GetPosition__1qwd(SourceContext));
+	return 1/*true*/;
+}
+
+static struct ZNode52 * f159(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	struct ZBinaryNode310 * BinaryNode__3 = ZOrNode__5q4x(_NewZOrNode421(), ParentNode, GetToken__2qwh(TokenContext__1, ZTokenContext_MoveNext_Z58), LeftNode__2, GetApplyingSyntax__1qwh(TokenContext__1));
+	return AppendParsedRightNode__3qo1(BinaryNode__3, ParentNode, TokenContext__1);
+}
+
+static struct ZNode52 * f161(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	struct ZNode52 * ParamNode__3 = ZParamNode__2qtb(_NewZParamNode172(), ParentNode);
+	ParamNode__3 = MatchPattern__5qwh(TokenContext__1, ParamNode__3, ZNode_NameInfo_Z21, "$Name$", ZTokenContext_Required_Z53);
+	ParamNode__3 = MatchPattern__5qwh(TokenContext__1, ParamNode__3, ZNode_TypeInfo_Z22, "$TypeAnnotation$", ZTokenContext_Optional_Z54);
+	return ParamNode__3;
+}
+
+static struct ZNode52 * f163(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	struct ZNode52 * FuncNode__3 = ZPrototypeNode__2q4b(_NewZPrototypeNode424(), ParentNode);
+	FuncNode__3 = MatchToken__4qwh(TokenContext__1, FuncNode__3, "function", ZTokenContext_Required_Z53);
+	FuncNode__3 = MatchPattern__5qwh(TokenContext__1, FuncNode__3, ZNode_NameInfo_Z21, "$Name$", ZTokenContext_Required_Z53);
+	FuncNode__3 = MatchNtimes__6qwh(TokenContext__1, FuncNode__3, "(", "$Param$", ",", ")");
+	FuncNode__3 = MatchPattern__5qwh(TokenContext__1, FuncNode__3, ZNode_TypeInfo_Z22, "$TypeAnnotation$", ZTokenContext_Required_Z53);
+	return FuncNode__3;
+}
+
+static struct ZNode52 * f165(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	struct ZNode52 * ReturnNode__3 = ZReturnNode__2qtc(_NewZReturnNode170(), ParentNode);
+	ReturnNode__3 = MatchToken__4qwh(TokenContext__1, ReturnNode__3, "return", ZTokenContext_Required_Z53);
+	ReturnNode__3 = MatchPattern__5qwh(TokenContext__1, ReturnNode__3, ZReturnNode_Expr_Z25, "$Expression$", ZTokenContext_Optional_Z54);
+	return ReturnNode__3;
+}
+
+static struct ZNode52 * f167(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	return ExpressionPattern_DispatchPattern__5qwg(ParentNode, TokenContext__1, LeftNode__2, 0/*false*/, 0/*false*/);
+}
+
+static struct ZNode52 * f169(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftTypeNode__2) {
+	struct ZToken77 * SourceToken__6 = GetToken__1qwh(TokenContext__1);
+	if (LeftTypeNode__2->Type->GetParamSize(LeftTypeNode__2->Type) > 0) {
+		if (MatchToken__2qwh(TokenContext__1, "<")) {
+			ArrayOfZType * TypeList__4 = LibZen_NewArray(0);
+			while (!StartsWithToken__2qwh(TokenContext__1, ">")) {
+				if (LibZen_ArraySize((ArrayOfVar *)TypeList__4) > 0 && !MatchToken__2qwh(TokenContext__1, ",")) {
+					return NULL;
+				};
+				struct ZTypeNode235 * ParamTypeNode__5 = (struct ZTypeNode235 *)ParsePattern__4qwh(TokenContext__1, ParentNode, "$Type$", ZTokenContext_Optional_Z54);
+				if (ParamTypeNode__5 == NULL) {
+					return LeftTypeNode__2;
+				};
+				LibZen_ArrayAdd((ArrayOfVar *)TypeList__4, (var)ParamTypeNode__5->Type);
+			};
+			LeftTypeNode__2 = ZTypeNode__4quk(_NewZTypeNode235(), ParentNode, SourceToken__3, ZTypePool_GetGenericType__3qwz(LeftTypeNode__2->Type, TypeList__4, 1/*true*/));
+		};
+	};
+	while (MatchToken__2qwh(TokenContext__1, "[")) {
+		if (!MatchToken__2qwh(TokenContext__1, "]")) {
+			return NULL;
+		};
+		LeftTypeNode__2 = ZTypeNode__4quk(_NewZTypeNode235(), ParentNode, SourceToken__3, ZTypePool_GetGenericType1__2qwz(ZGenericType_ArrayType_Z15, LeftTypeNode__2->Type));
+	};
+	return LeftTypeNode__2;
+}
+
+static struct ZNode52 * f171(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	struct ZNode52 * IndexerNode__3 = ZSetIndexNode__3qt2(_NewZSetIndexNode178(), ParentNode, LeftNode__2);
+	IndexerNode__3 = MatchToken__4qwh(TokenContext__1, IndexerNode__3, "[", ZTokenContext_Required_Z53);
+	IndexerNode__3 = MatchPattern__6qwh(TokenContext__1, IndexerNode__3, ZSetIndexNode_Index_Z27, "$Expression$", ZTokenContext_Required_Z53, ZTokenContext_AllowSkipIndent_Z55);
+	IndexerNode__3 = MatchToken__4qwh(TokenContext__1, IndexerNode__3, "]", ZTokenContext_Required_Z53);
+	IndexerNode__3 = MatchToken__4qwh(TokenContext__1, IndexerNode__3, "=", ZTokenContext_Required_Z53);
+	IndexerNode__3 = MatchPattern__5qwh(TokenContext__1, IndexerNode__3, ZSetIndexNode_Expr_Z28, "$Expression$", ZTokenContext_Required_Z53);
+	return IndexerNode__3;
+}
+
+static struct ZNode52 * f173(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	struct ZNode52 * SetterNode__3 = ZSetterNode__3qyt(_NewZSetterNode184(), ParentNode, LeftNode__2);
+	SetterNode__3 = MatchToken__4qwh(TokenContext__1, SetterNode__3, ".", ZTokenContext_Required_Z53);
+	SetterNode__3 = MatchPattern__5qwh(TokenContext__1, SetterNode__3, ZNode_NameInfo_Z21, "$Name$", ZTokenContext_Required_Z53);
+	SetterNode__3 = MatchToken__4qwh(TokenContext__1, SetterNode__3, "=", ZTokenContext_Required_Z53);
+	SetterNode__3 = MatchPattern__5qwh(TokenContext__1, SetterNode__3, ZSetterNode_Expr_Z31, "$Expression$", ZTokenContext_Required_Z53);
+	return SetterNode__3;
+}
+
+static struct ZNode52 * f175(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	int ContextAllowance__3 = SetParseFlag__2qwh(TokenContext__1, 0/*false*/);
+	struct ZToken77 * Token__4 = NULL;
+	if (HasNext__1qwh(TokenContext__1)) {
+		Token__4 = GetToken__1qwh(TokenContext__1);
+		if (!EqualsText__2qey(Token__4, ";") && !IsIndent__1qey(Token__4)) {
+			(void)SetParseFlag__2qwh(TokenContext__1, ContextAllowance__3);
+			return CreateExpectedErrorNode__3qwh(TokenContext__1, Token__4, ";");
+		};
+		MoveNext__1qwh(TokenContext__1);
+		while (HasNext__1qwh(TokenContext__1)) {
+			Token__4 = GetToken__1qwh(TokenContext__1);
+			if (!EqualsText__2qey(Token__4, ";") && !IsIndent__1qey(Token__4)) {
+				break;
+			};
+			MoveNext__1qwh(TokenContext__1);
+		};
+	};
+	(void)SetParseFlag__2qwh(TokenContext__1, ContextAllowance__3);
+	return ZEmptyNode__3qpp(_NewZEmptyNode333(), ParentNode, Token__4);
+}
+
+static struct ZNode52 * f177(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	int Rememberd__3 = SetParseFlag__2qwh(TokenContext__1, ZTokenContext_AllowSkipIndent_Z55);
+	(void)SetParseFlag__2qwh(TokenContext__1, ZTokenContext_NotAllowSkipIndent_Z56);
+	struct ZNode52 * StmtNode__4 = ExpressionPattern_DispatchPattern__5qwg(ParentNode, TokenContext__1, NULL, 1/*true*/, 1/*true*/);
+	StmtNode__4 = MatchPattern__5qwh(TokenContext__1, StmtNode__4, ZNode_Nop_Z20, ";", ZTokenContext_Required_Z53);
+	(void)SetParseFlag__2qwh(TokenContext__1, Rememberd__3);
+	return StmtNode__4;
+}
+
+static struct ZNode52 * f179(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	struct ZToken77 * Token__3 = GetToken__2qwh(TokenContext__1, ZTokenContext_MoveNext_Z58);
+	return ZStringNode__4q42(_NewZStringNode430(), ParentNode, Token__3, LibZen_UnquoteString__1qqy(GetText__1qey(Token__3)));
+}
+
+static int f181(struct ZSourceContext50 * SourceContext) {
+	long StartIndex__1 = GetPosition__1qwd(SourceContext);
+	MoveNext__1qwd(SourceContext);
+	while (HasChar__1qwd(SourceContext)) {
+		const char * ch__2 = GetCurrentChar__1qwd(SourceContext);
+		if (ch__2 == "\"") {
+			MoveNext__1qwd(SourceContext);
+			Tokenize__4qwd(SourceContext, "$StringLiteral$", StartIndex__1, GetPosition__1qwd(SourceContext));
+			return 1/*true*/;
+		};
+		if (ch__2 == "\n") {
+			break;
+		};
+		if (ch__2 == "\\") {
+			MoveNext__1qwd(SourceContext);
+		};
+		MoveNext__1qwd(SourceContext);
+	};
+	LogWarning__3qwd(SourceContext, StartIndex__1, "unclosed \"");
+	Tokenize__4qwd(SourceContext, "$StringLiteral$", StartIndex__1, GetPosition__1qwd(SourceContext));
+	return 0/*false*/;
+}
+
+static struct ZNode52 * f183(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	struct ZToken77 * NameToken__3 = GetToken__2qwh(TokenContext__1, ZTokenContext_MoveNext_Z58);
+	if (IsToken__2qwh(TokenContext__1, "=")) {
+		return ZErrorNode__4qp4(_NewZErrorNode335(), ParentNode, GetToken__1qwh(TokenContext__1), "assignment is not en expression");
+	} else {
+		return ZGetNameNode__4qpx(_NewZGetNameNode349(), ParentNode, NameToken__3, GetText__1qey(NameToken__3));
+	};
+}
+
+static struct ZNode52 * f185(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	struct ZToken77 * NameToken__3 = GetToken__2qwh(TokenContext__1, ZTokenContext_MoveNext_Z58);
+	if (MatchToken__2qwh(TokenContext__1, "=")) {
+		struct ZNode52 * AssignedNode__4 = ZSetNameNode__4qyw(_NewZSetNameNode181(), ParentNode, NameToken__3, GetText__1qey(NameToken__3));
+		AssignedNode__4 = MatchPattern__5qwh(TokenContext__1, AssignedNode__4, ZSetNameNode_Expr_Z29, "$Expression$", ZTokenContext_Required_Z53);
+		return AssignedNode__4;
+	} else {
+		return ZGetNameNode__4qpx(_NewZGetNameNode349(), ParentNode, NameToken__3, GetText__1qey(NameToken__3));
+	};
+}
+
+static struct ZNode52 * f187(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	struct ZNode52 * ThrowNode__3 = ZThrowNode__2qy4(_NewZThrowNode191(), ParentNode);
+	ThrowNode__3 = MatchToken__4qwh(TokenContext__1, ThrowNode__3, "throw", ZTokenContext_Required_Z53);
+	ThrowNode__3 = MatchPattern__5qwh(TokenContext__1, ThrowNode__3, ZThrowNode_Expr_Z33, "$Expression$", ZTokenContext_Required_Z53);
+	return ThrowNode__3;
+}
+
+static struct ZNode52 * f189(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	return ZBooleanNode__4qst(_NewZBooleanNode472(), ParentNode, GetToken__2qwh(TokenContext__1, ZTokenContext_MoveNext_Z58), 1/*true*/);
+}
+
+static struct ZNode52 * f191(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	struct ZNode52 * TryNode__3 = ZTryNode__2qyd(_NewZTryNode194(), ParentNode);
+	TryNode__3 = MatchToken__4qwh(TokenContext__1, TryNode__3, "try", ZTokenContext_Required_Z53);
+	TryNode__3 = MatchPattern__5qwh(TokenContext__1, TryNode__3, ZTryNode_Try_Z34, "$Block$", ZTokenContext_Required_Z53);
+	long count__4 = 0;
+	if (IsNewLineToken__2qwh(TokenContext__1, "catch")) {
+		TryNode__3 = MatchPattern__5qwh(TokenContext__1, TryNode__3, ZTryNode_Catch_Z35, "$Catch$", ZTokenContext_Required_Z53);
+		count__4 = count__4 + 1;
+	};
+	if (MatchNewLineToken__2qwh(TokenContext__1, "finally")) {
+		TryNode__3 = MatchPattern__5qwh(TokenContext__1, TryNode__3, ZTryNode_Finally_Z36, "$Block$", ZTokenContext_Required_Z53);
+		count__4 = count__4 + 1;
+	};
+	if (count__4 == 0 && !IsErrorNode__1qwg(TryNode__3)) {
+		return Array<ZNode>GetIndex(ZTryNode_Try_Z34);
+	};
+	return TryNode__3;
+}
+
+static struct ZNode52 * f193(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	if (MatchToken__2qwh(TokenContext__1, ":")) {
+		return ParsePattern__4qwh(TokenContext__1, ParentNode, "$Type$", ZTokenContext_Required_Z53);
+	};
+	return NULL;
+}
+
+static struct ZNode52 * f195(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	struct ZToken77 * Token__3 = GetToken__2qwh(TokenContext__1, ZTokenContext_MoveNext_Z58);
+	struct ZTypeNode235 * TypeNode__4 = GetTypeNode__3qwa(GetNameSpace__1qwg(ParentNode), GetText__1qey(Token__3), Token__3);
+	if (TypeNode__4 != NULL) {
+		return ParsePatternAfter__5qwh(TokenContext__1, ParentNode, TypeNode__4, "$TypeRight$", ZTokenContext_Optional_Z54);
+	};
+	return NULL;
+}
+
+static struct ZNode52 * f197(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	struct ZNode52 * UnaryNode__3 = ZUnaryNode__3qyh(_NewZUnaryNode197(), ParentNode, GetToken__2qwh(TokenContext__1, ZTokenContext_MoveNext_Z58));
+	return MatchPattern__5qwh(TokenContext__1, UnaryNode__3, ZUnaryNode_Recv_Z37, "$RightExpression$", ZTokenContext_Required_Z53);
+}
+
+static struct ZNode52 * f199(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	struct ZNode52 * VarNode__3 = ZVarNode__2qs2(_NewZVarNode502(), ParentNode);
+	VarNode__3 = MatchToken__4qwh(TokenContext__1, VarNode__3, "var", ZTokenContext_Required_Z53);
+	VarNode__3 = MatchPattern__5qwh(TokenContext__1, VarNode__3, ZNode_NameInfo_Z21, "$Name$", ZTokenContext_Required_Z53);
+	VarNode__3 = MatchPattern__5qwh(TokenContext__1, VarNode__3, ZNode_TypeInfo_Z22, "$TypeAnnotation$", ZTokenContext_Optional_Z54);
+	VarNode__3 = MatchToken__4qwh(TokenContext__1, VarNode__3, "=", ZTokenContext_Required_Z53);
+	VarNode__3 = MatchPattern__5qwh(TokenContext__1, VarNode__3, ZVarNode_InitValue_Z81, "$Expression$", ZTokenContext_Required_Z53);
+	return VarNode__3;
+}
+
+static struct ZNode52 * f201(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
+	struct ZNode52 * WhileNode__3 = ZWhileNode__2qyl(_NewZWhileNode200(), ParentNode);
+	WhileNode__3 = MatchToken__4qwh(TokenContext__1, WhileNode__3, "while", ZTokenContext_Required_Z53);
+	WhileNode__3 = MatchToken__4qwh(TokenContext__1, WhileNode__3, "(", ZTokenContext_Required_Z53);
+	WhileNode__3 = MatchPattern__6qwh(TokenContext__1, WhileNode__3, ZWhileNode_Cond_Z38, "$Expression$", ZTokenContext_Required_Z53, ZTokenContext_AllowSkipIndent_Z55);
+	WhileNode__3 = MatchToken__4qwh(TokenContext__1, WhileNode__3, ")", ZTokenContext_Required_Z53);
+	WhileNode__3 = MatchPattern__5qwh(TokenContext__1, WhileNode__3, ZWhileNode_Block_Z39, "$Block$", ZTokenContext_Required_Z53);
+	return WhileNode__3;
+}
+
+static int f203(struct ZSourceContext50 * SourceContext) {
+	SkipWhiteSpace__1qwd(SourceContext);
+	return 1/*true*/;
+}
 
 static ArrayOfString * LibZen_GreekNames_Z0 = LibZen_NewStringArray(3, "a", "b", "c");
 struct ZType60 {
@@ -1347,21 +1860,21 @@ static struct ZPrototype121 * _NewZPrototype121(void) {
 	return o;
 }
 
-struct ZTypePool671 {
-	int _classId671;
-	int _delta671;
+struct ZTypePool670 {
+	int _classId670;
+	int _delta670;
 	int _nextId;
 };
 
-static void _InitZTypePool671(struct ZTypePool671 * o) {
-	o->_classId671 = 671;
-	o->_delta671 = sizeof(struct ZTypePool671) - sizeof(int);
+static void _InitZTypePool670(struct ZTypePool670 * o) {
+	o->_classId670 = 670;
+	o->_delta670 = sizeof(struct ZTypePool670) - sizeof(int);
 	o->_nextId = 0;
 }
 
-static struct ZTypePool671 * _NewZTypePool671(void) {
-	struct ZTypePool671 *o = LibZen_Malloc(sizeof(struct ZTypePool671));
-	_InitZTypePool671(o);
+static struct ZTypePool670 * _NewZTypePool670(void) {
+	struct ZTypePool670 *o = LibZen_Malloc(sizeof(struct ZTypePool670));
+	_InitZTypePool670(o);
 	return o;
 }
 
@@ -2108,21 +2621,21 @@ static struct ZNameSpace48 * _NewZNameSpace48(void) {
 	return o;
 }
 
-struct ZParserConst676 {
-	int _classId676;
-	int _delta676;
+struct ZParserConst675 {
+	int _classId675;
+	int _delta675;
 	int _nextId;
 };
 
-static void _InitZParserConst676(struct ZParserConst676 * o) {
-	o->_classId676 = 676;
-	o->_delta676 = sizeof(struct ZParserConst676) - sizeof(int);
+static void _InitZParserConst675(struct ZParserConst675 * o) {
+	o->_classId675 = 675;
+	o->_delta675 = sizeof(struct ZParserConst675) - sizeof(int);
 	o->_nextId = 0;
 }
 
-static struct ZParserConst676 * _NewZParserConst676(void) {
-	struct ZParserConst676 *o = LibZen_Malloc(sizeof(struct ZParserConst676));
-	_InitZParserConst676(o);
+static struct ZParserConst675 * _NewZParserConst675(void) {
+	struct ZParserConst675 *o = LibZen_Malloc(sizeof(struct ZParserConst675));
+	_InitZParserConst675(o);
 	return o;
 }
 
@@ -6234,6 +6747,7 @@ struct ZVarNode502 {
 	int _delta502;
 	struct ZType60 * DeclType;
 	const char * NativeName;
+	long VarIndex;
 	struct ZToken77 * TypeToken;
 	struct ZToken77 * NameToken;
 	int _nextId;
@@ -6245,6 +6759,7 @@ static void _InitZVarNode502(struct ZVarNode502 * o) {
 	o->_delta502 = sizeof(struct ZVarNode502) - sizeof(struct ZBlockNode161);
 	o->DeclType = ZTypeVarType_Z4;
 	o->NativeName = NULL;
+	o->VarIndex = 0;
 	o->TypeToken = NULL;
 	o->NameToken = NULL;
 #ifdef _ZVarNode502_SetNameInfo
@@ -6452,7 +6967,7 @@ static struct ZType60 * GetFieldType__3qeo(struct ZClassType80 * this, const cha
 	return DefaultType__2;
 }
 static struct ZClassField79 * AppendField__4qeo(struct ZClassType80 * this, struct ZType60 * FieldType__1, const char * FieldName__2, struct ZToken77 * SourceToken__3) {
-	LibZen_Assert(!/*untyped*/NULL(FieldType__1), "(libzen/libzen.zen:1483)");
+	LibZen_Assert(!/*untyped*/NULL(FieldType__1), "(libzen/libzen.zen:1423)");
 	if (this->FieldList == NULL) {
 		this->FieldList = LibZen_NewArray(0);
 	};
@@ -6734,7 +7249,7 @@ static struct ZType60 * ZTypePool_GetGenericType1__2qwz(struct ZType60 * BaseTyp
 	return GenericType__3;
 }
 static struct ZType60 * ZTypePool_GetGenericType__3qwz(struct ZType60 * BaseType, ArrayOfZType * TypeList__1, int IsCreation__2) {
-	LibZen_Assert(BaseType->GetParamSize(BaseType) > 0, "(libzen/libzen.zen:1800)");
+	LibZen_Assert(BaseType->GetParamSize(BaseType) > 0, "(libzen/libzen.zen:1740)");
 	if (LibZen_ArraySize((ArrayOfVar *)TypeList__1) == 1 && !IsFuncType__1qwz(BaseType)) {
 		return ZTypePool_GetGenericType1__2qwz(BaseType, Array<ZType>GetIndex(0));
 	};
@@ -6928,7 +7443,7 @@ static void Maybe__3qrb(struct ZVarType136 * this, struct ZType60 * T__1, struct
 	return;
 }
 static struct ZNode52 * ZNode__4qwg(struct ZNode52 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * SourceToken__2, long Size__3) {
-	LibZen_Assert(this != ParentNode__1, "(libzen/libzen.zen:2008)");
+	LibZen_Assert(this != ParentNode__1, "(libzen/libzen.zen:1948)");
 	this->ParentNode = ParentNode__1;
 	this->SourceToken = SourceToken__2;
 	if (Size__3 > 0) {
@@ -6939,15 +7454,15 @@ static struct ZNode52 * ZNode__4qwg(struct ZNode52 * this, struct ZNode52 * Pare
 	return NULL;
 }
 static struct ZNode52 * SetChild__2qwg(struct ZNode52 * this, struct ZNode52 * Node__1) {
-	LibZen_Assert(Node__1 != NULL, "(libzen/libzen.zen:2020)");
+	LibZen_Assert(Node__1 != NULL, "(libzen/libzen.zen:1960)");
 	if (Node__1 != NULL) {
-		LibZen_Assert(this != Node__1, "(libzen/libzen.zen:2022)");
+		LibZen_Assert(this != Node__1, "(libzen/libzen.zen:1962)");
 		Node__1->ParentNode = this;
 	};
 	return Node__1;
 }
 static void SetNameInfo__3qwg(struct ZNode52 * this, struct ZToken77 * NameToken__1, const char * Name__2) {
-	LibZen_Assert(Name__2 == NULL, "(libzen/libzen.zen:2029)");
+	LibZen_Assert(Name__2 == NULL, "(libzen/libzen.zen:1969)");
 	return;
 }
 static void SetTypeInfo__3qwg(struct ZNode52 * this, struct ZToken77 * TypeToken__1, struct ZType60 * Type__2) {
@@ -6962,7 +7477,7 @@ static void Set__3qwg(struct ZNode52 * this, long Index__1, struct ZNode52 * Nod
 		if (LibZen_Is(ListNode__3, 251)) {
 			Append__2qu8(((struct ZListNode251 *)ListNode__3), Node__2);
 		} else {
-			LibZen_Assert(LibZen_Is(ListNode__3, 251), "(libzen/libzen.zen:2046)");
+			LibZen_Assert(LibZen_Is(ListNode__3, 251), "(libzen/libzen.zen:1986)");
 		};
 	} else if (Index__1 == ZNode_NameInfo_Z21) {
 		/*untyped*/NULL(this, Node__2->SourceToken, GetText__1qey(Node__2->SourceToken));
@@ -7026,7 +7541,7 @@ static struct ZBlockNode161 * GetScopeBlockNode__1qwg(struct ZNode52 * this) {
 		if (LibZen_Is(Node__1, 161)) {
 			return (struct ZBlockNode161 *)Node__1;
 		};
-		LibZen_Assert(!(Node__1 == Node__1->ParentNode), "(libzen/libzen.zen:2119)");
+		LibZen_Assert(!(Node__1 == Node__1->ParentNode), "(libzen/libzen.zen:2059)");
 		Node__1 = Node__1->ParentNode;
 	};
 	return NULL;
@@ -7392,11 +7907,11 @@ static struct ZVariable230 * GetLocalVariable__2qwa(struct ZNameSpace48 * this, 
 	};
 	return NULL;
 }
-static void SetLocalVariable__5qwa(struct ZNameSpace48 * this, struct ZFunctionNode144 * FunctionNode__1, struct ZType60 * VarType__2, const char * VarName__3, struct ZToken77 * SourceToken__4) {
+static long SetLocalVariable__5qwa(struct ZNameSpace48 * this, struct ZFunctionNode144 * FunctionNode__1, struct ZType60 * VarType__2, const char * VarName__3, struct ZToken77 * SourceToken__4) {
 	struct ZSymbolEntry225 * Parent__5 = GetSymbol__2qwa(this, VarName__3);
 	struct ZVariable230 * VarInfo__6 = ZVariable__7qud(_NewZVariable230(), Parent__5, FunctionNode__1, 0, VarType__2, VarName__3, SourceToken__4);
 	SetLocalSymbolEntry__3qwa(this, VarName__3, VarInfo__6);
-	return;
+	return VarInfo__6->VarUniqueIndex;
 }
 static void SetTypeName__4qwa(struct ZNameSpace48 * this, const char * Name__1, struct ZType60 * Type__2, struct ZToken77 * SourceToken__3) {
 	struct ZTypeNode235 * Node__4 = ZTypeNode__4quk(_NewZTypeNode235(), NULL, SourceToken__3, Type__2);
@@ -8105,7 +8620,7 @@ static struct ZNode52 * ApplyMatchPattern__5qwh(struct ZTokenContext53 * this, s
 		this->CurrentPosition = RollbackPosition__5;
 		this->ApplyingPattern = CurrentPattern__6;
 		ParsedNode__8 = LibZen_ApplyMatchFunc__4qqq(CurrentPattern__6->MatchFunc, ParentNode__1, this, LeftNode__2);
-		LibZen_Assert(ParsedNode__8 != ParentNode__1, "(libzen/libzen.zen:3276)");
+		LibZen_Assert(ParsedNode__8 != ParentNode__1, "(libzen/libzen.zen:3217)");
 		this->ApplyingPattern = NULL;
 		this->IsAllowSkipIndent = Remembered__9;
 		if (ParsedNode__8 != NULL && !IsErrorNode__1qwg(ParsedNode__8)) {
@@ -8119,7 +8634,7 @@ static struct ZNode52 * ApplyMatchPattern__5qwh(struct ZTokenContext53 * this, s
 	};
 	if (this->CurrentPosition == RollbackPosition__5) {
 		LibZen_PrintLine__1qqy(LibZen_StrCat(LibZen_StrCat(LibZen_StrCat(LibZen_StrCat(LibZen_StrCat("DEBUG infinite looping", LibZen_IntToString(RollbackPosition__5)), " Token="), toString__1qey(TopToken__7)), " ParsedNode="), toString__1qwg(ParsedNode__8)));
-		LibZen_Assert(this->CurrentPosition != RollbackPosition__5, "(libzen/libzen.zen:3290)");
+		LibZen_Assert(this->CurrentPosition != RollbackPosition__5, "(libzen/libzen.zen:3231)");
 	};
 	if (ParsedNode__8 == NULL) {
 		ParsedNode__8 = CreateExpectedErrorNode__3qwh(this, TopToken__7, Pattern__3->PatternName);
@@ -8307,7 +8822,7 @@ static struct ZSugarNode165 * DeSugar__2qok(struct ZAssertNode307 * this, struct
 static struct ZBinaryNode310 * ZBinaryNode__5qo1(struct ZBinaryNode310 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * SourceToken__2, struct ZNode52 * Left__3, struct ZSyntax219 * Pattern__4) {
 	(void)ZNode__4qwg(this, ParentNode__1, SourceToken__2, 2);
 	Set__3qwg(this, ZBinaryNode_Left_Z60, Left__3);
-	LibZen_Assert(Pattern__4 != NULL, "(libzen/libzen.zen:3492)");
+	LibZen_Assert(Pattern__4 != NULL, "(libzen/libzen.zen:3433)");
 	this->Pattern = Pattern__4;
 	return NULL;
 }
@@ -8648,7 +9163,7 @@ static void ClearListAfter__2qu8(struct ZListNode251 * this, long Size__1) {
 static struct ZMacroNode391 * ZMacroNode__4q07(struct ZMacroNode391 * this, struct ZNode52 * ParentNode__1, struct ZToken77 * SourceToken__2, struct ZMacroFunc210 * MacroFunc__3) {
 	(void)ZListNode__4qu8(this, ParentNode__1, SourceToken__2, 0);
 	this->MacroFunc = MacroFunc__3;
-	LibZen_Assert(MacroFunc__3 != NULL, "(libzen/libzen.zen:3850)");
+	LibZen_Assert(MacroFunc__3 != NULL, "(libzen/libzen.zen:3791)");
 	return NULL;
 }
 static struct ZFuncType90 * GetFuncType__1q07(struct ZMacroNode391 * this) {
@@ -9706,7 +10221,7 @@ static void VisitCatchNode__2quv(struct ZSourceGenerator243 * this, struct ZCatc
 static void VisitVarNode__2quv(struct ZSourceGenerator243 * this, struct ZVarNode502 * Node__1) {
 	Append__2qwu(this->CurrentBuilder, "var");
 	AppendWhiteSpace__1qwu(this->CurrentBuilder);
-	Append__2qwu(this->CurrentBuilder, Node__1->NativeName);
+	Append__2qwu(this->CurrentBuilder, SafeName__3quv(this, Node__1->NativeName, Node__1->VarIndex));
 	VisitTypeAnnotation__2quv(this, Node__1->DeclType);
 	AppendToken__2qwu(this->CurrentBuilder, "=");
 	/*untyped*/NULL(this, NULL, Array<ZNode>GetIndex(ZVarNode_InitValue_Z81));
@@ -10108,11 +10623,11 @@ static void VisitSetIndexNode__2qgl(struct CSourceGenerator596 * this, struct ZS
 	return;
 }
 static void VisitGetNameNode__2qgl(struct CSourceGenerator596 * this, struct ZGetNameNode349 * Node__1) {
-	Append__2qwu(this->CurrentBuilder, Node__1->VarName);
+	Append__2qwu(this->CurrentBuilder, SafeName__3quv(this, Node__1->VarName, Node__1->VarIndex));
 	return;
 }
 static void VisitSetNameNode__2qgl(struct CSourceGenerator596 * this, struct ZSetNameNode181 * Node__1) {
-	Append__2qwu(this->CurrentBuilder, Node__1->VarName);
+	Append__2qwu(this->CurrentBuilder, SafeName__3quv(this, Node__1->VarName, Node__1->VarIndex));
 	AppendToken__2qwu(this->CurrentBuilder, "=");
 	/*untyped*/NULL(this, NULL, Array<ZNode>GetIndex(ZSetNameNode_Expr_Z29));
 	return;
@@ -10220,7 +10735,7 @@ static void GenerateTypeName__2qgl(struct CSourceGenerator596 * this, struct ZTy
 static void VisitVarNode__2qgl(struct CSourceGenerator596 * this, struct ZVarNode502 * Node__1) {
 	GenerateTypeName__2qgl(this, Node__1->DeclType);
 	Append__2qwu(this->CurrentBuilder, " ");
-	Append__2qwu(this->CurrentBuilder, Node__1->NativeName);
+	Append__2qwu(this->CurrentBuilder, SafeName__3quv(this, Node__1->NativeName, Node__1->VarIndex));
 	AppendToken__2qwu(this->CurrentBuilder, "=");
 	/*untyped*/NULL(this, NULL, Array<ZNode>GetIndex(ZVarNode_InitValue_Z81));
 	Append__2qwu(this->CurrentBuilder, this->SemiColon);
@@ -10533,137 +11048,21 @@ static void Accept__2qs2(struct ZVarNode502 * this, struct ZVisitor167 * Visitor
 	/*untyped*/NULL(Visitor__1, this);
 	return;
 }
-static struct ZNode52 * AndPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZBinaryNode310 * BinaryNode__3 = ZAndNode__5qsm(_NewZAndNode498(), ParentNode, GetToken__2qwh(TokenContext__1, ZTokenContext_MoveNext_Z58), LeftNode__2, GetApplyingSyntax__1qwh(TokenContext__1));
-	return AppendParsedRightNode__3qo1(BinaryNode__3, ParentNode, TokenContext__1);
-}
-static struct ZNode52 * AnnotationPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	return NULL;
-}
-static struct ZNode52 * ApplyPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * ApplyNode__3 = ZFuncCallNode__3q40(_NewZFuncCallNode406(), ParentNode, LeftNode__2);
-	ApplyNode__3 = MatchNtimes__6qwh(TokenContext__1, ApplyNode__3, "(", "$Expression$", ",", ")");
-	return ApplyNode__3;
-}
-static struct ZNode52 * ArrayLiteralPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * LiteralNode__3 = ZArrayLiteralNode__2qsp(_NewZArrayLiteralNode477(), ParentNode);
-	LiteralNode__3 = MatchNtimes__6qwh(TokenContext__1, LiteralNode__3, "[", "$Expression$", ",", "]");
-	return LiteralNode__3;
-}
-static struct ZNode52 * AssertPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * AssertNode__3 = ZAssertNode__2qok(_NewZAssertNode307(), ParentNode);
-	AssertNode__3 = MatchToken__4qwh(TokenContext__1, AssertNode__3, "assert", ZTokenContext_Required_Z53);
-	AssertNode__3 = MatchToken__4qwh(TokenContext__1, AssertNode__3, "(", ZTokenContext_Required_Z53);
-	AssertNode__3 = MatchPattern__6qwh(TokenContext__1, AssertNode__3, ZThrowNode_Expr_Z33, "$Expression$", ZTokenContext_Required_Z53, ZTokenContext_AllowSkipIndent_Z55);
-	AssertNode__3 = MatchToken__4qwh(TokenContext__1, AssertNode__3, ")", ZTokenContext_Required_Z53);
-	return AssertNode__3;
-}
-static struct ZNode52 * AssignPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	return NULL;
-}
-static struct ZNode52 * BinaryPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZToken77 * Token__3 = GetToken__2qwh(TokenContext__1, ZTokenContext_MoveNext_Z58);
-	struct ZBinaryNode310 * BinaryNode__4 = ZBinaryNode__5qo1(_NewZBinaryNode310(), ParentNode, Token__3, LeftNode__2, GetApplyingSyntax__1qwh(TokenContext__1));
-	return AppendParsedRightNode__3qo1(BinaryNode__4, ParentNode, TokenContext__1);
-}
-static int BlockComment__1qwd(struct ZSourceContext50 * SourceContext) {
-	long StartIndex__1 = GetPosition__1qwd(SourceContext);
-	const char * NextChar__2 = GetCharAtFromCurrentPosition__2qwd(SourceContext, +1);
-	if (NextChar__2 != "/" && NextChar__2 != "*") {
-		return 0/*false*/;
-	};
-	if (NextChar__2 == "/") {
-		while (HasChar__1qwd(SourceContext)) {
-			const char * ch__3 = GetCurrentChar__1qwd(SourceContext);
-			if (ch__3 == "\n") {
-				break;
-			};
-			MoveNext__1qwd(SourceContext);
-		};
-		return 1/*true*/;
-	};
-	long NestedLevel__4 = 0;
-	const char * PrevChar__5 = "0";
-	while (HasChar__1qwd(SourceContext)) {
-		NextChar__2 = GetCurrentChar__1qwd(SourceContext);
-		if (PrevChar__5 == "*" && NextChar__2 == "/") {
-			NestedLevel__4 = NestedLevel__4 - 1;
-			if (NestedLevel__4 == 0) {
-				MoveNext__1qwd(SourceContext);
-				return 1/*true*/;
-			};
-		};
-		if (PrevChar__5 == "/" && NextChar__2 == "*") {
-			NestedLevel__4 = NestedLevel__4 + 1;
-		};
-		MoveNext__1qwd(SourceContext);
-		PrevChar__5 = NextChar__2;
-	};
-	LogWarning__3qwd(SourceContext, StartIndex__1, "unfound */");
-	return 1/*true*/;
-}
-static struct ZNode52 * BlockPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * BlockNode__3 = ZBlockNode__3qth(_NewZBlockNode161(), ParentNode, 0);
-	struct ZToken77 * SkipToken__4 = GetToken__1qwh(TokenContext__1);
-	BlockNode__3 = MatchToken__4qwh(TokenContext__1, BlockNode__3, "{", ZTokenContext_Required_Z53);
-	if (!IsErrorNode__1qwg(BlockNode__3)) {
-		int Remembered__5 = SetParseFlag__2qwh(TokenContext__1, ZTokenContext_AllowSkipIndent_Z55);
-		struct ZNode52 * NestedBlockNode__6 = BlockNode__3;
-		while (HasNext__1qwh(TokenContext__1)) {
-			if (MatchToken__2qwh(TokenContext__1, "}")) {
-				break;
-			};
-			NestedBlockNode__6 = MatchPattern__5qwh(TokenContext__1, NestedBlockNode__6, ZNode_NestedAppendIndex_Z24, "$Statement$", ZTokenContext_Required_Z53);
-			if (IsErrorNode__1qwg(NestedBlockNode__6)) {
-				SkipError__2qwh(TokenContext__1, SkipToken__4);
-				(void)MatchToken__2qwh(TokenContext__1, "}");
-				break;
-			};
-		};
-		(void)SetParseFlag__2qwh(TokenContext__1, Remembered__5);
-	};
-	return BlockNode__3;
-}
-static struct ZNode52 * BreakPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * BreakNode__3 = ZBreakNode__2qon(_NewZBreakNode317(), ParentNode);
-	BreakNode__3 = MatchToken__4qwh(TokenContext__1, BreakNode__3, "break", ZTokenContext_Required_Z53);
-	return BreakNode__3;
-}
-static int CLineComment__1qwd(struct ZSourceContext50 * SourceContext) {
-	return 0/*false*/;
-}
-static struct ZNode52 * CastPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * CastNode__3 = ZCastNode__4qo5(_NewZCastNode320(), ParentNode, ZTypeVarType_Z4, NULL);
-	CastNode__3 = MatchToken__4qwh(TokenContext__1, CastNode__3, "(", ZTokenContext_Required_Z53);
-	CastNode__3 = MatchPattern__5qwh(TokenContext__1, CastNode__3, ZNode_TypeInfo_Z22, "$Type$", ZTokenContext_Required_Z53);
-	CastNode__3 = MatchToken__4qwh(TokenContext__1, CastNode__3, ")", ZTokenContext_Required_Z53);
-	CastNode__3 = MatchPattern__5qwh(TokenContext__1, CastNode__3, ZCastNode_Expr_Z62, "$RightExpression$", ZTokenContext_Required_Z53);
-	return CastNode__3;
-}
-static struct ZNode52 * CatchPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * CatchNode__3 = ZCatchNode__2qpq(_NewZCatchNode324(), ParentNode);
-	CatchNode__3 = MatchToken__4qwh(TokenContext__1, CatchNode__3, "catch", ZTokenContext_Required_Z53);
-	CatchNode__3 = MatchToken__4qwh(TokenContext__1, CatchNode__3, "(", ZTokenContext_Required_Z53);
-	CatchNode__3 = MatchPattern__5qwh(TokenContext__1, CatchNode__3, ZNode_NameInfo_Z21, "$Name$", ZTokenContext_Required_Z53);
-	CatchNode__3 = MatchToken__4qwh(TokenContext__1, CatchNode__3, ")", ZTokenContext_Required_Z53);
-	CatchNode__3 = MatchPattern__5qwh(TokenContext__1, CatchNode__3, ZCatchNode_Block_Z63, "$Block$", ZTokenContext_Required_Z53);
-	return CatchNode__3;
-}
-static struct ZNode52 * ClassPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * ClassNode__3 = ZClassNode__2qdo(_NewZClassNode512(), ParentNode);
-	ClassNode__3 = MatchToken__4qwh(TokenContext__1, ClassNode__3, "class", ZTokenContext_Required_Z53);
-	ClassNode__3 = MatchPattern__5qwh(TokenContext__1, ClassNode__3, ZNode_NameInfo_Z21, "$Name$", ZTokenContext_Required_Z53);
-	if (MatchNewLineToken__2qwh(TokenContext__1, "extends")) {
-		ClassNode__3 = MatchPattern__5qwh(TokenContext__1, ClassNode__3, ZNode_TypeInfo_Z22, "$Type$", ZTokenContext_Required_Z53);
-	};
-	ClassNode__3 = MatchNtimes__6qwh(TokenContext__1, ClassNode__3, "{", "$FieldDecl$", NULL, "}");
-	return ClassNode__3;
-}
-static struct ZNode52 * ComparatorPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZToken77 * Token__3 = GetToken__2qwh(TokenContext__1, ZTokenContext_MoveNext_Z58);
-	struct ZBinaryNode310 * BinaryNode__4 = ZComparatorNode__5qpt(_NewZComparatorNode328(), ParentNode, Token__3, LeftNode__2, GetApplyingSyntax__1qwh(TokenContext__1));
-	return AppendParsedRightNode__3qo1(BinaryNode__4, ParentNode, TokenContext__1);
-}
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) AndPattern_Z82 = f83;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) AnnotationPattern_Z84 = f85;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) ApplyPattern_Z86 = f87;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) ArrayLiteralPattern_Z88 = f89;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) AssertPattern_Z90 = f91;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) AssignPattern_Z92 = f93;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) BinaryPattern_Z94 = f95;
+static int (*)(struct ZSourceContext50 *) BlockComment_Z96 = f97;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) BlockPattern_Z98 = f99;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) BreakPattern_Z100 = f101;
+static int (*)(struct ZSourceContext50 *) CLineComment_Z102 = f103;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) CastPattern_Z104 = f105;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) CatchPattern_Z106 = f107;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) ClassPattern_Z108 = f109;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) ComparatorPattern_Z110 = f111;
 static struct ZSyntax219 * ExpressionPattern_GetRightPattern__2qwa(struct ZNameSpace48 * NameSpace, struct ZTokenContext53 * TokenContext__1) {
 	struct ZToken77 * Token__2 = GetToken__1qwh(TokenContext__1);
 	if (Token__2 != ZToken_NullToken_Z52) {
@@ -10716,152 +11115,27 @@ static struct ZNode52 * ExpressionPattern_DispatchPattern__5qwg(struct ZNode52 *
 	};
 	return LeftNode__2;
 }
-static struct ZNode52 * ExpressionPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	return ExpressionPattern_DispatchPattern__5qwg(ParentNode, TokenContext__1, LeftNode__2, 0/*false*/, 1/*true*/);
-}
-static struct ZNode52 * FalsePattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	return ZBooleanNode__4qst(_NewZBooleanNode472(), ParentNode, GetToken__2qwh(TokenContext__1, ZTokenContext_MoveNext_Z58), 0/*false*/);
-}
-static struct ZNode52 * FieldPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	int Rememberd__3 = SetParseFlag__2qwh(TokenContext__1, 0/*false*/);
-	struct ZNode52 * FieldNode__4 = ZFieldNode__2qpf(_NewZFieldNode339(), ParentNode);
-	FieldNode__4 = MatchToken__4qwh(TokenContext__1, FieldNode__4, "var", ZTokenContext_Required_Z53);
-	FieldNode__4 = MatchPattern__5qwh(TokenContext__1, FieldNode__4, ZNode_NameInfo_Z21, "$Name$", ZTokenContext_Required_Z53);
-	FieldNode__4 = MatchPattern__5qwh(TokenContext__1, FieldNode__4, ZNode_TypeInfo_Z22, "$TypeAnnotation$", ZTokenContext_Optional_Z54);
-	if (MatchToken__2qwh(TokenContext__1, "=")) {
-		FieldNode__4 = MatchPattern__5qwh(TokenContext__1, FieldNode__4, ZFieldNode_InitValue_Z64, "$Expression$", ZTokenContext_Required_Z53);
-	};
-	FieldNode__4 = MatchPattern__5qwh(TokenContext__1, FieldNode__4, ZNode_Nop_Z20, ";", ZTokenContext_Required_Z53);
-	(void)SetParseFlag__2qwh(TokenContext__1, Rememberd__3);
-	return FieldNode__4;
-}
-static struct ZNode52 * FloatLiteralPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZToken77 * Token__3 = GetToken__2qwh(TokenContext__1, ZTokenContext_MoveNext_Z58);
-	return ZFloatNode__4qpk(_NewZFloatNode343(), ParentNode, Token__3, LibZen_ParseFloat__1qqy(GetText__1qey(Token__3)));
-}
-static struct ZNode52 * FunctionPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * FuncNode__3 = ZFunctionNode__2qtq(_NewZFunctionNode144(), ParentNode);
-	FuncNode__3 = MatchToken__4qwh(TokenContext__1, FuncNode__3, "function", ZTokenContext_Required_Z53);
-	FuncNode__3 = MatchPattern__5qwh(TokenContext__1, FuncNode__3, ZNode_NameInfo_Z21, "$Name$", ZTokenContext_Optional_Z54);
-	FuncNode__3 = MatchNtimes__6qwh(TokenContext__1, FuncNode__3, "(", "$Param$", ",", ")");
-	FuncNode__3 = MatchPattern__5qwh(TokenContext__1, FuncNode__3, ZNode_TypeInfo_Z22, "$TypeAnnotation$", ZTokenContext_Optional_Z54);
-	FuncNode__3 = MatchPattern__5qwh(TokenContext__1, FuncNode__3, ZFunctionNode_Block_Z80, "$Block$", ZTokenContext_Required_Z53);
-	return FuncNode__3;
-}
-static struct ZNode52 * GetIndexPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * IndexerNode__3 = ZGetIndexNode__3qp1(_NewZGetIndexNode346(), ParentNode, LeftNode__2);
-	IndexerNode__3 = MatchToken__4qwh(TokenContext__1, IndexerNode__3, "[", ZTokenContext_Required_Z53);
-	IndexerNode__3 = MatchPattern__6qwh(TokenContext__1, IndexerNode__3, ZGetIndexNode_Index_Z66, "$Expression$", ZTokenContext_Required_Z53, ZTokenContext_AllowSkipIndent_Z55);
-	IndexerNode__3 = MatchToken__4qwh(TokenContext__1, IndexerNode__3, "]", ZTokenContext_Required_Z53);
-	return IndexerNode__3;
-}
-static struct ZNode52 * GetterPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * GetterNode__3 = ZGetterNode__3qpm(_NewZGetterNode354(), ParentNode, LeftNode__2);
-	GetterNode__3 = MatchToken__4qwh(TokenContext__1, GetterNode__3, ".", ZTokenContext_Required_Z53);
-	GetterNode__3 = MatchPattern__5qwh(TokenContext__1, GetterNode__3, ZNode_NameInfo_Z21, "$Name$", ZTokenContext_Required_Z53);
-	return GetterNode__3;
-}
-static struct ZNode52 * GroupPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * GroupNode__3 = ZGroupNode__2q0r(_NewZGroupNode363(), ParentNode);
-	GroupNode__3 = MatchToken__4qwh(TokenContext__1, GroupNode__3, "(", ZTokenContext_Required_Z53);
-	GroupNode__3 = MatchPattern__6qwh(TokenContext__1, GroupNode__3, ZGroupNode_Expr_Z68, "$Expression$", ZTokenContext_Required_Z53, ZTokenContext_AllowSkipIndent_Z55);
-	GroupNode__3 = MatchToken__4qwh(TokenContext__1, GroupNode__3, ")", ZTokenContext_Required_Z53);
-	return GroupNode__3;
-}
-static struct ZNode52 * IfPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * IfNode__3 = ZIfNode__2q0u(_NewZIfNode366(), ParentNode);
-	IfNode__3 = MatchToken__4qwh(TokenContext__1, IfNode__3, "if", ZTokenContext_Required_Z53);
-	IfNode__3 = MatchToken__4qwh(TokenContext__1, IfNode__3, "(", ZTokenContext_Required_Z53);
-	IfNode__3 = MatchPattern__6qwh(TokenContext__1, IfNode__3, ZIfNode_Cond_Z69, "$Expression$", ZTokenContext_Required_Z53, ZTokenContext_AllowNewLine_Z57);
-	IfNode__3 = MatchToken__4qwh(TokenContext__1, IfNode__3, ")", ZTokenContext_Required_Z53);
-	IfNode__3 = MatchPattern__5qwh(TokenContext__1, IfNode__3, ZIfNode_Then_Z70, "$Block$", ZTokenContext_Required_Z53);
-	if (MatchNewLineToken__2qwh(TokenContext__1, "else")) {
-		const char * PatternName__4 = "$Block$";
-		if (IsNewLineToken__2qwh(TokenContext__1, "if")) {
-			PatternName__4 = "if";
-		};
-		IfNode__3 = MatchPattern__5qwh(TokenContext__1, IfNode__3, ZIfNode_Else_Z71, PatternName__4, ZTokenContext_Required_Z53);
-	};
-	return IfNode__3;
-}
-static struct ZNode52 * InstanceOfPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * BinaryNode__3 = ZInstanceOfNode__4q0a(_NewZInstanceOfNode372(), ParentNode, GetToken__2qwh(TokenContext__1, ZTokenContext_MoveNext_Z58), LeftNode__2);
-	BinaryNode__3 = MatchPattern__5qwh(TokenContext__1, BinaryNode__3, ZNode_TypeInfo_Z22, "$Type$", ZTokenContext_Required_Z53);
-	return BinaryNode__3;
-}
-static struct ZNode52 * IntLiteralPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZToken77 * Token__3 = GetToken__2qwh(TokenContext__1, ZTokenContext_MoveNext_Z58);
-	return ZIntNode__4q0g(_NewZIntNode376(), ParentNode, Token__3, LibZen_ParseInt__1qqy(GetText__1qey(Token__3)));
-}
-static struct ZNode52 * LetPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * LetNode__3 = ZLetNode__2q0k(_NewZLetNode379(), ParentNode);
-	LetNode__3 = MatchToken__4qwh(TokenContext__1, LetNode__3, "let", ZTokenContext_Required_Z53);
-	LetNode__3 = MatchPattern__5qwh(TokenContext__1, LetNode__3, ZNode_NameInfo_Z21, "$Name$", ZTokenContext_Required_Z53);
-	LetNode__3 = MatchPattern__5qwh(TokenContext__1, LetNode__3, ZNode_TypeInfo_Z22, "$TypeAnnotation$", ZTokenContext_Optional_Z54);
-	LetNode__3 = MatchToken__4qwh(TokenContext__1, LetNode__3, "=", ZTokenContext_Required_Z53);
-	LetNode__3 = MatchPattern__5qwh(TokenContext__1, LetNode__3, ZLetNode_InitValue_Z73, "$Expression$", ZTokenContext_Required_Z53);
-	return LetNode__3;
-}
-static struct ZNode52 * MapEntryPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * LiteralNode__3 = ZMapEntryNode__2q4q(_NewZMapEntryNode396(), ParentNode);
-	LiteralNode__3 = MatchPattern__5qwh(TokenContext__1, LiteralNode__3, ZMapEntryNode_Key_Z74, "$Expression$", ZTokenContext_Required_Z53);
-	LiteralNode__3 = MatchToken__4qwh(TokenContext__1, LiteralNode__3, ":", ZTokenContext_Required_Z53);
-	LiteralNode__3 = MatchPattern__5qwh(TokenContext__1, LiteralNode__3, ZMapEntryNode_Value_Z75, "$Expression$", ZTokenContext_Required_Z53);
-	return LiteralNode__3;
-}
-static struct ZNode52 * MapLiteralPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * LiteralNode__3 = ZMapLiteralNode__2q4e(_NewZMapLiteralNode398(), ParentNode);
-	LiteralNode__3 = MatchNtimes__6qwh(TokenContext__1, LiteralNode__3, "{", "$MapEntry$", ",", "}");
-	return LiteralNode__3;
-}
-static struct ZNode52 * MethodCallPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * MethodCallNode__3 = ZMethodCallNode__3q4u(_NewZMethodCallNode402(), ParentNode, LeftNode__2);
-	MethodCallNode__3 = MatchToken__4qwh(TokenContext__1, MethodCallNode__3, ".", ZTokenContext_Required_Z53);
-	MethodCallNode__3 = MatchPattern__5qwh(TokenContext__1, MethodCallNode__3, ZNode_NameInfo_Z21, "$Name$", ZTokenContext_Required_Z53);
-	MethodCallNode__3 = MatchNtimes__6qwh(TokenContext__1, MethodCallNode__3, "(", "$Expression$", ",", ")");
-	return MethodCallNode__3;
-}
-static struct ZNode52 * NamePattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZToken77 * Token__3 = GetToken__2qwh(TokenContext__1, ZTokenContext_MoveNext_Z58);
-	if (LibZen_IsSymbol__1qqy(GetChar__1qey(Token__3))) {
-		return ZGetNameNode__4qpx(_NewZGetNameNode349(), ParentNode, Token__3, GetText__1qey(Token__3));
-	};
-	return ZErrorNode__4qp4(_NewZErrorNode335(), ParentNode, Token__3, LibZen_StrCat(LibZen_StrCat("illegal name: \"", GetText__1qey(Token__3)), "\""));
-}
-static int NameToken__1qwd(struct ZSourceContext50 * SourceContext) {
-	long StartIndex__1 = GetPosition__1qwd(SourceContext);
-	while (HasChar__1qwd(SourceContext)) {
-		const char * ch__2 = GetCurrentChar__1qwd(SourceContext);
-		if (!LibZen_IsSymbol__1qqy(ch__2) && !LibZen_IsDigit__1qqy(ch__2)) {
-			break;
-		};
-		MoveNext__1qwd(SourceContext);
-	};
-	Tokenize__3qwd(SourceContext, StartIndex__1, GetPosition__1qwd(SourceContext));
-	return 1/*true*/;
-}
-static int NewLineToken__1qwd(struct ZSourceContext50 * SourceContext) {
-	long StartIndex__1 = GetPosition__1qwd(SourceContext) + 1;
-	MoveNext__1qwd(SourceContext);
-	SkipWhiteSpace__1qwd(SourceContext);
-	FoundIndent__3qwd(SourceContext, StartIndex__1, GetPosition__1qwd(SourceContext));
-	return 1/*true*/;
-}
-static struct ZNode52 * NewObjectPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * LiteralNode__3 = ZNewObjectNode__2q4f(_NewZNewObjectNode411(), ParentNode);
-	LiteralNode__3 = MatchToken__4qwh(TokenContext__1, LiteralNode__3, "new", ZTokenContext_Required_Z53);
-	LiteralNode__3 = MatchPattern__5qwh(TokenContext__1, LiteralNode__3, ZNode_TypeInfo_Z22, "$Type$", ZTokenContext_Optional_Z54);
-	LiteralNode__3 = MatchNtimes__6qwh(TokenContext__1, LiteralNode__3, "(", "$Expression$", ",", ")");
-	return LiteralNode__3;
-}
-static struct ZNode52 * NotPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * UnaryNode__3 = ZNotNode__3q4k(_NewZNotNode415(), ParentNode, GetToken__2qwh(TokenContext__1, ZTokenContext_MoveNext_Z58));
-	UnaryNode__3 = MatchPattern__5qwh(TokenContext__1, UnaryNode__3, ZUnaryNode_Recv_Z37, "$RightExpression$", ZTokenContext_Required_Z53);
-	return UnaryNode__3;
-}
-static struct ZNode52 * NullPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	return ZNullNode__3q41(_NewZNullNode418(), ParentNode, GetToken__2qwh(TokenContext__1, ZTokenContext_MoveNext_Z58));
-}
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) ExpressionPattern_Z112 = f113;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) FalsePattern_Z114 = f115;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) FieldPattern_Z116 = f117;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) FloatLiteralPattern_Z118 = f119;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) FunctionPattern_Z120 = f121;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) GetIndexPattern_Z122 = f123;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) GetterPattern_Z124 = f125;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) GroupPattern_Z126 = f127;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) IfPattern_Z128 = f129;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) InstanceOfPattern_Z130 = f131;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) IntLiteralPattern_Z132 = f133;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) LetPattern_Z134 = f135;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) MapEntryPattern_Z136 = f137;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) MapLiteralPattern_Z138 = f139;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) MethodCallPattern_Z140 = f141;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) NamePattern_Z142 = f143;
+static int (*)(struct ZSourceContext50 *) NameToken_Z144 = f145;
+static int (*)(struct ZSourceContext50 *) NewLineToken_Z146 = f147;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) NewObjectPattern_Z148 = f149;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) NotPattern_Z150 = f151;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) NullPattern_Z152 = f153;
 static const char * NumberLiteralToken_ParseDigit__1qwd(struct ZSourceContext50 * SourceContext) {
 	const char * ch__1 = "0";
 	while (HasChar__1qwd(SourceContext)) {
@@ -10873,240 +11147,29 @@ static const char * NumberLiteralToken_ParseDigit__1qwd(struct ZSourceContext50 
 	};
 	return ch__1;
 }
-static int NumberLiteralToken__1qwd(struct ZSourceContext50 * SourceContext) {
-	long StartIndex__1 = GetPosition__1qwd(SourceContext);
-	const char * ch__2 = NumberLiteralToken_ParseDigit__1qwd(SourceContext);
-	if (ch__2 == ".") {
-		MoveNext__1qwd(SourceContext);
-		ch__2 = NumberLiteralToken_ParseDigit__1qwd(SourceContext);
-		if (ch__2 == "e" || ch__2 == "E") {
-			MoveNext__1qwd(SourceContext);
-			if (HasChar__1qwd(SourceContext)) {
-				ch__2 = GetCurrentChar__1qwd(SourceContext);
-				if (ch__2 == "+" || ch__2 == "-") {
-					MoveNext__1qwd(SourceContext);
-				};
-			};
-			(void)NumberLiteralToken_ParseDigit__1qwd(SourceContext);
-		};
-		Tokenize__4qwd(SourceContext, "$FloatLiteral$", StartIndex__1, GetPosition__1qwd(SourceContext));
-	} else {
-		Tokenize__4qwd(SourceContext, "$IntegerLiteral$", StartIndex__1, GetPosition__1qwd(SourceContext));
-	};
-	return 1/*true*/;
-}
-static int OperatorToken__1qwd(struct ZSourceContext50 * SourceContext) {
-	TokenizeDefinedSymbol__2qwd(SourceContext, GetPosition__1qwd(SourceContext));
-	return 1/*true*/;
-}
-static struct ZNode52 * OrPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZBinaryNode310 * BinaryNode__3 = ZOrNode__5q4x(_NewZOrNode421(), ParentNode, GetToken__2qwh(TokenContext__1, ZTokenContext_MoveNext_Z58), LeftNode__2, GetApplyingSyntax__1qwh(TokenContext__1));
-	return AppendParsedRightNode__3qo1(BinaryNode__3, ParentNode, TokenContext__1);
-}
-static struct ZNode52 * ParamPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * ParamNode__3 = ZParamNode__2qtb(_NewZParamNode172(), ParentNode);
-	ParamNode__3 = MatchPattern__5qwh(TokenContext__1, ParamNode__3, ZNode_NameInfo_Z21, "$Name$", ZTokenContext_Required_Z53);
-	ParamNode__3 = MatchPattern__5qwh(TokenContext__1, ParamNode__3, ZNode_TypeInfo_Z22, "$TypeAnnotation$", ZTokenContext_Optional_Z54);
-	return ParamNode__3;
-}
-static struct ZNode52 * PrototypePattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * FuncNode__3 = ZPrototypeNode__2q4b(_NewZPrototypeNode424(), ParentNode);
-	FuncNode__3 = MatchToken__4qwh(TokenContext__1, FuncNode__3, "function", ZTokenContext_Required_Z53);
-	FuncNode__3 = MatchPattern__5qwh(TokenContext__1, FuncNode__3, ZNode_NameInfo_Z21, "$Name$", ZTokenContext_Required_Z53);
-	FuncNode__3 = MatchNtimes__6qwh(TokenContext__1, FuncNode__3, "(", "$Param$", ",", ")");
-	FuncNode__3 = MatchPattern__5qwh(TokenContext__1, FuncNode__3, ZNode_TypeInfo_Z22, "$TypeAnnotation$", ZTokenContext_Required_Z53);
-	return FuncNode__3;
-}
-static struct ZNode52 * ReturnPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * ReturnNode__3 = ZReturnNode__2qtc(_NewZReturnNode170(), ParentNode);
-	ReturnNode__3 = MatchToken__4qwh(TokenContext__1, ReturnNode__3, "return", ZTokenContext_Required_Z53);
-	ReturnNode__3 = MatchPattern__5qwh(TokenContext__1, ReturnNode__3, ZReturnNode_Expr_Z25, "$Expression$", ZTokenContext_Optional_Z54);
-	return ReturnNode__3;
-}
-static struct ZNode52 * RightExpressionPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	return ExpressionPattern_DispatchPattern__5qwg(ParentNode, TokenContext__1, LeftNode__2, 0/*false*/, 0/*false*/);
-}
-static struct ZNode52 * RightTypePattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftTypeNode__2) {
-	struct ZToken77 * SourceToken__6 = GetToken__1qwh(TokenContext__1);
-	if (LeftTypeNode__2->Type->GetParamSize(LeftTypeNode__2->Type) > 0) {
-		if (MatchToken__2qwh(TokenContext__1, "<")) {
-			ArrayOfZType * TypeList__4 = LibZen_NewArray(0);
-			while (!StartsWithToken__2qwh(TokenContext__1, ">")) {
-				if (LibZen_ArraySize((ArrayOfVar *)TypeList__4) > 0 && !MatchToken__2qwh(TokenContext__1, ",")) {
-					return NULL;
-				};
-				struct ZTypeNode235 * ParamTypeNode__5 = (struct ZTypeNode235 *)ParsePattern__4qwh(TokenContext__1, ParentNode, "$Type$", ZTokenContext_Optional_Z54);
-				if (ParamTypeNode__5 == NULL) {
-					return LeftTypeNode__2;
-				};
-				LibZen_ArrayAdd((ArrayOfVar *)TypeList__4, (var)ParamTypeNode__5->Type);
-			};
-			LeftTypeNode__2 = ZTypeNode__4quk(_NewZTypeNode235(), ParentNode, SourceToken__3, ZTypePool_GetGenericType__3qwz(LeftTypeNode__2->Type, TypeList__4, 1/*true*/));
-		};
-	};
-	while (MatchToken__2qwh(TokenContext__1, "[")) {
-		if (!MatchToken__2qwh(TokenContext__1, "]")) {
-			return NULL;
-		};
-		LeftTypeNode__2 = ZTypeNode__4quk(_NewZTypeNode235(), ParentNode, SourceToken__3, ZTypePool_GetGenericType1__2qwz(ZGenericType_ArrayType_Z15, LeftTypeNode__2->Type));
-	};
-	return LeftTypeNode__2;
-}
-static struct ZNode52 * SetIndexPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * IndexerNode__3 = ZSetIndexNode__3qt2(_NewZSetIndexNode178(), ParentNode, LeftNode__2);
-	IndexerNode__3 = MatchToken__4qwh(TokenContext__1, IndexerNode__3, "[", ZTokenContext_Required_Z53);
-	IndexerNode__3 = MatchPattern__6qwh(TokenContext__1, IndexerNode__3, ZSetIndexNode_Index_Z27, "$Expression$", ZTokenContext_Required_Z53, ZTokenContext_AllowSkipIndent_Z55);
-	IndexerNode__3 = MatchToken__4qwh(TokenContext__1, IndexerNode__3, "]", ZTokenContext_Required_Z53);
-	IndexerNode__3 = MatchToken__4qwh(TokenContext__1, IndexerNode__3, "=", ZTokenContext_Required_Z53);
-	IndexerNode__3 = MatchPattern__5qwh(TokenContext__1, IndexerNode__3, ZSetIndexNode_Expr_Z28, "$Expression$", ZTokenContext_Required_Z53);
-	return IndexerNode__3;
-}
-static struct ZNode52 * SetterPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * SetterNode__3 = ZSetterNode__3qyt(_NewZSetterNode184(), ParentNode, LeftNode__2);
-	SetterNode__3 = MatchToken__4qwh(TokenContext__1, SetterNode__3, ".", ZTokenContext_Required_Z53);
-	SetterNode__3 = MatchPattern__5qwh(TokenContext__1, SetterNode__3, ZNode_NameInfo_Z21, "$Name$", ZTokenContext_Required_Z53);
-	SetterNode__3 = MatchToken__4qwh(TokenContext__1, SetterNode__3, "=", ZTokenContext_Required_Z53);
-	SetterNode__3 = MatchPattern__5qwh(TokenContext__1, SetterNode__3, ZSetterNode_Expr_Z31, "$Expression$", ZTokenContext_Required_Z53);
-	return SetterNode__3;
-}
-static struct ZNode52 * StatementEndPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	int ContextAllowance__3 = SetParseFlag__2qwh(TokenContext__1, 0/*false*/);
-	struct ZToken77 * Token__4 = NULL;
-	if (HasNext__1qwh(TokenContext__1)) {
-		Token__4 = GetToken__1qwh(TokenContext__1);
-		if (!EqualsText__2qey(Token__4, ";") && !IsIndent__1qey(Token__4)) {
-			(void)SetParseFlag__2qwh(TokenContext__1, ContextAllowance__3);
-			return CreateExpectedErrorNode__3qwh(TokenContext__1, Token__4, ";");
-		};
-		MoveNext__1qwh(TokenContext__1);
-		while (HasNext__1qwh(TokenContext__1)) {
-			Token__4 = GetToken__1qwh(TokenContext__1);
-			if (!EqualsText__2qey(Token__4, ";") && !IsIndent__1qey(Token__4)) {
-				break;
-			};
-			MoveNext__1qwh(TokenContext__1);
-		};
-	};
-	(void)SetParseFlag__2qwh(TokenContext__1, ContextAllowance__3);
-	return ZEmptyNode__3qpp(_NewZEmptyNode333(), ParentNode, Token__4);
-}
-static struct ZNode52 * StatementPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	int Rememberd__3 = SetParseFlag__2qwh(TokenContext__1, ZTokenContext_AllowSkipIndent_Z55);
-	(void)SetParseFlag__2qwh(TokenContext__1, ZTokenContext_NotAllowSkipIndent_Z56);
-	struct ZNode52 * StmtNode__4 = ExpressionPattern_DispatchPattern__5qwg(ParentNode, TokenContext__1, NULL, 1/*true*/, 1/*true*/);
-	StmtNode__4 = MatchPattern__5qwh(TokenContext__1, StmtNode__4, ZNode_Nop_Z20, ";", ZTokenContext_Required_Z53);
-	(void)SetParseFlag__2qwh(TokenContext__1, Rememberd__3);
-	return StmtNode__4;
-}
-static struct ZNode52 * StringLiteralPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZToken77 * Token__3 = GetToken__2qwh(TokenContext__1, ZTokenContext_MoveNext_Z58);
-	return ZStringNode__4q42(_NewZStringNode430(), ParentNode, Token__3, LibZen_UnquoteString__1qqy(GetText__1qey(Token__3)));
-}
-static int StringLiteralToken__1qwd(struct ZSourceContext50 * SourceContext) {
-	long StartIndex__1 = GetPosition__1qwd(SourceContext);
-	MoveNext__1qwd(SourceContext);
-	while (HasChar__1qwd(SourceContext)) {
-		const char * ch__2 = GetCurrentChar__1qwd(SourceContext);
-		if (ch__2 == "\"") {
-			MoveNext__1qwd(SourceContext);
-			Tokenize__4qwd(SourceContext, "$StringLiteral$", StartIndex__1, GetPosition__1qwd(SourceContext));
-			return 1/*true*/;
-		};
-		if (ch__2 == "\n") {
-			break;
-		};
-		if (ch__2 == "\\") {
-			MoveNext__1qwd(SourceContext);
-		};
-		MoveNext__1qwd(SourceContext);
-	};
-	LogWarning__3qwd(SourceContext, StartIndex__1, "unclosed \"");
-	Tokenize__4qwd(SourceContext, "$StringLiteral$", StartIndex__1, GetPosition__1qwd(SourceContext));
-	return 0/*false*/;
-}
-static struct ZNode52 * SymbolExpressionPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZToken77 * NameToken__3 = GetToken__2qwh(TokenContext__1, ZTokenContext_MoveNext_Z58);
-	if (IsToken__2qwh(TokenContext__1, "=")) {
-		return ZErrorNode__4qp4(_NewZErrorNode335(), ParentNode, GetToken__1qwh(TokenContext__1), "assignment is not en expression");
-	} else {
-		return ZGetNameNode__4qpx(_NewZGetNameNode349(), ParentNode, NameToken__3, GetText__1qey(NameToken__3));
-	};
-}
-static struct ZNode52 * SymbolStatementPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZToken77 * NameToken__3 = GetToken__2qwh(TokenContext__1, ZTokenContext_MoveNext_Z58);
-	if (MatchToken__2qwh(TokenContext__1, "=")) {
-		struct ZNode52 * AssignedNode__4 = ZSetNameNode__4qyw(_NewZSetNameNode181(), ParentNode, NameToken__3, GetText__1qey(NameToken__3));
-		AssignedNode__4 = MatchPattern__5qwh(TokenContext__1, AssignedNode__4, ZSetNameNode_Expr_Z29, "$Expression$", ZTokenContext_Required_Z53);
-		return AssignedNode__4;
-	} else {
-		return ZGetNameNode__4qpx(_NewZGetNameNode349(), ParentNode, NameToken__3, GetText__1qey(NameToken__3));
-	};
-}
-static struct ZNode52 * ThrowPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * ThrowNode__3 = ZThrowNode__2qy4(_NewZThrowNode191(), ParentNode);
-	ThrowNode__3 = MatchToken__4qwh(TokenContext__1, ThrowNode__3, "throw", ZTokenContext_Required_Z53);
-	ThrowNode__3 = MatchPattern__5qwh(TokenContext__1, ThrowNode__3, ZThrowNode_Expr_Z33, "$Expression$", ZTokenContext_Required_Z53);
-	return ThrowNode__3;
-}
-static struct ZNode52 * TruePattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	return ZBooleanNode__4qst(_NewZBooleanNode472(), ParentNode, GetToken__2qwh(TokenContext__1, ZTokenContext_MoveNext_Z58), 1/*true*/);
-}
-static struct ZNode52 * TryPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * TryNode__3 = ZTryNode__2qyd(_NewZTryNode194(), ParentNode);
-	TryNode__3 = MatchToken__4qwh(TokenContext__1, TryNode__3, "try", ZTokenContext_Required_Z53);
-	TryNode__3 = MatchPattern__5qwh(TokenContext__1, TryNode__3, ZTryNode_Try_Z34, "$Block$", ZTokenContext_Required_Z53);
-	long count__4 = 0;
-	if (IsNewLineToken__2qwh(TokenContext__1, "catch")) {
-		TryNode__3 = MatchPattern__5qwh(TokenContext__1, TryNode__3, ZTryNode_Catch_Z35, "$Catch$", ZTokenContext_Required_Z53);
-		count__4 = count__4 + 1;
-	};
-	if (MatchNewLineToken__2qwh(TokenContext__1, "finally")) {
-		TryNode__3 = MatchPattern__5qwh(TokenContext__1, TryNode__3, ZTryNode_Finally_Z36, "$Block$", ZTokenContext_Required_Z53);
-		count__4 = count__4 + 1;
-	};
-	if (count__4 == 0 && !IsErrorNode__1qwg(TryNode__3)) {
-		return Array<ZNode>GetIndex(ZTryNode_Try_Z34);
-	};
-	return TryNode__3;
-}
-static struct ZNode52 * TypeAnnotationPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	if (MatchToken__2qwh(TokenContext__1, ":")) {
-		return ParsePattern__4qwh(TokenContext__1, ParentNode, "$Type$", ZTokenContext_Required_Z53);
-	};
-	return NULL;
-}
-static struct ZNode52 * TypePattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZToken77 * Token__3 = GetToken__2qwh(TokenContext__1, ZTokenContext_MoveNext_Z58);
-	struct ZTypeNode235 * TypeNode__4 = GetTypeNode__3qwa(GetNameSpace__1qwg(ParentNode), GetText__1qey(Token__3), Token__3);
-	if (TypeNode__4 != NULL) {
-		return ParsePatternAfter__5qwh(TokenContext__1, ParentNode, TypeNode__4, "$TypeRight$", ZTokenContext_Optional_Z54);
-	};
-	return NULL;
-}
-static struct ZNode52 * UnaryPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * UnaryNode__3 = ZUnaryNode__3qyh(_NewZUnaryNode197(), ParentNode, GetToken__2qwh(TokenContext__1, ZTokenContext_MoveNext_Z58));
-	return MatchPattern__5qwh(TokenContext__1, UnaryNode__3, ZUnaryNode_Recv_Z37, "$RightExpression$", ZTokenContext_Required_Z53);
-}
-static struct ZNode52 * VarPattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * VarNode__3 = ZVarNode__2qs2(_NewZVarNode502(), ParentNode);
-	VarNode__3 = MatchToken__4qwh(TokenContext__1, VarNode__3, "var", ZTokenContext_Required_Z53);
-	VarNode__3 = MatchPattern__5qwh(TokenContext__1, VarNode__3, ZNode_NameInfo_Z21, "$Name$", ZTokenContext_Required_Z53);
-	VarNode__3 = MatchPattern__5qwh(TokenContext__1, VarNode__3, ZNode_TypeInfo_Z22, "$TypeAnnotation$", ZTokenContext_Optional_Z54);
-	VarNode__3 = MatchToken__4qwh(TokenContext__1, VarNode__3, "=", ZTokenContext_Required_Z53);
-	VarNode__3 = MatchPattern__5qwh(TokenContext__1, VarNode__3, ZVarNode_InitValue_Z81, "$Expression$", ZTokenContext_Required_Z53);
-	return VarNode__3;
-}
-static struct ZNode52 * WhilePattern__3qwg(struct ZNode52 * ParentNode, struct ZTokenContext53 * TokenContext__1, struct ZNode52 * LeftNode__2) {
-	struct ZNode52 * WhileNode__3 = ZWhileNode__2qyl(_NewZWhileNode200(), ParentNode);
-	WhileNode__3 = MatchToken__4qwh(TokenContext__1, WhileNode__3, "while", ZTokenContext_Required_Z53);
-	WhileNode__3 = MatchToken__4qwh(TokenContext__1, WhileNode__3, "(", ZTokenContext_Required_Z53);
-	WhileNode__3 = MatchPattern__6qwh(TokenContext__1, WhileNode__3, ZWhileNode_Cond_Z38, "$Expression$", ZTokenContext_Required_Z53, ZTokenContext_AllowSkipIndent_Z55);
-	WhileNode__3 = MatchToken__4qwh(TokenContext__1, WhileNode__3, ")", ZTokenContext_Required_Z53);
-	WhileNode__3 = MatchPattern__5qwh(TokenContext__1, WhileNode__3, ZWhileNode_Block_Z39, "$Block$", ZTokenContext_Required_Z53);
-	return WhileNode__3;
-}
-static int WhiteSpaceToken__1qwd(struct ZSourceContext50 * SourceContext) {
-	SkipWhiteSpace__1qwd(SourceContext);
-	return 1/*true*/;
-}
+static int (*)(struct ZSourceContext50 *) NumberLiteralToken_Z154 = f155;
+static int (*)(struct ZSourceContext50 *) OperatorToken_Z156 = f157;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) OrPattern_Z158 = f159;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) ParamPattern_Z160 = f161;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) PrototypePattern_Z162 = f163;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) ReturnPattern_Z164 = f165;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) RightExpressionPattern_Z166 = f167;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) RightTypePattern_Z168 = f169;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) SetIndexPattern_Z170 = f171;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) SetterPattern_Z172 = f173;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) StatementEndPattern_Z174 = f175;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) StatementPattern_Z176 = f177;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) StringLiteralPattern_Z178 = f179;
+static int (*)(struct ZSourceContext50 *) StringLiteralToken_Z180 = f181;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) SymbolExpressionPattern_Z182 = f183;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) SymbolStatementPattern_Z184 = f185;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) ThrowPattern_Z186 = f187;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) TruePattern_Z188 = f189;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) TryPattern_Z190 = f191;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) TypeAnnotationPattern_Z192 = f193;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) TypePattern_Z194 = f195;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) UnaryPattern_Z196 = f197;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) VarPattern_Z198 = f199;
+static struct ZNode52 * (*)(struct ZNode52 *,struct ZTokenContext53 *,struct ZNode52 *) WhilePattern_Z200 = f201;
+static int (*)(struct ZSourceContext50 *) WhiteSpaceToken_Z202 = f203;
 

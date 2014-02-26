@@ -144,7 +144,11 @@ def GenFunc(cname, line, IsProto):
 	if funcname == "Invoke" :
 		funcname = params[0][0]
 		params = params[1:]
-	
+		if IsProto:
+			s = ""
+		else:
+			s = "let " + funcname + " = function" + GenParam(params) + ": " + GenType(ReturnType) + line[end+1:] + "\n"
+		return s
 	sig = funcname + GenParam(params) + ": " + GenType(ReturnType)
 	if IsProto:
 		return "function " + sig + ";\n"

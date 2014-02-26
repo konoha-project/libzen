@@ -227,7 +227,7 @@ function SetLocalSymbolEntry(this: ZNameSpace, Symbol: String, Entry: ZSymbolEnt
 function SetLocalSymbol(this: ZNameSpace, Symbol: String, Node: ZNode): ZSymbolEntry;
 function SetGlobalSymbol(this: ZNameSpace, Symbol: String, Node: ZNode): ZSymbolEntry;
 function GetLocalVariable(this: ZNameSpace, VarName: String): ZVariable;
-function SetLocalVariable(this: ZNameSpace, FunctionNode: ZFunctionNode, VarType: ZType, VarName: String, SourceToken: ZToken): void;
+function SetLocalVariable(this: ZNameSpace, FunctionNode: ZFunctionNode, VarType: ZType, VarName: String, SourceToken: ZToken): int;
 function SetTypeName(this: ZNameSpace, Name: String, Type: ZType, SourceToken: ZToken): void;
 function SetTypeName(this: ZNameSpace, Type: ZType, SourceToken: ZToken): void;
 function GetTypeNode(this: ZNameSpace, TypeName: String, SourceToken: ZToken): ZTypeNode;
@@ -681,70 +681,9 @@ function ZVarNode(this: ZVarNode, ParentNode: ZNode): ZVarNode;
 function SetNameInfo(this: ZVarNode, NameToken: ZToken, Name: String): void;
 function SetTypeInfo(this: ZVarNode, TypeToken: ZToken, Type: ZType): void;
 function Accept(this: ZVarNode, Visitor: ZVisitor): void;
-function AndPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function AnnotationPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function ApplyPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function ArrayLiteralPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function AssertPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function AssignPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function BinaryPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function BlockComment(SourceContext: ZSourceContext): boolean;
-function BlockPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function BreakPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function CLineComment(SourceContext: ZSourceContext): boolean;
-function CastPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function CatchPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function ClassPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function ComparatorPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function ExpressionPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
 function ExpressionPattern_GetRightPattern(NameSpace: ZNameSpace, TokenContext: ZTokenContext): ZSyntax;
 function ExpressionPattern_DispatchPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode, AllowStatement: boolean, AllowBinary: boolean): ZNode;
-function FalsePattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function FieldPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function FloatLiteralPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function FunctionPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function GetIndexPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function GetterPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function GroupPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function IfPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function InstanceOfPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function IntLiteralPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function LetPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function MapEntryPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function MapLiteralPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function MethodCallPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function NamePattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function NameToken(SourceContext: ZSourceContext): boolean;
-function NewLineToken(SourceContext: ZSourceContext): boolean;
-function NewObjectPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function NotPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function NullPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
 function NumberLiteralToken_ParseDigit(SourceContext: ZSourceContext): String;
-function NumberLiteralToken(SourceContext: ZSourceContext): boolean;
-function OperatorToken(SourceContext: ZSourceContext): boolean;
-function OrPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function ParamPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function PrototypePattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function ReturnPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function RightExpressionPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function RightTypePattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftTypeNode: ZNode): ZNode;
-function SetIndexPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function SetterPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function StatementEndPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function StatementPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function StringLiteralPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function StringLiteralToken(SourceContext: ZSourceContext): boolean;
-function SymbolExpressionPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function SymbolStatementPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function ThrowPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function TruePattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function TryPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function TypeAnnotationPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function TypePattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function UnaryPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function VarPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function WhilePattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
-function WhiteSpaceToken(SourceContext: ZSourceContext): boolean;
 class ZType {
 	var TypeFlag: int = 0;
 	var TypeId: int = 0;
@@ -1262,6 +1201,7 @@ let ZFunctionNode_Block: int = 0;
 class ZVarNode extends ZBlockNode {
 	var DeclType: ZType = ZTypeVarType;
 	var NativeName: String = null;
+	var VarIndex: int = 0;
 	var TypeToken: ZToken = null;
 	var NameToken: ZToken = null;
 }
@@ -2503,10 +2443,11 @@ function GetLocalVariable(this: ZNameSpace, VarName: String): ZVariable {
 	return null;
 }
 
-function SetLocalVariable(this: ZNameSpace, FunctionNode: ZFunctionNode, VarType: ZType, VarName: String, SourceToken: ZToken): void {
+function SetLocalVariable(this: ZNameSpace, FunctionNode: ZFunctionNode, VarType: ZType, VarName: String, SourceToken: ZToken): int {
 	var Parent: ZSymbolEntry = this.GetSymbol(VarName);
 	var VarInfo: ZVariable = new ZVariable(Parent, FunctionNode, 0, VarType, VarName, SourceToken);
 	this.SetLocalSymbolEntry(VarName, VarInfo);
+	return VarInfo.VarUniqueIndex;
 }
 
 function SetTypeName(this: ZNameSpace, Name: String, Type: ZType, SourceToken: ZToken): void {
@@ -4953,7 +4894,7 @@ function VisitCatchNode(this: ZSourceGenerator, Node: ZCatchNode): void {
 function VisitVarNode(this: ZSourceGenerator, Node: ZVarNode): void {
 	this.CurrentBuilder.Append("var");
 	this.CurrentBuilder.AppendWhiteSpace();
-	this.CurrentBuilder.Append(Node.NativeName);
+	this.CurrentBuilder.Append(this.SafeName(Node.NativeName, Node.VarIndex));
 	this.VisitTypeAnnotation(Node.DeclType);
 	this.CurrentBuilder.AppendToken("=");
 	this.GenerateCode(null, Node.AST[ZVarNode_InitValue]);
@@ -5379,11 +5320,11 @@ function VisitSetIndexNode(this: CSourceGenerator, Node: ZSetIndexNode): void {
 }
 
 function VisitGetNameNode(this: CSourceGenerator, Node: ZGetNameNode): void {
-	this.CurrentBuilder.Append(Node.VarName);
+	this.CurrentBuilder.Append(this.SafeName(Node.VarName, Node.VarIndex));
 }
 
 function VisitSetNameNode(this: CSourceGenerator, Node: ZSetNameNode): void {
-	this.CurrentBuilder.Append(Node.VarName);
+	this.CurrentBuilder.Append(this.SafeName(Node.VarName, Node.VarIndex));
 	this.CurrentBuilder.AppendToken("=");
 	this.GenerateCode(null, Node.AST[ZSetNameNode_Expr]);
 }
@@ -5494,7 +5435,7 @@ function GenerateTypeName(this: CSourceGenerator, Type: ZType): void {
 function VisitVarNode(this: CSourceGenerator, Node: ZVarNode): void {
 	this.GenerateTypeName(Node.DeclType);
 	this.CurrentBuilder.Append(" ");
-	this.CurrentBuilder.Append(Node.NativeName);
+	this.CurrentBuilder.Append(this.SafeName(Node.NativeName, Node.VarIndex));
 	this.CurrentBuilder.AppendToken("=");
 	this.GenerateCode(null, Node.AST[ZVarNode_InitValue]);
 	this.CurrentBuilder.Append(this.SemiColon);
@@ -5822,28 +5763,28 @@ function Accept(this: ZVarNode, Visitor: ZVisitor): void {
 	Visitor.VisitVarNode(this);
 }
 
-function AndPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let AndPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var BinaryNode: ZBinaryNode = new ZAndNode(ParentNode, TokenContext.GetToken(ZTokenContext_MoveNext), LeftNode, TokenContext.GetApplyingSyntax());
 	return BinaryNode.AppendParsedRightNode(ParentNode, TokenContext);
 }
 
-function AnnotationPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let AnnotationPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	return null;
 }
 
-function ApplyPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let ApplyPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var ApplyNode: ZNode = new ZFuncCallNode(ParentNode, LeftNode);
 	ApplyNode = TokenContext.MatchNtimes(ApplyNode, "(", "$Expression$", ",", ")");
 	return ApplyNode;
 }
 
-function ArrayLiteralPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let ArrayLiteralPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var LiteralNode: ZNode = new ZArrayLiteralNode(ParentNode);
 	LiteralNode = TokenContext.MatchNtimes(LiteralNode, "[", "$Expression$", ",", "]");
 	return LiteralNode;
 }
 
-function AssertPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let AssertPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var AssertNode: ZNode = new ZAssertNode(ParentNode);
 	AssertNode = TokenContext.MatchToken(AssertNode, "assert", ZTokenContext_Required);
 	AssertNode = TokenContext.MatchToken(AssertNode, "(", ZTokenContext_Required);
@@ -5852,17 +5793,17 @@ function AssertPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode:
 	return AssertNode;
 }
 
-function AssignPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let AssignPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	return null;
 }
 
-function BinaryPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let BinaryPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var Token: ZToken = TokenContext.GetToken(ZTokenContext_MoveNext);
 	var BinaryNode: ZBinaryNode = new ZBinaryNode(ParentNode, Token, LeftNode, TokenContext.GetApplyingSyntax());
 	return BinaryNode.AppendParsedRightNode(ParentNode, TokenContext);
 }
 
-function BlockComment(SourceContext: ZSourceContext): boolean {
+let BlockComment = function(SourceContext: ZSourceContext): boolean {
 	var StartIndex: int = SourceContext.GetPosition();
 	var NextChar: String = SourceContext.GetCharAtFromCurrentPosition(+1);
 	if(NextChar != "/" && NextChar != "*") {
@@ -5899,7 +5840,7 @@ function BlockComment(SourceContext: ZSourceContext): boolean {
 	return true;
 }
 
-function BlockPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let BlockPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var BlockNode: ZNode = new ZBlockNode(ParentNode, 0);
 	var SkipToken: ZToken = TokenContext.GetToken();
 	BlockNode = TokenContext.MatchToken(BlockNode, "{", ZTokenContext_Required);
@@ -5922,17 +5863,17 @@ function BlockPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: 
 	return BlockNode;
 }
 
-function BreakPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let BreakPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var BreakNode: ZNode = new ZBreakNode(ParentNode);
 	BreakNode = TokenContext.MatchToken(BreakNode, "break", ZTokenContext_Required);
 	return BreakNode;
 }
 
-function CLineComment(SourceContext: ZSourceContext): boolean {
+let CLineComment = function(SourceContext: ZSourceContext): boolean {
 	return false;
 }
 
-function CastPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let CastPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var CastNode: ZNode = new ZCastNode(ParentNode, ZTypeVarType, null);
 	CastNode = TokenContext.MatchToken(CastNode, "(", ZTokenContext_Required);
 	CastNode = TokenContext.MatchPattern(CastNode, ZNode_TypeInfo, "$Type$", ZTokenContext_Required);
@@ -5941,7 +5882,7 @@ function CastPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: Z
 	return CastNode;
 }
 
-function CatchPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let CatchPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var CatchNode: ZNode = new ZCatchNode(ParentNode);
 	CatchNode = TokenContext.MatchToken(CatchNode, "catch", ZTokenContext_Required);
 	CatchNode = TokenContext.MatchToken(CatchNode, "(", ZTokenContext_Required);
@@ -5951,7 +5892,7 @@ function CatchPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: 
 	return CatchNode;
 }
 
-function ClassPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let ClassPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var ClassNode: ZNode = new ZClassNode(ParentNode);
 	ClassNode = TokenContext.MatchToken(ClassNode, "class", ZTokenContext_Required);
 	ClassNode = TokenContext.MatchPattern(ClassNode, ZNode_NameInfo, "$Name$", ZTokenContext_Required);
@@ -5962,7 +5903,7 @@ function ClassPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: 
 	return ClassNode;
 }
 
-function ComparatorPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let ComparatorPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var Token: ZToken = TokenContext.GetToken(ZTokenContext_MoveNext);
 	var BinaryNode: ZBinaryNode = new ZComparatorNode(ParentNode, Token, LeftNode, TokenContext.GetApplyingSyntax());
 	return BinaryNode.AppendParsedRightNode(ParentNode, TokenContext);
@@ -6025,15 +5966,15 @@ function ExpressionPattern_DispatchPattern(ParentNode: ZNode, TokenContext: ZTok
 	}
 	return LeftNode;
 }
-function ExpressionPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let ExpressionPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	return ExpressionPattern_DispatchPattern(ParentNode, TokenContext, LeftNode, false, true);
 }
 
-function FalsePattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let FalsePattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	return new ZBooleanNode(ParentNode, TokenContext.GetToken(ZTokenContext_MoveNext), false);
 }
 
-function FieldPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let FieldPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var Rememberd: boolean = TokenContext.SetParseFlag(false);
 	var FieldNode: ZNode = new ZFieldNode(ParentNode);
 	FieldNode = TokenContext.MatchToken(FieldNode, "var", ZTokenContext_Required);
@@ -6047,12 +5988,12 @@ function FieldPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: 
 	return FieldNode;
 }
 
-function FloatLiteralPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let FloatLiteralPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var Token: ZToken = TokenContext.GetToken(ZTokenContext_MoveNext);
 	return new ZFloatNode(ParentNode, Token, LibZen_ParseFloat(Token.GetText()));
 }
 
-function FunctionPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let FunctionPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var FuncNode: ZNode = new ZFunctionNode(ParentNode);
 	FuncNode = TokenContext.MatchToken(FuncNode, "function", ZTokenContext_Required);
 	FuncNode = TokenContext.MatchPattern(FuncNode, ZNode_NameInfo, "$Name$", ZTokenContext_Optional);
@@ -6062,7 +6003,7 @@ function FunctionPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNod
 	return FuncNode;
 }
 
-function GetIndexPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let GetIndexPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var IndexerNode: ZNode = new ZGetIndexNode(ParentNode, LeftNode);
 	IndexerNode = TokenContext.MatchToken(IndexerNode, "[", ZTokenContext_Required);
 	IndexerNode = TokenContext.MatchPattern(IndexerNode, ZGetIndexNode_Index, "$Expression$", ZTokenContext_Required, ZTokenContext_AllowSkipIndent);
@@ -6070,14 +6011,14 @@ function GetIndexPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNod
 	return IndexerNode;
 }
 
-function GetterPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let GetterPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var GetterNode: ZNode = new ZGetterNode(ParentNode, LeftNode);
 	GetterNode = TokenContext.MatchToken(GetterNode, ".", ZTokenContext_Required);
 	GetterNode = TokenContext.MatchPattern(GetterNode, ZNode_NameInfo, "$Name$", ZTokenContext_Required);
 	return GetterNode;
 }
 
-function GroupPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let GroupPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var GroupNode: ZNode = new ZGroupNode(ParentNode);
 	GroupNode = TokenContext.MatchToken(GroupNode, "(", ZTokenContext_Required);
 	GroupNode = TokenContext.MatchPattern(GroupNode, ZGroupNode_Expr, "$Expression$", ZTokenContext_Required, ZTokenContext_AllowSkipIndent);
@@ -6085,7 +6026,7 @@ function GroupPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: 
 	return GroupNode;
 }
 
-function IfPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let IfPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var IfNode: ZNode = new ZIfNode(ParentNode);
 	IfNode = TokenContext.MatchToken(IfNode, "if", ZTokenContext_Required);
 	IfNode = TokenContext.MatchToken(IfNode, "(", ZTokenContext_Required);
@@ -6102,18 +6043,18 @@ function IfPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNo
 	return IfNode;
 }
 
-function InstanceOfPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let InstanceOfPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var BinaryNode: ZNode = new ZInstanceOfNode(ParentNode, TokenContext.GetToken(ZTokenContext_MoveNext), LeftNode);
 	BinaryNode = TokenContext.MatchPattern(BinaryNode, ZNode_TypeInfo, "$Type$", ZTokenContext_Required);
 	return BinaryNode;
 }
 
-function IntLiteralPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let IntLiteralPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var Token: ZToken = TokenContext.GetToken(ZTokenContext_MoveNext);
 	return new ZIntNode(ParentNode, Token, LibZen_ParseInt(Token.GetText()));
 }
 
-function LetPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let LetPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var LetNode: ZNode = new ZLetNode(ParentNode);
 	LetNode = TokenContext.MatchToken(LetNode, "let", ZTokenContext_Required);
 	LetNode = TokenContext.MatchPattern(LetNode, ZNode_NameInfo, "$Name$", ZTokenContext_Required);
@@ -6123,7 +6064,7 @@ function LetPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZN
 	return LetNode;
 }
 
-function MapEntryPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let MapEntryPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var LiteralNode: ZNode = new ZMapEntryNode(ParentNode);
 	LiteralNode = TokenContext.MatchPattern(LiteralNode, ZMapEntryNode_Key, "$Expression$", ZTokenContext_Required);
 	LiteralNode = TokenContext.MatchToken(LiteralNode, ":", ZTokenContext_Required);
@@ -6131,13 +6072,13 @@ function MapEntryPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNod
 	return LiteralNode;
 }
 
-function MapLiteralPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let MapLiteralPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var LiteralNode: ZNode = new ZMapLiteralNode(ParentNode);
 	LiteralNode = TokenContext.MatchNtimes(LiteralNode, "{", "$MapEntry$", ",", "}");
 	return LiteralNode;
 }
 
-function MethodCallPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let MethodCallPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var MethodCallNode: ZNode = new ZMethodCallNode(ParentNode, LeftNode);
 	MethodCallNode = TokenContext.MatchToken(MethodCallNode, ".", ZTokenContext_Required);
 	MethodCallNode = TokenContext.MatchPattern(MethodCallNode, ZNode_NameInfo, "$Name$", ZTokenContext_Required);
@@ -6145,7 +6086,7 @@ function MethodCallPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftN
 	return MethodCallNode;
 }
 
-function NamePattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let NamePattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var Token: ZToken = TokenContext.GetToken(ZTokenContext_MoveNext);
 	if(LibZen_IsSymbol(Token.GetChar())) {
 		return new ZGetNameNode(ParentNode, Token, Token.GetText());
@@ -6153,7 +6094,7 @@ function NamePattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: Z
 	return new ZErrorNode(ParentNode, Token, "illegal name: \"" + Token.GetText() + "\"");
 }
 
-function NameToken(SourceContext: ZSourceContext): boolean {
+let NameToken = function(SourceContext: ZSourceContext): boolean {
 	var StartIndex: int = SourceContext.GetPosition();
 	while(SourceContext.HasChar()) {
 		var ch: String = SourceContext.GetCurrentChar();
@@ -6166,7 +6107,7 @@ function NameToken(SourceContext: ZSourceContext): boolean {
 	return true;
 }
 
-function NewLineToken(SourceContext: ZSourceContext): boolean {
+let NewLineToken = function(SourceContext: ZSourceContext): boolean {
 	var StartIndex: int = SourceContext.GetPosition() + 1;
 	SourceContext.MoveNext();
 	SourceContext.SkipWhiteSpace();
@@ -6174,7 +6115,7 @@ function NewLineToken(SourceContext: ZSourceContext): boolean {
 	return true;
 }
 
-function NewObjectPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let NewObjectPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var LiteralNode: ZNode = new ZNewObjectNode(ParentNode);
 	LiteralNode = TokenContext.MatchToken(LiteralNode, "new", ZTokenContext_Required);
 	LiteralNode = TokenContext.MatchPattern(LiteralNode, ZNode_TypeInfo, "$Type$", ZTokenContext_Optional);
@@ -6182,13 +6123,13 @@ function NewObjectPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNo
 	return LiteralNode;
 }
 
-function NotPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let NotPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var UnaryNode: ZNode = new ZNotNode(ParentNode, TokenContext.GetToken(ZTokenContext_MoveNext));
 	UnaryNode = TokenContext.MatchPattern(UnaryNode, ZUnaryNode_Recv, "$RightExpression$", ZTokenContext_Required);
 	return UnaryNode;
 }
 
-function NullPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let NullPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	return new ZNullNode(ParentNode, TokenContext.GetToken(ZTokenContext_MoveNext));
 }
 
@@ -6203,7 +6144,7 @@ function NumberLiteralToken_ParseDigit(SourceContext: ZSourceContext): String {
 	}
 	return ch;
 }
-function NumberLiteralToken(SourceContext: ZSourceContext): boolean {
+let NumberLiteralToken = function(SourceContext: ZSourceContext): boolean {
 	var StartIndex: int = SourceContext.GetPosition();
 	var ch: String = NumberLiteralToken_ParseDigit(SourceContext);
 	if(ch == ".") {
@@ -6227,24 +6168,24 @@ function NumberLiteralToken(SourceContext: ZSourceContext): boolean {
 	return true;
 }
 
-function OperatorToken(SourceContext: ZSourceContext): boolean {
+let OperatorToken = function(SourceContext: ZSourceContext): boolean {
 	SourceContext.TokenizeDefinedSymbol(SourceContext.GetPosition());
 	return true;
 }
 
-function OrPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let OrPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var BinaryNode: ZBinaryNode = new ZOrNode(ParentNode, TokenContext.GetToken(ZTokenContext_MoveNext), LeftNode, TokenContext.GetApplyingSyntax());
 	return BinaryNode.AppendParsedRightNode(ParentNode, TokenContext);
 }
 
-function ParamPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let ParamPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var ParamNode: ZNode = new ZParamNode(ParentNode);
 	ParamNode = TokenContext.MatchPattern(ParamNode, ZNode_NameInfo, "$Name$", ZTokenContext_Required);
 	ParamNode = TokenContext.MatchPattern(ParamNode, ZNode_TypeInfo, "$TypeAnnotation$", ZTokenContext_Optional);
 	return ParamNode;
 }
 
-function PrototypePattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let PrototypePattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var FuncNode: ZNode = new ZPrototypeNode(ParentNode);
 	FuncNode = TokenContext.MatchToken(FuncNode, "function", ZTokenContext_Required);
 	FuncNode = TokenContext.MatchPattern(FuncNode, ZNode_NameInfo, "$Name$", ZTokenContext_Required);
@@ -6253,18 +6194,18 @@ function PrototypePattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNo
 	return FuncNode;
 }
 
-function ReturnPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let ReturnPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var ReturnNode: ZNode = new ZReturnNode(ParentNode);
 	ReturnNode = TokenContext.MatchToken(ReturnNode, "return", ZTokenContext_Required);
 	ReturnNode = TokenContext.MatchPattern(ReturnNode, ZReturnNode_Expr, "$Expression$", ZTokenContext_Optional);
 	return ReturnNode;
 }
 
-function RightExpressionPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let RightExpressionPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	return ExpressionPattern_DispatchPattern(ParentNode, TokenContext, LeftNode, false, false);
 }
 
-function RightTypePattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftTypeNode: ZNode): ZNode {
+let RightTypePattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftTypeNode: ZNode): ZNode {
 	var SourceToken: ZToken = TokenContext.GetToken();
 	if(LeftTypeNode.Type.GetParamSize() > 0) {
 		if(TokenContext.MatchToken("<")) {  // Generics
@@ -6291,7 +6232,7 @@ function RightTypePattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftTy
 	return LeftTypeNode;
 }
 
-function SetIndexPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let SetIndexPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var IndexerNode: ZNode = new ZSetIndexNode(ParentNode, LeftNode);
 	IndexerNode = TokenContext.MatchToken(IndexerNode, "[", ZTokenContext_Required);
 	IndexerNode = TokenContext.MatchPattern(IndexerNode, ZSetIndexNode_Index, "$Expression$", ZTokenContext_Required, ZTokenContext_AllowSkipIndent);
@@ -6301,7 +6242,7 @@ function SetIndexPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNod
 	return IndexerNode;
 }
 
-function SetterPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let SetterPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var SetterNode: ZNode = new ZSetterNode(ParentNode, LeftNode);
 	SetterNode = TokenContext.MatchToken(SetterNode, ".", ZTokenContext_Required);
 	SetterNode = TokenContext.MatchPattern(SetterNode, ZNode_NameInfo, "$Name$", ZTokenContext_Required);
@@ -6310,7 +6251,7 @@ function SetterPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode:
 	return SetterNode;
 }
 
-function StatementEndPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let StatementEndPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var ContextAllowance: boolean = TokenContext.SetParseFlag(false);
 	var Token: ZToken = null;
 	if(TokenContext.HasNext()) {
@@ -6332,7 +6273,7 @@ function StatementEndPattern(ParentNode: ZNode, TokenContext: ZTokenContext, Lef
 	return new ZEmptyNode(ParentNode, Token);
 }
 
-function StatementPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let StatementPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var Rememberd: boolean = TokenContext.SetParseFlag(ZTokenContext_AllowSkipIndent);
 	TokenContext.SetParseFlag(ZTokenContext_NotAllowSkipIndent);
 	var StmtNode: ZNode = ExpressionPattern_DispatchPattern(ParentNode, TokenContext, null, true, true);
@@ -6341,12 +6282,12 @@ function StatementPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNo
 	return StmtNode;
 }
 
-function StringLiteralPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let StringLiteralPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var Token: ZToken = TokenContext.GetToken(ZTokenContext_MoveNext);
 	return new ZStringNode(ParentNode, Token, LibZen_UnquoteString(Token.GetText()));
 }
 
-function StringLiteralToken(SourceContext: ZSourceContext): boolean {
+let StringLiteralToken = function(SourceContext: ZSourceContext): boolean {
 	var StartIndex: int = SourceContext.GetPosition();
 	SourceContext.MoveNext();
 	while(SourceContext.HasChar()) {
@@ -6369,7 +6310,7 @@ function StringLiteralToken(SourceContext: ZSourceContext): boolean {
 	return false;
 }
 
-function SymbolExpressionPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let SymbolExpressionPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var NameToken: ZToken = TokenContext.GetToken(ZTokenContext_MoveNext);
 	if(TokenContext.IsToken("=")) {
 		return new ZErrorNode(ParentNode, TokenContext.GetToken(), "assignment is not en expression");
@@ -6379,7 +6320,7 @@ function SymbolExpressionPattern(ParentNode: ZNode, TokenContext: ZTokenContext,
 	}
 }
 
-function SymbolStatementPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let SymbolStatementPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var NameToken: ZToken = TokenContext.GetToken(ZTokenContext_MoveNext);
 	if(TokenContext.MatchToken("=")) {
 		var AssignedNode: ZNode = new ZSetNameNode(ParentNode, NameToken, NameToken.GetText());
@@ -6391,18 +6332,18 @@ function SymbolStatementPattern(ParentNode: ZNode, TokenContext: ZTokenContext, 
 	}
 }
 
-function ThrowPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let ThrowPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var ThrowNode: ZNode = new ZThrowNode(ParentNode);
 	ThrowNode = TokenContext.MatchToken(ThrowNode, "throw", ZTokenContext_Required);
 	ThrowNode = TokenContext.MatchPattern(ThrowNode, ZThrowNode_Expr, "$Expression$", ZTokenContext_Required);
 	return ThrowNode;
 }
 
-function TruePattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let TruePattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	return new ZBooleanNode(ParentNode, TokenContext.GetToken(ZTokenContext_MoveNext), true);
 }
 
-function TryPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let TryPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var TryNode: ZNode = new ZTryNode(ParentNode);
 	TryNode = TokenContext.MatchToken(TryNode, "try", ZTokenContext_Required);
 	TryNode = TokenContext.MatchPattern(TryNode, ZTryNode_Try, "$Block$", ZTokenContext_Required);
@@ -6421,14 +6362,14 @@ function TryPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZN
 	return TryNode;
 }
 
-function TypeAnnotationPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let TypeAnnotationPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	if(TokenContext.MatchToken(":")) {
 		return TokenContext.ParsePattern(ParentNode, "$Type$", ZTokenContext_Required);
 	}
 	return null;
 }
 
-function TypePattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let TypePattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var Token: ZToken = TokenContext.GetToken(ZTokenContext_MoveNext);
 	var TypeNode: ZTypeNode = ParentNode.GetNameSpace().GetTypeNode(Token.GetText(), Token);
 	if(TypeNode != null) {
@@ -6437,12 +6378,12 @@ function TypePattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: Z
 	return null; // Not Matched
 }
 
-function UnaryPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let UnaryPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var UnaryNode: ZNode = new ZUnaryNode(ParentNode, TokenContext.GetToken(ZTokenContext_MoveNext));
 	return TokenContext.MatchPattern(UnaryNode, ZUnaryNode_Recv, "$RightExpression$", ZTokenContext_Required);
 }
 
-function VarPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let VarPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var VarNode: ZNode = new ZVarNode(ParentNode);
 	VarNode = TokenContext.MatchToken(VarNode, "var", ZTokenContext_Required);
 	VarNode = TokenContext.MatchPattern(VarNode, ZNode_NameInfo, "$Name$", ZTokenContext_Required);
@@ -6452,7 +6393,7 @@ function VarPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZN
 	return VarNode;
 }
 
-function WhilePattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+let WhilePattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
 	var WhileNode: ZNode = new ZWhileNode(ParentNode);
 	WhileNode = TokenContext.MatchToken(WhileNode, "while", ZTokenContext_Required);
 	WhileNode = TokenContext.MatchToken(WhileNode, "(", ZTokenContext_Required);
@@ -6462,7 +6403,7 @@ function WhilePattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: 
 	return WhileNode;
 }
 
-function WhiteSpaceToken(SourceContext: ZSourceContext): boolean {
+let WhiteSpaceToken = function(SourceContext: ZSourceContext): boolean {
 	SourceContext.SkipWhiteSpace();
 	return true;
 }
