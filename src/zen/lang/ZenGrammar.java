@@ -58,7 +58,7 @@ import zen.grammar.NamePatternFunction;
 import zen.grammar.NameTokenFunction;
 import zen.grammar.NewLineTokenFunction;
 import zen.grammar.NewObjectPatternFunction;
-import zen.grammar.NotPattern;
+import zen.grammar.NotPatternFunction;
 import zen.grammar.NullPatternFunction;
 import zen.grammar.NumberLiteralTokenFunction;
 import zen.grammar.OperatorTokenFunction;
@@ -122,7 +122,7 @@ public class ZenGrammar {
 		NameSpace.DefineExpression("+", MatchUnary);
 		NameSpace.DefineExpression("-", MatchUnary);
 		NameSpace.DefineExpression("~", MatchUnary);
-		NameSpace.DefineExpression("!", new NotPattern());
+		NameSpace.DefineExpression("!", new NotPatternFunction());
 		//		NameSpace.AppendSyntax("++ --", new Incl"));
 
 		NameSpace.DefineRightExpression("* / %", ZenPrecedence._CStyleMUL, MatchBinary);

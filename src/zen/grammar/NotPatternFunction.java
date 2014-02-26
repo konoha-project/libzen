@@ -7,7 +7,7 @@ import zen.deps.Var;
 import zen.deps.ZMatchFunction;
 import zen.parser.ZTokenContext;
 
-public class NotPattern extends ZMatchFunction {
+public class NotPatternFunction extends ZMatchFunction {
 
 	@Override public ZNode Invoke(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
 		@Var ZNode UnaryNode = new ZNotNode(ParentNode, TokenContext.GetToken(ZTokenContext._MoveNext));
