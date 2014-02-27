@@ -78,6 +78,7 @@ import zen.deps.ZArray;
 import zen.deps.ZenMap;
 import zen.deps.ZenMethod;
 import zen.lang.ZenTypeSafer;
+import zen.type.ZClassType;
 import zen.type.ZFuncType;
 import zen.type.ZType;
 import zen.type.ZTypePool;
@@ -676,4 +677,28 @@ public class ZSourceGenerator extends ZGenerator {
 		this.VisitListNode(OpenToken, VargNode, ", ", CloseToken);
 	}
 
+	protected final String NameMethod(ZType ClassType, String MethodName) {
+		return "_" + this.NameClass(ClassType) + "_" + MethodName;
+	}
+
+	protected final boolean IsMethod(String FuncName, ZFuncType FuncType) {
+		@Var ZType RecvType = FuncType.GetRecvType();
+		if(RecvType instanceof ZClassType && FuncName != null) {
+			@Var ZClassType ClassType = (ZClassType)RecvType;
+			@Var ZType FieldType = ClassType.GetFieldType(FuncName, null);
+			if(FieldType == null || !FieldType.IsFuncType()) {
+				FuncName = LibZen._AnotherName(FuncName);
+				FieldType = ClassType.GetFieldType(FuncName, null);
+				if(FieldType == null || !FieldType.IsFuncType()) {
+					return false;
+				}
+			}
+			if(FieldType instanceof ZFuncType) {
+				if(((ZFuncType)FieldType).AcceptAsFieldFunc(FuncType)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 }

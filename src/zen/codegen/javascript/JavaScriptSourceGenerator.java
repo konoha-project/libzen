@@ -315,11 +315,10 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 			this.GenerateCode(null, ErrorNode.ErrorNode);
 		}
 		else {
-			ZLogger._LogError(Node.SourceToken, Node.ErrorMessage);
+			@Var String Message = ZLogger._LogError(Node.SourceToken, Node.ErrorMessage);
 			this.CurrentBuilder.AppendWhiteSpace();
-			this.CurrentBuilder.Append("LibZen.ThrowError");
-			this.CurrentBuilder.Append("(");
-			this.CurrentBuilder.Append(LibZen._QuoteString(Node.ErrorMessage));
+			this.CurrentBuilder.Append("LibZen.ThrowError(");
+			this.CurrentBuilder.Append(LibZen._QuoteString(Message));
 			this.CurrentBuilder.Append(")");
 		}
 	}

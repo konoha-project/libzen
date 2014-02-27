@@ -408,27 +408,6 @@ public class CSourceGenerator extends ZSourceGenerator {
 		}
 	}
 
-	protected boolean IsMethod(String FuncName, ZFuncType FuncType) {
-		@Var ZType RecvType = FuncType.GetRecvType();
-		if(RecvType instanceof ZClassType && FuncName != null) {
-			@Var ZClassType ClassType = (ZClassType)RecvType;
-			@Var ZType FieldType = ClassType.GetFieldType(FuncName, null);
-			if(FieldType == null || !FieldType.IsFuncType()) {
-				FuncName = LibZen._AnotherName(FuncName);
-				FieldType = ClassType.GetFieldType(FuncName, null);
-				if(FieldType == null || !FieldType.IsFuncType()) {
-					return false;
-				}
-			}
-			if(FieldType instanceof ZFuncType) {
-				if(((ZFuncType)FieldType).AcceptAsFieldFunc(FuncType)) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
 	private void SetMethod(String FuncName, ZFuncType FuncType) {
 		@Var ZType RecvType = FuncType.GetRecvType();
 		if(RecvType instanceof ZClassType && FuncName != null) {

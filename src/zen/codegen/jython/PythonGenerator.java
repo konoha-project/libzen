@@ -30,20 +30,25 @@ import zen.ast.ZBlockNode;
 import zen.ast.ZCastNode;
 import zen.ast.ZCatchNode;
 import zen.ast.ZClassNode;
+import zen.ast.ZErrorNode;
 import zen.ast.ZFieldNode;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZInstanceOfNode;
 import zen.ast.ZLetNode;
+import zen.ast.ZNewObjectNode;
 import zen.ast.ZNode;
 import zen.ast.ZParamNode;
+import zen.ast.ZStupidCastErrorNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZVarNode;
 import zen.deps.LibZen;
 import zen.deps.Var;
+import zen.lang.ZenTypeSafer;
+import zen.parser.ZLogger;
+import zen.parser.ZSourceEngine;
 import zen.parser.ZSourceGenerator;
 import zen.type.ZClassField;
-import zen.type.ZClassType;
 import zen.type.ZFuncType;
 import zen.type.ZGenericType;
 import zen.type.ZType;
@@ -99,24 +104,23 @@ public class PythonGenerator extends ZSourceGenerator {
 		this.SetMacro("size", "len($[0])", ZType.IntType, ZGenericType._ArrayType);
 		this.SetMacro("clear", "LibZen_ArrayClear($[0], $[1])", ZType.VoidType, ZGenericType._ArrayType, ZType.IntType);
 		this.SetMacro("add", "$[0].append($[1])", ZType.VoidType, ZGenericType._ArrayType, ZType.VarType);
-		this.SetMacro("add", "$[0].insert($[1], $[2])", ZType.VoidType, ZGenericType._ArrayType, ZType.IntType, ZType.VarType);
+	}
 
-
+	@Override public ZSourceEngine GetEngine() {
+		return new ZSourceEngine(new ZenTypeSafer(this), this);
 	}
 
 	@Override public void VisitStmtList(ZBlockNode BlockNode) {
 		@Var int i = 0;
 		while (i < BlockNode.GetListSize()) {
 			ZNode SubNode = BlockNode.GetListAt(i);
-			this.CurrentBuilder.AppendLineFeed();
-			this.CurrentBuilder.AppendIndent();
+			this.CurrentBuilder.AppendLineFeedIndent();
 			this.GenerateCode(null, SubNode);
 			this.CurrentBuilder.Append(this.SemiColon);
 			i = i + 1;
 		}
 		if (i == 0) {
-			this.CurrentBuilder.AppendLineFeed();
-			this.CurrentBuilder.AppendIndent();
+			this.CurrentBuilder.AppendLineFeedIndent();
 			this.CurrentBuilder.Append("pass");
 		}
 	}
@@ -126,16 +130,20 @@ public class PythonGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Indent();
 		this.VisitStmtList(Node);
 		this.CurrentBuilder.UnIndent();
-		this.CurrentBuilder.AppendLineFeed();
-		this.CurrentBuilder.AppendIndent();
-		this.CurrentBuilder.Append("#");
+		//this.CurrentBuilder.AppendLineFeedIndent();
+		//this.CurrentBuilder.Append("#");
+	}
+
+	@Override public void VisitNewObjectNode(ZNewObjectNode Node) {
+		this.CurrentBuilder.Append(this.NameClass(Node.Type));
+		this.VisitListNode("(", Node, ")");
 	}
 
 	@Override public void VisitCastNode(ZCastNode Node) {
 		// this.CurrentBuilder.Append("(");
 		// this.VisitType(Node.Type);
 		// this.CurrentBuilder.Append(") ");
-		this.CurrentBuilder.AppendBlockComment("as " + this.GetNativeTypeName(Node.Type));
+		//this.CurrentBuilder.AppendBlockComment("as " + this.GetNativeTypeName(Node.Type));
 		this.GenerateCode(null, Node.AST[ZCastNode._Expr]);
 	}
 
@@ -145,31 +153,6 @@ public class PythonGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Append(this.Camma);
 		this.GenerateTypeName(Node.TargetType);
 		this.CurrentBuilder.Append(")");
-	}
-
-	@Override public void VisitThrowNode(ZThrowNode Node) {
-		this.CurrentBuilder.Append("raise ");
-		this.GenerateCode(null, Node.AST[ZThrowNode._Expr]);
-	}
-
-	@Override public void VisitTryNode(ZTryNode Node) {
-		this.CurrentBuilder.Append("try");
-		this.GenerateCode(null, Node.AST[ZTryNode._Try]);
-		if (Node.AST[ZTryNode._Catch] != null) {
-			this.GenerateCode(null, Node.AST[ZTryNode._Catch]);
-		}
-		if (Node.AST[ZTryNode._Finally] != null) {
-			this.CurrentBuilder.Append("finally");
-			this.GenerateCode(null, Node.AST[ZTryNode._Finally]);
-		}
-	}
-
-	@Override public void VisitCatchNode(ZCatchNode Node) {
-		this.CurrentBuilder.Append("except:");
-		//		this.VisitType(Node.ExceptionType);
-		//		this.CurrentBuilder.AppendToken("as");
-		//		this.CurrentBuilder.Append(Node.ExceptionName);
-		this.GenerateCode(null, Node.AST[ZCatchNode._Block]);
 	}
 
 	@Override public void VisitVarNode(ZVarNode Node) {
@@ -231,39 +214,24 @@ public class PythonGenerator extends ZSourceGenerator {
 			this.VisitListNode("(", Node, ")");
 			this.GenerateCode(null, Node.AST[ZFunctionNode._Block]);
 			this.CurrentBuilder.AppendLineFeed();
-			this.SetMethod(Node.FuncName, Node.GetFuncType(null));
-		}
-	}
 
-	private void SetMethod(String FuncName, ZFuncType FuncType) {
-		@Var ZType RecvType = FuncType.GetRecvType();
-		if(RecvType instanceof ZClassType && FuncName != null) {
-			@Var ZClassType ClassType = (ZClassType)RecvType;
-			@Var ZType FieldType = ClassType.GetFieldType(FuncName, null);
-			if(FieldType == null || !FieldType.IsFuncType()) {
-				FuncName = LibZen._AnotherName(FuncName);
-				FieldType = ClassType.GetFieldType(FuncName, null);
-				if(FieldType == null || !FieldType.IsFuncType()) {
-					return;
-				}
-			}
-			if(FieldType instanceof ZFuncType) {
-				if(((ZFuncType)FieldType).AcceptAsFieldFunc(FuncType)) {
-					this.CurrentBuilder.Append("_" + this.NameClass(ClassType) + "_" + FuncName + " = " + FuncType.StringfySignature(FuncName));
-					this.CurrentBuilder.AppendLineFeed();
-				}
+			@Var ZFuncType FuncType = Node.GetFuncType(null);
+			if(this.IsMethod(Node.FuncName, FuncType)) {
+				this.CurrentBuilder.Append(this.NameMethod(FuncType.GetRecvType(), Node.FuncName));
+				this.CurrentBuilder.Append(" = ", FuncType.StringfySignature(Node.FuncName));
+				this.CurrentBuilder.AppendLineFeed();
 			}
 		}
 	}
 
-	public void GenerateMethodVariables(ZClassNode Node) {
+	private void GenerateMethodVariables(ZClassNode Node) {
 		@Var int i = 0;
 		while (i < Node.ClassType.GetFieldSize()) {
 			@Var ZClassField ClassField = Node.ClassType.GetFieldAt(i);
 			if(ClassField.FieldType.IsFuncType()) {
 				this.CurrentBuilder.AppendLineFeedIndent();
-				this.CurrentBuilder.Append("_" + this.NameClass(Node.ClassType) + "_" + ClassField.FieldName + " = ");
-				this.CurrentBuilder.Append(this.NullLiteral);
+				this.CurrentBuilder.Append(this.NameMethod(Node.ClassType, ClassField.FieldName));
+				this.CurrentBuilder.Append(" = ", this.NullLiteral);
 			}
 			i = i + 1;
 		}
@@ -285,8 +253,8 @@ public class PythonGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.AppendLineFeedIndent();
 		this.CurrentBuilder.Append("def __init__(self):");
 		this.CurrentBuilder.Indent();
-		this.CurrentBuilder.AppendLineFeedIndent();
 		if(!SuperType.IsVarType()) {
+			this.CurrentBuilder.AppendLineFeedIndent();
 			this.CurrentBuilder.Append(this.NameClass(SuperType));
 			this.CurrentBuilder.Append(".__init__(self)");
 		}
@@ -318,6 +286,44 @@ public class PythonGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.AppendLineFeed();
 	}
 
+	@Override public void VisitErrorNode(ZErrorNode Node) {
+		if(Node instanceof ZStupidCastErrorNode) {
+			@Var ZStupidCastErrorNode ErrorNode = (ZStupidCastErrorNode)Node;
+			this.GenerateCode(null, ErrorNode.ErrorNode);
+		}
+		else {
+			@Var String Message = ZLogger._LogError(Node.SourceToken, Node.ErrorMessage);
+			this.CurrentBuilder.AppendWhiteSpace();
+			this.CurrentBuilder.Append("LibZen.ThrowError(");
+			this.CurrentBuilder.Append(LibZen._QuoteString(Message));
+			this.CurrentBuilder.Append(")");
+		}
+	}
+
+	@Override public void VisitThrowNode(ZThrowNode Node) {
+		this.CurrentBuilder.Append("raise ");
+		this.GenerateCode(null, Node.AST[ZThrowNode._Expr]);
+	}
+
+	@Override public void VisitTryNode(ZTryNode Node) {
+		this.CurrentBuilder.Append("try");
+		this.GenerateCode(null, Node.AST[ZTryNode._Try]);
+		if (Node.AST[ZTryNode._Catch] != null) {
+			this.GenerateCode(null, Node.AST[ZTryNode._Catch]);
+		}
+		if (Node.AST[ZTryNode._Finally] != null) {
+			this.CurrentBuilder.Append("finally");
+			this.GenerateCode(null, Node.AST[ZTryNode._Finally]);
+		}
+	}
+
+	@Override public void VisitCatchNode(ZCatchNode Node) {
+		this.CurrentBuilder.Append("except:");
+		//		this.VisitType(Node.ExceptionType);
+		//		this.CurrentBuilder.AppendToken("as");
+		//		this.CurrentBuilder.Append(Node.ExceptionName);
+		this.GenerateCode(null, Node.AST[ZCatchNode._Block]);
+	}
 
 
 }
