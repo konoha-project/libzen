@@ -1,5 +1,12 @@
 var JavaScriptGlobal = Function("return this")();
 
+Object.prototype.IsVarType = function (self) {
+   return self.HasUnknownType;
+};
+Object.prototype.IsGreekType = function (self) {
+   return self.HasGreekType;
+};
+
 var LibZen = {};
 LibZen.AnotherName = (function(s){
 	var ch = s.charAt(0);

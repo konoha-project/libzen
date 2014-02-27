@@ -181,7 +181,7 @@ public class ZSourceGenerator extends ZGenerator {
 		this.ReservedNameMap.put(Keyword, AnotherName);
 	}
 
-	public final String SafeName(String Name, int Index) {
+	public String SafeName(String Name, int Index) {
 		if(Index == 0) {
 			@Var String SafeName = this.ReservedNameMap.GetOrNull(Name);
 			if(SafeName == null) {
