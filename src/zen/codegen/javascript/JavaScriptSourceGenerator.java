@@ -33,6 +33,7 @@ import zen.ast.ZErrorNode;
 import zen.ast.ZFieldNode;
 import zen.ast.ZFuncCallNode;
 import zen.ast.ZFunctionNode;
+import zen.ast.ZGetterNode;
 import zen.ast.ZGlobalNameNode;
 import zen.ast.ZInstanceOfNode;
 import zen.ast.ZLetNode;
@@ -73,7 +74,9 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 		this.SetMacro("print", "console.log($[0])", ZType.VoidType, ZType.StringType);
 		this.SetMacro("println", "console.log($[0])", ZType.VoidType, ZType.StringType);
 
-		this.SetMacro("size", "($[0]).length", ZType.IntType, ZGenericType._ArrayType);
+		this.SetMacro("size", "$[0].length", ZType.IntType, ZGenericType.StringType);
+		this.SetMacro("size", "$[0].length", ZType.IntType, ZGenericType._ArrayType);
+		this.SetMacro("clear", "$[0].splice(0, $[0].length)", ZType.VoidType, ZGenericType._ArrayType, ZType.IntType);
 		this.SetMacro("add", "$[0].push($[1])", ZType.VoidType, ZGenericType._ArrayType, ZType.VarType);
 
 		this.SetConverterMacro("$[0]", ZType.FloatType, ZType.IntType);
@@ -205,13 +208,22 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 			this.CurrentBuilder.Append(this.SemiColon);
 			if(IsInstanceMethod) {
 				if(this.IsUserDefinedType(SelfType) && !IsConstructor){
-//					this.CurrentBuilder.AppendLineFeed();
-//					this.CurrentBuilder.Append(SelfType.ShortName); //FIXME must use typing in param
-//					this.CurrentBuilder.Append(".prototype.");
-//					this.CurrentBuilder.Append(Node.FuncName);
-//					this.CurrentBuilder.Append(" = ");
-//					this.CurrentBuilder.Append(Node.GetSignature(this));
-//					this.CurrentBuilder.Append(this.SemiColon);]
+					this.CurrentBuilder.AppendLineFeed();
+					this.CurrentBuilder.Append(SelfType.ShortName); //FIXME must use typing in param
+					this.CurrentBuilder.Append(".prototype.");
+					this.CurrentBuilder.Append(Node.FuncName);
+					this.CurrentBuilder.Append("__ = ");
+					this.CurrentBuilder.Append(Node.GetSignature(this));
+					
+					this.CurrentBuilder.AppendLineFeed();
+					this.CurrentBuilder.Append(SelfType.ShortName); //FIXME must use typing in param
+					this.CurrentBuilder.Append(".prototype.");
+					this.CurrentBuilder.Append(Node.FuncName);
+					this.CurrentBuilder.Append(" = (function(){ Array.prototype.unshift.call(arguments, this); return this.");
+					this.CurrentBuilder.Append(Node.FuncName);
+					this.CurrentBuilder.Append("__.apply(this, arguments); })");
+					
+					this.CurrentBuilder.Append(this.SemiColon);
 					this.CurrentBuilder.AppendLineFeed();
 					this.CurrentBuilder.Append("function ");
 					this.CurrentBuilder.Append(SelfType.ShortName); //FIXME must use typing in param
@@ -235,9 +247,17 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 		if(FuncType != null){
 			@Var ZType RecvType = Node.GetFuncType().GetParamType(0);
 			if(this.IsUserDefinedType(RecvType) &&  !RecvType.ShortName.equals(Node.GetFuncName())){
-				this.CurrentBuilder.Append(Node.GetFuncType().GetParamType(0).ShortName);
+				this.CurrentBuilder.Append("(");
+				this.GenerateCode(null, Node.AST[ZFuncCallNode._Func]);
+				if(Node.AST[ZFuncCallNode._Func] instanceof ZGetterNode){
+					this.CurrentBuilder.Append("__ || ");
+				}else{
+					this.CurrentBuilder.Append(" || ");
+				}
+				this.CurrentBuilder.Append(RecvType.ShortName);
 				this.CurrentBuilder.Append("_");
 				this.CurrentBuilder.Append(Node.GetFuncName());
+				this.CurrentBuilder.Append(")");
 			}else{
 				this.GenerateCode(null, Node.AST[ZFuncCallNode._Func]);
 			}
@@ -248,12 +268,26 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 	}
 	
 	@Override public void VisitMethodCallNode(ZMethodCallNode Node) {
-		this.CurrentBuilder.Append(Node.AST[ZMethodCallNode._Recv].Type.ShortName);
-		this.CurrentBuilder.Append("_");
-		this.CurrentBuilder.Append(Node.MethodName);
-		this.CurrentBuilder.Append("(");
+		// (recv.method || Type_method)(...)
+		@Var ZNode RecvNode = Node.AST[ZMethodCallNode._Recv];
+
+		if(this.IsUserDefinedType(RecvNode.Type)){
+			this.CurrentBuilder.Append("(");
+			this.GenerateSurroundCode(RecvNode);
+			this.CurrentBuilder.Append(".");
+			this.CurrentBuilder.Append(Node.MethodName);
+			this.CurrentBuilder.Append("__ || ");
+			this.CurrentBuilder.Append(RecvNode.Type.ShortName);
+			this.CurrentBuilder.Append("_");
+			this.CurrentBuilder.Append(Node.MethodName);
+			this.CurrentBuilder.Append(")");
+		}else{
+			this.GenerateSurroundCode(RecvNode);
+			this.CurrentBuilder.Append(".");
+			this.CurrentBuilder.Append(Node.MethodName);
+		}
 		//this.GenerateSurroundCode(Node.AST[ZMethodCallNode._Recv]);
-		this.VisitListNode("", Node, ")");
+		this.VisitListNode("(", Node, ")");
 	}
 	
 	@Override public void VisitMapLiteralNode(ZMapLiteralNode Node) {
@@ -286,6 +320,7 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 		this.GenerateCode(null, Node.AST[ZVarNode._InitValue]);
 		this.CurrentBuilder.Append(this.SemiColon);
 		this.CurrentBuilder.AppendLineFeed();
+		Node.GetNameSpace().SetLocalSymbol(Node.Symbol, Node.ToGlobalNameNode());
 	}
 
 	private void GenerateExtendCode(ZClassNode Node) {
