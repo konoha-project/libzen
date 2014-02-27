@@ -74,8 +74,9 @@ public class VariableManager {
 		if (Var == null) {
 			Var = this.SearchVariable(VarName);
 			if (Var == null) {
-				//Error handling
-				System.out.println(this.MapList);
+				//FIXME!! Error handling
+				//System.out.println(this.MapList);
+				return;
 			} else {
 				Variable NewVar = this.CreateVariable(VarName);
 				NewVar.Read = Var.Read;
