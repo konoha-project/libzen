@@ -252,12 +252,12 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 	// 	this.GenerateSurroundCode(Node.AST[ZUnaryNode._Recv]);
 	// }
 
-	// @Override public void VisitCastNode(ZCastNode Node) {
-	// 	this.CurrentBuilder.Append("(");
-	// 	this.GenerateTypeName(Node.Type);
-	// 	this.CurrentBuilder.Append(")");
-	// 	this.GenerateSurroundCode(Node.AST[ZCastNode._Expr]);
-	// }
+	@Override public void VisitCastNode(ZCastNode Node) {
+		// this.CurrentBuilder.Append("(");
+		// this.GenerateTypeName(Node.Type);
+		// this.CurrentBuilder.Append(")");
+		this.GenerateSurroundCode(Node.AST[ZCastNode._Expr]);
+	}
 
 	// @Override public void VisitInstanceOfNode(ZInstanceOfNode Node) {
 	// 	this.GenerateCode(null, Node.AST[ZBinaryNode._Left]);
