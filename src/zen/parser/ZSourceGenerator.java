@@ -136,6 +136,10 @@ public class ZSourceGenerator extends ZGenerator {
 		this.CurrentBuilder = this.AppendNewSourceBuilder();
 	}
 
+	@ZenMethod protected void Finish() {
+
+	}
+
 	@Override public ZSourceEngine GetEngine() {
 		LibZen._PrintLine("FIXME: Overide GetEngine in each generator!!");
 		return new ZSourceEngine(new ZenTypeSafer(this), this);
@@ -219,11 +223,13 @@ public class ZSourceGenerator extends ZGenerator {
 	}
 
 	@Override public final void WriteTo(@Nullable String FileName) {
+		this.Finish();
 		LibZen._WriteTo(this.NameOutputFile(FileName), this.BuilderList);
 		this.InitBuilderList();
 	}
 
 	@Override public final String GetSourceText() {
+		this.Finish();
 		@Var ZSourceBuilder sb = new ZSourceBuilder(this, null);
 		@Var int i = 0;
 		while(i < this.BuilderList.size()) {

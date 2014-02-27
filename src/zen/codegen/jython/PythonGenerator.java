@@ -42,8 +42,10 @@ import zen.ast.ZStupidCastErrorNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZVarNode;
+import zen.deps.Field;
 import zen.deps.LibZen;
 import zen.deps.Var;
+import zen.deps.ZenMethod;
 import zen.lang.ZenTypeSafer;
 import zen.parser.ZLogger;
 import zen.parser.ZSourceEngine;
@@ -56,6 +58,8 @@ import zen.type.ZType;
 //Zen Generator should be written in each language.
 
 public class PythonGenerator extends ZSourceGenerator {
+
+	@Field boolean HasMainFunction = false;
 
 	public PythonGenerator() {
 		super("py", "Python-2.7.1");
@@ -79,9 +83,9 @@ public class PythonGenerator extends ZSourceGenerator {
 		this.SetNativeType(ZType.FloatType, "float");
 		this.SetNativeType(ZType.StringType, "str");
 
-		this.SetMacro("assert", "LibZen_Assert($[0], $[1])", ZType.VoidType, ZType.BooleanType, ZType.StringType);
-		this.SetMacro("print", "print ($[0]),", ZType.VoidType, ZType.StringType);
-		this.SetMacro("println", "print ($[0])", ZType.VoidType, ZType.StringType);
+		this.SetMacro("assert", "assert $[0], $[1]", ZType.VoidType, ZType.BooleanType, ZType.StringType);
+		this.SetMacro("print", "print $[0],", ZType.VoidType, ZType.StringType);
+		this.SetMacro("println", "print $[0]", ZType.VoidType, ZType.StringType);
 
 		// Converter
 		this.SetConverterMacro("float($[0])", ZType.FloatType, ZType.IntType);
@@ -104,10 +108,20 @@ public class PythonGenerator extends ZSourceGenerator {
 		this.SetMacro("size", "len($[0])", ZType.IntType, ZGenericType._ArrayType);
 		this.SetMacro("clear", "LibZen_ArrayClear($[0], $[1])", ZType.VoidType, ZGenericType._ArrayType, ZType.IntType);
 		this.SetMacro("add", "$[0].append($[1])", ZType.VoidType, ZGenericType._ArrayType, ZType.VarType);
+
+		this.HeaderBuilder.Append("#! /usr/bin/env python\n# -*- coding: utf-8 -*-\n\n");
 	}
 
 	@Override public ZSourceEngine GetEngine() {
 		return new ZSourceEngine(new ZenTypeSafer(this), this);
+	}
+
+	@Override @ZenMethod protected void Finish() {
+		if(this.HasMainFunction) {
+			this.CurrentBuilder.AppendLineFeed();
+			this.CurrentBuilder.Append("if __name__ == \"__main__\":\n\tmain()");
+			this.CurrentBuilder.AppendLineFeed();
+		}
 	}
 
 	@Override public void VisitStmtList(ZBlockNode BlockNode) {
@@ -209,13 +223,19 @@ public class PythonGenerator extends ZSourceGenerator {
 			this.CurrentBuilder.Append(FuncName);
 		}
 		else {
+			@Var ZFuncType FuncType = Node.GetFuncType(null);
 			this.CurrentBuilder.Append("def ");
 			this.CurrentBuilder.Append(Node.GetSignature(this));
 			this.VisitListNode("(", Node, ")");
 			this.GenerateCode(null, Node.AST[ZFunctionNode._Block]);
 			this.CurrentBuilder.AppendLineFeed();
-
-			@Var ZFuncType FuncType = Node.GetFuncType(null);
+			if(Node.IsExport) {
+				this.CurrentBuilder.Append(Node.FuncName, " = ", FuncType.StringfySignature(Node.FuncName));
+				this.CurrentBuilder.AppendLineFeed();
+				if(Node.FuncName.equals("main")) {
+					this.HasMainFunction = true;
+				}
+			}
 			if(this.IsMethod(Node.FuncName, FuncType)) {
 				this.CurrentBuilder.Append(this.NameMethod(FuncType.GetRecvType(), Node.FuncName));
 				this.CurrentBuilder.Append(" = ", FuncType.StringfySignature(Node.FuncName));
