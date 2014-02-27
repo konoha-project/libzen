@@ -28,7 +28,8 @@ $(JavaBin): check_java_env
 	ant jar
 
 clean:
-	-rm -rf bin/*.class *.jar
+	-find build -name '*.class' -type f -print0 | xargs -0 rm -f
+	-rm -f *.jar
 
 install: installj
 
