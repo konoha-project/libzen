@@ -532,12 +532,19 @@ public class LibZen {
 	private final static ZenMap<Class<?>> GenMap = new ZenMap<Class<?>>(null);
 
 	static {
-		GenMap.put("py", zen.codegen.jython.PythonGenerator.class);
-		GenMap.put("javascript", zen.codegen.javascript.JavaScriptSourceGenerator.class);
-		GenMap.put("js", zen.codegen.javascript.JavaScriptSourceGenerator.class);
-		GenMap.put("ruby", zen.codegen.jruby.RubySourceGenerator.class);
-		GenMap.put("clisp", zen.codegen.clisp.CommonLispGenerator.class);
+		// source code file extension
 		GenMap.put("c", zen.codegen.c.CSourceGenerator.class);
+		GenMap.put("cl", zen.codegen.clisp.CommonLispGenerator.class);
+
+		GenMap.put("hs", zen.codegen.haskell.HaskellSourceGenerator.class);
+		GenMap.put("js", zen.codegen.javascript.JavaScriptSourceGenerator.class);
+
+		GenMap.put("py", zen.codegen.jython.PythonGenerator.class);
+		GenMap.put("rb", zen.codegen.jruby.RubySourceGenerator.class);
+
+		GenMap.put("zen", zen.codegen.ZenGenerator.class);
+
+		// engine
 		GenMap.put("jvm", zen.codegen.jvm.JavaAsmGenerator.class);
 		GenMap.put("debug-jvm", zen.codegen.jvm.DebugAsmGenerator.class);
 		GenMap.put("llvm", zen.codegen.llvm.LLVMSourceGenerator.class);
