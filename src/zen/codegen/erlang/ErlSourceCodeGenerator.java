@@ -1,64 +1,29 @@
 //ifdef JAVA
 package zen.codegen.erlang;
 
-import zen.ast.ZAndNode;
-import zen.ast.ZArrayLiteralNode;
-import zen.ast.ZBinaryNode;
 import zen.ast.ZBlockNode;
-import zen.ast.ZBooleanNode;
 import zen.ast.ZBreakNode;
-import zen.ast.ZCastNode;
-import zen.ast.ZCatchNode;
 import zen.ast.ZClassNode;
-import zen.ast.ZComparatorNode;
-import zen.ast.ZErrorNode;
 import zen.ast.ZFieldNode;
-import zen.ast.ZFloatNode;
 import zen.ast.ZFuncCallNode;
 import zen.ast.ZFunctionNode;
-import zen.ast.ZGetIndexNode;
 import zen.ast.ZGetNameNode;
 import zen.ast.ZGetterNode;
-import zen.ast.ZGlobalNameNode;
-import zen.ast.ZGroupNode;
 import zen.ast.ZIfNode;
-import zen.ast.ZInstanceOfNode;
-import zen.ast.ZIntNode;
-import zen.ast.ZLetNode;
 import zen.ast.ZListNode;
-import zen.ast.ZMacroNode;
-import zen.ast.ZMapLiteralNode;
-import zen.ast.ZMethodCallNode;
-import zen.ast.ZNewObjectNode;
 import zen.ast.ZNode;
-import zen.ast.ZNotNode;
-import zen.ast.ZNullNode;
-import zen.ast.ZOrNode;
 import zen.ast.ZParamNode;
 import zen.ast.ZReturnNode;
-import zen.ast.ZSetIndexNode;
 import zen.ast.ZSetNameNode;
-import zen.ast.ZSetterNode;
-import zen.ast.ZStringNode;
-import zen.ast.ZSugarNode;
-import zen.ast.ZThrowNode;
-import zen.ast.ZTryNode;
-import zen.ast.ZUnaryNode;
 import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
+import zen.ast.ZGlobalNameNode;
+import zen.ast.ZNewObjectNode;
 import zen.deps.Field;
-import zen.deps.LibZen;
-import zen.deps.Nullable;
 import zen.deps.Var;
-import zen.deps.ZArray;
-import zen.deps.ZenMap;
-import zen.deps.ZenMethod;
 import zen.lang.ZenTypeSafer;
-import zen.type.ZFuncType;
-import zen.type.ZType;
-import zen.type.ZTypePool;
-import zen.parser.ZSourceEngine;
 import zen.parser.ZSourceBuilder;
+import zen.parser.ZSourceEngine;
 import zen.parser.ZSourceGenerator;
 
 //ifdef JAVA
@@ -66,7 +31,7 @@ import zen.parser.ZSourceGenerator;
 public class ErlSourceCodeGenerator extends ZSourceGenerator {
 	@Field private int LoopNodeNumber;
 	@Field private int BreakMark;
-	@Field private VariableManager VarMgr;
+	@Field private final VariableManager VarMgr;
 
 	public ErlSourceCodeGenerator/*constructor*/() {
 		super("erlang", "5.10.4");
@@ -83,7 +48,7 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitStmtList(ZBlockNode BlockNode) {
-		VisitStmtList(BlockNode, ",");
+		this.VisitStmtList(BlockNode, ",");
 	}
 	public void VisitStmtList(ZBlockNode BlockNode, String last) {
 		@Var int i = 0;
@@ -152,12 +117,11 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 	// 	// TODO Auto-generated method stub
 	// }
 
-	// @Override public void VisitNewObjectNode(ZNewObjectNode Node) {
-	// 	this.CurrentBuilder.Append("new");
-	// 	this.CurrentBuilder.AppendWhiteSpace();
-	// 	this.GenerateTypeName(Node.Type);
-	// 	this.VisitListNode("(", Node, ")");
-	// }
+	@Override public void VisitNewObjectNode(ZNewObjectNode Node) {
+		this.CurrentBuilder.Append("#");
+		this.CurrentBuilder.Append(ToErlangTypeName(Node.Type.ShortName));
+		this.VisitListNode("{", Node, "}");
+	}
 
 	// @Override public void VisitGroupNode(ZGroupNode Node) {
 	// 	this.CurrentBuilder.Append("(");
@@ -212,9 +176,9 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 	@Override public void VisitGetterNode(ZGetterNode Node) {
 		this.GenerateSurroundCode(Node.AST[ZGetterNode._Recv]);
 		this.CurrentBuilder.Append("#");
-		this.CurrentBuilder.Append(Node.AST[ZGetterNode._Recv].Type.ShortName.toLowerCase());
+		this.CurrentBuilder.Append(ToErlangTypeName(Node.AST[ZGetterNode._Recv].Type.ShortName));
 		this.CurrentBuilder.Append(".");
-		this.CurrentBuilder.Append(Node.FieldName.toLowerCase());
+		this.CurrentBuilder.Append(ToErlangTypeName(Node.FieldName));
 	}
 
 	// @Override public void VisitSetterNode(ZSetterNode Node) {
@@ -253,10 +217,13 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 	// 	this.CurrentBuilder.Append(Macro.substring(fromIndex));
 	// }
 
-	// @Override public void VisitFuncCallNode(ZFuncCallNode Node) {
-	// 	this.GenerateCode(null, Node.AST[ZFuncCallNode._Func]);
-	// 	this.VisitListNode("(", Node, ")");
-	// }
+	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
+		String FuncName = ((ZGlobalNameNode)Node.AST[ZFuncCallNode._Func]).GlobalName;
+		FuncName = ToErlangFuncName(FuncName);
+		this.CurrentBuilder.Append(FuncName);
+		//this.GenerateCode(null, Node.AST[ZFuncCallNode._Func]);
+		this.VisitListNode("(", Node, ")");
+	}
 
 	// @Override public void VisitUnaryNode(ZUnaryNode Node) {
 	// 	this.CurrentBuilder.Append(Node.SourceToken.GetText());
@@ -435,8 +402,8 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 		this.VarMgr.CreateVariable(VarName);
 		this.AppendLazy(mark, this.VarMgr.GenVariableName(VarName) + " = ");
 
+		this.CurrentBuilder.Append(",");
 		if (Node.GetListSize() > 0) {
-			this.CurrentBuilder.Append(",");
 			this.VisitStmtList(Node);
 		}
 		this.CurrentBuilder.AppendLineFeed();
@@ -456,17 +423,19 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 	// 	this.GenerateCode(null, Node.AST[ZLetNode._InitValue]);
 	// }
 
+	@Override
 	public void VisitParamNode(ZParamNode Node) {
-		this.CurrentBuilder.Append(Node.Name.toUpperCase());
+		this.CurrentBuilder.Append(ToErlangVarName(Node.Name));
 	}
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
 		this.CreateVariables(Node);
 
-		this.HeaderBuilder.Append("-export([" + Node.FuncName + "/" + Node.GetListSize() + "]).");
+		String FuncName = ToErlangFuncName(Node.FuncName);
+		this.HeaderBuilder.Append("-export([" + FuncName + "/" + Node.GetListSize() + "]).");
 		this.HeaderBuilder.AppendLineFeed();
 
-		this.CurrentBuilder.Append(Node.FuncName + "_inner");
+		this.CurrentBuilder.Append(FuncName + "_inner");
 		this.VisitListNode("(", Node, ")");
 		this.CurrentBuilder.Append("->");
 		if (Node.AST[ZFunctionNode._Block] == null) {
@@ -486,7 +455,7 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 		this.CurrentBuilder = this.HeaderBuilder;
 
 		this.CurrentBuilder.Append("-record(");
-		this.CurrentBuilder.Append(Node.ClassName.toLowerCase());
+		this.CurrentBuilder.Append(ToErlangTypeName(Node.ClassName));
 		if(Node.SuperType != null) {
 			throw new RuntimeException("\"extends\" is not supported yet");
 		}
@@ -495,7 +464,7 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 		@Var int size = Node.GetListSize();
 		while (i < size) {
 			@Var ZFieldNode FieldNode = Node.GetFieldNode(i);
-			this.CurrentBuilder.Append(FieldNode.FieldName.toLowerCase());
+			this.CurrentBuilder.Append(ToErlangTypeName(FieldNode.FieldName));
 			if(FieldNode.HasAst(ZFieldNode._InitValue)) {
 				this.CurrentBuilder.AppendToken("=");
 				this.GenerateCode(null, FieldNode.AST[ZFieldNode._InitValue]);
@@ -538,6 +507,7 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 	// 	this.CurrentBuilder.Append(this.GetNativeTypeName(Type.GetRealType()));
 	// }
 
+	@Override
 	protected void VisitListNode(String OpenToken, ZListNode VargNode, String DelimToken, String CloseToken) {
 		this.CurrentBuilder.Append(OpenToken);
 		@Var int i = 0;
@@ -551,18 +521,20 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 		}
 		this.CurrentBuilder.Append(CloseToken);
 	}
+	@Override
 	protected void VisitListNode(String OpenToken, ZListNode VargNode, String CloseToken) {
 		this.VisitListNode(OpenToken, VargNode, ", ", CloseToken);
 	}
 
 	private void AppendWrapperFuncDecl(ZFunctionNode Node){
-		this.CurrentBuilder.Append(Node.FuncName);
+		String FuncName = ToErlangFuncName(Node.FuncName);
+		this.CurrentBuilder.Append(FuncName);
 		this.VisitListNode("(", Node, ")");
 		this.CurrentBuilder.Append(" ->");
 
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.Indent();
-		this.CurrentBuilder.IndentAndAppend("try "+ Node.FuncName + "_inner");
+		this.CurrentBuilder.IndentAndAppend("try "+ FuncName + "_inner");
 		this.VisitListNode("(", Node, ")");
 		this.CurrentBuilder.Append(" of");
 		this.CurrentBuilder.AppendLineFeed();
@@ -598,5 +570,14 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 			this.VarMgr.CreateVariable(ParamNode.Name);
 			i += 1;
 		}
+	}
+	private String ToErlangFuncName(String FuncName) {
+		return FuncName.toLowerCase();
+	}
+	private String ToErlangTypeName(String TypeName) {
+		return TypeName.toLowerCase();
+	}
+	private String ToErlangVarName(String VarName) {
+		return VarName.toUpperCase();
 	}
 }
