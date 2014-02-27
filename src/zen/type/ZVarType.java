@@ -41,8 +41,8 @@ public class ZVarType extends ZType {
 		this.VarList = VarList;
 		this.SourceToken = SourceToken;
 		this.GreekId = VarList.size();
-		VarList.add(this);
 		this.TypeId = this.RefType.TypeId;
+		VarList.add(this);
 	}
 
 	@Override public final ZType GetRealType() {
@@ -66,10 +66,11 @@ public class ZVarType extends ZType {
 	}
 
 	@ZenIgnored @Override public String toString() {
-		return "typeof("+this.ShortName+"): " + this.RefType;
+		return "typeof(" + this.ShortName + "): " + this.RefType;
 	}
 
 	public void Infer(ZType ContextType, ZToken SourceToken) {
+		System.out.println("Infer="+ContextType);
 		if(this.RefType.IsVarType()) {
 			if(ContextType instanceof ZVarType && ContextType.IsVarType()) {
 				@Var ZVarType VarType = (ZVarType)ContextType;

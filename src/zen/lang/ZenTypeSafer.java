@@ -731,7 +731,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 			ParamNode.ParamIndex = i;
 			ParamNode.Type = this.VarScope.NewVarType(ParamNode.Type, ParamNode.Name, ParamNode.SourceToken);
 			if(FuncType != null) {
-				ParamNode.Type.Maybe(FuncType.GetParamType(i+1), null);
+				this.VarScope.InferType(FuncType.GetParamType(i+1), ParamNode);
 			}
 			NameSpace.SetLocalVariable(this.CurrentFunctionNode, ParamNode.Type, ParamNode.Name, null);
 			i = i + 1;
@@ -819,14 +819,6 @@ public class ZenTypeSafer extends ZTypeChecker {
 				if(FieldNode.DeclType.IsVarType()) {
 					FieldNode.DeclType = FieldNode.AST[ZFieldNode._InitValue].Type;
 				}
-				//				if(FieldNode.DeclType.IsFuncType()) {
-				//					@Var ZFuncType FuncType = (ZFuncType)FieldNode.DeclType;
-				//					if(!Node.ClassType.Equals(FuncType.GetRecvType())) {
-				//						FuncType = FuncType.NewMethodFuncType(Node.ClassType);
-				//						ZLogger._LogWarning(FieldNode.SourceToken, FieldNode.FieldName + " " + FieldNode.DeclType + " -> " + FuncType);
-				//						FieldNode.DeclType = FuncType;
-				//					}
-				//				}
 				if(FieldNode.DeclType.IsVarType()) {
 					ZLogger._LogError(FieldNode.SourceToken, "type of " + FieldNode.FieldName + " is unspecific");
 				}

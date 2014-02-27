@@ -32,7 +32,6 @@ import zen.deps.ZenMethod;
 import zen.parser.ZGenerator;
 import zen.parser.ZNameSpace;
 import zen.parser.ZToken;
-import zen.parser.ZTypeChecker;
 import zen.parser.ZVisitor;
 import zen.type.ZFuncType;
 import zen.type.ZType;
@@ -209,10 +208,6 @@ public abstract class ZNode {
 			}
 		}
 		return this.HasUntypedNode;
-	}
-
-	public ZNode VisitTypeChecker(ZTypeChecker TypeChecker, ZType ContextType) {
-		return TypeChecker.VisitTypeChecker(this, ContextType);
 	}
 
 	public ZReturnNode ToReturnNode() {
