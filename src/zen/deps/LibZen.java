@@ -536,7 +536,7 @@ public class LibZen {
 		GenMap.put("javascript", zen.codegen.javascript.JavaScriptSourceGenerator.class);
 		GenMap.put("js", zen.codegen.javascript.JavaScriptSourceGenerator.class);
 		GenMap.put("ruby", zen.codegen.jruby.RubySourceGenerator.class);
-		GenMap.put("clisp", zen.codegen.clisp.CommonLispSourceGenerator.class);
+		GenMap.put("clisp", zen.codegen.clisp.CommonLispGenerator.class);
 		GenMap.put("c", zen.codegen.c.CSourceGenerator.class);
 		GenMap.put("jvm", zen.codegen.jvm.JavaAsmGenerator.class);
 		GenMap.put("debug-jvm", zen.codegen.jvm.DebugAsmGenerator.class);
