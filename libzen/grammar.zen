@@ -1,0 +1,648 @@
+function ExpressionPatternFunction_GetRightPattern(NameSpace: ZNameSpace, TokenContext: ZTokenContext): ZSyntax;
+function ExpressionPatternFunction_DispatchPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode, AllowStatement: boolean, AllowBinary: boolean): ZNode;
+function NumberLiteralTokenFunction_ParseDigit(SourceContext: ZSourceContext): String;
+let AndPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var BinaryNode: ZBinaryNode = new ZAndNode(ParentNode, TokenContext.GetToken(ZTokenContext_MoveNext), LeftNode, TokenContext.GetApplyingSyntax());
+	return BinaryNode.AppendParsedRightNode(ParentNode, TokenContext);
+}
+
+let AnnotationPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	return null;
+}
+
+let ApplyPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var ApplyNode: ZNode = new ZFuncCallNode(ParentNode, LeftNode);
+	ApplyNode = TokenContext.MatchNtimes(ApplyNode, "(", "$Expression$", ",", ")");
+	return ApplyNode;
+}
+
+let ArrayLiteralPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var LiteralNode: ZNode = new ZArrayLiteralNode(ParentNode);
+	LiteralNode = TokenContext.MatchNtimes(LiteralNode, "[", "$Expression$", ",", "]");
+	return LiteralNode;
+}
+
+let AssertPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var AssertNode: ZNode = new ZAssertNode(ParentNode);
+	AssertNode = TokenContext.MatchToken(AssertNode, "assert", ZTokenContext_Required);
+	AssertNode = TokenContext.MatchToken(AssertNode, "(", ZTokenContext_Required);
+	AssertNode = TokenContext.MatchPattern(AssertNode, ZThrowNode_Expr, "$Expression$", ZTokenContext_Required, ZTokenContext_AllowSkipIndent);
+	AssertNode = TokenContext.MatchToken(AssertNode, ")", ZTokenContext_Required);
+	return AssertNode;
+}
+
+let Assig = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	return null;
+}
+
+let BinaryPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var Token: ZToken = TokenContext.GetToken(ZTokenContext_MoveNext);
+	var BinaryNode: ZBinaryNode = new ZBinaryNode(ParentNode, Token, LeftNode, TokenContext.GetApplyingSyntax());
+	return BinaryNode.AppendParsedRightNode(ParentNode, TokenContext);
+}
+
+let BlockComment = function(SourceContext: ZSourceContext): boolean {
+	var StartIndex: int = SourceContext.GetPosition();
+	var NextChar: String = SourceContext.GetCharAtFromCurrentPosition(+1);
+	if(NextChar != "/" && NextChar != "*") {
+		return false;  // another tokenizer
+	}
+	if(NextChar == "/") { // SingleLineComment
+		while(SourceContext.HasChar()) {
+			var ch: String = SourceContext.GetCurrentChar();
+			if(ch == "\n") {
+				break;
+			}
+			SourceContext.MoveNext();
+		}
+		return true;
+	}
+	var NestedLevel: int = 0;
+	var PrevChar: String = "\0";
+	while(SourceContext.HasChar()) {
+		NextChar = SourceContext.GetCurrentChar();
+		if(PrevChar == "*" && NextChar == "/") {
+			NestedLevel = NestedLevel - 1;
+			if(NestedLevel == 0) {
+				SourceContext.MoveNext();
+				return true;
+			}
+		}
+		if(PrevChar == "/" && NextChar == "*") {
+			NestedLevel = NestedLevel + 1;
+		}
+		SourceContext.MoveNext();
+		PrevChar = NextChar;
+	}
+	SourceContext.LogWarning(StartIndex, "unfound */");
+	return true;
+}
+
+let BlockPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var BlockNode: ZNode = new ZBlockNode(ParentNode, 0);
+	var SkipToken: ZToken = TokenContext.GetToken();
+	BlockNode = TokenContext.MatchToken(BlockNode, "{", ZTokenContext_Required);
+	if(!BlockNode.IsErrorNode()) {
+		var Remembered: boolean = TokenContext.SetParseFlag(ZTokenContext_AllowSkipIndent); // init
+		var NestedBlockNode: ZNode = BlockNode;
+		while(TokenContext.HasNext()) {
+			if(TokenContext.MatchToken("}")) {
+				break;
+			}
+			NestedBlockNode = TokenContext.MatchPattern(NestedBlockNode, ZNode_NestedAppendIndex, "$Statement$", ZTokenContext_Required);
+			if(NestedBlockNode.IsErrorNode()) {
+				TokenContext.SkipError(SkipToken);
+				TokenContext.MatchToken("}");
+				break;
+			}
+		}
+		TokenContext.SetParseFlag(Remembered);
+	}
+	return BlockNode;
+}
+
+let BreakPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var BreakNode: ZNode = new ZBreakNode(ParentNode);
+	BreakNode = TokenContext.MatchToken(BreakNode, "break", ZTokenContext_Required);
+	return BreakNode;
+}
+
+let CLin = function(SourceContext: ZSourceContext): boolean {
+	return false;
+}
+
+let CastPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var CastNode: ZNode = new ZCastNode(ParentNode, ZTypeVarType, null);
+	CastNode = TokenContext.MatchToken(CastNode, "(", ZTokenContext_Required);
+	CastNode = TokenContext.MatchPattern(CastNode, ZNode_TypeInfo, "$Type$", ZTokenContext_Required);
+	CastNode = TokenContext.MatchToken(CastNode, ")", ZTokenContext_Required);
+	CastNode = TokenContext.MatchPattern(CastNode, ZCastNode_Expr, "$RightExpression$", ZTokenContext_Required);
+	return CastNode;
+}
+
+let CatchPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var CatchNode: ZNode = new ZCatchNode(ParentNode);
+	CatchNode = TokenContext.MatchToken(CatchNode, "catch", ZTokenContext_Required);
+	CatchNode = TokenContext.MatchToken(CatchNode, "(", ZTokenContext_Required);
+	CatchNode = TokenContext.MatchPattern(CatchNode, ZNode_NameInfo, "$Name$", ZTokenContext_Required);
+	CatchNode = TokenContext.MatchToken(CatchNode, ")", ZTokenContext_Required);
+	CatchNode = TokenContext.MatchPattern(CatchNode, ZCatchNode_Block, "$Block$", ZTokenContext_Required);
+	return CatchNode;
+}
+
+let ClassPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var ClassNode: ZNode = new ZClassNode(ParentNode);
+	ClassNode = TokenContext.MatchToken(ClassNode, "class", ZTokenContext_Required);
+	ClassNode = TokenContext.MatchPattern(ClassNode, ZNode_NameInfo, "$Name$", ZTokenContext_Required);
+	if(TokenContext.MatchNewLineToken("extends")) {
+		ClassNode = TokenContext.MatchPattern(ClassNode, ZNode_TypeInfo, "$Type$", ZTokenContext_Required);
+	}
+	ClassNode = TokenContext.MatchNtimes(ClassNode, "{", "$FieldDecl$", null, "}");
+	return ClassNode;
+}
+
+let ComparatorPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var Token: ZToken = TokenContext.GetToken(ZTokenContext_MoveNext);
+	var BinaryNode: ZBinaryNode = new ZComparatorNode(ParentNode, Token, LeftNode, TokenContext.GetApplyingSyntax());
+	return BinaryNode.AppendParsedRightNode(ParentNode, TokenContext);
+}
+
+function ExpressionPatternFunction_GetRightPattern(NameSpace: ZNameSpace, TokenContext: ZTokenContext): ZSyntax {
+	var Token: ZToken = TokenContext.GetToken();
+	if(Token != ZToken_NullToken) {
+		var Pattern: ZSyntax = NameSpace.GetRightSyntaxPattern(Token.GetText());
+		return Pattern;
+	}
+	return null;
+}
+function ExpressionPatternFunction_DispatchPattern(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode, AllowStatement: boolean, AllowBinary: boolean): ZNode {
+	var Token: ZToken = TokenContext.GetToken();
+	var Pattern: ZSyntax = null;
+	var NameSpace: ZNameSpace = ParentNode.GetNameSpace();
+	if(Token instanceof ZPatternToken) {
+		Pattern = ((ZPatternToken)Token).PresetPattern;
+	}
+	else {
+		Pattern = NameSpace.GetSyntaxPattern(Token.GetText());
+	}
+	if(Pattern != null) {
+		if(Pattern.IsStatement && !AllowStatement) {
+			return new ZErrorNode(ParentNode, Token, Token.GetText() + " statement is not here");
+		}
+		LeftNode = TokenContext.ApplyMatchPattern(ParentNode, LeftNode, Pattern, ZTokenContext_Required);
+	}
+	else {
+		if(Token.IsNameSymbol()) {
+			if(AllowStatement) {
+				Pattern = NameSpace.GetSyntaxPattern("$SymbolStatement$");
+			}
+			else {
+				Pattern = NameSpace.GetSyntaxPattern("$SymbolExpression$");
+			}
+			LeftNode = TokenContext.ApplyMatchPattern(ParentNode, LeftNode, Pattern, ZTokenContext_Required);
+		}
+		else {
+			if(AllowStatement) {
+				return TokenContext.CreateExpectedErrorNode(Token, "statement");
+			}
+			else {
+				return TokenContext.CreateExpectedErrorNode(Token, "expression");
+			}
+		}
+	}
+	if(!Pattern.IsStatement) {
+		while(LeftNode != null && !LeftNode.IsErrorNode()) {
+			var RightPattern: ZSyntax = ExpressionPatternFunction_GetRightPattern(NameSpace, TokenContext);
+			if(RightPattern == null) {
+				break;
+			}
+			if(!AllowBinary && RightPattern.IsBinaryOperator()) {
+				break;
+			}
+			LeftNode = TokenContext.ApplyMatchPattern(ParentNode, LeftNode, RightPattern, ZTokenContext_Required);
+		}
+	}
+	return LeftNode;
+}
+let ExpressionPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	return ExpressionPatternFunction_DispatchPattern(ParentNode, TokenContext, LeftNode, false, true);
+}
+
+let FalsePattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	return new ZBooleanNode(ParentNode, TokenContext.GetToken(ZTokenContext_MoveNext), false);
+}
+
+let FieldPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var Rememberd: boolean = TokenContext.SetParseFlag(false);
+	var FieldNode: ZNode = new ZFieldNode(ParentNode);
+	FieldNode = TokenContext.MatchToken(FieldNode, "var", ZTokenContext_Required);
+	FieldNode = TokenContext.MatchPattern(FieldNode, ZNode_NameInfo, "$Name$", ZTokenContext_Required);
+	FieldNode = TokenContext.MatchPattern(FieldNode, ZNode_TypeInfo, "$TypeAnnotation$", ZTokenContext_Optional);
+	if(TokenContext.MatchToken("=")) {
+		FieldNode = TokenContext.MatchPattern(FieldNode, ZFieldNode_InitValue, "$Expression$", ZTokenContext_Required);
+	}
+	FieldNode = TokenContext.MatchPattern(FieldNode, ZNode_Nop, ";", ZTokenContext_Required);
+	TokenContext.SetParseFlag(Rememberd);
+	return FieldNode;
+}
+
+let FloatLiteralPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var Token: ZToken = TokenContext.GetToken(ZTokenContext_MoveNext);
+	return new ZFloatNode(ParentNode, Token, LibZen_ParseFloat(Token.GetText()));
+}
+
+let FunctionPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var FuncNode: ZNode = new ZFunctionNode(ParentNode);
+	FuncNode = TokenContext.MatchToken(FuncNode, "function", ZTokenContext_Required);
+	FuncNode = TokenContext.MatchPattern(FuncNode, ZNode_NameInfo, "$Name$", ZTokenContext_Optional);
+	FuncNode = TokenContext.MatchNtimes(FuncNode, "(", "$Param$", ",", ")");
+	FuncNode = TokenContext.MatchPattern(FuncNode, ZNode_TypeInfo, "$TypeAnnotation$", ZTokenContext_Optional);
+	FuncNode = TokenContext.MatchPattern(FuncNode, ZFunctionNode_Block, "$Block$", ZTokenContext_Required);
+	return FuncNode;
+}
+
+let GetIndexPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var IndexerNode: ZNode = new ZGetIndexNode(ParentNode, LeftNode);
+	IndexerNode = TokenContext.MatchToken(IndexerNode, "[", ZTokenContext_Required);
+	IndexerNode = TokenContext.MatchPattern(IndexerNode, ZGetIndexNode_Index, "$Expression$", ZTokenContext_Required, ZTokenContext_AllowSkipIndent);
+	IndexerNode = TokenContext.MatchToken(IndexerNode, "]", ZTokenContext_Required);
+	return IndexerNode;
+}
+
+let GetterPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var GetterNode: ZNode = new ZGetterNode(ParentNode, LeftNode);
+	GetterNode = TokenContext.MatchToken(GetterNode, ".", ZTokenContext_Required);
+	GetterNode = TokenContext.MatchPattern(GetterNode, ZNode_NameInfo, "$Name$", ZTokenContext_Required);
+	return GetterNode;
+}
+
+let GroupPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var GroupNode: ZNode = new ZGroupNode(ParentNode);
+	GroupNode = TokenContext.MatchToken(GroupNode, "(", ZTokenContext_Required);
+	GroupNode = TokenContext.MatchPattern(GroupNode, ZGroupNode_Expr, "$Expression$", ZTokenContext_Required, ZTokenContext_AllowSkipIndent);
+	GroupNode = TokenContext.MatchToken(GroupNode, ")", ZTokenContext_Required);
+	return GroupNode;
+}
+
+let IfPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var IfNode: ZNode = new ZIfNode(ParentNode);
+	IfNode = TokenContext.MatchToken(IfNode, "if", ZTokenContext_Required);
+	IfNode = TokenContext.MatchToken(IfNode, "(", ZTokenContext_Required);
+	IfNode = TokenContext.MatchPattern(IfNode, ZIfNode_Cond, "$Expression$", ZTokenContext_Required, ZTokenContext_AllowNewLine);
+	IfNode = TokenContext.MatchToken(IfNode, ")", ZTokenContext_Required);
+	IfNode = TokenContext.MatchPattern(IfNode, ZIfNode_Then, "$Block$", ZTokenContext_Required);
+	if(TokenContext.MatchNewLineToken("else")) {
+		var PatternName: String = "$Block$";
+		if(TokenContext.IsNewLineToken("if")) {
+			PatternName = "if";
+		}
+		IfNode = TokenContext.MatchPattern(IfNode, ZIfNode_Else, PatternName, ZTokenContext_Required);
+	}
+	return IfNode;
+}
+
+let InstanceOfPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var BinaryNode: ZNode = new ZInstanceOfNode(ParentNode, TokenContext.GetToken(ZTokenContext_MoveNext), LeftNode);
+	BinaryNode = TokenContext.MatchPattern(BinaryNode, ZNode_TypeInfo, "$Type$", ZTokenContext_Required);
+	return BinaryNode;
+}
+
+let IntLiteralPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var Token: ZToken = TokenContext.GetToken(ZTokenContext_MoveNext);
+	return new ZIntNode(ParentNode, Token, LibZen_ParseInt(Token.GetText()));
+}
+
+let LetPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var LetNode: ZNode = new ZLetNode(ParentNode);
+	LetNode = TokenContext.MatchToken(LetNode, "let", ZTokenContext_Required);
+	LetNode = TokenContext.MatchPattern(LetNode, ZNode_NameInfo, "$Name$", ZTokenContext_Required);
+	LetNode = TokenContext.MatchPattern(LetNode, ZNode_TypeInfo, "$TypeAnnotation$", ZTokenContext_Optional);
+	LetNode = TokenContext.MatchToken(LetNode, "=", ZTokenContext_Required);
+	LetNode = TokenContext.MatchPattern(LetNode, ZLetNode_InitValue, "$Expression$", ZTokenContext_Required);
+	return LetNode;
+}
+
+let MapEntryPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var LiteralNode: ZNode = new ZMapEntryNode(ParentNode);
+	LiteralNode = TokenContext.MatchPattern(LiteralNode, ZMapEntryNode_Key, "$Expression$", ZTokenContext_Required);
+	LiteralNode = TokenContext.MatchToken(LiteralNode, ":", ZTokenContext_Required);
+	LiteralNode = TokenContext.MatchPattern(LiteralNode, ZMapEntryNode_Value, "$Expression$", ZTokenContext_Required);
+	return LiteralNode;
+}
+
+let MapLiteralPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var LiteralNode: ZNode = new ZMapLiteralNode(ParentNode);
+	LiteralNode = TokenContext.MatchNtimes(LiteralNode, "{", "$MapEntry$", ",", "}");
+	return LiteralNode;
+}
+
+let MethodCallPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var MethodCallNode: ZNode = new ZMethodCallNode(ParentNode, LeftNode);
+	MethodCallNode = TokenContext.MatchToken(MethodCallNode, ".", ZTokenContext_Required);
+	MethodCallNode = TokenContext.MatchPattern(MethodCallNode, ZNode_NameInfo, "$Name$", ZTokenContext_Required);
+	MethodCallNode = TokenContext.MatchNtimes(MethodCallNode, "(", "$Expression$", ",", ")");
+	return MethodCallNode;
+}
+
+let NamePattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var Token: ZToken = TokenContext.GetToken(ZTokenContext_MoveNext);
+	if(LibZen_IsSymbol(Token.GetChar())) {
+		return new ZGetNameNode(ParentNode, Token, Token.GetText());
+	}
+	return new ZErrorNode(ParentNode, Token, "illegal name: \"" + Token.GetText() + "\"");
+}
+
+let NameToken = function(SourceContext: ZSourceContext): boolean {
+	var StartIndex: int = SourceContext.GetPosition();
+	while(SourceContext.HasChar()) {
+		var ch: String = SourceContext.GetCurrentChar();
+		if(!LibZen_IsSymbol(ch) && !LibZen_IsDigit(ch)) {
+			break;
+		}
+		SourceContext.MoveNext();
+	}
+	SourceContext.Tokenize(StartIndex, SourceContext.GetPosition());
+	return true;
+}
+
+let NewLineToken = function(SourceContext: ZSourceContext): boolean {
+	var StartIndex: int = SourceContext.GetPosition() + 1;
+	SourceContext.MoveNext();
+	SourceContext.SkipWhiteSpace();
+	SourceContext.FoundIndent(StartIndex, SourceContext.GetPosition());
+	return true;
+}
+
+let NewObjectPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var LiteralNode: ZNode = new ZNewObjectNode(ParentNode);
+	LiteralNode = TokenContext.MatchToken(LiteralNode, "new", ZTokenContext_Required);
+	LiteralNode = TokenContext.MatchPattern(LiteralNode, ZNode_TypeInfo, "$Type$", ZTokenContext_Optional);
+	LiteralNode = TokenContext.MatchNtimes(LiteralNode, "(", "$Expression$", ",", ")");
+	return LiteralNode;
+}
+
+let NotPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var UnaryNode: ZNode = new ZNotNode(ParentNode, TokenContext.GetToken(ZTokenContext_MoveNext));
+	UnaryNode = TokenContext.MatchPattern(UnaryNode, ZUnaryNode_Recv, "$RightExpression$", ZTokenContext_Required);
+	return UnaryNode;
+}
+
+let NullPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	return new ZNullNode(ParentNode, TokenContext.GetToken(ZTokenContext_MoveNext));
+}
+
+function NumberLiteralTokenFunction_ParseDigit(SourceContext: ZSourceContext): String {
+	var ch: String = "\0";
+	while(SourceContext.HasChar()) {
+		ch = SourceContext.GetCurrentChar();
+		if(!LibZen_IsDigit(ch)) {
+			break;
+		}
+		SourceContext.MoveNext();
+	}
+	return ch;
+}
+let NumberLiteralToken = function(SourceContext: ZSourceContext): boolean {
+	var StartIndex: int = SourceContext.GetPosition();
+	var ch: String = NumberLiteralTokenFunction_ParseDigit(SourceContext);
+	if(ch == ".") {
+		SourceContext.MoveNext();
+		ch = NumberLiteralTokenFunction_ParseDigit(SourceContext);
+		if(ch == "e" || ch == "E") {
+			SourceContext.MoveNext();
+			if(SourceContext.HasChar()) {
+				ch = SourceContext.GetCurrentChar();
+				if(ch == "+" || ch == "-") {
+					SourceContext.MoveNext();
+				}
+			}
+			NumberLiteralTokenFunction_ParseDigit(SourceContext);
+		}
+		SourceContext.Tokenize("$FloatLiteral$", StartIndex, SourceContext.GetPosition());
+	}
+	else {
+		SourceContext.Tokenize("$IntegerLiteral$", StartIndex, SourceContext.GetPosition());
+	}
+	return true;
+}
+
+let OperatorToken = function(SourceContext: ZSourceContext): boolean {
+	SourceContext.TokenizeDefinedSymbol(SourceContext.GetPosition());
+	return true;
+}
+
+let OrPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var BinaryNode: ZBinaryNode = new ZOrNode(ParentNode, TokenContext.GetToken(ZTokenContext_MoveNext), LeftNode, TokenContext.GetApplyingSyntax());
+	return BinaryNode.AppendParsedRightNode(ParentNode, TokenContext);
+}
+
+let ParamPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var ParamNode: ZNode = new ZParamNode(ParentNode);
+	ParamNode = TokenContext.MatchPattern(ParamNode, ZNode_NameInfo, "$Name$", ZTokenContext_Required);
+	ParamNode = TokenContext.MatchPattern(ParamNode, ZNode_TypeInfo, "$TypeAnnotation$", ZTokenContext_Optional);
+	return ParamNode;
+}
+
+let PrototypePattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var FuncNode: ZNode = new ZPrototypeNode(ParentNode);
+	FuncNode = TokenContext.MatchToken(FuncNode, "function", ZTokenContext_Required);
+	FuncNode = TokenContext.MatchPattern(FuncNode, ZNode_NameInfo, "$Name$", ZTokenContext_Required);
+	FuncNode = TokenContext.MatchNtimes(FuncNode, "(", "$Param$", ",", ")");
+	FuncNode = TokenContext.MatchPattern(FuncNode, ZNode_TypeInfo, "$TypeAnnotation$", ZTokenContext_Required);
+	return FuncNode;
+}
+
+let ReturnPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var ReturnNode: ZNode = new ZReturnNode(ParentNode);
+	ReturnNode = TokenContext.MatchToken(ReturnNode, "return", ZTokenContext_Required);
+	ReturnNode = TokenContext.MatchPattern(ReturnNode, ZReturnNode_Expr, "$Expression$", ZTokenContext_Optional);
+	return ReturnNode;
+}
+
+let RightExpressionPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	return ExpressionPatternFunction_DispatchPattern(ParentNode, TokenContext, LeftNode, false, false);
+}
+
+let RightTypePattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftTypeNode: ZNode): ZNode {
+	var SourceToken: ZToken = TokenContext.GetToken();
+	if(LeftTypeNode.Type.GetParamSize() > 0) {
+		if(TokenContext.MatchToken("<")) {  // Generics
+			var TypeList: ZType[] = [];
+			while(!TokenContext.StartsWithToken(">")) {
+				if(TypeList.size() > 0 && !TokenContext.MatchToken(",")) {
+					return null;
+				}
+				var ParamTypeNode: ZTypeNode = (ZTypeNode) TokenContext.ParsePattern(ParentNode, "$Type$", ZTokenContext_Optional);
+				if(ParamTypeNode == null) {
+					return LeftTypeNode;
+				}
+				TypeList.add(ParamTypeNode.Type);
+			}
+			LeftTypeNode = new ZTypeNode(ParentNode, SourceToken, ZTypePool_GetGenericType(LeftTypeNode.Type, TypeList, true));
+		}
+	}
+	while(TokenContext.MatchToken("[")) {  // Array
+		if(!TokenContext.MatchToken("]")) {
+			return null;
+		}
+		LeftTypeNode = new ZTypeNode(ParentNode, SourceToken, ZTypePool_GetGenericType1(ZGenericType_ArrayType, LeftTypeNode.Type));
+	}
+	return LeftTypeNode;
+}
+
+let SetIndexPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var IndexerNode: ZNode = new ZSetIndexNode(ParentNode, LeftNode);
+	IndexerNode = TokenContext.MatchToken(IndexerNode, "[", ZTokenContext_Required);
+	IndexerNode = TokenContext.MatchPattern(IndexerNode, ZSetIndexNode_Index, "$Expression$", ZTokenContext_Required, ZTokenContext_AllowSkipIndent);
+	IndexerNode = TokenContext.MatchToken(IndexerNode, "]", ZTokenContext_Required);
+	IndexerNode = TokenContext.MatchToken(IndexerNode, "=", ZTokenContext_Required);
+	IndexerNode = TokenContext.MatchPattern(IndexerNode, ZSetIndexNode_Expr, "$Expression$", ZTokenContext_Required);
+	return IndexerNode;
+}
+
+let SetterPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var SetterNode: ZNode = new ZSetterNode(ParentNode, LeftNode);
+	SetterNode = TokenContext.MatchToken(SetterNode, ".", ZTokenContext_Required);
+	SetterNode = TokenContext.MatchPattern(SetterNode, ZNode_NameInfo, "$Name$", ZTokenContext_Required);
+	SetterNode = TokenContext.MatchToken(SetterNode, "=", ZTokenContext_Required);
+	SetterNode = TokenContext.MatchPattern(SetterNode, ZSetterNode_Expr, "$Expression$", ZTokenContext_Required);
+	return SetterNode;
+}
+
+let StatementEndPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var ContextAllowance: boolean = TokenContext.SetParseFlag(false);
+	var Token: ZToken = null;
+	if(TokenContext.HasNext()) {
+		Token = TokenContext.GetToken();
+		if(!Token.EqualsText(";") && !Token.IsIndent()) {
+			TokenContext.SetParseFlag(ContextAllowance);
+			return TokenContext.CreateExpectedErrorNode(Token, ";");
+		}
+		TokenContext.MoveNext();
+		while(TokenContext.HasNext()) {
+			Token = TokenContext.GetToken();
+			if(!Token.EqualsText(";") && !Token.IsIndent()) {
+				break;
+			}
+			TokenContext.MoveNext();
+		}
+	}
+	TokenContext.SetParseFlag(ContextAllowance);
+	return new ZEmptyNode(ParentNode, Token);
+}
+
+let StatementPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var Rememberd: boolean = TokenContext.SetParseFlag(ZTokenContext_AllowSkipIndent);
+	TokenContext.SetParseFlag(ZTokenContext_NotAllowSkipIndent);
+	var StmtNode: ZNode = ExpressionPatternFunction_DispatchPattern(ParentNode, TokenContext, null, true, true);
+	StmtNode = TokenContext.MatchPattern(StmtNode, ZNode_Nop, ";", ZTokenContext_Required);
+	TokenContext.SetParseFlag(Rememberd);
+	return StmtNode;
+}
+
+let StringLiteralPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var Token: ZToken = TokenContext.GetToken(ZTokenContext_MoveNext);
+	return new ZStringNode(ParentNode, Token, LibZen_UnquoteString(Token.GetText()));
+}
+
+let StringLiteralToken = function(SourceContext: ZSourceContext): boolean {
+	var StartIndex: int = SourceContext.GetPosition();
+	SourceContext.MoveNext();
+	while(SourceContext.HasChar()) {
+		var ch: String = SourceContext.GetCurrentChar();
+		if(ch == "\"") {
+			SourceContext.MoveNext(); // eat """
+			SourceContext.Tokenize("$StringLiteral$", StartIndex, SourceContext.GetPosition());
+			return true;
+		}
+		if(ch == "\n") {
+			break;
+		}
+		if(ch == "\\") {
+			SourceContext.MoveNext();
+		}
+		SourceContext.MoveNext();
+	}
+	SourceContext.LogWarning(StartIndex, "unclosed \"");
+	SourceContext.Tokenize("$StringLiteral$", StartIndex, SourceContext.GetPosition());
+	return false;
+}
+
+let SymbolExpressionPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var NameToken: ZToken = TokenContext.GetToken(ZTokenContext_MoveNext);
+	if(TokenContext.IsToken("=")) {
+		return new ZErrorNode(ParentNode, TokenContext.GetToken(), "assignment is not en expression");
+	}
+	else {
+		return new ZGetNameNode(ParentNode, NameToken, NameToken.GetText());
+	}
+}
+
+let SymbolStatementPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var NameToken: ZToken = TokenContext.GetToken(ZTokenContext_MoveNext);
+	if(TokenContext.MatchToken("=")) {
+		var AssignedNode: ZNode = new ZSetNameNode(ParentNode, NameToken, NameToken.GetText());
+		AssignedNode = TokenContext.MatchPattern(AssignedNode, ZSetNameNode_Expr, "$Expression$", ZTokenContext_Required);
+		return AssignedNode;
+	}
+	else {
+		return new ZGetNameNode(ParentNode, NameToken, NameToken.GetText());
+	}
+}
+
+let ThrowPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var ThrowNode: ZNode = new ZThrowNode(ParentNode);
+	ThrowNode = TokenContext.MatchToken(ThrowNode, "throw", ZTokenContext_Required);
+	ThrowNode = TokenContext.MatchPattern(ThrowNode, ZThrowNode_Expr, "$Expression$", ZTokenContext_Required);
+	return ThrowNode;
+}
+
+let TruePattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	return new ZBooleanNode(ParentNode, TokenContext.GetToken(ZTokenContext_MoveNext), true);
+}
+
+let TryPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var TryNode: ZNode = new ZTryNode(ParentNode);
+	TryNode = TokenContext.MatchToken(TryNode, "try", ZTokenContext_Required);
+	TryNode = TokenContext.MatchPattern(TryNode, ZTryNode_Try, "$Block$", ZTokenContext_Required);
+	var count: int = 0;
+	if(TokenContext.IsNewLineToken("catch")) {
+		TryNode = TokenContext.MatchPattern(TryNode, ZTryNode_Catch, "$Catch$", ZTokenContext_Required);
+		count = count + 1;
+	}
+	if(TokenContext.MatchNewLineToken("finally")) {
+		TryNode = TokenContext.MatchPattern(TryNode, ZTryNode_Finally, "$Block$", ZTokenContext_Required);
+		count = count + 1;
+	}
+	if(count == 0 && !TryNode.IsErrorNode()) {
+		return TryNode.AST[ZTryNode_Try]; // no catch and finally
+	}
+	return TryNode;
+}
+
+let TypeAnnotationPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	if(TokenContext.MatchToken(":")) {
+		return TokenContext.ParsePattern(ParentNode, "$Type$", ZTokenContext_Required);
+	}
+	return null;
+}
+
+let TypePattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var Token: ZToken = TokenContext.GetToken(ZTokenContext_MoveNext);
+	var TypeNode: ZTypeNode = ParentNode.GetNameSpace().GetTypeNode(Token.GetText(), Token);
+	if(TypeNode != null) {
+		return TokenContext.ParsePatternAfter(ParentNode, TypeNode, "$TypeRight$", ZTokenContext_Optional);
+	}
+	return null; // Not Matched
+}
+
+let UnaryPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var UnaryNode: ZNode = new ZUnaryNode(ParentNode, TokenContext.GetToken(ZTokenContext_MoveNext));
+	return TokenContext.MatchPattern(UnaryNode, ZUnaryNode_Recv, "$RightExpression$", ZTokenContext_Required);
+}
+
+let VarPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var VarNode: ZNode = new ZVarNode(ParentNode);
+	VarNode = TokenContext.MatchToken(VarNode, "var", ZTokenContext_Required);
+	VarNode = TokenContext.MatchPattern(VarNode, ZNode_NameInfo, "$Name$", ZTokenContext_Required);
+	VarNode = TokenContext.MatchPattern(VarNode, ZNode_TypeInfo, "$TypeAnnotation$", ZTokenContext_Optional);
+	VarNode = TokenContext.MatchToken(VarNode, "=", ZTokenContext_Required);
+	VarNode = TokenContext.MatchPattern(VarNode, ZVarNode_InitValue, "$Expression$", ZTokenContext_Required);
+	return VarNode;
+}
+
+let WhilePattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
+	var WhileNode: ZNode = new ZWhileNode(ParentNode);
+	WhileNode = TokenContext.MatchToken(WhileNode, "while", ZTokenContext_Required);
+	WhileNode = TokenContext.MatchToken(WhileNode, "(", ZTokenContext_Required);
+	WhileNode = TokenContext.MatchPattern(WhileNode, ZWhileNode_Cond, "$Expression$", ZTokenContext_Required, ZTokenContext_AllowSkipIndent);
+	WhileNode = TokenContext.MatchToken(WhileNode, ")", ZTokenContext_Required);
+	WhileNode = TokenContext.MatchPattern(WhileNode, ZWhileNode_Block, "$Block$", ZTokenContext_Required);
+	return WhileNode;
+}
+
+let WhiteSpaceToken = function(SourceContext: ZSourceContext): boolean {
+	SourceContext.SkipWhiteSpace();
+	return true;
+}
+

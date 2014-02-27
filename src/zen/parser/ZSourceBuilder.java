@@ -66,6 +66,17 @@ public final class ZSourceBuilder {
 		this.SourceList.add(Text);
 	}
 
+	public final void Append(String Text, String Text2) {
+		this.SourceList.add(Text);
+		this.SourceList.add(Text2);
+	}
+
+	public final void Append(String Text, String Text2, String Text3) {
+		this.SourceList.add(Text);
+		this.SourceList.add(Text2);
+		this.SourceList.add(Text3);
+	}
+
 	public final void AppendInt(int Value) {
 		this.SourceList.add(""+Value);
 	}

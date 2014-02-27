@@ -32,6 +32,8 @@ import zen.type.ZClassType;
 import zen.type.ZType;
 
 public final class ZClassNode extends ZListNode {
+
+	@Field public boolean IsExport = false;
 	@Field public String ClassName = null;
 	@Field public ZClassType ClassType = null;
 	@Field public ZType SuperType = null;
