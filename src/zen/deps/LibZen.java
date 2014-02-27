@@ -540,6 +540,7 @@ public class LibZen {
 		GenMap.put("hs", zen.codegen.haskell.HaskellSourceGenerator.class);
 		GenMap.put("js", zen.codegen.javascript.JavaScriptSourceGenerator.class);
 
+		GenMap.put("pl", zen.codegen.PerlGenerator.class);
 		GenMap.put("py", zen.codegen.jython.PythonGenerator.class);
 		GenMap.put("rb", zen.codegen.jruby.RubySourceGenerator.class);
 

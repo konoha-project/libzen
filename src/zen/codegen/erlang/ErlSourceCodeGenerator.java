@@ -29,6 +29,8 @@ import zen.lang.ZenTypeSafer;
 import zen.parser.ZSourceBuilder;
 import zen.parser.ZSourceEngine;
 import zen.parser.ZSourceGenerator;
+import zen.parser.ZToken;
+import zen.type.ZType;
 
 //ifdef JAVA
 
@@ -51,10 +53,11 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 		return new ZSourceEngine(new ZenTypeSafer(this), this);
 	}
 
-	@Override public void VisitStmtList(ZBlockNode BlockNode) {
+	@Override public void VisitStmtList(ZListNode BlockNode) {
 		this.VisitStmtList(BlockNode, ",");
 	}
-	public void VisitStmtList(ZBlockNode BlockNode, String last) {
+
+	public void VisitStmtList(ZListNode BlockNode, String last) {
 		@Var int i = 0;
 		@Var int size = BlockNode.GetListSize();
 		while (i < size) {
@@ -266,30 +269,30 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 	// 	this.GenerateTypeName(Node.AST[ZBinaryNode._Right].Type);
 	// }
 
+	@Override protected String GetBinaryOperator(ZType Type, ZToken Token) {
+		if(Token.EqualsText("<=")) {
+			return "=<";
+		}
+		if(Token.EqualsText("<<")) {
+			return "bsl";
+		}
+		if(Token.EqualsText(">>")) {
+			return "bsr";
+		}
+		if(Token.EqualsText('%')) {
+			return "rem";
+		}
+		return Token.GetText();
+	}
+
+
 	@Override public void VisitBinaryNode(ZBinaryNode Node) {
 		if (Node.ParentNode instanceof ZBinaryNode) {
 			this.CurrentBuilder.Append("(");
 		}
 		this.GenerateCode(null, Node.AST[ZBinaryNode._Left]);
 		//		this.CurrentBuilder.AppendToken(Node.SourceToken.GetText());
-		String Operator = Node.SourceToken.GetText();
-		if (Operator == null) {
-			//FIXME!! error handling
-		} else {
-			switch(Operator) {
-			case "<<":
-				Operator = "bsl";
-				break;
-			case ">>":
-				Operator = "bsr";
-				break;
-			case "%":
-				Operator = "rem";
-				break;
-			default:
-				//pass
-			}
-		}
+		@Var String Operator = this.GetBinaryOperator(Node.Type, Node.SourceToken);
 		this.CurrentBuilder.AppendToken(Operator);
 		this.GenerateCode(null, Node.AST[ZBinaryNode._Right]);
 		if (Node.ParentNode instanceof ZBinaryNode) {
@@ -299,18 +302,7 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 
 	@Override public void VisitComparatorNode(ZComparatorNode Node) {
 		this.GenerateCode(null, Node.AST[ZBinaryNode._Left]);
-		String Operator = Node.SourceToken.GetText();
-		if (Operator == null) {
-			//FIXME!! error handling
-		} else {
-			switch(Operator) {
-			case "<=":
-				Operator = "=<";
-				break;
-			default:
-				//pass
-			}
-		}
+		@Var String Operator = this.GetBinaryOperator(Node.Type, Node.SourceToken);
 		this.CurrentBuilder.AppendToken(Operator);
 		this.GenerateCode(null, Node.AST[ZBinaryNode._Right]);
 	}

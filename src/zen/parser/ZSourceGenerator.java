@@ -284,7 +284,7 @@ public class ZSourceGenerator extends ZGenerator {
 		this.CurrentBuilder.Append(RawSource);
 	}
 
-	public void VisitStmtList(ZBlockNode BlockNode) {
+	public void VisitStmtList(ZListNode BlockNode) {
 		@Var int i = 0;
 		while (i < BlockNode.GetListSize()) {
 			@Var ZNode SubNode = BlockNode.GetListAt(i);

@@ -35,6 +35,7 @@ import zen.ast.ZFieldNode;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZInstanceOfNode;
 import zen.ast.ZLetNode;
+import zen.ast.ZListNode;
 import zen.ast.ZNewObjectNode;
 import zen.ast.ZNode;
 import zen.ast.ZParamNode;
@@ -124,7 +125,7 @@ public class PythonGenerator extends ZSourceGenerator {
 		}
 	}
 
-	@Override public void VisitStmtList(ZBlockNode BlockNode) {
+	@Override public void VisitStmtList(ZListNode BlockNode) {
 		@Var int i = 0;
 		while (i < BlockNode.GetListSize()) {
 			ZNode SubNode = BlockNode.GetListAt(i);
