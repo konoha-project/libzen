@@ -209,11 +209,13 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 	}
 
 
-	// @Override public void VisitGetterNode(ZGetterNode Node) {
-	// 	this.GenerateSurroundCode(Node.AST[ZGetterNode._Recv]);
-	// 	this.CurrentBuilder.Append(".");
-	// 	this.CurrentBuilder.Append(Node.FieldName);
-	// }
+	@Override public void VisitGetterNode(ZGetterNode Node) {
+		this.GenerateSurroundCode(Node.AST[ZGetterNode._Recv]);
+		this.CurrentBuilder.Append("#");
+		this.CurrentBuilder.Append(Node.AST[ZGetterNode._Recv].Type.ShortName.toLowerCase());
+		this.CurrentBuilder.Append(".");
+		this.CurrentBuilder.Append(Node.FieldName.toLowerCase());
+	}
 
 	// @Override public void VisitSetterNode(ZSetterNode Node) {
 	// 	this.GenerateSurroundCode(Node.AST[ZSetterNode._Recv]);
@@ -473,38 +475,36 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.AppendLineFeed();
 	}
 
-	// @Override public void VisitClassNode(ZClassNode Node) {
-	// 	this.CurrentBuilder.Append("class");
-	// 	this.CurrentBuilder.AppendWhiteSpace();
-	// 	this.CurrentBuilder.Append(Node.ClassName);
-	// 	if(Node.SuperType != null) {
-	// 		this.CurrentBuilder.AppendToken("extends");
-	// 		this.GenerateTypeName(Node.SuperType);
-	// 	}
-	// 	this.CurrentBuilder.AppendWhiteSpace();
-	// 	this.CurrentBuilder.Append("{");
-	// 	this.CurrentBuilder.Indent();
-	// 	@Var int i = 0;
-	// 	while (i < Node.GetListSize()) {
-	// 		@Var ZFieldNode FieldNode = Node.GetFieldNode(i);
-	// 		this.CurrentBuilder.AppendLineFeed();
-	// 		this.CurrentBuilder.AppendIndent();
-	// 		this.CurrentBuilder.Append("var");
-	// 		this.CurrentBuilder.AppendWhiteSpace();
-	// 		this.CurrentBuilder.Append(FieldNode.FieldName);
-	// 		this.VisitTypeAnnotation(FieldNode.DeclType);
-	// 		if(FieldNode.HasAst(ZFieldNode._InitValue)) {
-	// 			this.CurrentBuilder.AppendToken("=");
-	// 			this.GenerateCode(null, FieldNode.AST[ZFieldNode._InitValue]);
-	// 		}
-	// 		this.CurrentBuilder.Append(this.SemiColon);
-	// 		i = i + 1;
-	// 	}
-	// 	this.CurrentBuilder.UnIndent();
-	// 	this.CurrentBuilder.AppendLineFeed();
-	// 	this.CurrentBuilder.AppendIndent();
-	// 	this.CurrentBuilder.Append("}");
-	// }
+	@Override public void VisitClassNode(ZClassNode Node) {
+		ZSourceBuilder BodyBuilder = this.CurrentBuilder;
+		this.CurrentBuilder = this.HeaderBuilder;
+
+		this.CurrentBuilder.Append("-record(");
+		this.CurrentBuilder.Append(Node.ClassName.toLowerCase());
+		if(Node.SuperType != null) {
+			throw new RuntimeException("\"extends\" is not supported yet");
+		}
+		this.CurrentBuilder.Append(", {");
+		@Var int i = 0;
+		@Var int size = Node.GetListSize();
+		while (i < size) {
+			@Var ZFieldNode FieldNode = Node.GetFieldNode(i);
+			this.CurrentBuilder.Append(FieldNode.FieldName.toLowerCase());
+			if(FieldNode.HasAst(ZFieldNode._InitValue)) {
+				this.CurrentBuilder.AppendToken("=");
+				this.GenerateCode(null, FieldNode.AST[ZFieldNode._InitValue]);
+			}
+			if (i < size - 1) {
+				this.CurrentBuilder.AppendWhiteSpace();
+				this.CurrentBuilder.Append(",");
+			}
+			i = i + 1;
+		}
+		this.CurrentBuilder.Append("}).");
+		this.CurrentBuilder.AppendLineFeed();
+
+		this.CurrentBuilder = BodyBuilder;
+	}
 
 	// @Override public void VisitErrorNode(ZErrorNode Node) {
 	// 	ZLogger._LogError(Node.SourceToken, Node.ErrorMessage);
