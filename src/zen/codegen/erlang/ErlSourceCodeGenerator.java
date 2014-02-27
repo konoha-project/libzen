@@ -1,27 +1,28 @@
 //ifdef JAVA
 package zen.codegen.erlang;
 
+import zen.ast.ZBinaryNode;
 import zen.ast.ZBlockNode;
 import zen.ast.ZBreakNode;
+import zen.ast.ZCastNode;
 import zen.ast.ZClassNode;
+import zen.ast.ZComparatorNode;
 import zen.ast.ZFieldNode;
 import zen.ast.ZFuncCallNode;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZGetNameNode;
 import zen.ast.ZGetterNode;
-import zen.ast.ZSetterNode;
+import zen.ast.ZGlobalNameNode;
 import zen.ast.ZIfNode;
 import zen.ast.ZListNode;
+import zen.ast.ZNewObjectNode;
 import zen.ast.ZNode;
 import zen.ast.ZParamNode;
 import zen.ast.ZReturnNode;
 import zen.ast.ZSetNameNode;
+import zen.ast.ZSetterNode;
 import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
-import zen.ast.ZGlobalNameNode;
-import zen.ast.ZNewObjectNode;
-import zen.ast.ZComparatorNode;
-import zen.ast.ZBinaryNode;
 import zen.deps.Field;
 import zen.deps.Var;
 import zen.lang.ZenTypeSafer;
@@ -122,7 +123,7 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 
 	@Override public void VisitNewObjectNode(ZNewObjectNode Node) {
 		this.CurrentBuilder.Append("#");
-		this.CurrentBuilder.Append(ToErlangTypeName(Node.Type.ShortName));
+		this.CurrentBuilder.Append(this.ToErlangTypeName(Node.Type.ShortName));
 		this.VisitListNode("{", Node, "}");
 	}
 
@@ -179,9 +180,9 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 	@Override public void VisitGetterNode(ZGetterNode Node) {
 		this.GenerateSurroundCode(Node.AST[ZGetterNode._Recv]);
 		this.CurrentBuilder.Append("#");
-		this.CurrentBuilder.Append(ToErlangTypeName(Node.AST[ZGetterNode._Recv].Type.ShortName));
+		this.CurrentBuilder.Append(this.ToErlangTypeName(Node.AST[ZGetterNode._Recv].Type.ShortName));
 		this.CurrentBuilder.Append(".");
-		this.CurrentBuilder.Append(ToErlangTypeName(Node.FieldName));
+		this.CurrentBuilder.Append(this.ToErlangTypeName(Node.FieldName));
 	}
 
 	@Override public void VisitSetterNode(ZSetterNode Node) {
@@ -190,7 +191,7 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 		ZGetNameNode GetNameNode = (ZGetNameNode)Node.AST[ZSetterNode._Recv];
 		this.GenerateSurroundCode(GetNameNode);
 		this.CurrentBuilder.Append("#");
-		this.CurrentBuilder.Append(ToErlangTypeName(Node.AST[ZSetterNode._Recv].Type.ShortName));
+		this.CurrentBuilder.Append(this.ToErlangTypeName(Node.AST[ZSetterNode._Recv].Type.ShortName));
 		this.CurrentBuilder.Append("{");
 		this.CurrentBuilder.Append(Node.FieldName);
 		this.CurrentBuilder.AppendToken("=");
@@ -236,7 +237,7 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 
 	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
 		String FuncName = ((ZGlobalNameNode)Node.AST[ZFuncCallNode._Func]).GlobalName;
-		FuncName = ToErlangFuncName(FuncName);
+		FuncName = this.ToErlangFuncName(FuncName);
 		this.CurrentBuilder.Append(FuncName);
 		//this.GenerateCode(null, Node.AST[ZFuncCallNode._Func]);
 		this.VisitListNode("(", Node, ")");
@@ -270,7 +271,7 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 			this.CurrentBuilder.Append("(");
 		}
 		this.GenerateCode(null, Node.AST[ZBinaryNode._Left]);
-//		this.CurrentBuilder.AppendToken(Node.SourceToken.GetText());
+		//		this.CurrentBuilder.AppendToken(Node.SourceToken.GetText());
 		String Operator = Node.SourceToken.GetText();
 		if (Operator == null) {
 			//FIXME!! error handling
@@ -392,12 +393,12 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 		this.GenerateCode(null, Node.AST[ZWhileNode._Cond]);
 		this.CurrentBuilder = BodyBuilder;
 		this.AppendLazy(mark1, ""
-						+ WhileNodeName
-						+ " = fun(" + WhileNodeName + ", "
-						+ this.VarMgr.GenVarTupleOnlyUsedByChildScope(false)
-						+ ") when "
-						+ LazyBuilder.toString()
-						+ " -> ");
+				+ WhileNodeName
+				+ " = fun(" + WhileNodeName + ", "
+				+ this.VarMgr.GenVarTupleOnlyUsedByChildScope(false)
+				+ ") when "
+				+ LazyBuilder.toString()
+				+ " -> ");
 
 		this.VarMgr.FinishUsingFilter();
 		this.CurrentBuilder.AppendLineFeed();
@@ -473,14 +474,14 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 
 	@Override
 	public void VisitParamNode(ZParamNode Node) {
-		this.CurrentBuilder.Append(ToErlangVarName(Node.Name));
+		this.CurrentBuilder.Append(this.ToErlangVarName(Node.Name));
 	}
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
 		this.VarMgr.PushScope();
 		this.CreateVariables(Node);
 
-		String FuncName = ToErlangFuncName(Node.FuncName);
+		String FuncName = this.ToErlangFuncName(Node.FuncName);
 		this.HeaderBuilder.Append("-export([" + FuncName + "/" + Node.GetListSize() + "]).");
 		this.HeaderBuilder.AppendLineFeed();
 
@@ -506,7 +507,7 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 		this.CurrentBuilder = this.HeaderBuilder;
 
 		this.CurrentBuilder.Append("-record(");
-		this.CurrentBuilder.Append(ToErlangTypeName(Node.ClassName));
+		this.CurrentBuilder.Append(this.ToErlangTypeName(Node.ClassName));
 		if(Node.SuperType != null) {
 			throw new RuntimeException("\"extends\" is not supported yet");
 		}
@@ -515,7 +516,7 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 		@Var int size = Node.GetListSize();
 		while (i < size) {
 			@Var ZFieldNode FieldNode = Node.GetFieldNode(i);
-			this.CurrentBuilder.Append(ToErlangTypeName(FieldNode.FieldName));
+			this.CurrentBuilder.Append(this.ToErlangTypeName(FieldNode.FieldName));
 			if(FieldNode.HasAst(ZFieldNode._InitValue)) {
 				this.CurrentBuilder.AppendToken("=");
 				this.GenerateCode(null, FieldNode.AST[ZFieldNode._InitValue]);
@@ -578,7 +579,7 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 	}
 
 	private void AppendWrapperFuncDecl(ZFunctionNode Node){
-		String FuncName = ToErlangFuncName(Node.FuncName);
+		String FuncName = this.ToErlangFuncName(Node.FuncName);
 		this.CurrentBuilder.Append(FuncName);
 		this.VisitListNode("(", Node, ")");
 		this.CurrentBuilder.Append(" ->");
