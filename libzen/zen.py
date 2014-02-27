@@ -29,10 +29,15 @@ def GenType(s):
 	s = s.replace("char", "String")
 	s = s.replace("long", "int")
 	s = s.replace("double", "float")
+	s = s.replace("ZMatchFunction", "Func<ZNode, ZNode, ZTokenContext, ZNode>")
+	s = s.replace("ZTokenFunction", "Func<boolean, ZSourceContext>")
 	m = ArrayPattern.match(s)
 	if m:
 		s = m.group(1) + "[]"
 	return s
+
+def GenAnno(s):
+	return ": " + GenType(s)
 
 FieldPattern = re.compile('\@Field\s+(\S*)\s+(\w*)(.*)')
 
@@ -41,7 +46,7 @@ def GenField(s):
 	s = s.replace('@Init ', '')
 	m = FieldPattern.match(s)
 	if m:
-		return '\tvar ' + m.group(2) + ': ' + GenType(m.group(1)) + m.group(3) + '\n'
+		return '\tvar ' + m.group(2) + GenAnno(m.group(1)) + m.group(3) + '\n'
 	return '\t//'+s;
 
 SymbolPattern = re.compile('(\S*)\s+(\w*)\s+\=\s+(.*)')
@@ -80,6 +85,7 @@ NewArrayPattern = re.compile('(.*)new ZArray\<\S*\>\(.*\)(.*)')
 NewMapPattern = re.compile('(.*)new ZenMap\<\S*\>\(.*\)(.*)')
 MapPattern1 = re.compile('(.*)\.GetOrNull\((.*)\);')
 MapPattern2 = re.compile('(.*)\.put\((.*)\,(.*)\);')
+FuncPattern = re.compile('(.*)new (\w+)Function\(\)(.*)');
 
 def GenVar(line):
 	line = line.replace("'", '"')
@@ -92,7 +98,7 @@ def GenVar(line):
 	line = line.replace(".CompactArray()", "")
 	m = VarPattern.match(line)
 	if m:
-		line = m.group(1) + 'var ' + m.group(3) + ": " + GenType(m.group(2)) + m.group(4) + '\n'
+		line = m.group(1) + 'var ' + m.group(3) + GenAnno(m.group(2)) + m.group(4) + '\n'
 	m = NewArrayPattern.match(line)
 	if m:
 		line = m.group(1) + "[]" + m.group(2) + "\n";
@@ -105,6 +111,9 @@ def GenVar(line):
 	m = MapPattern2.match(line)
 	if m :
 		line = m.group(1) + "[" + m.group(2) + "] = " + m.group(3) + ";\n";
+	m = FuncPattern.match(line)
+	if m :
+		line = m.group(1) + m.group(2) + m.group(3) + "\n"
 	return line;
 
 def ParseParam(s, IsMethod, cname):
@@ -142,9 +151,13 @@ def GenFunc(cname, line, IsProto):
 		ReturnType = cname
 		funcname = block
 	if funcname == "Invoke" :
-		funcname = params[0][0]
+		funcname = params[0][0][0:-8]
 		params = params[1:]
-	
+		if IsProto:
+			s = ""
+		else:
+			s = "let " + funcname + " = function" + GenParam(params) + ": " + GenType(ReturnType) + line[end+1:] + "\n"
+		return s
 	sig = funcname + GenParam(params) + ": " + GenType(ReturnType)
 	if IsProto:
 		return "function " + sig + ";\n"
@@ -387,14 +400,19 @@ function LibZen_ArrayCopy(src, sindex: int, dst, dindex: int, len: int): void;
 
 let LibZen_GreekNames = ["a", "b", "c"];
 '''
-	f.write(LIBZEN)
+	#f.write(LIBZEN)
+
+OUTFILE = 'libzen/libzen.zen'
 
 def main(files) :
 	c = Context()
 	for file in files[1:]:
+		if file.endswith(".zen"):
+			OUTFILE = file
+			continue
 		readfile(file, c)
 	c.ClassList = ClassSort(c.ClassList, {})
-	c.write('libzen/libzen.zen')
+	c.write(OUTFILE)
 
 
 main(sys.argv)

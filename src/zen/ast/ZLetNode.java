@@ -12,6 +12,7 @@ public class ZLetNode extends ZNode {
 	@Field public ZToken SymbolToken;
 	@Field public ZType  SymbolType = ZType.VarType;
 	@Field public String GlobalName = null;
+	@Field public boolean IsExport = false;
 
 	public ZLetNode(ZNode ParentNode) {
 		super(ParentNode, null, 1);

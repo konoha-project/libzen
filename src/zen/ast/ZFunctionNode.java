@@ -42,6 +42,7 @@ public class ZFunctionNode extends ZListNode {
 	@Field public String FuncName = null;
 	@Field public ZToken NameToken = null;
 
+	@Field public boolean IsExport = false;
 	@Field public ZFunctionNode ParentFunctionNode = null;
 	@Field public ZFuncType ResolvedFuncType = null;
 	@Field public int VarIndex = 0;

@@ -1,0 +1,47 @@
+function LibZen_Print(msg: String): void;
+function LibZen_PrintLine(msg: String): void;
+function LibZen_FixMe(e): void;
+function LibZen_PrintDebug(msg: String): void;
+function LibZen_Assert(TestResult: boolean): void;
+function LibZen_Exit(status: int, Message: String): void;
+function LibZen_GetPlatform(): String;
+function LibZen_GetEnv(Name: String): String;
+function LibZen_IsFlag(flag: int, flag2: int): boolean;
+function LibZen_UnsetFlag(flag: int, flag2: int): int;
+function LibZen_GetTokenMatrixIndex(c: String): int;
+function LibZen_NewTokenMatrix(): ZTokenFunc[];
+function LibZen_GetChar(Text: String, Pos: int): String;
+function LibZen_IsLetter(ch: String): boolean;
+function LibZen_IsDigit(ch: String): boolean;
+function LibZen_IsSymbol(ch: String): boolean;
+function LibZen_JoinStrings(Unit: String, Times: int): String;
+function LibZen_UnquoteString(Text: String): String;
+function LibZen_QuoteString(Text: String): String;
+function LibZen_ParseInt(Text: String): int;
+function LibZen_ParseFloat(Text: String): float;
+function LibZen_Stringify(Value: any): String;
+function LibZen_AnotherName(s: String): String;
+function LibZen_Stringfy(number: int): String;
+function LibZen_SourceBuilderToString(Builder: ZSourceBuilder): String;
+function LibZen_SourceBuilderToString(Builder: ZSourceBuilder, BeginIndex: int, EndIndex: int): String;
+
+
+function LibZen_LoadTextFile(FileName: String): String;
+function LibZen_WriteTo(FileName: String, List: ZSourceBuilder[]): void;
+function LibZen_Size(o) : int;
+
+function LibZen_ImportGrammar(NameSpace: ZNameSpace, ClassName: String): boolean;
+function LibZen_ApplyTokenFunc(TokenFunc, SourceContext: ZSourceContext): boolean;
+function LibZen_ApplyMatchFunc(MatchFunc, ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode;
+function LibZen_LoadGenerator(ClassName: String, OutputFile: String): ZGenerator;
+function LibZen_LoadEngine(ClassName: String, GrammarClass: String): ZSourceEngine;
+
+function LibZen_GetClassName(Value): String;
+
+function LibZen_NewTypeArray(Size: int): ZType[];
+function LibZen_NewNodeArray(Size: int): ZNode[];
+function LibZen_ArrayCopy(src, sindex: int, dst, dindex: int, len: int): void;
+
+let LibZen_GreekNames = ["__a", "__b", "__c"];
+
+

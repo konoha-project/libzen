@@ -97,7 +97,7 @@ public class CSourceGenerator extends ZSourceGenerator {
 		this.SetMacro("+", "LibZen_StrCat($[0], $[1])", ZType.StringType, ZType.StringType, ZType.StringType);
 		this.SetMacro("size", "LibZen_StringSize($[0])", ZType.IntType, ZType.StringType);
 		this.SetMacro("substring", "LibZen_SubString($[0], $[1])", ZType.StringType, ZType.StringType, ZType.IntType);
-		this.SetMacro("substring", "LibZen_SubString2($[0], $[1])", ZType.StringType, ZType.StringType, ZType.IntType, ZType.IntType);
+		this.SetMacro("substring", "LibZen_SubString2($[0], $[1], $[2])", ZType.StringType, ZType.StringType, ZType.IntType, ZType.IntType);
 		this.SetMacro("indexOf", "LibZen_IndexOf($[0], $[1])", ZType.IntType, ZType.StringType, ZType.StringType);
 		this.SetMacro("indexOf", "LibZen_IndexOf2($[0], $[1], $[2])", ZType.IntType, ZType.StringType, ZType.StringType, ZType.IntType);
 		this.SetMacro("equals", "LibZen_EqualsString($[0], $[1])", ZType.BooleanType, ZType.StringType, ZType.StringType);
@@ -106,7 +106,7 @@ public class CSourceGenerator extends ZSourceGenerator {
 
 		// Array
 		this.SetMacro("size", "LibZen_ArraySize($[0])", ZType.IntType, ZGenericType._ArrayType);
-		this.SetMacro("clear", "LibZen_ArrayClear($[0])", ZType.VoidType, ZGenericType._ArrayType, ZType.IntType);
+		this.SetMacro("clear", "LibZen_ArrayClear($[0], $[1])", ZType.VoidType, ZGenericType._ArrayType, ZType.IntType);
 		this.SetMacro("add", "LibZen_ArrayAdd($[0], $[1])", ZType.VoidType, ZGenericType._ArrayType, ZType.VarType);
 		this.SetMacro("add", "LibZen_ArrayAdd2($[0], $[1], $[2])", ZType.VoidType, ZGenericType._ArrayType, ZType.IntType, ZType.VarType);
 
@@ -365,7 +365,7 @@ public class CSourceGenerator extends ZSourceGenerator {
 
 	@Override public void VisitParamNode(ZParamNode Node) {
 		if(Node.Type.IsFuncType()) {
-			this.GenerateFuncTypeName(Node.Type, Node.Name);
+			this.GenerateFuncTypeName(Node.Type, this.SafeName(Node.Name, Node.ParamIndex));
 		}
 		else {
 			this.GenerateTypeName(Node.Type);

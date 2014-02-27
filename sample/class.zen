@@ -5,6 +5,10 @@ class Person {
   var IsChild : Func<boolean, Person>;
 }
 
+function Person(this: Person, Name: String) {
+  this.name = Name;
+}
+
 function IsChild(p : Person) {
   return p.age < 21;
 }
@@ -18,13 +22,15 @@ function IsChild(n : Neverland) {
 }
 
 function GetAge(p : Person) {
-  return p.name;
+  return p.age;
 }
 
-function main() {
+export function main() {
   var p = new Neverland();
   var f = p.IsChild;
   var b = p.IsChild();
-  println(p.GetAge());
+  var age = p.GetAge();
+  println("IsChild="+b);
+  println("age="+age);
 }
 

@@ -34,7 +34,7 @@ public final class ZVarNode extends ZBlockNode {
 
 	@Field public ZType   DeclType = ZType.VarType;
 	@Field public String  NativeName = null;
-	@Field public int VarIndex = 0;
+	@Field public int VarIndex = -1;
 
 	@Field public ZToken  TypeToken = null;
 	@Field public ZToken  NameToken = null;

@@ -78,6 +78,7 @@ import zen.deps.ZArray;
 import zen.deps.ZenMap;
 import zen.deps.ZenMethod;
 import zen.lang.ZenTypeSafer;
+import zen.type.ZClassType;
 import zen.type.ZFuncType;
 import zen.type.ZType;
 import zen.type.ZTypePool;
@@ -135,6 +136,10 @@ public class ZSourceGenerator extends ZGenerator {
 		this.CurrentBuilder = this.AppendNewSourceBuilder();
 	}
 
+	@ZenMethod protected void Finish() {
+
+	}
+
 	@Override public ZSourceEngine GetEngine() {
 		LibZen._PrintLine("FIXME: Overide GetEngine in each generator!!");
 		return new ZSourceEngine(new ZenTypeSafer(this), this);
@@ -181,7 +186,7 @@ public class ZSourceGenerator extends ZGenerator {
 		this.ReservedNameMap.put(Keyword, AnotherName);
 	}
 
-	public final String SafeName(String Name, int Index) {
+	public String SafeName(String Name, int Index) {
 		if(Index == 0) {
 			@Var String SafeName = this.ReservedNameMap.GetOrNull(Name);
 			if(SafeName == null) {
@@ -218,11 +223,13 @@ public class ZSourceGenerator extends ZGenerator {
 	}
 
 	@Override public final void WriteTo(@Nullable String FileName) {
+		this.Finish();
 		LibZen._WriteTo(this.NameOutputFile(FileName), this.BuilderList);
 		this.InitBuilderList();
 	}
 
 	@Override public final String GetSourceText() {
+		this.Finish();
 		@Var ZSourceBuilder sb = new ZSourceBuilder(this, null);
 		@Var int i = 0;
 		while(i < this.BuilderList.size()) {
@@ -676,4 +683,28 @@ public class ZSourceGenerator extends ZGenerator {
 		this.VisitListNode(OpenToken, VargNode, ", ", CloseToken);
 	}
 
+	protected final String NameMethod(ZType ClassType, String MethodName) {
+		return "_" + this.NameClass(ClassType) + "_" + MethodName;
+	}
+
+	protected final boolean IsMethod(String FuncName, ZFuncType FuncType) {
+		@Var ZType RecvType = FuncType.GetRecvType();
+		if(RecvType instanceof ZClassType && FuncName != null) {
+			@Var ZClassType ClassType = (ZClassType)RecvType;
+			@Var ZType FieldType = ClassType.GetFieldType(FuncName, null);
+			if(FieldType == null || !FieldType.IsFuncType()) {
+				FuncName = LibZen._AnotherName(FuncName);
+				FieldType = ClassType.GetFieldType(FuncName, null);
+				if(FieldType == null || !FieldType.IsFuncType()) {
+					return false;
+				}
+			}
+			if(FieldType instanceof ZFuncType) {
+				if(((ZFuncType)FieldType).AcceptAsFieldFunc(FuncType)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 }

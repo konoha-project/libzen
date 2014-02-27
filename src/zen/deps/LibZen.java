@@ -492,8 +492,8 @@ public class LibZen {
 	public final static boolean _ImportGrammar(ZNameSpace NameSpace, String ClassName) {
 		try {
 			@Var Class<?> NativeClass =  Class.forName(ClassName);
-			Method LoaderMethod = NativeClass.getMethod("ImportGrammar", ZNameSpace.class, Class.class);
-			LoaderMethod.invoke(null, NameSpace, NativeClass);
+			@Var Method LoaderMethod = NativeClass.getMethod("ImportGrammar", ZNameSpace.class);
+			LoaderMethod.invoke(null, NameSpace);
 			return true;
 		} catch (Exception e) { // naming
 			LibZen._FixMe(e);
@@ -532,7 +532,7 @@ public class LibZen {
 	private final static ZenMap<Class<?>> GenMap = new ZenMap<Class<?>>(null);
 
 	static {
-		GenMap.put("python", zen.codegen.jython.PythonGenerator.class);
+		GenMap.put("py", zen.codegen.jython.PythonGenerator.class);
 		GenMap.put("javascript", zen.codegen.javascript.JavaScriptSourceGenerator.class);
 		GenMap.put("js", zen.codegen.javascript.JavaScriptSourceGenerator.class);
 		GenMap.put("ruby", zen.codegen.jruby.RubySourceGenerator.class);
