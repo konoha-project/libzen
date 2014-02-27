@@ -426,16 +426,22 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 	// 	this.GenerateCode(null, Node.AST[ZCatchNode._Block]);
 	// }
 
-	// @Override public void VisitVarNode(ZVarNode Node) {
-	// 	this.CurrentBuilder.Append("var");
-	// 	this.CurrentBuilder.AppendWhiteSpace();
-	// 	this.CurrentBuilder.Append(this.SafeName(Node.NativeName, Node.VarIndex));
-	// 	this.VisitTypeAnnotation(Node.DeclType);
-	// 	this.CurrentBuilder.AppendToken("=");
-	// 	this.GenerateCode(null, Node.AST[ZVarNode._InitValue]);
-	// 	this.CurrentBuilder.Append(this.SemiColon);
-	// 	this.VisitStmtList(Node);
-	// }
+	@Override public void VisitVarNode(ZVarNode Node) {
+		@Var int mark = this.GetLazyMark();
+
+		this.GenerateCode(null, Node.AST[ZVarNode._InitValue]);
+
+		@Var String VarName = Node.NativeName;
+		this.VarMgr.CreateVariable(VarName);
+		this.AppendLazy(mark, this.VarMgr.GenVariableName(VarName) + " = ");
+
+		if (Node.GetListSize() > 0) {
+			this.CurrentBuilder.Append(",");
+			this.VisitStmtList(Node);
+		}
+		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.IndentAndAppend("pad");
+	}
 
 	// protected void VisitTypeAnnotation(ZType Type) {
 	// 	this.CurrentBuilder.Append(": ");
