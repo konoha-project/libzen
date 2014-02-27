@@ -9,6 +9,7 @@ import zen.ast.ZFuncCallNode;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZGetNameNode;
 import zen.ast.ZGetterNode;
+import zen.ast.ZSetterNode;
 import zen.ast.ZIfNode;
 import zen.ast.ZListNode;
 import zen.ast.ZNode;
@@ -181,13 +182,27 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Append(ToErlangTypeName(Node.FieldName));
 	}
 
-	// @Override public void VisitSetterNode(ZSetterNode Node) {
-	// 	this.GenerateSurroundCode(Node.AST[ZSetterNode._Recv]);
-	// 	this.CurrentBuilder.Append(".");
-	// 	this.CurrentBuilder.Append(Node.FieldName);
-	// 	this.CurrentBuilder.AppendToken("=");
-	// 	this.GenerateCode(null, Node.AST[ZSetterNode._Expr]);
-	// }
+	@Override public void VisitSetterNode(ZSetterNode Node) {
+		int mark = this.GetLazyMark();
+
+		ZGetNameNode GetNameNode = (ZGetNameNode)Node.AST[ZSetterNode._Recv];
+		this.GenerateSurroundCode(GetNameNode);
+		this.CurrentBuilder.Append("#");
+		this.CurrentBuilder.Append(ToErlangTypeName(Node.AST[ZSetterNode._Recv].Type.ShortName));
+		this.CurrentBuilder.Append("{");
+		this.CurrentBuilder.Append(Node.FieldName);
+		this.CurrentBuilder.AppendToken("=");
+		this.GenerateCode(null, Node.AST[ZSetterNode._Expr]);
+		this.CurrentBuilder.Append("}");
+		this.VarMgr.IncrementVariableNumber(GetNameNode.VarName);
+		ZSourceBuilder LazyBuilder = new ZSourceBuilder(this, this.CurrentBuilder);
+		ZSourceBuilder BodyBuilder = this.CurrentBuilder;
+		this.CurrentBuilder = LazyBuilder;
+		this.GenerateCode(null, Node.AST[ZSetterNode._Recv]);
+		this.CurrentBuilder.AppendToken("=");
+		this.CurrentBuilder = BodyBuilder;
+		this.AppendLazy(mark, LazyBuilder.toString());
+	}
 
 	// @Override public void VisitMethodCallNode(ZMethodCallNode Node) {
 	// 	this.GenerateSurroundCode(Node.AST[ZMethodCallNode._Recv]);
