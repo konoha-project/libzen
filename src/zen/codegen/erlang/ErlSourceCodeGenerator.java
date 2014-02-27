@@ -20,6 +20,8 @@ import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
 import zen.ast.ZGlobalNameNode;
 import zen.ast.ZNewObjectNode;
+import zen.ast.ZComparatorNode;
+import zen.ast.ZBinaryNode;
 import zen.deps.Field;
 import zen.deps.Var;
 import zen.lang.ZenTypeSafer;
@@ -82,7 +84,7 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.IndentAndAppend("__Arguments__ = " + this.VarMgr.GenVarTupleOnlyUsed(false));
 		this.CurrentBuilder.Append(last);
 		this.CurrentBuilder.UnIndent();
-		this.VarMgr.PopScope();
+		this.VarMgr.PopScope(false);
 	}
 
 	// @Override public void VisitNullNode(ZNullNode Node) {
@@ -263,23 +265,54 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 	// 	this.GenerateTypeName(Node.AST[ZBinaryNode._Right].Type);
 	// }
 
-	// @Override public void VisitBinaryNode(ZBinaryNode Node) {
-	// 	if (Node.ParentNode instanceof ZBinaryNode) {
-	// 		this.CurrentBuilder.Append("(");
-	// 	}
-	// 	this.GenerateCode(null, Node.AST[ZBinaryNode._Left]);
-	// 	this.CurrentBuilder.AppendToken(Node.SourceToken.GetText());
-	// 	this.GenerateCode(null, Node.AST[ZBinaryNode._Right]);
-	// 	if (Node.ParentNode instanceof ZBinaryNode) {
-	// 		this.CurrentBuilder.Append(")");
-	// 	}
-	// }
+	@Override public void VisitBinaryNode(ZBinaryNode Node) {
+		if (Node.ParentNode instanceof ZBinaryNode) {
+			this.CurrentBuilder.Append("(");
+		}
+		this.GenerateCode(null, Node.AST[ZBinaryNode._Left]);
+//		this.CurrentBuilder.AppendToken(Node.SourceToken.GetText());
+		String Operator = Node.SourceToken.GetText();
+		if (Operator == null) {
+			//FIXME!! error handling
+		} else {
+			switch(Operator) {
+			case "<<":
+				Operator = "bsl";
+				break;
+			case ">>":
+				Operator = "bsr";
+				break;
+			case "%":
+				Operator = "rem";
+				break;
+			default:
+				//pass
+			}
+		}
+		this.CurrentBuilder.AppendToken(Operator);
+		this.GenerateCode(null, Node.AST[ZBinaryNode._Right]);
+		if (Node.ParentNode instanceof ZBinaryNode) {
+			this.CurrentBuilder.Append(")");
+		}
+	}
 
-	// @Override public void VisitComparatorNode(ZComparatorNode Node) {
-	// 	this.GenerateCode(null, Node.AST[ZBinaryNode._Left]);
-	// 	this.CurrentBuilder.AppendToken(Node.SourceToken.GetText());
-	// 	this.GenerateCode(null, Node.AST[ZBinaryNode._Right]);
-	// }
+	@Override public void VisitComparatorNode(ZComparatorNode Node) {
+		this.GenerateCode(null, Node.AST[ZBinaryNode._Left]);
+		String Operator = Node.SourceToken.GetText();
+		if (Operator == null) {
+			//FIXME!! error handling
+		} else {
+			switch(Operator) {
+			case "<=":
+				Operator = "=<";
+				break;
+			default:
+				//pass
+			}
+		}
+		this.CurrentBuilder.AppendToken(Operator);
+		this.GenerateCode(null, Node.AST[ZBinaryNode._Right]);
+	}
 
 	// @Override public void VisitAndNode(ZAndNode Node) {
 	// 	this.GenerateCode(null, Node.AST[ZBinaryNode._Left]);
@@ -444,6 +477,7 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
+		this.VarMgr.PushScope();
 		this.CreateVariables(Node);
 
 		String FuncName = ToErlangFuncName(Node.FuncName);
@@ -463,6 +497,8 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.AppendLineFeed();
 		this.AppendWrapperFuncDecl(Node);
 		this.CurrentBuilder.AppendLineFeed();
+
+		this.VarMgr.PopScope(true);
 	}
 
 	@Override public void VisitClassNode(ZClassNode Node) {

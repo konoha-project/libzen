@@ -94,18 +94,20 @@ public class VariableManager {
 		this.MapList.add(this.CurrentMap);
 		this.CurrentMap = NewMap;
 	}
-	void PopScope() {
+	void PopScope(boolean DoClear) {
 		int size = this.MapList.size();
 		if (size > 0) {
 			HashMap<String, Variable> OldMap = this.CurrentMap;
 			this.CurrentMap = this.MapList.get(size - 1);
 			this.MapList.remove(size - 1);
-			for (Map.Entry<String, Variable> KeyValue : OldMap.entrySet()) {
-				Variable OldVar = KeyValue.getValue();
-				if (OldVar.IsUsed()) {
-					Variable CurrentVar = this.CreateVariable(KeyValue.getKey());
-					CurrentVar.Next = OldVar.Next;
-					CurrentVar.UsedByChildScope();
+			if (!DoClear) {
+				for (Map.Entry<String, Variable> KeyValue : OldMap.entrySet()) {
+					Variable OldVar = KeyValue.getValue();
+					if (OldVar.IsUsed()) {
+						Variable CurrentVar = this.CreateVariable(KeyValue.getKey());
+						CurrentVar.Next = OldVar.Next;
+						CurrentVar.UsedByChildScope();
+					}
 				}
 			}
 		} else {
