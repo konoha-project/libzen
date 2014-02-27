@@ -92,41 +92,28 @@ public class ZSourceGenerator extends ZGenerator {
 	@Field protected ZSourceBuilder HeaderBuilder;
 	@Field protected ZSourceBuilder CurrentBuilder;
 
-	@Field public String Tab;
-	@Field public String LineFeed;
-	@Field public String LineComment;
-	@Field public String BeginComment;
-	@Field public String EndComment;
-	@Field public String SemiColon;
-	@Field public String Camma;
+	@Field public boolean IsDynamicLanguage = false;
+	@Field public String Tab = "   ";
+	@Field public String LineFeed = "\n";
+	@Field public String LineComment = "//";
+	@Field public String BeginComment = "/*";
+	@Field public String EndComment = "*/";
+	@Field public String SemiColon = ";";
+	@Field public String Camma = ", ";
 
-	@Field public String TrueLiteral;
-	@Field public String FalseLiteral;
-	@Field public String NullLiteral;
+	@Field public String TrueLiteral = "true";
+	@Field public String FalseLiteral = "false";
+	@Field public String NullLiteral = "null";
 
-	@Field public String NotOperator;
-	@Field public String AndOperator;
-	@Field public String OrOperator;
+	@Field public String NotOperator = "&&";
+	@Field public String AndOperator = "||";
+	@Field public String OrOperator = "!";
 
-	@Field public String TopType;
+	@Field public String TopType = "var";
 
 	public ZSourceGenerator(String TargetCode, String TargetVersion) {
 		super(TargetCode, TargetVersion);
 		this.InitBuilderList();
-		this.LineFeed = "\n";
-		this.Tab = "   ";
-		this.LineComment = "//"; // if not, set null
-		this.BeginComment = "/*";
-		this.EndComment = "*/";
-		this.Camma = ", ";
-		this.SemiColon = ";";
-		this.TrueLiteral = "true";
-		this.FalseLiteral = "false";
-		this.NullLiteral = "null";
-		this.AndOperator = "&&";
-		this.OrOperator = "||";
-		this.NotOperator = "!";
-		this.TopType = "var";
 	}
 
 	@ZenMethod protected void InitBuilderList() {
@@ -388,7 +375,7 @@ public class ZSourceGenerator extends ZGenerator {
 	}
 
 	@Override public void VisitGlobalNameNode(ZGlobalNameNode Node) {
-		if(Node.IsUntyped()) {
+		if(Node.IsUntyped() && !this.IsDynamicLanguage) {
 			ZLogger._LogError(Node.SourceToken, "undefined symbol: " + Node.GlobalName);
 		}
 		if(Node.IsStaticFuncName) {
@@ -408,7 +395,6 @@ public class ZSourceGenerator extends ZGenerator {
 		this.CurrentBuilder.AppendToken("=");
 		this.GenerateCode(null, Node.AST[ZSetNameNode._Expr]);
 	}
-
 
 	@Override public void VisitGetterNode(ZGetterNode Node) {
 		this.GenerateSurroundCode(Node.AST[ZGetterNode._Recv]);
@@ -457,8 +443,18 @@ public class ZSourceGenerator extends ZGenerator {
 		this.VisitListNode("(", Node, ")");
 	}
 
+	@ZenMethod protected String GetUnaryOperator(ZType Type, ZToken Token) {
+		if(Token.EqualsText('-')) {
+			return "-";
+		}
+		if(Token.EqualsText('+')) {
+			return "+";
+		}
+		return Token.GetText();
+	}
+
 	@Override public void VisitUnaryNode(ZUnaryNode Node) {
-		this.CurrentBuilder.Append(Node.SourceToken.GetText());
+		this.CurrentBuilder.Append(this.GetUnaryOperator(Node.Type, Node.SourceToken));
 		this.GenerateCode(null, Node.AST[ZUnaryNode._Recv]);
 	}
 
@@ -480,12 +476,22 @@ public class ZSourceGenerator extends ZGenerator {
 		this.GenerateTypeName(Node.AST[ZBinaryNode._Right].Type);
 	}
 
+	@ZenMethod protected String GetBinaryOperator(ZType Type, ZToken Token) {
+		if(Token.EqualsText('+')) {
+			return "+";
+		}
+		if(Token.EqualsText('-')) {
+			return "-";
+		}
+		return Token.GetText();
+	}
+
 	@Override public void VisitBinaryNode(ZBinaryNode Node) {
 		if (Node.ParentNode instanceof ZBinaryNode) {
 			this.CurrentBuilder.Append("(");
 		}
 		this.GenerateCode(null, Node.AST[ZBinaryNode._Left]);
-		this.CurrentBuilder.AppendToken(Node.SourceToken.GetText());
+		this.CurrentBuilder.AppendToken(this.GetBinaryOperator(Node.Type, Node.SourceToken));
 		this.GenerateCode(null, Node.AST[ZBinaryNode._Right]);
 		if (Node.ParentNode instanceof ZBinaryNode) {
 			this.CurrentBuilder.Append(")");
@@ -494,7 +500,7 @@ public class ZSourceGenerator extends ZGenerator {
 
 	@Override public void VisitComparatorNode(ZComparatorNode Node) {
 		this.GenerateCode(null, Node.AST[ZBinaryNode._Left]);
-		this.CurrentBuilder.AppendToken(Node.SourceToken.GetText());
+		this.CurrentBuilder.AppendToken(this.GetBinaryOperator(Node.Type, Node.SourceToken));
 		this.GenerateCode(null, Node.AST[ZBinaryNode._Right]);
 	}
 
@@ -640,9 +646,9 @@ public class ZSourceGenerator extends ZGenerator {
 	}
 
 	@Override public void VisitErrorNode(ZErrorNode Node) {
-		ZLogger._LogError(Node.SourceToken, Node.ErrorMessage);
+		@Var String Message = ZLogger._LogError(Node.SourceToken, Node.ErrorMessage);
 		this.CurrentBuilder.Append("ThrowError(");
-		this.CurrentBuilder.Append(LibZen._QuoteString(Node.ErrorMessage));
+		this.CurrentBuilder.Append(LibZen._QuoteString(Message));
 		this.CurrentBuilder.Append(")");
 	}
 

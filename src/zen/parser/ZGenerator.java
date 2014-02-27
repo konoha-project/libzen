@@ -106,7 +106,7 @@ public abstract class ZGenerator extends ZVisitor {
 	}
 
 	public final String GetTargetLangInfo() {
-		return this.LanguageExtention + this.TargetVersion;
+		return this.TargetVersion;
 	}
 
 	public abstract boolean StartCodeGeneration(ZNode Node, boolean IsInteractive);

@@ -532,9 +532,10 @@ public class LibZen {
 	private final static ZenMap<Class<?>> GenMap = new ZenMap<Class<?>>(null);
 
 	static {
-		// source code file extension
+		// source code by file extension
 		GenMap.put("c", zen.codegen.c.CSourceGenerator.class);
 		GenMap.put("cl", zen.codegen.clisp.CommonLispGenerator.class);
+		GenMap.put("erl", zen.codegen.erlang.ErlSourceCodeGenerator.class);
 
 		GenMap.put("hs", zen.codegen.haskell.HaskellSourceGenerator.class);
 		GenMap.put("js", zen.codegen.javascript.JavaScriptSourceGenerator.class);
