@@ -532,15 +532,25 @@ public class LibZen {
 	private final static ZenMap<Class<?>> GenMap = new ZenMap<Class<?>>(null);
 
 	static {
-		GenMap.put("py", zen.codegen.jython.PythonGenerator.class);
-		GenMap.put("javascript", zen.codegen.javascript.JavaScriptSourceGenerator.class);
-		GenMap.put("js", zen.codegen.javascript.JavaScriptSourceGenerator.class);
-		GenMap.put("ruby", zen.codegen.jruby.RubySourceGenerator.class);
-		GenMap.put("clisp", zen.codegen.clisp.CommonLispSourceGenerator.class);
+		// source code by file extension
 		GenMap.put("c", zen.codegen.c.CSourceGenerator.class);
+		GenMap.put("cl", zen.codegen.clisp.CommonLispGenerator.class);
+		GenMap.put("erl", zen.codegen.erlang.ErlSourceCodeGenerator.class);
+
+		GenMap.put("hs", zen.codegen.haskell.HaskellSourceGenerator.class);
+		GenMap.put("js", zen.codegen.javascript.JavaScriptSourceGenerator.class);
+
+		GenMap.put("pl", zen.codegen.PerlGenerator.class);
+		GenMap.put("py", zen.codegen.jython.PythonGenerator.class);
+		GenMap.put("rb", zen.codegen.jruby.RubySourceGenerator.class);
+
+		GenMap.put("zen", zen.codegen.ZenGenerator.class);
+
+		// engine
 		GenMap.put("jvm", zen.codegen.jvm.JavaAsmGenerator.class);
 		GenMap.put("debug-jvm", zen.codegen.jvm.DebugAsmGenerator.class);
 		GenMap.put("llvm", zen.codegen.llvm.LLVMSourceGenerator.class);
+		GenMap.put("erlang", zen.codegen.erlang.ErlSourceCodeGenerator.class);
 	}
 
 	public final static ZGenerator _LoadGenerator(@Nullable String ClassName, String OutputFile) {

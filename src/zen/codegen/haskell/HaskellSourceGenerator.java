@@ -54,7 +54,7 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 	private static int IndentLevel = 0;
 
 	public HaskellSourceGenerator() {
-		super("haskell", "7.6.3");
+		super("hs", "Haskell-7.6.3");
 		this.LineFeed = "\n";
 		this.Tab = "\t";
 		this.LineComment = "#"; // if not, set null

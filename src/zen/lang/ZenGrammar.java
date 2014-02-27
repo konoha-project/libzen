@@ -39,6 +39,7 @@ import zen.grammar.CastPatternFunction;
 import zen.grammar.CatchPatternFunction;
 import zen.grammar.ClassPatternFunction;
 import zen.grammar.ComparatorPatternFunction;
+import zen.grammar.ExportPatternFunction;
 import zen.grammar.ExpressionPatternFunction;
 import zen.grammar.FalsePatternFunction;
 import zen.grammar.FieldPatternFunction;
@@ -186,6 +187,7 @@ public class ZenGrammar {
 		NameSpace.DefineExpression("function", new FunctionPatternFunction());
 
 		NameSpace.DefineStatement("let", new LetPatternFunction());
+		NameSpace.DefineStatement("export", new ExportPatternFunction());
 		NameSpace.Generator.AppendGrammarInfo("zen-0.1");
 
 		NameSpace.DefineStatement("try", new TryPatternFunction());
