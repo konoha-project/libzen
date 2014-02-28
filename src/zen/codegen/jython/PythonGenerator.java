@@ -33,6 +33,7 @@ import zen.ast.ZClassNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZFieldNode;
 import zen.ast.ZFunctionNode;
+import zen.ast.ZIfNode;
 import zen.ast.ZInstanceOfNode;
 import zen.ast.ZLetNode;
 import zen.ast.ZListNode;
@@ -145,8 +146,8 @@ public class PythonGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Indent();
 		this.VisitStmtList(Node);
 		this.CurrentBuilder.UnIndent();
-		//this.CurrentBuilder.AppendLineFeedIndent();
-		//this.CurrentBuilder.Append("#");
+		this.CurrentBuilder.AppendLineFeedIndent();
+		//		this.CurrentBuilder.Append("#");
 	}
 
 	@Override public void VisitNewObjectNode(ZNewObjectNode Node) {
@@ -179,6 +180,22 @@ public class PythonGenerator extends ZSourceGenerator {
 		this.VisitStmtList(Node);
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.AppendIndent();
+	}
+
+	@Override public void VisitIfNode(ZIfNode Node) {
+		this.CurrentBuilder.Append("if ");
+		this.GenerateCode(null, Node.AST[ZIfNode._Cond]);
+		this.GenerateCode(null, Node.AST[ZIfNode._Then]);
+		if (Node.HasAst(ZIfNode._Else)) {
+			ZNode ElseNode = Node.AST[ZIfNode._Else];
+			if(ElseNode instanceof ZIfNode) {
+				this.CurrentBuilder.Append("el");
+			}
+			else {
+				this.CurrentBuilder.Append("else");
+			}
+			this.GenerateCode(null, Node.AST[ZIfNode._Else]);
+		}
 	}
 
 	@Override public void VisitLetNode(ZLetNode Node) {

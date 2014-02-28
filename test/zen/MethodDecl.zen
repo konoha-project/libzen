@@ -1,9 +1,0 @@
-function f(a: int, b: int) {
-    return a + b;
-}
-
-function g(a: int, b : int, c: int) : int {
-    return a + f(b, c);
-}
-
-g(10, 20, 30);

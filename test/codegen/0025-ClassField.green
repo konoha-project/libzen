@@ -1,8 +1,0 @@
-class X {
-    int a;
-}
-
-class Y extends X {
-    int b;
-    int c;
-}

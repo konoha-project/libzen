@@ -1,8 +1,0 @@
-class Person {
-    var name : String;
-    var age  : int;
-}
-
-function f(x: Person): void {
-    x.age = 16;
-}

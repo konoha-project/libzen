@@ -1,0 +1,10 @@
+
+export function main() {
+	var n: int = 1;
+	var btrue = true;
+	println("#var n: " + n);
+	println("#var btrue: " + btrue);
+	assert(n == 1);
+	assert(btrue);
+}
+

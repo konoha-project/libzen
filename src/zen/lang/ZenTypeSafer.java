@@ -486,7 +486,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 		if(ExprType.Equals(Node.Type)) {
 			this.Return(Node.AST[ZCastNode._Expr]);
 		}
-		@Var ZFunc Func = this.Generator.GetCoercionFunc(ExprType, Node.Type);
+		@Var ZFunc Func = this.Generator.LookupConverterFunc(ExprType, Node.Type);
 		if(Func != null) {
 			this.TypedNode(Node.ToFuncCallNode(Func), Node.Type);
 		}

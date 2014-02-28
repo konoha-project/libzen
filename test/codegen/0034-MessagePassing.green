@@ -1,9 +1,0 @@
-//class X {
-//    int hello(int x) {
-//    }
-//}
-//
-//
-//void f(X x) {
-//    x.hello(10);
-//}

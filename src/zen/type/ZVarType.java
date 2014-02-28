@@ -70,7 +70,6 @@ public class ZVarType extends ZType {
 	}
 
 	public void Infer(ZType ContextType, ZToken SourceToken) {
-		System.out.println("Infer="+ContextType);
 		if(this.RefType.IsVarType()) {
 			if(ContextType instanceof ZVarType && ContextType.IsVarType()) {
 				@Var ZVarType VarType = (ZVarType)ContextType;

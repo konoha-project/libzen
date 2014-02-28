@@ -521,8 +521,9 @@ public class ZSourceGenerator extends ZGenerator {
 		this.GenerateCode(null, Node.AST[ZIfNode._Cond]);
 		this.CurrentBuilder.Append(")");
 		this.GenerateCode(null, Node.AST[ZIfNode._Then]);
-		if (Node.AST[ZIfNode._Else] != null) {
-			this.CurrentBuilder.AppendToken("else");
+		if (Node.HasAst(ZIfNode._Else)) {
+			this.CurrentBuilder.AppendLineFeedIndent();
+			this.CurrentBuilder.Append("else ");
 			this.GenerateCode(null, Node.AST[ZIfNode._Else]);
 		}
 	}

@@ -66,8 +66,6 @@ public class CSourceGenerator extends ZSourceGenerator {
 
 	public CSourceGenerator() {
 		super("c", "C99");
-		this.LineFeed = "\n";
-		this.Tab = "\t";
 		this.Camma = ", ";
 		this.SemiColon = ";";
 
@@ -75,7 +73,7 @@ public class CSourceGenerator extends ZSourceGenerator {
 		this.FalseLiteral = "0/*false*/";
 		this.NullLiteral  = "NULL";
 
-		this.TopType = "void *";
+		this.TopType = "ZObject *";
 		this.SetNativeType(ZType.BooleanType, "int");
 		//		this.SetNativeType(ZType.IntType, "long long int");
 		this.SetNativeType(ZType.IntType, "long");
@@ -401,32 +399,41 @@ public class CSourceGenerator extends ZSourceGenerator {
 			@Var String Prototype = this.CurrentBuilder.CopyString(StartIndex, this.CurrentBuilder.GetPosition());
 			this.GenerateCode(null, Node.AST[ZFunctionNode._Block]);
 			this.CurrentBuilder.AppendLineFeed();
+			this.CurrentBuilder.AppendLineFeed();
 			this.HeaderBuilder.Append(Prototype);
 			this.HeaderBuilder.Append(this.SemiColon);
 			this.HeaderBuilder.AppendLineFeed();
-			this.SetMethod(Node.FuncName, Node.GetFuncType(null));
+			@Var ZFuncType FuncType = Node.GetFuncType(null);
+			if(Node.IsExport) {
+				this.GenerateExportFunction(Node);
+			}
+			if(this.IsMethod(Node.FuncName, FuncType)) {
+				this.HeaderBuilder.Append("#define _" + this.NameMethod(FuncType.GetRecvType(), Node.FuncName));
+				this.HeaderBuilder.AppendLineFeed();
+			}
 		}
 	}
 
-	private void SetMethod(String FuncName, ZFuncType FuncType) {
-		@Var ZType RecvType = FuncType.GetRecvType();
-		if(RecvType instanceof ZClassType && FuncName != null) {
-			@Var ZClassType ClassType = (ZClassType)RecvType;
-			@Var ZType FieldType = ClassType.GetFieldType(FuncName, null);
-			if(FieldType == null || !FieldType.IsFuncType()) {
-				FuncName = LibZen._AnotherName(FuncName);
-				FieldType = ClassType.GetFieldType(FuncName, null);
-				if(FieldType == null || !FieldType.IsFuncType()) {
-					return;
-				}
-			}
-			if(FieldType instanceof ZFuncType) {
-				if(((ZFuncType)FieldType).AcceptAsFieldFunc(FuncType)) {
-					this.HeaderBuilder.Append("#define _" + this.NameClass(ClassType) + "_" + FuncName);
-					this.HeaderBuilder.AppendLineFeed();
-				}
-			}
+	private void GenerateExportFunction(ZFunctionNode Node) {
+		this.GenerateTypeName(Node.ReturnType);
+		this.CurrentBuilder.Append(" ");
+		this.CurrentBuilder.Append(Node.FuncName);
+		this.VisitListNode("(", Node, ")");
+		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.Append("{");
+		this.CurrentBuilder.Indent();
+		this.CurrentBuilder.AppendLineFeedIndent();
+		if(!Node.ReturnType.IsVoidType()) {
+			this.CurrentBuilder.Append("return ");
 		}
+		this.CurrentBuilder.Append(Node.GetSignature(this));
+		this.VisitListNode("(", Node, ")");
+		this.CurrentBuilder.Append(this.SemiColon);
+		this.CurrentBuilder.UnIndent();
+		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.Append("}");
+		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.AppendLineFeed();
 	}
 
 	@Override public void VisitInstanceOfNode(ZInstanceOfNode Node) {

@@ -1,6 +1,0 @@
-function f(a: int) : int {
-    var b : int = a + 10;
-    return b;
-}
-
-f(10);

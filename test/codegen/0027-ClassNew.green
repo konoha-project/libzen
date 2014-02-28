@@ -1,9 +1,0 @@
-class X {
-    constructor(int x) {
-        // empty
-    }
-}
-
-void f() {
-    new X(10);
-}

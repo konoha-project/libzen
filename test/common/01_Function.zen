@@ -1,0 +1,28 @@
+
+function g() : void {
+	println("#Func<void>");
+}
+
+function f() : int {
+	return 1;
+}
+
+function f(n: int) : int {
+	return n + 1;
+}
+
+function f(a: int, b : int) : int {
+	return a + b;
+}
+
+export function main() {
+	g();
+	println("#Func<int>: " + f());
+	println("#Func<int,int>: " + f(1));
+	println("#Func<int,int,int>: " + f(1,2));
+
+        assert(f() == 1);
+        assert(f(1) == 2);
+	assert(f(1,2) == 3);
+}
+

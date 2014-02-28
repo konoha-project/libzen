@@ -229,16 +229,16 @@ public abstract class ZGenerator extends ZVisitor {
 		return null;
 	}
 
-	public final ZFunc GetCoercionFunc(ZType FromType, ZType ToType) {
-		while(FromType != null) {
-			@Var ZFunc Func = this.DefinedFuncMap.GetOrNull(this.NameConverterFunc(FromType, ToType));
-			if(Func != null && Func.IsCoercionFunc()) {
-				return Func;
-			}
-			FromType = FromType.GetSuperType();
-		}
-		return null;
-	}
+	//	public final ZFunc GetCoercionFunc(ZType FromType, ZType ToType) {
+	//		while(FromType != null) {
+	//			@Var ZFunc Func = this.DefinedFuncMap.GetOrNull(this.NameConverterFunc(FromType, ToType));
+	//			if(Func != null && Func.IsCoercionFunc()) {
+	//				return Func;
+	//			}
+	//			FromType = FromType.GetSuperType();
+	//		}
+	//		return null;
+	//	}
 
 	@Override public void VisitExtendedNode(ZNode Node) {
 		@Var ZSugarNode DeNode = Node.DeSugar(this);

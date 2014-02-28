@@ -1,5 +1,0 @@
-void myprint(int x) import org.ZenScript.ZenRuntime.println;
-
-@Export int main() {
-    myprint("a");
-}

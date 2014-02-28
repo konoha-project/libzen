@@ -1,17 +1,16 @@
 // generated with geninttest by kimio kurmaitsu
 
-int succ(int n) {
+function succ(n : int) : int {
 	return n+1;
 }
 
-int minus(int n) {
+function minus(n : int) : int {
 	return -n;
 }
     
-void test() {
-  int plus2 = 2;
-  int minus2 = -2;
-  boolean btrue = true;
+function main() {
+  var plus2 : int = 2;
+  var minus2 : int = -2;
   assert((2 - 2 / 2) == 1);
   assert((2 - 2 / plus2) == 1);
   assert((2 - 2 / succ(1)) == 1);
@@ -355,11 +354,5 @@ void test() {
   assert(((5-3) - (5-3) / -minus(2)) == 1);
   assert(((5-3) - (5-3) / ~(-3)) == 1);
   assert(((5-3) - (5-3) / (5-3)) == 1);
-}
-
-@Export
-int main() {
-        test();
-        return 0;
 }
 
