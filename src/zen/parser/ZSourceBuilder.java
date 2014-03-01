@@ -152,6 +152,13 @@ public final class ZSourceBuilder {
 		this.Append(Text2);
 	}
 
+	public final void AppendWhiteSpace(String Text, String Text2, String Text3) {
+		this.AppendWhiteSpace();
+		this.Append(Text);
+		this.Append(Text2);
+		this.Append(Text3);
+	}
+
 	public final void AppendToken(String Text) {
 		this.AppendWhiteSpace();
 		this.SourceList.add(Text);

@@ -78,7 +78,7 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 		this.SetMacro("add", "LibZen_ArrayAdd($[0], $[1])", ZType.VoidType, ZGenericType._ArrayType, ZType.VarType);
 		this.SetMacro("add", "LibZen_ArrayAdd2($[0], $[1], $[2])", ZType.VoidType, ZGenericType._ArrayType, ZType.IntType, ZType.VarType);
 
-		this.HeaderBuilder.Append("import java.lang.*\n");
+		this.HeaderBuilder.Append("import java.lang.*;\n");
 		//		this.HeaderBuilder.Append("#include<stdlib.h>\n");
 		//		this.HeaderBuilder.Append("#include<assert.h>\n", "\n");
 	}
@@ -88,8 +88,11 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 		return new ZSourceEngine(new ZenTypeSafer(this), this);
 	}
 
-	@Override @ZenMethod protected void Finish() {
-		this.GenerateClass("public final", "ZenCommand", ZType.VarType);
+	@Override @ZenMethod protected void Finish(String FileName) {
+		if(FileName == null) {
+			FileName = "ZenCommand";
+		}
+		this.GenerateClass("public final", FileName, ZType.VarType);
 		this.CurrentBuilder.OpenIndent(" {");
 		if(this.MainFuncNode != null) {
 			this.CurrentBuilder.AppendNewLine("public final static void main(String[] a)");
@@ -308,7 +311,7 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 
 			this.CurrentBuilder = this.InsertNewSourceBuilder();
 			this.CurrentBuilder.AppendLineFeedIndent();
-			this.CurrentBuilder.AppendNewLine("class ", ClassName, " extends zen.deps.ZFunction");
+			this.CurrentBuilder.AppendNewLine("abstract class ", ClassName, "");
 			this.CurrentBuilder.OpenIndent(" {");
 
 			this.CurrentBuilder.AppendNewLine("abstract ");
@@ -319,7 +322,7 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 				if(i > 1) {
 					this.CurrentBuilder.Append(this.Camma);
 				}
-				this.GenerateTypeName(FuncType.GetReturnType());
+				this.GenerateTypeName(FuncType.GetParamType(i));
 				this.CurrentBuilder.Append(" x"+i);
 				i = i + 1;
 			}
@@ -327,7 +330,7 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 
 			this.CurrentBuilder.AppendNewLine(ClassName, "(int TypeId, String Name)");
 			this.CurrentBuilder.OpenIndent(" {");
-			this.CurrentBuilder.AppendNewLine("super(TypeId, Name);");
+			this.CurrentBuilder.AppendNewLine("//super(TypeId, Name);");
 			this.CurrentBuilder.CloseIndent("}");
 			this.CurrentBuilder.CloseIndent("}");
 			this.CurrentBuilder.AppendLineFeedIndent();
@@ -385,13 +388,13 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 			}
 			@Var String FuncName = Node.FuncName + this.GetUniqueNumber();
 			this.CurrentBuilder = this.InsertNewSourceBuilder();
-			FuncName = this.GenerateFunctionAsSymbolField(Node);
+			FuncName = this.GenerateFunctionAsClass(Node);
 			this.CurrentBuilder.AppendLineFeed();
 			this.CurrentBuilder = this.CurrentBuilder.Pop();
 			this.CurrentBuilder.Append(FuncName);
 		}
 		else {
-			this.GenerateFunctionAsSymbolField(Node);
+			this.GenerateFunctionAsClass(Node);
 			if(Node.IsExport) {
 				if(Node.FuncName.equals("main")) {
 					this.MainFuncNode = Node;
@@ -413,10 +416,10 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 		return "F" + FuncType.StringfySignature(FuncName);
 	}
 
-	private String GenerateFunctionAsSymbolField(ZFunctionNode Node) {
+	private String GenerateFunctionAsClass(ZFunctionNode Node) {
 		@Var ZFuncType FuncType = Node.GetFuncType(null);
 		@Var String ClassName = this.NameFunctionClass(Node.FuncName, FuncType);
-		this.GenerateClass("final class", ClassName, FuncType);
+		this.GenerateClass("final", ClassName, FuncType);
 		this.CurrentBuilder.OpenIndent(" {");
 		this.CurrentBuilder.AppendNewLine("static ");
 		this.GenerateTypeName(Node.ReturnType);
@@ -428,7 +431,7 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.AppendNewLine(ClassName, "()");
 		this.CurrentBuilder.OpenIndent(" {");
 
-		this.CurrentBuilder.AppendNewLine("super(", ""+FuncType.TypeId);
+		this.CurrentBuilder.AppendNewLine("super(", ""+FuncType.TypeId, this.Camma);
 		this.CurrentBuilder.Append(LibZen._QuoteString(Node.FuncName), ");");
 		this.CurrentBuilder.CloseIndent("}");
 
@@ -459,9 +462,13 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 
 
 	private void GenerateClass(String Qualifier, String ClassName, ZType SuperType) {
-		this.CurrentBuilder.AppendLineFeedIndent();
-		this.CurrentBuilder.Append(Qualifier);
-		this.CurrentBuilder.AppendWhiteSpace(ClassName, " extends ");
+		if(Qualifier != null && Qualifier.length() > 0) {
+			this.CurrentBuilder.AppendNewLine(Qualifier);
+			this.CurrentBuilder.AppendWhiteSpace("class ", ClassName, " extends ");
+		}
+		else {
+			this.CurrentBuilder.AppendNewLine("class ", ClassName, " extends ");
+		}
 		if(SuperType.IsVarType()) {
 			this.CurrentBuilder.Append("Object");
 		}
@@ -471,8 +478,8 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 	}
 
 	private void GenerateClassField(String Qualifier, ZType FieldType, String FieldName, String Value) {
-		this.CurrentBuilder.AppendLineFeedIndent();
-		this.CurrentBuilder.Append(Qualifier);
+		this.CurrentBuilder.AppendNewLine(Qualifier);
+		this.CurrentBuilder.AppendWhiteSpace();
 		this.GenerateTypeName(FieldType);
 		this.CurrentBuilder.Append(" ", FieldName);
 		if(Value != null) {
@@ -503,7 +510,8 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 			i = i + 1;
 		}
 
-		this.CurrentBuilder.OpenIndent(this.NameClass(Node.ClassType) + "() {");
+		this.CurrentBuilder.AppendNewLine(this.NameClass(Node.ClassType), "()");
+		this.CurrentBuilder.OpenIndent(" {");
 		this.CurrentBuilder.AppendNewLine("super();");
 		while (i < Node.GetListSize()) {
 			@Var ZFieldNode FieldNode = Node.GetFieldNode(i);

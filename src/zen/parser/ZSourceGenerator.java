@@ -123,7 +123,7 @@ public class ZSourceGenerator extends ZGenerator {
 		this.CurrentBuilder = this.AppendNewSourceBuilder();
 	}
 
-	@ZenMethod protected void Finish() {
+	@ZenMethod protected void Finish(String FileName) {
 
 	}
 
@@ -210,13 +210,13 @@ public class ZSourceGenerator extends ZGenerator {
 	}
 
 	@Override public final void WriteTo(@Nullable String FileName) {
-		this.Finish();
+		this.Finish(FileName);
 		LibZen._WriteTo(this.NameOutputFile(FileName), this.BuilderList);
 		this.InitBuilderList();
 	}
 
 	@Override public final String GetSourceText() {
-		this.Finish();
+		this.Finish(null);
 		@Var ZSourceBuilder sb = new ZSourceBuilder(this, null);
 		@Var int i = 0;
 		while(i < this.BuilderList.size()) {

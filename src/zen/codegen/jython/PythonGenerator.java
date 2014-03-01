@@ -122,7 +122,7 @@ public class PythonGenerator extends ZSourceGenerator {
 		return new ZSourceEngine(new ZenTypeSafer(this), this);
 	}
 
-	@Override @ZenMethod protected void Finish() {
+	@Override @ZenMethod protected void Finish(String FileName) {
 		if(this.HasMainFunction) {
 			this.CurrentBuilder.AppendLineFeed();
 			this.CurrentBuilder.Append("if __name__ == \"__main__\":\n\tmain()");
