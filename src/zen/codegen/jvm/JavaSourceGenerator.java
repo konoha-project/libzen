@@ -20,8 +20,12 @@ import zen.ast.ZSetIndexNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZVarNode;
+import zen.deps.Field;
 import zen.deps.LibZen;
 import zen.deps.Var;
+import zen.deps.ZArray;
+import zen.deps.ZenMap;
+import zen.deps.ZenMethod;
 import zen.lang.ZenTypeSafer;
 import zen.parser.ZLogger;
 import zen.parser.ZSourceEngine;
@@ -34,10 +38,13 @@ import zen.type.ZType;
 
 public class JavaSourceGenerator extends ZSourceGenerator {
 
+	@Field private ZFunctionNode MainFuncNode = null;
+	@Field private final ZArray<ZFunctionNode> ExportFunctionList = new ZArray<ZFunctionNode>(new ZFunctionNode[4]);
+
 	public JavaSourceGenerator() {
 		super("java", "1.6");
 
-		this.TopType = "ZObject";
+		this.TopType = "Object";
 		this.SetNativeType(ZType.BooleanType, "boolean");
 		//		this.SetNativeType(ZType.IntType, "long long int");
 		this.SetNativeType(ZType.IntType, "long");
@@ -46,25 +53,25 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 
 		this.SetMacro("assert", "assert($[0])", ZType.VoidType, ZType.BooleanType, ZType.StringType);
 		this.SetMacro("print", "System.out.print($[0])", ZType.VoidType, ZType.StringType);
-		this.SetMacro("println", "System.out.println($[0]);", ZType.VoidType, ZType.StringType);
+		this.SetMacro("println", "System.out.println($[0])", ZType.VoidType, ZType.StringType);
 
 		// Converter
 		this.SetConverterMacro("(double)($[0])", ZType.FloatType, ZType.IntType);
 		this.SetConverterMacro("(long)($[0])", ZType.IntType, ZType.FloatType);
-		this.SetConverterMacro("LibZen_BooleanToString($[0])", ZType.StringType, ZType.BooleanType);
-		this.SetConverterMacro("LibZen_IntToString($[0])", ZType.StringType, ZType.IntType);
-		this.SetConverterMacro("LibZen_FloatToString($[0])", ZType.StringType, ZType.FloatType);
+		this.SetConverterMacro("String.valueOf($[0])", ZType.StringType, ZType.BooleanType);
+		this.SetConverterMacro("String.valueOf($[0])", ZType.StringType, ZType.IntType);
+		this.SetConverterMacro("String.valueOf($[0])", ZType.StringType, ZType.FloatType);
 
 		// String
-		this.SetMacro("+", "LibZen_StrCat($[0], $[1])", ZType.StringType, ZType.StringType, ZType.StringType);
-		this.SetMacro("size", "strlen($[0])", ZType.IntType, ZType.StringType);
-		this.SetMacro("substring", "LibZen_SubString($[0], $[1])", ZType.StringType, ZType.StringType, ZType.IntType);
-		this.SetMacro("substring", "LibZen_SubString2($[0], $[1], $[2])", ZType.StringType, ZType.StringType, ZType.IntType, ZType.IntType);
-		this.SetMacro("indexOf", "LibZen_IndexOf($[0], $[1])", ZType.IntType, ZType.StringType, ZType.StringType);
-		this.SetMacro("indexOf", "LibZen_IndexOf2($[0], $[1], $[2])", ZType.IntType, ZType.StringType, ZType.StringType, ZType.IntType);
-		this.SetMacro("equals", "LibZen_EqualsString($[0], $[1])", ZType.BooleanType, ZType.StringType, ZType.StringType);
-		this.SetMacro("startsWith", "LibZen_StartsWith($[0], $[1])", ZType.BooleanType, ZType.StringType, ZType.StringType);
-		this.SetMacro("endsWith", "LibZen_EndWidth($[0], $[1])", ZType.BooleanType, ZType.StringType, ZType.StringType);
+		this.SetMacro("==", "$[0].equals($[1])", ZType.StringType, ZType.StringType, ZType.StringType);
+		this.SetMacro("size", "($[0]).length()", ZType.IntType, ZType.StringType);
+		this.SetMacro("substring", "$[0].substring($[1])", ZType.StringType, ZType.StringType, ZType.IntType);
+		this.SetMacro("substring", "$[0].sunstring($[1], $[2])", ZType.StringType, ZType.StringType, ZType.IntType, ZType.IntType);
+		this.SetMacro("indexOf", "$[0].indexOf($[1])", ZType.IntType, ZType.StringType, ZType.StringType);
+		this.SetMacro("indexOf", "$[0].indexOf($[1], $[2])", ZType.IntType, ZType.StringType, ZType.StringType, ZType.IntType);
+		this.SetMacro("equals", "$[0].equals($[1])", ZType.BooleanType, ZType.StringType, ZType.StringType);
+		this.SetMacro("startsWith", "$[0].startsWith($[1])", ZType.BooleanType, ZType.StringType, ZType.StringType);
+		this.SetMacro("endsWith", "$[0].endsWith($[1])", ZType.BooleanType, ZType.StringType, ZType.StringType);
 
 		// Array
 		this.SetMacro("size", "LibZen_ArraySize($[0])", ZType.IntType, ZGenericType._ArrayType);
@@ -72,15 +79,29 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 		this.SetMacro("add", "LibZen_ArrayAdd($[0], $[1])", ZType.VoidType, ZGenericType._ArrayType, ZType.VarType);
 		this.SetMacro("add", "LibZen_ArrayAdd2($[0], $[1], $[2])", ZType.VoidType, ZGenericType._ArrayType, ZType.IntType, ZType.VarType);
 
-		this.HeaderBuilder.Append("#include<stdio.h>\n");
-		this.HeaderBuilder.Append("#include<stdlib.h>\n");
-		this.HeaderBuilder.Append("#include<assert.h>\n", "\n");
+		this.HeaderBuilder.Append("import java.lang.*\n");
+		//		this.HeaderBuilder.Append("#include<stdlib.h>\n");
+		//		this.HeaderBuilder.Append("#include<assert.h>\n", "\n");
 	}
 
 
 	@Override public ZSourceEngine GetEngine() {
 		return new ZSourceEngine(new ZenTypeSafer(this), this);
 	}
+
+	@Override @ZenMethod protected void Finish() {
+		this.GenerateClass("public final", "ZenCommand", ZType.VarType);
+		this.CurrentBuilder.OpenIndent(" {");
+		if(this.MainFuncNode != null) {
+			this.CurrentBuilder.AppendNewLine("public final static void main(String[] a)");
+			this.CurrentBuilder.OpenIndent(" {");
+			this.CurrentBuilder.AppendNewLine("F", this.MainFuncNode.GetSignature(this), ".f();");
+			this.CurrentBuilder.CloseIndent("}");
+		}
+		this.CurrentBuilder.CloseIndent("}");
+		this.CurrentBuilder.AppendLineFeed();
+	}
+
 
 	@Override protected void GenerateCode(ZType ContextType, ZNode Node) {
 		if(Node.IsUntyped() && !Node.IsErrorNode() && !(Node instanceof ZGlobalNameNode)) {
@@ -235,19 +256,19 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 
 	private String ParamTypeName(ZType Type) {
 		if(Type.IsArrayType()) {
-			return "ArrayOf" + this.ParamTypeName(Type.GetParamType(0));
+			return "ArrayOf" + this.ParamTypeName(Type.GetParamType(0)) + "_";
 		}
 		if(Type.IsMapType()) {
-			return "MapOf" + this.ParamTypeName(Type.GetParamType(0));
+			return "MapOf" + this.ParamTypeName(Type.GetParamType(0)) + "_";
 		}
 		if(Type.IsFuncType()) {
-			@Var String s = "FuncOf" + this.ParamTypeName(Type.GetParamType(0))+"Of";
+			@Var String s = "FuncOf";
 			@Var int i = 0;
 			while(i < Type.GetParamSize()) {
 				s = s +  this.ParamTypeName(Type.GetParamType(i));
 				i = i + 1;
 			}
-			return s;
+			return s + "_";
 		}
 		if(Type.IsIntType()) {
 			return "Int";
@@ -270,7 +291,7 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 			TypeName = this.ParamTypeName(Type) + " *";
 		}
 		if(Type instanceof ZClassType) {
-			TypeName = "struct " + this.NameClass(Type) + " *";
+			TypeName = this.NameClass(Type);
 		}
 		if(TypeName == null) {
 			TypeName = this.GetNativeTypeName(Type);
@@ -278,24 +299,47 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 		return TypeName;
 	}
 
-	protected void GenerateFuncTypeName(ZType Type, String FuncName) {
-		this.GenerateTypeName(Type.GetParamType(0));
-		this.CurrentBuilder.Append(" (*" + FuncName + ")");
-		@Var int i = 1;
-		this.CurrentBuilder.Append("(");
-		while(i < Type.GetParamSize()) {
-			if(i > 1) {
-				this.CurrentBuilder.Append(",");
+	@Field private final ZenMap<String> FuncNameMap = new ZenMap<String>(null);
+
+	String GetFuncTypeClass(ZFuncType FuncType) {
+		@Var String ClassName = this.FuncNameMap.GetOrNull(FuncType.GetUniqueName());
+		if(ClassName == null) {
+			ClassName = this.ParamTypeName(FuncType);
+			this.FuncNameMap.put(FuncType.GetUniqueName(), ClassName);
+
+			this.CurrentBuilder = this.InsertNewSourceBuilder();
+			this.CurrentBuilder.AppendLineFeedIndent();
+			this.CurrentBuilder.AppendNewLine("class ", ClassName, " extends zen.deps.ZFunction");
+			this.CurrentBuilder.OpenIndent(" {");
+
+			this.CurrentBuilder.AppendNewLine("abstract ");
+			this.GenerateTypeName(FuncType.GetReturnType());
+			this.CurrentBuilder.Append(" Invoke(");
+			@Var int i = 1;
+			while(i < FuncType.GetParamSize()) {
+				if(i > 1) {
+					this.CurrentBuilder.Append(this.Camma);
+				}
+				this.GenerateTypeName(FuncType.GetReturnType());
+				this.CurrentBuilder.Append(" x"+i);
+				i = i + 1;
 			}
-			this.GenerateTypeName(Type.GetParamType(i));
-			i = i + 1;
+			this.CurrentBuilder.Append(");");
+
+			this.CurrentBuilder.AppendNewLine(ClassName, "(int TypeId, String Name)");
+			this.CurrentBuilder.OpenIndent(" {");
+			this.CurrentBuilder.AppendNewLine("super(TypeId, Name);");
+			this.CurrentBuilder.CloseIndent("}");
+			this.CurrentBuilder.CloseIndent("}");
+			this.CurrentBuilder.AppendLineFeedIndent();
+			this.CurrentBuilder = this.CurrentBuilder.Pop();
 		}
-		this.CurrentBuilder.Append(")");
+		return ClassName;
 	}
 
 	@Override protected void GenerateTypeName(ZType Type) {
-		if(Type.IsFuncType()) {
-			this.GenerateFuncTypeName(Type, "");
+		if(Type instanceof ZFuncType) {
+			this.CurrentBuilder.Append(this.GetFuncTypeClass((ZFuncType)Type));
 		}
 		else {
 			this.CurrentBuilder.Append(this.GetCTypeName(Type.GetRealType()));
@@ -329,14 +373,9 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitParamNode(ZParamNode Node) {
-		if(Node.Type.IsFuncType()) {
-			this.GenerateFuncTypeName(Node.Type, this.SafeName(Node.Name, Node.ParamIndex));
-		}
-		else {
-			this.GenerateTypeName(Node.Type);
-			this.CurrentBuilder.Append(" ");
-			this.CurrentBuilder.Append(this.SafeName(Node.Name, Node.ParamIndex));
-		}
+		this.GenerateTypeName(Node.Type);
+		this.CurrentBuilder.Append(" ");
+		this.CurrentBuilder.Append(this.SafeName(Node.Name, Node.ParamIndex));
 	}
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
@@ -353,13 +392,15 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 		}
 		else {
 			this.GenerateFunctionAsSymbolField(Node);
+			if(Node.IsExport) {
+				if(Node.FuncName.equals("main")) {
+					this.MainFuncNode = Node;
+				}
+				else {
+					this.ExportFunctionList.add(Node);
+				}
+			}
 			//@Var ZFuncType FuncType = Node.GetFuncType(null);
-			//			if(Node.FuncName.equals("main")) {
-			//				this.MainFuncNode = FuncNode;
-			//			}
-			//			if(Node.IsExport) {
-			//				this.GenerateExportFunction(Node);
-			//			}
 			//			if(this.IsMethod(Node.FuncName, FuncType)) {
 			//				this.HeaderBuilder.Append("#define _" + this.NameMethod(FuncType.GetRecvType(), Node.FuncName));
 			//				this.HeaderBuilder.AppendLineFeed();
@@ -367,34 +408,6 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 		}
 	}
 
-	//	Class<?> LoadFuncClass(ZFuncType FuncType) {
-	//		String ClassName = NameFuncClass(FuncType);
-	//		Class<?> FuncClass = this.GetGeneratedClass(ClassName, null);
-	//		if(FuncClass == null) {
-	//			this.CurrentBuilder.Append("class ", ClassName, " extends zen.deps.ZFunction {");
-	//			this.CurrentBuilder.Indent();
-	//
-	//
-	//
-	//			@Var String SuperClassName = Type.getInternalName(ZFunction.class);
-	//
-	//			@Var AsmClassBuilder ClassBuilder = this.AsmLoader.NewClass(ACC_PUBLIC| ACC_ABSTRACT, null, ClassName, ZFunction.class);
-	//			AsmMethodBuilder InvokeMethod = ClassBuilder.NewMethod(ACC_PUBLIC | ACC_ABSTRACT, "Invoke", FuncType);
-	//			InvokeMethod.Finish();
-	//
-	//			AsmMethodBuilder InitMethod = ClassBuilder.NewMethod(ACC_PUBLIC, "<init>", "(ILjava/lang/String;)V");
-	//			InitMethod.visitVarInsn(ALOAD, 0);
-	//			InitMethod.visitVarInsn(ILOAD, 1);
-	//			InitMethod.visitVarInsn(ALOAD, 2);
-	//			InitMethod.visitMethodInsn(INVOKESPECIAL, SuperClassName, "<init>", "(ILjava/lang/String;)V");
-	//			InitMethod.visitInsn(RETURN);
-	//			InitMethod.Finish();
-	//
-	//			FuncClass = this.AsmLoader.LoadGeneratedClass(ClassName);
-	//			this.SetGeneratedClass(ClassName, FuncClass);
-	//		}
-	//		return FuncClass;
-	//	}
 
 	public String NameFunctionClass(String FuncName, ZFuncType FuncType) {
 		return "F" + FuncType.StringfySignature(FuncName);
@@ -405,29 +418,13 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 		@Var String ClassName = this.NameFunctionClass(Node.FuncName, FuncType);
 		this.GenerateClass("final class", ClassName, FuncType);
 		this.CurrentBuilder.OpenIndent(" {");
-
-		this.CurrentBuilder.AppendNewLine("final ");
+		this.CurrentBuilder.AppendNewLine("static ");
 		this.GenerateTypeName(Node.ReturnType);
-		this.CurrentBuilder.Append(" Invoke");
+		this.CurrentBuilder.Append(" f");
 		this.VisitListNode("(", Node, ")");
-		this.CurrentBuilder.OpenIndent(" {");
-		this.CurrentBuilder.Indent();
-		if(FuncType.GetReturnType().IsVoidType()) {
-			this.CurrentBuilder.Append("return ");
-		}
-		this.CurrentBuilder.Append(ClassName, ".f");
-		this.GenerateWrapperCall("(", Node, ");");
-		this.CurrentBuilder.CloseIndent("}");
+		this.GenerateCode(null, Node.AST[ZFunctionNode._Block]);
 
-		this.GenerateClassField("static ", FuncType, "function", "null");
-
-		// static init
-		this.CurrentBuilder.AppendNewLine("static");
-		this.CurrentBuilder.OpenIndent(" {");
-		this.CurrentBuilder.AppendNewLine("function = new ", ClassName, "();");
-		this.CurrentBuilder.CloseIndent("}");
-
-		this.CurrentBuilder.AppendLineFeedIndent();
+		this.GenerateClassField("static ", FuncType, "function", "new " + ClassName + "();");
 		this.CurrentBuilder.AppendNewLine(ClassName, "()");
 		this.CurrentBuilder.OpenIndent(" {");
 
@@ -435,13 +432,19 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Append(LibZen._QuoteString(Node.FuncName), ");");
 		this.CurrentBuilder.CloseIndent("}");
 
-		this.CurrentBuilder.CloseIndent("}");
-
-		this.CurrentBuilder.AppendNewLine("static ");
+		this.CurrentBuilder.AppendNewLine("");
 		this.GenerateTypeName(Node.ReturnType);
-		this.CurrentBuilder.Append(" f");
+		this.CurrentBuilder.Append(" Invoke");
 		this.VisitListNode("(", Node, ")");
-		this.GenerateCode(null, Node.AST[ZFunctionNode._Block]);
+		this.CurrentBuilder.OpenIndent(" {");
+		if(!FuncType.GetReturnType().IsVoidType()) {
+			this.CurrentBuilder.AppendNewLine("return ", ClassName, ".f");
+		}
+		else {
+			this.CurrentBuilder.AppendNewLine(ClassName, ".f");
+		}
+		this.GenerateWrapperCall("(", Node, ");");
+		this.CurrentBuilder.CloseIndent("}");
 
 		this.CurrentBuilder.CloseIndent("}");
 		this.CurrentBuilder.AppendLineFeedIndent();
@@ -484,6 +487,7 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 		this.GenerateTypeName(Node.TargetType);
 	}
 
+
 	private void GenerateClass(String Qualifier, String ClassName, ZType SuperType) {
 		this.CurrentBuilder.AppendLineFeedIndent();
 		this.CurrentBuilder.Append(Qualifier);
@@ -519,7 +523,6 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 		while(i < Node.ClassType.GetFieldSize()) {
 			@Var ZClassField Field = Node.ClassType.GetFieldAt(i);
 			if(Field.FieldType.IsFuncType()) {
-				this.CurrentBuilder.AppendLineFeedIndent();
 				this.GenerateClassField("static", Field.FieldType, this.NameMethod(Node.ClassType, Field.FieldName), "null");
 			}
 			i = i + 1;
