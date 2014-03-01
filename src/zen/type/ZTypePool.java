@@ -1,8 +1,8 @@
 package zen.type;
 
-import zen.deps.Var;
-import zen.deps.ZArray;
-import zen.deps.ZenMap;
+import zen.util.Var;
+import zen.util.ZArray;
+import zen.util.ZenMap;
 
 public class ZTypePool {
 

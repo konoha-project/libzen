@@ -3,11 +3,11 @@ package zen.grammar;
 import zen.ast.ZErrorNode;
 import zen.ast.ZGetNameNode;
 import zen.ast.ZNode;
-import zen.deps.LibZen;
-import zen.deps.Var;
-import zen.deps.ZMatchFunction;
 import zen.parser.ZToken;
 import zen.parser.ZTokenContext;
+import zen.util.LibZen;
+import zen.util.Var;
+import zen.util.ZMatchFunction;
 
 public class NamePatternFunction extends ZMatchFunction {
 

@@ -24,16 +24,16 @@
 
 package zen.ast;
 
-import zen.deps.Field;
-import zen.deps.Nullable;
-import zen.deps.Var;
-import zen.deps.ZArray;
 import zen.parser.ZGenerator;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 import zen.type.ZFuncType;
 import zen.type.ZType;
 import zen.type.ZTypePool;
+import zen.util.Field;
+import zen.util.Nullable;
+import zen.util.Var;
+import zen.util.ZArray;
 
 public class ZFunctionNode extends ZListNode {
 	public final static int _Block = 0;

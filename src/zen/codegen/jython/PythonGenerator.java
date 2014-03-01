@@ -44,10 +44,6 @@ import zen.ast.ZStupidCastErrorNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZVarNode;
-import zen.deps.Field;
-import zen.deps.LibZen;
-import zen.deps.Var;
-import zen.deps.ZenMethod;
 import zen.lang.ZenTypeSafer;
 import zen.parser.ZLogger;
 import zen.parser.ZSourceEngine;
@@ -56,6 +52,10 @@ import zen.type.ZClassField;
 import zen.type.ZFuncType;
 import zen.type.ZGenericType;
 import zen.type.ZType;
+import zen.util.Field;
+import zen.util.LibZen;
+import zen.util.Var;
+import zen.util.ZenMethod;
 
 //Zen Generator should be written in each language.
 

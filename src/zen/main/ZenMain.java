@@ -33,14 +33,14 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.ArrayList;
 
-import zen.deps.LibZen;
-import zen.deps.Var;
-import zen.deps.ZStringArray;
 import zen.lang.ZenGrammar;
 import zen.parser.ZEmptyValue;
 import zen.parser.ZParserConst;
 import zen.parser.ZSourceBuilder;
 import zen.parser.ZSourceEngine;
+import zen.util.LibZen;
+import zen.util.Var;
+import zen.util.ZStringArray;
 
 public class ZenMain {
 	private static jline.ConsoleReader ConsoleReader = null;

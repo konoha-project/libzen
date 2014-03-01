@@ -24,10 +24,10 @@
 
 package zen.ast;
 
-import zen.deps.Var;
 import zen.parser.ZMacroFunc;
 import zen.parser.ZVisitor;
 import zen.type.ZFunc;
+import zen.util.Var;
 
 public final class ZNewObjectNode extends ZListNode {
 

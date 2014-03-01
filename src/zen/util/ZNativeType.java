@@ -1,4 +1,4 @@
-package zen.deps;
+package zen.util;
 
 import zen.codegen.jvm.JavaTypeTable;
 import zen.type.ZType;

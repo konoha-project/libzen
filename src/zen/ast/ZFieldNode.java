@@ -24,10 +24,10 @@
 
 package zen.ast;
 
-import zen.deps.Field;
 import zen.parser.ZToken;
 import zen.type.ZClassType;
 import zen.type.ZType;
+import zen.util.Field;
 
 public final class ZFieldNode extends ZNode {
 	public final static int _InitValue = 0;

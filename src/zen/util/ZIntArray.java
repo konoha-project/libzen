@@ -1,21 +1,18 @@
-package zen.deps;
+package zen.util;
 
-public class ZStringArray extends ZObject {
+
+public class ZIntArray extends ZObject {
 	@Field private int    Size;
-	@Field public String[] ArrayValues;
+	@Field public long[] ArrayValues;
 
-	public ZStringArray() {
-		this(0, null);
-	}
-
-	public ZStringArray(int TypeId, String[] Values) {
+	public ZIntArray(int TypeId, long[] Values) {
 		super(TypeId);
 		if(Values != null) {
 			this.ArrayValues = Values;
 			this.Size = Values.length;
 		}
 		else {
-			this.ArrayValues = new String[1];
+			this.ArrayValues = new long[1];
 			this.Size = 0;
 		}
 	}
@@ -26,7 +23,7 @@ public class ZStringArray extends ZObject {
 			if(i > 0) {
 				sb.append(", ");
 			}
-			sb.append(LibZen._QuoteString(this.ArrayValues[i]));
+			sb.append(this.ArrayValues[i]);
 		}
 		sb.append("]");
 	}
@@ -35,24 +32,24 @@ public class ZStringArray extends ZObject {
 		return this.Size;
 	}
 
-	public final static String GetIndex(ZStringArray a, long Index) {
+	public final static long GetIndex(ZIntArray a, long Index) {
 		if(Index < a.Size) {
 			return a.ArrayValues[(int)Index];
 		}
 		ZObjectArray.ThrowOutOfArrayIndex(a.Size, Index);
-		return null;
+		return 0;
 	}
 
-	public final static void SetIndex(ZStringArray a, long Index, String Value) {
+	public final static void SetIndex(ZIntArray a, long Index, long Value) {
 		if(Index < a.Size) {
 			a.ArrayValues[(int)Index] = Value;
 		}
 		ZObjectArray.ThrowOutOfArrayIndex(a.Size, Index);
 	}
 
-	public final void Add(String Value) {
+	public final void Add(long Value) {
 		if(this.Size == this.ArrayValues.length) {
-			String[] newValues = new String[this.ArrayValues.length*2];
+			long[] newValues = new long[this.ArrayValues.length*2];
 			System.arraycopy(this.ArrayValues, 0, newValues, 0, this.Size);
 			this.ArrayValues = newValues;
 		}

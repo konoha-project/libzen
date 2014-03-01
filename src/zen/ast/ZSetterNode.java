@@ -24,9 +24,9 @@
 
 package zen.ast;
 
-import zen.deps.Field;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
+import zen.util.Field;
 
 public final class ZSetterNode extends ZNode {
 	public final static int _Recv = 0;

@@ -1,12 +1,12 @@
 package zen.ast;
 
-import zen.deps.Field;
-import zen.deps.Var;
-import zen.deps.ZArray;
 import zen.parser.ZToken;
 import zen.type.ZFuncType;
 import zen.type.ZType;
 import zen.type.ZTypePool;
+import zen.util.Field;
+import zen.util.Var;
+import zen.util.ZArray;
 
 public class ZPrototypeNode extends ZListNode {
 	@Field public ZType ReturnType = ZType.VarType;

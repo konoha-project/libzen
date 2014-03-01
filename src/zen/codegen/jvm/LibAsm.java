@@ -4,11 +4,11 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.MethodNode;
 
-import zen.deps.ZFloatArray;
-import zen.deps.ZIntArray;
-import zen.deps.ZObjectArray;
-import zen.deps.ZStringArray;
 import zen.type.ZType;
+import zen.util.ZFloatArray;
+import zen.util.ZIntArray;
+import zen.util.ZObjectArray;
+import zen.util.ZStringArray;
 
 public class LibAsm {
 

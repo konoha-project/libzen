@@ -1,9 +1,9 @@
 package zen.grammar;
 
-import zen.deps.LibZen;
-import zen.deps.Var;
-import zen.deps.ZTokenFunction;
 import zen.parser.ZSourceContext;
+import zen.util.LibZen;
+import zen.util.Var;
+import zen.util.ZTokenFunction;
 
 public class NameTokenFunction extends ZTokenFunction {
 

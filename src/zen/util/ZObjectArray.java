@@ -1,4 +1,4 @@
-package zen.deps;
+package zen.util;
 
 public final class ZObjectArray extends ZObject {
 	@Field private int    Size;

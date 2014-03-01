@@ -1,9 +1,9 @@
 package zen.grammar;
 
 import zen.ast.ZNode;
-import zen.deps.Var;
-import zen.deps.ZMatchFunction;
 import zen.parser.ZTokenContext;
+import zen.util.Var;
+import zen.util.ZMatchFunction;
 
 public class StatementPatternFunction extends ZMatchFunction {
 

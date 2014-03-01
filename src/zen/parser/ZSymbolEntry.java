@@ -1,7 +1,7 @@
 package zen.parser;
 
 import zen.ast.ZNode;
-import zen.deps.Field;
+import zen.util.Field;
 
 public class ZSymbolEntry {
 	@Field public ZSymbolEntry Parent;

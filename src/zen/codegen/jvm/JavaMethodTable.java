@@ -26,10 +26,10 @@ package zen.codegen.jvm;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 
-import zen.deps.LibZen;
 import zen.type.ZGenericType;
 import zen.type.ZType;
 import zen.type.ZTypePool;
+import zen.util.LibZen;
 
 public class JavaMethodTable {
 
@@ -102,17 +102,17 @@ public class JavaMethodTable {
 		ZType FloatArrayType = ZTypePool._GetGenericType1(ZGenericType._ArrayType, ZType.FloatType);
 		ZType StringArrayType = ZTypePool._GetGenericType1(ZGenericType._ArrayType, ZType.StringType);
 
-		Import(ZGenericType._ArrayType, "[]", ZType.IntType, zen.deps.ZObjectArray.class, "GetIndex");
-		Import(ZGenericType._ArrayType, "[]=", ZType.IntType, zen.deps.ZObjectArray.class, "SetIndex", Object.class);
-		Import(IntArrayType, "[]", ZType.IntType, zen.deps.ZIntArray.class, "GetIndex");
-		Import(IntArrayType, "[]=", ZType.IntType, zen.deps.ZIntArray.class, "SetIndex", long.class);
-		Import(FloatArrayType, "[]", ZType.IntType, zen.deps.ZFloatArray.class, "GetIndex");
-		Import(FloatArrayType, "[]=", ZType.IntType, zen.deps.ZFloatArray.class, "SetIndex", double.class);
-		Import(StringArrayType, "[]", ZType.IntType, zen.deps.ZStringArray.class, "GetIndex");
-		Import(StringArrayType, "[]=", ZType.IntType, zen.deps.ZStringArray.class, "SetIndex", String.class);
+		Import(ZGenericType._ArrayType, "[]", ZType.IntType, zen.util.ZObjectArray.class, "GetIndex");
+		Import(ZGenericType._ArrayType, "[]=", ZType.IntType, zen.util.ZObjectArray.class, "SetIndex", Object.class);
+		Import(IntArrayType, "[]", ZType.IntType, zen.util.ZIntArray.class, "GetIndex");
+		Import(IntArrayType, "[]=", ZType.IntType, zen.util.ZIntArray.class, "SetIndex", long.class);
+		Import(FloatArrayType, "[]", ZType.IntType, zen.util.ZFloatArray.class, "GetIndex");
+		Import(FloatArrayType, "[]=", ZType.IntType, zen.util.ZFloatArray.class, "SetIndex", double.class);
+		Import(StringArrayType, "[]", ZType.IntType, zen.util.ZStringArray.class, "GetIndex");
+		Import(StringArrayType, "[]=", ZType.IntType, zen.util.ZStringArray.class, "SetIndex", String.class);
 
-		Import(ZGenericType._MapType, "[]", ZType.StringType, zen.deps.ZenMap.class, "GetIndex");
-		Import(ZGenericType._MapType, "[]=", ZType.StringType, zen.deps.ZenMap.class, "SetIndex", Object.class);
+		Import(ZGenericType._MapType, "[]", ZType.StringType, zen.util.ZenMap.class, "GetIndex");
+		Import(ZGenericType._MapType, "[]=", ZType.StringType, zen.util.ZenMap.class, "SetIndex", Object.class);
 
 
 		Import(boolean.class, JavaCastApi.class, "toObject");

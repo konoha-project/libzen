@@ -1,9 +1,9 @@
 package zen.ast;
 
-import zen.deps.Field;
-import zen.deps.LibZen;
-import zen.deps.Var;
 import zen.parser.ZToken;
+import zen.util.Field;
+import zen.util.LibZen;
+import zen.util.Var;
 
 public class ZListNode extends ZNode {
 	@Field public int ListStartIndex;

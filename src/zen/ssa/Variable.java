@@ -3,7 +3,7 @@ package zen.ssa;
 import java.util.ArrayList;
 
 import zen.ast.ZNode;
-import zen.deps.Field;
+import zen.util.Field;
 
 public class Variable {
 	@Field public String Name;

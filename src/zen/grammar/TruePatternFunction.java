@@ -2,8 +2,8 @@ package zen.grammar;
 
 import zen.ast.ZBooleanNode;
 import zen.ast.ZNode;
-import zen.deps.ZMatchFunction;
 import zen.parser.ZTokenContext;
+import zen.util.ZMatchFunction;
 
 public class TruePatternFunction extends ZMatchFunction {
 

@@ -24,11 +24,11 @@
 
 package zen.type;
 
-import zen.deps.Field;
-import zen.deps.Var;
-import zen.deps.ZArray;
-import zen.deps.ZenIgnored;
 import zen.parser.ZToken;
+import zen.util.Field;
+import zen.util.Var;
+import zen.util.ZArray;
+import zen.util.ZenIgnored;
 
 public class ZVarType extends ZType {
 

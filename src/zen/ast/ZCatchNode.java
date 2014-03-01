@@ -24,9 +24,9 @@
 
 package zen.ast;
 
-import zen.deps.Field;
 import zen.parser.ZToken;
 import zen.type.ZType;
+import zen.util.Field;
 
 public final class ZCatchNode extends ZNode {
 	public final static int _Block = 0;

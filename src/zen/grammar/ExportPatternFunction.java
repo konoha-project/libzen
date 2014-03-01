@@ -5,10 +5,10 @@ import zen.ast.ZErrorNode;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZLetNode;
 import zen.ast.ZNode;
-import zen.deps.Var;
-import zen.deps.ZMatchFunction;
 import zen.parser.ZToken;
 import zen.parser.ZTokenContext;
+import zen.util.Var;
+import zen.util.ZMatchFunction;
 
 public class ExportPatternFunction extends ZMatchFunction {
 

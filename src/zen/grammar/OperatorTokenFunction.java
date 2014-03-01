@@ -1,7 +1,7 @@
 package zen.grammar;
 
-import zen.deps.ZTokenFunction;
 import zen.parser.ZSourceContext;
+import zen.util.ZTokenFunction;
 
 public class OperatorTokenFunction extends ZTokenFunction {
 

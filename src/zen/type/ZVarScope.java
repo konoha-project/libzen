@@ -2,12 +2,12 @@ package zen.type;
 
 import zen.ast.ZFunctionNode;
 import zen.ast.ZNode;
-import zen.deps.Field;
-import zen.deps.Var;
-import zen.deps.ZArray;
 import zen.parser.ZLogger;
 import zen.parser.ZToken;
 import zen.parser.ZTypeChecker;
+import zen.util.Field;
+import zen.util.Var;
+import zen.util.ZArray;
 
 public final class ZVarScope {
 	@Field public ZVarScope Parent;

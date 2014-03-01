@@ -72,9 +72,6 @@ import zen.ast.ZTypeNode;
 import zen.ast.ZUnaryNode;
 import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
-import zen.deps.Field;
-import zen.deps.LibZen;
-import zen.deps.Var;
 import zen.parser.ZGenerator;
 import zen.parser.ZLogger;
 import zen.parser.ZMacroFunc;
@@ -92,6 +89,9 @@ import zen.type.ZType;
 import zen.type.ZTypePool;
 import zen.type.ZVarScope;
 import zen.type.ZVarType;
+import zen.util.Field;
+import zen.util.LibZen;
+import zen.util.Var;
 
 public class ZenTypeSafer extends ZTypeChecker {
 

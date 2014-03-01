@@ -26,10 +26,10 @@
 package zen.parser;
 
 import zen.ast.ZListNode;
-import zen.deps.Field;
-import zen.deps.LibZen;
-import zen.deps.Var;
-import zen.deps.ZArray;
+import zen.util.Field;
+import zen.util.LibZen;
+import zen.util.Var;
+import zen.util.ZArray;
 
 
 

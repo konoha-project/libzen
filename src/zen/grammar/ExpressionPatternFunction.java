@@ -2,13 +2,13 @@ package zen.grammar;
 
 import zen.ast.ZErrorNode;
 import zen.ast.ZNode;
-import zen.deps.Var;
-import zen.deps.ZMatchFunction;
 import zen.parser.ZNameSpace;
 import zen.parser.ZPatternToken;
 import zen.parser.ZSyntax;
 import zen.parser.ZToken;
 import zen.parser.ZTokenContext;
+import zen.util.Var;
+import zen.util.ZMatchFunction;
 
 public class ExpressionPatternFunction extends ZMatchFunction {
 

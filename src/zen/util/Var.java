@@ -21,11 +21,16 @@
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
-//ifdef JAVA
-package zen.deps;
 
-import zen.type.ZType;
+package zen.util;
 
-public interface ZTypedObject {
-	public ZType GetZenType();
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Target(ElementType.LOCAL_VARIABLE)
+@Retention(RetentionPolicy.SOURCE)
+public @interface Var {
+
 }

@@ -1,6 +1,6 @@
 package test.zen;
 
-import zen.deps.Field;
+import zen.util.Field;
 
 public class ExitException extends SecurityException {
 	@Field public int ExitStatus;

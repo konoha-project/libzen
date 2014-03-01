@@ -1,8 +1,8 @@
 package zen.type;
 
-import zen.deps.Field;
-import zen.deps.LibZen;
-import zen.deps.Var;
+import zen.util.Field;
+import zen.util.LibZen;
+import zen.util.Var;
 
 public class ZGreekType extends ZType {
 	//	private final static ZType[] _GreekTypes = ZGreekType._NewGreekTypes(null);

@@ -24,7 +24,7 @@
 
 
 //ifdef JAVA
-package zen.deps;
+package zen.util;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 

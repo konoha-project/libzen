@@ -24,8 +24,6 @@
 
 //ifdef JAVA
 package zen.lang;
-import zen.deps.Var;
-import zen.deps.ZMatchFunction;
 import zen.grammar.AndPatternFunction;
 import zen.grammar.AnnotationPatternFunction;
 import zen.grammar.ApplyPatternFunction;
@@ -90,6 +88,8 @@ import zen.parser.ZNameSpace;
 import zen.type.ZFuncType;
 import zen.type.ZGenericType;
 import zen.type.ZType;
+import zen.util.Var;
+import zen.util.ZMatchFunction;
 
 public class ZenGrammar {
 	public static void ImportGrammar(ZNameSpace NameSpace) {

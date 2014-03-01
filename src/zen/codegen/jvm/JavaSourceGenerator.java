@@ -20,12 +20,6 @@ import zen.ast.ZSetIndexNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZVarNode;
-import zen.deps.Field;
-import zen.deps.LibZen;
-import zen.deps.Var;
-import zen.deps.ZArray;
-import zen.deps.ZenMap;
-import zen.deps.ZenMethod;
 import zen.lang.ZenTypeSafer;
 import zen.parser.ZLogger;
 import zen.parser.ZSourceEngine;
@@ -35,6 +29,12 @@ import zen.type.ZClassType;
 import zen.type.ZFuncType;
 import zen.type.ZGenericType;
 import zen.type.ZType;
+import zen.util.Field;
+import zen.util.LibZen;
+import zen.util.Var;
+import zen.util.ZArray;
+import zen.util.ZenMap;
+import zen.util.ZenMethod;
 
 public class JavaSourceGenerator extends ZSourceGenerator {
 
@@ -46,7 +46,6 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 
 		this.TopType = "Object";
 		this.SetNativeType(ZType.BooleanType, "boolean");
-		//		this.SetNativeType(ZType.IntType, "long long int");
 		this.SetNativeType(ZType.IntType, "long");
 		this.SetNativeType(ZType.FloatType, "double");
 		this.SetNativeType(ZType.StringType, "String");
@@ -347,6 +346,7 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitVarNode(ZVarNode Node) {
+		this.CurrentBuilder.AppendNewLine("");
 		this.GenerateTypeName(Node.DeclType);
 		this.CurrentBuilder.Append(" ");
 		this.CurrentBuilder.Append(this.SafeName(Node.NativeName, Node.VarIndex));
@@ -451,36 +451,6 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 		return ClassName + ".function";
 	}
 
-	//	private void GenerateExportFunction(ZFunctionNode Node) {
-	//		if(Node.FuncName.equals("main")) {
-	//			this.CurrentBuilder.Append("int");
-	//		}
-	//		else {
-	//			this.GenerateTypeName(Node.ReturnType);
-	//		}
-	//		this.CurrentBuilder.Append(" ", Node.FuncName);
-	//		this.VisitListNode("(", Node, ")");
-	//		this.CurrentBuilder.AppendLineFeed();
-	//		this.CurrentBuilder.Append("{");
-	//		this.CurrentBuilder.Indent();
-	//		this.CurrentBuilder.AppendLineFeedIndent();
-	//		if(!Node.ReturnType.IsVoidType()) {
-	//			this.CurrentBuilder.Append("return ");
-	//		}
-	//		this.CurrentBuilder.Append(Node.GetSignature(this));
-	//		this.VisitListNode("(", Node, ")");
-	//		this.CurrentBuilder.Append(this.SemiColon);
-	//		if(Node.FuncName.equals("main")) {
-	//			this.CurrentBuilder.AppendLineFeed();
-	//			this.CurrentBuilder.Append("return 0;");
-	//		}
-	//		this.CurrentBuilder.UnIndent();
-	//		this.CurrentBuilder.AppendLineFeed();
-	//		this.CurrentBuilder.Append("}");
-	//		this.CurrentBuilder.AppendLineFeed();
-	//		this.CurrentBuilder.AppendLineFeed();
-	//	}
-
 	@Override public void VisitInstanceOfNode(ZInstanceOfNode Node) {
 		this.GenerateCode(null, Node.AST[ZInstanceOfNode._Left]);
 		this.CurrentBuilder.Append(" instanceof ");
@@ -492,7 +462,12 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.AppendLineFeedIndent();
 		this.CurrentBuilder.Append(Qualifier);
 		this.CurrentBuilder.AppendWhiteSpace(ClassName, " extends ");
-		this.GenerateTypeName(SuperType);
+		if(SuperType.IsVarType()) {
+			this.CurrentBuilder.Append("Object");
+		}
+		else {
+			this.GenerateTypeName(SuperType);
+		}
 	}
 
 	private void GenerateClassField(String Qualifier, ZType FieldType, String FieldName, String Value) {

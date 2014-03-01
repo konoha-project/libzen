@@ -13,12 +13,6 @@ import zen.ast.ZNode;
 import zen.ast.ZNullNode;
 import zen.ast.ZStringNode;
 import zen.ast.ZTypeNode;
-import zen.deps.LibZen;
-import zen.deps.Var;
-import zen.deps.ZArray;
-import zen.deps.ZMatchFunction;
-import zen.deps.ZTokenFunction;
-import zen.deps.ZenMap;
 import zen.lang.ZenTypeSafer;
 import zen.parser.ZGenerator;
 import zen.parser.ZNameSpace;
@@ -28,6 +22,12 @@ import zen.parser.ZTokenContext;
 import zen.type.ZFuncType;
 import zen.type.ZType;
 import zen.type.ZTypePool;
+import zen.util.LibZen;
+import zen.util.Var;
+import zen.util.ZArray;
+import zen.util.ZMatchFunction;
+import zen.util.ZTokenFunction;
+import zen.util.ZenMap;
 
 public abstract class JavaGenerator extends ZGenerator {
 	private final ZenMap<ZNode> LazyNodeMap = new ZenMap<ZNode>(null);

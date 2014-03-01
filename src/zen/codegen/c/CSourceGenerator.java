@@ -49,8 +49,6 @@ import zen.ast.ZSetterNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZVarNode;
-import zen.deps.LibZen;
-import zen.deps.Var;
 import zen.lang.ZenTypeSafer;
 import zen.parser.ZLogger;
 import zen.parser.ZSourceEngine;
@@ -61,6 +59,8 @@ import zen.type.ZFunc;
 import zen.type.ZFuncType;
 import zen.type.ZGenericType;
 import zen.type.ZType;
+import zen.util.LibZen;
+import zen.util.Var;
 
 public class CSourceGenerator extends ZSourceGenerator {
 

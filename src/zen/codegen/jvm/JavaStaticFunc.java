@@ -26,9 +26,9 @@ package zen.codegen.jvm;
 
 import java.lang.reflect.Method;
 
-import zen.deps.Field;
 import zen.parser.ZMacroFunc;
 import zen.type.ZFuncType;
+import zen.util.Field;
 
 public class JavaStaticFunc extends ZMacroFunc {
 	@Field public Method StaticFunc;  // Abstract function if null

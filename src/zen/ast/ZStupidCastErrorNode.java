@@ -1,6 +1,6 @@
 package zen.ast;
 
-import zen.deps.Field;
+import zen.util.Field;
 
 public class ZStupidCastErrorNode extends ZErrorNode {
 	@Field public ZNode ErrorNode;

@@ -1,6 +1,6 @@
 package zen.codegen.jvm;
 
-import zen.deps.LibZen;
+import zen.util.LibZen;
 
 public class DebugAsmGenerator extends JavaAsmGenerator {
 	public DebugAsmGenerator() {

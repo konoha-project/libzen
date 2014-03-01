@@ -22,15 +22,16 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package zen.deps;
+package zen.util;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+public class ZenException extends RuntimeException {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5333884246425321233L;
 
-@Target(ElementType.FIELD)
-@Retention(RetentionPolicy.SOURCE)
-public @interface Field {
-
+	public ZenException(String Message) {
+		super(Message);
+	}
+	
 }

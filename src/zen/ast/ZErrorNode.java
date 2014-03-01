@@ -24,10 +24,10 @@
 
 package zen.ast;
 
-import zen.deps.Field;
-import zen.deps.ZenIgnored;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
+import zen.util.Field;
+import zen.util.ZenIgnored;
 
 public class ZErrorNode extends ZConstNode {
 	@Field public String ErrorMessage;

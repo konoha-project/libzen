@@ -28,10 +28,10 @@ import zen.ast.ZBlockNode;
 import zen.ast.ZEmptyNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZNode;
-import zen.deps.Field;
-import zen.deps.LibZen;
-import zen.deps.Var;
-import zen.deps.ZArray;
+import zen.util.Field;
+import zen.util.LibZen;
+import zen.util.Var;
+import zen.util.ZArray;
 
 public final class ZTokenContext {
 	public final static boolean     _Required          = true;

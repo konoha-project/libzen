@@ -27,15 +27,15 @@ package zen.parser;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZNode;
 import zen.ast.ZTypeNode;
-import zen.deps.Field;
-import zen.deps.LibZen;
-import zen.deps.Nullable;
-import zen.deps.Var;
-import zen.deps.ZMatchFunction;
-import zen.deps.ZTokenFunction;
-import zen.deps.ZenMap;
 import zen.type.ZClassType;
 import zen.type.ZType;
+import zen.util.Field;
+import zen.util.LibZen;
+import zen.util.Nullable;
+import zen.util.Var;
+import zen.util.ZMatchFunction;
+import zen.util.ZTokenFunction;
+import zen.util.ZenMap;
 
 public final class ZNameSpace {
 	//	private static int SerialNumber = 0;

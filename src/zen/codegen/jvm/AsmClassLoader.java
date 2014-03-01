@@ -5,8 +5,8 @@ import java.util.HashMap;
 import org.objectweb.asm.Type;
 
 import zen.ast.ZNode;
-import zen.deps.LibZen;
-import zen.deps.Var;
+import zen.util.LibZen;
+import zen.util.Var;
 
 class AsmClassLoader extends ClassLoader {
 	private final HashMap<String,AsmClassBuilder> ClassBuilderMap = new HashMap<String, AsmClassBuilder>();

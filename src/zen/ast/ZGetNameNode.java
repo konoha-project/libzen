@@ -24,10 +24,10 @@
 
 package zen.ast;
 
-import zen.deps.Field;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 import zen.type.ZFunc;
+import zen.util.Field;
 
 public class ZGetNameNode extends ZNode {
 	@Field public boolean IsCaptured = false;

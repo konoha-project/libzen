@@ -24,10 +24,10 @@
 
 package zen.type;
 
-import zen.deps.Field;
-import zen.deps.Var;
-import zen.deps.ZArray;
 import zen.parser.ZToken;
+import zen.util.Field;
+import zen.util.Var;
+import zen.util.ZArray;
 
 public class ZClassType extends ZType {
 	@Field ZArray<ZClassField> FieldList = null;

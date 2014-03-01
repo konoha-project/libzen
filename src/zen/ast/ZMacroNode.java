@@ -1,12 +1,12 @@
 package zen.ast;
 
-import zen.deps.Field;
-import zen.deps.Var;
 import zen.parser.ZMacroFunc;
 import zen.parser.ZSourceMacro;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 import zen.type.ZFuncType;
+import zen.util.Field;
+import zen.util.Var;
 
 public class ZMacroNode extends ZListNode {
 	@Field public final ZMacroFunc MacroFunc;

@@ -70,18 +70,18 @@ import zen.ast.ZTryNode;
 import zen.ast.ZUnaryNode;
 import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
-import zen.deps.Field;
-import zen.deps.LibZen;
-import zen.deps.Nullable;
-import zen.deps.Var;
-import zen.deps.ZArray;
-import zen.deps.ZenMap;
-import zen.deps.ZenMethod;
 import zen.lang.ZenTypeSafer;
 import zen.type.ZClassType;
 import zen.type.ZFuncType;
 import zen.type.ZType;
 import zen.type.ZTypePool;
+import zen.util.Field;
+import zen.util.LibZen;
+import zen.util.Nullable;
+import zen.util.Var;
+import zen.util.ZArray;
+import zen.util.ZenMap;
+import zen.util.ZenMethod;
 
 public class ZSourceGenerator extends ZGenerator {
 

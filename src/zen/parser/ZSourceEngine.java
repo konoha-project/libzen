@@ -70,12 +70,12 @@ import zen.ast.ZTypeNode;
 import zen.ast.ZUnaryNode;
 import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
-import zen.deps.Field;
-import zen.deps.LibZen;
-import zen.deps.Var;
-import zen.deps.ZenIgnored;
 import zen.type.ZFuncType;
 import zen.type.ZType;
+import zen.util.Field;
+import zen.util.LibZen;
+import zen.util.Var;
+import zen.util.ZenIgnored;
 
 public class ZSourceEngine extends ZVisitor {
 	@Field protected final ZTypeChecker TypeChecker;

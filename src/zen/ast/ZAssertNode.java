@@ -1,9 +1,9 @@
 package zen.ast;
 
-import zen.deps.Var;
 import zen.parser.ZGenerator;
 import zen.parser.ZMacroFunc;
 import zen.type.ZType;
+import zen.util.Var;
 
 
 public class ZAssertNode extends ZNode {

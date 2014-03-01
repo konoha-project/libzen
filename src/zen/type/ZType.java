@@ -24,11 +24,11 @@
 
 //ifdef JAVA
 package zen.type;
-import zen.deps.Field;
-import zen.deps.LibZen;
-import zen.deps.Var;
-import zen.deps.ZenMethod;
 import zen.parser.ZToken;
+import zen.util.Field;
+import zen.util.LibZen;
+import zen.util.Var;
+import zen.util.ZenMethod;
 
 public class ZType  {
 	public final static int     UniqueTypeFlag         = 1 << 16;

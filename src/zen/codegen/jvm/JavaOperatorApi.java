@@ -29,10 +29,10 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import zen.deps.SoftwareFaultException;
-import zen.deps.Var;
-import zen.deps.ZenMap;
 import zen.type.ZType;
+import zen.util.SoftwareFaultException;
+import zen.util.Var;
+import zen.util.ZenMap;
 
 public final class JavaOperatorApi {
 

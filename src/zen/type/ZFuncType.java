@@ -1,9 +1,9 @@
 package zen.type;
 
-import zen.deps.Field;
-import zen.deps.LibZen;
-import zen.deps.Var;
-import zen.deps.ZArray;
+import zen.util.Field;
+import zen.util.LibZen;
+import zen.util.Var;
+import zen.util.ZArray;
 
 public final class ZFuncType extends ZType {
 	public final static ZFuncType _FuncType  = new ZFuncType("Func", null);

@@ -2,7 +2,7 @@
 
 package zen.codegen.erlang;
 
-import zen.deps.Field;
+import zen.util.Field;
 
 //endif VAJA
 

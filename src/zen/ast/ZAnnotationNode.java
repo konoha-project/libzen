@@ -23,10 +23,10 @@
 // **************************************************************************
 
 package zen.ast;
-import zen.deps.Field;
-import zen.deps.ZenMap;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
+import zen.util.Field;
+import zen.util.ZenMap;
 
 public final class ZAnnotationNode extends ZNode {
 	//@Field public ZenMap<Object> Annotation;

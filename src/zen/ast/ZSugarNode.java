@@ -1,7 +1,7 @@
 package zen.ast;
 
-import zen.deps.Field;
 import zen.parser.ZVisitor;
+import zen.util.Field;
 
 public class ZSugarNode extends ZNode {
 	public final static int _DeSugar = 0;

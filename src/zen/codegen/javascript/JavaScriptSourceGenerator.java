@@ -46,14 +46,14 @@ import zen.ast.ZStupidCastErrorNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZVarNode;
-import zen.deps.LibZen;
-import zen.deps.Var;
 import zen.lang.ZenTypeSafer;
 import zen.parser.ZLogger;
 import zen.parser.ZSourceEngine;
 import zen.parser.ZSourceGenerator;
 import zen.type.ZGenericType;
 import zen.type.ZType;
+import zen.util.LibZen;
+import zen.util.Var;
 
 public class JavaScriptSourceGenerator extends ZSourceGenerator {
 	private static boolean UseExtend;

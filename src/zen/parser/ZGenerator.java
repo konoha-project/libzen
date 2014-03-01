@@ -28,16 +28,16 @@ package zen.parser;
 import zen.ast.ZListNode;
 import zen.ast.ZNode;
 import zen.ast.ZSugarNode;
-import zen.deps.Field;
-import zen.deps.LibZen;
-import zen.deps.Nullable;
-import zen.deps.Var;
-import zen.deps.ZenMap;
-import zen.deps.ZenMethod;
 import zen.type.ZFunc;
 import zen.type.ZFuncType;
 import zen.type.ZPrototype;
 import zen.type.ZType;
+import zen.util.Field;
+import zen.util.LibZen;
+import zen.util.Nullable;
+import zen.util.Var;
+import zen.util.ZenMap;
+import zen.util.ZenMethod;
 
 public abstract class ZGenerator extends ZVisitor {
 	@Field private String            GrammarInfo;

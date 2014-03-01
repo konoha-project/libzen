@@ -1,7 +1,7 @@
 package zen.parser;
 
-import zen.deps.Field;
-import zen.deps.ZTokenFunction;
+import zen.util.Field;
+import zen.util.ZTokenFunction;
 
 public final class ZTokenFunc {
 	@Field public ZTokenFunction      Func;

@@ -1,9 +1,9 @@
 package zen.parser;
 
-import zen.deps.Field;
-import zen.deps.LibZen;
-import zen.deps.Var;
-import zen.deps.ZenIgnored;
+import zen.util.Field;
+import zen.util.LibZen;
+import zen.util.Var;
+import zen.util.ZenIgnored;
 
 public class ZToken {
 	public final static ZToken _NullToken = new ZToken(null, 0, 0);

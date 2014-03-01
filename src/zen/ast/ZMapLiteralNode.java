@@ -24,8 +24,8 @@
 
 package zen.ast;
 
-import zen.deps.Var;
 import zen.parser.ZVisitor;
+import zen.util.Var;
 
 public final class ZMapLiteralNode extends ZListNode {
 	public ZMapLiteralNode(ZNode ParentNode) {

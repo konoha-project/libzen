@@ -1,7 +1,7 @@
 package zen.type;
 
-import zen.deps.Field;
 import zen.parser.ZToken;
+import zen.util.Field;
 
 public class ZPrototype extends ZFunc {
 	@Field public int DefinedCount = 0;

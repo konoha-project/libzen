@@ -1,7 +1,7 @@
 package zen.ast;
 
-import zen.deps.Field;
 import zen.parser.ZToken;
+import zen.util.Field;
 
 public abstract class ZImportNode extends ZNode {
 	@Field public String ResourcePath = null;

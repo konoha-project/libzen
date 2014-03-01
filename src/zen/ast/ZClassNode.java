@@ -24,12 +24,12 @@
 
 package zen.ast;
 
-import zen.deps.Field;
-import zen.deps.Var;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 import zen.type.ZClassType;
 import zen.type.ZType;
+import zen.util.Field;
+import zen.util.Var;
 
 public final class ZClassNode extends ZListNode {
 

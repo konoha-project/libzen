@@ -24,7 +24,7 @@
 
 //ifdef JAVA
 package zen.type;
-import zen.deps.Field;
+import zen.util.Field;
 
 public abstract class ZFunc {
 	public final static String _NativeNameConnector = "__";

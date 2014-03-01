@@ -24,10 +24,10 @@
 
 package zen.ast;
 
-import zen.deps.Field;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 import zen.type.ZType;
+import zen.util.Field;
 
 //E.g., $ExprNode instanceof TypeInfo
 public final class ZInstanceOfNode extends ZNode {

@@ -1,6 +1,6 @@
 package zen.ast;
 
-import zen.deps.Field;
+import zen.util.Field;
 
 public class ZMapEntryNode extends ZNode {
 	public final static int _Key = 0;

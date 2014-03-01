@@ -3,7 +3,7 @@ package zen.ssa;
 import zen.ast.ZBlockNode;
 import zen.ast.ZNode;
 import zen.ast.ZVarNode;
-import zen.deps.Var;
+import zen.util.Var;
 
 public class VariableScopeFixer extends ZASTTransformer {
 	private ZBlockNode GetParentBlock(ZVarNode Node) {

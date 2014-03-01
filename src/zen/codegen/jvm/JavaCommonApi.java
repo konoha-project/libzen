@@ -2,13 +2,13 @@ package zen.codegen.jvm;
 
 import java.lang.reflect.Method;
 
-import zen.deps.LibZen;
-import zen.deps.SoftwareFaultException;
-import zen.deps.Var;
 import zen.parser.ZGenerator;
 import zen.type.ZFunc;
 import zen.type.ZFuncType;
 import zen.type.ZType;
+import zen.util.LibZen;
+import zen.util.SoftwareFaultException;
+import zen.util.Var;
 
 public class JavaCommonApi {
 

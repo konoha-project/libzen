@@ -22,15 +22,15 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package zen.deps;
+package zen.util;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target({ElementType.PARAMETER, ElementType.FIELD, ElementType.METHOD})
+@Target(ElementType.FIELD)
 @Retention(RetentionPolicy.SOURCE)
-public @interface Nullable {
+public @interface Field {
 
 }

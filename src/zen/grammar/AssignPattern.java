@@ -1,8 +1,8 @@
 package zen.grammar;
 
 import zen.ast.ZNode;
-import zen.deps.ZMatchFunction;
 import zen.parser.ZTokenContext;
+import zen.util.ZMatchFunction;
 
 public class AssignPattern extends ZMatchFunction {
 

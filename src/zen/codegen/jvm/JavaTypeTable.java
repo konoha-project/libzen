@@ -28,20 +28,20 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 
-import zen.deps.LibZen;
-import zen.deps.Var;
-import zen.deps.ZArray;
-import zen.deps.ZFloatArray;
-import zen.deps.ZFunction;
-import zen.deps.ZIntArray;
-import zen.deps.ZNativeType;
-import zen.deps.ZObjectArray;
-import zen.deps.ZStringArray;
-import zen.deps.ZenMap;
 import zen.type.ZFuncType;
 import zen.type.ZGenericType;
 import zen.type.ZType;
 import zen.type.ZTypePool;
+import zen.util.LibZen;
+import zen.util.Var;
+import zen.util.ZArray;
+import zen.util.ZFloatArray;
+import zen.util.ZFunction;
+import zen.util.ZIntArray;
+import zen.util.ZNativeType;
+import zen.util.ZObjectArray;
+import zen.util.ZStringArray;
+import zen.util.ZenMap;
 
 public class JavaTypeTable {
 	static HashMap<String, Class<?>> ClassMap = new HashMap<String,Class<?>>();

@@ -1,4 +1,4 @@
-package zen.deps;
+package zen.util;
 
 import zen.type.ZType;
 import zen.type.ZTypePool;

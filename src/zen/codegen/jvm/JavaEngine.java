@@ -63,19 +63,19 @@ import zen.ast.ZStringNode;
 import zen.ast.ZSugarNode;
 import zen.ast.ZTypeNode;
 import zen.ast.ZUnaryNode;
-import zen.deps.LibZen;
-import zen.deps.Var;
-import zen.deps.ZFloatArray;
-import zen.deps.ZIntArray;
-import zen.deps.ZObjectArray;
-import zen.deps.ZStringArray;
-import zen.deps.ZenMap;
 import zen.parser.ZEmptyValue;
 import zen.parser.ZLogger;
 import zen.parser.ZSourceEngine;
 import zen.parser.ZTypeChecker;
 import zen.type.ZFunc;
 import zen.type.ZFuncType;
+import zen.util.LibZen;
+import zen.util.Var;
+import zen.util.ZFloatArray;
+import zen.util.ZIntArray;
+import zen.util.ZObjectArray;
+import zen.util.ZStringArray;
+import zen.util.ZenMap;
 
 public class JavaEngine extends ZSourceEngine {
 

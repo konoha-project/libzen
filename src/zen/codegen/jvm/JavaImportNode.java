@@ -2,10 +2,10 @@ package zen.codegen.jvm;
 
 import zen.ast.ZImportNode;
 import zen.ast.ZNode;
-import zen.deps.Var;
 import zen.parser.ZLogger;
 import zen.parser.ZNameSpace;
 import zen.type.ZType;
+import zen.util.Var;
 
 public class JavaImportNode extends ZImportNode {
 

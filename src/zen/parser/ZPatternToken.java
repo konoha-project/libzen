@@ -1,6 +1,6 @@
 package zen.parser;
 
-import zen.deps.Field;
+import zen.util.Field;
 
 public class ZPatternToken extends ZToken {
 	@Field public ZSyntax	PresetPattern;

@@ -1,4 +1,4 @@
-package zen.deps;
+package zen.util;
 
 import zen.ast.ZNode;
 import zen.parser.ZTokenContext;

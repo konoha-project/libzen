@@ -1,7 +1,7 @@
 package zen.parser;
 
-import zen.deps.Field;
 import zen.type.ZFuncType;
+import zen.util.Field;
 
 public class ZSourceMacro extends ZMacroFunc {
 	@Field public String Macro;

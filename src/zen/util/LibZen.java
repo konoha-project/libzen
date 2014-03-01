@@ -24,7 +24,7 @@
 
 // LangBase is a language-dependent code used in Zen.java
 
-package zen.deps;
+package zen.util;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

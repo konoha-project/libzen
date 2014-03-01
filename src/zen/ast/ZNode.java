@@ -25,16 +25,16 @@
 //ifdef JAVA
 package zen.ast;
 
-import zen.deps.Field;
-import zen.deps.LibZen;
-import zen.deps.Var;
-import zen.deps.ZenMethod;
 import zen.parser.ZGenerator;
 import zen.parser.ZNameSpace;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 import zen.type.ZFuncType;
 import zen.type.ZType;
+import zen.util.Field;
+import zen.util.LibZen;
+import zen.util.Var;
+import zen.util.ZenMethod;
 
 public abstract class ZNode {
 	public final static int _Nop =      -1;

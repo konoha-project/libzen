@@ -24,11 +24,11 @@
 
 package zen.ast;
 
-import zen.deps.Var;
 import zen.parser.ZMacroFunc;
 import zen.parser.ZVisitor;
 import zen.type.ZFuncType;
 import zen.type.ZType;
+import zen.util.Var;
 
 public final class ZFuncCallNode extends ZListNode {
 	public final static int _Func = 0;

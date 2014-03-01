@@ -42,12 +42,12 @@ import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
-import zen.deps.Field;
-import zen.deps.LibZen;
-import zen.deps.Var;
 import zen.parser.ZSourceBuilder;
 import zen.parser.ZSourceGenerator;
 import zen.type.ZType;
+import zen.util.Field;
+import zen.util.LibZen;
+import zen.util.Var;
 
 public class HaskellSourceGenerator extends ZSourceGenerator {
 	@Field public ArrayList <String> Variables;

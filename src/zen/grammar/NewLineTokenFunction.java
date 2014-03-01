@@ -1,8 +1,8 @@
 package zen.grammar;
 
-import zen.deps.Var;
-import zen.deps.ZTokenFunction;
 import zen.parser.ZSourceContext;
+import zen.util.Var;
+import zen.util.ZTokenFunction;
 
 public class NewLineTokenFunction extends ZTokenFunction {
 

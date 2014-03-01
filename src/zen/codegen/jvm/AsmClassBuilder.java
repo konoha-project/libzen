@@ -13,10 +13,10 @@ import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.MethodNode;
 
-import zen.deps.LibZen;
-import zen.deps.Var;
 import zen.type.ZFuncType;
 import zen.type.ZType;
+import zen.util.LibZen;
+import zen.util.Var;
 
 class AsmClassBuilder {
 	final JavaAsmGenerator Generator;

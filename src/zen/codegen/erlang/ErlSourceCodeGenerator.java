@@ -23,14 +23,14 @@ import zen.ast.ZSetNameNode;
 import zen.ast.ZSetterNode;
 import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
-import zen.deps.Field;
-import zen.deps.Var;
 import zen.lang.ZenTypeSafer;
 import zen.parser.ZSourceBuilder;
 import zen.parser.ZSourceEngine;
 import zen.parser.ZSourceGenerator;
 import zen.parser.ZToken;
 import zen.type.ZType;
+import zen.util.Field;
+import zen.util.Var;
 
 //ifdef JAVA
 

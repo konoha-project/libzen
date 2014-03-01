@@ -24,12 +24,12 @@
 
 package zen.ast;
 
-import zen.deps.Field;
-import zen.deps.Var;
 import zen.parser.ZMacroFunc;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 import zen.type.ZFunc;
+import zen.util.Field;
+import zen.util.Var;
 
 public final class ZMethodCallNode extends ZListNode {
 	public final static int _Recv = 0;

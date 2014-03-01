@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Map;
 
-import zen.deps.Field;
+import zen.util.Field;
 
 //endif VAJA
 

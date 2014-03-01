@@ -25,10 +25,10 @@
 //ifdef JAVA
 package zen.parser;
 
-import zen.deps.Field;
-import zen.deps.LibZen;
-import zen.deps.Var;
-import zen.deps.ZMatchFunction;
+import zen.util.Field;
+import zen.util.LibZen;
+import zen.util.Var;
+import zen.util.ZMatchFunction;
 
 public final class ZSyntax {
 	public final static int _BinaryOperator					= 1;

@@ -25,8 +25,8 @@
 package zen.parser;
 
 import zen.ast.ZFunctionNode;
-import zen.deps.Field;
 import zen.type.ZType;
+import zen.util.Field;
 
 public final class ZVariable extends ZSymbolEntry {
 	@Field public int     VarFlag;

@@ -24,10 +24,10 @@
 
 package zen.ast;
 
-import zen.deps.Field;
-import zen.deps.Var;
 import zen.parser.ZNameSpace;
 import zen.parser.ZVisitor;
+import zen.util.Field;
+import zen.util.Var;
 
 public class ZBlockNode extends ZListNode {
 	@Field public ZNameSpace NameSpace;

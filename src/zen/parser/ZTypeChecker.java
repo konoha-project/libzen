@@ -33,13 +33,13 @@ import zen.ast.ZMacroNode;
 import zen.ast.ZNode;
 import zen.ast.ZStupidCastErrorNode;
 import zen.ast.ZSugarNode;
-import zen.deps.Field;
-import zen.deps.LibZen;
-import zen.deps.Var;
 import zen.type.ZFunc;
 import zen.type.ZType;
 import zen.type.ZVarScope;
 import zen.type.ZVarType;
+import zen.util.Field;
+import zen.util.LibZen;
+import zen.util.Var;
 
 public abstract class ZTypeChecker extends ZVisitor {
 

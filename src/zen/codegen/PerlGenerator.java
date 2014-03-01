@@ -37,13 +37,13 @@ import zen.ast.ZParamNode;
 import zen.ast.ZSetNameNode;
 import zen.ast.ZSetterNode;
 import zen.ast.ZVarNode;
-import zen.deps.LibZen;
-import zen.deps.Var;
 import zen.parser.ZSourceGenerator;
 import zen.parser.ZToken;
 import zen.type.ZClassField;
 import zen.type.ZClassType;
 import zen.type.ZType;
+import zen.util.LibZen;
+import zen.util.Var;
 
 
 //Zen Generator should be written in each language.

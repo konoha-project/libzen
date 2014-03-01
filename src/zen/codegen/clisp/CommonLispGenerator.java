@@ -39,11 +39,11 @@ import zen.ast.ZSetNameNode;
 import zen.ast.ZUnaryNode;
 import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
-import zen.deps.Var;
 import zen.parser.ZSourceGenerator;
 import zen.type.ZFuncType;
 import zen.type.ZGenericType;
 import zen.type.ZType;
+import zen.util.Var;
 
 public class CommonLispGenerator extends ZSourceGenerator {
 

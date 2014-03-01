@@ -24,8 +24,8 @@
 
 package zen.type;
 
-import zen.deps.Field;
-import zen.deps.Nullable;
+import zen.util.Field;
+import zen.util.Nullable;
 
 public class ZGenericType extends ZType {
 	public final static ZGenericType _ArrayType = new ZGenericType(ZType.UniqueTypeFlag, "Array", null, ZType.VarType);

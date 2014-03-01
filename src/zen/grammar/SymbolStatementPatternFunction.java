@@ -3,10 +3,10 @@ package zen.grammar;
 import zen.ast.ZGetNameNode;
 import zen.ast.ZNode;
 import zen.ast.ZSetNameNode;
-import zen.deps.Var;
-import zen.deps.ZMatchFunction;
 import zen.parser.ZToken;
 import zen.parser.ZTokenContext;
+import zen.util.Var;
+import zen.util.ZMatchFunction;
 
 public class SymbolStatementPatternFunction extends ZMatchFunction {
 

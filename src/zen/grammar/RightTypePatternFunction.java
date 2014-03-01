@@ -2,14 +2,14 @@ package zen.grammar;
 
 import zen.ast.ZNode;
 import zen.ast.ZTypeNode;
-import zen.deps.Var;
-import zen.deps.ZArray;
-import zen.deps.ZMatchFunction;
 import zen.parser.ZToken;
 import zen.parser.ZTokenContext;
 import zen.type.ZGenericType;
 import zen.type.ZType;
 import zen.type.ZTypePool;
+import zen.util.Var;
+import zen.util.ZArray;
+import zen.util.ZMatchFunction;
 
 public class RightTypePatternFunction extends ZMatchFunction {
 
