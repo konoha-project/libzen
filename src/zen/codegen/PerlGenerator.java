@@ -199,22 +199,6 @@ public class PerlGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Append(this.SemiColon);
 	}
 
-	private void GenerateFields(ZClassType ClassType, ZType ThisType) {
-		@Var ZType SuperType = ThisType.GetSuperType();
-		if(!SuperType.IsVarType()) {
-			this.GenerateFields(ClassType, SuperType);
-		}
-		@Var int i = 0;
-		this.GenerateCField("int", "_classId" + ThisType.TypeId);
-		this.GenerateCField("int", "_delta" + ThisType.TypeId);
-		while (i < ClassType.GetFieldSize()) {
-			@Var ZClassField ClassField = ClassType.GetFieldAt(i);
-			if(ClassField.ClassType == ThisType) {
-				this.GenerateField(ClassField.FieldType, ClassField.FieldName);
-			}
-			i = i + 1;
-		}
-	}
 
 	private String ClassKey(ZType ClassType) {
 		return LibZen._QuoteString(this.NameClass(ClassType));

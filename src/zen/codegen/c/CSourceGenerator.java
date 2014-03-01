@@ -66,9 +66,6 @@ public class CSourceGenerator extends ZSourceGenerator {
 
 	public CSourceGenerator() {
 		super("c", "C99");
-		this.Camma = ", ";
-		this.SemiColon = ";";
-
 		this.TrueLiteral  = "1/*true*/";
 		this.FalseLiteral = "0/*false*/";
 		this.NullLiteral  = "NULL";
@@ -80,9 +77,9 @@ public class CSourceGenerator extends ZSourceGenerator {
 		this.SetNativeType(ZType.FloatType, "double");
 		this.SetNativeType(ZType.StringType, "const char *");
 
-		this.SetMacro("assert", "LibZen_Assert($[0], $[1])", ZType.VoidType, ZType.BooleanType, ZType.StringType);
-		this.SetMacro("print", "LibZen_Print($[0])", ZType.VoidType, ZType.StringType);
-		this.SetMacro("println", "LibZen_PrintLine($[0])", ZType.VoidType, ZType.StringType);
+		this.SetMacro("assert", "assert($[0])", ZType.VoidType, ZType.BooleanType, ZType.StringType);
+		this.SetMacro("print", "puts($[0])", ZType.VoidType, ZType.StringType);
+		this.SetMacro("println", "puts($[0]); puts(\"\\n\");", ZType.VoidType, ZType.StringType);
 
 		// Converter
 		this.SetConverterMacro("(double)($[0])", ZType.FloatType, ZType.IntType);
@@ -93,7 +90,7 @@ public class CSourceGenerator extends ZSourceGenerator {
 
 		// String
 		this.SetMacro("+", "LibZen_StrCat($[0], $[1])", ZType.StringType, ZType.StringType, ZType.StringType);
-		this.SetMacro("size", "LibZen_StringSize($[0])", ZType.IntType, ZType.StringType);
+		this.SetMacro("size", "strlen($[0])", ZType.IntType, ZType.StringType);
 		this.SetMacro("substring", "LibZen_SubString($[0], $[1])", ZType.StringType, ZType.StringType, ZType.IntType);
 		this.SetMacro("substring", "LibZen_SubString2($[0], $[1], $[2])", ZType.StringType, ZType.StringType, ZType.IntType, ZType.IntType);
 		this.SetMacro("indexOf", "LibZen_IndexOf($[0], $[1])", ZType.IntType, ZType.StringType, ZType.StringType);
@@ -107,6 +104,10 @@ public class CSourceGenerator extends ZSourceGenerator {
 		this.SetMacro("clear", "LibZen_ArrayClear($[0], $[1])", ZType.VoidType, ZGenericType._ArrayType, ZType.IntType);
 		this.SetMacro("add", "LibZen_ArrayAdd($[0], $[1])", ZType.VoidType, ZGenericType._ArrayType, ZType.VarType);
 		this.SetMacro("add", "LibZen_ArrayAdd2($[0], $[1], $[2])", ZType.VoidType, ZGenericType._ArrayType, ZType.IntType, ZType.VarType);
+
+		this.HeaderBuilder.Append("#include<stdio.h>\n");
+		this.HeaderBuilder.Append("#include<stdlib.h>\n");
+		this.HeaderBuilder.Append("#include<assert.h>\n", "\n");
 
 	}
 
@@ -415,9 +416,13 @@ public class CSourceGenerator extends ZSourceGenerator {
 	}
 
 	private void GenerateExportFunction(ZFunctionNode Node) {
-		this.GenerateTypeName(Node.ReturnType);
-		this.CurrentBuilder.Append(" ");
-		this.CurrentBuilder.Append(Node.FuncName);
+		if(Node.FuncName.equals("main")) {
+			this.CurrentBuilder.Append("int");
+		}
+		else {
+			this.GenerateTypeName(Node.ReturnType);
+		}
+		this.CurrentBuilder.Append(" ", Node.FuncName);
 		this.VisitListNode("(", Node, ")");
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.Append("{");
@@ -429,6 +434,10 @@ public class CSourceGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Append(Node.GetSignature(this));
 		this.VisitListNode("(", Node, ")");
 		this.CurrentBuilder.Append(this.SemiColon);
+		if(Node.FuncName.equals("main")) {
+			this.CurrentBuilder.AppendLineFeed();
+			this.CurrentBuilder.Append("return 0;");
+		}
 		this.CurrentBuilder.UnIndent();
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.Append("}");

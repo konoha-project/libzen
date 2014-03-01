@@ -34,8 +34,8 @@ import zen.deps.ZArray;
 
 
 public final class ZSourceBuilder {
-	@Field ZSourceGenerator Template;
 	@Field public ZArray<String> SourceList = new ZArray<String>(new String[128]);
+	@Field ZSourceGenerator Template;
 	@Field ZSourceBuilder Parent;
 	@Field int IndentLevel = 0;
 	@Field String CurrentIndentString = "";
@@ -62,8 +62,34 @@ public final class ZSourceBuilder {
 		return LibZen._SourceBuilderToString(this, BeginIndex, EndIndex);
 	}
 
-	public final void Append(String Text) {
-		this.SourceList.add(Text);
+	public final void Append(String Source) {
+		if(Source.startsWith("\\")) {
+			@Var int StartIndex = 1;
+			@Var int i = 1;
+			while(i < Source.length()) {
+				@Var char ch = LibZen._GetChar(Source, i);
+				if(ch == '\n') {
+					if(StartIndex < i) {
+						this.SourceList.add(Source.substring(StartIndex, i));
+					}
+					this.AppendLineFeedIndent();
+					StartIndex = i + 1;
+				}
+				if(ch == '\t') {
+					if(StartIndex < i) {
+						this.SourceList.add(Source.substring(StartIndex, i));
+					}
+					this.Append(this.Template.Tab);
+					StartIndex = i + 1;
+				}
+			}
+			if(StartIndex < i) {
+				this.SourceList.add(Source.substring(StartIndex, i));
+			}
+		}
+		else {
+			this.SourceList.add(Source);
+		}
 	}
 
 	public final void Append(String Text, String Text2) {
@@ -78,7 +104,11 @@ public final class ZSourceBuilder {
 	}
 
 	public final void AppendInt(int Value) {
-		this.SourceList.add(""+Value);
+		this.SourceList.add("" + Value);
+	}
+
+	public final void AppendQuote(String Text) {
+		this.SourceList.add(LibZen._QuoteString(Text));
 	}
 
 	public final void AppendLineFeed() {
@@ -109,6 +139,17 @@ public final class ZSourceBuilder {
 			}
 		}
 		this.SourceList.add(" ");
+	}
+
+	public final void AppendWhiteSpace(String Text) {
+		this.AppendWhiteSpace();
+		this.Append(Text);
+	}
+
+	public final void AppendWhiteSpace(String Text, String Text2) {
+		this.AppendWhiteSpace();
+		this.Append(Text);
+		this.Append(Text2);
 	}
 
 	public final void AppendToken(String Text) {
@@ -164,6 +205,37 @@ public final class ZSourceBuilder {
 	public final void AppendLineFeedIndent() {
 		this.SourceList.add(this.Template.LineFeed);
 		this.SourceList.add(this.GetIndentString());
+	}
+
+	public final void AppendNewLine(String Text) {
+		this.AppendLineFeedIndent();
+		this.Append(Text);
+	}
+
+	public final void AppendNewLine(String Text, String Text2) {
+		this.AppendLineFeedIndent();
+		this.Append(Text);
+		this.Append(Text2);
+	}
+
+	public final void AppendNewLine(String Text, String Text2, String Text3) {
+		this.AppendLineFeedIndent();
+		this.Append(Text);
+		this.Append(Text2);
+		this.Append(Text3);
+	}
+
+	public final void OpenIndent(String Text) {
+		this.Append(Text);
+		this.Indent();
+	}
+
+	public final void CloseIndent(String Text) {
+		this.UnIndent();
+		if(Text != null && Text.length() > 0) {
+			this.AppendLineFeedIndent();
+			this.Append(Text);
+		}
 	}
 
 

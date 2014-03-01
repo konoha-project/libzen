@@ -117,12 +117,13 @@ import zen.type.ZFuncType;
 import zen.type.ZType;
 
 public class JavaAsmGenerator extends JavaGenerator {
+	public JavaStaticFieldNode MainFuncNode = null;
 	AsmClassLoader AsmLoader = null;
 	Stack<TryCatchLabel> TryCatchLabel;
 	AsmMethodBuilder AsmBuilder;
 
 	public JavaAsmGenerator() {
-		super("java", "1.6");
+		super("java", "Java 1.6");
 		this.TryCatchLabel = new Stack<TryCatchLabel>();
 		this.AsmLoader = new AsmClassLoader(this);
 	}
@@ -668,8 +669,13 @@ public class JavaAsmGenerator extends JavaGenerator {
 			assert(Node.FuncName != null);
 			assert(Node.IsTopLevel());  // otherwise, transformed to var f = function ()..
 			JavaStaticFieldNode FuncNode = this.GenerateFunctionAsSymbolField(Node);
+			if(Node.IsExport) {
+				if(Node.FuncName.equals("main")) {
+					this.MainFuncNode = FuncNode;
+				}
+			}
 			this.SetMethod(Node.FuncName, (ZFuncType)FuncNode.Type, FuncNode.StaticClass);
-			Node.GetNameSpace().SetLocalSymbol(Node.FuncName, FuncNode);
+			//Node.GetNameSpace().SetLocalSymbol(Node.FuncName, FuncNode);
 		}
 		else {
 			if(Node.FuncName == null) {
@@ -687,6 +693,7 @@ public class JavaAsmGenerator extends JavaGenerator {
 			}
 		}
 	}
+
 
 	private JavaStaticFieldNode GenerateFunctionAsSymbolField(ZFunctionNode Node) {
 		@Var ZFuncType FuncType = Node.GetFuncType(null);
@@ -737,7 +744,6 @@ public class JavaAsmGenerator extends JavaGenerator {
 		this.SetGeneratedClass(ClassName, FuncClass);
 		return new JavaStaticFieldNode(null, FuncClass, FuncType, "function");
 	}
-
 
 	private ZFunction LoadFunction(Class<?> WrapperClass, Class<?> StaticMethodClass) {
 		try {
@@ -873,14 +879,14 @@ public class JavaAsmGenerator extends JavaGenerator {
 			if(Field.ClassType.Equals(Node.ClassType)) {
 				ClassBuilder.AddField(ACC_PUBLIC, Field.FieldName, Field.DeclType, this.GetConstValue(Field.AST[ZFieldNode._InitValue]));
 			}
-			i++;
+			i = i + 1;
 		}
 		while(i < Node.ClassType.GetFieldSize()) {
 			@Var ZClassField Field = Node.ClassType.GetFieldAt(i);
 			if(Field.FieldType.IsFuncType()) {
 				ClassBuilder.AddField(ACC_PUBLIC|ACC_STATIC, NameClassMethod(Node.ClassType, Field.FieldName), Field.FieldType, null);
 			}
-			i++;
+			i = i + 1;
 		}
 		AsmMethodBuilder InitMethod = ClassBuilder.NewMethod(ACC_PUBLIC, "<init>", "()V");
 		InitMethod.visitVarInsn(Opcodes.ALOAD, 0);

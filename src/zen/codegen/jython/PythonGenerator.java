@@ -92,11 +92,12 @@ public class PythonGenerator extends ZSourceGenerator {
 		// Converter
 		this.SetConverterMacro("float($[0])", ZType.FloatType, ZType.IntType);
 		this.SetConverterMacro("int($[0])", ZType.IntType, ZType.FloatType);
-		this.SetConverterMacro("('true' if $[0] else 'false')", ZType.StringType, ZType.BooleanType);
+		this.SetConverterMacro("(\'true\' if $[0] else \'false\')", ZType.StringType, ZType.BooleanType);
 		this.SetConverterMacro("str($[0])", ZType.StringType, ZType.IntType);
-		this.SetConverterMacro("str($[0])", ZType.StringType, ZType.FloatType);
+		this.SetConverterMacro("(\"%.5f\" % ($[0]))", ZType.StringType, ZType.FloatType);
 
 		// String
+		this.SetMacro("+", "zstr($[0]) + zstr($[1])", ZType.StringType, ZType.StringType, ZType.StringType);
 		this.SetMacro("size", "len($[0])", ZType.IntType, ZType.StringType);
 		this.SetMacro("substring", "$[0][$[1]:]", ZType.StringType, ZType.StringType, ZType.IntType);
 		this.SetMacro("substring", "$[0][$[1]:$[2]]", ZType.StringType, ZType.StringType, ZType.IntType, ZType.IntType);
@@ -111,7 +112,10 @@ public class PythonGenerator extends ZSourceGenerator {
 		this.SetMacro("clear", "LibZen_ArrayClear($[0], $[1])", ZType.VoidType, ZGenericType._ArrayType, ZType.IntType);
 		this.SetMacro("add", "$[0].append($[1])", ZType.VoidType, ZGenericType._ArrayType, ZType.VarType);
 
-		this.HeaderBuilder.Append("#! /usr/bin/env python\n# -*- coding: utf-8 -*-\n\n");
+		this.HeaderBuilder.Append("#! /usr/bin/env python\n");
+		this.HeaderBuilder.Append("# -*- coding: utf-8 -*-\n\n");
+		this.HeaderBuilder.Append("def zstr(s) : return str(s) if s != None else \'null\'\n");
+		this.HeaderBuilder.Append(this.LineFeed);
 	}
 
 	@Override public ZSourceEngine GetEngine() {

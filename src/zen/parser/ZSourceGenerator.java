@@ -687,8 +687,24 @@ public class ZSourceGenerator extends ZGenerator {
 	}
 
 	protected void VisitListNode(String OpenToken, ZListNode VargNode, String CloseToken) {
-		this.VisitListNode(OpenToken, VargNode, ", ", CloseToken);
+		this.VisitListNode(OpenToken, VargNode, this.Camma, CloseToken);
 	}
+
+	protected void GenerateWrapperCall(String OpenToken, ZFunctionNode FuncNode, String CloseToken) {
+		this.CurrentBuilder.Append(OpenToken);
+		@Var int i = 0;
+		while(i < FuncNode.GetListSize()) {
+			@Var ZParamNode ParamNode = FuncNode.GetParamNode(i);
+			if (i > 0) {
+				this.CurrentBuilder.Append(this.Camma);
+			}
+			this.CurrentBuilder.Append(this.SafeName(ParamNode.Name, ParamNode.ParamIndex));
+			i = i + 1;
+		}
+		this.CurrentBuilder.Append(CloseToken);
+	}
+
+
 
 	protected final String NameMethod(ZType ClassType, String MethodName) {
 		return "_" + this.NameClass(ClassType) + "_" + MethodName;
