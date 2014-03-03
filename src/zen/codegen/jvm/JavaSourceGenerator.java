@@ -352,7 +352,7 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.AppendNewLine("");
 		this.GenerateTypeName(Node.DeclType);
 		this.CurrentBuilder.Append(" ");
-		this.CurrentBuilder.Append(this.SafeName(Node.NativeName, Node.VarIndex));
+		this.CurrentBuilder.Append(this.NameLocalVariable(Node.NativeName, Node.VarIndex));
 		this.CurrentBuilder.AppendToken("=");
 		this.GenerateCode(null, Node.AST[ZVarNode._InitValue]);
 		this.CurrentBuilder.Append(this.SemiColon);
@@ -378,7 +378,7 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 	@Override public void VisitParamNode(ZParamNode Node) {
 		this.GenerateTypeName(Node.Type);
 		this.CurrentBuilder.Append(" ");
-		this.CurrentBuilder.Append(this.SafeName(Node.Name, Node.ParamIndex));
+		this.CurrentBuilder.Append(this.NameLocalVariable(Node.Name, Node.ParamIndex));
 	}
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {

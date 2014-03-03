@@ -103,7 +103,7 @@ public class CommonLispGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitSetNameNode(ZSetNameNode Node) {
-		this.CurrentBuilder.Append("(setq  " + this.SafeName(Node.VarName, Node.VarIndex));
+		this.CurrentBuilder.Append("(setq  " + this.NameLocalVariable(Node.VarName, Node.VarIndex));
 		this.CurrentBuilder.Append(" ");
 		this.GenerateCode(null, Node.AST[ZSetNameNode._Expr]);
 		this.CurrentBuilder.Append(")");
@@ -165,10 +165,10 @@ public class CommonLispGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitVarNode(ZVarNode Node) {
-		this.CurrentBuilder.Append("(let (", this.SafeName(Node.NativeName, Node.VarIndex) + ")");
+		this.CurrentBuilder.Append("(let (", this.NameLocalVariable(Node.NativeName, Node.VarIndex) + ")");
 		this.CurrentBuilder.Indent();
 		this.CurrentBuilder.AppendLineFeedIndent();
-		this.CurrentBuilder.Append("(setf  ", this.SafeName(Node.NativeName, Node.VarIndex), " ");
+		this.CurrentBuilder.Append("(setf  ", this.NameLocalVariable(Node.NativeName, Node.VarIndex), " ");
 		this.GenerateCode(null, Node.AST[ZVarNode._InitValue]);
 		this.CurrentBuilder.Append(")");
 		this.VisitStmtList(Node);
@@ -230,7 +230,7 @@ public class CommonLispGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitParamNode(ZParamNode Node) {
-		this.CurrentBuilder.Append(this.SafeName(Node.Name, Node.ParamIndex));
+		this.CurrentBuilder.Append(this.NameLocalVariable(Node.Name, Node.ParamIndex));
 	}
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {

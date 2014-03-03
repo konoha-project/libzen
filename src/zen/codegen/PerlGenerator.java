@@ -100,11 +100,11 @@ public class PerlGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitGetNameNode(ZGetNameNode Node) {
-		this.CurrentBuilder.Append(this.VariablePrefix(Node.Type), this.SafeName(Node.VarName, Node.VarIndex));
+		this.CurrentBuilder.Append(this.VariablePrefix(Node.Type), this.NameLocalVariable(Node.VarName, Node.VarIndex));
 	}
 
 	@Override public void VisitSetNameNode(ZSetNameNode Node) {
-		this.CurrentBuilder.Append(this.VariablePrefix(Node.GetAstType(ZSetNameNode._Expr)), this.SafeName(Node.VarName, Node.VarIndex), " = ");
+		this.CurrentBuilder.Append(this.VariablePrefix(Node.GetAstType(ZSetNameNode._Expr)), this.NameLocalVariable(Node.VarName, Node.VarIndex), " = ");
 		this.GenerateCode(null, Node.AST[ZSetNameNode._Expr]);
 	}
 
@@ -121,7 +121,7 @@ public class PerlGenerator extends ZSourceGenerator {
 
 	@Override public void VisitVarNode(ZVarNode Node) {
 		this.CurrentBuilder.Append("my ", this.VariablePrefix(Node.DeclType.GetRealType()));
-		this.CurrentBuilder.Append(this.SafeName(Node.NativeName, Node.VarIndex), " = ");
+		this.CurrentBuilder.Append(this.NameLocalVariable(Node.NativeName, Node.VarIndex), " = ");
 		this.GenerateCode(null, Node.AST[ZVarNode._InitValue]);
 		this.CurrentBuilder.Append(this.SemiColon);
 		this.VisitStmtList(Node);
@@ -157,7 +157,7 @@ public class PerlGenerator extends ZSourceGenerator {
 
 	@Override public void VisitParamNode(ZParamNode Node) {
 		this.CurrentBuilder.Append("my ", this.VariablePrefix(Node.Type));
-		this.CurrentBuilder.Append(this.SafeName(Node.Name, Node.ParamIndex), " = shift");
+		this.CurrentBuilder.Append(this.NameLocalVariable(Node.Name, Node.ParamIndex), " = shift");
 	}
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {

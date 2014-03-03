@@ -176,7 +176,7 @@ public class PythonGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitVarNode(ZVarNode Node) {
-		this.CurrentBuilder.Append(this.SafeName(Node.NativeName, Node.VarIndex));
+		this.CurrentBuilder.Append(this.NameLocalVariable(Node.NativeName, Node.VarIndex));
 		this.CurrentBuilder.AppendToken("=");
 		this.GenerateCode(null, Node.AST[ZVarNode._InitValue]);
 		this.CurrentBuilder.AppendLineFeed();
@@ -215,7 +215,7 @@ public class PythonGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitParamNode(ZParamNode Node) {
-		this.CurrentBuilder.Append(this.SafeName(Node.Name, Node.ParamIndex));
+		this.CurrentBuilder.Append(this.NameLocalVariable(Node.Name, Node.ParamIndex));
 	}
 
 	/**

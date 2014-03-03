@@ -62,9 +62,9 @@ import zen.type.ZType;
 import zen.util.LibZen;
 import zen.util.Var;
 
-public class CSourceGenerator extends ZSourceGenerator {
+public class CGenerator extends ZSourceGenerator {
 
-	public CSourceGenerator() {
+	public CGenerator() {
 		super("c", "C99");
 		this.TrueLiteral  = "1/*true*/";
 		this.FalseLiteral = "0/*false*/";
@@ -79,7 +79,7 @@ public class CSourceGenerator extends ZSourceGenerator {
 
 		this.SetMacro("assert", "assert($[0])", ZType.VoidType, ZType.BooleanType, ZType.StringType);
 		this.SetMacro("print", "puts($[0])", ZType.VoidType, ZType.StringType);
-		this.SetMacro("println", "puts($[0]); puts(\"\\n\");", ZType.VoidType, ZType.StringType);
+		this.SetMacro("println", "puts($[0]); puts(\"\\n\")", ZType.VoidType, ZType.StringType);
 
 		// Converter
 		this.SetConverterMacro("(double)($[0])", ZType.FloatType, ZType.IntType);
@@ -199,11 +199,11 @@ public class CSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitGetNameNode(ZGetNameNode Node) {
-		this.CurrentBuilder.Append(this.SafeName(Node.VarName, Node.VarIndex));
+		this.CurrentBuilder.Append(this.NameLocalVariable(Node.VarName, Node.VarIndex));
 	}
 
 	@Override public void VisitSetNameNode(ZSetNameNode Node) {
-		this.CurrentBuilder.Append(this.SafeName(Node.VarName, Node.VarIndex));
+		this.CurrentBuilder.Append(this.NameLocalVariable(Node.VarName, Node.VarIndex));
 		this.CurrentBuilder.AppendToken("=");
 		this.GenerateCode(null, Node.AST[ZSetNameNode._Expr]);
 	}
@@ -339,7 +339,7 @@ public class CSourceGenerator extends ZSourceGenerator {
 	@Override public void VisitVarNode(ZVarNode Node) {
 		this.GenerateTypeName(Node.DeclType);
 		this.CurrentBuilder.Append(" ");
-		this.CurrentBuilder.Append(this.SafeName(Node.NativeName, Node.VarIndex));
+		this.CurrentBuilder.Append(this.NameLocalVariable(Node.NativeName, Node.VarIndex));
 		this.CurrentBuilder.AppendToken("=");
 		this.GenerateCode(null, Node.AST[ZVarNode._InitValue]);
 		this.CurrentBuilder.Append(this.SemiColon);
@@ -364,12 +364,12 @@ public class CSourceGenerator extends ZSourceGenerator {
 
 	@Override public void VisitParamNode(ZParamNode Node) {
 		if(Node.Type.IsFuncType()) {
-			this.GenerateFuncTypeName(Node.Type, this.SafeName(Node.Name, Node.ParamIndex));
+			this.GenerateFuncTypeName(Node.Type, this.NameLocalVariable(Node.Name, Node.ParamIndex));
 		}
 		else {
 			this.GenerateTypeName(Node.Type);
 			this.CurrentBuilder.Append(" ");
-			this.CurrentBuilder.Append(this.SafeName(Node.Name, Node.ParamIndex));
+			this.CurrentBuilder.Append(this.NameLocalVariable(Node.Name, Node.ParamIndex));
 		}
 	}
 

@@ -105,7 +105,7 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 		}
 	}
 	
-	@Override public String SafeName(String Name, int Index) {
+	@Override public String NameLocalVariable(String Name, int Index) {
 		// FIXME: Because of some unknown reasons, original SafeName dosen't work well. I use SafeName instead of SafeName temporary.
 		if(Index == 0) {
 			@Var String SafeName = this.ReservedNameMap.GetOrNull(Name);
@@ -155,7 +155,7 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 	@Override public void VisitVarNode(ZVarNode Node) {
 		this.CurrentBuilder.AppendToken("var");
 		this.CurrentBuilder.AppendWhiteSpace();
-		this.CurrentBuilder.Append(this.SafeName(Node.NativeName, Node.VarIndex));
+		this.CurrentBuilder.Append(this.NameLocalVariable(Node.NativeName, Node.VarIndex));
 		this.CurrentBuilder.AppendToken("=");
 		this.GenerateCode(null, Node.AST[ZVarNode._InitValue]);
 		this.CurrentBuilder.Append(this.SemiColon);
@@ -163,7 +163,7 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitParamNode(ZParamNode Node) {
-		this.CurrentBuilder.Append(this.SafeName(Node.Name, Node.ParamIndex));
+		this.CurrentBuilder.Append(this.NameLocalVariable(Node.Name, Node.ParamIndex));
 	}
 	
 	private boolean IsUserDefinedType(ZType SelfType){
