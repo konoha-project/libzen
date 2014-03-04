@@ -279,7 +279,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 		@Var ZType[] Greek = ZGreekType._NewGreekTypes(null);
 		while(i < FuncNode.GetListSize()) {
 			@Var ZNode SubNode = FuncNode.GetListAt(i);
-			@Var ZType ParamType =  FuncType.GetParamType(i+1);
+			@Var ZType ParamType =  FuncType.GetFuncParamType(i);
 			SubNode = this.TryType(SubNode, ParamType);
 			if(!SubNode.IsUntyped() || !ParamType.IsVarType()) {
 				if(!ParamType.AcceptValueType(SubNode.Type, false, Greek)) {
@@ -403,7 +403,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 				@Var int StaticShift = FuncType.GetParamSize() - List.GetListSize();
 				while(i < List.GetListSize()) {
 					@Var ZNode SubNode = List.GetListAt(i);
-					SubNode = this.CheckType(SubNode, FuncType.GetParamType(i+StaticShift));
+					SubNode = this.CheckType(SubNode, FuncType.GetFuncParamType(i+StaticShift));
 					List.SetListAt(i, SubNode);
 					i = i + 1;
 				}
@@ -731,14 +731,14 @@ public class ZenTypeSafer extends ZTypeChecker {
 			ParamNode.ParamIndex = i;
 			ParamNode.Type = this.VarScope.NewVarType(ParamNode.Type, ParamNode.Name, ParamNode.SourceToken);
 			if(FuncType != null) {
-				this.VarScope.InferType(FuncType.GetParamType(i+1), ParamNode);
+				this.VarScope.InferType(FuncType.GetFuncParamType(i), ParamNode);
 			}
 			NameSpace.SetLocalVariable(this.CurrentFunctionNode, ParamNode.Type, ParamNode.Name, null);
 			i = i + 1;
 		}
 		FunctionNode.ReturnType = this.VarScope.NewVarType(FunctionNode.ReturnType, "return", FunctionNode.SourceToken);
 		if(FuncType != null) {
-			FunctionNode.Type.Maybe(FuncType.GetParamType(0), null);
+			FunctionNode.Type.Maybe(FuncType.GetReturnType(), null);
 		}
 	}
 

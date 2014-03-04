@@ -197,8 +197,7 @@ public abstract class JavaGenerator extends ZGenerator {
 			Constructor<?> jMethod = this.GetConstructor(RecvType, ParamList);
 			if(jMethod != null) {
 				@Var Class<?>[] ParamTypes = jMethod.getParameterTypes();
-				@Var ZArray<ZType> TypeList = new ZArray<ZType>(new ZType[LibZen._Size(ParamTypes) + 1]);
-				TypeList.add(RecvType);
+				@Var ZArray<ZType> TypeList = new ZArray<ZType>(new ZType[ParamTypes.length + 2]);
 				if (ParamTypes != null) {
 					@Var int j = 0;
 					while(j < LibZen._Size(ParamTypes)) {
@@ -206,7 +205,11 @@ public abstract class JavaGenerator extends ZGenerator {
 						j = j + 1;
 					}
 				}
-				return ZTypePool._LookupFuncType(TypeList);
+				if(TypeList.size() == 0) {
+					TypeList.add(ZType.VoidType);
+				}
+				TypeList.add(RecvType);
+				return ZTypePool._LookupFuncType2(TypeList);
 			}
 		}
 		else {

@@ -275,13 +275,13 @@ public class CGenerator extends ZSourceGenerator {
 			return "MapOf" + this.ParamTypeName(Type.GetParamType(0));
 		}
 		if(Type.IsFuncType()) {
-			@Var String s = "FuncOf" + this.ParamTypeName(Type.GetParamType(0))+"Of";
+			@Var String s = "FuncOf";
 			@Var int i = 0;
 			while(i < Type.GetParamSize()) {
 				s = s +  this.ParamTypeName(Type.GetParamType(i));
 				i = i + 1;
 			}
-			return s;
+			return s + "_";
 		}
 		if(Type.IsIntType()) {
 			return "Int";

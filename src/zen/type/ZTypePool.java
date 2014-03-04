@@ -97,7 +97,7 @@ public class ZTypePool {
 		return GenericType;
 	}
 
-	public final static ZFuncType _LookupFuncType(ZArray<ZType> TypeList) {
+	public final static ZFuncType _LookupFuncType2(ZArray<ZType> TypeList) {
 		@Var ZType FuncType = ZTypePool._GetGenericType(ZFuncType._FuncType, TypeList, true);
 		if(FuncType instanceof ZFuncType) {
 			return (ZFuncType)FuncType;
@@ -105,34 +105,35 @@ public class ZTypePool {
 		return null;
 	}
 
-	public final static ZFuncType _LookupFuncType(ZType R) {
+	public final static ZFuncType _LookupFuncType2(ZType R) {
 		@Var ZArray<ZType> TypeList = new ZArray<ZType>(new ZType[2]);
+		TypeList.add(ZType.VoidType);
 		TypeList.add(R);
-		return ZTypePool._LookupFuncType(TypeList);
+		return ZTypePool._LookupFuncType2(TypeList);
 	}
 
-	public final static ZFuncType _LookupFuncType(ZType R, ZType P1) {
+	public final static ZFuncType _LookupFuncType2(ZType P1, ZType R) {
 		@Var ZArray<ZType> TypeList = new ZArray<ZType>(new ZType[2]);
-		TypeList.add(R);
 		TypeList.add(P1);
-		return ZTypePool._LookupFuncType(TypeList);
+		TypeList.add(R);
+		return ZTypePool._LookupFuncType2(TypeList);
 	}
 
-	public final static ZFuncType _LookupFuncType(ZType R, ZType P1, ZType P2) {
+	public final static ZFuncType _LookupFuncType2(ZType P1, ZType P2, ZType R) {
 		@Var ZArray<ZType> TypeList = new ZArray<ZType>(new ZType[3]);
-		TypeList.add(R);
 		TypeList.add(P1);
 		TypeList.add(P2);
-		return ZTypePool._LookupFuncType(TypeList);
+		TypeList.add(R);
+		return ZTypePool._LookupFuncType2(TypeList);
 	}
 
-	public final static ZFuncType _LookupFuncType(ZType R, ZType P1, ZType P2, ZType P3) {
+	public final static ZFuncType _LookupFuncType2(ZType P1, ZType P2, ZType P3, ZType R) {
 		@Var ZArray<ZType> TypeList = new ZArray<ZType>(new ZType[3]);
-		TypeList.add(R);
 		TypeList.add(P1);
 		TypeList.add(P2);
 		TypeList.add(P3);
-		return ZTypePool._LookupFuncType(TypeList);
+		TypeList.add(R);
+		return ZTypePool._LookupFuncType2(TypeList);
 	}
 
 }

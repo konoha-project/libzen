@@ -41,7 +41,7 @@ public final class ZFuncType extends ZType {
 		return this.HasUnknownType;
 	}
 
-	@Override public boolean IsGreekType() {
+	@Override public final boolean IsGreekType() {
 		return this.HasGreekType;
 	}
 
@@ -53,7 +53,7 @@ public final class ZFuncType extends ZType {
 				TypeList.add(this.TypeParams[i].GetGreekRealType(Greek));
 				i = i + 1;
 			}
-			return ZTypePool._LookupFuncType(TypeList);
+			return ZTypePool._LookupFuncType2(TypeList);
 		}
 		return this;
 	}
@@ -72,24 +72,24 @@ public final class ZFuncType extends ZType {
 		return false;
 	}
 
-	@Override public String StringfySignature(String FuncName) {
+	@Override public final String StringfySignature(String FuncName) {
 		return ZFunc._StringfySignature(FuncName, this.GetFuncParamSize(), this.GetRecvType());
 	}
 
-	@Override public ZType GetBaseType() {
+	@Override public final ZType GetBaseType() {
 		return ZFuncType._FuncType;
 	}
 
-	@Override public int GetParamSize() {
+	@Override public final int GetParamSize() {
 		return this.TypeParams.length;
 	}
 
-	@Override public ZType GetParamType(int Index) {
+	@Override public final ZType GetParamType(int Index) {
 		return this.TypeParams[Index];
 	}
 
 	public final ZType GetReturnType() {
-		return this.TypeParams[0];
+		return this.TypeParams[this.TypeParams.length - 1];
 	}
 
 	public final int GetFuncParamSize() {
@@ -97,26 +97,11 @@ public final class ZFuncType extends ZType {
 	}
 
 	public final ZType GetRecvType() {
-		if(this.TypeParams.length == 1) {
-			return ZType.VoidType;
-		}
-		return this.TypeParams[1];
+		return this.TypeParams[0];
 	}
 
 	public final ZType GetFuncParamType(int Index) {
-		return this.TypeParams[Index+1];
-	}
-
-	public final ZFuncType NewMethodFuncType(ZType RecvType) {
-		@Var ZArray<ZType> TypeList = new ZArray<ZType>(new ZType[this.GetFuncParamSize()+2]);
-		TypeList.add(this.GetReturnType());
-		TypeList.add(RecvType);
-		@Var int i = 0;
-		while(i < this.GetFuncParamSize()) {
-			TypeList.add(this.GetFuncParamType(i));
-			i = i + 1;
-		}
-		return ZTypePool._LookupFuncType(TypeList);
+		return this.TypeParams[Index];
 	}
 
 	public final boolean AcceptAsFieldFunc(ZFuncType FuncType) {

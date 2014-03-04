@@ -104,7 +104,7 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 			this.CurrentBuilder.Append(Node.GlobalName);
 		}
 	}
-	
+
 	@Override public String NameLocalVariable(String Name, int Index) {
 		// FIXME: Because of some unknown reasons, original SafeName dosen't work well. I use SafeName instead of SafeName temporary.
 		if(Index == 0) {
@@ -120,7 +120,7 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 	@Override public void VisitCastNode(ZCastNode Node) {
 		this.GenerateCode(null, Node.AST[ZCastNode._Expr]);
 	}
-	
+
 	@Override public void VisitInstanceOfNode(ZInstanceOfNode Node) {
 		this.CurrentBuilder.Append("(");
 		this.GenerateCode(null, Node.AST[ZBinaryNode._Left]);
@@ -165,17 +165,17 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 	@Override public void VisitParamNode(ZParamNode Node) {
 		this.CurrentBuilder.Append(this.NameLocalVariable(Node.Name, Node.ParamIndex));
 	}
-	
+
 	private boolean IsUserDefinedType(ZType SelfType){
 		return SelfType != ZType.BooleanType &&
-			SelfType != ZType.IntType &&
-			SelfType != ZType.FloatType &&
-			SelfType != ZType.StringType &&
-			SelfType != ZType.VoidType &&
-			SelfType != ZType.TypeType &&
-			//SelfType != ZType.VarType &&
-			SelfType.GetBaseType() != ZGenericType._ArrayType &&
-			SelfType.GetBaseType() != ZGenericType._MapType;
+				SelfType != ZType.IntType &&
+				SelfType != ZType.FloatType &&
+				SelfType != ZType.StringType &&
+				SelfType != ZType.VoidType &&
+				SelfType != ZType.TypeType &&
+				//SelfType != ZType.VarType &&
+				SelfType.GetBaseType() != ZGenericType._ArrayType &&
+				SelfType.GetBaseType() != ZGenericType._MapType;
 	}
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
@@ -183,7 +183,7 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 		@Var boolean IsInstanceMethod = (!IsLambda && Node.AST.length > 1 && Node.AST[1/*first param*/] instanceof ZParamNode);
 		@Var ZType SelfType = IsInstanceMethod ? Node.AST[1/*first param*/].Type : null;
 		@Var boolean IsConstructor = IsInstanceMethod && SelfType.ShortName.equals(Node.FuncName);
-		
+
 		if(IsConstructor){
 			@Var ZNode Block = Node.AST[ZFunctionNode._Block];
 			Block.AST[Block.AST.length - 1].AST[0] = Node.AST[1];
@@ -193,8 +193,8 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 		}else{
 			this.CurrentBuilder.Append("function ");
 			if(!Node.Type.IsVoidType()) {
-					@Var String FuncName = Node.FuncName + this.GetUniqueNumber();
-					this.CurrentBuilder.Append(FuncName);
+				@Var String FuncName = Node.FuncName + this.GetUniqueNumber();
+				this.CurrentBuilder.Append(FuncName);
 			}
 			else {
 				this.CurrentBuilder.Append(Node.GetSignature(this));
@@ -214,7 +214,7 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 					this.CurrentBuilder.Append(Node.FuncName);
 					this.CurrentBuilder.Append("__ = ");
 					this.CurrentBuilder.Append(Node.GetSignature(this));
-					
+
 					this.CurrentBuilder.AppendLineFeed();
 					this.CurrentBuilder.Append(SelfType.ShortName); //FIXME must use typing in param
 					this.CurrentBuilder.Append(".prototype.");
@@ -222,7 +222,7 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 					this.CurrentBuilder.Append(" = (function(){ Array.prototype.unshift.call(arguments, this); return this.");
 					this.CurrentBuilder.Append(Node.FuncName);
 					this.CurrentBuilder.Append("__.apply(this, arguments); })");
-					
+
 					this.CurrentBuilder.Append(this.SemiColon);
 					this.CurrentBuilder.AppendLineFeed();
 					this.CurrentBuilder.Append("function ");
@@ -240,12 +240,12 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 			this.CurrentBuilder.AppendLineFeed();
 		}
 	}
-	
+
 	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
 		//this.GenerateCode(null, Node.AST[ZFuncCallNode._Func]);
 		@Var ZType FuncType = Node.GetFuncType();
 		if(FuncType != null){
-			@Var ZType RecvType = Node.GetFuncType().GetParamType(0);
+			@Var ZType RecvType = Node.GetFuncType().GetRecvType();
 			if(this.IsUserDefinedType(RecvType) &&  !RecvType.ShortName.equals(Node.GetFuncName())){
 				this.CurrentBuilder.Append("(");
 				this.GenerateCode(null, Node.AST[ZFuncCallNode._Func]);
@@ -266,7 +266,7 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 		}
 		this.VisitListNode("(", Node, ")");
 	}
-	
+
 	@Override public void VisitMethodCallNode(ZMethodCallNode Node) {
 		// (recv.method || Type_method)(...)
 		@Var ZNode RecvNode = Node.AST[ZMethodCallNode._Recv];
@@ -289,9 +289,9 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 		//this.GenerateSurroundCode(Node.AST[ZMethodCallNode._Recv]);
 		this.VisitListNode("(", Node, ")");
 	}
-	
+
 	@Override public void VisitMapLiteralNode(ZMapLiteralNode Node) {
-		this.CurrentBuilder.Append("{");	
+		this.CurrentBuilder.Append("{");
 		@Var int i = 0;
 		while(i < Node.GetListSize()) {
 			@Var ZNode KeyNode = Node.GetListAt(i);
@@ -309,7 +309,7 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 				this.CurrentBuilder.Append("null");
 			}
 		}
-		this.CurrentBuilder.Append("}");	
+		this.CurrentBuilder.Append("}");
 	}
 
 	@Override public void VisitLetNode(ZLetNode Node) {

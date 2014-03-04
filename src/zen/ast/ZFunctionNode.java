@@ -78,22 +78,25 @@ public class ZFunctionNode extends ZListNode {
 			if(ContextType instanceof ZFuncType) {
 				FuncType = (ZFuncType)ContextType;
 			}
-			@Var ZArray<ZType> TypeList = new ZArray<ZType>(new ZType[this.GetListSize()+1]);
+			@Var ZArray<ZType> TypeList = new ZArray<ZType>(new ZType[this.GetListSize()+2]);
 			if(this.ReturnType.IsVarType() && FuncType != null) {
-				this.ReturnType = FuncType.GetParamType(0);
+				this.ReturnType = FuncType.GetReturnType();
 			}
-			TypeList.add(this.ReturnType.GetRealType());
 			@Var int i = 0;
 			while(i < this.GetListSize()) {
 				@Var ZParamNode Node = this.GetParamNode(i);
 				@Var ZType ParamType = Node.Type.GetRealType();
 				if(ParamType.IsVarType() && FuncType != null) {
-					ParamType = FuncType.GetParamType(i+1);
+					ParamType = FuncType.GetFuncParamType(i);
 				}
 				TypeList.add(ParamType);
 				i = i + 1;
 			}
-			FuncType = ZTypePool._LookupFuncType(TypeList);
+			if(TypeList.size() == 0) {
+				TypeList.add(ZType.VoidType);
+			}
+			TypeList.add(this.ReturnType.GetRealType());
+			FuncType = ZTypePool._LookupFuncType2(TypeList);
 			if(!FuncType.IsVarType()) {
 				this.ResolvedFuncType = FuncType;
 			}

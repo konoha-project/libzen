@@ -110,7 +110,6 @@ public class JavaTypeTable {
 	public final static ZFuncType ConvertToFuncType(Method JMethod) {
 		@Var Class<?>[] ParamTypes = JMethod.getParameterTypes();
 		@Var ZArray<ZType> TypeList = new ZArray<ZType>(new ZType[LibZen._Size(ParamTypes) + 2]);
-		TypeList.add(JavaTypeTable.GetZenType(JMethod.getReturnType()));
 		if (!Modifier.isStatic(JMethod.getModifiers())) {
 			TypeList.add(JavaTypeTable.GetZenType(JMethod.getDeclaringClass()));
 		}
@@ -121,16 +120,23 @@ public class JavaTypeTable {
 				j = j + 1;
 			}
 		}
-		return ZTypePool._LookupFuncType(TypeList);
+		if(TypeList.size() == 0) {
+			TypeList.add(ZType.VoidType);
+		}
+		TypeList.add(JavaTypeTable.GetZenType(JMethod.getReturnType()));
+		return ZTypePool._LookupFuncType2(TypeList);
 	}
 
 	public final static ZFuncType FuncType(Class<?> ReturnT, Class<?> ... paramsT) {
 		@Var ZArray<ZType> TypeList = new ZArray<ZType>(new ZType[10]);
-		TypeList.add(JavaTypeTable.GetZenType(ReturnT));
 		for(Class<?> C : paramsT) {
 			TypeList.add(JavaTypeTable.GetZenType(C));
 		}
-		return ZTypePool._LookupFuncType(TypeList);
+		if(TypeList.size() == 0) {
+			TypeList.add(ZType.VoidType);
+		}
+		TypeList.add(JavaTypeTable.GetZenType(ReturnT));
+		return ZTypePool._LookupFuncType2(TypeList);
 	}
 
 }

@@ -37,7 +37,6 @@ public class ZPrototypeNode extends ZListNode {
 
 	public final ZFuncType GetFuncType() {
 		@Var ZArray<ZType> TypeList = new ZArray<ZType>(new ZType[this.GetListSize()+1]);
-		TypeList.add(this.ReturnType.GetRealType());
 		@Var int i = 0;
 		while(i < this.GetListSize()) {
 			@Var ZParamNode Node = this.GetParamNode(i);
@@ -45,6 +44,10 @@ public class ZPrototypeNode extends ZListNode {
 			TypeList.add(ParamType);
 			i = i + 1;
 		}
-		return ZTypePool._LookupFuncType(TypeList);
+		if(TypeList.size() == 0) {
+			TypeList.add(ZType.VoidType);
+		}
+		TypeList.add(this.ReturnType.GetRealType());
+		return ZTypePool._LookupFuncType2(TypeList);
 	}
 }
