@@ -37,9 +37,9 @@ function ImportGrammar(NameSpace: ZNameSpace): void {
 	NameSpace.AppendTokenFunc("Aa_", NameToken);
 	NameSpace.AppendTokenFunc("\"", StringLiteralToken);
 	NameSpace.AppendTokenFunc("1",  NumberLiteralToken);
-	var MatchUnary: Func<ZNode, ZNode, ZTokenContext, ZNode>     = UnaryPattern;
-	var MatchBinary: Func<ZNode, ZNode, ZTokenContext, ZNode>    = BinaryPattern;
-	var MatchComparator: Func<ZNode, ZNode, ZTokenContext, ZNode>    = ComparatorPattern;
+	var MatchUnary: Func<ZNode,ZTokenContext,ZNode,ZNode>     = UnaryPattern;
+	var MatchBinary: Func<ZNode,ZTokenContext,ZNode,ZNode>    = BinaryPattern;
+	var MatchComparator: Func<ZNode,ZTokenContext,ZNode,ZNode>    = ComparatorPattern;
 	NameSpace.DefineExpression("null", NullPattern);
 	NameSpace.DefineExpression("true", TruePattern);
 	NameSpace.DefineExpression("false", FalsePattern);
@@ -93,6 +93,7 @@ function ImportGrammar(NameSpace: ZNameSpace): void {
 	NameSpace.DefineExpression("function", PrototypePattern);
 	NameSpace.DefineExpression("function", FunctionPattern);
 	NameSpace.DefineStatement("let", LetPattern);
+	NameSpace.DefineStatement("export", ExportPattern);
 	NameSpace.Generator.AppendGrammarInfo("zen-0.1");
 	NameSpace.DefineStatement("try", TryPattern);
 	NameSpace.DefineExpression("$Catch$", CatchPattern);
@@ -103,4 +104,7 @@ function ImportGrammar(NameSpace: ZNameSpace): void {
 	NameSpace.DefineExpression("$FieldDecl$", FieldPattern);
 	NameSpace.Generator.AppendGrammarInfo("zen-class-0.1");
 	NameSpace.DefineStatement("assert", AssertPattern);
+	NameSpace.DefineStatement("asm", AsmPattern);
+	NameSpace.DefineStatement("asm", AsmMacroPattern);
+	NameSpace.DefineStatement("require", RequirePattern);
 }

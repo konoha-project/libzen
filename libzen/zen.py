@@ -29,8 +29,8 @@ def GenType(s):
 	s = s.replace("char", "String")
 	s = s.replace("long", "int")
 	s = s.replace("double", "float")
-	s = s.replace("ZMatchFunction", "Func<ZNode, ZNode, ZTokenContext, ZNode>")
-	s = s.replace("ZTokenFunction", "Func<boolean, ZSourceContext>")
+	s = s.replace("ZMatchFunction", "Func<ZNode,ZTokenContext,ZNode,ZNode>")
+	s = s.replace("ZTokenFunction", "Func<ZSourceContext,boolean>")
 	m = ArrayPattern.match(s)
 	if m:
 		s = m.group(1) + "[]"
@@ -173,11 +173,14 @@ def ParseFuncType(s, rtype, cname):
                         param.append(t[0])
         s = 'Func<'
         c = 0
-        for p in param:
+        for p in param[1:]:
                 if c > 0:
                         s = s + ','
                 s = s + GenType(p)
                 c = c + 1
+	if len(param) == 1:
+		s = s + 'void'
+	s = s + "," + param[0]
         return s + '>'
 
 def GenMethod(cname, line):
