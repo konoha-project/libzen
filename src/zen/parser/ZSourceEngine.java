@@ -60,6 +60,7 @@ import zen.ast.ZNotNode;
 import zen.ast.ZNullNode;
 import zen.ast.ZOrNode;
 import zen.ast.ZPrototypeNode;
+import zen.ast.ZRequireNode;
 import zen.ast.ZReturnNode;
 import zen.ast.ZSetIndexNode;
 import zen.ast.ZSetNameNode;
@@ -78,6 +79,7 @@ import zen.util.Field;
 import zen.util.LibZen;
 import zen.util.Var;
 import zen.util.ZenIgnored;
+import zen.util.ZenMap;
 
 public class ZSourceEngine extends ZVisitor {
 	@Field protected final ZTypeChecker TypeChecker;
@@ -126,13 +128,18 @@ public class ZSourceEngine extends ZVisitor {
 	private void VisitAsmMacroNode(ZAsmMacroNode Node) {
 		@Var String MacroText = Node.GetMacroText();
 		@Var ZType MacroType = Node.MacroType;
-		System.out.println("Macro: " + MacroText);
 		if(MacroType instanceof ZFuncType) {
 			this.Generator.SetAsmMacro(Node.GetNameSpace(), Node.Symbol, (ZFuncType)MacroType, MacroText);
 		}
 		else {
 			this.Generator.SetAsmSymbol(Node.GetNameSpace(), Node);
 		}
+	}
+
+	private void VisitRequireNode(ZRequireNode Node) {
+		@Var String ResourcePath = Node.ResourcePath;
+		System.out.println("resource: " + ResourcePath);
+		this.RequireLibrary(Node.ResourcePath);
 	}
 
 	private void VisitImportNode(ZImportNode Node) {
@@ -148,6 +155,10 @@ public class ZSourceEngine extends ZVisitor {
 		}
 		else if(Node instanceof ZAsmMacroNode) {
 			this.VisitAsmMacroNode((ZAsmMacroNode)Node);
+			return ZEmptyValue._TrueEmpty;
+		}
+		else if(Node instanceof ZRequireNode) {
+			this.VisitRequireNode((ZRequireNode)Node);
 			return ZEmptyValue._TrueEmpty;
 		}
 		else if(Node instanceof ZImportNode) {
@@ -169,6 +180,9 @@ public class ZSourceEngine extends ZVisitor {
 		}
 		else if(Node instanceof ZAsmMacroNode) {
 			this.VisitAsmMacroNode((ZAsmMacroNode)Node);
+		}
+		else if(Node instanceof ZRequireNode) {
+			this.VisitRequireNode((ZRequireNode)Node);
 		}
 		else if(Node instanceof ZImportNode) {
 			this.VisitImportNode((ZImportNode)Node);
@@ -224,6 +238,33 @@ public class ZSourceEngine extends ZVisitor {
 		return true;
 	}
 
+	public final String GetLibPath(String LibName) {
+		return "lib/" + this.Generator.LanguageExtention + "/" + LibName + ".zen";
+	}
+
+	private final ZenMap<String> LibraryMap = new ZenMap<String>(null);
+
+	public final boolean RequireLibrary(String LibName) {
+		@Var String Key = "__L" + LibName.toLowerCase();
+		@Var String Value = this.LibraryMap.GetOrNull(Key);
+		if(Value == null) {
+			@Var String Path = this.GetLibPath(LibName);
+			@Var String Script = LibZen._LoadTextFile(Path);
+			if(Script == null) {
+				LibZen._Exit(1, "library not found: " + LibName + ", " + Path);
+				return false;
+			}
+			@Var Object ResultValue = this.Eval(Script, Path, 1, false);
+			this.Logger.ShowErrors();
+			if(ResultValue == ZEmptyValue._FalseEmpty) {
+				return false;
+			}
+			this.LibraryMap.put(Key, Path);
+		}
+		return true;
+	}
+
+
 	public final String Translate(String ScriptText, String FileName, int LineNumber) {
 		@Var ZBlockNode TopBlockNode = new ZBlockNode(this.Generator.RootNameSpace);
 		@Var ZTokenContext TokenContext = new ZTokenContext(this.Generator, this.Generator.RootNameSpace, FileName, LineNumber, ScriptText);
@@ -268,22 +309,6 @@ public class ZSourceEngine extends ZVisitor {
 	//		return false;
 	//	}
 	//
-	//	public final boolean LoadRequiredLib(String LibName) {
-	//		@Var String Key = ZParserConst.NativeNameRight + "L" + LibName.toLowerCase();
-	//		if(!this.HasSymbol(Key)) {
-	//			@Var String Path = LibZen.GetLibPath(this.Generator.TargetCode, LibName);
-	//			@Var String Script = LibNative.LoadTextFile(Path);
-	//			if(Script != null) {
-	//				@Var long FileLine = ZSystem.GetFileLine(Path, 1);
-	//				if(this.Load(Script, FileLine)) {
-	//					this.SetSymbol(Key, Path, null);
-	//					return true;
-	//				}
-	//			}
-	//			return false;
-	//		}
-	//		return true;
-	//	}
 
 	protected void Unsupported(ZNode Node) {
 		if(this.InteractiveContext) {

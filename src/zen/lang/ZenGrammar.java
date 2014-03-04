@@ -66,6 +66,7 @@ import zen.grammar.OperatorTokenFunction;
 import zen.grammar.OrPatternFunction;
 import zen.grammar.ParamPatternFunction;
 import zen.grammar.PrototypePatternFunction;
+import zen.grammar.RequirePatternFunction;
 import zen.grammar.ReturnPatternFunction;
 import zen.grammar.RightExpressionPatternFunction;
 import zen.grammar.RightTypePatternFunction;
@@ -205,6 +206,8 @@ public class ZenGrammar {
 		NameSpace.DefineStatement("assert", new AssertPatternFunction());
 		NameSpace.DefineStatement("asm", new AsmPatternFunction());
 		NameSpace.DefineStatement("asm", new AsmMacroPatternFunction());
+		NameSpace.DefineStatement("require", new RequirePatternFunction());
+
 	}
 
 }

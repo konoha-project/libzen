@@ -395,14 +395,6 @@ public class LibZen {
 		return new File(Path).exists();
 	}
 
-	public final static boolean IsSupportedTarget(String TargetCode) {
-		return HasFile(GetLibPath(TargetCode, "common"));
-	}
-
-	public final static String GetLibPath(String TargetCode, String LibName) {
-		return "lib/" + TargetCode + "/" + LibName + ".green";
-	}
-
 	final static String FormatFilePath(String FileName) {
 		String Path = FileName;
 		if(HasFile(Path)) {

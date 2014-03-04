@@ -234,6 +234,7 @@ public class ZSourceGenerator extends ZGenerator {
 	}
 
 	@Override public boolean StartCodeGeneration(ZNode Node, boolean IsInteractive) {
+		this.CurrentBuilder.AppendLineFeedIndent();
 		Node.Accept(this);
 		if(IsInteractive) {
 			@Var int i = 0;
