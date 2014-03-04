@@ -28,6 +28,8 @@ import zen.grammar.AndPatternFunction;
 import zen.grammar.AnnotationPatternFunction;
 import zen.grammar.ApplyPatternFunction;
 import zen.grammar.ArrayLiteralPatternFunction;
+import zen.grammar.AsmMacroPatternFunction;
+import zen.grammar.AsmPatternFunction;
 import zen.grammar.AssertPatternFunction;
 import zen.grammar.BinaryPatternFunction;
 import zen.grammar.BlockCommentFunction;
@@ -201,7 +203,8 @@ public class ZenGrammar {
 
 		NameSpace.Generator.AppendGrammarInfo("zen-class-0.1");
 		NameSpace.DefineStatement("assert", new AssertPatternFunction());
-
+		NameSpace.DefineStatement("asm", new AsmPatternFunction());
+		NameSpace.DefineStatement("asm", new AsmMacroPatternFunction());
 	}
 
 }

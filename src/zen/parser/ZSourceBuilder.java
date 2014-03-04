@@ -62,34 +62,34 @@ public final class ZSourceBuilder {
 		return LibZen._SourceBuilderToString(this, BeginIndex, EndIndex);
 	}
 
+	public final void AppendCode(String Source) {
+		@Var int StartIndex = 0;
+		@Var int i = 0;
+		while(i < Source.length()) {
+			@Var char ch = LibZen._GetChar(Source, i);
+			if(ch == '\n') {
+				if(StartIndex < i) {
+					this.SourceList.add(Source.substring(StartIndex, i));
+				}
+				this.AppendLineFeedIndent();
+				StartIndex = i + 1;
+			}
+			if(ch == '\t') {
+				if(StartIndex < i) {
+					this.SourceList.add(Source.substring(StartIndex, i));
+				}
+				this.Append(this.Template.Tab);
+				StartIndex = i + 1;
+			}
+			i = i + 1;
+		}
+		if(StartIndex < i) {
+			this.SourceList.add(Source.substring(StartIndex, i));
+		}
+	}
+
 	public final void Append(String Source) {
-		if(Source.startsWith("\\")) {
-			@Var int StartIndex = 1;
-			@Var int i = 1;
-			while(i < Source.length()) {
-				@Var char ch = LibZen._GetChar(Source, i);
-				if(ch == '\n') {
-					if(StartIndex < i) {
-						this.SourceList.add(Source.substring(StartIndex, i));
-					}
-					this.AppendLineFeedIndent();
-					StartIndex = i + 1;
-				}
-				if(ch == '\t') {
-					if(StartIndex < i) {
-						this.SourceList.add(Source.substring(StartIndex, i));
-					}
-					this.Append(this.Template.Tab);
-					StartIndex = i + 1;
-				}
-			}
-			if(StartIndex < i) {
-				this.SourceList.add(Source.substring(StartIndex, i));
-			}
-		}
-		else {
-			this.SourceList.add(Source);
-		}
+		this.SourceList.add(Source);
 	}
 
 	public final void Append(String Text, String Text2) {

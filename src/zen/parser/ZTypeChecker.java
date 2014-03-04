@@ -24,6 +24,7 @@
 
 package zen.parser;
 
+import zen.ast.ZAsmNode;
 import zen.ast.ZCastNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZFuncCallNode;
@@ -232,12 +233,6 @@ public abstract class ZTypeChecker extends ZVisitor {
 		this.Return(new ZErrorNode(Node.ParentNode, ErrorToken, Message));
 	}
 
-	//	public final void Todo(ZNode Node) {
-	//		ZLogger._LogWarning(Node.SourceToken, "TODO: unimplemented type checker node: " + Node.getClass().getSimpleName());
-	//		Node.Type = ZType.VarType;
-	//		this.ReturnedNode = Node;
-	//	}
-
 	public abstract void DefineFunction(ZFunctionNode FunctionNode, boolean Enforced);
 
 	@Override public void VisitErrorNode(ZErrorNode Node) {
@@ -265,6 +260,15 @@ public abstract class ZTypeChecker extends ZVisitor {
 		@Var ZType ContextType = this.GetContextType();
 		this.CheckTypeAt(Node, ZSugarNode._DeSugar, ContextType);
 		this.TypedNode(Node, Node.GetAstType(ZSugarNode._DeSugar));
+	}
+
+	@Override public void VisitAsmNode(ZAsmNode Node) {
+		if(Node.MacroType != null) {
+			this.TypedNode(Node, Node.MacroType);
+		}
+		else {
+			this.TypedNode(Node, ZType.VoidType);
+		}
 	}
 
 

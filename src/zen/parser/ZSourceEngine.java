@@ -28,6 +28,8 @@ package zen.parser;
 
 import zen.ast.ZAndNode;
 import zen.ast.ZArrayLiteralNode;
+import zen.ast.ZAsmMacroNode;
+import zen.ast.ZAsmNode;
 import zen.ast.ZBinaryNode;
 import zen.ast.ZBlockNode;
 import zen.ast.ZBooleanNode;
@@ -121,6 +123,18 @@ public class ZSourceEngine extends ZVisitor {
 		this.Generator.SetPrototype(Node, Node.FuncName, FuncType);
 	}
 
+	private void VisitAsmMacroNode(ZAsmMacroNode Node) {
+		@Var String MacroText = Node.GetMacroText();
+		@Var ZType MacroType = Node.MacroType;
+		System.out.println("Macro: " + MacroText);
+		if(MacroType instanceof ZFuncType) {
+			this.Generator.SetAsmMacro(Node.GetNameSpace(), Node.Symbol, (ZFuncType)MacroType, MacroText);
+		}
+		else {
+			this.Generator.SetAsmSymbol(Node.GetNameSpace(), Node);
+		}
+	}
+
 	private void VisitImportNode(ZImportNode Node) {
 		Node.Import();
 	}
@@ -130,6 +144,10 @@ public class ZSourceEngine extends ZVisitor {
 		this.EnableVisitor();
 		if(Node instanceof ZPrototypeNode) {
 			this.VisitPrototypeNode((ZPrototypeNode)Node);
+			return ZEmptyValue._TrueEmpty;
+		}
+		else if(Node instanceof ZAsmMacroNode) {
+			this.VisitAsmMacroNode((ZAsmMacroNode)Node);
 			return ZEmptyValue._TrueEmpty;
 		}
 		else if(Node instanceof ZImportNode) {
@@ -148,6 +166,9 @@ public class ZSourceEngine extends ZVisitor {
 		this.EnableVisitor();
 		if(Node instanceof ZPrototypeNode) {
 			this.VisitPrototypeNode((ZPrototypeNode)Node);
+		}
+		else if(Node instanceof ZAsmMacroNode) {
+			this.VisitAsmMacroNode((ZAsmMacroNode)Node);
 		}
 		else if(Node instanceof ZImportNode) {
 			this.VisitImportNode((ZImportNode)Node);
@@ -488,9 +509,14 @@ public class ZSourceEngine extends ZVisitor {
 		this.Eval2(Node.AST[ZSugarNode._DeSugar]);
 	}
 
+	@Override public void VisitAsmNode(ZAsmNode Node) {
+		this.Generator.StartCodeGeneration(Node, this.InteractiveContext);
+	}
+
 	public void WriteTo(String OutputFile) {
 		this.Generator.WriteTo(OutputFile);
 		this.Generator.Logger.ShowErrors();
 	}
+
 
 }

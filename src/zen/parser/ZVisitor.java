@@ -26,6 +26,7 @@ package zen.parser;
 
 import zen.ast.ZAndNode;
 import zen.ast.ZArrayLiteralNode;
+import zen.ast.ZAsmNode;
 import zen.ast.ZBinaryNode;
 import zen.ast.ZBlockNode;
 import zen.ast.ZBooleanNode;
@@ -106,9 +107,10 @@ public abstract class ZVisitor {
 	public abstract void VisitLetNode(ZLetNode Node);
 	public abstract void VisitFunctionNode(ZFunctionNode Node);
 	public abstract void VisitClassNode(ZClassNode Node);
-	public abstract void VisitErrorNode(ZErrorNode Node);
 	public abstract void VisitExtendedNode(ZNode Node);
 	public abstract void VisitSugarNode(ZSugarNode Node);
+	public abstract void VisitAsmNode(ZAsmNode Node);
+	public abstract void VisitErrorNode(ZErrorNode Node);
 
 	public abstract void EnableVisitor();
 	public abstract void StopVisitor();

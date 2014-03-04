@@ -1,0 +1,4 @@
+
+asm("import math");
+asm macro sin "math.sin($[0])" : Func<float,float>;
+asm macro cos "math.cos($[0])" : Func<float,float>;

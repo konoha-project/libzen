@@ -27,6 +27,7 @@ package zen.parser;
 
 import zen.ast.ZAndNode;
 import zen.ast.ZArrayLiteralNode;
+import zen.ast.ZAsmNode;
 import zen.ast.ZBinaryNode;
 import zen.ast.ZBlockNode;
 import zen.ast.ZBooleanNode;
@@ -649,6 +650,10 @@ public class ZSourceGenerator extends ZGenerator {
 		this.GenerateCode(null, Node.AST[ZSugarNode._DeSugar]);
 	}
 
+	@Override public void VisitAsmNode(ZAsmNode Node) {
+		this.CurrentBuilder.AppendCode(Node.GetMacroText());
+	}
+
 	// Utils
 	protected void GenerateTypeName(ZType Type) {
 		this.CurrentBuilder.Append(this.GetNativeTypeName(Type.GetRealType()));
@@ -686,8 +691,6 @@ public class ZSourceGenerator extends ZGenerator {
 		this.CurrentBuilder.Append(CloseToken);
 	}
 
-
-
 	protected final String NameMethod(ZType ClassType, String MethodName) {
 		return "_" + this.NameClass(ClassType) + "_" + MethodName;
 	}
@@ -712,4 +715,5 @@ public class ZSourceGenerator extends ZGenerator {
 		}
 		return false;
 	}
+
 }

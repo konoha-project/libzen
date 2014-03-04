@@ -62,6 +62,7 @@ import org.objectweb.asm.Type;
 
 import zen.ast.ZAndNode;
 import zen.ast.ZArrayLiteralNode;
+import zen.ast.ZAsmNode;
 import zen.ast.ZBinaryNode;
 import zen.ast.ZBlockNode;
 import zen.ast.ZBooleanNode;
@@ -949,6 +950,12 @@ public class JavaAsmGenerator extends JavaGenerator {
 		else {
 			super.VisitExtendedNode(Node);
 		}
+	}
+
+	@Override
+	public void VisitAsmNode(ZAsmNode Node) {
+		// TODO Auto-generated method stub
+
 	}
 
 

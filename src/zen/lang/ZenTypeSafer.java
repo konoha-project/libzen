@@ -837,6 +837,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 		this.TypedNode(Node, ZType.VoidType);
 	}
 
+
 	// utils
 
 	private ZFunc LookupFunc(ZNameSpace NameSpace, String FuncName, ZType RecvType, int FuncParamSize) {
@@ -876,6 +877,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 		//		}
 		return null;
 	}
+
 
 	//	private ZFunc LookupFunc2(ZNameSpace NameSpace, String FuncName, ZType RecvType, int FuncParamSize) {
 	//		@Var ZFunc Func = this.Generator.LookupFunc(FuncName, RecvType, FuncParamSize);

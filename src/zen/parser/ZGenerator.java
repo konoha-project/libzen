@@ -25,6 +25,8 @@
 //ifdef JAVA
 package zen.parser;
 
+import zen.ast.ZAsmMacroNode;
+import zen.ast.ZAsmNode;
 import zen.ast.ZListNode;
 import zen.ast.ZNode;
 import zen.ast.ZSugarNode;
@@ -200,8 +202,6 @@ public abstract class ZGenerator extends ZVisitor {
 		return Func;
 	}
 
-
-
 	public final ZMacroFunc GetMacroFunc(String FuncName, ZType RecvType, int FuncParamSize) {
 		@Var ZFunc Func = this.GetDefinedFunc(ZFunc._StringfySignature(FuncName, FuncParamSize, RecvType));
 		if(Func instanceof ZMacroFunc) {
@@ -229,6 +229,18 @@ public abstract class ZGenerator extends ZVisitor {
 		return null;
 	}
 
+	public void SetAsmMacro(ZNameSpace NameSpace, String Symbol, ZFuncType MacroType, String MacroText) {
+		this.SetDefinedFunc(new ZSourceMacro(Symbol, MacroType, MacroText));
+	}
+
+	public void SetAsmSymbol(ZNameSpace NameSpace, ZAsmMacroNode Node) {
+		ZAsmNode AsmNode = new ZAsmNode(null);
+		AsmNode.SourceToken = Node.SymbolToken;
+		AsmNode.Set(ZAsmNode._Macro, Node.AST[ZAsmNode._Macro]);
+		AsmNode.Type = Node.MacroType;
+		NameSpace.SetLocalSymbol(Node.Symbol, AsmNode);
+	}
+
 	//	public final ZFunc GetCoercionFunc(ZType FromType, ZType ToType) {
 	//		while(FromType != null) {
 	//			@Var ZFunc Func = this.DefinedFuncMap.GetOrNull(this.NameConverterFunc(FromType, ToType));
@@ -248,4 +260,7 @@ public abstract class ZGenerator extends ZVisitor {
 	@Override public void VisitSugarNode(ZSugarNode Node) {
 		Node.AST[ZSugarNode._DeSugar].Accept(this);
 	}
+
+
+
 }
