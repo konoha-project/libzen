@@ -1,0 +1,25 @@
+
+class Person {
+  var name : String = "naruto";
+  var age : int = 17;
+  var IsChild : Func<boolean, Person>;
+}
+
+function IsChild(p: Person) : boolean {
+	return p.age < 20;
+}
+
+class Student extends Person {
+  var StudentId = 0;
+  var IsStudent: Func <boolean, Student>;
+}
+
+function IsChild(s: Student) {
+	return false;
+}
+
+export function main() {
+	var p = new Person();
+	var s = new Student();
+	return p.IsChild();
+}

@@ -1,0 +1,32 @@
+
+function WhileTest() {
+	var n : int = 0;
+	while(n < 10) {
+		assert(n < 10);
+		n = n + 1;
+	}
+	println("#while: " + n);
+	assert(n == 10);
+}
+
+function NestedWhileTest() {
+	var n : int = 0;
+	while(n < 10) {
+		var m : int = 0;
+		while(m < 10) {
+			assert(m < 10);
+			m = m + 1;
+		}
+		assert(m == 10);
+		n = n + 1;
+	}
+	println("#while/while: " + n);
+	assert(n == 10);
+}
+
+export function main() {
+	WhileTest();
+	NestedWhileTest();
+}
+
+
