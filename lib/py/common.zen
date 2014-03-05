@@ -1,0 +1,29 @@
+
+asm macro assert  "assert $[0], $[1]": Func<boolean,String,void>;
+asm macro print   "print $[0]," : Func<String,void>;
+asm macro println "print $[0]" : Func<String,void>;
+
+// converter
+asm macro _ "float($[0])" : Func<int,float>;
+asm macro _ "int($[0])" : Func<float,int>;
+asm macro _ "(\'true\' if $[0] else \'false\')" : Func<boolean,String>;
+asm macro _ "str($[0])" : Func<int,String>;
+asm macro _ "(\"%.5f\" % ($[0]))" : Func<float,String>;
+
+// String
+asm macro + "zstr($[0]) + zstr($[1])" : Func<String,String,String>;
+asm macro size "len($[0])" : Func<String,int>;
+asm macro substring "$[0][$[1]:]" : Func<String,int,String>;
+asm macro substring "$[0][$[1]:$[2]]" : Func<String,int,int,String>;
+asm macro indexOf "$[0].find($[1])" : Func<String,String,int>;
+asm macro indexOf "$[0][$[1]:].find($[2])" : Func<String,int,String,int>;
+asm macro equals "$[0] == $[1]" : Func<String,String,boolean>;
+asm macro startsWith "$[0].startswith($[1])" : Func<String,String,boolean>;
+asm macro endsWith "$[0].endswith($[1])" : Func<String,String,boolean>;
+
+// Array
+asm macro size "len($[0])" : Func<α[],int>;
+asm macro clear "libzen~zclear($[0], $[1])" : Func<α[],int,void>;
+asm macro add "$[0].append($[1])" : Func<α[],α,void>;
+asm macro add "$[0].insert($[1], $[2])" : Func<α[],int,α,void>;
+

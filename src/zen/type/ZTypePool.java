@@ -62,6 +62,11 @@ public class ZTypePool {
 		return GenericType;
 	}
 
+	final static void _SetBaseGenericType(ZGenericType Type) {
+		@Var String MangleName = ZTypePool._MangleType2(Type.BaseType, Type.ParamType);
+		ZTypePool._ClassNameMap.put(MangleName, Type);
+	}
+
 	public final static ZType _GetGenericType(ZType BaseType, ZArray<ZType> TypeList, boolean IsCreation) {
 		assert(BaseType.GetParamSize() > 0);
 		if(TypeList.size() == 1 && !BaseType.IsFuncType()) {

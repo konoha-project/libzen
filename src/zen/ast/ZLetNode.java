@@ -28,7 +28,11 @@ public class ZLetNode extends ZNode {
 		Visitor.VisitLetNode(this);
 	}
 
-	public ZGlobalNameNode ToGlobalNameNode() {
+	public final boolean IsConstValue() {
+		return this.AST[ZLetNode._InitValue] instanceof ZConstNode;
+	}
+
+	public final ZGlobalNameNode ToGlobalNameNode() {
 		return new ZGlobalNameNode(null, this.SymbolToken, this.GetAstType(ZLetNode._InitValue), this.GlobalName, false);
 	}
 

@@ -87,19 +87,44 @@ public abstract class ZGenerator extends ZVisitor {
 	}
 
 	public final void SetAsmMacro(ZNameSpace NameSpace, String Symbol, ZFuncType MacroType, String MacroText) {
+		@Var ZMacroFunc MacroFunc = null;
 		@Var int loc = MacroText.indexOf("~");
 		if(loc > 0) {
 			@Var String LibName = MacroText.substring(0, loc);
-			this.ImportLibrary(LibName);
 			MacroText = MacroText.substring(loc+1);
+			MacroFunc = new ZMacroFunc(Symbol, MacroType, MacroText);
+			MacroFunc.RequiredLibrary = LibName;
 		}
-		@Var ZMacroFunc MacroFunc = new ZSourceMacro(Symbol, MacroType, MacroText);
+		else {
+			MacroFunc = new ZMacroFunc(Symbol, MacroType, MacroText);
+		}
 		if(Symbol.equals("_")) {
-			this.SetConverterFunc(MacroType.GetRecvType(), MacroType.GetRealType(), MacroFunc);
+			this.SetConverterFunc(MacroType.GetRecvType(), MacroType.GetReturnType(), MacroFunc);
 		}
 		else {
 			this.SetDefinedFunc(MacroFunc);
 		}
+	}
+
+	private String NameConverterFunc(ZType FromType, ZType ToType) {
+		return FromType.GetUniqueName() + "T" + ToType.GetUniqueName();
+	}
+
+	public final void SetConverterFunc(ZType FromType, ZType ToType, ZFunc Func) {
+		//System.out.println("set " + this.NameConverterFunc(FromType, ToType));
+		this.DefinedFuncMap.put(this.NameConverterFunc(FromType, ToType), Func);
+	}
+
+	public final ZFunc LookupConverterFunc(ZType FromType, ZType ToType) {
+		while(FromType != null) {
+			@Var ZFunc Func = this.DefinedFuncMap.GetOrNull(this.NameConverterFunc(FromType, ToType));
+			//System.out.println("get " + this.NameConverterFunc(FromType, ToType) + ", func="+ Func);
+			if(Func != null) {
+				return Func;
+			}
+			FromType = FromType.GetSuperType();
+		}
+		return null;
 	}
 
 	public final void SetAsmSymbol(ZNameSpace NameSpace, ZAsmMacroNode Node) {
@@ -110,7 +135,6 @@ public abstract class ZGenerator extends ZVisitor {
 			this.ImportLibrary(LibName);
 			Node.Set(ZAsmNode._Macro, new ZStringNode(Node, Node.SymbolToken, MacroText.substring(loc+1)));
 		}
-
 		@Var ZAsmNode AsmNode = new ZAsmNode(null);
 		AsmNode.SourceToken = Node.SymbolToken;
 		AsmNode.Set(ZAsmNode._Macro, Node.AST[ZAsmNode._Macro]);
@@ -257,24 +281,6 @@ public abstract class ZGenerator extends ZVisitor {
 		return null;
 	}
 
-	public final String NameConverterFunc(ZType FromType, ZType ToType) {
-		return FromType.GetUniqueName() + "T" + ToType.GetUniqueName();
-	}
-
-	public final void SetConverterFunc(ZType FromType, ZType ToType, ZFunc Func) {
-		this.DefinedFuncMap.put(this.NameConverterFunc(FromType, ToType), Func);
-	}
-
-	public final ZFunc LookupConverterFunc(ZType FromType, ZType ToType) {
-		while(FromType != null) {
-			@Var ZFunc Func = this.DefinedFuncMap.GetOrNull(this.NameConverterFunc(FromType, ToType));
-			if(Func != null) {
-				return Func;
-			}
-			FromType = FromType.GetSuperType();
-		}
-		return null;
-	}
 
 	@Override public void VisitExtendedNode(ZNode Node) {
 		@Var ZSugarNode DeNode = Node.DeSugar(this);

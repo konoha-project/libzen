@@ -71,7 +71,6 @@ import zen.ast.ZCastNode;
 import zen.ast.ZCatchNode;
 import zen.ast.ZClassNode;
 import zen.ast.ZComparatorNode;
-import zen.ast.ZConstNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZFieldNode;
 import zen.ast.ZFloatNode;
@@ -625,7 +624,7 @@ public class JavaAsmGenerator extends JavaGenerator {
 			this.VisitErrorNode((ZErrorNode)Node.AST[ZLetNode._InitValue]);
 			return;
 		}
-		if(!(Node.AST[ZLetNode._InitValue] instanceof ZConstNode)) {
+		if(!Node.IsConstValue()) {
 			String ClassName = "Symbol" + Node.GlobalName;
 			@Var AsmClassBuilder ClassBuilder = this.AsmLoader.NewClass(ACC_PUBLIC|ACC_FINAL, Node, ClassName, "java/lang/Object");
 			Class<?> ValueClass = this.GetJavaClass(Node.GetAstType(ZLetNode._InitValue));

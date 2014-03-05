@@ -50,7 +50,6 @@ import zen.parser.ZSourceEngine;
 import zen.parser.ZSourceGenerator;
 import zen.type.ZClassField;
 import zen.type.ZFuncType;
-import zen.type.ZGenericType;
 import zen.type.ZType;
 import zen.util.Field;
 import zen.util.LibZen;
@@ -85,36 +84,10 @@ public class PythonGenerator extends ZSourceGenerator {
 		this.SetNativeType(ZType.FloatType, "float");
 		this.SetNativeType(ZType.StringType, "str");
 
-		this.SetMacro("assert", "assert $[0], $[1]", ZType.VoidType, ZType.BooleanType, ZType.StringType);
-		this.SetMacro("print", "print $[0],", ZType.VoidType, ZType.StringType);
-		this.SetMacro("println", "print $[0]", ZType.VoidType, ZType.StringType);
-
-		// Converter
-		this.SetConverterMacro("float($[0])", ZType.FloatType, ZType.IntType);
-		this.SetConverterMacro("int($[0])", ZType.IntType, ZType.FloatType);
-		this.SetConverterMacro("(\'true\' if $[0] else \'false\')", ZType.StringType, ZType.BooleanType);
-		this.SetConverterMacro("str($[0])", ZType.StringType, ZType.IntType);
-		this.SetConverterMacro("(\"%.5f\" % ($[0]))", ZType.StringType, ZType.FloatType);
-
-		// String
-		this.SetMacro("+", "zstr($[0]) + zstr($[1])", ZType.StringType, ZType.StringType, ZType.StringType);
-		this.SetMacro("size", "len($[0])", ZType.IntType, ZType.StringType);
-		this.SetMacro("substring", "$[0][$[1]:]", ZType.StringType, ZType.StringType, ZType.IntType);
-		this.SetMacro("substring", "$[0][$[1]:$[2]]", ZType.StringType, ZType.StringType, ZType.IntType, ZType.IntType);
-		this.SetMacro("indexOf", "$[0].find($[1])", ZType.IntType, ZType.StringType, ZType.StringType);
-		this.SetMacro("indexOf", "$[0].find($[1], $[2])", ZType.IntType, ZType.StringType, ZType.StringType, ZType.IntType);
-		this.SetMacro("equals", "$[0] == $[1]", ZType.BooleanType, ZType.StringType, ZType.StringType);
-		this.SetMacro("startsWith", "$[0].startswith($[1])", ZType.BooleanType, ZType.StringType, ZType.StringType);
-		this.SetMacro("endsWith", "$[0].endswith($[1])", ZType.BooleanType, ZType.StringType, ZType.StringType);
-
-		// Array
-		this.SetMacro("size", "len($[0])", ZType.IntType, ZGenericType._ArrayType);
-		this.SetMacro("clear", "LibZen_ArrayClear($[0], $[1])", ZType.VoidType, ZGenericType._ArrayType, ZType.IntType);
-		this.SetMacro("add", "$[0].append($[1])", ZType.VoidType, ZGenericType._ArrayType, ZType.VarType);
-
 		this.HeaderBuilder.Append("#! /usr/bin/env python");
 		this.HeaderBuilder.AppendNewLine("# -*- coding: utf-8 -*-");
 		this.HeaderBuilder.AppendNewLine("def zstr(s) : return str(s) if s != None else \'null\'");
+		this.CurrentBuilder.AppendNewLine("## end of header", this.LineFeed);
 
 	}
 

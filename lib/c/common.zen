@@ -1,7 +1,7 @@
 
 asm macro assert  "assert.h~assert($[0])": Func<boolean,String,void>;
 asm macro print   "stdio.h~puts($[0])" : Func<String,void>;
-asm macro println "stdio.h~printf(\"%s\\\n\", $[0])" : Func<String,void>;
+asm macro println "stdio.h~printf(\"%s\\n\", $[0])" : Func<String,void>;
 
 // converter
 asm macro _ "(double)($[0])" : Func<int,float>;
@@ -26,4 +26,10 @@ asm macro size "libzen.h~zArraySize($[0])" : Func<α[],int>;
 asm macro clear "libzen.h~zArrayClear($[0], $[1])" : Func<α[],int,void>;
 asm macro add "libzen.h~zArrayAdd($[0], $[1])" : Func<α[],α,void>;
 asm macro add "libzen.h~zArrayInsert($[0], $[1], $[2])" : Func<α[],int,α,void>;
+
+asm macro add "libzen.h~zIntArrayAdd($[0], $[1])" : Func<int[],int,void>;
+asm macro add "libzen.h~zIntArrayInsert($[0], $[1], $[2])" : Func<int[],int,int,void>;
+
+asm macro add "libzen.h~zStringArrayAdd($[0], $[1])" : Func<String[],String,void>;
+asm macro add "libzen.h~zStringArrayInsert($[0], $[1], $[2])" : Func<String[],int,String,void>;
 

@@ -47,6 +47,7 @@ public final class ZSourceBuilder {
 	}
 
 	public final ZSourceBuilder Pop() {
+		this.AppendLineFeed();
 		return this.Parent;
 	}
 

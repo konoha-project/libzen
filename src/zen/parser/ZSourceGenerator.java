@@ -191,27 +191,27 @@ public class ZSourceGenerator extends ZGenerator {
 
 	public final void SetMacro(String FuncName, String Macro, ZType ReturnType) {
 		@Var ZFuncType FuncType = ZTypePool._LookupFuncType2(ReturnType);
-		this.SetDefinedFunc(new ZSourceMacro(FuncName, FuncType, Macro));
+		this.SetDefinedFunc(new ZMacroFunc(FuncName, FuncType, Macro));
 	}
 
 	public final void SetMacro(String FuncName, String Macro, ZType ReturnType, ZType P1) {
 		@Var ZFuncType FuncType = ZTypePool._LookupFuncType2(P1, ReturnType);
-		this.SetDefinedFunc(new ZSourceMacro(FuncName, FuncType, Macro));
+		this.SetDefinedFunc(new ZMacroFunc(FuncName, FuncType, Macro));
 	}
 
 	public final void SetMacro(String FuncName, String Macro, ZType ReturnType, ZType P1, ZType P2) {
 		@Var ZFuncType FuncType = ZTypePool._LookupFuncType2(P1, P2, ReturnType);
-		this.SetDefinedFunc(new ZSourceMacro(FuncName, FuncType, Macro));
+		this.SetDefinedFunc(new ZMacroFunc(FuncName, FuncType, Macro));
 	}
 
 	public final void SetMacro(String FuncName, String Macro, ZType ReturnType, ZType P1, ZType P2, ZType P3) {
 		@Var ZFuncType FuncType = ZTypePool._LookupFuncType2(P1, P2, P3, ReturnType);
-		this.SetDefinedFunc(new ZSourceMacro(FuncName, FuncType, Macro));
+		this.SetDefinedFunc(new ZMacroFunc(FuncName, FuncType, Macro));
 	}
 
 	public final void SetConverterMacro(String Macro, ZType ReturnType, ZType P1) {
 		@Var ZFuncType FuncType = ZTypePool._LookupFuncType2(P1, ReturnType);
-		this.SetConverterFunc(P1, ReturnType, new ZSourceMacro("to" + this.NameClass(ReturnType), FuncType, Macro));
+		this.SetConverterFunc(P1, ReturnType, new ZMacroFunc("to" + this.NameClass(ReturnType), FuncType, Macro));
 	}
 
 	@Override public final void WriteTo(@Nullable String FileName) {
@@ -438,6 +438,9 @@ public class ZSourceGenerator extends ZGenerator {
 			BeginNum = Macro.indexOf("$[", fromIndex);
 		}
 		this.CurrentBuilder.Append(Macro.substring(fromIndex));
+		if(Node.MacroFunc.RequiredLibrary != null) {
+			this.ImportLibrary(Node.MacroFunc.RequiredLibrary);
+		}
 	}
 
 	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {

@@ -55,10 +55,10 @@ import zen.type.ZType;
 import zen.util.LibZen;
 import zen.util.Var;
 
-public class JavaScriptSourceGenerator extends ZSourceGenerator {
+public class JavaScriptGenerator extends ZSourceGenerator {
 	private static boolean UseExtend;
 
-	public JavaScriptSourceGenerator() {
+	public JavaScriptGenerator() {
 		super("js", "JavaScript-1.4");
 		this.TopType = "Object";
 		this.SetNativeType(ZType.BooleanType, "Boolean");
@@ -67,23 +67,9 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 		this.SetNativeType(ZType.StringType, "String");
 		this.SetNativeType(ZType.VarType, "Object");
 
-
 		this.SetReservedName("this", "self");
 
-		this.SetMacro("assert", "console.assert($[0], $[1])", ZType.VoidType, ZType.BooleanType, ZType.StringType);
-		this.SetMacro("print", "console.log($[0])", ZType.VoidType, ZType.StringType);
-		this.SetMacro("println", "console.log($[0])", ZType.VoidType, ZType.StringType);
-
-		this.SetMacro("size", "$[0].length", ZType.IntType, ZGenericType.StringType);
-		this.SetMacro("size", "$[0].length", ZType.IntType, ZGenericType._ArrayType);
-		this.SetMacro("clear", "$[0].splice(0, $[0].length)", ZType.VoidType, ZGenericType._ArrayType, ZType.IntType);
-		this.SetMacro("add", "$[0].push($[1])", ZType.VoidType, ZGenericType._ArrayType, ZType.VarType);
-
-		this.SetConverterMacro("$[0]", ZType.FloatType, ZType.IntType);
-		this.SetConverterMacro("($[0] | 0)", ZType.IntType, ZType.FloatType);
-		this.SetConverterMacro("($[0]).toString()", ZType.StringType, ZType.IntType);
-		this.SetConverterMacro("($[0]).toString()", ZType.StringType, ZType.FloatType);
-		JavaScriptSourceGenerator.UseExtend = false;
+		JavaScriptGenerator.UseExtend = false;
 	}
 
 	@Override public ZSourceEngine GetEngine() {
@@ -313,13 +299,9 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitLetNode(ZLetNode Node) {
-		this.CurrentBuilder.Append("var");
-		this.CurrentBuilder.AppendWhiteSpace();
-		this.CurrentBuilder.Append(Node.GlobalName);
-		this.CurrentBuilder.Append(" = ");
+		this.CurrentBuilder.AppendNewLine("var ", Node.GlobalName, " = ");
 		this.GenerateCode(null, Node.AST[ZVarNode._InitValue]);
 		this.CurrentBuilder.Append(this.SemiColon);
-		this.CurrentBuilder.AppendLineFeed();
 		Node.GetNameSpace().SetLocalSymbol(Node.Symbol, Node.ToGlobalNameNode());
 	}
 
@@ -354,41 +336,23 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 		 * 	return ClassName;
 		 * })(_super);
 		 */
-		if(Node.SuperType != null && !JavaScriptSourceGenerator.UseExtend) {
-			JavaScriptSourceGenerator.UseExtend = true;
+		if(Node.SuperType != null && !JavaScriptGenerator.UseExtend) {
+			JavaScriptGenerator.UseExtend = true;
 			this.GenerateExtendCode(Node);
 		}
-		this.CurrentBuilder.Append("var ");
-		this.CurrentBuilder.Append(Node.ClassName);
-		this.CurrentBuilder.Append(" = ");
+		this.CurrentBuilder.AppendNewLine("var ", Node.ClassName, " = ");
 		this.CurrentBuilder.Append("(function(");
 		if(Node.SuperType != null) {
-			this.CurrentBuilder.Append("_super) {");
-			this.CurrentBuilder.Indent();
-			this.CurrentBuilder.AppendLineFeed();
-			this.CurrentBuilder.AppendIndent();
-			this.CurrentBuilder.Append("__extends(");
-			this.CurrentBuilder.Append(Node.ClassName);
-			this.CurrentBuilder.Append(this.Camma);
-			this.CurrentBuilder.Append("_super)");
-			this.CurrentBuilder.Append(this.SemiColon);
+			this.CurrentBuilder.OpenIndent("_super) {");
+			this.CurrentBuilder.AppendNewLine("__extends(", Node.ClassName, this.Camma);
+			this.CurrentBuilder.Append("_super)", this.SemiColon);
 		} else {
-			this.CurrentBuilder.Append(") {");
-			this.CurrentBuilder.Indent();
+			this.CurrentBuilder.OpenIndent(") {");
 		}
-		this.CurrentBuilder.AppendLineFeed();
-		this.CurrentBuilder.AppendIndent();
-		this.CurrentBuilder.Append("function");
-		this.CurrentBuilder.AppendWhiteSpace();
-		this.CurrentBuilder.Append(Node.ClassName);
-		this.CurrentBuilder.Append("(){");
-		this.CurrentBuilder.AppendLineFeed();
-		this.CurrentBuilder.Indent();
+		this.CurrentBuilder.AppendNewLine("function", Node.ClassName);
+		this.CurrentBuilder.OpenIndent("() {");
 		if(Node.SuperType != null) {
-			this.CurrentBuilder.AppendIndent();
-			this.CurrentBuilder.Append("_super.call(this)");
-			this.CurrentBuilder.Append(this.SemiColon);
-			this.CurrentBuilder.AppendLineFeed();
+			this.CurrentBuilder.AppendNewLine("_super.call(this)", this.SemiColon);
 		}
 
 		@Var int i = 0;
@@ -396,36 +360,22 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 			@Var ZFieldNode FieldNode = Node.GetFieldNode(i);
 			@Var ZNode ValueNode = FieldNode.AST[ZFieldNode._InitValue];
 			if(!(ValueNode instanceof ZNullNode)) {
-				this.CurrentBuilder.AppendIndent();
-				this.CurrentBuilder.Append("this.");
+				this.CurrentBuilder.AppendNewLine("this.");
 				this.CurrentBuilder.Append(FieldNode.FieldName);
 				this.CurrentBuilder.Append(" = ");
-
 				this.GenerateCode(null, FieldNode.AST[ZFieldNode._InitValue]);
 				this.CurrentBuilder.Append(this.SemiColon);
-				this.CurrentBuilder.AppendLineFeed();
 			}
 			i = i + 1;
 		}
-		this.CurrentBuilder.UnIndent();
-		this.CurrentBuilder.AppendIndent();
-		this.CurrentBuilder.Append("}");
-		this.CurrentBuilder.AppendLineFeed();
-		this.CurrentBuilder.AppendIndent();
-		this.CurrentBuilder.Append("return");
-		this.CurrentBuilder.AppendWhiteSpace();
-		this.CurrentBuilder.Append(Node.ClassName);
-		this.CurrentBuilder.Append(this.SemiColon);
-		this.CurrentBuilder.AppendLineFeed();
-		this.CurrentBuilder.UnIndent();
-		this.CurrentBuilder.Append("})(");
+		this.CurrentBuilder.CloseIndent("}");
+
+		this.CurrentBuilder.AppendNewLine("return ", Node.ClassName, this.SemiColon);
+		this.CurrentBuilder.CloseIndent("})(");
 		if(Node.SuperType != null) {
-			this.CurrentBuilder.Append(Node.SuperType.ShortName);
+			this.CurrentBuilder.Append(Node.SuperType.GetName());
 		}
-		this.CurrentBuilder.Append(")");
-		this.CurrentBuilder.Append(this.SemiColon);
-		this.CurrentBuilder.AppendLineFeed();
-		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.Append(")", this.SemiColon);
 	}
 
 	@Override public void VisitErrorNode(ZErrorNode Node) {
@@ -441,13 +391,5 @@ public class JavaScriptSourceGenerator extends ZSourceGenerator {
 			this.CurrentBuilder.Append(")");
 		}
 	}
-
-	//	@Override public ZFuncType GetConstructorFuncType(ZType ClassType, ZListNode List) {
-	//		return ZType.VarType;
-	//	}
-	//
-	//	@Override public ZFuncType GetMethodFuncType(ZType RecvType, String MethodName, ZListNode List) {
-	//		return ZType.VarType;
-	//	}
 
 }

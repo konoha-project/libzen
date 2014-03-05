@@ -40,6 +40,7 @@ public class ZGenericType extends ZType {
 		super(ZType.UniqueTypeFlag, ShortName, ZType.VarType);
 		this.BaseType = this;
 		this.ParamType = ZGenericType._AlphaType;
+		ZTypePool._SetBaseGenericType(this);
 	}
 
 	public ZGenericType(int TypeFlag, @Nullable ZType BaseType, ZType ParamType) {

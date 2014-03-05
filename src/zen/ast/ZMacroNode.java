@@ -1,12 +1,10 @@
 package zen.ast;
 
 import zen.parser.ZMacroFunc;
-import zen.parser.ZSourceMacro;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 import zen.type.ZFuncType;
 import zen.util.Field;
-import zen.util.Var;
 
 public class ZMacroNode extends ZListNode {
 	@Field public final ZMacroFunc MacroFunc;
@@ -22,11 +20,7 @@ public class ZMacroNode extends ZListNode {
 	}
 
 	public final String GetMacroText() {
-		@Var ZMacroFunc Func = this.MacroFunc;
-		if(Func instanceof ZSourceMacro) {
-			return ((ZSourceMacro)Func).Macro;
-		}
-		return "";
+		return this.MacroFunc.MacroText;
 	}
 
 	@Override public void Accept(ZVisitor Visitor) {

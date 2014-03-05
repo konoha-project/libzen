@@ -27,7 +27,6 @@ import zen.parser.ZSourceGenerator;
 import zen.type.ZClassField;
 import zen.type.ZClassType;
 import zen.type.ZFuncType;
-import zen.type.ZGenericType;
 import zen.type.ZType;
 import zen.util.Field;
 import zen.util.LibZen;
@@ -50,36 +49,8 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 		this.SetNativeType(ZType.FloatType, "double");
 		this.SetNativeType(ZType.StringType, "String");
 
-		this.SetMacro("assert", "assert($[0])", ZType.VoidType, ZType.BooleanType, ZType.StringType);
-		this.SetMacro("print", "System.out.print($[0])", ZType.VoidType, ZType.StringType);
-		this.SetMacro("println", "System.out.println($[0])", ZType.VoidType, ZType.StringType);
-
-		// Converter
-		this.SetConverterMacro("(double)($[0])", ZType.FloatType, ZType.IntType);
-		this.SetConverterMacro("(long)($[0])", ZType.IntType, ZType.FloatType);
-		this.SetConverterMacro("String.valueOf($[0])", ZType.StringType, ZType.BooleanType);
-		this.SetConverterMacro("String.valueOf($[0])", ZType.StringType, ZType.IntType);
-		this.SetConverterMacro("String.valueOf($[0])", ZType.StringType, ZType.FloatType);
-
-		// String
-		this.SetMacro("==", "$[0].equals($[1])", ZType.StringType, ZType.StringType, ZType.StringType);
-		this.SetMacro("size", "($[0]).length()", ZType.IntType, ZType.StringType);
-		this.SetMacro("substring", "$[0].substring($[1])", ZType.StringType, ZType.StringType, ZType.IntType);
-		this.SetMacro("substring", "$[0].sunstring($[1], $[2])", ZType.StringType, ZType.StringType, ZType.IntType, ZType.IntType);
-		this.SetMacro("indexOf", "$[0].indexOf($[1])", ZType.IntType, ZType.StringType, ZType.StringType);
-		this.SetMacro("indexOf", "$[0].indexOf($[1], $[2])", ZType.IntType, ZType.StringType, ZType.StringType, ZType.IntType);
-		this.SetMacro("equals", "$[0].equals($[1])", ZType.BooleanType, ZType.StringType, ZType.StringType);
-		this.SetMacro("startsWith", "$[0].startsWith($[1])", ZType.BooleanType, ZType.StringType, ZType.StringType);
-		this.SetMacro("endsWith", "$[0].endsWith($[1])", ZType.BooleanType, ZType.StringType, ZType.StringType);
-
-		// Array
-		this.SetMacro("size", "LibZen_ArraySize($[0])", ZType.IntType, ZGenericType._ArrayType);
-		this.SetMacro("clear", "LibZen_ArrayClear($[0], $[1])", ZType.VoidType, ZGenericType._ArrayType, ZType.IntType);
-		this.SetMacro("add", "LibZen_ArrayAdd($[0], $[1])", ZType.VoidType, ZGenericType._ArrayType, ZType.VarType);
-		this.SetMacro("add", "LibZen_ArrayAdd2($[0], $[1], $[2])", ZType.VoidType, ZGenericType._ArrayType, ZType.IntType, ZType.VarType);
-
-		this.HeaderBuilder.AppendNewLine("import java.lang.*;");
-		this.CurrentBuilder.AppendNewLine("// main ", this.LineFeed);
+		this.HeaderBuilder.AppendNewLine("import zen.util.*;");
+		this.CurrentBuilder.AppendNewLine("/* end of header */", this.LineFeed);
 	}
 
 
@@ -313,10 +284,8 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 			this.FuncNameMap.put(FuncType.GetUniqueName(), ClassName);
 
 			this.CurrentBuilder = this.InsertNewSourceBuilder();
-			this.CurrentBuilder.AppendLineFeedIndent();
 			this.CurrentBuilder.AppendNewLine("abstract class ", ClassName, "");
 			this.CurrentBuilder.OpenIndent(" {");
-
 			this.CurrentBuilder.AppendNewLine("abstract ");
 			this.GenerateTypeName(FuncType.GetReturnType());
 			this.CurrentBuilder.Append(" Invoke(");
@@ -352,11 +321,10 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitVarNode(ZVarNode Node) {
-		this.CurrentBuilder.AppendNewLine("");
 		this.GenerateTypeName(Node.DeclType);
 		this.CurrentBuilder.Append(" ");
 		this.CurrentBuilder.Append(this.NameLocalVariable(Node.NativeName, Node.VarIndex));
-		this.CurrentBuilder.AppendToken("=");
+		this.CurrentBuilder.Append(" = ");
 		this.GenerateCode(null, Node.AST[ZVarNode._InitValue]);
 		this.CurrentBuilder.Append(this.SemiColon);
 		this.VisitStmtList(Node);
@@ -367,15 +335,18 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 			this.VisitErrorNode((ZErrorNode)Node.AST[ZLetNode._InitValue]);
 			return;
 		}
-		this.CurrentBuilder.Append("static ");
-		this.GenerateTypeName(Node.GetAstType(ZLetNode._InitValue));
-		this.CurrentBuilder.Append(" ");
-		this.CurrentBuilder.Append(Node.GlobalName);
-		this.CurrentBuilder.Append(" = ");
-		this.GenerateCode(null, Node.AST[ZLetNode._InitValue]);
-		this.CurrentBuilder.Append(this.SemiColon);
-		this.CurrentBuilder.AppendLineFeed();
-		Node.GetNameSpace().SetLocalSymbol(Node.Symbol, Node.ToGlobalNameNode());
+		if(!Node.IsConstValue()) {
+			@Var String ClassName = "Symbol" + Node.GlobalName;
+			this.CurrentBuilder = this.InsertNewSourceBuilder();
+			this.CurrentBuilder.AppendNewLine("final class ", ClassName, "");
+			this.CurrentBuilder.OpenIndent(" {");
+			this.GenerateClassField("static", Node.GetAstType(ZLetNode._InitValue), "_", null);
+			this.GenerateCode(null, " = ", Node.AST[ZLetNode._InitValue], this.SemiColon);
+			this.CurrentBuilder.CloseIndent("}");
+			this.CurrentBuilder = this.CurrentBuilder.Pop();
+			Node.GlobalName = ClassName + "._";
+			Node.GetNameSpace().SetLocalSymbol(Node.Symbol, Node.ToGlobalNameNode());
+		}
 	}
 
 	@Override public void VisitParamNode(ZParamNode Node) {

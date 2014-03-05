@@ -260,7 +260,7 @@ public class LibZen {
 		else {
 			quote = '\0';
 		}
-		for(; i < Length; i += 1) {
+		while(i < Length) {
 			@Var char ch = _GetChar(Text, i);
 			if(ch == '\\') {
 				i = i + 1;
@@ -287,6 +287,7 @@ public class LibZen {
 				}
 			}
 			sb.append(ch);
+			i = i + 1;
 		}
 		return sb.toString();
 	}
@@ -531,7 +532,7 @@ public class LibZen {
 
 		GenMap.put("hs", zen.codegen.haskell.HaskellSourceGenerator.class);
 		GenMap.put("java", zen.codegen.jvm.JavaSourceGenerator.class);
-		GenMap.put("js", zen.codegen.javascript.JavaScriptSourceGenerator.class);
+		GenMap.put("js", zen.codegen.javascript.JavaScriptGenerator.class);
 
 		GenMap.put("pl", zen.codegen.PerlGenerator.class);
 		GenMap.put("py", zen.codegen.jython.PythonGenerator.class);
