@@ -13,11 +13,9 @@ import zen.ast.ZNode;
 import zen.ast.ZNullNode;
 import zen.ast.ZStringNode;
 import zen.ast.ZTypeNode;
-import zen.lang.ZenTypeSafer;
 import zen.parser.ZGenerator;
 import zen.parser.ZNameSpace;
 import zen.parser.ZSourceContext;
-import zen.parser.ZSourceEngine;
 import zen.parser.ZTokenContext;
 import zen.type.ZFuncType;
 import zen.type.ZType;
@@ -37,11 +35,6 @@ public abstract class JavaGenerator extends ZGenerator {
 	protected JavaGenerator(String TargetCode, String TargetVersion) {
 		super(TargetCode, TargetVersion);
 		this.InitFuncClass();
-		JavaCommonApi.LoadCommonApi(this);
-	}
-
-	@Override public ZSourceEngine GetEngine() {
-		return new JavaEngine(new ZenTypeSafer(this), this);
 	}
 
 	@Override public void ImportLocalGrammar(ZNameSpace NameSpace) {

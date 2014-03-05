@@ -79,10 +79,10 @@ import zen.util.ZenMap;
 
 public class JavaEngine extends ZSourceEngine {
 
-	protected final JavaGenerator Solution;
+	protected final JavaAsmGenerator Solution;
 	protected Object EvaledValue = null;
 
-	public JavaEngine(ZTypeChecker TypeChecker, JavaGenerator Generator) {
+	public JavaEngine(ZTypeChecker TypeChecker, JavaAsmGenerator Generator) {
 		super(TypeChecker, Generator);
 		this.Solution = Generator;
 	}
@@ -570,6 +570,20 @@ public class JavaEngine extends ZSourceEngine {
 		this.EvaledValue = this.Eval(Node.AST[ZSugarNode._DeSugar]);
 	}
 
-
-
+	@Override public void ExecMain() {
+		this.Generator.Logger.ShowErrors();
+		if(this.Solution.MainFuncNode != null) {
+			@Var JavaStaticFieldNode MainFunc = this.Solution.MainFuncNode;
+			try {
+				Method Method = MainFunc.StaticClass.getMethod("f");
+				Method.invoke(null);
+			}
+			catch(NoSuchMethodException e) {
+				System.out.println(e);
+			}
+			catch(Exception e) {
+				System.out.println(e);
+			}
+		}
+	}
 }

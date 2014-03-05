@@ -105,7 +105,9 @@ import zen.ast.ZTryNode;
 import zen.ast.ZUnaryNode;
 import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
+import zen.lang.ZenTypeSafer;
 import zen.parser.ZLogger;
+import zen.parser.ZSourceEngine;
 import zen.type.ZClassField;
 import zen.type.ZClassType;
 import zen.type.ZFuncType;
@@ -123,9 +125,13 @@ public class JavaAsmGenerator extends JavaGenerator {
 	AsmMethodBuilder AsmBuilder;
 
 	public JavaAsmGenerator() {
-		super("java", "Java 1.6");
+		super("jvm", "Java 1.6");
 		this.TryCatchLabel = new Stack<TryCatchLabel>();
 		this.AsmLoader = new AsmClassLoader(this);
+	}
+
+	@Override public ZSourceEngine GetEngine() {
+		return new JavaEngine(new ZenTypeSafer(this), this);
 	}
 
 	public final Class<?> GetJavaClass(ZType zType, Class<?> C) {
@@ -404,7 +410,18 @@ public class JavaAsmGenerator extends JavaGenerator {
 	}
 
 	@Override public void VisitMacroNode(ZMacroNode Node) {
-		this.AsmBuilder.ApplyStaticMethod(Node, ((JavaStaticFunc)Node.MacroFunc).StaticFunc, Node);
+		for(int i = 0; i < Node.GetListSize(); i++) {
+			this.AsmBuilder.PushNode(null, Node.GetListAt(i));
+		}
+		@Var String MacroText = Node.MacroFunc.MacroText;
+		@Var int ClassEnd = MacroText.indexOf(".");
+		@Var int MethodEnd = MacroText.indexOf("(");
+		//System.out.println("MacroText: " + MacroText + " " + ClassEnd + ", " + MethodEnd);
+		@Var String ClassName = MacroText.substring(0, ClassEnd);
+		@Var String MethodName = MacroText.substring(ClassEnd+1, MethodEnd);
+		this.AsmBuilder.SetLineNumber(Node);
+		//System.out.println("debug: " + ClassName + ", " + MethodName);
+		this.AsmBuilder.visitMethodInsn(INVOKESTATIC, ClassName, MethodName, Node.MacroFunc.FuncType);
 	}
 
 	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
@@ -675,15 +692,12 @@ public class JavaAsmGenerator extends JavaGenerator {
 				}
 			}
 			this.SetMethod(Node.FuncName, (ZFuncType)FuncNode.Type, FuncNode.StaticClass);
-			//Node.GetNameSpace().SetLocalSymbol(Node.FuncName, FuncNode);
 		}
 		else {
 			if(Node.FuncName == null) {
-				Node.FuncName = "f" + this.GetUniqueNumber();
+				Node.FuncName = "f";
 			}
-			else {
-				Node.FuncName = Node.FuncName + "Z" + this.GetUniqueNumber();
-			}
+			Node.FuncName = this.NameGlobalSymbol(Node.FuncName);
 			JavaStaticFieldNode FuncNode = this.GenerateFunctionAsSymbolField(Node);
 			if(this.AsmBuilder != null) {
 				this.VisitStaticFieldNode(FuncNode);

@@ -75,7 +75,6 @@ import zen.lang.ZenTypeSafer;
 import zen.type.ZClassType;
 import zen.type.ZFuncType;
 import zen.type.ZType;
-import zen.type.ZTypePool;
 import zen.util.Field;
 import zen.util.LibZen;
 import zen.util.Nullable;
@@ -189,30 +188,30 @@ public class ZSourceGenerator extends ZGenerator {
 		return Name + "__" + Index;
 	}
 
-	public final void SetMacro(String FuncName, String Macro, ZType ReturnType) {
-		@Var ZFuncType FuncType = ZTypePool._LookupFuncType2(ReturnType);
-		this.SetDefinedFunc(new ZMacroFunc(FuncName, FuncType, Macro));
-	}
-
-	public final void SetMacro(String FuncName, String Macro, ZType ReturnType, ZType P1) {
-		@Var ZFuncType FuncType = ZTypePool._LookupFuncType2(P1, ReturnType);
-		this.SetDefinedFunc(new ZMacroFunc(FuncName, FuncType, Macro));
-	}
-
-	public final void SetMacro(String FuncName, String Macro, ZType ReturnType, ZType P1, ZType P2) {
-		@Var ZFuncType FuncType = ZTypePool._LookupFuncType2(P1, P2, ReturnType);
-		this.SetDefinedFunc(new ZMacroFunc(FuncName, FuncType, Macro));
-	}
-
-	public final void SetMacro(String FuncName, String Macro, ZType ReturnType, ZType P1, ZType P2, ZType P3) {
-		@Var ZFuncType FuncType = ZTypePool._LookupFuncType2(P1, P2, P3, ReturnType);
-		this.SetDefinedFunc(new ZMacroFunc(FuncName, FuncType, Macro));
-	}
-
-	public final void SetConverterMacro(String Macro, ZType ReturnType, ZType P1) {
-		@Var ZFuncType FuncType = ZTypePool._LookupFuncType2(P1, ReturnType);
-		this.SetConverterFunc(P1, ReturnType, new ZMacroFunc("to" + this.NameClass(ReturnType), FuncType, Macro));
-	}
+	//	public final void SetMacro(String FuncName, String Macro, ZType ReturnType) {
+	//		@Var ZFuncType FuncType = ZTypePool._LookupFuncType2(ReturnType);
+	//		this.SetDefinedFunc(new ZMacroFunc(FuncName, FuncType, Macro));
+	//	}
+	//
+	//	public final void SetMacro(String FuncName, String Macro, ZType ReturnType, ZType P1) {
+	//		@Var ZFuncType FuncType = ZTypePool._LookupFuncType2(P1, ReturnType);
+	//		this.SetDefinedFunc(new ZMacroFunc(FuncName, FuncType, Macro));
+	//	}
+	//
+	//	public final void SetMacro(String FuncName, String Macro, ZType ReturnType, ZType P1, ZType P2) {
+	//		@Var ZFuncType FuncType = ZTypePool._LookupFuncType2(P1, P2, ReturnType);
+	//		this.SetDefinedFunc(new ZMacroFunc(FuncName, FuncType, Macro));
+	//	}
+	//
+	//	public final void SetMacro(String FuncName, String Macro, ZType ReturnType, ZType P1, ZType P2, ZType P3) {
+	//		@Var ZFuncType FuncType = ZTypePool._LookupFuncType2(P1, P2, P3, ReturnType);
+	//		this.SetDefinedFunc(new ZMacroFunc(FuncName, FuncType, Macro));
+	//	}
+	//
+	//	public final void SetConverterMacro(String Macro, ZType ReturnType, ZType P1) {
+	//		@Var ZFuncType FuncType = ZTypePool._LookupFuncType2(P1, ReturnType);
+	//		this.SetConverterFunc(P1, ReturnType, new ZMacroFunc("to" + this.NameClass(ReturnType), FuncType, Macro));
+	//	}
 
 	@Override public final void WriteTo(@Nullable String FileName) {
 		this.Finish(FileName);

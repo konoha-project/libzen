@@ -1,27 +1,27 @@
-asm macro assert  "assert($[0])": Func<boolean,String,void>;
-asm macro print   "System.out.print($[0])" : Func<String,void>;
-asm macro println "System.out.println($[0])" : Func<String,void>;
+asm macro assert  "zen/codegen/jvm/JavaCommonApi.Assert($[0],$[1])": Func<boolean,String,void>;
+asm macro print   "zen/codegen/jvm/JavaCommonApi.Print($[0])" : Func<String,void>;
+asm macro println "zen/codegen/jvm/JavaCommonApi.PrintLine($[0])" : Func<String,void>;
 
 // converter
-asm macro _ "(double)($[0])" : Func<int,float>;
-asm macro _ "(long)($[0])" : Func<float,int>;
-asm macro _ "String.valueOf($[0])" : Func<boolean,String>;
-asm macro _ "String.valueOf($[0])" : Func<int,String>;
-asm macro _ "String.valueOf($[0])" : Func<float,String>;
+asm macro _ "zen/codegen/jvm/JavaCommonApi.IntToFloat($[0])" : Func<int,float>;
+asm macro _ "zen/codegen/jvm/JavaCommonApi.FloatToInt($[0])" : Func<float,int>;
+asm macro _ "zen/codegen/jvm/JavaCommonApi.ToString($[0])" : Func<boolean,String>;
+asm macro _ "zen/codegen/jvm/JavaCommonApi.ToString($[0])" : Func<int,String>;
+asm macro _ "zen/codegen/jvm/JavaCommonApi.ToString($[0])" : Func<float,String>;
 
 // String
 //asm macro + "zstr($[0]) + zstr($[1])" : Func<String,String,String>;
-asm macro size "$[0].length()" : Func<String,int>;
-asm macro substring "$[0].substring($[1])" : Func<String,int,String>;
-asm macro substring "$[0].substring($[1],$[2])" : Func<String,int,int,String>;
-asm macro indexOf "$[0].indexOf($[1])" : Func<String,String,int>;
-asm macro indexOf "$[0].indexOf($[1], $[2])" : Func<String,int,String,int>;
-asm macro equals "$[0].equals($[1])" : Func<String,String,boolean>;
-asm macro startsWith "$[0].startsWith($[1])" : Func<String,String,boolean>;
-asm macro endsWith "$[0].endsWith($[1])" : Func<String,String,boolean>;
+asm macro size "zen/codegen/jvm/JavaCommonApi.StringSize($[0])" : Func<String,int>;
+asm macro substring "zen/codegen/jvm/JavaCommonApi.SubString($[0],$[1])" : Func<String,int,String>;
+asm macro substring "zen/codegen/jvm/JavaCommonApi.SubString($[0],$[1],$[2])" : Func<String,int,int,String>;
+asm macro indexOf "zen/codegen/jvm/JavaCommonApi.IndexOf($[0],$[1])" : Func<String,String,int>;
+asm macro indexOf "zen/codegen/jvm/JavaCommonApi.IndexOf($[0],$[1],$[2])" : Func<String,String,int,int>;
+asm macro equals "zen/codegen/jvm/JavaCommonApi.Equals($[0],$[1])" : Func<String,String,boolean>;
+asm macro startsWith "zen/codegen/jvm/JavaCommonApi.StartsWith($[0],$[1])" : Func<String,String,boolean>;
+asm macro endsWith "zen/codegen/jvm/JavaCommonApi.EndsWith($[0],$[1])" : Func<String,String,boolean>;
 
 // Array
-asm macro size "$[0].size()" : Func<α[],int>;
-asm macro clear "$[0].clear($[0], $[1])" : Func<α[],int,void>;
-asm macro add "$[0].add($[1])" : Func<α[],α,void>;
-asm macro add "$[0].add($[1], $[2])" : Func<α[],int,α,void>;
+asm macro size "zen/codegen/jvm/JavaCommonApi.ArraySize($[0])" : Func<α[],int>;
+asm macro clear "zen/codegen/jvm/JavaCommonApi.ArrayClear($[0],$[1])" : Func<α[],int,void>;
+asm macro add "zen/codegen/jvm/JavaCommonApi.ArrayAdd($[0],$[1])" : Func<α[],α,void>;
+asm macro add "zen/codegen/jvm/JavaCommonApi.ArrayInsert($[0],$[1],$[2])" : Func<α[],int,α,void>;

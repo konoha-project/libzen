@@ -271,10 +271,11 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		this.SetNativeType(ZType.IntType, "i64");
 		this.SetNativeType(ZType.FloatType, "double");
 
-		this.SetMacro("print", "call void (%ZString*)* @ZString_println ($[0])", ZType.VoidType, ZType.StringType);
-		this.SetMacro("strcat", "call %ZString*  (%ZString*, %ZString*)* @ZString_StrCat ($[0], $[1])", ZType.StringType, ZType.StringType, ZType.StringType);
-		this.SetMacro("toString", "call %ZString* (i64)* @ZString_int_toString ($[0])", ZType.StringType, ZType.IntType);
-		this.SetConverterMacro("call %ZString* (i64)* @ZString_int_toString ($[0])", ZType.StringType, ZType.IntType);
+		// FIXME: lib/llvm/common.zen
+		//		this.SetMacro("print", "call void (%ZString*)* @ZString_println ($[0])", ZType.VoidType, ZType.StringType);
+		//		this.SetMacro("strcat", "call %ZString*  (%ZString*, %ZString*)* @ZString_StrCat ($[0], $[1])", ZType.StringType, ZType.StringType, ZType.StringType);
+		//		this.SetMacro("toString", "call %ZString* (i64)* @ZString_int_toString ($[0])", ZType.StringType, ZType.IntType);
+		//		this.SetConverterMacro("call %ZString* (i64)* @ZString_int_toString ($[0])", ZType.StringType, ZType.IntType);
 
 		this.TempGlobalSymbolNumber = 0;
 		this.GlobalSymbolList = new ArrayList<String>();

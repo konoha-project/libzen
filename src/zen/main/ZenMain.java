@@ -172,6 +172,7 @@ public class ZenMain {
 			ScriptEngine.WriteTo(OutputFile);
 			// Generator.FlushBuffer();
 		}
+		ScriptEngine.ExecMain();
 	}
 
 	public final static void Usage(String Message) {

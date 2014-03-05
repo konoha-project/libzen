@@ -80,6 +80,7 @@ import zen.util.LibZen;
 import zen.util.Var;
 import zen.util.ZenIgnored;
 import zen.util.ZenMap;
+import zen.util.ZenMethod;
 
 public class ZSourceEngine extends ZVisitor {
 	@Field protected final ZTypeChecker TypeChecker;
@@ -540,5 +541,8 @@ public class ZSourceEngine extends ZVisitor {
 		this.Generator.Logger.ShowErrors();
 	}
 
+	@ZenMethod public void ExecMain() {
+		this.Generator.Logger.ShowErrors();
+	}
 
 }

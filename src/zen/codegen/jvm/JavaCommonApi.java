@@ -2,31 +2,14 @@ package zen.codegen.jvm;
 
 import java.lang.reflect.Method;
 
-import zen.parser.ZGenerator;
 import zen.type.ZFunc;
 import zen.type.ZFuncType;
-import zen.type.ZType;
 import zen.util.LibZen;
 import zen.util.SoftwareFaultException;
 import zen.util.Var;
+import zen.util.ZArray;
 
 public class JavaCommonApi {
-
-	public final static void Assert(boolean x) {
-		if(!x) {
-			Exception e = new SoftwareFaultException("assertion failed");
-			e.printStackTrace();
-			StackTraceElement[] Elements = e.getStackTrace();
-			String LineNumber = "";
-			int depth = 4;
-			if(depth < Elements.length) {
-				StackTraceElement elem = Elements[depth];
-				LineNumber += elem;
-			}
-			System.err.println("EXIT: " + LineNumber + " assertion failed");
-			System.exit(1);
-		}
-	}
 
 	public final static void Assert(boolean x, String Location) {
 		if(!x) {
@@ -39,6 +22,22 @@ public class JavaCommonApi {
 			System.err.println("REC assert 1 @" + Location);
 		}
 	}
+
+	public final static void Print(String o) {
+		System.out.print(o);
+	}
+
+	public final static void PrintLine(String o) {
+		System.out.println(o);
+	}
+
+	//	// converter
+	//	asm macro _ "zen/codegen/jvm/JavaCommonApi.IntToFloat($[0])" : Func<int,float>;
+	//	asm macro _ "zen/codegen/jvm/JavaCommonApi.FloatToInt($[0])" : Func<float,int>;
+	//	asm macro _ "zen/codegen/jvm/JavaCommonApi.ToString($[0])" : Func<boolean,String>;
+	//	asm macro _ "zen/codegen/jvm/JavaCommonApi.ToString($[0])" : Func<int,String>;
+	//	asm macro _ "zen/codegen/jvm/JavaCommonApi.ToString($[0])" : Func<float,String>;
+	//
 
 	public final static long FloatToInt(double x) {
 		return Math.round(x);
@@ -67,8 +66,60 @@ public class JavaCommonApi {
 		return String.valueOf(x);
 	}
 
-	public final static long Size(String x) {
+	//	// Array
+	//	asm macro size "zen/codegen/jvm/JavaCommonApi.ArraySize($[0])" : Func<α[],int>;
+	//	asm macro clear "zen/codegen/jvm/JavaCommonApi.ArrayClear($[0],$[1])" : Func<α[],int,void>;
+	//	asm macro add "zen/codegen/jvm/JavaCommonApi.ArrayAdd($[0],$[1])" : Func<α[],α,void>;
+	//	asm macro add "zen/codegen/jvm/JavaCommonApi.ArrayInsert($[0],$[1],$[2])" : Func<α[],int,α,void>;
+
+
+	public final static long StringSize(String x) {
 		return x.length();
+	}
+
+	public final static String SubString(String x, long y) {
+		return x.substring((int)y);
+	}
+
+	public final static String SubString(String x, long y, long z) {
+		return x.substring((int)y, (int)z);
+	}
+
+	public final static long IndexOf(String x, String y) {
+		return x.indexOf(y);
+	}
+
+	public final static long IndexOf(String x, String y, long z) {
+		return x.indexOf(y, (int)z);
+	}
+
+	public final static boolean Equals(String x, String z) {
+		return x.equals(z);
+	}
+
+	public final static boolean StartsWith(String x, String z) {
+		return x.startsWith(z);
+	}
+
+	public final static boolean EndsWith(String x, String z) {
+		return x.endsWith(z);
+	}
+
+	// Array
+	public final static <T> long ArraySize(ZArray<T> x) {
+		return x.size();
+	}
+
+	public final static <T> long ArrayClear(ZArray<T> x) {
+		return x.size();
+	}
+
+	public final static <T> void ArrayAdd(ZArray<T> x, T z) {
+		x.add(z);
+	}
+
+	public final static <T> void ArrayInsert(ZArray<T> x, long y, T z) {
+		x.add((int)y, z);
 	}
 
 	public final static JavaStaticFunc ConvertToNativeFunc(Method jMethod) {
@@ -85,15 +136,15 @@ public class JavaCommonApi {
 		return null;
 	}
 
-	static void LoadCommonApi(ZGenerator Generator) {
-		Generator.SetDefinedFunc(LoadFunc("Assert", boolean.class));
-		Generator.SetDefinedFunc(LoadFunc("Assert", boolean.class, String.class));
-		Generator.SetConverterFunc(ZType.FloatType, ZType.IntType, LoadFunc("FloatToInt", double.class));
-		Generator.SetConverterFunc(ZType.IntType, ZType.FloatType, LoadFunc("IntToFloat", long.class));
-		Generator.SetConverterFunc(ZType.VarType, ZType.StringType, LoadFunc("ToString", Object.class));
-		Generator.SetConverterFunc(ZType.BooleanType, ZType.StringType, LoadFunc("ToString", boolean.class));
-		Generator.SetConverterFunc(ZType.IntType, ZType.StringType, LoadFunc("ToString", long.class));
-		Generator.SetConverterFunc(ZType.FloatType, ZType.StringType, LoadFunc("ToString", double.class));
-		Generator.SetDefinedFunc(LoadFunc("Size", String.class));
-	}
+	//	static void LoadCommonApi(ZGenerator Generator) {
+	//		Generator.SetDefinedFunc(LoadFunc("Assert", boolean.class));
+	//		Generator.SetDefinedFunc(LoadFunc("Assert", boolean.class, String.class));
+	//		Generator.SetConverterFunc(ZType.FloatType, ZType.IntType, LoadFunc("FloatToInt", double.class));
+	//		Generator.SetConverterFunc(ZType.IntType, ZType.FloatType, LoadFunc("IntToFloat", long.class));
+	//		Generator.SetConverterFunc(ZType.VarType, ZType.StringType, LoadFunc("ToString", Object.class));
+	//		Generator.SetConverterFunc(ZType.BooleanType, ZType.StringType, LoadFunc("ToString", boolean.class));
+	//		Generator.SetConverterFunc(ZType.IntType, ZType.StringType, LoadFunc("ToString", long.class));
+	//		Generator.SetConverterFunc(ZType.FloatType, ZType.StringType, LoadFunc("ToString", double.class));
+	//		Generator.SetDefinedFunc(LoadFunc("Size", String.class));
+	//	}
 }
