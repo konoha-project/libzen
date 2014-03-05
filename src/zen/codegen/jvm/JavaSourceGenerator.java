@@ -78,14 +78,17 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 		this.SetMacro("add", "LibZen_ArrayAdd($[0], $[1])", ZType.VoidType, ZGenericType._ArrayType, ZType.VarType);
 		this.SetMacro("add", "LibZen_ArrayAdd2($[0], $[1], $[2])", ZType.VoidType, ZGenericType._ArrayType, ZType.IntType, ZType.VarType);
 
-		this.HeaderBuilder.Append("import java.lang.*;\n");
-		//		this.HeaderBuilder.Append("#include<stdlib.h>\n");
-		//		this.HeaderBuilder.Append("#include<assert.h>\n", "\n");
+		this.HeaderBuilder.AppendNewLine("import java.lang.*;");
+		this.CurrentBuilder.AppendNewLine("// main ", this.LineFeed);
 	}
 
 
 	@Override public ZSourceEngine GetEngine() {
 		return new ZSourceEngine(new ZenTypeSafer(this), this);
+	}
+
+	@Override protected void GenerateImportLibrary(String LibName) {
+		this.HeaderBuilder.AppendNewLine("import ", LibName, this.SemiColon);
 	}
 
 	@Override @ZenMethod protected void Finish(String FileName) {

@@ -29,6 +29,7 @@ import zen.ast.ZAsmMacroNode;
 import zen.ast.ZAsmNode;
 import zen.ast.ZListNode;
 import zen.ast.ZNode;
+import zen.ast.ZStringNode;
 import zen.ast.ZSugarNode;
 import zen.type.ZFunc;
 import zen.type.ZFuncType;
@@ -42,6 +43,9 @@ import zen.util.ZenMap;
 import zen.util.ZenMethod;
 
 public abstract class ZGenerator extends ZVisitor {
+	@Field public ZenMap<String>        ImportedLibraryMap = new ZenMap<String>(null);
+	@Field private final ZenMap<ZFunc>  DefinedFuncMap = new ZenMap<ZFunc>(null);
+
 	@Field private String            GrammarInfo;
 	@Field public final String       LanguageExtention;
 	@Field public final String       TargetVersion;
@@ -50,7 +54,6 @@ public abstract class ZGenerator extends ZVisitor {
 	@Field private int UniqueNumber = 0;
 	@Field public String             OutputFile;
 	@Field public ZLogger            Logger;
-	@Field private final ZenMap<ZFunc>      DefinedFuncMap = new ZenMap<ZFunc>(null);
 
 	@Field private boolean StoppedVisitor;
 
@@ -71,6 +74,50 @@ public abstract class ZGenerator extends ZVisitor {
 		// TODO Auto-generated method stub
 	}
 
+	@ZenMethod protected void GenerateImportLibrary(String LibName) {
+		//		this.HeaderBuilder.AppendNewLine("require ", LibName, this.LineFeed);
+	}
+
+	public final void ImportLibrary(String LibName) {
+		@Var String Imported = this.ImportedLibraryMap.GetOrNull(LibName);
+		if(Imported == null) {
+			this.GenerateImportLibrary(LibName);
+			this.ImportedLibraryMap.put(LibName, LibName);
+		}
+	}
+
+	public final void SetAsmMacro(ZNameSpace NameSpace, String Symbol, ZFuncType MacroType, String MacroText) {
+		@Var int loc = MacroText.indexOf("~");
+		if(loc > 0) {
+			@Var String LibName = MacroText.substring(0, loc);
+			this.ImportLibrary(LibName);
+			MacroText = MacroText.substring(loc+1);
+		}
+		@Var ZMacroFunc MacroFunc = new ZSourceMacro(Symbol, MacroType, MacroText);
+		if(Symbol.equals("_")) {
+			this.SetConverterFunc(MacroType.GetRecvType(), MacroType.GetRealType(), MacroFunc);
+		}
+		else {
+			this.SetDefinedFunc(MacroFunc);
+		}
+	}
+
+	public final void SetAsmSymbol(ZNameSpace NameSpace, ZAsmMacroNode Node) {
+		@Var String MacroText = Node.GetMacroText();
+		@Var int loc = MacroText.indexOf("~");
+		if(loc > 0) {
+			@Var String LibName = MacroText.substring(0, loc);
+			this.ImportLibrary(LibName);
+			Node.Set(ZAsmNode._Macro, new ZStringNode(Node, Node.SymbolToken, MacroText.substring(loc+1)));
+		}
+
+		@Var ZAsmNode AsmNode = new ZAsmNode(null);
+		AsmNode.SourceToken = Node.SymbolToken;
+		AsmNode.Set(ZAsmNode._Macro, Node.AST[ZAsmNode._Macro]);
+		AsmNode.Type = Node.MacroType;
+		NameSpace.SetLocalSymbol(Node.Symbol, AsmNode);
+	}
+
 	@ZenMethod public void WriteTo(@Nullable String FileName) {
 		// TODO Stub
 	}
@@ -78,7 +125,6 @@ public abstract class ZGenerator extends ZVisitor {
 	@ZenMethod public String GetSourceText() {
 		return null;
 	}
-
 
 	@ZenMethod protected String NameOutputFile(String FileName) {
 		if(FileName != null) {
@@ -140,7 +186,7 @@ public abstract class ZGenerator extends ZVisitor {
 	}
 
 	public final String NameGlobalSymbol(String Symbol) {
-		return Symbol + "_Z" + this.GetUniqueNumber();
+		return Symbol + "_" + this.GetUniqueNumber();
 	}
 
 	public final String NameClass(ZType ClassType) {
@@ -229,29 +275,6 @@ public abstract class ZGenerator extends ZVisitor {
 		}
 		return null;
 	}
-
-	public void SetAsmMacro(ZNameSpace NameSpace, String Symbol, ZFuncType MacroType, String MacroText) {
-		this.SetDefinedFunc(new ZSourceMacro(Symbol, MacroType, MacroText));
-	}
-
-	public void SetAsmSymbol(ZNameSpace NameSpace, ZAsmMacroNode Node) {
-		ZAsmNode AsmNode = new ZAsmNode(null);
-		AsmNode.SourceToken = Node.SymbolToken;
-		AsmNode.Set(ZAsmNode._Macro, Node.AST[ZAsmNode._Macro]);
-		AsmNode.Type = Node.MacroType;
-		NameSpace.SetLocalSymbol(Node.Symbol, AsmNode);
-	}
-
-	//	public final ZFunc GetCoercionFunc(ZType FromType, ZType ToType) {
-	//		while(FromType != null) {
-	//			@Var ZFunc Func = this.DefinedFuncMap.GetOrNull(this.NameConverterFunc(FromType, ToType));
-	//			if(Func != null && Func.IsCoercionFunc()) {
-	//				return Func;
-	//			}
-	//			FromType = FromType.GetSuperType();
-	//		}
-	//		return null;
-	//	}
 
 	@Override public void VisitExtendedNode(ZNode Node) {
 		@Var ZSugarNode DeNode = Node.DeSugar(this);

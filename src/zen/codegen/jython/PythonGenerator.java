@@ -112,20 +112,23 @@ public class PythonGenerator extends ZSourceGenerator {
 		this.SetMacro("clear", "LibZen_ArrayClear($[0], $[1])", ZType.VoidType, ZGenericType._ArrayType, ZType.IntType);
 		this.SetMacro("add", "$[0].append($[1])", ZType.VoidType, ZGenericType._ArrayType, ZType.VarType);
 
-		this.HeaderBuilder.Append("#! /usr/bin/env python\n");
-		this.HeaderBuilder.Append("# -*- coding: utf-8 -*-\n\n");
-		this.HeaderBuilder.Append("def zstr(s) : return str(s) if s != None else \'null\'\n");
-		this.HeaderBuilder.Append(this.LineFeed);
+		this.HeaderBuilder.Append("#! /usr/bin/env python");
+		this.HeaderBuilder.AppendNewLine("# -*- coding: utf-8 -*-");
+		this.HeaderBuilder.AppendNewLine("def zstr(s) : return str(s) if s != None else \'null\'");
+
 	}
 
 	@Override public ZSourceEngine GetEngine() {
 		return new ZSourceEngine(new ZenTypeSafer(this), this);
 	}
 
+	@Override protected void GenerateImportLibrary(String LibName) {
+		this.HeaderBuilder.AppendNewLine("import ", LibName);
+	}
+
 	@Override @ZenMethod protected void Finish(String FileName) {
 		if(this.HasMainFunction) {
-			this.CurrentBuilder.AppendLineFeed();
-			this.CurrentBuilder.Append("if __name__ == \"__main__\":\n\tmain()");
+			this.CurrentBuilder.AppendNewLine("if __name__ == \"__main__\":\n\tmain()");
 			this.CurrentBuilder.AppendLineFeed();
 		}
 	}

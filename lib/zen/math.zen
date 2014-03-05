@@ -12,53 +12,53 @@
 //TODO: SQRT1_2	Returns the square root of 1/2 (approx. 0.707)
 //TODO: SQRT2	Returns the square root of 2 (approx. 1.414)
 
-asm macro _E   "math~math.e": float;
-asm macro _PI  "math~math.pi": float;
+asm macro _E   "math~math.E": float;
+asm macro _PI  "math~math.PI": float;
 
 // abs(x)	Returns the absolute value of x
-asm macro abs  "math~math.abs($[0])": Func<float,float>;
+asm macro abs  "math~abs($[0])": Func<float,float>;
 
 //sin(x)	Returns the sine of x (x is in radians)
 //cos(x)	Returns the cosine of x (x is in radians)
 //tan(x)	Returns the tangent of an angle
-asm macro cos   "math~math.cos($[0])" : Func<float,float>;
-asm macro sin   "math~math.sin($[0])" : Func<float,float>;
-asm macro tan   "math~math.tan($[0])" : Func<float,float>;
+asm macro cos   "math~cos($[0])" : Func<float,float>;
+asm macro sin   "math~sin($[0])" : Func<float,float>;
+asm macro tan   "math~tan($[0])" : Func<float,float>;
 
 //sqrt(x)	Returns the square root of x
-asm macro sqrt "math~math.sqrt($[0])" : Func<float,float>;
+asm macro sqrt "math~sqrt($[0])" : Func<float,float>;
 
 //acos(x)	Returns the arccosine of x, in radians
 //asin(x)	Returns the arcsine of x, in radians
 //atan(x)	Returns the arctangent of x as a numeric value between -PI/2 and PI/2 radians
 //atan2(y,x)	Returns the arctangent of the quotient of its arguments
 
-asm macro acos "math~math.acos($[0])" : Func<float,float>;
-asm macro asin "math~math.asin($[0])" : Func<float,float>;
-asm macro atan "math~math.atan($[0])" : Func<float,float>;
-asm macro atan2 "math~math.atan2($[0], $[1])" : Func<float,float,float>;
+asm macro acos "math~acos($[0])" : Func<float,float>;
+asm macro asin "math~asin($[0])" : Func<float,float>;
+asm macro atan "math~atan($[0])" : Func<float,float>;
+asm macro atan2 "math~atan2($[0], $[1])" : Func<float,float,float>;
 
 //ceil(x)	Returns x, rounded upwards to the nearest integer
 //exp(x)	Returns the value of Ex
 //floor(x)	Returns x, rounded downwards to the nearest integer
 //log(x)	Returns the natural logarithm (base E) of x
 
-asm macro ceil "math~math.ceil($[0])" : Func<float,float>;
-asm macro exp "math~math.exp($[0])" : Func<float,float>;
-asm macro floor "math~math.floor($[0])" : Func<float,float>;
-asm macro log "math~math.log($[0])" : Func<float,float>;
+asm macro ceil "math~ceil($[0])" : Func<float,float>;
+asm macro exp "math~exp($[0])" : Func<float,float>;
+asm macro floor "math~floor($[0])" : Func<float,float>;
+asm macro log "math~log($[0])" : Func<float,float>;
 
 //TODO: max(x,y,z,...,n)	Returns the number with the highest value
 //TODO: min(x,y,z,...,n)	Returns the number with the lowest value
-asm macro max "math~math.max($[0], $[1])" : Func<float,float,float>;
-asm macro min "math~math.min($[0], $[1])" : Func<float,float,float>;
-asm macro max "math~math.max($[0], $[1])" : Func<int,int,int>;
-asm macro min "math~math.min($[0], $[1])" : Func<int,int,int>;
+asm macro max "math~max($[0], $[1])" : Func<float,float,float>;
+asm macro min "math~min($[0], $[1])" : Func<float,float,float>;
+asm macro max "math~max($[0], $[1])" : Func<int,int,int>;
+asm macro min "math~min($[0], $[1])" : Func<int,int,int>;
 
 //pow(x,y)	Returns the value of x to the power of y
-asm macro pow "math~math.pow($[0], $[1])" : Func<float,float,float>;
+asm macro pow "math~pow($[0], $[1])" : Func<float,float,float>;
 
 //random()	Returns a random number between 0 and 1
-asm macro round "math~math.round($[0])" : Func<float,float>;
+asm macro round "math~round($[0])" : Func<float,int>;
 
-asm macro random "math~math.random()" :Func<float>;
+asm macro random "math~random()" :Func<float>;

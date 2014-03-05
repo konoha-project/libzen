@@ -568,7 +568,9 @@ public class LibZen {
 		@Var ZGenerator Generator = LibZen._LoadGenerator(ClassName, null);
 		LibZen._ImportGrammar(Generator.RootNameSpace, GrammarClass);
 		Generator.ImportLocalGrammar(Generator.RootNameSpace);
-		return Generator.GetEngine();
+		ZSourceEngine Engine = Generator.GetEngine();
+		Engine.RequireLibrary("common");
+		return Engine;
 	}
 
 	//

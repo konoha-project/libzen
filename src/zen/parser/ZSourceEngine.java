@@ -120,6 +120,10 @@ public class ZSourceEngine extends ZVisitor {
 		}
 	}
 
+	private void VisitRequireNode(ZRequireNode Node) {
+		this.RequireLibrary(Node.ResourcePath);
+	}
+
 	private void VisitPrototypeNode(ZPrototypeNode Node) {
 		@Var ZFuncType FuncType = Node.GetFuncType();
 		this.Generator.SetPrototype(Node, Node.FuncName, FuncType);
@@ -134,12 +138,6 @@ public class ZSourceEngine extends ZVisitor {
 		else {
 			this.Generator.SetAsmSymbol(Node.GetNameSpace(), Node);
 		}
-	}
-
-	private void VisitRequireNode(ZRequireNode Node) {
-		@Var String ResourcePath = Node.ResourcePath;
-		System.out.println("resource: " + ResourcePath);
-		this.RequireLibrary(Node.ResourcePath);
 	}
 
 	private void VisitImportNode(ZImportNode Node) {
@@ -263,7 +261,6 @@ public class ZSourceEngine extends ZVisitor {
 		}
 		return true;
 	}
-
 
 	public final String Translate(String ScriptText, String FileName, int LineNumber) {
 		@Var ZBlockNode TopBlockNode = new ZBlockNode(this.Generator.RootNameSpace);

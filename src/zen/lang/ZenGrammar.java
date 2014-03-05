@@ -204,8 +204,8 @@ public class ZenGrammar {
 
 		NameSpace.Generator.AppendGrammarInfo("zen-class-0.1");
 		NameSpace.DefineStatement("assert", new AssertPatternFunction());
-		NameSpace.DefineStatement("asm", new AsmPatternFunction());
 		NameSpace.DefineStatement("asm", new AsmMacroPatternFunction());
+		NameSpace.DefineStatement("asm", new AsmPatternFunction());
 		NameSpace.DefineStatement("require", new RequirePatternFunction());
 
 	}

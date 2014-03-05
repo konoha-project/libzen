@@ -1,0 +1,6 @@
+require math;
+
+export function main() {
+	println("#sin(0.1): " + sin(0.1));
+}
+

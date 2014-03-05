@@ -130,7 +130,6 @@ public class ZSourceGenerator extends ZGenerator {
 	}
 
 	@Override public ZSourceEngine GetEngine() {
-		LibZen._PrintLine("FIXME: Overide GetEngine in each generator!!");
 		return new ZSourceEngine(new ZenTypeSafer(this), this);
 	}
 
@@ -152,6 +151,10 @@ public class ZSourceGenerator extends ZGenerator {
 		}
 		this.BuilderList.add(Builder);
 		return Builder;
+	}
+
+	@Override protected void GenerateImportLibrary(String LibName) {
+		this.HeaderBuilder.AppendNewLine("require ", LibName, this.SemiColon);
 	}
 
 	protected void SetNativeType(ZType Type, String TypeName) {
