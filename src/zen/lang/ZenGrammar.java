@@ -101,7 +101,8 @@ public class ZenGrammar {
 		NameSpace.SetTypeName(ZType.IntType, null);
 		NameSpace.SetTypeName(ZType.FloatType, null);
 		NameSpace.SetTypeName(ZType.StringType, null);
-		NameSpace.SetTypeName(ZType.TypeType, null);
+		//NameSpace.SetTypeName(ZType.TypeType, null);
+		NameSpace.SetTypeName(ZGenericType._AlphaType, null);
 		NameSpace.SetTypeName(ZGenericType._ArrayType, null);
 		NameSpace.SetTypeName(ZGenericType._MapType, null);
 		NameSpace.SetTypeName(ZFuncType._FuncType, null);

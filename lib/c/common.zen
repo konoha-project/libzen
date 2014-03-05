@@ -22,8 +22,8 @@ asm macro startsWith "libzen.h~zStartWith($[0],$[1])" : Func<String,String,boole
 asm macro endsWith "libzen.h~zEndWith($[0],$[1])" : Func<String,String,boolean>;
 
 // Array
-//asm macro size "libzen.h~zArraySize($[0])" : Func<Array,int>;
-//asm macro clear "libzen.h~zArrayClear($[0], $[1])" : Func<Array,int>;
-//asm macro add "libzen.h~zArrayAdd($[0], $[1])" : Func<Array,int, _a>;
-//asm macro add "libzen.h~zArrayInsert($[0], $[1], $[2])" : Func<Array,int>;
+asm macro size "libzen.h~zArraySize($[0])" : Func<α[],int>;
+asm macro clear "libzen.h~zArrayClear($[0], $[1])" : Func<α[],int,void>;
+asm macro add "libzen.h~zArrayAdd($[0], $[1])" : Func<α[],α,void>;
+asm macro add "libzen.h~zArrayInsert($[0], $[1], $[2])" : Func<α[],int,α,void>;
 

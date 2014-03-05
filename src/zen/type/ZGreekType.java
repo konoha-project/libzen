@@ -11,6 +11,7 @@ public class ZGreekType extends ZType {
 
 	public ZGreekType(int GreekId) {
 		super(ZType.UniqueTypeFlag, LibZen._GreekNames[GreekId], ZType.VarType);
+		System.out.println("greek type: " + this.ShortName);
 		this.GreekId = GreekId;
 	}
 

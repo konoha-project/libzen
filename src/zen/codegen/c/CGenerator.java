@@ -57,7 +57,6 @@ import zen.type.ZClassField;
 import zen.type.ZClassType;
 import zen.type.ZFunc;
 import zen.type.ZFuncType;
-import zen.type.ZGenericType;
 import zen.type.ZType;
 import zen.util.Var;
 
@@ -76,35 +75,6 @@ public class CGenerator extends ZSourceGenerator {
 		this.SetNativeType(ZType.FloatType, "double");
 		this.SetNativeType(ZType.StringType, "const char *");
 
-		this.SetMacro("assert", "assert($[0])", ZType.VoidType, ZType.BooleanType, ZType.StringType);
-		this.SetMacro("print", "puts($[0])", ZType.VoidType, ZType.StringType);
-		this.SetMacro("println", "puts($[0]); puts(\"\\n\")", ZType.VoidType, ZType.StringType);
-
-		// Converter
-		this.SetConverterMacro("(double)($[0])", ZType.FloatType, ZType.IntType);
-		this.SetConverterMacro("(long)($[0])", ZType.IntType, ZType.FloatType);
-		this.SetConverterMacro("LibZen_BooleanToString($[0])", ZType.StringType, ZType.BooleanType);
-		this.SetConverterMacro("LibZen_IntToString($[0])", ZType.StringType, ZType.IntType);
-		this.SetConverterMacro("LibZen_FloatToString($[0])", ZType.StringType, ZType.FloatType);
-
-		// String
-		this.SetMacro("+", "LibZen_StrCat($[0], $[1])", ZType.StringType, ZType.StringType, ZType.StringType);
-		this.SetMacro("size", "strlen($[0])", ZType.IntType, ZType.StringType);
-		this.SetMacro("substring", "LibZen_SubString($[0], $[1])", ZType.StringType, ZType.StringType, ZType.IntType);
-		this.SetMacro("substring", "LibZen_SubString2($[0], $[1], $[2])", ZType.StringType, ZType.StringType, ZType.IntType, ZType.IntType);
-		this.SetMacro("indexOf", "LibZen_IndexOf($[0], $[1])", ZType.IntType, ZType.StringType, ZType.StringType);
-		this.SetMacro("indexOf", "LibZen_IndexOf2($[0], $[1], $[2])", ZType.IntType, ZType.StringType, ZType.StringType, ZType.IntType);
-		this.SetMacro("equals", "LibZen_EqualsString($[0], $[1])", ZType.BooleanType, ZType.StringType, ZType.StringType);
-		this.SetMacro("startsWith", "LibZen_StartsWith($[0], $[1])", ZType.BooleanType, ZType.StringType, ZType.StringType);
-		this.SetMacro("endsWith", "LibZen_EndWidth($[0], $[1])", ZType.BooleanType, ZType.StringType, ZType.StringType);
-
-		// Array
-		this.SetMacro("size", "LibZen_ArraySize($[0])", ZType.IntType, ZGenericType._ArrayType);
-		this.SetMacro("clear", "LibZen_ArrayClear($[0], $[1])", ZType.VoidType, ZGenericType._ArrayType, ZType.IntType);
-		this.SetMacro("add", "LibZen_ArrayAdd($[0], $[1])", ZType.VoidType, ZGenericType._ArrayType, ZType.VarType);
-		this.SetMacro("add", "LibZen_ArrayAdd2($[0], $[1], $[2])", ZType.VoidType, ZGenericType._ArrayType, ZType.IntType, ZType.VarType);
-
-		this.GenerateImportLibrary("stdio.h");
 		this.HeaderBuilder.AppendNewLine("/* end of header */", this.LineFeed);
 	}
 

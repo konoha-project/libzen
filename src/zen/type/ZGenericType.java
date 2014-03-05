@@ -28,6 +28,8 @@ import zen.util.Field;
 import zen.util.Nullable;
 
 public class ZGenericType extends ZType {
+	public final static ZType _AlphaType  = new ZGreekType(0);
+
 	public final static ZGenericType _ArrayType = new ZGenericType("Array");
 	public final static ZGenericType _MapType = new ZGenericType("Map");
 
@@ -37,8 +39,7 @@ public class ZGenericType extends ZType {
 	public ZGenericType(String ShortName) {
 		super(ZType.UniqueTypeFlag, ShortName, ZType.VarType);
 		this.BaseType = this;
-		this.ParamType = ZType.VarType;
-
+		this.ParamType = ZGenericType._AlphaType;
 	}
 
 	public ZGenericType(int TypeFlag, @Nullable ZType BaseType, ZType ParamType) {

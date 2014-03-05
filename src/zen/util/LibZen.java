@@ -595,7 +595,7 @@ public class LibZen {
 	}
 
 	public final static String[] _GreekNames = {
-		"\u03B1", "\u03B2", "\u03B3"
+		/*"Alpha"*/ "\u03B1", "\u03B2", "\u03B3"
 	};
 
 	public final static ZType[] _NewTypeArray(int Size) {
