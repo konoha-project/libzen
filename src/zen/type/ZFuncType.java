@@ -6,21 +6,22 @@ import zen.util.Var;
 import zen.util.ZArray;
 
 public final class ZFuncType extends ZType {
-	public final static ZFuncType _FuncType  = new ZFuncType("Func", null);
+	public final static ZFuncType _FuncType  = new ZFuncType();
 
 	@Field public ZType[]  TypeParams;
 	@Field private boolean HasUnknownType = false;
 	@Field private boolean HasGreekType = false;
 
-	public ZFuncType(String ShortName, ZType[] UniqueTypeParams) {
-		super(ZType.UniqueTypeFlag, ShortName, ZType.VarType);
-		if(UniqueTypeParams == null) {
-			this.TypeParams = LibZen._NewTypeArray(1);
-			this.TypeParams[0] = ZType.VarType;
-		}
-		else {
-			this.TypeParams = UniqueTypeParams;
-		}
+	private ZFuncType() {
+		super(ZType.UniqueTypeFlag, "Func", ZType.VarType);
+		this.TypeParams = LibZen._NewTypeArray(1);
+		this.TypeParams[0] = ZType.VarType;
+		this.HasUnknownType = true;
+	}
+
+	public ZFuncType(ZType[] UniqueTypeParams) {
+		super(ZType.UniqueTypeFlag, null, ZType.VarType);
+		this.TypeParams = UniqueTypeParams;
 		@Var int i = 0;
 		while(i < this.TypeParams.length) {
 			if(this.TypeParams[i].IsVarType()) {
@@ -31,6 +32,22 @@ public final class ZFuncType extends ZType {
 			}
 			i = i + 1;
 		}
+	}
+
+	@Override public final String GetName() {
+		if(this.ShortName != null) {
+			@Var String s = "Func<";
+			@Var int i = 0;
+			while(i < this.TypeParams.length) {
+				if(i > 0) {
+					s = s + ",";
+				}
+				s = s + this.TypeParams[i].GetName();
+				i = i + 1;
+			}
+			this.ShortName =  s + ">";
+		}
+		return this.ShortName;
 	}
 
 	@Override public final boolean IsFuncType() {
@@ -92,13 +109,17 @@ public final class ZFuncType extends ZType {
 		return this.TypeParams[this.TypeParams.length - 1];
 	}
 
+	public final ZType GetRecvType() {
+		if(this.TypeParams.length == 1) {
+			return ZType.VoidType;
+		}
+		return this.TypeParams[0];
+	}
+
 	public final int GetFuncParamSize() {
 		return this.TypeParams.length - 1;
 	}
 
-	public final ZType GetRecvType() {
-		return this.TypeParams[0];
-	}
 
 	public final ZType GetFuncParamType(int Index) {
 		return this.TypeParams[Index];

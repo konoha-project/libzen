@@ -56,11 +56,7 @@ public class ZTypePool {
 		@Var String MangleName = ZTypePool._MangleType2(BaseType, ParamType);
 		@Var ZType GenericType = ZTypePool._ClassNameMap.GetOrNull(MangleName);
 		if(GenericType == null) {
-			@Var String Name = BaseType.ShortName + "<" + ParamType + ">";
-			if(BaseType.IsArrayType()) {
-				Name = BaseType.ShortName + "<" + ParamType + ">";
-			}
-			GenericType = new ZGenericType(ZType.UniqueTypeFlag, Name, BaseType, ParamType);
+			GenericType = new ZGenericType(ZType.UniqueTypeFlag, BaseType, ParamType);
 			ZTypePool._ClassNameMap.put(MangleName, GenericType);
 		}
 		return GenericType;
@@ -74,20 +70,8 @@ public class ZTypePool {
 		@Var String MangleName = ":" + BaseType.TypeId + ZTypePool._MangleTypes(TypeList);
 		@Var ZType GenericType = ZTypePool._ClassNameMap.GetOrNull(MangleName);
 		if((GenericType == null) && IsCreation) {
-			@Var String ShortName = BaseType.ShortName + "<";
-			@Var int i = 0;
-			while(i < TypeList.size()) {
-				ShortName = ShortName + TypeList.ArrayValues[i].GetRealType().ShortName;
-				if(i + 1 == TypeList.size()) {
-					ShortName = ShortName + ">";
-				}
-				else {
-					ShortName = ShortName + ",";
-				}
-				i = i + 1;
-			}
 			if(BaseType.IsFuncType()) {
-				GenericType = new ZFuncType(ShortName, ZTypePool._UniqueTypes(TypeList));
+				GenericType = new ZFuncType(ZTypePool._UniqueTypes(TypeList));
 			}
 			else {
 				// TODO;
@@ -107,7 +91,6 @@ public class ZTypePool {
 
 	public final static ZFuncType _LookupFuncType2(ZType R) {
 		@Var ZArray<ZType> TypeList = new ZArray<ZType>(new ZType[2]);
-		TypeList.add(ZType.VoidType);
 		TypeList.add(R);
 		return ZTypePool._LookupFuncType2(TypeList);
 	}

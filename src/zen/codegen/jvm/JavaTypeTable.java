@@ -120,9 +120,6 @@ public class JavaTypeTable {
 				j = j + 1;
 			}
 		}
-		if(TypeList.size() == 0) {
-			TypeList.add(ZType.VoidType);
-		}
 		TypeList.add(JavaTypeTable.GetZenType(JMethod.getReturnType()));
 		return ZTypePool._LookupFuncType2(TypeList);
 	}
@@ -131,9 +128,6 @@ public class JavaTypeTable {
 		@Var ZArray<ZType> TypeList = new ZArray<ZType>(new ZType[10]);
 		for(Class<?> C : paramsT) {
 			TypeList.add(JavaTypeTable.GetZenType(C));
-		}
-		if(TypeList.size() == 0) {
-			TypeList.add(ZType.VoidType);
 		}
 		TypeList.add(JavaTypeTable.GetZenType(ReturnT));
 		return ZTypePool._LookupFuncType2(TypeList);

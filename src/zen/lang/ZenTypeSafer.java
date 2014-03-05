@@ -704,7 +704,6 @@ public class ZenTypeSafer extends ZTypeChecker {
 	@Override public void DefineFunction(ZFunctionNode FunctionNode, boolean Enforced) {
 		if(FunctionNode.FuncName != null && FunctionNode.ResolvedFuncType == null) {
 			@Var ZFuncType FuncType = FunctionNode.GetFuncType(null);
-			//System.out.println("debug guessing " + FuncType);
 			if(Enforced || !FuncType.IsVarType()) {
 				@Var ZNameSpace NameSpace = FunctionNode.GetNameSpace();
 				@Var ZPrototype Func = NameSpace.Generator.SetPrototype(FunctionNode, FunctionNode.FuncName, FuncType);

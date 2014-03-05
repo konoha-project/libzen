@@ -28,19 +28,35 @@ import zen.util.Field;
 import zen.util.Nullable;
 
 public class ZGenericType extends ZType {
-	public final static ZGenericType _ArrayType = new ZGenericType(ZType.UniqueTypeFlag, "Array", null, ZType.VarType);
-	public final static ZGenericType _MapType = new ZGenericType(ZType.UniqueTypeFlag, "Map", null, ZType.VarType);
+	public final static ZGenericType _ArrayType = new ZGenericType("Array");
+	public final static ZGenericType _MapType = new ZGenericType("Map");
 
 	@Field public ZType			BaseType;
 	@Field public ZType         ParamType;
 
-	public ZGenericType(int TypeFlag, String ShortName, @Nullable ZType BaseType, ZType ParamType) {
-		super(TypeFlag, ShortName, ZType.VarType);
+	public ZGenericType(String ShortName) {
+		super(ZType.UniqueTypeFlag, ShortName, ZType.VarType);
+		this.BaseType = this;
+		this.ParamType = ZType.VarType;
+
+	}
+
+	public ZGenericType(int TypeFlag, @Nullable ZType BaseType, ZType ParamType) {
+		super(TypeFlag, null, ZType.VarType);
 		this.BaseType = BaseType;
-		if(this.BaseType == null) {
-			this.BaseType = this;
-		}
 		this.ParamType = ParamType;
+	}
+
+	@Override public final String GetName() {
+		if(this.ShortName == null) {
+			if(this.BaseType.IsArrayType()) {
+				this.ShortName = this.ParamType.GetName() + "[]";
+			}
+			else {
+				this.ShortName = this.BaseType.GetName() + "<" + this.ParamType.GetName() + ">";
+			}
+		}
+		return this.ShortName;
 	}
 
 	@Override public final ZType GetSuperType() {

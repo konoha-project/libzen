@@ -176,6 +176,7 @@ public abstract class ZGenerator extends ZVisitor {
 			//			System.out.println("AnotherName = " + GlobalName + ", " + LibZen._AnotherName(GlobalName));
 			Func = this.DefinedFuncMap.GetOrNull(LibZen._AnotherName(GlobalName));
 		}
+		//System.out.println("sinature="+GlobalName+", func="+Func);
 		return Func;
 	}
 

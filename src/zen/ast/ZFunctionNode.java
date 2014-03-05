@@ -92,9 +92,6 @@ public class ZFunctionNode extends ZListNode {
 				TypeList.add(ParamType);
 				i = i + 1;
 			}
-			if(TypeList.size() == 0) {
-				TypeList.add(ZType.VoidType);
-			}
 			TypeList.add(this.ReturnType.GetRealType());
 			FuncType = ZTypePool._LookupFuncType2(TypeList);
 			if(!FuncType.IsVarType()) {

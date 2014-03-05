@@ -205,9 +205,6 @@ public abstract class JavaGenerator extends ZGenerator {
 						j = j + 1;
 					}
 				}
-				if(TypeList.size() == 0) {
-					TypeList.add(ZType.VoidType);
-				}
 				TypeList.add(RecvType);
 				return ZTypePool._LookupFuncType2(TypeList);
 			}

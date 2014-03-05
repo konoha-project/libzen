@@ -57,6 +57,14 @@ public class ZType  {
 		}
 	}
 
+	@Override public String toString() {
+		return this.GetName();
+	}
+
+	@ZenMethod public String GetName() {
+		return this.ShortName;
+	}
+
 	@ZenMethod public ZType GetRealType() {
 		return this;
 	}
@@ -168,10 +176,6 @@ public class ZType  {
 
 	public final boolean IsNullableType() {
 		return true;
-	}
-
-	@Override public String toString() {
-		return this.ShortName;
 	}
 
 	public String GetAsciiName() {

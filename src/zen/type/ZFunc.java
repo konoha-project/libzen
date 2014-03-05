@@ -49,17 +49,6 @@ public abstract class ZFunc {
 		return this.FuncName + ": " + this.FuncType;
 	}
 
-	//	public final boolean IsConverterFunc() {
-	//		return LibZen._IsFlag(this.FuncFlag, ZFunc._ConverterFunc);
-	//	}
-	//	public final boolean IsCoercionFunc() {
-	//		return LibZen._IsFlag(this.FuncFlag, ZFunc._CoercionFunc);
-	//	}
-	//
-	//	protected final boolean Is(int Flag) {
-	//		return LibZen._IsFlag(this.FuncFlag, Flag);
-	//	}
-
 	public static String _StringfySignature(String FuncName, int FuncParamSize, ZType RecvType) {
 		return FuncName + "__" + FuncParamSize + RecvType.GetUniqueName();
 	}
