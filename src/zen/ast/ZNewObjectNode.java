@@ -25,14 +25,24 @@
 package zen.ast;
 
 import zen.parser.ZMacroFunc;
+import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 import zen.type.ZFunc;
+import zen.type.ZType;
+import zen.util.Field;
 import zen.util.Var;
 
 public final class ZNewObjectNode extends ZListNode {
 
+	@Field public ZType ClassType = null;
+	@Field public ZToken ClassToken = null;
 	public ZNewObjectNode(ZNode ParentNode) {
 		super(ParentNode, null, 0);
+	}
+
+	@Override public void SetTypeInfo(ZToken TypeToken, ZType Type) {
+		this.ClassToken = TypeToken;
+		this.ClassType = Type;
 	}
 
 	@Override public void Accept(ZVisitor Visitor) {
@@ -54,6 +64,7 @@ public final class ZNewObjectNode extends ZListNode {
 			FuncNode.Append(this.GetListAt(i));
 			i = i + 1;
 		}
+		this.Type = this.ClassType;
 		this.ClearListAfter(0);
 		return FuncNode;
 	}

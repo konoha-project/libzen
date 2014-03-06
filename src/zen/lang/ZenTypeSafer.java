@@ -451,15 +451,15 @@ public class ZenTypeSafer extends ZTypeChecker {
 		@Var ZNameSpace NameSpace = Node.GetNameSpace();
 		@Var ZType ContextType = this.GetContextType();
 		this.TypeCheckNodeList(Node);
-		if(Node.Type.IsVarType()) {
+		if(Node.ClassType.IsVarType()) {
 			if(ContextType.IsVarType()) {
 				this.TypedNode(Node, ZType.VarType);
 				return;
 			}
-			Node.Type = ContextType;
+			Node.ClassType = ContextType;
 		}
 		@Var int FuncParamSize = Node.GetListSize() + 1;
-		@Var ZFunc Func = this.LookupFunc(NameSpace, Node.Type.ShortName, Node.Type, FuncParamSize);
+		@Var ZFunc Func = this.LookupFunc(NameSpace, Node.ClassType.GetName(), Node.ClassType, FuncParamSize);
 		if(Func != null) {
 			@Var ZListNode FuncCall = Node.ToFuncCallNode(Func);
 			this.VisitListNodeAsFuncCall(FuncCall, Func.GetFuncType());

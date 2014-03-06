@@ -49,6 +49,7 @@ import zen.parser.ZLogger;
 import zen.parser.ZSourceEngine;
 import zen.parser.ZSourceGenerator;
 import zen.type.ZClassField;
+import zen.type.ZClassType;
 import zen.type.ZFuncType;
 import zen.type.ZType;
 import zen.util.Field;
@@ -69,6 +70,7 @@ public class PythonGenerator extends ZSourceGenerator {
 		this.EndComment = null; //"'''";
 		this.Camma = ", ";
 		this.SemiColon = "";
+		this.StringLiteralPrefix = "";
 
 		this.TrueLiteral = "True";
 		this.FalseLiteral = "False";
@@ -146,20 +148,22 @@ public class PythonGenerator extends ZSourceGenerator {
 	@Override public void VisitInstanceOfNode(ZInstanceOfNode Node) {
 		this.CurrentBuilder.Append("isinstance(");
 		this.GenerateCode(null, Node.AST[ZBinaryNode._Left]);
-		this.CurrentBuilder.Append(this.Camma);
-		this.GenerateTypeName(Node.TargetType);
-		this.CurrentBuilder.Append(")");
+		if(Node.TargetType instanceof ZClassType) {
+			this.CurrentBuilder.Append(this.Camma, this.NameClass(Node.TargetType), ")");
+		}
+		else {
+			this.CurrentBuilder.Append(this.Camma);
+			this.GenerateTypeName(Node.TargetType);
+			this.CurrentBuilder.Append(")");
+		}
 	}
 
 	@Override public void VisitVarNode(ZVarNode Node) {
 		this.CurrentBuilder.Append(this.NameLocalVariable(Node.NativeName, Node.VarIndex));
 		this.CurrentBuilder.AppendToken("=");
 		this.GenerateCode(null, Node.AST[ZVarNode._InitValue]);
-		this.CurrentBuilder.AppendLineFeed();
-		this.CurrentBuilder.AppendIndent();
 		this.VisitStmtList(Node);
-		this.CurrentBuilder.AppendLineFeed();
-		this.CurrentBuilder.AppendIndent();
+		this.CurrentBuilder.AppendLineFeedIndent();
 	}
 
 	@Override public void VisitIfNode(ZIfNode Node) {
