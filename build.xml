@@ -38,6 +38,7 @@
 	<target name="jar" depends="build">
 		<jar jarfile="${BinaryName}.jar">
 			<fileset dir="${build_dir}" includes="**/*.class" />
+			<fileset dir="." includes="lib/**/*.zen" />
 			<exclude name="**/*Test.class" />
 			<manifest>
 				<attribute name="Main-Class" value="zen.main.ZenMain" />
