@@ -1,5 +1,6 @@
 
 DIR="test/common"
+mkdir -p workingtest
 
 echo "testing generation of java byte code"
 ZENCODE=jvm bash test/testfiles.sh $DIR workingtest 
