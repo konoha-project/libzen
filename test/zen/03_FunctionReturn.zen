@@ -1,0 +1,40 @@
+// written by kimio kuramitsu
+
+function TestBoolean(b : boolean) : boolean {
+	return b;
+}
+
+function TestBooleanTrue() : boolean {
+	return true;
+}
+
+function TestInt(a : int) : int {
+	return a;
+}
+
+function TestInt123() : int {
+	return 123;
+}
+
+function TestString(a : String) : String {
+	return a;
+}
+
+function TestStringABC() : String {
+	return "ABC";
+}
+
+function TestVoid() : void {
+
+}
+
+export function main() {
+	assert(TestBooleanTrue());
+	assert(TestBoolean(true));
+	assert(TestInt(123) == 123);
+	assert(TestInt123() == 123);
+	assert(TestStringABC() == "ABC");
+	assert(TestString("ABC") == "ABC");
+	TestVoid();
+}
+

@@ -1,0 +1,8 @@
+function f() {
+    if (true) {
+        if (true) {
+            1;
+        }
+        2;
+    }
+}

@@ -1,0 +1,9 @@
+class X {
+    int f();
+}
+
+class Y {
+    int f() {
+        return 10;
+    }
+}

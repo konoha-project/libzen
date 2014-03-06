@@ -49,7 +49,9 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 		this.SetNativeType(ZType.FloatType, "double");
 		this.SetNativeType(ZType.StringType, "String");
 
-		this.HeaderBuilder.AppendNewLine("import zen.util.*;");
+		this.SetReservedName("this", "self");
+
+		//this.HeaderBuilder.AppendNewLine("import zen.util.*;");
 		this.CurrentBuilder.AppendNewLine("/* end of header */", this.LineFeed);
 	}
 
@@ -64,7 +66,13 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 
 	@Override @ZenMethod protected void Finish(String FileName) {
 		if(FileName == null) {
-			FileName = "ZenCommand";
+			FileName = "ZenMain";
+		}
+		else {
+			@Var int loc = FileName.lastIndexOf('/');
+			if(loc != -1) {
+				FileName = FileName.substring(loc+1);
+			}
 		}
 		this.GenerateClass("public final", FileName, ZType.VarType);
 		this.CurrentBuilder.OpenIndent(" {");
@@ -93,6 +101,22 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 			Node.Accept(this);
 		}
 	}
+
+	@Override public void VisitGlobalNameNode(ZGlobalNameNode Node) {
+		if(Node.IsStaticFuncName) {
+			this.CurrentBuilder.Append(this.NameFunctionClass(Node.GlobalName, (ZFuncType)Node.Type), ".f");
+		}
+		else {
+			if(Node.IsUntyped()) {
+				ZLogger._LogError(Node.SourceToken, "undefined symbol: " + Node.GlobalName);
+				this.CurrentBuilder.Append(this.NullLiteral,"/*"+Node.GlobalName+"*/");
+			}
+			else {
+				this.CurrentBuilder.Append(Node.GlobalName);
+			}
+		}
+	}
+
 
 	@Override public void VisitArrayLiteralNode(ZArrayLiteralNode Node) {
 		@Var ZType ParamType = Node.Type.GetParamType(0);
@@ -289,12 +313,12 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 			this.CurrentBuilder.AppendNewLine("abstract ");
 			this.GenerateTypeName(FuncType.GetReturnType());
 			this.CurrentBuilder.Append(" Invoke(");
-			@Var int i = 1;
-			while(i < FuncType.GetParamSize()) {
-				if(i > 1) {
+			@Var int i = 0;
+			while(i < FuncType.GetFuncParamSize()) {
+				if(i > 0) {
 					this.CurrentBuilder.Append(this.Camma);
 				}
-				this.GenerateTypeName(FuncType.GetParamType(i));
+				this.GenerateTypeName(FuncType.GetFuncParamType(i));
 				this.CurrentBuilder.Append(" x"+i);
 				i = i + 1;
 			}

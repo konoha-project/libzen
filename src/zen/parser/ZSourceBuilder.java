@@ -31,8 +31,6 @@ import zen.util.LibZen;
 import zen.util.Var;
 import zen.util.ZArray;
 
-
-
 public final class ZSourceBuilder {
 	@Field public ZArray<String> SourceList = new ZArray<String>(new String[128]);
 	@Field ZSourceGenerator Template;
@@ -129,6 +127,17 @@ public final class ZSourceBuilder {
 		if(AppendIndent) {
 			this.AppendIndent();
 		}
+	}
+
+	public final boolean EndsWith(String s) {
+		@Var int Size = this.SourceList.size();
+		if(Size > 0) {
+			@Var String Last = this.SourceList.ArrayValues[Size-1];
+			if(Last != null && Last.endsWith(s)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public final void AppendWhiteSpace() {

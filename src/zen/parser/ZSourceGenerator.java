@@ -105,9 +105,9 @@ public class ZSourceGenerator extends ZGenerator {
 	@Field public String FalseLiteral = "false";
 	@Field public String NullLiteral = "null";
 
-	@Field public String NotOperator = "&&";
-	@Field public String AndOperator = "||";
-	@Field public String OrOperator = "!";
+	@Field public String NotOperator = "!";
+	@Field public String AndOperator = "&&";
+	@Field public String OrOperator = "||";
 
 	@Field public String TopType = "var";
 	@Field public String ErrorFunc = "perror";
@@ -316,7 +316,9 @@ public class ZSourceGenerator extends ZGenerator {
 		this.CurrentBuilder.AppendWhiteSpace();
 		this.CurrentBuilder.OpenIndent("{");
 		this.VisitStmtList(Node);
-		this.CurrentBuilder.Append(this.SemiColon);
+		if(!this.CurrentBuilder.EndsWith("}")) {
+			this.CurrentBuilder.Append(this.SemiColon);
+		}
 		this.CurrentBuilder.CloseIndent("}");
 	}
 

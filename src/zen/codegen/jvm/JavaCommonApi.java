@@ -18,9 +18,9 @@ public class JavaCommonApi {
 			System.err.println("REC assert 0 @" + Location);
 			System.exit(1);
 		}
-		else {
-			System.err.println("REC assert 1 @" + Location);
-		}
+		//		else {
+		//			System.err.println("REC assert 1 @" + Location);
+		//		}
 	}
 
 	public final static void Print(String o) {
