@@ -1,15 +1,19 @@
 
 DIR="test/common"
-mkdir -p workingtest
+TDIR="build/test"
+mkdir -p $TDIR
 
-echo "testing generation of java byte code"
-ZENCODE=jvm bash test/testfiles.sh $DIR workingtest 
+echo "testing java bytecode generation and its execution"
+ZENCODE=jvm bash test/testfiles.sh $DIR $TDIR  
 
-echo "testing generation of java source code"
-ZENCODE=java bash test/testfiles.sh $DIR workingtest javac class java
+echo "testing java generation and its execution"
+ZENCODE=java bash test/testfiles.sh $DIR $TDIR javac class java
 
-echo "testing python.."
-ZENCODE=py bash test/testfiles.sh $DIR workingtest python
+echo "testing c.."
+ZENCODE=c bash test/testfiles.sh $DIR $TDIR
+
+echo "testing python and its execution"
+ZENCODE=py bash test/testfiles.sh $DIR $TDIR python
 
 #echo "testing java.."
-#ZENCODE=java bash test/testfiles.sh $DIR workingtest javac
+#ZENCODE=java bash test/testfiles.sh $DIR $TDIR javac
