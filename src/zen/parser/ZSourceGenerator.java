@@ -191,6 +191,7 @@ public class ZSourceGenerator extends ZGenerator {
 
 	@Override public final void WriteTo(@Nullable String FileName) {
 		this.Finish(FileName);
+		this.Logger.OutputErrorsToStdErr();
 		LibZen._WriteTo(this.NameOutputFile(FileName), this.BuilderList);
 		this.InitBuilderList();
 	}

@@ -28,6 +28,7 @@ import zen.parser.ZMacroFunc;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 import zen.type.ZFunc;
+import zen.type.ZFuncType;
 import zen.util.Field;
 import zen.util.Var;
 
@@ -50,12 +51,15 @@ public final class ZMethodCallNode extends ZListNode {
 		Visitor.VisitMethodCallNode(this);
 	}
 
-	public final ZFuncCallNode ToGetterFuncCall() {
+	public final ZFuncCallNode ToGetterFuncCall(ZFuncType FuncType) {
 		@Var ZGetterNode Getter = new ZGetterNode(null, this.AST[ZMethodCallNode._Recv]);
 		Getter.SetNameInfo(this.MethodToken, this.MethodName);
+		Getter.Type = FuncType;
 		@Var ZFuncCallNode FuncNode = new ZFuncCallNode(this.ParentNode, Getter);
 		FuncNode.SourceToken = this.SourceToken;
-		FuncNode.Append(this.AST[ZMethodCallNode._Recv]);
+		if(FuncType.GetFuncParamSize() == this.GetListSize() + 1) {
+			FuncNode.Append(this.AST[ZMethodCallNode._Recv]);
+		}
 		@Var int i = 0;
 		while(i < this.GetListSize()) {
 			FuncNode.Append(this.GetListAt(i));

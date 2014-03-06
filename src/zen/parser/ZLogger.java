@@ -82,7 +82,7 @@ public final class ZLogger {
 		return List.CompactArray();
 	}
 
-	public final void ShowErrors() {
+	public final void OutputErrorsToStdErr() {
 		@Var String[] Messages = this.GetReportedErrors();
 		@Var int i = 0;
 		while(i < Messages.length) {

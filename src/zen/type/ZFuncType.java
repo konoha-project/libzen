@@ -35,7 +35,7 @@ public final class ZFuncType extends ZType {
 	}
 
 	@Override public final String GetName() {
-		if(this.ShortName != null) {
+		if(this.ShortName == null) {
 			@Var String s = "Func<";
 			@Var int i = 0;
 			while(i < this.TypeParams.length) {

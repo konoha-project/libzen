@@ -17,8 +17,8 @@ println("#abc.endsWith(\"bc\"): " + abc.endsWith("bc"));
 println("#abc.endsWith(\"dabc\"): " + abc.endsWith("dabc"));
 
 println("#abc+abc: " + (abc+abc));
-println("#abc+null: " + (abc+null));
-println("#null+abc: " + (null+abc));
+//println("#abc+null: " + (abc+null));
+//println("#null+abc: " + (null+abc));
 println("#abc+1: " + (abc+1));
 println("#1+abc: " + (1+abc));
 
@@ -36,8 +36,8 @@ assert(abc.endsWith("bc"));
 assert(!abc.endsWith("dabc"));
 
 assert(abc+abc == "abcabc");
-assert(abc+null == "abcnull");
-assert(null+abc == "nullabc");
+//assert(abc+null == "abcnull");
+//assert(null+abc == "nullabc");
 assert(abc+1 == "abc1");
 assert(1+abc == "1abc");
 }

@@ -89,8 +89,9 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 
 	@Override protected void GenerateCode(ZType ContextType, ZNode Node) {
 		if(Node.IsUntyped() && !Node.IsErrorNode() && !(Node instanceof ZGlobalNameNode)) {
-			this.CurrentBuilder.Append("/*untyped*/" + this.NullLiteral);
 			ZLogger._LogError(Node.SourceToken, "untyped error: " + Node);
+			Node.Accept(this);
+			this.CurrentBuilder.Append("/*untyped*/");
 		}
 		else {
 			if(ContextType != null && Node.Type != ContextType) {
@@ -217,8 +218,15 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
-		this.GenerateCode(null, Node.AST[ZFuncCallNode._Func]);
-		this.VisitListNode("(", Node, ")");
+		if(Node.IsStaticFuncCall()) {
+			this.GenerateCode(null, Node.AST[ZFuncCallNode._Func]);
+			this.VisitListNode("(", Node, ")");
+		}
+		else {
+			this.GenerateCode(null, Node.AST[ZFuncCallNode._Func]);
+			this.CurrentBuilder.Append(".Invoke");
+			this.VisitListNode("(", Node, ")");
+		}
 	}
 
 	//	@Override public void VisitCastNode(ZCastNode Node) {

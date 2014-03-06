@@ -145,13 +145,13 @@ public class ZenMain {
 			LibZen._PrintLine(ZParserConst.Copyright);
 			LibZen._PrintLine("Accept: " + ScriptEngine.Generator.GetGrammarInfo());
 			LibZen._PrintLine("Produce: " + ScriptEngine.Generator.GetTargetLangInfo());
-			ScriptEngine.Generator.Logger.ShowErrors();
+			ScriptEngine.Generator.Logger.OutputErrorsToStdErr();
 			@Var int linenum = 1;
 			@Var String Line = null;
 			while ((Line = ZenMain.ReadLine2(">>> ", "    ")) != null) {
 				try {
 					@Var Object EvaledValue = ScriptEngine.Eval(Line, "(stdin)", linenum, true);
-					ScriptEngine.Generator.Logger.ShowErrors();
+					ScriptEngine.Generator.Logger.OutputErrorsToStdErr();
 					if (!(EvaledValue instanceof ZEmptyValue)) {
 						if(EvaledValue == null) {
 							LibZen._PrintLine(" null");

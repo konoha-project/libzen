@@ -409,7 +409,7 @@ public class JavaEngine extends ZSourceEngine {
 			this.StopVisitor();
 		}
 		else {
-			@Var String FuncName = Node.GetFuncName();
+			@Var String FuncName = Node.GetStaticFuncName();
 			if(FuncName != null) {
 				this.Solution.LazyBuild(FuncType.StringfySignature(FuncName));
 				Class<?> FunctionClass = this.Solution.GetDefinedFunctionClass(FuncName, FuncType);
@@ -571,7 +571,7 @@ public class JavaEngine extends ZSourceEngine {
 	}
 
 	@Override public void ExecMain() {
-		this.Generator.Logger.ShowErrors();
+		this.Generator.Logger.OutputErrorsToStdErr();
 		if(this.Solution.MainFuncNode != null) {
 			@Var JavaStaticFieldNode MainFunc = this.Solution.MainFuncNode;
 			try {

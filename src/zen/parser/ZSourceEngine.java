@@ -230,7 +230,7 @@ public class ZSourceEngine extends ZVisitor {
 			return false;
 		}
 		@Var Object ResultValue = this.Eval(ScriptText, FileName, 1, false);
-		this.Logger.ShowErrors();
+		this.Logger.OutputErrorsToStdErr();
 		if(ResultValue == ZEmptyValue._FalseEmpty) {
 			return false;
 		}
@@ -254,7 +254,7 @@ public class ZSourceEngine extends ZVisitor {
 				return false;
 			}
 			@Var Object ResultValue = this.Eval(Script, Path, 1, false);
-			this.Logger.ShowErrors();
+			this.Logger.OutputErrorsToStdErr();
 			if(ResultValue == ZEmptyValue._FalseEmpty) {
 				return false;
 			}
@@ -538,11 +538,11 @@ public class ZSourceEngine extends ZVisitor {
 
 	public void WriteTo(String OutputFile) {
 		this.Generator.WriteTo(OutputFile);
-		this.Generator.Logger.ShowErrors();
+		this.Generator.Logger.OutputErrorsToStdErr();
 	}
 
 	@ZenMethod public void ExecMain() {
-		this.Generator.Logger.ShowErrors();
+		this.Generator.Logger.OutputErrorsToStdErr();
 	}
 
 }

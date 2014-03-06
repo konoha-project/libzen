@@ -78,10 +78,10 @@ public class ZClassType extends ZType {
 	public ZType GetFieldType(String FieldName, ZType DefaultType) {
 		if(this.FieldList != null) {
 			@Var int i = 0;
-			//System.out.println("FieldSize = " + this.FieldList.size() + " by " + FieldName);
+			//			System.out.println("FieldSize = " + this.FieldList.size() + " by " + FieldName);
 			while(i < this.FieldList.size()) {
 				@Var ZClassField Field = this.FieldList.ArrayValues[i];
-				//System.out.println("Looking FieldName = " + Field.FieldName + ", " + Field.FieldType);
+				//				System.out.println("Looking FieldName = " + Field.FieldName + ", " + Field.FieldType);
 				if(FieldName.equals(Field.FieldName)) {
 					return Field.FieldType;
 				}
@@ -97,7 +97,8 @@ public class ZClassType extends ZType {
 			this.FieldList = new ZArray<ZClassField>(new ZClassField[4]);
 		}
 		@Var ZClassField ClassField = new ZClassField(this, FieldName, FieldType, SourceToken);
-		//System.out.println("Append FieldName = " + ClassField.FieldName + ", " + ClassField.FieldType);
+		//		System.out.println("Append FieldName = " + ClassField.FieldName + ", " + ClassField.FieldType);
+		assert(ClassField.FieldType != null);
 		this.FieldList.add(ClassField);
 		return ClassField;
 	}

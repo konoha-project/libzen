@@ -55,7 +55,15 @@ public final class ZFuncCallNode extends ZListNode {
 		return ZType.VoidType;
 	}
 
-	public final String GetFuncName() {
+	public final boolean IsStaticFuncCall() {
+		@Var ZNode FNode = this.AST[ZFuncCallNode._Func];
+		if(FNode instanceof ZGlobalNameNode) {
+			return ((ZGlobalNameNode)FNode).IsStaticFuncName;
+		}
+		return false;
+	}
+
+	public final String GetStaticFuncName() {
 		@Var ZNode FNode = this.AST[ZFuncCallNode._Func];
 		if(FNode instanceof ZGlobalNameNode) {
 			return ((ZGlobalNameNode)FNode).GlobalName;
@@ -70,7 +78,6 @@ public final class ZFuncCallNode extends ZListNode {
 		}
 		return null;
 	}
-
 
 	public ZMacroNode ToMacroNode(ZMacroFunc MacroFunc) {
 		@Var ZMacroNode MacroNode = new ZMacroNode(this.ParentNode, this.AST[ZFuncCallNode._Func].SourceToken, MacroFunc);
