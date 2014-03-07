@@ -30,7 +30,6 @@ import zen.util.ZenMap;
 public abstract class JavaGenerator extends ZGenerator {
 	private final ZenMap<ZNode> LazyNodeMap = new ZenMap<ZNode>(null);
 	private final ZenMap<Class<?>> GeneratedClassMap = new ZenMap<Class<?>>(null);
-	private final ZenMap<Method> FuncMap = new ZenMap<Method>(null);
 
 	protected JavaGenerator(String TargetCode, String TargetVersion) {
 		super(TargetCode, TargetVersion);
@@ -244,23 +243,23 @@ public abstract class JavaGenerator extends ZGenerator {
 		return this.GeneratedClassMap.GetOrNull(this.NameFunctionClass(FuncName, FuncType));
 	}
 
-	// generated method
-
-
-	protected  Method LoadDefinedFunc(String FuncName, ZFuncType FuncType) {
-		return this.FuncMap.GetOrNull(FuncType.StringfySignature(FuncName));
-	}
-
-	protected void SetStaticFuncMethod(String FuncName, Method jMethod) {
-		//	this.Debug(FuncName + ", " + jMethod);
-		this.FuncMap.put(FuncName, jMethod);
-	}
-
-	public Method GetStaticFuncMethod(String FuncName) {
-		Method jMethod = this.FuncMap.GetOrNull(FuncName);
-		//	this.Debug(FuncName + ", " + jMethod);
-		return jMethod;
-	}
+	//	// generated method
+	//
+	//	protected  Method LoadDefinedFunc(String FuncName, ZFuncType FuncType) {
+	//		return this.FuncMap.GetOrNull(FuncType.StringfySignature(FuncName));
+	//	}
+	//
+	//	protected void SetStaticFuncMethod(String FuncName, Method jMethod) {
+	//		//	this.Debug(FuncName + ", " + jMethod);
+	//		this.FuncMap.put(FuncName, jMethod);
+	//	}
+	//
+	//	public Method GetStaticFuncMethod(String FuncName) {
+	//		Method jMethod = this.FuncMap.GetOrNull(FuncName);
+	//		//	this.Debug(FuncName + ", " + jMethod);
+	//		return jMethod;
+	//	}
+	//
 
 	public void Debug(String Message) {
 		LibZen._PrintDebug(Message);

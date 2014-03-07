@@ -129,7 +129,6 @@ public class PythonGenerator extends ZSourceGenerator {
 		this.VisitStmtList(Node);
 		this.CurrentBuilder.UnIndent();
 		this.CurrentBuilder.AppendLineFeedIndent();
-		//		this.CurrentBuilder.Append("#");
 	}
 
 	@Override public void VisitNewObjectNode(ZNewObjectNode Node) {

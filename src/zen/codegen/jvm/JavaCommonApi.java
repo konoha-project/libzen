@@ -1,12 +1,6 @@
 package zen.codegen.jvm;
 
-import java.lang.reflect.Method;
-
-import zen.type.ZFunc;
-import zen.type.ZFuncType;
-import zen.util.LibZen;
 import zen.util.SoftwareFaultException;
-import zen.util.Var;
 import zen.util.ZArray;
 
 public class JavaCommonApi {
@@ -122,19 +116,19 @@ public class JavaCommonApi {
 		x.add((int)y, z);
 	}
 
-	public final static JavaStaticFunc ConvertToNativeFunc(Method jMethod) {
-		@Var ZFuncType FuncType = JavaTypeTable.ConvertToFuncType(jMethod);
-		return new JavaStaticFunc(jMethod.getName(), FuncType, jMethod);
-	}
-
-	static ZFunc LoadFunc(String Name, Class<?> ... classes) {
-		try {
-			return ConvertToNativeFunc(JavaCommonApi.class.getMethod(Name, classes));
-		} catch (Exception e) {
-			LibZen._Exit(1, "FIXME: " + e);
-		}
-		return null;
-	}
+	//	public final static JavaStaticFunc ConvertToNativeFunc(Method jMethod) {
+	//		@Var ZFuncType FuncType = JavaTypeTable.ConvertToFuncType(jMethod);
+	//		return new JavaStaticFunc(jMethod.getName(), FuncType, jMethod);
+	//	}
+	//
+	//	static ZFunc LoadFunc(String Name, Class<?> ... classes) {
+	//		try {
+	//			return ConvertToNativeFunc(JavaCommonApi.class.getMethod(Name, classes));
+	//		} catch (Exception e) {
+	//			LibZen._Exit(1, "FIXME: " + e);
+	//		}
+	//		return null;
+	//	}
 
 	//	static void LoadCommonApi(ZGenerator Generator) {
 	//		Generator.SetDefinedFunc(LoadFunc("Assert", boolean.class));

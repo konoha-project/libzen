@@ -65,6 +65,7 @@ import zen.ast.ZTypeNode;
 import zen.ast.ZUnaryNode;
 import zen.parser.ZEmptyValue;
 import zen.parser.ZLogger;
+import zen.parser.ZMacroFunc;
 import zen.parser.ZSourceEngine;
 import zen.parser.ZTypeChecker;
 import zen.type.ZFunc;
@@ -398,8 +399,31 @@ public class JavaEngine extends ZSourceEngine {
 		}
 	}
 
+	private Method LookupStaticMethod(ZMacroFunc MacroFunc) {
+		@Var String MacroText = MacroFunc.MacroText;
+		@Var int ClassEnd = MacroText.indexOf(".");
+		@Var int MethodEnd = MacroText.indexOf("(");
+		//System.out.println("MacroText: " + MacroText + " " + ClassEnd + ", " + MethodEnd);
+		@Var String ClassName = MacroText.substring(0, ClassEnd);
+		ClassName = ClassName.replaceAll("/", ".");
+		@Var String MethodName = MacroText.substring(ClassEnd+1, MethodEnd);
+		try {
+			Class<?> C= Class.forName(ClassName);
+			Class<?>[] P = new Class<?>[MacroFunc.GetFuncType().GetFuncParamSize()];
+			for(int i = 0; i < P.length; i++) {
+				P[0] = this.Solution.GetJavaClass(MacroFunc.GetFuncType().GetFuncParamType(i));
+			}
+			Method M = C.getMethod(MethodName, P);
+			return M;
+		}
+		catch(Exception e) {
+			System.out.println(e);
+		}
+		return null;
+	}
+
 	@Override public void VisitMacroNode(ZMacroNode Node) {
-		this.EvalStaticMethod(Node, ((JavaStaticFunc)Node.MacroFunc).StaticFunc, this.PackNodes(null, Node));
+		this.EvalStaticMethod(Node, this.LookupStaticMethod(Node.MacroFunc), this.PackNodes(null, Node));
 	}
 
 	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
@@ -438,8 +462,8 @@ public class JavaEngine extends ZSourceEngine {
 		}
 		else {
 			ZFunc Func = this.Generator.LookupConverterFunc(Node.AST[ZCastNode._Expr].Type, Node.Type);
-			if(Func instanceof JavaStaticFunc) {
-				this.EvalStaticMethod(Node, ((JavaStaticFunc)Func).StaticFunc, new ZNode[] {Node.AST[ZCastNode._Expr]});
+			if(Func instanceof ZMacroFunc) {
+				this.EvalStaticMethod(Node, this.LookupStaticMethod((ZMacroFunc)Func), new ZNode[] {Node.AST[ZCastNode._Expr]});
 				return;
 			}
 			this.EvaledValue = this.Eval(Node.AST[ZCastNode._Expr]);
