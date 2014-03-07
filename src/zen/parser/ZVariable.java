@@ -43,7 +43,12 @@ public final class ZVariable extends ZSymbolEntry {
 		this.VarType = VarType;
 		this.VarName = VarName;
 		this.SourceToken = SourceToken;
-		this.VarUniqueIndex = FuncNode.GetVarIndex();
+		if(Parent instanceof ZVariable) {
+			this.VarUniqueIndex = ((ZVariable)Parent).VarUniqueIndex + 1;
+		}
+		else {
+			this.VarUniqueIndex = 0; /*FuncNode.GetVarIndex();*/
+		}
 		this.UsedCount = 0;
 		this.DefCount  = 1;
 	}

@@ -11,6 +11,7 @@ import zen.ast.ZGetIndexNode;
 import zen.ast.ZGlobalNameNode;
 import zen.ast.ZInstanceOfNode;
 import zen.ast.ZLetNode;
+import zen.ast.ZMapEntryNode;
 import zen.ast.ZMapLiteralNode;
 import zen.ast.ZMethodCallNode;
 import zen.ast.ZNewObjectNode;
@@ -132,24 +133,18 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitMapLiteralNode(ZMapLiteralNode Node) {
-		@Var ZType ParamType = Node.Type.GetParamType(0);
-		if(ParamType.IsIntType() || ParamType.IsBooleanType()) {
-			this.CurrentBuilder.Append("LibZen_NewIntMap(");
-		}
-		else if(ParamType.IsFloatType()) {
-			this.CurrentBuilder.Append("LibZen_NewFloatMap(");
-		}
-		else if(ParamType.IsStringType()) {
-			this.CurrentBuilder.Append("LibZen_NewStringMap(");
-		}
-		else {
-			this.CurrentBuilder.Append("LibZen_NewMap(");
-		}
-		this.CurrentBuilder.Append(String.valueOf(Node.GetListSize()));
+		this.CurrentBuilder.Append("new ", this.GetJavaTypeName(Node.Type, false), "()");
 		if(Node.GetListSize() > 0) {
-			this.CurrentBuilder.Append(this.Camma);
+			@Var int i = 0;
+			this.CurrentBuilder.OpenIndent(" {{");
+			while(i < Node.GetListSize()) {
+				@Var ZMapEntryNode Entry = Node.GetMapEntryNode(i);
+				this.CurrentBuilder.AppendNewLine("put");
+				this.GenerateCode("(", Entry.AST[ZMapEntryNode._Key], this.Camma, Entry.AST[ZMapEntryNode._Value], ");");
+				i = i + 1;
+			}
+			this.CurrentBuilder.CloseIndent("}}");
 		}
-		this.VisitListNode("", Node, ")");
 	}
 
 	@Override public void VisitNewObjectNode(ZNewObjectNode Node) {
@@ -492,6 +487,7 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 		while (i < Node.GetListSize()) {
 			@Var ZFieldNode FieldNode = Node.GetFieldNode(i);
 			this.GenerateClassField("", FieldNode.DeclType, FieldNode.FieldName, null);
+			this.CurrentBuilder.Append(this.SemiColon);
 			i = i + 1;
 		}
 		this.CurrentBuilder.AppendLineFeedIndent();
@@ -501,6 +497,7 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 			@Var ZClassField Field = Node.ClassType.GetFieldAt(i);
 			if(Field.FieldType.IsFuncType()) {
 				this.GenerateClassField("static", Field.FieldType, this.NameMethod(Node.ClassType, Field.FieldName), "null");
+				this.CurrentBuilder.Append(this.SemiColon);
 			}
 			i = i + 1;
 		}

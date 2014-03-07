@@ -731,12 +731,13 @@ public class ZenTypeSafer extends ZTypeChecker {
 		@Var int i = 0;
 		while(i < FunctionNode.GetListSize()) {
 			@Var ZParamNode ParamNode = FunctionNode.GetParamNode(i);
-			ParamNode.ParamIndex = i;
-			ParamNode.Type = this.VarScope.NewVarType(ParamNode.Type, ParamNode.Name, ParamNode.SourceToken);
-			if(FuncType != null) {
-				this.VarScope.InferType(FuncType.GetFuncParamType(i), ParamNode);
+			if(ParamNode.ParamIndex == -1) {
+				ParamNode.Type = this.VarScope.NewVarType(ParamNode.Type, ParamNode.Name, ParamNode.SourceToken);
+				if(FuncType != null) {
+					this.VarScope.InferType(FuncType.GetFuncParamType(i), ParamNode);
+				}
+				ParamNode.ParamIndex = NameSpace.SetLocalVariable(this.CurrentFunctionNode, ParamNode.Type, ParamNode.Name, null);
 			}
-			NameSpace.SetLocalVariable(this.CurrentFunctionNode, ParamNode.Type, ParamNode.Name, null);
 			i = i + 1;
 		}
 		FunctionNode.ReturnType = this.VarScope.NewVarType(FunctionNode.ReturnType, "return", FunctionNode.SourceToken);

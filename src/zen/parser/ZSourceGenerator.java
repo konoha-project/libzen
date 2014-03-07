@@ -52,6 +52,7 @@ import zen.ast.ZIntNode;
 import zen.ast.ZLetNode;
 import zen.ast.ZListNode;
 import zen.ast.ZMacroNode;
+import zen.ast.ZMapEntryNode;
 import zen.ast.ZMapLiteralNode;
 import zen.ast.ZMethodCallNode;
 import zen.ast.ZNewObjectNode;
@@ -258,6 +259,24 @@ public class ZSourceGenerator extends ZGenerator {
 		}
 	}
 
+	protected final void GenerateCode(String Pre, ZType ContextType, ZNode Node, String Delim, ZType ContextType2, ZNode Node2, String Post) {
+		if(Pre != null && Pre.length() > 0) {
+			this.CurrentBuilder.Append(Pre);
+		}
+		this.GenerateCode(ContextType, Node);
+		if(Delim != null && Delim.length() > 0) {
+			this.CurrentBuilder.Append(Delim);
+		}
+		this.GenerateCode(ContextType2, Node2);
+		if(Post != null && Post.length() > 0) {
+			this.CurrentBuilder.Append(Post);
+		}
+	}
+
+	protected final void GenerateCode(String Pre, ZNode Node, String Delim, ZNode Node2, String Post) {
+		this.GenerateCode(Pre, null, Node, Delim, null, Node2, Post);
+	}
+
 	final protected boolean IsNeededSurroud(ZNode Node) {
 		if(Node instanceof ZBinaryNode) {
 			return true;
@@ -332,7 +351,14 @@ public class ZSourceGenerator extends ZGenerator {
 	}
 
 	@Override public void VisitMapLiteralNode(ZMapLiteralNode Node) {
-		// TODO Auto-generated method stub
+		this.CurrentBuilder.Append("{");
+		@Var int i = 0;
+		while(i < Node.GetListSize()) {
+			@Var ZMapEntryNode Entry = Node.GetMapEntryNode(i);
+			this.GenerateCode(null, Entry.AST[ZMapEntryNode._Key], ": ", Entry.AST[ZMapEntryNode._Value], ",");
+			i = i + 1;
+		}
+		this.CurrentBuilder.Append("} ");  // space is needed to distinguish block
 	}
 
 	@Override public void VisitNewObjectNode(ZNewObjectNode Node) {

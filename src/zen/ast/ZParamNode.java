@@ -30,7 +30,7 @@ import zen.util.Field;
 public class ZParamNode extends ZNode {
 	@Field public String  Name;
 	@Field public ZToken  NameToken = null;
-	@Field public int     ParamIndex = 0;
+	@Field public int     ParamIndex = -1;  // unregistered to NameSpace
 
 	public ZParamNode(ZNode ParentNode) {
 		super(ParentNode, null, 0);

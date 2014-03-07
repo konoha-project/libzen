@@ -33,6 +33,7 @@ import zen.ast.ZClassNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZFieldNode;
 import zen.ast.ZFunctionNode;
+import zen.ast.ZGetIndexNode;
 import zen.ast.ZIfNode;
 import zen.ast.ZInstanceOfNode;
 import zen.ast.ZLetNode;
@@ -98,7 +99,12 @@ public class PythonGenerator extends ZSourceGenerator {
 	}
 
 	@Override protected void GenerateImportLibrary(String LibName) {
-		this.HeaderBuilder.AppendNewLine("import ", LibName);
+		if(LibName.startsWith("def ")) {
+			this.HeaderBuilder.AppendNewLine(LibName);
+		}
+		else {
+			this.HeaderBuilder.AppendNewLine("import ", LibName);
+		}
 	}
 
 	@Override @ZenMethod protected void Finish(String FileName) {
@@ -142,6 +148,19 @@ public class PythonGenerator extends ZSourceGenerator {
 		// this.CurrentBuilder.Append(") ");
 		//this.CurrentBuilder.AppendBlockComment("as " + this.GetNativeTypeName(Node.Type));
 		this.GenerateCode(null, Node.AST[ZCastNode._Expr]);
+	}
+
+	@Override public void VisitGetIndexNode(ZGetIndexNode Node) {
+		@Var ZType RecvType = Node.GetAstType(ZGetIndexNode._Recv);
+		if(RecvType.IsMapType()) {
+			this.ImportLibrary("def zGetMap(m,k): return m[k] if m.has_key(k) else None");
+			this.GenerateCode(null, "zGetMap(", Node.AST[ZGetIndexNode._Recv], ", ");
+			this.GenerateCode(null, "", Node.AST[ZGetIndexNode._Index], ")");
+		}
+		else {
+			this.GenerateCode(null, Node.AST[ZGetIndexNode._Recv]);
+			this.GenerateCode(null, "[", Node.AST[ZGetIndexNode._Index], "]");
+		}
 	}
 
 	@Override public void VisitInstanceOfNode(ZInstanceOfNode Node) {
