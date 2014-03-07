@@ -30,15 +30,24 @@ import zen.util.Field;
 import zen.util.Var;
 
 public class ZBlockNode extends ZListNode {
-	@Field public ZNameSpace NameSpace;
+	@Field public ZNameSpace NullableNameSpace;
+
 	public ZBlockNode(ZNameSpace NameSpace) {
 		super(null, null, 0);
-		this.NameSpace = NameSpace;
+		this.NullableNameSpace = NameSpace;
 	}
 
 	public ZBlockNode(ZNode ParentNode, int Init) {
 		super(ParentNode, null, Init);
-		this.NameSpace = ParentNode.GetNameSpace().CreateSubNameSpace();
+		this.NullableNameSpace = null;
+	}
+
+	public final ZNameSpace GetBlockNameSpace() {
+		if(this.NullableNameSpace == null) {
+			@Var ZNameSpace NameSpace = this.GetNameSpace();
+			this.NullableNameSpace = new ZNameSpace(NameSpace.Generator, this);
+		}
+		return this.NullableNameSpace;
 	}
 
 	@Override public void Accept(ZVisitor Visitor) {

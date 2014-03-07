@@ -24,6 +24,7 @@
 
 //ifdef JAVA
 package zen.parser;
+import zen.ast.ZBlockNode;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZNode;
 import zen.ast.ZTypeNode;
@@ -40,33 +41,39 @@ import zen.util.ZenMap;
 public final class ZNameSpace {
 	//	private static int SerialNumber = 0;
 
-	@Field public final ZNameSpace   ParentNameSpace;
+	//	@Field public final ZNameSpace   ParentNameSpace;
 	@Field public final ZGenerator   Generator;
-	@Field private int SerialId = 0;
-	@Field ZTokenFunc[]   TokenMatrix = null;
-	@Field ZenMap<ZSyntax> SyntaxTable = null;
+	@Field public final ZBlockNode   BlockNode;
+	@Field ZTokenFunc[]         TokenMatrix = null;
+	@Field ZenMap<ZSyntax>      SyntaxTable = null;
 	@Field ZenMap<ZSymbolEntry> SymbolTable = null;
 
 	//	@Field private ZNode  FuncNode = null;
 
-	public ZNameSpace(ZGenerator Generator, ZNameSpace ParentNameSpace) {
-		this.ParentNameSpace = ParentNameSpace;
-		if(ParentNameSpace == null) {
-			this.Generator = Generator;
+	public ZNameSpace(ZGenerator Generator, ZBlockNode BlockNode) {
+		this.BlockNode = BlockNode;   // rootname is null
+		this.Generator = Generator;
+		assert(this.Generator != null);
+	}
+
+	public final ZNameSpace GetParentNameSpace() {
+		if(this.BlockNode != null) {
+			@Var ZNode Node = this.BlockNode.ParentNode;
+			while(Node != null) {
+				if(Node instanceof ZBlockNode) {
+					@Var ZBlockNode blockNode = (ZBlockNode)Node;
+					if(blockNode.NullableNameSpace != null) {
+						return blockNode.NullableNameSpace;
+					}
+				}
+				Node = Node.ParentNode;
+			}
 		}
-		else {
-			this.Generator = ParentNameSpace.Generator;
-		}
-		this.SerialId = 0;//SerialNumber;
-		//		SerialNumber = SerialNumber + 1;
+		return null;
 	}
 
 	@Override public String toString() {
-		return "NS["+this.SerialId+"]";
-	}
-
-	public final ZNameSpace CreateSubNameSpace() {
-		return new ZNameSpace(null, this);
+		return "NS[" + this.BlockNode + "]";
 	}
 
 	public final ZNameSpace GetRootNameSpace() {
@@ -76,7 +83,7 @@ public final class ZNameSpace {
 	// TokenMatrix
 	public final ZTokenFunc GetTokenFunc(int ZenChar) {
 		if(this.TokenMatrix == null) {
-			return this.ParentNameSpace.GetTokenFunc(ZenChar);
+			return this.GetParentNameSpace().GetTokenFunc(ZenChar);
 		}
 		return this.TokenMatrix[ZenChar];
 	}
@@ -91,10 +98,10 @@ public final class ZNameSpace {
 	public final void AppendTokenFunc(String keys, ZTokenFunction TokenFunc) {
 		if(this.TokenMatrix == null) {
 			this.TokenMatrix = LibZen._NewTokenMatrix();
-			if(this.ParentNameSpace != null) {
+			if(this.GetParentNameSpace() != null) {
 				@Var int i = 0;
 				while(i < this.TokenMatrix.length) {
-					this.TokenMatrix[i] = this.ParentNameSpace.GetTokenFunc(i);
+					this.TokenMatrix[i] = this.GetParentNameSpace().GetTokenFunc(i);
 					i = i + 1;
 				}
 			}
@@ -114,7 +121,7 @@ public final class ZNameSpace {
 			if(NameSpace.SyntaxTable != null) {
 				return NameSpace.SyntaxTable.GetOrNull(PatternName);
 			}
-			NameSpace = NameSpace.ParentNameSpace;
+			NameSpace = NameSpace.GetParentNameSpace();
 		}
 		return null;
 	}
@@ -194,7 +201,7 @@ public final class ZNameSpace {
 					return Entry;
 				}
 			}
-			NameSpace = NameSpace.ParentNameSpace;
+			NameSpace = NameSpace.GetParentNameSpace();
 		}
 		return null;
 	}

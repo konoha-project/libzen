@@ -40,6 +40,12 @@ public class ZSetNameNode extends ZNode {
 		super(ParentNode, Token, 1);
 		this.VarName = VarName;
 	}
+	public ZSetNameNode(String Name, ZNode ExprNode) {
+		super(null, null, 1);
+		this.VarName = Name;
+		this.Set(ZSetNameNode._Expr, ExprNode);
+	}
+
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitSetNameNode(this);
 	}

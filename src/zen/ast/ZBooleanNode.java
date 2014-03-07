@@ -36,6 +36,13 @@ public final class ZBooleanNode extends ZConstNode {
 		this.Type = ZType.BooleanType;
 		this.BooleanValue = Value;
 	}
+
+	public ZBooleanNode(boolean Value) {
+		super(null, null);
+		this.Type = ZType.BooleanType;
+		this.BooleanValue = Value;
+	}
+
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitBooleanNode(this);
 	}

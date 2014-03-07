@@ -168,7 +168,10 @@ public abstract class ZNode {
 
 	public final ZNameSpace GetNameSpace() {
 		@Var ZBlockNode BlockNode = this.GetScopeBlockNode();
-		return BlockNode.NameSpace;
+		while(BlockNode.NullableNameSpace == null) {
+			BlockNode = BlockNode.ParentNode.GetScopeBlockNode();
+		}
+		return BlockNode.NullableNameSpace;
 	}
 
 	public final boolean IsErrorNode() {

@@ -39,9 +39,15 @@ public final class ZVarNode extends ZBlockNode {
 	@Field public ZToken  TypeToken = null;
 	@Field public ZToken  NameToken = null;
 
-
 	public ZVarNode(ZNode ParentNode) {
 		super(ParentNode, 1);
+	}
+
+	public ZVarNode(String Name, ZType DeclType, ZNode InitNode) {
+		super(null, 1);
+		this.NativeName = Name;
+		this.DeclType = DeclType;
+		this.Set(ZVarNode._InitValue, InitNode);
 	}
 
 	@Override public void SetNameInfo(ZToken NameToken, String Name) {

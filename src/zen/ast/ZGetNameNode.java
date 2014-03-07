@@ -45,6 +45,11 @@ public class ZGetNameNode extends ZNode {
 		this.Type = ResolvedFunc.GetFuncType();
 	}
 
+	public ZGetNameNode(String Name) {
+		super(null, null, 0);
+		this.VarName = Name;
+	}
+
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitGetNameNode(this);
 	}

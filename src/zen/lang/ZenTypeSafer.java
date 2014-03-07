@@ -599,7 +599,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 		}
 		if(Node.VarIndex == -1) {
 			Node.DeclType = this.VarScope.NewVarType(Node.DeclType, Node.NativeName, Node.SourceToken);
-			Node.VarIndex = Node.NameSpace.SetLocalVariable(this.CurrentFunctionNode, Node.DeclType, Node.NativeName, Node.SourceToken);
+			Node.VarIndex = Node.GetBlockNameSpace().SetLocalVariable(this.CurrentFunctionNode, Node.DeclType, Node.NativeName, Node.SourceToken);
 		}
 		this.VisitBlockNode(Node);
 		if(Node.GetListSize() == 0) {
