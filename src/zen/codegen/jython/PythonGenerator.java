@@ -118,13 +118,13 @@ public class PythonGenerator extends ZSourceGenerator {
 		@Var int i = 0;
 		while (i < BlockNode.GetListSize()) {
 			ZNode SubNode = BlockNode.GetListAt(i);
-			this.CurrentBuilder.AppendLineFeedIndent();
+			this.CurrentBuilder.AppendNewLine();
 			this.GenerateCode(null, SubNode);
 			this.CurrentBuilder.Append(this.SemiColon);
 			i = i + 1;
 		}
 		if (i == 0) {
-			this.CurrentBuilder.AppendLineFeedIndent();
+			this.CurrentBuilder.AppendNewLine();
 			this.CurrentBuilder.Append("pass");
 		}
 	}
@@ -134,7 +134,7 @@ public class PythonGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Indent();
 		this.VisitStmtList(Node);
 		this.CurrentBuilder.UnIndent();
-		this.CurrentBuilder.AppendLineFeedIndent();
+		this.CurrentBuilder.AppendNewLine();
 	}
 
 	@Override public void VisitNewObjectNode(ZNewObjectNode Node) {
@@ -181,7 +181,7 @@ public class PythonGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.AppendToken("=");
 		this.GenerateCode(null, Node.AST[ZVarNode._InitValue]);
 		this.VisitStmtList(Node);
-		this.CurrentBuilder.AppendLineFeedIndent();
+		this.CurrentBuilder.AppendNewLine();
 	}
 
 	@Override public void VisitIfNode(ZIfNode Node) {
@@ -266,13 +266,13 @@ public class PythonGenerator extends ZSourceGenerator {
 		while (i < Node.ClassType.GetFieldSize()) {
 			@Var ZClassField ClassField = Node.ClassType.GetFieldAt(i);
 			if(ClassField.FieldType.IsFuncType()) {
-				this.CurrentBuilder.AppendLineFeedIndent();
+				this.CurrentBuilder.AppendNewLine();
 				this.CurrentBuilder.Append(this.NameMethod(Node.ClassType, ClassField.FieldName));
 				this.CurrentBuilder.Append(" = ", this.NullLiteral);
 			}
 			i = i + 1;
 		}
-		this.CurrentBuilder.AppendLineFeedIndent();
+		this.CurrentBuilder.AppendNewLine();
 	}
 
 	@Override public void VisitClassNode(ZClassNode Node) {
@@ -287,11 +287,11 @@ public class PythonGenerator extends ZSourceGenerator {
 		}
 		this.CurrentBuilder.Append(":");
 		this.CurrentBuilder.Indent();
-		this.CurrentBuilder.AppendLineFeedIndent();
+		this.CurrentBuilder.AppendNewLine();
 		this.CurrentBuilder.Append("def __init__(self):");
 		this.CurrentBuilder.Indent();
 		if(!SuperType.IsVarType()) {
-			this.CurrentBuilder.AppendLineFeedIndent();
+			this.CurrentBuilder.AppendNewLine();
 			this.CurrentBuilder.Append(this.NameClass(SuperType));
 			this.CurrentBuilder.Append(".__init__(self)");
 		}
@@ -299,7 +299,7 @@ public class PythonGenerator extends ZSourceGenerator {
 		while (i < Node.GetListSize()) {
 			@Var ZFieldNode FieldNode = Node.GetFieldNode(i);
 			if(!FieldNode.DeclType.IsFuncType()) {
-				this.CurrentBuilder.AppendLineFeedIndent();
+				this.CurrentBuilder.AppendNewLine();
 				this.CurrentBuilder.Append("self." + FieldNode.FieldName + " = ");
 				this.GenerateCode(null, FieldNode.AST[ZFieldNode._InitValue]);
 			}
@@ -311,7 +311,7 @@ public class PythonGenerator extends ZSourceGenerator {
 		while (i < Node.ClassType.GetFieldSize()) {
 			@Var ZClassField ClassField = Node.ClassType.GetFieldAt(i);
 			if(ClassField.FieldType.IsFuncType()) {
-				this.CurrentBuilder.AppendLineFeedIndent();
+				this.CurrentBuilder.AppendNewLine();
 				this.CurrentBuilder.Append("self." + ClassField.FieldName);
 				this.CurrentBuilder.Append(" = _" + this.NameClass(Node.ClassType) + "_" + ClassField.FieldName);
 			}

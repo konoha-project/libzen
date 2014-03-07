@@ -321,7 +321,7 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 			this.CurrentBuilder.AppendNewLine("//super(TypeId, Name);");
 			this.CurrentBuilder.CloseIndent("}");
 			this.CurrentBuilder.CloseIndent("}");
-			this.CurrentBuilder.AppendLineFeedIndent();
+			this.CurrentBuilder.AppendNewLine();
 			this.CurrentBuilder = this.CurrentBuilder.Pop();
 		}
 		return ClassName;
@@ -440,7 +440,7 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.CloseIndent("}");
 
 		this.CurrentBuilder.CloseIndent("}");
-		this.CurrentBuilder.AppendLineFeedIndent();
+		this.CurrentBuilder.AppendNewLine();
 		return ClassName + ".function";
 	}
 
@@ -490,7 +490,7 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 			this.CurrentBuilder.Append(this.SemiColon);
 			i = i + 1;
 		}
-		this.CurrentBuilder.AppendLineFeedIndent();
+		this.CurrentBuilder.AppendNewLine();
 
 		i = 0;
 		while(i < Node.ClassType.GetFieldSize()) {

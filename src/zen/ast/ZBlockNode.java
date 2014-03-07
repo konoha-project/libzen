@@ -79,4 +79,19 @@ public class ZBlockNode extends ZListNode {
 			i = i + 1;
 		}
 	}
+
+	public final void ReplaceWith(ZNode OldNode, ZVarNode NewNode) {
+		@Var int i = 0;
+		while(i < this.GetAstSize()) {
+			if(this.AST[i] == OldNode) {
+				this.Set(i, NewNode);
+				if(NewNode.HasUntypedNode()) {
+					this.HasUntypedNode = true;
+				}
+				return;
+			}
+			i = i + 1;
+		}
+		assert(OldNode == NewNode);  // this must not happen!!
+	}
 }

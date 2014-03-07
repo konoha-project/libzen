@@ -6,14 +6,14 @@ import zen.util.Field;
 import zen.util.Var;
 
 public class ZDesugarNode extends ZSyntaxSugarNode {
-	public final static int _NewNode = 0;
+	//	public final static int _NewNode = 0;
 	@Field ZNode OriginalNode;
 
 	public ZDesugarNode(ZNode OriginalNode, ZNode DesugaredNode) {
 		super(OriginalNode.ParentNode, null, 1);
 		this.OriginalNode = OriginalNode;
 		OriginalNode.ParentNode = this;
-		this.Set(ZDesugarNode._NewNode, DesugaredNode);
+		this.Set(0, DesugaredNode);
 	}
 
 	public ZDesugarNode(ZNode OriginalNode, ZNode[] Nodes) {

@@ -176,10 +176,10 @@ public class PerlGenerator extends ZSourceGenerator {
 		}
 		this.CurrentBuilder.Append(this.SemiColon);
 		this.CurrentBuilder.UnIndent();
-		this.CurrentBuilder.AppendLineFeedIndent();
+		this.CurrentBuilder.AppendNewLine();
 		this.CurrentBuilder.Append("}");
-		this.CurrentBuilder.AppendLineFeedIndent();
-		this.CurrentBuilder.AppendLineFeedIndent();
+		this.CurrentBuilder.AppendNewLine();
+		this.CurrentBuilder.AppendNewLine();
 	}
 
 	private void GenerateCField(String CType, String FieldName) {
@@ -192,7 +192,7 @@ public class PerlGenerator extends ZSourceGenerator {
 	}
 
 	private void GenerateField(ZType DeclType, String FieldName) {
-		this.CurrentBuilder.AppendLineFeedIndent();
+		this.CurrentBuilder.AppendNewLine();
 		this.GenerateTypeName(DeclType);
 		this.CurrentBuilder.AppendWhiteSpace();
 		this.CurrentBuilder.Append(FieldName);
@@ -207,22 +207,22 @@ public class PerlGenerator extends ZSourceGenerator {
 	@Override public void VisitClassNode(ZClassNode Node) {
 		this.CurrentBuilder.Append("sub _Init", this.NameClass(Node.ClassType), "{");
 		this.CurrentBuilder.Indent();
-		this.CurrentBuilder.AppendLineFeedIndent();
+		this.CurrentBuilder.AppendNewLine();
 		this.CurrentBuilder.Append("%o = shift", this.SemiColon);
 
 		@Var ZType SuperType = Node.ClassType.GetSuperType();
 		if(!SuperType.IsVarType()) {
-			this.CurrentBuilder.AppendLineFeedIndent();
+			this.CurrentBuilder.AppendNewLine();
 			this.CurrentBuilder.Append("_Init" + this.NameClass(SuperType) + "(%o);");
 		}
-		this.CurrentBuilder.AppendLineFeedIndent();
+		this.CurrentBuilder.AppendNewLine();
 		this.CurrentBuilder.Append("$o{", this.ClassKey(Node.ClassType), "} = ");
 		this.CurrentBuilder.AppendInt(Node.ClassType.TypeId);
 		this.CurrentBuilder.Append(this.SemiColon);
 		@Var int i = 0;
 		while (i < Node.GetListSize()) {
 			@Var ZFieldNode FieldNode = Node.GetFieldNode(i);
-			this.CurrentBuilder.AppendLineFeedIndent();
+			this.CurrentBuilder.AppendNewLine();
 			this.CurrentBuilder.Append("$o{", LibZen._QuoteString(FieldNode.FieldName), "} = ");
 			this.GenerateCode(null, FieldNode.AST[ZFieldNode._InitValue]);
 			this.CurrentBuilder.Append(this.SemiColon);
@@ -233,35 +233,35 @@ public class PerlGenerator extends ZSourceGenerator {
 		while (i < Node.ClassType.GetFieldSize()) {
 			@Var ZClassField ClassField = Node.ClassType.GetFieldAt(i);
 			if(ClassField.FieldType.IsFuncType()) {
-				this.CurrentBuilder.AppendLineFeedIndent();
+				this.CurrentBuilder.AppendNewLine();
 				this.CurrentBuilder.Append("if (defined $", this.NameMethod(Node.ClassType, ClassField.FieldName), ") {");
 				this.CurrentBuilder.Indent();
-				this.CurrentBuilder.AppendLineFeedIndent();
+				this.CurrentBuilder.AppendNewLine();
 				this.CurrentBuilder.Append("$o{", LibZen._QuoteString(ClassField.FieldName), "} = $");
 				this.CurrentBuilder.Append(this.NameMethod(Node.ClassType, ClassField.FieldName), this.SemiColon);
 				this.CurrentBuilder.UnIndent();
-				this.CurrentBuilder.AppendLineFeedIndent();
+				this.CurrentBuilder.AppendNewLine();
 				this.CurrentBuilder.Append("}");
 			}
 			i = i + 1;
 		}
-		this.CurrentBuilder.AppendLineFeedIndent();
+		this.CurrentBuilder.AppendNewLine();
 		this.CurrentBuilder.UnIndent();
-		this.CurrentBuilder.AppendLineFeedIndent();
+		this.CurrentBuilder.AppendNewLine();
 		this.CurrentBuilder.Append("}");
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.AppendLineFeed();
 
 		this.CurrentBuilder.Append("sub _New", this.NameClass(Node.ClassType), " {");
 		this.CurrentBuilder.Indent();
-		this.CurrentBuilder.AppendLineFeedIndent();
+		this.CurrentBuilder.AppendNewLine();
 		this.CurrentBuilder.Append("%o = {}", this.SemiColon);
-		this.CurrentBuilder.AppendLineFeedIndent();
+		this.CurrentBuilder.AppendNewLine();
 		this.CurrentBuilder.Append("_Init" + this.NameClass(Node.ClassType) + "(%o);");
-		this.CurrentBuilder.AppendLineFeedIndent();
+		this.CurrentBuilder.AppendNewLine();
 		this.CurrentBuilder.Append("return %o;");
 		this.CurrentBuilder.UnIndent();
-		this.CurrentBuilder.AppendLineFeedIndent();
+		this.CurrentBuilder.AppendNewLine();
 		this.CurrentBuilder.Append("}");
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.AppendLineFeed();

@@ -382,7 +382,7 @@ public class CGenerator extends ZSourceGenerator {
 	}
 
 	private void GenerateExportFunction(ZFunctionNode Node) {
-		this.CurrentBuilder.AppendLineFeedIndent();
+		this.CurrentBuilder.AppendNewLine();
 		if(Node.FuncName.equals("main")) {
 			this.CurrentBuilder.Append("int");
 		}
@@ -420,7 +420,7 @@ public class CGenerator extends ZSourceGenerator {
 	}
 
 	private void GenerateField(ZType DeclType, String FieldName) {
-		this.CurrentBuilder.AppendLineFeedIndent();
+		this.CurrentBuilder.AppendNewLine();
 		this.GenerateTypeName(DeclType);
 		this.CurrentBuilder.Append(" ", FieldName, this.SemiColon);
 	}
@@ -501,7 +501,7 @@ public class CGenerator extends ZSourceGenerator {
 		this.GenerateTypeName(Node.ClassType);
 		this.CurrentBuilder.Append(" _New", this.NameClass(Node.ClassType));
 		this.CurrentBuilder.OpenIndent("(void) {");
-		this.CurrentBuilder.AppendLineFeedIndent();
+		this.CurrentBuilder.AppendNewLine();
 		this.GenerateTypeName(Node.ClassType);
 		this.CurrentBuilder.Append("o = LibZen_Malloc(sizeof(struct ", this.NameClass(Node.ClassType), "));");
 		this.CurrentBuilder.AppendNewLine("_Init", this.NameClass(Node.ClassType), "(o);");

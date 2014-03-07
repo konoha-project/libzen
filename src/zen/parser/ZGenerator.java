@@ -290,7 +290,11 @@ public abstract class ZGenerator extends ZVisitor {
 
 	@Override public void VisitSyntaxSugarNode(ZSyntaxSugarNode Node) {
 		@Var ZDesugarNode DeNode = Node.DeSugar(this);
-		DeNode.AST[ZDesugarNode._NewNode].Accept(this);
+		@Var int i = 0;
+		while(i < DeNode.GetAstSize()) {
+			DeNode.AST[i].Accept(this);  // FIXME
+			i = i + 1;
+		}
 	}
 
 	public void RequireLibrary(String resourcePath) {

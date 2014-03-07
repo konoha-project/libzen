@@ -489,7 +489,11 @@ public class ZSourceEngine extends ZVisitor {
 
 	@Override public void VisitSyntaxSugarNode(ZSyntaxSugarNode Node) {
 		@Var ZDesugarNode DesugarNode = Node.DeSugar(this.Generator);
-		this.Eval2(DesugarNode.AST[ZDesugarNode._NewNode]);
+		@Var int i = 0;
+		while(i < DesugarNode.GetAstSize()) {
+			this.Eval2(DesugarNode.AST[i]);
+			i = i + 1;
+		}
 	}
 
 

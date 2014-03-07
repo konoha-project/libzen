@@ -167,14 +167,14 @@ public class CommonLispGenerator extends ZSourceGenerator {
 	@Override public void VisitVarNode(ZVarNode Node) {
 		this.CurrentBuilder.Append("(let (", this.NameLocalVariable(Node.NativeName, Node.VarIndex) + ")");
 		this.CurrentBuilder.Indent();
-		this.CurrentBuilder.AppendLineFeedIndent();
+		this.CurrentBuilder.AppendNewLine();
 		this.CurrentBuilder.Append("(setf  ", this.NameLocalVariable(Node.NativeName, Node.VarIndex), " ");
 		this.GenerateCode(null, Node.AST[ZVarNode._InitValue]);
 		this.CurrentBuilder.Append(")");
 		this.VisitStmtList(Node);
 		this.CurrentBuilder.Append(")");
 		this.CurrentBuilder.UnIndent();
-		this.CurrentBuilder.AppendLineFeedIndent();
+		this.CurrentBuilder.AppendNewLine();
 	}
 
 	//	@Override public void VisitTrinaryNode(ZenTrinaryNode Node) {

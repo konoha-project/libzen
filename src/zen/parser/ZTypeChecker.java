@@ -249,8 +249,12 @@ public abstract class ZTypeChecker extends ZVisitor {
 	@Override public void VisitSyntaxSugarNode(ZSyntaxSugarNode Node) {
 		@Var ZType ContextType = this.GetContextType();
 		@Var ZDesugarNode DesugarNode = Node.DeSugar(this.Generator);
-		this.CheckTypeAt(DesugarNode, ZDesugarNode._NewNode, ContextType);
-		this.TypedNode(DesugarNode, DesugarNode.GetAstType(ZDesugarNode._NewNode));
+		@Var int i = 0;
+		while(i < DesugarNode.GetAstSize()) {
+			this.CheckTypeAt(DesugarNode, i, ContextType);
+			i = i + 1;
+		}
+		this.TypedNode(DesugarNode, DesugarNode.GetAstType(DesugarNode.GetAstSize()-1));
 	}
 
 	@Override public void VisitAsmNode(ZAsmNode Node) {

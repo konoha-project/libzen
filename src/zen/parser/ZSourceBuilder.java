@@ -70,7 +70,7 @@ public final class ZSourceBuilder {
 				if(StartIndex < i) {
 					this.SourceList.add(Source.substring(StartIndex, i));
 				}
-				this.AppendLineFeedIndent();
+				this.AppendNewLine();
 				StartIndex = i + 1;
 			}
 			if(ch == '\t') {
@@ -219,24 +219,24 @@ public final class ZSourceBuilder {
 		this.SourceList.add(this.GetIndentString());
 	}
 
-	public final void AppendLineFeedIndent() {
+	public final void AppendNewLine() {
 		this.SourceList.add(this.Template.LineFeed);
 		this.SourceList.add(this.GetIndentString());
 	}
 
 	public final void AppendNewLine(String Text) {
-		this.AppendLineFeedIndent();
+		this.AppendNewLine();
 		this.Append(Text);
 	}
 
 	public final void AppendNewLine(String Text, String Text2) {
-		this.AppendLineFeedIndent();
+		this.AppendNewLine();
 		this.Append(Text);
 		this.Append(Text2);
 	}
 
 	public final void AppendNewLine(String Text, String Text2, String Text3) {
-		this.AppendLineFeedIndent();
+		this.AppendNewLine();
 		this.Append(Text);
 		this.Append(Text2);
 		this.Append(Text3);
@@ -250,7 +250,7 @@ public final class ZSourceBuilder {
 	public final void CloseIndent(String Text) {
 		this.UnIndent();
 		if(Text != null && Text.length() > 0) {
-			this.AppendLineFeedIndent();
+			this.AppendNewLine();
 			this.Append(Text);
 		}
 	}

@@ -221,7 +221,7 @@ public class ZSourceGenerator extends ZGenerator {
 	}
 
 	@Override public boolean StartCodeGeneration(ZNode Node, boolean IsInteractive) {
-		this.CurrentBuilder.AppendLineFeedIndent();
+		this.CurrentBuilder.AppendNewLine();
 		Node.Accept(this);
 		if(IsInteractive) {
 			@Var int i = 0;
@@ -306,7 +306,7 @@ public class ZSourceGenerator extends ZGenerator {
 		@Var int i = 0;
 		while (i < BlockNode.GetListSize()) {
 			@Var ZNode SubNode = BlockNode.GetListAt(i);
-			this.CurrentBuilder.AppendLineFeedIndent();
+			this.CurrentBuilder.AppendNewLine();
 			this.GenerateCode(null, SubNode);
 			i = i + 1;
 			if(i  < BlockNode.GetListSize()) {
@@ -538,7 +538,7 @@ public class ZSourceGenerator extends ZGenerator {
 		this.CurrentBuilder.Append(")");
 		this.GenerateCode(null, Node.AST[ZIfNode._Then]);
 		if (Node.HasAst(ZIfNode._Else)) {
-			this.CurrentBuilder.AppendLineFeedIndent();
+			this.CurrentBuilder.AppendNewLine();
 			this.CurrentBuilder.Append("else ");
 			this.GenerateCode(null, Node.AST[ZIfNode._Else]);
 		}
@@ -673,7 +673,14 @@ public class ZSourceGenerator extends ZGenerator {
 
 	@Override public void VisitSyntaxSugarNode(ZSyntaxSugarNode Node) {
 		@Var ZDesugarNode DesugarNode = Node.DeSugar(this);
-		this.GenerateCode(null, DesugarNode.AST[ZDesugarNode._NewNode]);
+		this.GenerateCode(null, DesugarNode.AST[0]);
+		@Var int i = 1;
+		while(i < DesugarNode.GetAstSize()) {
+			this.CurrentBuilder.Append(this.SemiColon);
+			this.CurrentBuilder.AppendNewLine();
+			this.GenerateCode(null, DesugarNode.AST[i]);
+			i = i + 1;
+		}
 	}
 
 	// Utils
