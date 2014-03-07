@@ -73,6 +73,7 @@ import zen.ast.ZTryNode;
 import zen.ast.ZUnaryNode;
 import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
+import zen.ast.sugar.ZLocalDefinedNode;
 import zen.lang.ZenTypeSafer;
 import zen.parser.ZLogger;
 import zen.parser.ZSourceEngine;
@@ -1455,7 +1456,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override
-	public void VisitExtendedNode(ZNode Node) {
+	public void VisitLocalDefinedNode(ZLocalDefinedNode Node) {
 		if(Node instanceof ZParamNode) {
 			@Var String SymbolName = ((ZParamNode)Node).Name;
 			this.Writer.DefineLocalSymbol(SymbolName);

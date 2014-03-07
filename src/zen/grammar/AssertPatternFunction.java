@@ -1,8 +1,8 @@
 package zen.grammar;
 
-import zen.ast.ZAssertNode;
 import zen.ast.ZNode;
 import zen.ast.ZThrowNode;
+import zen.ast.sugar.ZAssertNode;
 import zen.parser.ZTokenContext;
 import zen.util.Var;
 import zen.util.ZMatchFunction;

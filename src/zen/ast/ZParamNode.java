@@ -24,10 +24,11 @@
 
 package zen.ast;
 
+import zen.ast.sugar.ZLocalDefinedNode;
 import zen.parser.ZToken;
 import zen.util.Field;
 
-public class ZParamNode extends ZNode {
+public class ZParamNode extends ZLocalDefinedNode {
 	@Field public String  Name;
 	@Field public ZToken  NameToken = null;
 	@Field public int     ParamIndex = -1;  // unregistered to NameSpace

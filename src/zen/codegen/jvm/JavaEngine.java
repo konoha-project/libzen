@@ -60,9 +60,9 @@ import zen.ast.ZOrNode;
 import zen.ast.ZSetIndexNode;
 import zen.ast.ZSetterNode;
 import zen.ast.ZStringNode;
-import zen.ast.ZSugarNode;
 import zen.ast.ZTypeNode;
 import zen.ast.ZUnaryNode;
+import zen.ast.sugar.ZLocalDefinedNode;
 import zen.parser.ZEmptyValue;
 import zen.parser.ZLogger;
 import zen.parser.ZMacroFunc;
@@ -581,17 +581,13 @@ public class JavaEngine extends ZSourceEngine {
 		}
 	}
 
-	@Override public void VisitExtendedNode(ZNode Node) {
+	@Override public void VisitLocalDefinedNode(ZLocalDefinedNode Node) {
 		if(Node instanceof JavaStaticFieldNode) {
 			this.VisitStaticFieldNode((JavaStaticFieldNode)Node);
 		}
 		else {
-			super.VisitExtendedNode(Node);
+			this.Generator.VisitUndefinedNode(Node);
 		}
-	}
-
-	@Override public void VisitSugarNode(ZSugarNode Node) {
-		this.EvaledValue = this.Eval(Node.AST[ZSugarNode._DeSugar]);
 	}
 
 	@Override public void ExecMain() {

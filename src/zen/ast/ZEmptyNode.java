@@ -24,9 +24,10 @@
 
 package zen.ast;
 
+import zen.ast.sugar.ZLocalDefinedNode;
 import zen.parser.ZToken;
 
-public final class ZEmptyNode extends ZNode {
+public final class ZEmptyNode extends ZLocalDefinedNode {
 	public ZEmptyNode(ZNode ParentNode, ZToken Token) {
 		super(ParentNode, Token, 0);
 	}

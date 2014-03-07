@@ -28,7 +28,6 @@ package zen.parser;
 
 import zen.ast.ZAndNode;
 import zen.ast.ZArrayLiteralNode;
-import zen.ast.ZAsmMacroNode;
 import zen.ast.ZAsmNode;
 import zen.ast.ZBinaryNode;
 import zen.ast.ZBlockNode;
@@ -47,7 +46,6 @@ import zen.ast.ZGetterNode;
 import zen.ast.ZGlobalNameNode;
 import zen.ast.ZGroupNode;
 import zen.ast.ZIfNode;
-import zen.ast.ZImportNode;
 import zen.ast.ZInstanceOfNode;
 import zen.ast.ZIntNode;
 import zen.ast.ZLetNode;
@@ -59,21 +57,21 @@ import zen.ast.ZNode;
 import zen.ast.ZNotNode;
 import zen.ast.ZNullNode;
 import zen.ast.ZOrNode;
-import zen.ast.ZPrototypeNode;
-import zen.ast.ZRequireNode;
 import zen.ast.ZReturnNode;
 import zen.ast.ZSetIndexNode;
 import zen.ast.ZSetNameNode;
 import zen.ast.ZSetterNode;
 import zen.ast.ZStringNode;
-import zen.ast.ZSugarNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZTypeNode;
 import zen.ast.ZUnaryNode;
 import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
-import zen.type.ZFuncType;
+import zen.ast.sugar.ZDesugarNode;
+import zen.ast.sugar.ZLocalDefinedNode;
+import zen.ast.sugar.ZSyntaxSugarNode;
+import zen.ast.sugar.ZTopLevelNode;
 import zen.type.ZType;
 import zen.util.Field;
 import zen.util.LibZen;
@@ -121,47 +119,13 @@ public class ZSourceEngine extends ZVisitor {
 		}
 	}
 
-	private void VisitRequireNode(ZRequireNode Node) {
-		this.RequireLibrary(Node.ResourcePath);
-	}
 
-	private void VisitPrototypeNode(ZPrototypeNode Node) {
-		@Var ZFuncType FuncType = Node.GetFuncType();
-		this.Generator.SetPrototype(Node, Node.FuncName, FuncType);
-	}
-
-	private void VisitAsmMacroNode(ZAsmMacroNode Node) {
-		@Var String MacroText = Node.GetMacroText();
-		@Var ZType MacroType = Node.MacroType;
-		if(MacroType instanceof ZFuncType) {
-			this.Generator.SetAsmMacro(Node.GetNameSpace(), Node.Symbol, (ZFuncType)MacroType, MacroText);
-		}
-		else {
-			this.Generator.SetAsmSymbol(Node.GetNameSpace(), Node);
-		}
-	}
-
-	private void VisitImportNode(ZImportNode Node) {
-		Node.Import();
-	}
 
 	@ZenIgnored public final Object Exec(ZNode Node, boolean IsInteractive) {
 		this.InteractiveContext = IsInteractive;
 		this.EnableVisitor();
-		if(Node instanceof ZPrototypeNode) {
-			this.VisitPrototypeNode((ZPrototypeNode)Node);
-			return ZEmptyValue._TrueEmpty;
-		}
-		else if(Node instanceof ZAsmMacroNode) {
-			this.VisitAsmMacroNode((ZAsmMacroNode)Node);
-			return ZEmptyValue._TrueEmpty;
-		}
-		else if(Node instanceof ZRequireNode) {
-			this.VisitRequireNode((ZRequireNode)Node);
-			return ZEmptyValue._TrueEmpty;
-		}
-		else if(Node instanceof ZImportNode) {
-			this.VisitImportNode((ZImportNode)Node);
+		if(Node instanceof ZTopLevelNode) {
+			this.VisitTopLevelNode((ZTopLevelNode)Node);
 			return ZEmptyValue._TrueEmpty;
 		}
 		else {
@@ -174,17 +138,8 @@ public class ZSourceEngine extends ZVisitor {
 	public final void Exec2(ZNode Node, boolean IsInteractive) {
 		this.InteractiveContext = IsInteractive;
 		this.EnableVisitor();
-		if(Node instanceof ZPrototypeNode) {
-			this.VisitPrototypeNode((ZPrototypeNode)Node);
-		}
-		else if(Node instanceof ZAsmMacroNode) {
-			this.VisitAsmMacroNode((ZAsmMacroNode)Node);
-		}
-		else if(Node instanceof ZRequireNode) {
-			this.VisitRequireNode((ZRequireNode)Node);
-		}
-		else if(Node instanceof ZImportNode) {
-			this.VisitImportNode((ZImportNode)Node);
+		if(Node instanceof ZTopLevelNode) {
+			this.VisitTopLevelNode((ZTopLevelNode)Node);
 		}
 		else {
 			Node = this.TypeChecker.CheckType(Node, ZType.VoidType);
@@ -514,27 +469,29 @@ public class ZSourceEngine extends ZVisitor {
 		this.StopVisitor();
 	}
 
+	@Override public void VisitAsmNode(ZAsmNode Node) {
+		this.Generator.StartCodeGeneration(Node, this.InteractiveContext);
+	}
+
 	public void VisitTypeNode(ZTypeNode Node) {
 		this.Unsupported(Node);
 	}
 
-	@Override public void VisitExtendedNode(ZNode Node) {
+	@Override public void VisitTopLevelNode(ZTopLevelNode Node) {
+		Node.Perform(Node.GetNameSpace());
+	}
+
+	@Override public void VisitLocalDefinedNode(ZLocalDefinedNode Node) {
 		if(Node instanceof ZTypeNode) {
 			this.VisitTypeNode((ZTypeNode)Node);
 		}
-		else {
-			@Var ZNode SugarNode = Node.DeSugar(this.Generator);
-			SugarNode.Accept(this);
-		}
 	}
 
-	@Override public void VisitSugarNode(ZSugarNode Node) {
-		this.Eval2(Node.AST[ZSugarNode._DeSugar]);
+	@Override public void VisitSyntaxSugarNode(ZSyntaxSugarNode Node) {
+		@Var ZDesugarNode DesugarNode = Node.DeSugar(this.Generator);
+		this.Eval2(DesugarNode.AST[ZDesugarNode._NewNode]);
 	}
 
-	@Override public void VisitAsmNode(ZAsmNode Node) {
-		this.Generator.StartCodeGeneration(Node, this.InteractiveContext);
-	}
 
 	public void WriteTo(String OutputFile) {
 		this.Generator.WriteTo(OutputFile);

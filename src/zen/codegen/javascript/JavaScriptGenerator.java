@@ -134,7 +134,7 @@ public class JavaScriptGenerator extends ZSourceGenerator {
 	@Override public void VisitCatchNode(ZCatchNode Node) {
 		this.CurrentBuilder.Append("catch");
 		this.CurrentBuilder.AppendWhiteSpace();
-		this.CurrentBuilder.Append(Node.ExceptionName);
+		this.CurrentBuilder.Append(Node.GivenName);
 		this.GenerateCode(null, Node.AST[ZCatchNode._Block]);
 	}
 

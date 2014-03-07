@@ -24,12 +24,13 @@
 
 package zen.ast;
 
+import zen.ast.sugar.ZLocalDefinedNode;
 import zen.parser.ZToken;
 import zen.type.ZType;
 
-public final class ZTypeNode extends ZConstNode {
+public final class ZTypeNode extends ZLocalDefinedNode {
 	public ZTypeNode(ZNode ParentNode, ZToken SourceToken, ZType ParsedType) {
-		super(ParentNode, SourceToken);
+		super(ParentNode, SourceToken, 0);
 		this.Type = ParsedType;
 	}
 }

@@ -38,12 +38,14 @@ import zen.ast.ZSetIndexNode;
 import zen.ast.ZSetNameNode;
 import zen.ast.ZSetterNode;
 import zen.ast.ZStringNode;
-import zen.ast.ZSugarNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZUnaryNode;
 import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
+import zen.ast.sugar.ZLocalDefinedNode;
+import zen.ast.sugar.ZSyntaxSugarNode;
+import zen.ast.sugar.ZTopLevelNode;
 import zen.parser.ZVisitor;
 
 public class ZASTTransformer extends ZVisitor {
@@ -292,18 +294,6 @@ public class ZASTTransformer extends ZVisitor {
 		/* do nothing */
 	}
 
-	@Override
-	public void VisitExtendedNode(ZNode Node) {
-		if(Node instanceof ZListNode) {
-			ZListNode List = (ZListNode) Node;
-			this.VisitListNode(List);
-		}
-	}
-
-	@Override
-	public void VisitSugarNode(ZSugarNode Node) {
-		/* do nothing */
-	}
 
 
 	@Override
@@ -329,6 +319,24 @@ public class ZASTTransformer extends ZVisitor {
 
 	@Override
 	public void VisitAsmNode(ZAsmNode Node) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void VisitTopLevelNode(ZTopLevelNode Node) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void VisitSyntaxSugarNode(ZSyntaxSugarNode Node) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void VisitLocalDefinedNode(ZLocalDefinedNode Node) {
 		// TODO Auto-generated method stub
 
 	}

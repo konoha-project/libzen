@@ -105,7 +105,7 @@ public class RubySourceGenerator extends ZSourceGenerator {
 	public void VisitCatchNode(ZCatchNode Node) {
 		this.CurrentBuilder.Append("rescue => ");
 		//this.VisitType(Node.ExceptionType);
-		this.CurrentBuilder.Append(Node.ExceptionName);
+		this.CurrentBuilder.Append(Node.GivenName);
 		this.GenerateCode(null, Node.AST[ZCatchNode._Block]);
 	}
 

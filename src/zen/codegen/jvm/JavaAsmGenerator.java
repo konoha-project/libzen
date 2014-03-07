@@ -105,6 +105,8 @@ import zen.ast.ZTryNode;
 import zen.ast.ZUnaryNode;
 import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
+import zen.ast.sugar.ZLocalDefinedNode;
+import zen.ast.sugar.ZTopLevelNode;
 import zen.lang.ZenTypeSafer;
 import zen.parser.ZLogger;
 import zen.parser.ZSourceEngine;
@@ -619,17 +621,17 @@ public class JavaAsmGenerator extends JavaGenerator {
 
 		// prepare
 		//TODO: add exception class name
-		String throwType = this.AsmType(Node.ExceptionType).getInternalName();
+		String throwType = this.AsmType(Node.GivenType).getInternalName();
 		mv.visitTryCatchBlock(Label.beginTryLabel, Label.endTryLabel, catchLabel, throwType);
 
 		// catch block
-		this.AsmBuilder.AddLocal(this.GetJavaClass(Node.ExceptionType), Node.ExceptionName);
+		this.AsmBuilder.AddLocal(this.GetJavaClass(Node.GivenType), Node.GivenName);
 		mv.visitLabel(catchLabel);
-		this.AsmBuilder.StoreLocal(Node.ExceptionName);
+		this.AsmBuilder.StoreLocal(Node.GivenName);
 		Node.AST[ZCatchNode._Block].Accept(this);
 		mv.visitJumpInsn(GOTO, Label.finallyLabel);
 
-		this.AsmBuilder.RemoveLocal(this.GetJavaClass(Node.ExceptionType), Node.ExceptionName);
+		this.AsmBuilder.RemoveLocal(this.GetJavaClass(Node.GivenType), Node.GivenName);
 	}
 
 	@Override public void VisitLetNode(ZLetNode Node) {
@@ -956,18 +958,21 @@ public class JavaAsmGenerator extends JavaGenerator {
 		this.AsmBuilder.visitFieldInsn(Opcodes.GETSTATIC, Type.getInternalName(Node.StaticClass), Node.FieldName, FieldDesc);
 	}
 
-	@Override public void VisitExtendedNode(ZNode Node) {
+	@Override public void VisitAsmNode(ZAsmNode Node) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override public void VisitTopLevelNode(ZTopLevelNode Node) {
+		this.VisitUndefinedNode(Node);
+	}
+
+	@Override public void VisitLocalDefinedNode(ZLocalDefinedNode Node) {
 		if(Node instanceof JavaStaticFieldNode) {
 			this.VisitStaticFieldNode((JavaStaticFieldNode)Node);
 		}
 		else {
-			super.VisitExtendedNode(Node);
+			this.VisitUndefinedNode(Node);
 		}
-	}
-
-	@Override
-	public void VisitAsmNode(ZAsmNode Node) {
-		// TODO Auto-generated method stub
 
 	}
 

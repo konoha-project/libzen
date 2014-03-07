@@ -27,10 +27,12 @@ package zen.parser;
 
 import zen.ast.ZAsmMacroNode;
 import zen.ast.ZAsmNode;
+import zen.ast.ZErrorNode;
 import zen.ast.ZListNode;
 import zen.ast.ZNode;
 import zen.ast.ZStringNode;
-import zen.ast.ZSugarNode;
+import zen.ast.sugar.ZDesugarNode;
+import zen.ast.sugar.ZSyntaxSugarNode;
 import zen.type.ZFunc;
 import zen.type.ZFuncType;
 import zen.type.ZPrototype;
@@ -281,17 +283,19 @@ public abstract class ZGenerator extends ZVisitor {
 		return null;
 	}
 
-
-	@Override public void VisitExtendedNode(ZNode Node) {
-		@Var ZSugarNode DeNode = Node.DeSugar(this);
-		DeNode.Accept(this);
+	public final void VisitUndefinedNode(ZNode Node) {
+		ZErrorNode ErrorNode = new ZErrorNode(Node.ParentNode, Node.SourceToken, "undefined node:" + Node.toString());
+		this.VisitErrorNode(ErrorNode);
 	}
 
-	@Override public void VisitSugarNode(ZSugarNode Node) {
-		Node.AST[ZSugarNode._DeSugar].Accept(this);
+	@Override public void VisitSyntaxSugarNode(ZSyntaxSugarNode Node) {
+		@Var ZDesugarNode DeNode = Node.DeSugar(this);
+		DeNode.AST[ZDesugarNode._NewNode].Accept(this);
 	}
 
+	public void RequireLibrary(String resourcePath) {
+		// TODO Auto-generated method stub
 
-
+	}
 
 }

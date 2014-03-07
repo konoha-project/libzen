@@ -1,50 +1,32 @@
 package zen.ast;
 
-import zen.parser.ZToken;
+import zen.ast.sugar.ZTopLevelNode;
+import zen.parser.ZNameSpace;
 import zen.type.ZFuncType;
-import zen.type.ZType;
-import zen.type.ZTypePool;
 import zen.util.Field;
 import zen.util.Var;
-import zen.util.ZArray;
 
-public class ZPrototypeNode extends ZListNode {
-	@Field public ZType ReturnType = ZType.VarType;
-
-	@Field public String FuncName = null;
-	@Field public ZToken  NameToken = null;
-
-	public ZPrototypeNode(ZNode ParentNode) {
-		super(ParentNode, null, 0);
-	}
-
-	@Override public final void SetTypeInfo(ZToken TypeToken, ZType Type) {
-		this.ReturnType = Type;
-	}
-
-	@Override public final void SetNameInfo(ZToken NameToken, String Name) {
-		this.FuncName = Name;
-		this.NameToken = NameToken;
+public class ZPrototypeNode extends ZTopLevelNode {
+	public final static int _FuncInfo = 0;
+	@Field ZFunctionNode FunctionNode;
+	public ZPrototypeNode(ZFunctionNode FunctionNode) {
+		super(FunctionNode.ParentNode, FunctionNode.SourceToken, 1);
+		this.Set(ZPrototypeNode._FuncInfo, FunctionNode);
+		this.FunctionNode = FunctionNode;
 	}
 
 	public final ZParamNode GetParamNode(int Index) {
-		@Var ZNode Node = this.GetListAt(Index);
-		if(Node instanceof ZParamNode) {
-			return (ZParamNode)Node;
-		}
-		return null;
+		return this.FunctionNode.GetParamNode(Index);
 	}
 
-	public final ZFuncType GetFuncType() {
-		@Var ZArray<ZType> TypeList = new ZArray<ZType>(new ZType[this.GetListSize()+1]);
-		@Var int i = 0;
-		while(i < this.GetListSize()) {
-			@Var ZParamNode Node = this.GetParamNode(i);
-			@Var ZType ParamType = Node.Type.GetRealType();
-			TypeList.add(ParamType);
-			i = i + 1;
-		}
-		TypeList.add(this.ReturnType.GetRealType());
-		return ZTypePool._LookupFuncType2(TypeList);
+	//	public final ZFuncType GetFuncType() {
+	//		return this.FunctionNode.GetFuncType(null);
+	//	}
+
+	@Override public final void Perform(ZNameSpace NameSpace) {
+		@Var ZFuncType FuncType = this.FunctionNode.GetFuncType(null);
+		NameSpace.Generator.SetPrototype(this.FunctionNode, this.FunctionNode.FuncName, FuncType);
+
 	}
+
 }

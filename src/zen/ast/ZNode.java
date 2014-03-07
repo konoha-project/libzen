@@ -25,7 +25,6 @@
 //ifdef JAVA
 package zen.ast;
 
-import zen.parser.ZGenerator;
 import zen.parser.ZNameSpace;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
@@ -180,14 +179,7 @@ public abstract class ZNode {
 		return false;
 	}
 
-	@ZenMethod public ZSugarNode DeSugar(ZGenerator Generator) {
-		return new ZSugarNode(this, new ZErrorNode(this.ParentNode, "undefined code generation: " + this));
-	}
-
-	//	public abstract boolean Accept(ZenVisitor Visitor);
-	@ZenMethod public void Accept(ZVisitor Visitor) {
-		Visitor.VisitExtendedNode(this);
-	}
+	public abstract void Accept(ZVisitor Visitor);
 
 	public final boolean IsUntyped() {
 		return !(this.Type instanceof ZFuncType) && this.Type.IsVarType();

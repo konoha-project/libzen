@@ -66,12 +66,15 @@ import zen.ast.ZSetIndexNode;
 import zen.ast.ZSetNameNode;
 import zen.ast.ZSetterNode;
 import zen.ast.ZStringNode;
-import zen.ast.ZSugarNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZUnaryNode;
 import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
+import zen.ast.sugar.ZDesugarNode;
+import zen.ast.sugar.ZLocalDefinedNode;
+import zen.ast.sugar.ZSyntaxSugarNode;
+import zen.ast.sugar.ZTopLevelNode;
 import zen.lang.ZenTypeSafer;
 import zen.type.ZClassType;
 import zen.type.ZFuncType;
@@ -580,8 +583,8 @@ public class ZSourceGenerator extends ZGenerator {
 
 	public void VisitCatchNode(ZCatchNode Node) {
 		this.CurrentBuilder.Append("catch (");
-		this.CurrentBuilder.Append(Node.ExceptionName);
-		this.GenerateTypeAnnotation(Node.ExceptionType);
+		this.CurrentBuilder.Append(Node.GivenName);
+		this.GenerateTypeAnnotation(Node.GivenType);
 		this.CurrentBuilder.Append(")");
 		this.GenerateCode(null, Node.AST[ZCatchNode._Block]);
 	}
@@ -651,22 +654,26 @@ public class ZSourceGenerator extends ZGenerator {
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override public void VisitExtendedNode(ZNode Node) {
+	@Override public void VisitAsmNode(ZAsmNode Node) {
+		this.CurrentBuilder.AppendCode(Node.GetMacroText());
+	}
+
+	@Override public void VisitLocalDefinedNode(ZLocalDefinedNode Node) {
 		if(Node instanceof ZParamNode) {
 			this.VisitParamNode((ZParamNode)Node);
 		}
 		else {
-			@Var ZSugarNode SugarNode = Node.DeSugar(this);
-			this.VisitSugarNode(SugarNode);
+			this.VisitUndefinedNode(Node);
 		}
 	}
 
-	@Override public void VisitSugarNode(ZSugarNode Node) {
-		this.GenerateCode(null, Node.AST[ZSugarNode._DeSugar]);
+	@Override public void VisitTopLevelNode(ZTopLevelNode Node) {
+		this.VisitUndefinedNode(Node);
 	}
 
-	@Override public void VisitAsmNode(ZAsmNode Node) {
-		this.CurrentBuilder.AppendCode(Node.GetMacroText());
+	@Override public void VisitSyntaxSugarNode(ZSyntaxSugarNode Node) {
+		@Var ZDesugarNode DesugarNode = Node.DeSugar(this);
+		this.GenerateCode(null, DesugarNode.AST[ZDesugarNode._NewNode]);
 	}
 
 	// Utils
@@ -730,5 +737,6 @@ public class ZSourceGenerator extends ZGenerator {
 		}
 		return false;
 	}
+
 
 }

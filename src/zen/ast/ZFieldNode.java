@@ -24,13 +24,15 @@
 
 package zen.ast;
 
+import zen.ast.sugar.ZLocalDefinedNode;
 import zen.parser.ZToken;
 import zen.type.ZClassType;
 import zen.type.ZType;
 import zen.util.Field;
 
-public final class ZFieldNode extends ZNode {
-	public final static int _InitValue = 0;
+public final class ZFieldNode extends ZLocalDefinedNode {
+	public final static int    _InitValue = 0;
+
 	@Field public  ZClassType  ClassType;
 	@Field public ZType  DeclType = ZType.VarType;
 

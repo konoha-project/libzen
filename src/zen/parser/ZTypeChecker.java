@@ -33,7 +33,8 @@ import zen.ast.ZListNode;
 import zen.ast.ZMacroNode;
 import zen.ast.ZNode;
 import zen.ast.ZStupidCastErrorNode;
-import zen.ast.ZSugarNode;
+import zen.ast.sugar.ZDesugarNode;
+import zen.ast.sugar.ZSyntaxSugarNode;
 import zen.type.ZFunc;
 import zen.type.ZType;
 import zen.type.ZVarScope;
@@ -245,21 +246,11 @@ public abstract class ZTypeChecker extends ZVisitor {
 		}
 	}
 
-	@Override public void VisitExtendedNode(ZNode Node) {
+	@Override public void VisitSyntaxSugarNode(ZSyntaxSugarNode Node) {
 		@Var ZType ContextType = this.GetContextType();
-		@Var ZNode DeNode = Node.DeSugar(this.Generator);
-		if(!DeNode.IsErrorNode()) {
-			this.Return(this.CheckType(DeNode, ContextType));
-		}
-		else {
-			this.TypedNode(DeNode, ContextType);
-		}
-	}
-
-	@Override public void VisitSugarNode(ZSugarNode Node) {
-		@Var ZType ContextType = this.GetContextType();
-		this.CheckTypeAt(Node, ZSugarNode._DeSugar, ContextType);
-		this.TypedNode(Node, Node.GetAstType(ZSugarNode._DeSugar));
+		@Var ZDesugarNode DesugarNode = Node.DeSugar(this.Generator);
+		this.CheckTypeAt(DesugarNode, ZDesugarNode._NewNode, ContextType);
+		this.TypedNode(DesugarNode, DesugarNode.GetAstType(ZDesugarNode._NewNode));
 	}
 
 	@Override public void VisitAsmNode(ZAsmNode Node) {

@@ -72,6 +72,8 @@ import zen.ast.ZTypeNode;
 import zen.ast.ZUnaryNode;
 import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
+import zen.ast.sugar.ZLocalDefinedNode;
+import zen.ast.sugar.ZTopLevelNode;
 import zen.parser.ZGenerator;
 import zen.parser.ZLogger;
 import zen.parser.ZMacroFunc;
@@ -841,6 +843,16 @@ public class ZenTypeSafer extends ZTypeChecker {
 		this.TypedNode(Node, ZType.VoidType);
 	}
 
+	@Override public void VisitTopLevelNode(ZTopLevelNode Node) {
+		// TODO Auto-generated method stub
+		System.out.println("FIXME: " + Node);
+	}
+
+	@Override public void VisitLocalDefinedNode(ZLocalDefinedNode Node) {
+		// TODO Auto-generated method stub
+		System.out.println("FIXME: " + Node);
+	}
+
 
 	// utils
 
@@ -881,6 +893,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 		//		}
 		return null;
 	}
+
 
 
 	//	private ZFunc LookupFunc2(ZNameSpace NameSpace, String FuncName, ZType RecvType, int FuncParamSize) {

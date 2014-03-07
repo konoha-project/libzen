@@ -1,9 +1,10 @@
 package zen.codegen.jvm;
 
 import zen.ast.ZNode;
+import zen.ast.sugar.ZLocalDefinedNode;
 import zen.type.ZType;
 
-public class JavaStaticFieldNode extends ZNode {
+public class JavaStaticFieldNode extends ZLocalDefinedNode {
 	Class<?> StaticClass;
 	String FieldName;
 	JavaStaticFieldNode(ZNode ParentNode, Class<?> StaticClass, ZType FieldType, String FieldName) {

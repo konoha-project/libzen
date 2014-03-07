@@ -6,7 +6,6 @@ import zen.ast.ZCatchNode;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZGetNameNode;
 import zen.ast.ZIfNode;
-import zen.ast.ZNode;
 import zen.ast.ZParamNode;
 import zen.ast.ZSetNameNode;
 import zen.ast.ZVarNode;
@@ -118,7 +117,7 @@ public class SSATransformer2 extends ZASTTransformer {
 
 	@Override
 	public void VisitCatchNode(ZCatchNode Node) {
-		Variable V = new Variable(Node.ExceptionName, Node);
+		Variable V = new Variable(Node.GivenName, Node);
 		this.AddVariable(V);
 		Node.AST[ZCatchNode._Block].Accept(this);
 		this.LocalVariables.set(V.Index, null);
@@ -140,8 +139,4 @@ public class SSATransformer2 extends ZASTTransformer {
 		this.LocalStates = OriginalState;
 	}
 
-	@Override
-	public void VisitExtendedNode(ZNode Node) {
-		throw new RuntimeException("Not supported Node:" + Node.getClass().getName());
-	}
 }

@@ -51,7 +51,6 @@ import zen.ast.ZMacroNode;
 import zen.ast.ZMapLiteralNode;
 import zen.ast.ZMethodCallNode;
 import zen.ast.ZNewObjectNode;
-import zen.ast.ZNode;
 import zen.ast.ZNotNode;
 import zen.ast.ZNullNode;
 import zen.ast.ZOrNode;
@@ -60,12 +59,14 @@ import zen.ast.ZSetIndexNode;
 import zen.ast.ZSetNameNode;
 import zen.ast.ZSetterNode;
 import zen.ast.ZStringNode;
-import zen.ast.ZSugarNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZUnaryNode;
 import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
+import zen.ast.sugar.ZLocalDefinedNode;
+import zen.ast.sugar.ZSyntaxSugarNode;
+import zen.ast.sugar.ZTopLevelNode;
 
 public abstract class ZVisitor {
 	public abstract void VisitNullNode(ZNullNode Node);
@@ -107,10 +108,12 @@ public abstract class ZVisitor {
 	public abstract void VisitLetNode(ZLetNode Node);
 	public abstract void VisitFunctionNode(ZFunctionNode Node);
 	public abstract void VisitClassNode(ZClassNode Node);
-	public abstract void VisitExtendedNode(ZNode Node);
-	public abstract void VisitSugarNode(ZSugarNode Node);
 	public abstract void VisitAsmNode(ZAsmNode Node);
 	public abstract void VisitErrorNode(ZErrorNode Node);
+	//	public abstract void VisitSugarNode(ZSugarNode Node);
+	public abstract void VisitTopLevelNode(ZTopLevelNode Node);
+	public abstract void VisitSyntaxSugarNode(ZSyntaxSugarNode Node);
+	public abstract void VisitLocalDefinedNode(ZLocalDefinedNode Node);
 
 	public abstract void EnableVisitor();
 	public abstract void StopVisitor();

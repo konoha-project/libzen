@@ -5,7 +5,7 @@ import zen.util.Field;
 import zen.util.LibZen;
 import zen.util.Var;
 
-public class ZListNode extends ZNode {
+public abstract class ZListNode extends ZNode {
 	@Field public int ListStartIndex;
 	public ZListNode(ZNode ParentNode, ZToken SourceToken, int Size) {
 		super(ParentNode, SourceToken, Size);

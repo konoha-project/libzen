@@ -24,28 +24,21 @@
 
 package zen.ast;
 
+import zen.ast.sugar.ZLocalDefinedNode;
 import zen.parser.ZToken;
 import zen.type.ZType;
 import zen.util.Field;
 
-public final class ZCatchNode extends ZNode {
+public final class ZCatchNode extends ZLocalDefinedNode {
 	public final static int _Block = 0;
-
-	@Field public ZType   ExceptionType = ZType.VarType;
-	@Field public String  ExceptionName = null;
-
-	@Field public ZToken NameToken = null;
 
 	public ZCatchNode(ZNode ParentNode) {
 		super(ParentNode, null, 1);
 	}
 
-	@Override public void SetTypeInfo(ZToken TypeToken, ZType Type) {
-		this.ExceptionType = Type;
-	}
-	@Override public void SetNameInfo(ZToken NameToken, String Name) {
-		this.ExceptionName = Name;
-		this.NameToken = NameToken;
-	}
+	@Field public ZType   GivenType = ZType.VarType;
+	@Field public String  GivenName = null;
+	@Field public ZToken GivenNameToken = null;
+
 
 }
