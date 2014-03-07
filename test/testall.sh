@@ -3,6 +3,9 @@ DIR="test/common"
 TDIR="build/test"
 mkdir -p $TDIR
 
+echo "testing zen generation .."
+ZENCODE=zen bash test/testfiles.sh $DIR $TDIR cat
+
 echo "testing java bytecode generation and its execution"
 ZENCODE=jvm bash test/testfiles.sh $DIR $TDIR  
 

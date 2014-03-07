@@ -100,7 +100,9 @@ public class ZSourceGenerator extends ZGenerator {
 	@Field public String EndComment = "*/";
 	@Field public String SemiColon = ";";
 	@Field public String Camma = ", ";
+
 	@Field public String StringLiteralPrefix = "";
+	@Field public String IntLiteralSuffix = "L";
 
 	@Field public String TrueLiteral = "true";
 	@Field public String FalseLiteral = "false";
@@ -314,7 +316,7 @@ public class ZSourceGenerator extends ZGenerator {
 	}
 
 	@Override public void VisitIntNode(ZIntNode Node) {
-		this.CurrentBuilder.Append(String.valueOf(Node.IntValue));
+		this.CurrentBuilder.Append(String.valueOf(Node.IntValue), this.IntLiteralSuffix);
 	}
 
 	@Override public void VisitFloatNode(ZFloatNode Node) {

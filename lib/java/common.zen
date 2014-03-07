@@ -15,13 +15,20 @@ asm macro size "$[0].length()" : Func<String,int>;
 asm macro substring "$[0].substring($[1])" : Func<String,int,String>;
 asm macro substring "$[0].substring($[1],$[2])" : Func<String,int,int,String>;
 asm macro indexOf "$[0].indexOf($[1])" : Func<String,String,int>;
-asm macro indexOf "$[0].indexOf($[1], $[2])" : Func<String,int,String,int>;
+asm macro indexOf "$[0].indexOf($[1],$[2])" : Func<String,int,String,int>;
 asm macro equals "$[0].equals($[1])" : Func<String,String,boolean>;
 asm macro startsWith "$[0].startsWith($[1])" : Func<String,String,boolean>;
 asm macro endsWith "$[0].endsWith($[1])" : Func<String,String,boolean>;
+asm macro == "$[0].equals($[1])" : Func<String,String,boolean>;
+asm macro != "!($[0].equals($[1]))" : Func<String,String,boolean>;
+asm macro <  "$[0].compareTo($[1]) < 0" : Func<String,String,boolean>;
+asm macro <= "$[0].compareTo($[1]) <= 0" : Func<String,String,boolean>;
+asm macro >  "$[0].compareTo($[1]) > 0" : Func<String,String,boolean>;
+asm macro >= "$[0].compareTo($[1]) >= 0" : Func<String,String,boolean>;
 
 // Array
 asm macro size "$[0].size()" : Func<α[],int>;
 asm macro clear "$[0].clear($[0], $[1])" : Func<α[],int,void>;
 asm macro add "$[0].add($[1])" : Func<α[],α,void>;
 asm macro add "$[0].add($[1], $[2])" : Func<α[],int,α,void>;
+asm macro _ "$[0].toString()" : Func<α[],String>;

@@ -42,10 +42,10 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 
 	public JavaSourceGenerator() {
 		super("java", "1.6");
-
+		this.IntLiteralSuffix="";
 		this.TopType = "Object";
 		this.SetNativeType(ZType.BooleanType, "boolean");
-		this.SetNativeType(ZType.IntType, "long");
+		this.SetNativeType(ZType.IntType, "int");  // for beautiful code
 		this.SetNativeType(ZType.FloatType, "double");
 		this.SetNativeType(ZType.StringType, "String");
 
@@ -94,7 +94,7 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 			this.CurrentBuilder.Append("/*untyped*/");
 		}
 		else {
-			if(ContextType != null && Node.Type != ContextType) {
+			if(ContextType != null && Node.Type != ContextType && !ContextType.IsGreekType()) {
 				this.CurrentBuilder.Append("(");
 				this.GenerateTypeName(ContextType);
 				this.CurrentBuilder.Append(")");
@@ -118,26 +118,17 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 		}
 	}
 
-
 	@Override public void VisitArrayLiteralNode(ZArrayLiteralNode Node) {
-		@Var ZType ParamType = Node.Type.GetParamType(0);
-		if(ParamType.IsIntType() || ParamType.IsBooleanType()) {
-			this.CurrentBuilder.Append("LibZen_NewIntArray(");
-		}
-		else if(ParamType.IsFloatType()) {
-			this.CurrentBuilder.Append("LibZen_NewFloatArray(");
-		}
-		else if(ParamType.IsStringType()) {
-			this.CurrentBuilder.Append("LibZen_NewStringArray(");
+		if(Node.GetListSize() == 0) {
+			this.CurrentBuilder.Append("new ", this.GetJavaTypeName(Node.Type, false), "()");
 		}
 		else {
-			this.CurrentBuilder.Append("LibZen_NewArray(");
+			@Var ZType ParamType = Node.Type.GetParamType(0);
+			this.ImportLibrary("java.util.Arrays");
+			this.CurrentBuilder.Append("new ", this.GetJavaTypeName(Node.Type, false), "(");
+			this.CurrentBuilder.Append("Arrays.asList(new ", this.GetJavaTypeName(ParamType, true), "[]");
+			this.VisitListNode("{", Node, "}))");
 		}
-		this.CurrentBuilder.Append(String.valueOf(Node.GetListSize()));
-		if(Node.GetListSize() > 0) {
-			this.CurrentBuilder.Append(this.Camma);
-		}
-		this.VisitListNode("", Node, ")");
 	}
 
 	@Override public void VisitMapLiteralNode(ZMapLiteralNode Node) {
@@ -166,49 +157,32 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 		this.VisitListNode("(", Node, ")");
 	}
 
-	private String BaseName(ZType RecvType) {
-		return RecvType.GetAsciiName(); // FIXME
-	}
-
 	@Override public void VisitGetIndexNode(ZGetIndexNode Node) {
-		this.CurrentBuilder.Append(this.BaseName(Node.GetAstType(ZGetIndexNode._Recv)) + "GetIndex");
-		this.CurrentBuilder.Append("(");
-		this.GenerateCode(null, Node.AST[ZGetIndexNode._Index]);
-		this.CurrentBuilder.Append(")");
+		@Var ZType RecvType = Node.GetAstType(ZGetIndexNode._Recv);
+		if(RecvType.IsStringType()) {
+			this.GenerateCode(null, "String.valueOf((", Node.AST[ZGetIndexNode._Recv], ")");
+			this.GenerateCode(null, ".charAt(", Node.AST[ZGetIndexNode._Index], "))");
+		}
+		else {
+			this.GenerateCode(null, Node.AST[ZGetIndexNode._Recv]);
+			this.GenerateCode(null, ".get(", Node.AST[ZGetIndexNode._Index], ")");
+		}
 	}
 
 	@Override public void VisitSetIndexNode(ZSetIndexNode Node) {
-		this.CurrentBuilder.Append(this.BaseName(Node.GetAstType(ZGetIndexNode._Recv)) + "SetIndex");
-		this.CurrentBuilder.Append("(");
+		@Var ZType RecvType = Node.GetAstType(ZGetIndexNode._Recv);
+		this.GenerateCode(null, Node.AST[ZGetIndexNode._Recv]);
+		if(RecvType.IsMapType()) {
+			this.CurrentBuilder.Append(".put(");
+		}
+		else {
+			this.CurrentBuilder.Append(".set(");
+		}
 		this.GenerateCode(null, Node.AST[ZSetIndexNode._Index]);
 		this.CurrentBuilder.Append(this.Camma);
 		this.GenerateCode(null, Node.AST[ZSetIndexNode._Expr]);
 		this.CurrentBuilder.Append(")");
 	}
-
-	//	@Override public void VisitGetNameNode(ZGetNameNode Node) {
-	//		this.CurrentBuilder.Append(this.SafeName(Node.VarName, Node.VarIndex));
-	//	}
-	//
-	//	@Override public void VisitSetNameNode(ZSetNameNode Node) {
-	//		this.CurrentBuilder.Append(this.SafeName(Node.VarName, Node.VarIndex));
-	//		this.CurrentBuilder.AppendToken("=");
-	//		this.GenerateCode(null, Node.AST[ZSetNameNode._Expr]);
-	//	}
-	//
-	//	@Override public void VisitGetterNode(ZGetterNode Node) {
-	//		this.GenerateSurroundCode(Node.AST[ZGetterNode._Recv]);
-	//		this.CurrentBuilder.Append(".");
-	//		this.CurrentBuilder.Append(Node.FieldName);
-	//	}
-	//
-	//	@Override public void VisitSetterNode(ZSetterNode Node) {
-	//		this.GenerateSurroundCode(Node.AST[ZSetterNode._Recv]);
-	//		this.CurrentBuilder.Append(".");
-	//		this.CurrentBuilder.Append(Node.FieldName);
-	//		this.CurrentBuilder.AppendToken("=");
-	//		this.GenerateCode(null, Node.AST[ZSetterNode._Expr]);
-	//	}
 
 	@Override public void VisitMethodCallNode(ZMethodCallNode Node) {
 		this.GenerateSurroundCode(Node.AST[ZMethodCallNode._Recv]);
@@ -262,18 +236,47 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 		//		this.GenerateCode(Node.AST[ZCatchNode._Block]);
 	}
 
-	private String ParamTypeName(ZType Type) {
+	private String GetJavaTypeName(ZType Type, boolean Boxing) {
 		if(Type.IsArrayType()) {
-			return "ArrayOf" + this.ParamTypeName(Type.GetParamType(0)) + "_";
+			this.ImportLibrary("java.util.ArrayList");
+			return "ArrayList<" + this.GetJavaTypeName(Type.GetParamType(0), true) + ">";
 		}
 		if(Type.IsMapType()) {
-			return "MapOf" + this.ParamTypeName(Type.GetParamType(0)) + "_";
+			this.ImportLibrary("java.util.HashMap");
+			return "HashMap<String," + this.GetJavaTypeName(Type.GetParamType(0), true) + ">";
+		}
+		if(Type instanceof ZFuncType) {
+			return this.GetFuncTypeClass((ZFuncType)Type);
+		}
+		if(Type instanceof ZClassType) {
+			return this.NameClass(Type);
+		}
+		if(Boxing) {
+			if(Type.IsIntType()) {
+				return "Integer";
+			}
+			if(Type.IsFloatType()) {
+				return "Double";
+			}
+			if(Type.IsBooleanType()) {
+				return "Boolean";
+			}
+		}
+		return this.GetNativeTypeName(Type);
+	}
+
+	private String ParamFuncTypeName(ZType Type) {
+		if(Type.IsArrayType()) {
+			return "ArrayOf" + this.ParamFuncTypeName(Type.GetParamType(0)) + "_";
+		}
+		if(Type.IsMapType()) {
+			return "MapOf" + this.ParamFuncTypeName(Type.GetParamType(0)) + "_";
 		}
 		if(Type.IsFuncType()) {
 			@Var String s = "FuncOf";
 			@Var int i = 0;
 			while(i < Type.GetParamSize()) {
-				s = s +  this.ParamTypeName(Type.GetParamType(i));
+				s = s +  this.ParamFuncTypeName(Type.GetParamType(i));
 				i = i + 1;
 			}
 			return s + "_";
@@ -290,21 +293,7 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 		if(Type.IsVarType()) {
 			return "Var";
 		}
-		return Type.ShortName;
-	}
-
-	private String GetCTypeName(ZType Type) {
-		@Var String TypeName = null;
-		if(Type.IsArrayType() || Type.IsMapType()) {
-			TypeName = this.ParamTypeName(Type) + " *";
-		}
-		if(Type instanceof ZClassType) {
-			TypeName = this.NameClass(Type);
-		}
-		if(TypeName == null) {
-			TypeName = this.GetNativeTypeName(Type);
-		}
-		return TypeName;
+		return Type.GetName();
 	}
 
 	@Field private final ZenMap<String> FuncNameMap = new ZenMap<String>(null);
@@ -312,7 +301,7 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 	String GetFuncTypeClass(ZFuncType FuncType) {
 		@Var String ClassName = this.FuncNameMap.GetOrNull(FuncType.GetUniqueName());
 		if(ClassName == null) {
-			ClassName = this.ParamTypeName(FuncType);
+			ClassName = this.ParamFuncTypeName(FuncType);
 			this.FuncNameMap.put(FuncType.GetUniqueName(), ClassName);
 
 			this.CurrentBuilder = this.InsertNewSourceBuilder();
@@ -348,7 +337,7 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 			this.CurrentBuilder.Append(this.GetFuncTypeClass((ZFuncType)Type));
 		}
 		else {
-			this.CurrentBuilder.Append(this.GetCTypeName(Type.GetRealType()));
+			this.CurrentBuilder.Append(this.GetJavaTypeName(Type.GetRealType(), false));
 		}
 	}
 
@@ -490,8 +479,8 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Append(" ", FieldName);
 		if(Value != null) {
 			this.CurrentBuilder.Append(" = ", Value);
+			this.CurrentBuilder.Append(this.SemiColon);
 		}
-		this.CurrentBuilder.Append(this.SemiColon);
 	}
 
 	@Override public void VisitClassNode(ZClassNode Node) {

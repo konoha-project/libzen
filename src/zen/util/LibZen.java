@@ -38,7 +38,6 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 
 import zen.ast.ZNode;
-import zen.codegen.jvm.JavaStaticFunc;
 import zen.codegen.jvm.JavaTypeTable;
 import zen.parser.ZGenerator;
 import zen.parser.ZNameSpace;
@@ -48,8 +47,6 @@ import zen.parser.ZSourceEngine;
 import zen.parser.ZSourceGenerator;
 import zen.parser.ZTokenContext;
 import zen.parser.ZTokenFunc;
-import zen.type.ZFunc;
-import zen.type.ZFuncType;
 import zen.type.ZType;
 
 public class LibZen {
@@ -494,26 +491,6 @@ public class LibZen {
 		return false;
 	}
 
-	public final static ZFunc LoadTokenFunc(Class<?> GrammarClass, String FuncName) {
-		try {
-			Method JavaMethod = GrammarClass.getMethod(FuncName, ZSourceContext.class);
-			return LibZen.ConvertToNativeFunc(JavaMethod);
-		} catch (NoSuchMethodException e) {
-			LibZen._FixMe(e);
-		}
-		return null;
-	}
-
-	public final static ZFunc LoadMatchFunc(Class<?> GrammarClass, String FuncName) {
-		try {
-			Method JavaMethod = GrammarClass.getMethod(FuncName, ZNode.class, ZTokenContext.class, ZNode.class);
-			return LibZen.ConvertToNativeFunc(JavaMethod);
-		} catch (NoSuchMethodException e) {
-			LibZen._FixMe(e);
-		}
-		return null;
-	}
-
 	public final static boolean _ApplyTokenFunc(ZTokenFunction TokenFunc, ZSourceContext SourceContext) {
 		return TokenFunc.Invoke(SourceContext);
 	}
@@ -578,13 +555,6 @@ public class LibZen {
 	public final static ZType GetNativeType(Class<?> NativeClass) {
 		return JavaTypeTable.GetZenType(NativeClass);
 	}
-
-	public final static JavaStaticFunc ConvertToNativeFunc(Method jMethod) {
-		@Var ZFuncType FuncType = JavaTypeTable.ConvertToFuncType(jMethod);
-		return new JavaStaticFunc(jMethod.getName(), FuncType, jMethod);
-	}
-
-
 
 	// Type
 	public final static String _GetClassName(Object Value) {
