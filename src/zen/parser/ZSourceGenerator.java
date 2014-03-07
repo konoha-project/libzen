@@ -113,6 +113,8 @@ public class ZSourceGenerator extends ZGenerator {
 	@Field public String TopType = "var";
 	@Field public String ErrorFunc = "perror";
 
+	@Field public boolean ReadableCode = true;
+
 	public ZSourceGenerator(String TargetCode, String TargetVersion) {
 		super(TargetCode, TargetVersion);
 		this.InitBuilderList();

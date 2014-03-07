@@ -24,9 +24,25 @@ function NestedWhileTest() {
 	assert(n == 10);
 }
 
+function WhileNtimes(n: int) {
+	var count = 0;
+	while(count < n) {
+		count = count + 1;
+	}
+	println("#count: " + count);
+	assert(count == n);
+}
+
+
 export function main() {
 	WhileTest();
 	NestedWhileTest();
+	WhileNtimes(100);
+	WhileNtimes(1000);
+	WhileNtimes(10000);
+	WhileNtimes(100000);
+	WhileNtimes(1000000);
+	WhileNtimes(10000000);
 }
 
 

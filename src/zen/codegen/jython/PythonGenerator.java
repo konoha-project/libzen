@@ -183,15 +183,12 @@ public class PythonGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitLetNode(ZLetNode Node) {
-		//		this.CurrentBuilder.Append("static ");
-		//		this.GenerateTypeName(Node.GetAstType(ZLetNode._InitValue));
-		//		this.CurrentBuilder.Append(" ");
-		this.CurrentBuilder.Append(Node.GlobalName);
-		this.CurrentBuilder.Append(" = ");
-		this.GenerateCode(null, Node.AST[ZLetNode._InitValue]);
-		this.CurrentBuilder.Append(this.SemiColon);
-		this.CurrentBuilder.AppendLineFeed();
-		Node.GetNameSpace().SetLocalSymbol(Node.Symbol, Node.ToGlobalNameNode());
+		if(this.ReadableCode || !Node.IsConstValue()) {
+			this.CurrentBuilder.Append(Node.GlobalName);
+			this.CurrentBuilder.Append(" = ");
+			this.GenerateCode(null, Node.AST[ZLetNode._InitValue]);
+			Node.GetNameSpace().SetLocalSymbol(Node.Symbol, Node.ToGlobalNameNode());
+		}
 	}
 
 	@Override public void VisitParamNode(ZParamNode Node) {
