@@ -15,6 +15,9 @@ ZENCODE=java bash test/testfiles.sh $DIR $TDIR javac class java
 echo "generating c.."
 ZENCODE=c bash test/testfiles.sh $DIR $TDIR
 
+echo "generating llvm assembly code .."
+ZENCODE=llvm bash test/testfiles.sh $DIR $TDIR
+
 NODE=`which node`
 if [ -x $NODE ]; then
 	echo "testing javascript and its execution with $NODE"
