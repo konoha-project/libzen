@@ -47,6 +47,15 @@ public class ZFunctionNode extends ZListNode {
 	@Field public ZFuncType ResolvedFuncType = null;
 	@Field public int VarIndex = 0;
 
+	public final ZBlockNode BlockNode() {
+		@Var ZNode BlockNode = this.AST[ZFunctionNode._Block];
+		if(BlockNode instanceof ZBlockNode) {
+			return (ZBlockNode)BlockNode;
+		}
+		assert(BlockNode == null); // this must not happen
+		return null;
+	}
+
 	public ZFunctionNode(ZNode ParentNode) {
 		super(ParentNode, null, 1);
 	}

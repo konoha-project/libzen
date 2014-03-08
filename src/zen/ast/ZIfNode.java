@@ -35,6 +35,24 @@ public final class ZIfNode extends ZNode {
 		super(ParentNode, null, 3);
 	}
 
+	public final ZNode CondNode() {
+		return this.AST[ZIfNode._Cond ];
+	}
+
+	public final ZNode ThenNode() {
+		return this.AST[ZIfNode._Then ];
+	}
+
+	public final boolean HasElseNode() {
+		return this.AST[ZIfNode._Else ] != null;
+	}
+
+	public final ZNode ElseNode() {
+		return this.AST[ZIfNode._Else ];
+	}
+
+
+
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitIfNode(this);
 	}

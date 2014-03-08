@@ -50,6 +50,13 @@ public final class ZVarNode extends ZBlockNode {
 		this.Set(ZVarNode._InitValue, InitNode);
 	}
 
+	public final ZNode InitValueNode() {
+		if(this.AST[ZVarNode._InitValue] == null) {
+			this.Set(ZVarNode._InitValue, new ZDefaultValueNode());
+		}
+		return this.AST[ZVarNode._InitValue];
+	}
+
 	@Override public void SetNameInfo(ZToken NameToken, String Name) {
 		this.NativeName = Name;
 		this.NameToken = NameToken;
@@ -63,4 +70,5 @@ public final class ZVarNode extends ZBlockNode {
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitVarNode(this);
 	}
+
 }

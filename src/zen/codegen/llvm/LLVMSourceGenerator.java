@@ -35,7 +35,6 @@ import zen.ast.ZBlockNode;
 import zen.ast.ZBooleanNode;
 import zen.ast.ZBreakNode;
 import zen.ast.ZCastNode;
-import zen.ast.ZCatchNode;
 import zen.ast.ZClassNode;
 import zen.ast.ZComparatorNode;
 import zen.ast.ZConstNode;
@@ -395,68 +394,68 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		}
 		@Var String Binary = Node.SourceToken.GetText();
 		if(Binary.equals("+")) {
-			if(Node.AST[ZBinaryNode._Left].Type.IsIntType() && Node.AST[ZBinaryNode._Right].Type.IsIntType()) {
+			if(Node.LeftNode().Type.IsIntType() && Node.RightNode().Type.IsIntType()) {
 				return "add";
 			}
-			else if(Node.AST[ZBinaryNode._Left].Type.IsFloatType() && Node.AST[ZBinaryNode._Right].Type.IsFloatType()) {
+			else if(Node.LeftNode().Type.IsFloatType() && Node.RightNode().Type.IsFloatType()) {
 				return "fadd";
 			}
 		}
 		else if(Binary.equals("-")) {
-			if(Node.AST[ZBinaryNode._Left].Type.IsIntType() && Node.AST[ZBinaryNode._Right].Type.IsIntType()) {
+			if(Node.LeftNode().Type.IsIntType() && Node.RightNode().Type.IsIntType()) {
 				return "sub";
 			}
-			else if(Node.AST[ZBinaryNode._Left].Type.IsFloatType() && Node.AST[ZBinaryNode._Right].Type.IsFloatType()) {
+			else if(Node.LeftNode().Type.IsFloatType() && Node.RightNode().Type.IsFloatType()) {
 				return "fsub";
 			}
 		}
 		else if(Binary.equals("*")) {
-			if(Node.AST[ZBinaryNode._Left].Type.IsIntType() && Node.AST[ZBinaryNode._Right].Type.IsIntType()) {
+			if(Node.LeftNode().Type.IsIntType() && Node.RightNode().Type.IsIntType()) {
 				return "mul";
 			}
-			else if(Node.AST[ZBinaryNode._Left].Type.IsFloatType() && Node.AST[ZBinaryNode._Right].Type.IsFloatType()) {
+			else if(Node.LeftNode().Type.IsFloatType() && Node.RightNode().Type.IsFloatType()) {
 				return "fmul";
 			}
 		}
 		else if(Binary.equals("/")) {
-			if(Node.AST[ZBinaryNode._Left].Type.IsIntType() && Node.AST[ZBinaryNode._Right].Type.IsIntType()) {
+			if(Node.LeftNode().Type.IsIntType() && Node.RightNode().Type.IsIntType()) {
 				return "sdiv";
 			}
-			else if(Node.AST[ZBinaryNode._Left].Type.IsFloatType() && Node.AST[ZBinaryNode._Right].Type.IsFloatType()) {
+			else if(Node.LeftNode().Type.IsFloatType() && Node.RightNode().Type.IsFloatType()) {
 				return "fdiv";
 			}
 		}
 		else if(Binary.equals("%")) {
-			if(Node.AST[ZBinaryNode._Left].Type.IsIntType() && Node.AST[ZBinaryNode._Right].Type.IsIntType()) {
+			if(Node.LeftNode().Type.IsIntType() && Node.RightNode().Type.IsIntType()) {
 				return "srem";
 			}
-			else if(Node.AST[ZBinaryNode._Left].Type.IsFloatType() && Node.AST[ZBinaryNode._Right].Type.IsFloatType()) {
+			else if(Node.LeftNode().Type.IsFloatType() && Node.RightNode().Type.IsFloatType()) {
 				return "frem";
 			}
 		}
 		else if(Binary.equals("|")) {
-			if(Node.AST[ZBinaryNode._Left].Type.IsIntType() && Node.AST[ZBinaryNode._Right].Type.IsIntType()) {
+			if(Node.LeftNode().Type.IsIntType() && Node.RightNode().Type.IsIntType()) {
 				return "or";
 			}
 		}
 		else if(Binary.equals("&")) {
-			if(Node.AST[ZBinaryNode._Left].Type.IsIntType() && Node.AST[ZBinaryNode._Right].Type.IsIntType()) {
+			if(Node.LeftNode().Type.IsIntType() && Node.RightNode().Type.IsIntType()) {
 				return "and";
 			}
 		}
 		else if(Binary.equals("<<")) {
-			if(Node.AST[ZBinaryNode._Left].Type.IsIntType() && Node.AST[ZBinaryNode._Right].Type.IsIntType()) {
+			if(Node.LeftNode().Type.IsIntType() && Node.RightNode().Type.IsIntType()) {
 				return "shl";
 			}
 		}
 		else if(Binary.equals(">>")) {
-			if(Node.AST[ZBinaryNode._Left].Type.IsIntType() && Node.AST[ZBinaryNode._Right].Type.IsIntType()) {
+			if(Node.LeftNode().Type.IsIntType() && Node.RightNode().Type.IsIntType()) {
 				return "ashr"; //arithmetic
 				//return "lshr"; //logical
 			}
 		}
 		else if(Binary.equals("^")) {
-			if(Node.AST[ZBinaryNode._Left].Type.IsIntType() && Node.AST[ZBinaryNode._Right].Type.IsIntType()) {
+			if(Node.LeftNode().Type.IsIntType() && Node.RightNode().Type.IsIntType()) {
 				return "xor";
 			}
 		}
@@ -470,7 +469,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		}
 		@Var String Comparator = Node.SourceToken.GetText();
 		if(Comparator.equals("==")) {
-			if(Node.AST[ZBinaryNode._Left].Type.IsFloatType() && Node.AST[ZBinaryNode._Right].Type.IsFloatType()) {
+			if(Node.LeftNode().Type.IsFloatType() && Node.RightNode().Type.IsFloatType()) {
 				return "fcmp oeq";
 			}
 			else {
@@ -478,7 +477,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 			}
 		}
 		else if(Comparator.equals("!=")) {
-			if(Node.AST[ZBinaryNode._Left].Type.IsFloatType() && Node.AST[ZBinaryNode._Right].Type.IsFloatType()) {
+			if(Node.LeftNode().Type.IsFloatType() && Node.RightNode().Type.IsFloatType()) {
 				return "fcmp one";
 			}
 			else {
@@ -486,34 +485,34 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 			}
 		}
 		else if(Comparator.equals("<")) {
-			if(Node.AST[ZBinaryNode._Left].Type.IsIntType() && Node.AST[ZBinaryNode._Right].Type.IsIntType()) {
+			if(Node.LeftNode().Type.IsIntType() && Node.RightNode().Type.IsIntType()) {
 				return "icmp slt";
 			}
-			else if(Node.AST[ZBinaryNode._Left].Type.IsFloatType() && Node.AST[ZBinaryNode._Right].Type.IsFloatType()) {
+			else if(Node.LeftNode().Type.IsFloatType() && Node.RightNode().Type.IsFloatType()) {
 				return "fcmp olt";
 			}
 		}
 		else if(Comparator.equals("<=")) {
-			if(Node.AST[ZBinaryNode._Left].Type.IsIntType() && Node.AST[ZBinaryNode._Right].Type.IsIntType()) {
+			if(Node.LeftNode().Type.IsIntType() && Node.RightNode().Type.IsIntType()) {
 				return "icmp sle";
 			}
-			else if(Node.AST[ZBinaryNode._Left].Type.IsFloatType() && Node.AST[ZBinaryNode._Right].Type.IsFloatType()) {
+			else if(Node.LeftNode().Type.IsFloatType() && Node.RightNode().Type.IsFloatType()) {
 				return "fcmp ole";
 			}
 		}
 		else if(Comparator.equals(">")) {
-			if(Node.AST[ZBinaryNode._Left].Type.IsIntType() && Node.AST[ZBinaryNode._Right].Type.IsIntType()) {
+			if(Node.LeftNode().Type.IsIntType() && Node.RightNode().Type.IsIntType()) {
 				return "icmp sgt";
 			}
-			else if(Node.AST[ZBinaryNode._Left].Type.IsFloatType() && Node.AST[ZBinaryNode._Right].Type.IsFloatType()) {
+			else if(Node.LeftNode().Type.IsFloatType() && Node.RightNode().Type.IsFloatType()) {
 				return "fcmp ogt";
 			}
 		}
 		else if(Comparator.equals(">=")) {
-			if(Node.AST[ZBinaryNode._Left].Type.IsIntType() && Node.AST[ZBinaryNode._Right].Type.IsIntType()) {
+			if(Node.LeftNode().Type.IsIntType() && Node.RightNode().Type.IsIntType()) {
 				return "icmp sge";
 			}
-			else if(Node.AST[ZBinaryNode._Left].Type.IsFloatType() && Node.AST[ZBinaryNode._Right].Type.IsFloatType()) {
+			else if(Node.LeftNode().Type.IsFloatType() && Node.RightNode().Type.IsFloatType()) {
 				return "fcmp oge";
 			}
 		}
@@ -613,7 +612,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		@Var String EndLabel = "And__" + LabelNum + ".End";
 
 		this.Writer.PushNewBuffer("br i1 ");
-		this.GenerateCode(null, Node.AST[ZBinaryNode._Left]);
+		this.GenerateCode(null, Node.LeftNode());
 		this.Writer.AddCodeToCurrentBuffer(", ");
 		this.Writer.AddCodeToCurrentBuffer("label %" + RightLabel + ", ");
 		this.Writer.AddCodeToCurrentBuffer("label %" + EndLabel);
@@ -622,7 +621,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 
 		this.Writer.AppendLabel(RightLabel);
 		this.Writer.PushNewBuffer("");
-		this.GenerateCode(null, Node.AST[ZBinaryNode._Right]);
+		this.GenerateCode(null, Node.RightNode());
 		@Var String RightResult = this.Writer.PopCurrentBuffer();
 		this.Writer.AppendLine("br label %" + EndLabel);
 		RightLabel = this.Writer.GetCurrentLabel();
@@ -672,30 +671,30 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 
 	@Override
 	public void VisitBinaryNode(ZBinaryNode Node) {
-		if(this.IsPrimitiveType(Node.AST[ZBinaryNode._Left].Type)) {
+		if(this.IsPrimitiveType(Node.LeftNode().Type)) {
 			@Var String TempVar = this.Writer.CreateTempLocalSymbol();
 			this.Writer.PushNewBuffer(TempVar);
 			this.Writer.AddCodeToCurrentBuffer(" = ");
 			this.Writer.AddCodeToCurrentBuffer(this.GetBinaryOpcode(Node));
 			this.Writer.AddCodeToCurrentBuffer(" ");
-			this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.AST[ZBinaryNode._Left].Type));
+			this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.LeftNode().Type));
 			this.Writer.AddCodeToCurrentBuffer(" ");
-			this.GenerateCode(null, Node.AST[ZBinaryNode._Left]);
+			this.GenerateCode(null, Node.LeftNode());
 			this.Writer.AddCodeToCurrentBuffer(", ");
-			this.GenerateCode(null, Node.AST[ZBinaryNode._Right]);
+			this.GenerateCode(null, Node.RightNode());
 			this.Writer.AppendBufferAsNewLine();
 			this.Writer.AddCodeToCurrentBuffer(TempVar);
 		}
-		else if(Node.AST[ZBinaryNode._Left].Type.IsStringType()) {
-			if(Node.SourceToken.EqualsText('+') && Node.AST[ZBinaryNode._Right].Type.IsStringType()) {
+		else if(Node.LeftNode().Type.IsStringType()) {
+			if(Node.SourceToken.EqualsText('+') && Node.RightNode().Type.IsStringType()) {
 				this.DeclareExtrnalFunction("ZString_StrCat", "%ZString*", "(%ZString*, %ZString*)");
 				this.Writer.PushNewBuffer("");
-				this.GenerateCode(null, Node.AST[ZBinaryNode._Left]);
+				this.GenerateCode(null, Node.LeftNode());
 				@Var String LeftResult = this.Writer.PopCurrentBuffer();
 				this.Writer.PushNewBuffer("");
-				this.GenerateCode(null, Node.AST[ZBinaryNode._Right]);
+				this.GenerateCode(null, Node.RightNode());
 				@Var String RightResult = this.Writer.PopCurrentBuffer();
-				this.CallExternalFunction("ZString_StrCat", "(" + this.GetTypeExpr(Node.AST[ZBinaryNode._Left].Type) + " " + LeftResult + ", " + this.GetTypeExpr(Node.AST[ZBinaryNode._Right].Type) + " " + RightResult + ")");
+				this.CallExternalFunction("ZString_StrCat", "(" + this.GetTypeExpr(Node.LeftNode().Type) + " " + LeftResult + ", " + this.GetTypeExpr(Node.RightNode().Type) + " " + RightResult + ")");
 			}
 		}
 		else {
@@ -725,13 +724,13 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 
 	@Override public void VisitCastNode(ZCastNode Node) {
 		/*FIXME*/
-		@Var ZType BeforeType = Node.AST[ZCastNode._Expr].Type;
+		@Var ZType BeforeType = Node.ExprNode().Type;
 		@Var ZType AfterType = Node.Type;
 		if(BeforeType == AfterType || BeforeType.IsVarType()) {
-			this.GenerateCode(null, Node.AST[ZCastNode._Expr]);
+			this.GenerateCode(null, Node.ExprNode());
 		}
 		else if(!(BeforeType.IsVoidType()) && AfterType.IsVoidType()) {
-			this.GenerateCode(null, Node.AST[ZCastNode._Expr]);
+			this.GenerateCode(null, Node.ExprNode());
 			this.Writer.PopCurrentBuffer();
 		}
 		else {
@@ -742,7 +741,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 			this.Writer.AddCodeToCurrentBuffer(" ");
 			this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(BeforeType));
 			this.Writer.AddCodeToCurrentBuffer(" ");
-			this.GenerateSurroundCode(Node.AST[ZCastNode._Expr]);
+			this.GenerateSurroundCode(Node.ExprNode());
 			this.Writer.AddCodeToCurrentBuffer(" to ");
 			this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(AfterType));
 			this.Writer.AppendBufferAsNewLine();
@@ -750,10 +749,6 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		}
 	}
 
-	@Override
-	public void VisitCatchNode(ZCatchNode Node) {
-		// TODO
-	}
 
 	@Override
 	public void VisitClassNode(ZClassNode Node) {
@@ -785,34 +780,34 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 	@Override
 	public void VisitComparatorNode(ZComparatorNode Node) {
 		@Var String TempVar = this.Writer.CreateTempLocalSymbol();
-		if(this.IsPrimitiveType(Node.AST[ZBinaryNode._Left].Type)) {
+		if(this.IsPrimitiveType(Node.LeftNode().Type)) {
 			this.Writer.PushNewBuffer(TempVar);
 			this.Writer.AddCodeToCurrentBuffer(" = ");
 			this.Writer.AddCodeToCurrentBuffer(this.GetCompareOpCodeAndCondition(Node));
 			this.Writer.AddCodeToCurrentBuffer(" ");
-			this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.AST[ZBinaryNode._Left].Type));
+			this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.LeftNode().Type));
 			this.Writer.AddCodeToCurrentBuffer(" ");
-			this.GenerateCode(null, Node.AST[ZBinaryNode._Left]);
+			this.GenerateCode(null, Node.LeftNode());
 			this.Writer.AddCodeToCurrentBuffer(", ");
-			this.GenerateCode(null, Node.AST[ZBinaryNode._Right]);
+			this.GenerateCode(null, Node.RightNode());
 			this.Writer.AppendBufferAsNewLine();
 		}
 		else {
 			@Var String LeftAddress = this.Writer.CreateTempLocalSymbol();
 			this.Writer.PushNewBuffer(LeftAddress);
 			this.Writer.AddCodeToCurrentBuffer(" = ptrtoint ");
-			this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.AST[ZBinaryNode._Left].Type));
+			this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.LeftNode().Type));
 			this.Writer.AddCodeToCurrentBuffer(" ");
-			this.GenerateCode(null, Node.AST[ZBinaryNode._Left]);
+			this.GenerateCode(null, Node.LeftNode());
 			this.Writer.AddCodeToCurrentBuffer(" to i64");
 			this.Writer.AppendBufferAsNewLine();
 
 			@Var String RightAddress = this.Writer.CreateTempLocalSymbol();
 			this.Writer.PushNewBuffer(RightAddress);
 			this.Writer.AddCodeToCurrentBuffer(" = ptrtoint ");
-			this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.AST[ZBinaryNode._Right].Type));
+			this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.RightNode().Type));
 			this.Writer.AddCodeToCurrentBuffer(" ");
-			this.GenerateCode(null, Node.AST[ZBinaryNode._Right]);
+			this.GenerateCode(null, Node.RightNode());
 			this.Writer.AddCodeToCurrentBuffer(" to i64");
 			this.Writer.AppendBufferAsNewLine();
 
@@ -846,8 +841,8 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		//		if(Node.ResolvedFuncName != null && Node.ResolvedFunc != null) {
 		//			FuncType = Node.ResolvedFunc.GetFuncType();
 		//		}
-		//		else if(Node.AST[ZFuncCallNode._Func].Type instanceof ZFuncType) {
-		//			FuncType = (ZFuncType)Node.AST[ZFuncCallNode._Func].Type;
+		//		else if(Node.FuncNameNode().Type instanceof ZFuncType) {
+		//			FuncType = (ZFuncType)Node.FuncNameNode().Type;
 		//		}
 		//		else {
 		//			ZLogger._LogError(Node.SourceToken, "Can't interpret this function call");
@@ -869,7 +864,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		this.Writer.AddCodeToCurrentBuffer("call ");
 		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(FuncType));
 		this.Writer.AddCodeToCurrentBuffer(" ");
-		this.GenerateCode(null, Node.AST[ZFuncCallNode._Func]);
+		this.GenerateCode(null, Node.FuncNameNode());
 		this.VisitListNode(" (", Node, ", ", ")");
 		this.Writer.AppendBufferAsNewLine();
 		if(!ReturnType.IsVoidType()) {
@@ -905,7 +900,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 
 		this.Writer.IncreaseIndent();
 		this.Writer.AppendLabel("Entry");
-		this.GenerateCode(null, Node.AST[ZFunctionNode._Block]);
+		this.GenerateCode(null, Node.BlockNode());
 		if(!this.Writer.IsBlockTerminated()) {
 			this.AppendDefaultReturn(Node.ReturnType);
 		}
@@ -927,7 +922,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		this.Writer.AddCodeToCurrentBuffer(" = load ");
 		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.Type) + "*");
 		this.Writer.AddCodeToCurrentBuffer(" ");
-		this.GetArrayElementPointer(Node.AST[ZGetIndexNode._Recv], Node.AST[ZGetIndexNode._Index]);
+		this.GetArrayElementPointer(Node.RecvNode(), Node.IndexNode());
 		//@llvm.gcread
 		this.Writer.AppendBufferAsNewLine();
 		this.Writer.AddCodeToCurrentBuffer(TempVar);
@@ -961,7 +956,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		this.Writer.AddCodeToCurrentBuffer(" = load ");
 		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.Type) + "*");
 		this.Writer.AddCodeToCurrentBuffer(" ");
-		this.GetObjectElementPointer(Node.AST[ZGetterNode._Recv], Node.FieldName);
+		this.GetObjectElementPointer(Node.RecvNode(), Node.FieldName);
 		//@llvm.gcread
 		this.Writer.AppendBufferAsNewLine();
 		this.Writer.AddCodeToCurrentBuffer(TempVar);
@@ -991,7 +986,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 
 	@Override
 	public void VisitGroupNode(ZGroupNode Node) {
-		this.GenerateCode(null, Node.AST[ZGroupNode._Expr]);
+		this.GenerateCode(null, Node.ExprNode());
 	}
 
 	@Override
@@ -1003,10 +998,10 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		@Var boolean IsEndReachable = false;
 
 		this.Writer.PushNewBuffer("br i1 ");
-		this.GenerateCode(null, Node.AST[ZIfNode._Cond]);
+		this.GenerateCode(null, Node.CondNode());
 		this.Writer.AddCodeToCurrentBuffer(", ");
 		this.Writer.AddCodeToCurrentBuffer("label %" + ThenLabel + ", ");
-		if(Node.AST[ZIfNode._Else] != null) {
+		if(Node.ElseNode() != null) {
 			this.Writer.AddCodeToCurrentBuffer("label %" + ElseLabel);
 		}
 		else {
@@ -1016,15 +1011,15 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		this.Writer.AppendBufferAsNewLine();
 
 		this.Writer.AppendLabel(ThenLabel);
-		this.GenerateCode(null, Node.AST[ZIfNode._Then]);
+		this.GenerateCode(null, Node.ThenNode());
 		if(!this.Writer.IsBlockTerminated()) {
 			this.Writer.AppendLine("br label %" + EndLabel);
 			IsEndReachable = true;
 		}
 
-		if(Node.AST[ZIfNode._Else] != null) {
+		if(Node.ElseNode() != null) {
 			this.Writer.AppendLabel(ElseLabel);
-			this.GenerateCode(null, Node.AST[ZIfNode._Else]);
+			this.GenerateCode(null, Node.ElseNode());
 			if(!this.Writer.IsBlockTerminated()) {
 				this.Writer.AppendLine("br label %" + EndLabel);
 				IsEndReachable = true;
@@ -1052,7 +1047,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		this.Writer.AddCodeToCurrentBuffer(" = private constant ");
 		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.SymbolType));
 		this.Writer.AddCodeToCurrentBuffer(" ");
-		this.GenerateCode(null, Node.AST[ZLetNode._InitValue]);
+		this.GenerateCode(null, Node.InitValueNode());
 		this.Writer.AppendBufferAsHeaderLine();
 		//this.Writer.AddCodeToCurrentBuffer(this.ToGlobalSymbol(Node.GlobalName));
 		Node.GetNameSpace().SetLocalSymbol(Node.Symbol, Node.ToGlobalNameNode());
@@ -1217,7 +1212,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		@Var String EndLabel = "Or__" + LabelNum + ".End";
 
 		this.Writer.PushNewBuffer("br i1 ");
-		this.GenerateCode(null, Node.AST[ZBinaryNode._Left]);
+		this.GenerateCode(null, Node.LeftNode());
 		this.Writer.AddCodeToCurrentBuffer(", ");
 		this.Writer.AddCodeToCurrentBuffer("label %" + EndLabel + ", ");
 		this.Writer.AddCodeToCurrentBuffer("label %" + RightLabel);
@@ -1226,7 +1221,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 
 		this.Writer.AppendLabel(RightLabel);
 		this.Writer.PushNewBuffer("");
-		this.GenerateCode(null, Node.AST[ZBinaryNode._Right]);
+		this.GenerateCode(null, Node.RightNode());
 		@Var String RightResult = this.Writer.PopCurrentBuffer();
 		this.Writer.AppendLine("br label %" + EndLabel);
 		RightLabel = this.Writer.GetCurrentLabel();
@@ -1250,10 +1245,10 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 	@Override
 	public void VisitReturnNode(ZReturnNode Node) {
 		this.Writer.PushNewBuffer("ret ");
-		if (Node.AST[ZReturnNode._Expr] != null) {
-			this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.AST[ZReturnNode._Expr].Type));
+		if (Node.HasReturnExpr()) {
+			this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.ExprNode().Type));
 			this.Writer.AddCodeToCurrentBuffer(" ");
-			this.GenerateCode(null, Node.AST[ZReturnNode._Expr]);
+			this.GenerateCode(null, Node.ExprNode());
 		}
 		else {
 			this.Writer.AddCodeToCurrentBuffer("void");
@@ -1265,13 +1260,13 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 	@Override
 	public void VisitSetIndexNode(ZSetIndexNode Node) {
 		this.Writer.PushNewBuffer("store ");
-		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.AST[ZSetIndexNode._Expr].Type));
+		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.ExprNode().Type));
 		this.Writer.AddCodeToCurrentBuffer(" ");
-		this.GenerateCode(null, Node.AST[ZSetIndexNode._Expr]);
+		this.GenerateCode(null, Node.ExprNode());
 		this.Writer.AddCodeToCurrentBuffer(", ");
-		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.AST[ZSetIndexNode._Expr].Type) + "*");
+		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.ExprNode().Type) + "*");
 		this.Writer.AddCodeToCurrentBuffer(" ");
-		this.GetArrayElementPointer(Node.AST[ZSetIndexNode._Recv], Node.AST[ZSetIndexNode._Index]);
+		this.GetArrayElementPointer(Node.RecvNode(), Node.IndexNode());
 		//@llvm.gcwrite
 		this.Writer.AppendBufferAsNewLine();
 	}
@@ -1284,14 +1279,14 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 			throw new RuntimeException("Can't assign to argument");
 		}
 		this.Writer.PushNewBuffer("store ");
-		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.AST[ZSetNameNode._Expr].Type));
+		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.ExprNode().Type));
 		this.Writer.AddCodeToCurrentBuffer(" ");
-		this.GenerateCode(null, Node.AST[ZSetNameNode._Expr]);
+		this.GenerateCode(null, Node.ExprNode());
 		this.Writer.AddCodeToCurrentBuffer(", ");
-		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.AST[ZSetNameNode._Expr].Type) + "*");
+		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.ExprNode().Type) + "*");
 		this.Writer.AddCodeToCurrentBuffer(" ");
 		this.Writer.AddCodeToCurrentBuffer(this.ToLocalSymbol(VarName));
-		//if(!this.IsPrimitiveType(Node.AST[ZSetNameNode._Expr].Type)) {
+		//if(!this.IsPrimitiveType(Node.ExprNode().Type)) {
 		//@llvm.gcwrite
 		//}
 		this.Writer.AppendBufferAsNewLine();
@@ -1317,13 +1312,13 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 	@Override
 	public void VisitSetterNode(ZSetterNode Node) {
 		this.Writer.PushNewBuffer("store ");
-		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.AST[ZSetterNode._Expr].Type));
+		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.ExprNode().Type));
 		this.Writer.AddCodeToCurrentBuffer(" ");
-		this.GenerateCode(null, Node.AST[ZSetterNode._Expr]);
+		this.GenerateCode(null, Node.ExprNode());
 		this.Writer.AddCodeToCurrentBuffer(", ");
-		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.AST[ZSetterNode._Expr].Type) + "*");
+		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.ExprNode().Type) + "*");
 		this.Writer.AddCodeToCurrentBuffer(" ");
-		this.GetObjectElementPointer(Node.AST[ZSetterNode._Recv], Node.FieldName);
+		this.GetObjectElementPointer(Node.RecvNode(), Node.FieldName);
 		//@llvm.gcwrite
 		this.Writer.AppendBufferAsNewLine();
 	}
@@ -1341,52 +1336,52 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 	@Override
 	public void VisitUnaryNode(ZUnaryNode Node) {
 		if(Node.SourceToken.EqualsText('+')) {
-			this.GenerateCode(null, Node.AST[ZUnaryNode._Recv]);
+			this.GenerateCode(null, Node.RecvNode());
 		}
 		else if(Node.SourceToken.EqualsText('-')){
-			if(Node.AST[ZUnaryNode._Recv] instanceof ZConstNode) {
+			if(Node.RecvNode() instanceof ZConstNode) {
 				this.Writer.AddCodeToCurrentBuffer("-");
-				this.GenerateCode(null, Node.AST[ZUnaryNode._Recv]);
+				this.GenerateCode(null, Node.RecvNode());
 			}
 			else {
 				@Var String TempVar = this.Writer.CreateTempLocalSymbol();
 				this.Writer.PushNewBuffer(TempVar);
 				this.Writer.AddCodeToCurrentBuffer(" = ");
-				if(Node.AST[ZUnaryNode._Recv].IsUntyped()) {
+				if(Node.RecvNode().IsUntyped()) {
 					ZLogger._LogError(Node.SourceToken, "Unary \"-\" is untyped");
 				}
-				else if(Node.AST[ZUnaryNode._Recv].Type.IsIntType()) {
+				else if(Node.RecvNode().Type.IsIntType()) {
 					this.Writer.AddCodeToCurrentBuffer("sub");
 				}
-				else if(Node.AST[ZUnaryNode._Recv].Type.IsFloatType()) {
+				else if(Node.RecvNode().Type.IsFloatType()) {
 					this.Writer.AddCodeToCurrentBuffer("fsub");
 				}
 				else {
 					ZLogger._LogError(Node.SourceToken, "Unknown unary \"-\" for this type");
 				}
 				this.Writer.AddCodeToCurrentBuffer(" ");
-				this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.AST[ZUnaryNode._Recv].Type));
+				this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.RecvNode().Type));
 				this.Writer.AddCodeToCurrentBuffer(" 0, ");
-				this.GenerateCode(null, Node.AST[ZUnaryNode._Recv]);
+				this.GenerateCode(null, Node.RecvNode());
 				this.Writer.AppendBufferAsNewLine();
 				this.Writer.AddCodeToCurrentBuffer(TempVar);
 			}
 		}
 		else if(Node.SourceToken.EqualsText('~')){
-			if(Node.AST[ZUnaryNode._Recv].IsUntyped()) {
+			if(Node.RecvNode().IsUntyped()) {
 				ZLogger._LogError(Node.SourceToken, "Unary \"~\" is untyped");
 				return;
 			}
-			else if(!Node.AST[ZUnaryNode._Recv].Type.IsIntType()){
+			else if(!Node.RecvNode().Type.IsIntType()){
 				ZLogger._LogError(Node.SourceToken, "Unknown unary \"~\" for this type");
 				return;
 			}
 			@Var String TempVar = this.Writer.CreateTempLocalSymbol();
 			this.Writer.PushNewBuffer(TempVar);
 			this.Writer.AddCodeToCurrentBuffer(" = xor ");
-			this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.AST[ZUnaryNode._Recv].Type));
+			this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.RecvNode().Type));
 			this.Writer.AddCodeToCurrentBuffer(" -1, ");
-			this.GenerateCode(null, Node.AST[ZUnaryNode._Recv]);
+			this.GenerateCode(null, Node.RecvNode());
 			this.Writer.AppendBufferAsNewLine();
 			this.Writer.AddCodeToCurrentBuffer(TempVar);
 		}
@@ -1397,7 +1392,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 
 	@Override
 	public void VisitVarNode(ZVarNode Node) {
-		assert(Node.AST[ZVarNode._InitValue] != null); //must be set initial value
+		assert(Node.InitValueNode() != null); //must be set initial value
 
 		@Var ZVariable Var = Node.GetNameSpace().GetLocalVariable(Node.NativeName);
 		@Var String VarName = Var.VarName + "__" + Var.VarUniqueIndex;
@@ -1412,14 +1407,14 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		//}
 
 		this.Writer.PushNewBuffer("store ");
-		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.AST[ZVarNode._InitValue].Type));
+		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.InitValueNode().Type));
 		this.Writer.AddCodeToCurrentBuffer(" ");
-		this.GenerateCode(null, Node.AST[ZVarNode._InitValue]);
+		this.GenerateCode(null, Node.InitValueNode());
 		this.Writer.AddCodeToCurrentBuffer(", ");
 		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.DeclType) + "*");
 		this.Writer.AddCodeToCurrentBuffer(" ");
 		this.Writer.AddCodeToCurrentBuffer(VarSymbol);
-		//if(!this.IsPrimitiveType(Node.AST[ZVarNode._InitValue].Type)) {
+		//if(!this.IsPrimitiveType(Node.InitValueNode().Type)) {
 		//@llvm.gcwrite
 		//}
 		this.Writer.AppendBufferAsNewLine();
@@ -1438,7 +1433,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 
 		this.Writer.AppendLabel(CondLabel);
 		this.Writer.PushNewBuffer("br i1 ");
-		this.GenerateCode(null, Node.AST[ZWhileNode._Cond]);
+		this.GenerateCode(null, Node.CondNode());
 		this.Writer.AddCodeToCurrentBuffer(", ");
 		this.Writer.AddCodeToCurrentBuffer("label %" + BodyLabel + ", ");
 		this.Writer.AddCodeToCurrentBuffer("label %" + EndLabel);
@@ -1446,7 +1441,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 
 		this.Writer.AppendLabel(BodyLabel);
 		this.Writer.PushBreakLabel(EndLabel);
-		this.GenerateCode(null, Node.AST[ZWhileNode._Block]);
+		this.GenerateCode(null, Node.BlockNode());
 		if(!this.Writer.IsBlockTerminated()) {
 			this.Writer.AppendLine("br label %" + CondLabel);
 		}
@@ -1541,7 +1536,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 			this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(FieldNode.DeclType));
 			if(WithInitValue) {
 				this.Writer.AddCodeToCurrentBuffer(" ");
-				this.GenerateCode(null, FieldNode.AST[ZFieldNode._InitValue]);
+				this.GenerateCode(null, FieldNode.InitValueNode());
 			}
 			i = i + 1;
 		}

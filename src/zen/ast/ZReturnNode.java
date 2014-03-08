@@ -27,7 +27,8 @@ package zen.ast;
 import zen.parser.ZVisitor;
 
 public final class ZReturnNode extends ZNode {
-	public final static int _Expr = 0;
+	public final static int _Expr = 0;  // optional
+
 	public ZReturnNode(ZNode ParentNode) {
 		super(ParentNode, null, 1);
 	}
@@ -36,6 +37,14 @@ public final class ZReturnNode extends ZNode {
 	}
 	@Override public ZReturnNode ToReturnNode() {
 		return this;
+	}
+
+	public final boolean HasReturnExpr() {
+		return this.AST[ZReturnNode._Expr] != null;
+	}
+
+	public final ZNode ExprNode() {
+		return this.AST[ZReturnNode._Expr];
 	}
 
 }

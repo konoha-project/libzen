@@ -42,6 +42,15 @@ public final class ZFieldNode extends ZLocalDefinedNode {
 	public ZFieldNode(ZNode ParentNode) {
 		super(ParentNode, null, 1);
 	}
+
+	public final ZNode InitValueNode() {
+		if(this.AST[ZFieldNode._InitValue] == null) {
+			this.Set(ZFieldNode._InitValue, new ZDefaultValueNode());
+		}
+		return this.AST[ZFieldNode._InitValue];
+	}
+
+
 	@Override public void SetTypeInfo(ZToken TypeToken, ZType Type) {
 		this.DeclType = Type;
 	}

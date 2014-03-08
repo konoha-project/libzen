@@ -11,4 +11,12 @@ public class ZMapEntryNode extends ZLocalDefinedNode {
 	public ZMapEntryNode(ZNode ParentNode) {
 		super(ParentNode, null, 2);
 	}
+
+	public final ZNode KeyNode() {
+		return this.AST[ZMapEntryNode._Key];
+	}
+
+	public final ZNode ValueNode() {
+		return this.AST[ZMapEntryNode._Value];
+	}
 }

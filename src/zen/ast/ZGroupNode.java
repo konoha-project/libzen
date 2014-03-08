@@ -34,4 +34,7 @@ public final class ZGroupNode extends ZNode {
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitGroupNode(this);
 	}
+	public final ZNode ExprNode() {
+		return this.AST[ZGroupNode._Expr];
+	}
 }

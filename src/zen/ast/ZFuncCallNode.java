@@ -44,6 +44,10 @@ public final class ZFuncCallNode extends ZListNode {
 		this.Set(ZFuncCallNode._Func, FuncNode);
 	}
 
+	public final ZNode FuncNameNode() {
+		return this.AST[ZFuncCallNode._Func ];
+	}
+
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitFuncCallNode(this);
 	}
@@ -56,7 +60,7 @@ public final class ZFuncCallNode extends ZListNode {
 	}
 
 	public final boolean IsStaticFuncCall() {
-		@Var ZNode FNode = this.AST[ZFuncCallNode._Func];
+		@Var ZNode FNode = this.FuncNameNode();
 		if(FNode instanceof ZGlobalNameNode) {
 			return ((ZGlobalNameNode)FNode).IsStaticFuncName;
 		}
@@ -64,7 +68,7 @@ public final class ZFuncCallNode extends ZListNode {
 	}
 
 	public final String GetStaticFuncName() {
-		@Var ZNode FNode = this.AST[ZFuncCallNode._Func];
+		@Var ZNode FNode = this.FuncNameNode();
 		if(FNode instanceof ZGlobalNameNode) {
 			return ((ZGlobalNameNode)FNode).GlobalName;
 		}
@@ -72,7 +76,7 @@ public final class ZFuncCallNode extends ZListNode {
 	}
 
 	public final ZFuncType GetFuncType() {
-		@Var ZType FType = this.AST[ZFuncCallNode._Func].Type;
+		@Var ZType FType = this.FuncNameNode().Type;
 		if(FType instanceof ZFuncType) {
 			return (ZFuncType)FType;
 		}
@@ -80,7 +84,7 @@ public final class ZFuncCallNode extends ZListNode {
 	}
 
 	public ZMacroNode ToMacroNode(ZMacroFunc MacroFunc) {
-		@Var ZMacroNode MacroNode = new ZMacroNode(this.ParentNode, this.AST[ZFuncCallNode._Func].SourceToken, MacroFunc);
+		@Var ZMacroNode MacroNode = new ZMacroNode(this.ParentNode, this.FuncNameNode().SourceToken, MacroFunc);
 		@Var int i = 0;
 		while(i < this.GetListSize()) {
 			MacroNode.Append(this.GetListAt(i));

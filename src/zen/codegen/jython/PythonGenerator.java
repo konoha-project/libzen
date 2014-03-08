@@ -25,10 +25,8 @@
 //ifdef JAVA
 package zen.codegen.jython;
 
-import zen.ast.ZBinaryNode;
 import zen.ast.ZBlockNode;
 import zen.ast.ZCastNode;
-import zen.ast.ZCatchNode;
 import zen.ast.ZClassNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZFieldNode;
@@ -147,25 +145,25 @@ public class PythonGenerator extends ZSourceGenerator {
 		// this.VisitType(Node.Type);
 		// this.CurrentBuilder.Append(") ");
 		//this.CurrentBuilder.AppendBlockComment("as " + this.GetNativeTypeName(Node.Type));
-		this.GenerateCode(null, Node.AST[ZCastNode._Expr]);
+		this.GenerateCode(null, Node.ExprNode());
 	}
 
 	@Override public void VisitGetIndexNode(ZGetIndexNode Node) {
 		@Var ZType RecvType = Node.GetAstType(ZGetIndexNode._Recv);
 		if(RecvType.IsMapType()) {
 			this.ImportLibrary("def zGetMap(m,k): return m[k] if m.has_key(k) else None");
-			this.GenerateCode(null, "zGetMap(", Node.AST[ZGetIndexNode._Recv], ", ");
-			this.GenerateCode(null, "", Node.AST[ZGetIndexNode._Index], ")");
+			this.GenerateCode("zGetMap(", null, Node.RecvNode(), ", ");
+			this.GenerateCode("", null, Node.IndexNode(), ")");
 		}
 		else {
-			this.GenerateCode(null, Node.AST[ZGetIndexNode._Recv]);
-			this.GenerateCode(null, "[", Node.AST[ZGetIndexNode._Index], "]");
+			this.GenerateCode(null, Node.RecvNode());
+			this.GenerateCode("[", null, Node.IndexNode(), "]");
 		}
 	}
 
 	@Override public void VisitInstanceOfNode(ZInstanceOfNode Node) {
 		this.CurrentBuilder.Append("isinstance(");
-		this.GenerateCode(null, Node.AST[ZBinaryNode._Left]);
+		this.GenerateCode(null, Node.LeftNode());
 		if(Node.TargetType instanceof ZClassType) {
 			this.CurrentBuilder.Append(this.Camma, this.NameClass(Node.TargetType), ")");
 		}
@@ -179,24 +177,24 @@ public class PythonGenerator extends ZSourceGenerator {
 	@Override public void VisitVarNode(ZVarNode Node) {
 		this.CurrentBuilder.Append(this.NameLocalVariable(Node.NativeName, Node.VarIndex));
 		this.CurrentBuilder.AppendToken("=");
-		this.GenerateCode(null, Node.AST[ZVarNode._InitValue]);
+		this.GenerateCode(null, Node.InitValueNode());
 		this.VisitStmtList(Node);
 		this.CurrentBuilder.AppendNewLine();
 	}
 
 	@Override public void VisitIfNode(ZIfNode Node) {
 		this.CurrentBuilder.Append("if ");
-		this.GenerateCode(null, Node.AST[ZIfNode._Cond]);
-		this.GenerateCode(null, Node.AST[ZIfNode._Then]);
-		if (Node.HasAst(ZIfNode._Else)) {
-			ZNode ElseNode = Node.AST[ZIfNode._Else];
+		this.GenerateCode(null, Node.CondNode());
+		this.GenerateCode(null, Node.ThenNode());
+		if (Node.HasElseNode()) {
+			ZNode ElseNode = Node.ElseNode();
 			if(ElseNode instanceof ZIfNode) {
 				this.CurrentBuilder.Append("el");
 			}
 			else {
 				this.CurrentBuilder.Append("else");
 			}
-			this.GenerateCode(null, Node.AST[ZIfNode._Else]);
+			this.GenerateCode(null, Node.ElseNode());
 		}
 	}
 
@@ -204,7 +202,7 @@ public class PythonGenerator extends ZSourceGenerator {
 		if(this.ReadableCode || !Node.IsConstValue()) {
 			this.CurrentBuilder.Append(Node.GlobalName);
 			this.CurrentBuilder.Append(" = ");
-			this.GenerateCode(null, Node.AST[ZLetNode._InitValue]);
+			this.GenerateCode(null, Node.InitValueNode());
 			Node.GetNameSpace().SetLocalSymbol(Node.Symbol, Node.ToGlobalNameNode());
 		}
 	}
@@ -233,7 +231,7 @@ public class PythonGenerator extends ZSourceGenerator {
 			this.CurrentBuilder.Append("def ");
 			this.CurrentBuilder.Append(FuncName);
 			this.VisitListNode("(", Node, ")");
-			this.GenerateCode(null, Node.AST[ZFunctionNode._Block]);
+			this.GenerateCode(null, Node.BlockNode());
 			this.CurrentBuilder.AppendLineFeed();
 			this.CurrentBuilder.AppendLineFeed();
 			this.CurrentBuilder = this.CurrentBuilder.Pop();
@@ -244,7 +242,7 @@ public class PythonGenerator extends ZSourceGenerator {
 			this.CurrentBuilder.Append("def ");
 			this.CurrentBuilder.Append(Node.GetSignature(this));
 			this.VisitListNode("(", Node, ")");
-			this.GenerateCode(null, Node.AST[ZFunctionNode._Block]);
+			this.GenerateCode(null, Node.BlockNode());
 			this.CurrentBuilder.AppendLineFeed();
 			if(Node.IsExport) {
 				this.CurrentBuilder.Append(Node.FuncName, " = ", FuncType.StringfySignature(Node.FuncName));
@@ -301,7 +299,7 @@ public class PythonGenerator extends ZSourceGenerator {
 			if(!FieldNode.DeclType.IsFuncType()) {
 				this.CurrentBuilder.AppendNewLine();
 				this.CurrentBuilder.Append("self." + FieldNode.FieldName + " = ");
-				this.GenerateCode(null, FieldNode.AST[ZFieldNode._InitValue]);
+				this.GenerateCode(null, FieldNode.InitValueNode());
 			}
 			this.CurrentBuilder.Append(this.SemiColon);
 			i = i + 1;
@@ -339,28 +337,28 @@ public class PythonGenerator extends ZSourceGenerator {
 
 	@Override public void VisitThrowNode(ZThrowNode Node) {
 		this.CurrentBuilder.Append("raise ");
-		this.GenerateCode(null, Node.AST[ZThrowNode._Expr]);
+		this.GenerateCode(null, Node.ExprNode());
 	}
 
 	@Override public void VisitTryNode(ZTryNode Node) {
 		this.CurrentBuilder.Append("try");
-		this.GenerateCode(null, Node.AST[ZTryNode._Try]);
-		if (Node.AST[ZTryNode._Catch] != null) {
-			this.GenerateCode(null, Node.AST[ZTryNode._Catch]);
+		this.GenerateCode(null, Node.TryBlockNode());
+		if (Node.CatchBlockNode() != null) {
+			this.GenerateCode(null, Node.CatchBlockNode());
 		}
-		if (Node.AST[ZTryNode._Finally] != null) {
+		if (Node.FinallyBlockNode() != null) {
 			this.CurrentBuilder.Append("finally");
-			this.GenerateCode(null, Node.AST[ZTryNode._Finally]);
+			this.GenerateCode(null, Node.FinallyBlockNode());
 		}
 	}
 
-	@Override public void VisitCatchNode(ZCatchNode Node) {
-		this.CurrentBuilder.Append("except:");
-		//		this.VisitType(Node.ExceptionType);
-		//		this.CurrentBuilder.AppendToken("as");
-		//		this.CurrentBuilder.Append(Node.ExceptionName);
-		this.GenerateCode(null, Node.AST[ZCatchNode._Block]);
-	}
+	//	@Override public void VisitCatchNode(ZCatchNode Node) {
+	//		this.CurrentBuilder.Append("except:");
+	//		//		this.VisitType(Node.ExceptionType);
+	//		//		this.CurrentBuilder.AppendToken("as");
+	//		//		this.CurrentBuilder.Append(Node.ExceptionName);
+	//		this.GenerateCode(null, Node.AST[ZCatchNode._Block]);
+	//	}
 
 
 }

@@ -8,9 +8,9 @@ import zen.ast.ZBlockNode;
 import zen.ast.ZBooleanNode;
 import zen.ast.ZBreakNode;
 import zen.ast.ZCastNode;
-import zen.ast.ZCatchNode;
 import zen.ast.ZClassNode;
 import zen.ast.ZComparatorNode;
+import zen.ast.ZDefaultValueNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZFloatNode;
 import zen.ast.ZFuncCallNode;
@@ -270,9 +270,9 @@ public class ZASTTransformer extends ZVisitor {
 		this.Transform(Node, ZTryNode._Finally);
 	}
 
-	public void VisitCatchNode(ZCatchNode Node) {
-		this.Transform(Node, ZCatchNode._Block);
-	}
+	//	public void VisitCatchNode(ZCatchNode Node) {
+	//		this.Transform(Node, ZCatchNode._Block);
+	//	}
 
 	@Override
 	public void VisitLetNode(ZLetNode Node) {
@@ -337,6 +337,12 @@ public class ZASTTransformer extends ZVisitor {
 
 	@Override
 	public void VisitLocalDefinedNode(ZLocalDefinedNode Node) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void VisitDefaultValueNode(ZDefaultValueNode Node) {
 		// TODO Auto-generated method stub
 
 	}

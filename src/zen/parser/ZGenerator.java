@@ -27,9 +27,11 @@ package zen.parser;
 
 import zen.ast.ZAsmMacroNode;
 import zen.ast.ZAsmNode;
+import zen.ast.ZDefaultValueNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZListNode;
 import zen.ast.ZNode;
+import zen.ast.ZNullNode;
 import zen.ast.ZStringNode;
 import zen.ast.sugar.ZDesugarNode;
 import zen.ast.sugar.ZSyntaxSugarNode;
@@ -286,6 +288,10 @@ public abstract class ZGenerator extends ZVisitor {
 	public final void VisitUndefinedNode(ZNode Node) {
 		ZErrorNode ErrorNode = new ZErrorNode(Node.ParentNode, Node.SourceToken, "undefined node:" + Node.toString());
 		this.VisitErrorNode(ErrorNode);
+	}
+
+	@Override public final void VisitDefaultValueNode(ZDefaultValueNode Node) {
+		this.VisitNullNode(new ZNullNode(Node.ParentNode, null));
 	}
 
 	@Override public void VisitSyntaxSugarNode(ZSyntaxSugarNode Node) {

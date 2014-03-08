@@ -46,6 +46,15 @@ public class ZBinaryNode extends ZNode {
 		this.Pattern = Pattern;
 	}
 
+	public final ZNode LeftNode() {
+		return this.AST[ZBinaryNode._Left ];
+	}
+
+	public final ZNode RightNode() {
+		return this.AST[ZBinaryNode._Right ];
+	}
+
+
 	private final boolean IsRightJoin(ZNode Node) {
 		if(Node instanceof ZBinaryNode) {
 			return this.Pattern.IsRightJoin(((ZBinaryNode)Node).Pattern);
@@ -54,7 +63,7 @@ public class ZBinaryNode extends ZNode {
 	}
 
 	private final ZNode RightJoin(ZNode ParentNode, ZBinaryNode RightNode) {
-		@Var ZNode RightLeftNode = RightNode.AST[ZBinaryNode._Left];
+		@Var ZNode RightLeftNode = RightNode.LeftNode();
 		if(this.IsRightJoin(RightLeftNode)) {
 			RightNode.Set(ZBinaryNode._Left, this.RightJoin(ParentNode, (ZBinaryNode) RightLeftNode));
 		}
@@ -83,8 +92,8 @@ public class ZBinaryNode extends ZNode {
 			@Var ZFunc Func = Generator.GetDefinedFunc(Op, this.GetAstType(ZBinaryNode._Left), 2);
 			if(Func instanceof ZMacroFunc) {
 				@Var ZMacroNode MacroNode = new ZMacroNode(this.ParentNode, this.SourceToken, (ZMacroFunc)Func);
-				MacroNode.Append(this.AST[ZBinaryNode._Left]);
-				MacroNode.Append(this.AST[ZBinaryNode._Right]);
+				MacroNode.Append(this.LeftNode());
+				MacroNode.Append(this.RightNode());
 				return MacroNode;
 			}
 		}
@@ -94,5 +103,6 @@ public class ZBinaryNode extends ZNode {
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitBinaryNode(this);
 	}
+
 
 }

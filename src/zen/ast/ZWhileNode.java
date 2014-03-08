@@ -25,6 +25,7 @@
 package zen.ast;
 
 import zen.parser.ZVisitor;
+import zen.util.Var;
 
 public final class ZWhileNode extends ZNode {
 	public final static int _Cond  = 0;
@@ -45,8 +46,26 @@ public final class ZWhileNode extends ZNode {
 		Visitor.VisitWhileNode(this);
 	}
 
-	public final boolean HasIteratonStatement() {
+	public final ZNode CondNode() {
+		return this.AST[ZWhileNode._Cond];
+	}
+
+	public final ZBlockNode BlockNode() {
+		@Var ZNode BlockNode = this.AST[ZWhileNode._Block];
+		if(BlockNode instanceof ZBlockNode) {
+			return (ZBlockNode)BlockNode;
+		}
+		assert(BlockNode == null); // this must not happen
+		return null;
+	}
+
+	public final boolean HasNextStatement() {
 		return (this.AST[ZWhileNode._Next] != null);
 	}
+
+	public final ZNode NextNode() {
+		return this.AST[ZWhileNode._Next];
+	}
+
 
 }

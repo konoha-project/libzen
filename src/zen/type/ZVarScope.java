@@ -90,11 +90,11 @@ public final class ZVarScope {
 			this.TypedNodeCount = 0;
 			TypeSafer.DefineFunction(FunctionNode, false/*Enforced*/);
 			TypeSafer.CheckTypeAt(FunctionNode, ZFunctionNode._Block, ZType.VoidType);
-			if(!FunctionNode.AST[ZFunctionNode._Block].IsUntyped() || this.TypedNodeCount == 0) {
+			if(!FunctionNode.BlockNode().IsUntyped() || this.TypedNodeCount == 0) {
 				break;
 			}
-			//System.out.println("@@ VarNodeCount="+ this.VarNodeCount + " Block.IsUntyped()=" + FunctionNode.AST[ZFunctionNode._Block].IsUntyped());
-			//System.out.println("@@ TypedNodeCount=" + this.TypedNodeCount + " Block.IsUntyped()=" + FunctionNode.AST[ZFunctionNode._Block].IsUntyped());
+			//System.out.println("@@ VarNodeCount="+ this.VarNodeCount + " Block.IsUntyped()=" + FunctionNode.BlockNode().IsUntyped());
+			//System.out.println("@@ TypedNodeCount=" + this.TypedNodeCount + " Block.IsUntyped()=" + FunctionNode.BlockNode().IsUntyped());
 			if(this.VarNodeCount == 0 || PrevCount == this.VarNodeCount) {
 				break;
 			}

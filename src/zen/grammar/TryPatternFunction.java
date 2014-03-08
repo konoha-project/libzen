@@ -1,5 +1,6 @@
 package zen.grammar;
 
+import zen.ast.ZErrorNode;
 import zen.ast.ZNode;
 import zen.ast.ZTryNode;
 import zen.parser.ZTokenContext;
@@ -13,8 +14,12 @@ public class TryPatternFunction extends ZMatchFunction {
 		TryNode = TokenContext.MatchToken(TryNode, "try", ZTokenContext._Required);
 		TryNode = TokenContext.MatchPattern(TryNode, ZTryNode._Try, "$Block$", ZTokenContext._Required);
 		@Var int count = 0;
-		if(TokenContext.IsNewLineToken("catch")) {
-			TryNode = TokenContext.MatchPattern(TryNode, ZTryNode._Catch, "$Catch$", ZTokenContext._Required);
+		if(TokenContext.MatchNewLineToken("catch")) {
+			TryNode = TokenContext.MatchToken(TryNode, "(", ZTokenContext._Required);
+			TryNode = TokenContext.MatchPattern(TryNode, ZNode._NameInfo, "$Name$", ZTokenContext._Required);
+			TryNode = TokenContext.MatchPattern(TryNode, ZNode._TypeInfo, "$TypeAnnotation$", ZTokenContext._Optional);
+			TryNode = TokenContext.MatchToken(TryNode, ")", ZTokenContext._Required);
+			TryNode = TokenContext.MatchPattern(TryNode, ZTryNode._Catch, "$Block$", ZTokenContext._Required);
 			count = count + 1;
 		}
 		if(TokenContext.MatchNewLineToken("finally")) {
@@ -22,7 +27,7 @@ public class TryPatternFunction extends ZMatchFunction {
 			count = count + 1;
 		}
 		if(count == 0 && !TryNode.IsErrorNode()) {
-			return TryNode.AST[ZTryNode._Try]; // no catch and finally
+			TryNode = new ZErrorNode(ParentNode, TryNode.SourceToken, "either catch or finally is expected");
 		}
 		return TryNode;
 	}

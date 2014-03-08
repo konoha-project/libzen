@@ -34,6 +34,7 @@ import zen.ast.ZBreakNode;
 import zen.ast.ZCastNode;
 import zen.ast.ZClassNode;
 import zen.ast.ZComparatorNode;
+import zen.ast.ZDefaultValueNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZFloatNode;
 import zen.ast.ZFuncCallNode;
@@ -69,6 +70,7 @@ import zen.ast.sugar.ZSyntaxSugarNode;
 import zen.ast.sugar.ZTopLevelNode;
 
 public abstract class ZVisitor {
+	public abstract void VisitDefaultValueNode(ZDefaultValueNode Node);
 	public abstract void VisitNullNode(ZNullNode Node);
 	public abstract void VisitBooleanNode(ZBooleanNode Node);
 	public abstract void VisitIntNode(ZIntNode Node);

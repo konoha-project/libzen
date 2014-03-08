@@ -36,7 +36,6 @@ import zen.grammar.BlockCommentFunction;
 import zen.grammar.BlockPatternFunction;
 import zen.grammar.BreakPatternFunction;
 import zen.grammar.CastPatternFunction;
-import zen.grammar.CatchPatternFunction;
 import zen.grammar.ClassPatternFunction;
 import zen.grammar.ComparatorPatternFunction;
 import zen.grammar.ExportPatternFunction;
@@ -204,7 +203,6 @@ public class ZenGrammar {
 		NameSpace.Generator.AppendGrammarInfo("zen-0.1");
 
 		NameSpace.DefineStatement("try", new TryPatternFunction());
-		NameSpace.DefineExpression("$Catch$", new CatchPatternFunction());
 		NameSpace.DefineStatement("throw", new ThrowPatternFunction());
 		NameSpace.Generator.AppendGrammarInfo("zen-trycatch-0.1");
 

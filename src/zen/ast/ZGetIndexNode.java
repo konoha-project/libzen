@@ -33,9 +33,16 @@ public final class ZGetIndexNode extends ZNode {
 
 	public ZGetIndexNode(ZNode ParentNode, ZNode RecvNode) {
 		super(ParentNode, null, 2);
-		this.AST[ZGetIndexNode._Recv] = this.SetChild(RecvNode);
+		this.Set(ZGetIndexNode._Recv, RecvNode);
+	}
+	public final ZNode RecvNode() {
+		return this.AST[ZGetIndexNode._Recv ];
+	}
+	public final ZNode IndexNode() {
+		return this.AST[ZGetIndexNode._Index ];
 	}
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitGetIndexNode(this);
 	}
+
 }

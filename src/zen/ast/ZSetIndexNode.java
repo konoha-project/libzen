@@ -36,6 +36,16 @@ public final class ZSetIndexNode extends ZNode {
 		super(ParentNode, null, 3);
 		this.Set(ZSetIndexNode._Recv, LeftNode);
 	}
+	public final ZNode RecvNode() {
+		return this.AST[ZSetIndexNode._Recv ];
+	}
+	public final ZNode IndexNode() {
+		return this.AST[ZSetIndexNode._Index ];
+	}
+	public final ZNode ExprNode() {
+		return this.AST[ZSetIndexNode._Expr ];
+	}
+
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitSetIndexNode(this);
 	}

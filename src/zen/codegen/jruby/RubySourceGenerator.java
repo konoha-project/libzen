@@ -5,7 +5,6 @@ import javax.script.ScriptEngineManager;
 
 import zen.ast.ZBlockNode;
 import zen.ast.ZCastNode;
-import zen.ast.ZCatchNode;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZInstanceOfNode;
 import zen.ast.ZParamNode;
@@ -85,35 +84,35 @@ public class RubySourceGenerator extends ZSourceGenerator {
 	@Override
 	public void VisitThrowNode(ZThrowNode Node) {
 		this.CurrentBuilder.Append("raise ");
-		this.GenerateCode(null, Node.AST[ZThrowNode._Expr]);
+		this.GenerateCode(null, Node.ExprNode());
 	}
 
 	@Override
 	public void VisitTryNode(ZTryNode Node) {
 		this.CurrentBuilder.Append("begin");
-		this.GenerateCode(null, Node.AST[ZTryNode._Try]);
-		if (Node.AST[ZTryNode._Catch] != null) {
-			this.GenerateCode(null, Node.AST[ZTryNode._Catch]);
+		this.GenerateCode(null, Node.TryBlockNode());
+		if (Node.CatchBlockNode() != null) {
+			this.GenerateCode(null, Node.CatchBlockNode());
 		}
-		if (Node.AST[ZTryNode._Finally] != null) {
+		if (Node.FinallyBlockNode() != null) {
 			this.CurrentBuilder.Append("ensure");
-			this.GenerateCode(null, Node.AST[ZTryNode._Finally]);
+			this.GenerateCode(null, Node.FinallyBlockNode());
 		}
 	}
 
-	@Override
-	public void VisitCatchNode(ZCatchNode Node) {
-		this.CurrentBuilder.Append("rescue => ");
-		//this.VisitType(Node.ExceptionType);
-		this.CurrentBuilder.Append(Node.GivenName);
-		this.GenerateCode(null, Node.AST[ZCatchNode._Block]);
-	}
+	//	@Override
+	//	public void VisitCatchNode(ZCatchNode Node) {
+	//		this.CurrentBuilder.Append("rescue => ");
+	//		//this.VisitType(Node.ExceptionType);
+	//		this.CurrentBuilder.Append(Node.GivenName);
+	//		this.GenerateCode(null, Node.AST[ZCatchNode._Block]);
+	//	}
 
 	@Override
 	public void VisitVarNode(ZVarNode Node) {
 		this.CurrentBuilder.Append(Node.NativeName);
 		this.CurrentBuilder.AppendToken("=");
-		this.GenerateCode(null, Node.AST[ZVarNode._InitValue]);
+		this.GenerateCode(null, Node.InitValueNode());
 	}
 
 	@Override
@@ -125,15 +124,15 @@ public class RubySourceGenerator extends ZSourceGenerator {
 	public void VisitFunctionNode(ZFunctionNode Node) {
 		this.CurrentBuilder.Append("->");
 		this.VisitListNode("(", Node, ")");
-		this.GenerateCode(null, Node.AST[ZFunctionNode._Block]);
+		this.GenerateCode(null, Node.BlockNode());
 	}
 
 	//	public void VisitFuncDeclNode(ZFunctionNode/ Node) {
 	//		this.CurrentBuilder.Append("def ");
 	//		this.CurrentBuilder.Append(Node.FuncName);
 	//		this.VisitListNode("(", Node, ")");
-	//		if (Node.AST[ZFunctionNode._Block] != null) {
-	//			this.GenerateCode(Node.AST[ZFunctionNode._Block]);
+	//		if (Node.BlockNode() != null) {
+	//			this.GenerateCode(Node.BlockNode());
 	//		}
 	//	}
 }

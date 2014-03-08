@@ -41,6 +41,9 @@ public class ZCastNode extends ZNode {
 			this.Set(ZCastNode._Expr, Node);
 		}
 	}
+	public final ZNode ExprNode() {
+		return this.AST[ZCastNode._Expr ];
+	}
 
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitCastNode(this);
@@ -49,13 +52,13 @@ public class ZCastNode extends ZNode {
 	public final ZListNode ToFuncCallNode(ZFunc Func) {
 		if(Func instanceof ZMacroFunc) {
 			@Var ZMacroNode FuncNode = new ZMacroNode(this.ParentNode, this.SourceToken, (ZMacroFunc)Func);
-			FuncNode.Append(this.AST[ZCastNode._Expr]);
+			FuncNode.Append(this.ExprNode());
 			return FuncNode;
 		}
 		else {
 			@Var ZFuncCallNode FuncNode = new ZFuncCallNode(this.ParentNode, Func.FuncName, Func.GetFuncType());
 			FuncNode.SourceToken = this.SourceToken;
-			FuncNode.Append(this.AST[ZCastNode._Expr]);
+			FuncNode.Append(this.ExprNode());
 			return FuncNode;
 		}
 	}

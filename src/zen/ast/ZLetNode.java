@@ -17,6 +17,15 @@ public class ZLetNode extends ZNode {
 	public ZLetNode(ZNode ParentNode) {
 		super(ParentNode, null, 1);
 	}
+
+	public final ZNode InitValueNode() {
+		if(this.AST[ZLetNode._InitValue] == null) {
+			this.Set(ZLetNode._InitValue, new ZDefaultValueNode());
+		}
+		return this.AST[ZLetNode._InitValue];
+	}
+
+
 	@Override public void SetNameInfo(ZToken NameToken, String Name) {
 		this.Symbol = Name;
 		this.SymbolToken = NameToken;
@@ -29,7 +38,7 @@ public class ZLetNode extends ZNode {
 	}
 
 	public final boolean IsConstValue() {
-		return this.AST[ZLetNode._InitValue] instanceof ZConstNode;
+		return this.InitValueNode() instanceof ZConstNode;
 	}
 
 	public final ZGlobalNameNode ToGlobalNameNode() {

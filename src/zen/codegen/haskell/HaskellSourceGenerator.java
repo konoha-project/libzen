@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import zen.ast.ZBinaryNode;
 import zen.ast.ZBlockNode;
 import zen.ast.ZCastNode;
-import zen.ast.ZCatchNode;
 import zen.ast.ZFuncCallNode;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZGetNameNode;
@@ -131,31 +130,27 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 	@Override
 	public void VisitThrowNode(ZThrowNode Node) {
 		this.CurrentBuilder.Append("raise ");
-		this.GenerateCode(null, Node.AST[ZThrowNode._Expr]);
+		this.GenerateCode(null, Node.ExprNode());
 	}
 
 	@Override
 	public void VisitTryNode(ZTryNode Node) {
 		// See: http://d.hatena.ne.jp/kazu-yamamoto/20090819/1250660658
-		this.GenerateCode(null, Node.AST[ZTryNode._Try]);
+		this.GenerateCode(null, Node.TryBlockNode());
 		this.CurrentBuilder.Append(" `catch` ");
-		if (Node.AST[ZTryNode._Catch] != null) {
-			this.GenerateCode(null, Node.AST[ZTryNode._Catch]);
+		if (Node.CatchBlockNode() != null) {
+			this.GenerateCode(null, Node.CatchBlockNode());
 		}
-		if (Node.AST[ZTryNode._Finally] != null) {
-			this.GenerateCode(null, Node.AST[ZTryNode._Finally]);
+		if (Node.FinallyBlockNode() != null) {
+			this.GenerateCode(null, Node.FinallyBlockNode());
 		}
 	}
 
-	@Override public void VisitCatchNode(ZCatchNode Node) {
-		this.GenerateCode(null, Node.AST[ZCatchNode._Block]);
-	}
 
-	@Override
-	public void VisitVarNode(ZVarNode Node) {
+	@Override public void VisitVarNode(ZVarNode Node) {
 		this.CurrentBuilder.Append(Node.NativeName + " <- readIORef ");
 		this.CurrentBuilder.Append(Node.NativeName + "_ref");
-		this.GenerateCode(null, Node.AST[ZVarNode._InitValue]);
+		this.GenerateCode(null, Node.InitValueNode());
 		this.CurrentBuilder.AppendLineFeed();
 	}
 
@@ -196,17 +191,17 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 		}
 		this.UnIndent(this.CurrentBuilder);
 
-		ZReturnNode ReturnNode = Node.AST[ZFunctionNode._Block].ToReturnNode();
-		if(ReturnNode != null && ReturnNode.AST[ZReturnNode._Expr] != null) {
+		ZReturnNode ReturnNode = Node.BlockNode().ToReturnNode();
+		if(ReturnNode != null && ReturnNode.HasReturnExpr()) {
 			this.Indent(this.CurrentBuilder);
 
 			String Indentation = LibZen._JoinStrings("\t", IndentLevel);
 			this.CurrentBuilder.Append(Indentation);
 			this.CurrentBuilder.Append("return ");
-			this.GenerateCode(null, ReturnNode.AST[ZReturnNode._Expr]);
+			this.GenerateCode(null, ReturnNode.ExprNode());
 			this.UnIndent(this.CurrentBuilder);
 		} else {
-			this.GenerateCode(null, Node.AST[ZFunctionNode._Block]);
+			this.GenerateCode(null, Node.BlockNode());
 		}
 	}
 
@@ -219,7 +214,7 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 	public void VisitSetNameNode(ZSetNameNode Node) {
 		this.CurrentBuilder.Append("writeIORef ");
 		this.CurrentBuilder.Append(Node.VarName + "_ref ");
-		this.GenerateCode(null, Node.AST[ZSetNameNode._Expr]);
+		this.GenerateCode(null, Node.ExprNode());
 		this.CurrentBuilder.AppendLineFeed();
 
 		this.CurrentBuilder.AppendIndent();
@@ -231,8 +226,8 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 
 	@Override
 	public void VisitReturnNode(ZReturnNode Node) {
-		if (Node.AST[ZReturnNode._Expr] != null) {
-			this.GenerateCode(null, Node.AST[ZReturnNode._Expr]);
+		if (Node.HasReturnExpr()) {
+			this.GenerateCode(null, Node.ExprNode());
 		}
 	}
 
@@ -251,9 +246,9 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 		String Op = this.ZenOpToHaskellOp(Node.SourceToken.GetText());
 
 		this.CurrentBuilder.Append("(");
-		Node.AST[ZBinaryNode._Left].Accept(this);
+		Node.LeftNode().Accept(this);
 		this.CurrentBuilder.Append(" " + Op + " ");
-		Node.AST[ZBinaryNode._Right].Accept(this);
+		Node.RightNode().Accept(this);
 		this.CurrentBuilder.Append(")");
 	}
 
@@ -273,7 +268,7 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 
 		this.CurrentBuilder.AppendIndent();
 		this.CurrentBuilder.Append("if ");
-		Node.AST[ZWhileNode._Cond].Accept(this);
+		Node.CondNode().Accept(this);
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.AppendIndent();
 		this.CurrentBuilder.Append("then");
@@ -281,8 +276,8 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 
 		// XXX Is this correct node type ?
 		ZNode LoopNode = new ZGetNameNode(Node, null, "__loop");
-		Node.AST[ZWhileNode._Block].Set(ZNode._AppendIndex, LoopNode);
-		Node.AST[ZWhileNode._Block].Accept(this);
+		Node.BlockNode().Set(ZNode._AppendIndex, LoopNode);
+		Node.BlockNode().Accept(this);
 
 		this.CurrentBuilder.AppendIndent();
 		this.CurrentBuilder.Append("else");
@@ -309,7 +304,7 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
-		this.GenerateCode(null, Node.AST[ZFuncCallNode._Func]);
+		this.GenerateCode(null, Node.FuncNameNode());
 		this.VisitListNode(" ", Node, " ");
 	}
 }

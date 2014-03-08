@@ -49,6 +49,9 @@ public class ZSetNameNode extends ZNode {
 			this.Type = ZType.VoidType;
 		}
 	}
+	public final ZNode ExprNode() {
+		return this.AST[ZSetNameNode._Expr ];
+	}
 
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitSetNameNode(this);

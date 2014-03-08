@@ -25,24 +25,9 @@
 package zen.ast;
 
 import zen.parser.ZToken;
-import zen.type.ZType;
 
 abstract public class ZConstNode extends ZNode {
 	protected ZConstNode(ZNode ParentNode, ZToken SourceToken) {
 		super(ParentNode, SourceToken, 0);
 	}
-
-	public final static ZNode _CreateDefaultValueNode(ZNode ParentNode, ZType Type, String FieldName) {
-		if(Type.IsIntType()) {
-			return new ZIntNode(ParentNode, null, 0);
-		}
-		else if(Type.IsBooleanType()) {
-			return new ZBooleanNode(ParentNode, null, false);
-		}
-		else if(Type.IsFloatType()) {
-			return new ZFloatNode(ParentNode, null, 0.0);
-		}
-		return new ZNullNode(ParentNode, null);
-	}
-
 }

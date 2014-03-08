@@ -34,4 +34,7 @@ public final class ZThrowNode extends ZNode {
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitThrowNode(this);
 	}
+	public final ZNode ExprNode() {
+		return this.AST[ZThrowNode._Expr];
+	}
 }

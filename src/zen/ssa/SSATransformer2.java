@@ -2,7 +2,6 @@ package zen.ssa;
 
 import java.util.ArrayList;
 
-import zen.ast.ZCatchNode;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZGetNameNode;
 import zen.ast.ZIfNode;
@@ -95,11 +94,11 @@ public class SSATransformer2 extends ZASTTransformer {
 		ArrayList<VariableState> Original = this.LocalStates;
 		ArrayList<VariableState> ThenBlockVars = this.CloneTable();
 		ArrayList<VariableState> ElseBlockVars = this.CloneTable();
-		Node.AST[ZIfNode._Cond].Accept(this);
+		Node.CondNode().Accept(this);
 		this.LocalStates = ThenBlockVars;
-		Node.AST[ZIfNode._Then].Accept(this);
+		Node.ThenNode().Accept(this);
 		this.LocalStates = ElseBlockVars;
-		Node.AST[ZIfNode._Else].Accept(this);
+		Node.ElseNode().Accept(this);
 		this.LocalStates = Original;
 		this.PlacePHINode(ThenBlockVars, ElseBlockVars);
 	}
@@ -108,20 +107,20 @@ public class SSATransformer2 extends ZASTTransformer {
 	public void VisitWhileNode(ZWhileNode Node) {
 		ArrayList<VariableState> Original = this.LocalStates;
 		ArrayList<VariableState> BlockVars = this.CloneTable();
-		Node.AST[ZWhileNode._Cond].Accept(this);
+		Node.CondNode().Accept(this);
 		this.LocalStates = BlockVars;
-		Node.AST[ZWhileNode._Block].Accept(this);
+		Node.BlockNode().Accept(this);
 		this.PlacePHINode(BlockVars, null);
 		this.LocalStates = Original;
 	}
 
-	@Override
-	public void VisitCatchNode(ZCatchNode Node) {
-		Variable V = new Variable(Node.GivenName, Node);
-		this.AddVariable(V);
-		Node.AST[ZCatchNode._Block].Accept(this);
-		this.LocalVariables.set(V.Index, null);
-	}
+	//	@Override
+	//	public void VisitCatchNode(ZCatchNode Node) {
+	//		Variable V = new Variable(Node.GivenName, Node);
+	//		this.AddVariable(V);
+	//		Node.AST[ZCatchNode._Block].Accept(this);
+	//		this.LocalVariables.set(V.Index, null);
+	//	}
 
 	@Override
 	public void VisitFunctionNode(ZFunctionNode Node) {
@@ -133,7 +132,7 @@ public class SSATransformer2 extends ZASTTransformer {
 			ZParamNode ParamNode = Node.GetParamNode(i);
 			this.AddVariable(new Variable(ParamNode.Name, ParamNode));
 		}
-		Node.AST[ZFunctionNode._Block].Accept(this);
+		Node.BlockNode().Accept(this);
 
 		this.LocalVariables = OriginalVars;
 		this.LocalStates = OriginalState;

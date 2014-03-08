@@ -36,6 +36,7 @@ import zen.ast.ZBreakNode;
 import zen.ast.ZCastNode;
 import zen.ast.ZClassNode;
 import zen.ast.ZComparatorNode;
+import zen.ast.ZDefaultValueNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZFloatNode;
 import zen.ast.ZFuncCallNode;
@@ -273,6 +274,10 @@ public class ZSourceEngine extends ZVisitor {
 		}
 	}
 
+	@Override public final void VisitDefaultValueNode(ZDefaultValueNode Node) {
+		this.VisitNullNode(new ZNullNode(Node.ParentNode, Node.SourceToken));
+	}
+
 	@Override public void VisitNullNode(ZNullNode Node) {
 		this.Unsupported(Node);
 	}
@@ -322,7 +327,7 @@ public class ZSourceEngine extends ZVisitor {
 	}
 
 	@Override public void VisitGroupNode(ZGroupNode Node) {
-		this.Eval2(Node.AST[ZGroupNode._Expr]);
+		this.Eval2(Node.ExprNode());
 	}
 
 	@Override public void VisitGetterNode(ZGetterNode Node) {
@@ -363,8 +368,8 @@ public class ZSourceEngine extends ZVisitor {
 
 	@Override public void VisitCastNode(ZCastNode Node) {
 		if(Node.Type.IsVoidType()) {
-			this.Eval2(Node.AST[ZCastNode._Expr]);
-			Node.Type = Node.AST[ZCastNode._Expr].Type;
+			this.Eval2(Node.ExprNode());
+			Node.Type = Node.ExprNode().Type;
 		}
 		else {
 			this.Unsupported(Node);
@@ -408,13 +413,13 @@ public class ZSourceEngine extends ZVisitor {
 
 	@Override public void VisitIfNode(ZIfNode Node) {
 		this.Unsupported(Node);
-		//		@Var Object BooleanValue = this.Eval2(Node.AST[ZIfNode._Cond]);
+		//		@Var Object BooleanValue = this.Eval2(Node.CondNode());
 		//		if(BooleanValue instanceof Boolean) {
 		//			if((Boolean)BooleanValue) {
-		//				this.Eval(Node.AST[ZIfNode._Then]);
+		//				this.Eval(Node.ThenNode());
 		//			}
-		//			else if(Node.AST[ZIfNode._Else] != null) {
-		//				this.Eval(Node.AST[ZIfNode._Then]);
+		//			else if(Node.ElseNode() != null) {
+		//				this.Eval(Node.ThenNode());
 		//			}
 		//		}
 	}

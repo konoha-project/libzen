@@ -29,7 +29,7 @@ public class VariableScopeFixer extends ZASTTransformer {
 				break;
 			}
 		}
-		Node.AST[ZVarNode._InitValue].Accept(this);
+		Node.InitValueNode().Accept(this);
 		assert(Index != Parent.GetListSize());
 		int i = Index + 1;
 		for (; i < Parent.GetListSize(); i++) {

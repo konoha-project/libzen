@@ -33,6 +33,9 @@ public class ZUnaryNode extends ZNode {
 	public ZUnaryNode(ZNode ParentNode, ZToken Token) {
 		super(ParentNode, Token, 1);
 	}
+	public final ZNode RecvNode() {
+		return this.AST[ZUnaryNode._Recv ];
+	}
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitUnaryNode(this);
 	}

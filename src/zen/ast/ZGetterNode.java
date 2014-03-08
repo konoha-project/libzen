@@ -37,14 +37,21 @@ public final class ZGetterNode extends ZNode {
 		super(ParentNode, null, 1);
 		this.Set(ZGetterNode._Recv, RecvNode);
 	}
+
+	public final ZNode RecvNode() {
+		return this.AST[ZGetterNode._Recv ];
+	}
+
 	@Override public void SetNameInfo(ZToken NameToken, String Name) {
 		this.FieldName = Name;
 		this.NameToken = NameToken;
 	}
+
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitGetterNode(this);
 	}
+
 	public final boolean IsStaticField() {
-		return this.AST[ZGetterNode._Recv] instanceof ZTypeNode;
+		return this.RecvNode() instanceof ZTypeNode;
 	}
 }
