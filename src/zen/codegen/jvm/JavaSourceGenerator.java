@@ -21,7 +21,7 @@ import zen.ast.ZSetIndexNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZVarNode;
-import zen.lang.ZenTypeSafer;
+import zen.lang.zen.ZenTypeSafer;
 import zen.parser.ZLogger;
 import zen.parser.ZSourceEngine;
 import zen.parser.ZSourceGenerator;

@@ -61,11 +61,10 @@ public abstract class ZNode {
 	}
 
 	public final ZNode SetChild(ZNode Node) {
-		assert(Node != null);
-		if(Node != null) {
-			assert(this != Node);
-			Node.ParentNode = this;
-		}
+		//		if(Node != null) {
+		assert(this != Node);
+		Node.ParentNode = this;
+		//		}
 		return Node;
 	}
 
@@ -145,7 +144,12 @@ public abstract class ZNode {
 					Self = Self + "null";
 				}
 				else {
-					Self = Self + this.AST[i].toString();
+					if(this.AST[i].ParentNode == this) {
+						Self = Self + this.AST[i].toString();
+					}
+					else {
+						Self = Self + "*" + LibZen._GetClassName(this.AST[i])+"*";
+					}
 				}
 				i = i + 1;
 			}
@@ -155,21 +159,33 @@ public abstract class ZNode {
 	}
 
 	public final ZBlockNode GetScopeBlockNode() {
+		@Var int SafeCount = 0;
 		@Var ZNode Node = this;
 		while(Node != null) {
 			if(Node instanceof ZBlockNode) {
 				return (ZBlockNode)Node;
 			}
 			assert(!(Node == Node.ParentNode));
+			//System.out.println("node: " + Node.getClass() + ", " + Node.hashCode() + ", " + SafeCount);
 			Node = Node.ParentNode;
+			SafeCount = SafeCount + 1;
+			assert(SafeCount < 10);
 		}
 		return null;
 	}
 
 	public final ZNameSpace GetNameSpace() {
+		@Var int SafeCount = 0;
 		@Var ZBlockNode BlockNode = this.GetScopeBlockNode();
 		while(BlockNode.NullableNameSpace == null) {
-			BlockNode = BlockNode.ParentNode.GetScopeBlockNode();
+			@Var ZBlockNode ParentBlockNode = BlockNode.ParentNode.GetScopeBlockNode();
+			assert(!(BlockNode == ParentBlockNode));
+			//System.out.println("pnode: " + ParentBlockNode.getClass() + ", " + ParentBlockNode.hashCode() + ", " + SafeCount);
+			//System.out.println("node: " + BlockNode.getClass() + ", " + BlockNode.hashCode() + ", " + SafeCount);
+			BlockNode = ParentBlockNode;
+			//			System.out.println("node:" + BlockNode);
+			SafeCount = SafeCount + 1;
+			assert(SafeCount < 100);
 		}
 		return BlockNode.NullableNameSpace;
 	}

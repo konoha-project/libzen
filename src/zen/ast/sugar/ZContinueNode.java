@@ -50,28 +50,22 @@ public class ZContinueNode extends ZSyntaxSugarNode {
 
 	private ZDesugarNode ReplaceContinue(ZNode Node, ZContinueNode FirstNode, ZNode[] NodeList, ZDesugarNode FirstDesugarNode) {
 		@Var int i = 0;
-		if(Node instanceof ZBlockNode) {
-			while(i < Node.GetAstSize()) {
-				@Var ZNode SubNode = Node.AST[i];
-				if(SubNode instanceof ZContinueNode) {
-					@Var ZDesugarNode DesugarNode = new ZDesugarNode(SubNode, NodeList);
-					if(SubNode == FirstNode) {
-						FirstDesugarNode = DesugarNode;
-					}
-					else {
-						Node.Set(i, DesugarNode);
-					}
-					break;
+		while(i < Node.GetAstSize()) {
+			@Var ZNode SubNode = Node.AST[i];
+			if(SubNode instanceof ZContinueNode) {
+				@Var ZDesugarNode DesugarNode = new ZDesugarNode(SubNode, NodeList);
+				if(SubNode == FirstNode) {
+					FirstDesugarNode = DesugarNode;
 				}
-				i = i + 1;
+				else {
+					Node.Set(i, DesugarNode);
+				}
+				break;
 			}
-		}
-		else {
-			while(i < Node.GetAstSize()) {
-				@Var ZNode SubNode = Node.AST[i];
+			if(SubNode != null) {
 				FirstDesugarNode = this.ReplaceContinue(SubNode, FirstNode, NodeList, FirstDesugarNode);
-				i = i + 1;
 			}
+			i = i + 1;
 		}
 		return FirstDesugarNode;
 	}
@@ -81,18 +75,19 @@ public class ZContinueNode extends ZSyntaxSugarNode {
 		if(WhileNode == null) {
 			return new ZDesugarNode(this, new ZErrorNode(this.ParentNode, this.SourceToken, "must be inside while statement"));
 		}
-		@Var ZVarNode VarNode = new ZVarNode("continue", ZType.BooleanType, new ZBooleanNode(true));
+		@Var String VarName = Generator.NameUniqueSymbol("continue");
+		@Var ZBlockNode ParentBlockNode = WhileNode.GetScopeBlockNode();
+		@Var ZVarNode VarNode = new ZVarNode(VarName, ZType.BooleanType, new ZBooleanNode(true));
 		@Var ZBlockNode WhileBlockNode = new ZBlockNode(null);
-		@Var ZWhileNode VarWhileNode = new ZWhileNode(new ZGetNameNode("continue"), WhileBlockNode);
-		VarNode.Append(VarWhileNode);
-		WhileBlockNode.Append(new ZSetNameNode("continue", new ZBooleanNode(false)));
+		@Var ZWhileNode ContinueWhile = new ZWhileNode(new ZGetNameNode(VarName, ZType.BooleanType), WhileBlockNode);
+		VarNode.Append(ContinueWhile);
+		WhileBlockNode.Append(new ZSetNameNode(VarName, new ZBooleanNode(false)));
 		WhileBlockNode.Append(WhileNode);
-		ZNode[] NodeList = LibZen._NewNodeArray(2);
-		NodeList[0] = new ZSetNameNode("continue", new ZBooleanNode(true));
-		NodeList[1] = new ZBreakNode(null);
-		WhileNode.GetScopeBlockNode().ReplaceWith(WhileNode, VarNode);
-		return this.ReplaceContinue(WhileNode, this, NodeList, null);
+		@Var ZNode[] Nodes = LibZen._NewNodeArray(2);
+		Nodes[0] = new ZSetNameNode(VarName, new ZBooleanNode(true));
+		Nodes[1] = new ZBreakNode(null);
+		ParentBlockNode.ReplaceWith(WhileNode, VarNode);
+		return this.ReplaceContinue(WhileNode, this, Nodes, null);
 	}
-
 
 }

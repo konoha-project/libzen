@@ -26,6 +26,7 @@ package zen.ast;
 
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
+import zen.type.ZType;
 import zen.util.Field;
 
 // E.g., $NativeName = $ValueNode
@@ -33,7 +34,7 @@ public class ZSetNameNode extends ZNode {
 	public static int _Expr = 0;
 
 	@Field public String  VarName;
-	@Field public int    VarIndex = 0;
+	@Field public int     VarIndex = 0;
 	@Field public boolean IsCaptured = false;
 
 	public ZSetNameNode(ZNode ParentNode, ZToken Token, String VarName) {
@@ -44,6 +45,9 @@ public class ZSetNameNode extends ZNode {
 		super(null, null, 1);
 		this.VarName = Name;
 		this.Set(ZSetNameNode._Expr, ExprNode);
+		if(!ExprNode.IsUntyped()) {
+			this.Type = ZType.VoidType;
+		}
 	}
 
 	@Override public void Accept(ZVisitor Visitor) {

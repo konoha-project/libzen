@@ -107,7 +107,7 @@ import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
 import zen.ast.sugar.ZLocalDefinedNode;
 import zen.ast.sugar.ZTopLevelNode;
-import zen.lang.ZenTypeSafer;
+import zen.lang.zen.ZenTypeSafer;
 import zen.parser.ZLogger;
 import zen.parser.ZSourceEngine;
 import zen.type.ZClassField;
@@ -699,7 +699,7 @@ public class JavaAsmGenerator extends JavaGenerator {
 			if(Node.FuncName == null) {
 				Node.FuncName = "f";
 			}
-			Node.FuncName = this.NameGlobalSymbol(Node.FuncName);
+			Node.FuncName = this.NameUniqueSymbol(Node.FuncName);
 			JavaStaticFieldNode FuncNode = this.GenerateFunctionAsSymbolField(Node);
 			if(this.AsmBuilder != null) {
 				this.VisitStaticFieldNode(FuncNode);

@@ -211,8 +211,8 @@ public abstract class ZGenerator extends ZVisitor {
 		return UniqueNumber;
 	}
 
-	public final String NameGlobalSymbol(String Symbol) {
-		return Symbol + "_" + this.GetUniqueNumber();
+	public final String NameUniqueSymbol(String Symbol) {
+		return Symbol + "Z" + this.GetUniqueNumber();
 	}
 
 	public final String NameClass(ZType ClassType) {

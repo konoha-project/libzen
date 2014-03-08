@@ -33,7 +33,7 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.ArrayList;
 
-import zen.lang.ZenGrammar;
+import zen.lang.konoha.KonohaGrammar;
 import zen.parser.ZEmptyValue;
 import zen.parser.ZParserConst;
 import zen.parser.ZSourceBuilder;
@@ -123,7 +123,7 @@ public class ZenMain {
 				continue;
 			}
 		}
-		@Var ZSourceEngine ScriptEngine = LibZen._LoadEngine(TargetCode, ZenGrammar.class.getName());
+		@Var ZSourceEngine ScriptEngine = LibZen._LoadEngine(TargetCode, KonohaGrammar.class.getName());
 		if (!(Index < Args.length)) {
 			ShellMode = true;
 		}
@@ -316,8 +316,6 @@ public class ZenMain {
 		}
 		return Line;
 	}
-
-
 
 
 }

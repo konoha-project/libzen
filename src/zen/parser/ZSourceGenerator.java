@@ -75,7 +75,7 @@ import zen.ast.sugar.ZDesugarNode;
 import zen.ast.sugar.ZLocalDefinedNode;
 import zen.ast.sugar.ZSyntaxSugarNode;
 import zen.ast.sugar.ZTopLevelNode;
-import zen.lang.ZenTypeSafer;
+import zen.lang.zen.ZenTypeSafer;
 import zen.type.ZClassType;
 import zen.type.ZFuncType;
 import zen.type.ZType;
@@ -106,7 +106,7 @@ public class ZSourceGenerator extends ZGenerator {
 	@Field public String Camma = ", ";
 
 	@Field public String StringLiteralPrefix = "";
-	@Field public String IntLiteralSuffix = "L";
+	@Field public String IntLiteralSuffix = "";
 
 	@Field public String TrueLiteral = "true";
 	@Field public String FalseLiteral = "false";
@@ -480,10 +480,15 @@ public class ZSourceGenerator extends ZGenerator {
 	}
 
 	@Override public void VisitCastNode(ZCastNode Node) {
-		this.CurrentBuilder.Append("(");
-		this.GenerateTypeName(Node.Type);
-		this.CurrentBuilder.Append(")");
-		this.GenerateSurroundCode(Node.AST[ZCastNode._Expr]);
+		if(Node.Type.IsVoidType()) {
+			this.GenerateCode(null, Node.AST[ZCastNode._Expr]);
+		}
+		else {
+			this.CurrentBuilder.Append("(");
+			this.GenerateTypeName(Node.Type);
+			this.CurrentBuilder.Append(")");
+			this.GenerateSurroundCode(Node.AST[ZCastNode._Expr]);
+		}
 	}
 
 	@Override public void VisitInstanceOfNode(ZInstanceOfNode Node) {

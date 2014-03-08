@@ -24,7 +24,7 @@
 
 //ifdef JAVA
 
-package zen.lang;
+package zen.lang.zen;
 
 import zen.ast.ZAndNode;
 import zen.ast.ZArrayLiteralNode;
@@ -576,9 +576,15 @@ public class ZenTypeSafer extends ZTypeChecker {
 	@Override public void VisitBlockNode(ZBlockNode Node) {
 		@Var int i = 0;
 		while(i < Node.GetListSize()) {
-			@Var ZNode SubNode = Node.GetListAt(i);  // without annotation
-			SubNode = this.CheckType(SubNode, ZType.VoidType);
-			Node.SetListAt(i, SubNode);
+			@Var ZNode SubNode = Node.GetListAt(i);
+			@Var ZNode TypedNode = this.CheckType(SubNode, ZType.VoidType);
+			@Var ZNode CheckNode = Node.GetListAt(i);
+			while(SubNode != CheckNode) {  // detecting replacement
+				SubNode = CheckNode;
+				TypedNode = this.CheckType(SubNode, ZType.VoidType);
+				CheckNode = Node.GetListAt(i);
+			}
+			Node.SetListAt(i, TypedNode);
 			if(SubNode.IsBreakingBlock()) {
 				Node.ClearListAfter(i+1);
 				break;
@@ -671,7 +677,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 	@Override public void VisitLetNode(ZLetNode Node) {
 		this.CheckTypeAt(Node, ZLetNode._InitValue, Node.SymbolType);
 		if(!Node.GetAstType(ZLetNode._InitValue).IsVarType()) {
-			Node.GlobalName = this.Generator.NameGlobalSymbol(Node.Symbol);
+			Node.GlobalName = this.Generator.NameUniqueSymbol(Node.Symbol);
 			Node.GetNameSpace().SetLocalSymbol(Node.Symbol, Node.AST[ZLetNode._InitValue]);
 		}
 		this.TypedNode(Node, ZType.VoidType);
@@ -753,9 +759,16 @@ public class ZenTypeSafer extends ZTypeChecker {
 		this.VarScope = this.VarScope.Parent;
 	}
 
+	private ZNameSpace EnforceBlockNameSpace(ZFunctionNode Node) {
+		@Var ZNode BlockNode = Node.AST[ZFunctionNode._Block];
+		if(BlockNode instanceof ZBlockNode) {
+			return ((ZBlockNode)BlockNode).GetBlockNameSpace();
+		}
+		return BlockNode.GetNameSpace();
+	}
+
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
 		//LibZen._PrintDebug("name="+Node.FuncName+ ", Type=" + Node.Type + ", IsTopLevel=" + this.IsTopLevel());
-		@Var ZNameSpace NameSpace = Node.AST[ZFunctionNode._Block].GetNameSpace();
 		@Var ZType ContextType = this.GetContextType();
 		if(Node.IsUntyped()) {
 			Node.Type = ContextType;  // funcdecl is requested with VoidType
@@ -780,6 +793,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 		if(!this.HasReturn(Node.AST[ZFunctionNode._Block])) {
 			Node.AST[ZFunctionNode._Block].Set(ZNode._AppendIndex, new ZReturnNode(Node));
 		}
+		@Var ZNameSpace NameSpace = this.EnforceBlockNameSpace(Node);
 		this.PushFunctionNode(NameSpace, Node, ContextType);
 		this.VarScope.TypeCheckFuncBlock(this, Node);
 		this.PopFunctionNode(NameSpace);

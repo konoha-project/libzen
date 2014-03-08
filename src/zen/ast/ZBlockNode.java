@@ -80,11 +80,12 @@ public class ZBlockNode extends ZListNode {
 		}
 	}
 
-	public final void ReplaceWith(ZNode OldNode, ZVarNode NewNode) {
+	public final void ReplaceWith(ZNode OldNode, ZNode NewNode) {
 		@Var int i = 0;
 		while(i < this.GetAstSize()) {
 			if(this.AST[i] == OldNode) {
-				this.Set(i, NewNode);
+				this.AST[i] = NewNode;
+				NewNode.ParentNode = this;
 				if(NewNode.HasUntypedNode()) {
 					this.HasUntypedNode = true;
 				}
@@ -92,6 +93,7 @@ public class ZBlockNode extends ZListNode {
 			}
 			i = i + 1;
 		}
+		System.out.println("no replacement");
 		assert(OldNode == NewNode);  // this must not happen!!
 	}
 }

@@ -27,6 +27,7 @@ package zen.ast;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 import zen.type.ZFunc;
+import zen.type.ZType;
 import zen.util.Field;
 
 public class ZGetNameNode extends ZNode {
@@ -45,9 +46,10 @@ public class ZGetNameNode extends ZNode {
 		this.Type = ResolvedFunc.GetFuncType();
 	}
 
-	public ZGetNameNode(String Name) {
+	public ZGetNameNode(String Name, ZType Type) {
 		super(null, null, 0);
 		this.VarName = Name;
+		this.Type = Type;
 	}
 
 	@Override public void Accept(ZVisitor Visitor) {

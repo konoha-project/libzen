@@ -23,7 +23,7 @@ import zen.ast.ZSetNameNode;
 import zen.ast.ZSetterNode;
 import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
-import zen.lang.ZenTypeSafer;
+import zen.lang.zen.ZenTypeSafer;
 import zen.parser.ZSourceBuilder;
 import zen.parser.ZSourceEngine;
 import zen.parser.ZSourceGenerator;

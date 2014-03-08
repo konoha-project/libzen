@@ -23,7 +23,7 @@
 // **************************************************************************
 
 //ifdef JAVA
-package zen.lang;
+package zen.lang.zen;
 import zen.grammar.AndPatternFunction;
 import zen.grammar.AnnotationPatternFunction;
 import zen.grammar.ApplyPatternFunction;
@@ -192,22 +192,21 @@ public class ZenGrammar {
 
 		NameSpace.DefineStatement("let", new LetPatternFunction());
 		NameSpace.DefineStatement("export", new ExportPatternFunction());
+		NameSpace.DefineRightExpression("instanceof", ZenPrecedence._Instanceof, new InstanceOfPatternFunction());
+		NameSpace.DefineStatement("class", new ClassPatternFunction());
+		NameSpace.DefineExpression("$FieldDecl$", new FieldPatternFunction());
+
+		NameSpace.DefineStatement("assert", new AssertPatternFunction());
+		NameSpace.DefineStatement("asm", new AsmMacroPatternFunction());
+		NameSpace.DefineStatement("asm", new AsmPatternFunction());
+		NameSpace.DefineStatement("require", new RequirePatternFunction());
+
 		NameSpace.Generator.AppendGrammarInfo("zen-0.1");
 
 		NameSpace.DefineStatement("try", new TryPatternFunction());
 		NameSpace.DefineExpression("$Catch$", new CatchPatternFunction());
 		NameSpace.DefineStatement("throw", new ThrowPatternFunction());
 		NameSpace.Generator.AppendGrammarInfo("zen-trycatch-0.1");
-
-		NameSpace.DefineRightExpression("instanceof", ZenPrecedence._Instanceof, new InstanceOfPatternFunction());
-		NameSpace.DefineStatement("class", new ClassPatternFunction());
-		NameSpace.DefineExpression("$FieldDecl$", new FieldPatternFunction());
-
-		NameSpace.Generator.AppendGrammarInfo("zen-class-0.1");
-		NameSpace.DefineStatement("assert", new AssertPatternFunction());
-		NameSpace.DefineStatement("asm", new AsmMacroPatternFunction());
-		NameSpace.DefineStatement("asm", new AsmPatternFunction());
-		NameSpace.DefineStatement("require", new RequirePatternFunction());
 
 	}
 

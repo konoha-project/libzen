@@ -1,4 +1,4 @@
-package zen.lang;
+package zen.lang.zen;
 
 public abstract class ZenPrecedence {
 	public final static int _BinaryOperator					= 1;
