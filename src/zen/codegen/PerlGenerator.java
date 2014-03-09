@@ -211,7 +211,7 @@ public class PerlGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Append("%o = shift", this.SemiColon);
 
 		@Var ZType SuperType = Node.ClassType.GetSuperType();
-		if(!SuperType.IsVarType()) {
+		if(!SuperType.Equals(ZClassType._ObjectType)) {
 			this.CurrentBuilder.AppendNewLine();
 			this.CurrentBuilder.Append("_Init" + this.NameClass(SuperType) + "(%o);");
 		}

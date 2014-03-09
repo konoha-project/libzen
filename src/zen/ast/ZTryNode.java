@@ -50,6 +50,10 @@ public final class ZTryNode extends ZGivenNameNode {
 		return this.GivenName;
 	}
 
+	public final boolean HasExceptionType() {
+		return this.GivenType != null;
+	}
+
 	public final ZType ExceptionType() {
 		return this.GivenType;
 	}
@@ -84,6 +88,7 @@ public final class ZTryNode extends ZGivenNameNode {
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitTryNode(this);
 	}
+
 
 
 }

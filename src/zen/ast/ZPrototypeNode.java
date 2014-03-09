@@ -11,7 +11,7 @@ public class ZPrototypeNode extends ZTopLevelNode {
 	@Field ZFunctionNode FunctionNode;
 	public ZPrototypeNode(ZFunctionNode FunctionNode) {
 		super(FunctionNode.ParentNode, FunctionNode.SourceToken, 1);
-		this.Set(ZPrototypeNode._FuncInfo, FunctionNode);
+		this.SetNode(ZPrototypeNode._FuncInfo, FunctionNode);
 		this.FunctionNode = FunctionNode;
 	}
 

@@ -750,8 +750,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 	}
 
 
-	@Override
-	public void VisitClassNode(ZClassNode Node) {
+	@Override public void VisitClassNode(ZClassNode Node) {
 		this.DefineClass(Node.ClassName, Node);
 		@Var String ClassSymbol = this.ToClassSymbol(Node.ClassName);
 		this.Writer.PushNewBuffer(ClassSymbol);
@@ -766,7 +765,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		this.Writer.AddCodeToCurrentBuffer(ClassSymbol);
 		this.Writer.AddCodeToCurrentBuffer(" { ");
 		@Var String HeaderValue;
-		if(Node.SuperType != null) {
+		if(!Node.SuperType.Equals(ZClassType._ObjectType)) {
 			HeaderValue = "i8* bitcast (" + this.GetTypeExpr(Node.SuperType) + " @" + Node.SuperType.ShortName + ".Proto to i8*)";
 		}
 		else {
@@ -1053,8 +1052,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		Node.GetNameSpace().SetLocalSymbol(Node.Symbol, Node.ToGlobalNameNode());
 	}
 
-	@Override
-	public void VisitMacroNode(ZMacroNode Node) {
+	@Override public void VisitMacroNode(ZMacroNode Node) {
 		@Var String TempVar = "";
 		this.Writer.PushNewBuffer("");
 		@Var String Macro = Node.GetMacroText();
@@ -1073,7 +1071,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 			}
 			this.Writer.AddCodeToCurrentBuffer(Macro.substring(fromIndex, BeginNum));
 			@Var int Index = (int)LibZen._ParseInt(Macro.substring(BeginNum+2, EndNum));
-			if(Node.HasAst(Index)) {
+			if(Node.AST[Index] != null) {
 				this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.AST[Index].Type));
 				this.Writer.AddCodeToCurrentBuffer(" ");
 				this.GenerateCode(FuncType.GetFuncParamType(Index), Node.AST[Index]);

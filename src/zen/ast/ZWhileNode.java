@@ -38,8 +38,8 @@ public final class ZWhileNode extends ZNode {
 
 	public ZWhileNode(ZNode CondNode, ZBlockNode BlockNode) {
 		super(null, null, 3);
-		this.Set(ZWhileNode._Cond, CondNode);
-		this.Set(ZWhileNode._Block, BlockNode);
+		this.SetNode(ZWhileNode._Cond, CondNode);
+		this.SetNode(ZWhileNode._Block, BlockNode);
 	}
 
 	@Override public void Accept(ZVisitor Visitor) {

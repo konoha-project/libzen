@@ -378,7 +378,6 @@ public class ZSourceGenerator extends ZGenerator {
 
 	@Override public void VisitSetIndexNode(ZSetIndexNode Node) {
 		this.GenerateCode(null, Node.RecvNode());
-		this.CurrentBuilder.Append("[");
 		this.GenerateCode("[", null, Node.IndexNode(), "] = ");
 		this.GenerateCode(null, Node.ExprNode());
 	}
@@ -433,7 +432,7 @@ public class ZSourceGenerator extends ZGenerator {
 			}
 			this.CurrentBuilder.Append(Macro.substring(fromIndex, BeginNum));
 			@Var int Index = (int)LibZen._ParseInt(Macro.substring(BeginNum+2, EndNum));
-			if(Node.HasAst(Index)) {
+			if(Node.AST[Index] != null) {
 				this.GenerateCode(FuncType.GetFuncParamType(Index), Node.AST[Index]);
 			}
 			fromIndex = EndNum + 1;
@@ -565,7 +564,9 @@ public class ZSourceGenerator extends ZGenerator {
 		this.GenerateCode(null, Node.TryBlockNode());
 		if(Node.HasCatchBlockNode()) {
 			this.CurrentBuilder.AppendNewLine("catch (", Node.ExceptionName());
-			this.GenerateTypeAnnotation(Node.ExceptionType());
+			if(Node.HasExceptionType()) {
+				this.GenerateTypeAnnotation(Node.ExceptionType());
+			}
 			this.CurrentBuilder.Append(") ");
 			this.GenerateCode(null, Node.CatchBlockNode());
 		}
@@ -626,10 +627,8 @@ public class ZSourceGenerator extends ZGenerator {
 			@Var ZFieldNode FieldNode = Node.GetFieldNode(i);
 			this.CurrentBuilder.AppendNewLine("var ", FieldNode.FieldName);
 			this.GenerateTypeAnnotation(FieldNode.DeclType);
-			if(FieldNode.HasAst(ZFieldNode._InitValue)) {
-				this.CurrentBuilder.AppendToken("=");
-				this.GenerateCode(null, FieldNode.InitValueNode());
-			}
+			this.CurrentBuilder.AppendToken("=");
+			this.GenerateCode(null, FieldNode.InitValueNode());
 			this.CurrentBuilder.Append(this.SemiColon);
 			i = i + 1;
 		}

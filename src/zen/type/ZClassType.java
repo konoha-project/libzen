@@ -26,19 +26,28 @@ package zen.type;
 
 import zen.parser.ZToken;
 import zen.util.Field;
+import zen.util.LibZen;
 import zen.util.Var;
 import zen.util.ZArray;
 
 public class ZClassType extends ZType {
+	public final static ZClassType _ObjectType = new ZClassType("Object");
+
 	@Field ZArray<ZClassField> FieldList = null;
+
+	private ZClassType(String ShortName) {
+		super(ZType.OpenTypeFlag|ZType.UniqueTypeFlag, ShortName, ZType.VarType);
+		this.TypeFlag = LibZen._UnsetFlag(this.TypeFlag, ZType.OpenTypeFlag);
+	}
+
 	public ZClassType(String ShortName, ZType RefType) {
 		super(ZType.OpenTypeFlag|ZType.UniqueTypeFlag, ShortName, RefType);
 		if(RefType instanceof ZClassType) {
-			this.ResetSuperType((ZClassType)RefType);
+			this.EnforceSuperClass((ZClassType)RefType);
 		}
 	}
 
-	public final void ResetSuperType(ZClassType SuperClass) {
+	public final void EnforceSuperClass(ZClassType SuperClass) {
 		this.RefType = SuperClass;
 		if(SuperClass.FieldList != null) {
 			this.FieldList = new ZArray<ZClassField>(new ZClassField[10]);

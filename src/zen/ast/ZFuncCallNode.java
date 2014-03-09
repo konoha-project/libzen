@@ -35,13 +35,13 @@ public final class ZFuncCallNode extends ZListNode {
 
 	public ZFuncCallNode(ZNode ParentNode, ZNode FuncNode) {
 		super(ParentNode, null, 1);
-		this.Set(ZFuncCallNode._Func, FuncNode);
+		this.SetNode(ZFuncCallNode._Func, FuncNode);
 	}
 
 	public ZFuncCallNode(ZNode ParentNode, String FuncName, ZType FuncType) {
 		super(ParentNode, null, 1);
 		@Var ZGlobalNameNode FuncNode = new ZGlobalNameNode(this, null, FuncType, FuncName, true);
-		this.Set(ZFuncCallNode._Func, FuncNode);
+		this.SetNode(ZFuncCallNode._Func, FuncNode);
 	}
 
 	public final ZNode FuncNameNode() {

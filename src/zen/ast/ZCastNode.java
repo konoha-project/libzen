@@ -38,7 +38,7 @@ public class ZCastNode extends ZNode {
 		super(ParentNode, null, 1);
 		this.Type = CastType;
 		if(Node != null) {
-			this.Set(ZCastNode._Expr, Node);
+			this.SetNode(ZCastNode._Expr, Node);
 		}
 	}
 	public final ZNode ExprNode() {

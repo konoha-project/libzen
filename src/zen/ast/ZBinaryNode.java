@@ -41,7 +41,7 @@ public class ZBinaryNode extends ZNode {
 
 	public ZBinaryNode(ZNode ParentNode, ZToken SourceToken, ZNode Left, ZSyntax Pattern) {
 		super(ParentNode, SourceToken, 2);
-		this.Set(ZBinaryNode._Left, Left);
+		this.SetNode(ZBinaryNode._Left, Left);
 		assert(Pattern != null);
 		this.Pattern = Pattern;
 	}
@@ -65,11 +65,11 @@ public class ZBinaryNode extends ZNode {
 	private final ZNode RightJoin(ZNode ParentNode, ZBinaryNode RightNode) {
 		@Var ZNode RightLeftNode = RightNode.LeftNode();
 		if(this.IsRightJoin(RightLeftNode)) {
-			RightNode.Set(ZBinaryNode._Left, this.RightJoin(ParentNode, (ZBinaryNode) RightLeftNode));
+			RightNode.SetNode(ZBinaryNode._Left, this.RightJoin(ParentNode, (ZBinaryNode) RightLeftNode));
 		}
 		else {
-			RightNode.Set(ZBinaryNode._Left, this);
-			this.Set(ZBinaryNode._Right, RightLeftNode);
+			RightNode.SetNode(ZBinaryNode._Left, this);
+			this.SetNode(ZBinaryNode._Right, RightLeftNode);
 		}
 		return RightNode;
 	}
@@ -82,7 +82,7 @@ public class ZBinaryNode extends ZNode {
 		if(this.IsRightJoin(RightNode)) {
 			return this.RightJoin(ParentNode, (ZBinaryNode) RightNode);
 		}
-		this.Set(ZBinaryNode._Right, RightNode);
+		this.SetNode(ZBinaryNode._Right, RightNode);
 		return this;
 	}
 

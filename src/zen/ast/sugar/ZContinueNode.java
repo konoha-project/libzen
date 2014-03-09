@@ -58,7 +58,7 @@ public class ZContinueNode extends ZSyntaxSugarNode {
 					FirstDesugarNode = DesugarNode;
 				}
 				else {
-					Node.Set(i, DesugarNode);
+					Node.SetNode(i, DesugarNode);
 				}
 				break;
 			}

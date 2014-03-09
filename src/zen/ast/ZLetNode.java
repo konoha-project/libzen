@@ -20,7 +20,7 @@ public class ZLetNode extends ZNode {
 
 	public final ZNode InitValueNode() {
 		if(this.AST[ZLetNode._InitValue] == null) {
-			this.Set(ZLetNode._InitValue, new ZDefaultValueNode());
+			this.SetNode(ZLetNode._InitValue, new ZDefaultValueNode());
 		}
 		return this.AST[ZLetNode._InitValue];
 	}

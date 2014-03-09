@@ -211,15 +211,22 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitTryNode(ZTryNode Node) {
-		//		this.CurrentBuilder.Append("try");
-		//		this.GenerateCode(Node.TryNode());
-		//		if(Node.CatchNode() != null) {
-		//			this.GenerateCode(Node.CatchNode());
-		//		}
-		//		if (Node.FinallyNode() != null) {
-		//			this.CurrentBuilder.Append("finally");
-		//			this.GenerateCode(Node.FinallyNode());
-		//		}
+		this.CurrentBuilder.Append("try ");
+		this.GenerateCode(null, Node.TryBlockNode());
+		if(Node.HasCatchBlockNode()) {
+			@Var String VarName = this.NameUniqueSymbol("e");
+			this.CurrentBuilder.AppendNewLine("catch (Exception ", VarName, ")");
+			this.CurrentBuilder.OpenIndent(" {");
+			this.CurrentBuilder.AppendNewLine("Object ", Node.ExceptionName(), " = ");
+			this.CurrentBuilder.Append("/*FIXME*/", VarName, this.SemiColon);
+			this.VisitStmtList(Node.CatchBlockNode());
+			this.CurrentBuilder.Append(this.SemiColon);
+			this.CurrentBuilder.CloseIndent("}");
+		}
+		if(Node.HasFinallyBlockNode()) {
+			this.CurrentBuilder.AppendNewLine("finally ");
+			this.GenerateCode(null, Node.FinallyBlockNode());
+		}
 	}
 
 	private String GetJavaTypeName(ZType Type, boolean Boxing) {
@@ -450,7 +457,7 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 		else {
 			this.CurrentBuilder.AppendNewLine("class ", ClassName, " extends ");
 		}
-		if(SuperType.IsVarType()) {
+		if(SuperType.Equals(ZClassType._ObjectType)) {
 			this.CurrentBuilder.Append("Object");
 		}
 		else {

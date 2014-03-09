@@ -33,7 +33,7 @@ public final class ZGetIndexNode extends ZNode {
 
 	public ZGetIndexNode(ZNode ParentNode, ZNode RecvNode) {
 		super(ParentNode, null, 2);
-		this.Set(ZGetIndexNode._Recv, RecvNode);
+		this.SetNode(ZGetIndexNode._Recv, RecvNode);
 	}
 	public final ZNode RecvNode() {
 		return this.AST[ZGetIndexNode._Recv ];

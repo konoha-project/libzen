@@ -171,7 +171,7 @@ public abstract class ZTypeChecker extends ZVisitor {
 
 	public final void TryTypeAt(ZNode Node, int Index, ZType ContextType) {
 		//		@Var ZNode N = Node.AST[Index];
-		Node.Set(Index, this.TypeCheck(Node.AST[Index], ContextType, ZTypeChecker._NoCheckPolicy));
+		Node.SetNode(Index, this.TypeCheck(Node.AST[Index], ContextType, ZTypeChecker._NoCheckPolicy));
 		//		if(N != Node.AST[Index]) {
 		//			System.out.println("Node="+Node+"\n\tFrom="+N+"\n\tTo="+Node.AST[Index]);
 		//		}
@@ -183,7 +183,7 @@ public abstract class ZTypeChecker extends ZVisitor {
 
 	public final void CheckTypeAt(ZNode Node, int Index, ZType ContextType) {
 		//		@Var ZNode N = Node.AST[Index];
-		Node.Set(Index, this.TypeCheck(Node.AST[Index], ContextType, ZTypeChecker._DefaultTypeCheckPolicy));
+		Node.SetNode(Index, this.TypeCheck(Node.AST[Index], ContextType, ZTypeChecker._DefaultTypeCheckPolicy));
 		//		if(N != Node.AST[Index]) {
 		//			System.out.println("Node="+Node+"\n\tFrom="+N+"\n\tTo="+Node.AST[Index]);
 		//		}

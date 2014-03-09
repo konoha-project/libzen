@@ -45,7 +45,7 @@ public final class ZFieldNode extends ZLocalDefinedNode {
 
 	public final ZNode InitValueNode() {
 		if(this.AST[ZFieldNode._InitValue] == null) {
-			this.Set(ZFieldNode._InitValue, new ZDefaultValueNode());
+			this.SetNode(ZFieldNode._InitValue, new ZDefaultValueNode());
 		}
 		return this.AST[ZFieldNode._InitValue];
 	}

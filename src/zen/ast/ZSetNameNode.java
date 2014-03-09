@@ -44,7 +44,7 @@ public class ZSetNameNode extends ZNode {
 	public ZSetNameNode(String Name, ZNode ExprNode) {
 		super(null, null, 1);
 		this.VarName = Name;
-		this.Set(ZSetNameNode._Expr, ExprNode);
+		this.SetNode(ZSetNameNode._Expr, ExprNode);
 		if(!ExprNode.IsUntyped()) {
 			this.Type = ZType.VoidType;
 		}

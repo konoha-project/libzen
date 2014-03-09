@@ -87,6 +87,7 @@ import zen.grammar.VarPatternFunction;
 import zen.grammar.WhilePatternFunction;
 import zen.grammar.WhiteSpaceTokenFunction;
 import zen.parser.ZNameSpace;
+import zen.type.ZClassType;
 import zen.type.ZFuncType;
 import zen.type.ZGenericType;
 import zen.type.ZType;
@@ -191,9 +192,11 @@ public class ZenGrammar {
 
 		NameSpace.DefineStatement("let", new LetPatternFunction());
 		NameSpace.DefineStatement("export", new ExportPatternFunction());
-		NameSpace.DefineRightExpression("instanceof", ZenPrecedence._Instanceof, new InstanceOfPatternFunction());
+
+		NameSpace.SetTypeName(ZClassType._ObjectType, null);
 		NameSpace.DefineStatement("class", new ClassPatternFunction());
 		NameSpace.DefineExpression("$FieldDecl$", new FieldPatternFunction());
+		NameSpace.DefineRightExpression("instanceof", ZenPrecedence._Instanceof, new InstanceOfPatternFunction());
 
 		NameSpace.DefineStatement("assert", new AssertPatternFunction());
 		NameSpace.DefineStatement("asm", new AsmMacroPatternFunction());

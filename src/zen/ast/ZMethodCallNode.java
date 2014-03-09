@@ -39,7 +39,7 @@ public final class ZMethodCallNode extends ZListNode {
 
 	public ZMethodCallNode(ZNode ParentNode, ZNode RecvNode) {
 		super(ParentNode, null, 1);
-		this.Set(ZMethodCallNode._Recv, RecvNode);
+		this.SetNode(ZMethodCallNode._Recv, RecvNode);
 	}
 
 	public final ZNode RecvNode() {

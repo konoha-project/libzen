@@ -47,12 +47,12 @@ public final class ZVarNode extends ZBlockNode {
 		super(null, 1);
 		this.NativeName = Name;
 		this.DeclType = DeclType;
-		this.Set(ZVarNode._InitValue, InitNode);
+		this.SetNode(ZVarNode._InitValue, InitNode);
 	}
 
 	public final ZNode InitValueNode() {
 		if(this.AST[ZVarNode._InitValue] == null) {
-			this.Set(ZVarNode._InitValue, new ZDefaultValueNode());
+			this.SetNode(ZVarNode._InitValue, new ZDefaultValueNode());
 		}
 		return this.AST[ZVarNode._InitValue];
 	}

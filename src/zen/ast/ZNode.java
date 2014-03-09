@@ -61,10 +61,8 @@ public abstract class ZNode {
 	}
 
 	public final ZNode SetChild(ZNode Node) {
-		//		if(Node != null) {
 		assert(this != Node);
 		Node.ParentNode = this;
-		//		}
 		return Node;
 	}
 
@@ -76,7 +74,7 @@ public abstract class ZNode {
 		this.Type = Type;  // default behavior
 	}
 
-	public final void Set(int Index, ZNode Node) {
+	public final void SetNode(int Index, ZNode Node) {
 		if(Index >= 0) {
 			this.AST[Index] = this.SetChild(Node);
 		}
@@ -107,12 +105,12 @@ public abstract class ZNode {
 		return this.AST.length;
 	}
 
-	public final boolean HasAst(int Index) {
-		if(this.AST != null && Index < this.AST.length) {
-			return this.AST[Index] != null;
-		}
-		return false;
-	}
+	//	public final boolean HasAst(int Index) {
+	//		if(this.AST != null && Index < this.AST.length) {
+	//			return this.AST[Index] != null;
+	//		}
+	//		return false;
+	//	}
 
 	public final ZType GetAstType(int Index) {
 		return this.AST[Index].Type.GetRealType();

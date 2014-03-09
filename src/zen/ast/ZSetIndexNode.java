@@ -34,7 +34,7 @@ public final class ZSetIndexNode extends ZNode {
 
 	public ZSetIndexNode(ZNode ParentNode, ZNode LeftNode) {
 		super(ParentNode, null, 3);
-		this.Set(ZSetIndexNode._Recv, LeftNode);
+		this.SetNode(ZSetIndexNode._Recv, LeftNode);
 	}
 	public final ZNode RecvNode() {
 		return this.AST[ZSetIndexNode._Recv ];

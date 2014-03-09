@@ -437,7 +437,7 @@ public class JavaEngine extends ZSourceEngine {
 			if(FuncName != null) {
 				this.Solution.LazyBuild(FuncType.StringfySignature(FuncName));
 				Class<?> FunctionClass = this.Solution.GetDefinedFunctionClass(FuncName, FuncType);
-				Node.Set(ZFuncCallNode._Func, new JavaStaticFieldNode(Node, FunctionClass, FuncType, "function"));
+				Node.SetNode(ZFuncCallNode._Func, new JavaStaticFieldNode(Node, FunctionClass, FuncType, "function"));
 			}
 		}
 		Object Recv = this.Eval(Node.FuncNameNode());

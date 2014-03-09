@@ -128,11 +128,9 @@ public class PythonGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitBlockNode(ZBlockNode Node) {
-		this.CurrentBuilder.Append(":");
-		this.CurrentBuilder.Indent();
+		this.CurrentBuilder.OpenIndent(":");
 		this.VisitStmtList(Node);
-		this.CurrentBuilder.UnIndent();
-		this.CurrentBuilder.AppendNewLine();
+		this.CurrentBuilder.CloseIndent("");
 	}
 
 	@Override public void VisitNewObjectNode(ZNewObjectNode Node) {
@@ -189,10 +187,10 @@ public class PythonGenerator extends ZSourceGenerator {
 		if (Node.HasElseNode()) {
 			ZNode ElseNode = Node.ElseNode();
 			if(ElseNode instanceof ZIfNode) {
-				this.CurrentBuilder.Append("el");
+				this.CurrentBuilder.AppendNewLine("el");
 			}
 			else {
-				this.CurrentBuilder.Append("else");
+				this.CurrentBuilder.AppendNewLine("else");
 			}
 			this.GenerateCode(null, Node.ElseNode());
 		}
@@ -278,7 +276,7 @@ public class PythonGenerator extends ZSourceGenerator {
 		this.GenerateMethodVariables(Node);
 		this.CurrentBuilder.Append("class ");
 		this.CurrentBuilder.Append(this.NameClass(Node.ClassType));
-		if(!SuperType.IsVarType()) {
+		if(!SuperType.Equals(ZClassType._ObjectType)) {
 			this.CurrentBuilder.Append("(");
 			this.CurrentBuilder.Append(this.NameClass(SuperType));
 			this.CurrentBuilder.Append(")");
@@ -288,7 +286,7 @@ public class PythonGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.AppendNewLine();
 		this.CurrentBuilder.Append("def __init__(self):");
 		this.CurrentBuilder.Indent();
-		if(!SuperType.IsVarType()) {
+		if(!Node.SuperType.Equals(ZClassType._ObjectType)) {
 			this.CurrentBuilder.AppendNewLine();
 			this.CurrentBuilder.Append(this.NameClass(SuperType));
 			this.CurrentBuilder.Append(".__init__(self)");
@@ -343,22 +341,18 @@ public class PythonGenerator extends ZSourceGenerator {
 	@Override public void VisitTryNode(ZTryNode Node) {
 		this.CurrentBuilder.Append("try");
 		this.GenerateCode(null, Node.TryBlockNode());
-		if (Node.CatchBlockNode() != null) {
-			this.GenerateCode(null, Node.CatchBlockNode());
+		if(Node.HasCatchBlockNode()) {
+			@Var String VarName = this.NameUniqueSymbol("e");
+			this.CurrentBuilder.AppendNewLine("except Exception as ", VarName);
+			this.CurrentBuilder.OpenIndent(":");
+			this.CurrentBuilder.AppendNewLine(Node.ExceptionName(), " = ", VarName);
+			this.VisitStmtList(Node.CatchBlockNode());
+			this.CurrentBuilder.CloseIndent("");
 		}
-		if (Node.FinallyBlockNode() != null) {
-			this.CurrentBuilder.Append("finally");
+		if(Node.HasFinallyBlockNode()) {
+			this.CurrentBuilder.AppendNewLine("finally");
 			this.GenerateCode(null, Node.FinallyBlockNode());
 		}
 	}
-
-	//	@Override public void VisitCatchNode(ZCatchNode Node) {
-	//		this.CurrentBuilder.Append("except:");
-	//		//		this.VisitType(Node.ExceptionType);
-	//		//		this.CurrentBuilder.AppendToken("as");
-	//		//		this.CurrentBuilder.Append(Node.ExceptionName);
-	//		this.GenerateCode(null, Node.AST[ZCatchNode._Block]);
-	//	}
-
 
 }

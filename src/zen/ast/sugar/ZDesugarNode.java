@@ -13,7 +13,7 @@ public class ZDesugarNode extends ZSyntaxSugarNode {
 		super(OriginalNode.ParentNode, null, 1);
 		this.OriginalNode = OriginalNode;
 		OriginalNode.ParentNode = this;
-		this.Set(0, DesugaredNode);
+		this.SetNode(0, DesugaredNode);
 	}
 
 	public ZDesugarNode(ZNode OriginalNode, ZNode[] Nodes) {
@@ -22,7 +22,7 @@ public class ZDesugarNode extends ZSyntaxSugarNode {
 		OriginalNode.ParentNode = this;
 		@Var int i = 0;
 		while(i < Nodes.length) {
-			this.Set(i, Nodes[i]);
+			this.SetNode(i, Nodes[i]);
 			i = i + 1;
 		}
 	}

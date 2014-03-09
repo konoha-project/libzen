@@ -28,6 +28,7 @@ import zen.parser.ZSourceBuilder;
 import zen.parser.ZSourceEngine;
 import zen.parser.ZSourceGenerator;
 import zen.parser.ZToken;
+import zen.type.ZClassType;
 import zen.type.ZType;
 import zen.util.Field;
 import zen.util.Var;
@@ -361,7 +362,7 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 		int mark1 = this.GetLazyMark();
 
 		this.VarMgr.StartUsingFilter(false);
-		this.VisitBlockNode((ZBlockNode)Node.BlockNode(), ",");
+		this.VisitBlockNode(Node.BlockNode(), ",");
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.Indent();
 		this.CurrentBuilder.IndentAndAppend(WhileNodeName + "(" + WhileNodeName + ", __Arguments__);");
@@ -500,7 +501,7 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 
 		this.CurrentBuilder.Append("-record(");
 		this.CurrentBuilder.Append(this.ToErlangTypeName(Node.ClassName));
-		if(Node.SuperType != null) {
+		if(!Node.SuperType.Equals(ZClassType._ObjectType)) {
 			throw new RuntimeException("\"extends\" is not supported yet");
 		}
 		this.CurrentBuilder.Append(", {");
@@ -509,10 +510,8 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 		while (i < size) {
 			@Var ZFieldNode FieldNode = Node.GetFieldNode(i);
 			this.CurrentBuilder.Append(this.ToErlangTypeName(FieldNode.FieldName));
-			if(FieldNode.HasAst(ZFieldNode._InitValue)) {
-				this.CurrentBuilder.AppendToken("=");
-				this.GenerateCode(null, FieldNode.InitValueNode());
-			}
+			this.CurrentBuilder.AppendToken("=");
+			this.GenerateCode(null, FieldNode.InitValueNode());
 			if (i < size - 1) {
 				this.CurrentBuilder.AppendWhiteSpace();
 				this.CurrentBuilder.Append(",");

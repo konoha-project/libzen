@@ -48,6 +48,7 @@ import zen.lang.zen.ZenTypeSafer;
 import zen.parser.ZLogger;
 import zen.parser.ZSourceEngine;
 import zen.parser.ZSourceGenerator;
+import zen.type.ZClassType;
 import zen.type.ZGenericType;
 import zen.type.ZType;
 import zen.util.LibZen;
@@ -334,13 +335,13 @@ public class JavaScriptGenerator extends ZSourceGenerator {
 		 * 	return ClassName;
 		 * })(_super);
 		 */
-		if(Node.SuperType != null && !JavaScriptGenerator.UseExtend) {
+		if(!Node.SuperType.Equals(ZClassType._ObjectType) && !JavaScriptGenerator.UseExtend) {
 			JavaScriptGenerator.UseExtend = true;
 			this.GenerateExtendCode(Node);
 		}
 		this.CurrentBuilder.AppendNewLine("var ", Node.ClassName, " = ");
 		this.CurrentBuilder.Append("(function(");
-		if(Node.SuperType != null) {
+		if(!Node.SuperType.Equals(ZClassType._ObjectType)) {
 			this.CurrentBuilder.OpenIndent("_super) {");
 			this.CurrentBuilder.AppendNewLine("__extends(", Node.ClassName, this.Camma);
 			this.CurrentBuilder.Append("_super)", this.SemiColon);
@@ -349,7 +350,7 @@ public class JavaScriptGenerator extends ZSourceGenerator {
 		}
 		this.CurrentBuilder.AppendNewLine("function", Node.ClassName);
 		this.CurrentBuilder.OpenIndent("() {");
-		if(Node.SuperType != null) {
+		if(!Node.SuperType.Equals(ZClassType._ObjectType)) {
 			this.CurrentBuilder.AppendNewLine("_super.call(this)", this.SemiColon);
 		}
 

@@ -35,7 +35,7 @@ public final class ZGetterNode extends ZNode {
 
 	public ZGetterNode(ZNode ParentNode, ZNode RecvNode) {
 		super(ParentNode, null, 1);
-		this.Set(ZGetterNode._Recv, RecvNode);
+		this.SetNode(ZGetterNode._Recv, RecvNode);
 	}
 
 	public final ZNode RecvNode() {

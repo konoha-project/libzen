@@ -290,7 +290,7 @@ public final class ZTokenContext {
 			if(ParsedNode != null) {
 				if(Index == ZNode._NestedAppendIndex) {
 					if(!(ParsedNode instanceof ZEmptyNode)) {
-						ParentNode.Set(ZNode._AppendIndex, ParsedNode);
+						ParentNode.SetNode(ZNode._AppendIndex, ParsedNode);
 					}
 					if(ParsedNode instanceof ZBlockNode || ParsedNode.IsErrorNode()) {
 						return ParsedNode;
@@ -301,7 +301,7 @@ public final class ZTokenContext {
 				}
 				else {
 					if(!(ParsedNode instanceof ZEmptyNode)) {
-						ParentNode.Set(Index, ParsedNode);
+						ParentNode.SetNode(Index, ParsedNode);
 					}
 				}
 			}
@@ -344,7 +344,7 @@ public final class ZTokenContext {
 				return ParsedNode;
 			}
 			if(!(ParsedNode instanceof ZEmptyNode)) {
-				ParentNode.Set(ZNode._AppendIndex, ParsedNode);
+				ParentNode.SetNode(ZNode._AppendIndex, ParsedNode);
 			}
 			if(DelimToken != null) {
 				if(!this.MatchToken(DelimToken)) {

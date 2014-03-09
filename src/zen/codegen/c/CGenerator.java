@@ -418,7 +418,7 @@ public class CGenerator extends ZSourceGenerator {
 
 	private void GenerateFields(ZClassType ClassType, ZType ThisType) {
 		@Var ZType SuperType = ThisType.GetSuperType();
-		if(!SuperType.IsVarType()) {
+		if(!SuperType.Equals(ZClassType._ObjectType)) {
 			this.GenerateFields(ClassType, SuperType);
 		}
 		@Var int i = 0;
@@ -444,14 +444,14 @@ public class CGenerator extends ZSourceGenerator {
 		this.GenerateTypeName(Node.ClassType);
 		this.CurrentBuilder.OpenIndent(" o) {");
 		@Var ZType SuperType = Node.ClassType.GetSuperType();
-		if(!SuperType.IsVarType()) {
+		if(!SuperType.Equals(ZClassType._ObjectType)) {
 			this.CurrentBuilder.AppendNewLine("_Init", this.NameClass(SuperType), "((");
 			this.GenerateTypeName(SuperType);
 			this.CurrentBuilder.Append(")o);");
 		}
 		this.CurrentBuilder.AppendNewLine("o->_classId" + Node.ClassType.TypeId, " = " + Node.ClassType.TypeId, this.SemiColon);
 		this.CurrentBuilder.AppendNewLine("o->_delta" + Node.ClassType.TypeId, " = sizeof(struct " + this.NameClass(Node.ClassType)+ ") - ");
-		if(SuperType.IsVarType()) {
+		if(SuperType.Equals(ZClassType._ObjectType)) {
 			this.CurrentBuilder.Append("sizeof(int);");
 		}
 		else {

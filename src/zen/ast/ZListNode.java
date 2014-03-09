@@ -15,13 +15,13 @@ public abstract class ZListNode extends ZNode {
 	public final void Append(ZNode Node) {
 		if(this.AST == null) {
 			this.AST = LibZen._NewNodeArray(1);
-			this.Set(0, Node);
+			this.SetNode(0, Node);
 		}
 		else {
 			@Var ZNode[] newAST = LibZen._NewNodeArray(this.AST.length+1);
 			LibZen._ArrayCopy(this.AST, 0, newAST, 0, this.AST.length);
 			this.AST = newAST;
-			this.Set(this.AST.length - 1, Node);
+			this.SetNode(this.AST.length - 1, Node);
 		}
 	}
 
@@ -34,7 +34,7 @@ public abstract class ZListNode extends ZNode {
 	}
 
 	public final void SetListAt(int Index, ZNode Node) {
-		this.Set(Index + this.ListStartIndex, Node);
+		this.SetNode(Index + this.ListStartIndex, Node);
 	}
 
 	public final void InsertListAt(int Index, ZNode Node) {
@@ -44,7 +44,7 @@ public abstract class ZListNode extends ZNode {
 			@Var ZNode[] newAST = LibZen._NewNodeArray(this.AST.length + 1);
 			Index = this.ListStartIndex + Index;
 			LibZen._ArrayCopy(this.AST, 0, newAST, 0, Index);
-			this.Set(Index, Node);
+			this.SetNode(Index, Node);
 			LibZen._ArrayCopy(this.AST, Index, newAST, Index + 1, this.AST.length - Index);
 			this.AST = newAST;
 		}

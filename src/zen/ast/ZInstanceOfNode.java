@@ -35,7 +35,7 @@ public final class ZInstanceOfNode extends ZNode {
 	@Field public ZType TargetType;
 	public ZInstanceOfNode(ZNode ParentNode, ZToken Token, ZNode LeftNode) {
 		super(ParentNode, Token, 1);
-		this.Set(ZInstanceOfNode._Left, LeftNode);
+		this.SetNode(ZInstanceOfNode._Left, LeftNode);
 	}
 	public final ZNode LeftNode() {
 		return this.AST[ZBinaryNode._Left ];
