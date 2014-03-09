@@ -4,6 +4,7 @@ import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 import zen.type.ZType;
 import zen.util.Field;
+import zen.util.Var;
 
 public class ZAsmNode extends ZNode {
 	public final static int _Macro = 0;
@@ -25,7 +26,7 @@ public class ZAsmNode extends ZNode {
 	}
 
 	public final String GetMacroText() {
-		ZNode Node = this.AST[ZAsmNode._Macro];
+		@Var ZNode Node = this.AST[ZAsmNode._Macro];
 		if(Node instanceof ZStringNode) {
 			return ((ZStringNode)Node).StringValue;
 		}

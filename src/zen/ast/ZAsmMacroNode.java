@@ -32,7 +32,7 @@ public class ZAsmMacroNode extends ZTopLevelNode {
 	}
 
 	public final String GetMacroText() {
-		ZNode Node = this.AST[ZAsmNode._Macro];
+		@Var ZNode Node = this.AST[ZAsmNode._Macro];
 		if(Node instanceof ZStringNode) {
 			return ((ZStringNode)Node).StringValue;
 		}
