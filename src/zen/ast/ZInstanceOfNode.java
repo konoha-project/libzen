@@ -27,22 +27,25 @@ package zen.ast;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 import zen.type.ZType;
-import zen.util.Field;
 
 //E.g., $ExprNode instanceof TypeInfo
 public final class ZInstanceOfNode extends ZNode {
 	public final static int _Left = 0;
-	@Field public ZType TargetType;
+	public final static int _TypeInfo = 1;
+
 	public ZInstanceOfNode(ZNode ParentNode, ZToken Token, ZNode LeftNode) {
-		super(ParentNode, Token, 1);
+		super(ParentNode, Token, 2);
 		this.SetNode(ZInstanceOfNode._Left, LeftNode);
 	}
+
 	public final ZNode LeftNode() {
-		return this.AST[ZBinaryNode._Left ];
+		return this.AST[ZInstanceOfNode._Left ];
 	}
-	@Override public void SetTypeInfo(ZToken TypeToken, ZType Type) {
-		this.TargetType = Type;
+
+	public final ZType TargetType() {
+		return this.AST[ZInstanceOfNode._TypeInfo].Type;
 	}
+
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitInstanceOfNode(this);
 	}

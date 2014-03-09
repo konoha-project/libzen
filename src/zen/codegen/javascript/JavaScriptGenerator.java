@@ -110,7 +110,7 @@ public class JavaScriptGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Append("(");
 		this.GenerateCode(null, Node.LeftNode());
 		this.CurrentBuilder.Append(").constructor.name == (");
-		this.GenerateTypeName(Node.TargetType);
+		this.GenerateTypeName(Node.TargetType());
 		this.CurrentBuilder.Append(").name");
 	}
 

@@ -398,7 +398,7 @@ public class CGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Append("LibZen_Is(");
 		this.GenerateCode(null, Node.AST[ZInstanceOfNode._Left]);
 		this.CurrentBuilder.Append(this.Camma);
-		this.CurrentBuilder.AppendInt(Node.TargetType.TypeId);
+		this.CurrentBuilder.AppendInt(Node.TargetType().TypeId);
 		this.CurrentBuilder.Append(")");
 	}
 

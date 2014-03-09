@@ -1,25 +1,20 @@
 package zen.ast;
 
 import zen.ast.sugar.ZTopLevelNode;
+import zen.codegen.jvm.JavaImportNode;
 import zen.parser.ZNameSpace;
-import zen.parser.ZToken;
-import zen.util.Field;
+import zen.util.Var;
 
 public class ZRequireNode extends ZTopLevelNode {
-	@Field public String ResourcePath = null;
-	@Field public ZToken ResourceToken = null;
+	public final static int _Path = 0;
 
 	public ZRequireNode(ZNode ParentNode) {
-		super(ParentNode, null, 0);
-	}
-
-	@Override public void SetNameInfo(ZToken NameToken, String Name) {
-		this.ResourcePath = Name;
-		this.ResourceToken = NameToken;
+		super(ParentNode, null, 1);
 	}
 
 	@Override public final void Perform(ZNameSpace NameSpace) {
-		NameSpace.Generator.RequireLibrary(this.ResourcePath);
+		@Var String ResourcePath = this.AST[JavaImportNode._Path].SourceToken.GetTextAsName();
+		NameSpace.Generator.RequireLibrary(ResourcePath);
 	}
 
 }

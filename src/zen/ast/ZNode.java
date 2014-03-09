@@ -37,8 +37,8 @@ import zen.util.ZenMethod;
 
 public abstract class ZNode {
 	public final static int _Nop =      -1;
-	public final static int _NameInfo = -2;
-	public final static int _TypeInfo = -3;
+	//	public final static int _NameInfo = -2;
+	//	public final static int _TypeInfo = -3;
 	public final static int _AppendIndex = -4;
 	public final static int _NestedAppendIndex = -5;
 
@@ -66,14 +66,6 @@ public abstract class ZNode {
 		return Node;
 	}
 
-	@ZenMethod public void SetNameInfo(ZToken NameToken, String Name) {
-		assert(Name == null);  // Set SetName in a sub class property
-	}
-
-	@ZenMethod public void SetTypeInfo(ZToken TypeToken, ZType Type) {
-		this.Type = Type;  // default behavior
-	}
-
 	public final void SetNode(int Index, ZNode Node) {
 		if(Index >= 0) {
 			this.AST[Index] = this.SetChild(Node);
@@ -86,15 +78,6 @@ public abstract class ZNode {
 			else {
 				assert(ListNode instanceof ZListNode);
 			}
-		}
-		else if(Index == ZNode._NameInfo) {
-			this.SetNameInfo(Node.SourceToken, Node.SourceToken.GetText());
-			this.SourceToken = Node.SourceToken;
-			return;
-		}
-		else if(Index == ZNode._TypeInfo) {
-			this.SetTypeInfo(Node.SourceToken, Node.Type);
-			return;
 		}
 	}
 

@@ -442,7 +442,7 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 	@Override public void VisitInstanceOfNode(ZInstanceOfNode Node) {
 		this.GenerateCode(null, Node.AST[ZInstanceOfNode._Left]);
 		this.CurrentBuilder.Append(" instanceof ");
-		this.GenerateTypeName(Node.TargetType);
+		this.GenerateTypeName(Node.TargetType());
 	}
 
 

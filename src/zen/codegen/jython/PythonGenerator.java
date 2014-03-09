@@ -162,12 +162,12 @@ public class PythonGenerator extends ZSourceGenerator {
 	@Override public void VisitInstanceOfNode(ZInstanceOfNode Node) {
 		this.CurrentBuilder.Append("isinstance(");
 		this.GenerateCode(null, Node.LeftNode());
-		if(Node.TargetType instanceof ZClassType) {
-			this.CurrentBuilder.Append(this.Camma, this.NameClass(Node.TargetType), ")");
+		if(Node.TargetType() instanceof ZClassType) {
+			this.CurrentBuilder.Append(this.Camma, this.NameClass(Node.TargetType()), ")");
 		}
 		else {
 			this.CurrentBuilder.Append(this.Camma);
-			this.GenerateTypeName(Node.TargetType);
+			this.GenerateTypeName(Node.TargetType());
 			this.CurrentBuilder.Append(")");
 		}
 	}

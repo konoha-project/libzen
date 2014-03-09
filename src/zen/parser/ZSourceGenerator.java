@@ -484,7 +484,7 @@ public class ZSourceGenerator extends ZGenerator {
 	@Override public void VisitInstanceOfNode(ZInstanceOfNode Node) {
 		this.GenerateCode(null, Node.LeftNode());
 		this.CurrentBuilder.Append(" instanceof ");
-		this.GenerateTypeName(Node.TargetType);
+		this.GenerateTypeName(Node.TargetType());
 	}
 
 	@ZenMethod protected String GetBinaryOperator(ZType Type, ZToken Token) {

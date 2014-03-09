@@ -33,16 +33,25 @@ import zen.util.Var;
 //E.g., (T) $Expr
 public class ZCastNode extends ZNode {
 	public final static int _Expr = 0;
+	public final static int _TypeInfo = 1;
 
 	public ZCastNode(ZNode ParentNode, ZType CastType, ZNode Node) {
-		super(ParentNode, null, 1);
+		super(ParentNode, null, 2);
 		this.Type = CastType;
 		if(Node != null) {
 			this.SetNode(ZCastNode._Expr, Node);
 		}
 	}
+
 	public final ZNode ExprNode() {
 		return this.AST[ZCastNode._Expr ];
+	}
+
+	public final ZType CastType() {
+		if(this.AST[ZCastNode._TypeInfo ] != null) {
+			this.Type = this.AST[ZCastNode._TypeInfo ].Type;
+		}
+		return this.Type;
 	}
 
 	@Override public void Accept(ZVisitor Visitor) {
