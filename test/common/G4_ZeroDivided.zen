@@ -1,0 +1,23 @@
+
+function TryFinally(n: int) {
+	try {
+		n = 1 / n;
+		println("#Try(n=1):" + n);
+	}
+	catch(e) {
+		n = n + 2;
+		println("#Catch(ZeroDivided): " + e);
+		println("#Catch(n=2):" + n);
+		assert(n == 2);
+	}
+	finally {
+		n = n + 4;
+		println("#Finally(n=6): " + n);
+	}
+	assert(n == 6);
+}
+
+export function main() {
+	TryFinally(0);
+}
+
