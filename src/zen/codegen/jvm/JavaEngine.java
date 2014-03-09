@@ -411,7 +411,7 @@ public class JavaEngine extends ZSourceEngine {
 			Class<?> C= Class.forName(ClassName);
 			Class<?>[] P = new Class<?>[MacroFunc.GetFuncType().GetFuncParamSize()];
 			for(int i = 0; i < P.length; i++) {
-				P[0] = this.Solution.GetJavaClass(MacroFunc.GetFuncType().GetFuncParamType(i));
+				P[i] = this.Solution.GetJavaClass(MacroFunc.GetFuncType().GetFuncParamType(i));
 			}
 			Method M = C.getMethod(MethodName, P);
 			return M;
