@@ -14,7 +14,7 @@ public class AsmPatternFunction extends ZMatchFunction {
 		AsmNode = TokenContext.MatchToken(AsmNode, "(", ZTokenContext._Required);
 		AsmNode = TokenContext.MatchPattern(AsmNode, ZAsmMacroNode._Macro, "$StringLiteral$", ZTokenContext._Required);
 		AsmNode = TokenContext.MatchToken(AsmNode, ")", ZTokenContext._Required);
-		AsmNode = TokenContext.MatchPattern(AsmNode, ZNode._TypeInfo, "$TypeAnnotation$", ZTokenContext._Optional);
+		AsmNode = TokenContext.MatchPattern(AsmNode, ZAsmNode._TypeInfo, "$TypeAnnotation$", ZTokenContext._Optional);
 		return AsmNode;
 	}
 }

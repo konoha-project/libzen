@@ -24,7 +24,6 @@
 
 package zen.ast;
 
-import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 import zen.type.ZClassType;
 import zen.type.ZType;
@@ -32,26 +31,33 @@ import zen.util.Field;
 import zen.util.Var;
 
 public final class ZClassNode extends ZListNode {
+	public static final int _NameInfo = 0;
+	public static final int _TypeInfo = 1;
 
-	@Field public boolean IsExport = false;
-	@Field public String ClassName = null;
+	@Field public String  GivenName = null;
 	@Field public ZClassType ClassType = null;
-	@Field public ZType SuperType = null;
-	@Field public ZToken NameToken = null;
-	@Field public ZToken SuperToken = null;
+	@Field public boolean IsExport = false;
 
 	public ZClassNode(ZNode ParentNode) {
-		super(ParentNode, null, 0);
+		super(ParentNode, null, 2);
 	}
 
-	@Override public void SetTypeInfo(ZToken TypeToken, ZType Type) {
-		this.SuperType = Type;
-		this.SuperToken = TypeToken;
+	public final String ClassName() {
+		if(this.GivenName == null) {
+			this.GivenName = this.AST[ZParamNode._NameInfo].SourceToken.GetTextAsName();
+		}
+		return this.GivenName;
 	}
-	@Override public void SetNameInfo(ZToken NameToken, String Name) {
-		this.ClassName = Name;
-		this.NameToken = NameToken;
+
+	public final ZType SuperType() {
+		if(this.AST[ZParamNode._TypeInfo] != null) {
+			return this.AST[ZParamNode._TypeInfo].Type;
+		}
+		else {
+			return ZClassType._ObjectType;
+		}
 	}
+
 	public final ZFieldNode GetFieldNode(int Index) {
 		@Var ZNode Node = this.GetListAt(Index);
 		if(Node instanceof ZFieldNode) {

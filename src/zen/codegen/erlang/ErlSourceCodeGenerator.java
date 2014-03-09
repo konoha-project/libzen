@@ -500,8 +500,8 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 		this.CurrentBuilder = this.HeaderBuilder;
 
 		this.CurrentBuilder.Append("-record(");
-		this.CurrentBuilder.Append(this.ToErlangTypeName(Node.ClassName));
-		if(!Node.SuperType.Equals(ZClassType._ObjectType)) {
+		this.CurrentBuilder.Append(this.ToErlangTypeName(Node.ClassName()));
+		if(!Node.SuperType().Equals(ZClassType._ObjectType)) {
 			throw new RuntimeException("\"extends\" is not supported yet");
 		}
 		this.CurrentBuilder.Append(", {");

@@ -137,13 +137,13 @@ public abstract class ZGenerator extends ZVisitor {
 		if(loc > 0) {
 			@Var String LibName = MacroText.substring(0, loc);
 			this.ImportLibrary(LibName);
-			Node.SetNode(ZAsmNode._Macro, new ZStringNode(Node, Node.SymbolToken, MacroText.substring(loc+1)));
+			Node.SetNode(ZAsmNode._Macro, new ZStringNode(Node, Node.GetAstToken(ZAsmMacroNode._Macro), MacroText.substring(loc+1)));
 		}
 		@Var ZAsmNode AsmNode = new ZAsmNode(null);
-		AsmNode.SourceToken = Node.SymbolToken;
+		AsmNode.SourceToken = Node.GetAstToken(ZAsmMacroNode._NameInfo);
 		AsmNode.SetNode(ZAsmNode._Macro, Node.AST[ZAsmNode._Macro]);
-		AsmNode.Type = Node.MacroType;
-		NameSpace.SetLocalSymbol(Node.Symbol, AsmNode);
+		AsmNode.Type = Node.MacroType();
+		NameSpace.SetLocalSymbol(Node.GetName(), AsmNode);
 	}
 
 	@ZenMethod public void WriteTo(@Nullable String FileName) {

@@ -613,10 +613,10 @@ public class ZSourceGenerator extends ZGenerator {
 	}
 
 	@Override public void VisitClassNode(ZClassNode Node) {
-		this.CurrentBuilder.AppendNewLine("class ", Node.ClassName);
-		if(Node.SuperType != null) {
+		this.CurrentBuilder.AppendNewLine("class ", Node.ClassName());
+		if(Node.SuperType() != null) {
 			this.CurrentBuilder.Append(" extends ");
-			this.GenerateTypeName(Node.SuperType);
+			this.GenerateTypeName(Node.SuperType());
 		}
 		this.CurrentBuilder.OpenIndent(" {");
 		@Var int i = 0;

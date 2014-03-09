@@ -751,22 +751,22 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 
 
 	@Override public void VisitClassNode(ZClassNode Node) {
-		this.DefineClass(Node.ClassName, Node);
-		@Var String ClassSymbol = this.ToClassSymbol(Node.ClassName);
+		this.DefineClass(Node.ClassName(), Node);
+		@Var String ClassSymbol = this.ToClassSymbol(Node.ClassName());
 		this.Writer.PushNewBuffer(ClassSymbol);
 		this.Writer.AddCodeToCurrentBuffer(" = type { ");
 		this.VisitFieldList("i8*", Node, !WithInitValue);
 		this.Writer.AddCodeToCurrentBuffer(" }");
 		this.Writer.AppendBufferAsHeaderLine();
 
-		@Var String ProtoSymbol = "@" + Node.ClassName + ".Proto";
+		@Var String ProtoSymbol = "@" + Node.ClassName() + ".Proto";
 		this.Writer.PushNewBuffer(ProtoSymbol);
 		this.Writer.AddCodeToCurrentBuffer(" = private constant ");
 		this.Writer.AddCodeToCurrentBuffer(ClassSymbol);
 		this.Writer.AddCodeToCurrentBuffer(" { ");
 		@Var String HeaderValue;
-		if(!Node.SuperType.Equals(ZClassType._ObjectType)) {
-			HeaderValue = "i8* bitcast (" + this.GetTypeExpr(Node.SuperType) + " @" + Node.SuperType.ShortName + ".Proto to i8*)";
+		if(!Node.SuperType().Equals(ZClassType._ObjectType)) {
+			HeaderValue = "i8* bitcast (" + this.GetTypeExpr(Node.SuperType()) + " @" + Node.SuperType().ShortName + ".Proto to i8*)";
 		}
 		else {
 			HeaderValue = "i8* null";
@@ -1519,11 +1519,11 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 	}
 
 	private void VisitFieldList(String HeaderElement, ZClassNode ClassNode, boolean WithInitValue) {
-		if(ClassNode.SuperType == null) {
+		if(ClassNode.SuperType() == null) {
 			this.Writer.AddCodeToCurrentBuffer(HeaderElement);
 		}
 		else {
-			ZClassNode SuperClassNode = this.ClassFieldMap.get(ClassNode.SuperType.ShortName);
+			ZClassNode SuperClassNode = this.ClassFieldMap.get(ClassNode.SuperType().ShortName);
 			this.VisitFieldList(HeaderElement, SuperClassNode, WithInitValue);
 		}
 		@Var int i = 0;

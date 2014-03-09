@@ -473,25 +473,25 @@ public class ZenTypeSafer extends ZTypeChecker {
 		@Var ZNameSpace NameSpace = Node.GetNameSpace();
 		@Var ZType ContextType = this.GetContextType();
 		this.TypeCheckNodeList(Node);
-		if(Node.ClassType.IsVarType()) {
+		if(Node.ClassType().IsVarType()) {
 			if(ContextType.IsVarType()) {
 				this.TypedNode(Node, ZType.VarType);
 				return;
 			}
-			Node.ClassType = ContextType;
+			Node.GivenType = ContextType;
 		}
 		@Var int FuncParamSize = Node.GetListSize() + 1;
-		@Var ZFunc Func = this.LookupFunc(NameSpace, Node.ClassType.GetName(), Node.ClassType, FuncParamSize);
+		@Var ZFunc Func = this.LookupFunc(NameSpace, Node.ClassType().GetName(), Node.ClassType(), FuncParamSize);
 		if(Func != null) {
 			@Var ZListNode FuncCall = Node.ToFuncCallNode(Func);
 			this.VisitListNodeAsFuncCall(FuncCall, Func.GetFuncType());
 			return;
 		}
 		if(FuncParamSize == 1) { /* no argument */
-			this.TypedNode(Node, Node.ClassType);
+			this.TypedNode(Node, Node.ClassType());
 		}
 		else {
-			this.VisitListAsNativeMethod(Node, Node.ClassType, null, Node);
+			this.VisitListAsNativeMethod(Node, Node.ClassType(), null, Node);
 		}
 	}
 
@@ -825,28 +825,25 @@ public class ZenTypeSafer extends ZTypeChecker {
 
 	@Override public void VisitClassNode(ZClassNode Node) {
 		@Var ZNameSpace NameSpace = Node.GetNameSpace();
-		@Var ZType ClassType = NameSpace.GetType(Node.ClassName, Node.SourceToken);
+		@Var ZType ClassType = NameSpace.GetType(Node.ClassName(), Node.SourceToken);
 		if(ClassType instanceof ZClassType) {
 			if(!ClassType.IsOpenType()) {
-				this.Return(new ZErrorNode(Node, Node.ClassName + " has been defined."));
+				this.Return(new ZErrorNode(Node, Node.ClassName() + " has been defined."));
 				return;
 			}
 			Node.ClassType = (ZClassType)ClassType;
 		}
 		else {
-			this.Return(new ZErrorNode(Node, Node.ClassName + " is not a Zen class."));
+			this.Return(new ZErrorNode(Node, Node.ClassName() + " is not a Zen class."));
 			return;
 		}
-		if(Node.SuperType == null) {
-			Node.SuperType = ZClassType._ObjectType;
-		}
 		//System.out.println(" B NodeClass.ToOpen="+Node.ClassType+", IsOpenType="+Node.ClassType.IsOpenType());
-		if(Node.SuperType != null) {
-			if(Node.SuperType instanceof ZClassType && !Node.SuperType.IsOpenType()) {
-				Node.ClassType.EnforceSuperClass((ZClassType)Node.SuperType);
+		if(Node.SuperType() != null) {
+			if(Node.SuperType() instanceof ZClassType && !Node.SuperType().IsOpenType()) {
+				Node.ClassType.EnforceSuperClass((ZClassType)Node.SuperType());
 			}
 			else {
-				this.Return(new ZErrorNode(Node.ParentNode, Node.SuperToken, "" + Node.SuperType + " cannot be extended."));
+				this.Return(new ZErrorNode(Node.ParentNode, Node.GetAstToken(ZClassNode._TypeInfo), "" + Node.SuperType() + " cannot be extended."));
 				return;
 			}
 		}

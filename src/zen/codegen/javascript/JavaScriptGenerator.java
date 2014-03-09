@@ -335,22 +335,22 @@ public class JavaScriptGenerator extends ZSourceGenerator {
 		 * 	return ClassName;
 		 * })(_super);
 		 */
-		if(!Node.SuperType.Equals(ZClassType._ObjectType) && !JavaScriptGenerator.UseExtend) {
+		if(!Node.SuperType().Equals(ZClassType._ObjectType) && !JavaScriptGenerator.UseExtend) {
 			JavaScriptGenerator.UseExtend = true;
 			this.GenerateExtendCode(Node);
 		}
-		this.CurrentBuilder.AppendNewLine("var ", Node.ClassName, " = ");
+		this.CurrentBuilder.AppendNewLine("var ", Node.ClassName(), " = ");
 		this.CurrentBuilder.Append("(function(");
-		if(!Node.SuperType.Equals(ZClassType._ObjectType)) {
+		if(!Node.SuperType().Equals(ZClassType._ObjectType)) {
 			this.CurrentBuilder.OpenIndent("_super) {");
-			this.CurrentBuilder.AppendNewLine("__extends(", Node.ClassName, this.Camma);
+			this.CurrentBuilder.AppendNewLine("__extends(", Node.ClassName(), this.Camma);
 			this.CurrentBuilder.Append("_super)", this.SemiColon);
 		} else {
 			this.CurrentBuilder.OpenIndent(") {");
 		}
-		this.CurrentBuilder.AppendNewLine("function", Node.ClassName);
+		this.CurrentBuilder.AppendNewLine("function", Node.ClassName());
 		this.CurrentBuilder.OpenIndent("() {");
-		if(!Node.SuperType.Equals(ZClassType._ObjectType)) {
+		if(!Node.SuperType().Equals(ZClassType._ObjectType)) {
 			this.CurrentBuilder.AppendNewLine("_super.call(this)", this.SemiColon);
 		}
 
@@ -369,10 +369,10 @@ public class JavaScriptGenerator extends ZSourceGenerator {
 		}
 		this.CurrentBuilder.CloseIndent("}");
 
-		this.CurrentBuilder.AppendNewLine("return ", Node.ClassName, this.SemiColon);
+		this.CurrentBuilder.AppendNewLine("return ", Node.ClassName(), this.SemiColon);
 		this.CurrentBuilder.CloseIndent("})(");
-		if(Node.SuperType != null) {
-			this.CurrentBuilder.Append(Node.SuperType.GetName());
+		if(Node.SuperType() != null) {
+			this.CurrentBuilder.Append(Node.SuperType().GetName());
 		}
 		this.CurrentBuilder.Append(")", this.SemiColon);
 	}

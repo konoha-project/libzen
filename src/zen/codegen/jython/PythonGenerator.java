@@ -283,7 +283,7 @@ public class PythonGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.AppendNewLine();
 		this.CurrentBuilder.Append("def __init__(self):");
 		this.CurrentBuilder.Indent();
-		if(!Node.SuperType.Equals(ZClassType._ObjectType)) {
+		if(!Node.SuperType().Equals(ZClassType._ObjectType)) {
 			this.CurrentBuilder.AppendNewLine();
 			this.CurrentBuilder.Append(this.NameClass(SuperType));
 			this.CurrentBuilder.Append(".__init__(self)");

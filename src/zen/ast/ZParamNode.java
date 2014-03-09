@@ -48,8 +48,8 @@ public class ZParamNode extends ZLocalDefinedNode {
 
 	public final ZType DeclType() {
 		if(this.GivenType == null) {
-			if(this.AST[_TypeInfo] != null) {
-				this.GivenType = this.AST[_TypeInfo].Type;
+			if(this.AST[ZParamNode._TypeInfo] != null) {
+				this.GivenType = this.AST[ZParamNode._TypeInfo].Type;
 			}
 			else {
 				this.GivenType = ZType.VarType;
@@ -64,7 +64,7 @@ public class ZParamNode extends ZLocalDefinedNode {
 
 	public final String GetName() {
 		if(this.GivenName == null) {
-			this.GivenName = this.AST[_NameInfo].SourceToken.GetTextAsName();
+			this.GivenName = this.AST[ZParamNode._NameInfo].SourceToken.GetTextAsName();
 		}
 		return this.GivenName;
 	}

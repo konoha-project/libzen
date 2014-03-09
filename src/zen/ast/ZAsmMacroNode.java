@@ -2,37 +2,32 @@ package zen.ast;
 
 import zen.ast.sugar.ZTopLevelNode;
 import zen.parser.ZNameSpace;
-import zen.parser.ZToken;
 import zen.type.ZFuncType;
 import zen.type.ZType;
-import zen.util.Field;
 import zen.util.Var;
 
 public class ZAsmMacroNode extends ZTopLevelNode {
 	public final static int _Macro = 0;
-
-	@Field public String  Symbol = null;
-	@Field public ZToken  SymbolToken = null;
-
-	@Field public ZType   MacroType = null;
-	@Field public ZToken  TypeToken = null;
+	public static final int _NameInfo = 1;
+	public static final int _TypeInfo = 2;
 
 	public ZAsmMacroNode(ZNode ParentNode) {
-		super(ParentNode, null, 1);
+		super(ParentNode, null, 3);
 	}
 
-	@Override public void SetTypeInfo(ZToken TypeToken, ZType Type) {
-		this.MacroType = Type;
-		this.TypeToken = TypeToken;
+	public final ZType MacroType() {
+		if(this.AST[ZAsmMacroNode._TypeInfo] != null) {
+			return this.AST[ZAsmMacroNode._TypeInfo].Type;
+		}
+		return ZType.VoidType;
 	}
 
-	@Override public void SetNameInfo(ZToken NameToken, String Name) {
-		this.Symbol      = Name;
-		this.SymbolToken = NameToken;
+	public final String GetName() {
+		return this.AST[ZAsmMacroNode._NameInfo].SourceToken.GetTextAsName();
 	}
 
 	public final String GetMacroText() {
-		ZNode Node = this.AST[ZAsmNode._Macro];
+		@Var ZNode Node = this.AST[ZAsmNode._Macro];
 		if(Node instanceof ZStringNode) {
 			return ((ZStringNode)Node).StringValue;
 		}
@@ -41,9 +36,9 @@ public class ZAsmMacroNode extends ZTopLevelNode {
 
 	@Override public final void Perform(ZNameSpace NameSpace) {
 		@Var String MacroText = this.GetMacroText();
-		@Var ZType MacroType = this.MacroType;
+		@Var ZType MacroType = this.MacroType();
 		if(MacroType instanceof ZFuncType) {
-			NameSpace.Generator.SetAsmMacro(NameSpace, this.Symbol, (ZFuncType)MacroType, MacroText);
+			NameSpace.Generator.SetAsmMacro(NameSpace, this.GetName(), (ZFuncType)MacroType, MacroText);
 		}
 		else {
 			NameSpace.Generator.SetAsmSymbol(NameSpace, this);

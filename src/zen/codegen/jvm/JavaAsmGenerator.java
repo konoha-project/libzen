@@ -882,8 +882,8 @@ public class JavaAsmGenerator extends JavaGenerator {
 	}
 
 	@Override public void VisitClassNode(ZClassNode Node) {
-		@Var Class<?> SuperClass = this.GetSuperClass(Node.SuperType);
-		@Var AsmClassBuilder ClassBuilder = this.AsmLoader.NewClass(ACC_PUBLIC, Node, Node.ClassName, SuperClass);
+		@Var Class<?> SuperClass = this.GetSuperClass(Node.SuperType());
+		@Var AsmClassBuilder ClassBuilder = this.AsmLoader.NewClass(ACC_PUBLIC, Node, Node.ClassName(), SuperClass);
 		@Var int i = 0;
 		while(i < Node.GetListSize()) {
 			@Var ZFieldNode FieldNode = Node.GetFieldNode(i);
@@ -902,7 +902,7 @@ public class JavaAsmGenerator extends JavaGenerator {
 		AsmMethodBuilder InitMethod = ClassBuilder.NewMethod(ACC_PUBLIC, "<init>", "()V");
 		InitMethod.visitVarInsn(Opcodes.ALOAD, 0);
 		InitMethod.PushInt(Node.ClassType.TypeId);
-		InitMethod.visitMethodInsn(INVOKESPECIAL, Node.ClassName, "<init>", "(I)V");
+		InitMethod.visitMethodInsn(INVOKESPECIAL, Node.ClassName(), "<init>", "(I)V");
 		InitMethod.visitInsn(RETURN);
 		InitMethod.Finish();
 
@@ -915,7 +915,7 @@ public class JavaAsmGenerator extends JavaGenerator {
 			if(!FieldNode.DeclType().IsFuncType()) {
 				InitMethod.visitVarInsn(Opcodes.ALOAD, 0);
 				InitMethod.PushNode(this.GetJavaClass(FieldNode.DeclType()), FieldNode.InitValueNode());
-				InitMethod.visitFieldInsn(PUTFIELD, Node.ClassName, FieldNode.GetName(), Type.getDescriptor(this.GetJavaClass(FieldNode.DeclType())));
+				InitMethod.visitFieldInsn(PUTFIELD, Node.ClassName(), FieldNode.GetName(), Type.getDescriptor(this.GetJavaClass(FieldNode.DeclType())));
 			}
 			i++;
 		}
@@ -925,10 +925,10 @@ public class JavaAsmGenerator extends JavaGenerator {
 				//System.out.println("FieldName:" + Field.ClassType + "." + Field.FieldName + ", type=" + Field.FieldType);
 				String FieldDesc = Type.getDescriptor(this.GetJavaClass(Field.FieldType));
 				Label JumpLabel = new Label();
-				InitMethod.visitFieldInsn(Opcodes.GETSTATIC, Node.ClassName, NameClassMethod(Node.ClassType, Field.FieldName), FieldDesc);
+				InitMethod.visitFieldInsn(Opcodes.GETSTATIC, Node.ClassName(), NameClassMethod(Node.ClassType, Field.FieldName), FieldDesc);
 				InitMethod.visitJumpInsn(Opcodes.IFNULL, JumpLabel);
 				InitMethod.visitVarInsn(Opcodes.ALOAD, 0);
-				InitMethod.visitFieldInsn(Opcodes.GETSTATIC, Node.ClassName, NameClassMethod(Node.ClassType, Field.FieldName), FieldDesc);
+				InitMethod.visitFieldInsn(Opcodes.GETSTATIC, Node.ClassName(), NameClassMethod(Node.ClassType, Field.FieldName), FieldDesc);
 				//System.out.println("************" + Field.ClassType + ", " + Type.getInternalName(this.GetJavaClass(Field.ClassType)));
 				InitMethod.visitFieldInsn(Opcodes.PUTFIELD, Field.ClassType.ShortName, Field.FieldName, FieldDesc);
 				InitMethod.visitLabel(JumpLabel);
@@ -938,7 +938,7 @@ public class JavaAsmGenerator extends JavaGenerator {
 		InitMethod.visitInsn(RETURN);
 		InitMethod.Finish();
 
-		JavaTypeTable.SetTypeTable(Node.ClassType, this.AsmLoader.LoadGeneratedClass(Node.ClassName));
+		JavaTypeTable.SetTypeTable(Node.ClassType, this.AsmLoader.LoadGeneratedClass(Node.ClassName()));
 	}
 
 	@Override public void VisitErrorNode(ZErrorNode Node) {

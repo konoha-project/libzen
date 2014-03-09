@@ -258,12 +258,7 @@ public abstract class ZTypeChecker extends ZVisitor {
 	}
 
 	@Override public void VisitAsmNode(ZAsmNode Node) {
-		if(Node.MacroType != null) {
-			this.TypedNode(Node, Node.MacroType);
-		}
-		else {
-			this.TypedNode(Node, ZType.VoidType);
-		}
+		this.TypedNode(Node, Node.MacroType());
 	}
 
 
