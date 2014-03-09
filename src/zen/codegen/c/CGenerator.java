@@ -320,7 +320,7 @@ public class CGenerator extends ZSourceGenerator {
 		this.GenerateCode(null, Node.InitValueNode());
 		this.CurrentBuilder.Append(this.SemiColon);
 		this.CurrentBuilder.AppendLineFeed();
-		Node.GetNameSpace().SetLocalSymbol(Node.Symbol, Node.ToGlobalNameNode());
+		Node.GetNameSpace().SetLocalSymbol(Node.GetName(), Node.ToGlobalNameNode());
 	}
 
 	@Override public void VisitParamNode(ZParamNode Node) {

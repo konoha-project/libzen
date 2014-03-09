@@ -655,7 +655,7 @@ public class JavaAsmGenerator extends JavaGenerator {
 			StaticInitMethod.Finish();
 
 			Class<?> StaticClass = this.AsmLoader.LoadGeneratedClass(ClassName);
-			Node.GetNameSpace().SetLocalSymbol(Node.Symbol, new JavaStaticFieldNode(Node, StaticClass, Node.InitValueNode().Type, "_"));
+			Node.GetNameSpace().SetLocalSymbol(Node.GetName(), new JavaStaticFieldNode(Node, StaticClass, Node.InitValueNode().Type, "_"));
 		}
 	}
 

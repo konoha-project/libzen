@@ -359,7 +359,7 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 			this.CurrentBuilder.CloseIndent("}");
 			this.CurrentBuilder = this.CurrentBuilder.Pop();
 			Node.GlobalName = ClassName + "._";
-			Node.GetNameSpace().SetLocalSymbol(Node.Symbol, Node.ToGlobalNameNode());
+			Node.GetNameSpace().SetLocalSymbol(Node.GetName(), Node.ToGlobalNameNode());
 		}
 	}
 

@@ -1044,12 +1044,12 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		this.DefineGlobalSymbol(Node.GlobalName);
 		this.Writer.PushNewBuffer(this.ToGlobalSymbol(Node.GlobalName));
 		this.Writer.AddCodeToCurrentBuffer(" = private constant ");
-		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.SymbolType));
+		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.DeclType()));
 		this.Writer.AddCodeToCurrentBuffer(" ");
 		this.GenerateCode(null, Node.InitValueNode());
 		this.Writer.AppendBufferAsHeaderLine();
 		//this.Writer.AddCodeToCurrentBuffer(this.ToGlobalSymbol(Node.GlobalName));
-		Node.GetNameSpace().SetLocalSymbol(Node.Symbol, Node.ToGlobalNameNode());
+		Node.GetNameSpace().SetLocalSymbol(Node.GetName(), Node.ToGlobalNameNode());
 	}
 
 	@Override public void VisitMacroNode(ZMacroNode Node) {

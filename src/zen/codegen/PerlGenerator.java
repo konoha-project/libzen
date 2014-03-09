@@ -128,7 +128,7 @@ public class PerlGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitLetNode(ZLetNode Node) {
-		this.CurrentBuilder.Append(this.VariablePrefix(Node.SymbolType.GetRealType()), Node.GlobalName, " = ");
+		this.CurrentBuilder.Append(this.VariablePrefix(Node.DeclType().GetRealType()), Node.GlobalName, " = ");
 		this.GenerateCode(null, Node.InitValueNode());
 	}
 

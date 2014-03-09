@@ -588,8 +588,8 @@ public class ZSourceGenerator extends ZGenerator {
 	}
 
 	@Override public void VisitLetNode(ZLetNode Node) {
-		this.CurrentBuilder.AppendNewLine("let ", Node.Symbol);
-		this.GenerateTypeAnnotation(Node.SymbolType);
+		this.CurrentBuilder.AppendNewLine("let ", Node.GetName());
+		this.GenerateTypeAnnotation(Node.DeclType());
 		this.CurrentBuilder.Append(" = ");
 		this.GenerateCode(null, Node.InitValueNode());
 	}

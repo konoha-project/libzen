@@ -201,7 +201,7 @@ public class PythonGenerator extends ZSourceGenerator {
 			this.CurrentBuilder.Append(Node.GlobalName);
 			this.CurrentBuilder.Append(" = ");
 			this.GenerateCode(null, Node.InitValueNode());
-			Node.GetNameSpace().SetLocalSymbol(Node.Symbol, Node.ToGlobalNameNode());
+			Node.GetNameSpace().SetLocalSymbol(Node.GetName(), Node.ToGlobalNameNode());
 		}
 	}
 

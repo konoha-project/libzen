@@ -301,7 +301,7 @@ public class JavaScriptGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.AppendNewLine("var ", Node.GlobalName, " = ");
 		this.GenerateCode(null, Node.InitValueNode());
 		this.CurrentBuilder.Append(this.SemiColon);
-		Node.GetNameSpace().SetLocalSymbol(Node.Symbol, Node.ToGlobalNameNode());
+		Node.GetNameSpace().SetLocalSymbol(Node.GetName(), Node.ToGlobalNameNode());
 	}
 
 	private void GenerateExtendCode(ZClassNode Node) {
