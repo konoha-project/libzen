@@ -148,20 +148,20 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 
 
 	@Override public void VisitVarNode(ZVarNode Node) {
-		this.CurrentBuilder.Append(Node.NativeName + " <- readIORef ");
-		this.CurrentBuilder.Append(Node.NativeName + "_ref");
+		this.CurrentBuilder.Append(Node.GetName() + " <- readIORef ");
+		this.CurrentBuilder.Append(Node.GetName() + "_ref");
 		this.GenerateCode(null, Node.InitValueNode());
 		this.CurrentBuilder.AppendLineFeed();
 	}
 
 	@Override public void VisitParamNode(ZParamNode Node) {
-		this.CurrentBuilder.Append(Node.Name);
+		this.CurrentBuilder.Append(Node.GetName());
 	}
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
 		this.Variables = new ArrayList<String>();
 
-		this.CurrentBuilder.Append(Node.FuncName);
+		this.CurrentBuilder.Append(Node.FuncName());
 		this.VisitListNode(" ", Node, " ", " ");
 
 		this.CurrentBuilder.Append(" = do");
@@ -171,12 +171,12 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 
 		for (int i = 0; i < Node.GetListSize(); i++) {
 			ZParamNode Param = Node.GetParamNode(i);
-			this.Variables.add(Param.Name);
+			this.Variables.add(Param.GetName());
 
 			this.CurrentBuilder.AppendIndent();
-			this.CurrentBuilder.Append(Param.Name
+			this.CurrentBuilder.Append(Param.GetName()
 					+ "_ref <- newIORef "
-					+ Param.Name);
+					+ Param.GetName());
 			this.CurrentBuilder.AppendLineFeed();
 		}
 
@@ -184,9 +184,9 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 			ZParamNode node1 = Node.GetParamNode(i);
 
 			this.CurrentBuilder.AppendIndent();
-			this.CurrentBuilder.Append(node1.Name
+			this.CurrentBuilder.Append(node1.GetName()
 					+ " <- readIORef "
-					+ node1.Name + "_ref");
+					+ node1.GetName() + "_ref");
 			this.CurrentBuilder.AppendLineFeed();
 		}
 		this.UnIndent(this.CurrentBuilder);

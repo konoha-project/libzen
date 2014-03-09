@@ -42,6 +42,10 @@ public final class ZGetterNode extends ZNode {
 		return this.AST[ZGetterNode._Recv ];
 	}
 
+	public final String GetName() {
+		return this.FieldName;
+	}
+
 	@Override public void SetNameInfo(ZToken NameToken, String Name) {
 		this.FieldName = Name;
 		this.NameToken = NameToken;

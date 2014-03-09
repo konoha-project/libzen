@@ -19,13 +19,9 @@ public class ZPrototypeNode extends ZTopLevelNode {
 		return this.FunctionNode.GetParamNode(Index);
 	}
 
-	//	public final ZFuncType GetFuncType() {
-	//		return this.FunctionNode.GetFuncType(null);
-	//	}
-
 	@Override public final void Perform(ZNameSpace NameSpace) {
-		@Var ZFuncType FuncType = this.FunctionNode.GetFuncType(null);
-		NameSpace.Generator.SetPrototype(this.FunctionNode, this.FunctionNode.FuncName, FuncType);
+		@Var ZFuncType FuncType = this.FunctionNode.GetFuncType();
+		NameSpace.Generator.SetPrototype(this.FunctionNode, this.FunctionNode.FuncName(), FuncType);
 
 	}
 

@@ -24,30 +24,52 @@
 
 package zen.ast;
 
-import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 import zen.type.ZType;
 import zen.util.Field;
 
-public final class ZVarNode extends ZBlockNode {
-	public final static int _InitValue = 0;
+public class ZVarNode extends ZBlockNode {
+	public static final int _NameInfo = 0;
+	public static final int _TypeInfo = 1;
+	public final static int _InitValue = 2;
 
-	@Field public ZType   DeclType = ZType.VarType;
-	@Field public String  NativeName = null;
-	@Field public int VarIndex = -1;
-
-	@Field public ZToken  TypeToken = null;
-	@Field public ZToken  NameToken = null;
+	@Field public ZType   GivenType = null;
+	@Field public String  GivenName = null;
+	@Field public int VarIndex      = -1;
 
 	public ZVarNode(ZNode ParentNode) {
-		super(ParentNode, 1);
+		super(ParentNode, 3);
 	}
 
 	public ZVarNode(String Name, ZType DeclType, ZNode InitNode) {
-		super(null, 1);
-		this.NativeName = Name;
-		this.DeclType = DeclType;
+		super(null, 3);
+		this.GivenName   = Name;
+		this.GivenType   = DeclType;
 		this.SetNode(ZVarNode._InitValue, InitNode);
+	}
+
+	public final ZType DeclType() {
+		if(this.GivenType == null) {
+			if(this.AST[_TypeInfo] != null) {
+				this.GivenType = this.AST[_TypeInfo].Type;
+			}
+			else {
+				this.GivenType = ZType.VarType;
+			}
+		}
+		return this.GivenType;
+	}
+
+	public final void SetDeclType(ZType Type) {
+		this.GivenType = Type;
+	}
+
+
+	public final String GetName() {
+		if(this.GivenName == null) {
+			this.GivenName = this.AST[_NameInfo].SourceToken.GetTextAsName();
+		}
+		return this.GivenName;
 	}
 
 	public final ZNode InitValueNode() {
@@ -57,18 +79,9 @@ public final class ZVarNode extends ZBlockNode {
 		return this.AST[ZVarNode._InitValue];
 	}
 
-	@Override public void SetNameInfo(ZToken NameToken, String Name) {
-		this.NativeName = Name;
-		this.NameToken = NameToken;
-	}
-
-	@Override public void SetTypeInfo(ZToken TypeToken, ZType Type) {
-		this.DeclType  = Type;
-		this.TypeToken = TypeToken;
-	}
-
-	@Override public void Accept(ZVisitor Visitor) {
+	@Override public final void Accept(ZVisitor Visitor) {
 		Visitor.VisitVarNode(this);
 	}
+
 
 }

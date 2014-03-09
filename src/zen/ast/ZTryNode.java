@@ -25,16 +25,16 @@
 package zen.ast;
 
 import zen.parser.ZVisitor;
-import zen.type.ZType;
 import zen.util.Var;
 
-public final class ZTryNode extends ZGivenNameNode {
-	public final static int _Try = 0;
-	public final static int _Catch = 1;
-	public final static int _Finally = 2;
+public final class ZTryNode extends ZNode {
+	public final static int _Try      = 0;
+	public static final int _NameInfo = 1;
+	public final static int _Catch    = 2;
+	public final static int _Finally  = 3;
 
 	public ZTryNode(ZNode ParentNode) {
-		super(ParentNode, null, 3);
+		super(ParentNode, null, 4);
 	}
 
 	public final ZBlockNode TryBlockNode() {
@@ -47,19 +47,11 @@ public final class ZTryNode extends ZGivenNameNode {
 	}
 
 	public final String ExceptionName() {
-		return this.GivenName;
-	}
-
-	public final boolean HasExceptionType() {
-		return this.GivenType != null;
-	}
-
-	public final ZType ExceptionType() {
-		return this.GivenType;
+		return this.AST[ZTryNode._NameInfo].SourceToken.GetText();
 	}
 
 	public final boolean HasCatchBlockNode() {
-		return (this.GivenName != null && this.AST[ZTryNode._Catch ] != null);
+		return (this.AST[ZTryNode._NameInfo] != null && this.AST[ZTryNode._Catch ] != null);
 	}
 
 	public final ZBlockNode CatchBlockNode() {
@@ -88,6 +80,7 @@ public final class ZTryNode extends ZGivenNameNode {
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitTryNode(this);
 	}
+
 
 
 

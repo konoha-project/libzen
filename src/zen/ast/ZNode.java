@@ -105,12 +105,12 @@ public abstract class ZNode {
 		return this.AST.length;
 	}
 
-	//	public final boolean HasAst(int Index) {
-	//		if(this.AST != null && Index < this.AST.length) {
-	//			return this.AST[Index] != null;
-	//		}
-	//		return false;
-	//	}
+	public final ZToken GetAstToken(int Index) {
+		if(this.AST[Index] != null) {
+			return this.AST[Index].SourceToken;
+		}
+		return null;
+	}
 
 	public final ZType GetAstType(int Index) {
 		return this.AST[Index].Type.GetRealType();

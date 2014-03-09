@@ -44,6 +44,10 @@ public final class ZSetterNode extends ZNode {
 		return this.AST[ZSetterNode._Recv ];
 	}
 
+	public final String GetName() {
+		return this.FieldName;
+	}
+
 	public final ZNode ExprNode() {
 		return this.AST[ZSetterNode._Expr ];
 	}

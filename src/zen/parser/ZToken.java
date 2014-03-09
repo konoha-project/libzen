@@ -40,6 +40,10 @@ public class ZToken {
 		return "";
 	}
 
+	public final String GetTextAsName() {
+		return this.GetText();
+	}
+
 	@Override public final String toString() {
 		@Var char ch = this.Source.GetCharAt(this.StartIndex-1);
 		if(ch == '\"') {
@@ -114,6 +118,7 @@ public class ZToken {
 		}
 		return 0;
 	}
+
 
 
 }

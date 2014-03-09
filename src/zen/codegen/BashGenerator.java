@@ -264,7 +264,7 @@ public class BashGenerator extends ZSourceGenerator {
 	//	}
 	//
 	//	@Override public void VisitSetNameNode(ZenSetLocalNode Node) {
-	//		this.PushSourceCode(Node.NativeName + "=" + this.ResolveValueType(Node.ValueNode, true));
+	//		this.PushSourceCode(Node.GetName() + "=" + this.ResolveValueType(Node.ValueNode, true));
 	//	}
 	//
 	////	@Override public void VisitSelfAssignNode(ZenSelfAssignNode Node) {
@@ -286,13 +286,13 @@ public class BashGenerator extends ZSourceGenerator {
 	////	}
 	//
 	//	@Override public void VisitVarNode(ZenVarNode Node) {
-	//		@Var String VarName = Node.NativeName;
+	//		@Var String VarName = Node.GetName();
 	//		@Var String Declare = "declare ";
 	//		@Var String Option = "";
 	//		if(this.inFunc) {
 	//			Declare = "local ";
 	//		}
-	//		if(!this.IsNativeType(Node.DeclType)) {
+	//		if(!this.IsNativeType(Node.DeclType())) {
 	//			Option = "-a ";
 	//		}
 	//

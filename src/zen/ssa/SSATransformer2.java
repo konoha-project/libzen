@@ -81,7 +81,7 @@ public class SSATransformer2 extends ZASTTransformer {
 
 	@Override
 	public void VisitVarNode(ZVarNode Node) {
-		Variable V = new Variable(Node.NativeName, Node);
+		Variable V = new Variable(Node.GetName(), Node);
 		this.AddVariable(V);
 		for (int i = 0; i < Node.GetListSize(); i++) {
 			Node.GetListAt(i).Accept(this);
@@ -130,7 +130,7 @@ public class SSATransformer2 extends ZASTTransformer {
 
 		for(int i = 0; i < Node.GetListSize(); i++) {
 			ZParamNode ParamNode = Node.GetParamNode(i);
-			this.AddVariable(new Variable(ParamNode.Name, ParamNode));
+			this.AddVariable(new Variable(ParamNode.GetName(), ParamNode));
 		}
 		Node.BlockNode().Accept(this);
 

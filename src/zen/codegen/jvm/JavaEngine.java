@@ -279,13 +279,13 @@ public class JavaEngine extends ZSourceEngine {
 
 	@Override public void VisitGetterNode(ZGetterNode Node) {
 		Method sMethod = JavaMethodTable.GetStaticMethod("GetField");
-		ZNode NameNode = new ZStringNode(Node, null, Node.FieldName);
+		ZNode NameNode = new ZStringNode(Node, null, Node.GetName());
 		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.RecvNode(), NameNode});
 	}
 
 	@Override public void VisitSetterNode(ZSetterNode Node) {
 		Method sMethod = JavaMethodTable.GetStaticMethod("SetField");
-		ZNode NameNode = new ZStringNode(Node, null, Node.FieldName);
+		ZNode NameNode = new ZStringNode(Node, null, Node.GetName());
 		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.RecvNode(), NameNode, Node.ExprNode()});
 	}
 

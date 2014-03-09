@@ -405,12 +405,12 @@ public class ZSourceGenerator extends ZGenerator {
 
 	@Override public void VisitGetterNode(ZGetterNode Node) {
 		this.GenerateSurroundCode(Node.RecvNode());
-		this.CurrentBuilder.Append(".", Node.FieldName);
+		this.CurrentBuilder.Append(".", Node.GetName());
 	}
 
 	@Override public void VisitSetterNode(ZSetterNode Node) {
 		this.GenerateSurroundCode(Node.RecvNode());
-		this.CurrentBuilder.Append(".", Node.FieldName, " = ");
+		this.CurrentBuilder.Append(".", Node.GetName(), " = ");
 		this.GenerateCode(null, Node.ExprNode());
 	}
 
@@ -564,9 +564,6 @@ public class ZSourceGenerator extends ZGenerator {
 		this.GenerateCode(null, Node.TryBlockNode());
 		if(Node.HasCatchBlockNode()) {
 			this.CurrentBuilder.AppendNewLine("catch (", Node.ExceptionName());
-			if(Node.HasExceptionType()) {
-				this.GenerateTypeAnnotation(Node.ExceptionType());
-			}
 			this.CurrentBuilder.Append(") ");
 			this.GenerateCode(null, Node.CatchBlockNode());
 		}
@@ -577,8 +574,8 @@ public class ZSourceGenerator extends ZGenerator {
 	}
 
 	@Override public void VisitVarNode(ZVarNode Node) {
-		this.CurrentBuilder.Append("var ", this.NameLocalVariable(Node.NativeName, Node.VarIndex));
-		this.GenerateTypeAnnotation(Node.DeclType);
+		this.CurrentBuilder.Append("var ", this.NameLocalVariable(Node.GetName(), Node.VarIndex));
+		this.GenerateTypeAnnotation(Node.DeclType());
 		this.GenerateCode(" = ", null, Node.InitValueNode(), this.SemiColon);
 		this.VisitStmtList(Node);
 	}
@@ -598,7 +595,7 @@ public class ZSourceGenerator extends ZGenerator {
 	}
 
 	public void VisitParamNode(ZParamNode Node) {
-		this.CurrentBuilder.Append(this.NameLocalVariable(Node.Name, Node.ParamIndex));
+		this.CurrentBuilder.Append(this.NameLocalVariable(Node.GetName(), Node.ParamIndex));
 		this.GenerateTypeAnnotation(Node.Type);
 	}
 
@@ -607,11 +604,11 @@ public class ZSourceGenerator extends ZGenerator {
 			this.CurrentBuilder.Append("export ");
 		}
 		this.CurrentBuilder.Append("function ");
-		if(Node.FuncName != null) {
-			this.CurrentBuilder.Append(Node.FuncName);
+		if(Node.FuncName() != null) {
+			this.CurrentBuilder.Append(Node.FuncName());
 		}
 		this.VisitListNode("(", Node, ")");
-		this.GenerateTypeAnnotation(Node.ReturnType);
+		this.GenerateTypeAnnotation(Node.ReturnType());
 		this.GenerateCode(null, Node.BlockNode());
 	}
 
@@ -625,8 +622,8 @@ public class ZSourceGenerator extends ZGenerator {
 		@Var int i = 0;
 		while (i < Node.GetListSize()) {
 			@Var ZFieldNode FieldNode = Node.GetFieldNode(i);
-			this.CurrentBuilder.AppendNewLine("var ", FieldNode.FieldName);
-			this.GenerateTypeAnnotation(FieldNode.DeclType);
+			this.CurrentBuilder.AppendNewLine("var ", FieldNode.GetName());
+			this.GenerateTypeAnnotation(FieldNode.DeclType());
 			this.CurrentBuilder.AppendToken("=");
 			this.GenerateCode(null, FieldNode.InitValueNode());
 			this.CurrentBuilder.Append(this.SemiColon);
@@ -702,7 +699,7 @@ public class ZSourceGenerator extends ZGenerator {
 			if (i > 0) {
 				this.CurrentBuilder.Append(this.Camma);
 			}
-			this.CurrentBuilder.Append(this.NameLocalVariable(ParamNode.Name, ParamNode.ParamIndex));
+			this.CurrentBuilder.Append(this.NameLocalVariable(ParamNode.GetName(), ParamNode.ParamIndex));
 			i = i + 1;
 		}
 		this.CurrentBuilder.Append(CloseToken);

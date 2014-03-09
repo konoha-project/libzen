@@ -173,7 +173,7 @@ public class PythonGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitVarNode(ZVarNode Node) {
-		this.CurrentBuilder.Append(this.NameLocalVariable(Node.NativeName, Node.VarIndex));
+		this.CurrentBuilder.Append(this.NameLocalVariable(Node.GetName(), Node.VarIndex));
 		this.CurrentBuilder.AppendToken("=");
 		this.GenerateCode(null, Node.InitValueNode());
 		this.VisitStmtList(Node);
@@ -206,7 +206,7 @@ public class PythonGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitParamNode(ZParamNode Node) {
-		this.CurrentBuilder.Append(this.NameLocalVariable(Node.Name, Node.ParamIndex));
+		this.CurrentBuilder.Append(this.NameLocalVariable(Node.GetName(), Node.ParamIndex));
 	}
 
 	/**
@@ -221,10 +221,7 @@ public class PythonGenerator extends ZSourceGenerator {
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
 		if(!Node.Type.IsVoidType()) {
-			if(Node.FuncName == null) {
-				Node.FuncName = "f";
-			}
-			@Var String FuncName = Node.FuncName + this.GetUniqueNumber();
+			@Var String FuncName = Node.GetUniqueName(this);
 			this.CurrentBuilder = this.InsertNewSourceBuilder();
 			this.CurrentBuilder.Append("def ");
 			this.CurrentBuilder.Append(FuncName);
@@ -236,22 +233,22 @@ public class PythonGenerator extends ZSourceGenerator {
 			this.CurrentBuilder.Append(FuncName);
 		}
 		else {
-			@Var ZFuncType FuncType = Node.GetFuncType(null);
+			@Var ZFuncType FuncType = Node.GetFuncType();
 			this.CurrentBuilder.Append("def ");
-			this.CurrentBuilder.Append(Node.GetSignature(this));
+			this.CurrentBuilder.Append(Node.GetSignature());
 			this.VisitListNode("(", Node, ")");
 			this.GenerateCode(null, Node.BlockNode());
 			this.CurrentBuilder.AppendLineFeed();
 			if(Node.IsExport) {
-				this.CurrentBuilder.Append(Node.FuncName, " = ", FuncType.StringfySignature(Node.FuncName));
+				this.CurrentBuilder.Append(Node.FuncName(), " = ", FuncType.StringfySignature(Node.FuncName()));
 				this.CurrentBuilder.AppendLineFeed();
-				if(Node.FuncName.equals("main")) {
+				if(Node.FuncName().equals("main")) {
 					this.HasMainFunction = true;
 				}
 			}
-			if(this.IsMethod(Node.FuncName, FuncType)) {
-				this.CurrentBuilder.Append(this.NameMethod(FuncType.GetRecvType(), Node.FuncName));
-				this.CurrentBuilder.Append(" = ", FuncType.StringfySignature(Node.FuncName));
+			if(this.IsMethod(Node.FuncName(), FuncType)) {
+				this.CurrentBuilder.Append(this.NameMethod(FuncType.GetRecvType(), Node.FuncName()));
+				this.CurrentBuilder.Append(" = ", FuncType.StringfySignature(Node.FuncName()));
 				this.CurrentBuilder.AppendLineFeed();
 			}
 		}
@@ -294,9 +291,9 @@ public class PythonGenerator extends ZSourceGenerator {
 		@Var int i = 0;
 		while (i < Node.GetListSize()) {
 			@Var ZFieldNode FieldNode = Node.GetFieldNode(i);
-			if(!FieldNode.DeclType.IsFuncType()) {
+			if(!FieldNode.DeclType().IsFuncType()) {
 				this.CurrentBuilder.AppendNewLine();
-				this.CurrentBuilder.Append("self." + FieldNode.FieldName + " = ");
+				this.CurrentBuilder.Append("self." + FieldNode.GetName() + " = ");
 				this.GenerateCode(null, FieldNode.InitValueNode());
 			}
 			this.CurrentBuilder.Append(this.SemiColon);

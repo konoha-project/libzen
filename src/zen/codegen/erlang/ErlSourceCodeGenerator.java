@@ -186,7 +186,7 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Append("#");
 		this.CurrentBuilder.Append(this.ToErlangTypeName(Node.RecvNode().Type.ShortName));
 		this.CurrentBuilder.Append(".");
-		this.CurrentBuilder.Append(this.ToErlangTypeName(Node.FieldName));
+		this.CurrentBuilder.Append(this.ToErlangTypeName(Node.GetName()));
 	}
 
 	@Override public void VisitSetterNode(ZSetterNode Node) {
@@ -197,7 +197,7 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Append("#");
 		this.CurrentBuilder.Append(this.ToErlangTypeName(Node.RecvNode().Type.ShortName));
 		this.CurrentBuilder.Append("{");
-		this.CurrentBuilder.Append(Node.FieldName);
+		this.CurrentBuilder.Append(Node.GetName());
 		this.CurrentBuilder.AppendToken("=");
 		this.GenerateCode(null, Node.ExprNode());
 		this.CurrentBuilder.Append("}");
@@ -440,7 +440,7 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 
 		this.GenerateCode(null, Node.InitValueNode());
 
-		@Var String VarName = Node.NativeName;
+		@Var String VarName = Node.GetName();
 		this.VarMgr.CreateVariable(VarName);
 		this.AppendLazy(mark, this.VarMgr.GenVariableName(VarName) + " = ");
 
@@ -467,14 +467,14 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 
 	@Override
 	public void VisitParamNode(ZParamNode Node) {
-		this.CurrentBuilder.Append(this.ToErlangVarName(Node.Name));
+		this.CurrentBuilder.Append(this.ToErlangVarName(Node.GetName()));
 	}
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
 		this.VarMgr.PushScope();
 		this.CreateVariables(Node);
 
-		String FuncName = this.ToErlangFuncName(Node.FuncName);
+		String FuncName = this.ToErlangFuncName(Node.FuncName());
 		this.HeaderBuilder.Append("-export([" + FuncName + "/" + Node.GetListSize() + "]).");
 		this.HeaderBuilder.AppendLineFeed();
 
@@ -509,7 +509,7 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 		@Var int size = Node.GetListSize();
 		while (i < size) {
 			@Var ZFieldNode FieldNode = Node.GetFieldNode(i);
-			this.CurrentBuilder.Append(this.ToErlangTypeName(FieldNode.FieldName));
+			this.CurrentBuilder.Append(this.ToErlangTypeName(FieldNode.GetName()));
 			this.CurrentBuilder.AppendToken("=");
 			this.GenerateCode(null, FieldNode.InitValueNode());
 			if (i < size - 1) {
@@ -570,7 +570,7 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 	}
 
 	private void AppendWrapperFuncDecl(ZFunctionNode Node){
-		String FuncName = this.ToErlangFuncName(Node.FuncName);
+		String FuncName = this.ToErlangFuncName(Node.FuncName());
 		this.CurrentBuilder.Append(FuncName);
 		this.VisitListNode("(", Node, ")");
 		this.CurrentBuilder.Append(" ->");
@@ -610,7 +610,7 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 		@Var int i = 0;
 		while(i < VargNode.GetListSize()) {
 			@Var ZParamNode ParamNode = (ZParamNode)VargNode.GetListAt(i);
-			this.VarMgr.CreateVariable(ParamNode.Name);
+			this.VarMgr.CreateVariable(ParamNode.GetName());
 			i += 1;
 		}
 	}

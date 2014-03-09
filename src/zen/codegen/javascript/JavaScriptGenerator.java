@@ -140,7 +140,7 @@ public class JavaScriptGenerator extends ZSourceGenerator {
 	@Override public void VisitVarNode(ZVarNode Node) {
 		this.CurrentBuilder.AppendToken("var");
 		this.CurrentBuilder.AppendWhiteSpace();
-		this.CurrentBuilder.Append(this.NameLocalVariable(Node.NativeName, Node.VarIndex));
+		this.CurrentBuilder.Append(this.NameLocalVariable(Node.GetName(), Node.VarIndex));
 		this.CurrentBuilder.AppendToken("=");
 		this.GenerateCode(null, Node.InitValueNode());
 		this.CurrentBuilder.Append(this.SemiColon);
@@ -148,7 +148,7 @@ public class JavaScriptGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitParamNode(ZParamNode Node) {
-		this.CurrentBuilder.Append(this.NameLocalVariable(Node.Name, Node.ParamIndex));
+		this.CurrentBuilder.Append(this.NameLocalVariable(Node.GetName(), Node.ParamIndex));
 	}
 
 	private boolean IsUserDefinedType(ZType SelfType){
@@ -164,10 +164,10 @@ public class JavaScriptGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
-		@Var boolean IsLambda = Node.FuncName == null;
+		@Var boolean IsLambda = (Node.FuncName() == null);
 		@Var boolean IsInstanceMethod = (!IsLambda && Node.AST.length > 1 && Node.AST[1/*first param*/] instanceof ZParamNode);
 		@Var ZType SelfType = IsInstanceMethod ? Node.AST[1/*first param*/].Type : null;
-		@Var boolean IsConstructor = IsInstanceMethod && SelfType.ShortName.equals(Node.FuncName);
+		@Var boolean IsConstructor = IsInstanceMethod && SelfType.ShortName.equals(Node.FuncName());
 
 		if(IsConstructor){
 			@Var ZNode Block = Node.BlockNode();
@@ -178,11 +178,11 @@ public class JavaScriptGenerator extends ZSourceGenerator {
 		}else{
 			this.CurrentBuilder.Append("function ");
 			if(!Node.Type.IsVoidType()) {
-				@Var String FuncName = Node.FuncName + this.GetUniqueNumber();
+				@Var String FuncName = Node.GetUniqueName(this);
 				this.CurrentBuilder.Append(FuncName);
 			}
 			else {
-				this.CurrentBuilder.Append(Node.GetSignature(this));
+				this.CurrentBuilder.Append(Node.GetSignature());
 			}
 		}
 		this.VisitListNode("(", Node, ")");
@@ -196,16 +196,16 @@ public class JavaScriptGenerator extends ZSourceGenerator {
 					this.CurrentBuilder.AppendLineFeed();
 					this.CurrentBuilder.Append(SelfType.ShortName); //FIXME must use typing in param
 					this.CurrentBuilder.Append(".prototype.");
-					this.CurrentBuilder.Append(Node.FuncName);
+					this.CurrentBuilder.Append(Node.FuncName());
 					this.CurrentBuilder.Append("__ = ");
-					this.CurrentBuilder.Append(Node.GetSignature(this));
+					this.CurrentBuilder.Append(Node.GetSignature());
 
 					this.CurrentBuilder.AppendLineFeed();
 					this.CurrentBuilder.Append(SelfType.ShortName); //FIXME must use typing in param
 					this.CurrentBuilder.Append(".prototype.");
-					this.CurrentBuilder.Append(Node.FuncName);
+					this.CurrentBuilder.Append(Node.FuncName());
 					this.CurrentBuilder.Append(" = (function(){ Array.prototype.unshift.call(arguments, this); return this.");
-					this.CurrentBuilder.Append(Node.FuncName);
+					this.CurrentBuilder.Append(Node.FuncName());
 					this.CurrentBuilder.Append("__.apply(this, arguments); })");
 
 					this.CurrentBuilder.Append(this.SemiColon);
@@ -213,10 +213,10 @@ public class JavaScriptGenerator extends ZSourceGenerator {
 					this.CurrentBuilder.Append("function ");
 					this.CurrentBuilder.Append(SelfType.ShortName); //FIXME must use typing in param
 					this.CurrentBuilder.Append("_");
-					this.CurrentBuilder.Append(Node.FuncName);
+					this.CurrentBuilder.Append(Node.FuncName());
 					this.VisitListNode("(", Node, ")");
 					this.CurrentBuilder.Append("{ return ");
-					this.CurrentBuilder.Append(Node.GetSignature(this));
+					this.CurrentBuilder.Append(Node.GetSignature());
 					this.VisitListNode("(", Node, "); ");
 					this.CurrentBuilder.Append("}");
 				}
@@ -360,7 +360,7 @@ public class JavaScriptGenerator extends ZSourceGenerator {
 			@Var ZNode ValueNode = FieldNode.InitValueNode();
 			if(!(ValueNode instanceof ZNullNode)) {
 				this.CurrentBuilder.AppendNewLine("this.");
-				this.CurrentBuilder.Append(FieldNode.FieldName);
+				this.CurrentBuilder.Append(FieldNode.GetName());
 				this.CurrentBuilder.Append(" = ");
 				this.GenerateCode(null, FieldNode.InitValueNode());
 				this.CurrentBuilder.Append(this.SemiColon);

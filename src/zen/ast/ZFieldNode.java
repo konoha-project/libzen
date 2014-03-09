@@ -24,38 +24,13 @@
 
 package zen.ast;
 
-import zen.ast.sugar.ZLocalDefinedNode;
-import zen.parser.ZToken;
 import zen.type.ZClassType;
-import zen.type.ZType;
 import zen.util.Field;
 
-public final class ZFieldNode extends ZLocalDefinedNode {
-	public final static int    _InitValue = 0;
-
+public final class ZFieldNode extends ZVarNode {
 	@Field public  ZClassType  ClassType;
-	@Field public ZType  DeclType = ZType.VarType;
-
-	@Field public String FieldName = null;
-	@Field public ZToken NameToken = null;
 
 	public ZFieldNode(ZNode ParentNode) {
-		super(ParentNode, null, 1);
-	}
-
-	public final ZNode InitValueNode() {
-		if(this.AST[ZFieldNode._InitValue] == null) {
-			this.SetNode(ZFieldNode._InitValue, new ZDefaultValueNode());
-		}
-		return this.AST[ZFieldNode._InitValue];
-	}
-
-
-	@Override public void SetTypeInfo(ZToken TypeToken, ZType Type) {
-		this.DeclType = Type;
-	}
-	@Override public void SetNameInfo(ZToken NameToken, String Name) {
-		this.FieldName = Name;
-		this.NameToken = NameToken;
+		super(ParentNode);
 	}
 }

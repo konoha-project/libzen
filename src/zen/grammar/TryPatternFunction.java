@@ -16,8 +16,7 @@ public class TryPatternFunction extends ZMatchFunction {
 		@Var int count = 0;
 		if(TokenContext.MatchNewLineToken("catch")) {
 			TryNode = TokenContext.MatchToken(TryNode, "(", ZTokenContext._Required);
-			TryNode = TokenContext.MatchPattern(TryNode, ZNode._NameInfo, "$Name$", ZTokenContext._Required);
-			TryNode = TokenContext.MatchPattern(TryNode, ZNode._TypeInfo, "$TypeAnnotation$", ZTokenContext._Optional);
+			TryNode = TokenContext.MatchPattern(TryNode, ZTryNode._NameInfo, "$Name$", ZTokenContext._Required);
 			TryNode = TokenContext.MatchToken(TryNode, ")", ZTokenContext._Required);
 			TryNode = TokenContext.MatchPattern(TryNode, ZTryNode._Catch, "$Block$", ZTokenContext._Required);
 			count = count + 1;

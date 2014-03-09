@@ -10,8 +10,8 @@ public class ParamPatternFunction extends ZMatchFunction {
 
 	@Override public ZNode Invoke(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
 		@Var ZNode ParamNode = new ZParamNode(ParentNode);
-		ParamNode = TokenContext.MatchPattern(ParamNode, ZNode._NameInfo, "$Name$", ZTokenContext._Required);
-		ParamNode = TokenContext.MatchPattern(ParamNode, ZNode._TypeInfo, "$TypeAnnotation$", ZTokenContext._Optional);
+		ParamNode = TokenContext.MatchPattern(ParamNode, ZParamNode._NameInfo, "$Name$", ZTokenContext._Required);
+		ParamNode = TokenContext.MatchPattern(ParamNode, ZParamNode._TypeInfo, "$TypeAnnotation$", ZTokenContext._Optional);
 		return ParamNode;
 	}
 

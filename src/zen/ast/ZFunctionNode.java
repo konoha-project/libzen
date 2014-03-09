@@ -31,21 +31,53 @@ import zen.type.ZFuncType;
 import zen.type.ZType;
 import zen.type.ZTypePool;
 import zen.util.Field;
-import zen.util.Nullable;
 import zen.util.Var;
 import zen.util.ZArray;
 
 public class ZFunctionNode extends ZListNode {
-	public final static int _Block = 0;
+	public static final int _NameInfo = 0;
+	public static final int _TypeInfo = 1;
+	public final static int _Block    = 2;
 
-	@Field public ZType ReturnType = ZType.VarType;
-	@Field public String FuncName = null;
+	@Field public ZType  GivenType = null;
+	@Field public String GivenName = null;
 	@Field public ZToken NameToken = null;
 
-	@Field public boolean IsExport = false;
+	@Field public boolean       IsExport = false;
 	@Field public ZFunctionNode ParentFunctionNode = null;
-	@Field public ZFuncType ResolvedFuncType = null;
+	@Field public ZFuncType     ResolvedFuncType = null;
 	@Field public int VarIndex = 0;
+
+	public final ZType ReturnType() {
+		if(this.GivenType == null) {
+			if(this.AST[ZFunctionNode._TypeInfo] != null) {
+				this.GivenType = this.AST[ZFunctionNode._TypeInfo].Type;
+			}
+			else {
+				this.GivenType = ZType.VarType;
+			}
+		}
+		return this.GivenType;
+	}
+
+	public final void SetReturnType(ZType Type) {
+		this.GivenType = Type;
+	}
+
+	public final String FuncName() {
+		if(this.GivenName == null && this.AST[ZFunctionNode._NameInfo] != null) {
+			this.GivenName = this.AST[ZFunctionNode._NameInfo].SourceToken.GetTextAsName();
+		}
+		return this.GivenName;
+	}
+
+	public final String GetUniqueName(ZGenerator Generator) {
+		@Var String FuncName = this.FuncName();
+		if(FuncName == null) {
+			FuncName = "f";
+		}
+		return Generator.NameUniqueSymbol("f");
+	}
 
 	public final ZBlockNode BlockNode() {
 		@Var ZNode BlockNode = this.AST[ZFunctionNode._Block];
@@ -57,16 +89,7 @@ public class ZFunctionNode extends ZListNode {
 	}
 
 	public ZFunctionNode(ZNode ParentNode) {
-		super(ParentNode, null, 1);
-	}
-
-	@Override public void SetTypeInfo(ZToken TypeToken, ZType Type) {
-		this.ReturnType = Type;
-	}
-
-	@Override public void SetNameInfo(ZToken NameToken, String Name) {
-		this.FuncName = Name;
-		this.NameToken = NameToken;
+		super(ParentNode, null, 3);
 	}
 
 	@Override public void Accept(ZVisitor Visitor) {
@@ -81,28 +104,18 @@ public class ZFunctionNode extends ZListNode {
 		return null;
 	}
 
-	public final ZFuncType GetFuncType(@Nullable ZType ContextType) {
+	public final ZFuncType GetFuncType() {
 		if(this.ResolvedFuncType == null) {
-			@Var ZFuncType FuncType = null;
-			if(ContextType instanceof ZFuncType) {
-				FuncType = (ZFuncType)ContextType;
-			}
 			@Var ZArray<ZType> TypeList = new ZArray<ZType>(new ZType[this.GetListSize()+2]);
-			if(this.ReturnType.IsVarType() && FuncType != null) {
-				this.ReturnType = FuncType.GetReturnType();
-			}
 			@Var int i = 0;
 			while(i < this.GetListSize()) {
 				@Var ZParamNode Node = this.GetParamNode(i);
-				@Var ZType ParamType = Node.Type.GetRealType();
-				if(ParamType.IsVarType() && FuncType != null) {
-					ParamType = FuncType.GetFuncParamType(i);
-				}
+				@Var ZType ParamType = Node.DeclType().GetRealType();
 				TypeList.add(ParamType);
 				i = i + 1;
 			}
-			TypeList.add(this.ReturnType.GetRealType());
-			FuncType = ZTypePool._LookupFuncType2(TypeList);
+			TypeList.add(this.ReturnType().GetRealType());
+			@Var ZFuncType FuncType = ZTypePool._LookupFuncType2(TypeList);
 			if(!FuncType.IsVarType()) {
 				this.ResolvedFuncType = FuncType;
 			}
@@ -111,12 +124,9 @@ public class ZFunctionNode extends ZListNode {
 		return this.ResolvedFuncType;
 	}
 
-	public final String GetSignature(ZGenerator Generator) {
-		@Var ZFuncType FuncType = this.GetFuncType(null);
-		if(this.FuncName == null) {
-			this.FuncName = "f_Z" + Generator.GetUniqueNumber();
-		}
-		return FuncType.StringfySignature(this.FuncName);
+	public final String GetSignature() {
+		@Var ZFuncType FuncType = this.GetFuncType();
+		return FuncType.StringfySignature(this.FuncName());
 	}
 
 	public final ZFunctionNode Push(ZFunctionNode Parent) {
@@ -131,10 +141,10 @@ public class ZFunctionNode extends ZListNode {
 	public final boolean IsTopLevel() {
 		return this.ParentFunctionNode == null;
 	}
-
-	public final int GetVarIndex() {
-		@Var int Index = this.VarIndex;
-		this.VarIndex = this.VarIndex + 1;
-		return Index;
-	}
+	//
+	//	public final int GetVarIndex() {
+	//		@Var int Index = this.VarIndex;
+	//		this.VarIndex = this.VarIndex + 1;
+	//		return Index;
+	//	}
 }

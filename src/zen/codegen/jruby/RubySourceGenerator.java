@@ -110,14 +110,14 @@ public class RubySourceGenerator extends ZSourceGenerator {
 
 	@Override
 	public void VisitVarNode(ZVarNode Node) {
-		this.CurrentBuilder.Append(Node.NativeName);
+		this.CurrentBuilder.Append(Node.GetName());
 		this.CurrentBuilder.AppendToken("=");
 		this.GenerateCode(null, Node.InitValueNode());
 	}
 
 	@Override
 	public void VisitParamNode(ZParamNode Node) {
-		this.CurrentBuilder.Append(Node.Name);
+		this.CurrentBuilder.Append(Node.GetName());
 	}
 
 	@Override

@@ -110,18 +110,18 @@ public class PerlGenerator extends ZSourceGenerator {
 
 	@Override public void VisitGetterNode(ZGetterNode Node) {
 		this.GenerateCode(null, Node.RecvNode());
-		this.CurrentBuilder.Append("->{\'", Node.FieldName, "\'} = ");
+		this.CurrentBuilder.Append("->{\'", Node.GetName(), "\'} = ");
 	}
 
 	@Override public void VisitSetterNode(ZSetterNode Node) {
 		this.GenerateCode(null, Node.RecvNode());
-		this.CurrentBuilder.Append("->{\'", Node.FieldName, "\'}");
+		this.CurrentBuilder.Append("->{\'", Node.GetName(), "\'}");
 		this.GenerateCode(null, Node.ExprNode());
 	}
 
 	@Override public void VisitVarNode(ZVarNode Node) {
-		this.CurrentBuilder.Append("my ", this.VariablePrefix(Node.DeclType.GetRealType()));
-		this.CurrentBuilder.Append(this.NameLocalVariable(Node.NativeName, Node.VarIndex), " = ");
+		this.CurrentBuilder.Append("my ", this.VariablePrefix(Node.DeclType().GetRealType()));
+		this.CurrentBuilder.Append(this.NameLocalVariable(Node.GetName(), Node.VarIndex), " = ");
 		this.GenerateCode(null, Node.InitValueNode());
 		this.CurrentBuilder.Append(this.SemiColon);
 		this.VisitStmtList(Node);
@@ -157,14 +157,14 @@ public class PerlGenerator extends ZSourceGenerator {
 
 	@Override public void VisitParamNode(ZParamNode Node) {
 		this.CurrentBuilder.Append("my ", this.VariablePrefix(Node.Type));
-		this.CurrentBuilder.Append(this.NameLocalVariable(Node.Name, Node.ParamIndex), " = shift");
+		this.CurrentBuilder.Append(this.NameLocalVariable(Node.GetName(), Node.ParamIndex), " = shift");
 	}
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
 		this.CurrentBuilder.Append("sub");
-		if(Node.FuncName != null) {
+		if(Node.FuncName() != null) {
 			this.CurrentBuilder.AppendWhiteSpace();
-			this.CurrentBuilder.Append(Node.FuncName);
+			this.CurrentBuilder.Append(Node.FuncName());
 		}
 		this.CurrentBuilder.Append(" {");
 		this.CurrentBuilder.Indent();
@@ -182,22 +182,22 @@ public class PerlGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.AppendNewLine();
 	}
 
-	private void GenerateCField(String CType, String FieldName) {
-		this.CurrentBuilder.AppendLineFeed();
-		this.CurrentBuilder.AppendIndent();
-		this.CurrentBuilder.Append(CType);
-		this.CurrentBuilder.AppendWhiteSpace();
-		this.CurrentBuilder.Append(FieldName);
-		this.CurrentBuilder.Append(this.SemiColon);
-	}
-
-	private void GenerateField(ZType DeclType, String FieldName) {
-		this.CurrentBuilder.AppendNewLine();
-		this.GenerateTypeName(DeclType);
-		this.CurrentBuilder.AppendWhiteSpace();
-		this.CurrentBuilder.Append(FieldName);
-		this.CurrentBuilder.Append(this.SemiColon);
-	}
+	//	private void GenerateCField(String CType, String FieldName) {
+	//		this.CurrentBuilder.AppendLineFeed();
+	//		this.CurrentBuilder.AppendIndent();
+	//		this.CurrentBuilder.Append(CType);
+	//		this.CurrentBuilder.AppendWhiteSpace();
+	//		this.CurrentBuilder.Append(FieldName);
+	//		this.CurrentBuilder.Append(this.SemiColon);
+	//	}
+	//
+	//	private void GenerateField(ZType DeclType, String FieldName) {
+	//		this.CurrentBuilder.AppendNewLine();
+	//		this.GenerateTypeName(DeclType);
+	//		this.CurrentBuilder.AppendWhiteSpace();
+	//		this.CurrentBuilder.Append(FieldName);
+	//		this.CurrentBuilder.Append(this.SemiColon);
+	//	}
 
 
 	private String ClassKey(ZType ClassType) {
@@ -223,7 +223,7 @@ public class PerlGenerator extends ZSourceGenerator {
 		while (i < Node.GetListSize()) {
 			@Var ZFieldNode FieldNode = Node.GetFieldNode(i);
 			this.CurrentBuilder.AppendNewLine();
-			this.CurrentBuilder.Append("$o{", LibZen._QuoteString(FieldNode.FieldName), "} = ");
+			this.CurrentBuilder.Append("$o{", LibZen._QuoteString(FieldNode.GetName()), "} = ");
 			this.GenerateCode(null, FieldNode.InitValueNode());
 			this.CurrentBuilder.Append(this.SemiColon);
 			i = i + 1;

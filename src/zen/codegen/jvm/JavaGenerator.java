@@ -42,7 +42,7 @@ public abstract class JavaGenerator extends ZGenerator {
 	}
 
 	protected void LazyBuild(ZFunctionNode Node) {
-		this.LazyNodeMap.put(Node.GetSignature(this), Node);
+		this.LazyNodeMap.put(Node.GetSignature(), Node);
 	}
 
 	protected void LazyBuild(String Signature) {

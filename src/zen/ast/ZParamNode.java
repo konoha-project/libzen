@@ -25,21 +25,47 @@
 package zen.ast;
 
 import zen.ast.sugar.ZLocalDefinedNode;
-import zen.parser.ZToken;
+import zen.type.ZType;
 import zen.util.Field;
 
 public class ZParamNode extends ZLocalDefinedNode {
-	@Field public String  Name;
-	@Field public ZToken  NameToken = null;
-	@Field public int     ParamIndex = -1;  // unregistered to NameSpace
+	public static final int _NameInfo = 0;
+	public static final int _TypeInfo = 1;
+
+	@Field public ZType   GivenType = null;
+	@Field public String  GivenName = null;
+	@Field public int     ParamIndex    = -1;
 
 	public ZParamNode(ZNode ParentNode) {
-		super(ParentNode, null, 0);
+		super(ParentNode, null, 2);
 	}
 
-	@Override public void SetNameInfo(ZToken NameToken, String Name) {
-		this.Name = Name;
-		this.NameToken = NameToken;
+	public ZParamNode(String Name, ZType DeclType) {
+		super(null, null, 2);
+		this.GivenName   = Name;
+		this.GivenType   = DeclType;
 	}
 
+	public final ZType DeclType() {
+		if(this.GivenType == null) {
+			if(this.AST[_TypeInfo] != null) {
+				this.GivenType = this.AST[_TypeInfo].Type;
+			}
+			else {
+				this.GivenType = ZType.VarType;
+			}
+		}
+		return this.GivenType;
+	}
+
+	public final void SetDeclType(ZType Type) {
+		this.GivenType = Type;
+	}
+
+	public final String GetName() {
+		if(this.GivenName == null) {
+			this.GivenName = this.AST[_NameInfo].SourceToken.GetTextAsName();
+		}
+		return this.GivenName;
+	}
 }

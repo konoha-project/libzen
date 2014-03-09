@@ -79,7 +79,7 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 		if(this.MainFuncNode != null) {
 			this.CurrentBuilder.AppendNewLine("public final static void main(String[] a)");
 			this.CurrentBuilder.OpenIndent(" {");
-			this.CurrentBuilder.AppendNewLine("F", this.MainFuncNode.GetSignature(this), ".f();");
+			this.CurrentBuilder.AppendNewLine("F", this.MainFuncNode.GetSignature(), ".f();");
 			this.CurrentBuilder.CloseIndent("}");
 		}
 		this.CurrentBuilder.CloseIndent("}");
@@ -335,9 +335,9 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitVarNode(ZVarNode Node) {
-		this.GenerateTypeName(Node.DeclType);
+		this.GenerateTypeName(Node.DeclType());
 		this.CurrentBuilder.Append(" ");
-		this.CurrentBuilder.Append(this.NameLocalVariable(Node.NativeName, Node.VarIndex));
+		this.CurrentBuilder.Append(this.NameLocalVariable(Node.GetName(), Node.VarIndex));
 		this.CurrentBuilder.Append(" = ");
 		this.GenerateCode(null, Node.InitValueNode());
 		this.CurrentBuilder.Append(this.SemiColon);
@@ -366,15 +366,12 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 	@Override public void VisitParamNode(ZParamNode Node) {
 		this.GenerateTypeName(Node.Type);
 		this.CurrentBuilder.Append(" ");
-		this.CurrentBuilder.Append(this.NameLocalVariable(Node.Name, Node.ParamIndex));
+		this.CurrentBuilder.Append(this.NameLocalVariable(Node.GetName(), Node.ParamIndex));
 	}
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
 		if(!Node.Type.IsVoidType()) {
-			if(Node.FuncName == null) {
-				Node.FuncName = "f";
-			}
-			@Var String FuncName = Node.FuncName + this.GetUniqueNumber();
+			@Var String FuncName = Node.GetUniqueName(this);
 			this.CurrentBuilder = this.InsertNewSourceBuilder();
 			FuncName = this.GenerateFunctionAsClass(Node);
 			this.CurrentBuilder.AppendLineFeed();
@@ -384,14 +381,14 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 		else {
 			this.GenerateFunctionAsClass(Node);
 			if(Node.IsExport) {
-				if(Node.FuncName.equals("main")) {
+				if(Node.FuncName().equals("main")) {
 					this.MainFuncNode = Node;
 				}
 				else {
 					this.ExportFunctionList.add(Node);
 				}
 			}
-			//@Var ZFuncType FuncType = Node.GetFuncType(null);
+			//@Var ZFuncType FuncType = Node.GetFuncType();
 			//			if(this.IsMethod(Node.FuncName, FuncType)) {
 			//				this.HeaderBuilder.Append("#define _" + this.NameMethod(FuncType.GetRecvType(), Node.FuncName));
 			//				this.HeaderBuilder.AppendLineFeed();
@@ -405,12 +402,12 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 	}
 
 	private String GenerateFunctionAsClass(ZFunctionNode Node) {
-		@Var ZFuncType FuncType = Node.GetFuncType(null);
-		@Var String ClassName = this.NameFunctionClass(Node.FuncName, FuncType);
+		@Var ZFuncType FuncType = Node.GetFuncType();
+		@Var String ClassName = this.NameFunctionClass(Node.FuncName(), FuncType);
 		this.GenerateClass("final", ClassName, FuncType);
 		this.CurrentBuilder.OpenIndent(" {");
 		this.CurrentBuilder.AppendNewLine("static ");
-		this.GenerateTypeName(Node.ReturnType);
+		this.GenerateTypeName(Node.ReturnType());
 		this.CurrentBuilder.Append(" f");
 		this.VisitListNode("(", Node, ")");
 		this.GenerateCode(null, Node.BlockNode());
@@ -420,11 +417,11 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.OpenIndent(" {");
 
 		this.CurrentBuilder.AppendNewLine("super(", ""+FuncType.TypeId, this.Camma);
-		this.CurrentBuilder.Append(LibZen._QuoteString(Node.FuncName), ");");
+		this.CurrentBuilder.Append(LibZen._QuoteString(Node.FuncName()), ");");
 		this.CurrentBuilder.CloseIndent("}");
 
 		this.CurrentBuilder.AppendNewLine("");
-		this.GenerateTypeName(Node.ReturnType);
+		this.GenerateTypeName(Node.ReturnType());
 		this.CurrentBuilder.Append(" Invoke");
 		this.VisitListNode("(", Node, ")");
 		this.CurrentBuilder.OpenIndent(" {");
@@ -484,7 +481,7 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 		@Var int i = 0;
 		while (i < Node.GetListSize()) {
 			@Var ZFieldNode FieldNode = Node.GetFieldNode(i);
-			this.GenerateClassField("", FieldNode.DeclType, FieldNode.FieldName, null);
+			this.GenerateClassField("", FieldNode.DeclType(), FieldNode.GetName(), null);
 			this.CurrentBuilder.Append(this.SemiColon);
 			i = i + 1;
 		}
@@ -505,7 +502,7 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.AppendNewLine("super();");
 		while (i < Node.GetListSize()) {
 			@Var ZFieldNode FieldNode = Node.GetFieldNode(i);
-			this.CurrentBuilder.AppendNewLine("this.", FieldNode.FieldName, "=");
+			this.CurrentBuilder.AppendNewLine("this.", FieldNode.GetName(), "=");
 			this.GenerateCode(null, FieldNode.InitValueNode());
 			this.CurrentBuilder.Append(this.SemiColon);
 			i = i + 1;
