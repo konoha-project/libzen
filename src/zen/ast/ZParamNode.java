@@ -59,6 +59,7 @@ public class ZParamNode extends ZLocalDefinedNode {
 	}
 
 	public final void SetDeclType(ZType Type) {
+		this.Type = Type;
 		this.GivenType = Type;
 	}
 

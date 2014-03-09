@@ -695,12 +695,14 @@ public class ZenTypeSafer extends ZTypeChecker {
 	}
 
 	@Override public void VisitLetNode(ZLetNode Node) {
-		this.CheckTypeAt(Node, ZLetNode._InitValue, Node.DeclType());
-		if(!Node.GetAstType(ZLetNode._InitValue).IsVarType()) {
+		@Var ZType DeclType = Node.DeclType();
+		this.CheckTypeAt(Node, ZLetNode._InitValue, DeclType);
+		@Var ZType ConstType = Node.InitValueNode().Type;
+		if(!ConstType.IsVarType()) {
 			Node.GlobalName = this.Generator.NameUniqueSymbol(Node.GetName());
 			Node.GetNameSpace().SetLocalSymbol(Node.GetName(), Node.InitValueNode());
+			this.TypedNode(Node, ZType.VoidType);
 		}
-		this.TypedNode(Node, ZType.VoidType);
 	}
 
 	private boolean HasReturn(ZNode Node) {

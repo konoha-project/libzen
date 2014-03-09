@@ -26,3 +26,6 @@ asm macro clear "$[0].clear($[0], $[1])" : Func<α[],int,void>;
 asm macro add "$[0].add($[1])" : Func<α[],α,void>;
 asm macro add "$[0].add($[1], $[2])" : Func<α[],int,α,void>;
 asm macro _ "(String)($[0])" : Func<α[],String>;
+
+// Object
+asm macro _ "(String)($[0])" : Func<Object,String>;
