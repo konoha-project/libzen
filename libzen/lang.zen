@@ -26,7 +26,7 @@ function ImportGrammar(NameSpace: ZNameSpace): void {
 	NameSpace.SetTypeName(ZTypeIntType, null);
 	NameSpace.SetTypeName(ZTypeFloatType, null);
 	NameSpace.SetTypeName(ZTypeStringType, null);
-	NameSpace.SetTypeName(ZTypeTypeType, null);
+	NameSpace.SetTypeName(ZGenericType_AlphaType, null);
 	NameSpace.SetTypeName(ZGenericType_ArrayType, null);
 	NameSpace.SetTypeName(ZGenericType_MapType, null);
 	NameSpace.SetTypeName(ZFuncType_FuncType, null);
@@ -94,17 +94,15 @@ function ImportGrammar(NameSpace: ZNameSpace): void {
 	NameSpace.DefineExpression("function", FunctionPattern);
 	NameSpace.DefineStatement("let", LetPattern);
 	NameSpace.DefineStatement("export", ExportPattern);
-	NameSpace.Generator.AppendGrammarInfo("zen-0.1");
-	NameSpace.DefineStatement("try", TryPattern);
-	NameSpace.DefineExpression("$Catch$", CatchPattern);
-	NameSpace.DefineStatement("throw", ThrowPattern);
-	NameSpace.Generator.AppendGrammarInfo("zen-trycatch-0.1");
 	NameSpace.DefineRightExpression("instanceof", ZenPrecedence_Instanceof, InstanceOfPattern);
 	NameSpace.DefineStatement("class", ClassPattern);
 	NameSpace.DefineExpression("$FieldDecl$", FieldPattern);
-	NameSpace.Generator.AppendGrammarInfo("zen-class-0.1");
 	NameSpace.DefineStatement("assert", AssertPattern);
-	NameSpace.DefineStatement("asm", AsmPattern);
 	NameSpace.DefineStatement("asm", AsmMacroPattern);
+	NameSpace.DefineStatement("asm", AsmPattern);
 	NameSpace.DefineStatement("require", RequirePattern);
+	NameSpace.Generator.AppendGrammarInfo("zen-0.1");
+	NameSpace.DefineStatement("try", TryPattern);
+	NameSpace.DefineStatement("throw", ThrowPattern);
+	NameSpace.Generator.AppendGrammarInfo("zen-trycatch-0.1");
 }
