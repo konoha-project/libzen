@@ -214,7 +214,7 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 	// @Override public void VisitMethodCallNode(ZMethodCallNode Node) {
 	// 	this.GenerateSurroundCode(Node.RecvNode());
 	// 	this.CurrentBuilder.Append(".");
-	// 	this.CurrentBuilder.Append(Node.MethodName);
+	// 	this.CurrentBuilder.Append(Node.MethodName());
 	// 	this.VisitListNode("(", Node, ")");
 	// }
 

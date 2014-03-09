@@ -24,17 +24,22 @@
 
 package zen.ast;
 
-import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 import zen.util.Field;
 
-public final class ZGetterNode extends ZNode {
+public class ZGetterNode extends ZNode {
 	public final static int _Recv = 0;
-	@Field public String  FieldName = null;
-	@Field public ZToken NameToken = null;
+	public static final int _NameInfo = 1;
+
+	@Field public String  GivenName = null;
+
+	protected ZGetterNode(ZNode ParentNode, ZNode RecvNode, int Size) {
+		super(ParentNode, null, Size);
+		this.SetNode(ZGetterNode._Recv, RecvNode);
+	}
 
 	public ZGetterNode(ZNode ParentNode, ZNode RecvNode) {
-		super(ParentNode, null, 1);
+		super(ParentNode, null, 2);
 		this.SetNode(ZGetterNode._Recv, RecvNode);
 	}
 
@@ -43,12 +48,10 @@ public final class ZGetterNode extends ZNode {
 	}
 
 	public final String GetName() {
-		return this.FieldName;
-	}
-
-	@Override public void SetNameInfo(ZToken NameToken, String Name) {
-		this.FieldName = Name;
-		this.NameToken = NameToken;
+		if(this.GivenName == null) {
+			this.GivenName = this.AST[ZGetterNode._NameInfo].SourceToken.GetTextAsName();
+		}
+		return this.GivenName;
 	}
 
 	@Override public void Accept(ZVisitor Visitor) {

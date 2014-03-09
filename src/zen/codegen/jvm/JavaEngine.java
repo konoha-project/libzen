@@ -389,12 +389,12 @@ public class JavaEngine extends ZSourceEngine {
 	}
 
 	@Override public void VisitMethodCallNode(ZMethodCallNode Node) {
-		Method jMethod = this.Solution.GetMethod(Node.RecvNode().Type, Node.MethodName, Node);
+		Method jMethod = this.Solution.GetMethod(Node.RecvNode().Type, Node.MethodName(), Node);
 		if(jMethod != null) {
 			this.EvalMethod(Node, jMethod, Node.RecvNode(), this.PackNodes(null, Node));
 		}
 		else {
-			ZLogger._LogError(Node.SourceToken, "no method: " + Node.MethodName + " of " + Node.RecvNode().Type);
+			ZLogger._LogError(Node.SourceToken, "no method: " + Node.MethodName() + " of " + Node.RecvNode().Type);
 			this.StopVisitor();
 		}
 	}

@@ -24,43 +24,23 @@
 
 package zen.ast;
 
-import zen.parser.ZToken;
 import zen.parser.ZVisitor;
-import zen.util.Field;
 
-public final class ZSetterNode extends ZNode {
+public final class ZSetterNode extends ZGetterNode {
 	public final static int _Recv = 0;
-	public final static int _Expr = 1;
-
-	@Field public String  FieldName = null;
-	@Field public ZToken  NameToken = null;
+	public static final int _NameInfo = 1;
+	public final static int _Expr = 2;
 
 	public ZSetterNode(ZNode ParentNode, ZNode RecvNode) {
-		super(ParentNode, null, 2);
-		this.SetNode(ZSetterNode._Recv, RecvNode);
-	}
-
-	public final ZNode RecvNode() {
-		return this.AST[ZSetterNode._Recv ];
-	}
-
-	public final String GetName() {
-		return this.FieldName;
+		super(ParentNode, RecvNode, 3);
 	}
 
 	public final ZNode ExprNode() {
 		return this.AST[ZSetterNode._Expr ];
 	}
 
-	@Override public void SetNameInfo(ZToken NameToken, String Name) {
-		this.FieldName = Name;
-		this.NameToken = NameToken;
-	}
-
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitSetterNode(this);
 	}
-	public final boolean IsStaticField() {
-		return this.RecvNode() instanceof ZTypeNode;
-	}
+
 }

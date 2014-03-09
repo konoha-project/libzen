@@ -260,16 +260,16 @@ public class JavaScriptGenerator extends ZSourceGenerator {
 			this.CurrentBuilder.Append("(");
 			this.GenerateSurroundCode(RecvNode);
 			this.CurrentBuilder.Append(".");
-			this.CurrentBuilder.Append(Node.MethodName);
+			this.CurrentBuilder.Append(Node.MethodName());
 			this.CurrentBuilder.Append("__ || ");
 			this.CurrentBuilder.Append(RecvNode.Type.ShortName);
 			this.CurrentBuilder.Append("_");
-			this.CurrentBuilder.Append(Node.MethodName);
+			this.CurrentBuilder.Append(Node.MethodName());
 			this.CurrentBuilder.Append(")");
 		}else{
 			this.GenerateSurroundCode(RecvNode);
 			this.CurrentBuilder.Append(".");
-			this.CurrentBuilder.Append(Node.MethodName);
+			this.CurrentBuilder.Append(Node.MethodName());
 		}
 		//this.GenerateSurroundCode(Node.RecvNode());
 		this.VisitListNode("(", Node, ")");

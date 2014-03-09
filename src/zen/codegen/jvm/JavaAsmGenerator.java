@@ -387,7 +387,7 @@ public class JavaAsmGenerator extends JavaGenerator {
 
 	@Override public void VisitMethodCallNode(ZMethodCallNode Node) {
 		this.AsmBuilder.SetLineNumber(Node);
-		Method jMethod = this.GetMethod(Node.RecvNode().Type, Node.MethodName, Node);
+		Method jMethod = this.GetMethod(Node.RecvNode().Type, Node.MethodName(), Node);
 		if(jMethod != null) {
 			if(!Modifier.isStatic(jMethod.getModifiers())) {
 				this.AsmBuilder.PushNode(null, Node.RecvNode());
@@ -404,7 +404,7 @@ public class JavaAsmGenerator extends JavaGenerator {
 		else {
 			jMethod = JavaMethodTable.GetStaticMethod("InvokeUnresolvedMethod");
 			this.AsmBuilder.PushNode(Object.class, Node.RecvNode());
-			this.AsmBuilder.PushConst(Node.MethodName);
+			this.AsmBuilder.PushConst(Node.MethodName());
 			this.AsmBuilder.PushNodeListAsArray(Object.class, 0, Node);
 			this.AsmBuilder.ApplyStaticMethod(Node, jMethod);
 		}
