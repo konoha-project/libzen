@@ -85,7 +85,7 @@ public class JavaScriptGenerator extends ZSourceGenerator {
 	}
 
 	@Override public String NameLocalVariable(String Name, int Index) {
-		// FIXME: Because of some unknown reasons, original SafeName dosen't work well. I use SafeName instead of SafeName temporary.
+		// FIXME: Because of some unknown reasons, original NameLocalVariable dosen't work well. I use NameLocalVariable instead of NameLocalVariable temporary.
 		if(Index == 0) {
 			@Var String SafeName = this.ReservedNameMap.GetOrNull(Name);
 			if(SafeName == null) {
@@ -103,14 +103,13 @@ public class JavaScriptGenerator extends ZSourceGenerator {
 	@Override public void VisitInstanceOfNode(ZInstanceOfNode Node) {
 		this.CurrentBuilder.Append("(");
 		this.GenerateCode(null, Node.LeftNode());
-		this.CurrentBuilder.Append(").constructor.name == (");
+		this.CurrentBuilder.Append(").constructor.name === ");
 		this.GenerateTypeName(Node.TargetType());
 		this.CurrentBuilder.Append(").name");
 	}
 
 	@Override public void VisitThrowNode(ZThrowNode Node) {
 		this.CurrentBuilder.Append("throw ");
-		this.CurrentBuilder.AppendWhiteSpace();
 		this.GenerateCode(null, Node.ExprNode());
 	}
 
@@ -161,7 +160,7 @@ public class JavaScriptGenerator extends ZSourceGenerator {
 		@Var boolean IsLambda = (Node.FuncName() == null);
 		@Var boolean IsInstanceMethod = (!IsLambda && Node.AST.length > 1 && Node.AST[1/*first param*/] instanceof ZParamNode);
 		@Var ZType SelfType = IsInstanceMethod ? Node.AST[1/*first param*/].Type : null;
-		@Var boolean IsConstructor = IsInstanceMethod && SelfType.ShortName.equals(Node.FuncName());
+		@Var boolean IsConstructor = IsInstanceMethod && Node.FuncName().equals(SelfType.GetName());
 
 		if(IsConstructor){
 			@Var ZNode Block = Node.BlockNode();

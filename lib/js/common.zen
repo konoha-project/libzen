@@ -16,12 +16,12 @@ asm macro substring "$[0].substring($[1])" : Func<String,int,String>;
 asm macro substring "$[0].substring($[1],$[2])" : Func<String,int,int,String>;
 asm macro indexOf "$[0].indexOf($[1])" : Func<String,String,int>;
 asm macro indexOf "$[0].indexOf($[1], $[2])" : Func<String,int,String,int>;
-asm macro equals "FIXME $[0].equals($[1])" : Func<String,String,boolean>;
-asm macro startsWith "FIXME $[0].startsWith($[1])" : Func<String,String,boolean>;
-asm macro endsWith "FIXME $[0].endsWith($[1])" : Func<String,String,boolean>;
+asm macro equals "($[0] === $[1])" : Func<String,String,boolean>;
+asm macro startsWith "($[0].lastIndexOf($[1], 0) === 0)" : Func<String,String,boolean>;
+asm macro endsWith "($[0].slice(- $[1].length) === $[1])" : Func<String,String,boolean>;
 
 // Array
-asm macro size "$[0].size" : Func<α[],int>;
+asm macro size "$[0].length" : Func<α[],int>;
 asm macro clear "$[0].splice(0, $[0].length)" : Func<α[],int,void>;
 asm macro add "$[0].push($[1])" : Func<α[],α,void>;
-asm macro add "$[0].insert($[1], $[2])" : Func<α[],int,α,void>;
+asm macro add "$[0].splice($[1], 0, $[2])" : Func<α[],int,α,void>;

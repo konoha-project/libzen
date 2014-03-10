@@ -26,7 +26,7 @@ let AsmMacroPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, L
 	var AsmNode: ZNode = new ZAsmMacroNode(ParentNode);
 	AsmNode = TokenContext.MatchToken(AsmNode, "asm", ZTokenContext_Required);
 	AsmNode = TokenContext.MatchToken(AsmNode, "macro", ZTokenContext_Required);
-	AsmNode = TokenContext.MatchPattern(AsmNode, ZNode_NameInfo, "$Name$", ZTokenContext_Required);
+	AsmNode = TokenContext.MatchPattern(AsmNode, ZNode_NameInfo, "$StringLiteral$", ZTokenContext_Required);
 	AsmNode = TokenContext.MatchPattern(AsmNode, ZAsmMacroNode_Macro, "$StringLiteral$", ZTokenContext_Required);
 	AsmNode = TokenContext.MatchPattern(AsmNode, ZNode_TypeInfo, "$TypeAnnotation$", ZTokenContext_Required);
 	return AsmNode;
@@ -138,16 +138,6 @@ let CastPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftN
 	CastNode = TokenContext.MatchToken(CastNode, ")", ZTokenContext_Required);
 	CastNode = TokenContext.MatchPattern(CastNode, ZCastNode_Expr, "$RightExpression$", ZTokenContext_Required);
 	return CastNode;
-}
-
-let CatchPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
-	var CatchNode: ZNode = new ZCatchNode(ParentNode);
-	CatchNode = TokenContext.MatchToken(CatchNode, "catch", ZTokenContext_Required);
-	CatchNode = TokenContext.MatchToken(CatchNode, "(", ZTokenContext_Required);
-	CatchNode = TokenContext.MatchPattern(CatchNode, ZNode_NameInfo, "$Name$", ZTokenContext_Required);
-	CatchNode = TokenContext.MatchToken(CatchNode, ")", ZTokenContext_Required);
-	CatchNode = TokenContext.MatchPattern(CatchNode, ZCatchNode_Block, "$Block$", ZTokenContext_Required);
-	return CatchNode;
 }
 
 let ClassPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
@@ -464,11 +454,14 @@ let ParamPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, Left
 }
 
 let PrototypePattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNode: ZNode): ZNode {
-	var FuncNode: ZNode = new ZPrototypeNode(ParentNode);
+	var FuncNode: ZNode = new ZFunctionNode(ParentNode);
 	FuncNode = TokenContext.MatchToken(FuncNode, "function", ZTokenContext_Required);
 	FuncNode = TokenContext.MatchPattern(FuncNode, ZNode_NameInfo, "$Name$", ZTokenContext_Required);
 	FuncNode = TokenContext.MatchNtimes(FuncNode, "(", "$Param$", ",", ")");
 	FuncNode = TokenContext.MatchPattern(FuncNode, ZNode_TypeInfo, "$TypeAnnotation$", ZTokenContext_Required);
+	if(FuncNode instanceof ZFunctionNode) {
+		return new ZPrototypeNode((ZFunctionNode)FuncNode);
+	}
 	return FuncNode;
 }
 
@@ -633,8 +626,12 @@ let TryPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNo
 	TryNode = TokenContext.MatchToken(TryNode, "try", ZTokenContext_Required);
 	TryNode = TokenContext.MatchPattern(TryNode, ZTryNode_Try, "$Block$", ZTokenContext_Required);
 	var count: int = 0;
-	if(TokenContext.IsNewLineToken("catch")) {
-		TryNode = TokenContext.MatchPattern(TryNode, ZTryNode_Catch, "$Catch$", ZTokenContext_Required);
+	if(TokenContext.MatchNewLineToken("catch")) {
+		TryNode = TokenContext.MatchToken(TryNode, "(", ZTokenContext_Required);
+		TryNode = TokenContext.MatchPattern(TryNode, ZNode_NameInfo, "$Name$", ZTokenContext_Required);
+		TryNode = TokenContext.MatchPattern(TryNode, ZNode_TypeInfo, "$TypeAnnotation$", ZTokenContext_Optional);
+		TryNode = TokenContext.MatchToken(TryNode, ")", ZTokenContext_Required);
+		TryNode = TokenContext.MatchPattern(TryNode, ZTryNode_Catch, "$Block$", ZTokenContext_Required);
 		count = count + 1;
 	}
 	if(TokenContext.MatchNewLineToken("finally")) {
@@ -642,7 +639,7 @@ let TryPattern = function(ParentNode: ZNode, TokenContext: ZTokenContext, LeftNo
 		count = count + 1;
 	}
 	if(count == 0 && !TryNode.IsErrorNode()) {
-		return TryNode.AST[ZTryNode_Try]; // no catch and finally
+		TryNode = new ZErrorNode(ParentNode, TryNode.SourceToken, "either catch or finally is expected");
 	}
 	return TryNode;
 }
