@@ -167,8 +167,6 @@ public abstract class ZGenerator extends ZVisitor {
 		return null;
 	}
 
-	public abstract boolean StartCodeGeneration(ZNode Node, boolean IsInteractive);
-
 	@ZenMethod public ZType GetFieldType(ZType BaseType, String Name) {
 		return ZType.VarType;     // undefined
 	}
@@ -201,6 +199,14 @@ public abstract class ZGenerator extends ZVisitor {
 
 	public final String NameClass(ZType ClassType) {
 		return ClassType.ShortName + "" + ClassType.TypeId;
+	}
+
+	public static String NameFuncClass(ZFuncType FuncType) {
+		return "ZFunc"+ FuncType.TypeId;
+	}
+
+	public String NameFunctionClass(String FuncName, ZFuncType FuncType) {
+		return "F" + FuncType.StringfySignature(FuncName);
 	}
 
 	//

@@ -10,9 +10,9 @@ import zen.util.Var;
 
 class AsmClassLoader extends ClassLoader {
 	private final HashMap<String,AsmClassBuilder> ClassBuilderMap = new HashMap<String, AsmClassBuilder>();
-	private final JavaAsmGenerator Generator;
+	private final AsmJavaGenerator Generator;
 
-	public AsmClassLoader(JavaAsmGenerator Generator) {
+	public AsmClassLoader(AsmJavaGenerator Generator) {
 		this.Generator = Generator;
 	}
 

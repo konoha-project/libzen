@@ -29,15 +29,15 @@ import zen.type.ZType;
 
 class AsmMethodBuilder extends MethodNode {
 
-	final AsmMethodBuilder          Parent;
-	final JavaAsmGenerator   Generator;
+	final AsmMethodBuilder        Parent;
+	final AsmJavaGenerator        Generator;
 	ArrayList<JavaLocalStack>     LocalVals  = new ArrayList<JavaLocalStack>();
 	int UsedStack = 0;
 	Stack<Label>                  BreakLabelStack = new Stack<Label>();
 	Stack<Label>                  ContinueLabelStack = new Stack<Label>();
 	int PreviousLine = 0;
 
-	public AsmMethodBuilder(int acc, String Name, String Desc, JavaAsmGenerator Generator) {
+	public AsmMethodBuilder(int acc, String Name, String Desc, AsmJavaGenerator Generator) {
 		super(acc, Name, Desc, null, null);
 		this.Generator = Generator;
 		this.Parent = Generator.AsmBuilder;
@@ -331,7 +331,6 @@ class AsmMethodBuilder extends MethodNode {
 	public void visitTypeInsn(int opcode, Class<?> C) {
 		this.visitTypeInsn(opcode, Type.getInternalName(C));
 	}
-
 
 
 }

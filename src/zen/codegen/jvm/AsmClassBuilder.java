@@ -19,7 +19,7 @@ import zen.util.LibZen;
 import zen.util.Var;
 
 class AsmClassBuilder {
-	final JavaAsmGenerator Generator;
+	final AsmJavaGenerator Generator;
 	final int ClassQualifer;
 	final String SourceFile;
 	final String ClassName;
@@ -27,7 +27,7 @@ class AsmClassBuilder {
 	final ArrayList<MethodNode> MethodList = new ArrayList<MethodNode>();
 	final ArrayList<FieldNode> FieldList = new ArrayList<FieldNode>();
 
-	AsmClassBuilder(JavaAsmGenerator Generator, int ClassQualifer, String SourceFile, String ClassName, String SuperClass) {
+	AsmClassBuilder(AsmJavaGenerator Generator, int ClassQualifer, String SourceFile, String ClassName, String SuperClass) {
 		this.Generator = Generator;
 		this.ClassQualifer = ClassQualifer;
 		this.SourceFile = SourceFile;
