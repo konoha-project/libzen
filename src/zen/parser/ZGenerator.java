@@ -290,7 +290,7 @@ public abstract class ZGenerator extends ZVisitor {
 		Node.Accept(this);
 	}
 
-	private boolean ExecStatement(ZNode Node, boolean IsInteractive) {
+	protected boolean ExecStatement(ZNode Node, boolean IsInteractive) {
 		//this.InteractiveContext = IsInteractive;
 		this.EnableVisitor();
 		this.TopLevelSymbol = null;
