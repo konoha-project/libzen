@@ -57,7 +57,7 @@ public abstract class ZGenerator extends ZVisitor {
 
 	@Field public final ZNameSpace      RootNameSpace;
 	@Field public ZLogger               Logger;
-	@Field public ZTypeChecker       TypeChecker;
+	@Field public ZTypeChecker          TypeChecker;
 	@Field public ZLangInfo             LangInfo;
 	@Field protected String             TopLevelSymbol = null;
 	@Field private int                  UniqueNumber = 0;
@@ -71,7 +71,7 @@ public abstract class ZGenerator extends ZVisitor {
 		this.StoppedVisitor = false;
 	}
 
-	protected final void SetTypeCheker(ZTypeChecker TypeChecker) {
+	public final void SetTypeChecker(ZTypeChecker TypeChecker) {
 		this.TypeChecker = TypeChecker;
 	}
 
@@ -303,6 +303,7 @@ public abstract class ZGenerator extends ZVisitor {
 			}
 			if(this.IsVisitable()) {
 				if(Node instanceof ZFunctionNode || Node instanceof ZClassNode || Node instanceof ZLetNode) {
+					Node.Type = ZType.VoidType;
 					this.GenerateStatement(Node);
 				}
 				else {

@@ -965,6 +965,22 @@ public class JavaAsmGenerator extends JavaGenerator {
 
 	}
 
+	@Override public void ExecMain() {
+		this.Logger.OutputErrorsToStdErr();
+		if(this.MainFuncNode != null) {
+			@Var JavaStaticFieldNode MainFunc = this.MainFuncNode;
+			try {
+				Method Method = MainFunc.StaticClass.getMethod("f");
+				Method.invoke(null);
+			}
+			catch(NoSuchMethodException e) {
+				System.out.println(e);
+			}
+			catch(Exception e) {
+				System.out.println(e);
+			}
+		}
+	}
 
 }
 

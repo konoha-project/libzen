@@ -39,6 +39,7 @@ import java.lang.reflect.Method;
 
 import zen.ast.ZNode;
 import zen.codegen.jvm.JavaTypeTable;
+import zen.lang.zen.ZenTypeSafer;
 import zen.parser.ZGenerator;
 import zen.parser.ZNameSpace;
 import zen.parser.ZSourceBuilder;
@@ -544,6 +545,7 @@ public class LibZen {
 	public final static ZGenerator _InitGenerator(@Nullable String ClassName, String GrammarClass) {
 		@Var ZGenerator Generator = LibZen._LoadGenerator(ClassName, null);
 		LibZen._ImportGrammar(Generator.RootNameSpace, GrammarClass);
+		Generator.SetTypeChecker(new ZenTypeSafer(Generator));
 		Generator.RequireLibrary("common", null);
 		return Generator;
 	}

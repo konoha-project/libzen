@@ -1114,21 +1114,5 @@ public class JavaEngine {
 	//		}
 	//	}
 	//
-	//	@Override public void ExecMain() {
-	//		this.Generator.Logger.OutputErrorsToStdErr();
-	//		if(this.Solution.MainFuncNode != null) {
-	//			@Var JavaStaticFieldNode MainFunc = this.Solution.MainFuncNode;
-	//			try {
-	//				Method Method = MainFunc.StaticClass.getMethod("f");
-	//				Method.invoke(null);
-	//			}
-	//			catch(NoSuchMethodException e) {
-	//				System.out.println(e);
-	//			}
-	//			catch(Exception e) {
-	//				System.out.println(e);
-	//			}
-	//		}
-	//	}
 	//>>>>>>> 261969b3579f70d267dae163452ba81174445cc5
 }

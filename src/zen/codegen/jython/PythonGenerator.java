@@ -110,14 +110,12 @@ public class PythonGenerator extends ZSourceGenerator {
 		@Var int i = 0;
 		while (i < BlockNode.GetListSize()) {
 			ZNode SubNode = BlockNode.GetListAt(i);
-			this.CurrentBuilder.AppendNewLine();
-			this.GenerateCode(null, SubNode);
+			this.GenerateStatement(SubNode);
 			this.CurrentBuilder.Append(this.SemiColon);
 			i = i + 1;
 		}
 		if (i == 0) {
-			this.CurrentBuilder.AppendNewLine();
-			this.CurrentBuilder.Append("pass");
+			this.CurrentBuilder.AppendNewLine("pass");
 		}
 	}
 

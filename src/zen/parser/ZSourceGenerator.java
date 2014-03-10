@@ -123,7 +123,7 @@ public class ZSourceGenerator extends ZGenerator {
 	public ZSourceGenerator(String Extension, String LangVersion) {
 		super(new ZLangInfo(LangVersion, Extension));
 		this.InitBuilderList();
-		this.SetTypeCheker(new ZenTypeSafer(this));
+		this.SetTypeChecker(new ZenTypeSafer(this));
 	}
 
 	@ZenMethod protected void InitBuilderList() {
@@ -256,6 +256,17 @@ public class ZSourceGenerator extends ZGenerator {
 	//		Builder.AppendLine("");
 	//	}
 
+	@Override public void GenerateStatement(ZNode Node) {
+		this.CurrentBuilder.AppendNewLine();
+		if(Node instanceof ZCastNode) {
+			if(Node.Type == ZType.VoidType) {
+				Node.AST[0].Accept(this);
+				return;
+			}
+		}
+		Node.Accept(this);
+	}
+
 	protected final void GenerateCode(String Pre, ZType ContextType, ZNode Node, String Post) {
 		if(Pre != null && Pre.length() > 0) {
 			this.CurrentBuilder.Append(Pre);
@@ -300,16 +311,11 @@ public class ZSourceGenerator extends ZGenerator {
 		}
 	}
 
-	//	public void AppendCode(String RawSource) {
-	//		this.CurrentBuilder.Append(RawSource);
-	//	}
-
 	public void VisitStmtList(ZListNode BlockNode) {
 		@Var int i = 0;
 		while (i < BlockNode.GetListSize()) {
 			@Var ZNode SubNode = BlockNode.GetListAt(i);
-			this.CurrentBuilder.AppendNewLine();
-			this.GenerateCode(null, SubNode);
+			this.GenerateStatement(SubNode);
 			i = i + 1;
 			if(i  < BlockNode.GetListSize()) {
 				this.CurrentBuilder.Append(this.SemiColon);

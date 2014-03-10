@@ -44,7 +44,6 @@ public class ZFunctionNode extends ZListNode {
 	@Field public boolean       IsExport = false;
 	@Field public ZFunctionNode ParentFunctionNode = null;
 	@Field public ZFuncType     ResolvedFuncType = null;
-	@Field public int VarIndex = 0;
 
 	public ZFunctionNode(ZNode ParentNode) {
 		super(ParentNode, null, 3);
