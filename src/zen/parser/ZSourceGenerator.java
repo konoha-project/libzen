@@ -233,6 +233,19 @@ public class ZSourceGenerator extends ZGenerator {
 		return true;
 	}
 
+	@Override public String Perform() {
+		@Var int i = 0;
+		LibZen._PrintLine("---");
+		while(i < this.BuilderList.size()) {
+			@Var ZSourceBuilder Builder = this.BuilderList.ArrayValues[i];
+			LibZen._PrintLine(Builder.toString());
+			Builder.Clear();
+			i = i + 1;
+		}
+		this.InitBuilderList();
+		return null;
+	}
+
 	//	public final void FlushErrorReport() {
 	//		@Var ZenSourceBuilder Builder = this.NewSourceBuilder();
 	//		@Var String[] Reports = this.Logger.GetReportedErrors();
@@ -721,6 +734,4 @@ public class ZSourceGenerator extends ZGenerator {
 		}
 		return false;
 	}
-
-
 }

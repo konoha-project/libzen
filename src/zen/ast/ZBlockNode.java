@@ -27,19 +27,20 @@ package zen.ast;
 import zen.parser.ZNameSpace;
 import zen.parser.ZVisitor;
 import zen.util.Field;
+import zen.util.Nullable;
 import zen.util.Var;
 
 public class ZBlockNode extends ZListNode {
 	@Field public ZNameSpace NullableNameSpace;
 
-	public ZBlockNode(ZNameSpace NameSpace) {
-		super(null, null, 0);
+	public ZBlockNode(ZNode ParentNode, @Nullable ZNameSpace NameSpace) {
+		super(ParentNode, null, 0);
 		this.NullableNameSpace = NameSpace;
 	}
 
-	public ZBlockNode(ZNode ParentNode, int Init) {
+	protected ZBlockNode(ZNode ParentNode, @Nullable ZNameSpace NameSpace, int Init) {  // call by ZVarNode
 		super(ParentNode, null, Init);
-		this.NullableNameSpace = null;
+		this.NullableNameSpace = NameSpace;
 	}
 
 	public final ZNameSpace GetBlockNameSpace() {

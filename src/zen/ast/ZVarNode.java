@@ -38,11 +38,11 @@ public class ZVarNode extends ZBlockNode {
 	@Field public int VarIndex      = -1;
 
 	public ZVarNode(ZNode ParentNode) {
-		super(ParentNode, 3);
+		super(ParentNode, null, 3);
 	}
 
 	public ZVarNode(String Name, ZType DeclType, ZNode InitNode) {
-		super(null, 3);
+		super(null, null, 3);
 		this.GivenName   = Name;
 		this.GivenType   = DeclType;
 		this.SetNode(ZVarNode._InitValue, InitNode);

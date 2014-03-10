@@ -78,7 +78,7 @@ public class ZContinueNode extends ZSyntaxSugarNode {
 		@Var String VarName = Generator.NameUniqueSymbol("continue");
 		@Var ZBlockNode ParentBlockNode = WhileNode.GetScopeBlockNode();
 		@Var ZVarNode VarNode = new ZVarNode(VarName, ZType.BooleanType, new ZBooleanNode(true));
-		@Var ZBlockNode WhileBlockNode = new ZBlockNode(null);
+		@Var ZBlockNode WhileBlockNode = Generator.TypeChecker.CreateBlockNode(null);
 		@Var ZWhileNode ContinueWhile = new ZWhileNode(new ZGetNameNode(VarName, ZType.BooleanType), WhileBlockNode);
 		VarNode.Append(ContinueWhile);
 		WhileBlockNode.Append(new ZSetNameNode(VarName, new ZBooleanNode(false)));

@@ -240,7 +240,7 @@ class ControlFlowGraph { // ControlFlowGraph
 		if(block instanceof ZBlockNode) {
 		}
 		else {
-			ZBlockNode NewBlock = new ZBlockNode(block.GetNameSpace());
+			ZBlockNode NewBlock = new ZBlockNode(null, block.GetNameSpace());
 			NewBlock.Append(block);
 			block = NewBlock;
 		}

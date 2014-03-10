@@ -10,7 +10,7 @@ import zen.util.ZMatchFunction;
 public class BlockPatternFunction extends ZMatchFunction {
 
 	@Override public ZNode Invoke(ZNode ParentNode, ZTokenContext TokenContext, ZNode LeftNode) {
-		@Var ZNode BlockNode = new ZBlockNode(ParentNode, 0);
+		@Var ZNode BlockNode = new ZBlockNode(ParentNode, null);
 		@Var ZToken SkipToken = TokenContext.GetToken();
 		BlockNode = TokenContext.MatchToken(BlockNode, "{", ZTokenContext._Required);
 		if(!BlockNode.IsErrorNode()) {

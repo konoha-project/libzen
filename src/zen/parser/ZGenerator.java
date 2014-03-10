@@ -57,7 +57,7 @@ public abstract class ZGenerator extends ZVisitor {
 
 	@Field public final ZNameSpace      RootNameSpace;
 	@Field public ZLogger               Logger;
-	@Field protected ZTypeChecker       TypeChecker;
+	@Field public ZTypeChecker       TypeChecker;
 	@Field public ZLangInfo             LangInfo;
 	@Field protected String             TopLevelSymbol = null;
 	@Field private int                  UniqueNumber = 0;
@@ -328,7 +328,7 @@ public abstract class ZGenerator extends ZVisitor {
 
 	public final boolean LoadScript(String ScriptText, String FileName, int LineNumber, boolean IsInteractive) {
 		@Var boolean Result = true;
-		@Var ZBlockNode TopBlockNode = new ZBlockNode(this.RootNameSpace);
+		@Var ZBlockNode TopBlockNode = new ZBlockNode(null, this.RootNameSpace);
 		@Var ZTokenContext TokenContext = new ZTokenContext(this, this.RootNameSpace, FileName, LineNumber, ScriptText);
 		TokenContext.SkipEmptyStatement();
 		@Var ZToken SkipToken = TokenContext.GetToken();
