@@ -27,14 +27,19 @@ package zen.parser;
 
 import zen.ast.ZAsmMacroNode;
 import zen.ast.ZAsmNode;
+import zen.ast.ZBlockNode;
+import zen.ast.ZClassNode;
 import zen.ast.ZDefaultValueNode;
 import zen.ast.ZErrorNode;
+import zen.ast.ZFunctionNode;
+import zen.ast.ZLetNode;
 import zen.ast.ZListNode;
 import zen.ast.ZNode;
 import zen.ast.ZNullNode;
 import zen.ast.ZStringNode;
 import zen.ast.sugar.ZDesugarNode;
 import zen.ast.sugar.ZSyntaxSugarNode;
+import zen.ast.sugar.ZTopLevelNode;
 import zen.type.ZFunc;
 import zen.type.ZFuncType;
 import zen.type.ZPrototype;
@@ -50,36 +55,40 @@ public abstract class ZGenerator extends ZVisitor {
 	@Field public ZenMap<String>        ImportedLibraryMap = new ZenMap<String>(null);
 	@Field private final ZenMap<ZFunc>  DefinedFuncMap = new ZenMap<ZFunc>(null);
 
-	@Field private String            GrammarInfo;
-	@Field public final String       LanguageExtention;
-	@Field public final String       TargetVersion;
+	@Field public final ZNameSpace      RootNameSpace;
+	@Field public ZLogger               Logger;
+	@Field protected ZTypeChecker       TypeChecker;
+	@Field public ZLangInfo             LangInfo;
+	@Field protected String             TopLevelSymbol = null;
+	@Field private int                  UniqueNumber = 0;
+	@Field private boolean              StoppedVisitor;
 
-	@Field public final ZNameSpace   RootNameSpace;
-	@Field private int UniqueNumber = 0;
-	@Field public String             OutputFile;
-	@Field public ZLogger            Logger;
-
-	@Field private boolean StoppedVisitor;
-
-	protected ZGenerator(String LanguageExtension, String TargetVersion) {
+	protected ZGenerator(ZLangInfo LangInfo) {
 		this.RootNameSpace = new ZNameSpace(this, null);
-		this.GrammarInfo = "";
-		this.LanguageExtention = LanguageExtension;
-		this.TargetVersion = TargetVersion;
-
-		this.OutputFile = null;
-		this.Logger = new ZLogger();
+		this.Logger        = new ZLogger();
+		this.LangInfo      = LangInfo;
+		this.TypeChecker   = null;
 		this.StoppedVisitor = false;
 	}
 
-	public abstract ZSourceEngine GetEngine();
+	protected final void SetTypeCheker(ZTypeChecker TypeChecker) {
+		this.TypeChecker = TypeChecker;
+	}
 
-	@ZenMethod public void ImportLocalGrammar(ZNameSpace NameSpace) {
-		// TODO Auto-generated method stub
+	@Override public final void EnableVisitor() {
+		this.StoppedVisitor = false;
+	}
+
+	@Override public final void StopVisitor() {
+		this.StoppedVisitor = true;
+	}
+
+	@Override public final boolean IsVisitable() {
+		return !this.StoppedVisitor;
 	}
 
 	@ZenMethod protected void GenerateImportLibrary(String LibName) {
-		//		this.HeaderBuilder.AppendNewLine("require ", LibName, this.LineFeed);
+		//	this.HeaderBuilder.AppendNewLine("require ", LibName, this.LineFeed);
 	}
 
 	public final void ImportLibrary(String LibName) {
@@ -88,6 +97,10 @@ public abstract class ZGenerator extends ZVisitor {
 			this.GenerateImportLibrary(LibName);
 			this.ImportedLibraryMap.put(LibName, LibName);
 		}
+	}
+
+	public final void SetDefinedFunc(ZFunc Func) {
+		this.DefinedFuncMap.put(Func.GetSignature(), Func);
 	}
 
 	public final void SetAsmMacro(ZNameSpace NameSpace, String Symbol, ZFuncType MacroType, String MacroText) {
@@ -154,37 +167,6 @@ public abstract class ZGenerator extends ZVisitor {
 		return null;
 	}
 
-	@ZenMethod protected String NameOutputFile(String FileName) {
-		if(FileName != null) {
-			return FileName + "." + this.LanguageExtention;
-		}
-		return FileName;
-	}
-
-	@Override public final void EnableVisitor() {
-		this.StoppedVisitor = false;
-	}
-
-	@Override public final void StopVisitor() {
-		this.StoppedVisitor = true;
-	}
-
-	@Override public final boolean IsVisitable() {
-		return !this.StoppedVisitor;
-	}
-
-	public final String GetGrammarInfo() {
-		return this.GrammarInfo;
-	}
-
-	public final void AppendGrammarInfo(String GrammarInfo) {
-		this.GrammarInfo = this.GrammarInfo + GrammarInfo + " ";
-	}
-
-	public final String GetTargetLangInfo() {
-		return this.TargetVersion;
-	}
-
 	public abstract boolean StartCodeGeneration(ZNode Node, boolean IsInteractive);
 
 	@ZenMethod public ZType GetFieldType(ZType BaseType, String Name) {
@@ -222,9 +204,6 @@ public abstract class ZGenerator extends ZVisitor {
 	}
 
 	//
-	public final void SetDefinedFunc(ZFunc Func) {
-		this.DefinedFuncMap.put(Func.GetSignature(), Func);
-	}
 
 	public final ZPrototype SetPrototype(ZNode Node, String FuncName, ZFuncType FuncType) {
 		@Var ZFunc Func = this.GetDefinedFunc(FuncName, FuncType);
@@ -303,9 +282,127 @@ public abstract class ZGenerator extends ZVisitor {
 		}
 	}
 
-	public void RequireLibrary(String resourcePath) {
-		// TODO Auto-generated method stub
-
+	@ZenMethod protected void GenerateCode(ZType ContextType, ZNode Node) {
+		Node.Accept(this);
 	}
+
+	@ZenMethod public void GenerateStatement(ZNode Node) {
+		Node.Accept(this);
+	}
+
+	private boolean ExecStatement(ZNode Node, boolean IsInteractive) {
+		//this.InteractiveContext = IsInteractive;
+		this.EnableVisitor();
+		this.TopLevelSymbol = null;
+		if(Node instanceof ZTopLevelNode) {
+			((ZTopLevelNode)Node).Perform(this.RootNameSpace);
+		}
+		else {
+			if(this.TypeChecker != null) {
+				Node = this.TypeChecker.CheckType(Node, ZType.VarType);
+			}
+			if(this.IsVisitable()) {
+				if(Node instanceof ZFunctionNode || Node instanceof ZClassNode || Node instanceof ZLetNode) {
+					this.GenerateStatement(Node);
+				}
+				else {
+					if(!this.LangInfo.AllowTopLevelScript) {
+						@Var String FuncName = this.NameUniqueSymbol("Main");
+						Node = this.TypeChecker.CreateFunctionNode(Node.ParentNode, FuncName, Node);
+						this.TopLevelSymbol = FuncName;
+					}
+					this.GenerateStatement(Node);
+				}
+			}
+		}
+		return this.IsVisitable();
+	}
+
+	public String Perform() {
+		if(this.TopLevelSymbol != null) {
+			System.out.println("TODO: " + this.TopLevelSymbol);
+		}
+		return null;
+	}
+
+
+	public final boolean LoadScript(String ScriptText, String FileName, int LineNumber, boolean IsInteractive) {
+		@Var boolean Result = true;
+		@Var ZBlockNode TopBlockNode = new ZBlockNode(this.RootNameSpace);
+		@Var ZTokenContext TokenContext = new ZTokenContext(this, this.RootNameSpace, FileName, LineNumber, ScriptText);
+		TokenContext.SkipEmptyStatement();
+		@Var ZToken SkipToken = TokenContext.GetToken();
+		while(TokenContext.HasNext()) {
+			TokenContext.SetParseFlag(ZTokenContext._NotAllowSkipIndent);
+			TopBlockNode.ClearListAfter(0);
+			SkipToken = TokenContext.GetToken();
+			@Var ZNode StmtNode = TokenContext.ParsePattern(TopBlockNode, "$Statement$", ZTokenContext._Required);
+			if(StmtNode.IsErrorNode()) {
+				TokenContext.SkipError(SkipToken);
+			}
+			if(!this.ExecStatement(StmtNode, IsInteractive)) {
+				Result = false;
+				break;
+			}
+			TokenContext.SkipEmptyStatement();
+			TokenContext.Vacume();
+		}
+		this.Logger.OutputErrorsToStdErr();
+		return Result;
+	}
+
+
+	public final boolean LoadFile(String FileName, @Nullable ZToken SourceToken) {
+		@Var String ScriptText = LibZen._LoadTextFile(FileName);
+		if(ScriptText == null) {
+			ZLogger._LogErrorExit(SourceToken, "file not found: " + FileName);
+			return false;
+		}
+		return this.LoadScript(ScriptText, FileName, 1, false);
+	}
+
+	public final boolean RequireLibrary(String LibName, @Nullable ZToken SourceToken) {
+		@Var String Key = "_Z" + LibName.toLowerCase();
+		@Var String Value = this.ImportedLibraryMap.GetOrNull(Key);
+		if(Value == null) {
+			@Var String Path = this.LangInfo.GetLibPath(LibName);
+			@Var String Script = LibZen._LoadTextFile(Path);
+			if(Script == null) {
+				ZLogger._LogErrorExit(SourceToken, "library not found: " + LibName + " as " + Path);
+				return false;
+			}
+			@Var boolean Result = this.LoadScript(Script, Path, 1, false);
+			this.ImportedLibraryMap.put(Key, Path);
+			return Result;
+		}
+		return true;
+	}
+
+	@ZenMethod public void ExecMain() {
+		this.Logger.OutputErrorsToStdErr();
+	}
+
+
+	//	public final String Translate(String ScriptText, String FileName, int LineNumber) {
+	//		@Var ZBlockNode TopBlockNode = new ZBlockNode(this.Generator.RootNameSpace);
+	//		@Var ZTokenContext TokenContext = new ZTokenContext(this.Generator, this.Generator.RootNameSpace, FileName, LineNumber, ScriptText);
+	//		TokenContext.SkipEmptyStatement();
+	//		@Var ZToken SkipToken = TokenContext.GetToken();
+	//		while(TokenContext.HasNext()) {
+	//			TokenContext.SetParseFlag(ZTokenContext._NotAllowSkipIndent);
+	//			TopBlockNode.ClearListAfter(0);
+	//			SkipToken = TokenContext.GetToken();
+	//			@Var ZNode ParsedNode = TokenContext.ParsePattern(TopBlockNode, "$Statement$", ZTokenContext._Required);
+	//			if(ParsedNode.IsErrorNode()) {
+	//				TokenContext.SkipError(SkipToken);
+	//			}
+	//			this.Exec2(ParsedNode, false);
+	//			TokenContext.SkipEmptyStatement();
+	//			TokenContext.Vacume();
+	//		}
+	//		return this.Generator.GetSourceText();
+	//	}
+
+
 
 }

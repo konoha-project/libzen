@@ -43,7 +43,6 @@ import zen.parser.ZGenerator;
 import zen.parser.ZNameSpace;
 import zen.parser.ZSourceBuilder;
 import zen.parser.ZSourceContext;
-import zen.parser.ZSourceEngine;
 import zen.parser.ZSourceGenerator;
 import zen.parser.ZTokenContext;
 import zen.parser.ZTokenFunc;
@@ -542,13 +541,11 @@ public class LibZen {
 		return new ZSourceGenerator("zen", "0.1");
 	}
 
-	public final static ZSourceEngine _LoadEngine(@Nullable String ClassName, String GrammarClass) {
+	public final static ZGenerator _InitGenerator(@Nullable String ClassName, String GrammarClass) {
 		@Var ZGenerator Generator = LibZen._LoadGenerator(ClassName, null);
 		LibZen._ImportGrammar(Generator.RootNameSpace, GrammarClass);
-		Generator.ImportLocalGrammar(Generator.RootNameSpace);
-		ZSourceEngine Engine = Generator.GetEngine();
-		Engine.RequireLibrary("common");
-		return Engine;
+		Generator.RequireLibrary("common", null);
+		return Generator;
 	}
 
 	//

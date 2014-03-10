@@ -120,9 +120,10 @@ public class ZSourceGenerator extends ZGenerator {
 
 	@Field public boolean ReadableCode = true;
 
-	public ZSourceGenerator(String TargetCode, String TargetVersion) {
-		super(TargetCode, TargetVersion);
+	public ZSourceGenerator(String Extension, String LangVersion) {
+		super(new ZLangInfo(LangVersion, Extension));
 		this.InitBuilderList();
+		this.SetTypeCheker(new ZenTypeSafer(this));
 	}
 
 	@ZenMethod protected void InitBuilderList() {
@@ -134,10 +135,6 @@ public class ZSourceGenerator extends ZGenerator {
 
 	@ZenMethod protected void Finish(String FileName) {
 
-	}
-
-	@Override public ZSourceEngine GetEngine() {
-		return new ZSourceEngine(new ZenTypeSafer(this), this);
 	}
 
 	protected final ZSourceBuilder AppendNewSourceBuilder() {
@@ -199,7 +196,7 @@ public class ZSourceGenerator extends ZGenerator {
 	@Override public final void WriteTo(@Nullable String FileName) {
 		this.Finish(FileName);
 		this.Logger.OutputErrorsToStdErr();
-		LibZen._WriteTo(this.NameOutputFile(FileName), this.BuilderList);
+		LibZen._WriteTo(this.LangInfo.NameOutputFile(FileName), this.BuilderList);
 		this.InitBuilderList();
 	}
 
@@ -245,11 +242,6 @@ public class ZSourceGenerator extends ZGenerator {
 	//		}
 	//		Builder.AppendLine("");
 	//	}
-
-
-	@ZenMethod protected void GenerateCode(ZType ContextType, ZNode Node) {
-		Node.Accept(this);
-	}
 
 	protected final void GenerateCode(String Pre, ZType ContextType, ZNode Node, String Post) {
 		if(Pre != null && Pre.length() > 0) {

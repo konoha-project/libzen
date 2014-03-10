@@ -14,6 +14,7 @@ import zen.ast.ZNullNode;
 import zen.ast.ZStringNode;
 import zen.ast.ZTypeNode;
 import zen.parser.ZGenerator;
+import zen.parser.ZLangInfo;
 import zen.parser.ZNameSpace;
 import zen.parser.ZSourceContext;
 import zen.parser.ZTokenContext;
@@ -32,11 +33,12 @@ public abstract class JavaGenerator extends ZGenerator {
 	private final ZenMap<Class<?>> GeneratedClassMap = new ZenMap<Class<?>>(null);
 
 	protected JavaGenerator(String TargetCode, String TargetVersion) {
-		super(TargetCode, TargetVersion);
+		super(new ZLangInfo(TargetVersion, TargetCode));
 		this.InitFuncClass();
+		this.ImportLocalGrammar(this.RootNameSpace);
 	}
 
-	@Override public void ImportLocalGrammar(ZNameSpace NameSpace) {
+	private void ImportLocalGrammar(ZNameSpace NameSpace) {
 		NameSpace.DefineStatement("import", new JavaImportPattern());
 		NameSpace.DefineExpression("$JavaClassPath$", new JavaClassPathPattern());
 	}

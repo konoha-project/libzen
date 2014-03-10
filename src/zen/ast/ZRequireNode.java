@@ -14,7 +14,7 @@ public class ZRequireNode extends ZTopLevelNode {
 
 	@Override public final void Perform(ZNameSpace NameSpace) {
 		@Var String ResourcePath = this.AST[JavaImportNode._Path].SourceToken.GetTextAsName();
-		NameSpace.Generator.RequireLibrary(ResourcePath);
+		NameSpace.Generator.RequireLibrary(ResourcePath, this.GetAstToken(JavaImportNode._Path));
 	}
 
 }

@@ -24,586 +24,533 @@
 
 package zen.codegen.jvm;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 
-import zen.ast.ZAndNode;
-import zen.ast.ZArrayLiteralNode;
-import zen.ast.ZBinaryNode;
-import zen.ast.ZBlockNode;
-import zen.ast.ZBooleanNode;
-import zen.ast.ZCastNode;
-import zen.ast.ZClassNode;
-import zen.ast.ZComparatorNode;
-import zen.ast.ZFloatNode;
-import zen.ast.ZFuncCallNode;
-import zen.ast.ZFunctionNode;
-import zen.ast.ZGetIndexNode;
-import zen.ast.ZGetNameNode;
-import zen.ast.ZGetterNode;
-import zen.ast.ZGroupNode;
-import zen.ast.ZIfNode;
-import zen.ast.ZIntNode;
-import zen.ast.ZLetNode;
-import zen.ast.ZListNode;
-import zen.ast.ZMacroNode;
-import zen.ast.ZMapEntryNode;
-import zen.ast.ZMapLiteralNode;
-import zen.ast.ZMethodCallNode;
-import zen.ast.ZNewObjectNode;
-import zen.ast.ZNode;
-import zen.ast.ZNotNode;
-import zen.ast.ZNullNode;
-import zen.ast.ZOrNode;
-import zen.ast.ZSetIndexNode;
-import zen.ast.ZSetterNode;
-import zen.ast.ZStringNode;
-import zen.ast.ZTypeNode;
-import zen.ast.ZUnaryNode;
-import zen.ast.sugar.ZLocalDefinedNode;
-import zen.parser.ZEmptyValue;
-import zen.parser.ZLogger;
-import zen.parser.ZMacroFunc;
-import zen.parser.ZSourceEngine;
-import zen.parser.ZTypeChecker;
-import zen.type.ZFunc;
-import zen.type.ZFuncType;
-import zen.util.LibZen;
-import zen.util.Var;
-import zen.util.ZFloatArray;
-import zen.util.ZIntArray;
-import zen.util.ZObjectArray;
-import zen.util.ZStringArray;
-import zen.util.ZenMap;
+public class JavaEngine {
 
-public class JavaEngine extends ZSourceEngine {
-
-	protected final JavaAsmGenerator Solution;
-	protected Object EvaledValue = null;
-
-	public JavaEngine(ZTypeChecker TypeChecker, JavaAsmGenerator Generator) {
-		super(TypeChecker, Generator);
-		this.Solution = Generator;
-	}
-
-	@Override public final void EnableVisitor() {
-		this.EvaledValue = ZEmptyValue._TrueEmpty;
-		super.EnableVisitor();
-	}
-
-	@Override public final void StopVisitor() {
-		this.EvaledValue = ZEmptyValue._FalseEmpty;
-		super.StopVisitor();
-	}
-
-	@Override protected final Object Eval(ZNode Node) {
-		if(this.IsVisitable()) {
-			Node.Accept(this);
-		}
-		return this.EvaledValue;
-	}
-
-	protected ZNode[] PackNodes(ZNode Node, ZListNode List) {
-		int Start = 0;
-		ZNode[] Nodes = new ZNode[List.GetListSize() + Start];
-		if(Node != null) {
-			Start = 1;
-			Nodes[0] = Node;
-		}
-		for(int i = 0; i < Nodes.length; i++) {
-			Nodes[i+Start] = List.GetListAt(i);
-		}
-		return Nodes;
-	}
-
-	Object NumberCast(Class<?> T, Number Value) {
-		if(T == int.class || T == Integer.class) {
-			return Value.intValue();
-		}
-		if(T == long.class || T == Long.class) {
-			return Value.longValue();
-		}
-		if(T == double.class || T == Double.class) {
-			return Value.longValue();
-		}
-		if(T == short.class || T == Short.class) {
-			return Value.shortValue();
-		}
-		if(T == float.class || T == Float.class) {
-			return Value.floatValue();
-		}
-		if(T == byte.class || T == Byte.class) {
-			return Value.byteValue();
-		}
-		return Value;
-	}
-
-	void EvalConstructor(ZNode Node, Constructor<?> jMethod, ZListNode ListNode) {
-		try {
-			Object Values[] = new Object[ListNode.GetListSize()];
-			Class<?> P[] = jMethod.getParameterTypes();
-			for(int i = 0; i < ListNode.GetListSize(); i++) {
-				Values[i] = this.Eval(ListNode.GetListAt(i));
-				if(Values[i] instanceof Number) {
-					Values[i] = this.NumberCast(P[i], (Number)Values[i]);
-				}
-			}
-			if(this.IsVisitable()) {
-				this.EvaledValue = jMethod.newInstance(Values);
-			}
-		} catch (Exception e) {
-			ZLogger._LogError(Node.SourceToken, "runtime error: " + e);
-			e.printStackTrace();
-			this.StopVisitor();
-		}
-	}
-
-	void EvalMethod(ZNode Node, Method jMethod, ZNode RecvNode, ZNode[] Nodes) {
-		try {
-			Object Recv = null;
-			if(RecvNode != null && !Modifier.isStatic(jMethod.getModifiers())) {
-				Recv = this.Eval(RecvNode);
-			}
-			Object Values[] = new Object[Nodes.length];
-			Class<?> P[] = jMethod.getParameterTypes();
-			for(int i = 0; i < Nodes.length; i++) {
-				Values[i] = this.Eval(Nodes[i]);
-				if(Values[i] instanceof Number) {
-					Values[i] = this.NumberCast(P[i], (Number)Values[i]);
-				}
-			}
-			if(this.IsVisitable()) {
-				this.EvaledValue = jMethod.invoke(Recv, Values);
-				if(jMethod.getReturnType() == void.class) {
-					this.EvaledValue = ZEmptyValue._TrueEmpty;
-				}
-			}
-		}
-		catch(java.lang.reflect.InvocationTargetException e) {
-			Throwable te = e.getCause();
-			ZLogger._LogError(Node.SourceToken, "runtime error: " + te);
-			te.printStackTrace();
-			this.StopVisitor();
-		}
-		catch (Exception e) {
-			ZLogger._LogInfo(Node.SourceToken, "runtime error: " + e);
-			e.printStackTrace();
-			this.StopVisitor();
-		}
-	}
-
-	void EvalStaticMethod(ZNode Node, Method sMethod, ZNode[] Nodes) {
-		this.EvalMethod(Node, sMethod, null, Nodes);
-	}
-
-	Method GetInvokeMethod(Object Recv) {
-		Method[] m = Recv.getClass().getMethods();
-		for(int i=0; i < m.length;i++) {
-			if(m[i].getName().equals("Invoke")) {
-				return m[i];
-			}
-		}
-		return null;
-	}
-
-	void InvokeMethod(ZNode Node, Object Recv, ZListNode ListNode) {
-		try {
-			Method jMethod = this.GetInvokeMethod(Recv);
-			//System.out.println("Recv="+Recv.getClass() + ", jMethod="+jMethod + "params=" + ListNode.GetListSize());
-			Object Values[] = new Object[ListNode.GetListSize()];
-			Class<?> P[] = jMethod.getParameterTypes();
-			for(int i = 0; i < ListNode.GetListSize(); i++) {
-				Values[i] = this.Eval(ListNode.GetListAt(i));
-				if(Values[i] instanceof Number) {
-					Values[i] = this.NumberCast(P[i], (Number)Values[i]);
-				}
-			}
-			if(this.IsVisitable()) {
-				this.EvaledValue = jMethod.invoke(Recv, Values);
-				if(jMethod.getReturnType() == void.class) {
-					this.EvaledValue = ZEmptyValue._TrueEmpty;
-				}
-			}
-		} catch(java.lang.reflect.InvocationTargetException e) {
-			Throwable te = e.getCause();
-			ZLogger._LogError(Node.SourceToken, "invocation error: " + te);
-			this.StopVisitor();
-		} catch (Exception e) {
-			ZLogger._LogError(Node.SourceToken, "invocation error: " + e);
-			this.StopVisitor();
-		}
-	}
-
-
-
-	@Override public void VisitNullNode(ZNullNode Node) {
-		this.EvaledValue = null;
-	}
-
-	@Override public void VisitBooleanNode(ZBooleanNode Node) {
-		this.EvaledValue = Node.BooleanValue;
-	}
-
-	@Override public void VisitIntNode(ZIntNode Node) {
-		this.EvaledValue = Node.IntValue;
-	}
-
-	@Override public void VisitFloatNode(ZFloatNode Node) {
-		this.EvaledValue = Node.FloatValue;
-	}
-
-	@Override public void VisitStringNode(ZStringNode Node) {
-		this.EvaledValue = Node.StringValue;
-	}
-
-	@Override public void VisitTypeNode(ZTypeNode Node) {
-		this.EvaledValue = Node.Type;
-	}
-
-	@Override public void VisitGetNameNode(ZGetNameNode Node) {
-		@Var ZNode Node1 = Node.GetNameSpace().GetSymbolNode(Node.VarName);
-		if(Node1 != null) {
-			this.EvaledValue = this.Eval(Node1);
-		}
-		else {
-			ZLogger._LogError(Node.SourceToken, "undefined symbol: " + Node.VarName);
-			this.StopVisitor();
-		}
-	}
-
-	@Override public void VisitGroupNode(ZGroupNode Node) {
-		this.EvaledValue = this.Eval(Node.ExprNode());
-	}
-
-	@Override public void VisitGetterNode(ZGetterNode Node) {
-		Method sMethod = JavaMethodTable.GetStaticMethod("GetField");
-		ZNode NameNode = new ZStringNode(Node, null, Node.GetName());
-		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.RecvNode(), NameNode});
-	}
-
-	@Override public void VisitSetterNode(ZSetterNode Node) {
-		Method sMethod = JavaMethodTable.GetStaticMethod("SetField");
-		ZNode NameNode = new ZStringNode(Node, null, Node.GetName());
-		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.RecvNode(), NameNode, Node.ExprNode()});
-	}
-
-	@Override public void VisitGetIndexNode(ZGetIndexNode Node) {
-		Method sMethod = JavaMethodTable.GetBinaryStaticMethod(Node.GetAstType(ZGetIndexNode._Recv), "[]", Node.GetAstType(ZGetIndexNode._Index));
-		if(sMethod == null) {
-			ZLogger._LogError(Node.SourceToken, "type error");
-			return ;
-		}
-		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.RecvNode(), Node.IndexNode()});
-	}
-
-	@Override public void VisitSetIndexNode(ZSetIndexNode Node) {
-		Method sMethod = JavaMethodTable.GetBinaryStaticMethod(Node.GetAstType(ZSetIndexNode._Recv), "[]", Node.GetAstType(ZSetIndexNode._Index));
-		if(sMethod == null) {
-			ZLogger._LogError(Node.SourceToken, "type error");
-			return ;
-		}
-		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.RecvNode(), Node.IndexNode(), Node.ExprNode()});
-	}
-
-	@Override public void VisitArrayLiteralNode(ZArrayLiteralNode Node) {
-		if(Node.IsUntyped()) {
-			ZLogger._LogError(Node.SourceToken, "ambigious array");
-			this.StopVisitor();
-		}
-		else if(Node.Type.GetParamType(0).IsIntType()) {
-			long Values[] = new long[Node.GetListSize()];
-			for(int i = 0; i < Node.GetListSize(); i++) {
-				Object Value = this.Eval(Node.GetListAt(i));
-				if(Value instanceof Number) {
-					Values[i] = ((Number)Value).longValue();
-				}
-			}
-			if(this.IsVisitable()) {
-				this.EvaledValue = new ZIntArray(Node.Type.TypeId, Values);
-			}
-		}
-		else if(Node.Type.GetParamType(0).IsFloatType()) {
-			double Values[] = new double[Node.GetListSize()];
-			for(int i = 0; i < Node.GetListSize(); i++) {
-				Object Value = this.Eval(Node.GetListAt(i));
-				if(Value instanceof Number) {
-					Values[i] = ((Number)Value).doubleValue();
-				}
-			}
-			if(this.IsVisitable()) {
-				this.EvaledValue = new ZFloatArray(Node.Type.TypeId, Values);
-			}
-		}
-		else if(Node.Type.GetParamType(0).IsIntType()) {
-			String Values[] = new String[Node.GetListSize()];
-			for(int i = 0; i < Node.GetListSize(); i++) {
-				Object Value = this.Eval(Node.GetListAt(i));
-				if(Value instanceof String) {
-					Values[i] = (String)Value;
-				}
-			}
-			if(this.IsVisitable()) {
-				this.EvaledValue = new ZStringArray(Node.Type.TypeId, Values);
-			}
-		}
-		else {
-			Object Values[] = new Object[Node.GetListSize()];
-			for(int i = 0; i < Node.GetListSize(); i++) {
-				Values[i] = this.Eval(Node.GetListAt(i));
-			}
-			if(this.IsVisitable()) {
-				this.EvaledValue = new ZObjectArray(Node.Type.TypeId, Values);
-			}
-		}
-	}
-
-	@Override public void VisitMapLiteralNode(ZMapLiteralNode Node) {
-		if(Node.IsUntyped()) {
-			ZLogger._LogError(Node.SourceToken, "ambigious map");
-			this.StopVisitor();
-		}
-		else {
-			Object Values[] = new Object[Node.GetListSize()*2];
-			for(int i = 0; i < Node.GetListSize(); i = i + 2) {
-				ZMapEntryNode EntryNode = Node.GetMapEntryNode(i);
-				Values[i*2] = EntryNode.Name;
-				Values[i*2+1] = this.Eval(EntryNode.ValueNode());
-			}
-			if(this.IsVisitable()) {
-				this.EvaledValue = new ZenMap<Object>(Node.Type.TypeId, Values);
-			}
-		}
-	}
-
-	@Override public void VisitNewObjectNode(ZNewObjectNode Node) {
-		Constructor<?> jMethod = this.Solution.GetConstructor(Node.Type, Node);
-		if(jMethod != null) {
-			this.EvalConstructor(Node, jMethod, Node);
-		}
-		else {
-			ZLogger._LogError(Node.SourceToken, "no constructor: " + Node.Type);
-			this.StopVisitor();
-		}
-	}
-
-	@Override public void VisitMethodCallNode(ZMethodCallNode Node) {
-		Method jMethod = this.Solution.GetMethod(Node.RecvNode().Type, Node.MethodName(), Node);
-		if(jMethod != null) {
-			this.EvalMethod(Node, jMethod, Node.RecvNode(), this.PackNodes(null, Node));
-		}
-		else {
-			ZLogger._LogError(Node.SourceToken, "no method: " + Node.MethodName() + " of " + Node.RecvNode().Type);
-			this.StopVisitor();
-		}
-	}
-
-	private Method LookupStaticMethod(ZMacroFunc MacroFunc) {
-		@Var String MacroText = MacroFunc.MacroText;
-		@Var int ClassEnd = MacroText.indexOf(".");
-		@Var int MethodEnd = MacroText.indexOf("(");
-		//System.out.println("MacroText: " + MacroText + " " + ClassEnd + ", " + MethodEnd);
-		@Var String ClassName = MacroText.substring(0, ClassEnd);
-		ClassName = ClassName.replaceAll("/", ".");
-		@Var String MethodName = MacroText.substring(ClassEnd+1, MethodEnd);
-		try {
-			Class<?> C= Class.forName(ClassName);
-			Class<?>[] P = new Class<?>[MacroFunc.GetFuncType().GetFuncParamSize()];
-			for(int i = 0; i < P.length; i++) {
-				P[0] = this.Solution.GetJavaClass(MacroFunc.GetFuncType().GetFuncParamType(i));
-			}
-			Method M = C.getMethod(MethodName, P);
-			return M;
-		}
-		catch(Exception e) {
-			System.out.println(e);
-		}
-		return null;
-	}
-
-	@Override public void VisitMacroNode(ZMacroNode Node) {
-		this.EvalStaticMethod(Node, this.LookupStaticMethod(Node.MacroFunc), this.PackNodes(null, Node));
-	}
-
-	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
-		@Var ZFuncType FuncType = Node.GetFuncType();
-		if(FuncType == null) {
-			ZLogger._LogError(Node.SourceToken, "not function");
-			this.StopVisitor();
-		}
-		else {
-			@Var String FuncName = Node.GetStaticFuncName();
-			if(FuncName != null) {
-				this.Solution.LazyBuild(FuncType.StringfySignature(FuncName));
-				Class<?> FunctionClass = this.Solution.GetDefinedFunctionClass(FuncName, FuncType);
-				Node.SetNode(ZFuncCallNode._Func, new JavaStaticFieldNode(Node, FunctionClass, FuncType, "function"));
-			}
-		}
-		Object Recv = this.Eval(Node.FuncNameNode());
-		if(this.IsVisitable()) {
-			this.InvokeMethod(Node, Recv, Node);
-		}
-	}
-
-	@Override public void VisitUnaryNode(ZUnaryNode Node) {
-		Method sMethod = JavaMethodTable.GetUnaryStaticMethod(Node.SourceToken.GetText(), Node.RecvNode().Type);
-		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.RecvNode()});
-	}
-
-	@Override public void VisitNotNode(ZNotNode Node) {
-		Method sMethod = JavaMethodTable.GetUnaryStaticMethod(Node.SourceToken.GetText(), Node.AST[ZNotNode._Recv].Type);
-		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.AST[ZNotNode._Recv]});
-	}
-
-	@Override public void VisitCastNode(ZCastNode Node) {
-		if(Node.Type.IsVoidType()) {
-			this.EvaledValue = this.Eval(Node.ExprNode());
-		}
-		else {
-			ZFunc Func = this.Generator.LookupConverterFunc(Node.ExprNode().Type, Node.Type);
-			if(Func instanceof ZMacroFunc) {
-				this.EvalStaticMethod(Node, this.LookupStaticMethod((ZMacroFunc)Func), new ZNode[] {Node.ExprNode()});
-				return;
-			}
-			this.EvaledValue = this.Eval(Node.ExprNode());
-			if(this.EvaledValue == null) {
-				return;
-			}
-			if(this.IsVisitable()) {
-				Class<?> CastClass = this.Solution.GetJavaClass(Node.Type);
-				if(CastClass.isAssignableFrom(this.EvaledValue.getClass())) {
-					return ;
-				}
-				else {
-					ZLogger._LogError(Node.SourceToken, "no type coercion: " + Node.ExprNode().Type + " to " + Node.Type);
-					this.StopVisitor();
-				}
-			}
-		}
-	}
-
-	@Override public void VisitBinaryNode(ZBinaryNode Node) {
-		Method sMethod = JavaMethodTable.GetBinaryStaticMethod(Node.LeftNode().Type, Node.SourceToken.GetText(), Node.RightNode().Type);
-		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.LeftNode(), Node.RightNode()});
-	}
-
-	@Override public void VisitComparatorNode(ZComparatorNode Node) {
-		Method sMethod = JavaMethodTable.GetBinaryStaticMethod(Node.LeftNode().Type, Node.SourceToken.GetText(), Node.RightNode().Type);
-		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.LeftNode(), Node.RightNode()});
-	}
-
-	@Override public void VisitAndNode(ZAndNode Node) {
-		@Var Object BooleanValue = this.Eval(Node.LeftNode());
-		if(BooleanValue instanceof Boolean) {
-			if((Boolean)BooleanValue) {
-				this.EvaledValue = this.Eval(Node.RightNode());
-			}
-			else {
-				this.EvaledValue = false;
-			}
-		}
-	}
-
-	@Override public void VisitOrNode(ZOrNode Node) {
-		@Var Object BooleanValue = this.Eval(Node.LeftNode());
-		if(BooleanValue instanceof Boolean) {
-			if(!(Boolean)BooleanValue) {
-				this.EvaledValue = this.Eval(Node.RightNode());
-			}
-			else {
-				this.EvaledValue = true;
-			}
-		}
-	}
-
-	@Override public void VisitBlockNode(ZBlockNode Node) {
-		@Var int i = 1;
-		while(i < Node.GetListSize() && this.IsVisitable()) {
-			ZNode StmtNode = Node.GetListAt(i);
-			this.Eval(StmtNode);
-			if(StmtNode.IsBreakingBlock()) {
-				break;
-			}
-		}
-		if(this.IsVisitable()) {
-			this.EvaledValue = ZEmptyValue._TrueEmpty;
-		}
-	}
-
-	@Override public void VisitIfNode(ZIfNode Node) {
-		Object BooleanValue = this.Eval(Node.CondNode());
-		if(BooleanValue instanceof Boolean) {
-			if((Boolean)BooleanValue) {
-				this.Eval(Node.ThenNode());
-			}
-			else if(Node.ElseNode() != null) {
-				this.Eval(Node.ThenNode());
-			}
-		}
-		if(this.IsVisitable()) {
-			this.EvaledValue = ZEmptyValue._TrueEmpty;
-		}
-	}
-
-
-	@Override public void VisitLetNode(ZLetNode Node) {
-		if(Node.HasUntypedNode()) {
-			LibZen._PrintDebug("HasUntypedNode: " + Node.HasUntypedNode() + "\n" + Node);
-		}
-		this.Solution.StartCodeGeneration(Node, false);
-	}
-
-	@Override public void VisitFunctionNode(ZFunctionNode Node) {
-		if(Node.HasUntypedNode()) {
-			LibZen._PrintDebug("HasUntypedNode: " + Node.HasUntypedNode() + "\nLAZY: " + Node);
-			this.Solution.LazyBuild(Node);
-		}
-		else {
-			this.Solution.StartCodeGeneration(Node, false);
-		}
-	}
-
-	@Override public void VisitClassNode(ZClassNode Node) {
-		if(Node.HasUntypedNode()) {
-			LibZen._PrintDebug("HasUntypedNode: " + Node.HasUntypedNode() + "\n" + Node);
-		}
-		this.Solution.StartCodeGeneration(Node, false);
-	}
-
-	private void VisitStaticFieldNode(JavaStaticFieldNode Node) {
-		try {
-			Field f = Node.StaticClass.getField(Node.FieldName);
-			this.EvaledValue = f.get(null);
-		} catch (Exception e) {
-			ZLogger._LogError(Node.SourceToken, "unresolved symbol: " + e);
-			this.StopVisitor();
-		}
-	}
-
-	@Override public void VisitLocalDefinedNode(ZLocalDefinedNode Node) {
-		if(Node instanceof JavaStaticFieldNode) {
-			this.VisitStaticFieldNode((JavaStaticFieldNode)Node);
-		}
-		else {
-			this.Generator.VisitUndefinedNode(Node);
-		}
-	}
-
-	@Override public void ExecMain() {
-		this.Generator.Logger.OutputErrorsToStdErr();
-		if(this.Solution.MainFuncNode != null) {
-			@Var JavaStaticFieldNode MainFunc = this.Solution.MainFuncNode;
-			try {
-				Method Method = MainFunc.StaticClass.getMethod("f");
-				Method.invoke(null);
-			}
-			catch(NoSuchMethodException e) {
-				System.out.println(e);
-			}
-			catch(Exception e) {
-				System.out.println(e);
-			}
-		}
-	}
+	//	protected final JavaAsmGenerator Solution;
+	//	protected Object EvaledValue = null;
+	//
+	//	public JavaEngine(ZTypeChecker TypeChecker, JavaAsmGenerator Generator) {
+	//		super(TypeChecker, Generator);
+	//		this.Solution = Generator;
+	//	}
+	//
+	//	@Override public final void EnableVisitor() {
+	//		this.EvaledValue = ZEmptyValue._TrueEmpty;
+	//		super.EnableVisitor();
+	//	}
+	//
+	//	@Override public final void StopVisitor() {
+	//		this.EvaledValue = ZEmptyValue._FalseEmpty;
+	//		super.StopVisitor();
+	//	}
+	//
+	//	@Override protected final Object Eval(ZNode Node) {
+	//		if(this.IsVisitable()) {
+	//			Node.Accept(this);
+	//		}
+	//		return this.EvaledValue;
+	//	}
+	//
+	//	protected ZNode[] PackNodes(ZNode Node, ZListNode List) {
+	//		int Start = 0;
+	//		ZNode[] Nodes = new ZNode[List.GetListSize() + Start];
+	//		if(Node != null) {
+	//			Start = 1;
+	//			Nodes[0] = Node;
+	//		}
+	//		for(int i = 0; i < Nodes.length; i++) {
+	//			Nodes[i+Start] = List.GetListAt(i);
+	//		}
+	//		return Nodes;
+	//	}
+	//
+	//	Object NumberCast(Class<?> T, Number Value) {
+	//		if(T == int.class || T == Integer.class) {
+	//			return Value.intValue();
+	//		}
+	//		if(T == long.class || T == Long.class) {
+	//			return Value.longValue();
+	//		}
+	//		if(T == double.class || T == Double.class) {
+	//			return Value.longValue();
+	//		}
+	//		if(T == short.class || T == Short.class) {
+	//			return Value.shortValue();
+	//		}
+	//		if(T == float.class || T == Float.class) {
+	//			return Value.floatValue();
+	//		}
+	//		if(T == byte.class || T == Byte.class) {
+	//			return Value.byteValue();
+	//		}
+	//		return Value;
+	//	}
+	//
+	//	void EvalConstructor(ZNode Node, Constructor<?> jMethod, ZListNode ListNode) {
+	//		try {
+	//			Object Values[] = new Object[ListNode.GetListSize()];
+	//			Class<?> P[] = jMethod.getParameterTypes();
+	//			for(int i = 0; i < ListNode.GetListSize(); i++) {
+	//				Values[i] = this.Eval(ListNode.GetListAt(i));
+	//				if(Values[i] instanceof Number) {
+	//					Values[i] = this.NumberCast(P[i], (Number)Values[i]);
+	//				}
+	//			}
+	//			if(this.IsVisitable()) {
+	//				this.EvaledValue = jMethod.newInstance(Values);
+	//			}
+	//		} catch (Exception e) {
+	//			ZLogger._LogError(Node.SourceToken, "runtime error: " + e);
+	//			e.printStackTrace();
+	//			this.StopVisitor();
+	//		}
+	//	}
+	//
+	//	void EvalMethod(ZNode Node, Method jMethod, ZNode RecvNode, ZNode[] Nodes) {
+	//		try {
+	//			Object Recv = null;
+	//			if(RecvNode != null && !Modifier.isStatic(jMethod.getModifiers())) {
+	//				Recv = this.Eval(RecvNode);
+	//			}
+	//			Object Values[] = new Object[Nodes.length];
+	//			Class<?> P[] = jMethod.getParameterTypes();
+	//			for(int i = 0; i < Nodes.length; i++) {
+	//				Values[i] = this.Eval(Nodes[i]);
+	//				if(Values[i] instanceof Number) {
+	//					Values[i] = this.NumberCast(P[i], (Number)Values[i]);
+	//				}
+	//			}
+	//			if(this.IsVisitable()) {
+	//				this.EvaledValue = jMethod.invoke(Recv, Values);
+	//				if(jMethod.getReturnType() == void.class) {
+	//					this.EvaledValue = ZEmptyValue._TrueEmpty;
+	//				}
+	//			}
+	//		}
+	//		catch(java.lang.reflect.InvocationTargetException e) {
+	//			Throwable te = e.getCause();
+	//			ZLogger._LogError(Node.SourceToken, "runtime error: " + te);
+	//			te.printStackTrace();
+	//			this.StopVisitor();
+	//		}
+	//		catch (Exception e) {
+	//			ZLogger._LogInfo(Node.SourceToken, "runtime error: " + e);
+	//			e.printStackTrace();
+	//			this.StopVisitor();
+	//		}
+	//	}
+	//
+	//	void EvalStaticMethod(ZNode Node, Method sMethod, ZNode[] Nodes) {
+	//		this.EvalMethod(Node, sMethod, null, Nodes);
+	//	}
+	//
+	//	Method GetInvokeMethod(Object Recv) {
+	//		Method[] m = Recv.getClass().getMethods();
+	//		for(int i=0; i < m.length;i++) {
+	//			if(m[i].getName().equals("Invoke")) {
+	//				return m[i];
+	//			}
+	//		}
+	//		return null;
+	//	}
+	//
+	//	void InvokeMethod(ZNode Node, Object Recv, ZListNode ListNode) {
+	//		try {
+	//			Method jMethod = this.GetInvokeMethod(Recv);
+	//			//System.out.println("Recv="+Recv.getClass() + ", jMethod="+jMethod + "params=" + ListNode.GetListSize());
+	//			Object Values[] = new Object[ListNode.GetListSize()];
+	//			Class<?> P[] = jMethod.getParameterTypes();
+	//			for(int i = 0; i < ListNode.GetListSize(); i++) {
+	//				Values[i] = this.Eval(ListNode.GetListAt(i));
+	//				if(Values[i] instanceof Number) {
+	//					Values[i] = this.NumberCast(P[i], (Number)Values[i]);
+	//				}
+	//			}
+	//			if(this.IsVisitable()) {
+	//				this.EvaledValue = jMethod.invoke(Recv, Values);
+	//				if(jMethod.getReturnType() == void.class) {
+	//					this.EvaledValue = ZEmptyValue._TrueEmpty;
+	//				}
+	//			}
+	//		} catch(java.lang.reflect.InvocationTargetException e) {
+	//			Throwable te = e.getCause();
+	//			ZLogger._LogError(Node.SourceToken, "invocation error: " + te);
+	//			this.StopVisitor();
+	//		} catch (Exception e) {
+	//			ZLogger._LogError(Node.SourceToken, "invocation error: " + e);
+	//			this.StopVisitor();
+	//		}
+	//	}
+	//
+	//
+	//
+	//	@Override public void VisitNullNode(ZNullNode Node) {
+	//		this.EvaledValue = null;
+	//	}
+	//
+	//	@Override public void VisitBooleanNode(ZBooleanNode Node) {
+	//		this.EvaledValue = Node.BooleanValue;
+	//	}
+	//
+	//	@Override public void VisitIntNode(ZIntNode Node) {
+	//		this.EvaledValue = Node.IntValue;
+	//	}
+	//
+	//	@Override public void VisitFloatNode(ZFloatNode Node) {
+	//		this.EvaledValue = Node.FloatValue;
+	//	}
+	//
+	//	@Override public void VisitStringNode(ZStringNode Node) {
+	//		this.EvaledValue = Node.StringValue;
+	//	}
+	//
+	//	@Override public void VisitTypeNode(ZTypeNode Node) {
+	//		this.EvaledValue = Node.Type;
+	//	}
+	//
+	//	@Override public void VisitGetNameNode(ZGetNameNode Node) {
+	//		@Var ZNode Node1 = Node.GetNameSpace().GetSymbolNode(Node.VarName);
+	//		if(Node1 != null) {
+	//			this.EvaledValue = this.Eval(Node1);
+	//		}
+	//		else {
+	//			ZLogger._LogError(Node.SourceToken, "undefined symbol: " + Node.VarName);
+	//			this.StopVisitor();
+	//		}
+	//	}
+	//
+	//	@Override public void VisitGroupNode(ZGroupNode Node) {
+	//		this.EvaledValue = this.Eval(Node.ExprNode());
+	//	}
+	//
+	//	@Override public void VisitGetterNode(ZGetterNode Node) {
+	//		Method sMethod = JavaMethodTable.GetStaticMethod("GetField");
+	//		ZNode NameNode = new ZStringNode(Node, null, Node.GetName());
+	//		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.RecvNode(), NameNode});
+	//	}
+	//
+	//	@Override public void VisitSetterNode(ZSetterNode Node) {
+	//		Method sMethod = JavaMethodTable.GetStaticMethod("SetField");
+	//		ZNode NameNode = new ZStringNode(Node, null, Node.GetName());
+	//		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.RecvNode(), NameNode, Node.ExprNode()});
+	//	}
+	//
+	//	@Override public void VisitGetIndexNode(ZGetIndexNode Node) {
+	//		Method sMethod = JavaMethodTable.GetBinaryStaticMethod(Node.GetAstType(ZGetIndexNode._Recv), "[]", Node.GetAstType(ZGetIndexNode._Index));
+	//		if(sMethod == null) {
+	//			ZLogger._LogError(Node.SourceToken, "type error");
+	//			return ;
+	//		}
+	//		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.RecvNode(), Node.IndexNode()});
+	//	}
+	//
+	//	@Override public void VisitSetIndexNode(ZSetIndexNode Node) {
+	//		Method sMethod = JavaMethodTable.GetBinaryStaticMethod(Node.GetAstType(ZSetIndexNode._Recv), "[]", Node.GetAstType(ZSetIndexNode._Index));
+	//		if(sMethod == null) {
+	//			ZLogger._LogError(Node.SourceToken, "type error");
+	//			return ;
+	//		}
+	//		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.RecvNode(), Node.IndexNode(), Node.ExprNode()});
+	//	}
+	//
+	//	@Override public void VisitArrayLiteralNode(ZArrayLiteralNode Node) {
+	//		if(Node.IsUntyped()) {
+	//			ZLogger._LogError(Node.SourceToken, "ambigious array");
+	//			this.StopVisitor();
+	//		}
+	//		else if(Node.Type.GetParamType(0).IsIntType()) {
+	//			long Values[] = new long[Node.GetListSize()];
+	//			for(int i = 0; i < Node.GetListSize(); i++) {
+	//				Object Value = this.Eval(Node.GetListAt(i));
+	//				if(Value instanceof Number) {
+	//					Values[i] = ((Number)Value).longValue();
+	//				}
+	//			}
+	//			if(this.IsVisitable()) {
+	//				this.EvaledValue = new ZIntArray(Node.Type.TypeId, Values);
+	//			}
+	//		}
+	//		else if(Node.Type.GetParamType(0).IsFloatType()) {
+	//			double Values[] = new double[Node.GetListSize()];
+	//			for(int i = 0; i < Node.GetListSize(); i++) {
+	//				Object Value = this.Eval(Node.GetListAt(i));
+	//				if(Value instanceof Number) {
+	//					Values[i] = ((Number)Value).doubleValue();
+	//				}
+	//			}
+	//			if(this.IsVisitable()) {
+	//				this.EvaledValue = new ZFloatArray(Node.Type.TypeId, Values);
+	//			}
+	//		}
+	//		else if(Node.Type.GetParamType(0).IsIntType()) {
+	//			String Values[] = new String[Node.GetListSize()];
+	//			for(int i = 0; i < Node.GetListSize(); i++) {
+	//				Object Value = this.Eval(Node.GetListAt(i));
+	//				if(Value instanceof String) {
+	//					Values[i] = (String)Value;
+	//				}
+	//			}
+	//			if(this.IsVisitable()) {
+	//				this.EvaledValue = new ZStringArray(Node.Type.TypeId, Values);
+	//			}
+	//		}
+	//		else {
+	//			Object Values[] = new Object[Node.GetListSize()];
+	//			for(int i = 0; i < Node.GetListSize(); i++) {
+	//				Values[i] = this.Eval(Node.GetListAt(i));
+	//			}
+	//			if(this.IsVisitable()) {
+	//				this.EvaledValue = new ZObjectArray(Node.Type.TypeId, Values);
+	//			}
+	//		}
+	//	}
+	//
+	//	@Override public void VisitMapLiteralNode(ZMapLiteralNode Node) {
+	//		if(Node.IsUntyped()) {
+	//			ZLogger._LogError(Node.SourceToken, "ambigious map");
+	//			this.StopVisitor();
+	//		}
+	//		else {
+	//			Object Values[] = new Object[Node.GetListSize()*2];
+	//			for(int i = 0; i < Node.GetListSize(); i = i + 2) {
+	//				ZMapEntryNode EntryNode = Node.GetMapEntryNode(i);
+	//				Values[i*2] = EntryNode.Name;
+	//				Values[i*2+1] = this.Eval(EntryNode.ValueNode());
+	//			}
+	//			if(this.IsVisitable()) {
+	//				this.EvaledValue = new ZenMap<Object>(Node.Type.TypeId, Values);
+	//			}
+	//		}
+	//	}
+	//
+	//	@Override public void VisitNewObjectNode(ZNewObjectNode Node) {
+	//		Constructor<?> jMethod = this.Solution.GetConstructor(Node.Type, Node);
+	//		if(jMethod != null) {
+	//			this.EvalConstructor(Node, jMethod, Node);
+	//		}
+	//		else {
+	//			ZLogger._LogError(Node.SourceToken, "no constructor: " + Node.Type);
+	//			this.StopVisitor();
+	//		}
+	//	}
+	//
+	//	@Override public void VisitMethodCallNode(ZMethodCallNode Node) {
+	//		Method jMethod = this.Solution.GetMethod(Node.RecvNode().Type, Node.MethodName(), Node);
+	//		if(jMethod != null) {
+	//			this.EvalMethod(Node, jMethod, Node.RecvNode(), this.PackNodes(null, Node));
+	//		}
+	//		else {
+	//			ZLogger._LogError(Node.SourceToken, "no method: " + Node.MethodName() + " of " + Node.RecvNode().Type);
+	//			this.StopVisitor();
+	//		}
+	//	}
+	//
+	//	private Method LookupStaticMethod(ZMacroFunc MacroFunc) {
+	//		@Var String MacroText = MacroFunc.MacroText;
+	//		@Var int ClassEnd = MacroText.indexOf(".");
+	//		@Var int MethodEnd = MacroText.indexOf("(");
+	//		//System.out.println("MacroText: " + MacroText + " " + ClassEnd + ", " + MethodEnd);
+	//		@Var String ClassName = MacroText.substring(0, ClassEnd);
+	//		ClassName = ClassName.replaceAll("/", ".");
+	//		@Var String MethodName = MacroText.substring(ClassEnd+1, MethodEnd);
+	//		try {
+	//			Class<?> C= Class.forName(ClassName);
+	//			Class<?>[] P = new Class<?>[MacroFunc.GetFuncType().GetFuncParamSize()];
+	//			for(int i = 0; i < P.length; i++) {
+	//				P[0] = this.Solution.GetJavaClass(MacroFunc.GetFuncType().GetFuncParamType(i));
+	//			}
+	//			Method M = C.getMethod(MethodName, P);
+	//			return M;
+	//		}
+	//		catch(Exception e) {
+	//			System.out.println(e);
+	//		}
+	//		return null;
+	//	}
+	//
+	//	@Override public void VisitMacroNode(ZMacroNode Node) {
+	//		this.EvalStaticMethod(Node, this.LookupStaticMethod(Node.MacroFunc), this.PackNodes(null, Node));
+	//	}
+	//
+	//	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
+	//		@Var ZFuncType FuncType = Node.GetFuncType();
+	//		if(FuncType == null) {
+	//			ZLogger._LogError(Node.SourceToken, "not function");
+	//			this.StopVisitor();
+	//		}
+	//		else {
+	//			@Var String FuncName = Node.GetStaticFuncName();
+	//			if(FuncName != null) {
+	//				this.Solution.LazyBuild(FuncType.StringfySignature(FuncName));
+	//				Class<?> FunctionClass = this.Solution.GetDefinedFunctionClass(FuncName, FuncType);
+	//				Node.SetNode(ZFuncCallNode._Func, new JavaStaticFieldNode(Node, FunctionClass, FuncType, "function"));
+	//			}
+	//		}
+	//		Object Recv = this.Eval(Node.FuncNameNode());
+	//		if(this.IsVisitable()) {
+	//			this.InvokeMethod(Node, Recv, Node);
+	//		}
+	//	}
+	//
+	//	@Override public void VisitUnaryNode(ZUnaryNode Node) {
+	//		Method sMethod = JavaMethodTable.GetUnaryStaticMethod(Node.SourceToken.GetText(), Node.RecvNode().Type);
+	//		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.RecvNode()});
+	//	}
+	//
+	//	@Override public void VisitNotNode(ZNotNode Node) {
+	//		Method sMethod = JavaMethodTable.GetUnaryStaticMethod(Node.SourceToken.GetText(), Node.AST[ZNotNode._Recv].Type);
+	//		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.AST[ZNotNode._Recv]});
+	//	}
+	//
+	//	@Override public void VisitCastNode(ZCastNode Node) {
+	//		if(Node.Type.IsVoidType()) {
+	//			this.EvaledValue = this.Eval(Node.ExprNode());
+	//		}
+	//		else {
+	//			ZFunc Func = this.Generator.LookupConverterFunc(Node.ExprNode().Type, Node.Type);
+	//			if(Func instanceof ZMacroFunc) {
+	//				this.EvalStaticMethod(Node, this.LookupStaticMethod((ZMacroFunc)Func), new ZNode[] {Node.ExprNode()});
+	//				return;
+	//			}
+	//			this.EvaledValue = this.Eval(Node.ExprNode());
+	//			if(this.EvaledValue == null) {
+	//				return;
+	//			}
+	//			if(this.IsVisitable()) {
+	//				Class<?> CastClass = this.Solution.GetJavaClass(Node.Type);
+	//				if(CastClass.isAssignableFrom(this.EvaledValue.getClass())) {
+	//					return ;
+	//				}
+	//				else {
+	//					ZLogger._LogError(Node.SourceToken, "no type coercion: " + Node.ExprNode().Type + " to " + Node.Type);
+	//					this.StopVisitor();
+	//				}
+	//			}
+	//		}
+	//	}
+	//
+	//	@Override public void VisitBinaryNode(ZBinaryNode Node) {
+	//		Method sMethod = JavaMethodTable.GetBinaryStaticMethod(Node.LeftNode().Type, Node.SourceToken.GetText(), Node.RightNode().Type);
+	//		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.LeftNode(), Node.RightNode()});
+	//	}
+	//
+	//	@Override public void VisitComparatorNode(ZComparatorNode Node) {
+	//		Method sMethod = JavaMethodTable.GetBinaryStaticMethod(Node.LeftNode().Type, Node.SourceToken.GetText(), Node.RightNode().Type);
+	//		this.EvalStaticMethod(Node, sMethod, new ZNode[] {Node.LeftNode(), Node.RightNode()});
+	//	}
+	//
+	//	@Override public void VisitAndNode(ZAndNode Node) {
+	//		@Var Object BooleanValue = this.Eval(Node.LeftNode());
+	//		if(BooleanValue instanceof Boolean) {
+	//			if((Boolean)BooleanValue) {
+	//				this.EvaledValue = this.Eval(Node.RightNode());
+	//			}
+	//			else {
+	//				this.EvaledValue = false;
+	//			}
+	//		}
+	//	}
+	//
+	//	@Override public void VisitOrNode(ZOrNode Node) {
+	//		@Var Object BooleanValue = this.Eval(Node.LeftNode());
+	//		if(BooleanValue instanceof Boolean) {
+	//			if(!(Boolean)BooleanValue) {
+	//				this.EvaledValue = this.Eval(Node.RightNode());
+	//			}
+	//			else {
+	//				this.EvaledValue = true;
+	//			}
+	//		}
+	//	}
+	//
+	//	@Override public void VisitBlockNode(ZBlockNode Node) {
+	//		@Var int i = 1;
+	//		while(i < Node.GetListSize() && this.IsVisitable()) {
+	//			ZNode StmtNode = Node.GetListAt(i);
+	//			this.Eval(StmtNode);
+	//			if(StmtNode.IsBreakingBlock()) {
+	//				break;
+	//			}
+	//		}
+	//		if(this.IsVisitable()) {
+	//			this.EvaledValue = ZEmptyValue._TrueEmpty;
+	//		}
+	//	}
+	//
+	//	@Override public void VisitIfNode(ZIfNode Node) {
+	//		Object BooleanValue = this.Eval(Node.CondNode());
+	//		if(BooleanValue instanceof Boolean) {
+	//			if((Boolean)BooleanValue) {
+	//				this.Eval(Node.ThenNode());
+	//			}
+	//			else if(Node.ElseNode() != null) {
+	//				this.Eval(Node.ThenNode());
+	//			}
+	//		}
+	//		if(this.IsVisitable()) {
+	//			this.EvaledValue = ZEmptyValue._TrueEmpty;
+	//		}
+	//	}
+	//
+	//
+	//	@Override public void VisitLetNode(ZLetNode Node) {
+	//		if(Node.HasUntypedNode()) {
+	//			LibZen._PrintDebug("HasUntypedNode: " + Node.HasUntypedNode() + "\n" + Node);
+	//		}
+	//		this.Solution.StartCodeGeneration(Node, false);
+	//	}
+	//
+	//	@Override public void VisitFunctionNode(ZFunctionNode Node) {
+	//		if(Node.HasUntypedNode()) {
+	//			LibZen._PrintDebug("HasUntypedNode: " + Node.HasUntypedNode() + "\nLAZY: " + Node);
+	//			this.Solution.LazyBuild(Node);
+	//		}
+	//		else {
+	//			this.Solution.StartCodeGeneration(Node, false);
+	//		}
+	//	}
+	//
+	//	@Override public void VisitClassNode(ZClassNode Node) {
+	//		if(Node.HasUntypedNode()) {
+	//			LibZen._PrintDebug("HasUntypedNode: " + Node.HasUntypedNode() + "\n" + Node);
+	//		}
+	//		this.Solution.StartCodeGeneration(Node, false);
+	//	}
+	//
+	//	private void VisitStaticFieldNode(JavaStaticFieldNode Node) {
+	//		try {
+	//			Field f = Node.StaticClass.getField(Node.FieldName);
+	//			this.EvaledValue = f.get(null);
+	//		} catch (Exception e) {
+	//			ZLogger._LogError(Node.SourceToken, "unresolved symbol: " + e);
+	//			this.StopVisitor();
+	//		}
+	//	}
+	//
+	//	@Override public void VisitLocalDefinedNode(ZLocalDefinedNode Node) {
+	//		if(Node instanceof JavaStaticFieldNode) {
+	//			this.VisitStaticFieldNode((JavaStaticFieldNode)Node);
+	//		}
+	//		else {
+	//			this.Generator.VisitUndefinedNode(Node);
+	//		}
+	//	}
+	//
+	//	//	@Override public void ExecMain() {
+	//	//		this.Generator.Logger.OutputErrorsToStdErr();
+	//	//		if(this.Solution.MainFuncNode != null) {
+	//	//			@Var JavaStaticFieldNode MainFunc = this.Solution.MainFuncNode;
+	//	//			try {
+	//	//				Method Method = MainFunc.StaticClass.getMethod("f");
+	//	//				Method.invoke(null);
+	//	//			}
+	//	//			catch(NoSuchMethodException e) {
+	//	//				System.out.println(e);
+	//	//			}
+	//	//			catch(Exception e) {
+	//	//				System.out.println(e);
+	//	//			}
+	//	//		}
+	//	//	}
 }

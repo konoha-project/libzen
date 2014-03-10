@@ -34,10 +34,9 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 
 import zen.lang.konoha.KonohaGrammar;
-import zen.parser.ZEmptyValue;
+import zen.parser.ZGenerator;
 import zen.parser.ZParserConst;
 import zen.parser.ZSourceBuilder;
-import zen.parser.ZSourceEngine;
 import zen.util.LibZen;
 import zen.util.Var;
 import zen.util.ZStringArray;
@@ -123,7 +122,7 @@ public class ZenMain {
 				continue;
 			}
 		}
-		@Var ZSourceEngine ScriptEngine = LibZen._LoadEngine(TargetCode, KonohaGrammar.class.getName());
+		@Var ZGenerator Generator = LibZen._InitGenerator(TargetCode, KonohaGrammar.class.getName());
 		if (!(Index < Args.length)) {
 			ShellMode = true;
 		}
@@ -135,30 +134,21 @@ public class ZenMain {
 		//ScriptEngine.SetSymbol("ARGV", ARGV, null);
 		if (ARGV.Size() > 0) {
 			@Var String FileName = ARGV.ArrayValues[0];
-			@Var boolean Success = ScriptEngine.Load(FileName);
-			if (!Success) {
-				LibZen._Exit(1, "abort loading: " + FileName);
-			}
+			Generator.LoadFile(FileName, null);
 		}
+		Generator.WriteTo(OutputFile);
+		Generator.ExecMain();
 		if (ShellMode) {
 			LibZen._PrintLine(ZParserConst.ProgName + ZParserConst.Version + " (" + ZParserConst.CodeName + ") on " + LibZen._GetPlatform());
 			LibZen._PrintLine(ZParserConst.Copyright);
-			LibZen._PrintLine("Accept: " + ScriptEngine.Generator.GetGrammarInfo());
-			LibZen._PrintLine("Produce: " + ScriptEngine.Generator.GetTargetLangInfo());
-			ScriptEngine.Generator.Logger.OutputErrorsToStdErr();
+			LibZen._PrintLine("Accept: " + Generator.LangInfo.GetGrammarInfo());
+			LibZen._PrintLine("Produce: " + Generator.LangInfo.LangVersion);
 			@Var int linenum = 1;
 			@Var String Line = null;
 			while ((Line = ZenMain.ReadLine2(">>> ", "    ")) != null) {
 				try {
-					@Var Object EvaledValue = ScriptEngine.Eval(Line, "(stdin)", linenum, true);
-					ScriptEngine.Generator.Logger.OutputErrorsToStdErr();
-					if (!(EvaledValue instanceof ZEmptyValue)) {
-						if(EvaledValue == null) {
-							LibZen._PrintLine(" null");
-						}
-						else {
-							LibZen._PrintLine(" (" +/* ZSystem.GuessType(EvaledValue) + ":" +*/ LibZen._GetClassName(EvaledValue) + ") " + LibZen._Stringify(EvaledValue));
-						}
+					if(Generator.LoadScript(Line, "(stdin)", linenum, true)) {
+						Generator.Perform();
 					}
 					linenum = linenum + 1;
 				} catch (Exception e) {
@@ -168,11 +158,6 @@ public class ZenMain {
 			}
 			LibZen._PrintLine("");
 		}
-		else {
-			ScriptEngine.WriteTo(OutputFile);
-			// Generator.FlushBuffer();
-		}
-		ScriptEngine.ExecMain();
 	}
 
 	public final static void Usage(String Message) {
@@ -208,8 +193,6 @@ public class ZenMain {
 	public final static void main(String[] Args) {
 		ZenMain.ExecCommand(Args);
 	}
-
-
 
 	public static void PrintStackTrace(Exception e, int linenum) {
 		@Var StackTraceElement[] elements = e.getStackTrace();

@@ -44,9 +44,7 @@ import zen.ast.ZStupidCastErrorNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZVarNode;
-import zen.lang.zen.ZenTypeSafer;
 import zen.parser.ZLogger;
-import zen.parser.ZSourceEngine;
 import zen.parser.ZSourceGenerator;
 import zen.type.ZClassType;
 import zen.type.ZGenericType;
@@ -69,10 +67,6 @@ public class JavaScriptGenerator extends ZSourceGenerator {
 		this.SetReservedName("this", "self");
 
 		JavaScriptGenerator.UseExtend = false;
-	}
-
-	@Override public ZSourceEngine GetEngine() {
-		return new ZSourceEngine(new ZenTypeSafer(this), this);
 	}
 
 	@Override public void VisitGlobalNameNode(ZGlobalNameNode Node) {

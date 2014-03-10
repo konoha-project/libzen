@@ -203,11 +203,11 @@ public class ZenGrammar {
 		NameSpace.DefineStatement("asm", new AsmPatternFunction());
 		NameSpace.DefineStatement("require", new RequirePatternFunction());
 
-		NameSpace.Generator.AppendGrammarInfo("zen-0.1");
+		NameSpace.Generator.LangInfo.AppendGrammarInfo("zen-0.1");
 
 		NameSpace.DefineStatement("try", new TryPatternFunction());
 		NameSpace.DefineStatement("throw", new ThrowPatternFunction());
-		NameSpace.Generator.AppendGrammarInfo("zen-trycatch-0.1");
+		NameSpace.Generator.LangInfo.AppendGrammarInfo("zen-trycatch-0.1");
 
 	}
 

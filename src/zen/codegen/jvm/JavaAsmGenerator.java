@@ -106,9 +106,7 @@ import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
 import zen.ast.sugar.ZLocalDefinedNode;
 import zen.ast.sugar.ZTopLevelNode;
-import zen.lang.zen.ZenTypeSafer;
 import zen.parser.ZLogger;
-import zen.parser.ZSourceEngine;
 import zen.type.ZClassField;
 import zen.type.ZClassType;
 import zen.type.ZFuncType;
@@ -129,10 +127,6 @@ public class JavaAsmGenerator extends JavaGenerator {
 		super("jvm", "Java 1.6");
 		this.TryCatchLabel = new Stack<TryCatchLabel>();
 		this.AsmLoader = new AsmClassLoader(this);
-	}
-
-	@Override public ZSourceEngine GetEngine() {
-		return new JavaEngine(new ZenTypeSafer(this), this);
 	}
 
 	public final Class<?> GetJavaClass(ZType zType, Class<?> C) {

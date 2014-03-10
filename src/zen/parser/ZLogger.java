@@ -47,6 +47,16 @@ public final class ZLogger {
 		this.ReportedErrorList.add(Message);
 	}
 
+	public final static void _LogErrorExit(ZToken Token, String Message) {
+		if(Token != null && Token.Source != null) {
+			Message = Token.Source.FormatErrorMarker("error", Token.StartIndex, Message);
+			Token.Source.Logger.Report(Message);
+		}
+		else {
+			LibZen._Exit(1, Message);
+		}
+	}
+
 	public final static String _LogError(ZToken Token, String Message) {
 		if(Token != null && Token.Source != null) {
 			Message = Token.Source.FormatErrorMarker("error", Token.StartIndex, Message);

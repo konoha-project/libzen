@@ -20,9 +20,7 @@ import zen.ast.ZSetIndexNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZVarNode;
-import zen.lang.zen.ZenTypeSafer;
 import zen.parser.ZLogger;
-import zen.parser.ZSourceEngine;
 import zen.parser.ZSourceGenerator;
 import zen.type.ZClassField;
 import zen.type.ZClassType;
@@ -53,11 +51,6 @@ public class JavaSourceGenerator extends ZSourceGenerator {
 
 		//this.HeaderBuilder.AppendNewLine("import zen.util.*;");
 		this.CurrentBuilder.AppendNewLine("/* end of header */", this.LineFeed);
-	}
-
-
-	@Override public ZSourceEngine GetEngine() {
-		return new ZSourceEngine(new ZenTypeSafer(this), this);
 	}
 
 	@Override protected void GenerateImportLibrary(String LibName) {

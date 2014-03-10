@@ -25,7 +25,6 @@
 package zen.ast;
 
 import zen.parser.ZGenerator;
-import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 import zen.type.ZFuncType;
 import zen.type.ZType;
@@ -41,12 +40,15 @@ public class ZFunctionNode extends ZListNode {
 
 	@Field public ZType  GivenType = null;
 	@Field public String GivenName = null;
-	@Field public ZToken NameToken = null;
 
 	@Field public boolean       IsExport = false;
 	@Field public ZFunctionNode ParentFunctionNode = null;
 	@Field public ZFuncType     ResolvedFuncType = null;
 	@Field public int VarIndex = 0;
+
+	public ZFunctionNode(ZNode ParentNode) {
+		super(ParentNode, null, 3);
+	}
 
 	public final ZType ReturnType() {
 		if(this.GivenType == null) {
@@ -86,10 +88,6 @@ public class ZFunctionNode extends ZListNode {
 		}
 		assert(BlockNode == null); // this must not happen
 		return null;
-	}
-
-	public ZFunctionNode(ZNode ParentNode) {
-		super(ParentNode, null, 3);
 	}
 
 	@Override public void Accept(ZVisitor Visitor) {

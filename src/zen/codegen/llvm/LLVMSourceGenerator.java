@@ -73,9 +73,7 @@ import zen.ast.ZUnaryNode;
 import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
 import zen.ast.sugar.ZLocalDefinedNode;
-import zen.lang.zen.ZenTypeSafer;
 import zen.parser.ZLogger;
-import zen.parser.ZSourceEngine;
 import zen.parser.ZSourceGenerator;
 import zen.parser.ZVariable;
 import zen.type.ZClassType;
@@ -586,12 +584,6 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 			Len = Len + 1;
 		}
 		return Len;
-	}
-
-	@Override
-	public ZSourceEngine GetEngine() {
-		/*FIXME*/
-		return new ZSourceEngine(new ZenTypeSafer(this), this);
 	}
 
 	@Override

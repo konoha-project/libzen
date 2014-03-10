@@ -43,9 +43,7 @@ import zen.ast.ZStupidCastErrorNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZVarNode;
-import zen.lang.zen.ZenTypeSafer;
 import zen.parser.ZLogger;
-import zen.parser.ZSourceEngine;
 import zen.parser.ZSourceGenerator;
 import zen.type.ZClassField;
 import zen.type.ZClassType;
@@ -90,10 +88,6 @@ public class PythonGenerator extends ZSourceGenerator {
 		this.HeaderBuilder.AppendNewLine("def zstr(s) : return str(s) if s != None else \'null\'");
 		this.CurrentBuilder.AppendNewLine("## end of header", this.LineFeed);
 
-	}
-
-	@Override public ZSourceEngine GetEngine() {
-		return new ZSourceEngine(new ZenTypeSafer(this), this);
 	}
 
 	@Override protected void GenerateImportLibrary(String LibName) {

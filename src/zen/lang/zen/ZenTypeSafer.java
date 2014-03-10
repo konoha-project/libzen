@@ -768,6 +768,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 				}
 				ParamNode.ParamIndex = NameSpace.SetLocalVariable(this.CurrentFunctionNode, ParamNode.DeclType(), ParamNode.GetName(), null);
 			}
+			ParamNode.Type = ParamNode.DeclType();
 			i = i + 1;
 		}
 		FunctionNode.SetReturnType(this.VarScope.NewVarType(FunctionNode.ReturnType(), "return", FunctionNode.SourceToken));

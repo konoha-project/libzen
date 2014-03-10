@@ -25,6 +25,7 @@
 package zen.parser;
 
 import zen.ast.ZAsmNode;
+import zen.ast.ZBlockNode;
 import zen.ast.ZCastNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZFuncCallNode;
@@ -32,6 +33,7 @@ import zen.ast.ZFunctionNode;
 import zen.ast.ZListNode;
 import zen.ast.ZMacroNode;
 import zen.ast.ZNode;
+import zen.ast.ZReturnNode;
 import zen.ast.ZStupidCastErrorNode;
 import zen.ast.sugar.ZDesugarNode;
 import zen.ast.sugar.ZSyntaxSugarNode;
@@ -262,6 +264,38 @@ public abstract class ZTypeChecker extends ZVisitor {
 	}
 
 
+
+
+	// ----------------------------------------------------------------------
+	/* Note : the CreateNode serise are designed to treat typed node */
+
+	public ZFunctionNode CreateFunctionNode(ZNode ParentNode, String FuncName, ZNode Node) {
+		ZFunctionNode FuncNode = new ZFunctionNode(ParentNode);
+		FuncNode.GivenName = FuncName;
+		FuncNode.GivenType = Node.Type;
+		ZBlockNode BlockNode = this.CreateBlockNode(FuncNode, 1);
+		if(Node.Type.IsVoidType()) {
+			BlockNode.SetNode(0, Node);
+		}
+		else {
+			BlockNode.SetNode(0, this.CreateReturnNode(BlockNode, Node));
+		}
+		FuncNode.Type = ZType.VoidType;
+		return FuncNode;
+	}
+
+	public ZBlockNode CreateBlockNode(ZNode ParentNode, int Size) {
+		ZBlockNode BlockNode = new ZBlockNode(ParentNode, Size);
+		BlockNode.Type = ZType.VoidType;
+		return BlockNode;
+	}
+
+	public ZReturnNode CreateReturnNode(ZNode ParentNode, ZNode ExprNode) {
+		ZReturnNode ReturnNode = new ZReturnNode(ParentNode);
+		ReturnNode.SetNode(ZReturnNode._Expr, ExprNode);
+		ReturnNode.Type = ZType.VoidType;
+		return ReturnNode;
+	}
 
 }
 

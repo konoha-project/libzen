@@ -32,6 +32,7 @@ public final class ZReturnNode extends ZNode {
 	public ZReturnNode(ZNode ParentNode) {
 		super(ParentNode, null, 1);
 	}
+
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitReturnNode(this);
 	}

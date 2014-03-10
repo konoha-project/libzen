@@ -23,9 +23,7 @@ import zen.ast.ZSetNameNode;
 import zen.ast.ZSetterNode;
 import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
-import zen.lang.zen.ZenTypeSafer;
 import zen.parser.ZSourceBuilder;
-import zen.parser.ZSourceEngine;
 import zen.parser.ZSourceGenerator;
 import zen.parser.ZToken;
 import zen.type.ZClassType;
@@ -48,10 +46,6 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 
 		this.HeaderBuilder.Append("-module(generated).");
 		this.HeaderBuilder.AppendLineFeed();
-	}
-
-	@Override public ZSourceEngine GetEngine() {
-		return new ZSourceEngine(new ZenTypeSafer(this), this);
 	}
 
 	@Override public void VisitStmtList(ZListNode BlockNode) {
