@@ -22,59 +22,64 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // **************************************************************************
 
-package zen.ast;
+package zen.util;
 
-import zen.parser.ZVisitor;
+import java.util.HashMap;
+
 import zen.type.ZType;
-import zen.util.Field;
 
-public class ZVarNode extends ZBlockNode {
-	public static final int _NameInfo = 0;
-	public static final int _TypeInfo = 1;
-	public final static int _InitValue = 2;
+public final class ZMap <T> extends ZObject {
+	final HashMap<String, T>	Map;
 
-	@Field public ZType   GivenType = null;
-	@Field public String  GivenName = null;
-	@Field public int VarIndex      = -1;
-
-	public ZVarNode(ZNode ParentNode) {
-		super(ParentNode, null, 3);
+	public ZMap(ZType ElementType) {
+		super(0);
+		this.Map = new HashMap<String, T>();
 	}
 
-	public final ZType DeclType() {
-		if(this.GivenType == null) {
-			if(this.AST[ZVarNode._TypeInfo] != null) {
-				this.GivenType = this.AST[ZVarNode._TypeInfo].Type;
+	public ZMap(int TypeId, T[] Literal) {
+		super(TypeId);
+		this.Map = new HashMap<String, T>();
+		@Var int i = 0;
+		while(i < Literal.length) {
+			this.Map.put(Literal[i].toString(), Literal[i+1]);
+			i = i + 2;
+		}
+	}
+
+	@Override protected void Stringfy(StringBuilder sb) {
+		@Var int i = 0;
+		sb.append("{");
+		for(String Key : this.Map.keySet()) {
+			if(i > 0) {
+				sb.append(", ");
 			}
-			else {
-				this.GivenType = ZType.VarType;
-			}
+			this.AppendStringBuffer(sb, Key, this.Map.get(Key));
+			i = i + 1;
 		}
-		return this.GivenType;
+		sb.append("}");
 	}
 
-	public final void SetDeclType(ZType Type) {
-		this.GivenType = Type;
+	public final void put(String Key, T Value) {
+		this.Map.put(Key, Value);
 	}
 
-
-	public final String GetName() {
-		if(this.GivenName == null) {
-			this.GivenName = this.AST[ZVarNode._NameInfo].SourceToken.GetTextAsName();
-		}
-		return this.GivenName;
+	public final T GetOrNull(String Key) {
+		return this.Map.get(Key);
 	}
 
-	public final ZNode InitValueNode() {
-		if(this.AST[ZVarNode._InitValue] == null) {
-			this.SetNode(ZVarNode._InitValue, new ZDefaultValueNode());
-		}
-		return this.AST[ZVarNode._InitValue];
+	public final void remove(String Key) {
+		this.Map.remove(Key);
 	}
 
-	@Override public final void Accept(ZVisitor Visitor) {
-		Visitor.VisitVarNode(this);
+	public void AddMap(ZMap<Object> aMap) {
+		throw new RuntimeException("unimplemented !!");
 	}
 
+	public final static <T> T GetIndex(ZMap<T> aMap, String Key) {
+		return aMap.Map.get(Key);
+	}
 
+	public final static <T> void SetIndex(ZMap<T> aMap, String Key, T Value) {
+		aMap.Map.put(Key, Value);
+	}
 }

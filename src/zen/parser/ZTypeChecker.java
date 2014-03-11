@@ -37,6 +37,7 @@ import zen.ast.ZNode;
 import zen.ast.ZReturnNode;
 import zen.ast.ZStupidCastErrorNode;
 import zen.ast.ZSyntaxSugarNode;
+import zen.ast.ZVarNode;
 import zen.type.ZFunc;
 import zen.type.ZType;
 import zen.type.ZVarScope;
@@ -301,6 +302,16 @@ public abstract class ZTypeChecker extends ZVisitor {
 		ReturnNode.Type = ZType.VoidType;
 		return ReturnNode;
 	}
+
+	public ZVarNode CreateVarNode(ZNode ParentNode, String Name, ZType DeclType, ZNode InitNode) {
+		@Var ZVarNode VarNode = new ZVarNode(ParentNode);
+		VarNode.GivenName   = Name;
+		VarNode.GivenType   = DeclType;
+		VarNode.SetNode(ZVarNode._InitValue, InitNode);
+		VarNode.Type = ZType.VoidType;
+		return VarNode;
+	}
+
 
 }
 
