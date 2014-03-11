@@ -3,8 +3,8 @@ package zen.ssa;
 import java.util.ArrayList;
 
 import zen.ast.ZBlockNode;
+import zen.ast.ZLocalDefinedNode;
 import zen.ast.ZNode;
-import zen.ast.sugar.ZLocalDefinedNode;
 
 public class PHINode extends ZLocalDefinedNode {
 	public ArrayList<ZNode> Args;

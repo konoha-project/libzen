@@ -1,7 +1,7 @@
 package zen.codegen.jvm;
 
 import zen.ast.ZNode;
-import zen.ast.sugar.ZTopLevelNode;
+import zen.ast.ZTopLevelNode;
 import zen.parser.ZLogger;
 import zen.parser.ZNameSpace;
 import zen.type.ZType;

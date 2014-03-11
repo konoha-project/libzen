@@ -1,9 +1,11 @@
 package zen.ast.sugar;
 
+import zen.ast.ZDesugarNode;
 import zen.ast.ZFuncCallNode;
 import zen.ast.ZMacroNode;
 import zen.ast.ZNode;
 import zen.ast.ZStringNode;
+import zen.ast.ZSyntaxSugarNode;
 import zen.parser.ZGenerator;
 import zen.parser.ZMacroFunc;
 import zen.type.ZType;

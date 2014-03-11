@@ -1,6 +1,5 @@
-package zen.ast.sugar;
+package zen.ast;
 
-import zen.ast.ZNode;
 import zen.parser.ZGenerator;
 import zen.util.Field;
 import zen.util.Var;

@@ -1,6 +1,5 @@
 package zen.ast;
 
-import zen.ast.sugar.ZLocalDefinedNode;
 import zen.util.Field;
 
 public class ZMapEntryNode extends ZLocalDefinedNode {

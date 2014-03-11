@@ -1,6 +1,5 @@
 package zen.ast;
 
-import zen.ast.sugar.ZTopLevelNode;
 import zen.codegen.jvm.JavaImportNode;
 import zen.parser.ZNameSpace;
 import zen.util.Var;

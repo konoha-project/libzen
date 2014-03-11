@@ -24,7 +24,6 @@
 
 package zen.ast;
 
-import zen.ast.sugar.ZLocalDefinedNode;
 import zen.type.ZType;
 import zen.util.Field;
 

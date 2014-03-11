@@ -48,6 +48,7 @@ import zen.ast.ZIfNode;
 import zen.ast.ZInstanceOfNode;
 import zen.ast.ZIntNode;
 import zen.ast.ZLetNode;
+import zen.ast.ZLocalDefinedNode;
 import zen.ast.ZMacroNode;
 import zen.ast.ZMapLiteralNode;
 import zen.ast.ZMethodCallNode;
@@ -60,14 +61,13 @@ import zen.ast.ZSetIndexNode;
 import zen.ast.ZSetNameNode;
 import zen.ast.ZSetterNode;
 import zen.ast.ZStringNode;
+import zen.ast.ZSyntaxSugarNode;
 import zen.ast.ZThrowNode;
+import zen.ast.ZTopLevelNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZUnaryNode;
 import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
-import zen.ast.sugar.ZLocalDefinedNode;
-import zen.ast.sugar.ZSyntaxSugarNode;
-import zen.ast.sugar.ZTopLevelNode;
 
 public abstract class ZVisitor {
 	public abstract void VisitDefaultValueNode(ZDefaultValueNode Node);

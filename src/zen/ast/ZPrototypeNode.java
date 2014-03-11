@@ -1,6 +1,5 @@
 package zen.ast;
 
-import zen.ast.sugar.ZTopLevelNode;
 import zen.parser.ZNameSpace;
 import zen.type.ZFuncType;
 import zen.util.Field;
