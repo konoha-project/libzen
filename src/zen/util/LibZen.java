@@ -508,7 +508,7 @@ public class LibZen {
 		GenMap.put("erl", zen.codegen.erlang.ErlSourceCodeGenerator.class);
 
 		GenMap.put("hs", zen.codegen.haskell.HaskellSourceGenerator.class);
-		GenMap.put("java", zen.codegen.JavaSourceGenerator.class);
+		GenMap.put("java", zen.codegen.JavaGenerator.class);
 		GenMap.put("js", zen.codegen.javascript.JavaScriptGenerator.class);
 
 		GenMap.put("pl", zen.codegen.PerlGenerator.class);
