@@ -1,9 +1,8 @@
 function CGenerator(this: CGenerator): CGenerator;
-function GetEngine(this: CGenerator): ZSourceEngine;
 function GenerateImportLibrary(this: CGenerator, LibName: String): void;
 function GenerateCode(this: CGenerator, ContextType: ZType, Node: ZNode): void;
 function VisitArrayLiteralNode(this: CGenerator, Node: ZArrayLiteralNode): void;
-function VisitMapLiteralNode(this: CGenerator, Node: ZMapLiteralNode): void;
+function VisitMapLiteralNode(this: CGenerator, Node: MapLiteralNode): void;
 function VisitNewObjectNode(this: CGenerator, Node: ZNewObjectNode): void;
 function BaseName(this: CGenerator, RecvType: ZType): String;
 function VisitGetIndexNode(this: CGenerator, Node: ZGetIndexNode): void;
@@ -43,10 +42,6 @@ function CGenerator(this: CGenerator): CGenerator {
 	this.SetNativeType(ZTypeFloatType, "double");
 	this.SetNativeType(ZTypeStringType, "const char *");
 	this.HeaderBuilder.AppendNewLine("/* end of header */", this.LineFeed);
-}
-
-function GetEngine(this: CGenerator): ZSourceEngine {
-	return new ZSourceEngine(new ZenTypeSafer(this), this);
 }
 
 function GenerateImportLibrary(this: CGenerator, LibName: String): void {
@@ -89,7 +84,7 @@ function VisitArrayLiteralNode(this: CGenerator, Node: ZArrayLiteralNode): void 
 	this.VisitListNode("", Node, ")");
 }
 
-function VisitMapLiteralNode(this: CGenerator, Node: ZMapLiteralNode): void {
+function VisitMapLiteralNode(this: CGenerator, Node: MapLiteralNode): void {
 	var ParamType: ZType = Node.Type.GetParamType(0);
 	if(ParamType.IsIntType() || ParamType.IsBooleanType()) {
 		this.CurrentBuilder.Append("LibZen_NewIntMap(");
@@ -148,13 +143,13 @@ function VisitSetNameNode(this: CGenerator, Node: ZSetNameNode): void {
 function VisitGetterNode(this: CGenerator, Node: ZGetterNode): void {
 	this.GenerateSurroundCode(Node.RecvNode());
 	this.CurrentBuilder.Append("->");
-	this.CurrentBuilder.Append(Node.FieldName);
+	this.CurrentBuilder.Append(Node.GetName());
 }
 
 function VisitSetterNode(this: CGenerator, Node: ZSetterNode): void {
 	this.GenerateSurroundCode(Node.RecvNode());
 	this.CurrentBuilder.Append("->");
-	this.CurrentBuilder.Append(Node.FieldName);
+	this.CurrentBuilder.Append(Node.GetName());
 	this.CurrentBuilder.AppendToken("=");
 	this.GenerateCode(null, Node.ExprNode());
 }
@@ -246,9 +241,9 @@ function GenerateTypeName(this: CGenerator, Type: ZType): void {
 }
 
 function VisitVarNode(this: CGenerator, Node: ZVarNode): void {
-	this.GenerateTypeName(Node.DeclType);
+	this.GenerateTypeName(Node.DeclType());
 	this.CurrentBuilder.Append(" ");
-	this.CurrentBuilder.Append(this.NameLocalVariable(Node.NativeName, Node.VarIndex));
+	this.CurrentBuilder.Append(this.NameLocalVariable(Node.GetName(), Node.VarIndex));
 	this.CurrentBuilder.AppendToken("=");
 	this.GenerateCode(null, Node.InitValueNode());
 	this.CurrentBuilder.Append(this.SemiColon);
@@ -257,35 +252,35 @@ function VisitVarNode(this: CGenerator, Node: ZVarNode): void {
 
 function VisitParamNode(this: CGenerator, Node: ZParamNode): void {
 	if(Node.Type.IsFuncType()) {
-		this.GenerateFuncTypeName(Node.Type, this.NameLocalVariable(Node.Name, Node.ParamIndex));
+		this.GenerateFuncTypeName(Node.DeclType(), this.NameLocalVariable(Node.GetName(), Node.ParamIndex));
 	}
 	else {
-		this.GenerateTypeName(Node.Type);
+		this.GenerateTypeName(Node.DeclType());
 		this.CurrentBuilder.Append(" ");
-		this.CurrentBuilder.Append(this.NameLocalVariable(Node.Name, Node.ParamIndex));
+		this.CurrentBuilder.Append(this.NameLocalVariable(Node.GetName(), Node.ParamIndex));
 	}
 }
 
 function GenerateExportFunction(this: CGenerator, Node: ZFunctionNode): void {
 	this.CurrentBuilder.AppendNewLine();
-	if(Node.FuncName.equals("main")) {
+	if(Node.FuncName().equals("main")) {
 		this.CurrentBuilder.Append("int");
 	}
 	else {
-		this.GenerateTypeName(Node.ReturnType);
+		this.GenerateTypeName(Node.ReturnType());
 	}
-	this.CurrentBuilder.Append(" ", Node.FuncName);
+	this.CurrentBuilder.Append(" ", Node.FuncName());
 	this.VisitListNode("(", Node, ")");
 	this.CurrentBuilder.OpenIndent(" {");
-	if(!Node.ReturnType.IsVoidType()) {
-		this.CurrentBuilder.AppendNewLine("return ", Node.GetSignature(this));
+	if(!Node.ReturnType().IsVoidType()) {
+		this.CurrentBuilder.AppendNewLine("return ", Node.GetSignature());
 	}
 	else {
-		this.CurrentBuilder.AppendNewLine(Node.GetSignature(this));
+		this.CurrentBuilder.AppendNewLine(Node.GetSignature());
 	}
 	this.GenerateWrapperCall("(", Node, ")");
 	this.CurrentBuilder.Append(this.SemiColon);
-	if(Node.FuncName.equals("main")) {
+	if(Node.FuncName().equals("main")) {
 		this.CurrentBuilder.AppendNewLine("return 0;");
 	}
 	this.CurrentBuilder.CloseIndent("}");
@@ -295,7 +290,7 @@ function VisitInstanceOfNode(this: CGenerator, Node: ZInstanceOfNode): void {
 	this.CurrentBuilder.Append("LibZen_Is(");
 	this.GenerateCode(null, Node.AST[ZInstanceOfNode_Left]);
 	this.CurrentBuilder.Append(this.Camma);
-	this.CurrentBuilder.AppendInt(Node.TargetType.TypeId);
+	this.CurrentBuilder.AppendInt(Node.TargetType().TypeId);
 	this.CurrentBuilder.Append(")");
 }
 
@@ -312,7 +307,7 @@ function GenerateField(this: CGenerator, DeclType: ZType, FieldName: String): vo
 
 function GenerateFields(this: CGenerator, ClassType: ZClassType, ThisType: ZType): void {
 	var SuperType: ZType = ThisType.GetSuperType();
-	if(!SuperType.IsVarType()) {
+	if(!SuperType.Equals(ZClassType_ObjectType)) {
 		this.GenerateFields(ClassType, SuperType);
 	}
 	var i: int = 0;

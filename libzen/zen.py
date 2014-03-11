@@ -25,7 +25,7 @@ def RemoveQ(s):
 ArrayPattern = re.compile('ZArray\<(.*)\>')
 
 def GenType(s):
-	s = s.replace("ZenMap", "Map")
+	s = s.replace("ZMap", "Map")
 	s = s.replace("char", "String")
 	s = s.replace("long", "int")
 	s = s.replace("double", "float")
@@ -82,7 +82,7 @@ def GenStaticFunc(cname, line, IsProto=False):
 
 VarPattern = re.compile('(.*)\@Var\s+(\S*)\s+(\w*)(.*)')
 NewArrayPattern = re.compile('(.*)new ZArray\<\S*\>\(.*\)(.*)')
-NewMapPattern = re.compile('(.*)new ZenMap\<\S*\>\(.*\)(.*)')
+NewMapPattern = re.compile('(.*)new ZMap\<\S*\>\(.*\)(.*)')
 MapPattern1 = re.compile('(.*)\.GetOrNull\((.*)\);')
 MapPattern2 = re.compile('(.*)\.put\((.*)\,(.*)\);')
 FuncPattern = re.compile('(.*)new (\w+)Function\(\)(.*)');
