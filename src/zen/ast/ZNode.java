@@ -33,7 +33,6 @@ import zen.type.ZType;
 import zen.util.Field;
 import zen.util.LibZen;
 import zen.util.Var;
-import zen.util.ZenMethod;
 
 public abstract class ZNode {
 	public final static int _Nop =      -1;
@@ -175,10 +174,6 @@ public abstract class ZNode {
 		return (this instanceof ZErrorNode);
 	}
 
-	@ZenMethod public boolean IsBreakingBlock() {
-		return false;
-	}
-
 	public abstract void Accept(ZVisitor Visitor);
 
 	public final boolean IsUntyped() {
@@ -200,10 +195,6 @@ public abstract class ZNode {
 			}
 		}
 		return this.HasUntypedNode;
-	}
-
-	public ZReturnNode ToReturnNode() {
-		return null;
 	}
 
 	//	@Deprecated public final ZNode GetPrevNode() {

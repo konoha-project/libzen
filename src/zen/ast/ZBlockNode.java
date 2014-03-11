@@ -55,13 +55,6 @@ public class ZBlockNode extends ZListNode {
 		Visitor.VisitBlockNode(this);
 	}
 
-	@Override public ZReturnNode ToReturnNode() {
-		if(this.GetListSize() == 1) {
-			return this.GetListAt(0).ToReturnNode();
-		}
-		return null;
-	}
-
 	public final int IndexOf(ZNode ChildNode) {
 		@Var int i = 0;
 		while(i < this.GetListSize()) {

@@ -78,6 +78,7 @@ import zen.parser.ZGenerator;
 import zen.parser.ZLogger;
 import zen.parser.ZMacroFunc;
 import zen.parser.ZNameSpace;
+import zen.parser.ZNodeUtils;
 import zen.parser.ZToken;
 import zen.parser.ZTypeChecker;
 import zen.parser.ZVariable;
@@ -613,7 +614,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 				CheckNode = Node.GetListAt(i);
 			}
 			Node.SetListAt(i, TypedNode);
-			if(SubNode.IsBreakingBlock()) {
+			if(ZNodeUtils._IsBreakBlock(SubNode)) {
 				Node.ClearListAfter(i+1);
 				break;
 			}
@@ -726,15 +727,12 @@ public class ZenTypeSafer extends ZTypeChecker {
 			@Var ZNode StmtNode = null;
 			while(i < BlockNode.GetListSize()) {
 				StmtNode = BlockNode.GetListAt(i);
-				if(StmtNode instanceof ZReturnNode) {
+				if(ZNodeUtils._IsBreakBlock(StmtNode)) {
 					return true;
 				}
 				i = i + 1;
 			}
 			Node = StmtNode;
-		}
-		if(Node instanceof ZReturnNode) {
-			return true;
 		}
 		if(Node instanceof ZIfNode) {
 			@Var ZIfNode IfNode = (ZIfNode)Node;
@@ -743,10 +741,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 			}
 			return false;
 		}
-		if(Node instanceof ZBlockNode) {
-			return this.HasReturn(Node);
-		}
-		return false;
+		return ZNodeUtils._IsBreakBlock(Node);
 	}
 
 	@Override public void DefineFunction(ZFunctionNode FunctionNode, boolean Enforced) {

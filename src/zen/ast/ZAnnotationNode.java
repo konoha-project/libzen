@@ -46,10 +46,6 @@ public final class ZAnnotationNode extends ZNode {
 	//		this.AnnotatedNode = this.SetChild(Node);
 	//	}
 
-	@Override public boolean IsBreakingBlock() {
-		return this.AnnotatedNode.IsBreakingBlock();
-	}
-
 	@Override public void Accept(ZVisitor Visitor) {
 		this.AnnotatedNode.Accept(Visitor);
 	}

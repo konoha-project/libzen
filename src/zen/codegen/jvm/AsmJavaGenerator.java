@@ -123,10 +123,10 @@ import zen.util.LibZen;
 import zen.util.Var;
 import zen.util.ZArray;
 import zen.util.ZFunction;
+import zen.util.ZMap;
 import zen.util.ZMatchFunction;
 import zen.util.ZObject;
 import zen.util.ZTokenFunction;
-import zen.util.ZMap;
 
 public class AsmJavaGenerator extends ZGenerator {
 	private final ZMap<Class<?>> GeneratedClassMap = new ZMap<Class<?>>(null);
@@ -150,9 +150,9 @@ public class AsmJavaGenerator extends ZGenerator {
 
 	private void InitFuncClass() {
 		ZFuncType FuncType = JavaTypeTable.FuncType(boolean.class, ZSourceContext.class);
-		this.SetGeneratedClass(NameFuncClass(FuncType), ZTokenFunction.class);
+		this.SetGeneratedClass(this.NameType(FuncType), ZTokenFunction.class);
 		FuncType = JavaTypeTable.FuncType(ZNode.class, ZNode.class, ZTokenContext.class, ZNode.class);
-		this.SetGeneratedClass(NameFuncClass(FuncType), ZMatchFunction.class);
+		this.SetGeneratedClass(this.NameType(FuncType), ZMatchFunction.class);
 	}
 
 	private final void SetGeneratedClass(String Key, Class<?> C) {
@@ -843,7 +843,7 @@ public class AsmJavaGenerator extends ZGenerator {
 	}
 
 	Class<?> LoadFuncClass(ZFuncType FuncType) {
-		String ClassName = NameFuncClass(FuncType);
+		String ClassName = this.NameType(FuncType);
 		Class<?> FuncClass = this.GetGeneratedClass(ClassName, null);
 		if(FuncClass == null) {
 			@Var String SuperClassName = Type.getInternalName(ZFunction.class);
@@ -989,9 +989,8 @@ public class AsmJavaGenerator extends ZGenerator {
 		return true;
 	}
 
-
 	private Class<?> MethodWrapperClass(ZFuncType FuncType, ZFuncType SourceFuncType) {
-		String ClassName = "W" + NameFuncClass(FuncType) + "W" + NameFuncClass(SourceFuncType);
+		String ClassName = "W" + this.NameType(FuncType) + "W" + this.NameType(SourceFuncType);
 		Class<?> WrapperClass = this.GetGeneratedClass(ClassName, null);
 		if(WrapperClass == null) {
 			Class<?> FuncClass = this.LoadFuncClass(FuncType);

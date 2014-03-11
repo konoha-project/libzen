@@ -41,6 +41,7 @@ import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
+import zen.parser.ZNodeUtils;
 import zen.parser.ZSourceBuilder;
 import zen.parser.ZSourceGenerator;
 import zen.type.ZType;
@@ -191,7 +192,7 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 		}
 		this.UnIndent(this.CurrentBuilder);
 
-		ZReturnNode ReturnNode = Node.BlockNode().ToReturnNode();
+		ZReturnNode ReturnNode = ZNodeUtils._CheckIfSingleReturnNode(Node);
 		if(ReturnNode != null && ReturnNode.HasReturnExpr()) {
 			this.Indent(this.CurrentBuilder);
 

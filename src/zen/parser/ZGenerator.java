@@ -40,6 +40,7 @@ import zen.ast.ZNullNode;
 import zen.ast.ZStringNode;
 import zen.ast.ZSyntaxSugarNode;
 import zen.ast.ZTopLevelNode;
+import zen.type.ZClassType;
 import zen.type.ZFunc;
 import zen.type.ZFuncType;
 import zen.type.ZPrototype;
@@ -194,11 +195,15 @@ public abstract class ZGenerator extends ZVisitor {
 		return UniqueNumber;
 	}
 
-	public final String NameGlobalSymbol(String Symbol) {
+	public final String NameUniqueSymbol(String Symbol) {
 		return Symbol + "Z" + this.GetUniqueNumber();
 	}
 
-	public final String NameUniqueSymbol(String Symbol) {
+	public String NameGlobalNameClass(String Name) {
+		return "G__" + Name;
+	}
+
+	public String NameGlobalSymbol(String Symbol) {
 		return Symbol + "Z" + this.GetUniqueNumber();
 	}
 
@@ -206,16 +211,34 @@ public abstract class ZGenerator extends ZVisitor {
 		return ClassType.ShortName + "" + ClassType.TypeId;
 	}
 
-	public static String NameFuncClass(ZFuncType FuncType) {
-		return "ZFunc"+ FuncType.TypeId;
-	}
-
 	public final String NameFunctionClass(String FuncName, ZFuncType FuncType) {
-		return "F" + FuncType.StringfySignature(FuncName);
+		return "F__" + FuncType.StringfySignature(FuncName);
 	}
 
 	public final String NameFunctionClass(String FuncName, ZType RecvType, int FuncParamSize) {
-		return "F" + ZFunc._StringfySignature(FuncName, FuncParamSize, RecvType);
+		return "F__" + ZFunc._StringfySignature(FuncName, FuncParamSize, RecvType);
+	}
+
+	public final String NameType(ZType Type) {
+		if(Type.IsArrayType()) {
+			return "ArrayOf" + this.NameType(Type.GetParamType(0)) + "_";
+		}
+		if(Type.IsMapType()) {
+			return "MapOf" + this.NameType(Type.GetParamType(0)) + "_";
+		}
+		if(Type instanceof ZFuncType) {
+			@Var String s = "FuncOf";
+			@Var int i = 0;
+			while(i < Type.GetParamSize()) {
+				s = s +  this.NameType(Type.GetParamType(i));
+				i = i + 1;
+			}
+			return s + "_";
+		}
+		if(Type instanceof ZClassType) {
+			return this.NameClass(Type);
+		}
+		return Type.GetName();
 	}
 
 	//

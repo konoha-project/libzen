@@ -36,9 +36,6 @@ public final class ZReturnNode extends ZNode {
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitReturnNode(this);
 	}
-	@Override public ZReturnNode ToReturnNode() {
-		return this;
-	}
 
 	public final boolean HasReturnExpr() {
 		return this.AST[ZReturnNode._Expr] != null;

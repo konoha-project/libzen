@@ -72,7 +72,7 @@ public class JavaGenerator extends ZSourceGenerator {
 		if(this.MainFuncNode != null) {
 			this.CurrentBuilder.AppendNewLine("public final static void main(String[] a)");
 			this.CurrentBuilder.OpenIndent(" {");
-			this.CurrentBuilder.AppendNewLine("F", this.MainFuncNode.GetSignature(), ".f();");
+			this.CurrentBuilder.AppendNewLine(this.NameFunctionClass(this.MainFuncNode.FuncName(), ZType.VoidType, 0), ".f();");
 			this.CurrentBuilder.CloseIndent("}");
 		}
 		this.CurrentBuilder.CloseIndent("}");
@@ -250,43 +250,13 @@ public class JavaGenerator extends ZSourceGenerator {
 		return this.GetNativeTypeName(Type);
 	}
 
-	private String ParamFuncTypeName(ZType Type) {
-		if(Type.IsArrayType()) {
-			return "ArrayOf" + this.ParamFuncTypeName(Type.GetParamType(0)) + "_";
-		}
-		if(Type.IsMapType()) {
-			return "MapOf" + this.ParamFuncTypeName(Type.GetParamType(0)) + "_";
-		}
-		if(Type.IsFuncType()) {
-			@Var String s = "FuncOf";
-			@Var int i = 0;
-			while(i < Type.GetParamSize()) {
-				s = s +  this.ParamFuncTypeName(Type.GetParamType(i));
-				i = i + 1;
-			}
-			return s + "_";
-		}
-		if(Type.IsIntType()) {
-			return "Int";
-		}
-		if(Type.IsFloatType()) {
-			return "Float";
-		}
-		if(Type.IsVoidType()) {
-			return "Void";
-		}
-		if(Type.IsVarType()) {
-			return "Var";
-		}
-		return Type.GetName();
-	}
 
 	@Field private final ZMap<String> FuncNameMap = new ZMap<String>(null);
 
 	String GetFuncTypeClass(ZFuncType FuncType) {
 		@Var String ClassName = this.FuncNameMap.GetOrNull(FuncType.GetUniqueName());
 		if(ClassName == null) {
-			ClassName = this.ParamFuncTypeName(FuncType);
+			ClassName = this.NameType(FuncType);
 			this.FuncNameMap.put(FuncType.GetUniqueName(), ClassName);
 
 			this.CurrentBuilder = this.InsertNewSourceBuilder();
@@ -334,10 +304,6 @@ public class JavaGenerator extends ZSourceGenerator {
 		this.GenerateCode(null, Node.InitValueNode());
 		this.CurrentBuilder.Append(this.SemiColon);
 		this.VisitStmtList(Node);
-	}
-
-	private String NameGlobalNameClass(String Name) {
-		return "G__" + Name;
 	}
 
 	@Override public void VisitLetNode(ZLetNode Node) {
