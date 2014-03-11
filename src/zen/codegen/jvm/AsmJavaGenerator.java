@@ -132,14 +132,14 @@ public class AsmJavaGenerator extends ZGenerator {
 	private final ZMap<Class<?>> GeneratedClassMap = new ZMap<Class<?>>(null);
 	public JavaStaticFieldNode MainFuncNode = null;
 	AsmClassLoader AsmLoader = null;
-	Stack<TryCatchLabel> TryCatchLabel;
+	Stack<AsmTryCatchLabel> TryCatchLabel;
 	AsmMethodBuilder AsmBuilder;
 
 	public AsmJavaGenerator() {
 		super(new ZLangInfo("Java1.6", "jvm"));
 		this.InitFuncClass();
 		this.ImportLocalGrammar(this.RootNameSpace);
-		this.TryCatchLabel = new Stack<TryCatchLabel>();
+		this.TryCatchLabel = new Stack<AsmTryCatchLabel>();
 		this.AsmLoader = new AsmClassLoader(this);
 	}
 
@@ -475,9 +475,21 @@ public class AsmJavaGenerator extends ZGenerator {
 		this.AsmBuilder.RemoveLocal(DeclClass, Node.GetName());
 	}
 
+	public void VisitStaticFieldNode(JavaStaticFieldNode Node) {
+		this.AsmBuilder.visitFieldInsn(Opcodes.GETSTATIC, Type.getInternalName(Node.StaticClass), Node.FieldName, this.GetJavaClass(Node.Type));
+	}
+
 	@Override public void VisitGlobalNameNode(ZGlobalNameNode Node) {
-		ZLogger._LogError(Node.SourceToken, "undefined symbol: " + Node.GlobalName);
-		this.AsmBuilder.visitInsn(Opcodes.ACONST_NULL);
+		if(Node.IsFuncNameNode()) {
+			this.AsmBuilder.visitFieldInsn(Opcodes.GETSTATIC, this.NameFunctionClass(Node.GlobalName, Node.FuncType), "f", this.GetJavaClass(Node.Type));
+		}
+		else if(!Node.IsUntyped()) {
+			this.AsmBuilder.visitFieldInsn(Opcodes.GETSTATIC, this.NameGlobalNameClass(Node.GlobalName), "_", this.GetJavaClass(Node.Type));
+		}
+		else {
+			ZLogger._LogError(Node.SourceToken, "undefined symbol: " + Node.GlobalName);
+			this.AsmBuilder.visitInsn(Opcodes.ACONST_NULL);
+		}
 	}
 
 	@Override public void VisitGetNameNode(ZGetNameNode Node) {
@@ -779,18 +791,21 @@ public class AsmJavaGenerator extends ZGenerator {
 
 	@Override public void VisitTryNode(ZTryNode Node) {
 		MethodVisitor mv = this.AsmBuilder;
-		TryCatchLabel Label = new TryCatchLabel();
-		this.TryCatchLabel.push(Label); // push
+		AsmTryCatchLabel TryCatchLabel = new AsmTryCatchLabel();
+		this.TryCatchLabel.push(TryCatchLabel); // push
 
 		// try block
-		mv.visitLabel(Label.beginTryLabel);
+		this.AsmBuilder.visitLabel(TryCatchLabel.BeginTryLabel);
 		Node.TryBlockNode().Accept(this);
-		mv.visitLabel(Label.endTryLabel);
-		mv.visitJumpInsn(GOTO, Label.finallyLabel);
+		this.AsmBuilder.visitLabel(TryCatchLabel.EndTryLabel);
+		mv.visitJumpInsn(GOTO, TryCatchLabel.FinallyLabel);
+		if(Node.HasCatchBlockNode()) {
+
+		}
 
 		// finally block
-		mv.visitLabel(Label.finallyLabel);
-		if(Node.FinallyBlockNode() != null) {
+		this.AsmBuilder.visitLabel(TryCatchLabel.FinallyLabel);
+		if(Node.HasFinallyBlockNode()) {
 			Node.FinallyBlockNode().Accept(this);
 		}
 		this.TryCatchLabel.pop();
@@ -818,28 +833,22 @@ public class AsmJavaGenerator extends ZGenerator {
 
 	@Override public void VisitLetNode(ZLetNode Node) {
 		if(Node.HasUntypedNode()) {
-			ZLogger._LogError(Node.InitValueNode().SourceToken, "type is ambigious");
+			ZLogger._LogWarning(Node.InitValueNode().SourceToken, "type is ambigious");
 			return;
 		}
-		if(Node.InitValueNode() instanceof ZErrorNode) {
-			this.VisitErrorNode((ZErrorNode)Node.InitValueNode());
-			return;
-		}
-		if(!Node.IsConstValue()) {
-			String ClassName = "Symbol" + Node.GlobalName;
-			@Var AsmClassBuilder ClassBuilder = this.AsmLoader.NewClass(ACC_PUBLIC|ACC_FINAL, Node, ClassName, "java/lang/Object");
-			Class<?> ValueClass = this.GetJavaClass(Node.GetAstType(ZLetNode._InitValue));
-			ClassBuilder.AddField(ACC_PUBLIC|ACC_STATIC, "_", ValueClass, null);
+		String ClassName = this.NameGlobalNameClass(Node.GlobalName);
+		@Var AsmClassBuilder ClassBuilder = this.AsmLoader.NewClass(ACC_PUBLIC|ACC_FINAL, Node, ClassName, "java/lang/Object");
+		Class<?> ValueClass = this.GetJavaClass(Node.GetAstType(ZLetNode._InitValue));
+		ClassBuilder.AddField(ACC_PUBLIC|ACC_STATIC, "_", ValueClass, null);
 
-			AsmMethodBuilder StaticInitMethod = ClassBuilder.NewMethod(ACC_PUBLIC | ACC_STATIC, "<clinit>", "()V");
-			StaticInitMethod.PushNode(ValueClass, Node.InitValueNode());
-			StaticInitMethod.visitFieldInsn(Opcodes.PUTSTATIC, ClassName, "_",  Type.getDescriptor(ValueClass));
-			StaticInitMethod.visitInsn(RETURN);
-			StaticInitMethod.Finish();
-
-			Class<?> StaticClass = this.AsmLoader.LoadGeneratedClass(ClassName);
-			Node.GetNameSpace().SetLocalSymbol(Node.GetName(), new JavaStaticFieldNode(Node, StaticClass, Node.InitValueNode().Type, "_"));
-		}
+		AsmMethodBuilder StaticInitMethod = ClassBuilder.NewMethod(ACC_PUBLIC | ACC_STATIC, "<clinit>", "()V");
+		StaticInitMethod.PushNode(ValueClass, Node.InitValueNode());
+		StaticInitMethod.visitFieldInsn(Opcodes.PUTSTATIC, ClassName, "_",  Type.getDescriptor(ValueClass));
+		StaticInitMethod.visitInsn(RETURN);
+		StaticInitMethod.Finish();
+		this.AsmLoader.LoadGeneratedClass(ClassName);
+		//Class<?> StaticClass = this.AsmLoader.LoadGeneratedClass(ClassName);
+		//		Node.GetNameSpace().SetLocalSymbol(Node.GetName(), new JavaStaticFieldNode(Node, StaticClass, Node.InitValueNode().Type, "_"));
 	}
 
 	Class<?> LoadFuncClass(ZFuncType FuncType) {
@@ -882,12 +891,8 @@ public class AsmJavaGenerator extends ZGenerator {
 			if(this.AsmBuilder != null) {
 				this.VisitStaticFieldNode(FuncNode);
 			}
-			else {  // ad hoc
-				Node.GetNameSpace().SetLocalSymbol("it", FuncNode);
-			}
 		}
 	}
-
 
 	private JavaStaticFieldNode GenerateFunctionAsSymbolField(String FuncName, ZFunctionNode Node) {
 		@Var ZFuncType FuncType = Node.GetFuncType();
@@ -1152,11 +1157,6 @@ public class AsmJavaGenerator extends ZGenerator {
 		this.AsmBuilder.ApplyStaticMethod(Node, sMethod);
 	}
 
-	public void VisitStaticFieldNode(JavaStaticFieldNode Node) {
-		String FieldDesc = Type.getDescriptor(this.GetJavaClass(Node.Type));
-		this.AsmBuilder.visitFieldInsn(Opcodes.GETSTATIC, Type.getInternalName(Node.StaticClass), Node.FieldName, FieldDesc);
-	}
-
 	@Override public void VisitAsmNode(ZAsmNode Node) {
 		// TODO Auto-generated method stub
 	}
@@ -1167,7 +1167,7 @@ public class AsmJavaGenerator extends ZGenerator {
 
 	@Override public void VisitLocalDefinedNode(ZLocalDefinedNode Node) {
 		if(Node instanceof JavaStaticFieldNode) {
-			this.VisitStaticFieldNode((JavaStaticFieldNode)Node);
+			this.VisitStaticFieldNode(((JavaStaticFieldNode)Node));
 		}
 		else {
 			this.VisitUndefinedNode(Node);

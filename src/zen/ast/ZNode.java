@@ -35,11 +35,11 @@ import zen.util.LibZen;
 import zen.util.Var;
 
 public abstract class ZNode {
-	public final static int _Nop =      -1;
 	//	public final static int _NameInfo = -2;
 	//	public final static int _TypeInfo = -3;
-	public final static int _AppendIndex = -4;
-	public final static int _NestedAppendIndex = -5;
+	public final static int _AppendIndex = -1;
+	public final static int _NestedAppendIndex = -2;
+	public final static int _Nop =      -3;
 
 	@Field public ZNode ParentNode;
 	@Field public ZToken SourceToken;
@@ -196,36 +196,6 @@ public abstract class ZNode {
 		}
 		return this.HasUntypedNode;
 	}
-
-	//	@Deprecated public final ZNode GetPrevNode() {
-	//		if(this.ParentNode == null) {
-	//			return null;
-	//		}
-	//		if(this.ParentNode instanceof ZBlockNode) {
-	//			@Var ZBlockNode Block = (ZBlockNode) this.ParentNode;
-	//			for (int i = 1; i < Block.GetListSize(); i++) {
-	//				if(Block.GetListAt(i) == this) {
-	//					return Block.GetListAt(i-1);
-	//				}
-	//			}
-	//		}
-	//		return null;
-	//	}
-	//
-	//	@Deprecated public ZNode GetNextNode() {
-	//		if(this.ParentNode == null) {
-	//			return null;
-	//		}
-	//		if(this.ParentNode instanceof ZBlockNode) {
-	//			@Var ZBlockNode Block = (ZBlockNode) this.ParentNode;
-	//			for (int i = 0; i < Block.GetListSize() - 1; i++) {
-	//				if(Block.GetListAt(i) == this) {
-	//					return Block.GetListAt(i+1);
-	//				}
-	//			}
-	//		}
-	//		return null;
-	//	}
 
 }
 
