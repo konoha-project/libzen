@@ -8,7 +8,7 @@ import zen.ast.ZErrorNode;
 import zen.ast.ZGetNameNode;
 import zen.ast.ZNode;
 import zen.ast.ZSetNameNode;
-import zen.ast.ZSyntaxSugarNode;
+import zen.ast.ZSugarNode;
 import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
 import zen.parser.ZGenerator;
@@ -17,7 +17,7 @@ import zen.type.ZType;
 import zen.util.LibZen;
 import zen.util.Var;
 
-public class ZContinueNode extends ZSyntaxSugarNode {
+public class ZContinueNode extends ZSugarNode {
 
 	public ZContinueNode(ZNode ParentNode) {
 		super(ParentNode, null, 0);

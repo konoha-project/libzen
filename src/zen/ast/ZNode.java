@@ -45,7 +45,7 @@ public abstract class ZNode {
 	@Field public ZToken SourceToken;
 	@Field public ZNode  AST[];
 	@Field public ZType	Type = ZType.VarType;
-	@Field public boolean HasUntypedNode = true;
+	@Field public boolean HasUntyped = true;
 
 	public ZNode(ZNode ParentNode, ZToken SourceToken, int Size) {
 		assert(this != ParentNode);
@@ -181,7 +181,7 @@ public abstract class ZNode {
 	}
 
 	public final boolean HasUntypedNode() {
-		if(this.HasUntypedNode) {
+		if(this.HasUntyped) {
 			if(!this.IsUntyped()) {
 				@Var int i = 0;
 				while(i < this.GetAstSize()) {
@@ -190,11 +190,10 @@ public abstract class ZNode {
 					}
 					i = i + 1;
 				}
-				this.HasUntypedNode = false;
-				return false;
+				this.HasUntyped = false;
 			}
 		}
-		return this.HasUntypedNode;
+		return this.HasUntyped;
 	}
 
 }

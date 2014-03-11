@@ -5,7 +5,7 @@ import zen.parser.ZTypeChecker;
 import zen.util.Field;
 import zen.util.Var;
 
-public class ZDesugarNode extends ZSyntaxSugarNode {
+public class ZDesugarNode extends ZSugarNode {
 	//	public final static int _NewNode = 0;
 	@Field ZNode OriginalNode;
 

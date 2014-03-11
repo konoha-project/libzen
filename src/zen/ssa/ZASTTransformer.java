@@ -39,7 +39,7 @@ import zen.ast.ZSetIndexNode;
 import zen.ast.ZSetNameNode;
 import zen.ast.ZSetterNode;
 import zen.ast.ZStringNode;
-import zen.ast.ZSyntaxSugarNode;
+import zen.ast.ZSugarNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTopLevelNode;
 import zen.ast.ZTryNode;
@@ -330,7 +330,7 @@ public class ZASTTransformer extends ZVisitor {
 	}
 
 	@Override
-	public void VisitSyntaxSugarNode(ZSyntaxSugarNode Node) {
+	public void VisitSugarNode(ZSugarNode Node) {
 		// TODO Auto-generated method stub
 
 	}

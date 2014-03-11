@@ -6,14 +6,14 @@ import zen.parser.ZTypeChecker;
 import zen.parser.ZVisitor;
 
 
-public abstract class ZSyntaxSugarNode extends ZNode {
+public abstract class ZSugarNode extends ZNode {
 
-	public ZSyntaxSugarNode(ZNode ParentNode, ZToken SourceToken, int Size) {
+	public ZSugarNode(ZNode ParentNode, ZToken SourceToken, int Size) {
 		super(ParentNode, SourceToken, Size);
 	}
 
 	@Override public final void Accept(ZVisitor Visitor) {
-		Visitor.VisitSyntaxSugarNode(this);
+		Visitor.VisitSugarNode(this);
 	}
 
 	public abstract ZDesugarNode DeSugar(ZGenerator Generator, ZTypeChecker TypeChekcer);

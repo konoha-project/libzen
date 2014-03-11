@@ -67,7 +67,7 @@ import zen.ast.ZSetIndexNode;
 import zen.ast.ZSetNameNode;
 import zen.ast.ZSetterNode;
 import zen.ast.ZStringNode;
-import zen.ast.ZSyntaxSugarNode;
+import zen.ast.ZSugarNode;
 import zen.ast.ZThrowNode;
 import zen.ast.ZTopLevelNode;
 import zen.ast.ZTryNode;
@@ -666,7 +666,7 @@ public class ZSourceGenerator extends ZGenerator {
 		this.VisitUndefinedNode(Node);
 	}
 
-	@Override public void VisitSyntaxSugarNode(ZSyntaxSugarNode Node) {
+	@Override public void VisitSugarNode(ZSugarNode Node) {
 		@Var ZDesugarNode DesugarNode = Node.DeSugar(this, this.TypeChecker);
 		this.GenerateCode(null, DesugarNode.AST[0]);
 		@Var int i = 1;

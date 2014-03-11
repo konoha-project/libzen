@@ -81,7 +81,7 @@ public class ZBlockNode extends ZListNode {
 				this.AST[i] = NewNode;
 				NewNode.ParentNode = this;
 				if(NewNode.HasUntypedNode()) {
-					this.HasUntypedNode = true;
+					this.HasUntyped = true;
 				}
 				return;
 			}

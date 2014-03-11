@@ -28,6 +28,11 @@ public final class ZVarScope {
 	}
 
 	public void TypeNode(ZNode Node, ZType Type) {
+		if(Type instanceof ZVarType) {
+			if(!Type.IsVarType()) {
+				Type = Type.GetRealType();
+			}
+		}
 		if(Node.Type != Type) {
 			Node.Type = Type;
 			this.TypedNodeCount = this.TypedNodeCount + 1;

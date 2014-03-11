@@ -38,18 +38,20 @@ import zen.ast.ZMacroNode;
 import zen.ast.ZNode;
 import zen.ast.ZReturnNode;
 import zen.ast.ZStupidCastErrorNode;
-import zen.ast.ZSyntaxSugarNode;
+import zen.ast.ZSugarNode;
 import zen.ast.ZVarNode;
 import zen.type.ZFunc;
 import zen.type.ZFuncType;
+import zen.type.ZGreekType;
 import zen.type.ZType;
 import zen.type.ZVarScope;
-import zen.type.ZVarType;
 import zen.util.Field;
 import zen.util.LibZen;
 import zen.util.Var;
 
 public abstract class ZTypeChecker extends ZVisitor {
+	public final static int _DefaultTypeCheckPolicy			= 0;
+	public final static int _NoCheckPolicy                  = 1;
 
 	@Field private ZType      StackedContextType;
 	@Field private ZNode      ReturnedNode;
@@ -84,6 +86,25 @@ public abstract class ZTypeChecker extends ZVisitor {
 		return this.StackedContextType;
 	}
 
+	public final void ReturnNode(ZNode Node) {
+		if(this.ReturnedNode != null) {
+			LibZen._PrintDebug("previous returned node " + Node);
+		}
+		this.ReturnedNode = Node;
+	}
+
+	public final void ReturnTypeNode(ZNode Node, ZType Type) {
+		this.VarScope.TypeNode(Node, Type);
+		this.ReturnNode(Node);
+	}
+
+	public final void ReturnErrorNode(ZNode Node, ZToken ErrorToken, String Message) {
+		if(ErrorToken == null) {
+			ErrorToken = Node.SourceToken;
+		}
+		this.ReturnNode(new ZErrorNode(Node.ParentNode, ErrorToken, Message));
+	}
+
 	protected final ZNode CreateStupidCastNode(ZType Requested, ZNode Node) {
 		@Var ZNode ErrorNode = new ZStupidCastErrorNode(Node, "type error: requested=" +  Requested + ", given=" + Node.Type/* + " of node " + Node*/);
 		ErrorNode.Type = Requested;
@@ -95,25 +116,13 @@ public abstract class ZTypeChecker extends ZVisitor {
 		if(Func == null && EnforcedType.IsStringType()) {
 			Func = this.Generator.LookupFunc("toString", Node.Type, 1);
 		}
-		if(Func instanceof ZMacroFunc) {
-			@Var ZMacroNode MacroNode = new ZMacroNode(Node.ParentNode, null, (ZMacroFunc)Func);
-			MacroNode.Append(Node);
-			// this.VisitListNodeAsFuncCall(MacroNode, Func.GetFuncType()); FIXME
-			this.VarScope.TypeNode(MacroNode, EnforcedType);
-			return MacroNode;
-		}
-		else if(Func != null) {
-			@Var ZFuncCallNode MacroNode = new ZFuncCallNode(Node.ParentNode, Func.FuncName, Func.GetFuncType());
-			MacroNode.Append(Node);
-			this.VarScope.TypeNode(MacroNode, EnforcedType);
-			return MacroNode;
+		if(Func != null) {
+			@Var ZListNode FuncNode = this.CreateDefinedFuncCallNode(Node.ParentNode, null, Func);
+			FuncNode.Append(Node);
+			return this.TypeListNodeAsFuncCall(FuncNode, Func.GetFuncType());
 		}
 		return this.CreateStupidCastNode(EnforcedType, Node);
 	}
-
-
-	public final static int _DefaultTypeCheckPolicy			= 0;
-	public final static int _NoCheckPolicy                   = 1;
 
 	private final ZNode TypeCheckImpl(ZNode Node, ZType ContextType, int TypeCheckPolicy) {
 		if(Node.IsErrorNode()) {
@@ -213,58 +222,55 @@ public abstract class ZTypeChecker extends ZVisitor {
 		return false;
 	}
 
-	public final void Return(ZNode Node) {
-		if(this.ReturnedNode != null) {
-			LibZen._PrintDebug("previous returned node " + Node);
-		}
-		this.ReturnedNode = Node;
-	}
-
-	public final void TypedNode(ZNode Node, ZType Type) {
-		if(Type instanceof ZVarType) {
-			if(!Type.IsVarType()) {
-				Type = Type.GetRealType();
+	public final ZNode TypeListNodeAsFuncCall(ZListNode FuncNode, ZFuncType FuncType) {
+		@Var int i = 0;
+		@Var ZType[] Greek = ZGreekType._NewGreekTypes(null);
+		//		if(FuncNode.GetListSize() != FuncType.GetFuncParamSize()) {
+		//			System.err.println(ZLogger._LogError(FuncNode.SourceToken, "mismatch " + FuncType + ", " + FuncNode.GetListSize()+": " + FuncNode));
+		//		}
+		while(i < FuncNode.GetListSize()) {
+			@Var ZNode SubNode = FuncNode.GetListAt(i);
+			@Var ZType ParamType =  FuncType.GetFuncParamType(i);
+			SubNode = this.TryType(SubNode, ParamType);
+			if(!SubNode.IsUntyped() || !ParamType.IsVarType()) {
+				if(!ParamType.AcceptValueType(SubNode.Type, false, Greek)) {
+					SubNode = this.CreateStupidCastNode(ParamType.GetGreekRealType(Greek), SubNode);
+				}
 			}
+			FuncNode.SetListAt(i, SubNode);
+			i = i + 1;
 		}
-		this.VarScope.TypeNode(Node, Type);
-		if(this.ReturnedNode != null) {
-			LibZen._PrintDebug("previous returned node " + Node);
-		}
-		this.ReturnedNode = Node;
+		this.VarScope.TypeNode(FuncNode, FuncType.GetReturnType().GetGreekRealType(Greek));
+		return FuncNode;
 	}
 
-	public final void ReturnErrorNode(ZNode Node, ZToken ErrorToken, String Message) {
-		if(ErrorToken == null) {
-			ErrorToken = Node.SourceToken;
-		}
-		this.Return(new ZErrorNode(Node.ParentNode, ErrorToken, Message));
-	}
 
 	public abstract void DefineFunction(ZFunctionNode FunctionNode, boolean Enforced);
 
 	@Override public void VisitErrorNode(ZErrorNode Node) {
 		@Var ZType ContextType = this.GetContextType();
 		if(!ContextType.IsVarType()) {
-			this.TypedNode(Node, ContextType);
+			this.ReturnTypeNode(Node, ContextType);
 		}
 		else {
-			this.Return(Node);
+			this.ReturnNode(Node);
 		}
 	}
 
-	@Override public void VisitSyntaxSugarNode(ZSyntaxSugarNode Node) {
+	@Override public void VisitSugarNode(ZSugarNode Node) {
 		@Var ZType ContextType = this.GetContextType();
 		@Var ZDesugarNode DesugarNode = Node.DeSugar(this.Generator, this.Generator.TypeChecker);
 		@Var int i = 0;
+		@Var boolean HasUntyped = false;
 		while(i < DesugarNode.GetAstSize()) {
 			this.CheckTypeAt(DesugarNode, i, ContextType);
 			i = i + 1;
 		}
-		this.TypedNode(DesugarNode, DesugarNode.GetAstType(DesugarNode.GetAstSize()-1));
+		this.ReturnTypeNode(DesugarNode, DesugarNode.GetAstType(DesugarNode.GetAstSize()-1));
 	}
 
 	@Override public void VisitAsmNode(ZAsmNode Node) {
-		this.TypedNode(Node, Node.MacroType());
+		this.ReturnTypeNode(Node, Node.MacroType());
 	}
 
 	// ----------------------------------------------------------------------

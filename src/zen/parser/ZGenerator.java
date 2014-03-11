@@ -38,7 +38,7 @@ import zen.ast.ZListNode;
 import zen.ast.ZNode;
 import zen.ast.ZNullNode;
 import zen.ast.ZStringNode;
-import zen.ast.ZSyntaxSugarNode;
+import zen.ast.ZSugarNode;
 import zen.ast.ZTopLevelNode;
 import zen.type.ZClassType;
 import zen.type.ZFunc;
@@ -311,7 +311,7 @@ public abstract class ZGenerator extends ZVisitor {
 		this.VisitNullNode(new ZNullNode(Node.ParentNode, null));
 	}
 
-	@Override public void VisitSyntaxSugarNode(ZSyntaxSugarNode Node) {
+	@Override public void VisitSugarNode(ZSugarNode Node) {
 		@Var ZDesugarNode DeNode = Node.DeSugar(this, this.TypeChecker);
 		@Var int i = 0;
 		while(i < DeNode.GetAstSize()) {

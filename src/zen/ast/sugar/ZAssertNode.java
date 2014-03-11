@@ -5,7 +5,7 @@ import zen.ast.ZFuncCallNode;
 import zen.ast.ZListNode;
 import zen.ast.ZNode;
 import zen.ast.ZStringNode;
-import zen.ast.ZSyntaxSugarNode;
+import zen.ast.ZSugarNode;
 import zen.parser.ZGenerator;
 import zen.parser.ZMacroFunc;
 import zen.parser.ZTypeChecker;
@@ -13,7 +13,7 @@ import zen.type.ZFuncType;
 import zen.type.ZType;
 import zen.util.Var;
 
-public class ZAssertNode extends ZSyntaxSugarNode {
+public class ZAssertNode extends ZSugarNode {
 	public final static int _Expr = 0;
 
 	public ZAssertNode(ZNode ParentNode) {
