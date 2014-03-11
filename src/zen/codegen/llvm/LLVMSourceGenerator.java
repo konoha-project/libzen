@@ -586,16 +586,16 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		return Len;
 	}
 
-	@Override
-	public boolean StartCodeGeneration(ZNode Node, boolean IsInteractive) {
-		Node.Accept(this);
-		//if(IsInteractive) {
-		//LibNative.println("---");
-		this.CurrentBuilder.Append(this.Writer.Write());
-		//LibNative.println("---");
-		//}
-		return true;
-	}
+	//	@Override
+	//	public boolean StartCodeGeneration(ZNode Node, boolean IsInteractive) {
+	//		Node.Accept(this);
+	//		//if(IsInteractive) {
+	//		//LibNative.println("---");
+	//		this.CurrentBuilder.Append(this.Writer.Write());
+	//		//LibNative.println("---");
+	//		//}
+	//		return true;
+	//	}
 
 	@Override
 	public void VisitAndNode(ZAndNode Node) {

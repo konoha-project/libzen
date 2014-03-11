@@ -216,24 +216,24 @@ public class ZSourceGenerator extends ZGenerator {
 		return LibZen._SourceBuilderToString(sb);
 	}
 
-	@Override public boolean StartCodeGeneration(ZNode Node, boolean IsInteractive) {
-		this.CurrentBuilder.AppendNewLine();
-		Node.Accept(this);
-		if(IsInteractive) {
-			@Var int i = 0;
-			LibZen._PrintLine("---");
-			while(i < this.BuilderList.size()) {
-				@Var ZSourceBuilder Builder = this.BuilderList.ArrayValues[i];
-				LibZen._PrintLine(Builder.toString());
-				Builder.Clear();
-				i = i + 1;
-			}
-			this.InitBuilderList();
-		}
-		return true;
-	}
+	//	@Override public boolean StartCodeGeneration(ZNode Node, boolean IsInteractive) {
+	//		this.CurrentBuilder.AppendNewLine();
+	//		Node.Accept(this);
+	//		if(IsInteractive) {
+	//			@Var int i = 0;
+	//			LibZen._PrintLine("---");
+	//			while(i < this.BuilderList.size()) {
+	//				@Var ZSourceBuilder Builder = this.BuilderList.ArrayValues[i];
+	//				LibZen._PrintLine(Builder.toString());
+	//				Builder.Clear();
+	//				i = i + 1;
+	//			}
+	//			this.InitBuilderList();
+	//		}
+	//		return true;
+	//	}
 
-	@Override public String Perform() {
+	@Override public void Perform() {
 		@Var int i = 0;
 		LibZen._PrintLine("---");
 		while(i < this.BuilderList.size()) {
@@ -243,7 +243,6 @@ public class ZSourceGenerator extends ZGenerator {
 			i = i + 1;
 		}
 		this.InitBuilderList();
-		return null;
 	}
 
 	//	public final void FlushErrorReport() {

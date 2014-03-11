@@ -272,10 +272,13 @@ public abstract class ZTypeChecker extends ZVisitor {
 		FuncNode.GivenType = Node.Type;
 		@Var ZBlockNode BlockNode = this.CreateBlockNode(FuncNode);
 		FuncNode.SetNode(ZFunctionNode._Block, BlockNode);
-		if(!Node.Type.IsVoidType()) {
-			Node = this.CreateReturnNode(BlockNode, Node);
+		if(Node.Type.IsVoidType()) {
+			BlockNode.Append(Node);
+			BlockNode.Append(this.CreateReturnNode(BlockNode));
 		}
-		BlockNode.Append(Node);
+		else {
+			BlockNode.Append(this.CreateReturnNode(BlockNode, Node));
+		}
 		FuncNode.Type = ZType.VoidType;
 		return FuncNode;
 	}
@@ -284,6 +287,12 @@ public abstract class ZTypeChecker extends ZVisitor {
 		@Var ZBlockNode BlockNode = new ZBlockNode(ParentNode, null);
 		BlockNode.Type = ZType.VoidType;
 		return BlockNode;
+	}
+
+	public ZReturnNode CreateReturnNode(ZNode ParentNode) {
+		@Var ZReturnNode ReturnNode = new ZReturnNode(ParentNode);
+		ReturnNode.Type = ZType.VoidType;
+		return ReturnNode;
 	}
 
 	public ZReturnNode CreateReturnNode(ZNode ParentNode, ZNode ExprNode) {

@@ -48,6 +48,7 @@ import zen.util.Field;
 import zen.util.LibZen;
 import zen.util.Nullable;
 import zen.util.Var;
+import zen.util.ZenIgnored;
 import zen.util.ZenMap;
 import zen.util.ZenMethod;
 
@@ -205,8 +206,12 @@ public abstract class ZGenerator extends ZVisitor {
 		return "ZFunc"+ FuncType.TypeId;
 	}
 
-	public String NameFunctionClass(String FuncName, ZFuncType FuncType) {
+	public final String NameFunctionClass(String FuncName, ZFuncType FuncType) {
 		return "F" + FuncType.StringfySignature(FuncName);
+	}
+
+	public final String NameFunctionClass(String FuncName, ZType RecvType, int FuncParamSize) {
+		return "F" + ZFunc._StringfySignature(FuncName, FuncParamSize, RecvType);
 	}
 
 	//
@@ -325,14 +330,6 @@ public abstract class ZGenerator extends ZVisitor {
 		return this.IsVisitable();
 	}
 
-	public String Perform() {
-		if(this.TopLevelSymbol != null) {
-			System.out.println("TODO: " + this.TopLevelSymbol);
-		}
-		return null;
-	}
-
-
 	public final boolean LoadScript(String ScriptText, String FileName, int LineNumber, boolean IsInteractive) {
 		@Var boolean Result = true;
 		@Var ZBlockNode TopBlockNode = new ZBlockNode(null, this.RootNameSpace);
@@ -383,6 +380,12 @@ public abstract class ZGenerator extends ZVisitor {
 			return Result;
 		}
 		return true;
+	}
+
+	@ZenIgnored public void Perform() {
+		if(this.TopLevelSymbol != null) {
+			System.out.println("TODO: " + this.TopLevelSymbol);
+		}
 	}
 
 	@ZenMethod public void ExecMain() {

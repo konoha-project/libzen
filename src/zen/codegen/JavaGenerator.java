@@ -388,10 +388,6 @@ public class JavaGenerator extends ZSourceGenerator {
 		}
 	}
 
-	public String NameFunctionClass(String FuncName, ZFuncType FuncType) {
-		return "F" + FuncType.StringfySignature(FuncName);
-	}
-
 	private String GenerateFunctionAsClass(String FuncName, ZFunctionNode Node) {
 		@Var ZFuncType FuncType = Node.GetFuncType();
 		@Var String ClassName = this.NameFunctionClass(FuncName, FuncType);

@@ -171,6 +171,10 @@ public class AsmJavaGenerator extends ZGenerator {
 		return this.GeneratedClassMap.GetOrNull(this.NameFunctionClass(FuncName, FuncType));
 	}
 
+	public Class<?> GetDefinedFunctionClass(String FuncName, ZType RecvType, int FuncParamSize) {
+		return this.GeneratedClassMap.GetOrNull(this.NameFunctionClass(FuncName, RecvType, FuncParamSize));
+	}
+
 	private final ZenMap<ZNode> LazyNodeMap = new ZenMap<ZNode>(null);
 	protected void LazyBuild(ZFunctionNode Node) {
 		this.LazyNodeMap.put(Node.GetSignature(), Node);
@@ -1169,7 +1173,25 @@ public class AsmJavaGenerator extends ZGenerator {
 		else {
 			this.VisitUndefinedNode(Node);
 		}
+	}
 
+	@Override public void Perform() {
+		if(this.TopLevelSymbol != null) {
+			Class<?> FuncClass = this.GetDefinedFunctionClass(this.TopLevelSymbol, ZType.VoidType, 0);
+			try {
+				Method Method = FuncClass.getMethod("f");
+				Object Value = Method.invoke(null);
+				if(Method.getReturnType() != void.class) {
+					System.out.println(" ("+Method.getReturnType().getSimpleName()+") " + Value);
+				}
+			}
+			catch(NoSuchMethodException e) {
+				System.out.println(e);
+			}
+			catch(Exception e) {
+				System.out.println(e);
+			}
+		}
 	}
 
 	@Override public final void ExecMain() {
