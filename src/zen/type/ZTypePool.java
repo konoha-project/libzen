@@ -2,7 +2,7 @@ package zen.type;
 
 import zen.util.Var;
 import zen.util.ZArray;
-import zen.util.ZenMap;
+import zen.util.ZMap;
 
 public class ZTypePool {
 
@@ -24,8 +24,8 @@ public class ZTypePool {
 		return ZType.VarType;
 	}
 
-	private final static ZenMap<ZType>     _ClassNameMap = new ZenMap<ZType>(null);
-	private final static ZenMap<ZType[]>   _UniqueTypeSetMap = new ZenMap<ZType[]>(null);
+	private final static ZMap<ZType>     _ClassNameMap = new ZMap<ZType>(null);
+	private final static ZMap<ZType[]>   _UniqueTypeSetMap = new ZMap<ZType[]>(null);
 
 	private final static String _MangleType2(ZType Type1, ZType Type2) {
 		return ":" + Type1.TypeId + ":" + Type2.TypeId;

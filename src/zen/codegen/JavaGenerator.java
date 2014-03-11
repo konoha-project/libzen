@@ -30,7 +30,7 @@ import zen.util.Field;
 import zen.util.LibZen;
 import zen.util.Var;
 import zen.util.ZArray;
-import zen.util.ZenMap;
+import zen.util.ZMap;
 import zen.util.ZenMethod;
 
 public class JavaGenerator extends ZSourceGenerator {
@@ -281,7 +281,7 @@ public class JavaGenerator extends ZSourceGenerator {
 		return Type.GetName();
 	}
 
-	@Field private final ZenMap<String> FuncNameMap = new ZenMap<String>(null);
+	@Field private final ZMap<String> FuncNameMap = new ZMap<String>(null);
 
 	String GetFuncTypeClass(ZFuncType FuncType) {
 		@Var String ClassName = this.FuncNameMap.GetOrNull(FuncType.GetUniqueName());

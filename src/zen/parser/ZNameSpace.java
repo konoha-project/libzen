@@ -36,7 +36,7 @@ import zen.util.Nullable;
 import zen.util.Var;
 import zen.util.ZMatchFunction;
 import zen.util.ZTokenFunction;
-import zen.util.ZenMap;
+import zen.util.ZMap;
 
 public final class ZNameSpace {
 	//	private static int SerialNumber = 0;
@@ -45,8 +45,8 @@ public final class ZNameSpace {
 	@Field public final ZGenerator   Generator;
 	@Field public final ZBlockNode   BlockNode;
 	@Field ZTokenFunc[]         TokenMatrix = null;
-	@Field ZenMap<ZSyntax>      SyntaxTable = null;
-	@Field ZenMap<ZSymbolEntry> SymbolTable = null;
+	@Field ZMap<ZSyntax>      SyntaxTable = null;
+	@Field ZMap<ZSymbolEntry> SymbolTable = null;
 
 	//	@Field private ZNode  FuncNode = null;
 
@@ -128,7 +128,7 @@ public final class ZNameSpace {
 
 	public final void SetSyntaxPattern(String PatternName, ZSyntax Syntax) {
 		if(this.SyntaxTable == null) {
-			this.SyntaxTable = new ZenMap<ZSyntax>(null);
+			this.SyntaxTable = new ZMap<ZSyntax>(null);
 		}
 		this.SyntaxTable.put(PatternName, Syntax);
 	}
@@ -216,7 +216,7 @@ public final class ZNameSpace {
 
 	private void SetLocalSymbolEntry(String Symbol, ZSymbolEntry Entry) {
 		if(this.SymbolTable == null) {
-			this.SymbolTable = new ZenMap<ZSymbolEntry>(null);
+			this.SymbolTable = new ZMap<ZSymbolEntry>(null);
 		}
 		this.SymbolTable.put(Symbol, Entry);
 	}

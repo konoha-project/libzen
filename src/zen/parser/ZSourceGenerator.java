@@ -83,13 +83,13 @@ import zen.util.LibZen;
 import zen.util.Nullable;
 import zen.util.Var;
 import zen.util.ZArray;
-import zen.util.ZenMap;
+import zen.util.ZMap;
 import zen.util.ZenMethod;
 
 public class ZSourceGenerator extends ZGenerator {
 
-	@Field public ZenMap<String> NativeTypeMap = new ZenMap<String>(null);
-	@Field public ZenMap<String> ReservedNameMap = new ZenMap<String>(null);
+	@Field public ZMap<String> NativeTypeMap = new ZMap<String>(null);
+	@Field public ZMap<String> ReservedNameMap = new ZMap<String>(null);
 
 	@Field private final ZArray<ZSourceBuilder> BuilderList = new ZArray<ZSourceBuilder>(new ZSourceBuilder[4]);
 	@Field protected ZSourceBuilder HeaderBuilder;

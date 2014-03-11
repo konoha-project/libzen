@@ -49,12 +49,12 @@ import zen.util.LibZen;
 import zen.util.Nullable;
 import zen.util.Var;
 import zen.util.ZenIgnored;
-import zen.util.ZenMap;
+import zen.util.ZMap;
 import zen.util.ZenMethod;
 
 public abstract class ZGenerator extends ZVisitor {
-	@Field public ZenMap<String>        ImportedLibraryMap = new ZenMap<String>(null);
-	@Field private final ZenMap<ZFunc>  DefinedFuncMap = new ZenMap<ZFunc>(null);
+	@Field public ZMap<String>        ImportedLibraryMap = new ZMap<String>(null);
+	@Field private final ZMap<ZFunc>  DefinedFuncMap = new ZMap<ZFunc>(null);
 
 	@Field public final ZNameSpace      RootNameSpace;
 	@Field public ZLogger               Logger;

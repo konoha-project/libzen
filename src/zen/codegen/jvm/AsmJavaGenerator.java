@@ -126,10 +126,10 @@ import zen.util.ZFunction;
 import zen.util.ZMatchFunction;
 import zen.util.ZObject;
 import zen.util.ZTokenFunction;
-import zen.util.ZenMap;
+import zen.util.ZMap;
 
 public class AsmJavaGenerator extends ZGenerator {
-	private final ZenMap<Class<?>> GeneratedClassMap = new ZenMap<Class<?>>(null);
+	private final ZMap<Class<?>> GeneratedClassMap = new ZMap<Class<?>>(null);
 	public JavaStaticFieldNode MainFuncNode = null;
 	AsmClassLoader AsmLoader = null;
 	Stack<TryCatchLabel> TryCatchLabel;
@@ -175,7 +175,7 @@ public class AsmJavaGenerator extends ZGenerator {
 		return this.GeneratedClassMap.GetOrNull(this.NameFunctionClass(FuncName, RecvType, FuncParamSize));
 	}
 
-	private final ZenMap<ZNode> LazyNodeMap = new ZenMap<ZNode>(null);
+	private final ZMap<ZNode> LazyNodeMap = new ZMap<ZNode>(null);
 	protected void LazyBuild(ZFunctionNode Node) {
 		this.LazyNodeMap.put(Node.GetSignature(), Node);
 	}
@@ -409,7 +409,7 @@ public class AsmJavaGenerator extends ZGenerator {
 			this.AsmBuilder.visitInsn(Opcodes.ACONST_NULL);
 		}
 		else {
-			String Owner = Type.getInternalName(ZenMap.class);
+			String Owner = Type.getInternalName(ZMap.class);
 			this.AsmBuilder.visitTypeInsn(NEW, Owner);
 			this.AsmBuilder.visitInsn(DUP);
 			this.AsmBuilder.PushInt(Node.Type.TypeId);

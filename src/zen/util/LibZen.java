@@ -499,7 +499,7 @@ public class LibZen {
 		return MatchFunc.Invoke(ParentNode, TokenContext, LeftNode);
 	}
 
-	private final static ZenMap<Class<?>> GenMap = new ZenMap<Class<?>>(null);
+	private final static ZMap<Class<?>> GenMap = new ZMap<Class<?>>(null);
 
 	static {
 		// source code by file extension

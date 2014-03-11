@@ -26,13 +26,13 @@ package zen.ast;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 import zen.util.Field;
-import zen.util.ZenMap;
+import zen.util.ZMap;
 
 public final class ZAnnotationNode extends ZNode {
 	//@Field public ZenMap<Object> Annotation;
 	@Field public ZNode AnnotatedNode = null;
 
-	public ZAnnotationNode(ZNode ParentNode, ZToken Token, ZenMap<Object> Anno) {
+	public ZAnnotationNode(ZNode ParentNode, ZToken Token, ZMap<Object> Anno) {
 		super(ParentNode, Token, 0);
 		//this.Annotation = Anno;
 	}

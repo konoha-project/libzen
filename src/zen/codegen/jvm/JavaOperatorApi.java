@@ -32,7 +32,7 @@ import java.util.List;
 import zen.type.ZType;
 import zen.util.SoftwareFaultException;
 import zen.util.Var;
-import zen.util.ZenMap;
+import zen.util.ZMap;
 
 public final class JavaOperatorApi {
 
@@ -291,8 +291,8 @@ public final class JavaOperatorApi {
 			@Var List<?> a = (List<?>)x;
 			return a.get(((Number)y).intValue());
 		}
-		if(x instanceof ZenMap && y instanceof String) {
-			@Var ZenMap<?> m = (ZenMap<?>)x;
+		if(x instanceof ZMap && y instanceof String) {
+			@Var ZMap<?> m = (ZMap<?>)x;
 			return m.GetOrNull(y.toString());
 		}
 		throw new RuntimeException("unsupported operator: " + t(x) + "[" + t(y) + "]");
@@ -304,8 +304,8 @@ public final class JavaOperatorApi {
 			@Var ArrayList<T> a = (ArrayList<T>)x;
 			a.set(((Number)y).intValue(), z);
 		}
-		if(x instanceof ZenMap && y instanceof String) {
-			@Var ZenMap<T> m = (ZenMap<T>)x;
+		if(x instanceof ZMap && y instanceof String) {
+			@Var ZMap<T> m = (ZMap<T>)x;
 			m.put(y.toString(), z);
 		}
 		throw new RuntimeException("unsupported operator: " + t(x) + "[" + t(y) + "]");
