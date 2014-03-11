@@ -481,13 +481,13 @@ public class AsmJavaGenerator extends ZGenerator {
 	}
 
 	@Override public void VisitGetNameNode(ZGetNameNode Node) {
-		this.AsmBuilder.LoadLocal(Node.VarName);
-		this.AsmBuilder.CheckReturnCast(Node, this.AsmBuilder.GetLocalType(Node.VarName));
+		this.AsmBuilder.LoadLocal(Node.GetName());
+		this.AsmBuilder.CheckReturnCast(Node, this.AsmBuilder.GetLocalType(Node.GetName()));
 	}
 
 	@Override public void VisitSetNameNode(ZSetNameNode Node) {
-		this.AsmBuilder.PushNode(this.AsmBuilder.GetLocalType(Node.VarName), Node.ExprNode());
-		this.AsmBuilder.StoreLocal(Node.VarName);
+		this.AsmBuilder.PushNode(this.AsmBuilder.GetLocalType(Node.GetName()), Node.ExprNode());
+		this.AsmBuilder.StoreLocal(Node.GetName());
 	}
 
 	@Override public void VisitGroupNode(ZGroupNode Node) {
@@ -610,14 +610,14 @@ public class AsmJavaGenerator extends ZGenerator {
 
 	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
 		if(Node.GetAstType(ZFuncCallNode._Func).IsFuncType()) {
-			ZFuncType FuncType = (ZFuncType)Node.FuncNameNode().Type;
-			if(Node.FuncNameNode() instanceof ZGlobalNameNode) {
-				ZGlobalNameNode NameNode = (ZGlobalNameNode)Node.FuncNameNode();
+			ZFuncType FuncType = (ZFuncType)Node.FunctionNode().Type;
+			if(Node.FunctionNode() instanceof ZGlobalNameNode) {
+				ZGlobalNameNode NameNode = (ZGlobalNameNode)Node.FunctionNode();
 				this.AsmBuilder.ApplyFuncName(NameNode, NameNode.GlobalName, FuncType, Node);
 			}
 			else {
 				Class<?> FuncClass = this.LoadFuncClass(FuncType);
-				this.AsmBuilder.ApplyFuncObject(Node, FuncClass, Node.FuncNameNode(), FuncType, Node);
+				this.AsmBuilder.ApplyFuncObject(Node, FuncClass, Node.FunctionNode(), FuncType, Node);
 			}
 		}
 		else {

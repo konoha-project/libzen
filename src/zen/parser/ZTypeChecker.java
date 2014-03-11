@@ -31,6 +31,8 @@ import zen.ast.ZDesugarNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZFuncCallNode;
 import zen.ast.ZFunctionNode;
+import zen.ast.ZGetNameNode;
+import zen.ast.ZGlobalNameNode;
 import zen.ast.ZListNode;
 import zen.ast.ZMacroNode;
 import zen.ast.ZNode;
@@ -39,6 +41,7 @@ import zen.ast.ZStupidCastErrorNode;
 import zen.ast.ZSyntaxSugarNode;
 import zen.ast.ZVarNode;
 import zen.type.ZFunc;
+import zen.type.ZFuncType;
 import zen.type.ZType;
 import zen.type.ZVarScope;
 import zen.type.ZVarType;
@@ -251,7 +254,7 @@ public abstract class ZTypeChecker extends ZVisitor {
 
 	@Override public void VisitSyntaxSugarNode(ZSyntaxSugarNode Node) {
 		@Var ZType ContextType = this.GetContextType();
-		@Var ZDesugarNode DesugarNode = Node.DeSugar(this.Generator);
+		@Var ZDesugarNode DesugarNode = Node.DeSugar(this.Generator, this.Generator.TypeChecker);
 		@Var int i = 0;
 		while(i < DesugarNode.GetAstSize()) {
 			this.CheckTypeAt(DesugarNode, i, ContextType);
@@ -311,6 +314,33 @@ public abstract class ZTypeChecker extends ZVisitor {
 		VarNode.Type = ZType.VoidType;
 		return VarNode;
 	}
+
+	public ZGetNameNode CreateGetNameNode(ZNode ParentNode, String Name, ZType Type) {
+		@Var ZGetNameNode NameNode = new ZGetNameNode(ParentNode, null, Name);
+		NameNode.Type = Type;
+		return NameNode;
+	}
+
+	public ZFuncCallNode CreateFuncCallNode(ZNode ParentNode, ZToken SourceToken, String FuncName, ZFuncType FuncType) {
+		@Var ZFuncCallNode FuncNode = new ZFuncCallNode(ParentNode, new ZGlobalNameNode(null, SourceToken, FuncName, FuncType));
+		FuncNode.Type = FuncType.GetReturnType();
+		return FuncNode;
+	}
+
+	public final ZListNode CreateDefinedFuncCallNode(ZNode ParentNode, ZToken SourceToken, ZFunc Func) {
+		@Var ZListNode FuncNode = null;
+		if(Func instanceof ZMacroFunc) {
+			FuncNode = new ZMacroNode(ParentNode, SourceToken, (ZMacroFunc)Func);
+		}
+		else {
+			FuncNode = this.CreateFuncCallNode(ParentNode, SourceToken, Func.FuncName, Func.GetFuncType());
+		}
+		//		FuncNode.Type = Func.GetFuncType().GetRealType();
+		return FuncNode;
+	}
+
+
+
 
 
 }

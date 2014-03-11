@@ -1,6 +1,7 @@
 package zen.ast;
 
 import zen.parser.ZGenerator;
+import zen.parser.ZTypeChecker;
 import zen.util.Field;
 import zen.util.Var;
 
@@ -26,7 +27,7 @@ public class ZDesugarNode extends ZSyntaxSugarNode {
 		}
 	}
 
-	@Override public ZDesugarNode DeSugar(ZGenerator Generator) {
+	@Override public ZDesugarNode DeSugar(ZGenerator Generator, ZTypeChecker TypeChekcer) {
 		return this;
 	}
 

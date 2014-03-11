@@ -162,11 +162,11 @@ public class CGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitGetNameNode(ZGetNameNode Node) {
-		this.CurrentBuilder.Append(this.NameLocalVariable(Node.VarName, Node.VarIndex));
+		this.CurrentBuilder.Append(this.NameLocalVariable(Node.GetName(), Node.VarIndex));
 	}
 
 	@Override public void VisitSetNameNode(ZSetNameNode Node) {
-		this.CurrentBuilder.Append(this.NameLocalVariable(Node.VarName, Node.VarIndex));
+		this.CurrentBuilder.Append(this.NameLocalVariable(Node.GetName(), Node.VarIndex));
 		this.CurrentBuilder.AppendToken("=");
 		this.GenerateCode(null, Node.ExprNode());
 	}
@@ -193,7 +193,7 @@ public class CGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
-		this.GenerateCode(null, Node.FuncNameNode());
+		this.GenerateCode(null, Node.FunctionNode());
 		this.VisitListNode("(", Node, ")");
 	}
 
@@ -313,8 +313,7 @@ public class CGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Append(" = ");
 		this.GenerateCode(null, Node.InitValueNode());
 		this.CurrentBuilder.Append(this.SemiColon);
-		this.CurrentBuilder.AppendLineFeed();
-		Node.GetNameSpace().SetLocalSymbol(Node.GetName(), Node.ToGlobalNameNode());
+		//this.CurrentBuilder.AppendLineFeed();
 	}
 
 	@Override public void VisitParamNode(ZParamNode Node) {

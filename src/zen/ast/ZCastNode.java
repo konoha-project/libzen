@@ -24,7 +24,7 @@
 
 package zen.ast;
 
-import zen.parser.ZMacroFunc;
+import zen.parser.ZTypeChecker;
 import zen.parser.ZVisitor;
 import zen.type.ZFunc;
 import zen.type.ZType;
@@ -58,18 +58,10 @@ public class ZCastNode extends ZNode {
 		Visitor.VisitCastNode(this);
 	}
 
-	public final ZListNode ToFuncCallNode(ZFunc Func) {
-		if(Func instanceof ZMacroFunc) {
-			@Var ZMacroNode FuncNode = new ZMacroNode(this.ParentNode, this.SourceToken, (ZMacroFunc)Func);
-			FuncNode.Append(this.ExprNode());
-			return FuncNode;
-		}
-		else {
-			@Var ZFuncCallNode FuncNode = new ZFuncCallNode(this.ParentNode, Func.FuncName, Func.GetFuncType());
-			FuncNode.SourceToken = this.SourceToken;
-			FuncNode.Append(this.ExprNode());
-			return FuncNode;
-		}
+	public final ZListNode ToFuncCallNode(ZTypeChecker TypeChecker, ZFunc ConverterFunc) {
+		@Var ZListNode FuncNode = TypeChecker.CreateDefinedFuncCallNode(this.ParentNode, this.SourceToken, ConverterFunc);
+		FuncNode.Append(this.ExprNode());
+		return FuncNode;
 	}
 
 }

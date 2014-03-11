@@ -855,7 +855,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		this.Writer.AddCodeToCurrentBuffer("call ");
 		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(FuncType));
 		this.Writer.AddCodeToCurrentBuffer(" ");
-		this.GenerateCode(null, Node.FuncNameNode());
+		this.GenerateCode(null, Node.FunctionNode());
 		this.VisitListNode(" (", Node, ", ", ")");
 		this.Writer.AppendBufferAsNewLine();
 		if(!ReturnType.IsVoidType()) {
@@ -921,7 +921,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 
 	@Override
 	public void VisitGetNameNode(ZGetNameNode Node) {
-		@Var ZVariable Var = Node.GetNameSpace().GetLocalVariable(Node.VarName);
+		@Var ZVariable Var = Node.GetNameSpace().GetLocalVariable(Node.GetName());
 		@Var String VarName = Var.VarName + "__" + Var.VarUniqueIndex;
 		if(this.Writer.IsUserDefinedVar(VarName)) {
 			@Var String TempVar = this.Writer.CreateTempLocalSymbol();
@@ -936,7 +936,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 			this.Writer.AddCodeToCurrentBuffer(TempVar);
 		}
 		else {
-			this.Writer.AddCodeToCurrentBuffer(this.ToLocalSymbol(Node.VarName));
+			this.Writer.AddCodeToCurrentBuffer(this.ToLocalSymbol(Node.GetName()));
 		}
 	}
 
@@ -958,7 +958,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		if(Node.IsUntyped()) {
 			ZLogger._LogError(Node.SourceToken, "undefined symbol: " + Node.GlobalName);
 		}
-		if(Node.IsStaticFuncName) {
+		if(Node.IsFuncNameNode()) {
 			this.Writer.AddCodeToCurrentBuffer(this.ToGlobalSymbol(Node.Type.StringfySignature(Node.GlobalName)));
 		}
 		//else if(!this.IsPrimitiveType(Node.Type)) {
@@ -1041,7 +1041,6 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		this.GenerateCode(null, Node.InitValueNode());
 		this.Writer.AppendBufferAsHeaderLine();
 		//this.Writer.AddCodeToCurrentBuffer(this.ToGlobalSymbol(Node.GlobalName));
-		Node.GetNameSpace().SetLocalSymbol(Node.GetName(), Node.ToGlobalNameNode());
 	}
 
 	@Override public void VisitMacroNode(ZMacroNode Node) {
@@ -1263,7 +1262,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 
 	@Override
 	public void VisitSetNameNode(ZSetNameNode Node) {
-		@Var ZVariable Var = Node.GetNameSpace().GetLocalVariable(Node.VarName);
+		@Var ZVariable Var = Node.GetNameSpace().GetLocalVariable(Node.GetName());
 		@Var String VarName = Var.VarName + "__" + Var.VarUniqueIndex;
 		if(!this.Writer.IsUserDefinedVar(VarName)) {
 			throw new RuntimeException("Can't assign to argument");

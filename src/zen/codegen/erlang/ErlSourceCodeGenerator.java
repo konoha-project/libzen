@@ -151,7 +151,7 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 	// 	if(Node.IsUntyped()) {
 	// 		ZLogger._LogError(Node.SourceToken, "undefined symbol: " + Node.GlobalName);
 	// 	}
-	// 	if(Node.IsStaticFuncName) {
+	// 	if(Node.IsFuncNameNode()) {
 	// 		this.CurrentBuilder.Append(Node.Type.StringfySignature(Node.GlobalName));
 	// 	}
 	// 	else {
@@ -160,7 +160,7 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 	// }
 
 	@Override public void VisitGetNameNode(ZGetNameNode Node) {
-		String VarName = this.VarMgr.GenVariableName(Node.VarName);
+		String VarName = this.VarMgr.GenVariableName(Node.GetName());
 		this.CurrentBuilder.Append(VarName);
 	}
 
@@ -169,7 +169,7 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 
 		this.GenerateCode(null, Node.ExprNode());
 
-		String VarName = Node.VarName;
+		String VarName = Node.GetName();
 		this.VarMgr.IncrementVariableNumber(VarName);
 		this.AppendLazy(mark, this.VarMgr.GenVariableName(VarName) + " = ");
 	}
@@ -195,7 +195,7 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.AppendToken("=");
 		this.GenerateCode(null, Node.ExprNode());
 		this.CurrentBuilder.Append("}");
-		this.VarMgr.IncrementVariableNumber(GetNameNode.VarName);
+		this.VarMgr.IncrementVariableNumber(GetNameNode.GetName());
 		ZSourceBuilder LazyBuilder = new ZSourceBuilder(this, this.CurrentBuilder);
 		ZSourceBuilder BodyBuilder = this.CurrentBuilder;
 		this.CurrentBuilder = LazyBuilder;
@@ -234,7 +234,7 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 	// }
 
 	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
-		String FuncName = ((ZGlobalNameNode)Node.FuncNameNode()).GlobalName;
+		String FuncName = ((ZGlobalNameNode)Node.FunctionNode()).GlobalName;
 		FuncName = this.ToErlangFuncName(FuncName);
 		this.CurrentBuilder.Append(FuncName);
 		//this.GenerateCode(null, Node.FuncNameNode());

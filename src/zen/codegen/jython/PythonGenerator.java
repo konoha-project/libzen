@@ -142,12 +142,12 @@ public class PythonGenerator extends ZSourceGenerator {
 		@Var ZType RecvType = Node.GetAstType(ZGetIndexNode._Recv);
 		if(RecvType.IsMapType()) {
 			this.ImportLibrary("def zGetMap(m,k): return m[k] if m.has_key(k) else None");
-			this.GenerateCode("zGetMap(", null, Node.RecvNode(), ", ");
-			this.GenerateCode("", null, Node.IndexNode(), ")");
+			this.GenerateCode2("zGetMap(", null, Node.RecvNode(), ", ");
+			this.GenerateCode2("", null, Node.IndexNode(), ")");
 		}
 		else {
 			this.GenerateCode(null, Node.RecvNode());
-			this.GenerateCode("[", null, Node.IndexNode(), "]");
+			this.GenerateCode2("[", null, Node.IndexNode(), "]");
 		}
 	}
 
@@ -193,7 +193,6 @@ public class PythonGenerator extends ZSourceGenerator {
 			this.CurrentBuilder.Append(Node.GlobalName);
 			this.CurrentBuilder.Append(" = ");
 			this.GenerateCode(null, Node.InitValueNode());
-			Node.GetNameSpace().SetLocalSymbol(Node.GetName(), Node.ToGlobalNameNode());
 		}
 	}
 

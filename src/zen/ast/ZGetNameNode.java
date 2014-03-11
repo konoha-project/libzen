@@ -27,36 +27,30 @@ package zen.ast;
 import zen.parser.ZToken;
 import zen.parser.ZVisitor;
 import zen.type.ZFunc;
-import zen.type.ZType;
 import zen.util.Field;
 
 public class ZGetNameNode extends ZNode {
 	@Field public boolean IsCaptured = false;
-	@Field public String  VarName;
+	@Field public String  GivenName;
 	@Field public int VarIndex = 0;
 
-	public ZGetNameNode(ZNode ParentNode, ZToken Token, String NativeName) {
-		super(ParentNode, Token, 0);
-		this.VarName = NativeName;
+	public ZGetNameNode(ZNode ParentNode, ZToken SourceToken, String GivenName) {
+		super(ParentNode, SourceToken, 0);
+		this.GivenName = GivenName;
 	}
 
 	public ZGetNameNode(ZNode ParentNode, ZFunc ResolvedFunc) {
 		super(ParentNode, null, 0);
-		this.VarName = ResolvedFunc.FuncName;
+		this.GivenName = ResolvedFunc.FuncName;
 		this.Type = ResolvedFunc.GetFuncType();
 	}
 
-	public ZGetNameNode(String Name, ZType Type) {
-		super(null, null, 0);
-		this.VarName = Name;
-		this.Type = Type;
+	public final String GetName() {
+		return this.GivenName;
 	}
 
 	@Override public void Accept(ZVisitor Visitor) {
 		Visitor.VisitGetNameNode(this);
 	}
 
-	public final ZNode ToGlobalNameNode() {
-		return new ZGlobalNameNode(this.ParentNode, this.SourceToken, this.Type, this.VarName, false);
-	}
 }

@@ -266,7 +266,7 @@ public class ZSourceGenerator extends ZGenerator {
 		Node.Accept(this);
 	}
 
-	protected final void GenerateCode(String Pre, ZType ContextType, ZNode Node, String Post) {
+	protected final void GenerateCode2(String Pre, ZType ContextType, ZNode Node, String Post) {
 		if(Pre != null && Pre.length() > 0) {
 			this.CurrentBuilder.Append(Pre);
 		}
@@ -276,7 +276,7 @@ public class ZSourceGenerator extends ZGenerator {
 		}
 	}
 
-	protected final void GenerateCode(String Pre, ZType ContextType, ZNode Node, String Delim, ZType ContextType2, ZNode Node2, String Post) {
+	protected final void GenerateCode2(String Pre, ZType ContextType, ZNode Node, String Delim, ZType ContextType2, ZNode Node2, String Post) {
 		if(Pre != null && Pre.length() > 0) {
 			this.CurrentBuilder.Append(Pre);
 		}
@@ -290,8 +290,8 @@ public class ZSourceGenerator extends ZGenerator {
 		}
 	}
 
-	protected final void GenerateCode(String Pre, ZNode Node, String Delim, ZNode Node2, String Post) {
-		this.GenerateCode(Pre, null, Node, Delim, null, Node2, Post);
+	protected final void GenerateCode2(String Pre, ZNode Node, String Delim, ZNode Node2, String Post) {
+		this.GenerateCode2(Pre, null, Node, Delim, null, Node2, Post);
 	}
 
 	final protected boolean IsNeededSurroud(ZNode Node) {
@@ -303,7 +303,7 @@ public class ZSourceGenerator extends ZGenerator {
 
 	protected void GenerateSurroundCode(ZNode Node) {
 		if(this.IsNeededSurroud(Node)) {
-			this.GenerateCode("(", null, Node, ")");
+			this.GenerateCode2("(", null, Node, ")");
 		}
 		else {
 			this.GenerateCode(null, Node);
@@ -365,7 +365,7 @@ public class ZSourceGenerator extends ZGenerator {
 		@Var int i = 0;
 		while(i < Node.GetListSize()) {
 			@Var ZMapEntryNode Entry = Node.GetMapEntryNode(i);
-			this.GenerateCode("", Entry.KeyNode(), ": ", Entry.ValueNode(), ",");
+			this.GenerateCode2("", Entry.KeyNode(), ": ", Entry.ValueNode(), ",");
 			i = i + 1;
 		}
 		this.CurrentBuilder.Append("} ");  // space is needed to distinguish block
@@ -378,17 +378,17 @@ public class ZSourceGenerator extends ZGenerator {
 	}
 
 	@Override public void VisitGroupNode(ZGroupNode Node) {
-		this.GenerateCode("(", null, Node.ExprNode(), ")");
+		this.GenerateCode2("(", null, Node.ExprNode(), ")");
 	}
 
 	@Override public void VisitGetIndexNode(ZGetIndexNode Node) {
 		this.GenerateCode(null, Node.RecvNode());
-		this.GenerateCode("[", null, Node.IndexNode(), "]");
+		this.GenerateCode2("[", null, Node.IndexNode(), "]");
 	}
 
 	@Override public void VisitSetIndexNode(ZSetIndexNode Node) {
 		this.GenerateCode(null, Node.RecvNode());
-		this.GenerateCode("[", null, Node.IndexNode(), "] = ");
+		this.GenerateCode2("[", null, Node.IndexNode(), "] = ");
 		this.GenerateCode(null, Node.ExprNode());
 	}
 
@@ -396,7 +396,7 @@ public class ZSourceGenerator extends ZGenerator {
 		if(Node.IsUntyped() && !this.IsDynamicLanguage) {
 			ZLogger._LogError(Node.SourceToken, "undefined symbol: " + Node.GlobalName);
 		}
-		if(Node.IsStaticFuncName) {
+		if(Node.IsFuncNameNode()) {
 			this.CurrentBuilder.Append(Node.Type.StringfySignature(Node.GlobalName));
 		}
 		else {
@@ -405,11 +405,11 @@ public class ZSourceGenerator extends ZGenerator {
 	}
 
 	@Override public void VisitGetNameNode(ZGetNameNode Node) {
-		this.CurrentBuilder.Append(this.NameLocalVariable(Node.VarName, Node.VarIndex));
+		this.CurrentBuilder.Append(this.NameLocalVariable(Node.GetName(), Node.VarIndex));
 	}
 
 	@Override public void VisitSetNameNode(ZSetNameNode Node) {
-		this.CurrentBuilder.Append(this.NameLocalVariable(Node.VarName, Node.VarIndex), " = ");
+		this.CurrentBuilder.Append(this.NameLocalVariable(Node.GetName(), Node.VarIndex), " = ");
 		this.GenerateCode(null, Node.ExprNode());
 	}
 
@@ -455,7 +455,7 @@ public class ZSourceGenerator extends ZGenerator {
 	}
 
 	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
-		this.GenerateCode(null, Node.FuncNameNode());
+		this.GenerateCode(null, Node.FunctionNode());
 		this.VisitListNode("(", Node, ")");
 	}
 
@@ -538,7 +538,7 @@ public class ZSourceGenerator extends ZGenerator {
 	}
 
 	@Override public void VisitIfNode(ZIfNode Node) {
-		this.GenerateCode("if (", null, Node.CondNode(), ")");
+		this.GenerateCode2("if (", null, Node.CondNode(), ")");
 		this.GenerateCode(null, Node.ThenNode());
 		if (Node.HasElseNode()) {
 			this.CurrentBuilder.AppendNewLine();
@@ -556,7 +556,7 @@ public class ZSourceGenerator extends ZGenerator {
 	}
 
 	@Override public void VisitWhileNode(ZWhileNode Node) {
-		this.GenerateCode("while (", null, Node.CondNode(),")");
+		this.GenerateCode2("while (", null, Node.CondNode(),")");
 		this.GenerateCode(null, Node.BlockNode());
 	}
 
@@ -586,7 +586,7 @@ public class ZSourceGenerator extends ZGenerator {
 	@Override public void VisitVarNode(ZVarNode Node) {
 		this.CurrentBuilder.Append("var ", this.NameLocalVariable(Node.GetName(), Node.VarIndex));
 		this.GenerateTypeAnnotation(Node.DeclType());
-		this.GenerateCode(" = ", null, Node.InitValueNode(), this.SemiColon);
+		this.GenerateCode2(" = ", null, Node.InitValueNode(), this.SemiColon);
 		this.VisitStmtList(Node);
 	}
 
@@ -667,7 +667,7 @@ public class ZSourceGenerator extends ZGenerator {
 	}
 
 	@Override public void VisitSyntaxSugarNode(ZSyntaxSugarNode Node) {
-		@Var ZDesugarNode DesugarNode = Node.DeSugar(this);
+		@Var ZDesugarNode DesugarNode = Node.DeSugar(this, this.TypeChecker);
 		this.GenerateCode(null, DesugarNode.AST[0]);
 		@Var int i = 1;
 		while(i < DesugarNode.GetAstSize()) {

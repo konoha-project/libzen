@@ -209,12 +209,12 @@ public class JavaEngine {
 	//	}
 	//
 	//	@Override public void VisitGetNameNode(ZGetNameNode Node) {
-	//		@Var ZNode Node1 = Node.GetNameSpace().GetSymbolNode(Node.VarName);
+	//		@Var ZNode Node1 = Node.GetNameSpace().GetSymbolNode(Node.GetName());
 	//		if(Node1 != null) {
 	//			this.EvaledValue = this.Eval(Node1);
 	//		}
 	//		else {
-	//			ZLogger._LogError(Node.SourceToken, "undefined symbol: " + Node.VarName);
+	//			ZLogger._LogError(Node.SourceToken, "undefined symbol: " + Node.GetName());
 	//			this.StopVisitor();
 	//		}
 	//	}
@@ -787,12 +787,12 @@ public class JavaEngine {
 	//	}
 	//
 	//	@Override public void VisitGetNameNode(ZGetNameNode Node) {
-	//		@Var ZNode Node1 = Node.GetNameSpace().GetSymbolNode(Node.VarName);
+	//		@Var ZNode Node1 = Node.GetNameSpace().GetSymbolNode(Node.GetName());
 	//		if(Node1 != null) {
 	//			this.EvaledValue = this.Eval(Node1);
 	//		}
 	//		else {
-	//			ZLogger._LogError(Node.SourceToken, "undefined symbol: " + Node.VarName);
+	//			ZLogger._LogError(Node.SourceToken, "undefined symbol: " + Node.GetName());
 	//			this.StopVisitor();
 	//		}
 	//	}

@@ -73,7 +73,7 @@ public class JavaScriptGenerator extends ZSourceGenerator {
 		//		if(Node.IsUntyped()) {
 		//			this.CurrentBuilder.Append(Node.GlobalName);
 		//		}
-		if(Node.IsStaticFuncName) {
+		if(Node.IsFuncNameNode()) {
 			if(Node.GlobalName.startsWith("LibZen")){
 				this.CurrentBuilder.Append(Node.GlobalName.replace('_', '.'));
 			}else{
@@ -226,8 +226,8 @@ public class JavaScriptGenerator extends ZSourceGenerator {
 			@Var ZType RecvType = Node.GetFuncType().GetRecvType();
 			if(this.IsUserDefinedType(RecvType) &&  !RecvType.ShortName.equals(Node.GetStaticFuncName())){
 				this.CurrentBuilder.Append("(");
-				this.GenerateCode(null, Node.FuncNameNode());
-				if(Node.FuncNameNode() instanceof ZGetterNode){
+				this.GenerateCode(null, Node.FunctionNode());
+				if(Node.FunctionNode() instanceof ZGetterNode){
 					this.CurrentBuilder.Append("__ || ");
 				}else{
 					this.CurrentBuilder.Append(" || ");
@@ -237,10 +237,10 @@ public class JavaScriptGenerator extends ZSourceGenerator {
 				this.CurrentBuilder.Append(Node.GetStaticFuncName());
 				this.CurrentBuilder.Append(")");
 			}else{
-				this.GenerateCode(null, Node.FuncNameNode());
+				this.GenerateCode(null, Node.FunctionNode());
 			}
 		}else{
-			this.GenerateCode(null, Node.FuncNameNode());
+			this.GenerateCode(null, Node.FunctionNode());
 		}
 		this.VisitListNode("(", Node, ")");
 	}
@@ -294,7 +294,6 @@ public class JavaScriptGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.AppendNewLine("var ", Node.GlobalName, " = ");
 		this.GenerateCode(null, Node.InitValueNode());
 		this.CurrentBuilder.Append(this.SemiColon);
-		Node.GetNameSpace().SetLocalSymbol(Node.GetName(), Node.ToGlobalNameNode());
 	}
 
 	private void GenerateExtendCode(ZClassNode Node) {

@@ -207,20 +207,20 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 
 	@Override
 	public void VisitGetNameNode(ZGetNameNode Node) {
-		this.CurrentBuilder.Append(Node.VarName);
+		this.CurrentBuilder.Append(Node.GetName());
 	}
 
 	@Override
 	public void VisitSetNameNode(ZSetNameNode Node) {
 		this.CurrentBuilder.Append("writeIORef ");
-		this.CurrentBuilder.Append(Node.VarName + "_ref ");
+		this.CurrentBuilder.Append(Node.GetName() + "_ref ");
 		this.GenerateCode(null, Node.ExprNode());
 		this.CurrentBuilder.AppendLineFeed();
 
 		this.CurrentBuilder.AppendIndent();
-		this.CurrentBuilder.Append(Node.VarName);
+		this.CurrentBuilder.Append(Node.GetName());
 		this.CurrentBuilder.Append(" <- readIORef ");
-		this.CurrentBuilder.Append(Node.VarName + "_ref");
+		this.CurrentBuilder.Append(Node.GetName() + "_ref");
 		this.CurrentBuilder.AppendLineFeed();
 	}
 
@@ -304,7 +304,7 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
-		this.GenerateCode(null, Node.FuncNameNode());
+		this.GenerateCode(null, Node.FunctionNode());
 		this.VisitListNode(" ", Node, " ");
 	}
 }

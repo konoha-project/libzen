@@ -58,8 +58,8 @@ public class ZLetNode extends ZNode {
 		return this.InitValueNode() instanceof ZConstNode;
 	}
 
-	public final ZGlobalNameNode ToGlobalNameNode() {
-		return new ZGlobalNameNode(null, this.GetAstToken(ZLetNode._NameInfo), this.GetAstType(ZLetNode._InitValue), this.GlobalName, false);
-	}
+	//	public final ZGlobalNameNode ToGlobalNameNode() {
+	//		return new ZGlobalNameNode(null, this.GetAstToken(ZLetNode._NameInfo), this.GetAstType(ZLetNode._InitValue), this.GlobalName, false);
+	//	}
 
 }

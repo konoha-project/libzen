@@ -69,12 +69,12 @@ public class SSATransformer2 extends ZASTTransformer {
 
 	@Override
 	public void VisitGetNameNode(ZGetNameNode Node) {
-		this.FindVariable(Node.VarName).Use(Node);
+		this.FindVariable(Node.GetName()).Use(Node);
 	}
 
 	@Override
 	public void VisitSetNameNode(ZSetNameNode Node) {
-		Variable V = this.FindVariable(Node.VarName);
+		Variable V = this.FindVariable(Node.GetName());
 		V.Def(Node);
 		this.LocalStates.set(V.Index, VariableState.Modified);
 	}

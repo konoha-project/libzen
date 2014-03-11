@@ -219,30 +219,36 @@ public class ZenTypeSafer extends ZTypeChecker {
 
 	@Override public void VisitGetNameNode(ZGetNameNode Node) {
 		@Var ZNameSpace NameSpace = Node.GetNameSpace();
-		@Var ZVariable VarInfo = NameSpace.GetLocalVariable(Node.VarName);
+		@Var ZVariable VarInfo = NameSpace.GetLocalVariable(Node.GetName());
 		if(VarInfo != null) {
-			Node.VarName = VarInfo.VarName;
 			Node.VarIndex = VarInfo.VarUniqueIndex;
 			Node.IsCaptured = VarInfo.IsCaptured(this.CurrentFunctionNode);
 			this.TypedNode(Node, VarInfo.VarType);
 		}
 		else {
-			@Var ZNode SymbolNode = NameSpace.GetSymbolNode(Node.VarName);
-			if(SymbolNode == null) {
-				SymbolNode = Node.ToGlobalNameNode();
+			@Var ZNode SymbolNode = NameSpace.GetSymbolNode(Node.GetName());
+			if(SymbolNode instanceof ZLetNode) {
+				@Var ZLetNode LetSymbolNode = (ZLetNode)SymbolNode;
+				SymbolNode = new ZGlobalNameNode(Node.ParentNode, Node.SourceToken, LetSymbolNode.GlobalName, null);
+				this.TypedNode(SymbolNode, LetSymbolNode.InitValueNode().Type);
 			}
-			this.TypedNode(SymbolNode, SymbolNode.Type);
+			else if(SymbolNode == null) {
+				SymbolNode =  new ZGlobalNameNode(Node.ParentNode, Node.SourceToken, Node.GetName(), null);
+				this.TypedNode(SymbolNode, SymbolNode.Type);
+			}
+			else {
+				LibZen._PrintLine("FIXME: unexpected node: " + SymbolNode);
+			}
 		}
 	}
 
 	@Override public void VisitSetNameNode(ZSetNameNode Node) {
 		@Var ZNameSpace NameSpace = Node.GetNameSpace();
-		@Var ZVariable VarInfo = NameSpace.GetLocalVariable(Node.VarName);
+		@Var ZVariable VarInfo = NameSpace.GetLocalVariable(Node.GetName());
 		if(VarInfo == null) {
 			this.ReturnErrorNode(Node, Node.SourceToken, "undefined variable");
 			return;
 		}
-		Node.VarName = VarInfo.VarName;
 		Node.VarIndex = VarInfo.VarUniqueIndex;
 		Node.IsCaptured = VarInfo.IsCaptured(this.CurrentFunctionNode);
 		if(Node.IsCaptured) {
@@ -295,9 +301,12 @@ public class ZenTypeSafer extends ZTypeChecker {
 		this.TypedNode(Node, Node.GetAstType(ZGroupNode._Expr));
 	}
 
-	private void VisitListNodeAsFuncCall(ZListNode FuncNode, ZFuncType FuncType) {
+	private void TypeCheckListAsFuncCall(ZListNode FuncNode, ZFuncType FuncType) {
 		@Var int i = 0;
 		@Var ZType[] Greek = ZGreekType._NewGreekTypes(null);
+		//		if(FuncNode.GetListSize() != FuncType.GetFuncParamSize()) {
+		//			System.err.println(ZLogger._LogError(FuncNode.SourceToken, "mismatch " + FuncType + ", " + FuncNode.GetListSize()+": " + FuncNode));
+		//		}
 		while(i < FuncNode.GetListSize()) {
 			@Var ZNode SubNode = FuncNode.GetListAt(i);
 			@Var ZType ParamType =  FuncType.GetFuncParamType(i);
@@ -317,24 +326,24 @@ public class ZenTypeSafer extends ZTypeChecker {
 	}
 
 	@Override public void VisitMacroNode(ZMacroNode FuncNode) {
-		this.VisitListNodeAsFuncCall(FuncNode, FuncNode.GetFuncType());
+		this.TypeCheckListAsFuncCall(FuncNode, FuncNode.GetFuncType());
 	}
 
 	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
 		@Var ZNameSpace NameSpace = Node.GetNameSpace();
 		this.TypeCheckNodeList(Node);
 		this.CheckTypeAt(Node, ZFuncCallNode._Func, ZType.VarType);
-		@Var ZNode FuncNode = Node.FuncNameNode();
+		@Var ZNode FuncNode = Node.FunctionNode();
 		@Var ZType FuncNodeType = Node.GetAstType(ZFuncCallNode._Func);
 		if(FuncNodeType instanceof ZFuncType) {
-			this.VisitListNodeAsFuncCall(Node, (ZFuncType)FuncNodeType);
+			this.TypeCheckListAsFuncCall(Node, (ZFuncType)FuncNodeType);
 		}
 		else if(FuncNode instanceof ZTypeNode) {
-			@Var String FuncName = FuncNode.Type.ShortName;
+			@Var String FuncName = FuncNode.Type.GetName();
 			@Var ZFunc Func = this.LookupFunc(NameSpace, FuncName, FuncNode.Type, Node.GetListSize());
 			if(Func != null) {
-				Node.SetNode(ZFuncCallNode._Func, new ZGlobalNameNode(Node, FuncNode.SourceToken, Func.GetFuncType(), FuncName, true));
-				this.VisitListNodeAsFuncCall(Node, Func.GetFuncType());
+				Node.SetNode(ZFuncCallNode._Func, new ZGlobalNameNode(Node, FuncNode.SourceToken, FuncName, Func.GetFuncType()));
+				this.TypeCheckListAsFuncCall(Node, Func.GetFuncType());
 				return;
 			}
 		}
@@ -344,21 +353,20 @@ public class ZenTypeSafer extends ZTypeChecker {
 				@Var ZFunc Func = this.LookupFunc(NameSpace, FuncName, Node.GetRecvType(), Node.GetListSize());
 				if(Func instanceof ZMacroFunc) {
 					@Var ZMacroNode MacroNode = Node.ToMacroNode((ZMacroFunc)Func);
-					this.VisitListNodeAsFuncCall(MacroNode, Func.GetFuncType());
+					this.TypeCheckListAsFuncCall(MacroNode, Func.GetFuncType());
 					return;
 				}
 				else if(Func != null) {
-					@Var ZGlobalNameNode NameNode = (ZGlobalNameNode)Node.FuncNameNode();
-					NameNode.Type = Func.GetFuncType();
-					NameNode.IsStaticFuncName = true;
-					this.VisitListNodeAsFuncCall(Node, Func.GetFuncType());
+					@Var ZGlobalNameNode NameNode = Node.FuncNameNode();
+					NameNode.SetFuncType(Func.GetFuncType());
+					this.TypeCheckListAsFuncCall(Node, Func.GetFuncType());
 					return;
 				}
 			}
 			this.TypedNode(Node, ZType.VarType);
 		}
 		else {
-			this.Return(new ZErrorNode(Node, "not function: " + FuncNodeType + " of node " + Node.FuncNameNode()));
+			this.Return(new ZErrorNode(Node, "not function: " + FuncNodeType + " of node " + Node.FunctionNode()));
 		}
 	}
 
@@ -450,14 +458,15 @@ public class ZenTypeSafer extends ZTypeChecker {
 			if(FieldType instanceof ZFuncType) {
 				@Var ZFuncType FieldFuncType = (ZFuncType)FieldType;
 				@Var ZFuncCallNode FuncCall = Node.ToGetterFuncCall(FieldFuncType);
-				this.VisitListNodeAsFuncCall(FuncCall, FieldFuncType);
+				this.TypeCheckListAsFuncCall(FuncCall, FieldFuncType);
 				return;
 			}
 			@Var int FuncParamSize = Node.GetListSize() + 1;
 			@Var ZFunc Func = this.LookupFunc(NameSpace, Node.MethodName(), Node.GetAstType(ZMethodCallNode._Recv), FuncParamSize);
+			System.out.println("Func: "+Func);
 			if(Func != null) {
-				@Var ZListNode FuncCall = Node.ToFuncCallNode(Func);
-				this.VisitListNodeAsFuncCall(FuncCall, Func.GetFuncType());
+				@Var ZListNode FuncCall = Node.ToFuncCallNode(this, Func);
+				this.TypeCheckListAsFuncCall(FuncCall, Func.GetFuncType());
 			}
 			else {
 				this.VisitListAsNativeMethod(Node, Node.GetAstType(ZMethodCallNode._Recv), Node.MethodName(), Node);
@@ -484,7 +493,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 		@Var ZFunc Func = this.LookupFunc(NameSpace, Node.ClassType().GetName(), Node.ClassType(), FuncParamSize);
 		if(Func != null) {
 			@Var ZListNode FuncCall = Node.ToFuncCallNode(Func);
-			this.VisitListNodeAsFuncCall(FuncCall, Func.GetFuncType());
+			this.TypeCheckListAsFuncCall(FuncCall, Func.GetFuncType());
 			return;
 		}
 		if(FuncParamSize == 1) { /* no argument */
@@ -513,7 +522,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 		}
 		@Var ZFunc Func = this.Generator.LookupConverterFunc(ExprType, Node.Type);
 		if(Func != null) {
-			this.TypedNode(Node.ToFuncCallNode(Func), Node.Type);
+			this.TypedNode(Node.ToFuncCallNode(this, Func), Node.Type);
 		}
 		this.TypedNode(Node, Node.Type);
 	}
@@ -699,8 +708,13 @@ public class ZenTypeSafer extends ZTypeChecker {
 		this.CheckTypeAt(Node, ZLetNode._InitValue, DeclType);
 		@Var ZType ConstType = Node.InitValueNode().Type;
 		if(!ConstType.IsVarType()) {
-			Node.GlobalName = this.Generator.NameUniqueSymbol(Node.GetName());
-			Node.GetNameSpace().SetLocalSymbol(Node.GetName(), Node.InitValueNode());
+			if(Node.IsExport) {
+				Node.GlobalName = Node.GetName();
+			}
+			else {
+				Node.GlobalName = this.Generator.NameGlobalSymbol(Node.GetName());
+			}
+			Node.GetNameSpace().SetLocalSymbol(Node.GetName(), Node);
 			this.TypedNode(Node, ZType.VoidType);
 		}
 	}

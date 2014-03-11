@@ -38,14 +38,21 @@ public final class ZFuncCallNode extends ZListNode {
 		this.SetNode(ZFuncCallNode._Func, FuncNode);
 	}
 
-	public ZFuncCallNode(ZNode ParentNode, String FuncName, ZType FuncType) {
+	@Deprecated public ZFuncCallNode(ZNode ParentNode, String FuncName, ZFuncType FuncType) {
 		super(ParentNode, null, 1);
-		@Var ZGlobalNameNode FuncNode = new ZGlobalNameNode(this, null, FuncType, FuncName, true);
-		this.SetNode(ZFuncCallNode._Func, FuncNode);
+		this.SetNode(ZFuncCallNode._Func, new ZGlobalNameNode(this, null, FuncName, FuncType));
 	}
 
-	public final ZNode FuncNameNode() {
+	public final ZNode FunctionNode() {
 		return this.AST[ZFuncCallNode._Func ];
+	}
+
+	public final ZGlobalNameNode FuncNameNode() {
+		@Var ZNode NameNode = this.FunctionNode();
+		if(NameNode instanceof ZGlobalNameNode) {
+			return (ZGlobalNameNode)NameNode;
+		}
+		return null;
 	}
 
 	@Override public void Accept(ZVisitor Visitor) {
@@ -60,15 +67,15 @@ public final class ZFuncCallNode extends ZListNode {
 	}
 
 	public final boolean IsStaticFuncCall() {
-		@Var ZNode FNode = this.FuncNameNode();
+		@Var ZNode FNode = this.FunctionNode();
 		if(FNode instanceof ZGlobalNameNode) {
-			return ((ZGlobalNameNode)FNode).IsStaticFuncName;
+			return ((ZGlobalNameNode)FNode).IsFuncNameNode();
 		}
 		return false;
 	}
 
 	public final String GetStaticFuncName() {
-		@Var ZNode FNode = this.FuncNameNode();
+		@Var ZNode FNode = this.FunctionNode();
 		if(FNode instanceof ZGlobalNameNode) {
 			return ((ZGlobalNameNode)FNode).GlobalName;
 		}
@@ -76,7 +83,7 @@ public final class ZFuncCallNode extends ZListNode {
 	}
 
 	public final ZFuncType GetFuncType() {
-		@Var ZType FType = this.FuncNameNode().Type;
+		@Var ZType FType = this.FunctionNode().Type;
 		if(FType instanceof ZFuncType) {
 			return (ZFuncType)FType;
 		}
@@ -84,7 +91,7 @@ public final class ZFuncCallNode extends ZListNode {
 	}
 
 	public ZMacroNode ToMacroNode(ZMacroFunc MacroFunc) {
-		@Var ZMacroNode MacroNode = new ZMacroNode(this.ParentNode, this.FuncNameNode().SourceToken, MacroFunc);
+		@Var ZMacroNode MacroNode = new ZMacroNode(this.ParentNode, this.FunctionNode().SourceToken, MacroFunc);
 		@Var int i = 0;
 		while(i < this.GetListSize()) {
 			MacroNode.Append(this.GetListAt(i));

@@ -31,24 +31,30 @@ import zen.util.Field;
 
 // E.g., $NativeName = $ValueNode
 public class ZSetNameNode extends ZNode {
-	public static int _Expr = 0;
+	public final static int _Expr = 0;
 
-	@Field public String  VarName;
+	@Field public String  GivenName;
 	@Field public int     VarIndex = 0;
 	@Field public boolean IsCaptured = false;
 
-	public ZSetNameNode(ZNode ParentNode, ZToken Token, String VarName) {
+	public ZSetNameNode(ZNode ParentNode, ZToken Token, String GivenName) {
 		super(ParentNode, Token, 1);
-		this.VarName = VarName;
+		this.GivenName = GivenName;
 	}
+
 	public ZSetNameNode(String Name, ZNode ExprNode) {
 		super(null, null, 1);
-		this.VarName = Name;
+		this.GivenName = Name;
 		this.SetNode(ZSetNameNode._Expr, ExprNode);
 		if(!ExprNode.IsUntyped()) {
 			this.Type = ZType.VoidType;
 		}
 	}
+
+	public final String GetName() {
+		return this.GivenName;
+	}
+
 	public final ZNode ExprNode() {
 		return this.AST[ZSetNameNode._Expr ];
 	}

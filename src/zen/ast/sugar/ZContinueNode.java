@@ -12,6 +12,7 @@ import zen.ast.ZSyntaxSugarNode;
 import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
 import zen.parser.ZGenerator;
+import zen.parser.ZTypeChecker;
 import zen.type.ZType;
 import zen.util.LibZen;
 import zen.util.Var;
@@ -72,7 +73,7 @@ public class ZContinueNode extends ZSyntaxSugarNode {
 		return FirstDesugarNode;
 	}
 
-	@Override public ZDesugarNode DeSugar(ZGenerator Generator) {
+	@Override public ZDesugarNode DeSugar(ZGenerator Generator, ZTypeChecker TypeChekcer) {
 		@Var ZWhileNode WhileNode = this.LookupWhileNode();
 		if(WhileNode == null) {
 			return new ZDesugarNode(this, new ZErrorNode(this.ParentNode, this.SourceToken, "must be inside while statement"));
@@ -81,7 +82,8 @@ public class ZContinueNode extends ZSyntaxSugarNode {
 		@Var ZBlockNode ParentBlockNode = WhileNode.GetScopeBlockNode();
 		@Var ZVarNode VarNode = Generator.TypeChecker.CreateVarNode(null, VarName, ZType.BooleanType, new ZBooleanNode(true));
 		@Var ZBlockNode WhileBlockNode = Generator.TypeChecker.CreateBlockNode(null);
-		@Var ZWhileNode ContinueWhile = new ZWhileNode(new ZGetNameNode(VarName, ZType.BooleanType), WhileBlockNode);
+		@Var ZGetNameNode WhileCondNode = Generator.TypeChecker.CreateGetNameNode(null, VarName, ZType.BooleanType);
+		@Var ZWhileNode ContinueWhile = new ZWhileNode(WhileCondNode, WhileBlockNode);
 		VarNode.Append(ContinueWhile);
 		WhileBlockNode.Append(new ZSetNameNode(VarName, new ZBooleanNode(false)));
 		WhileBlockNode.Append(WhileNode);

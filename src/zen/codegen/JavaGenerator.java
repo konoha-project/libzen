@@ -97,8 +97,8 @@ public class JavaGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitGlobalNameNode(ZGlobalNameNode Node) {
-		if(Node.IsStaticFuncName) {
-			this.CurrentBuilder.Append(this.NameFunctionClass(Node.GlobalName, (ZFuncType)Node.Type), ".f");
+		if(Node.IsFuncNameNode()) {
+			this.CurrentBuilder.Append(this.NameFunctionClass(Node.GlobalName,Node.FuncType), ".f");
 		}
 		else {
 			if(Node.IsUntyped()) {
@@ -106,7 +106,7 @@ public class JavaGenerator extends ZSourceGenerator {
 				this.CurrentBuilder.Append(this.NullLiteral,"/*"+Node.GlobalName+"*/");
 			}
 			else {
-				this.CurrentBuilder.Append(Node.GlobalName);
+				this.CurrentBuilder.Append(this.NameGlobalNameClass(Node.GlobalName), "._");
 			}
 		}
 	}
@@ -132,7 +132,7 @@ public class JavaGenerator extends ZSourceGenerator {
 			while(i < Node.GetListSize()) {
 				@Var ZMapEntryNode Entry = Node.GetMapEntryNode(i);
 				this.CurrentBuilder.AppendNewLine("put");
-				this.GenerateCode("(", Entry.KeyNode(), this.Camma, Entry.ValueNode(), ");");
+				this.GenerateCode2("(", Entry.KeyNode(), this.Camma, Entry.ValueNode(), ");");
 				i = i + 1;
 			}
 			this.CurrentBuilder.CloseIndent("}}");
@@ -147,12 +147,12 @@ public class JavaGenerator extends ZSourceGenerator {
 	@Override public void VisitGetIndexNode(ZGetIndexNode Node) {
 		@Var ZType RecvType = Node.GetAstType(ZGetIndexNode._Recv);
 		if(RecvType.IsStringType()) {
-			this.GenerateCode("String.valueOf((", null, Node.RecvNode(), ")");
-			this.GenerateCode(".charAt(", null, Node.IndexNode(), "))");
+			this.GenerateCode2("String.valueOf((", null, Node.RecvNode(), ")");
+			this.GenerateCode2(".charAt(", null, Node.IndexNode(), "))");
 		}
 		else {
 			this.GenerateCode(null, Node.RecvNode());
-			this.GenerateCode(".get(", null, Node.IndexNode(), ")");
+			this.GenerateCode2(".get(", null, Node.IndexNode(), ")");
 		}
 	}
 
@@ -180,11 +180,11 @@ public class JavaGenerator extends ZSourceGenerator {
 
 	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
 		if(Node.IsStaticFuncCall()) {
-			this.GenerateCode(null, Node.FuncNameNode());
+			this.GenerateCode(null, Node.FunctionNode());
 			this.VisitListNode("(", Node, ")");
 		}
 		else {
-			this.GenerateCode(null, Node.FuncNameNode());
+			this.GenerateCode(null, Node.FunctionNode());
 			this.CurrentBuilder.Append(".Invoke");
 			this.VisitListNode("(", Node, ")");
 		}
@@ -199,7 +199,7 @@ public class JavaGenerator extends ZSourceGenerator {
 
 	@Override public void VisitThrowNode(ZThrowNode Node) {
 		this.CurrentBuilder.Append("throw ");
-		this.GenerateCode("new RuntimeException((", null, Node.ExprNode(),").toString())");
+		this.GenerateCode2("new RuntimeException((", null, Node.ExprNode(),").toString())");
 	}
 
 	@Override public void VisitTryNode(ZTryNode Node) {
@@ -336,23 +336,21 @@ public class JavaGenerator extends ZSourceGenerator {
 		this.VisitStmtList(Node);
 	}
 
+	private String NameGlobalNameClass(String Name) {
+		return "G__" + Name;
+	}
+
 	@Override public void VisitLetNode(ZLetNode Node) {
-		if(Node.InitValueNode() instanceof ZErrorNode) {
-			this.VisitErrorNode((ZErrorNode)Node.InitValueNode());
-			return;
-		}
-		if(!Node.IsConstValue()) {
-			@Var String ClassName = "Symbol" + Node.GlobalName;
-			this.CurrentBuilder = this.InsertNewSourceBuilder();
-			this.CurrentBuilder.AppendNewLine("final class ", ClassName, "");
-			this.CurrentBuilder.OpenIndent(" {");
-			this.GenerateClassField("static", Node.GetAstType(ZLetNode._InitValue), "_", null);
-			this.GenerateCode(" = ", null, Node.InitValueNode(), this.SemiColon);
-			this.CurrentBuilder.CloseIndent("}");
-			this.CurrentBuilder = this.CurrentBuilder.Pop();
-			Node.GlobalName = ClassName + "._";
-			Node.GetNameSpace().SetLocalSymbol(Node.GetName(), Node.ToGlobalNameNode());
-		}
+		@Var String ClassName = this.NameGlobalNameClass(Node.GlobalName);
+		//		this.CurrentBuilder = this.InsertNewSourceBuilder();
+		this.CurrentBuilder.AppendNewLine("final class ", ClassName, "");
+		this.CurrentBuilder.OpenIndent(" {");
+		this.GenerateClassField("static", Node.GetAstType(ZLetNode._InitValue), "_", null);
+		this.GenerateCode2(" = ", null, Node.InitValueNode(), this.SemiColon);
+		this.CurrentBuilder.CloseIndent("}");
+		//		this.CurrentBuilder = this.CurrentBuilder.Pop();
+		//			Node.GlobalName = ClassName + "._";
+		//			Node.GetNameSpace().SetLocalSymbol(Node.GetName(), Node.ToGlobalNameNode());
 	}
 
 	@Override public void VisitParamNode(ZParamNode Node) {

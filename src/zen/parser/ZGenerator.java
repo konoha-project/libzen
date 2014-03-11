@@ -48,8 +48,8 @@ import zen.util.Field;
 import zen.util.LibZen;
 import zen.util.Nullable;
 import zen.util.Var;
-import zen.util.ZenIgnored;
 import zen.util.ZMap;
+import zen.util.ZenIgnored;
 import zen.util.ZenMethod;
 
 public abstract class ZGenerator extends ZVisitor {
@@ -194,6 +194,10 @@ public abstract class ZGenerator extends ZVisitor {
 		return UniqueNumber;
 	}
 
+	public final String NameGlobalSymbol(String Symbol) {
+		return Symbol + "Z" + this.GetUniqueNumber();
+	}
+
 	public final String NameUniqueSymbol(String Symbol) {
 		return Symbol + "Z" + this.GetUniqueNumber();
 	}
@@ -276,7 +280,7 @@ public abstract class ZGenerator extends ZVisitor {
 	}
 
 	public final void VisitUndefinedNode(ZNode Node) {
-		ZErrorNode ErrorNode = new ZErrorNode(Node.ParentNode, Node.SourceToken, "undefined node:" + Node.toString());
+		@Var ZErrorNode ErrorNode = new ZErrorNode(Node.ParentNode, Node.SourceToken, "undefined node:" + Node.toString());
 		this.VisitErrorNode(ErrorNode);
 	}
 
@@ -285,7 +289,7 @@ public abstract class ZGenerator extends ZVisitor {
 	}
 
 	@Override public void VisitSyntaxSugarNode(ZSyntaxSugarNode Node) {
-		@Var ZDesugarNode DeNode = Node.DeSugar(this);
+		@Var ZDesugarNode DeNode = Node.DeSugar(this, this.TypeChecker);
 		@Var int i = 0;
 		while(i < DeNode.GetAstSize()) {
 			DeNode.AST[i].Accept(this);  // FIXME

@@ -2,6 +2,7 @@ package zen.ast;
 
 import zen.parser.ZGenerator;
 import zen.parser.ZToken;
+import zen.parser.ZTypeChecker;
 import zen.parser.ZVisitor;
 
 
@@ -15,7 +16,7 @@ public abstract class ZSyntaxSugarNode extends ZNode {
 		Visitor.VisitSyntaxSugarNode(this);
 	}
 
-	public abstract ZDesugarNode DeSugar(ZGenerator Generator);
+	public abstract ZDesugarNode DeSugar(ZGenerator Generator, ZTypeChecker TypeChekcer);
 
 
 

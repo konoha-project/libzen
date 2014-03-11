@@ -103,7 +103,7 @@ public class CommonLispGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitSetNameNode(ZSetNameNode Node) {
-		this.CurrentBuilder.Append("(setq  " + this.NameLocalVariable(Node.VarName, Node.VarIndex));
+		this.CurrentBuilder.Append("(setq  " + this.NameLocalVariable(Node.GetName(), Node.VarIndex));
 		this.CurrentBuilder.Append(" ");
 		this.GenerateCode(null, Node.ExprNode());
 		this.CurrentBuilder.Append(")");

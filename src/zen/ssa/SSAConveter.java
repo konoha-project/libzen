@@ -181,7 +181,7 @@ class BlockNode {
 			ZNode x = this.block.GetListAt(i);
 			if(x instanceof ZSetNameNode) {
 				ZSetNameNode Inst = (ZSetNameNode) x;
-				local.put(Inst.VarName, Inst.VarIndex);
+				local.put(Inst.GetName(), Inst.VarIndex);
 			}
 			i = i + 1;
 		}
@@ -367,7 +367,7 @@ class ControlFlowGraph { // ControlFlowGraph
 	private void NewName(ZNode NewVal, ZNode Node, HashMap<String, Stack<ZNode>> stack) {
 		String n = null;
 		if(Node instanceof ZGetNameNode) {
-			n = ((ZGetNameNode)Node).VarName;
+			n = ((ZGetNameNode)Node).GetName();
 		}
 		else {
 			assert(Node instanceof ZVarNode);
@@ -378,7 +378,7 @@ class ControlFlowGraph { // ControlFlowGraph
 
 	private ZNode TopStack(ZNode Node, HashMap<String, Stack<ZNode>> stack) {
 		if(Node instanceof ZGetNameNode) {
-			String n = ((ZGetNameNode)Node).VarName;
+			String n = ((ZGetNameNode)Node).GetName();
 			return stack.get(n).peek();
 		}
 		else {
@@ -390,7 +390,7 @@ class ControlFlowGraph { // ControlFlowGraph
 
 	private ZNode PopStack(ZNode Node, HashMap<String, Stack<ZNode>> stack) {
 		if(Node instanceof ZGetNameNode) {
-			String n = ((ZGetNameNode)Node).VarName;
+			String n = ((ZGetNameNode)Node).GetName();
 			return stack.get(n).peek();
 		}
 		else {
