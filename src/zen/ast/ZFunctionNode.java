@@ -77,7 +77,7 @@ public class ZFunctionNode extends ZListNode {
 		if(FuncName == null) {
 			FuncName = "f";
 		}
-		return Generator.NameUniqueSymbol("f");
+		return Generator.NameUniqueSymbol(FuncName);
 	}
 
 	public final ZBlockNode BlockNode() {
@@ -138,10 +138,10 @@ public class ZFunctionNode extends ZListNode {
 	public final boolean IsTopLevel() {
 		return this.ParentFunctionNode == null;
 	}
-	//
-	//	public final int GetVarIndex() {
-	//		@Var int Index = this.VarIndex;
-	//		this.VarIndex = this.VarIndex + 1;
-	//		return Index;
-	//	}
+
+	public final boolean IsTopLevelDefineFunction() {
+		return (this.Type.IsVoidType());
+	}
+
+
 }

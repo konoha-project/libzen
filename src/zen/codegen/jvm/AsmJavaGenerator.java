@@ -832,10 +832,10 @@ public class AsmJavaGenerator extends ZGenerator {
 	//	}
 
 	@Override public void VisitLetNode(ZLetNode Node) {
-		if(Node.HasUntypedNode()) {
-			ZLogger._LogWarning(Node.InitValueNode().SourceToken, "type is ambigious");
-			return;
-		}
+		//		if(Node.InitValueNode().HasUntypedNode()) {
+		//			ZLogger._LogWarning(Node.InitValueNode().SourceToken, "type is ambigiou: " + Node.InitValueNode());
+		//			return;
+		//		}
 		String ClassName = this.NameGlobalNameClass(Node.GlobalName);
 		@Var AsmClassBuilder ClassBuilder = this.AsmLoader.NewClass(ACC_PUBLIC|ACC_FINAL, Node, ClassName, "java/lang/Object");
 		Class<?> ValueClass = this.GetJavaClass(Node.GetAstType(ZLetNode._InitValue));
@@ -875,7 +875,7 @@ public class AsmJavaGenerator extends ZGenerator {
 	}
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
-		if(Node.Type.IsVoidType()) {
+		if(Node.IsTopLevelDefineFunction()) {
 			assert(Node.FuncName() != null);
 			assert(Node.IsTopLevel());  // otherwise, transformed to var f = function ()..
 			JavaStaticFieldNode FuncNode = this.GenerateFunctionAsSymbolField(Node.FuncName(), Node);
@@ -1188,7 +1188,7 @@ public class AsmJavaGenerator extends ZGenerator {
 				System.out.println(e);
 			}
 			catch(Exception e) {
-				System.out.println(e);
+				e.printStackTrace();
 			}
 		}
 	}
@@ -1205,7 +1205,7 @@ public class AsmJavaGenerator extends ZGenerator {
 				System.out.println(e);
 			}
 			catch(Exception e) {
-				System.out.println(e);
+				e.printStackTrace();
 			}
 		}
 	}

@@ -211,7 +211,7 @@ public class PythonGenerator extends ZSourceGenerator {
 	 **/
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
-		if(!Node.Type.IsVoidType()) {
+		if(!Node.IsTopLevelDefineFunction()) {
 			@Var String FuncName = Node.GetUniqueName(this);
 			this.CurrentBuilder = this.InsertNewSourceBuilder();
 			this.CurrentBuilder.Append("def ");

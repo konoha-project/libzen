@@ -863,8 +863,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		}
 	}
 
-	@Override
-	public void VisitFunctionNode(ZFunctionNode Node) {
+	@Override public void VisitFunctionNode(ZFunctionNode Node) {
 		@Var LLVMSourceWriter PushedWriter = this.Writer;
 		//Node.ParentFunctionNode != null
 		if(!Node.Type.IsVoidType()) {
