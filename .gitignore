@@ -81,3 +81,8 @@ GSYMS
 
 *.jar
 *.class
+
+#############
+## Playground Server Edition
+#############
+playgroundserver/node_modules/
