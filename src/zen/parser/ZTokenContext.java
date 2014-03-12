@@ -262,10 +262,10 @@ public final class ZTokenContext {
 			this.CurrentPosition = RollbackPosition;
 			return null;
 		}
-		if(this.CurrentPosition == RollbackPosition) {
-			LibZen._PrintLine("DEBUG infinite looping" + RollbackPosition + " Token=" + TopToken + " ParsedNode=" + ParsedNode);
-			assert(this.CurrentPosition != RollbackPosition);
-		}
+		//		if(this.CurrentPosition == RollbackPosition) {
+		//			LibZen._PrintLine("DEBUG infinite looping" + RollbackPosition + " Token=" + TopToken + " ParsedNode=" + ParsedNode);
+		//			assert(this.CurrentPosition != RollbackPosition);
+		//		}
 		if(ParsedNode == null) {
 			ParsedNode = this.CreateExpectedErrorNode(TopToken, Pattern.PatternName);
 		}

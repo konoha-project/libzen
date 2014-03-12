@@ -46,6 +46,7 @@ public class JavaGenerator extends ZSourceGenerator {
 		this.SetNativeType(ZType.IntType, "int");  // for beautiful code
 		this.SetNativeType(ZType.FloatType, "double");
 		this.SetNativeType(ZType.StringType, "String");
+		this.SetNativeType(ZType.VarType, "Object");  // for safety
 
 		this.SetReservedName("this", "self");
 
