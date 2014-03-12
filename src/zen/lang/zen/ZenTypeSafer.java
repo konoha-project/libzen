@@ -655,6 +655,10 @@ public class ZenTypeSafer extends ZTypeChecker {
 	@Override public void VisitWhileNode(ZWhileNode Node) {
 		this.CheckTypeAt(Node, ZWhileNode._Cond, ZType.BooleanType);
 		this.CheckTypeAt(Node, ZWhileNode._Block, ZType.VoidType);
+		if(Node.HasNextNode()) {
+			this.CheckTypeAt(Node, ZWhileNode._Next, ZType.VoidType);
+			Node.BlockNode().Append(Node.NextNode());
+		}
 		this.ReturnTypeNode(Node, ZType.VoidType);
 	}
 
