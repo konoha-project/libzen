@@ -59,7 +59,7 @@ public final class ZWhileNode extends ZNode {
 		return null;
 	}
 
-	public final boolean HasNextStatement() {
+	public final boolean HasNextNode() {
 		return (this.AST[ZWhileNode._Next] != null);
 	}
 

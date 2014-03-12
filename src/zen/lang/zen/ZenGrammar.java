@@ -48,6 +48,7 @@ import zen.grammar.GetIndexPatternFunction;
 import zen.grammar.GetterPatternFunction;
 import zen.grammar.GroupPatternFunction;
 import zen.grammar.IfPatternFunction;
+import zen.grammar.InStatementPatternFunction;
 import zen.grammar.InstanceOfPatternFunction;
 import zen.grammar.IntLiteralPatternFunction;
 import zen.grammar.LetPatternFunction;
@@ -178,6 +179,7 @@ public class ZenGrammar {
 		NameSpace.DefineExpression("$Statement$", new StatementPatternFunction());
 		NameSpace.DefineExpression("$Expression$", new ExpressionPatternFunction());
 		NameSpace.DefineExpression("$RightExpression$", new RightExpressionPatternFunction());
+		NameSpace.DefineExpression("$InStatement$", new InStatementPatternFunction());
 
 		NameSpace.DefineStatement("if", new IfPatternFunction());
 		NameSpace.DefineStatement("return", new ReturnPatternFunction());

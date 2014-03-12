@@ -16,11 +16,12 @@ public class IfPatternFunction extends ZMatchFunction {
 		IfNode = TokenContext.MatchToken(IfNode, ")", ZTokenContext._Required);
 		IfNode = TokenContext.MatchPattern(IfNode, ZIfNode._Then, "$Block$", ZTokenContext._Required);
 		if(TokenContext.MatchNewLineToken("else")) {
-			@Var String PatternName = "$Block$";
 			if(TokenContext.IsNewLineToken("if")) {
-				PatternName = "if";
+				IfNode = TokenContext.MatchPattern(IfNode, ZIfNode._Else, "if", ZTokenContext._Required);
 			}
-			IfNode = TokenContext.MatchPattern(IfNode, ZIfNode._Else, PatternName, ZTokenContext._Required);
+			else {
+				IfNode = TokenContext.MatchPattern(IfNode, ZIfNode._Else, "$Block$", ZTokenContext._Required);
+			}
 		}
 		return IfNode;
 	}
