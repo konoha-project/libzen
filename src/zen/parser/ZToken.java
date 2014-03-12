@@ -6,11 +6,17 @@ import zen.util.Var;
 import zen.util.ZenIgnored;
 
 public class ZToken {
-	public final static ZToken _NullToken = new ZToken(null, 0, 0);
+	public final static ZToken _NullToken = new ZToken();
 
-	@Field public ZSource Source;
+	@Field public final ZSource Source;
 	@Field public int  StartIndex;
 	@Field public int  EndIndex;
+
+	private ZToken() {
+		this.Source = new ZSource();
+		this.StartIndex = 0;
+		this.EndIndex = 0;
+	}
 
 	public ZToken(ZSource Source, int StartIndex, int EndIndex) {
 		this.Source = Source;

@@ -12,6 +12,14 @@ public class ZSource {
 	@Field int    LineNumber;
 	@Field String  SourceText;
 
+	ZSource() {
+		this.FileName = null;
+		this.LineNumber = 0;
+		this.TokenContext = null;
+		this.SourceText ="";
+		this.Logger = null;
+	}
+
 	public ZSource(String FileName, int LineNumber, String Source, ZTokenContext TokenContext) {
 		this.FileName = FileName;
 		this.LineNumber = LineNumber;
