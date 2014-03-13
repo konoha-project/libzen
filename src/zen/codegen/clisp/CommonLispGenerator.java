@@ -28,8 +28,10 @@ import zen.ast.ZAndNode;
 import zen.ast.ZBinaryNode;
 import zen.ast.ZBlockNode;
 import zen.ast.ZErrorNode;
+import zen.ast.ZFuncCallNode;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZGetNameNode;
+import zen.ast.ZGlobalNameNode;
 import zen.ast.ZIfNode;
 import zen.ast.ZNode;
 import zen.ast.ZOrNode;
@@ -200,6 +202,18 @@ public class CommonLispGenerator extends ZSourceGenerator {
 			this.CurrentBuilder.Append("nil");
 		}
 		this.CurrentBuilder.Append(")");
+	}
+
+	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
+		ZGlobalNameNode GNode = Node.FuncNameNode();
+		if (GNode != null) {
+			String FuncName = GNode.GlobalName;
+			this.CurrentBuilder.Append("(");
+			this.CurrentBuilder.Append(FuncName);
+			this.VisitListNode(" ", Node, " ");
+			this.CurrentBuilder.Append(")");
+		} else { // lambda
+		}
 	}
 
 	private ZFunctionNode LookupFunctionNode(ZNode Node) {
