@@ -88,13 +88,13 @@ public class ZContinueNode extends ZSugarNode {
 
 		@Var ZNode[] Nodes = null;
 		if(WhileNode.HasNextNode()) {
-			Nodes = LibZen._NewNodeArray(2);
+			Nodes = LibZen._NewNodeArray(3);
 			Nodes[0] = new ZSetNameNode(VarName, new ZBooleanNode(true));
 			Nodes[1] = WhileNode.NextNode();
 			Nodes[2] = new ZBreakNode(null);
 		}
 		else {
-			Nodes = LibZen._NewNodeArray(3);
+			Nodes = LibZen._NewNodeArray(2);
 			Nodes[0] = new ZSetNameNode(VarName, new ZBooleanNode(true));
 			Nodes[1] = new ZBreakNode(null);
 		}

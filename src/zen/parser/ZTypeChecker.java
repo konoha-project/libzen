@@ -345,10 +345,5 @@ public abstract class ZTypeChecker extends ZVisitor {
 		return FuncNode;
 	}
 
-
-
-
-
-
 }
 

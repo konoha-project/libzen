@@ -36,8 +36,6 @@ import zen.util.LibZen;
 import zen.util.Var;
 
 public abstract class ZNode {
-	//	public final static int _NameInfo = -2;
-	//	public final static int _TypeInfo = -3;
 	public final static int _AppendIndex = -1;
 	public final static int _NestedAppendIndex = -2;
 	public final static int _Nop =      -3;
@@ -81,24 +79,6 @@ public abstract class ZNode {
 		}
 	}
 
-	public final int GetAstSize() {
-		if(this.AST == null) {
-			return 0;
-		}
-		return this.AST.length;
-	}
-
-	public final ZToken GetAstToken(int Index) {
-		if(this.AST[Index] != null) {
-			return this.AST[Index].SourceToken;
-		}
-		return null;
-	}
-
-	public final ZType GetAstType(int Index) {
-		return this.AST[Index].Type.GetRealType();
-	}
-
 	public final String GetSourceLocation() {
 		if(this.SourceToken != null) {
 			return "(" + this.SourceToken.GetFileName() + ":" + this.SourceToken.GetLineNumber() + ")";
@@ -138,6 +118,37 @@ public abstract class ZNode {
 		}
 		return Self;
 	}
+
+
+
+
+	public final int GetAstSize() {
+		if(this.AST == null) {
+			return 0;
+		}
+		return this.AST.length;
+	}
+
+	public final ZType GetAstType(int Index) {
+		return this.AST[Index].Type.GetRealType();
+	}
+
+	public final void SetAstType(int Index) {
+		if(this.AST[Index] != null) {
+			this.AST[Index].Type = this.Type;
+		}
+	}
+
+	public final ZToken GetAstToken(int Index) {
+		if(this.AST[Index] != null) {
+			return this.AST[Index].SourceToken;
+		}
+		return null;
+	}
+
+
+
+
 
 	public final ZBlockNode GetScopeBlockNode() {
 		@Var int SafeCount = 0;
