@@ -265,7 +265,7 @@ public final class ZNameSpace {
 		if(Node instanceof ZTypeNode) {
 			return Node.Type;
 		}
-		if(Node == null && IsCreation) {
+		if(Node == null && IsCreation && LibZen._IsSymbol(LibZen._GetChar(TypeName, 0))) {
 			@Var ZType Type = new ZClassType(TypeName, ZType.VarType);
 			this.GetRootNameSpace().SetTypeName(TypeName, Type, SourceToken);
 			return Type;

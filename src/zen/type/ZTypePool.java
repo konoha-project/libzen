@@ -1,5 +1,8 @@
 package zen.type;
 
+import zen.parser.ZToken;
+import zen.parser.ZTypeChecker;
+import zen.util.Nullable;
 import zen.util.Var;
 import zen.util.ZArray;
 import zen.util.ZMap;
@@ -122,6 +125,32 @@ public class ZTypePool {
 		TypeList.add(P3);
 		TypeList.add(R);
 		return ZTypePool._LookupFuncType2(TypeList);
+	}
+
+	public static ZType _LookupMutableType(ZTypeChecker Gamma, ZType Type, @Nullable ZToken MutableToken) {
+		if(Gamma.IsSupportMutable) {
+			@Var String MangleName = "M:"+Type.TypeId;
+			@Var ZType MutableType = ZTypePool._ClassNameMap.GetOrNull(MangleName);
+			if(MutableType == null) {
+				MutableType = new ZMutableType(Type);
+				ZTypePool._ClassNameMap.put(MangleName, MutableType);
+			}
+			return MutableType;
+		}
+		return Type;
+	}
+
+	public static ZType _LookupNullableType(ZTypeChecker Gamma, ZType Type, @Nullable ZToken MaybeToken) {
+		if(Gamma.IsSupportNullable) {
+			@Var String MangleName = "N:"+Type.TypeId;
+			@Var ZType NullableType = ZTypePool._ClassNameMap.GetOrNull(MangleName);
+			if(NullableType == null) {
+				NullableType = new ZMutableType(Type);
+				ZTypePool._ClassNameMap.put(MangleName, NullableType);
+			}
+			return NullableType;
+		}
+		return Type;
 	}
 
 }

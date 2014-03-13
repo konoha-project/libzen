@@ -25,6 +25,7 @@
 //ifdef JAVA
 package zen.type;
 import zen.parser.ZToken;
+import zen.parser.ZTypeChecker;
 import zen.util.Field;
 import zen.util.LibZen;
 import zen.util.Var;
@@ -171,16 +172,20 @@ public class ZType  {
 		return LibZen._IsFlag(this.TypeFlag, ZType.OpenTypeFlag);
 	}
 
-	public final boolean IsImmutableType() {
-		return false;
+	@ZenMethod public boolean IsMutableType(ZTypeChecker Gamma) {
+		//		if(Gamma.IsSupportMutable) {
+		//			return false;
+		//		}
+		//		return true;
+		return !Gamma.IsSupportMutable;
 	}
 
-	public final boolean IsNullableType() {
-		return true;
-	}
-
-	public String GetAsciiName() {
-		return this.ShortName;
+	@ZenMethod public boolean IsNullableType(ZTypeChecker Gamma) {
+		//		if(Gamma.IsSupportMutable) {
+		//			return false;
+		//		}
+		//		return true;
+		return !Gamma.IsSupportNullable;
 	}
 
 	public final String StringfyClassMember(String Name) {

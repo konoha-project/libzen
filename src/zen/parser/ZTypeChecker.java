@@ -60,6 +60,8 @@ public abstract class ZTypeChecker extends ZVisitor {
 	@Field public ZLogger     Logger;
 	@Field private boolean    StoppedVisitor;
 	@Field public ZVarScope   VarScope;
+	@Field public boolean     IsSupportNullable = false;
+	@Field public boolean     IsSupportMutable  = false;
 
 	public ZTypeChecker(ZGenerator Generator) {
 		this.Generator = Generator;

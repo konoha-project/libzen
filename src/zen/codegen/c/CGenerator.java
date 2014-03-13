@@ -141,19 +141,15 @@ public class CGenerator extends ZSourceGenerator {
 		this.VisitListNode("(", Node, ")");
 	}
 
-	private String BaseName(ZType RecvType) {
-		return RecvType.GetAsciiName(); // FIXME
-	}
-
 	@Override public void VisitGetIndexNode(ZGetIndexNode Node) {
-		this.CurrentBuilder.Append(this.BaseName(Node.GetAstType(ZGetIndexNode._Recv)) + "GetIndex");
+		this.CurrentBuilder.Append(this.NameType(Node.GetAstType(ZGetIndexNode._Recv)) + "GetIndex");
 		this.CurrentBuilder.Append("(");
 		this.GenerateCode(null, Node.IndexNode());
 		this.CurrentBuilder.Append(")");
 	}
 
 	@Override public void VisitSetIndexNode(ZSetIndexNode Node) {
-		this.CurrentBuilder.Append(this.BaseName(Node.GetAstType(ZGetIndexNode._Recv)) + "SetIndex");
+		this.CurrentBuilder.Append(this.NameType(Node.GetAstType(ZGetIndexNode._Recv)) + "SetIndex");
 		this.CurrentBuilder.Append("(");
 		this.GenerateCode(null, Node.IndexNode());
 		this.CurrentBuilder.Append(this.Camma);
