@@ -8,6 +8,10 @@ asm macro _ "($[0]|0)" : Func<float,int>;
 asm macro _ "$[0].toString()" : Func<boolean,String>;
 asm macro _ "($[0]).toString()" : Func<int,String>;
 asm macro _ "($[0]).toString()" : Func<float,String>;
+asm macro _ "parseInt($[0])" : Func<String,int>;
+asm macro _ "parseFloat($[0])" : Func<String,float>;
+asm macro _ "$[0].toString()" : Func<α[],String>;
+asm macro _ "$[0].toString()" : Func<Object,String>;
 
 // String
 //asm macro + "zstr($[0]) + zstr($[1])" : Func<String,String,String>;

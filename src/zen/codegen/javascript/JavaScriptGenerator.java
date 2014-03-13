@@ -273,9 +273,18 @@ public class JavaScriptGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitMapLiteralNode(ZMapLiteralNode Node) {
-		this.CurrentBuilder.Append("{");
+		@Var int ListSize =  Node.GetListSize();
 		@Var int i = 0;
-		while(i < Node.GetListSize()) {
+		while(i < ListSize) {
+			@Var ZNode KeyNode = Node.GetListAt(i);
+			if(KeyNode instanceof ZErrorNode){
+				this.GenerateCode(null, KeyNode);
+				return;
+			}
+			i = i + 1;
+		}
+		this.CurrentBuilder.Append("{");
+		while(i < ListSize) {
 			@Var ZNode KeyNode = Node.GetListAt(i);
 			if (i > 0) {
 				this.CurrentBuilder.Append(", ");
