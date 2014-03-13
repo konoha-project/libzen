@@ -235,7 +235,7 @@ public class CommonLispGenerator extends ZSourceGenerator {
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
 		if(!Node.IsTopLevelDefineFunction()) {
-			this.CurrentBuilder.Append("`#(lambda ");
+			this.CurrentBuilder.Append("#'(lambda ");
 			this.VisitListNode("(", Node, ")");
 			this.GenerateCode(null, Node.BlockNode());
 			this.CurrentBuilder.Append(")");
