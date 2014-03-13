@@ -15,6 +15,15 @@ ZENCODE=java bash test/testfiles.sh $DIR $TDIR javac class java
 echo "testing c.."
 ZENCODE=c bash test/testfiles.sh $DIR $TDIR
 
+NODE=`which node`
+if [ -x $NODE ]; then
+	echo "testing javascript and its execution with $NODE"
+	ZENCODE=js bash test/testfiles.sh $DIR $TDIR $NODE
+else
+	echo "testing javascript .."
+	ZENCODE=js bash test/testfiles.sh $DIR $TDIR
+fi
+
 echo "testing python and its execution"
 ZENCODE=py bash test/testfiles.sh $DIR $TDIR python
 
