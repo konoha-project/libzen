@@ -21,7 +21,27 @@ asm macro startsWith "zen/codegen/jvm/JavaCommonApi.StartsWith($[0],$[1])" : Fun
 asm macro endsWith "zen/codegen/jvm/JavaCommonApi.EndsWith($[0],$[1])" : Func<String,String,boolean>;
 
 // Array
-asm macro size "zen/codegen/jvm/JavaCommonApi.ArraySize($[0])" : Func<α[],int>;
-asm macro clear "zen/codegen/jvm/JavaCommonApi.ArrayClear($[0],$[1])" : Func<α[],int,void>;
-asm macro add "zen/codegen/jvm/JavaCommonApi.ArrayAdd($[0],$[1])" : Func<α[],α,void>;
-asm macro add "zen/codegen/jvm/JavaCommonApi.ArrayInsert($[0],$[1],$[2])" : Func<α[],int,α,void>;
+// ObjectArray
+asm macro size "zen/codegen/jvm/JavaCommonApi.ObjectArraySize($[0])" : Func<α[],int>;
+asm macro clear "zen/codegen/jvm/JavaCommonApi.ObjectArrayClear($[0],$[1])" : Func<α[],int,void>;
+asm macro add "zen/codegen/jvm/JavaCommonApi.ObjectArrayAdd($[0],$[1])" : Func<α[],α,void>;
+asm macro add "zen/codegen/jvm/JavaCommonApi.ObjectArrayInsert($[0],$[1],$[2])" : Func<α[],int,α,void>;
+asm macro _ "zen/codegen/jvm/JavaCommonApi.ObjectArrayToString($[0])" : Func<α[],String>;
+// IntArray
+asm macro size "zen/codegen/jvm/JavaCommonApi.IntArraySize($[0])" : Func<int[],int>;
+asm macro clear "zen/codegen/jvm/JavaCommonApi.IntArrayClear($[0],$[1])" : Func<int[],int,void>;
+asm macro add "zen/codegen/jvm/JavaCommonApi.IntArrayAdd($[0],$[1])" : Func<int[],int,void>;
+asm macro add "zen/codegen/jvm/JavaCommonApi.IntArrayInsert($[0],$[1],$[2])" : Func<int[],int,int,void>;
+asm macro _ "zen/codegen/jvm/JavaCommonApi.IntArrayToString($[0])" : Func<int[],String>;
+// FloatArray
+asm macro size "zen/codegen/jvm/JavaCommonApi.FloatArraySize($[0])" : Func<float[],int>;
+asm macro clear "zen/codegen/jvm/JavaCommonApi.FloatArrayClear($[0],$[1])" : Func<float[],float,void>;
+asm macro add "zen/codegen/jvm/JavaCommonApi.FloatArrayAdd($[0],$[1])" : Func<float[],int,void>;
+asm macro add "zen/codegen/jvm/JavaCommonApi.FloatArrayInsert($[0],$[1],$[2])" : Func<float[],int,float,void>;
+asm macro _ "zen/codegen/jvm/JavaCommonApi.FloatArrayToString($[0])" : Func<float[],String>;
+// StringArray
+asm macro size "zen/codegen/jvm/JavaCommonApi.StringArraySize($[0])" : Func<String[],int>;
+asm macro clear "zen/codegen/jvm/JavaCommonApi.StringArrayClear($[0],$[1])" : Func<String[],int,void>;
+asm macro add "zen/codegen/jvm/JavaCommonApi.StringArrayAdd($[0],$[1])" : Func<String[],String,void>;
+asm macro add "zen/codegen/jvm/JavaCommonApi.StringArrayInsert($[0],$[1],$[2])" : Func<String[],int,String,void>;
+asm macro _ "zen/codegen/jvm/JavaCommonApi.StringArrayToString($[0])" : Func<String[],String>;

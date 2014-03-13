@@ -10,13 +10,13 @@ public class ZStringArray extends ZObject {
 
 	public ZStringArray(int TypeId, String[] Values) {
 		super(TypeId);
-		if(Values != null) {
-			this.ArrayValues = Values;
-			this.Size = Values.length;
-		}
-		else {
+		if(Values == null || Values.length == 0) {
 			this.ArrayValues = new String[1];
 			this.Size = 0;
+		}
+		else {
+			this.ArrayValues = Values;
+			this.Size = Values.length;
 		}
 	}
 
@@ -35,6 +35,10 @@ public class ZStringArray extends ZObject {
 		return this.Size;
 	}
 
+	public final void Clear(long Index) {
+		this.Size = (int) Index;
+	}
+
 	public final static String GetIndex(ZStringArray a, long Index) {
 		if(Index < a.Size) {
 			return a.ArrayValues[(int)Index];
@@ -46,6 +50,7 @@ public class ZStringArray extends ZObject {
 	public final static void SetIndex(ZStringArray a, long Index, String Value) {
 		if(Index < a.Size) {
 			a.ArrayValues[(int)Index] = Value;
+			return;
 		}
 		ZObjectArray.ThrowOutOfArrayIndex(a.Size, Index);
 	}
@@ -60,6 +65,16 @@ public class ZStringArray extends ZObject {
 		this.Size = this.Size + 1;
 	}
 
-
+	public final void Insert(long Index, String Value) {
+		int index = (int) Index;
+		if(this.Size == this.ArrayValues.length) {
+			String[] NewValues = new String[this.Size * 2];
+			System.arraycopy(this.ArrayValues, 0, NewValues, 0, this.Size);
+			this.ArrayValues = NewValues;
+		}
+		System.arraycopy(this.ArrayValues, index, this.ArrayValues, index + 1, this.Size - index);
+		this.ArrayValues[index] = Value;
+		this.Size = this.Size + 1;
+	}
 
 }

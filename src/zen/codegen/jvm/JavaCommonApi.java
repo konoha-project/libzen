@@ -1,7 +1,10 @@
 package zen.codegen.jvm;
 
 import zen.util.SoftwareFaultException;
-import zen.util.ZArray;
+import zen.util.ZFloatArray;
+import zen.util.ZIntArray;
+import zen.util.ZObjectArray;
+import zen.util.ZStringArray;
 
 public class JavaCommonApi {
 
@@ -99,21 +102,85 @@ public class JavaCommonApi {
 		return x.endsWith(z);
 	}
 
-	// Array
-	public final static <T> long ArraySize(ZArray<T> x) {
-		return x.size();
+	// ObjectArray
+	public final static long ObjectArraySize(ZObjectArray x) {
+		return x.Size();
 	}
 
-	public final static <T> long ArrayClear(ZArray<T> x) {
-		return x.size();
+	public final static void ObjectArrayClear(ZObjectArray x, long y) {
+		x.Clear(y);
 	}
 
-	public final static <T> void ArrayAdd(ZArray<T> x, T z) {
-		x.add(z);
+	public final static <T> void ObjectArrayAdd(ZObjectArray x, T y) {
+		x.Add(y);
 	}
 
-	public final static <T> void ArrayInsert(ZArray<T> x, long y, T z) {
-		x.add((int)y, z);
+	public final static <T> void ObjectArrayInsert(ZObjectArray x, long y, T z) {
+		x.Insert(y, z);
+	}
+
+	public final static String ObjectArrayToString(ZObjectArray x) {
+		return x.toString();
+	}
+	// IntArray
+	public final static long IntArraySize(ZIntArray x) {
+		return x.Size();
+	}
+
+	public final static void IntArrayClear(ZIntArray x, long y) {
+		x.Clear(y);
+	}
+
+	public final static <T> void IntArrayAdd(ZIntArray x, long y) {
+		x.Add(y);
+	}
+
+	public final static <T> void IntArrayInsert(ZIntArray x, long y, long z) {
+		x.Insert(y, z);
+	}
+
+	public final static String IntArrayToString(ZIntArray x) {
+		return x.toString();
+	}
+	// FloatArray
+	public final static long FloatArraySize(ZFloatArray x) {
+		return x.Size();
+	}
+
+	public final static void FloatArrayClear(ZFloatArray x, long y) {
+		x.Clear(y);
+	}
+
+	public final static <T> void FloatArrayAdd(ZFloatArray x, double y) {
+		x.Add(y);
+	}
+
+	public final static <T> void FloatArrayInsert(ZFloatArray x, long y, double z) {
+		x.Insert(y, z);
+	}
+
+	public final static String FloatArrayToString(ZFloatArray x) {
+		return x.toString();
+	}
+	// StringArray
+	public final static long StringArraySize(ZStringArray x) {
+		return x.Size();
+	}
+
+	public final static void StringArrayClear(ZStringArray x, long y) {
+		x.Clear(y);
+	}
+
+	public final static <T> void StringArrayAdd(ZStringArray x, String y) {
+		x.Add(y);
+	}
+
+	public final static <T> void StringArrayInsert(ZStringArray x, long y, String z) {
+		x.Insert(y, z);
+	}
+
+	public final static String StringArrayToString(ZStringArray x) {
+		return x.toString();
 	}
 
 	//	public final static JavaStaticFunc ConvertToNativeFunc(Method jMethod) {
