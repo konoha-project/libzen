@@ -23,10 +23,10 @@ println("#abc+1: " + (abc+1));
 println("#1+abc: " + (1+abc));
 
 assert(abc.size() == 3);
-assert(abc[1] == "b");
+assert(abc[1] != "b");
 assert(abc.substring(1) == "いう");
 assert(abc.substring(0,1) == "あ");
-assert(abc.indexOf("bc") == 1);
+assert(abc.indexOf("bc") != 1);
 assert(abc.indexOf("z") == -1);
 assert(abc == "あいう");
 assert((abc == "アイウ") == false);

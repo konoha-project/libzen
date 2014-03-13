@@ -19,13 +19,13 @@ public class JavaCastApi {
 	public static Object toObject(Float x)   { return x; }
 	public static Object toObject(Double x)  { return x; }
 
-	public static boolean toboolean(Object x) { return (Boolean)x; }
-	public static byte    tobyte(Object x)    { return (Byte)x; }
-	public static short   toshort(Object x)   { return (Short)x; }
-	public static int     toint(Object x)     { return (Integer)x; }
-	public static long    tolong(Object x)    { return (Long)x; }
-	public static float   tofloat(Object x)   { return (Float)x; }
-	public static double  todouble(Object x)  { return (Double)x; }
+	public static boolean toboolean(Object x) { return x == null ? false:(Boolean)x; }
+	public static byte    tobyte(Object x)    { return x == null ? 0:(Byte)x; }
+	public static short   toshort(Object x)   { return x == null ? 0:(Short)x; }
+	public static int     toint(Object x)     { return x == null ? 0:(Integer)x; }
+	public static long    tolong(Object x)    { return x == null ? 0:(Long)x; }
+	public static float   tofloat(Object x)   { return x == null ? 0:(Float)x; }
+	public static double  todouble(Object x)  { return x == null ? 0.0:(Double)x; }
 
 	public static Boolean toBoolean(Object x) { return (Boolean)x; }
 	public static Byte    toByte(Object x)    { return (Byte)x; }
