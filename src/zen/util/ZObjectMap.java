@@ -52,10 +52,6 @@ public final class ZObjectMap extends ZObject {
 		sb.append("}");
 	}
 
-	public final Object GetOrNull(String Key) {
-		return this.Map.get(Key);
-	}
-
 	public final Object Remove(String Key) {
 		return this.Map.remove(Key);
 	}
