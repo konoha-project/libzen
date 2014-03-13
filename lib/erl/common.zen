@@ -1,0 +1,28 @@
+
+asm macro print   "io:format($[0])" : Func<String,void>;
+asm macro println "io:format($[0])" : Func<String,void>;
+
+// converter
+asm macro _ "float($[0])" : Func<int,float>;
+asm macro _ "trunc($[0])" : Func<float,int>;
+asm macro _ "atom_to_list($[0])" : Func<boolean,String>;
+asm macro _ "digits($[0])" : Func<int,String>;
+asm macro _ "digits($[0])" : Func<float,String>;
+
+// String
+asm macro + "string:concat(zstr($[0]), zstr($[1]))" : Func<String,String,String>;
+asm macro size "string:len($[0])" : Func<String,int>;
+asm macro substring "string:substr($[0], $[1] + 1)" : Func<String,int,String>;
+asm macro substring "string:substr($[0], $[1] + 1, $[2])" : Func<String,int,int,String>;
+asm macro indexOf "(string:str($[0], $[1]) - 1)" : Func<String,String,int>;
+// asm macro indexOf "$[0][$[1]:].find($[2])" : Func<String,int,String,int>;
+asm macro equals "$[0] =:= $[1]" : Func<String,String,boolean>;
+asm macro startsWith "(string:str($[0], $[1]) =:= 1)" : Func<String,String,boolean>;
+asm macro endsWith "(string:str(lists:reverse($[0]), lists:reverse($[1])) =:= 1)" : Func<String,String,boolean>;
+
+// // Array
+// asm macro size "len($[0])" : Func<α[],int>;
+// asm macro clear "libzen~zclear($[0], $[1])" : Func<α[],int,void>;
+// asm macro add "$[0].append($[1])" : Func<α[],α,void>;
+// asm macro add "$[0].insert($[1], $[2])" : Func<α[],int,α,void>;
+
