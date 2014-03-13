@@ -498,7 +498,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 		}
 		this.TryTypeAt(Node, ZCastNode._Expr, Node.CastType());
 		@Var ZType ExprType = Node.ExprNode().Type;
-		if(Node.Type.IsVarType()) {
+		if(Node.Type.IsVarType() || ExprType.IsVarType()) {
 			this.ReturnNode(Node);
 			return;
 		}
@@ -719,13 +719,14 @@ public class ZenTypeSafer extends ZTypeChecker {
 		}
 	}
 
-	private boolean HasReturn(ZNode Node) {
+	private boolean HasReturnStatement(ZNode Node) {
 		if(Node instanceof ZBlockNode) {
 			@Var ZBlockNode BlockNode = (ZBlockNode)Node;
 			@Var int i = 0;
 			@Var ZNode StmtNode = null;
 			while(i < BlockNode.GetListSize()) {
 				StmtNode = BlockNode.GetListAt(i);
+				//System.out.println("i="+i +", "+ StmtNode.getClass().getSimpleName());
 				if(ZNodeUtils._IsBreakBlock(StmtNode)) {
 					return true;
 				}
@@ -736,7 +737,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 		if(Node instanceof ZIfNode) {
 			@Var ZIfNode IfNode = (ZIfNode)Node;
 			if(IfNode.HasElseNode()) {
-				return this.HasReturn(IfNode.ThenNode()) && this.HasReturn(IfNode.ElseNode());
+				return this.HasReturnStatement(IfNode.ThenNode()) && this.HasReturnStatement(IfNode.ElseNode());
 			}
 			return false;
 		}
@@ -790,13 +791,13 @@ public class ZenTypeSafer extends ZTypeChecker {
 		this.VarScope = this.VarScope.Parent;
 	}
 
-	private ZNameSpace EnforceBlockNameSpace(ZFunctionNode Node) {
-		@Var ZNode BlockNode = Node.BlockNode();
-		if(BlockNode instanceof ZBlockNode) {
-			return ((ZBlockNode)BlockNode).GetBlockNameSpace();
-		}
-		return BlockNode.GetNameSpace();
-	}
+	//	private ZNameSpace EnforceBlockNameSpace(ZFunctionNode Node) {
+	//		@Var ZNode BlockNode = Node.BlockNode();
+	//		if(BlockNode instanceof ZBlockNode) {
+	//			return ((ZBlockNode)BlockNode).GetBlockNameSpace();
+	//		}
+	//		return BlockNode.GetNameSpace();
+	//	}
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
 		//LibZen._PrintDebug("name="+Node.FuncName+ ", Type=" + Node.Type + ", IsTopLevel=" + this.IsTopLevel());
@@ -821,10 +822,11 @@ public class ZenTypeSafer extends ZTypeChecker {
 			//				return;
 			//			}
 		}
-		if(!this.HasReturn(Node.BlockNode())) {
+		if(!this.HasReturnStatement(Node.BlockNode())) {
+			System.out.println("adding return.. ");
 			Node.BlockNode().SetNode(ZNode._AppendIndex, new ZReturnNode(Node));
 		}
-		@Var ZNameSpace NameSpace = this.EnforceBlockNameSpace(Node);
+		@Var ZNameSpace NameSpace = Node.BlockNode().GetBlockNameSpace();
 		this.PushFunctionNode(NameSpace, Node, ContextType);
 		this.VarScope.TypeCheckFuncBlock(this, Node);
 		this.PopFunctionNode(NameSpace);

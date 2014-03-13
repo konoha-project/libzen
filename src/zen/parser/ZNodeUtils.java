@@ -12,6 +12,7 @@ public class ZNodeUtils {
 		if(Node instanceof ZReturnNode || Node instanceof ZThrowNode) {
 			return true;
 		}
+		System.out.println("#"+ Node.getClass().getSimpleName());
 		return false;
 	}
 
