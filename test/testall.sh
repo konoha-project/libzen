@@ -20,3 +20,6 @@ ZENCODE=py bash test/testfiles.sh $DIR $TDIR python
 
 #echo "testing java.."
 #ZENCODE=java bash test/testfiles.sh $DIR $TDIR javac
+
+# echo "testing erlang and its execution"
+# ZENCODE=erl bash test/testfiles.sh $DIR $TDIR escript

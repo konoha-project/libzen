@@ -521,7 +521,6 @@ public class LibZen {
 		GenMap.put("jvm", zen.codegen.jvm.AsmJavaGenerator.class);
 		GenMap.put("debug-jvm", zen.codegen.jvm.DebugAsmGenerator.class);
 		GenMap.put("llvm", zen.codegen.llvm.LLVMSourceGenerator.class);
-		GenMap.put("erlang", zen.codegen.erlang.ErlSourceCodeGenerator.class);
 	}
 
 	public final static ZGenerator _LoadGenerator(@Nullable String ClassName, String OutputFile) {
