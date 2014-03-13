@@ -3,7 +3,7 @@ DIR="test/common"
 TDIR="build/test"
 mkdir -p $TDIR
 
-echo "testing zen generation .."
+echo "generating zen generation .."
 ZENCODE=zen bash test/testfiles.sh $DIR $TDIR cat
 
 echo "testing java bytecode generation and its execution"
@@ -12,7 +12,7 @@ ZENCODE=jvm bash test/testfiles.sh $DIR $TDIR
 echo "testing java generation and its execution"
 ZENCODE=java bash test/testfiles.sh $DIR $TDIR javac class java
 
-echo "testing c.."
+echo "generating c.."
 ZENCODE=c bash test/testfiles.sh $DIR $TDIR
 
 NODE=`which node`
@@ -22,6 +22,15 @@ if [ -x $NODE ]; then
 else
 	echo "testing javascript .."
 	ZENCODE=js bash test/testfiles.sh $DIR $TDIR
+fi
+
+ERLANG=`which escript`
+if [ -x $ERLANG ]; then
+	echo "testing erlang and its execution with $ERLANG"
+	ZENCODE=erl bash test/testfiles.sh $DIR $TDIR $ERLANG
+else
+	echo "generating eralang .erl files"
+	ZENCODE=erl bash test/testfiles.sh $DIR $TDIR
 fi
 
 echo "testing python and its execution"
