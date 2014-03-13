@@ -161,7 +161,10 @@ public abstract class ZTypeChecker extends ZVisitor {
 			Node = this.ReturnedNode;
 		}
 		if(ParentNode != Node.ParentNode && ParentNode != null) {
-			ParentNode.SetChild(Node);
+			if(Node.ParentNode != null) {
+				LibZen._PrintDebug("Preserving parent of typed new node: " + Node);
+			}
+			ParentNode.SetChild(Node, ZNode._PreservedParent);
 		}
 		return Node;
 	}

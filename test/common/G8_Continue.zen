@@ -25,7 +25,7 @@ function WhileNextContinue() {
 		}
 		c = c + 1;
 	}
-	println("#while/next/continue" + n + ", " + c);
+	println("#while/next/continue" + i + ", " + c);
 	assert(c == 5);
 }
 

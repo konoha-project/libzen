@@ -39,6 +39,8 @@ public abstract class ZNode {
 	public final static int _AppendIndex = -1;
 	public final static int _NestedAppendIndex = -2;
 	public final static int _Nop =      -3;
+	public final static boolean _EnforcedParent = true;
+	public final static boolean _PreservedParent = false;
 
 	@Field public ZNode ParentNode;
 	@Field public ZToken SourceToken;
@@ -55,27 +57,6 @@ public abstract class ZNode {
 		}
 		else {
 			this.AST = null;
-		}
-	}
-
-	public final ZNode SetChild(ZNode Node) {
-		assert(this != Node);
-		Node.ParentNode = this;
-		return Node;
-	}
-
-	public final void SetNode(int Index, ZNode Node) {
-		if(Index >= 0) {
-			this.AST[Index] = this.SetChild(Node);
-		}
-		else if(Index == ZNode._AppendIndex) {
-			@Var ZNode ListNode = this;
-			if(ListNode instanceof ZListNode) {
-				((ZListNode)ListNode).Append(Node);
-			}
-			else {
-				assert(ListNode instanceof ZListNode);
-			}
 		}
 	}
 
@@ -118,6 +99,35 @@ public abstract class ZNode {
 		}
 		return Self;
 	}
+
+	public final ZNode SetChild(ZNode Node, boolean EnforcedParent) {
+		assert(this != Node);
+		if(EnforcedParent || Node.ParentNode == null) {
+			Node.ParentNode = this;
+		}
+		return Node;
+	}
+
+	public final ZNode SetNode(int Index, ZNode Node, boolean EnforcedParent) {
+		if(Index >= 0) {
+			this.AST[Index] = this.SetChild(Node, EnforcedParent);
+		}
+		else if(Index == ZNode._AppendIndex) {
+			@Var ZNode ListNode = this;
+			if(ListNode instanceof ZListNode) {
+				((ZListNode)ListNode).Append(Node);
+			}
+			else {
+				assert(ListNode instanceof ZListNode);
+			}
+		}
+		return Node;
+	}
+
+	public final ZNode SetNode(int Index, ZNode Node) {
+		return this.SetNode(Index, Node, ZNode._EnforcedParent);
+	}
+
 
 
 

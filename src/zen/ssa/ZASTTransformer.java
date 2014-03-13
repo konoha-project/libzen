@@ -65,9 +65,9 @@ public class ZASTTransformer extends ZVisitor {
 		this.TransformedValue = Node.AST[Index];
 		this.VisitBefore(Node, Index);
 		Node.AST[Index].Accept(this);
-		if(Node != this.TransformedValue) {
-			Node.ParentNode.SetChild(this.TransformedValue);
-		}
+		//		if(Node != this.TransformedValue) {
+		//			Node.ParentNode.SetChild(this.TransformedValue);
+		//		}
 		Node.SetNode(Index, this.TransformedValue);
 		this.VisitAfter(Node, Index);
 		this.TransformedValue = LastTransformed;

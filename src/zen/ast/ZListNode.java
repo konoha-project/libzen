@@ -12,17 +12,21 @@ public abstract class ZListNode extends ZNode {
 		this.ListStartIndex = Size;
 	}
 
-	public final void Append(ZNode Node) {
+	public final void Append(ZNode Node, boolean EnforcedParent) {
 		if(this.AST == null) {
 			this.AST = LibZen._NewNodeArray(1);
-			this.SetNode(0, Node);
+			this.SetNode(0, Node, EnforcedParent);
 		}
 		else {
 			@Var ZNode[] newAST = LibZen._NewNodeArray(this.AST.length+1);
 			LibZen._ArrayCopy(this.AST, 0, newAST, 0, this.AST.length);
 			this.AST = newAST;
-			this.SetNode(this.AST.length - 1, Node);
+			this.SetNode(this.AST.length - 1, Node, EnforcedParent);
 		}
+	}
+
+	public final void Append(ZNode Node) {
+		this.Append(Node, ZNode._EnforcedParent);
 	}
 
 	public final int GetListSize() {
