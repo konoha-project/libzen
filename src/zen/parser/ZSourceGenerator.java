@@ -235,6 +235,7 @@ public class ZSourceGenerator extends ZGenerator {
 
 	@Override public void Perform() {
 		@Var int i = 0;
+		//this.Logger.OutputErrorsToStdErr();
 		LibZen._PrintLine("---");
 		while(i < this.BuilderList.size()) {
 			@Var ZSourceBuilder Builder = this.BuilderList.ArrayValues[i];

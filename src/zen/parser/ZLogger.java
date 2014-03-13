@@ -66,7 +66,7 @@ public final class ZLogger {
 	}
 
 	public final static void _LogWarning(ZToken Token, String Message) {
-		if(Token != null && Token.Source != null) {
+		if(Token != null) {
 			Message = Token.Source.FormatErrorMarker("warning", Token.StartIndex, Message);
 			Token.Source.Logger.Report(Message);
 		}

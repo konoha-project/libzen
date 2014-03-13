@@ -506,6 +506,9 @@ public class ZenTypeSafer extends ZTypeChecker {
 
 	@Override public void VisitInstanceOfNode(ZInstanceOfNode Node) {
 		this.CheckTypeAt(Node, ZBinaryNode._Left, ZType.VarType);
+		if(!(Node.TargetType() instanceof ZClassType)) {
+			ZLogger._LogWarning(Node.GetAstToken(ZInstanceOfNode._TypeInfo), "instanceof takes a class type; the result is implementation-dependant.");
+		}
 		this.ReturnTypeNode(Node, ZType.BooleanType);
 	}
 
@@ -817,7 +820,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 
 	@Override public void VisitClassNode(ZClassNode Node) {
 		@Var ZNameSpace NameSpace = Node.GetNameSpace();
-		@Var ZType ClassType = NameSpace.GetType(Node.ClassName(), Node.SourceToken);
+		@Var ZType ClassType = NameSpace.GetType(Node.ClassName(), Node.SourceToken, true/*IsCreation*/);
 		if(ClassType instanceof ZClassType) {
 			if(!ClassType.IsOpenType()) {
 				this.ReturnNode(new ZErrorNode(Node, Node.ClassName() + " has been defined."));

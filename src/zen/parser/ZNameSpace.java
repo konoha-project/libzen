@@ -260,25 +260,25 @@ public final class ZNameSpace {
 		this.SetTypeName(Type.ShortName, Type, SourceToken);
 	}
 
-	public final ZTypeNode GetTypeNode(String TypeName, @Nullable ZToken SourceToken) {
+	public final ZType GetType(String TypeName, ZToken SourceToken, boolean IsCreation) {
 		@Var ZNode Node = this.GetSymbolNode(TypeName);
 		if(Node instanceof ZTypeNode) {
-			return (ZTypeNode)Node;
+			return Node.Type;
 		}
-		if(Node == null && SourceToken != null) {
+		if(Node == null && IsCreation) {
 			@Var ZType Type = new ZClassType(TypeName, ZType.VarType);
 			this.GetRootNameSpace().SetTypeName(TypeName, Type, SourceToken);
-			return this.GetTypeNode(TypeName, null/*don't create again*/);
+			return Type;
 		}
 		return null;
 	}
 
-	public final ZType GetType(String TypeName, ZToken SourceToken) {
-		@Var ZTypeNode TypeNode = this.GetTypeNode(TypeName, SourceToken);
-		if(TypeNode != null) {
-			return TypeNode.Type;
-		}
-		return null;
-	}
+	//	public final ZType GetType(String TypeName, ZToken SourceToken) {
+	//		@Var ZTypeNode TypeNode = this.GetTypeNode(TypeName, SourceToken);
+	//		if(TypeNode != null) {
+	//			return TypeNode.Type;
+	//		}
+	//		return null;
+	//	}
 
 }
