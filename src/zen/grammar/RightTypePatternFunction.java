@@ -22,7 +22,7 @@ public class RightTypePatternFunction extends ZMatchFunction {
 					if(TypeList.size() > 0 && !TokenContext.MatchToken(",")) {
 						return null;
 					}
-					@Var ZTypeNode ParamTypeNode = (ZTypeNode) TokenContext.ParsePattern(ParentNode, "$Type$", ZTokenContext._Optional);
+					@Var ZTypeNode ParamTypeNode = (ZTypeNode) TokenContext.ParsePattern(ParentNode, "$OpenType$", ZTokenContext._Optional);
 					if(ParamTypeNode == null) {
 						return LeftTypeNode;
 					}

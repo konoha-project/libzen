@@ -13,7 +13,7 @@ public class ClassPatternFunction extends ZMatchFunction {
 		ClassNode = TokenContext.MatchToken(ClassNode, "class", ZTokenContext._Required);
 		ClassNode = TokenContext.MatchPattern(ClassNode, ZClassNode._NameInfo, "$Name$", ZTokenContext._Required);
 		if(TokenContext.MatchNewLineToken("extends")) {
-			ClassNode = TokenContext.MatchPattern(ClassNode, ZClassNode._TypeInfo, "$Type$", ZTokenContext._Required);
+			ClassNode = TokenContext.MatchPattern(ClassNode, ZClassNode._TypeInfo, "$OpenType$", ZTokenContext._Required);
 		}
 		ClassNode = TokenContext.MatchNtimes(ClassNode, "{", "$FieldDecl$", null, "}");
 		return ClassNode;

@@ -78,8 +78,8 @@ public final class ZMethodCallNode extends ZListNode {
 		return FuncNode;
 	}
 
-	public final ZListNode ToFuncCallNode(ZTypeChecker Checker, ZFunc Func) {
-		@Var ZListNode FuncNode = Checker.CreateDefinedFuncCallNode(this.ParentNode, this.GetAstToken(ZMethodCallNode._NameInfo), Func);
+	public final ZListNode ToFuncCallNode(ZTypeChecker Gamma, ZFunc Func) {
+		@Var ZListNode FuncNode = Gamma.CreateDefinedFuncCallNode(this.ParentNode, this.GetAstToken(ZMethodCallNode._NameInfo), Func);
 		FuncNode.SourceToken = this.GetAstToken(ZMethodCallNode._NameInfo);
 		FuncNode.Append(this.RecvNode());
 		@Var int i = 0;

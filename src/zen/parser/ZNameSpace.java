@@ -34,9 +34,9 @@ import zen.util.Field;
 import zen.util.LibZen;
 import zen.util.Nullable;
 import zen.util.Var;
+import zen.util.ZMap;
 import zen.util.ZMatchFunction;
 import zen.util.ZTokenFunction;
-import zen.util.ZMap;
 
 public final class ZNameSpace {
 	//	private static int SerialNumber = 0;
@@ -260,7 +260,7 @@ public final class ZNameSpace {
 		this.SetTypeName(Type.ShortName, Type, SourceToken);
 	}
 
-	public final ZTypeNode GetTypeNode(String TypeName, ZToken SourceToken) {
+	public final ZTypeNode GetTypeNode(String TypeName, @Nullable ZToken SourceToken) {
 		@Var ZNode Node = this.GetSymbolNode(TypeName);
 		if(Node instanceof ZTypeNode) {
 			return (ZTypeNode)Node;

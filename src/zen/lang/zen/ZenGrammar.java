@@ -38,6 +38,7 @@ import zen.grammar.BreakPatternFunction;
 import zen.grammar.CastPatternFunction;
 import zen.grammar.ClassPatternFunction;
 import zen.grammar.ComparatorPatternFunction;
+import zen.grammar.DefinedTypePatternFunction;
 import zen.grammar.ExportPatternFunction;
 import zen.grammar.ExpressionPatternFunction;
 import zen.grammar.FalsePatternFunction;
@@ -62,6 +63,7 @@ import zen.grammar.NewObjectPatternFunction;
 import zen.grammar.NotPatternFunction;
 import zen.grammar.NullPatternFunction;
 import zen.grammar.NumberLiteralTokenFunction;
+import zen.grammar.OpenTypePatternFunction;
 import zen.grammar.OperatorTokenFunction;
 import zen.grammar.OrPatternFunction;
 import zen.grammar.ParamPatternFunction;
@@ -82,7 +84,6 @@ import zen.grammar.ThrowPatternFunction;
 import zen.grammar.TruePatternFunction;
 import zen.grammar.TryPatternFunction;
 import zen.grammar.TypeAnnotationPatternFunction;
-import zen.grammar.TypePatternFunction;
 import zen.grammar.UnaryPatternFunction;
 import zen.grammar.VarPatternFunction;
 import zen.grammar.WhilePatternFunction;
@@ -147,7 +148,8 @@ public class ZenGrammar {
 		NameSpace.DefineRightExpression("&&", ZenPrecedence._CStyleAND, new AndPatternFunction());
 		NameSpace.DefineRightExpression("||", ZenPrecedence._CStyleOR, new OrPatternFunction());
 
-		NameSpace.DefineExpression("$Type$",new TypePatternFunction());
+		NameSpace.DefineExpression("$Type$",new DefinedTypePatternFunction());
+		NameSpace.DefineExpression("$OpenType$",new OpenTypePatternFunction());
 		NameSpace.DefineExpression("$TypeRight$", new RightTypePatternFunction());
 		NameSpace.DefineExpression("$TypeAnnotation$", new TypeAnnotationPatternFunction());
 
