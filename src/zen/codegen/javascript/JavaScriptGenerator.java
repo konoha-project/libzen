@@ -116,8 +116,12 @@ public class JavaScriptGenerator extends ZSourceGenerator {
 	@Override public void VisitTryNode(ZTryNode Node) {
 		this.CurrentBuilder.Append("try");
 		this.GenerateCode(null, Node.TryBlockNode());
-		this.GenerateCode(null, Node.CatchBlockNode());
-		if (Node.FinallyBlockNode() != null) {
+		if(Node.HasCatchBlockNode()){
+			@Var String VarName = this.NameUniqueSymbol("e");
+			this.CurrentBuilder.Append("catch(", VarName, ")");
+			this.GenerateCode(null, Node.CatchBlockNode());
+		}
+		if (Node.HasFinallyBlockNode()) {
 			this.CurrentBuilder.Append("finally");
 			this.GenerateCode(null, Node.FinallyBlockNode());
 		}
