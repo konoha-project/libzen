@@ -105,7 +105,7 @@ public class JavaScriptGenerator extends ZSourceGenerator {
 		this.GenerateCode(null, Node.LeftNode());
 		this.CurrentBuilder.Append(").constructor.name === ");
 		this.GenerateTypeName(Node.TargetType());
-		this.CurrentBuilder.Append(").name");
+		this.CurrentBuilder.Append(".name");
 	}
 
 	@Override public void VisitThrowNode(ZThrowNode Node) {
