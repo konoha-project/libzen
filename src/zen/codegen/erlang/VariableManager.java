@@ -79,6 +79,7 @@ public class VariableManager {
 				return;
 			} else {
 				Variable NewVar = this.CreateVariable(VarName);
+				NewVar.CreatedTemporary();
 				NewVar.Read = Var.Read;
 				NewVar.Next = Var.Next;
 				Var = NewVar;
@@ -103,7 +104,7 @@ public class VariableManager {
 			if (!DoClear) {
 				for (Map.Entry<String, Variable> KeyValue : OldMap.entrySet()) {
 					Variable OldVar = KeyValue.getValue();
-					if (OldVar.IsUsed()) {
+					if (OldVar.IsUsed() && OldVar.IsCreatedTemporary()) {
 						Variable CurrentVar = this.CreateVariable(KeyValue.getKey());
 						CurrentVar.Next = OldVar.Next;
 						CurrentVar.UsedByChildScope();
@@ -113,11 +114,6 @@ public class VariableManager {
 		} else {
 			System.out.println("too much call PopScope!!");
 		}
-	}
-
-	String GenVarTupleAll(boolean DoIncrement) {
-		String VarTuple = "{";
-		return VarTuple;
 	}
 
 	String GenVarTupleOnlyUsed(boolean DoIncrement) {
@@ -150,23 +146,36 @@ public class VariableManager {
 		VarTuple += "pad}";
 		return VarTuple;
 	}
+	String GenVarTupleOnlyUsedDefinedByParentScope(boolean DoIncrement) { //FIX ME!!
+		String VarTuple = "{";
+		for (Map.Entry<String, Variable> KeyValue : this.CurrentMap.entrySet()) {
+			Variable Var = KeyValue.getValue();
+			//System.out.println(Var.UsedFlag);
+			if (Var.IsUsed() && Var.IsCreatedTemporary()) {
+				String VarName = KeyValue.getKey();
+				if (DoIncrement) this.IncrementVariableNumber(VarName);
+				VarTuple += this.GenVariableName(VarName);
+				VarTuple += ", ";
+			}
+		}
+		VarTuple += "pad}";
+		return VarTuple;
+	}
 
 	void StartUsingFilter(boolean FilterOnlyUsed) {
 		this.FilterOnlyUsed = FilterOnlyUsed;
 		this.filter += 1;
 	}
 	void StopUsingFilter() {
-		if (this.filter > 0) {
-			this.filter = - this.filter;
-		}
+		this.FilterOnlyUsed = false;
+		this.filter -= 1;
 	}
 	void ContinueUsingFilter(boolean FilterOnlyUsed) {
 		this.FilterOnlyUsed = FilterOnlyUsed;
-		if (this.filter < 0) {
-			this.filter = - this.filter;
-		}
+		this.filter += 1;
 	}
 	void FinishUsingFilter() {
+		this.FilterOnlyUsed = false;
 		for (Map.Entry<String, Variable> KeyValue : this.CurrentMap.entrySet()) {
 			Variable Var = KeyValue.getValue();
 			if (Var.IsUsed()) {
