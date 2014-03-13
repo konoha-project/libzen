@@ -228,7 +228,7 @@ public class JavaScriptGenerator extends ZSourceGenerator {
 		@Var ZType FuncType = Node.GetFuncType();
 		if(FuncType != null){
 			@Var ZType RecvType = Node.GetFuncType().GetRecvType();
-			if(this.IsUserDefinedType(RecvType) && !RecvType.ShortName.equals(Node.GetStaticFuncName())){
+			if(this.IsUserDefinedType(RecvType) && RecvType.ShortName != null && !RecvType.ShortName.equals(Node.GetStaticFuncName())){
 				this.CurrentBuilder.Append("(");
 				this.GenerateCode(null, Node.FunctionNode());
 				if(Node.FunctionNode() instanceof ZGetterNode){
