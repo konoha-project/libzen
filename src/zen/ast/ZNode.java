@@ -27,6 +27,7 @@ package zen.ast;
 
 import zen.parser.ZNameSpace;
 import zen.parser.ZToken;
+import zen.parser.ZTypeChecker;
 import zen.parser.ZVisitor;
 import zen.type.ZFuncType;
 import zen.type.ZType;
@@ -194,6 +195,26 @@ public abstract class ZNode {
 			}
 		}
 		return this.HasUntyped;
+	}
+
+	// convinient interface
+	public final ZGetNameNode SetNewGetNameNode(int Index, ZTypeChecker Typer, String Name, ZType Type) {
+		@Var ZGetNameNode Node = Typer.CreateGetNameNode(null, Name, Type);
+		this.SetNode(Index, Node);
+		return Node;
+	}
+
+	public final ZBlockNode SetNewBlockNode(int Index, ZTypeChecker Typer) {
+		@Var ZBlockNode Node = Typer.CreateBlockNode(null);
+		this.SetNode(Index, Node);
+		return Node;
+	}
+
+	public final ZWhileNode SetNewWhileNode(int Index, ZTypeChecker Typer) {
+		@Var ZWhileNode Node = new ZWhileNode(null);
+		this.SetNode(Index, Node);
+		return Node;
+
 	}
 
 }

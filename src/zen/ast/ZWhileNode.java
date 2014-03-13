@@ -25,6 +25,7 @@
 package zen.ast;
 
 import zen.parser.ZVisitor;
+import zen.type.ZType;
 import zen.util.Var;
 
 public final class ZWhileNode extends ZNode {
@@ -40,6 +41,7 @@ public final class ZWhileNode extends ZNode {
 		super(null, null, 3);
 		this.SetNode(ZWhileNode._Cond, CondNode);
 		this.SetNode(ZWhileNode._Block, BlockNode);
+		this.Type = ZType.VoidType;
 	}
 
 	@Override public void Accept(ZVisitor Visitor) {
