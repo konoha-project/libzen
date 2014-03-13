@@ -27,6 +27,7 @@ package zen.codegen.clisp;
 import zen.ast.ZAndNode;
 import zen.ast.ZBinaryNode;
 import zen.ast.ZBlockNode;
+import zen.ast.ZComparatorNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZGetNameNode;
@@ -41,6 +42,7 @@ import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
 import zen.parser.ZSourceGenerator;
 import zen.type.ZFuncType;
+import zen.parser.ZToken;
 import zen.type.ZType;
 import zen.util.Var;
 
@@ -120,6 +122,23 @@ public class CommonLispGenerator extends ZSourceGenerator {
 	@Override public void VisitBinaryNode(ZBinaryNode Node) {
 		this.CurrentBuilder.Append("(");
 		this.CurrentBuilder.Append(Node.SourceToken.GetText());
+		this.CurrentBuilder.Append(" ");
+		this.GenerateCode(null, Node.LeftNode());
+		this.CurrentBuilder.Append(" ");
+		this.GenerateCode(null, Node.RightNode());
+		this.CurrentBuilder.Append(")");
+	}
+
+	private String GetBinaryOperator(ZToken Token) {
+		if(Token.EqualsText("!=")) {
+			return "/=";
+		}
+		return Token.GetText();
+	}
+
+	@Override public void VisitComparatorNode(ZComparatorNode Node) {
+		this.CurrentBuilder.Append("(");
+		this.CurrentBuilder.Append(GetBinaryOperator(Node.SourceToken));
 		this.CurrentBuilder.Append(" ");
 		this.GenerateCode(null, Node.LeftNode());
 		this.CurrentBuilder.Append(" ");
