@@ -40,8 +40,8 @@ import zen.util.ZFunction;
 import zen.util.ZIntArray;
 import zen.util.ZNativeType;
 import zen.util.ZObjectArray;
+import zen.util.ZObjectMap;
 import zen.util.ZStringArray;
-import zen.util.ZMap;
 
 public class JavaTypeTable {
 	static HashMap<String, Class<?>> ClassMap = new HashMap<String,Class<?>>();
@@ -56,7 +56,7 @@ public class JavaTypeTable {
 		JavaTypeTable.SetTypeTable(ZType.StringType, String.class);
 		JavaTypeTable.SetTypeTable(ZFuncType._FuncType, ZFunction.class);
 		JavaTypeTable.SetTypeTable(ZGenericType._ArrayType, ZObjectArray.class);
-		JavaTypeTable.SetTypeTable(ZGenericType._MapType, ZMap.class);
+		JavaTypeTable.SetTypeTable(ZGenericType._MapType, ZObjectMap.class);
 
 		ZType IntArrayType = ZTypePool._GetGenericType1(ZGenericType._ArrayType, ZType.IntType);
 		ZType FloatArrayType = ZTypePool._GetGenericType1(ZGenericType._ArrayType, ZType.FloatType);

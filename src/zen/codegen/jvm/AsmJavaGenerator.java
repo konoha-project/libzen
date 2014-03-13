@@ -126,6 +126,7 @@ import zen.util.ZFunction;
 import zen.util.ZMap;
 import zen.util.ZMatchFunction;
 import zen.util.ZObject;
+import zen.util.ZObjectMap;
 import zen.util.ZTokenFunction;
 
 public class AsmJavaGenerator extends ZGenerator {
@@ -409,11 +410,11 @@ public class AsmJavaGenerator extends ZGenerator {
 			this.AsmBuilder.visitInsn(Opcodes.ACONST_NULL);
 		}
 		else {
-			String Owner = Type.getInternalName(ZMap.class);
+			String Owner = Type.getInternalName(ZObjectMap.class);
 			this.AsmBuilder.visitTypeInsn(NEW, Owner);
 			this.AsmBuilder.visitInsn(DUP);
 			this.AsmBuilder.PushInt(Node.Type.TypeId);
-			this.AsmBuilder.PushInt(Node.GetListSize());
+			this.AsmBuilder.PushInt(Node.GetListSize() * 2);
 			this.AsmBuilder.visitTypeInsn(ANEWARRAY, Type.getInternalName(Object.class));
 			for(int i = 0; i < Node.GetListSize() ; i++) {
 				ZMapEntryNode EntryNode = Node.GetMapEntryNode(i);

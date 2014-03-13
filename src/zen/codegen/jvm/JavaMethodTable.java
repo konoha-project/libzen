@@ -111,8 +111,8 @@ public class JavaMethodTable {
 		Import(StringArrayType, "[]", ZType.IntType, zen.util.ZStringArray.class, "GetIndex");
 		Import(StringArrayType, "[]=", ZType.IntType, zen.util.ZStringArray.class, "SetIndex", String.class);
 
-		Import(ZGenericType._MapType, "[]", ZType.StringType, zen.util.ZMap.class, "GetIndex");
-		Import(ZGenericType._MapType, "[]=", ZType.StringType, zen.util.ZMap.class, "SetIndex", Object.class);
+		Import(ZGenericType._MapType, "[]", ZType.StringType, zen.util.ZObjectMap.class, "GetIndex");
+		Import(ZGenericType._MapType, "[]=", ZType.StringType, zen.util.ZObjectMap.class, "SetIndex", Object.class);
 
 
 		Import(boolean.class, JavaCastApi.class, "toObject");

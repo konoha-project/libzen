@@ -4,6 +4,7 @@ import zen.util.SoftwareFaultException;
 import zen.util.ZFloatArray;
 import zen.util.ZIntArray;
 import zen.util.ZObjectArray;
+import zen.util.ZObjectMap;
 import zen.util.ZStringArray;
 
 public class JavaCommonApi {
@@ -180,6 +181,20 @@ public class JavaCommonApi {
 	}
 
 	public final static String StringArrayToString(ZStringArray x) {
+		return x.toString();
+	}
+
+	// Map
+	public final static boolean MapContainsKey(ZObjectMap x, String y) {
+		return x.ContainsKey(y);
+	}
+
+	public final static String MapToString(ZObjectMap x) {
+		return x.toString();
+	}
+
+	// Object
+	public final static String ObjectToString(Object x) {
 		return x.toString();
 	}
 

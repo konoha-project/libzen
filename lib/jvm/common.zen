@@ -45,3 +45,10 @@ asm macro clear "zen/codegen/jvm/JavaCommonApi.StringArrayClear($[0],$[1])" : Fu
 asm macro add "zen/codegen/jvm/JavaCommonApi.StringArrayAdd($[0],$[1])" : Func<String[],String,void>;
 asm macro add "zen/codegen/jvm/JavaCommonApi.StringArrayInsert($[0],$[1],$[2])" : Func<String[],int,String,void>;
 asm macro _ "zen/codegen/jvm/JavaCommonApi.StringArrayToString($[0])" : Func<String[],String>;
+
+// Map
+asm macro containsKey "zen/codegen/jvm/JavaCommonApi.MapContainsKey($[0],$[1])" : Func<Map<α>,String,boolean>;
+asm macro _ "zen/codegen/jvm/JavaCommonApi.MapToString($[0])" : Func<Map<α>,String>;
+
+// Object
+asm macro _ "zen/codegen/jvm/JavaCommonApi.ObjectToString($[0])" : Func<Object,String>;
