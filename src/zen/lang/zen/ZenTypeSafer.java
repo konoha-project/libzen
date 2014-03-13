@@ -609,7 +609,7 @@ public class ZenTypeSafer extends ZTypeChecker {
 				CheckNode = Node.GetListAt(i);
 			}
 			Node.SetListAt(i, TypedNode);
-			if(ZNodeUtils._IsBreakBlock(SubNode)) {
+			if(ZNodeUtils._IsBlockBreak(SubNode)) {
 				Node.ClearListAfter(i+1);
 				break;
 			}
@@ -719,30 +719,30 @@ public class ZenTypeSafer extends ZTypeChecker {
 		}
 	}
 
-	private boolean HasReturnStatement(ZNode Node) {
-		if(Node instanceof ZBlockNode) {
-			@Var ZBlockNode BlockNode = (ZBlockNode)Node;
-			@Var int i = 0;
-			@Var ZNode StmtNode = null;
-			while(i < BlockNode.GetListSize()) {
-				StmtNode = BlockNode.GetListAt(i);
-				//System.out.println("i="+i +", "+ StmtNode.getClass().getSimpleName());
-				if(ZNodeUtils._IsBreakBlock(StmtNode)) {
-					return true;
-				}
-				i = i + 1;
-			}
-			Node = StmtNode;
-		}
-		if(Node instanceof ZIfNode) {
-			@Var ZIfNode IfNode = (ZIfNode)Node;
-			if(IfNode.HasElseNode()) {
-				return this.HasReturnStatement(IfNode.ThenNode()) && this.HasReturnStatement(IfNode.ElseNode());
-			}
-			return false;
-		}
-		return ZNodeUtils._IsBreakBlock(Node);
-	}
+	//	private boolean HasReturnStatement(ZNode Node) {
+	//		if(Node instanceof ZBlockNode) {
+	//			@Var ZBlockNode BlockNode = (ZBlockNode)Node;
+	//			@Var int i = 0;
+	//			@Var ZNode StmtNode = null;
+	//			while(i < BlockNode.GetListSize()) {
+	//				StmtNode = BlockNode.GetListAt(i);
+	//				//System.out.println("i="+i +", "+ StmtNode.getClass().getSimpleName());
+	//				if(ZNodeUtils._IsBlockBreak(StmtNode)) {
+	//					return true;
+	//				}
+	//				i = i + 1;
+	//			}
+	//			Node = StmtNode;
+	//		}
+	//		if(Node instanceof ZIfNode) {
+	//			@Var ZIfNode IfNode = (ZIfNode)Node;
+	//			if(IfNode.HasElseNode()) {
+	//				return this.HasReturnStatement(IfNode.ThenNode()) && this.HasReturnStatement(IfNode.ElseNode());
+	//			}
+	//			return false;
+	//		}
+	//		return ZNodeUtils._IsBlockBreak(Node);
+	//	}
 
 	@Override public void DefineFunction(ZFunctionNode FunctionNode, boolean Enforced) {
 		if(FunctionNode.FuncName() != null && FunctionNode.ResolvedFuncType == null) {
@@ -822,8 +822,8 @@ public class ZenTypeSafer extends ZTypeChecker {
 			//				return;
 			//			}
 		}
-		if(!this.HasReturnStatement(Node.BlockNode())) {
-			System.out.println("adding return.. ");
+		if(!ZNodeUtils._HasFunctionBreak(Node.BlockNode())) {
+			//System.out.println("adding return.. ");
 			Node.BlockNode().SetNode(ZNode._AppendIndex, new ZReturnNode(Node));
 		}
 		@Var ZNameSpace NameSpace = Node.BlockNode().GetBlockNameSpace();
