@@ -198,6 +198,7 @@ public abstract class ZNode {
 				@Var int i = 0;
 				while(i < this.GetAstSize()) {
 					if(this.AST[i] != null && this.AST[i].HasUntypedNode()) {
+						LibZen._PrintLine("@Untyped " + LibZen._GetClassName(this) + "[" + i + "] " + this.AST[i]);
 						return true;
 					}
 					i = i + 1;
