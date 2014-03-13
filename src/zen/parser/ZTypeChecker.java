@@ -105,10 +105,14 @@ public abstract class ZTypeChecker extends ZVisitor {
 		this.ReturnNode(new ZErrorNode(Node.ParentNode, ErrorToken, Message));
 	}
 
-	protected final ZNode CreateStupidCastNode(ZType Requested, ZNode Node) {
-		@Var ZNode ErrorNode = new ZStupidCastErrorNode(Node, "type error: requested=" +  Requested + ", given=" + Node.Type/* + " of node " + Node*/);
+	protected final ZNode CreateStupidCastNode(ZType Requested, ZNode Node, ZToken SourceToken, String Message) {
+		@Var ZNode ErrorNode = new ZStupidCastErrorNode(Node, SourceToken,  Message + ": " + Node.Type.GetName() + " => " + Requested.GetName());
 		ErrorNode.Type = Requested;
 		return ErrorNode;
+	}
+
+	protected final ZNode CreateStupidCastNode(ZType Requested, ZNode Node) {
+		return this.CreateStupidCastNode(Requested, Node, Node.SourceToken, "type error");
 	}
 
 	protected final ZNode EnforceNodeType(ZNode Node, ZType EnforcedType) {

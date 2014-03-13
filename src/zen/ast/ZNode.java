@@ -149,11 +149,11 @@ public abstract class ZNode {
 		}
 	}
 
-	public final ZToken GetAstToken(int Index) {
-		if(this.AST[Index] != null) {
-			return this.AST[Index].SourceToken;
+	public final ZToken GetAstToken(int TokenIndex) {
+		if(TokenIndex >= 0 && this.AST[TokenIndex] != null) {
+			return this.AST[TokenIndex].SourceToken;
 		}
-		return null;
+		return this.SourceToken;
 	}
 
 

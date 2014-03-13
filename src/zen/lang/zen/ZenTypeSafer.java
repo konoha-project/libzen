@@ -492,16 +492,32 @@ public class ZenTypeSafer extends ZTypeChecker {
 	}
 
 	@Override public void VisitCastNode(ZCastNode Node) {
-		this.TryTypeAt(Node, ZCastNode._Expr, Node.Type);
+		@Var ZType ContextType = this.GetContextType();
+		if(Node.CastType().IsVarType()) {
+			Node.Type = ContextType;
+		}
+		this.TryTypeAt(Node, ZCastNode._Expr, Node.CastType());
 		@Var ZType ExprType = Node.ExprNode().Type;
-		if(ExprType.Equals(Node.Type)) {
+		if(Node.Type.IsVarType()) {
+			this.ReturnNode(Node);
+			return;
+		}
+		if(ExprType.Equals(Node.Type) || Node.Type.Accept(ExprType)) {
 			this.ReturnNode(Node.ExprNode());
+			return;
 		}
-		@Var ZFunc Func = this.Generator.LookupConverterFunc(ExprType, Node.Type);
-		if(Func != null) {
-			this.ReturnTypeNode(Node.ToFuncCallNode(this, Func), Node.Type);
+		if(ExprType.Accept(Node.Type)) {
+			this.ReturnNode(this.CreateStupidCastNode(Node.Type, Node.ExprNode(), Node.GetAstToken(ZCastNode._TypeInfo), "unsafe downcast"));
+			return;
 		}
-		this.ReturnTypeNode(Node, Node.Type);
+		else {
+			@Var ZFunc Func = this.Generator.LookupConverterFunc(ExprType, Node.Type);
+			if(Func != null) {
+				this.ReturnTypeNode(Node.ToFuncCallNode(this, Func), Node.Type);
+				return;
+			}
+		}
+		this.ReturnNode(this.CreateStupidCastNode(Node.Type, Node.ExprNode(), Node.GetAstToken(ZCastNode._TypeInfo), "undefined converter"));
 	}
 
 	@Override public void VisitInstanceOfNode(ZInstanceOfNode Node) {

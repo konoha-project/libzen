@@ -94,15 +94,16 @@ public class ZType  {
 		if(ThisType == Type.GetRealType()) {
 			return true;
 		}
-		@Var ZType SuperClass = Type.GetSuperType();
-		while(SuperClass != null) {
-			if(SuperClass == ThisType) {
-				return true;
+		if(Type.GetParamSize() == 0) {
+			@Var ZType SuperClass = Type.GetSuperType();
+			while(SuperClass != null) {
+				if(SuperClass == ThisType) {
+					return true;
+				}
+				SuperClass = SuperClass.GetSuperType();
 			}
-			SuperClass = SuperClass.GetSuperType();
 		}
 		return false;
-		//return ZSystem.CheckSubType(Type, this);
 	}
 
 	@ZenMethod public boolean IsGreekType() {
