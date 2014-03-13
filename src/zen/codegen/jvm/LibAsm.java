@@ -5,6 +5,7 @@ import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.MethodNode;
 
 import zen.type.ZType;
+import zen.util.ZBooleanArray;
 import zen.util.ZFloatArray;
 import zen.util.ZIntArray;
 import zen.util.ZObjectArray;
@@ -19,6 +20,9 @@ public class LibAsm {
 
 	static Class<?> AsArrayClass(ZType zType) {
 		ZType zParamType = zType.GetParamType(0);
+		if(zParamType.IsBooleanType()) {
+			return ZBooleanArray.class;
+		}
 		if(zParamType.IsIntType()) {
 			return ZIntArray.class;
 		}
@@ -33,6 +37,9 @@ public class LibAsm {
 
 	static Class<?> AsElementClass(ZType zType) {
 		ZType zParamType = zType.GetParamType(0);
+		if(zParamType.IsBooleanType()) {
+			return boolean.class;
+		}
 		if(zParamType.IsIntType()) {
 			return long.class;
 		}
@@ -47,6 +54,9 @@ public class LibAsm {
 
 	static String NewArrayDescriptor(ZType ArrayType) {
 		ZType zParamType = ArrayType.GetParamType(0);
+		if(zParamType.IsBooleanType()) {
+			return Type.getMethodDescriptor(AsmType(void.class), new Type[] {AsmType(int.class), AsmType(boolean[].class)});
+		}
 		if(zParamType.IsIntType()) {
 			return Type.getMethodDescriptor(AsmType(void.class), new Type[] {AsmType(int.class), AsmType(long[].class)});
 		}

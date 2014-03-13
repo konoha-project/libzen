@@ -98,12 +98,15 @@ public class JavaMethodTable {
 		Import(ZType.StringType, "!=", ZType.StringType, JavaOperatorApi.class, "NotEquals");
 		Import(ZType.StringType, "[]", ZType.IntType, JavaOperatorApi.class, "GetIndex");
 
+		ZType BooleanArrayType = ZTypePool._GetGenericType1(ZGenericType._ArrayType, ZType.BooleanType);
 		ZType IntArrayType = ZTypePool._GetGenericType1(ZGenericType._ArrayType, ZType.IntType);
 		ZType FloatArrayType = ZTypePool._GetGenericType1(ZGenericType._ArrayType, ZType.FloatType);
 		ZType StringArrayType = ZTypePool._GetGenericType1(ZGenericType._ArrayType, ZType.StringType);
 
 		Import(ZGenericType._ArrayType, "[]", ZType.IntType, zen.util.ZObjectArray.class, "GetIndex");
 		Import(ZGenericType._ArrayType, "[]=", ZType.IntType, zen.util.ZObjectArray.class, "SetIndex", Object.class);
+		Import(BooleanArrayType, "[]", ZType.IntType, zen.util.ZBooleanArray.class, "GetIndex");
+		Import(BooleanArrayType, "[]=", ZType.IntType, zen.util.ZBooleanArray.class, "SetIndex", boolean.class);
 		Import(IntArrayType, "[]", ZType.IntType, zen.util.ZIntArray.class, "GetIndex");
 		Import(IntArrayType, "[]=", ZType.IntType, zen.util.ZIntArray.class, "SetIndex", long.class);
 		Import(FloatArrayType, "[]", ZType.IntType, zen.util.ZFloatArray.class, "GetIndex");

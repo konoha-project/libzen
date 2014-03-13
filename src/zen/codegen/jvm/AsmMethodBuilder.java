@@ -2,6 +2,7 @@ package zen.codegen.jvm;
 
 import static org.objectweb.asm.Opcodes.AASTORE;
 import static org.objectweb.asm.Opcodes.ANEWARRAY;
+import static org.objectweb.asm.Opcodes.BASTORE;
 import static org.objectweb.asm.Opcodes.CHECKCAST;
 import static org.objectweb.asm.Opcodes.DASTORE;
 import static org.objectweb.asm.Opcodes.DUP;
@@ -286,7 +287,11 @@ class AsmMethodBuilder extends MethodNode {
 	void PushNodeListAsArray(Class<?> T, int StartIdx, ZListNode NodeList) {
 		this.PushInt(NodeList.GetListSize() - StartIdx);
 		int StoreOpcode = -1;
-		if(T == long.class) {
+		if(T == boolean.class) {
+			this.visitIntInsn(Opcodes.NEWARRAY, Opcodes.T_BOOLEAN);
+			StoreOpcode = BASTORE;
+		}
+		else if(T == long.class) {
 			this.visitIntInsn(Opcodes.NEWARRAY, Opcodes.T_LONG);
 			StoreOpcode = LASTORE;
 		}
