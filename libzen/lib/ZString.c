@@ -5,6 +5,7 @@
 
 #include<gc.h>
 
+
 struct ZString {
 	uintptr_t bufsize;
 	uintptr_t len;
@@ -68,6 +69,46 @@ struct ZString * ZString_int_toString(int64_t number) {
 	}
 }
 
+struct ZString * ZString_float_toString(double number) {
+	char buf[BUFSIZE];
+	int len = snprintf(buf, BUFSIZE, "%lf", number);
+	if(len != EOF) {
+		return ZString_Create(buf, (size_t)len);
+	} else {
+		return ZString_new(0);
+	}
+}
+
+struct ZString * ZString_boolean_toString(char boolean) {
+	if(boolean & (char)1) {
+		return ZString_Create("false", 5);
+	} else {
+		return ZString_Create("true", 4);
+	}
+}
+
+
+char ZString_StrCmp(struct ZString *ZStr1, struct ZString *ZStr2) {
+	uintptr_t len = ZStr1->len;
+	if(len == ZStr2->len) {
+		if(strncmp(ZStr1->string, ZStr2->string, (size_t)len) == 0) {
+			return -1/* true */;
+		}
+	}
+	return 0/* false */;
+}
+
+//(ZStr1).StartsWith(ZStr2)
+char ZString_StartsWith(struct ZString *ZStr1, struct ZString *ZStr2) {
+	uintptr_t len = ZStr2->len;
+	if(ZStr1->len >= len) {
+		if(strncmp(ZStr1->string, ZStr2->string, (size_t)len) == 0) {
+			return -1/* true */;
+		}
+	}
+	return 0/* false */;
+}
+
 struct ZString * ZString_StrCat(struct ZString *ZStr1, struct ZString *ZStr2) {
 	size_t len1 = (size_t)ZStr1->len;
 	size_t len2 = (size_t)ZStr2->len;
@@ -85,9 +126,9 @@ int64_t ZString_StrLen(struct ZString *ZStr) {
 	return (int64_t)(ZStr->len);
 }
 
-/* void ZString_print(struct ZString *ZStr) {
+void ZString_print(struct ZString *ZStr) {
 	printf("%s", ZStr->string);
-} */
+}
 
 void ZString_println(struct ZString *ZStr) {
 	puts(ZStr->string);

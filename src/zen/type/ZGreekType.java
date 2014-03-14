@@ -5,7 +5,6 @@ import zen.util.LibZen;
 import zen.util.Var;
 
 public class ZGreekType extends ZType {
-	//	private final static ZType[] _GreekTypes = ZGreekType._NewGreekTypes(null);
 
 	@Field public final int GreekId;
 

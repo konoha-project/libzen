@@ -15,6 +15,9 @@ ZENCODE=java bash test/testfiles.sh $DIR $TDIR javac class java
 echo "generating c.."
 ZENCODE=c bash test/testfiles.sh $DIR $TDIR
 
+echo "generating llvm assembly code .."
+ZENCODE=llvm bash test/testfiles.sh $DIR $TDIR
+
 NODE=`which node`
 if [ -x $NODE ]; then
 	echo "testing javascript and its execution with $NODE"
@@ -31,6 +34,15 @@ if [ -x $ERLANG ]; then
 else
 	echo "generating eralang .erl files"
 	ZENCODE=erl bash test/testfiles.sh $DIR $TDIR
+fi
+
+CSHARP=`which mcs`
+if [ -x $CSHARP ]; then
+	echo "testing C# and its execution with mono"
+	ZENCODE=cs bash test/testfiles.sh $DIR $TDIR mcs exe mono
+else
+	echo "generating C# .cs files"
+	ZENCODE=cs bash test/testfiles.sh $DIR $TDIR
 fi
 
 echo "testing python and its execution"

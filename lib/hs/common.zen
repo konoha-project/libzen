@@ -1,0 +1,27 @@
+asm macro assert  "Control.Exception~return(assert ($[0]) $[1])": Func<boolean,String,void>;
+asm macro print   "putStr $[0]" : Func<String,void>;
+asm macro println "putStrLn $[0]" : Func<String,void>;
+
+// converter
+asm macro _ "fromIntegral $[0] :: Float" : Func<int,float>;
+asm macro _ "round $[0]" : Func<float,int>;
+asm macro _ "show $[0]" : Func<boolean,String>;
+asm macro _ "show ($[0] :: Int)" : Func<int,String>;
+asm macro _ "show ($[0] :: Float)" : Func<float,String>;
+
+// String
+asm macro + "($[0] ++ $[1])" : Func<String,String,String>;
+asm macro size "length $[0]" : Func<String,int>;
+asm macro substring "drop $[1] $[0]" : Func<String,int,String>;
+asm macro substring "drop $[1] (take $[2] $[0])" : Func<String,int,int,String>;
+asm macro indexOf "Data.List~head [fst x| x <- zip [0..] (tails $[0]), (snd x) == $[1]]" : Func<String,String,int>;
+asm macro indexOf "Data.List~head [fst x| x <- zip [$[1]..] (tails (drop $[1] $[0])), (snd x) == $[2]]" : Func<String,int,String,int>;
+asm macro equals "$[0] == $[1]" : Func<String,String,boolean>;
+asm macro startsWith "(take (length $[1]) $[0]) == $[1]" : Func<String,String,boolean>;
+asm macro endsWith "(drop ((length $[0]) - (length $[1])) $[0]) == $[1]" : Func<String,String,boolean>;
+
+// Array
+asm macro size "length $[0]" : Func<α[],int>;
+asm macro clear "take $[1] $[0]" : Func<α[],int,void>;
+asm macro add "$[0] ++ [$[1]]" : Func<α[],α,void>;
+asm macro add "let (ys,zs) = splitAt $[1] $[0] in ys ++ [$[2]] ++ zs" : Func<α[],int,α,void>;

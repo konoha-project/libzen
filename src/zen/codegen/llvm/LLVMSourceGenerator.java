@@ -74,56 +74,34 @@ import zen.ast.ZUnaryNode;
 import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
 import zen.parser.ZLogger;
+import zen.parser.ZSourceBuilder;
 import zen.parser.ZSourceGenerator;
 import zen.parser.ZVariable;
 import zen.type.ZClassType;
 import zen.type.ZFuncType;
 import zen.type.ZGenericType;
 import zen.type.ZType;
+import zen.util.Field;
 import zen.util.LibZen;
 import zen.util.Var;
 
-class LLVMSourceWriter {
-	private int IndentLebel;
-	private int VarCodeIndex;
-	private int TempLocalSymbolNumber;
-	private boolean IsBlockTerminated;
-	private String CurrentLabel;
-	private final ArrayList<String> BreakLabelStack = new ArrayList<String>();
-	private final ArrayList<String> LocalSymbolList = new ArrayList<String>();
-	private final ArrayList<String> LocalVarList = new ArrayList<String>();
-	private final ArrayList<String> CodeBufferStack = new ArrayList<String>();
-	private final ArrayList<String> HeaderCodeList = new ArrayList<String>();
-	private final ArrayList<String> BodyCodeList = new ArrayList<String>();
+class LLVMScope {
+	@Field private int TempLocalSymbolNumber;
+	@Field private boolean IsBlockTerminated;
+	@Field private String CurrentLabel;
+	@Field private final ArrayList<String> ValueStack = new ArrayList<String>();
+	@Field private final ArrayList<String> BreakLabelStack = new ArrayList<String>();
+	@Field private final ArrayList<String> LocalSymbolList = new ArrayList<String>();
+	@Field private final ArrayList<String> LocalVarList = new ArrayList<String>();
 
-	public LLVMSourceWriter() {
-		this.clear();
-	}
-
-	private void clear() {
-		this.IndentLebel = 0;
-		this.VarCodeIndex = 2;
+	public LLVMScope() {
 		this.TempLocalSymbolNumber = 0;
 		this.IsBlockTerminated = false;
 		this.CurrentLabel = null;
+		this.ValueStack.clear();
 		this.BreakLabelStack.clear();
 		this.LocalSymbolList.clear();
 		this.LocalVarList.clear();
-		this.CodeBufferStack.clear();
-		this.HeaderCodeList.clear();
-		this.BodyCodeList.clear();
-	}
-	private String GetCurrentIndentString() {
-		return this.GetIndentString(this.IndentLebel);
-	}
-	private String GetIndentString(int Level) {
-		return LibZen._JoinStrings("\t", Level);
-	}
-	public void IncreaseIndent() {
-		this.IndentLebel = this.IndentLebel + 1;
-	}
-	public void DecreaseIndent() {
-		this.IndentLebel = this.IndentLebel - 1;
 	}
 
 	public String CreateTempLocalSymbol() {
@@ -137,6 +115,10 @@ class LLVMSourceWriter {
 		return ReturnNumber;
 	}
 
+	public void SetLabel(String Label) {
+		this.IsBlockTerminated = false;
+		this.CurrentLabel = Label;
+	}
 	public void TerminateBlock() {
 		this.IsBlockTerminated = true;
 	}
@@ -146,16 +128,34 @@ class LLVMSourceWriter {
 	public String GetCurrentLabel() {
 		return this.CurrentLabel;
 	}
+
+	private void PushStrStack(ArrayList<String> Stack, String Label) {
+		Stack.add(Label);
+	}
+	private String PopStrStack(ArrayList<String> Stack) {
+		@Var int Size = Stack.size();
+		return Stack.remove(Size-1);
+	}
+	private String PeekStrStack(ArrayList<String> Stack) {
+		@Var int Size = Stack.size();
+		return Stack.get(Size-1);
+	}
+
 	public void PushBreakLabel(String Label) {
-		this.BreakLabelStack.add(Label);
+		this.PushStrStack(this.BreakLabelStack, Label);
 	}
 	public String PopBreakLabel() {
-		@Var int Size = this.BreakLabelStack.size();
-		return this.BreakLabelStack.remove(Size-1);
+		return this.PopStrStack(this.BreakLabelStack);
 	}
 	public String PeekBreakLabel() {
-		@Var int Size = this.BreakLabelStack.size();
-		return this.BreakLabelStack.get(Size-1);
+		return this.PeekStrStack(this.BreakLabelStack);
+	}
+
+	public void PushValue(String Value) {
+		this.PushStrStack(this.ValueStack, Value);
+	}
+	public String PopValue() {
+		return this.PopStrStack(this.ValueStack);
 	}
 
 	public void DefineLocalSymbol(String Symbol) {
@@ -171,86 +171,20 @@ class LLVMSourceWriter {
 	public boolean IsUserDefinedVar(String Symbol) {
 		return this.LocalVarList.contains(Symbol);
 	}
-
-	public void PushNewBuffer(String Text) {
-		this.CodeBufferStack.add(Text);
-	}
-	public void AddCodeToCurrentBuffer(String NewText) {
-		@Var int Size = this.CodeBufferStack.size();
-		if(Size <= 0) {
-			this.CodeBufferStack.add(NewText);
-		}
-		else {
-			@Var String OldText = this.CodeBufferStack.remove(Size-1);
-			this.CodeBufferStack.add(OldText + NewText);
-		}
-	}
-	public String PopCurrentBuffer() {
-		@Var int Size = this.CodeBufferStack.size();
-		if(Size > 0) {
-			return this.CodeBufferStack.remove(Size-1);
-		}
-		return null;
-	}
-	public void AppendLine(String Text) {
-		this.BodyCodeList.add(this.GetCurrentIndentString() + Text + "\n");
-	}
-	public void AppendHeaderLine(String Text) {
-		this.HeaderCodeList.add(Text + "\n");
-	}
-	public void AppendBufferAsNewLine() {
-		this.AppendLine(this.PopCurrentBuffer());
-	}
-	public void AppendBufferAsHeaderLine() {
-		this.AppendHeaderLine(this.PopCurrentBuffer());
-	}
-	public void AppendBufferAsVarLine() {
-		assert(this.BodyCodeList.size() > 2);
-		@Var int VarCodePosition = this.VarCodeIndex;
-		this.VarCodeIndex = this.VarCodeIndex + 1;
-		this.BodyCodeList.add(VarCodePosition, this.GetCurrentIndentString() + this.PopCurrentBuffer() + "\n");
-	}
-	public void AppendLabel(String Label) {
-		this.BodyCodeList.add(Label + ": \n");
-		this.IsBlockTerminated = false;
-		this.CurrentLabel = Label;
-	}
-
-	public String Write() {
-		@Var StringBuilder sb = new StringBuilder();
-		@Var int i = 0;
-		while(i < this.HeaderCodeList.size()) {
-			sb.append(this.HeaderCodeList.get(i));
-			i = i + 1;
-		}
-		this.HeaderCodeList.clear();
-		i = 0;
-		while(i < this.BodyCodeList.size()) {
-			sb.append(this.BodyCodeList.get(i));
-			i = i + 1;
-		}
-		sb.append("\n");
-		this.clear();
-		return sb.toString();
-	}
-
 }
 
 public class LLVMSourceGenerator extends ZSourceGenerator {
-	private int TempGlobalSymbolNumber;
-	private final ArrayList<String> GlobalSymbolList;
-	private final ArrayList<String> ExternalStructList;
-	private final HashMap<String, String> ExternalFunctionMap;
-	private final HashMap<String, ZClassNode> ClassFieldMap;
-	private LLVMSourceWriter Writer;
+	@Field private int TempGlobalSymbolNumber;
+	@Field private final ArrayList<String> GlobalSymbolList;
+	@Field private final ArrayList<String> ExternalStructList;
+	@Field private final HashMap<String, String> ExternalFunctionMap;
+	@Field private final HashMap<String, ZClassNode> ClassFieldMap;
+	@Field private LLVMScope CurrentScope;
 
 	private static final boolean WithInitValue = true;
 
-	//private final ScriptEngineManager EngineManager;
-	//private final ScriptEngine Engine;
-
 	public LLVMSourceGenerator() {
-		super("LLVM", "3.1");
+		super("ll", "LLVM3.1");
 		this.LineFeed = "\n";
 		this.Tab = "\t";
 		this.LineComment = ";"; // if not, set null
@@ -269,20 +203,12 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		this.SetNativeType(ZType.IntType, "i64");
 		this.SetNativeType(ZType.FloatType, "double");
 
-		// FIXME: lib/llvm/common.zen
-		//		this.SetMacro("print", "call void (%ZString*)* @ZString_println ($[0])", ZType.VoidType, ZType.StringType);
-		//		this.SetMacro("strcat", "call %ZString*  (%ZString*, %ZString*)* @ZString_StrCat ($[0], $[1])", ZType.StringType, ZType.StringType, ZType.StringType);
-		//		this.SetMacro("toString", "call %ZString* (i64)* @ZString_int_toString ($[0])", ZType.StringType, ZType.IntType);
-		//		this.SetConverterMacro("call %ZString* (i64)* @ZString_int_toString ($[0])", ZType.StringType, ZType.IntType);
-
 		this.TempGlobalSymbolNumber = 0;
 		this.GlobalSymbolList = new ArrayList<String>();
 		this.ExternalStructList = new ArrayList<String>();
 		this.ExternalFunctionMap = new HashMap<String, String>();
 		this.ClassFieldMap = new HashMap<String, ZClassNode>();
-		this.Writer = new LLVMSourceWriter();
-		//this.EngineManager = new ScriptEngineManager();
-		//this.Engine = this.EngineManager.getEngineByName("js");
+		this.CurrentScope = null;
 	}
 
 	private String CreateTempFuncName(ZFuncType FuncType) {
@@ -303,7 +229,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		this.ClassFieldMap.put(ClassName, Node);
 	}
 	private String ToLocalSymbol(String Symbol) {
-		if(this.Writer.IsUserDefinedSymbol(Symbol)) {
+		if(this.CurrentScope.IsUserDefinedSymbol(Symbol)) {
 			return "%" + Symbol;
 		}
 		else {
@@ -586,107 +512,97 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		return Len;
 	}
 
-	//	@Override
-	//	public boolean StartCodeGeneration(ZNode Node, boolean IsInteractive) {
-	//		Node.Accept(this);
-	//		//if(IsInteractive) {
-	//		//LibNative.println("---");
-	//		this.CurrentBuilder.Append(this.Writer.Write());
-	//		//LibNative.println("---");
-	//		//}
-	//		return true;
-	//	}
-
 	@Override
 	public void VisitAndNode(ZAndNode Node) {
-		@Var int LabelNum = this.Writer.GetTempLabelNumber();
+		@Var int LabelNum = this.CurrentScope.GetTempLabelNumber();
 		@Var String RightLabel = "And__" + LabelNum + ".Right";
 		@Var String EndLabel = "And__" + LabelNum + ".End";
 
-		this.Writer.PushNewBuffer("br i1 ");
 		this.GenerateCode(null, Node.LeftNode());
-		this.Writer.AddCodeToCurrentBuffer(", ");
-		this.Writer.AddCodeToCurrentBuffer("label %" + RightLabel + ", ");
-		this.Writer.AddCodeToCurrentBuffer("label %" + EndLabel);
-		this.Writer.AppendBufferAsNewLine();
-		@Var String LeftLabel = this.Writer.GetCurrentLabel();
+		@Var String LeftResult = this.CurrentScope.PopValue();
 
-		this.Writer.AppendLabel(RightLabel);
-		this.Writer.PushNewBuffer("");
+		this.CurrentBuilder.AppendNewLine("br i1 ");
+		this.CurrentBuilder.Append(LeftResult);
+		this.CurrentBuilder.Append(", ");
+		this.CurrentBuilder.Append("label %" + RightLabel + ", ");
+		this.CurrentBuilder.Append("label %" + EndLabel);
+		@Var String LeftLabel = this.CurrentScope.GetCurrentLabel();
+
+		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.Append(RightLabel + ":");
+		this.CurrentScope.SetLabel(RightLabel);
 		this.GenerateCode(null, Node.RightNode());
-		@Var String RightResult = this.Writer.PopCurrentBuffer();
-		this.Writer.AppendLine("br label %" + EndLabel);
-		RightLabel = this.Writer.GetCurrentLabel();
+		@Var String RightResult = this.CurrentScope.PopValue();
+		this.CurrentBuilder.AppendNewLine("br label %" + EndLabel);
+		RightLabel = this.CurrentScope.GetCurrentLabel();
 
-		this.Writer.AppendLabel(EndLabel);
-		@Var String AllResult = this.Writer.CreateTempLocalSymbol();
-		this.Writer.PushNewBuffer(AllResult);
-		this.Writer.AddCodeToCurrentBuffer(" = phi i1 ");
-		this.Writer.AddCodeToCurrentBuffer("[ false, %" + LeftLabel + " ], ");
-		this.Writer.AddCodeToCurrentBuffer("[ " + RightResult + ", %" + RightLabel + " ]");
-		this.Writer.AppendBufferAsNewLine();
-		this.Writer.AddCodeToCurrentBuffer(AllResult);
+		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.Append(EndLabel + ":");
+		this.CurrentScope.SetLabel(EndLabel);
+		@Var String AllResult = this.CurrentScope.CreateTempLocalSymbol();
+		this.CurrentBuilder.AppendNewLine(AllResult);
+		this.CurrentBuilder.Append(" = phi i1 ");
+		this.CurrentBuilder.Append("[ false, %" + LeftLabel + " ], ");
+		this.CurrentBuilder.Append("[ " + RightResult + ", %" + RightLabel + " ]");
+
+		this.CurrentScope.PushValue(AllResult);
 	}
 
 	@Override
 	public void VisitArrayLiteralNode(ZArrayLiteralNode Node) {
+		@Var StringBuilder sb = new StringBuilder();
 		@Var String GlobalConst = this.CreateTempGlobalSymbol();
-		this.Writer.PushNewBuffer(GlobalConst);
-		this.Writer.AddCodeToCurrentBuffer(" = private constant ");
+		sb.append(GlobalConst);
+		sb.append(" = private constant ");
 		int ArraySize = Node.GetListSize();
 		@Var String ElementType = this.GetTypeExpr(((ZGenericType)Node.Type).ParamType);
 		@Var String ArrayType = "[" + ArraySize + " x " + ElementType + "]";
-		this.Writer.AddCodeToCurrentBuffer(ArrayType);
+		sb.append(ArrayType);
 
-		this.Writer.AddCodeToCurrentBuffer(" [");
+		sb.append(" [");
 		@Var int i = 0;
 		while(i < ArraySize) {
 			if (i > 0) {
-				this.Writer.AddCodeToCurrentBuffer(", ");
+				sb.append(", ");
 			}
 			@Var ZNode SubNode = Node.GetListAt(i);
-			this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(SubNode.Type));
-			this.Writer.AddCodeToCurrentBuffer(" ");
+			sb.append(this.GetTypeExpr(SubNode.Type));
+			sb.append(" ");
 			this.GenerateCode(null, SubNode);
+			sb.append(this.CurrentScope.PopValue());
 			i = i + 1;
 		}
-		this.Writer.AddCodeToCurrentBuffer("]");
-		this.Writer.AppendBufferAsHeaderLine();
+		sb.append("]");
+		this.HeaderBuilder.AppendNewLine(sb.toString());
 
-		this.Writer.AddCodeToCurrentBuffer("bitcast (");
-		this.Writer.AddCodeToCurrentBuffer(ArrayType + "* ");
-		this.Writer.AddCodeToCurrentBuffer(GlobalConst);
-		this.Writer.AddCodeToCurrentBuffer(" to ");
-		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.Type));
-		this.Writer.AddCodeToCurrentBuffer(")");
+		this.CurrentScope.PushValue("bitcast (" + ArrayType + "* " + GlobalConst + " to " + this.GetTypeExpr(Node.Type) + ")");
 	}
 
 	@Override
 	public void VisitBinaryNode(ZBinaryNode Node) {
+		this.GenerateCode(null, Node.LeftNode());
+		@Var String Left = this.CurrentScope.PopValue();
+		this.GenerateCode(null, Node.RightNode());
+		@Var String Right = this.CurrentScope.PopValue();
+
 		if(this.IsPrimitiveType(Node.LeftNode().Type)) {
-			@Var String TempVar = this.Writer.CreateTempLocalSymbol();
-			this.Writer.PushNewBuffer(TempVar);
-			this.Writer.AddCodeToCurrentBuffer(" = ");
-			this.Writer.AddCodeToCurrentBuffer(this.GetBinaryOpcode(Node));
-			this.Writer.AddCodeToCurrentBuffer(" ");
-			this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.LeftNode().Type));
-			this.Writer.AddCodeToCurrentBuffer(" ");
-			this.GenerateCode(null, Node.LeftNode());
-			this.Writer.AddCodeToCurrentBuffer(", ");
-			this.GenerateCode(null, Node.RightNode());
-			this.Writer.AppendBufferAsNewLine();
-			this.Writer.AddCodeToCurrentBuffer(TempVar);
+			@Var String TempVar = this.CurrentScope.CreateTempLocalSymbol();
+			this.CurrentBuilder.AppendNewLine(TempVar);
+			this.CurrentBuilder.Append(" = ");
+			this.CurrentBuilder.Append(this.GetBinaryOpcode(Node));
+			this.CurrentBuilder.Append(" ");
+			this.CurrentBuilder.Append(this.GetTypeExpr(Node.LeftNode().Type));
+			this.CurrentBuilder.Append(" ");
+			this.CurrentBuilder.Append(Left);
+			this.CurrentBuilder.Append(", ");
+			this.CurrentBuilder.Append(Right);
+
+			this.CurrentScope.PushValue(TempVar);
 		}
 		else if(Node.LeftNode().Type.IsStringType()) {
 			if(Node.SourceToken.EqualsText('+') && Node.RightNode().Type.IsStringType()) {
 				this.DeclareExtrnalFunction("ZString_StrCat", "%ZString*", "(%ZString*, %ZString*)");
-				this.Writer.PushNewBuffer("");
-				this.GenerateCode(null, Node.LeftNode());
-				@Var String LeftResult = this.Writer.PopCurrentBuffer();
-				this.Writer.PushNewBuffer("");
-				this.GenerateCode(null, Node.RightNode());
-				@Var String RightResult = this.Writer.PopCurrentBuffer();
-				this.CallExternalFunction("ZString_StrCat", "(" + this.GetTypeExpr(Node.LeftNode().Type) + " " + LeftResult + ", " + this.GetTypeExpr(Node.RightNode().Type) + " " + RightResult + ")");
+				this.CallExternalFunction("ZString_StrCat", "(" + this.GetTypeExpr(Node.LeftNode().Type) + " " + Left + ", " + this.GetTypeExpr(Node.RightNode().Type) + " " + Right + ")");
 			}
 		}
 		else {
@@ -696,8 +612,8 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 
 	@Override
 	public void VisitBreakNode(ZBreakNode Node) {
-		this.Writer.AppendLine("br label %" + this.Writer.PeekBreakLabel());
-		this.Writer.TerminateBlock();
+		this.CurrentBuilder.AppendNewLine("br label %" + this.CurrentScope.PeekBreakLabel());
+		this.CurrentScope.TerminateBlock();
 	}
 
 	@Override
@@ -708,9 +624,9 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 	@Override
 	public void VisitBooleanNode(ZBooleanNode Node) {
 		if (Node.BooleanValue) {
-			this.Writer.AddCodeToCurrentBuffer(this.TrueLiteral);
+			this.CurrentScope.PushValue(this.TrueLiteral);
 		} else {
-			this.Writer.AddCodeToCurrentBuffer(this.FalseLiteral);
+			this.CurrentScope.PushValue(this.FalseLiteral);
 		}
 	}
 
@@ -723,97 +639,108 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		}
 		else if(!(BeforeType.IsVoidType()) && AfterType.IsVoidType()) {
 			this.GenerateCode(null, Node.ExprNode());
-			this.Writer.PopCurrentBuffer();
+			this.CurrentScope.PopValue();
 		}
 		else {
-			@Var String TempVar = this.Writer.CreateTempLocalSymbol();
-			this.Writer.PushNewBuffer(TempVar);
-			this.Writer.AddCodeToCurrentBuffer(" = ");
-			this.Writer.AddCodeToCurrentBuffer(this.GetCastOpCode(BeforeType, AfterType));
-			this.Writer.AddCodeToCurrentBuffer(" ");
-			this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(BeforeType));
-			this.Writer.AddCodeToCurrentBuffer(" ");
 			this.GenerateSurroundCode(Node.ExprNode());
-			this.Writer.AddCodeToCurrentBuffer(" to ");
-			this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(AfterType));
-			this.Writer.AppendBufferAsNewLine();
-			this.Writer.AddCodeToCurrentBuffer(TempVar);
+			@Var String Expr = this.CurrentScope.PopValue();
+
+			@Var String TempVar = this.CurrentScope.CreateTempLocalSymbol();
+			this.CurrentBuilder.AppendNewLine(TempVar);
+			this.CurrentBuilder.Append(" = ");
+			this.CurrentBuilder.Append(this.GetCastOpCode(BeforeType, AfterType));
+			this.CurrentBuilder.Append(" ");
+			this.CurrentBuilder.Append(this.GetTypeExpr(BeforeType));
+			this.CurrentBuilder.Append(" ");
+			this.CurrentBuilder.Append(Expr);
+			this.CurrentBuilder.Append(" to ");
+			this.CurrentBuilder.Append(this.GetTypeExpr(AfterType));
+
+			this.CurrentScope.PushValue(TempVar);
 		}
 	}
 
-
 	@Override public void VisitClassNode(ZClassNode Node) {
+		@Var LLVMScope PushedScope = this.CurrentScope;
+		this.CurrentScope = new LLVMScope();
+
+		this.CurrentBuilder = this.AppendNewSourceBuilder();
+
 		this.DefineClass(Node.ClassName(), Node);
 		@Var String ClassSymbol = this.ToClassSymbol(Node.ClassName());
-		this.Writer.PushNewBuffer(ClassSymbol);
-		this.Writer.AddCodeToCurrentBuffer(" = type { ");
-		this.VisitFieldList("i8*", Node, !WithInitValue);
-		this.Writer.AddCodeToCurrentBuffer(" }");
-		this.Writer.AppendBufferAsHeaderLine();
+		this.CurrentBuilder.AppendNewLine(ClassSymbol);
+		this.CurrentBuilder.OpenIndent(" = type {");
+		this.CurrentBuilder.AppendNewLine("i8*");
+		this.VisitFieldList(Node, !WithInitValue);
+		this.CurrentBuilder.CloseIndent("}");
 
 		@Var String ProtoSymbol = "@" + Node.ClassName() + ".Proto";
-		this.Writer.PushNewBuffer(ProtoSymbol);
-		this.Writer.AddCodeToCurrentBuffer(" = private constant ");
-		this.Writer.AddCodeToCurrentBuffer(ClassSymbol);
-		this.Writer.AddCodeToCurrentBuffer(" { ");
-		@Var String HeaderValue;
+		this.CurrentBuilder.AppendNewLine(ProtoSymbol);
+		this.CurrentBuilder.Append(" = private constant ");
+		this.CurrentBuilder.Append(ClassSymbol);
+		this.CurrentBuilder.OpenIndent(" {");
 		if(!Node.SuperType().Equals(ZClassType._ObjectType)) {
-			HeaderValue = "i8* bitcast (" + this.GetTypeExpr(Node.SuperType()) + " @" + Node.SuperType().ShortName + ".Proto to i8*)";
+			this.CurrentBuilder.AppendNewLine("i8* bitcast (");
+			this.CurrentBuilder.Append(this.GetTypeExpr(Node.SuperType()));
+			this.CurrentBuilder.Append(" @" + Node.SuperType().ShortName + ".Proto");
+			this.CurrentBuilder.Append(" to i8*)");
 		}
 		else {
-			HeaderValue = "i8* null";
+			this.CurrentBuilder.AppendNewLine("i8* null");
 		}
-		this.VisitFieldList(HeaderValue, Node, WithInitValue);
-		this.Writer.AddCodeToCurrentBuffer(" }");
-		this.Writer.AppendBufferAsHeaderLine();
+		this.VisitFieldList(Node, WithInitValue);
+		this.CurrentBuilder.CloseIndent("}");
+
+		this.CurrentScope = PushedScope;
 	}
 
 	@Override
 	public void VisitComparatorNode(ZComparatorNode Node) {
-		@Var String TempVar = this.Writer.CreateTempLocalSymbol();
+		this.GenerateCode(null, Node.LeftNode());
+		@Var String Left = this.CurrentScope.PopValue();
+		this.GenerateCode(null, Node.RightNode());
+		@Var String Right = this.CurrentScope.PopValue();
+
+		@Var String TempVar = this.CurrentScope.CreateTempLocalSymbol();
 		if(this.IsPrimitiveType(Node.LeftNode().Type)) {
-			this.Writer.PushNewBuffer(TempVar);
-			this.Writer.AddCodeToCurrentBuffer(" = ");
-			this.Writer.AddCodeToCurrentBuffer(this.GetCompareOpCodeAndCondition(Node));
-			this.Writer.AddCodeToCurrentBuffer(" ");
-			this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.LeftNode().Type));
-			this.Writer.AddCodeToCurrentBuffer(" ");
-			this.GenerateCode(null, Node.LeftNode());
-			this.Writer.AddCodeToCurrentBuffer(", ");
-			this.GenerateCode(null, Node.RightNode());
-			this.Writer.AppendBufferAsNewLine();
+			this.CurrentBuilder.AppendNewLine(TempVar);
+			this.CurrentBuilder.Append(" = ");
+			this.CurrentBuilder.Append(this.GetCompareOpCodeAndCondition(Node));
+			this.CurrentBuilder.Append(" ");
+			this.CurrentBuilder.Append(this.GetTypeExpr(Node.LeftNode().Type));
+			this.CurrentBuilder.Append(" ");
+			this.CurrentBuilder.Append(Left);
+			this.CurrentBuilder.Append(", ");
+			this.CurrentBuilder.Append(Right);
 		}
 		else {
-			@Var String LeftAddress = this.Writer.CreateTempLocalSymbol();
-			this.Writer.PushNewBuffer(LeftAddress);
-			this.Writer.AddCodeToCurrentBuffer(" = ptrtoint ");
-			this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.LeftNode().Type));
-			this.Writer.AddCodeToCurrentBuffer(" ");
-			this.GenerateCode(null, Node.LeftNode());
-			this.Writer.AddCodeToCurrentBuffer(" to i64");
-			this.Writer.AppendBufferAsNewLine();
+			@Var String LeftAddress = this.CurrentScope.CreateTempLocalSymbol();
+			this.CurrentBuilder.AppendNewLine(LeftAddress);
+			this.CurrentBuilder.Append(" = ptrtoint ");
+			this.CurrentBuilder.Append(this.GetTypeExpr(Node.LeftNode().Type));
+			this.CurrentBuilder.Append(" ");
+			this.CurrentBuilder.Append(Left);
+			this.CurrentBuilder.Append(" to i64");
 
-			@Var String RightAddress = this.Writer.CreateTempLocalSymbol();
-			this.Writer.PushNewBuffer(RightAddress);
-			this.Writer.AddCodeToCurrentBuffer(" = ptrtoint ");
-			this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.RightNode().Type));
-			this.Writer.AddCodeToCurrentBuffer(" ");
-			this.GenerateCode(null, Node.RightNode());
-			this.Writer.AddCodeToCurrentBuffer(" to i64");
-			this.Writer.AppendBufferAsNewLine();
+			@Var String RightAddress = this.CurrentScope.CreateTempLocalSymbol();
+			this.CurrentBuilder.AppendNewLine(RightAddress);
+			this.CurrentBuilder.Append(" = ptrtoint ");
+			this.CurrentBuilder.Append(this.GetTypeExpr(Node.RightNode().Type));
+			this.CurrentBuilder.Append(" ");
+			this.CurrentBuilder.Append(Right);
+			this.CurrentBuilder.Append(" to i64");
 
-			this.Writer.PushNewBuffer(TempVar);
-			this.Writer.AddCodeToCurrentBuffer(" = ");
-			this.Writer.AddCodeToCurrentBuffer(this.GetCompareOpCodeAndCondition(Node));
-			this.Writer.AddCodeToCurrentBuffer(" ");
-			this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(ZType.IntType));
-			this.Writer.AddCodeToCurrentBuffer(" ");
-			this.Writer.AddCodeToCurrentBuffer(LeftAddress);
-			this.Writer.AddCodeToCurrentBuffer(", ");
-			this.Writer.AddCodeToCurrentBuffer(RightAddress);
-			this.Writer.AppendBufferAsNewLine();
+			this.CurrentBuilder.AppendNewLine(TempVar);
+			this.CurrentBuilder.Append(" = ");
+			this.CurrentBuilder.Append(this.GetCompareOpCodeAndCondition(Node));
+			this.CurrentBuilder.Append(" ");
+			this.CurrentBuilder.Append(this.GetTypeExpr(ZType.IntType));
+			this.CurrentBuilder.Append(" ");
+			this.CurrentBuilder.Append(LeftAddress);
+			this.CurrentBuilder.Append(", ");
+			this.CurrentBuilder.Append(RightAddress);
 		}
-		this.Writer.AddCodeToCurrentBuffer(TempVar);
+		this.CurrentScope.PushValue(TempVar);
 	}
 
 	@Override
@@ -822,7 +749,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 
 	@Override
 	public void VisitFloatNode(ZFloatNode Node) {
-		this.Writer.AddCodeToCurrentBuffer("" + Node.FloatValue);
+		this.CurrentScope.PushValue("" + Node.FloatValue);
 	}
 
 	@Override
@@ -845,33 +772,38 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 			return;
 		}
 		@Var ZType ReturnType = FuncType.GetReturnType();
-		@Var String TempVar = "";
-		this.Writer.PushNewBuffer("");
-		if(!ReturnType.IsVoidType()) {
-			TempVar = this.Writer.CreateTempLocalSymbol();
-			this.Writer.AddCodeToCurrentBuffer(TempVar);
-			this.Writer.AddCodeToCurrentBuffer(" = ");
-		}
-		this.Writer.AddCodeToCurrentBuffer("call ");
-		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(FuncType));
-		this.Writer.AddCodeToCurrentBuffer(" ");
+
 		this.GenerateCode(null, Node.FunctionNode());
+		@Var String CallFunc = this.CurrentScope.PopValue();
 		this.VisitListNode(" (", Node, ", ", ")");
-		this.Writer.AppendBufferAsNewLine();
+		@Var String Args = this.CurrentScope.PopValue();
+
+		@Var String TempVar = "";
+		this.CurrentBuilder.AppendNewLine("");
 		if(!ReturnType.IsVoidType()) {
-			this.Writer.AddCodeToCurrentBuffer(TempVar);
+			TempVar = this.CurrentScope.CreateTempLocalSymbol();
+			this.CurrentBuilder.Append(TempVar);
+			this.CurrentBuilder.Append(" = ");
+		}
+		this.CurrentBuilder.Append("call ");
+		this.CurrentBuilder.Append(this.GetTypeExpr(FuncType));
+		this.CurrentBuilder.Append(" ");
+		this.CurrentBuilder.Append(CallFunc);
+		this.CurrentBuilder.Append(Args);
+
+		if(!ReturnType.IsVoidType()) {
+			this.CurrentScope.PushValue(TempVar);
 		}
 	}
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
-		@Var LLVMSourceWriter PushedWriter = this.Writer;
-		//Node.ParentFunctionNode != null
-		if(!Node.Type.IsVoidType()) {
-			this.Writer = new LLVMSourceWriter();
-		}
+		@Var LLVMScope PushedScope = this.CurrentScope;
+		this.CurrentScope = new LLVMScope();
 
-		this.Writer.PushNewBuffer("define ");
-		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.ReturnType()));
+		this.CurrentBuilder = this.AppendNewSourceBuilder();
+
+		this.CurrentBuilder.AppendNewLine("define ");
+		this.CurrentBuilder.Append(this.GetTypeExpr(Node.ReturnType()));
 		@Var String FuncName;
 		if(Node.FuncName() == null) {
 			FuncName = this.CreateTempFuncName(Node.ResolvedFuncType);
@@ -884,72 +816,77 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 			this.DefineGlobalSymbol(StringifiedName);
 			FuncName = this.ToGlobalSymbol(StringifiedName);
 		}
-		this.Writer.AddCodeToCurrentBuffer(" " + FuncName + " ");
+		this.CurrentBuilder.Append(" " + FuncName + " ");
 		this.VisitListNode("(", Node, ", ", ") {");
-		this.Writer.AppendBufferAsNewLine();
+		this.CurrentBuilder.OpenIndent(this.CurrentScope.PopValue());
+		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.Append("Entry:");
+		this.CurrentScope.SetLabel("Entry");
 
-		this.Writer.IncreaseIndent();
-		this.Writer.AppendLabel("Entry");
+		this.CurrentBuilder = this.AppendNewSourceBuilder();
+		this.CurrentBuilder.Indent();
 		this.GenerateCode(null, Node.BlockNode());
-		if(!this.Writer.IsBlockTerminated()) {
+		if(!this.CurrentScope.IsBlockTerminated()) {
 			this.AppendDefaultReturn(Node.ReturnType());
 		}
-		this.Writer.DecreaseIndent();
+		this.CurrentBuilder.CloseIndent("}");
 
-		this.Writer.AppendLine("}");
-		if(!Node.Type.IsVoidType()) {
-			String FunctionDefine = this.Writer.Write();
-			this.Writer = PushedWriter;
-			this.Writer.AppendHeaderLine(FunctionDefine);
-			this.Writer.AddCodeToCurrentBuffer(FuncName);
+		this.CurrentScope = PushedScope;
+		//Node.ParentFunctionNode != null
+		if(Node.FuncName() == null) {
+			this.CurrentScope.PushValue(FuncName);
 		}
 	}
 
 	@Override
 	public void VisitGetIndexNode(ZGetIndexNode Node) {
-		@Var String TempVar = this.Writer.CreateTempLocalSymbol();
-		this.Writer.PushNewBuffer(TempVar);
-		this.Writer.AddCodeToCurrentBuffer(" = load ");
-		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.Type) + "*");
-		this.Writer.AddCodeToCurrentBuffer(" ");
 		this.GetArrayElementPointer(Node.RecvNode(), Node.IndexNode());
+		@Var String Element = this.CurrentScope.PopValue();
+
+		@Var String TempVar = this.CurrentScope.CreateTempLocalSymbol();
+		this.CurrentBuilder.AppendNewLine(TempVar);
+		this.CurrentBuilder.Append(" = load ");
+		this.CurrentBuilder.Append(this.GetTypeExpr(Node.Type) + "*");
+		this.CurrentBuilder.Append(" ");
+		this.CurrentBuilder.Append(Element);
 		//@llvm.gcread
-		this.Writer.AppendBufferAsNewLine();
-		this.Writer.AddCodeToCurrentBuffer(TempVar);
+
+		this.CurrentScope.PushValue(TempVar);
 	}
 
 	@Override
 	public void VisitGetNameNode(ZGetNameNode Node) {
 		@Var ZVariable Var = Node.GetNameSpace().GetLocalVariable(Node.GetName());
 		@Var String VarName = Var.VarName + "__" + Var.VarUniqueIndex;
-		if(this.Writer.IsUserDefinedVar(VarName)) {
-			@Var String TempVar = this.Writer.CreateTempLocalSymbol();
-			this.Writer.PushNewBuffer(TempVar);
-			this.Writer.AddCodeToCurrentBuffer(" = load ");
-			this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.Type) + "*");
-			this.Writer.AddCodeToCurrentBuffer(" " + this.ToLocalSymbol(VarName));
+		if(this.CurrentScope.IsUserDefinedVar(VarName)) {
+			@Var String TempVar = this.CurrentScope.CreateTempLocalSymbol();
+			this.CurrentBuilder.AppendNewLine(TempVar);
+			this.CurrentBuilder.Append(" = load ");
+			this.CurrentBuilder.Append(this.GetTypeExpr(Node.Type) + "*");
+			this.CurrentBuilder.Append(" " + this.ToLocalSymbol(VarName));
 			//if(!this.IsPrimitiveType(Node.Type)) {
 			//@llvm.gcread
 			//}
-			this.Writer.AppendBufferAsNewLine();
-			this.Writer.AddCodeToCurrentBuffer(TempVar);
+			this.CurrentScope.PushValue(TempVar);
 		}
 		else {
-			this.Writer.AddCodeToCurrentBuffer(this.ToLocalSymbol(Node.GetName()));
+			this.CurrentScope.PushValue(this.ToLocalSymbol(Node.GetName()));
 		}
 	}
 
 	@Override
 	public void VisitGetterNode(ZGetterNode Node) {
-		@Var String TempVar = this.Writer.CreateTempLocalSymbol();
-		this.Writer.PushNewBuffer(TempVar);
-		this.Writer.AddCodeToCurrentBuffer(" = load ");
-		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.Type) + "*");
-		this.Writer.AddCodeToCurrentBuffer(" ");
 		this.GetObjectElementPointer(Node.RecvNode(), Node.GetName());
+		@Var String Element = this.CurrentScope.PopValue();
+
+		@Var String TempVar = this.CurrentScope.CreateTempLocalSymbol();
+		this.CurrentBuilder.AppendNewLine(TempVar);
+		this.CurrentBuilder.Append(" = load ");
+		this.CurrentBuilder.Append(this.GetTypeExpr(Node.Type) + "*");
+		this.CurrentBuilder.Append(" ");
+		this.CurrentBuilder.Append(Element);
 		//@llvm.gcread
-		this.Writer.AppendBufferAsNewLine();
-		this.Writer.AddCodeToCurrentBuffer(TempVar);
+		this.CurrentScope.PushValue(TempVar);
 	}
 
 	@Override
@@ -958,19 +895,19 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 			ZLogger._LogError(Node.SourceToken, "undefined symbol: " + Node.GlobalName);
 		}
 		if(Node.IsFuncNameNode()) {
-			this.Writer.AddCodeToCurrentBuffer(this.ToGlobalSymbol(Node.Type.StringfySignature(Node.GlobalName)));
+			this.CurrentScope.PushValue(this.ToGlobalSymbol(Node.Type.StringfySignature(Node.GlobalName)));
 		}
 		//else if(!this.IsPrimitiveType(Node.Type)) {
-		//	this.Writer.AddCodeToCurrentBuffer(this.ToGlobalSymbol(Node.GlobalName));
+		//	this.Writer.PushValue(this.ToGlobalSymbol(Node.GlobalName));
 		//}
 		else {
-			@Var String TempVar = this.Writer.CreateTempLocalSymbol();
-			this.Writer.PushNewBuffer(TempVar);
-			this.Writer.AddCodeToCurrentBuffer(" = load ");
-			this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.Type) + "*");
-			this.Writer.AddCodeToCurrentBuffer(" " + this.ToGlobalSymbol(Node.GlobalName));
-			this.Writer.AppendBufferAsNewLine();
-			this.Writer.AddCodeToCurrentBuffer(TempVar);
+			@Var String TempVar = this.CurrentScope.CreateTempLocalSymbol();
+			this.CurrentBuilder.AppendNewLine(TempVar);
+			this.CurrentBuilder.Append(" = load ");
+			this.CurrentBuilder.Append(this.GetTypeExpr(Node.Type) + "*");
+			this.CurrentBuilder.Append(" " + this.ToGlobalSymbol(Node.GlobalName));
+
+			this.CurrentScope.PushValue(TempVar);
 		}
 	}
 
@@ -981,42 +918,50 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 
 	@Override
 	public void VisitIfNode(ZIfNode Node) {
-		@Var int LabelNum = this.Writer.GetTempLabelNumber();
+		@Var int LabelNum = this.CurrentScope.GetTempLabelNumber();
 		@Var String ThenLabel = "If__" + LabelNum + ".Then";
 		@Var String ElseLabel = "If__" + LabelNum + ".Else";
 		@Var String EndLabel = "If__" + LabelNum + ".End";
 		@Var boolean IsEndReachable = false;
 
-		this.Writer.PushNewBuffer("br i1 ");
 		this.GenerateCode(null, Node.CondNode());
-		this.Writer.AddCodeToCurrentBuffer(", ");
-		this.Writer.AddCodeToCurrentBuffer("label %" + ThenLabel + ", ");
+		@Var String Cond = this.CurrentScope.PopValue();
+
+		this.CurrentBuilder.AppendNewLine("br i1 ");
+		this.CurrentBuilder.Append(Cond);
+		this.CurrentBuilder.Append(", ");
+		this.CurrentBuilder.Append("label %" + ThenLabel + ", ");
 		if(Node.ElseNode() != null) {
-			this.Writer.AddCodeToCurrentBuffer("label %" + ElseLabel);
+			this.CurrentBuilder.Append("label %" + ElseLabel);
 		}
 		else {
-			this.Writer.AddCodeToCurrentBuffer("label %" + EndLabel);
+			this.CurrentBuilder.Append("label %" + EndLabel);
 			IsEndReachable = true;
 		}
-		this.Writer.AppendBufferAsNewLine();
 
-		this.Writer.AppendLabel(ThenLabel);
+		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.Append(ThenLabel + ":");
+		this.CurrentScope.SetLabel(ThenLabel);
 		this.GenerateCode(null, Node.ThenNode());
-		if(!this.Writer.IsBlockTerminated()) {
-			this.Writer.AppendLine("br label %" + EndLabel);
+		if(!this.CurrentScope.IsBlockTerminated()) {
+			this.CurrentBuilder.AppendNewLine("br label %" + EndLabel);
 			IsEndReachable = true;
 		}
 
 		if(Node.ElseNode() != null) {
-			this.Writer.AppendLabel(ElseLabel);
+			this.CurrentBuilder.AppendLineFeed();
+			this.CurrentBuilder.Append(ElseLabel + ":");
+			this.CurrentScope.SetLabel(ElseLabel);
 			this.GenerateCode(null, Node.ElseNode());
-			if(!this.Writer.IsBlockTerminated()) {
-				this.Writer.AppendLine("br label %" + EndLabel);
+			if(!this.CurrentScope.IsBlockTerminated()) {
+				this.CurrentBuilder.AppendNewLine("br label %" + EndLabel);
 				IsEndReachable = true;
 			}
 		}
 		if(IsEndReachable) {
-			this.Writer.AppendLabel(EndLabel);
+			this.CurrentBuilder.AppendLineFeed();
+			this.CurrentBuilder.Append(EndLabel + ":");
+			this.CurrentScope.SetLabel(EndLabel);
 		}
 	}
 
@@ -1027,30 +972,38 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 
 	@Override
 	public void VisitIntNode(ZIntNode Node) {
-		this.Writer.AddCodeToCurrentBuffer("" + Node.IntValue);
+		this.CurrentScope.PushValue("" + Node.IntValue);
 	}
 
 	@Override
 	public void VisitLetNode(ZLetNode Node) {
-		this.DefineGlobalSymbol(Node.GlobalName);
-		this.Writer.PushNewBuffer(this.ToGlobalSymbol(Node.GlobalName));
-		this.Writer.AddCodeToCurrentBuffer(" = private constant ");
-		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.DeclType()));
-		this.Writer.AddCodeToCurrentBuffer(" ");
+		@Var LLVMScope PushedScope = this.CurrentScope;
+		this.CurrentScope = new LLVMScope();
+
 		this.GenerateCode(null, Node.InitValueNode());
-		this.Writer.AppendBufferAsHeaderLine();
-		//this.Writer.AddCodeToCurrentBuffer(this.ToGlobalSymbol(Node.GlobalName));
+		@Var String Init = this.CurrentScope.PopValue();
+
+		this.DefineGlobalSymbol(Node.GlobalName);
+		this.HeaderBuilder.AppendNewLine(this.ToGlobalSymbol(Node.GlobalName));
+		this.HeaderBuilder.Append(" = private constant ");
+		this.HeaderBuilder.Append(this.GetTypeExpr(Node.DeclType()));
+		this.HeaderBuilder.Append(" ");
+		this.HeaderBuilder.Append(Init);
+
+		this.CurrentScope = PushedScope;
+		//this.Writer.PushValue(this.ToGlobalSymbol(Node.GlobalName));
 	}
 
 	@Override public void VisitMacroNode(ZMacroNode Node) {
+		@Var StringBuilder sb = new StringBuilder();
+
 		@Var String TempVar = "";
-		this.Writer.PushNewBuffer("");
 		@Var String Macro = Node.GetMacroText();
 		@Var ZFuncType FuncType = Node.GetFuncType();
 		if(!FuncType.GetReturnType().IsVoidType()) {
-			TempVar = this.Writer.CreateTempLocalSymbol();
-			this.Writer.AddCodeToCurrentBuffer(TempVar);
-			this.Writer.AddCodeToCurrentBuffer(" = ");
+			TempVar = this.CurrentScope.CreateTempLocalSymbol();
+			sb.append(TempVar);
+			sb.append(" = ");
 		}
 		@Var int fromIndex = 0;
 		@Var int BeginNum = Macro.indexOf("$[", fromIndex);
@@ -1059,18 +1012,19 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 			if(EndNum == -1) {
 				break;
 			}
-			this.Writer.AddCodeToCurrentBuffer(Macro.substring(fromIndex, BeginNum));
+			sb.append(Macro.substring(fromIndex, BeginNum));
 			@Var int Index = (int)LibZen._ParseInt(Macro.substring(BeginNum+2, EndNum));
 			if(Node.AST[Index] != null) {
-				this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.AST[Index].Type));
-				this.Writer.AddCodeToCurrentBuffer(" ");
+				sb.append(this.GetTypeExpr(Node.AST[Index].Type));
+				sb.append(" ");
 				this.GenerateCode(FuncType.GetFuncParamType(Index), Node.AST[Index]);
+				sb.append(this.CurrentScope.PopValue());
 			}
 			fromIndex = EndNum + 1;
 			BeginNum = Macro.indexOf("$[", fromIndex);
 		}
-		this.Writer.AddCodeToCurrentBuffer(Macro.substring(fromIndex));
-		this.Writer.AppendBufferAsNewLine();
+		sb.append(Macro.substring(fromIndex));
+		this.CurrentBuilder.AppendNewLine(sb.toString());
 
 		BeginNum = Macro.indexOf("call ");
 		while(BeginNum != -1) {
@@ -1100,29 +1054,14 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 
 			BeginNum = Macro.indexOf("call ", EndNum + 1);
 		}
-
 		if(!FuncType.GetReturnType().IsVoidType()) {
-			this.Writer.AddCodeToCurrentBuffer(TempVar);
+			this.CurrentScope.PushValue(TempVar);
 		}
 	}
 
 	@Override
 	public void VisitMapLiteralNode(ZMapLiteralNode Node) {
-		/*FIXME*/
-		//		this.AddCodeToCurrentBuffer("{ ");
-		//		@Var int ListSize = Node.NodeList.size();
-		//		@Var int i = 0;
-		//		while(i < ListSize) {
-		//			if (i > 0) {
-		//				this.AddCodeToCurrentBuffer(", ");
-		//			}
-		//			@Var ZNode ParamNode = Node.NodeList.get(i + 1);
-		//			this.VisitType(ParamNode.Type);
-		//			this.AddCodeToCurrentBuffer(" ");
-		//			this.GenerateCode(ParamNode);
-		//			i = i + 2;
-		//		}
-		//		this.AddCodeToCurrentBuffer(" }");
+		// TODO
 	}
 
 	@Override
@@ -1138,36 +1077,35 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 			this.DeclareExtrnalFunction("memcpy", "void", "(i8*, i8*, i64)");
 
 			@Var String AllocateSize = this.GetSizeOfType(Node.Type);
-			this.Writer.PushNewBuffer("");
 			this.CallExternalFunction("GC_malloc", "(i64 " + AllocateSize + ")");
-			@Var String AllocatedAddress = this.Writer.PopCurrentBuffer();
+			@Var String AllocatedAddress = this.CurrentScope.PopValue();
 
 			this.CallExternalFunction("memcpy", "(i8* " + AllocatedAddress + ", i8* bitcast (" + this.GetTypeExpr(Node.Type) + " @" + Node.Type.ShortName + ".Proto to i8*), i64 " + AllocateSize + ")");
 
-			@Var String TempVar = this.Writer.CreateTempLocalSymbol();
-			this.Writer.PushNewBuffer(TempVar);
-			this.Writer.AddCodeToCurrentBuffer(" = bitcast i8* ");
-			this.Writer.AddCodeToCurrentBuffer(AllocatedAddress);
-			this.Writer.AddCodeToCurrentBuffer(" to ");
-			this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.Type));
-			this.Writer.AppendBufferAsNewLine();
+			@Var String TempVar = this.CurrentScope.CreateTempLocalSymbol();
+			this.CurrentBuilder.AppendNewLine(TempVar);
+			this.CurrentBuilder.Append(" = bitcast i8* ");
+			this.CurrentBuilder.Append(AllocatedAddress);
+			this.CurrentBuilder.Append(" to ");
+			this.CurrentBuilder.Append(this.GetTypeExpr(Node.Type));
 
 			/* if(this.IsUserDefinedGlobalSymbol(Node.Type.ShortName)) {
-				this.Writer.PushNewBuffer("call void ");
-				this.Writer.AddCodeToCurrentBuffer(this.ToConstructorSymbol(Node.Type.ShortName));
-				this.Writer.AddCodeToCurrentBuffer(" (");
-				this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.Type));
-				this.Writer.AddCodeToCurrentBuffer(" " + TempVar);
+				@Var StringBuilder sb = new StringBuilder();
+				sb.append("call void ");
+				sb.append(this.ToConstructorSymbol(Node.Type.ShortName));
+				sb.append(" (");
+				sb.append(this.GetTypeExpr(Node.Type));
+				sb.append(" " + TempVar);
 				if(Node.GetListSize() > 0) {
 					this.VisitListNode(", ", Node, ", ", ")");
+					sb.append(this.Writer.PopValue());
 				}
 				else {
-					this.Writer.AddCodeToCurrentBuffer(")");
+					sb.append(")");
 				}
-				this.Writer.AppendBufferAsNewLine();
+				this.CurrentBuilder.AppendNewLine(sb.toString());
 			} */
-
-			this.Writer.AddCodeToCurrentBuffer(TempVar);
+			this.CurrentScope.PushValue(TempVar);
 		}
 		else if(Node.Type.IsStringType()) {
 			// FIXME
@@ -1176,122 +1114,137 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 
 	@Override
 	public void VisitNotNode(ZNotNode Node) {
-		@Var String TempVar = this.Writer.CreateTempLocalSymbol();
-		this.Writer.PushNewBuffer(TempVar);
-		this.Writer.AddCodeToCurrentBuffer(" = ");
-		this.Writer.AddCodeToCurrentBuffer("xor");
-		this.Writer.AddCodeToCurrentBuffer(" ");
-		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.AST[ZNotNode._Recv].Type));
-		this.Writer.AddCodeToCurrentBuffer(" 1, ");
 		this.GenerateSurroundCode(Node.AST[ZNotNode._Recv]);
-		this.Writer.AppendBufferAsNewLine();
-		this.Writer.AddCodeToCurrentBuffer(TempVar);
+		@Var String Recv = this.CurrentScope.PopValue();
+
+		@Var String TempVar = this.CurrentScope.CreateTempLocalSymbol();
+		this.CurrentBuilder.AppendNewLine(TempVar);
+		this.CurrentBuilder.Append(" = ");
+		this.CurrentBuilder.Append("xor");
+		this.CurrentBuilder.Append(" ");
+		this.CurrentBuilder.Append(this.GetTypeExpr(Node.AST[ZNotNode._Recv].Type));
+		this.CurrentBuilder.Append(" 1, ");
+		this.CurrentBuilder.Append(Recv);
+
+		this.CurrentScope.PushValue(TempVar);
 	}
 
 	@Override
 	public void VisitNullNode(ZNullNode Node) {
-		this.Writer.AddCodeToCurrentBuffer(this.NullLiteral);
+		this.CurrentScope.PushValue(this.NullLiteral);
 	}
 
 	@Override
 	public void VisitOrNode(ZOrNode Node) {
-		@Var int LabelNum = this.Writer.GetTempLabelNumber();
+		@Var int LabelNum = this.CurrentScope.GetTempLabelNumber();
 		@Var String RightLabel = "Or__" + LabelNum + ".Right";
 		@Var String EndLabel = "Or__" + LabelNum + ".End";
 
-		this.Writer.PushNewBuffer("br i1 ");
 		this.GenerateCode(null, Node.LeftNode());
-		this.Writer.AddCodeToCurrentBuffer(", ");
-		this.Writer.AddCodeToCurrentBuffer("label %" + EndLabel + ", ");
-		this.Writer.AddCodeToCurrentBuffer("label %" + RightLabel);
-		this.Writer.AppendBufferAsNewLine();
-		@Var String LeftLabel = this.Writer.GetCurrentLabel();
+		@Var String LeftResult = this.CurrentScope.PopValue();
 
-		this.Writer.AppendLabel(RightLabel);
-		this.Writer.PushNewBuffer("");
+		this.CurrentBuilder.AppendNewLine("br i1 ");
+		this.CurrentBuilder.Append(LeftResult);
+		this.CurrentBuilder.Append(", ");
+		this.CurrentBuilder.Append("label %" + EndLabel + ", ");
+		this.CurrentBuilder.Append("label %" + RightLabel);
+		@Var String LeftLabel = this.CurrentScope.GetCurrentLabel();
+
+		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.Append(RightLabel + ":");
+		this.CurrentScope.SetLabel(RightLabel);
 		this.GenerateCode(null, Node.RightNode());
-		@Var String RightResult = this.Writer.PopCurrentBuffer();
-		this.Writer.AppendLine("br label %" + EndLabel);
-		RightLabel = this.Writer.GetCurrentLabel();
+		@Var String RightResult = this.CurrentScope.PopValue();
+		this.CurrentBuilder.AppendNewLine("br label %" + EndLabel);
+		RightLabel = this.CurrentScope.GetCurrentLabel();
 
-		this.Writer.AppendLabel(EndLabel);
-		@Var String AllResult = this.Writer.CreateTempLocalSymbol();
-		this.Writer.PushNewBuffer(AllResult);
-		this.Writer.AddCodeToCurrentBuffer(" = phi i1 ");
-		this.Writer.AddCodeToCurrentBuffer("[ true, %" + LeftLabel + " ], ");
-		this.Writer.AddCodeToCurrentBuffer("[ " + RightResult + ", %" + RightLabel + " ]");
-		this.Writer.AppendBufferAsNewLine();
-		this.Writer.AddCodeToCurrentBuffer(AllResult);
+		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.Append(EndLabel + ":");
+		this.CurrentScope.SetLabel(EndLabel);
+		@Var String AllResult = this.CurrentScope.CreateTempLocalSymbol();
+		this.CurrentBuilder.AppendNewLine(AllResult);
+		this.CurrentBuilder.Append(" = phi i1 ");
+		this.CurrentBuilder.Append("[ true, %" + LeftLabel + " ], ");
+		this.CurrentBuilder.Append("[ " + RightResult + ", %" + RightLabel + " ]");
+
+		this.CurrentScope.PushValue(AllResult);
 	}
 
 	/* @Override
 	public void VisitParamNode(ZParamNode Node) {
 		this.Writer.DefineLocalSymbol(Node.Name);
-		this.Writer.AddCodeToCurrentBuffer(this.ToLocalSymbol(Node.Name));
+		this.Writer.PushValue(this.ToLocalSymbol(Node.Name));
 	} */
 
 	@Override
 	public void VisitReturnNode(ZReturnNode Node) {
-		this.Writer.PushNewBuffer("ret ");
 		if (Node.HasReturnExpr()) {
-			this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.ExprNode().Type));
-			this.Writer.AddCodeToCurrentBuffer(" ");
 			this.GenerateCode(null, Node.ExprNode());
+			@Var String Expr = this.CurrentScope.PopValue();
+
+			this.CurrentBuilder.AppendNewLine("ret ");
+			this.CurrentBuilder.Append(this.GetTypeExpr(Node.ExprNode().Type));
+			this.CurrentBuilder.Append(" ");
+			this.CurrentBuilder.Append(Expr);
 		}
 		else {
-			this.Writer.AddCodeToCurrentBuffer("void");
+			this.CurrentBuilder.AppendNewLine("ret void");
 		}
-		this.Writer.AppendBufferAsNewLine();
-		this.Writer.TerminateBlock();
+		this.CurrentScope.TerminateBlock();
 	}
 
 	@Override
 	public void VisitSetIndexNode(ZSetIndexNode Node) {
-		this.Writer.PushNewBuffer("store ");
-		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.ExprNode().Type));
-		this.Writer.AddCodeToCurrentBuffer(" ");
 		this.GenerateCode(null, Node.ExprNode());
-		this.Writer.AddCodeToCurrentBuffer(", ");
-		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.ExprNode().Type) + "*");
-		this.Writer.AddCodeToCurrentBuffer(" ");
+		@Var String Expr = this.CurrentScope.PopValue();
 		this.GetArrayElementPointer(Node.RecvNode(), Node.IndexNode());
+		@Var String Element = this.CurrentScope.PopValue();
+
+		this.CurrentBuilder.AppendNewLine("store ");
+		this.CurrentBuilder.Append(this.GetTypeExpr(Node.ExprNode().Type));
+		this.CurrentBuilder.Append(" ");
+		this.CurrentBuilder.Append(Expr);
+		this.CurrentBuilder.Append(", ");
+		this.CurrentBuilder.Append(this.GetTypeExpr(Node.ExprNode().Type) + "*");
+		this.CurrentBuilder.Append(" ");
+		this.CurrentBuilder.Append(Element);
 		//@llvm.gcwrite
-		this.Writer.AppendBufferAsNewLine();
 	}
 
 	@Override
 	public void VisitSetNameNode(ZSetNameNode Node) {
 		@Var ZVariable Var = Node.GetNameSpace().GetLocalVariable(Node.GetName());
 		@Var String VarName = Var.VarName + "__" + Var.VarUniqueIndex;
-		if(!this.Writer.IsUserDefinedVar(VarName)) {
+		if(!this.CurrentScope.IsUserDefinedVar(VarName)) {
 			throw new RuntimeException("Can't assign to argument");
 		}
-		this.Writer.PushNewBuffer("store ");
-		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.ExprNode().Type));
-		this.Writer.AddCodeToCurrentBuffer(" ");
+
 		this.GenerateCode(null, Node.ExprNode());
-		this.Writer.AddCodeToCurrentBuffer(", ");
-		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.ExprNode().Type) + "*");
-		this.Writer.AddCodeToCurrentBuffer(" ");
-		this.Writer.AddCodeToCurrentBuffer(this.ToLocalSymbol(VarName));
+		@Var String Expr = this.CurrentScope.PopValue();
+
+		this.CurrentBuilder.AppendNewLine("store ");
+		this.CurrentBuilder.Append(this.GetTypeExpr(Node.ExprNode().Type));
+		this.CurrentBuilder.Append(" ");
+		this.CurrentBuilder.Append(Expr);
+		this.CurrentBuilder.Append(", ");
+		this.CurrentBuilder.Append(this.GetTypeExpr(Node.ExprNode().Type) + "*");
+		this.CurrentBuilder.Append(" ");
+		this.CurrentBuilder.Append(this.ToLocalSymbol(VarName));
 		//if(!this.IsPrimitiveType(Node.ExprNode().Type)) {
 		//@llvm.gcwrite
 		//}
-		this.Writer.AppendBufferAsNewLine();
 	}
 
 	@Override
 	public void VisitStringNode(ZStringNode Node) {
 		@Var String StringConst = this.CreateTempGlobalSymbol();
-		this.Writer.PushNewBuffer(StringConst);
-		this.Writer.AddCodeToCurrentBuffer(" = private constant ");
+		this.HeaderBuilder.AppendNewLine(StringConst);
+		this.HeaderBuilder.Append(" = private constant ");
 		@Var String StringValue = this.ConvertLLVMString(Node.StringValue);
 		@Var int StrLen = this.GetLLVMStringLen(StringValue);
 		@Var String StringType = "[" + StrLen + " x i8]";
-		this.Writer.AddCodeToCurrentBuffer(StringType);
-
-		this.Writer.AddCodeToCurrentBuffer(" c\"" + StringValue + "\"");
-		this.Writer.AppendBufferAsHeaderLine();
+		this.HeaderBuilder.Append(StringType);
+		this.HeaderBuilder.Append(" c\"" + StringValue + "\"");
 
 		this.DeclareExtrnalFunction("ZString_Create", "%ZString*", "(i8*, i64)");
 		this.CallExternalFunction("ZString_Create", "(i8* bitcast (" + StringType + "* " + StringConst + " to i8*), i64 " + (StrLen-1) + ")");
@@ -1299,16 +1252,20 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 
 	@Override
 	public void VisitSetterNode(ZSetterNode Node) {
-		this.Writer.PushNewBuffer("store ");
-		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.ExprNode().Type));
-		this.Writer.AddCodeToCurrentBuffer(" ");
 		this.GenerateCode(null, Node.ExprNode());
-		this.Writer.AddCodeToCurrentBuffer(", ");
-		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.ExprNode().Type) + "*");
-		this.Writer.AddCodeToCurrentBuffer(" ");
+		@Var String Expr = this.CurrentScope.PopValue();
 		this.GetObjectElementPointer(Node.RecvNode(), Node.GetName());
+		@Var String Element = this.CurrentScope.PopValue();
+
+		this.CurrentBuilder.AppendNewLine("store ");
+		this.CurrentBuilder.Append(this.GetTypeExpr(Node.ExprNode().Type));
+		this.CurrentBuilder.Append(" ");
+		this.CurrentBuilder.Append(Expr);
+		this.CurrentBuilder.Append(", ");
+		this.CurrentBuilder.Append(this.GetTypeExpr(Node.ExprNode().Type) + "*");
+		this.CurrentBuilder.Append(" ");
+		this.CurrentBuilder.Append(Element);
 		//@llvm.gcwrite
-		this.Writer.AppendBufferAsNewLine();
 	}
 
 	@Override
@@ -1323,36 +1280,39 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 
 	@Override
 	public void VisitUnaryNode(ZUnaryNode Node) {
+		this.GenerateCode(null, Node.RecvNode());
+		@Var String Recv = this.CurrentScope.PopValue();
+
 		if(Node.SourceToken.EqualsText('+')) {
-			this.GenerateCode(null, Node.RecvNode());
+			this.CurrentScope.PushValue(Recv);
 		}
 		else if(Node.SourceToken.EqualsText('-')){
 			if(Node.RecvNode() instanceof ZConstNode) {
-				this.Writer.AddCodeToCurrentBuffer("-");
-				this.GenerateCode(null, Node.RecvNode());
+				this.CurrentBuilder.Append("-");
+				this.CurrentBuilder.Append(Recv);
 			}
 			else {
-				@Var String TempVar = this.Writer.CreateTempLocalSymbol();
-				this.Writer.PushNewBuffer(TempVar);
-				this.Writer.AddCodeToCurrentBuffer(" = ");
+				@Var String TempVar = this.CurrentScope.CreateTempLocalSymbol();
+				this.CurrentBuilder.AppendNewLine(TempVar);
+				this.CurrentBuilder.Append(" = ");
 				if(Node.RecvNode().IsUntyped()) {
 					ZLogger._LogError(Node.SourceToken, "Unary \"-\" is untyped");
 				}
 				else if(Node.RecvNode().Type.IsIntType()) {
-					this.Writer.AddCodeToCurrentBuffer("sub");
+					this.CurrentBuilder.Append("sub");
 				}
 				else if(Node.RecvNode().Type.IsFloatType()) {
-					this.Writer.AddCodeToCurrentBuffer("fsub");
+					this.CurrentBuilder.Append("fsub");
 				}
 				else {
 					ZLogger._LogError(Node.SourceToken, "Unknown unary \"-\" for this type");
 				}
-				this.Writer.AddCodeToCurrentBuffer(" ");
-				this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.RecvNode().Type));
-				this.Writer.AddCodeToCurrentBuffer(" 0, ");
-				this.GenerateCode(null, Node.RecvNode());
-				this.Writer.AppendBufferAsNewLine();
-				this.Writer.AddCodeToCurrentBuffer(TempVar);
+				this.CurrentBuilder.Append(" ");
+				this.CurrentBuilder.Append(this.GetTypeExpr(Node.RecvNode().Type));
+				this.CurrentBuilder.Append(" 0, ");
+				this.CurrentBuilder.Append(Recv);
+
+				this.CurrentScope.PushValue(TempVar);
 			}
 		}
 		else if(Node.SourceToken.EqualsText('~')){
@@ -1364,14 +1324,15 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 				ZLogger._LogError(Node.SourceToken, "Unknown unary \"~\" for this type");
 				return;
 			}
-			@Var String TempVar = this.Writer.CreateTempLocalSymbol();
-			this.Writer.PushNewBuffer(TempVar);
-			this.Writer.AddCodeToCurrentBuffer(" = xor ");
-			this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.RecvNode().Type));
-			this.Writer.AddCodeToCurrentBuffer(" -1, ");
-			this.GenerateCode(null, Node.RecvNode());
-			this.Writer.AppendBufferAsNewLine();
-			this.Writer.AddCodeToCurrentBuffer(TempVar);
+
+			@Var String TempVar = this.CurrentScope.CreateTempLocalSymbol();
+			this.CurrentBuilder.AppendNewLine(TempVar);
+			this.CurrentBuilder.Append(" = xor ");
+			this.CurrentBuilder.Append(this.GetTypeExpr(Node.RecvNode().Type));
+			this.CurrentBuilder.Append(" -1, ");
+			this.CurrentBuilder.Append(Recv);
+
+			this.CurrentScope.PushValue(TempVar);
 		}
 		else {
 			ZLogger._LogError(Node.SourceToken, "Unknown unary \"" + Node.SourceToken.GetText() + "\" for this type");
@@ -1381,77 +1342,87 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 	@Override
 	public void VisitVarNode(ZVarNode Node) {
 		assert(Node.InitValueNode() != null); //must be set initial value
+		@Var ZSourceBuilder EntryBlockBuilder = this.CurrentBuilder.Pop();
 
 		@Var ZVariable Var = Node.GetNameSpace().GetLocalVariable(Node.GetName());
 		@Var String VarName = Var.VarName + "__" + Var.VarUniqueIndex;
-		this.Writer.DefineLocalVar(VarName);
+		this.CurrentScope.DefineLocalVar(VarName);
 		@Var String VarSymbol = this.ToLocalSymbol(VarName);
-		this.Writer.PushNewBuffer(VarSymbol);
-		this.Writer.AddCodeToCurrentBuffer(" = alloca ");
-		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.DeclType()));
-		this.Writer.AppendBufferAsVarLine();
+		EntryBlockBuilder.AppendNewLine(VarSymbol);
+		EntryBlockBuilder.Append(" = alloca ");
+		EntryBlockBuilder.Append(this.GetTypeExpr(Node.DeclType()));
 		//if(!this.IsPrimitiveType(Node.DeclType())) {
 		//@llvm.gcroot
 		//}
 
-		this.Writer.PushNewBuffer("store ");
-		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.InitValueNode().Type));
-		this.Writer.AddCodeToCurrentBuffer(" ");
 		this.GenerateCode(null, Node.InitValueNode());
-		this.Writer.AddCodeToCurrentBuffer(", ");
-		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(Node.DeclType()) + "*");
-		this.Writer.AddCodeToCurrentBuffer(" ");
-		this.Writer.AddCodeToCurrentBuffer(VarSymbol);
+		@Var String Init = this.CurrentScope.PopValue();
+
+		this.CurrentBuilder.AppendNewLine("store ");
+		this.CurrentBuilder.Append(this.GetTypeExpr(Node.InitValueNode().Type));
+		this.CurrentBuilder.Append(" ");
+		this.CurrentBuilder.Append(Init);
+		this.CurrentBuilder.Append(", ");
+		this.CurrentBuilder.Append(this.GetTypeExpr(Node.DeclType()) + "*");
+		this.CurrentBuilder.Append(" ");
+		this.CurrentBuilder.Append(VarSymbol);
 		//if(!this.IsPrimitiveType(Node.InitValueNode().Type)) {
 		//@llvm.gcwrite
 		//}
-		this.Writer.AppendBufferAsNewLine();
 		this.VisitStmtList(Node);
 	}
 
-
 	@Override
 	public void VisitWhileNode(ZWhileNode Node) {
-		@Var int LabelNum = this.Writer.GetTempLabelNumber();
+		@Var int LabelNum = this.CurrentScope.GetTempLabelNumber();
 		@Var String CondLabel = "While__" + LabelNum + ".Cond";
 		@Var String BodyLabel = "While__" + LabelNum + ".Body";
 		@Var String EndLabel = "While__" + LabelNum + ".End";
 
-		this.Writer.AppendLine("br label %" + CondLabel);
+		this.CurrentBuilder.AppendNewLine("br label %" + CondLabel);
 
-		this.Writer.AppendLabel(CondLabel);
-		this.Writer.PushNewBuffer("br i1 ");
+		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.Append(CondLabel + ":");
+		this.CurrentScope.SetLabel(CondLabel);
 		this.GenerateCode(null, Node.CondNode());
-		this.Writer.AddCodeToCurrentBuffer(", ");
-		this.Writer.AddCodeToCurrentBuffer("label %" + BodyLabel + ", ");
-		this.Writer.AddCodeToCurrentBuffer("label %" + EndLabel);
-		this.Writer.AppendBufferAsNewLine();
+		@Var String Cond = this.CurrentScope.PopValue();
 
-		this.Writer.AppendLabel(BodyLabel);
-		this.Writer.PushBreakLabel(EndLabel);
+		this.CurrentBuilder.AppendNewLine("br i1 ");
+		this.CurrentBuilder.Append(Cond);
+		this.CurrentBuilder.Append(", ");
+		this.CurrentBuilder.Append("label %" + BodyLabel + ", ");
+		this.CurrentBuilder.Append("label %" + EndLabel);
+
+		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.Append(BodyLabel + ":");
+		this.CurrentScope.SetLabel(BodyLabel);
+		this.CurrentScope.PushBreakLabel(EndLabel);
 		this.GenerateCode(null, Node.BlockNode());
-		if(!this.Writer.IsBlockTerminated()) {
-			this.Writer.AppendLine("br label %" + CondLabel);
+		if(!this.CurrentScope.IsBlockTerminated()) {
+			this.CurrentBuilder.AppendNewLine("br label %" + CondLabel);
 		}
-		this.Writer.PopBreakLabel();
+		this.CurrentScope.PopBreakLabel();
 
-		this.Writer.AppendLabel(EndLabel);
+		this.CurrentBuilder.AppendLineFeed();
+		this.CurrentBuilder.Append(EndLabel + ":");
+		this.CurrentScope.SetLabel(EndLabel);
 	}
 
-	@Override public void VisitLocalDefinedNode(ZLocalDefinedNode Node) {
+	@Override
+	public void VisitLocalDefinedNode(ZLocalDefinedNode Node) {
 		if(Node instanceof ZParamNode) {
 			@Var String SymbolName = ((ZParamNode)Node).GetName();
-			this.Writer.DefineLocalSymbol(SymbolName);
-			this.Writer.AddCodeToCurrentBuffer(this.ToLocalSymbol(SymbolName));
+			this.CurrentScope.DefineLocalSymbol(SymbolName);
+			this.CurrentScope.PushValue(this.ToLocalSymbol(SymbolName));
 		}
 	}
 
 	@Override
 	protected void GenerateSurroundCode(ZNode Node) {
 		if(this.IsNeededSurroud(Node)) {
-			//this.Writer.AddCodeToCurrentBuffer("(");
+			//this.CurrentBuilder.Append("(");
 			this.GenerateCode(null, Node);
-			//this.Writer.AddCodeToCurrentBuffer(")");
+			//this.CurrentBuilder.Append(")");
 		}
 		else {
 			this.GenerateCode(null, Node);
@@ -1460,7 +1431,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 
 	private void DefineExternalStruct(String TypeName) {
 		if(!this.ExternalStructList.contains(TypeName)) {
-			this.Writer.AppendHeaderLine("%" + TypeName + " = type opaque");
+			this.HeaderBuilder.AppendNewLine("%" + TypeName + " = type opaque");
 			this.ExternalStructList.add(TypeName);
 		}
 	}
@@ -1468,12 +1439,10 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 	private void DeclareExtrnalFunction(String FuncName, String ReturnType, String ParamType) {
 		if(!this.ExternalFunctionMap.containsKey(FuncName)) {
 			this.ExternalFunctionMap.put(FuncName, ReturnType + " " + ParamType + "*");
-
-			this.Writer.PushNewBuffer("declare ");
-			this.Writer.AddCodeToCurrentBuffer(ReturnType);
-			this.Writer.AddCodeToCurrentBuffer(" @" + FuncName);
-			this.Writer.AddCodeToCurrentBuffer(" " + ParamType);
-			this.Writer.AppendBufferAsHeaderLine();
+			this.HeaderBuilder.AppendNewLine("declare ");
+			this.HeaderBuilder.Append(ReturnType);
+			this.HeaderBuilder.Append(" @" + FuncName);
+			this.HeaderBuilder.Append(" " + ParamType);
 		}
 	}
 	private void CallExternalFunction(String FuncName, String Param) {
@@ -1482,19 +1451,19 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 			return;
 		}
 		@Var String TempVar = "";
-		this.Writer.PushNewBuffer("");
+		this.CurrentBuilder.AppendNewLine("");
 		if(!FuncType.startsWith("void")) {
-			TempVar = this.Writer.CreateTempLocalSymbol();
-			this.Writer.AddCodeToCurrentBuffer(TempVar);
-			this.Writer.AddCodeToCurrentBuffer(" = ");
+			TempVar = this.CurrentScope.CreateTempLocalSymbol();
+			this.CurrentBuilder.Append(TempVar);
+			this.CurrentBuilder.Append(" = ");
 		}
-		this.Writer.AddCodeToCurrentBuffer("call ");
-		this.Writer.AddCodeToCurrentBuffer(FuncType);
-		this.Writer.AddCodeToCurrentBuffer(" @" + FuncName);
-		this.Writer.AddCodeToCurrentBuffer(" " + Param);
-		this.Writer.AppendBufferAsNewLine();
+		this.CurrentBuilder.Append("call ");
+		this.CurrentBuilder.Append(FuncType);
+		this.CurrentBuilder.Append(" @" + FuncName);
+		this.CurrentBuilder.Append(" " + Param);
+
 		if(!FuncType.startsWith("void")) {
-			this.Writer.AddCodeToCurrentBuffer(TempVar);
+			this.CurrentScope.PushValue(TempVar);
 		}
 	}
 
@@ -1508,22 +1477,20 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		}
 	}
 
-	private void VisitFieldList(String HeaderElement, ZClassNode ClassNode, boolean WithInitValue) {
-		if(ClassNode.SuperType() == null) {
-			this.Writer.AddCodeToCurrentBuffer(HeaderElement);
-		}
-		else {
+	private void VisitFieldList(ZClassNode ClassNode, boolean WithInitValue) {
+		if(ClassNode.SuperType() != ZClassType._ObjectType) {
 			ZClassNode SuperClassNode = this.ClassFieldMap.get(ClassNode.SuperType().ShortName);
-			this.VisitFieldList(HeaderElement, SuperClassNode, WithInitValue);
+			this.VisitFieldList(SuperClassNode, WithInitValue);
 		}
 		@Var int i = 0;
 		while(i < ClassNode.GetListSize()) {
 			@Var ZFieldNode FieldNode = ClassNode.GetFieldNode(i);
-			this.Writer.AddCodeToCurrentBuffer(", ");
-			this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(FieldNode.DeclType()));
+			this.CurrentBuilder.Append(",");
+			this.CurrentBuilder.AppendNewLine(this.GetTypeExpr(FieldNode.DeclType()));
 			if(WithInitValue) {
-				this.Writer.AddCodeToCurrentBuffer(" ");
+				this.CurrentBuilder.Append(" ");
 				this.GenerateCode(null, FieldNode.InitValueNode());
+				this.CurrentBuilder.Append(this.CurrentScope.PopValue());
 			}
 			i = i + 1;
 		}
@@ -1531,47 +1498,60 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 
 	@Override
 	protected void VisitListNode(String OpenToken, ZListNode VargNode, String DelimToken, String CloseToken) {
-		this.Writer.AddCodeToCurrentBuffer(OpenToken);
+		@Var StringBuilder sb = new StringBuilder();
+		sb.append(OpenToken);
 		@Var int i = 0;
 		while(i < VargNode.GetListSize()) {
 			@Var ZNode ParamNode = VargNode.GetListAt(i);
 			if (i > 0) {
-				this.Writer.AddCodeToCurrentBuffer(DelimToken);
+				sb.append(DelimToken);
 			}
-			this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(ParamNode.Type));
-			this.Writer.AddCodeToCurrentBuffer(" ");
+			sb.append(this.GetTypeExpr(ParamNode.Type));
+			sb.append(" ");
 			this.GenerateCode(null, ParamNode);
+			sb.append(this.CurrentScope.PopValue());
 			i = i + 1;
 		}
-		this.Writer.AddCodeToCurrentBuffer(CloseToken);
+		sb.append(CloseToken);
+		this.CurrentScope.PushValue(sb.toString());
 	}
 
 	private void GetArrayElementPointer(ZNode RecvNode, ZNode IndexNode) {
-		@Var String TempVar = this.Writer.CreateTempLocalSymbol();
-		this.Writer.PushNewBuffer(TempVar);
-		this.Writer.AddCodeToCurrentBuffer(" = getelementptr ");
-		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(RecvNode.Type));
-		this.Writer.AddCodeToCurrentBuffer(" ");
 		this.GenerateCode(null, RecvNode);
-		this.Writer.AddCodeToCurrentBuffer(", ");
-		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(IndexNode.Type));
-		this.Writer.AddCodeToCurrentBuffer(" ");
+		@Var String Recv = this.CurrentScope.PopValue();
 		this.GenerateCode(null, IndexNode);
-		this.Writer.AppendBufferAsNewLine();
-		this.Writer.AddCodeToCurrentBuffer(TempVar);
+		@Var String Index = this.CurrentScope.PopValue();
+
+		@Var String TempVar = this.CurrentScope.CreateTempLocalSymbol();
+		this.CurrentBuilder.AppendNewLine(TempVar);
+		this.CurrentBuilder.Append(" = getelementptr ");
+		this.CurrentBuilder.Append(this.GetTypeExpr(RecvNode.Type));
+		this.CurrentBuilder.Append(" ");
+		this.CurrentBuilder.Append(Recv);
+		this.CurrentBuilder.Append(", ");
+		this.CurrentBuilder.Append(this.GetTypeExpr(IndexNode.Type));
+		this.CurrentBuilder.Append(" ");
+		this.CurrentBuilder.Append(Index);
+
+		this.CurrentScope.PushValue(TempVar);
 	}
 	private void GetObjectElementPointer(ZNode RecvNode, String FieldName) {
-		@Var String TempVar = this.Writer.CreateTempLocalSymbol();
-		this.Writer.PushNewBuffer(TempVar);
-		this.Writer.AddCodeToCurrentBuffer(" = getelementptr ");
-		this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(RecvNode.Type));
-		this.Writer.AddCodeToCurrentBuffer(" ");
 		this.GenerateCode(null, RecvNode);
-		this.Writer.AddCodeToCurrentBuffer(", i64 0");
-		this.Writer.AddCodeToCurrentBuffer(", ");
+		@Var String Recv = this.CurrentScope.PopValue();
 		this.GetObjectElementOffset(RecvNode.Type, FieldName);
-		this.Writer.AppendBufferAsNewLine();
-		this.Writer.AddCodeToCurrentBuffer(TempVar);
+		@Var String Field = this.CurrentScope.PopValue();
+
+		@Var String TempVar = this.CurrentScope.CreateTempLocalSymbol();
+		this.CurrentBuilder.AppendNewLine(TempVar);
+		this.CurrentBuilder.Append(" = getelementptr ");
+		this.CurrentBuilder.Append(this.GetTypeExpr(RecvNode.Type));
+		this.CurrentBuilder.Append(" ");
+		this.CurrentBuilder.Append(Recv);
+		this.CurrentBuilder.Append(", i64 0");
+		this.CurrentBuilder.Append(", ");
+		this.CurrentBuilder.Append(Field);
+
+		this.CurrentScope.PushValue(TempVar);
 	}
 	private void GetObjectElementOffset(ZType Type, String FieldName) {
 		@Var String ClassName = Type.ShortName;
@@ -1582,7 +1562,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 			while(i < Size) {
 				if(ClassNode.GetFieldNode(i).GetName().equals(FieldName)) {
 					@Var int Offset = i + this.GetClassFieldSize(Type.RefType);
-					this.Writer.AddCodeToCurrentBuffer("i32 " + Offset);
+					this.CurrentScope.PushValue("i32 " + Offset);
 					return;
 				}
 				i = i + 1;
@@ -1592,7 +1572,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 			this.GetObjectElementOffset(Type.RefType, FieldName);
 			return;
 		}
-		this.Writer.AddCodeToCurrentBuffer("i32 -1");
+		this.CurrentScope.PushValue("i32 -1");
 	}
 	private int GetClassFieldSize(ZType Type) {
 		if(Type != null) {
@@ -1605,25 +1585,24 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		return 1/*Element size of object header*/;
 	}
 
-
 	private void AppendDefaultReturn(ZType ReturnType) {
-		this.Writer.PushNewBuffer("ret ");
+		this.CurrentBuilder.AppendNewLine("ret ");
 		if(!ReturnType.IsVoidType()) {
-			this.Writer.AddCodeToCurrentBuffer(this.GetTypeExpr(ReturnType));
-			this.Writer.AddCodeToCurrentBuffer(" ");
+			this.CurrentBuilder.Append(this.GetTypeExpr(ReturnType));
+			this.CurrentBuilder.Append(" ");
 			if(ReturnType.IsFloatType()) {
-				this.Writer.AddCodeToCurrentBuffer("" + 0.0);
+				this.CurrentBuilder.Append("" + 0.0);
 			}
 			else if(ReturnType.IsBooleanType()) {
-				this.Writer.AddCodeToCurrentBuffer(this.FalseLiteral);
+				this.CurrentBuilder.Append(this.FalseLiteral);
 			}
 			else {
-				this.Writer.AddCodeToCurrentBuffer("" + 0);
+				this.CurrentBuilder.Append("" + 0);
 			}
 		}
 		else {
-			this.Writer.AddCodeToCurrentBuffer("void");
+			this.CurrentBuilder.Append("void");
 		}
-		this.Writer.AppendBufferAsNewLine();
+
 	}
 }

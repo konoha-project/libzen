@@ -40,6 +40,7 @@ import zen.ast.ZParamNode;
 import zen.ast.ZReturnNode;
 import zen.ast.ZSetNameNode;
 import zen.ast.ZUnaryNode;
+import zen.ast.ZTryNode;
 import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
 import zen.parser.ZSourceGenerator;
@@ -174,9 +175,11 @@ public class CommonLispGenerator extends ZSourceGenerator {
 	// Visitor API
 	//
 	@Override public void VisitWhileNode(ZWhileNode Node) {
-		this.CurrentBuilder.Append("(while ");
+		this.CurrentBuilder.Append("(loop while ");
 		this.GenerateCode(null, Node.CondNode());
-		this.CurrentBuilder.Append(" ");
+		this.CurrentBuilder.AppendNewLine();
+		this.CurrentBuilder.Append("do");
+		this.CurrentBuilder.AppendNewLine();
 		this.GenerateCode(null, Node.BlockNode());
 		this.CurrentBuilder.Append(")");
 	}
@@ -298,6 +301,20 @@ public class CommonLispGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Append(")");
 	}
 
-
-
+	@Override public void VisitTryNode(ZTryNode Node) {
+		this.CurrentBuilder.Append("(unwind-protect ");
+		this.CurrentBuilder.Append("(handler-case ");
+		this.GenerateCode(null, Node.TryBlockNode());
+		if(Node.HasCatchBlockNode()) {
+			@Var String VarName = this.NameUniqueSymbol("e");
+			this.CurrentBuilder.AppendNewLine("(error (", VarName, ")");
+			this.VisitStmtList(Node.CatchBlockNode());
+			this.CurrentBuilder.AppendNewLine(")");
+		}
+		this.CurrentBuilder.Append(")");
+		if(Node.HasFinallyBlockNode()) {
+			this.GenerateCode(null, Node.FinallyBlockNode());
+		}
+		this.CurrentBuilder.Append(")");
+	}
 }
