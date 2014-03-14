@@ -1,13 +1,13 @@
-asm macro assert  "(assert $[0])": Func<boolean,String,void>;
-asm macro print   "putStr $[0]" : Func<String,void>;
-asm macro println "putStrLn $[0]" : Func<String,void>;
+asm macro assert  "Control.Exception~assert ($[0]) $[1]": Func<boolean,String,void>;
+asm macro print   "putStr $[0] :: IO()" : Func<String,void>;
+asm macro println "putStrLn $[0] :: IO()" : Func<String,void>;
 
 // converter
 asm macro _ "(coerce $[0] 'float)" : Func<int,float>;
 asm macro _ "(round $[0])" : Func<float,int>;
-asm macro _ "(format nil "~a" $[0])" : Func<boolean,String>;
-asm macro _ "(format nil "~a" $[0])" : Func<int,String>;
-asm macro _ "(format nil "~a" $[0])" : Func<float,String>;
+asm macro _ "(format nil \"a\" $[0])" : Func<boolean,String>;
+asm macro _ "(format nil \"a\" $[0])" : Func<int,String>;
+asm macro _ "(format nil \"a\" $[0])" : Func<float,String>;
 
 // String
 asm macro + "(concatenate 'string $[0] $[1])" : Func<String,String,String>;

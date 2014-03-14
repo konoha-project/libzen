@@ -78,6 +78,10 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 		this.SetNativeType(ZType.StringType, "String");
 	}
 
+	@Override protected void GenerateImportLibrary(String LibName) {
+		this.HeaderBuilder.AppendNewLine("import ", LibName, this.SemiColon);
+	}
+
 	private void Indent(ZSourceBuilder builder) {
 		IndentLevel = IndentLevel + 1;
 		builder.Indent();
