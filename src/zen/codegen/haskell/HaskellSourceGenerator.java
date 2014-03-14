@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import zen.ast.ZBinaryNode;
 import zen.ast.ZBlockNode;
 import zen.ast.ZCastNode;
+import zen.ast.ZComparatorNode;
 import zen.ast.ZFuncCallNode;
 import zen.ast.ZFunctionNode;
 import zen.ast.ZGetNameNode;
@@ -76,6 +77,8 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 		this.SetNativeType(ZType.IntType, "Int");
 		this.SetNativeType(ZType.FloatType, "Float");
 		this.SetNativeType(ZType.StringType, "String");
+
+		this.ImportLibrary("Data.IORef");
 	}
 
 	@Override protected void GenerateImportLibrary(String LibName) {
@@ -165,8 +168,11 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
 		this.Variables = new ArrayList<String>();
-
-		this.CurrentBuilder.Append(Node.FuncName());
+		if(Node.FuncName().equals("main")){
+			this.CurrentBuilder.Append("main");
+		}else{
+			this.CurrentBuilder.Append(Node.GetSignature());
+		}
 		this.VisitListNode(" ", Node, " ", " ");
 
 		this.CurrentBuilder.Append(" = do");
@@ -243,11 +249,24 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 		if(OpCode.equals("%")) {
 			return "`mod`";
 		}
+		if(OpCode.equals("!=")) {
+			return "/=";
+		}
 		return OpCode;
 	}
 
 	@Override
 	public void VisitBinaryNode(ZBinaryNode Node) {
+		String Op = this.ZenOpToHaskellOp(Node.SourceToken.GetText());
+
+		this.CurrentBuilder.Append("(");
+		Node.LeftNode().Accept(this);
+		this.CurrentBuilder.Append(" " + Op + " ");
+		Node.RightNode().Accept(this);
+		this.CurrentBuilder.Append(")");
+	}
+
+	@Override public void VisitComparatorNode(ZComparatorNode Node) {
 		String Op = this.ZenOpToHaskellOp(Node.SourceToken.GetText());
 
 		this.CurrentBuilder.Append("(");
@@ -310,6 +329,6 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 
 	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
 		this.GenerateCode(null, Node.FunctionNode());
-		this.VisitListNode(" ", Node, " ");
+		this.VisitListNode(" ", Node, " ", " ");
 	}
 }
