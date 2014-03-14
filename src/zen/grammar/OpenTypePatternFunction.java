@@ -35,6 +35,7 @@ public class OpenTypePatternFunction extends ZMatchFunction {
 					Node.Type = ZTypePool._LookupNullableType(Gamma, Node.Type, MaybeToken);
 				}
 			}
+			return Node;
 		}
 		return null; // Not Matched
 	}
