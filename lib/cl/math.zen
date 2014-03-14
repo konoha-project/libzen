@@ -50,13 +50,13 @@ asm macro log "(log $[0])" : Func<float,float>;
 
 //TODO: max(x,y,z,...,n)	Returns the number with the highest value
 //TODO: min(x,y,z,...,n)	Returns the number with the lowest value
-asm macro max "(max $[0], $[1])" : Func<float,float,float>;
-asm macro min "(min $[0], $[1])" : Func<float,float,float>;
-asm macro max "(max $[0], $[1])" : Func<int,int,int>;
-asm macro min "(min $[0], $[1])" : Func<int,int,int>;
+asm macro max "(max $[0] $[1])" : Func<float,float,float>;
+asm macro min "(min $[0] $[1])" : Func<float,float,float>;
+asm macro max "(max $[0] $[1])" : Func<int,int,int>;
+asm macro min "(min $[0] $[1])" : Func<int,int,int>;
 
 //pow(x,y)	Returns the value of x to the power of y
-asm macro pow "(expt $[0], $[1])" : Func<float,float,float>;
+asm macro pow "(expt $[0] $[1])" : Func<float,float,float>;
 
 //random()	Returns a random number between 0 and 1
 asm macro round "(round $[0])" : Func<float,float>;
