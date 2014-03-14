@@ -505,6 +505,7 @@ public class LibZen {
 		// source code by file extension
 		GenMap.put("c", zen.codegen.c.CGenerator.class);
 		GenMap.put("cl", zen.codegen.clisp.CommonLispGenerator.class);
+		GenMap.put("cs", zen.codegen.csharp.CSharpGenerator.class);
 		GenMap.put("erl", zen.codegen.erlang.ErlSourceCodeGenerator.class);
 
 		GenMap.put("hs", zen.codegen.haskell.HaskellSourceGenerator.class);

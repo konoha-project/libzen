@@ -1,0 +1,37 @@
+asm macro assert  "Debug.Assert($[0])": Func<boolean,String,void>;
+asm macro print   "Console.Write($[0])" : Func<String,void>;
+asm macro println "Console.WriteLine($[0])" : Func<String,void>;
+
+// converter
+asm macro _ "(double)($[0])" : Func<int,float>;
+asm macro _ "(long)($[0])" : Func<float,int>;
+asm macro _ "($[0]).ToString()" : Func<boolean,String>;
+asm macro _ "($[0]).ToString()" : Func<int,String>;
+asm macro _ "($[0]).ToString()" : Func<float,String>;
+
+// String
+//asm macro + "zstr($[0]) + zstr($[1])" : Func<String,String,String>;
+asm macro size "$[0].Length" : Func<String,int>;
+asm macro substring "$[0].Substring($[1])" : Func<String,int,String>;
+asm macro substring "$[0].Substring($[1],$[2])" : Func<String,int,int,String>;
+asm macro indexOf "$[0].IndexOf($[1])" : Func<String,String,int>;
+asm macro indexOf "$[0].IndexOf($[1],$[2])" : Func<String,int,String,int>;
+asm macro equals "($[0] == $[1])" : Func<String,String,boolean>;
+asm macro startsWith "$[0].StartsWith($[1])" : Func<String,String,boolean>;
+asm macro endsWith "$[0].EndsWith($[1])" : Func<String,String,boolean>;
+asm macro == "$[0].Equals($[1])" : Func<String,String,boolean>;
+asm macro != "!($[0].Equals($[1]))" : Func<String,String,boolean>;
+asm macro <  "($[0] < $[1])" : Func<String,String,boolean>;
+asm macro <= "($[0] <= $[1])" : Func<String,String,boolean>;
+asm macro >  "($[0].> $[1])" : Func<String,String,boolean>;
+asm macro >= "($[0] >= $[1])" : Func<String,String,boolean>;
+
+// Array
+asm macro size "$[0].Count()" : Func<α[],int>;
+asm macro clear "$[0].Clear($[0], $[1])" : Func<α[],int,void>;
+asm macro add "$[0].Add($[1])" : Func<α[],α,void>;
+asm macro add "$[0].Insert($[1], $[2])" : Func<α[],int,α,void>;
+asm macro _ "$[0].ToString()" : Func<α[],String>;
+
+// Object
+asm macro _ "$[0].ToString()" : Func<Object,String>;

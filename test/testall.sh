@@ -36,6 +36,15 @@ else
 	ZENCODE=erl bash test/testfiles.sh $DIR $TDIR
 fi
 
+CSHARP=`which mcs`
+if [ -x $CSHARP ]; then
+	echo "testing C# and its execution with mono"
+	ZENCODE=cs bash test/testfiles.sh $DIR $TDIR mcs exe mono
+else
+	echo "generating C# .cs files"
+	ZENCODE=cs bash test/testfiles.sh $DIR $TDIR
+fi
+
 echo "testing python and its execution"
 ZENCODE=py bash test/testfiles.sh $DIR $TDIR python
 
