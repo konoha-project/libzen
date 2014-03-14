@@ -174,9 +174,11 @@ public class CommonLispGenerator extends ZSourceGenerator {
 	// Visitor API
 	//
 	@Override public void VisitWhileNode(ZWhileNode Node) {
-		this.CurrentBuilder.Append("(while ");
+		this.CurrentBuilder.Append("(loop while ");
 		this.GenerateCode(null, Node.CondNode());
-		this.CurrentBuilder.Append(" ");
+		this.CurrentBuilder.AppendNewLine();
+		this.CurrentBuilder.Append("do");
+		this.CurrentBuilder.AppendNewLine();
 		this.GenerateCode(null, Node.BlockNode());
 		this.CurrentBuilder.Append(")");
 	}
