@@ -426,7 +426,6 @@ public class AsmJavaGenerator extends ZGenerator {
 				this.AsmBuilder.PushInt(i * 2 + 1);
 				this.AsmBuilder.PushNode(Object.class, EntryNode.ValueNode());
 				this.AsmBuilder.visitInsn(Opcodes.AASTORE);
-				i = i + 1;
 			}
 			this.AsmBuilder.SetLineNumber(Node);
 			String Desc = Type.getMethodDescriptor(Type.getType(void.class), new Type[] { Type.getType(int.class),  Type.getType(Object[].class)});
