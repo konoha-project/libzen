@@ -328,7 +328,15 @@ public class HaskellSourceGenerator extends ZSourceGenerator {
 	}
 
 	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
-		this.GenerateCode(null, Node.FunctionNode());
-		this.VisitListNode(" ", Node, " ", " ");
+		if(Node.ParentNode instanceof ZBlockNode){
+			this.GenerateCode(null, Node.FunctionNode());
+			this.VisitListNode(" ", Node, " ", " ");
+		}else{
+			this.ImportLibrary("System.IO.Unsafe");
+			this.CurrentBuilder.Append("(unsafePerformIO (");
+			this.GenerateCode(null, Node.FunctionNode());
+			this.VisitListNode(" ", Node, " ", " ");
+			this.CurrentBuilder.Append("))");
+		}
 	}
 }
