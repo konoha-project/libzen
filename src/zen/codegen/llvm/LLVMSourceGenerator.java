@@ -94,6 +94,7 @@ class LLVMScope {
 	@Field private final ArrayList<String> LocalSymbolList = new ArrayList<String>();
 	@Field private final ArrayList<String> LocalVarList = new ArrayList<String>();
 
+
 	public LLVMScope() {
 		this.TempLocalSymbolNumber = 0;
 		this.IsBlockTerminated = false;
@@ -223,7 +224,9 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 	}
 
 	private void DefineGlobalSymbol(String Symbol) {
-		this.GlobalSymbolList.add(Symbol);
+		if(!this.IsUserDefinedGlobalSymbol(Symbol)) {
+			this.GlobalSymbolList.add(Symbol);
+		}
 	}
 	private void DefineClass(String ClassName, ZClassNode Node) {
 		this.ClassFieldMap.put(ClassName, Node);
@@ -664,8 +667,6 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		@Var LLVMScope PushedScope = this.CurrentScope;
 		this.CurrentScope = new LLVMScope();
 
-		this.CurrentBuilder = this.AppendNewSourceBuilder();
-
 		this.DefineClass(Node.ClassName(), Node);
 		@Var String ClassSymbol = this.ToClassSymbol(Node.ClassName());
 		this.CurrentBuilder.AppendNewLine(ClassSymbol);
@@ -676,7 +677,11 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 
 		@Var String ProtoSymbol = "@" + Node.ClassName() + ".Proto";
 		this.CurrentBuilder.AppendNewLine(ProtoSymbol);
-		this.CurrentBuilder.Append(" = private constant ");
+		this.HeaderBuilder.Append(" = ");
+		if(!Node.IsExport) {
+			this.HeaderBuilder.Append("private ");
+		}
+		this.HeaderBuilder.Append("constant ");
 		this.CurrentBuilder.Append(ClassSymbol);
 		this.CurrentBuilder.OpenIndent(" {");
 		if(!Node.SuperType().Equals(ZClassType._ObjectType)) {
@@ -800,16 +805,13 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		@Var LLVMScope PushedScope = this.CurrentScope;
 		this.CurrentScope = new LLVMScope();
 
-		this.CurrentBuilder = this.AppendNewSourceBuilder();
+		this.CurrentBuilder = this.InsertNewSourceBuilder();
 
-		this.CurrentBuilder.AppendNewLine("define ");
+		this.CurrentBuilder.AppendNewLine("define private ");
 		this.CurrentBuilder.Append(this.GetTypeExpr(Node.ReturnType()));
 		@Var String FuncName;
 		if(Node.FuncName() == null) {
 			FuncName = this.CreateTempFuncName(Node.ResolvedFuncType);
-		}
-		else if(Node.FuncName().equals("main")) {
-			FuncName = "@main";
 		}
 		else {
 			@Var String StringifiedName = Node.ResolvedFuncType.StringfySignature(Node.FuncName());
@@ -817,20 +819,49 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 			FuncName = this.ToGlobalSymbol(StringifiedName);
 		}
 		this.CurrentBuilder.Append(" " + FuncName + " ");
-		this.VisitListNode("(", Node, ", ", ") {");
-		this.CurrentBuilder.OpenIndent(this.CurrentScope.PopValue());
+		this.VisitListNode("(", Node, ", ", ")");
+		@Var String Args = this.CurrentScope.PopValue();
+		this.CurrentBuilder.Append(Args);
+		this.CurrentBuilder.OpenIndent(" {");
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.Append("Entry:");
 		this.CurrentScope.SetLabel("Entry");
 
-		this.CurrentBuilder = this.AppendNewSourceBuilder();
-		this.CurrentBuilder.Indent();
+		//this.CurrentBuilder = this.AppendNewSourceBuilder();
+		//this.CurrentBuilder.Indent();
 		this.GenerateCode(null, Node.BlockNode());
 		if(!this.CurrentScope.IsBlockTerminated()) {
 			this.AppendDefaultReturn(Node.ReturnType());
 		}
 		this.CurrentBuilder.CloseIndent("}");
 
+		if(Node.IsExport) {
+			if(!Node.FuncName().equals("main")) {
+				this.HeaderBuilder.AppendNewLine("@" + Node.FuncName());
+				this.HeaderBuilder.Append(" = constant ");
+				this.HeaderBuilder.Append(this.GetTypeExpr(Node.ResolvedFuncType));
+				this.HeaderBuilder.Append(" ");
+				this.HeaderBuilder.Append(FuncName);
+			}
+			else {
+				this.CurrentBuilder.AppendNewLine("define i64 @main (i64 %argc, i8** %argv)");
+				this.CurrentBuilder.OpenIndent(" {");
+				this.CurrentBuilder.AppendNewLine("call ");
+				this.CurrentBuilder.Append(this.GetTypeExpr(Node.ResolvedFuncType));
+				this.CurrentBuilder.Append(" ");
+				this.CurrentBuilder.Append(FuncName);
+				if(Node.ResolvedFuncType.GetFuncParamSize() == 0) {
+					this.CurrentBuilder.Append(" ()");
+				}
+				else {
+					this.CurrentBuilder.Append(" (i64 %argc, i8** %argv)");
+				}
+				this.CurrentBuilder.AppendNewLine("ret i64 0");
+				this.CurrentBuilder.CloseIndent("}");
+			}
+		}
+
+		this.CurrentBuilder = this.CurrentBuilder.Pop();
 		this.CurrentScope = PushedScope;
 		//Node.ParentFunctionNode != null
 		if(Node.FuncName() == null) {
@@ -895,7 +926,9 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 			ZLogger._LogError(Node.SourceToken, "undefined symbol: " + Node.GlobalName);
 		}
 		if(Node.IsFuncNameNode()) {
-			this.CurrentScope.PushValue(this.ToGlobalSymbol(Node.Type.StringfySignature(Node.GlobalName)));
+			@Var String FuncName = Node.FuncType.StringfySignature(Node.GlobalName);
+			this.DefineGlobalSymbol(FuncName);
+			this.CurrentScope.PushValue(this.ToGlobalSymbol(FuncName));
 		}
 		//else if(!this.IsPrimitiveType(Node.Type)) {
 		//	this.Writer.PushValue(this.ToGlobalSymbol(Node.GlobalName));
@@ -985,7 +1018,11 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 
 		this.DefineGlobalSymbol(Node.GlobalName);
 		this.HeaderBuilder.AppendNewLine(this.ToGlobalSymbol(Node.GlobalName));
-		this.HeaderBuilder.Append(" = private constant ");
+		this.HeaderBuilder.Append(" = ");
+		if(!Node.IsExport) {
+			this.HeaderBuilder.Append("private ");
+		}
+		this.HeaderBuilder.Append("constant ");
 		this.HeaderBuilder.Append(this.GetTypeExpr(Node.DeclType()));
 		this.HeaderBuilder.Append(" ");
 		this.HeaderBuilder.Append(Init);
@@ -1288,8 +1325,7 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 		}
 		else if(Node.SourceToken.EqualsText('-')){
 			if(Node.RecvNode() instanceof ZConstNode) {
-				this.CurrentBuilder.Append("-");
-				this.CurrentBuilder.Append(Recv);
+				this.CurrentScope.PushValue("-" + Recv);
 			}
 			else {
 				@Var String TempVar = this.CurrentScope.CreateTempLocalSymbol();
@@ -1300,16 +1336,15 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 				}
 				else if(Node.RecvNode().Type.IsIntType()) {
 					this.CurrentBuilder.Append("sub");
+					this.CurrentBuilder.Append(" i64 0, ");
 				}
 				else if(Node.RecvNode().Type.IsFloatType()) {
 					this.CurrentBuilder.Append("fsub");
+					this.CurrentBuilder.Append(" double 0.0, ");
 				}
 				else {
 					ZLogger._LogError(Node.SourceToken, "Unknown unary \"-\" for this type");
 				}
-				this.CurrentBuilder.Append(" ");
-				this.CurrentBuilder.Append(this.GetTypeExpr(Node.RecvNode().Type));
-				this.CurrentBuilder.Append(" 0, ");
 				this.CurrentBuilder.Append(Recv);
 
 				this.CurrentScope.PushValue(TempVar);
@@ -1342,15 +1377,16 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 	@Override
 	public void VisitVarNode(ZVarNode Node) {
 		assert(Node.InitValueNode() != null); //must be set initial value
-		@Var ZSourceBuilder EntryBlockBuilder = this.CurrentBuilder.Pop();
+		//@Var ZSourceBuilder EntryBlockBuilder = this.CurrentBuilder.Pop();
+		@Var ZSourceBuilder VarDeclBuilder = this.CurrentBuilder; //FIXME
 
 		@Var ZVariable Var = Node.GetNameSpace().GetLocalVariable(Node.GetName());
 		@Var String VarName = Var.VarName + "__" + Var.VarUniqueIndex;
 		this.CurrentScope.DefineLocalVar(VarName);
 		@Var String VarSymbol = this.ToLocalSymbol(VarName);
-		EntryBlockBuilder.AppendNewLine(VarSymbol);
-		EntryBlockBuilder.Append(" = alloca ");
-		EntryBlockBuilder.Append(this.GetTypeExpr(Node.DeclType()));
+		VarDeclBuilder.AppendNewLine(VarSymbol);
+		VarDeclBuilder.Append(" = alloca ");
+		VarDeclBuilder.Append(this.GetTypeExpr(Node.DeclType()));
 		//if(!this.IsPrimitiveType(Node.DeclType())) {
 		//@llvm.gcroot
 		//}
@@ -1414,6 +1450,9 @@ public class LLVMSourceGenerator extends ZSourceGenerator {
 			@Var String SymbolName = ((ZParamNode)Node).GetName();
 			this.CurrentScope.DefineLocalSymbol(SymbolName);
 			this.CurrentScope.PushValue(this.ToLocalSymbol(SymbolName));
+		}
+		else {
+			this.VisitUndefinedNode(Node);
 		}
 	}
 

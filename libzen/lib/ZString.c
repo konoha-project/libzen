@@ -87,6 +87,9 @@ struct ZString * ZString_boolean_toString(char boolean) {
 	}
 }
 
+struct ZString * ZString_NullString() {
+	return ZString_Create("null", 4);
+}
 
 char ZString_StrCmp(struct ZString *ZStr1, struct ZString *ZStr2) {
 	uintptr_t len = ZStr1->len;
@@ -110,13 +113,22 @@ char ZString_StartsWith(struct ZString *ZStr1, struct ZString *ZStr2) {
 }
 
 struct ZString * ZString_StrCat(struct ZString *ZStr1, struct ZString *ZStr2) {
-	size_t len1 = (size_t)ZStr1->len;
-	size_t len2 = (size_t)ZStr2->len;
-	size_t newlen = (size_t)(ZStr1->len + ZStr2->len);
+	struct ZString *LeftZStr = ZStr1;
+	if(LeftZStr == NULL) {
+		LeftZStr = ZString_NullString();
+	}
+	struct ZString *RightZStr = ZStr2;
+	if(RightZStr == NULL) {
+		RightZStr = ZString_NullString();
+	}	
+
+	size_t len1 = (size_t)LeftZStr->len;
+	size_t len2 = (size_t)RightZStr->len;
+	size_t newlen = (size_t)(LeftZStr->len + RightZStr->len);
 	struct ZString *RetZStr = ZString_new(newlen + 1);
 
-	memcpy((void *)(RetZStr->string)       , (const void *)(ZStr1->string), len1);
-	memcpy((void *)(RetZStr->string) + len1, (const void *)(ZStr2->string), len2);
+	memcpy((void *)(RetZStr->string)       , (const void *)(LeftZStr->string), len1);
+	memcpy((void *)(RetZStr->string) + len1, (const void *)(RightZStr->string), len2);
 	(RetZStr->string)[len1 + len2] = '\0';
 	RetZStr->len = (uintptr_t)(len1 + len2);
 	return RetZStr;
