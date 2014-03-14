@@ -1,15 +1,14 @@
 
-asm macro assert  "call void (i1)* @assert($[0])": Func<boolean,void>;
+asm macro assert "call void (i1)* @ZStdLib_assert ($[0])": Func<boolean,String,void>;
 asm macro print "call void (%ZString*)* @ZString_print ($[0])": Func<String,void>;
 asm macro println "call void (%ZString*)* @ZString_println ($[0])": Func<String,void>;
 
 // converter
-asm macro _ "call %ZString* (i64)* @ZString_int_toString ($[0])" : Func<int,String>;
 // asm macro _ "(double)($[0])" : Func<int,float>;
 // asm macro _ "(long)($[0])" : Func<float,int>;
-// asm macro _ "(($[0])?\"true\":\"false\")" : Func<boolean,String>;
-// asm macro _ "libzen.h~zIntToStr($[0])" : Func<int,String>;
-// asm macro _ "libzen.h~zFloatToStr($[0])" : Func<float,String>;
+asm macro _ "call %ZString* (i1)* @ZString_boolean_toString ($[0])" : Func<boolean,String>;
+asm macro _ "call %ZString* (i64)* @ZString_int_toString ($[0])" : Func<int,String>;
+asm macro _ "call %ZString* (double)* @ZString_float_toString ($[0])" : Func<float,String>;
 
 // String
 asm macro "+" "call %ZString*  (%ZString*, %ZString*)* @ZString_StrCat ($[0], $[1])": Func<String,String,String>;
