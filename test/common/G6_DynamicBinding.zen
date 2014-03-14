@@ -1,7 +1,7 @@
 
 class Point2d {
 	var x: int = 2;
-	var y = 3;
+	var y: int = 3;
 	var area: Func<Point2d,int>;
 }
 

@@ -1006,7 +1006,7 @@ public class AsmJavaGenerator extends ZGenerator {
 
 			AsmMethodBuilder InitMethod = ClassBuilder.NewMethod(ACC_PUBLIC, "<init>", "(L"+Type.getInternalName(SourceClass)+";)V");
 			InitMethod.visitVarInsn(Opcodes.ALOAD, 0);
-			LibAsm.PushInt(InitMethod, FuncType.TypeId);
+			InitMethod.PushInt(FuncType.TypeId);
 			InitMethod.visitLdcInsn(SourceFuncType.ShortName);
 			InitMethod.visitMethodInsn(INVOKESPECIAL, Type.getInternalName(FuncClass), "<init>", "(ILjava/lang/String;)V");
 			InitMethod.visitVarInsn(Opcodes.ALOAD, 0);
@@ -1093,57 +1093,54 @@ public class AsmJavaGenerator extends ZGenerator {
 	@Override public void VisitClassNode(ZClassNode Node) {
 		@Var Class<?> SuperClass = this.GetSuperClass(Node.SuperType());
 		@Var AsmClassBuilder ClassBuilder = this.AsmLoader.NewClass(ACC_PUBLIC, Node, Node.ClassName(), SuperClass);
-		@Var int i = 0;
-		while(i < Node.GetListSize()) {
+		// add class field (not function)
+		for(int i = 0; i < Node.GetListSize(); i++) {
 			@Var ZFieldNode FieldNode = Node.GetFieldNode(i);
-			if(FieldNode.ClassType.Equals(Node.ClassType)) {
-				ClassBuilder.AddField(ACC_PUBLIC, FieldNode.GetName(), FieldNode.DeclType(), this.GetConstValue(FieldNode.InitValueNode()));
-			}
-			i = i + 1;
+			ClassBuilder.AddField(ACC_PUBLIC, FieldNode.GetName(), FieldNode.DeclType(), this.GetConstValue(FieldNode.InitValueNode()));
 		}
-		while(i < Node.ClassType.GetFieldSize()) {
+		// add class field (function)
+		for(int i = 0; i < Node.ClassType.GetFieldSize(); i++) {
 			@Var ZClassField Field = Node.ClassType.GetFieldAt(i);
 			if(Field.FieldType.IsFuncType()) {
 				ClassBuilder.AddField(ACC_PUBLIC|ACC_STATIC, NameClassMethod(Node.ClassType, Field.FieldName), Field.FieldType, null);
 			}
-			i = i + 1;
 		}
+		// public <init>()
 		AsmMethodBuilder InitMethod = ClassBuilder.NewMethod(ACC_PUBLIC, "<init>", "()V");
 		InitMethod.visitVarInsn(Opcodes.ALOAD, 0);
 		InitMethod.PushInt(Node.ClassType.TypeId);
 		InitMethod.visitMethodInsn(INVOKESPECIAL, Node.ClassName(), "<init>", "(I)V");
 		InitMethod.visitInsn(RETURN);
 		InitMethod.Finish();
-
+		// protected <init>(int typeid)
 		InitMethod = ClassBuilder.NewMethod(ACC_PROTECTED, "<init>", "(I)V");
 		InitMethod.visitVarInsn(Opcodes.ALOAD, 0);
-		InitMethod.visitVarInsn(Opcodes.ILOAD, 1);
-		InitMethod.visitMethodInsn(INVOKESPECIAL, Type.getInternalName(SuperClass), "<init>", "(I)V");
-		while(i < Node.GetListSize()) {
+		//		InitMethod.visitVarInsn(Opcodes.ILOAD, 1);
+		//		InitMethod.visitMethodInsn(INVOKESPECIAL, Type.getInternalName(SuperClass), "<init>", "(I)V");
+		InitMethod.visitMethodInsn(INVOKESPECIAL, Type.getInternalName(SuperClass), "<init>", "()V");	// FIXME: ZObject?
+		for(int i = 0; i < Node.GetListSize(); i++) {
 			@Var ZFieldNode FieldNode = Node.GetFieldNode(i);
 			if(!FieldNode.DeclType().IsFuncType()) {
 				InitMethod.visitVarInsn(Opcodes.ALOAD, 0);
 				InitMethod.PushNode(this.GetJavaClass(FieldNode.DeclType()), FieldNode.InitValueNode());
 				InitMethod.visitFieldInsn(PUTFIELD, Node.ClassName(), FieldNode.GetName(), Type.getDescriptor(this.GetJavaClass(FieldNode.DeclType())));
 			}
-			i++;
 		}
-		while(i < Node.ClassType.GetFieldSize()) {
+		// set function
+		for(int i = 0; i < Node.ClassType.GetFieldSize(); i++) {
 			@Var ZClassField Field = Node.ClassType.GetFieldAt(i);
 			if(Field.FieldType.IsFuncType()) {
-				//System.out.println("FieldName:" + Field.ClassType + "." + Field.FieldName + ", type=" + Field.FieldType);
 				String FieldDesc = Type.getDescriptor(this.GetJavaClass(Field.FieldType));
 				Label JumpLabel = new Label();
 				InitMethod.visitFieldInsn(Opcodes.GETSTATIC, Node.ClassName(), NameClassMethod(Node.ClassType, Field.FieldName), FieldDesc);
 				InitMethod.visitJumpInsn(Opcodes.IFNULL, JumpLabel);
 				InitMethod.visitVarInsn(Opcodes.ALOAD, 0);
 				InitMethod.visitFieldInsn(Opcodes.GETSTATIC, Node.ClassName(), NameClassMethod(Node.ClassType, Field.FieldName), FieldDesc);
-				//System.out.println("************" + Field.ClassType + ", " + Type.getInternalName(this.GetJavaClass(Field.ClassType)));
-				InitMethod.visitFieldInsn(Opcodes.PUTFIELD, Field.ClassType.ShortName, Field.FieldName, FieldDesc);
+				InitMethod.visitFieldInsn(Opcodes.PUTFIELD, Node.ClassName(), Field.FieldName, FieldDesc);
 				InitMethod.visitLabel(JumpLabel);
 			}
-			i++;
 		}
+
 		InitMethod.visitInsn(RETURN);
 		InitMethod.Finish();
 
