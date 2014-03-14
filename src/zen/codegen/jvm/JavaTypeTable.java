@@ -35,6 +35,7 @@ import zen.type.ZTypePool;
 import zen.util.LibZen;
 import zen.util.Var;
 import zen.util.ZArray;
+import zen.util.ZBooleanArray;
 import zen.util.ZFloatArray;
 import zen.util.ZFunction;
 import zen.util.ZIntArray;
@@ -58,9 +59,11 @@ public class JavaTypeTable {
 		JavaTypeTable.SetTypeTable(ZGenericType._ArrayType, ZObjectArray.class);
 		JavaTypeTable.SetTypeTable(ZGenericType._MapType, ZObjectMap.class);
 
+		ZType BooleanArrayType = ZTypePool._GetGenericType1(ZGenericType._ArrayType, ZType.BooleanType);
 		ZType IntArrayType = ZTypePool._GetGenericType1(ZGenericType._ArrayType, ZType.IntType);
 		ZType FloatArrayType = ZTypePool._GetGenericType1(ZGenericType._ArrayType, ZType.FloatType);
 		ZType StringArrayType = ZTypePool._GetGenericType1(ZGenericType._ArrayType, ZType.StringType);
+		JavaTypeTable.SetTypeTable(BooleanArrayType, ZBooleanArray.class);
 		JavaTypeTable.SetTypeTable(IntArrayType, ZIntArray.class);
 		JavaTypeTable.SetTypeTable(FloatArrayType, ZFloatArray.class);
 		JavaTypeTable.SetTypeTable(StringArrayType, ZStringArray.class);

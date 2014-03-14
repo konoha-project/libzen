@@ -1,6 +1,7 @@
 package zen.codegen.jvm;
 
 import zen.util.SoftwareFaultException;
+import zen.util.ZBooleanArray;
 import zen.util.ZFloatArray;
 import zen.util.ZIntArray;
 import zen.util.ZObjectArray;
@@ -121,6 +122,26 @@ public class JavaCommonApi {
 	}
 
 	public final static String ObjectArrayToString(ZObjectArray x) {
+		return x.toString();
+	}
+	// BooleanArray
+	public final static long BooleanArraySize(ZBooleanArray x) {
+		return x.Size();
+	}
+
+	public final static void BooleanArrayClear(ZBooleanArray x, long y) {
+		x.Clear(y);
+	}
+
+	public final static <T> void BooleanArrayAdd(ZBooleanArray x, boolean y) {
+		x.Add(y);
+	}
+
+	public final static <T> void BooleanArrayInsert(ZBooleanArray x, long y, boolean z) {
+		x.Insert(y, z);
+	}
+
+	public final static String BooleanArrayToString(ZBooleanArray x) {
 		return x.toString();
 	}
 	// IntArray

@@ -27,6 +27,12 @@ asm macro clear "zen/codegen/jvm/JavaCommonApi.ObjectArrayClear($[0],$[1])" : Fu
 asm macro add "zen/codegen/jvm/JavaCommonApi.ObjectArrayAdd($[0],$[1])" : Func<α[],α,void>;
 asm macro add "zen/codegen/jvm/JavaCommonApi.ObjectArrayInsert($[0],$[1],$[2])" : Func<α[],int,α,void>;
 asm macro _ "zen/codegen/jvm/JavaCommonApi.ObjectArrayToString($[0])" : Func<α[],String>;
+// BooleanArray
+asm macro size "zen/codegen/jvm/JavaCommonApi.BooleanArraySize($[0])" : Func<boolean[],int>;
+asm macro clear "zen/codegen/jvm/JavaCommonApi.BooleanArrayClear($[0],$[1])" : Func<boolean[],int,void>;
+asm macro add "zen/codegen/jvm/JavaCommonApi.BooleanArrayAdd($[0],$[1])" : Func<boolean[],boolean,void>;
+asm macro add "zen/codegen/jvm/JavaCommonApi.BooleanArrayInsert($[0],$[1],$[2])" : Func<boolean[],int,boolean,void>;
+asm macro _ "zen/codegen/jvm/JavaCommonApi.BooleanArrayToString($[0])" : Func<boolean[],String>;
 // IntArray
 asm macro size "zen/codegen/jvm/JavaCommonApi.IntArraySize($[0])" : Func<int[],int>;
 asm macro clear "zen/codegen/jvm/JavaCommonApi.IntArrayClear($[0],$[1])" : Func<int[],int,void>;

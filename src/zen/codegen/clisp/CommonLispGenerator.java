@@ -27,6 +27,7 @@ package zen.codegen.clisp;
 import zen.ast.ZAndNode;
 import zen.ast.ZBinaryNode;
 import zen.ast.ZBlockNode;
+import zen.ast.ZComparatorNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZFuncCallNode;
 import zen.ast.ZFunctionNode;
@@ -39,10 +40,12 @@ import zen.ast.ZParamNode;
 import zen.ast.ZReturnNode;
 import zen.ast.ZSetNameNode;
 import zen.ast.ZUnaryNode;
+import zen.ast.ZTryNode;
 import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
 import zen.parser.ZSourceGenerator;
 import zen.type.ZFuncType;
+import zen.parser.ZToken;
 import zen.type.ZType;
 import zen.util.Var;
 
@@ -100,10 +103,6 @@ public class CommonLispGenerator extends ZSourceGenerator {
 
 	}
 
-	@Override public void VisitGetNameNode(ZGetNameNode Node) {
-		this.CurrentBuilder.Append(Node.SourceToken.GetText());
-	}
-
 	@Override public void VisitSetNameNode(ZSetNameNode Node) {
 		this.CurrentBuilder.Append("(setq  " + this.NameLocalVariable(Node.GetName(), Node.VarIndex));
 		this.CurrentBuilder.Append(" ");
@@ -122,6 +121,23 @@ public class CommonLispGenerator extends ZSourceGenerator {
 	@Override public void VisitBinaryNode(ZBinaryNode Node) {
 		this.CurrentBuilder.Append("(");
 		this.CurrentBuilder.Append(Node.SourceToken.GetText());
+		this.CurrentBuilder.Append(" ");
+		this.GenerateCode(null, Node.LeftNode());
+		this.CurrentBuilder.Append(" ");
+		this.GenerateCode(null, Node.RightNode());
+		this.CurrentBuilder.Append(")");
+	}
+
+	private String GetBinaryOperator(ZToken Token) {
+		if(Token.EqualsText("!=")) {
+			return "/=";
+		}
+		return Token.GetText();
+	}
+
+	@Override public void VisitComparatorNode(ZComparatorNode Node) {
+		this.CurrentBuilder.Append("(");
+		this.CurrentBuilder.Append(GetBinaryOperator(Node.SourceToken));
 		this.CurrentBuilder.Append(" ");
 		this.GenerateCode(null, Node.LeftNode());
 		this.CurrentBuilder.Append(" ");
@@ -159,9 +175,11 @@ public class CommonLispGenerator extends ZSourceGenerator {
 	// Visitor API
 	//
 	@Override public void VisitWhileNode(ZWhileNode Node) {
-		this.CurrentBuilder.Append("(while ");
+		this.CurrentBuilder.Append("(loop while ");
 		this.GenerateCode(null, Node.CondNode());
-		this.CurrentBuilder.Append(" ");
+		this.CurrentBuilder.AppendNewLine();
+		this.CurrentBuilder.Append("do");
+		this.CurrentBuilder.AppendNewLine();
 		this.GenerateCode(null, Node.BlockNode());
 		this.CurrentBuilder.Append(")");
 	}
@@ -249,7 +267,7 @@ public class CommonLispGenerator extends ZSourceGenerator {
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
 		if(!Node.IsTopLevelDefineFunction()) {
-			this.CurrentBuilder.Append("`#(lambda ");
+			this.CurrentBuilder.Append("#'(lambda ");
 			this.VisitListNode("(", Node, ")");
 			this.GenerateCode(null, Node.BlockNode());
 			this.CurrentBuilder.Append(")");
@@ -283,6 +301,20 @@ public class CommonLispGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Append(")");
 	}
 
-
-
+	@Override public void VisitTryNode(ZTryNode Node) {
+		this.CurrentBuilder.Append("(unwind-protect ");
+		this.CurrentBuilder.Append("(handler-case ");
+		this.GenerateCode(null, Node.TryBlockNode());
+		if(Node.HasCatchBlockNode()) {
+			@Var String VarName = this.NameUniqueSymbol("e");
+			this.CurrentBuilder.AppendNewLine("(error (", VarName, ")");
+			this.VisitStmtList(Node.CatchBlockNode());
+			this.CurrentBuilder.AppendNewLine(")");
+		}
+		this.CurrentBuilder.Append(")");
+		if(Node.HasFinallyBlockNode()) {
+			this.GenerateCode(null, Node.FinallyBlockNode());
+		}
+		this.CurrentBuilder.Append(")");
+	}
 }

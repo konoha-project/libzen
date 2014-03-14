@@ -406,7 +406,8 @@ public class ZenTypeSafer extends ZTypeChecker {
 		if(FuncType != null) {
 			if(!FuncType.IsVarType()) {
 				@Var int i = 0;
-				@Var int StaticShift = FuncType.GetParamSize() - List.GetListSize();
+				//@Var int StaticShift = FuncType.GetParamSize() - List.GetListSize();
+				@Var int StaticShift = FuncType.GetFuncParamSize() - List.GetListSize();
 				while(i < List.GetListSize()) {
 					@Var ZNode SubNode = List.GetListAt(i);
 					SubNode = this.CheckType(SubNode, FuncType.GetFuncParamType(i+StaticShift));
