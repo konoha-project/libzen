@@ -314,7 +314,7 @@ public class CSharpGenerator extends ZSourceGenerator {
 	@Override public void VisitLetNode(ZLetNode Node) {
 		this.CurrentBuilder.AppendNewLine("public static partial class ZenMain");
 		this.CurrentBuilder.OpenIndent(" {");
-		this.GenerateClassField("static readonly", Node.GetAstType(ZLetNode._InitValue), Node.GlobalName, null);
+		this.GenerateClassField("static readonly ", Node.GetAstType(ZLetNode._InitValue), Node.GlobalName, null);
 		this.GenerateCode2(" = ", null, Node.InitValueNode(), this.SemiColon);
 		this.CurrentBuilder.CloseIndent("}");
 	}
@@ -425,10 +425,10 @@ public class CSharpGenerator extends ZSourceGenerator {
 	private void GenerateClassField(String Qualifier, ZType FieldType, String FieldName, String Value) {
 		if(Qualifier.length() > 1){
 			this.CurrentBuilder.AppendNewLine(Qualifier);
+			this.CurrentBuilder.Append("public ");
 		}else{
-			this.CurrentBuilder.AppendNewLine("");
+			this.CurrentBuilder.AppendNewLine("public ");
 		}
-		this.CurrentBuilder.Append("public ");
 		this.GenerateTypeName(FieldType);
 		this.CurrentBuilder.Append(" ", FieldName);
 		if(Value != null) {
