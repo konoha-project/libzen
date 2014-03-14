@@ -1,5 +1,5 @@
 asm macro assert  "(assert $[0])": Func<boolean,String,void>;
-asm macro print   "(format t "~a" $[0])," : Func<String,void>;
+asm macro print   "(format t "~a" $[0])" : Func<String,void>;
 asm macro println "(format t "~a~%" $[0])" : Func<String,void>;
 
 // converter
