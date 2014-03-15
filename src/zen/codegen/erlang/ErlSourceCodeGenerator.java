@@ -96,10 +96,10 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Indent();
 		this.VisitStmtList(Node);
 		this.CurrentBuilder.AppendLineFeed();
-		this.CurrentBuilder.IndentAndAppend("__Arguments__ = " + this.VarMgr.GenVarTupleOnlyUsedDefinedByParentScope(false));
+		this.CurrentBuilder.IndentAndAppend("__Arguments__ = " + this.VarMgr.GenVarTuple(VarFlag.Assigned | VarFlag.DefinedByParentScope, false));
 		this.CurrentBuilder.Append(last);
 		this.CurrentBuilder.UnIndent();
-		this.VarMgr.PopScope(false);
+		this.VarMgr.PopScope();
 	}
 
 	// @Override public void VisitNullNode(ZNullNode Node) {
@@ -181,7 +181,8 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 	// }
 
 	@Override public void VisitGetNameNode(ZGetNameNode Node) {
-		String VarName = this.VarMgr.GenVariableName(Node.GetName());
+		String VarName = this.ToErlangVarName(Node.GetName());
+		VarName = this.VarMgr.GenVariableName(VarName);
 		this.CurrentBuilder.Append(VarName);
 	}
 
@@ -190,8 +191,8 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 
 		this.GenerateCode(null, Node.ExprNode());
 
-		String VarName = Node.GetName();
-		this.VarMgr.IncrementVariableNumber(VarName);
+		String VarName = this.ToErlangVarName(Node.GetName());
+		this.VarMgr.AssignVariable(VarName);
 		this.AppendLazy(mark, this.VarMgr.GenVariableName(VarName) + " = ");
 	}
 
@@ -216,7 +217,7 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.AppendToken("=");
 		this.GenerateCode(null, Node.ExprNode());
 		this.CurrentBuilder.Append("}");
-		this.VarMgr.IncrementVariableNumber(GetNameNode.GetName());
+		this.VarMgr.AssignVariable(GetNameNode.GetName());
 		ZSourceBuilder LazyBuilder = new ZSourceBuilder(this, this.CurrentBuilder);
 		ZSourceBuilder BodyBuilder = this.CurrentBuilder;
 		this.CurrentBuilder = LazyBuilder;
@@ -255,10 +256,10 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 	// }
 
 	@Override public void VisitFuncCallNode(ZFuncCallNode Node) {
-		String FuncName = ((ZGlobalNameNode)Node.FunctionNode()).GlobalName;
-		FuncName = this.ToErlangFuncName(FuncName);
-		this.CurrentBuilder.Append(FuncName);
-		//this.GenerateCode(null, Node.FuncNameNode());
+		ZGlobalNameNode FuncNameNode = Node.FuncNameNode();
+		if (FuncNameNode != null) {
+			this.CurrentBuilder.Append(this.ToErlangFuncName(Node.FuncNameNode().GlobalName));
+		}
 		this.VisitListNode("(", Node, ")");
 	}
 
@@ -364,7 +365,7 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 			} else {
 				this.CurrentBuilder.Indent();
 				this.CurrentBuilder.AppendLineFeed();
-				this.CurrentBuilder.IndentAndAppend(this.VarMgr.GenVarTupleOnlyUsedByChildScope(false));
+				this.CurrentBuilder.IndentAndAppend(this.VarMgr.GenVarTuple(VarFlag.AssignedByChildScope, false));
 				this.CurrentBuilder.UnIndent();
 			}
 		}
@@ -379,7 +380,7 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.IndentAndAppend("end");
 
-		this.AppendLazy(mark, this.VarMgr.GenVarTupleOnlyUsed(true) + " = ");
+		this.AppendLazy(mark, this.VarMgr.GenVarTuple(VarFlag.Assigned, true) + " = ");
 	}
 
 	@Override public void VisitReturnNode(ZReturnNode Node) {
@@ -399,7 +400,8 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 		int mark1 = this.GetLazyMark();
 
 		//Generate WhileBlock
-		this.VarMgr.StartUsingFilter(false);
+		this.VarMgr.FilterStart();
+		this.VarMgr.ChangeFilterFlag(VarFlag.None);
 		this.VisitBlockNode(Node.BlockNode(), ",");
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.Indent();
@@ -418,29 +420,29 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.IndentAndAppend("end,");
 
 		//Generate While Guard
-		this.VarMgr.StopUsingFilter();
-		this.VarMgr.ContinueUsingFilter(true);
+		this.VarMgr.ChangeFilterFlag(VarFlag.Assigned);
 		ZSourceBuilder LazyBuilder = new ZSourceBuilder(this, this.CurrentBuilder);
 		ZSourceBuilder BodyBuilder = this.CurrentBuilder;
 		this.CurrentBuilder = LazyBuilder;
 		this.GenerateCode(null, Node.CondNode());
 		this.CurrentBuilder = BodyBuilder;
 		this.AppendLazy(mark1, ""
-				+ WhileNodeName
-				+ " = fun(" + WhileNodeName + ", "
-				+ this.VarMgr.GenVarTupleOnlyUsedByChildScope(false)
-				+ ") when "
-				+ LazyBuilder.toString()
-				+ " -> ");
+						+ WhileNodeName
+						+ " = fun(" + WhileNodeName + ", "
+						+ this.VarMgr.GenVarTuple(VarFlag.AssignedByChildScope, false)
+						+ ") when "
+						+ LazyBuilder.toString()
+						+ " -> ");
 
 		//Generate Loop Function Call
-		this.VarMgr.FinishUsingFilter();
+		this.VarMgr.ChangeFilterFlag(VarFlag.None);
+		this.VarMgr.FilterFinish();
 		this.CurrentBuilder.AppendLineFeed();
 		this.CurrentBuilder.AppendIndent();
 		int mark2 = this.GetLazyMark();
 		this.CurrentBuilder.Append(" = " + WhileNodeName + "(" + WhileNodeName + ", ");
-		this.CurrentBuilder.Append(this.VarMgr.GenVarTupleOnlyUsedByChildScope(false) + ")");
-		this.AppendLazy(mark2, this.VarMgr.GenVarTupleOnlyUsedByChildScope(true));
+		this.CurrentBuilder.Append(this.VarMgr.GenVarTuple(VarFlag.AssignedByChildScope, false) + ")");
+		this.AppendLazy(mark2, this.VarMgr.GenVarTuple(VarFlag.AssignedByChildScope, true));
 	}
 
 	@Override public void VisitBreakNode(ZBreakNode Node) {
@@ -481,8 +483,8 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 
 		this.GenerateCode(null, Node.InitValueNode());
 
-		@Var String VarName = Node.GetName();
-		this.VarMgr.CreateVariable(VarName);
+		@Var String VarName = this.ToErlangVarName(Node.GetName());
+		this.VarMgr.DefineVariable(VarName);
 		this.AppendLazy(mark, this.VarMgr.GenVariableName(VarName) + " = ");
 
 		this.CurrentBuilder.Append(",");
@@ -508,12 +510,14 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 
 	@Override
 	public void VisitParamNode(ZParamNode Node) {
-		this.CurrentBuilder.Append(this.ToErlangVarName(Node.GetName()));
+		String VarName = ToErlangVarName(Node.GetName());
+		VarName = this.VarMgr.GenVariableName(VarName);
+		this.CurrentBuilder.Append(VarName);
 	}
 
 	@Override public void VisitFunctionNode(ZFunctionNode Node) {
-		this.VarMgr.PushScope();
-		this.CreateVariables(Node);
+		this.VarMgr.Init();
+		this.DefineVariables(Node);
 
 		String FuncName = this.ToErlangFuncName(Node.FuncName());
 		if (FuncName.equals("main")) {
@@ -536,8 +540,6 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.AppendLineFeed();
 		this.AppendWrapperFuncDecl(Node);
 		this.CurrentBuilder.AppendLineFeed();
-
-		this.VarMgr.PopScope(true);
 	}
 
 	@Override public void VisitClassNode(ZClassNode Node) {
@@ -698,21 +700,21 @@ public class ErlSourceCodeGenerator extends ZSourceGenerator {
 	private void AppendLazy(int mark, String Code) {
 		this.CurrentBuilder.SourceList.ArrayValues[mark] = Code;
 	}
-	private void CreateVariables(ZListNode VargNode) {
+	private void DefineVariables(ZListNode VargNode) {
 		@Var int i = 0;
 		while(i < VargNode.GetListSize()) {
 			@Var ZParamNode ParamNode = (ZParamNode)VargNode.GetListAt(i);
-			this.VarMgr.CreateVariable(ParamNode.GetName());
+			this.VarMgr.DefineVariable(this.ToErlangVarName(ParamNode.GetName()));
 			i += 1;
 		}
 	}
 	private String ToErlangFuncName(String FuncName) {
-		return FuncName.toLowerCase();
+		return FuncName != null ? FuncName.toLowerCase() : "";
 	}
 	private String ToErlangTypeName(String TypeName) {
-		return TypeName.toLowerCase();
+		return TypeName != null ? TypeName.toLowerCase() : "";
 	}
 	private String ToErlangVarName(String VarName) {
-		return VarName.toUpperCase();
+		return VarName != null ? VarName.toUpperCase() : "";
 	}
 }
