@@ -39,6 +39,7 @@ import static org.objectweb.asm.Opcodes.GOTO;
 import static org.objectweb.asm.Opcodes.IFEQ;
 import static org.objectweb.asm.Opcodes.IFNE;
 import static org.objectweb.asm.Opcodes.ILOAD;
+import static org.objectweb.asm.Opcodes.INSTANCEOF;
 import static org.objectweb.asm.Opcodes.INVOKEINTERFACE;
 import static org.objectweb.asm.Opcodes.INVOKESPECIAL;
 import static org.objectweb.asm.Opcodes.INVOKESTATIC;
@@ -117,6 +118,7 @@ import zen.parser.ZTokenContext;
 import zen.type.ZClassField;
 import zen.type.ZClassType;
 import zen.type.ZFuncType;
+import zen.type.ZGenericType;
 import zen.type.ZType;
 import zen.type.ZTypePool;
 import zen.util.LibZen;
@@ -667,8 +669,52 @@ public class AsmJavaGenerator extends ZGenerator {
 	}
 
 	@Override public void VisitInstanceOfNode(ZInstanceOfNode Node) {
-		// TODO Auto-generated method stub
+		if(!(Node.LeftNode().Type instanceof ZGenericType)) {
+			this.VisitNativeInstanceOfNode(Node);
+			return;
+		}
+		Node.LeftNode().Accept(this);
+		this.AsmBuilder.Pop(Node.LeftNode().Type);
+		this.AsmBuilder.PushLong(Node.LeftNode().Type.TypeId);
+		this.AsmBuilder.PushLong(Node.TargetType().TypeId);
+		Method method = JavaMethodTable.GetBinaryStaticMethod(ZType.IntType, "==", ZType.IntType);
+		String owner = Type.getInternalName(method.getDeclaringClass());
+		this.AsmBuilder.visitMethodInsn(INVOKESTATIC, owner, method.getName(), Type.getMethodDescriptor(method));
+	}
 
+	private void VisitNativeInstanceOfNode(ZInstanceOfNode Node) {
+		Class<?> JavaClass = this.GetJavaClass(Node.TargetType());
+		if(Node.TargetType().IsIntType()) {
+			JavaClass = Long.class;
+		}
+		else if(Node.TargetType().IsFloatType()) {
+			JavaClass = Double.class;
+		}
+		else if(Node.TargetType().IsBooleanType()) {
+			JavaClass = Boolean.class;
+		}
+		this.invokeBoxingMethod(Node.LeftNode());
+		this.AsmBuilder.visitTypeInsn(INSTANCEOF, JavaClass);
+	}
+
+	private void invokeBoxingMethod(ZNode TargetNode) {
+		Class<?> TargetClass = Object.class;
+		if(TargetNode.Type.IsIntType()) {
+			TargetClass = Long.class;
+		}
+		else if(TargetNode.Type.IsFloatType()) {
+			TargetClass = Double.class;
+		}
+		else if(TargetNode.Type.IsBooleanType()) {
+			TargetClass = Boolean.class;
+		}
+		Class<?> SourceClass = this.GetJavaClass(TargetNode.Type);
+		Method Method = JavaMethodTable.GetCastMethod(TargetClass, SourceClass);
+		TargetNode.Accept(this);
+		if(!TargetClass.equals(Object.class)) {
+			String owner = Type.getInternalName(Method.getDeclaringClass());
+			this.AsmBuilder.visitMethodInsn(INVOKESTATIC, owner, Method.getName(), Type.getMethodDescriptor(Method));
+		}
 	}
 
 	@Override public void VisitBinaryNode(ZBinaryNode Node) {
@@ -1007,7 +1053,7 @@ public class AsmJavaGenerator extends ZGenerator {
 			AsmMethodBuilder InitMethod = ClassBuilder.NewMethod(ACC_PUBLIC, "<init>", "(L"+Type.getInternalName(SourceClass)+";)V");
 			InitMethod.visitVarInsn(Opcodes.ALOAD, 0);
 			InitMethod.PushInt(FuncType.TypeId);
-			InitMethod.visitLdcInsn(SourceFuncType.ShortName);
+			InitMethod.visitLdcInsn(SourceFuncType.GetName());	// FIXME: name
 			InitMethod.visitMethodInsn(INVOKESPECIAL, Type.getInternalName(FuncClass), "<init>", "(ILjava/lang/String;)V");
 			InitMethod.visitVarInsn(Opcodes.ALOAD, 0);
 			InitMethod.visitVarInsn(Opcodes.ALOAD, 1);
