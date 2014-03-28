@@ -25,21 +25,30 @@
 package zen.codegen.clisp;
 
 import zen.ast.ZAndNode;
+import zen.ast.ZArrayLiteralNode;
 import zen.ast.ZBinaryNode;
 import zen.ast.ZBlockNode;
+import zen.ast.ZBooleanNode;
+import zen.ast.ZBreakNode;
 import zen.ast.ZComparatorNode;
 import zen.ast.ZErrorNode;
 import zen.ast.ZFuncCallNode;
 import zen.ast.ZFunctionNode;
+import zen.ast.ZGetIndexNode;
+import zen.ast.ZSetIndexNode;
 import zen.ast.ZGetNameNode;
 import zen.ast.ZGlobalNameNode;
+import zen.ast.ZGroupNode;
 import zen.ast.ZIfNode;
+import zen.ast.ZLetNode;
 import zen.ast.ZNode;
+import zen.ast.ZNotNode;
 import zen.ast.ZOrNode;
 import zen.ast.ZParamNode;
 import zen.ast.ZReturnNode;
 import zen.ast.ZSetNameNode;
 import zen.ast.ZUnaryNode;
+import zen.ast.ZThrowNode;
 import zen.ast.ZTryNode;
 import zen.ast.ZVarNode;
 import zen.ast.ZWhileNode;
@@ -47,9 +56,12 @@ import zen.parser.ZSourceGenerator;
 import zen.type.ZFuncType;
 import zen.parser.ZToken;
 import zen.type.ZType;
+import zen.util.Field;
 import zen.util.Var;
+import zen.util.ZenMethod;
 
 public class CommonLispGenerator extends ZSourceGenerator {
+	@Field boolean hasMain = false;
 
 	public CommonLispGenerator() {
 		super("cl", "CommonLisp");
@@ -118,30 +130,59 @@ public class CommonLispGenerator extends ZSourceGenerator {
 		this.CurrentBuilder.Append(")");
 	}
 
-	@Override public void VisitBinaryNode(ZBinaryNode Node) {
-		this.CurrentBuilder.Append("(");
-		this.CurrentBuilder.Append(Node.SourceToken.GetText());
-		this.CurrentBuilder.Append(" ");
-		this.GenerateCode(null, Node.LeftNode());
-		this.CurrentBuilder.Append(" ");
-		this.GenerateCode(null, Node.RightNode());
-		this.CurrentBuilder.Append(")");
+	protected void GenerateSurroundCode(ZNode Node) {
+		this.GenerateCode(null, Node);
 	}
 
 	private String GetBinaryOperator(ZToken Token) {
 		if(Token.EqualsText("!=")) {
-			return "/=";
+			return "!=";
+		} else if(Token.EqualsText("==")) {
+			return "equal";
+		} else if(Token.EqualsText("%")) {
+			return "mod";
+		} else if(Token.EqualsText("/")) {
+			return "/";
 		}
 		return Token.GetText();
 	}
 
-	@Override public void VisitComparatorNode(ZComparatorNode Node) {
+	@Override public void VisitBinaryNode(ZBinaryNode Node) {
 		this.CurrentBuilder.Append("(");
-		this.CurrentBuilder.Append(GetBinaryOperator(Node.SourceToken));
+		String operator = GetBinaryOperator(Node.SourceToken);
+		if (operator == "/") {
+			this.CurrentBuilder.Append("floor" + " ");
+			this.CurrentBuilder.Append("(");
+		}
+		this.CurrentBuilder.Append(operator);
 		this.CurrentBuilder.Append(" ");
 		this.GenerateCode(null, Node.LeftNode());
 		this.CurrentBuilder.Append(" ");
 		this.GenerateCode(null, Node.RightNode());
+		if (operator == "/") {
+			this.CurrentBuilder.Append(")");
+		}
+		this.CurrentBuilder.Append(")");
+	}
+
+	@Override public void VisitComparatorNode(ZComparatorNode Node) {
+		String operator = GetBinaryOperator(Node.SourceToken);
+
+		this.CurrentBuilder.Append("(");
+		if (operator == "!=") {
+			this.CurrentBuilder.Append("not");
+			this.CurrentBuilder.Append("(equal");
+		} else {
+			this.CurrentBuilder.Append(operator);
+		}
+		this.CurrentBuilder.Append(" ");
+		this.GenerateCode(null, Node.LeftNode());
+		this.CurrentBuilder.Append(" ");
+		this.GenerateCode(null, Node.RightNode());
+
+		if (operator == "!=") {
+			this.CurrentBuilder.Append(")");
+		}
 		this.CurrentBuilder.Append(")");
 	}
 
@@ -247,7 +288,7 @@ public class CommonLispGenerator extends ZSourceGenerator {
 	@Override public void VisitReturnNode(ZReturnNode Node) {
 		@Var ZFunctionNode FuncNode = this.LookupFunctionNode(Node);
 		if(FuncNode != null) {
-			this.CurrentBuilder.Append("(return-from ", FuncNode.GetSignature(), " ");
+			this.CurrentBuilder.Append("(return-from ", FuncNode.FuncName(), " ");
 		}
 		else {
 			this.CurrentBuilder.Append("(return ");
@@ -275,16 +316,16 @@ public class CommonLispGenerator extends ZSourceGenerator {
 		else {
 			@Var ZFuncType FuncType = Node.GetFuncType();
 			this.CurrentBuilder.Append("(defun ");
-			this.CurrentBuilder.Append(Node.GetSignature());
+			this.CurrentBuilder.Append(Node.FuncName());
 			this.VisitListNode(" (", Node, ")");
 			this.GenerateCode(null, Node.BlockNode());
 			this.CurrentBuilder.Append(")");
 			if(Node.IsExport) {
 				//				this.CurrentBuilder.Append(Node.FuncName, " = ", FuncType.StringfySignature(Node.FuncName));
 				//				this.CurrentBuilder.AppendLineFeed();
-				//				if(Node.FuncName.equals("main")) {
-				//					this.HasMainFunction = true;
-				//				}
+				if(Node.FuncName().equals("main")) {
+					this.hasMain = true;
+				}
 			}
 			if(this.IsMethod(Node.FuncName(), FuncType)) {
 				//				this.CurrentBuilder.Append(this.NameMethod(FuncType.GetRecvType(), Node.FuncName));
@@ -307,7 +348,7 @@ public class CommonLispGenerator extends ZSourceGenerator {
 		this.GenerateCode(null, Node.TryBlockNode());
 		if(Node.HasCatchBlockNode()) {
 			@Var String VarName = this.NameUniqueSymbol("e");
-			this.CurrentBuilder.AppendNewLine("(error (", VarName, ")");
+			this.CurrentBuilder.AppendNewLine("(error (", "e", ")");
 			this.VisitStmtList(Node.CatchBlockNode());
 			this.CurrentBuilder.AppendNewLine(")");
 		}
@@ -315,6 +356,64 @@ public class CommonLispGenerator extends ZSourceGenerator {
 		if(Node.HasFinallyBlockNode()) {
 			this.GenerateCode(null, Node.FinallyBlockNode());
 		}
+		this.CurrentBuilder.Append(")");
+	}
+
+	@Override @ZenMethod protected void Finish(String FileName) {
+		if(this.hasMain) {
+			this.CurrentBuilder.AppendNewLine("(main)");
+			this.CurrentBuilder.AppendLineFeed();
+		}
+	}
+
+	@Override public void VisitGroupNode(ZGroupNode Node) {
+		this.GenerateCode2("", null, Node.ExprNode(), "");
+	}
+
+	@Override public void VisitNotNode(ZNotNode Node) {
+		this.CurrentBuilder.Append("(");
+		this.CurrentBuilder.AppendToken(this.NotOperator);
+		this.GenerateSurroundCode(Node.RecvNode());
+		this.CurrentBuilder.Append(") ");
+	}
+
+	@Override public void VisitLetNode(ZLetNode Node) {
+		this.CurrentBuilder.AppendNewLine("(setf ", Node.GlobalName);
+		this.GenerateTypeAnnotation(Node.DeclType());
+		this.CurrentBuilder.Append(" ");
+		this.GenerateCode(null, Node.InitValueNode());
+		this.CurrentBuilder.Append(")");
+	}
+
+	@Override public void VisitThrowNode(ZThrowNode Node) {
+		this.CurrentBuilder.Append("(throw nil ");
+		this.GenerateCode(null, Node.ExprNode());
+		this.CurrentBuilder.Append(")");
+	}
+
+	@Override public void VisitBreakNode(ZBreakNode Node) {
+		this.CurrentBuilder.Append("(return)");
+	}
+
+	@Override public void VisitArrayLiteralNode(ZArrayLiteralNode Node) {
+		this.VisitListNode("#(", Node, ")");
+	}
+
+	@Override public void VisitGetIndexNode(ZGetIndexNode Node) {
+		this.CurrentBuilder.Append("(aref ");
+		this.GenerateCode(null, Node.RecvNode());
+		this.CurrentBuilder.Append(" ");
+		this.GenerateCode(null, Node.IndexNode());
+		this.CurrentBuilder.Append(")");
+	}
+
+	@Override public void VisitSetIndexNode(ZSetIndexNode Node) {
+		this.CurrentBuilder.Append("(setf (aref ");
+		this.GenerateCode(null, Node.RecvNode());
+		this.CurrentBuilder.Append(" ");
+		this.GenerateCode(null, Node.IndexNode());
+		this.CurrentBuilder.Append(") ");
+		this.GenerateCode(null, Node.ExprNode());
 		this.CurrentBuilder.Append(")");
 	}
 }
