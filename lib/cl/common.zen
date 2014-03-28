@@ -12,7 +12,7 @@ asm macro _ "(format nil \"~a\" $[0])" : Func<int[],String>;
 asm macro _ "(format nil \"~a\" $[0])" : Func<Object,String>;
 
 // String
-asm macro + "(concatenate 'string $[0] $[1])" : Func<String,String,String>;
+asm macro + "(format nil \"~a~a\" $[0] $[1])" : Func<String,String,String>;
 asm macro size "(length $[0])" : Func<String,int>;
 asm macro substring "(subseq $[0] $[1])" : Func<String,int,String>;
 asm macro substring "(subseq $[0] $[1] $[2])" : Func<String,int,int,String>;
